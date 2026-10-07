@@ -20,20 +20,20 @@ Fresh main-based branch codex/famous-travellers-33. Sources: Production/FAMOUS_P
 | Isaac Newton | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
 | Michelangelo Buonarroti | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
 | Alan Turing | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Confucius | pending | pending | pending | pending | pending | pending | pending |
-| Aristotle | pending | pending | pending | pending | pending | pending | pending |
-| Katsushika Hokusai | pending | pending | pending | pending | pending | pending | pending |
-| Genghis Khan | pending | pending | pending | pending | pending | pending | pending |
-| Qin Shi Huang | pending | pending | pending | pending | pending | pending | pending |
-| Umm Kulthum | pending | pending | pending | pending | pending | pending | pending |
-| Leonardo da Vinci | pending | pending | pending | pending | pending | pending | pending |
-| Elizabeth I | pending | pending | pending | pending | pending | pending | pending |
-| Muhammad al-Khwarizmi | pending | pending | pending | pending | pending | pending | pending |
-| William Shakespeare | pending | pending | pending | pending | pending | pending | pending |
-| Marco Polo | pending | pending | pending | pending | pending | pending | pending |
-| Galileo Galilei | pending | pending | pending | pending | pending | pending | pending |
-| Archimedes | pending | pending | pending | pending | pending | pending | pending |
-| Hammurabi | pending | pending | pending | pending | pending | pending | pending |
-| Socrates | pending | pending | pending | pending | pending | pending | pending |
-| Ada Lovelace | pending | pending | pending | pending | pending | pending | pending |
-| Johannes Gutenberg | pending | pending | pending | pending | pending | pending | pending |
+| Confucius | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Aristotle | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Katsushika Hokusai | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Genghis Khan | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Qin Shi Huang | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Umm Kulthum | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Leonardo da Vinci | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Elizabeth I | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Muhammad al-Khwarizmi | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| William Shakespeare | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Marco Polo | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Galileo Galilei | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Archimedes | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Hammurabi | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Socrates | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Ada Lovelace | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Johannes Gutenberg | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
