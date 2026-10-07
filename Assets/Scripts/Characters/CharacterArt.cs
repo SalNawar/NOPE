@@ -12,7 +12,11 @@ using Object = UnityEngine.Object;
 /// CharacterArtFallbackSO), and not drawn at all when there is none: nothing
 /// is drawn by code. Development builds log each stand-in once. Also makes
 /// each layer's passport-photo crop (LookCanvas.PhotoRect). Every sprite is
-/// one unit tall with its pivot at the feet. Retain keeps only the current
+/// one unit tall with its pivot at the feet. Two art sets (LookArtSets): the
+/// traveller at the desk (PresentTraveller) is drawn from the 80s set (Resources/
+/// Characters/80s) when every key of their look has an 80s drawing, else from
+/// the classic set with its stand-ins, so one traveller never mixes the two
+/// styles (their papers' photo included). Retain keeps only the current
 /// traveller's textures; Dispose releases everything.
 /// </summary>
 public sealed class CharacterArt : IDisposable
@@ -36,8 +40,14 @@ public sealed class CharacterArt : IDisposable
     /// <summary>The loaded art, by the name of the key actually drawn.</summary>
     private readonly Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
 
-    /// <summary>Each asked key's drawn key (null: nothing to draw), resolved once per run: the art does not change while the game runs.</summary>
+    /// <summary>Each asked key's drawn path in its set (null: nothing to draw), resolved once per run: the art does not change while the game runs.</summary>
     private readonly Dictionary<string, string> _drawn = new Dictionary<string, string>();
+
+    /// <summary>The art set the traveller at the desk is drawn from (LookArtSets; PresentTraveller).</summary>
+    private string _set = LookArtSets.Classic;
+
+    /// <summary>The art set the traveller at the desk is drawn from (LookArtSets.Classic or Retro).</summary>
+    public string Set => _set;
 
     private readonly LookArtFallbackTable _table;
     private readonly LookArtUniverse _universe;
@@ -80,12 +90,28 @@ public sealed class CharacterArt : IDisposable
     /// </summary>
     public static bool HasFinalArt(string keyName)
     {
-        Sprite sprite = Load(keyName);
+        Sprite sprite = Load(keyName) ?? Load(LookArtSets.PathOf(LookArtSets.Retro, keyName));
         if (sprite == null)
             return false;
         Resources.UnloadAsset(sprite.texture);
         return true;
     }
+
+    /// <summary>
+    /// The traveller now at the desk: their art set is chosen (the 80s set
+    /// when every key of <paramref name="look"/> has an 80s drawing, else the
+    /// classic set; the classic set for no look) and only their textures are
+    /// kept (Retain). Every Get and GetPhoto until the next PresentTraveller draws from
+    /// that set, their papers' photo too.
+    /// </summary>
+    public void PresentTraveller(TravellerLook look)
+    {
+        Retain(look != null ? look.Keys : null);
+        _set = LookArtSets.For(look, name => HasArtIn(LookArtSets.Retro, name));
+    }
+
+    /// <summary>True when <paramref name="keyName"/> has its own drawing in the current set (no stand-in): what a pose frame needs (TravellerPose.Posed).</summary>
+    public bool HasOwnArt(string keyName) => HasArtIn(_set, keyName);
 
     /// <summary>The layer's full-canvas sprite: its own art, else its nearest stand-in's; null when there is none (the layer is not drawn).</summary>
     public Sprite Get(LookKey key) => EntryOf(key)?.Full;
@@ -113,7 +139,7 @@ public sealed class CharacterArt : IDisposable
         var keep = new HashSet<string>();
         if (keys != null)
             foreach (LookKey key in keys)
-                if (_drawn.TryGetValue(key.Name, out string drawn) && drawn != null)
+                if (_drawn.TryGetValue(LookArtSets.PathOf(_set, key.Name), out string drawn) && drawn != null)
                     keep.Add(drawn);
 
         foreach (string name in _cache.Keys.Where(n => !keep.Contains(n)).ToList())
@@ -123,14 +149,19 @@ public sealed class CharacterArt : IDisposable
         }
     }
 
-    /// <summary>Releases everything.</summary>
-    public void Dispose() => Retain(null);
+    /// <summary>Releases everything (and draws from the classic set until the next PresentTraveller).</summary>
+    public void Dispose()
+    {
+        _set = LookArtSets.Classic;
+        Retain(null);
+    }
 
     /// <summary>The entry a key draws (its own art or its stand-in's), loading it on first use; null when nothing is drawn.</summary>
     private Entry EntryOf(LookKey key)
     {
-        if (!_drawn.TryGetValue(key.Name, out string drawn))
-            drawn = _drawn[key.Name] = Resolve(key);
+        string asked = LookArtSets.PathOf(_set, key.Name);
+        if (!_drawn.TryGetValue(asked, out string drawn))
+            drawn = _drawn[asked] = Resolve(key);
         if (drawn == null)
             return null;
 
@@ -145,9 +176,18 @@ public sealed class CharacterArt : IDisposable
         return entry;
     }
 
-    /// <summary>The name of the key to draw for <paramref name="key"/> (the first of its fallback candidates with art), logged once in development builds when it is a stand-in or nothing.</summary>
+    /// <summary>The path of the drawing for <paramref name="key"/>: in the 80s set its own 80s drawing; otherwise (or when the 80s set lacks it, logged) the first of its classic fallback candidates with art, logged once in development builds when it is a stand-in or nothing.</summary>
     private string Resolve(LookKey key)
     {
+        if (_set != LookArtSets.Classic)
+        {
+            string own = LookArtSets.PathOf(_set, key.Name);
+            if (HasArt(own))
+                return own;
+            if (Debug.isDebugBuild)
+                Debug.Log($"[CharacterArt] The {_set} set has no '{key.Name}'; drawing it from the classic set.");
+        }
+
         foreach (LookKey candidate in LookArtFallback.Candidates(key, _table, _universe))
         {
             if (HasArt(candidate.Name))
@@ -163,7 +203,10 @@ public sealed class CharacterArt : IDisposable
         return null;
     }
 
-    /// <summary>True when the key has art; the loaded sprite is kept for its first Get.</summary>
+    /// <summary>True when the key has its own drawing in <paramref name="set"/>; the loaded sprite is kept for its first Get.</summary>
+    private bool HasArtIn(string set, string keyName) => HasArt(LookArtSets.PathOf(set, keyName));
+
+    /// <summary>True when the path (a key in the classic set, "{set}/{key}" in another) has art; the loaded sprite is kept for its first Get.</summary>
     private bool HasArt(string keyName)
     {
         if (_cache.ContainsKey(keyName))

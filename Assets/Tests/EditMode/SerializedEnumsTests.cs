@@ -192,7 +192,8 @@ public class SerializedEnumsTests
         Assert.AreEqual(6, (int)LookLayer.Headwear);
         Assert.AreEqual(7, (int)LookLayer.Accessory);
         Assert.AreEqual(8, (int)LookLayer.Whole);
-        Assert.AreEqual(9, System.Enum.GetValues(typeof(LookLayer)).Length, "a new member is appended here too");
+        Assert.AreEqual(9, (int)LookLayer.Hands);
+        Assert.AreEqual(10, System.Enum.GetValues(typeof(LookLayer)).Length, "a new member is appended here too");
     }
 
     /// <summary>TellChannel: stored in DayPlanSO.tellChannels.</summary>
