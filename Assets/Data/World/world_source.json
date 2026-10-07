@@ -24358,6 +24358,24 @@
         "tier": "Full"
       },
       {
+        "key": "settings.cameraSway",
+        "text": "Camera sway",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.cameraSwayOff",
+        "text": "Off",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.cameraSwayOn",
+        "text": "On",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.desktop",
         "text": "Desktop icons open with",
         "gloss": "None",

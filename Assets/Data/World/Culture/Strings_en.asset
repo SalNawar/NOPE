@@ -1234,6 +1234,18 @@ MonoBehaviour:
     text: '{0} %'
     gloss: 0
     tier: 0
+  - key: settings.cameraSway
+    text: Camera sway
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOff
+    text: Off
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOn
+    text: On
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: Desktop icons open with
     gloss: 0

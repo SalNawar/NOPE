@@ -13,7 +13,9 @@ using UnityEngine.UI;
 /// (MotionPreference; reduced shows translations at once, from the next
 /// traveller, and cuts the game feel's motion), with the Motion intensity
 /// slider under it (0-100 %, MotionPreference.Intensity: how far the game
-/// feel's springs, shakes and the camera move; off while Reduced is chosen);
+/// feel's springs, shakes and the camera move; off while Reduced is chosen),
+/// and Camera sway, "Off" (the default) or "On" (MotionPreference.CameraSway:
+/// the cameras' idle breathing; off and inert while Reduced is chosen);
 /// and the desktop's icons (the PC redesign DK5, DK6): open
 /// with a "Double click" (the default) or a "Single click"
 /// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange)
@@ -41,6 +43,12 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     /// <summary>Chooses Reduced motion (translations show at once).</summary>
     [SerializeField] private Button reducedMotionButton;
+
+    /// <summary>Camera sway "Off" (the default) in the Motion group.</summary>
+    [SerializeField] private Button cameraSwayOffButton;
+
+    /// <summary>Camera sway "On": the cameras' idle breathing (MotionPreference.CameraSway; off while Reduced is chosen).</summary>
+    [SerializeField] private Button cameraSwayOnButton;
 
     /// <summary>The Motion intensity slider (0 to 100).</summary>
     [SerializeField] private Slider motionIntensitySlider;
@@ -88,6 +96,10 @@ public sealed class SettingsWindowController : MonoBehaviour
             fullMotionButton.onClick.AddListener(() => ChooseMotion(false));
         if (reducedMotionButton != null)
             reducedMotionButton.onClick.AddListener(() => ChooseMotion(true));
+        if (cameraSwayOffButton != null)
+            cameraSwayOffButton.onClick.AddListener(() => ChooseSway(false));
+        if (cameraSwayOnButton != null)
+            cameraSwayOnButton.onClick.AddListener(() => ChooseSway(true));
         if (motionIntensitySlider != null)
             motionIntensitySlider.onValueChanged.AddListener(ChooseIntensity);
         if (iconDoubleClickButton != null)
@@ -121,6 +133,15 @@ public sealed class SettingsWindowController : MonoBehaviour
     private void ChooseMotion(bool reduced)
     {
         MotionPreference.Reduced = reduced;
+        ShowSelection();
+    }
+
+    /// <summary>Stores the camera sway choice and shows it (never while Reduced is chosen: it forces the sway off).</summary>
+    private void ChooseSway(bool on)
+    {
+        if (MotionPreference.Reduced)
+            return;
+        MotionPreference.CameraSway = on;
         ShowSelection();
     }
 
@@ -188,6 +209,13 @@ public sealed class SettingsWindowController : MonoBehaviour
         }
         if (motionIntensityText != null)
             motionIntensityText.text = UiText.Format("settings.motionIntensityValue", percent);
+        bool sway = MotionPreference.CameraSway && !reduced;
+        Paint(cameraSwayOffButton, !sway, theme);
+        Paint(cameraSwayOnButton, sway, theme);
+        if (cameraSwayOffButton != null)
+            cameraSwayOffButton.interactable = !reduced;
+        if (cameraSwayOnButton != null)
+            cameraSwayOnButton.interactable = !reduced;
         bool single = DesktopPreferences.OpenIconsWithSingleClick;
         Paint(iconDoubleClickButton, !single, theme);
         Paint(iconSingleClickButton, single, theme);

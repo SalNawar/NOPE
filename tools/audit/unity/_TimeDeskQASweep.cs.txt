@@ -17,7 +17,8 @@
 //   decided with the desk machine: with the rack out the passport's visa page lies under the daters and the rack covers
 //   none of its fields or its photo; a dater dragged over a passport field (its ink over the printed box), a dater
 //   pressed where it hangs (it prints on the booklet's visa page), the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
-//   cover flipped up, the button pressed); the Citation flying onto the desk (wholly on the screen);
+//   cover flipped up, the button pressed); the citation slip (shown on the screen, its lines readable, its CITED stamp
+//   slamming on once printed, ACKNOWLEDGE putting it away); the cameras' idle sway off by default, on and off again;
 // - home, night 1: the bills (each toggled; Heating must leave Electricity alone), the pet corner (pat, play), the House
 //   (a card selected, bought when the wallet allows), the Night Slots machine (idle, a lever pull, the spin landing,
 //   the can't-afford state), Sleep;
@@ -39,6 +40,7 @@ using System.Reflection;
 using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -65,7 +67,7 @@ public static class _TimeDeskQASweep
 
     /// <summary>The per-player preferences the sweep starts without and restores: Settings' language and motion and the desktop's layout (DesktopPreferences' keys), each under its stored name (PlayerPrefKeys).</summary>
     private static IEnumerable<string> PrefNames() =>
-        new[] { "TimeDesk.UiLanguage", "TimeDesk.ReducedMotion", "TimeDesk.MotionIntensity" }
+        new[] { "TimeDesk.UiLanguage", "TimeDesk.ReducedMotion", "TimeDesk.MotionIntensity", "TimeDesk.CameraSway" }
             .Concat(typeof(DesktopPreferences).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(f => f.IsLiteral && f.FieldType == typeof(string)).Select(f => (string)f.GetRawConstantValue()).Where(v => v.StartsWith("TimeDesk.")))
             .Select(PlayerPrefKeys.For);
@@ -296,6 +298,7 @@ public static class _TimeDeskQASweep
         yield return Shot("office", "d1_traveller_at_desk");
         yield return KitChecks("office", "day 1 traveller at the desk");
         HelixMonitor(o, "d1");
+        CameraSway("d1");
 
         yield return Wheel(o, "d1");
         yield return InspectRulebook(o);
@@ -319,17 +322,16 @@ public static class _TimeDeskQASweep
             }
             var c = (CaseInstance)Field(o.Ui, "_currentCase");
             bool accept = !first && c.ShouldAccept;
-            int citationsBefore = o.Citations.Count;
             if (decided == 2)
                 yield return Detain(o, "d1_detain");
             else
                 yield return Decide(o, accept, decided < 2 ? $"d1_slot{decided + 1}" : null, decided == 0 ? PressAt.Field : decided == 1 ? PressAt.Hanging : PressAt.Anywhere);
             decided++;
             yield return Seconds(0.5f);
-            if (o.Citations.Count > citationsBefore)
-                yield return CitationArrival(o, $"d1_citation_{decided}");
+            if (o.CitationPanel.activeInHierarchy)
+                yield return CitationSlip(o, $"d1_citation_{decided}");
             else if (first)
-                Note("day 1: the first traveller's denial brought no Citation (a free warning, or the traveller was faulty)");
+                Note("day 1: the first traveller's denial brought no citation slip (a free warning, or the traveller was faulty)");
             first = false;
             if (!string.IsNullOrEmpty(RunManager.Instance.World.endingId))
             {
@@ -912,27 +914,50 @@ public static class _TimeDeskQASweep
         }
     }
 
-    /// <summary>The Citation's arrival (DOC: it flies onto the desk instead of the slip): it flies, lands, and lies wholly on the screen.</summary>
-    private static IEnumerator CitationArrival(Office o, string shotTag)
+    /// <summary>
+    /// The citation slip (back since Saleh's 1007b demo): it lies wholly on
+    /// the screen, its reason, rule and consequence lines are filled and fit
+    /// (no overflow), its CITED stamp slams on once the slip has printed, and
+    /// ACKNOWLEDGE puts it away.
+    /// </summary>
+    private static IEnumerator CitationSlip(Office o, string shotTag)
     {
-        DeskDocument citation = o.Citations.LastOrDefault();
-        yield return Seconds(0.25f);
-        yield return Shot("office", $"{shotTag}_flying");
-        yield return Until(() => !o.CitationFlying, 10f, "the Citation on the desk");
-        yield return Seconds(0.3f);
-        Camera cam = OfficeRaycaster().eventCamera;
-        if (citation != null && cam != null)
+        yield return Seconds(0.2f);
+        yield return Shot("office", $"{shotTag}_printing");
+        var stamp = (GameObject)Field(o.OfficeUi, "citationStamp");
+        yield return Settle(() => stamp != null && stamp.activeInHierarchy, 6f);
+        yield return Seconds(0.6f);
+        CheckInside((RectTransform)o.CitationPanel.transform, $"{shotTag}: the citation slip");
+        var unreadable = new List<string>();
+        foreach (string f in new[] { "citationReasonText", "citationDetailText", "citationConsequenceText" })
         {
-            Rect r = ScreenBounds(cam, SheetBounds(citation));
-            bool inside = r.xMin >= -1f && r.yMin >= -1f && r.xMax <= UnityEngine.Screen.width + 1f && r.yMax <= UnityEngine.Screen.height + 1f;
-            Check(inside, $"{shotTag}: the Citation lands wholly on the screen ({Fmt(r)} of {UnityEngine.Screen.width}x{UnityEngine.Screen.height})");
+            var t = (TMP_Text)Field(o.OfficeUi, f);
+            t.ForceMeshUpdate();
+            if (t == null || string.IsNullOrWhiteSpace(t.text) || t.isTextOverflowing || t.maxVisibleLines < t.textInfo.lineCount)
+                unreadable.Add($"{f} ('{t?.text}', overflow {t?.isTextOverflowing})");
         }
-        else
-        {
-            Check(false, $"{shotTag}: the Citation lies on the desk");
-        }
-        yield return Shot("office", $"{shotTag}_landed");
+        Check(unreadable.Count == 0, $"{shotTag}: the slip's reason, rule and consequence lines are printed whole and fit{List(unreadable)}");
+        Check(stamp != null && stamp.activeInHierarchy, $"{shotTag}: the CITED stamp slams on once the slip has printed");
+        yield return Shot("office", $"{shotTag}_stamped");
+        ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
+        yield return Seconds(0.4f);
+        Check(!o.CitationPanel.activeInHierarchy, $"{shotTag}: ACKNOWLEDGE puts the citation slip away");
     }
+
+    /// <summary>The cameras' idle sway (Saleh 2026-10-07: off by default, it caused motion sickness): no camera noise at first; turned on it breathes, turned off it stops.</summary>
+    private static void CameraSway(string tag)
+    {
+        bool before = MotionPreference.CameraSway;
+        Check(!before && !SwayOn(), $"{tag}: the cameras' idle sway is off by default (stored {before}, noise on {SwayOn()})");
+        MotionPreference.CameraSway = true;
+        Check(SwayOn(), $"{tag}: turning Camera sway on brings the idle sway back");
+        MotionPreference.CameraSway = false;
+        Check(!SwayOn(), $"{tag}: turning it off again stops it");
+    }
+
+    /// <summary>True when any office camera's idle noise moves (an enabled Perlin noise with some amplitude).</summary>
+    private static bool SwayOn() =>
+        Object.FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsInactive.Include, FindObjectsSortMode.None).Any(n => n.enabled && n.AmplitudeGain > 0f);
 
     /// <summary>The briefing's Bureau memo (Track P: the day's bulletin moved off the paper): shown on the screen with a title and a body.</summary>
     private static void BureauMemo(Office o, string when)
@@ -1227,7 +1252,8 @@ public static class _TimeDeskQASweep
         yield return Pc(o);
         yield return Decide(o, ((CaseInstance)Field(o.Ui, "_currentCase")).ShouldAccept, "d5");
         yield return Seconds(1f);
-        yield return Until(() => !o.CitationFlying, 10f, "any Citation on the desk");
+        if (o.CitationPanel.activeInHierarchy)
+            yield return CitationSlip(o, "d5_citation");
     }
 
     /// <summary>Inspect mode with two papers' fields of the same detail linked (a paper against a paper).</summary>
@@ -1517,6 +1543,14 @@ public static class _TimeDeskQASweep
         yield return ShotPc("settings_reduced");
         Click("fullMotionButton");
         yield return Frames(2);
+        Click("cameraSwayOnButton");
+        yield return Frames(2);
+        Check(MotionPreference.CameraSway && SwayOn(), "settings: Camera sway On turns the cameras' idle sway on");
+        yield return ShotPc("settings_sway_on");
+        Click("cameraSwayOffButton");
+        yield return Frames(2);
+        Check(!MotionPreference.CameraSway && !SwayOn(), "settings: Camera sway Off turns it off again");
+        yield return Frames(2);
         Check(!MotionPreference.Reduced, "settings: Full motion is chosen");
         if (slider != null)
         {
@@ -1773,8 +1807,7 @@ public static class _TimeDeskQASweep
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
         public DetainButton Detain => One<DetainButton>();
-        public List<DeskDocument> Citations => (List<DeskDocument>)Field(Desk, "_citations");
-        public bool CitationFlying => Citations.Any(p => p != null && p.TryGetComponent(out PaperArrival a) && a.Flying);
+        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
         public List<DeskDocument> Papers() => ((Transform)Field(Desk, "paperRoot")).GetComponentsInChildren<DeskDocument>().OrderBy(p => p.Index).ToList();
         public DeskDocument Paper(int index) => Papers().FirstOrDefault(p => p.Index == index);
     }
