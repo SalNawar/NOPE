@@ -22,28 +22,46 @@ public sealed class UiMotion : MonoBehaviour
     /// <summary>The driver (made on the first Run in play mode).</summary>
     private static UiMotion _driver;
 
-    /// <summary>The tuning once read.</summary>
+    /// <summary>The tuning asset and its knobs once read.</summary>
+    private static MotionTuningSO _tuning;
     private static MotionKnobs _knobs;
 
     /// <summary>The motions that move.</summary>
     private readonly List<IMotionTick> _running = new List<IMotionTick>(64);
 
-    /// <summary>The motion's tuning (RunConfig.motionTuning; the defaults, with a warning, when it is not wired).</summary>
+    /// <summary>The motion's tuning asset (RunConfig.motionTuning), or null (a warning once: the defaults play).</summary>
+    public static MotionTuningSO Tuning
+    {
+        get
+        {
+            if (_knobs == null)
+                Load();
+            return _tuning;
+        }
+    }
+
+    /// <summary>The motion's knobs (the tuning asset's; the defaults when it is not wired).</summary>
     public static MotionKnobs Knobs
     {
         get
         {
-            if (_knobs != null)
-                return _knobs;
-            var config = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
-            if (config != null && config.motionTuning != null)
-                _knobs = config.motionTuning.knobs;
-            else
-            {
-                Debug.LogWarning("[UiMotion] RunConfig has no MotionTuningSO, so the game feel uses the default springs. Run Tools > TimeDesk > Build Office UI (it creates and assigns MotionTuning_Default).");
-                _knobs = new MotionKnobs();
-            }
+            if (_knobs == null)
+                Load();
             return _knobs;
+        }
+    }
+
+    /// <summary>Reads the tuning from RunConfig once.</summary>
+    private static void Load()
+    {
+        var config = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
+        _tuning = config != null ? config.motionTuning : null;
+        if (_tuning != null)
+            _knobs = _tuning.knobs;
+        else
+        {
+            Debug.LogWarning("[UiMotion] RunConfig has no MotionTuningSO, so the game feel uses the default springs. Run Tools > TimeDesk > Build Office UI (it creates and assigns MotionTuning_Default).");
+            _knobs = new MotionKnobs();
         }
     }
 
@@ -114,6 +132,7 @@ public sealed class UiMotion : MonoBehaviour
     private static void ResetStatics()
     {
         _knobs = null;
+        _tuning = null;
         _driver = null;
     }
 }

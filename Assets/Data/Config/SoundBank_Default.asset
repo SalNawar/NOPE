@@ -1,0 +1,588 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2aa0b0a84448a59999681f138832d6, type: 3}
+  m_Name: SoundBank_Default
+  m_EditorClassIdentifier: Assembly-CSharp::SoundBankSO
+  cues:
+  - id: stamp_approve
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: stamp_deny
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: stamp_miss
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: stamp_bar_out
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: stamp_bar_in
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 47541b5e239906b439d3f573c2d5f16b, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: stamp_lift
+    bus: 1
+    loop: 0
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: paper_pickup
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: fc01654399fc0fc41a67932ec1be8f10, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: paper_drop
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 571e71c3292025c4d996e1a34d39a2de, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: paper_slide
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 10dbe4d1504f2124f9aa1eba913913a8, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: passport_open
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: passport_close
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: card_drop
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: rulebook_page
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 73b9acb813b2b7a4db8abaeac2264440, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: rulebook_drop
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: citation_print
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: e21b6513a2552a84ca27529b641cbbef, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: citation_tear
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 3164558bdc1781b4ab7da4cee1ff4da8, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: citation_land
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 60367ac41f7804e40975418a6ee907c9, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: newspaper_unfold
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: scanner_start
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 00295c964cd50144db3f833d0b9f0a31, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: scanner_sweep
+    bus: 1
+    loop: 1
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: scanner_done
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 3e4fc6092d1fbf640b0f708e4e11fc16, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: scanner_flag
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 967f53dc81613704cb130e3b57106fd6, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: inspect_on
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: inspect_link
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: inspect_match
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 132095275a6b67b4e81c772fb8f10979, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: till_open
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: coins
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: mug_set
+    bus: 1
+    loop: 0
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: prop_click
+    bus: 1
+    loop: 0
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: call_next
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 42bf6f48d05ed324e956c56221fb2219, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: available_on
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: footsteps_arrive
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: footsteps_leave
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: booth_shutter_open
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: booth_shutter_close
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: portal_through
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: detain
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: dialogue_blip
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: pc_on
+    bus: 0
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: pc_off
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: key_tap
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 655d90fcb5f443f489e0b93f657e4aa6, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: mouse_click
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: bf45d8273fb05cf4f9d9a7134e767a2a, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: window_open
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 56dbccd1bac72be4fb64fe8f82dd348b, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: window_close
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 6dd03f35ea6d1db45bba87159a8deaf5, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: pc_error
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 76051055df671dd4685ec9817a893ddb, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: pc_notify
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: purchase
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: ui_hover
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: ui_press
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 059e3d11ddb4b3a4097c8c589985f2fd, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: ui_release
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: dacbda362fc31d044b2ffded0babf5d1, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: ui_toggle
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: ac71fc4856785c841a8eda1066ad3fb8, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: ui_tab
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: ui_error
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 68029aa1e51a07144be2bff9d1d6aa3d, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: ui_popup
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: wheel_open
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: clock_tick
+    bus: 1
+    loop: 0
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: last_hour_alarm
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 8f469e4f4c4d9c04fbdf5de42f42dc1c, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: shift_end_bell
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 3b458a8b41512ee4999b5ded718af7e9, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: pa_chime
+    bus: 1
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 4f1b78820a232484f99f0656f3df6b2e, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: board_flip
+    bus: 1
+    loop: 1
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: day_start
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: citation_hit
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: helix_pulse
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: helix_breach
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: famous_pass
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_hall_day
+    bus: 2
+    loop: 1
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_hall_rush
+    bus: 2
+    loop: 1
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_hall_night
+    bus: 2
+    loop: 1
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_portal_hum
+    bus: 2
+    loop: 1
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_rain
+    bus: 2
+    loop: 1
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_booth_room
+    bus: 2
+    loop: 1
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_city
+    bus: 2
+    loop: 1
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: amb_home
+    bus: 2
+    loop: 1
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: mus_title
+    bus: 3
+    loop: 1
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: mus_desk_calm
+    bus: 3
+    loop: 1
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: mus_desk_tense
+    bus: 3
+    loop: 1
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  mixer: {fileID: 24100000, guid: 88350525a2851204c89298cb9417e5c4, type: 2}
+  uiGroup: {fileID: 2772037289441704978, guid: 88350525a2851204c89298cb9417e5c4, type: 2}
+  deskGroup: {fileID: 8258350513747525167, guid: 88350525a2851204c89298cb9417e5c4, type: 2}
+  ambienceGroup: {fileID: 1465161516497065641, guid: 88350525a2851204c89298cb9417e5c4, type: 2}
+  musicGroup: {fileID: -1754541378430565272, guid: 88350525a2851204c89298cb9417e5c4, type: 2}
+  placeholderVolume: 0.5
+  pitchJitter: 0.04
+  duckLevel: 0.35
+  duckHold: 0.5
+  duckFade: 0.25
+  bedFade: 1.5
+  nightFromMinute: 1200
+  dayFromMinute: 360
+  bedFadeMinutes: 30
+  rushWindows: e001000058020000fc03000074040000
+  lastHourMinutes: 60

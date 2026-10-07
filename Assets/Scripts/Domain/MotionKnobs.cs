@@ -78,20 +78,32 @@ public sealed class MotionKnobs
     /// <summary>How much the stamp squashes on impact.</summary>
     public float stampSquash = 0.16f;
 
-    /// <summary>How far the desk (the office camera) shakes on a slam.</summary>
-    public float stampShake = 0.0035f;
-
     /// <summary>Seconds the ink mark takes to bloom in after a slam.</summary>
     public float inkBloomSeconds = 0.08f;
 
-    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, a stamp's rebound and the desk's shake.</summary>
-    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Balanced, shakeFeel = MotionFeel.Elastic;
+    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, and a stamp's rebound.</summary>
+    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Balanced;
 
     /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack, the stamp bar): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>
     public MotionFeel deskMoveFeel = MotionFeel.Balanced;
 
     /// <summary>The curve of the desk camera's blend (the reading view, the PC zoom): a heavy settle with a slight overshoot.</summary>
     public MotionFeel cameraFeel = MotionFeel.Heavy;
+
+    /// <summary>The hit-stop (FeelDirector: a stamp landing, a citation issued, a famous traveller let through): the time scale gameplay drops to, and for how many real seconds (the UI and the springs run on unscaled time).</summary>
+    public float hitStopScale = 0.05f, hitStopSeconds = 0.075f;
+
+    /// <summary>The desk cameras' idle breathing (Cinemachine noise: MotionTuningSO.breathingNoise): its amplitude and frequency gains at full Motion intensity.</summary>
+    public float breathingAmplitude = 0.35f, breathingFrequency = 0.25f;
+
+    /// <summary>How many degrees the desk camera's field of view narrows while a paper is read (the soft push-in), on the Heavy feel.</summary>
+    public float readingPushIn = 2.5f;
+
+    /// <summary>The camera impulses' strength (Cinemachine impulse force, scaled by the Motion intensity): a stamp's slam, a citation landing, the Helix River breaching.</summary>
+    public float shakeStamp = 0.04f, shakeCitation = 0.1f, shakeBreach = 0.28f;
+
+    /// <summary>The camera impulses' seconds: a slam's bump, a citation's, a breach's rumble.</summary>
+    public float shakeStampSeconds = 0.18f, shakeCitationSeconds = 0.3f, shakeBreachSeconds = 0.9f;
 
     /// <summary>A spring settles (stops and leaves the motion driver) within this of its target and slower than settleSpeed.</summary>
     public float settleValue = 0.0005f, settleSpeed = 0.005f;

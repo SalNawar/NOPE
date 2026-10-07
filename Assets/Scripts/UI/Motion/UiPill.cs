@@ -22,7 +22,7 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
     {
         if (pill == null)
             return;
-        UiSounds.Play(UiSoundCue.Toggle);
+        Sounds.Play(SoundCues.UiToggle);
         MotionAmount amount = UiMotion.Amount;
         if (amount.Still)
             return;

@@ -805,7 +805,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         if (dragged != _wasDragged)
         {
             _wasDragged = dragged;
-            UiSounds.Play(dragged ? UiSoundCue.PaperPickup : UiSoundCue.PaperDrop);
+            Sounds.Play(dragged ? SoundCues.PaperPickup : SoundCues.PaperDrop);
             if (!dragged && !amount.Still)
             {
                 SpringTuning paper = knobs.Get(knobs.paperFeel);

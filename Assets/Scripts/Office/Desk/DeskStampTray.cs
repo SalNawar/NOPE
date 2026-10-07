@@ -41,7 +41,7 @@ using UnityEngine.UI;
 /// investigates). The press is the game feel's slam (Saleh 2026-10-07): the
 /// stamp rises a little (the anticipation, MotionKnobs.stampLift), slams
 /// down, squashes on impact (stampSquash, keeping its volume), the desk
-/// shakes (DeskShake) and the mark's ink blooms in (DeskDocument.BloomLastStamp:
+/// shakes (FeelDirector.Punch: a hit-stop and a Cinemachine impulse) and the mark's ink blooms in (DeskDocument.BloomLastStamp:
 /// the mark is printed, and counts, at the press; only its look waits for the
 /// impact), then the stamp rebounds on its spring (stampFeel) and goes back
 /// (the way back and the bar's slide on the desk's spring curve, their seconds
@@ -52,8 +52,9 @@ using UnityEngine.UI;
 /// (false slides it back) and shows its tab while the desk takes input
 /// (BoothRules.PropsLive). The hint at the top right says the next step, or
 /// a note (a refusal's, the counter's "Stamp the passport first": Note). The
-/// thump and the thunk are made in code until UiSoundSO gives the StampSlam
-/// and Error cues clips (UiSounds), and the bar plays the Tab cue. Build Office UI
+/// thump and the thunk are made in code until the sound bank has stamp_approve /
+/// stamp_deny and ui_error clips (Sounds), and the bar plays stamp_bar_out /
+/// stamp_bar_in. Build Office UI
 /// builds the tab, the hint and the audio source on the overlay and the rack
 /// and its stamps in the office; the office binder lays the rack (Lay).
 /// </summary>
@@ -257,8 +258,9 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_live)
             return;
         CancelCarry();
-        UiSounds.Play(UiSoundCue.Tab);
-        if (_flow.ToggleBar() && deskView != null)
+        bool slidOut = _flow.ToggleBar();
+        Sounds.Play(slidOut ? SoundCues.StampBarOut : SoundCues.StampBarIn);
+        if (slidOut && deskView != null)
             deskView.TiltIn();
         Raise();
     }
@@ -269,6 +271,7 @@ public sealed class DeskStampTray : MonoBehaviour
         CancelCarry();
         if (!_flow.StowBar())
             return false;
+        Sounds.Play(SoundCues.StampBarIn);
         Raise();
         return true;
     }
@@ -370,7 +373,7 @@ public sealed class DeskStampTray : MonoBehaviour
         if (note != null)
             Note(note);
         bool refused = LastPress != StampPress.Stamped;
-        if (refused && !UiSounds.Play(UiSoundCue.Error))
+        if (refused && !Sounds.Play(SoundCues.UiError))
             Play(_thunk);
         Dip(handle, refused);
         Raise();
@@ -534,9 +537,9 @@ public sealed class DeskStampTray : MonoBehaviour
     private void Strike(Handle handle, float depth, MotionKnobs knobs, MotionAmount amount)
     {
         handle.Struck = true;
-        if (!UiSounds.Play(UiSoundCue.StampSlam))
+        if (!Sounds.Play(handle.Kind == DeskStamp.Approved ? SoundCues.StampApprove : SoundCues.StampDeny))
             Play(_thump);
-        DeskShake.Kick(knobs.stampShake);
+        FeelDirector.Punch(FeelHit.Stamp);
         handle.Rebound = amount.Still ? Spring.At(0f) : new Spring { Value = -depth, Target = 0f };
         handle.Squash = amount.Still ? Spring.At(0f) : new Spring { Value = knobs.stampSquash * amount.Share, Target = 0f };
     }

@@ -26,8 +26,8 @@ public sealed class RunConfigSO : ScriptableObject
     /// <summary>The game feel's springs and amplitudes, used in every scene (UiMotion; the builders create and assign MotionTuning_Default).</summary>
     public MotionTuningSO motionTuning;
 
-    /// <summary>The game feel's sound cues, used in every scene (UiSounds; the builders create and assign UiSounds_Default; a cue without a clip is silent).</summary>
-    public UiSoundSO uiSounds;
+    /// <summary>The game's sound bank, used in every scene (Sounds; Tools > Audio > Import Sound List creates, fills and assigns SoundBank_Default; a cue without a clip is silent).</summary>
+    public SoundBankSO soundBank;
 
     [Header("Starting values")]
     /// <summary>Money the player starts a new run with.</summary>

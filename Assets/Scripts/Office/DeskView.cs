@@ -50,6 +50,9 @@ public sealed class DeskView : MonoBehaviour
     private const int IdlePriority = 0;
 
     private int _onPriority;
+
+    /// <summary>The desk camera's field of view as bound (its view geometry: CameraFeel's push-in narrows the lens, never the desk's layout).</summary>
+    private float _boundFov;
     private bool _toggleLive;
     private bool _backLive;
     private int _backLiveSince;
@@ -121,9 +124,11 @@ public sealed class DeskView : MonoBehaviour
         if (tuning.fieldOfView > 0f)
             lens.FieldOfView = tuning.fieldOfView;
         deskCamera.Lens = lens;
+        _boundFov = lens.FieldOfView;
         _onPriority = office.Priority.Value + PriorityAboveOffice;
         deskCamera.Priority = IsOn ? _onPriority : IdlePriority;
         deskCamera.gameObject.SetActive(true);
+        CameraFeel.Attach(this, office, deskCamera); // the cameras' breathing, impulses and the reading push-in
     }
 
     /// <summary>Where the desk view's ray through <paramref name="viewport"/> (0..1 each, from the bottom left) meets the level plane at <paramref name="height"/>: what of the desk the view shows there (false while unbound, or for a ray that never comes down to it).</summary>
@@ -133,7 +138,7 @@ public sealed class DeskView : MonoBehaviour
         if (_office == null || deskCamera == null)
             return false;
         Transform t = deskCamera.transform;
-        float tan = Mathf.Tan(deskCamera.Lens.FieldOfView * 0.5f * Mathf.Deg2Rad);
+        float tan = Mathf.Tan(_boundFov * 0.5f * Mathf.Deg2Rad);
         float aspect = Screen.height > 0 ? (float)Screen.width / Screen.height : 16f / 9f;
         Vector3 ray = t.forward + t.up * ((viewport.y * 2f - 1f) * tan) + t.right * ((viewport.x * 2f - 1f) * tan * aspect);
         if (ray.y > -1e-5f)
