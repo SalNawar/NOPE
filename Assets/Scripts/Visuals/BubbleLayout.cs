@@ -49,6 +49,9 @@ public static class BubbleLayout
     /// <summary>The search's step (canvas units).</summary>
     public const float Step = 12f;
 
+    /// <summary>The most a tail leaving the box's top or bottom turns from straight, in degrees: toward the mouth, never flatter.</summary>
+    public const float MaxTailDegrees = 40f;
+
     /// <summary>
     /// Places a <paramref name="width"/> x <paramref name="height"/> bubble
     /// whose tail is <paramref name="tailLength"/> long for a head whose top is
@@ -112,7 +115,7 @@ public static class BubbleLayout
         return WithTail(new FaceRect(x, y, x + width, y + height), mouthX, mouthY, inset, tailLength, false);
     }
 
-    /// <summary>The tail for <paramref name="box"/>: from the edge that faces the mouth (its bottom when the mouth is below it, its top when above, else its nearer side), at the mouth's height or across (kept <paramref name="inset"/> in from the corners), toward the mouth.</summary>
+    /// <summary>The tail for <paramref name="box"/>: from the edge that faces the mouth (its bottom when the mouth is below it, its top when above, else its nearer side), at the mouth's height or across (kept <paramref name="inset"/> in from the corners), toward the mouth (at most MaxTailDegrees from straight off the top or the bottom).</summary>
     private static BubblePlacement WithTail(FaceRect box, float mouthX, float mouthY, float inset, float tailLength, bool clear)
     {
         float baseX, baseY;
@@ -128,6 +131,12 @@ public static class BubbleLayout
             baseY = Math.Min(Math.Max(mouthY, box.YMin + sideInset), box.YMax - sideInset);
         }
         float dx = mouthX - baseX, dy = mouthY - baseY;
+        // A tail leaving the top or the bottom turns at most MaxTailDegrees from straight (the kit's tail reads as a tail, not a sliver along the edge).
+        if (dy != 0f && (mouthY < box.YMin || mouthY > box.YMax))
+        {
+            float most = Math.Abs(dy) * (float)Math.Tan(MaxTailDegrees * Math.PI / 180.0);
+            dx = Math.Max(-most, Math.Min(most, dx));
+        }
         float length = (float)Math.Sqrt(dx * dx + dy * dy);
         if (length < 1e-3f)
         {

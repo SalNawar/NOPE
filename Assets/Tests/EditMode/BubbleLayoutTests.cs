@@ -84,6 +84,7 @@ public class BubbleLayoutTests
             }
             if (p.Box.YMin > mouthY)
                 Assert.Greater(p.TailBaseY, p.TailTipY, $"{v.name}: above the mouth, the tail points down");
+            Assert.LessOrEqual(System.Math.Abs(p.TailDegrees), BubbleLayout.MaxTailDegrees + 1e-3f, $"{v.name}: the tail never lies flat along the edge");
             float before = Dist(p.TailBaseX, p.TailBaseY, v.sx, mouthY), after = Dist(p.TailTipX, p.TailTipY, v.sx, mouthY);
             Assert.Less(after, before, $"{v.name}: the tail points at the mouth");
         }
