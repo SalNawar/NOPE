@@ -2238,6 +2238,459 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar_neutral",
+      "family": "unique",
+      "id": "caesar",
+      "expression": "neutral",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b0d7de69-623f-40b3-8a80-43d344909b64.png",
+      "prompt": "Correct composition of attached character sprite, preserve exact Caesar identity outfit style and neutral expression. Full canvas remains1024x1536. Required HUGE EMPTY GREEN HEADROOM: entire top 240 pixel rows green only. Top of scalp at y260, chin y424. Soles y1490. Shrink head and upper-body to achieve normal 7.5-head adult proportions occupying y260..1490. Figure stays centered x512. Shoulders y500 waist760 hips900 knees1170. Front view looking toward player. Flatgreen #00FF00. No labels or rulers. Preserve textured late80s cel artwork and toga. This is registration correction; top margin mandatory.",
+      "path": "Raw/premade_caesar_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b37a288d1c001bd7fb87204daa46404f1418ed7b3124f70cf21327b2f85d7448",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar_happy",
+      "family": "unique",
+      "id": "caesar",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Change only brows eyelids and mouth to a subtle pleased smile, composed warm happiness. Keep all clothing and arms exactly unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change only brows eyelids and mouth to a subtle pleased smile, composed warm happiness. Keep all clothing and arms exactly unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e33dca0e-6907-4ea0-a1f2-5b75b030f7c9.png",
+      "path": "Raw/premade_caesar_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "235e755ac359e9f32f9a89d4a8f8142be2fa5af849aac595280f5852792f19bf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar_angry",
+      "family": "unique",
+      "id": "caesar",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Change only brows eyelids and mouth to controlled anger: lowered knitted brows, firm compressed lips, intent eyes. Keep all clothing and arms exactly unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change only brows eyelids and mouth to controlled anger: lowered knitted brows, firm compressed lips, intent eyes. Keep all clothing and arms exactly unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cee66de2-9ef7-418b-b98b-d7c73351aa30.png",
+      "path": "Raw/premade_caesar_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "becd8aa302495e9ffb2a83d29c3fc360077a6c27ad24192c9e7eda09d17e597c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar_worried",
+      "family": "unique",
+      "id": "caesar",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Change only brows eyelids mouth to quiet concern: raised inner brows, tense slightly parted lips, uncertain eyes. Keep costume arms unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change only brows eyelids mouth to quiet concern: raised inner brows, tense slightly parted lips, uncertain eyes. Keep costume arms unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-58113082-0f40-4632-ac1b-09cb95956bef.png",
+      "path": "Raw/premade_caesar_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "792e1c7fcb0be972da8546116b816c45073701db66a85cc1b627ba191a952b7f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar_photo",
+      "family": "unique_photo",
+      "id": "caesar",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace Roman costume with plain slate civilian collared jacket cream shirt charcoal straight trousers practical shoes for2150 passport. Remove laurel wreath, keep same receding grey hair neatly combed, exact same mature face and neutral expression. No era props or headwear. Same full figure scale head feet placement.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace Roman costume with plain slate civilian collared jacket cream shirt charcoal straight trousers practical shoes for2150 passport. Remove laurel wreath, keep same receding grey hair neatly combed, exact same mature face and neutral expression. No era props or headwear. Same full figure scale head feet placement. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-868d6c36-c38d-4b3d-b2d6-2f83aaf69127.png",
+      "path": "Raw/premade_caesar_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "964bf9aec4b5733fd4a3ba9b01c0b932cc6e57260cd5f5288fb9e60aa24a2eb4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar__explaining_a",
+      "family": "unique_pose",
+      "id": "caesar",
+      "expression": "neutral",
+      "pose": "explaining_a",
+      "change": "Change pose only: his RIGHT elbow open, right palm up at lower chest in measured explanation, other arm relaxed. Redraw toga folds only where arm movement requires. Neutral expression.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change pose only: his RIGHT elbow open, right palm up at lower chest in measured explanation, other arm relaxed. Redraw toga folds only where arm movement requires. Neutral expression. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c11f2806-6356-48a3-b845-90e8b690b9d6.png",
+      "path": "Raw/premade_caesar__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9da9bed855be70ba0d27dc5184c80bd1c67e44aa3b1fe38ba2c4c483130b74ab",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar__thinking_a",
+      "family": "unique_pose",
+      "id": "caesar",
+      "expression": "neutral",
+      "pose": "thinking_a",
+      "change": "Change pose only: his RIGHT fingertips lightly under chin in thought, right elbow bent, left hand relaxed down. Fingers clearly anatomically correct and face readable. Redraw affected toga folds. Neutral thoughtful expression.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change pose only: his RIGHT fingertips lightly under chin in thought, right elbow bent, left hand relaxed down. Fingers clearly anatomically correct and face readable. Redraw affected toga folds. Neutral thoughtful expression. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d945ab0a-1c2d-4297-8289-31a80e2497e7.png",
+      "path": "Raw/premade_caesar__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "71f6c19cfe15a7ca477128359353b68faf6920371769575ce073fc7efe54e687",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_caesar__objecting_a",
+      "family": "unique_pose",
+      "id": "caesar",
+      "expression": "neutral",
+      "pose": "objecting_a",
+      "change": "Change pose only: his RIGHT open palm forward at shoulder height, five natural fingers pointing up in restrained please-wait gesture, left arm down. Neutral serious expression. Adjust affected toga sleeve folds naturally.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change pose only: his RIGHT open palm forward at shoulder height, five natural fingers pointing up in restrained please-wait gesture, left arm down. Neutral serious expression. Adjust affected toga sleeve folds naturally. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ff52fb30-e5c9-4d4a-beb9-5a4994715937.png",
+      "path": "Raw/premade_caesar__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "12259a64667fe621523c03ea1560fb546e5a205ba15fb37149b84879034b741b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses_neutral",
+      "family": "unique",
+      "id": "ramesses",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Revise ONLY facial identity and exposed skin of this Ramesses II portrait, keeping entire costume, cap, position and canvas unchanged. Distinct Egyptian man age53: longer oval face with fuller cheeks, broad nasal base and prominent convex bridge, fuller upper and lower lips, large long almond eyes with Egyptian dark eyelid line, gently arched brows, strong rounded projecting chin; deep medium-brown complexion, not the reference's Roman angular gaunt face. Clean shaven, aging eye and mouth creases, natural asymmetry. Neutral composed gaze. Preserve painted1980s anime style, not photorealism. Unchanged green background and fullbody scale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8a184edb-1552-4044-b70b-b4f9d9f28898.png",
+      "path": "Raw/premade_ramesses_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e399389b79486999a53479d274ab7324e1bb1d990ae1c553cde80d71489bcfc3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses_happy",
+      "family": "unique",
+      "id": "ramesses",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Change only face expression to quietly happy closed-mouth warm smile, softened eyelids, lifted cheeks. No costume pose changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change only face expression to quietly happy closed-mouth warm smile, softened eyelids, lifted cheeks. No costume pose changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23668f48-d571-4ba3-a51b-c37eef667b75.png",
+      "path": "Raw/premade_ramesses_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a884f676dcbd2e6a05419be833a29aba01f32d3c4f05e853f6575a57819f135d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses_angry",
+      "family": "unique",
+      "id": "ramesses",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Change only face expression to controlled anger, knitted brows narrowed eyes firm downturned lips. No costume pose changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change only face expression to controlled anger, knitted brows narrowed eyes firm downturned lips. No costume pose changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a187b40d-ba79-4987-b93c-16d9d953f2e9.png",
+      "path": "Raw/premade_ramesses_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c05392f7ea91eecc895db0e77af6184a58a71c4be8503031bda0cdf919eeb837",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses_worried",
+      "family": "unique",
+      "id": "ramesses",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Change only face to anxious concern: brows raised at inner ends, uncertain eyes and slightly parted lips, subtle not caricature.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change only face to anxious concern: brows raised at inner ends, uncertain eyes and slightly parted lips, subtle not caricature. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-58330921-f9c0-416c-ad7c-572e3d301d05.png",
+      "path": "Raw/premade_ramesses_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "91d18fa99aa05c5bd7ee71f5af9ca52b6863bdea385db73949c5f94aa33f7a14",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses_photo",
+      "family": "unique_photo",
+      "id": "ramesses",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace all ancient costume with plain muted taupe civilian jacket cream shirt grey trousers brown practical shoes for2150 ID photo. Remove cap, gold collar and all jewelry, remove kohl. Give him neat very short greying dark hair with ordinary receding hairline. Preserve exact face age skin and neutral expression. Same figure anchors.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace all ancient costume with plain muted taupe civilian jacket cream shirt grey trousers brown practical shoes for2150 ID photo. Remove cap, gold collar and all jewelry, remove kohl. Give him neat very short greying dark hair with ordinary receding hairline. Preserve exact face age skin and neutral expression. Same figure anchors. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aa0a2ba0-a147-4c2c-aff8-d57bd66e4eb7.png",
+      "path": "Raw/premade_ramesses_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "225e840eb79238c2b841c0743fc9cef0d1b5063e5212ceaeee7e66401e5f54df",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses__explaining_b",
+      "family": "unique_pose",
+      "id": "ramesses",
+      "expression": "neutral",
+      "pose": "explaining_b",
+      "change": "Change arm pose: BOTH palms up low at lower chest, asymmetrical height, elbows bent close, calmly explaining. Repaint linen folds affected by pose, collar stays identical.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change arm pose: BOTH palms up low at lower chest, asymmetrical height, elbows bent close, calmly explaining. Repaint linen folds affected by pose, collar stays identical. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-202c7ceb-c3c7-4e86-8105-e5dd772dbd34.png",
+      "path": "Raw/premade_ramesses__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "05d2b3b3bd8d907bc1d695c705ab41a22215d7569c8d80bf94341425791585e9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses__thinking_b",
+      "family": "unique_pose",
+      "id": "ramesses",
+      "expression": "neutral",
+      "pose": "thinking_b",
+      "change": "Change arm pose: LEFT fingertips lightly touch cheek, RIGHT forearm crosses torso supporting left elbow. Face readable, natural correct hands. Repaint linen folds affected by pose, collar stays identical.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Change arm pose: LEFT fingertips lightly touch cheek, RIGHT forearm crosses torso supporting left elbow. Face readable, natural correct hands. Repaint linen folds affected by pose, collar stays identical. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2c6a0cf4-29fe-4890-b801-902d2a7da1ad.png",
+      "path": "Raw/premade_ramesses__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6eefd592276d1df2d4f0a8701f2d25fcbcab2a65c2eaf1f00692f059b51080fa",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ramesses__objecting_b",
+      "family": "unique_pose",
+      "id": "ramesses",
+      "expression": "neutral",
+      "pose": "objecting_b",
+      "change": "Both hands raised at lower chest, palms forward, elbows tucked close in restrained questioning refusal, one hand slightly higher. Five natural fingers per hand. Same neutral serious face, adapt linen folds only around arms.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both hands raised at lower chest, palms forward, elbows tucked close in restrained questioning refusal, one hand slightly higher. Five natural fingers per hand. Same neutral serious face, adapt linen folds only around arms. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6b9a5d3f-d85d-44b3-9733-1bd71012f302.png",
+      "path": "Raw/premade_ramesses__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6507dd6d646d8db1f7b93d57d7524f48d817aab6f64b7978a08e76970552e0d3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa_neutral",
+      "family": "unique",
+      "id": "kurosawa",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Akira Kurosawa, Japanese film director age70, Showa Tokyo1980. Stylized likeness from traits, not photograph copy. Tall lean elderly man with long oval East Asian face, broad forehead, soft jowls, small narrowed eyes behind lightly tinted square glasses, greying eyebrows, closed thin lips. Beige fisherman's bucket hat, worn slate field jacket over pale beige shirt, loose charcoal trousers and plain brown shoes. Slightly stooped shoulders from age, not heroic posture, civilian clothes without logos. No Roman features or garments.. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c3d8fe44-9fd6-4369-ad6c-5acabf4d3ffd.png",
+      "path": "Raw/premade_kurosawa_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "db7922ec83e70f8bc5f89ad596f2ff42cb959def3cd38e4087ff5cf977e792a3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa_happy",
+      "family": "unique",
+      "id": "kurosawa",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only face changes: warm modest smile, lifted cheeks, softly crinkled eyelids visible through glasses. Do not change costume pose.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only face changes: warm modest smile, lifted cheeks, softly crinkled eyelids visible through glasses. Do not change costume pose. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4bcd9bcf-932e-4e40-8133-b804213bc37a.png",
+      "path": "Raw/premade_kurosawa_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "62090af4ff9ee086ba2c66ec1e880808da52dbfdd7f975e0d9d6c97c6667e180",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa_angry",
+      "family": "unique",
+      "id": "kurosawa",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only face changes: stern frown, knitted brows clearly visible through glasses, compressed displeased mouth. Controlled anger. Do not change costume pose.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only face changes: stern frown, knitted brows clearly visible through glasses, compressed displeased mouth. Controlled anger. Do not change costume pose. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b6507468-9597-4471-84dc-ccd9812eb8c7.png",
+      "path": "Raw/premade_kurosawa_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "43ce645d8d5f05682dc92cbaa731fc56e9334594ee153db44c93dfee21d2f952",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa_worried",
+      "family": "unique",
+      "id": "kurosawa",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only face changes: raised inner brows, worried eyes through lenses, slightly open uncertain mouth. Preserve glasses and costume.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only face changes: raised inner brows, worried eyes through lenses, slightly open uncertain mouth. Preserve glasses and costume. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b3f08b0f-2004-4c21-9b1f-c2d307ac6355.png",
+      "path": "Raw/premade_kurosawa_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "57065f985a4faa7965fea2b61833215753addae005cf80e4d013b6a93994183c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa_photo",
+      "family": "unique_photo",
+      "id": "kurosawa",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "2150 civilian passport version: remove bucket hat, show short thinning grey hair neatly combed. Replace field jacket with simple charcoal utility jacket, plain stone undershirt, loose grey trousers and practical shoes. Keep neutral aged face, lightly tinted corrective glasses, body scale and position. No props, logos, headwear.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. 2150 civilian passport version: remove bucket hat, show short thinning grey hair neatly combed. Replace field jacket with simple charcoal utility jacket, plain stone undershirt, loose grey trousers and practical shoes. Keep neutral aged face, lightly tinted corrective glasses, body scale and position. No props, logos, headwear. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-054cc149-8611-4e4e-b041-171102d43463.png",
+      "path": "Raw/premade_kurosawa_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7c716491d4aeda63b5712db77fd0f6f2ff1888c735cd4bf98101e82ac58dc69c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa__explaining_c",
+      "family": "unique_pose",
+      "id": "kurosawa",
+      "expression": "neutral",
+      "pose": "explaining_c",
+      "change": "LEFT hand opens palm up close to upper chest, compact measured explanation, right arm relaxed. Natural aged hands, jacket sleeve folds move correctly. Same neutral face.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT hand opens palm up close to upper chest, compact measured explanation, right arm relaxed. Natural aged hands, jacket sleeve folds move correctly. Same neutral face. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aa0793e7-6d21-4051-bb88-b76b891cfe47.png",
+      "path": "Raw/premade_kurosawa__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7f041b0554707d4aaf15384f8b2227380278b2c93321dc7c8069cba6cd938946",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa__thinking_c",
+      "family": "unique_pose",
+      "id": "kurosawa",
+      "expression": "neutral",
+      "pose": "thinking_c",
+      "change": "Both hands loosely linked at waist, fingers relaxed, quiet reflective stance. Natural aged hands, believable jacket sleeve folds. Same neutral face.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both hands loosely linked at waist, fingers relaxed, quiet reflective stance. Natural aged hands, believable jacket sleeve folds. Same neutral face. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d3195a3f-0c22-4684-9067-496c5d4209d5.png",
+      "path": "Raw/premade_kurosawa__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "25e905e9feae4d698dd9158c6c41f48e72295adccf57428487f645b21ec287a8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_kurosawa__objecting_c",
+      "family": "unique_pose",
+      "id": "kurosawa",
+      "expression": "neutral",
+      "pose": "objecting_c",
+      "change": "RIGHT hand rests open on upper chest, LEFT palm extends low to side in restrained personal objection. Natural aged fingers, correctly connected forearms and believable jacket sleeve folds. Same neutral serious face.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT hand rests open on upper chest, LEFT palm extends low to side in restrained personal objection. Natural aged fingers, correctly connected forearms and believable jacket sleeve folds. Same neutral serious face. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-039eec71-b19a-4c64-9030-c74d65565345.png",
+      "path": "Raw/premade_kurosawa__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "663ad71c6e7a90b6e6cb600163f416efcf27746455b6c334b0cd701330fa9e18",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

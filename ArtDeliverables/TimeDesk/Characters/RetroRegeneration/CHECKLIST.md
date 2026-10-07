@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 98. Full regeneration is NOT complete.
+Saved: 122. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -102,3 +102,27 @@ Saved: 98. Full regeneration is NOT complete.
 | outfit_f_civil_2150_v2 | visually reviewed; registration pending |
 | outfit_f_civil_2150_v3 | neckline revised and visually reviewed; exact collar mask and registration pending |
 | hair_f_civil_2150_brown | visually reviewed; registration pending |
+| premade_caesar_neutral | visually reviewed; registration pending |
+| premade_caesar_happy | visually reviewed; registration pending |
+| premade_caesar_angry | visually reviewed; registration pending |
+| premade_caesar_worried | visually reviewed; registration pending |
+| premade_caesar_photo | visually reviewed; registration pending |
+| premade_caesar__explaining_a | visually reviewed; registration pending |
+| premade_caesar__thinking_a | visually reviewed; registration pending |
+| premade_caesar__objecting_a | visually reviewed; registration pending |
+| premade_ramesses_neutral | visually reviewed; registration pending |
+| premade_ramesses_happy | visually reviewed; registration pending |
+| premade_ramesses_angry | visually reviewed; registration pending |
+| premade_ramesses_worried | visually reviewed; registration pending |
+| premade_ramesses_photo | visually reviewed; registration pending |
+| premade_ramesses__explaining_b | visually reviewed; registration pending |
+| premade_ramesses__thinking_b | visually reviewed; registration pending |
+| premade_ramesses__objecting_b | visually reviewed; registration pending |
+| premade_kurosawa_neutral | visually reviewed; registration pending |
+| premade_kurosawa_happy | visually reviewed; registration pending |
+| premade_kurosawa_angry | visually reviewed; registration pending |
+| premade_kurosawa_worried | visually reviewed; registration pending |
+| premade_kurosawa_photo | visually reviewed; registration pending |
+| premade_kurosawa__explaining_c | visually reviewed; registration pending |
+| premade_kurosawa__thinking_c | visually reviewed; registration pending |
+| premade_kurosawa__objecting_c | visually reviewed; registration pending |
