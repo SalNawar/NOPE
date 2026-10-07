@@ -21,8 +21,9 @@ using static SceneUiKit;
 /// Debt Relief ending, the clerk's papers as printed cards; the world panel
 /// (the endings spec E0: the world's outcomes over the END OF DEMO card and
 /// New Run); and the adoption panel (the Home pet spec PS1, shown after New
-/// Run): the dog's and the cat's choice cards, a name field, the refusal's
-/// line, Back and Adopt.
+/// Run): the pet's big preview, the dog's and the cat's choice cards, the
+/// coat row (its swatch template; TitleUIController copies it per coat), a
+/// name field, the refusal's line, Back and Adopt.
 /// </summary>
 public static class TitleSceneBuilder
 {
@@ -93,7 +94,18 @@ public static class TitleSceneBuilder
             TextAlignmentOptions.TopLeft, new Vector2(0.52f, 0.35f), new Vector2(0.94f, 0.45f));
         Button adoptGo = FindOrCreateButton(adopt, "AdoptButton", "Adopt and start", new Vector2(0.52f, 0.2f), new Vector2(0.94f, 0.31f));
         Button adoptBack = FindOrCreateButton(adopt, "BackButton", "Back", new Vector2(0.05f, 0.04f), new Vector2(0.27f, 0.12f));
+        Transform petFrame = FindOrCreatePanel(adopt, "PetFrame", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, withBackground: true);
+        Transform petView = FindOrCreatePanel(petFrame, "PetView", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, withBackground: false);
+        PetStandIn preview = petView.GetComponent<PetStandIn>();
+        if (preview == null)
+            preview = Undo.AddComponent<PetStandIn>(petView.gameObject);
+        Transform coatRow = FindOrCreatePanel(adopt, "CoatRow", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, withBackground: false);
+        Button coatSwatch = FindOrCreateButton(coatRow, "CoatSwatch", "Coat", Vector2.zero, Vector2.zero);
+        Image swatchWell = FindOrCreateImage(coatSwatch.transform, "Well", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero);
+        Image swatchPicture = FindOrCreateImage(coatSwatch.transform, "Swatch", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero);
         LayOutAdopt(adopt, kit, adoptTitle, adoptBody, dog, cat, nameInput, problem, adoptGo, adoptBack);
+        LayOutPreview(kit, petFrame, (RectTransform)petView);
+        LayOutCoatRow(kit, (RectTransform)coatRow, coatSwatch, swatchWell, swatchPicture);
 
         // --- The Debt Relief ending's papers (redesign phase 13): the clerk's Labour Contract left of the panel, the account right ---
         Transform papers = FindOrCreatePanel(ending, "ClerkPapers", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -134,6 +146,9 @@ public static class TitleSceneBuilder
         soUi.FindProperty("adoptBodyText").objectReferenceValue = adoptBody;
         soUi.FindProperty("adoptDogButton").objectReferenceValue = dog;
         soUi.FindProperty("adoptCatButton").objectReferenceValue = cat;
+        soUi.FindProperty("adoptPreview").objectReferenceValue = preview;
+        soUi.FindProperty("adoptCoatRow").objectReferenceValue = coatRow;
+        soUi.FindProperty("adoptCoatSwatch").objectReferenceValue = coatSwatch;
         soUi.FindProperty("adoptNameInput").objectReferenceValue = nameInput;
         soUi.FindProperty("adoptProblemText").objectReferenceValue = problem;
         soUi.FindProperty("adoptButton").objectReferenceValue = adoptGo;
@@ -157,6 +172,7 @@ public static class TitleSceneBuilder
         ending.gameObject.SetActive(false);
         world.gameObject.SetActive(false);
         adopt.gameObject.SetActive(false);
+        coatSwatch.gameObject.SetActive(false);
         papers.gameObject.SetActive(false);
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
@@ -332,25 +348,48 @@ public static class TitleSceneBuilder
     }
 
     /// <summary>The adoption panel's size (reference px).</summary>
-    private static readonly Vector2 AdoptPanelSize = new Vector2(1180f, 620f);
+    private static readonly Vector2 AdoptPanelSize = new Vector2(1280f, 700f);
 
     /// <summary>A choice card (reference px, as seen), the tile on it and the gap between the two cards.</summary>
-    private static readonly Vector2 ChoiceCardSize = new Vector2(220f, 260f);
+    private static readonly Vector2 ChoiceCardSize = new Vector2(200f, 236f);
 
     /// <summary>The pet's tile on its choice card (reference px, as seen).</summary>
-    private const float ChoiceTileSize = 128f;
+    private const float ChoiceTileSize = 120f;
+
+    /// <summary>The gap between the two kind cards (reference px).</summary>
+    private const float ChoiceGap = 24f;
+
+    /// <summary>The top of the panel's content under its heading and line (reference px).</summary>
+    private const float AdoptContentTop = 186f;
+
+    /// <summary>The pet's big preview at the panel's left (reference px, as seen; the Home pet spec PS11).</summary>
+    private static readonly Vector2 PreviewSize = new Vector2(420f, 440f);
+
+    /// <summary>The left edge of the panel's right column: the cards, the field and the coat row (reference px).</summary>
+    private const float AdoptColumnLeft = Inset + 420f + 40f;
+
+    /// <summary>The coat row's top and height (reference px): under the kind cards, above the foot's plates.</summary>
+    private const float CoatRowTop = 440f, CoatRowHeight = 132f;
+
+    /// <summary>The pet's picture on a coat swatch (reference px, as seen), its top and side insets on the card, and the coat's name under it.</summary>
+    private const float SwatchPictureSize = 88f, SwatchTop = 8f, SwatchSide = 10f, SwatchLabelHeight = 30f;
+
+    /// <summary>The plate behind a swatch's picture: the preview's own plate (PetStandIn's), so a white coat shows on the bone card.</summary>
+    private static readonly Color SwatchWell = new Color(0.86f, 0.8f, 0.68f, 1f);
 
     /// <summary>
     /// The adoption panel, re-applied on every build (sheet 04's ADOPT A
-    /// COMPANION): the kit's bone panel; its heading and line; the dog's and
-    /// the cat's choice cards at the left (the kit's card with the kind's tile
-    /// over its name; under the pointer its hover face; the chosen card takes
-    /// no clicks and shows the selected face, framed in oxblood); the name
-    /// field (the kit's field: its focus face while typing; TitleUIController
-    /// shows the error face on a refusal) with the refusal's line under it in
-    /// signal red; Back on the slate plate and Adopt on the oxblood one at the
-    /// foot right. The drawn preview pet that came before the kit's cards is
-    /// removed.
+    /// COMPANION, with the coats of the Home pet spec PS11): the kit's bone
+    /// panel; its heading and line; the pet's preview at the left
+    /// (LayOutPreview); in the right column the dog's and the cat's choice
+    /// cards (the kit's card with the kind's tile over its name; under the
+    /// pointer its hover face; the chosen card takes no clicks and shows the
+    /// selected face, framed in oxblood), the name field beside them (the
+    /// kit's field: its focus face while typing; TitleUIController shows the
+    /// error face on a refusal) with the refusal's line under it in signal
+    /// red, and the coat row under them (LayOutCoatRow); Back on the slate
+    /// plate and Adopt on the oxblood one at the foot right. The drawn preview
+    /// pet that came before the kit's cards is removed.
     /// </summary>
     private static void LayOutAdopt(Transform panel, UiKitSO kit, TMP_Text title, TMP_Text body, Button dog, Button cat, TMP_InputField name,
                                     TMP_Text problem, Button go, Button back)
@@ -364,10 +403,10 @@ public static class TitleSceneBuilder
         KitScreens.Across(body.rectTransform, Inset, Inset, 92f, 70f);
         KitScreens.Body(body, kit, kit.inkOnLight, KitText.Body);
 
-        ChoiceCard(dog, kit, "tile_dog_rest", Inset, 186f);
-        ChoiceCard(cat, kit, "tile_cat_rest", Inset + ChoiceCardSize.x + 24f, 186f);
+        ChoiceCard(dog, kit, "tile_dog_rest", AdoptColumnLeft, AdoptContentTop);
+        ChoiceCard(cat, kit, "tile_cat_rest", AdoptColumnLeft + ChoiceCardSize.x + ChoiceGap, AdoptContentTop);
 
-        float fieldLeft = Inset + 2f * ChoiceCardSize.x + 24f + 56f;
+        float fieldLeft = AdoptColumnLeft + 2f * ChoiceCardSize.x + ChoiceGap + 32f;
         float fieldWidth = AdoptPanelSize.x - fieldLeft - Inset;
         KitScreens.Place((RectTransform)name.transform, fieldLeft, 206f, new Vector2(fieldWidth, 64f));
         Image field = name.GetComponent<Image>();
@@ -385,7 +424,7 @@ public static class TitleSceneBuilder
         }
         EditorUtility.SetDirty(name);
 
-        KitScreens.Place(problem.rectTransform, fieldLeft + 4f, 282f, new Vector2(fieldWidth - 8f, 60f));
+        KitScreens.Place(problem.rectTransform, fieldLeft + 4f, 282f, new Vector2(fieldWidth - 8f, 120f));
         KitScreens.Body(problem, kit, kit.signalRed, KitText.Body);
         problem.fontStyle = FontStyles.Bold;
 
@@ -393,6 +432,74 @@ public static class TitleSceneBuilder
         KitScreens.Plate(go, kit, "plate_ox");
         KitScreens.PlaceBottomRight((RectTransform)back.transform, Inset + 380f + 22f, 32f, new Vector2(230f, 72f));
         KitScreens.Plate(back, kit, "plate_slate");
+    }
+
+    /// <summary>The pet's big preview (the Home pet spec PS11): the kit's content inset at the panel's left, the PetStandIn inside it (TitleUIController shows the chosen kind in the chosen coat, idle).</summary>
+    private static void LayOutPreview(UiKitSO kit, Transform frame, RectTransform view)
+    {
+        KitScreens.Place((RectTransform)frame, Inset, AdoptContentTop, PreviewSize);
+        KitScreens.Panel(frame, kit, "content_inset");
+        Undo.RecordObject(view, "Lay out the adoption");
+        Stretch(view, Vector2.zero, Vector2.one);
+        view.offsetMin = new Vector2(12f, 12f);
+        view.offsetMax = new Vector2(-12f, -12f);
+    }
+
+    /// <summary>
+    /// The coat row (the Home pet spec PS11) across the right column under
+    /// the kind cards, and its swatch template: a small kit choice card
+    /// (rest and hover swapped; the chosen swatch takes no clicks and shows
+    /// the selected face) with the pet's picture (filled per coat at run
+    /// time) on the preview's plate over the coat's name in the kit's tile
+    /// caption face. The template
+    /// is laid out at the row's full height and the widest a swatch grows;
+    /// TitleUIController copies it per coat.
+    /// </summary>
+    private static void LayOutCoatRow(UiKitSO kit, RectTransform row, Button swatch, Image well, Image picture)
+    {
+        KitScreens.Place(row, AdoptColumnLeft, CoatRowTop, new Vector2(AdoptPanelSize.x - AdoptColumnLeft - Inset, CoatRowHeight));
+        var size = new Vector2(140f, CoatRowHeight);
+        KitScreens.Place((RectTransform)swatch.transform, 0f, 0f, size);
+        KitScreens.Plate(swatch, kit, "choicecard");
+        Undo.RecordObject(swatch, "Lay out the adoption");
+        SpriteState states = swatch.spriteState;
+        states.pressedSprite = kit.Get("choicecard_hover");
+        states.disabledSprite = kit.Get("choicecard_selected");
+        swatch.spriteState = states;
+        swatch.transition = Selectable.Transition.SpriteSwap;
+        ColorBlock colours = swatch.colors;
+        colours.disabledColor = Color.white;
+        swatch.colors = colours;
+        EditorUtility.SetDirty(swatch);
+
+        KitScreens.Across(well.rectTransform, SwatchSide, SwatchSide, SwatchTop, SwatchPictureSize);
+        Undo.RecordObject(well, "Lay out the adoption");
+        well.color = SwatchWell;
+        well.raycastTarget = false;
+        well.transform.SetSiblingIndex(1);
+        EditorUtility.SetDirty(well);
+
+        Undo.RecordObject(picture, "Lay out the adoption");
+        picture.rectTransform.anchorMin = picture.rectTransform.anchorMax = picture.rectTransform.pivot = new Vector2(0.5f, 1f);
+        picture.rectTransform.anchoredPosition = new Vector2(0f, -SwatchTop);
+        picture.rectTransform.sizeDelta = new Vector2(SwatchPictureSize, SwatchPictureSize);
+        picture.preserveAspect = true;
+        picture.raycastTarget = false;
+        picture.sprite = kit.Get("tile_dog_rest");
+        picture.transform.SetSiblingIndex(2);
+        EditorUtility.SetDirty(picture);
+
+        Transform label = swatch.transform.Find("Label");
+        if (label != null)
+        {
+            KitScreens.Across((RectTransform)label, 4f, 4f, SwatchTop + SwatchPictureSize + 2f, SwatchLabelHeight);
+            TMP_Text name = label.GetComponent<TMP_Text>();
+            KitScreens.Label(name, kit, kit.inkOnLight, KitText.TileCaption);
+            Undo.RecordObject(name, "Lay out the adoption");
+            name.margin = Vector4.zero;
+            EditorUtility.SetDirty(name);
+            label.SetAsLastSibling();
+        }
     }
 
     /// <summary>The name field's placeholder ink (muted, on the kit's field).</summary>

@@ -145,6 +145,29 @@ public class NarrativeWorkbookTests
     }
 
     [Test]
+    public void ThePetBlock_HoldsEveryCoatsName_AndAnEditedNameLandsOnItsUiString()
+    {
+        List<RowTable> content = Content();
+        List<RowTable> book = ThroughXlsx(NarrativeWorkbook.Build(ContentSheetMap.World, content, null));
+        RowTable narrative = Sheet(book, "Narrative");
+        RowTable coats = content.Single(t => t.Name == "homePetCoats");
+        Assert.AreEqual(10, coats.Rows.Count, "five coats for the dog, five for the cat");
+        foreach (string[] coat in coats.Rows)
+        {
+            string[] row = Bound(narrative, RefOfLine(content, "uiStrings", "key", coat[coats.Headers.IndexOf("nameKey")]) + ":text");
+            Assert.AreEqual("pet", row[Col(narrative, "narrative")]);
+        }
+
+        string[] ginger = Bound(narrative, RefOfLine(content, "uiStrings", "key", "adopt.coat.ginger") + ":text");
+        Assert.AreEqual("Ginger", ginger[Col(narrative, "text")]);
+        Assert.AreEqual("cat", ginger[Col(narrative, "part")]);
+        ginger[Col(narrative, "text")] = "Marmalade";
+        string json = Import(content, book, out NarrativeImport result);
+        Assert.AreEqual(1, result.Edited);
+        StringAssert.Contains("\"text\": \"Marmalade\"", json);
+    }
+
+    [Test]
     public void AnEditToARowTheSourceChangedMeanwhile_IsAConflict_AndAnUneditedOneIsSkipped()
     {
         List<RowTable> content = Content();

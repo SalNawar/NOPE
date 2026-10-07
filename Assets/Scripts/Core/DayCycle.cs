@@ -29,27 +29,29 @@ public static class DayCycle
             runSeed = runSeed
         };
 
-        Adopt(world, lib, run.startingPetKind, null);
+        Adopt(world, lib, run.startingPetKind, null, null);
         TimelineService.SeedDominance(world, lib, run.gameConfig);
         return world;
     }
 
     /// <summary>
-    /// The run's pet (the Home pet spec PS1): a fresh <paramref name="kind"/>
+    /// The run's pet (the Home pet spec PS1, PS11): a fresh <paramref name="kind"/>
     /// with every need met, called <paramref name="name"/> (PetNames.Clean),
     /// or the content's suggested name for the kind when the name is blank or
     /// refused (PetNames.Check at home.pet.nameMaxLength: the Title checks
-    /// before it adopts, so only a run started elsewhere gets the suggestion).
+    /// before it adopts, so only a run started elsewhere gets the suggestion),
+    /// in <paramref name="coat"/> when the kind lists it, else the kind's
+    /// first coat (PetContent.CoatOf).
     /// </summary>
-    public static void Adopt(WorldState world, ContentLibrarySO lib, PetKind kind, string name)
+    public static void Adopt(WorldState world, ContentLibrarySO lib, PetKind kind, string name, string coat)
     {
         if (world == null)
             return;
         PetContent words = lib != null ? lib.Home.pet : new PetContent();
         PetKindContent k = words.Kind(kind);
         string chosen = PetNames.Check(name, words.nameMaxLength) == PetNameProblem.None ? PetNames.Clean(name) : k != null ? PetNames.Clean(k.suggestedName) : kind.ToString();
-        world.pet = new PetState { kind = kind, name = chosen, adoptedDay = world.day };
-        Debug.Log($"[DayCycle] Adopted a {kind} called '{chosen}'.");
+        world.pet = new PetState { kind = kind, name = chosen, coat = words.CoatOf(kind, coat), adoptedDay = world.day };
+        Debug.Log($"[DayCycle] Adopted a {kind} called '{chosen}' ({world.pet.coat} coat).");
     }
 
     /// <summary>

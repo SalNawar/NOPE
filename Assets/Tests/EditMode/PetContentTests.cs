@@ -12,8 +12,8 @@ public class PetContentTests
         nameMaxLength = 12,
         kinds = new List<PetKindContent>
         {
-            new PetKindContent { kind = PetKind.Dog, word = "dog", suggestedName = "Biscuit", reactions = new List<string> { "{name} wags.", "{name} leans in." }, toyLines = new List<string> { "{name} chases the {toy}." } },
-            new PetKindContent { kind = PetKind.Cat, word = "cat", suggestedName = "Miso", reactions = new List<string> { "{name} purrs." }, toyLines = new List<string> { "{name} bats the {toy}." } }
+            new PetKindContent { kind = PetKind.Dog, word = "dog", suggestedName = "Biscuit", reactions = new List<string> { "{name} wags.", "{name} leans in." }, toyLines = new List<string> { "{name} chases the {toy}." }, coats = Coats("cream", "tan", "chocolate") },
+            new PetKindContent { kind = PetKind.Cat, word = "cat", suggestedName = "Miso", reactions = new List<string> { "{name} purrs." }, toyLines = new List<string> { "{name} bats the {toy}." }, coats = Coats("white", "ginger") }
         },
         hunger = new List<string> { "{name} is fed.", "{name} is hungry.", "{name} is very hungry.", "{name} is starving." },
         cold = new List<string> { "{name} is warm.", "{name} is cold." },
@@ -25,6 +25,15 @@ public class PetContentTests
         paperAdopted = "{name} the {kind} has a home.",
         paperWelfare = "Inspectors ask after a {kind} called {name}."
     };
+
+    /// <summary>Coats with these ids, each named by its "adopt.coat.&lt;id&gt;" UI string.</summary>
+    private static List<PetCoatContent> Coats(params string[] ids)
+    {
+        var coats = new List<PetCoatContent>();
+        foreach (string id in ids)
+            coats.Add(new PetCoatContent { id = id, nameKey = "adopt.coat." + id });
+        return coats;
+    }
 
     private static PetState Biscuit => new PetState { kind = PetKind.Dog, name = "Biscuit", adoptedDay = 1 };
 
@@ -90,6 +99,63 @@ public class PetContentTests
         Assert.IsTrue(problems.Exists(p => p.Contains("R2-D2")));
         Assert.IsTrue(problems.Exists(p => p.Contains("home.pet.cold")));
         Assert.IsTrue(problems.Exists(p => p.Contains("home.pet.worse")));
+    }
+
+    [Test]
+    public void CoatOf_AListedCoat_ElseTheKindsFirst()
+    {
+        PetContent c = Content();
+        Assert.AreEqual("tan", c.CoatOf(PetKind.Dog, "tan"));
+        Assert.AreEqual("ginger", c.CoatOf(PetKind.Cat, "ginger"));
+        Assert.AreEqual("cream", c.CoatOf(PetKind.Dog, ""), "a save from before the coats: the first coat");
+        Assert.AreEqual("cream", c.CoatOf(PetKind.Dog, null));
+        Assert.AreEqual("white", c.CoatOf(PetKind.Cat, "tan"), "another kind's coat is not this kind's");
+        Assert.AreEqual("white", c.CoatOf(PetKind.Cat, "tabby"), "a coat the content dropped");
+        Assert.AreEqual(string.Empty, new PetContent().CoatOf(PetKind.Dog, "tan"), "no content: no coat");
+    }
+
+    [Test]
+    public void Problems_AKindWithoutCoats_ARepeatedCoat_ACoatWithoutIdOrName()
+    {
+        PetContent c = Content();
+        c.kinds[0].coats.Add(new PetCoatContent { id = "tan", nameKey = "adopt.coat.tan" });
+        c.kinds[0].coats.Add(new PetCoatContent { id = " ", nameKey = "" });
+        c.kinds[1].coats.Clear();
+        List<string> problems = c.Problems();
+        Assert.IsTrue(problems.Exists(p => p.Contains("coat 'tan' twice")), string.Join("\n", problems));
+        Assert.IsTrue(problems.Exists(p => p.Contains("coats[4] has no id")));
+        Assert.IsTrue(problems.Exists(p => p.Contains("coats[4] has no nameKey")));
+        Assert.IsTrue(problems.Exists(p => p.Contains("Cat has no coats")));
+    }
+
+    /// <summary>
+    /// The save's own serializer (SaveSystem writes WorldState with
+    /// JsonUtility) keeps the coat, and a save written before the coats loads
+    /// it blank, which reads as the kind's first coat. JsonUtility is native
+    /// code: it runs in Unity's EditMode suite only, and the offline runner
+    /// (outside Unity) skips the test.
+    /// </summary>
+    [Test]
+    public void PetState_TheCoatRoundTripsInTheSave_AndAnOlderSaveLoadsItBlank()
+    {
+        var pet = new PetState { kind = PetKind.Cat, name = "Miso", coat = "ginger", adoptedDay = 1 };
+        string json;
+        try
+        {
+            json = UnityEngine.JsonUtility.ToJson(pet);
+        }
+        catch (System.Security.SecurityException)
+        {
+            return; // outside Unity: no native JsonUtility
+        }
+        StringAssert.Contains("\"coat\":\"ginger\"", json);
+        PetState back = UnityEngine.JsonUtility.FromJson<PetState>(json);
+        Assert.AreEqual("ginger", back.coat);
+        Assert.AreEqual(PetKind.Cat, back.kind);
+
+        PetState older = UnityEngine.JsonUtility.FromJson<PetState>(json.Replace(",\"coat\":\"ginger\"", string.Empty));
+        Assert.AreEqual(string.Empty, older.coat, "a save from before the coats has none");
+        Assert.AreEqual("white", Content().CoatOf(older.kind, older.coat), "and wears the kind's first coat");
     }
 
     [Test]

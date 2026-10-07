@@ -27305,7 +27305,7 @@
       },
       {
         "key": "adopt.body",
-        "text": "The Directorate's shelter has a dog and a cat waiting. One of them goes home with you tonight. Choose, and give them a name.",
+        "text": "The Directorate's shelter has a dog and a cat waiting. One of them goes home with you tonight. Choose one and its coat, and give them a name.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -27318,6 +27318,60 @@
       {
         "key": "adopt.cat",
         "text": "Cat",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.cream",
+        "text": "Cream",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.tan",
+        "text": "Tan",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.chocolate",
+        "text": "Chocolate",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.charcoal",
+        "text": "Charcoal",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.grey",
+        "text": "Grey",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.white",
+        "text": "White",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.ginger",
+        "text": "Ginger",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.slate",
+        "text": "Slate",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.coat.black",
+        "text": "Black",
         "gloss": "None",
         "tier": "Full"
       },
@@ -29619,6 +29673,28 @@
             "{name} carries the {toy} round the flat like a trophy.",
             "{name} drops the {toy} at your feet. Again. And again.",
             "{name} guards the {toy} from an invisible rival."
+          ],
+          "coats": [
+            {
+              "id": "cream",
+              "nameKey": "adopt.coat.cream"
+            },
+            {
+              "id": "tan",
+              "nameKey": "adopt.coat.tan"
+            },
+            {
+              "id": "chocolate",
+              "nameKey": "adopt.coat.chocolate"
+            },
+            {
+              "id": "charcoal",
+              "nameKey": "adopt.coat.charcoal"
+            },
+            {
+              "id": "grey",
+              "nameKey": "adopt.coat.grey"
+            }
           ]
         },
         {
@@ -29635,6 +29711,28 @@
             "{name} ambushes the {toy} from under the sofa.",
             "{name} bats the {toy} under the radiator and stares at you.",
             "{name} decides the {toy} is beneath them, then pounces anyway."
+          ],
+          "coats": [
+            {
+              "id": "white",
+              "nameKey": "adopt.coat.white"
+            },
+            {
+              "id": "ginger",
+              "nameKey": "adopt.coat.ginger"
+            },
+            {
+              "id": "slate",
+              "nameKey": "adopt.coat.slate"
+            },
+            {
+              "id": "black",
+              "nameKey": "adopt.coat.black"
+            },
+            {
+              "id": "cream",
+              "nameKey": "adopt.coat.cream"
+            }
           ]
         }
       ],

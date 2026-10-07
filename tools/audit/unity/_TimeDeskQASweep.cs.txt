@@ -8,7 +8,8 @@
 // area, contact_<area>.png (tools/audit/qa_contact_sheet.py, run at the end with the python on PATH).
 //
 // The path, with a fixed seed (12345), from a clean slot (the player's save and preferences set aside and restored):
-// - title: the Title (Continue hidden with no save), New Run, the pet adoption (a refused name, then the dog Biscuit);
+// - title: the Title (Continue hidden with no save), New Run, the pet adoption (a refused name, the cat's coats, then the dog
+//   Biscuit in the charcoal coat, not the default: the preview and the coat row follow the choice);
 // - office, day 1: the briefing and its Bureau memo, the AVAILABLE start, the desk with a traveller, the stability
 //   monitor's size (the Helix River), the wheel opened and every one of its choices with the speech bubble, inspect mode
 //   with a passport field linked to a rulebook row, the passport picked up, dropped and moved to the reading view, the
@@ -19,7 +20,8 @@
 //   pressed where it hangs (it prints on the booklet's visa page), the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
 //   cover flipped up, the button pressed); the citation slip (shown on the screen, its lines readable, its CITED stamp
 //   slamming on once printed, ACKNOWLEDGE putting it away); the cameras' idle sway off by default, on and off again;
-// - home, night 1: the bills (each toggled; Heating must leave Electricity alone), the pet corner (pat, play), the House
+// - home, night 1: the bills (each toggled; Heating must leave Electricity alone), the pet corner (pat, play; the pet drawn
+//   in its charcoal coat), the House
 //   (a card selected, bought when the wallet allows), the Night Slots machine (idle, a lever pull, the spin landing,
 //   the can't-afford state), Sleep;
 // - office, day 5 (RunManager.JumpToDay: the scanner and every PC app are in): two papers overlapped both ways, two papers'
@@ -237,13 +239,25 @@ public static class _TimeDeskQASweep
         ((Button)Field(title, "adoptCatButton")).onClick.Invoke();
         yield return Frames(2);
         Check(!((Button)Field(title, "adoptCatButton")).interactable, "adopt: the cat button shows it is chosen");
+        Check(CoatIds(title).SequenceEqual(new[] { "white", "ginger", "slate", "black", "cream" }), $"adopt: the cat offers its five coats ({string.Join(", ", CoatIds(title))})");
+        yield return Shot("title", "adopt_cat");
         ((Button)Field(title, "adoptDogButton")).onClick.Invoke();
         yield return Frames(2);
+        Check(CoatIds(title).SequenceEqual(new[] { "cream", "tan", "chocolate", "charcoal", "grey" }), $"adopt: the dog offers its five coats ({string.Join(", ", CoatIds(title))})");
+        Button charcoal = CoatButton(title, "charcoal");
+        Check(charcoal != null && charcoal.interactable, "adopt: the charcoal coat takes a click");
+        charcoal?.onClick.Invoke();
+        yield return Seconds(0.5f);
+        Check(charcoal != null && !charcoal.interactable && CoatButton(title, "cream").interactable, "adopt: the charcoal swatch shows it is chosen, the default one is live again");
+        string preview = PetPicture((PetStandIn)Field(title, "adoptPreview"));
+        Check(preview == "pet_dog_charcoal_idle", $"adopt: the preview shows the dog in the charcoal coat, idle ('{preview}')");
+        yield return Shot("title", "adopt_coat");
         input.text = "Biscuit";
         ((Button)Field(title, "adoptButton")).onClick.Invoke();
         yield return Frames(3);
         WorldState w = RunManager.Instance.World;
-        Check(w.pet != null && w.pet.name == "Biscuit" && w.pet.kind == PetKind.Dog, $"adopt: the run starts with the dog Biscuit ({w.pet?.name} {w.pet?.kind})");
+        Check(w.pet != null && w.pet.name == "Biscuit" && w.pet.kind == PetKind.Dog && w.pet.coat == "charcoal",
+              $"adopt: the run starts with the dog Biscuit in the charcoal coat ({w.pet?.name} {w.pet?.kind} {w.pet?.coat})");
     }
 
     private static IEnumerator TitleContinue()
@@ -1110,6 +1124,8 @@ public static class _TimeDeskQASweep
         Check(petPanel != null && petPanel.activeInHierarchy, "home: the pet corner follows the bills");
         if (petPanel != null && petPanel.activeInHierarchy)
         {
+            string corner = PetPicture((PetStandIn)Field(ui, "petView"));
+            Check(corner != null && corner.StartsWith("pet_dog_charcoal_"), $"home: the pet's corner draws it in its charcoal coat ('{corner}')");
             ((Button)Field(ui, "petPatButton")).onClick.Invoke();
             yield return Seconds(0.6f);
             string reaction = ((TMP_Text)Field(ui, "petReactionText")).text;
@@ -1954,6 +1970,22 @@ public static class _TimeDeskQASweep
         if (message.StartsWith("Account API did not become accessible"))
             return;
         try { File.AppendAllText(WarningsPath, $"[{type}] {message}\n"); } catch (IOException) { }
+    }
+
+    /// <summary>The adoption panel's coat swatches' ids, in order.</summary>
+    private static List<string> CoatIds(TitleUIController title) =>
+        ((IEnumerable<(Button button, string coat)>)Field(title, "_coatSwatches")).Select(s => s.coat).ToList();
+
+    /// <summary>The adoption panel's swatch of <paramref name="coat"/> (null when the row lacks it).</summary>
+    private static Button CoatButton(TitleUIController title, string coat) =>
+        ((IEnumerable<(Button button, string coat)>)Field(title, "_coatSwatches")).FirstOrDefault(s => s.coat == coat).button;
+
+    /// <summary>The art a PetStandIn draws (its picture's sprite name), or null when it draws the code stand-in.</summary>
+    private static string PetPicture(PetStandIn view)
+    {
+        Transform picture = view != null ? view.transform.Find("Figure/Picture") : null;
+        Image image = picture != null ? picture.GetComponent<Image>() : null;
+        return image != null && image.sprite != null ? image.sprite.name : null;
     }
 
     private static object Field(object target, string name)

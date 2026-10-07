@@ -89,6 +89,10 @@ public static partial class WorldContentGenerator
         foreach (LookSlot slot in Looks.Slots)
             RequireKey(keys, Looks.SlotKey(slot), "Looks.SlotKey", errors);
         RequireKey(keys, WorldFactors.LeftBehindKey, "a failure ending's world page (WorldFactors.LeftBehindKey)", errors);
+        foreach (PetKindData k in src.home?.pet?.kinds ?? Array.Empty<PetKindData>())
+            foreach (PetCoatData c in k?.coats ?? Array.Empty<PetCoatData>())
+                if (!string.IsNullOrWhiteSpace(c?.nameKey))
+                    RequireKey(keys, c.nameKey, $"home.pet.kinds {k.kind}'s coat '{c.id}'", errors);
 
         foreach (LanguageData l in ui.languages ?? Array.Empty<LanguageData>())
         {
