@@ -590,6 +590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HomeUIController
   kit: {fileID: 11400000, guid: 293fe75c7d4472440b654c55ca31e277, type: 2}
+  backdrop: {fileID: 1696245245}
   moneyText: {fileID: 1774239108}
   dayText: {fileID: 1350252250}
   expensesPanel: {fileID: 121406627}
