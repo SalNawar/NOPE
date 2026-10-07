@@ -165,9 +165,6 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
     [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
 
-    /// <summary>Seconds a press takes, down and up.</summary>
-    [Min(0f)] public float stampPressSeconds = 0.18f;
-
     /// <summary>Seconds a stamp dragged out over the desk takes to go back to its place in the rack once pressed or let go (a cut under Reduced Motion).</summary>
     [Min(0f)] public float stampReturnSeconds = 0.2f;
 

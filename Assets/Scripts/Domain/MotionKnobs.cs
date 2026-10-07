@@ -6,7 +6,8 @@ using System;
 /// how far each control state moves (hover, press, release, click, a
 /// disabled click's "no"), how panels, pills and popups come and go, and the
 /// desk's physical layer (papers, stamps). Lengths on the UI are reference
-/// pixels (the 1920×1080 canvas), on the desk metres. Every motion goes
+/// pixels (the 1920×1080 canvas), on the desk metres (a dragged paper's
+/// lift is the desk's own knob, DeskConfigSO.dragLift). Every motion goes
 /// through a Spring with one of the feels; the player's Motion intensity and
 /// Reduced Motion scale it (MotionAmount).
 /// </summary>
@@ -62,9 +63,6 @@ public sealed class MotionKnobs
     /// <summary>The seconds a fade takes in place of a motion under Reduced Motion.</summary>
     public float reducedFadeSeconds = 0.12f;
 
-    /// <summary>How high a dragged paper lifts off the desk.</summary>
-    public float paperLift = 0.012f;
-
     /// <summary>A dragged paper's most tilt toward its travel (degrees) and the tilt per metre per second of speed.</summary>
     public float paperTiltMax = 7f, paperTiltPerSpeed = 14f;
 
@@ -86,8 +84,14 @@ public sealed class MotionKnobs
     /// <summary>Seconds the ink mark takes to bloom in after a slam.</summary>
     public float inkBloomSeconds = 0.08f;
 
-    /// <summary>The feel of a paper's lift and drop, a stamp's rebound and the shake.</summary>
-    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Elastic, shakeFeel = MotionFeel.Elastic;
+    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, a stamp's rebound and the desk's shake.</summary>
+    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Balanced, shakeFeel = MotionFeel.Elastic;
+
+    /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack, the stamp bar): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>
+    public MotionFeel deskMoveFeel = MotionFeel.Balanced;
+
+    /// <summary>The curve of the desk camera's blend (the reading view, the PC zoom): a heavy settle with a slight overshoot.</summary>
+    public MotionFeel cameraFeel = MotionFeel.Heavy;
 
     /// <summary>A spring settles (stops and leaves the motion driver) within this of its target and slower than settleSpeed.</summary>
     public float settleValue = 0.0005f, settleSpeed = 0.005f;

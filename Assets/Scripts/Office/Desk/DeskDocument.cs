@@ -162,12 +162,32 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     /// <summary>How many stamps the paper carries (each next one steps across its stamp area).</summary>
     private int _stamps;
+
+    /// <summary>The last stamp's mark, its word (a code-drawn stamp's) and its ink as printed (BloomLastStamp blooms it in).</summary>
+    private Renderer _lastMark;
+    private TextMeshPro _lastWord;
+    private Color _lastInk;
+
+    /// <summary>The ink's bloom (made on the first bloom).</summary>
+    private InkBloom _bloom;
     private Material _ownPaperMaterial;
     private MaterialPropertyBlock _block;
     private int _hoveredSlot = -1;
 
     /// <summary>The sheet's scale now, the scale it eases toward (the zone's) and where the ease started.</summary>
     private float _sizeNow = 1f, _sizeTarget = 1f, _sizeFrom = 1f, _sizeElapsed;
+
+    /// <summary>The paper's feel (the game feel's desk layer): its lift off the desk (a spring toward SetLift's height), its tilt toward a drag's travel (degrees about the sheet's x and z) and a drop's squash (wider by the value).</summary>
+    private Spring _lift, _tiltX, _tiltZ, _squash;
+
+    /// <summary>True once the lift has a place (the first SetLift puts it there at once), and the drag's state last frame (a pick-up or a drop plays its cue and its squash).</summary>
+    private bool _liftPlaced, _wasDragged;
+
+    /// <summary>Where the paper was last frame (a drag's speed tilts it).</summary>
+    private Vector3 _lastPosition;
+
+    /// <summary>The sheet's own rotation (lying flat, its face up: the builder's), which the tilt turns in the paper's space.</summary>
+    private Quaternion? _sheetRest;
 
     private Vector3 _slideFrom;
     private Vector3 _slideTo;
@@ -205,21 +225,21 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>Only while one runs: eases the sheet toward its zone's size, and moves along the slide (its done callback on landing).</summary>
     private void Update()
     {
+        Feel(Time.unscaledDeltaTime);
         if (!Mathf.Approximately(_sizeNow, _sizeTarget))
         {
             _sizeElapsed += Time.deltaTime;
             float seconds = MotionPreference.Reduced ? 0f : resizeSeconds;
             float eased = seconds > 0f ? Mathf.Clamp01(_sizeElapsed / seconds) : 1f;
-            _sizeNow = eased >= 1f ? _sizeTarget : Mathf.Lerp(_sizeFrom, _sizeTarget, DeskZones.Ease(eased));
-            if (sheet != null)
-                sheet.localScale = Vector3.one * _sizeNow;
+            _sizeNow = eased >= 1f ? _sizeTarget : Mathf.LerpUnclamped(_sizeFrom, _sizeTarget, UiMotion.Ease(eased, UiMotion.Knobs.deskMoveFeel, seconds));
+            ShowSheetScale();
         }
         if (!IsSliding)
             return;
 
         _slideElapsed += Time.deltaTime;
         float t = _slideSeconds > 0f ? Mathf.Clamp01(_slideElapsed / _slideSeconds) : 1f;
-        transform.position = Vector3.Lerp(_slideFrom, _slideTo, t);
+        transform.position = Vector3.LerpUnclamped(_slideFrom, _slideTo, UiMotion.Ease(t, UiMotion.Knobs.deskMoveFeel, _slideSeconds));
         if (t < 1f)
             return;
 
@@ -349,8 +369,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         if (instant)
         {
             _sizeNow = target;
-            if (sheet != null)
-                sheet.localScale = Vector3.one * target;
+            ShowSheetScale();
         }
 
         bool reading = zone == DeskZone.Desk;
@@ -544,6 +563,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _block.SetColor(BaseColorId, art != null ? new Color(1f, 1f, 1f, ink.a / StampAlpha) : ink);
         mark.SetPropertyBlock(_block);
         mark.gameObject.SetActive(true);
+        _lastMark = mark;
+        _lastWord = null;
+        _lastInk = art != null ? new Color(1f, 1f, 1f, ink.a / StampAlpha) : ink;
 
         if (art == null && style != null)
         {
@@ -558,8 +580,102 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift - 0.0001f);
             word.rectTransform.localRotation = Quaternion.Euler(0f, 0f, tilt);
             word.GetComponent<MeshRenderer>().enabled = true;
+            _lastWord = word;
         }
         return new FaceRect(place.XMin * _scale, place.YMin * _scale, place.XMax * _scale, place.YMax * _scale);
+    }
+
+    /// <summary>
+    /// The last stamp's ink blooms in (the game feel's slam, Saleh 2026-10-07:
+    /// "the ink mark blooming in over 80 ms"): hidden for <paramref name="delay"/>
+    /// seconds (the stamp's way down), then over MotionKnobs.inkBloomSeconds
+    /// its ink comes up from nothing as the mark shrinks from a little larger
+    /// to its printed size. The mark is printed (and counts) at once; only its
+    /// look waits. A fade with no delay under Reduced Motion; none when still.
+    /// </summary>
+    public void BloomLastStamp(float delay)
+    {
+        MotionAmount amount = UiMotion.Amount;
+        if (_lastMark == null || amount.Still && !amount.Reduced)
+            return;
+        _bloom ??= new InkBloom(this);
+        _bloom.Start(_lastMark, _lastWord, _lastInk, amount.Reduced ? 0f : delay, UiMotion.Knobs.inkBloomSeconds, amount.Share);
+        UiMotion.Run(_bloom);
+    }
+
+    /// <summary>One mark's bloom (BloomLastStamp), stepped by UiMotion while it runs.</summary>
+    private sealed class InkBloom : IMotionTick
+    {
+        /// <summary>How much larger the mark starts than it prints (a share of its size, at full motion).</summary>
+        private const float Spread = 0.3f;
+
+        private readonly DeskDocument _paper;
+        private Renderer _mark;
+        private TextMeshPro _word;
+        private Color _ink, _wordInk;
+        private Vector3 _scale, _wordScale;
+        private float _wait, _seconds, _elapsed, _share;
+
+        public InkBloom(DeskDocument paper) => _paper = paper;
+
+        /// <summary>Starts on <paramref name="mark"/> (a bloom still running on another mark ends at once).</summary>
+        public void Start(Renderer mark, TextMeshPro word, Color ink, float delay, float seconds, float share)
+        {
+            if (_mark != null && _mark != mark)
+                Show(1f);
+            _mark = mark;
+            _word = word;
+            _ink = ink;
+            _wordInk = word != null ? word.color : default;
+            _scale = mark.transform.localScale;
+            _wordScale = word != null ? word.transform.localScale : Vector3.one;
+            _wait = delay;
+            _seconds = seconds;
+            _share = share;
+            _elapsed = 0f;
+            Show(0f);
+        }
+
+        /// <summary>Waits out the delay, then blooms; false once the mark shows as printed.</summary>
+        public bool TickMotion(float dt)
+        {
+            if (_paper == null || _mark == null)
+                return false;
+            if (_wait > 0f)
+            {
+                _wait -= dt;
+                if (_wait > 0f)
+                    return true;
+                dt = -_wait;
+            }
+            _elapsed += dt;
+            float p = _seconds > 0f ? Mathf.Clamp01(_elapsed / _seconds) : 1f;
+            Show(p);
+            if (p < 1f)
+                return true;
+            _mark = null;
+            return false;
+        }
+
+        /// <summary>Draws the mark at <paramref name="p"/> of its bloom (1: as printed).</summary>
+        private void Show(float p)
+        {
+            float eased = 1f - (1f - p) * (1f - p);
+            float grow = 1f + Spread * _share * (1f - eased);
+            MaterialPropertyBlock block = _paper._block;
+            _mark.GetPropertyBlock(block);
+            Color ink = _ink;
+            ink.a *= eased;
+            block.SetColor(BaseColorId, ink);
+            _mark.SetPropertyBlock(block);
+            _mark.transform.localScale = new Vector3(_scale.x * grow, _scale.y * grow, _scale.z);
+            if (_word == null)
+                return;
+            Color word = _wordInk;
+            word.a *= eased;
+            _word.color = word;
+            _word.transform.localScale = _wordScale * grow;
+        }
     }
 
     /// <summary>The code-drawn stamp's frame: a thick outer rectangle and a hairline inside it, white on clear (tinted by the ink), painted once.</summary>
@@ -654,11 +770,85 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         filter.sharedMesh = _shapedMesh;
     }
 
-    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres.</summary>
+    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres: the first place at once, then on the paper's spring (a picked-up paper rises, a dropped one settles; a cut without motion).</summary>
     public void SetLift(float height)
     {
-        if (sheet != null)
-            sheet.localPosition = new Vector3(0f, height, 0f);
+        if (sheet == null)
+            return;
+        if (!_liftPlaced || UiMotion.Amount.Still)
+        {
+            _liftPlaced = true;
+            _lift.Snap(height);
+            ShowFeel();
+            return;
+        }
+        _lift.Target = height;
+    }
+
+    /// <summary>
+    /// The paper's feel (Saleh 2026-10-07: every touch reads as physical): a
+    /// pick-up and a drop play their cues; while dragged the sheet tilts
+    /// toward its travel by its speed (MotionKnobs.paperTiltPerSpeed, at most
+    /// paperTiltMax), its leading edge dipping; dropped, it squashes softly
+    /// wider (paperDropSquash) and flutters back flat; its lift follows SetLift
+    /// on the same spring (paperFeel). Scaled by the Motion intensity; still
+    /// under Reduced Motion. Nothing runs while it rests.
+    /// </summary>
+    private void Feel(float dt)
+    {
+        if (sheet == null || drag == null)
+            return;
+        bool dragged = drag.IsDragging;
+        Vector3 position = transform.position;
+        MotionKnobs knobs = UiMotion.Knobs;
+        MotionAmount amount = UiMotion.Amount;
+        if (dragged != _wasDragged)
+        {
+            _wasDragged = dragged;
+            UiSounds.Play(dragged ? UiSoundCue.PaperPickup : UiSoundCue.PaperDrop);
+            if (!dragged && !amount.Still)
+            {
+                SpringTuning paper = knobs.Get(knobs.paperFeel);
+                _squash.Kick(paper.KickFor(knobs.paperDropSquash * amount.Share));
+                _tiltX.Kick(paper.KickFor(knobs.paperTiltMax * 0.25f * amount.Share)); // the flutter as it lands
+            }
+        }
+        if (dragged && dt > 0f && !amount.Still)
+        {
+            Vector3 travel = transform.InverseTransformDirection(position - _lastPosition) / dt;
+            float most = knobs.paperTiltMax * amount.Share;
+            _tiltX.Target = Mathf.Clamp(travel.z * knobs.paperTiltPerSpeed * amount.Share, -most, most);
+            _tiltZ.Target = Mathf.Clamp(-travel.x * knobs.paperTiltPerSpeed * amount.Share, -most, most);
+        }
+        else
+            _tiltX.Target = _tiltZ.Target = 0f;
+        _lastPosition = position;
+        if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest)
+            return;
+        SpringTuning tuning = knobs.Get(knobs.paperFeel);
+        _lift.Step(dt, tuning, knobs.settleValue * 0.01f, knobs.settleSpeed * 0.01f); // metres
+        _tiltX.Step(dt, tuning, knobs.settleValue * 10f, knobs.settleSpeed * 10f); // degrees
+        _tiltZ.Step(dt, tuning, knobs.settleValue * 10f, knobs.settleSpeed * 10f);
+        _squash.Step(dt, tuning, knobs.settleValue, knobs.settleSpeed);
+        ShowFeel();
+    }
+
+    /// <summary>Draws the lift and the tilt on the sheet, and its scale.</summary>
+    private void ShowFeel()
+    {
+        sheet.localPosition = new Vector3(0f, _lift.Value, 0f);
+        _sheetRest ??= sheet.localRotation;
+        sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f ? _sheetRest.Value : Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+        ShowSheetScale();
+    }
+
+    /// <summary>The sheet's scale: its zone's size, wider in its own plane (its x and y: it lies on its back) by a drop's squash.</summary>
+    private void ShowSheetScale()
+    {
+        if (sheet == null)
+            return;
+        float wide = 1f + _squash.Value;
+        sheet.localScale = new Vector3(_sizeNow * wide, _sizeNow * wide, _sizeNow);
     }
 
     /// <summary>
@@ -680,7 +870,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             click.Interactable = clickable;
     }
 
-    /// <summary>Slides the paper to a world point in <paramref name="seconds"/> (a linear move), then calls <paramref name="done"/>.</summary>
+    /// <summary>Slides the paper to a world point in <paramref name="seconds"/> (on the desk's spring curve, MotionKnobs.deskMoveFeel: it lands with a little overshoot, exactly there at the end), then calls <paramref name="done"/>.</summary>
     public void SlideTo(Vector3 target, float seconds, Action done)
     {
         _slideFrom = transform.position;

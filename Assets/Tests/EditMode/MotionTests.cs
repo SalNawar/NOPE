@@ -299,4 +299,33 @@ public class MotionTests
         a.Step(0.1f, Knobs.balanced, Knobs.reducedFadeSeconds, Knobs.settleValue, Knobs.settleSpeed);
         Assert.Greater(a.Presence, 0f, "then grows");
     }
+
+    [Test]
+    public void SpringCurve_StartsAt0_LandsExactlyOn1_AndKeepsTheSpringsShape()
+    {
+        foreach (MotionFeel feel in System.Enum.GetValues(typeof(MotionFeel)))
+        {
+            SpringTuning tuning = Knobs.Get(feel);
+            Assert.AreEqual(0f, SpringCurve.Ease(0f, tuning, 0.3f), $"{feel} starts at 0");
+            Assert.AreEqual(1f, SpringCurve.Ease(1f, tuning, 0.3f), $"{feel} lands on 1");
+            Assert.AreEqual(1f, SpringCurve.Ease(0.5f, tuning, 0f), "no length: a cut");
+        }
+        float peak = 0f;
+        for (int i = 0; i <= 100; i++)
+            peak = System.Math.Max(peak, SpringCurve.Ease(i / 100f, Knobs.elastic, 0.6f));
+        Assert.Greater(peak, 1.05f, "an elastic curve swings past its end before it lands");
+        for (int i = 1; i <= 100; i++)
+            Assert.LessOrEqual(SpringCurve.Ease(i / 100f, SpringTuning.Critical(300f), 0.5f), 1f + 1e-5f, "a critical curve never does");
+    }
+
+    [Test]
+    public void SpringCurve_Response_MatchesTheIntegrator()
+    {
+        foreach (SpringTuning tuning in new[] { Knobs.elastic, Knobs.balanced, SpringTuning.Critical(300f), SpringTuning.WithRatio(300f, 1.6f) })
+        {
+            Spring s = From0To1();
+            Run(ref s, tuning, 0.25f, 240f);
+            Assert.AreEqual(SpringCurve.Response(0.25f, tuning), s.Value, 0.01f, $"ratio {tuning.Ratio}");
+        }
+    }
 }

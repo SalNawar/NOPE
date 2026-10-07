@@ -188,3 +188,46 @@ public struct Spring
         return true;
     }
 }
+
+/// <summary>
+/// A spring's step response as an easing curve for a motion of fixed length
+/// (a paper's slide, a stamp's way back, the stamp bar, the desk camera's
+/// blend): the curve a spring of the given tuning draws from 0 toward 1 over
+/// the motion's seconds, blended so it lands exactly on 1 at the end. It
+/// keeps the length a rule or a probe counts on, and the spring's shape (an
+/// under-damped feel swings past 1 before it lands).
+/// </summary>
+public static class SpringCurve
+{
+    /// <summary>The curve at <paramref name="t"/> (0..1, clamped) of a motion lasting <paramref name="seconds"/> with <paramref name="tuning"/>: 0 at the start, exactly 1 at the end.</summary>
+    public static float Ease(float t, SpringTuning tuning, float seconds)
+    {
+        if (t <= 0f)
+            return 0f;
+        if (t >= 1f || seconds <= 0f)
+            return 1f;
+        float atEnd = Response(seconds, tuning);
+        float blend = t * t * t;
+        return Response(t * seconds, tuning) + (1f - atEnd) * blend;
+    }
+
+    /// <summary>A spring of <paramref name="tuning"/> let go at rest 1 unit from its target: how far it has come after <paramref name="time"/> seconds (the closed-form step response; 1 = arrived).</summary>
+    public static float Response(float time, SpringTuning tuning)
+    {
+        float w = tuning.Omega;
+        if (w <= 0f || time <= 0f)
+            return 0f;
+        float z = tuning.Ratio;
+        if (z < 1f - 1e-4f)
+        {
+            float s = MathF.Sqrt(1f - z * z);
+            float wd = w * s;
+            return 1f - MathF.Exp(-z * w * time) * (MathF.Cos(wd * time) + z / s * MathF.Sin(wd * time));
+        }
+        if (z <= 1f + 1e-4f)
+            return 1f - MathF.Exp(-w * time) * (1f + w * time);
+        float root = MathF.Sqrt(z * z - 1f);
+        float r1 = -w * (z - root), r2 = -w * (z + root);
+        return 1f + (r2 * MathF.Exp(r1 * time) - r1 * MathF.Exp(r2 * time)) / (r1 - r2);
+    }
+}

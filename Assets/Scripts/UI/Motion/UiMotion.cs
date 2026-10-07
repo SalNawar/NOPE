@@ -50,6 +50,22 @@ public sealed class UiMotion : MonoBehaviour
     /// <summary>How much of each motion plays now (the player's Motion intensity and Reduced Motion).</summary>
     public static MotionAmount Amount => new MotionAmount(MotionPreference.Intensity, MotionPreference.Reduced);
 
+    /// <summary>
+    /// The shape of a motion of fixed length (<paramref name="seconds"/>; a
+    /// paper's slide, the stamp bar, the desk camera's blend) at
+    /// <paramref name="t"/> (0..1): <paramref name="feel"/>'s spring curve
+    /// (SpringCurve), toward the critically damped one (no overshoot) as the
+    /// Motion intensity falls, that one under Reduced Motion. 0 at the start,
+    /// exactly 1 at the end, so the length a rule counts on stays.
+    /// </summary>
+    public static float Ease(float t, MotionFeel feel, float seconds)
+    {
+        SpringTuning tuning = Knobs.Get(feel);
+        float calm = SpringCurve.Ease(t, SpringTuning.Critical(tuning.stiffness, tuning.mass), seconds);
+        float share = Amount.Share;
+        return share <= 0f ? calm : calm + (SpringCurve.Ease(t, tuning, seconds) - calm) * share;
+    }
+
     /// <summary>Steps <paramref name="motion"/> every frame until it settles (nothing outside play mode; a motion already running is not added twice).</summary>
     public static void Run(IMotionTick motion)
     {
