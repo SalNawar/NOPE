@@ -1,0 +1,13 @@
+{
+  "scope": "Thebes circa 1470 BCE, existing male and female silhouettes",
+  "assembly": "Existing PNG references, runtime source-space clips and joint transforms; fixed torso/outfit reused in five poses",
+  "renderer": "Node sharp/librsvg, exact SVG to PNG rendering",
+  "structuralTests": "PASS: canvas, references, whole-set fallback, optional layers, baked complexion selection, thinking-hand order",
+  "visualQA": "FAIL for production",
+  "fixedAfterFirstVisualReview": ["Rotated forearm clipped by neutral envelope", "Arm separator masks reached underwear", "Outward gesture bend direction", "Forearm behind clothing"],
+  "verifiedInRevisedVisuals": ["All arms present", "No gray torso/underwear rectangles", "Stationary torso/outfit/head/feet", "Thinking hand pixels above face and accessory"],
+  "remainingVisualDefects": ["Thinking shoulder caps have flat ends", "Bent elbow joints have abrupt corners", "Reused neutral hands are not proper gesture drawings"],
+  "nextArtRequirement": "Authored registered bent-arm overlays per silhouette, keeping existing arm-free torso and clothing; this is not a failure of shared-arm layers in principle",
+  "unverified": ["Sleeved outfit compatibility", "Unity integration", "Expression swaps", "Glasses/moustache/hat swaps", "Selective runtime recolouring", "Desk/passport readability"],
+  "originalAssetChanges": "None"
+}
