@@ -241,13 +241,14 @@ public sealed class CaseVerdict
 
     /// <summary>
     /// The UI string key of a wrong decision's mistake: "citation.unproven"
-    /// for an unproven denial or detention, "citation.detainedWrong" for a
+    /// for an unproven denial ("citation.detainedUnproven" for an unproven
+    /// detention), "citation.detainedWrong" for a
     /// detention of a traveller who broke no law, "citation.deniedWrong" for another denial,
     /// "citation.acceptedWrong" plus "." and the fault reason (when there is
     /// one) for an accept ({0} = the destination).
     /// </summary>
     public string MistakeKey =>
-        unprovenDenial ? "citation.unproven"
+        unprovenDenial ? (detained ? "citation.detainedUnproven" : "citation.unproven")
         : detained ? "citation.detainedWrong"
         : !accepted ? "citation.deniedWrong"
         : string.IsNullOrEmpty(faultReason) ? "citation.acceptedWrong"

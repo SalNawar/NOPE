@@ -28,6 +28,9 @@ public static class BirthDates
     /// <summary>True when a place has birth years authored: the range 0..0 is the one convention for none (audit R1-014; HomeCandidate, CaseFactory and the validator read it here).</summary>
     public static bool HasYears(int yearMin, int yearMax) => !(yearMin == 0 && yearMax == 0);
 
+    /// <summary>A month's short name as dates print it ("Mar"; 0 is January).</summary>
+    public static string MonthName(int monthIndex0) => Months[monthIndex0];
+
     /// <summary>Writes a date; negative years get a BCE suffix.</summary>
     public static string Format(int day, int monthIndex0, int year) => $"{day} {Months[monthIndex0]} {FormatYear(year)}";
 

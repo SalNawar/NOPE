@@ -81,4 +81,16 @@ public class DaterWheelsTests
         Assert.AreEqual(DaterWheels.MonthNotches, 12);
         Assert.AreEqual(DaterWheels.YearNotches, 10);
     }
+
+    [Test]
+    public void TheBands_PrintEachNotch()
+    {
+        string[] days = DaterWheels.Labels(0, 2150), months = DaterWheels.Labels(1, 2150), years = DaterWheels.Labels(2, 2153);
+        Assert.AreEqual(31, days.Length);
+        Assert.AreEqual("1", days[0]);
+        Assert.AreEqual("31", days[30]);
+        Assert.AreEqual("MAR", months[2]);
+        Assert.AreEqual(new[] { "2150", "2151", "2152", "2153", "2154", "2155", "2156", "2157", "2158", "2159" }, years);
+        Assert.AreEqual("2153", years[DaterWheels.Notches(new DateTime(2153, 3, 14)).Year], "a notch reads its date");
+    }
 }

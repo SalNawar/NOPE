@@ -15,6 +15,8 @@ MonoBehaviour:
   contentLibrary: {fileID: 11400000, guid: 64331f3cb4087d54ca99e7a3cca0cd20, type: 2}
   gameConfig: {fileID: 11400000, guid: 4d8c2a6f1e3b49d7a5c0f8b2e6d41a93, type: 2}
   interactionFeedback: {fileID: 11400000, guid: 8f94ae939f8b3ac4fb3ef352f0b92ce1, type: 2}
+  motionTuning: {fileID: 11400000, guid: f66420caf8bf5724cb278404ee1e237f, type: 2}
+  uiSounds: {fileID: 11400000, guid: 312cc47089be2c04898f41e9c0d6435c, type: 2}
   startingMoney: 50
   startingStability: 100
   startingDay: 1

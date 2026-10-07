@@ -59,6 +59,19 @@ public static class DaterWheels
         return new WheelSetting(Forward(from.Day, to.Day, DayNotches), Forward(from.Month, to.Month, MonthNotches), Forward(from.Year, to.Year, YearNotches));
     }
 
+    /// <summary>The labels round each wheel's band, notch by notch, for a dater set in the decade of <paramref name="year"/>: the day wheel 1 to 31, the month wheel JAN to DEC, the year band the decade's years.</summary>
+    public static string[] Labels(int wheel, int year)
+    {
+        int n = wheel == 0 ? DayNotches : wheel == 1 ? MonthNotches : YearNotches;
+        var labels = new string[n];
+        int decade = year - ((year % YearNotches) + YearNotches) % YearNotches;
+        for (int i = 0; i < n; i++)
+            labels[i] = wheel == 0 ? (i + 1).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                : wheel == 1 ? BirthDates.MonthName(i).ToUpperInvariant()
+                : BirthDates.FormatYear(decade + i);
+        return labels;
+    }
+
     /// <summary>The clicks a wheel of <paramref name="notches"/> turns forward from notch <paramref name="from"/> to <paramref name="to"/> (0 when it stands there).</summary>
     public static int Forward(int from, int to, int notches) => notches <= 0 ? 0 : ((to - from) % notches + notches) % notches;
 }

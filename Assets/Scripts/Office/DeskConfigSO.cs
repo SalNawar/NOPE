@@ -165,11 +165,17 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
     [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
 
-    /// <summary>Seconds a press takes, down and up.</summary>
-    [Min(0f)] public float stampPressSeconds = 0.18f;
+    /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
+    [Range(0f, 0.2f)] public float daterInkFade = 0.035f;
 
-    /// <summary>Seconds a stamp dragged out over the desk takes to go back to its place in the rack once pressed or let go (a cut under Reduced Motion).</summary>
-    [Min(0f)] public float stampReturnSeconds = 0.2f;
+    /// <summary>The least density a dater's pad ever prints (it never runs out: a look, not a resource).</summary>
+    [Range(0f, 1f)] public float daterInkFloor = 0.45f;
+
+    /// <summary>How much one print's density may vary around the pad's.</summary>
+    [Range(0f, 0.3f)] public float daterInkSpread = 0.08f;
+
+    /// <summary>Where the gate lever's hinge stands (the desk machine spec §2: floor-mounted beside the desk): the point of the desk's plane the office view shows there (viewport x, y; low on the right, beside the desk).</summary>
+    public Vector2 leverView = new Vector2(0.93f, 0.2f);
 
     /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;

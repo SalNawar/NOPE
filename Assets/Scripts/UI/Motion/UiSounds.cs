@@ -35,7 +35,28 @@ public enum UiSoundCue
     WindowClose,
 
     /// <summary>A refused action (a disabled control clicked, a stamp refused).</summary>
-    Error
+    Error,
+
+    /// <summary>A date wheel's ratchet click (the daters' morning roll).</summary>
+    WheelClick,
+
+    /// <summary>A dater re-inked (its side button: a squish).</summary>
+    Reink,
+
+    /// <summary>The gate lever's ratchet, a click every notch (lever_ratchet).</summary>
+    LeverRatchet,
+
+    /// <summary>The gate lever thunks home (lever_home).</summary>
+    LeverHome,
+
+    /// <summary>An approved traveller goes through the portal (portal_through).</summary>
+    PortalThrough,
+
+    /// <summary>RETURN pressed: a turnstile clunk and a buzzer.</summary>
+    Return,
+
+    /// <summary>DETAIN pressed: an alarm chirp (detain).</summary>
+    Detain
 }
 
 /// <summary>

@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f5d6220f7148e29f3148a6f01a763a, type: 3}
+  m_Name: MotionTuning_Default
+  m_EditorClassIdentifier: Assembly-CSharp::MotionTuningSO
+  knobs:
+    firm:
+      stiffness: 700
+      damping: 42.332024
+      mass: 1
+    balanced:
+      stiffness: 480
+      damping: 24.099794
+      mass: 1
+    elastic:
+      stiffness: 420
+      damping: 12.296342
+      mass: 1
+    paper:
+      stiffness: 160
+      damping: 15.684897
+      mass: 1
+    heavy:
+      stiffness: 380
+      damping: 41.918015
+      mass: 1.6
+    dater:
+      stiffness: 2600
+      damping: 96.88137
+      mass: 1
+    lever:
+      stiffness: 220
+      damping: 15.2593565
+      mass: 1.5
+    hoverScale: 1.03
+    pressScaleX: 1.06
+    pressScaleY: 0.92
+    popAmount: 0.08
+    refuseShake: 7
+    pressFeel: 0
+    releaseFeel: 2
+    hoverFeel: 1
+    popFeel: 1
+    refuseFeel: 2
+    appearFromScale: 0.6
+    slideDistance: 80
+    staggerSeconds: 0.035
+    appearFeel: 1
+    slideFeel: 2
+    pillFeel: 1
+    stretchPerSpeed: 0.00035
+    maxStretch: 0.3
+    reducedFadeSeconds: 0.12
+    paperLift: 0.012
+    paperTiltMax: 7
+    paperTiltPerSpeed: 14
+    paperDropSquash: 0.06
+    stampLift: 0.025
+    stampRiseSeconds: 0.07
+    stampSlamSeconds: 0.05
+    stampSquash: 0.16
+    stampShake: 0.0035
+    inkBloomSeconds: 0.08
+    paperFeel: 3
+    stampFeel: 2
+    shakeFeel: 2
+    daterCompress: 0.012
+    daterHoldDelay: 0.12
+    daterQuickHold: 0.07
+    daterWheelClick: 0.07
+    daterHit: 1
+    leverHit: 0.7
+    daterFeel: 5
+    daterReleaseFeel: 2
+    wheelFeel: 0
+    leverTravel: 60
+    leverNotch: 15
+    leverResistance: 0.6
+    leverPullPerPixel: 0.22
+    leverRefuse: 5
+    leverHomeSeconds: 0.6
+    leverFeel: 6
+    leverRefuseFeel: 2
+    hitStopSeconds: 0.05
+    settleValue: 0.0005
+    settleSpeed: 0.005

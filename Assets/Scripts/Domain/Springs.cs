@@ -21,7 +21,13 @@ public enum MotionFeel
     Paper,
 
     /// <summary>Weighty and barely overshooting: a panel, a window, the camera.</summary>
-    Heavy
+    Heavy,
+
+    /// <summary>A dater's stroke going down (the desk machine spec §1): stiff, nearly critical, so the body slows into the paper as if against a building spring.</summary>
+    Dater,
+
+    /// <summary>The gate lever's arm (the desk machine spec §2): heavy, a slow swing with a small overshoot when it springs back.</summary>
+    Lever
 }
 
 /// <summary>

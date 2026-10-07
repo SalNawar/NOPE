@@ -74,7 +74,7 @@ public sealed class UiMotion : MonoBehaviour
     /// <summary>Steps every moving motion; drops those that settled or were destroyed (swapped down in place).</summary>
     private void Update()
     {
-        float dt = Time.unscaledDeltaTime;
+        float dt = FeelDirector.StepDelta(Time.unscaledDeltaTime); // frozen by a hit-stop; a fixed-rate capture's frame (FeelDirector)
         for (int i = _running.Count - 1; i >= 0; i--)
         {
             IMotionTick motion = _running[i];

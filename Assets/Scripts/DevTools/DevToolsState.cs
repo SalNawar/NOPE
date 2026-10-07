@@ -34,6 +34,16 @@ public static class DevToolsState
     public static CostumeError ForcedCostumeError;
 
     /// <summary>
+    /// When set, the next generated traveller who is not a premade, has no
+    /// directive fault and carries papers tells this lie (CaseFactory.RollLie;
+    /// the cheat menu's "Law-breaker next": someone else's photo, so DETAIN has a
+    /// law-breaker to take; the desk machine spec §2), and the flag resets.
+    /// Cases are generated at the day's start, so it applies from the next
+    /// generation (a restarted shift).
+    /// </summary>
+    public static LieKind? ForcedLie;
+
+    /// <summary>
     /// While true, every accepted traveller on an Economy transponder is
     /// stranded at the shift's end (ShiftStrandings: the chance reads 1), so a
     /// stranding, its fate, its paper line, its Mail report and its fine can
@@ -103,6 +113,8 @@ public static class DevToolsState
             Debug.Log($"[DevToolsState] ResetAll: clearing ForcedLeaderId '{ForcedLeaderId}'.");
         if (ForcedCostumeError != CostumeError.None)
             Debug.Log($"[DevToolsState] ResetAll: clearing ForcedCostumeError '{ForcedCostumeError}'.");
+        if (ForcedLie != null)
+            Debug.Log($"[DevToolsState] ResetAll: clearing ForcedLie '{ForcedLie}'.");
         if (ForcedPersonality != null)
             Debug.Log($"[DevToolsState] ResetAll: clearing ForcedPersonality '{ForcedPersonality}'.");
         if (ForcedStrandingFate != null)
@@ -113,6 +125,7 @@ public static class DevToolsState
         ForceLegendaryNextCase = false;
         ForcedLeaderId = null;
         ForcedCostumeError = CostumeError.None;
+        ForcedLie = null;
         ForceStrandings = false;
         ForcedPersonality = null;
         ForcedStrandingFate = null;

@@ -71,7 +71,7 @@ public class ShiftLedgerTests
     public void MistakeKey_OfAWrongDetention_SaysTheTravellerBrokeNoLaw()
     {
         Assert.AreEqual("citation.detainedWrong", new CaseVerdict { detained = true, faultReason = "disguised" }.MistakeKey);
-        Assert.AreEqual("citation.unproven", new CaseVerdict { detained = true, unprovenDenial = true, faultReason = "forged" }.MistakeKey, "a law-breaker detained with nothing logged");
+        Assert.AreEqual("citation.detainedUnproven", new CaseVerdict { detained = true, unprovenDenial = true, faultReason = "forged" }.MistakeKey, "a law-breaker detained with nothing logged");
     }
 
     [Test]
