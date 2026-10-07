@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 
-/// <summary>Where the debt crisis stands, read from the day (the shift hours' ramp: week 1, the extended hours, the night shifts).</summary>
+/// <summary>Where the debt crisis stands, read from the day's desk hours (night shifts: the standard day, the extended hours, the night shifts; HallStates.PhaseOf).</summary>
 public enum HallPhase
 {
-    /// <summary>Days before HallSlotsSO.extendedFromDay (1-7): the ordinary week.</summary>
+    /// <summary>A day that closes at the standard hour or earlier (days 1-7, 09:00-17:00): the ordinary week.</summary>
     Normal,
 
-    /// <summary>From HallSlotsSO.extendedFromDay (8): the Bureau extends the hours.</summary>
+    /// <summary>A day that closes after the standard hour but before midnight (days 8-11, 13:00-21:00): the Bureau extends the hours.</summary>
     Extended,
 
-    /// <summary>From HallSlotsSO.nightsFromDay (12): night shifts.</summary>
+    /// <summary>A day that closes at midnight (days 12-15, 16:00-24:00): night shifts.</summary>
     Nights
 }
 
@@ -103,16 +103,19 @@ public static class HallStates
     public const string NoExhibit = "none";
 
     /// <summary>
-    /// The phase of <paramref name="day"/>: Nights from <paramref name="nightsFromDay"/>,
-    /// Extended from <paramref name="extendedFromDay"/>, else Normal (the shift
-    /// hours' ramp: days 1-7 09:00-17:00, 8-11 the extended hours, 12-15 the
-    /// night shifts; the knobs are HallSlotsSO's).
+    /// The phase of a day whose desk hours are <paramref name="today"/>, from
+    /// how late it sends the clerk home (ShiftHours.Lateness against
+    /// <paramref name="standard"/>, GameConfigSO's standard day): Normal at the
+    /// standard closing or earlier, Nights at midnight, Extended between (the
+    /// shipped ramp: days 1-7 09:00-17:00, 8-11 13:00-21:00, 12-15 16:00-24:00;
+    /// world_source.json days[].shiftStart / shiftEnd).
     /// </summary>
-    public static HallPhase PhaseOf(int day, int extendedFromDay, int nightsFromDay)
+    public static HallPhase PhaseOf(ShiftHours today, ShiftHours standard)
     {
-        if (day >= nightsFromDay)
+        float lateness = ShiftHours.Lateness(today.EndMinute, standard);
+        if (lateness >= 1f)
             return HallPhase.Nights;
-        return day >= extendedFromDay ? HallPhase.Extended : HallPhase.Normal;
+        return lateness > 0f ? HallPhase.Extended : HallPhase.Normal;
     }
 
     /// <summary>

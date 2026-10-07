@@ -45,7 +45,10 @@ its clock visibly faster, which reads as overtime; a per-day real-time knob is n
   replaced (docs/SCENE_CONTRACT_GAMEPLAY.md).
 - `ShiftHours.Announces(yesterday, today)`: the briefing names the new hours when they differ from yesterday's (days 8
   and 12; never day 1).
-- `ShiftHours.Lateness(close, standard)`: 0 at the standard closing or earlier, 1 at midnight, linear between.
+- `ShiftHours.Lateness(close, standard)`: 0 at the standard closing or earlier, 1 at midnight, linear between. Home's
+  tint reads it, and so does the hall slots' phase (Track H, `HallStates.PhaseOf(today, standard)`: normal at 0, nights
+  at 1, extended between), which replaced Track H's interim day knobs (`HallSlotsSO.extendedFromDay` 8,
+  `nightsFromDay` 12) when this landed.
 
 ## What the player sees
 
