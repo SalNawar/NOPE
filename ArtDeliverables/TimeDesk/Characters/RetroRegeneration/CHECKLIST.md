@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 218. Full regeneration is NOT complete.
+Saved: 242. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -222,3 +222,27 @@ Saved: 218. Full regeneration is NOT complete.
 | premade_michelangelo__thinking_c | visually reviewed; registration pending |
 | premade_michelangelo__objecting_c | visually reviewed; registration pending |
 | premade_michelangelo_photo | visually reviewed; registration pending |
+| premade_turing_neutral | visually reviewed; registration pending |
+| premade_turing_happy | visually reviewed; registration pending |
+| premade_turing_angry | visually reviewed; registration pending |
+| premade_turing_worried | visually reviewed; registration pending |
+| premade_turing__explaining_a | visually reviewed; registration pending |
+| premade_turing__thinking_a | visually reviewed; registration pending |
+| premade_turing__objecting_a | visually reviewed; registration pending |
+| premade_turing_photo | visually reviewed; registration pending |
+| premade_confucius_neutral | visually reviewed; registration pending |
+| premade_confucius_happy | visually reviewed; registration pending |
+| premade_confucius_angry | visually reviewed; registration pending |
+| premade_confucius_worried | visually reviewed; registration pending |
+| premade_confucius__explaining_b | visually reviewed; registration pending |
+| premade_confucius__thinking_b | visually reviewed; registration pending |
+| premade_confucius__objecting_b | visually reviewed; registration pending |
+| premade_confucius_photo | visually reviewed; registration pending |
+| premade_aristotle_neutral | visually reviewed; registration pending |
+| premade_aristotle_happy | visually reviewed; registration pending |
+| premade_aristotle_angry | visually reviewed; registration pending |
+| premade_aristotle_worried | visually reviewed; registration pending |
+| premade_aristotle__explaining_c | visually reviewed; registration pending |
+| premade_aristotle__thinking_c | visually reviewed; registration pending |
+| premade_aristotle__objecting_c | visually reviewed; registration pending |
+| premade_aristotle_photo | visually reviewed; registration pending |

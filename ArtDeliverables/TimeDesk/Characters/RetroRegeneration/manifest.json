@@ -4503,6 +4503,459 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing_neutral",
+      "family": "unique",
+      "id": "turing",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Alan Turing at38, Post-war Britain1950. Original stylized drawn interpretation, no copied photograph. Lean runner's build, narrow shoulders, long oval face, prominent straight nose, attentive small blue-grey eyes, clean-shaven, short dark brown hair with side part and an untidy front lock, slightly prominent ears. Brown herringbone tweed sports jacket with leather elbow patches over a modest muted Fair Isle sleeveless knitted pullover, white shirt and visibly crooked dark knitted tie, loose grey flannel trousers and brown brogues. No cap obscuring face, no props. Neutral shy attentive expression, ordinary imperfect features. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5eeb1836-86d2-4a0d-820b-4c13d458429f.png",
+      "path": "Raw/premade_turing_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cbbc3c014ac35ab34b4739e3495cf31fd4adef9ed7623f5218124f55722e7f3a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing_happy",
+      "id": "turing",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c84821bf-7378-474f-88ab-6a9d36bbaaeb.png",
+      "path": "Raw/premade_turing_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "21d6b591ab9d08556e32a40a5ae3b5011c8b03d4f85b1e8fa8bd730bef8233d5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing_angry",
+      "id": "turing",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-063b035f-0beb-47a6-9f5a-66ea8b0f7e75.png",
+      "path": "Raw/premade_turing_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c43d08851ea8ec095890324da0c0ddb83782fbf3777c54ae154c3d6b76d53dca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing_worried",
+      "id": "turing",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6d3aee2a-dc98-43fb-a179-aed51d85ab7d.png",
+      "path": "Raw/premade_turing_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6bcacc8529699757056d21542f12cc57050caf161edefa143aee3e8dfeb9ef8f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing__explaining_a",
+      "id": "turing",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_a",
+      "change": "RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cecf499d-b0c9-4979-9dc8-40d68b9b9ddb.png",
+      "path": "Raw/premade_turing__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8bc79bd6e479a9aa646c3dfaccbbb7992f913b99a186f240fde6951c7f57812c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing__thinking_a",
+      "id": "turing",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_a",
+      "change": "RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4e3bcd94-9f6f-474b-8c22-638230a79654.png",
+      "path": "Raw/premade_turing__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "98079fbacca05c042c3a3902ef75fcab6fa2049e562ab84a29720925823b8493",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing__objecting_a",
+      "id": "turing",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_a",
+      "change": "RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0be64467-e370-4bc5-a682-7d241ddda9b5.png",
+      "path": "Raw/premade_turing__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "746f7772572bb977fe4010008e7d064610d5125ca4904f9d66bf61db60155dc3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_turing_photo",
+      "family": "unique_photo",
+      "id": "turing",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical outfit with year2150 civilian passport clothing: practical muted slate-blue collared utility jacket over plain light grey shirt, dark straight trousers and simple shoes. No tie, tweed or historical accessories. Neaten same short hair. Preserve same face, age, body, neutral expression and arms-down pose exactly. Collar remains below chin.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical outfit with year2150 civilian passport clothing: practical muted slate-blue collared utility jacket over plain light grey shirt, dark straight trousers and simple shoes. No tie, tweed or historical accessories. Neaten same short hair. Preserve same face, age, body, neutral expression and arms-down pose exactly. Collar remains below chin. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-50b70699-0419-427b-813b-6d6b8c020aea.png",
+      "path": "Raw/premade_turing_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ffb8d3adb297fd972257fa0f3bf6688ff79dffefcbd2a7c910676b8bb79a19bf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius_neutral",
+      "family": "unique",
+      "id": "confucius",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Confucius, Chinese man age51 in Lu500BCE. Broad slightly heavy ordinary scholar build, East Asian face with softly drooping eyelids, broad nose, long thin grey beard and thin greying moustache, restrained patient expression, dark hair under plain black guan cap. Deep desaturated brown cross-collared long scholar robe with wide sleeves, charcoal edging, cream inner collar, tied cloth belt, plain dark cloth shoes. Recognizably middle aged, not frail ancient wizard, no jewellery. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c45ec736-6df9-47b5-b094-9ecd9e062bb0.png",
+      "path": "Raw/premade_confucius_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "efd6c14d4cb3b8192cf930137899a64d9385a340d9f03ba73cd3c146b3d44aef",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius_happy",
+      "id": "confucius",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3dc27728-108c-43cb-b1ac-b452c2fe186c.png",
+      "path": "Raw/premade_confucius_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f4e98f419427bcbcef6564a5d1f4bf7f6ed21da0732de0e71c4708e7cea9b4ae",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius_angry",
+      "id": "confucius",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-582dce34-5a1e-4f94-93a8-9de19cd5798e.png",
+      "path": "Raw/premade_confucius_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6b5b8cb5cad6f547f2a70693a0f7161046efa22c8d3dacf9690d89be9954e4b9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius_worried",
+      "id": "confucius",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3015b996-3c81-4027-9abc-ab73400a23c9.png",
+      "path": "Raw/premade_confucius_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eda50d581219c3cf875b087e5b052612f3a9b6872916c2bc5a88864dfbefa2dd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius__explaining_b",
+      "id": "confucius",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_b",
+      "change": "Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-716f33f0-5180-46d0-ab96-e5ee31a5c6fa.png",
+      "path": "Raw/premade_confucius__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c5d988efc026157c9050355dfbb6b089021ab986af6d1606b1ef2e3e2dd10e58",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius__thinking_b",
+      "id": "confucius",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_b",
+      "change": "LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9e19f047-1c35-4c7b-8625-d7c5fa1aae6c.png",
+      "path": "Raw/premade_confucius__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9353fb5aa2ce3fcfe80c156ef5d8f67043de5d37669f6db4d26f40810e165804",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius__objecting_b",
+      "id": "confucius",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_b",
+      "change": "Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8c36b27d-da48-4c34-963b-0442afea4e4f.png",
+      "path": "Raw/premade_confucius__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e4a975b0663e8cce7b912edda9b9845706aac5bf8fe46e590ea3682138d29399",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_confucius_photo",
+      "family": "unique_photo",
+      "id": "confucius",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical outfit and cap with year2150 civilian passport clothes: worn muted taupe hooded jacket with hood down, plain cream shirt, charcoal trousers and practical shoes. Remove guan cap, reveal neat short dark-grey hair. Preserve long thin beard, same face age body neutral expression arms-down pose and texture. No historical accessories. Clothing stays below chin.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical outfit and cap with year2150 civilian passport clothes: worn muted taupe hooded jacket with hood down, plain cream shirt, charcoal trousers and practical shoes. Remove guan cap, reveal neat short dark-grey hair. Preserve long thin beard, same face age body neutral expression arms-down pose and texture. No historical accessories. Clothing stays below chin. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1524b01e-e327-4e44-a5e7-6669c27e0bdf.png",
+      "path": "Raw/premade_confucius_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "32165f3a815f500bd767a55bf0177f2be4ea06367196d7f6a5e87cb8900cd4da",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle_neutral",
+      "family": "unique",
+      "id": "aristotle",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Aristotle age48, Greek scholar in Pella336BCE. Stocky middle-aged ordinary build with slight belly, receding curly dark hair flecked grey, short neatly trimmed dark-grey beard, broad rounded nose, thoughtful slightly furrowed brow, olive skin. Muted ochre wool himation over an offwhite chiton, small tightly rolled scroll securely tucked at chest inside cloth, worn leather sandals. No laurel or headwear. Individual rounded scholarly face unlike reference. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1f8e7b6c-df0b-4be5-b339-c7b13f43685b.png",
+      "path": "Raw/premade_aristotle_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2b5547e8890ba66b5856e7d807248741aa29141836dce54830768dbff877b622",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle_happy",
+      "id": "aristotle",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bf21d71c-b291-45ef-922f-27176a236b1a.png",
+      "path": "Raw/premade_aristotle_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f29f2d7486ef673779ed4f240505a753e9c6910f9bd49f9adeea10f57375b96b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle_angry",
+      "id": "aristotle",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a5a186f0-5f73-429a-9640-f2cc72765f17.png",
+      "path": "Raw/premade_aristotle_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "946fc3fffec92dda0f231db5c68a1315d21411b02ce4a0e72e73a165d4b06e87",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle_worried",
+      "id": "aristotle",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e918c676-ba8d-41f5-a04e-d88b0b9647b9.png",
+      "path": "Raw/premade_aristotle_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8928b2442ba883adab5337e9a7744e1397fa716ab71621129f42448b3da88b35",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle__explaining_c",
+      "id": "aristotle",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_c",
+      "change": "LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ecb32ad6-62ff-46e4-9765-e6a9d8d5c425.png",
+      "path": "Raw/premade_aristotle__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c3fc7a82f2497c8f805b75c0187cbcd04b6daaf14c7a7fdc944c213f9e569146",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle__thinking_c",
+      "id": "aristotle",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_c",
+      "change": "Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2dd325b5-7d98-4b16-bf51-c35a31aeb769.png",
+      "path": "Raw/premade_aristotle__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4beada080e50c7d367e4f09a417f09d1b2a507468bf91d8258b946820ad5f353",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle__objecting_c",
+      "id": "aristotle",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_c",
+      "change": "RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bc0712fe-9000-4e9b-935b-534e9ef45b9f.png",
+      "path": "Raw/premade_aristotle__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d6d49bdaeb52ffd4c211b8054af543f613362e36acc6d386a683724daec5c13a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_aristotle_photo",
+      "family": "unique_photo",
+      "id": "aristotle",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical outfit with year2150 civilian passport outfit: practical muted charcoal work coverall with simple pockets over offwhite undershirt, ordinary dark boots. Remove scroll and all historical accessories. Neaten same receding curly hair and short beard without changing identity. Preserve face age build expression neutral arms-down pose exactly. Collar below chin.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical outfit with year2150 civilian passport outfit: practical muted charcoal work coverall with simple pockets over offwhite undershirt, ordinary dark boots. Remove scroll and all historical accessories. Neaten same receding curly hair and short beard without changing identity. Preserve face age build expression neutral arms-down pose exactly. Collar below chin. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-034868e0-544c-44c3-b73f-f4f49e7abf84.png",
+      "path": "Raw/premade_aristotle_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "272f9a323dcb37c435c8bc8019d6f5857d3ae278abb901e55bcc43a75b5f7ae8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
