@@ -205,11 +205,23 @@ public static class _TimeDeskQASweep
         RunManager.Instance.Config.fixedRunSeed = Seed;
         yield return Frames(5);
         yield return Title();
-        if (Culture.Length == 0 && !string.IsNullOrEmpty(RunManager.Instance.World.history.leaderId))
+        // DevToolsState keeps a leader forced by an earlier sweep for the whole
+        // editor session and every night re-applies it (HistoryService), so an
+        // English sweep after a culture one turned Greek at day 5's jump: clear both.
+        if (Culture.Length == 0 && (!string.IsNullOrEmpty(RunManager.Instance.World.history.leaderId) || !string.IsNullOrEmpty(DevToolsState.ForcedLeaderId)))
         {
             HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, string.Empty);
             CultureThemeService.RefreshActive();
             Note("a leader forced earlier in this editor session (DevToolsState) is cleared: the run as found");
+        }
+        if (Culture.Length == 0)
+        {
+            // The run as found has history lead by day 5 (Greece in this seed),
+            // so the English sweep reads with Settings on Always English: every
+            // label stays English whatever leads (Saleh 2026-10-07).
+            UiLanguagePreference.AlwaysEnglish = true;
+            CultureThemeService.RefreshActive();
+            Note("English: Settings on Always English (history comes to lead by day 5 in this seed; Always English keeps every label English)");
         }
         if (Culture.Length > 0)
         {
@@ -225,6 +237,8 @@ public static class _TimeDeskQASweep
         Note("RunManager.JumpToDay(5): the scanner, the Investigation app and every PC app are in from day 5");
         RunManager.Instance.JumpToDay(5);
         WorldChange();
+        if (Culture.Length == 0)
+            Check(CultureThemeService.Instance == null || CultureThemeService.Instance.Language != LabelLanguage.Culture, $"day 5: Always English keeps the labels English (history's leader '{RunManager.Instance.World.history.leaderId}')");
         yield return OfficeDay5();
         if (Culture.Length > 0)
             yield return SwitchLanguage();
@@ -240,17 +254,30 @@ public static class _TimeDeskQASweep
     private static IEnumerator SwitchLanguage()
     {
         string other = Culture == "japan" ? "egypt" : "japan";
-        TMP_Text[] keyed = Object.FindObjectsByType<KeyedText>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).Select(k => k.GetComponent<TMP_Text>()).ToArray();
+        KeyedText[] words = Object.FindObjectsByType<KeyedText>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        TMP_Text[] keyed = words.Select(k => k.GetComponent<TMP_Text>()).ToArray();
         string[] before = keyed.Select(t => t.text).ToArray();
         HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, other);
         CultureThemeService.RefreshActive();
         yield return Frames(5);
+        // A word reprints when it now shows its string in the new language: two
+        // languages may share a word (zh and ja both write DETAIN as 拘留), so
+        // "changed" alone is not the test; at least one must visibly change.
         int changed = keyed.Where((t, i) => t.text != before[i]).Count();
-        Check(keyed.Length > 0 && changed == keyed.Length, $"language switch to {other}'s mid-run: {changed} of {keyed.Length} shown builder-printed words print again in it (hidden ones on showing)");
+        string[] stale = words.Where((k, i) => keyed[i].text != KeyedExpected(k)).Select(k => k.gameObject.name + " '" + k.GetComponent<TMP_Text>().text + "'").ToArray();
+        Check(keyed.Length > 0 && changed > 0 && stale.Length == 0, $"language switch to {other}'s mid-run: {keyed.Length - stale.Length} of {keyed.Length} shown builder-printed words print in it ({changed} changed, the rest the same word in both){(stale.Length > 0 ? ": stale " + string.Join("; ", stale) : "")} (hidden ones on showing)");
         yield return Shot("office", "switched_to_" + other);
         HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, Culture);
         CultureThemeService.RefreshActive();
         yield return Frames(3);
+    }
+
+    /// <summary>What a KeyedText prints in the reading language now: its template around its key's string.</summary>
+    private static string KeyedExpected(KeyedText k)
+    {
+        var so = new SerializedObject(k);
+        string template = so.FindProperty("template").stringValue;
+        return (string.IsNullOrEmpty(template) ? "{0}" : template).Replace("{0}", UiText.Get(so.FindProperty("key").stringValue));
     }
 
     /// <summary>Clears the forced leader (DevToolsState keeps it for the editor session) before the sweep ends.</summary>
@@ -1582,6 +1609,8 @@ public static class _TimeDeskQASweep
             Click("followHistoryButton");
             yield return Frames(2);
             Check(!UiLanguagePreference.AlwaysEnglish, "settings: Follow history is chosen");
+            if (Culture.Length == 0)
+                Click("alwaysEnglishButton");
         }
         Click("reducedMotionButton");
         yield return Frames(2);
