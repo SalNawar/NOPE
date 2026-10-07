@@ -395,7 +395,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
             else
             {
-                s.SetPositionAndRotation(new Vector3(spot.Position.x, top, spot.Position.z), spot.Rotation);
+                // The gameplay's machine faces the chair (Track BR): its front (local -Z) toward the office camera, its lid hinged away, whatever yaw the anchor carries.
+                Vector3 at = new Vector3(spot.Position.x, top, spot.Position.z);
+                Vector3 away = Vector3.ProjectOnPlane(at - viewer, Vector3.up);
+                s.SetPositionAndRotation(at, away.sqrMagnitude > 1e-6f ? Quaternion.LookRotation(away.normalized, Vector3.up) : spot.Rotation);
             }
 
             if (scanner.TryGetComponent(out BoxCollider box))
