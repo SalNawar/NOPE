@@ -8,7 +8,10 @@ public enum ThemePart
     Fill,
 
     /// <summary>The role's ink.</summary>
-    Ink
+    Ink,
+
+    /// <summary>The UI kit's own colours (docs/UI_KIT.md): the theme never recolours it (an image keeps its kit sprite untinted, a text the ink it was built with); a text still takes the theme's font, style, fit and label.</summary>
+    Kit
 }
 
 /// <summary>Which of the theme's style additions a text takes.</summary>
@@ -53,6 +56,9 @@ public sealed class ThemeTag : MonoBehaviour
     /// <summary>Text only: never wraps and shrinks from its size to CultureUiSettings.labelMinScale of it, so longer words, glosses and currencies fit.</summary>
     [SerializeField] private bool shrinkToFit;
 
+    /// <summary>Text only: the face it keeps while the labels are not in a culture's own script (the UI kit's label, readout, masthead or body font); null = the theme's font.</summary>
+    [SerializeField] private TMP_FontAsset face;
+
     /// <summary>The size the text had when first themed (the fit's maximum); -1 until then.</summary>
     private float _baseSize = -1f;
 
@@ -74,6 +80,9 @@ public sealed class ThemeTag : MonoBehaviour
     /// <summary>Whether the text shrinks to fit instead of wrapping.</summary>
     public bool ShrinkToFit => shrinkToFit;
 
+    /// <summary>The face the text keeps while the labels are not in a culture's script (null: the theme's font).</summary>
+    public TMP_FontAsset Face => face;
+
     /// <summary>Sets the tag (the builder, and runtime-built UI such as the investigation text fallback).</summary>
     public void Configure(ThemeRoleId role, ThemePart part, string labelKey, FontStyles baseStyle, ThemeTextKind kind, bool shrinkToFit)
     {
@@ -84,6 +93,9 @@ public sealed class ThemeTag : MonoBehaviour
         textKind = kind;
         this.shrinkToFit = shrinkToFit;
     }
+
+    /// <summary>Sets the text's kit face (the builders' SceneUiKit.SkinText); null clears it.</summary>
+    public void SetFace(TMP_FontAsset font) => face = font;
 
     /// <summary>The size a shrink-to-fit text may grow back to: its size (or auto-size maximum) the first time it is asked.</summary>
     public float FitSize(TMP_Text text)

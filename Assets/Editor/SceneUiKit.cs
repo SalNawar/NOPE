@@ -287,6 +287,124 @@ internal static class SceneUiKit
         EditorUtility.SetDirty(art);
     }
 
+    /// <summary>The child that carries a skinned graphic's kit sprite.</summary>
+    public const string KitFaceName = "KitFace";
+
+    /// <summary>
+    /// Skins <paramref name="host"/> with the UI kit's <paramref name="piece"/>
+    /// (docs/UI_KIT.md; re-applied on every build): the host keeps its rect and
+    /// its clicks but draws nothing (clear, its theme tag the kit's), and its
+    /// first child KitFace draws the piece's sprite untinted, sliced at
+    /// <paramref name="scale"/> sprite pixels per unit, grown past the host by
+    /// the sprite's empty pad so the drawn plate fills the host's rect; a
+    /// control on the host (a Button, a Toggle, an input field) swaps the
+    /// piece's sprites (rest, hover, pressed, locked) on its face. A stateful
+    /// piece is named without its state ("plate_ox"), any other by its sprite
+    /// ("panel_bone"). Returns the face, or null (with an error) when the kit
+    /// has no such piece.
+    /// </summary>
+    public static Image Skin(Image host, UiKitSO kit, string piece, float scale)
+    {
+        if (host == null || kit == null)
+            return null;
+        Sprite rest = kit.Get(piece, KitState.Rest) ?? kit.Get(piece);
+        if (rest == null)
+        {
+            Debug.LogError($"[TimeDesk] The UI kit has no piece '{piece}' for '{host.name}'; it keeps its flat look. Check the name against Assets/Art/UI/Kit/kit_manifest.json.", host);
+            return null;
+        }
+
+        host.sprite = null;
+        host.color = Color.clear;
+        ThemeTag hostTag = host.GetComponent<ThemeTag>();
+        ThemeRoleId role = hostTag != null ? hostTag.Role : ThemeRoleId.ClickCatcher;
+        Rekit(hostTag, FontStyles.Normal, null);
+
+        Transform faceTransform = host.transform.Find(KitFaceName);
+        if (faceTransform == null)
+        {
+            faceTransform = new GameObject(KitFaceName, typeof(RectTransform)).transform;
+            faceTransform.SetParent(host.transform, false);
+        }
+        faceTransform.SetAsFirstSibling();
+        Image face = faceTransform.GetComponent<Image>();
+        if (face == null)
+            face = faceTransform.gameObject.AddComponent<Image>();
+        face.sprite = rest;
+        face.color = Color.white;
+        face.raycastTarget = false;
+        face.preserveAspect = false;
+        face.fillCenter = true;
+        bool sliced = rest.border != Vector4.zero;
+        face.type = sliced ? Image.Type.Sliced : Image.Type.Simple;
+        face.pixelsPerUnitMultiplier = scale;
+        Tag(face, role, ThemePart.Kit);
+        LayoutElement free = faceTransform.GetComponent<LayoutElement>();
+        if (free == null)
+            free = faceTransform.gameObject.AddComponent<LayoutElement>();
+        free.ignoreLayout = true; // a host's layout group lays out its content, never its face
+
+        var rt = (RectTransform)faceTransform;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.localRotation = Quaternion.identity;
+        rt.localScale = Vector3.one;
+        if (sliced)
+        {
+            float pad = kit.spritePad / (rest.pixelsPerUnit / 100f * scale);
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = new Vector2(-pad, -pad);
+            rt.offsetMax = new Vector2(pad, pad);
+        }
+        else
+        {
+            // A simple sprite stretches whole: grow it by its pad's share of the drawn part, whatever the host's size.
+            Vector2 size = rest.rect.size;
+            var grow = new Vector2(kit.spritePad / Mathf.Max(1f, size.x - 2f * kit.spritePad), kit.spritePad / Mathf.Max(1f, size.y - 2f * kit.spritePad));
+            rt.anchorMin = -grow;
+            rt.anchorMax = Vector2.one + grow;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+        }
+
+        if (host.TryGetComponent(out Selectable control))
+        {
+            control.targetGraphic = face;
+            bool states = kit.Get(piece, KitState.Hover) != null;
+            control.transition = states ? Selectable.Transition.SpriteSwap : Selectable.Transition.None;
+            kit.Show(face, piece, states ? control : null);
+        }
+        EditorUtility.SetDirty(host);
+        return face;
+    }
+
+    /// <summary>
+    /// A text on a kit face (re-applied on every build): <paramref name="ink"/>,
+    /// the kit's <paramref name="face"/> (kept by the theme unless the labels
+    /// are in a culture's script), upper case when <paramref name="upper"/>,
+    /// and its theme tag the kit's (the theme no longer recolours it).
+    /// </summary>
+    public static void SkinText(TMP_Text text, Color ink, TMP_FontAsset face, bool upper)
+    {
+        if (text == null)
+            return;
+        text.color = ink;
+        if (face != null)
+            text.font = face;
+        if (upper)
+            text.fontStyle |= FontStyles.UpperCase;
+        Rekit(text.GetComponent<ThemeTag>(), upper ? FontStyles.UpperCase : FontStyles.Normal, face);
+    }
+
+    /// <summary>Turns a theme tag into the kit's (part Kit, its role, label key, kind and fit kept), adding <paramref name="style"/> to its base style and setting its face.</summary>
+    private static void Rekit(ThemeTag tag, FontStyles style, TMP_FontAsset face)
+    {
+        if (tag == null)
+            return;
+        tag.Configure(tag.Role, ThemePart.Kit, tag.LabelKey, tag.BaseStyle | style, tag.TextKind, tag.ShrinkToFit);
+        tag.SetFace(face);
+    }
+
     /// <summary>Anchors a rect to the given relative corners with no offsets, so it fills them.</summary>
     public static void Stretch(RectTransform rt, Vector2 anchorMin, Vector2 anchorMax)
     {

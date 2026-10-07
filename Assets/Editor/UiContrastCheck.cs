@@ -93,10 +93,10 @@ public static class UiContrastCheck
         return e != null ? e.textClass : (ContrastClass?)null;
     }
 
-    /// <summary>The text's colour in a theme: its role's ink unless the role is diegetic (never themed) or the theme has none.</summary>
+    /// <summary>The text's colour in a theme: its role's ink unless the role is diegetic (never themed), the text is the kit's (its own ink) or the theme has none.</summary>
     private static Color Ink(TMP_Text text, ThemeTag tag, ThemeSO theme)
     {
-        PaletteEntry e = tag != null && theme != null && !ThemeRoles.IsDiegetic(tag.Role) ? theme.Get(tag.Role) : null;
+        PaletteEntry e = tag != null && theme != null && !ThemeRoles.IsDiegetic(tag.Role) && tag.Part != ThemePart.Kit ? theme.Get(tag.Role) : null;
         return e != null && e.hasInk ? e.ink : text.color;
     }
 
@@ -140,7 +140,7 @@ public static class UiContrastCheck
         Color colour = g.color;
         ThemeTag tag = g.GetComponent<ThemeTag>();
         Sprite sprite = g is Image img ? img.sprite : null;
-        if (tag != null && theme != null && !ThemeRoles.IsDiegetic(tag.Role) && theme.Get(tag.Role) is PaletteEntry e)
+        if (tag != null && theme != null && !ThemeRoles.IsDiegetic(tag.Role) && tag.Part != ThemePart.Kit && theme.Get(tag.Role) is PaletteEntry e)
         {
             if (tag.Role == ThemeRoleId.Desktop)
             {

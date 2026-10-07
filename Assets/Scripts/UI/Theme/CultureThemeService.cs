@@ -304,18 +304,21 @@ public sealed class CultureThemeService : TimelineCueReceiver
             return;
         }
 
+        if (tag.Part == ThemePart.Kit)
+            return;
+
         bool ink = tag.Part == ThemePart.Ink;
         if (ink ? entry.hasInk : entry.hasFill)
             image.color = ink ? entry.ink : entry.fill;
     }
 
-    /// <summary>A themed text: ink, font, style (italics stripped or additions), shrink-to-fit, and its label when keyed.</summary>
+    /// <summary>A themed text: ink (not a kit text's), font (a kit face unless the labels are in a culture's script), style (italics stripped or additions), shrink-to-fit, and its label when keyed.</summary>
     private void ApplyText(ThemeTag tag, TMP_Text text, PaletteEntry entry)
     {
-        if (entry.hasInk)
+        if (entry.hasInk && tag.Part != ThemePart.Kit)
             text.color = entry.ink;
 
-        TMP_FontAsset font = _font != null ? _font : TMP_Settings.defaultFontAsset;
+        TMP_FontAsset font = tag.Face != null && Language != LabelLanguage.Culture ? tag.Face : _font != null ? _font : TMP_Settings.defaultFontAsset;
         if (font != null)
             text.font = font;
 
