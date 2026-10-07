@@ -791,6 +791,8 @@ public static class _TimeDeskAuditPlay
             _ended = true;
             yield break;
         }
+        // The verdict line as shown now: the day goes on while the Citation flies (the next traveller's call clears it).
+        string verdictLine = ((TMP_Text)Field(o.OfficeUi, "resultText")).text;
         if (v.citationIssued)
         {
             // The Citation (2026-10-07) lands on the desk; its lines are the slip's (its violation, its rule and values, its consequence).
@@ -804,7 +806,7 @@ public static class _TimeDeskAuditPlay
             if (ShotsOn && First($"citation {v.faultReason}/{v.unprovenDenial}/{v.accepted}"))
                 yield return Shots($"citation_{(v.accepted ? "accepted" : "denied")}_{(string.IsNullOrEmpty(v.faultReason) ? "honest" : v.faultReason)}{(v.unprovenDenial ? "_unproven" : "")}");
         }
-        Line($"   verdict line: {((TMP_Text)Field(o.OfficeUi, "resultText")).text.Replace("\n", " / ")}");
+        Line($"   verdict line: {verdictLine.Replace("\n", " / ")}");
     }
 
     private static bool Once(string key) => MistakesMade.Add(key);
