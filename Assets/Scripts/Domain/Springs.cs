@@ -178,6 +178,9 @@ public struct Spring
         return true;
     }
 
+    /// <summary>Its acceleration now under <paramref name="tuning"/> (units per second²): the spring's pull on its displacement less its damping.</summary>
+    public float Acceleration(SpringTuning tuning) => (-tuning.stiffness * (Value - Target) - tuning.damping * Velocity) / tuning.SafeMass;
+
     /// <summary>Snaps onto the target and stops when within <paramref name="valueTolerance"/> of it and slower than <paramref name="speedTolerance"/>; true when it did (or already rested).</summary>
     public bool Settle(float valueTolerance, float speedTolerance)
     {

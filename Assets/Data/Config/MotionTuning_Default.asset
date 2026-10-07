@@ -15,42 +15,51 @@ MonoBehaviour:
   knobs:
     firm:
       stiffness: 700
-      damping: 42.332024
+      damping: 42.33202
       mass: 1
     balanced:
-      stiffness: 480
-      damping: 24.099794
+      stiffness: 1900
+      damping: 52.30679
       mass: 1
     elastic:
-      stiffness: 420
-      damping: 12.296342
+      stiffness: 645
+      damping: 14.22224
       mass: 1
     paper:
       stiffness: 160
-      damping: 15.684897
+      damping: 15.6849
       mass: 1
     heavy:
       stiffness: 380
-      damping: 41.918015
+      damping: 41.91802
       mass: 1.6
-    hoverScale: 1.03
-    pressScaleX: 1.06
-    pressScaleY: 0.92
-    popAmount: 0.08
-    refuseShake: 7
-    pressFeel: 0
+    hoverLift: 1.5
+    pressDepth: 2.5
+    pressDarken: 0.14
+    popLift: 2
+    refuseShake: 3
+    faceRoom: 3
+    pullHover: 12
+    pullPop: 8
+    pullStretchPerSpeed: 0.0006
+    pullSquashPerAccel: 6e-06
+    pressFeel: 1
     releaseFeel: 2
     hoverFeel: 1
-    popFeel: 1
+    popFeel: 2
     refuseFeel: 2
     appearFromScale: 0.6
     slideDistance: 80
     staggerSeconds: 0.035
-    appearFeel: 1
+    printLinesPerSecond: 10
+    appearFeel: 2
     slideFeel: 2
-    pillFeel: 1
-    stretchPerSpeed: 0.00035
-    maxStretch: 0.3
+    pillFeel: 2
+    stretchPerSpeed: 0.00012
+    squashPerAccel: 1.2e-06
+    maxStretch: 0.25
+    deskStretchPerSpeed: 0.06
+    deskSquashPerAccel: 0.0005
     reducedFadeSeconds: 0.12
     paperTiltMax: 7
     paperTiltPerSpeed: 14
@@ -61,8 +70,8 @@ MonoBehaviour:
     stampSquash: 0.16
     inkBloomSeconds: 0.08
     paperFeel: 3
-    stampFeel: 1
-    deskMoveFeel: 1
+    stampFeel: 0
+    deskMoveFeel: 0
     cameraFeel: 4
     hitStopScale: 0.05
     hitStopSeconds: 0.075

@@ -1,36 +1,46 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
 /// A kit control's physical feel (Saleh 2026-10-07: "every single button,
-/// every single action to feel this satisfying"), on every kit control
-/// (UiKitSO.Show adds it, the one hook: the builders' SceneUiKit.Skin and the
-/// views that build kit controls at run time both come through it; a kit
-/// control a view draws without it calls On): under the pointer it lifts
-/// (the kit's hover face adds the star glint), pressed it squashes wider and
-/// shorter while its face swaps to the pressed one, let go it springs back
-/// past its rest and wobbles in, a confirmed click (or Submit) pops it, and a
-/// click on a disabled control shakes it sideways, a short "no", with the
-/// error cue. Each moment plays its cue (ui_hover, ui_press, ui_release,
-/// ui_toggle, ui_error: Sounds; silent until the bank has a clip). The motion is ControlMotion's springs, stepped by UiMotion only
-/// while they move; the control's hit area stays its rest rect whatever its
-/// scale (the graphic's raycast padding cancels it), so a squash never loses
-/// the click. Reduced Motion keeps it still; the Motion intensity scales it.
+/// every single action to feel this satisfying"; round 2: "they go out of
+/// bounds of their borders, buttons overlap", "too fast"), on every kit
+/// control (UiKitSO.Show adds it, the one hook: the builders' SceneUiKit.Skin
+/// and the views that build kit controls at run time both come through it; a
+/// kit control a view draws without it calls On). The control itself (its
+/// rect, its hit area, its place in a layout) never moves or grows: its FACE
+/// (every child: the kit face, the label, an icon) moves inside it as
+/// ControlMotion says. Under the pointer the face lifts a pixel or two (the
+/// kit's hover face adds the star glint); pressed, it goes down into its
+/// bezel, shortens and darkens while its sprite swaps to the pressed one; let
+/// go, it springs back past its rest and wobbles in; a confirmed click (or
+/// Submit) pops it; a click on a disabled control shakes it, a short "no",
+/// with the error cue; a screen-edge pull tab slides out, stretched along its
+/// travel. The face's reach past the rest rect is capped by its room
+/// (ControlRoom: the kit's border inset, never into a sibling's rest rect).
+/// Each moment plays its cue (ui_hover, ui_press, ui_release, ui_toggle,
+/// ui_error: Sounds). Stepped by UiMotion only while it moves; the face's
+/// parts are moved by deltas, so a layout that moves them meanwhile keeps
+/// its say. Reduced Motion keeps the face still; the Motion intensity scales it.
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler,
                               IPointerClickHandler, ISubmitHandler, IMotionTick
 {
-    private readonly ControlMotion _motion = new ControlMotion();
-    private Selectable _control;
-    private Graphic _hit;
-    private RectTransform _rect;
-    private Vector3 _restScale = Vector3.one;
-    private Vector4 _restPadding;
-    private float _appliedOffset;
-    private bool _posed;
+    /// <summary>The siblings' rest rects while a room is measured (reused: no allocation).</summary>
+    private static readonly List<FaceRect> Neighbours = new List<FaceRect>(16);
 
+    private readonly ControlMotion _motion = new ControlMotion();
+    private readonly List<Transform> _parts = new List<Transform>(4);
+    private readonly List<Vector3> _appliedMove = new List<Vector3>(4);
+    private readonly List<Vector2> _appliedScale = new List<Vector2>(4);
+    private Selectable _control;
+    private RectTransform _rect;
+    private Graphic _face;
+    private float _appliedDarken;
+    private bool _posed;
     private bool _chosen;
 
     /// <summary>
@@ -60,18 +70,28 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     /// <summary>True while its springs move (the probes wait for it).</summary>
     public bool Moving => _motion.Moving;
 
-    /// <summary>Gives <paramref name="control"/> its UiJuice (kept when present; nothing for none): UiKitSO.Show, the one hook every kit control comes through.</summary>
-    public static void On(Selectable control)
+    /// <summary>
+    /// Gives <paramref name="control"/> its UiJuice (kept when present; nothing
+    /// for none): UiKitSO.Show, the one hook every kit control comes through.
+    /// A kit pull tab (<paramref name="piece"/> "pulltab_left" on the screen's
+    /// left edge, "pulltab_right" on its right) slides out toward the screen.
+    /// </summary>
+    public static void On(Selectable control, string piece = null)
     {
-        if (control != null && !control.TryGetComponent(out UiJuice _))
-            control.gameObject.AddComponent<UiJuice>();
+        if (control == null)
+            return;
+        if (!control.TryGetComponent(out UiJuice juice))
+            juice = control.gameObject.AddComponent<UiJuice>();
+        if (piece != null && piece.StartsWith(UiKitNames.PullTab, System.StringComparison.Ordinal))
+            juice._motion.SetPull(piece.StartsWith(UiKitNames.PullTabLeft, System.StringComparison.Ordinal) ? 1 : -1, 0);
     }
 
     private void Awake()
     {
         _control = GetComponent<Selectable>();
-        _hit = GetComponent<Graphic>();
         _rect = transform as RectTransform;
+        Transform face = transform.Find(UiKitSO.FaceName);
+        _face = face != null ? face.GetComponent<Graphic>() : null;
     }
 
     /// <summary>The pointer came over it: the lift and the hover cue (a live control only).</summary>
@@ -84,14 +104,14 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         Sounds.Play(SoundCues.UiHover);
     }
 
-    /// <summary>The pointer left: it comes back down (or stays squashed while held).</summary>
+    /// <summary>The pointer left: the face comes back (or stays down while held).</summary>
     public void OnPointerExit(PointerEventData eventData)
     {
         Begin();
         _motion.Hover(false, UiMotion.Knobs, UiMotion.Amount);
     }
 
-    /// <summary>Pressed with the left button: the anticipation squash and the press cue.</summary>
+    /// <summary>Pressed with the left button: the face goes into its bezel, and the press cue.</summary>
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left || !Live)
@@ -121,7 +141,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     /// <summary>Submit (Enter on a selected control) clicks it.</summary>
     public void OnSubmit(BaseEventData eventData) => Click();
 
-    /// <summary>Back at rest at once when it hides mid-motion (a control is never left squashed).</summary>
+    /// <summary>Back at rest at once when it hides mid-motion (a face is never left down).</summary>
     private void OnDisable()
     {
         _motion.Reset();
@@ -156,43 +176,96 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
     }
 
-    /// <summary>Takes note of the rest pose when a motion starts from rest (the builder's or a layout's scale, the graphic's padding) and hands the springs to the driver.</summary>
+    /// <summary>When a motion starts from rest: the face's parts (every child, as they lie now) and the room among the siblings (ControlRoom); then the springs go to the driver.</summary>
     private void Begin()
     {
-        if (!_posed)
+        if (!_posed && _rect != null)
         {
-            _restScale = transform.localScale;
-            _restPadding = _hit != null ? _hit.raycastPadding : Vector4.zero;
-            _appliedOffset = 0f;
+            _parts.Clear();
+            _appliedMove.Clear();
+            _appliedScale.Clear();
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                _parts.Add(transform.GetChild(i));
+                _appliedMove.Add(Vector3.zero);
+                _appliedScale.Add(Vector2.one);
+            }
+            _appliedDarken = 0f;
+            MeasureRoom();
             _posed = true;
         }
         UiMotion.Run(this);
     }
 
-    /// <summary>Draws the springs: the scale over the rest scale, the shake as a sideways offset (only its change is applied, so a layout keeps the place), the hit area held at the rest rect; once back at rest, the rest pose exactly (a pose it settles on, the hover lift or a held press, stays).</summary>
+    /// <summary>The face's room on each side: the kit's border inset (a pull tab's slide and pop on its open side), cut to the gap to each active sibling it faces.</summary>
+    private void MeasureRoom()
+    {
+        MotionKnobs knobs = UiMotion.Knobs;
+        Neighbours.Clear();
+        Transform parent = transform.parent;
+        if (parent != null)
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                Transform sibling = parent.GetChild(i);
+                if (sibling != transform && sibling.gameObject.activeSelf && sibling is RectTransform r)
+                    Neighbours.Add(InParent(r));
+            }
+        float room = knobs.faceRoom, pull = knobs.pullHover + knobs.pullPop + knobs.faceRoom;
+        bool pulls = _motion.Pulls;
+        var dir = new Vector2(_motion.PullX, _motion.PullY);
+        ControlRoom.Of(InParent(_rect), Neighbours, pulls && dir.x < 0f ? pull : room, pulls && dir.x > 0f ? pull : room,
+                       pulls && dir.y < 0f ? pull : room, pulls && dir.y > 0f ? pull : room, out float l, out float r2, out float b, out float t);
+        _motion.SetRoom(l, r2, b, t);
+        Neighbours.Clear();
+    }
+
+    /// <summary>A rect transform's rect in its parent's space (position and scale; no rotation in the kit).</summary>
+    private static FaceRect InParent(RectTransform r)
+    {
+        Rect rect = r.rect;
+        Vector3 p = r.localPosition, s = r.localScale;
+        return new FaceRect(p.x + rect.xMin * s.x, p.y + rect.yMin * s.y, p.x + rect.xMax * s.x, p.y + rect.yMax * s.y);
+    }
+
+    /// <summary>
+    /// Draws the face: each part mapped from the rest rect to the face's rect
+    /// (ControlMotion.Edges: moved and scaled about the rect's centre, by the
+    /// change from what was applied, so a layout keeps its say), the kit face
+    /// darkened; once back at rest, the parts exactly as they lie at rest.
+    /// </summary>
     private void Apply()
     {
-        float sx = _motion.ScaleX, sy = _motion.ScaleY, offset = _motion.OffsetX;
-        transform.localScale = new Vector3(_restScale.x * sx, _restScale.y * sy, _restScale.z);
-        if (!Mathf.Approximately(offset, _appliedOffset))
+        if (_rect == null)
+            return;
+        Rect rest = _rect.rect;
+        FaceEdges e = _motion.AtRestPose ? FaceEdges.Rest : _motion.Edges(rest.width, rest.height, UiMotion.Knobs);
+        var face = Rect.MinMaxRect(rest.xMin - e.Left, rest.yMin - e.Bottom, rest.xMax + e.Right, rest.yMax + e.Top);
+        var s = new Vector2(rest.width > 0f ? face.width / rest.width : 1f, rest.height > 0f ? face.height / rest.height : 1f);
+        Vector2 c = rest.center, c2 = face.center;
+        for (int i = 0; i < _parts.Count; i++)
         {
-            Vector3 p = transform.localPosition;
-            p.x += offset - _appliedOffset;
-            transform.localPosition = p;
-            _appliedOffset = offset;
+            Transform part = _parts[i];
+            if (part == null)
+                continue;
+            Vector3 restPos = part.localPosition - _appliedMove[i];
+            Vector2 applied = _appliedScale[i];
+            Vector3 scale = part.localScale;
+            var restScale = new Vector2(applied.x != 0f ? scale.x / applied.x : scale.x, applied.y != 0f ? scale.y / applied.y : scale.y);
+            var moved = new Vector3(c2.x + (restPos.x - c.x) * s.x, c2.y + (restPos.y - c.y) * s.y, restPos.z);
+            _appliedMove[i] = moved - restPos;
+            _appliedScale[i] = s;
+            part.localPosition = moved;
+            part.localScale = new Vector3(restScale.x * s.x, restScale.y * s.y, scale.z);
         }
-        if (_hit != null && _rect != null)
+        if (_face != null && !Mathf.Approximately(e.Darken, _appliedDarken))
         {
-            Vector2 size = _rect.rect.size;
-            float px = sx > 0.01f ? size.x * (1f - 1f / sx) * 0.5f : 0f;
-            float py = sy > 0.01f ? size.y * (1f - 1f / sy) * 0.5f : 0f;
-            _hit.raycastPadding = _restPadding + new Vector4(px, py, px, py);
+            Color now = _face.color;
+            float back = 1f - _appliedDarken, to = 1f - e.Darken;
+            float k = back > 0.01f ? to / back : 1f;
+            _face.color = new Color(now.r * k, now.g * k, now.b * k, now.a);
+            _appliedDarken = e.Darken;
         }
-        if (_motion.Moving || sx != 1f || sy != 1f || offset != 0f)
-            return; // still moving, or settled on a pose (the hover lift, a held press): kept as drawn
-        transform.localScale = _restScale;
-        if (_hit != null)
-            _hit.raycastPadding = _restPadding;
-        _posed = false;
+        if (_motion.AtRestPose)
+            _posed = false;
     }
 }

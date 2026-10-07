@@ -25,6 +25,9 @@ public enum KitState
 /// </summary>
 public static class UiKitNames
 {
+    /// <summary>The screen-edge pull tabs' pieces: every one starts with PullTab; the left edge's tab is PullTabLeft (it slides out to the right), the right edge's PullTabRight.</summary>
+    public const string PullTab = "pulltab_", PullTabLeft = "pulltab_left", PullTabRight = "pulltab_right";
+
     /// <summary>The sprite of <paramref name="piece"/> in <paramref name="state"/> ("plate_ox", Hover gives plate_ox_hover).</summary>
     public static string Of(string piece, KitState state) => piece + "_" + Word(state);
 
@@ -126,7 +129,7 @@ public static class UiKitNames
     private static readonly string[] DarkPieces =
     {
         "plate_ox", "plate_slate", "plate_red", "plate_green", "plate_brass", "plate_lav", "miniplate_ox", "miniplate_slate",
-        "pulltab_", "iconkey", "titlebar_", "panel_dark", "panel_night", "panel_slate", "pill_", "strip_", "ribbon_green", "ribbon_red",
+        PullTab, "iconkey", "titlebar_", "panel_dark", "panel_night", "panel_slate", "pill_", "strip_", "ribbon_green", "ribbon_red",
         "chip_active", "segment_on", "row_highlight", "badge_", "wheel_back", "wheelpill_hover", "lcd_glass", "inspect_"
     };
 

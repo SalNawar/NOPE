@@ -165,6 +165,10 @@ public sealed class DeskStampTray : MonoBehaviour
     private float _noteUntil;
     private AudioClip _thump, _thunk;
 
+    /// <summary>The rack's rest scale, and its speed last frame (m/s along its travel: its change squashes it).</summary>
+    private Vector3 _rackScale = Vector3.one;
+    private float _barSpeed;
+
     /// <summary>True while the passport carries a verdict (the decision skips the leaving papers' own verdict ink: the player's is on them; a paper dropped on the counter hands the papers back).</summary>
     public bool HasVerdict => _flow.CanHandBack;
 
@@ -192,7 +196,10 @@ public sealed class DeskStampTray : MonoBehaviour
             tab.onClick.AddListener(ToggleBar);
         _handles = new[] { MakeHandle(DeskStamp.Approved, approvedStamp, approvedDie), MakeHandle(DeskStamp.Denied, deniedStamp, deniedDie) };
         if (rack != null)
+        {
+            _rackScale = rack.localScale;
             rack.gameObject.SetActive(false);
+        }
         _thump = Tone("StampThump", 140f, 0.09f, 0.9f);
         _thunk = Tone("StampThunk", 70f, 0.16f, 0.7f);
         Show();
@@ -566,20 +573,52 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         float target = _flow.BarOut ? 1f : 0f;
         if (Mathf.Approximately(_slide, target))
+        {
+            StretchBar(0f);
             return;
+        }
         float seconds = config != null && !MotionPreference.Reduced ? config.stampBarSeconds : 0f;
         _slide = seconds > 0f ? Mathf.MoveTowards(_slide, target, Time.unscaledDeltaTime / seconds) : target;
         if (_laid)
+        {
+            Vector3 was = rack.position;
             rack.position = Vector3.LerpUnclamped(_in, _out, BarCurve(seconds));
+            StretchBar(Time.unscaledDeltaTime > 0f && !Mathf.Approximately(_slide, target) ? Vector3.Dot(rack.position - was, rack.right) / Time.unscaledDeltaTime : 0f);
+        }
         bool shown = _slide > 0f;
         if (rack.gameObject.activeSelf != shown)
             rack.gameObject.SetActive(shown);
     }
 
-    /// <summary>Where the bar is along its travel (0 in, 1 out) on the desk's spring curve: past out as it arrives, past in as it goes back (UiMotion.Ease over <paramref name="seconds"/>).</summary>
+    /// <summary>
+    /// The bar's shape for its <paramref name="speed"/> along its travel (m/s;
+    /// Saleh 2026-10-07, round 2: what travels stretches): longer along the
+    /// rail by its speed, squashed by its change of speed (the launch, the
+    /// arrival), its volume kept (SquashStretch.FromMotion); its rest scale
+    /// at 0 once it stops.
+    /// </summary>
+    private void StretchBar(float speed)
+    {
+        float dt = Time.unscaledDeltaTime;
+        float acceleration = dt > 0f ? (speed - _barSpeed) / dt : 0f;
+        _barSpeed = speed;
+        if (speed == 0f)
+        {
+            if (rack.localScale != _rackScale)
+                rack.localScale = _rackScale;
+            return;
+        }
+        MotionKnobs knobs = UiMotion.Knobs;
+        float share = UiMotion.Amount.Share;
+        Stretch s = SquashStretch.FromMotion(speed * share, acceleration * share, knobs.deskStretchPerSpeed, knobs.deskSquashPerAccel, knobs.maxStretch);
+        float across = Mathf.Sqrt(s.Across); // the two other axes share the area's rule, so the volume keeps
+        rack.localScale = new Vector3(_rackScale.x * s.Along, _rackScale.y * across, _rackScale.z * across);
+    }
+
+    /// <summary>Where the bar is along its travel (0 in, 1 out) on the desk's spring curve: past out as it arrives, past in as it goes back, wobbling (MotionKnobs.slideFeel, UiMotion.Ease over <paramref name="seconds"/>).</summary>
     private float BarCurve(float seconds)
     {
-        MotionFeel feel = UiMotion.Knobs.deskMoveFeel;
+        MotionFeel feel = UiMotion.Knobs.slideFeel;
         return _flow.BarOut ? UiMotion.Ease(_slide, feel, seconds) : 1f - UiMotion.Ease(1f - _slide, feel, seconds);
     }
 

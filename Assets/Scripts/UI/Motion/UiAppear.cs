@@ -18,7 +18,9 @@ public enum AppearStyle
 
 /// <summary>
 /// A popup's or a panel's coming and going through the game feel's springs
-/// (AppearMotion): Open after the object is switched on (it grows, slides or
+/// (AppearMotion; Saleh 2026-10-07, round 2: what travels stretches along its
+/// travel by its speed, overshoots, squashes on arrival and wobbles into
+/// place: SquashStretch.FromMotion): Open after the object is switched on (it grows, slides or
 /// drops in from its style's start, optionally from a point: a window from
 /// its taskbar button, after a stagger's delay), Close to take it away (it
 /// shrinks or slides back, optionally toward a point, takes no clicks while
@@ -40,6 +42,9 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
     private Vector3 _applied;
     private bool _posed, _closing, _finishing;
     private MotionAmount _amount;
+
+    /// <summary>The tuning of the running motion (its acceleration shapes the squash).</summary>
+    private SpringTuning _tuning;
 
     /// <summary>True while it is going (Close ran; it switches itself off when gone).</summary>
     public bool Closing => _closing;
@@ -64,8 +69,8 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
     /// <summary>Plays it in from its style's start, after <paramref name="delay"/> seconds (the object should be on).</summary>
     public void Open(float delay = 0f) => OpenFrom(StyleStart(), delay);
 
-    /// <summary>Plays it in growing from <paramref name="world"/> (a window from its taskbar button).</summary>
-    public void Open(Vector3 world) => OpenFrom(LocalOffsetTo(world), 0f);
+    /// <summary>Plays it in growing from <paramref name="world"/> (a window from its taskbar button, a wheel's pill from the ring's centre) after <paramref name="delay"/> seconds.</summary>
+    public void Open(Vector3 world, float delay = 0f) => OpenFrom(LocalOffsetTo(world), delay);
 
     /// <summary>Takes it away toward its style's start, then switches it off.</summary>
     public void Close() => CloseTo(StyleStart());
@@ -117,7 +122,8 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
             return false;
         MotionKnobs knobs = UiMotion.Knobs;
         MotionFeel feel = _closing ? MotionFeel.Heavy : _style == AppearStyle.Pop ? knobs.appearFeel : _style == AppearStyle.Drop ? knobs.paperFeel : knobs.slideFeel;
-        bool moving = _motion.Step(dt, knobs.Get(feel), knobs.reducedFadeSeconds, knobs.settleValue, knobs.settleSpeed);
+        _tuning = knobs.Get(feel);
+        bool moving = _motion.Step(dt, _tuning, knobs.reducedFadeSeconds, knobs.settleValue, knobs.settleSpeed);
         if (_closing && _motion.Gone)
         {
             Finish();
@@ -172,7 +178,13 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
         MotionKnobs knobs = UiMotion.Knobs;
         float from = _style == AppearStyle.Pop || _from != StyleStart() ? knobs.appearFromScale : 1f;
         float s = _motion.Scale(from, _amount);
-        transform.localScale = _restScale * s;
+        // A piece that travels (a slide, a window from its taskbar button, a wheel pill from the ring's centre) stretches along its travel by its speed and squashes by its acceleration.
+        float distance = _from.magnitude * _amount.Share;
+        Stretch st = distance > 0f
+            ? SquashStretch.FromMotion(distance * _motion.Speed, distance * _motion.Acceleration(_tuning), knobs.stretchPerSpeed, knobs.squashPerAccel, knobs.maxStretch)
+            : Stretch.None;
+        bool alongY = Mathf.Abs(_from.y) > Mathf.Abs(_from.x);
+        transform.localScale = new Vector3(_restScale.x * s * (alongY ? st.Across : st.Along), _restScale.y * s * (alongY ? st.Along : st.Across), _restScale.z * s);
         Vector3 offset = _from * _motion.Offset(1f, _amount);
         if (offset != _applied)
         {

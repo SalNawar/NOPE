@@ -31,12 +31,20 @@ public static class SquashStretch
     /// <summary>Stretched to <paramref name="along"/> along the axis, the other axis scaled by its inverse (a non-positive factor is taken as no stretch).</summary>
     public static Stretch Preserve(float along) => along > 0f ? new Stretch(along, 1f / along) : Stretch.None;
 
-    /// <summary>Squashed by <paramref name="amount"/> along the axis of a press (0.2 is 20 % shorter), wider across it by the area's rule.</summary>
-    public static Stretch Squash(float amount) => Preserve(1f - Clamp(amount, 0f, 0.9f));
-
-    /// <summary>Stretched along the travel by the speed: 1 + |<paramref name="speed"/>| · <paramref name="perSpeed"/>, at most 1 + <paramref name="max"/>.</summary>
-    public static Stretch FromSpeed(float speed, float perSpeed, float max) =>
-        Preserve(1f + Clamp(MathF.Abs(speed) * MathF.Max(0f, perSpeed), 0f, MathF.Max(0f, max)));
+    /// <summary>
+    /// A travelling piece's shape (Saleh 2026-10-07, round 2: "no stretch in
+    /// motion"): stretched along its travel by its <paramref name="speed"/>
+    /// (· <paramref name="perSpeed"/>) and squashed by its
+    /// <paramref name="acceleration"/> (· <paramref name="perAccel"/>: the
+    /// launch's anticipation, the arrival, each turn of a wobble), the two
+    /// summed and held within 1 ± <paramref name="max"/>; the area keeps.
+    /// </summary>
+    public static Stretch FromMotion(float speed, float acceleration, float perSpeed, float perAccel, float max)
+    {
+        float m = Clamp(max, 0f, 0.9f);
+        float along = 1f + MathF.Abs(speed) * MathF.Max(0f, perSpeed) - MathF.Abs(acceleration) * MathF.Max(0f, perAccel);
+        return Preserve(Clamp(along, 1f - m, 1f + m));
+    }
 
     /// <summary><paramref name="value"/> held between <paramref name="min"/> and <paramref name="max"/>.</summary>
     private static float Clamp(float value, float min, float max) => value < min ? min : value > max ? max : value;

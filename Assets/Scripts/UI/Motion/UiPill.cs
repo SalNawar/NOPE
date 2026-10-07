@@ -15,6 +15,9 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
     private Spring _x, _y;
     private Vector3 _restScale = Vector3.one;
     private Vector3 _applied;
+
+    /// <summary>True when the slide runs up or down (its stretch is along y), else across.</summary>
+    private bool _alongY;
     private bool _posed;
 
     /// <summary>Slides <paramref name="pill"/> to its place from <paramref name="fromWorld"/> (where the selection was) with the toggle cue.</summary>
@@ -43,7 +46,8 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
         Vector3 from = (parent != null ? parent.InverseTransformPoint(fromWorld) : fromWorld) - (transform.localPosition - _applied);
         _x = new Spring { Value = from.x * amount.Share, Target = 0f };
         _y = new Spring { Value = from.y * amount.Share, Target = 0f };
-        Apply(0f);
+        _alongY = Mathf.Abs(from.y) > Mathf.Abs(from.x);
+        Apply(0f, 0f);
         UiMotion.Run(this);
     }
 
@@ -55,7 +59,8 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
         MotionKnobs knobs = UiMotion.Knobs;
         SpringTuning tuning = knobs.Get(knobs.pillFeel);
         bool moving = _x.Step(dt, tuning, knobs.settleValue * 100f, knobs.settleSpeed * 100f) | _y.Step(dt, tuning, knobs.settleValue * 100f, knobs.settleSpeed * 100f);
-        Apply(moving ? Mathf.Sqrt(_x.Velocity * _x.Velocity + _y.Velocity * _y.Velocity) : 0f);
+        Spring along = _alongY ? _y : _x;
+        Apply(moving ? along.Velocity : 0f, moving ? along.Acceleration(tuning) : 0f);
         return moving;
     }
 
@@ -64,11 +69,11 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
     {
         _x.Snap(0f);
         _y.Snap(0f);
-        Apply(0f);
+        Apply(0f, 0f);
     }
 
-    /// <summary>Draws the offset (only its change applied) and the stretch for <paramref name="speed"/> (px/s) along the travel.</summary>
-    private void Apply(float speed)
+    /// <summary>Draws the offset (only its change applied) and the shape for <paramref name="speed"/> (px/s) and <paramref name="acceleration"/> (px/s²) along the travel: stretched in flight, squashed at the launch, the arrival and each turn of the wobble (SquashStretch.FromMotion).</summary>
+    private void Apply(float speed, float acceleration)
     {
         if (!_posed)
             return;
@@ -76,10 +81,9 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
         transform.localPosition += offset - _applied;
         _applied = offset;
         MotionKnobs knobs = UiMotion.Knobs;
-        Stretch s = SquashStretch.FromSpeed(speed, knobs.stretchPerSpeed, knobs.maxStretch);
-        bool across = Mathf.Abs(_y.Velocity) > Mathf.Abs(_x.Velocity);
-        transform.localScale = new Vector3(_restScale.x * (across ? s.Across : s.Along), _restScale.y * (across ? s.Along : s.Across), _restScale.z);
-        if (speed > 0f || !_x.AtRest || !_y.AtRest)
+        Stretch s = SquashStretch.FromMotion(speed, acceleration, knobs.stretchPerSpeed, knobs.squashPerAccel, knobs.maxStretch);
+        transform.localScale = new Vector3(_restScale.x * (_alongY ? s.Across : s.Along), _restScale.y * (_alongY ? s.Along : s.Across), _restScale.z);
+        if (speed != 0f || acceleration != 0f || !_x.AtRest || !_y.AtRest)
             return;
         transform.localScale = _restScale;
         transform.localPosition -= _applied;
