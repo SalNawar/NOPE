@@ -72,7 +72,7 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The reading view (piece 10; optional): the camera tilted forward over the desk.</summary>
     [SerializeField] private DeskView deskView;
 
-    /// <summary>The city view (the desk-first redesign, item 6; optional): the camera turned left to the city.</summary>
+    /// <summary>The city view (the desk-first redesign, item 6; optional): the hall turned left and the whole city faded in.</summary>
     [SerializeField] private CityView cityView;
 
     private BoothPhase _phase = BoothPhase.NoTraveller;

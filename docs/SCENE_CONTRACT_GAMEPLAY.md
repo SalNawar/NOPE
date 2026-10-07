@@ -80,9 +80,9 @@ the hall's, below).
 the hall lacked for the game to be whole (the list at the end of the next
 section), leaves alone whatever it already has (a second run changes nothing)
 and marks the scene dirty for saving. The gameplay side ran it once, with
-Saleh's OK (2026-09-29). Reinstalling the hall's art
-(`AnimeHallLayerInstaller`) rebuilds the scene without these hooks: run it again
-afterwards.
+Saleh's OK (2026-09-29). A rebuild of the hall from scratch (its first
+installer, `AnimeHallLayerInstaller`, was retired on 2026-10-07) would lose these
+hooks: run it again afterwards.
 
 ## The anime hall (`AnimeHall.unity`, art c75e1fe)
 
@@ -103,7 +103,7 @@ it; a click box, its hover outline and its reaction cover that part):
 | `Intercom` | `Clean_Phone__DeskClean_PhoneBody` | |
 | `Stamp`, `Till`, `StabilityMonitor`, `Calendar`, `Clock` | `Clean_Stamp__DeskClean_Wood`, `Clean_Till__DeskClean_Green`, `Office_Stability__Plastic_WarmGrey`, `Office_Calendar__Office_TealDark`, `Office_Clock__Plastic_WarmGrey` | |
 | `Calculator`, `PenPot`, `Stapler` | `Clean_Calculator__DeskClean_Case`, `Clean_PenPot__DeskClean_ABS`, `Clean_Stapler__DeskClean_Case` | |
-| `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock`, `ReadoutNext` | `GameplayAnchors/DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` | world-space TextMeshPro texts on the boards' display faces (the calendar's paper, the stability monitor's and the clock's glass, the till's display, the NEXT sign's glass), where the static `Preview display — 01 / 100% / 09:00 / NEXT` TextMeshes stood (deleted): dark ink (the art's `211F26`) on the calendar's paper, light digits (its `FFF2D9` ivory) on the dark glasses. `GameplayAnchors` is the scene's **first root**, so these are found before the preserved desk's empty meshes of the same names (copies of the room's texts without their TextMeshPro component), which stay; deleting those would drop the reliance on root order |
+| `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock`, `ReadoutNext` | `GameplayAnchors/DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` | world-space TextMeshPro texts on the boards' display faces (the calendar's paper, the stability monitor's and the clock's glass, the till's display, the NEXT sign's glass), where the static `Preview display — 01 / 100% / 09:00 / NEXT` TextMeshes stood (deleted): dark ink (the art's `211F26`) on the calendar's paper, light digits (its `FFF2D9` ivory) on the dark glasses. `GameplayAnchors` is the scene's **first root**, so these are found before the preserved desk's empty meshes of the same names (copies of the room's texts without their TextMeshPro component), which stay; deleting those would drop the reliance on root order. Since the hall-art pass (2026-10-07) the till's `CreditsNumber` lives inside `Anchor_Till` (it pulses with the till), so `ReadoutCredits` first names its full root path (`OfficeSceneContractSO.TillReadoutPath`): the bare name would find the desk's empty mesh |
 | `Scanner`, `Traveller`, `HandOver` | `GameplayAnchors/Anchor_Scanner`, `Anchor_Traveller`, `Anchor_HandOver` | at the room's defaults (the same desk layout), for the art side to move |
 | `OfficeCamera` | `Anime hall player preview` | tagged `MainCamera`, with a `CinemachineBrain` (so it follows `OfficeVCam`: move that to move the view), depth 100, culled to layer 29, no AudioListener: the binder orders the PC frame's camera after it and the clone's before it, and adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
 | `OfficeVCam` | `Cameras/OfficeVCam` | a CinemachineCamera at the camera's pose, its lens copied (55°, 0.05 to 400 m), as the room's: the desk view works |

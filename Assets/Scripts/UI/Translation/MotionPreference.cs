@@ -17,14 +17,18 @@ public static class MotionPreference
     /// <summary>The stored value for "full".</summary>
     private const string FullValue = "full";
 
-    /// <summary>True when the player chose Reduced motion (saved at once when set).</summary>
+    /// <summary>The stored choice once read (every change goes through <see cref="Reduced"/>'s setter), so the per-frame readers (the hall's art, the city view) allocate nothing.</summary>
+    private static bool? _reduced;
+
+    /// <summary>True when the player chose Reduced motion (saved at once when set; read from PlayerPrefs once, then cached).</summary>
     public static bool Reduced
     {
-        get => PlayerPrefs.GetString(Key, FullValue) == ReducedValue;
+        get => _reduced ??= PlayerPrefs.GetString(Key, FullValue) == ReducedValue;
         set
         {
             PlayerPrefs.SetString(Key, value ? ReducedValue : FullValue);
             PlayerPrefs.Save();
+            _reduced = value;
             Changed?.Invoke();
         }
     }

@@ -1,73 +1,75 @@
 WINDOW title (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 0 B, mean 0 B, p95 0 B, max 0 B; frames allocating 0/240
-   PlayerLoop time per frame: median 0.87 ms, p95 1.05 ms; frame time median 2.90 ms, p95 3.43 ms
+   PlayerLoop time per frame: median 0.78 ms, p95 0.96 ms; frame time median 2.34 ms, p95 2.81 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 2.88 ms p95 3.41 ms; GC Allocated In Frame (whole main thread, editor included) median 12307 B mean 12607 B (241 samples)
-LOAD title -> office (art + gameplay, briefing up): 1388 ms, 1 frames
+   recorder: main thread median 2.32 ms p95 2.80 ms; GC Allocated In Frame (whole main thread, editor included) median 12307 B mean 12413 B (241 samples)
+LOAD title -> office (art + gameplay, briefing up): 1746 ms, 1 frames
 WINDOW office + morning briefing (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 436 B, mean 436 B, p95 436 B, max 436 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.84 ms, p95 3.30 ms; frame time median 5.05 ms, p95 5.70 ms
+   PlayerLoop time per frame: median 3.08 ms, p95 3.46 ms; frame time median 4.90 ms, p95 5.52 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 5.03 ms p95 5.70 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 13000 B (241 samples)
+   recorder: main thread median 4.89 ms p95 5.51 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12809 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Anime hall player preview > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 36 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Hall backdrop camera (2D lights, made at runtime) > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 32 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: CloneCamera > Inl_RecordRenderGraph > Inl_On Record Render Graph
 WINDOW office view, before READY (no traveller): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 436 B, mean 436 B, p95 436 B, max 508 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.84 ms, p95 3.31 ms; frame time median 4.99 ms, p95 5.66 ms
+   PlayerLoop time per frame: median 3.14 ms, p95 3.49 ms; frame time median 5.00 ms, p95 5.51 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 4.97 ms p95 5.66 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12852 B (241 samples)
+   recorder: main thread median 4.98 ms p95 5.50 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12852 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Anime hall player preview > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 36 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Hall backdrop camera (2D lights, made at runtime) > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 32 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: CloneCamera > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW office view, traveller at the desk (idle, bubble done): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 436 B, mean 436 B, p95 436 B, max 508 B; frames allocating 240/240
-   PlayerLoop time per frame: median 3.21 ms, p95 3.59 ms; frame time median 5.52 ms, p95 5.98 ms
+   PlayerLoop GC alloc per frame: median 504 B, mean 504 B, p95 504 B, max 576 B; frames allocating 240/240
+   PlayerLoop time per frame: median 2.88 ms, p95 3.27 ms; frame time median 4.62 ms, p95 5.15 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 5.50 ms p95 5.97 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 13008 B (241 samples)
+   recorder: main thread median 4.61 ms p95 5.14 ms; GC Allocated In Frame (whole main thread, editor included) median 12811 B mean 13066 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Anime hall player preview > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
+   site 68 B/frame avg, in 240/240 frames, 2 allocs/frame when present: PlayerLoop > UpdateScene > PreLateUpdate.ScriptRunBehaviourLateUpdate > LateBehaviourUpdate > Assembly-CSharp.dll!::GuideDirector.LateUpdate() [Invoke]
    site 36 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Hall backdrop camera (2D lights, made at runtime) > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 32 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: CloneCamera > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW desktop in the PC frame, traveller at the desk (idle): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 436 B, mean 437 B, p95 436 B, max 508 B; frames allocating 240/240
-   PlayerLoop time per frame: median 3.39 ms, p95 3.95 ms; frame time median 5.65 ms, p95 6.46 ms
+   PlayerLoop GC alloc per frame: median 436 B, mean 436 B, p95 436 B, max 508 B; frames allocating 240/240
+   PlayerLoop time per frame: median 3.14 ms, p95 3.53 ms; frame time median 4.87 ms, p95 5.34 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 5.63 ms p95 6.44 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12811 B (241 samples)
+   recorder: main thread median 4.85 ms p95 5.33 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12819 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: FrameCamera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 36 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Hall backdrop camera (2D lights, made at runtime) > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 32 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: CloneCamera > Inl_RecordRenderGraph > Inl_On Record Render Graph
-   site 1 B/frame avg, in 2/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
+   site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW office view, traveller wheel open (idle): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 436 B, mean 436 B, p95 436 B, max 508 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.99 ms, p95 3.42 ms; frame time median 5.19 ms, p95 5.85 ms
+   PlayerLoop GC alloc per frame: median 504 B, mean 505 B, p95 504 B, max 576 B; frames allocating 240/240
+   PlayerLoop time per frame: median 3.11 ms, p95 3.48 ms; frame time median 4.93 ms, p95 5.54 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 5.17 ms p95 5.85 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12819 B (241 samples)
+   recorder: main thread median 4.92 ms p95 5.56 ms; GC Allocated In Frame (whole main thread, editor included) median 12811 B mean 13023 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Anime hall player preview > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
+   site 68 B/frame avg, in 240/240 frames, 2 allocs/frame when present: PlayerLoop > UpdateScene > PreLateUpdate.ScriptRunBehaviourLateUpdate > LateBehaviourUpdate > Assembly-CSharp.dll!::GuideDirector.LateUpdate() [Invoke]
    site 36 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Hall backdrop camera (2D lights, made at runtime) > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 32 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: CloneCamera > Inl_RecordRenderGraph > Inl_On Record Render Graph
-   site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
+   site 1 B/frame avg, in 2/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW office + shift report (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 436 B, mean 436 B, p95 436 B, max 436 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.84 ms, p95 3.39 ms; frame time median 5.03 ms, p95 5.77 ms
+   PlayerLoop time per frame: median 2.80 ms, p95 3.14 ms; frame time median 4.52 ms, p95 5.01 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 5.02 ms p95 5.80 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 13007 B (241 samples)
+   recorder: main thread median 4.51 ms p95 5.00 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12809 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Anime hall player preview > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 36 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Hall backdrop camera (2D lights, made at runtime) > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 32 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: CloneCamera > Inl_RecordRenderGraph > Inl_On Record Render Graph
-LOAD office -> home (expenses up): 386 ms, 1 frames
+LOAD office -> home (expenses up): 326 ms, 1 frames
 WINDOW home, expenses panel (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 0 B, mean 0 B, p95 0 B, max 0 B; frames allocating 0/240
-   PlayerLoop time per frame: median 0.81 ms, p95 1.00 ms; frame time median 2.63 ms, p95 3.13 ms
+   PlayerLoop time per frame: median 0.60 ms, p95 0.83 ms; frame time median 1.76 ms, p95 2.34 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 2.61 ms p95 3.12 ms; GC Allocated In Frame (whole main thread, editor included) median 12307 B mean 12403 B (241 samples)
-LOAD home -> office (sleep, nightly resolve, day 2 briefing up): 883 ms, 1 frames
+   recorder: main thread median 1.75 ms p95 2.36 ms; GC Allocated In Frame (whole main thread, editor included) median 12307 B mean 12359 B (241 samples)
+LOAD home -> office (sleep, nightly resolve, day 2 briefing up): 905 ms, 1 frames
 WINDOW day 2 office + morning briefing (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 436 B, mean 436 B, p95 436 B, max 436 B; frames allocating 240/240
-   PlayerLoop time per frame: median 3.11 ms, p95 3.46 ms; frame time median 5.42 ms, p95 5.94 ms
+   PlayerLoop time per frame: median 3.04 ms, p95 3.41 ms; frame time median 4.90 ms, p95 5.41 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 5.40 ms p95 5.95 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12843 B (241 samples)
+   recorder: main thread median 4.88 ms p95 5.40 ms; GC Allocated In Frame (whole main thread, editor included) median 12743 B mean 12998 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Anime hall player preview > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 36 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: Hall backdrop camera (2D lights, made at runtime) > Inl_RecordRenderGraph > Inl_On Record Render Graph
    site 32 B/frame avg, in 240/240 frames, 1 allocs/frame when present: PlayerLoop > UpdateScene > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_UniversalRenderPipeline.RenderSingleCameraInternal: CloneCamera > Inl_RecordRenderGraph > Inl_On Record Render Graph

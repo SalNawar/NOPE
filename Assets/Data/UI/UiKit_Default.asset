@@ -1,0 +1,491 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb19c6bdf8d43aabfcf420b4b53a6f4, type: 3}
+  m_Name: UiKit_Default
+  m_EditorClassIdentifier: Assembly-CSharp::UiKitSO
+  labelFont: {fileID: 11400000, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}
+  readoutFont: {fileID: 11400000, guid: 217ec87cbb051d9469204f7628483534, type: 2}
+  mastheadFont: {fileID: 11400000, guid: c73422efd5c3597448c26abe795e7382, type: 2}
+  bodyFont: {fileID: 11400000, guid: 9948aa6ae551ea641adf9b4420ebe196, type: 2}
+  bodyBoldFont: {fileID: 11400000, guid: c490a7d6804c814438423899b9b22d60, type: 2}
+  inkOnDark: {r: 0.933, g: 0.898, b: 0.816, a: 1}
+  inkOnLight: {r: 0.169, g: 0.11, b: 0.141, a: 1}
+  phosphorInk: {r: 0.8, g: 1, b: 0.82, a: 1}
+  signalRed: {r: 0.761, g: 0.227, b: 0.18, a: 1}
+  spritePad: 28
+  overlayScale: 2
+  desktopScale: 1.6
+  sprites:
+  - name: badge_brass
+    sprite: {fileID: 21300000, guid: 645ccc06b8094965bf52c2c5148ff2a5, type: 3}
+  - name: badge_ox
+    sprite: {fileID: 21300000, guid: 16632a5c1f324b3cb54a291dc92044af, type: 3}
+  - name: badge_red
+    sprite: {fileID: 21300000, guid: 6b5007ba38834a0f9d35dfb5094c329f, type: 3}
+  - name: card_hover
+    sprite: {fileID: 21300000, guid: 0548030b40e54f49aa59c3887c509c3e, type: 3}
+  - name: card_locked
+    sprite: {fileID: 21300000, guid: b15a52cd76ea4ed581b718700e0d2d7c, type: 3}
+  - name: card_pressed
+    sprite: {fileID: 21300000, guid: 056fc72e3e6945529c11773fd7206723, type: 3}
+  - name: card_rest
+    sprite: {fileID: 21300000, guid: 8bdfb25639744c9b8eb9a188eb05f1e4, type: 3}
+  - name: checkbox_off
+    sprite: {fileID: 21300000, guid: 1b2ff211cf6a49c1a1277731bca47c8b, type: 3}
+  - name: checkbox_on
+    sprite: {fileID: 21300000, guid: 9c78dc3323034228b7becc5478479218, type: 3}
+  - name: chip_active
+    sprite: {fileID: 21300000, guid: 5105f8e0ae954f259b4e6ab4cb0d21e3, type: 3}
+  - name: chip_rest
+    sprite: {fileID: 21300000, guid: 67dd220d655340b088ff8745c7a510f3, type: 3}
+  - name: choicecard_hover
+    sprite: {fileID: 21300000, guid: 26918ef0fb2f426d8dd6f6d283958f93, type: 3}
+  - name: choicecard_rest
+    sprite: {fileID: 21300000, guid: ab7d2bb6113d4c1cbd56fba25f09f400, type: 3}
+  - name: choicecard_selected
+    sprite: {fileID: 21300000, guid: a8c5f9c73ae342f98e0960b167d4e974, type: 3}
+  - name: citation_slip
+    sprite: {fileID: 21300000, guid: a6c3f49a4360468aac595bd9f74be40f, type: 3}
+  - name: content_inset
+    sprite: {fileID: 21300000, guid: ce29a1d89a654c0fb4dd4d84fae10d6d, type: 3}
+  - name: dome_red_pressed
+    sprite: {fileID: 21300000, guid: c05260526acd4541ba7373738151fa69, type: 3}
+  - name: dome_red_rest
+    sprite: {fileID: 21300000, guid: f92a358df51d45b084499abfba5d032c, type: 3}
+  - name: dropdown
+    sprite: {fileID: 21300000, guid: 7c09cd1adcb642d8ba39fb48a310c619, type: 3}
+  - name: field_error
+    sprite: {fileID: 21300000, guid: 79d569ee1d414d179c8e8c4ae3da4d93, type: 3}
+  - name: field_focus
+    sprite: {fileID: 21300000, guid: 35c37ec7435d478d98740ec9cae6e65d, type: 3}
+  - name: field_rest
+    sprite: {fileID: 21300000, guid: a97d953dfcdd45d080f0b567ac4919c2, type: 3}
+  - name: folder_body
+    sprite: {fileID: 21300000, guid: b66353dfea144e82a11d382e7217e89e, type: 3}
+  - name: foldertab_hover
+    sprite: {fileID: 21300000, guid: dfe1e65334114f1ea14e72057a958425, type: 3}
+  - name: foldertab_new
+    sprite: {fileID: 21300000, guid: 0925e11c20424f70b414bdfc49bc16cf, type: 3}
+  - name: foldertab_rest
+    sprite: {fileID: 21300000, guid: b1854dd2673b4458883c465b1adfaed4, type: 3}
+  - name: foldertab_selected
+    sprite: {fileID: 21300000, guid: 83bf6517fc8a4f5faf606c2e781f15ae, type: 3}
+  - name: glyph_back
+    sprite: {fileID: 21300000, guid: 386bde107cf44562ac63b34aded036d8, type: 3}
+  - name: glyph_clock
+    sprite: {fileID: 21300000, guid: 75444c4039b842d5a026153324150c0c, type: 3}
+  - name: glyph_cross
+    sprite: {fileID: 21300000, guid: c4d6fb0169624fae86ce85e0b39b1165, type: 3}
+  - name: glyph_down
+    sprite: {fileID: 21300000, guid: aba3fca1aae6435282767be595a749b8, type: 3}
+  - name: glyph_max
+    sprite: {fileID: 21300000, guid: ee3a02bdaead4018828b995b4986b1a7, type: 3}
+  - name: glyph_menu
+    sprite: {fileID: 21300000, guid: b6b497356d6a4ad197d9dfd64ef5c940, type: 3}
+  - name: glyph_min
+    sprite: {fileID: 21300000, guid: 4bad00a9bbb048998a8173199ad2415d, type: 3}
+  - name: glyph_padlock
+    sprite: {fileID: 21300000, guid: 6e4ca72797be41f7b2444819db113960, type: 3}
+  - name: glyph_plus
+    sprite: {fileID: 21300000, guid: c597faf351944aa2a0385a55dda9d4ec, type: 3}
+  - name: glyph_search
+    sprite: {fileID: 21300000, guid: 2610ec98be644386b82f2df46cc7b2a7, type: 3}
+  - name: glyph_tick
+    sprite: {fileID: 21300000, guid: e02068c44d0e41ec95ab026032e65d07, type: 3}
+  - name: glyph_up
+    sprite: {fileID: 21300000, guid: fe3495aec12f4cef868445fbb85ab0e5, type: 3}
+  - name: iconkey_hover
+    sprite: {fileID: 21300000, guid: 92d9adcfc96248c18566470d5bacf5fa, type: 3}
+  - name: iconkey_locked
+    sprite: {fileID: 21300000, guid: 08059b41cae3420a8cb1546e7857097a, type: 3}
+  - name: iconkey_pressed
+    sprite: {fileID: 21300000, guid: 11ccd8c522a24fd899f6ad14ee9a094a, type: 3}
+  - name: iconkey_rest
+    sprite: {fileID: 21300000, guid: 299449023a224a31ac8dc326846e4712, type: 3}
+  - name: inspect_hover
+    sprite: {fileID: 21300000, guid: e87cb8241bfc4ffea49ac4164c6eb558, type: 3}
+  - name: inspect_locked
+    sprite: {fileID: 21300000, guid: 9fe41b0c258241488d8d0c878bc3a57d, type: 3}
+  - name: inspect_pressed
+    sprite: {fileID: 21300000, guid: c5bf4c43c7b642929e287f53b3c0771c, type: 3}
+  - name: inspect_rest
+    sprite: {fileID: 21300000, guid: 21c80f4008994b66bd140640f9de9a09, type: 3}
+  - name: keycap_bone_locked
+    sprite: {fileID: 21300000, guid: d9708e25851d4c13adb4d97b50e12d49, type: 3}
+  - name: keycap_bone_pressed
+    sprite: {fileID: 21300000, guid: a7483518d2784511bea7146abf77828a, type: 3}
+  - name: keycap_bone_rest
+    sprite: {fileID: 21300000, guid: 3c8e445d53dc446f9619b4040a58d7e6, type: 3}
+  - name: keycap_lav_locked
+    sprite: {fileID: 21300000, guid: 726d523b458444279de6beb29d169178, type: 3}
+  - name: keycap_lav_pressed
+    sprite: {fileID: 21300000, guid: 63bc8851812b4375aaec8b7cc3cd1f94, type: 3}
+  - name: keycap_lav_rest
+    sprite: {fileID: 21300000, guid: 9100030fb1804fae9683d156dbb91538, type: 3}
+  - name: lcd_glass
+    sprite: {fileID: 21300000, guid: fb40a66adce74dbfa65555e422ff5e9b, type: 3}
+  - name: listrow_hover
+    sprite: {fileID: 21300000, guid: 95b73d0343e945d6bcd4adec39a09e55, type: 3}
+  - name: listrow_rest
+    sprite: {fileID: 21300000, guid: 210b1d5dfe3c4bbd919103d86e16827f, type: 3}
+  - name: listrow_selected
+    sprite: {fileID: 21300000, guid: 6760ce1405ba4b2d99303fc4a51f1838, type: 3}
+  - name: logo_time_sorter
+    sprite: {fileID: 21300000, guid: b6d9f34b5765414f8ab83263bcc6a1ca, type: 3}
+  - name: miniplate_bone_hover
+    sprite: {fileID: 21300000, guid: 54b9c208517243568d475a68e9fd8146, type: 3}
+  - name: miniplate_bone_locked
+    sprite: {fileID: 21300000, guid: c810636d4c444c54a9e53d767c531e42, type: 3}
+  - name: miniplate_bone_pressed
+    sprite: {fileID: 21300000, guid: 25ef2e81b94b4b5dbf31bb85174a0967, type: 3}
+  - name: miniplate_bone_rest
+    sprite: {fileID: 21300000, guid: a92c083f1f244a3cb8e26371a5e43820, type: 3}
+  - name: miniplate_ox_hover
+    sprite: {fileID: 21300000, guid: 51167f9e76764d1cb95ebcaa40743d66, type: 3}
+  - name: miniplate_ox_locked
+    sprite: {fileID: 21300000, guid: 506b38c5502445d0ae34aac286ea70b9, type: 3}
+  - name: miniplate_ox_pressed
+    sprite: {fileID: 21300000, guid: 66c2fbef59ef4a2496f61a1425d22726, type: 3}
+  - name: miniplate_ox_rest
+    sprite: {fileID: 21300000, guid: 80e68c8547574287b5f18837efdb30fb, type: 3}
+  - name: miniplate_slate_hover
+    sprite: {fileID: 21300000, guid: 6911876aa7eb4208b66037b3dacfe738, type: 3}
+  - name: miniplate_slate_locked
+    sprite: {fileID: 21300000, guid: bf967944cc1b408b83402518844cee23, type: 3}
+  - name: miniplate_slate_pressed
+    sprite: {fileID: 21300000, guid: d7244a19ad9a491ab8b8b16ae0184451, type: 3}
+  - name: miniplate_slate_rest
+    sprite: {fileID: 21300000, guid: f44d5fa3d6aa4435bb4c6cb345ed8ca8, type: 3}
+  - name: panel_bone
+    sprite: {fileID: 21300000, guid: 2014b4d89d994de28bcef46d24db9802, type: 3}
+  - name: panel_card
+    sprite: {fileID: 21300000, guid: ee25f71e142e4e3a883a4e592f328cb7, type: 3}
+  - name: panel_dark
+    sprite: {fileID: 21300000, guid: 4562fb5cc7c0493b9a3571549f33ccb8, type: 3}
+  - name: panel_manila
+    sprite: {fileID: 21300000, guid: fdb3c1c26f3145dba1800c9db16a4829, type: 3}
+  - name: panel_night
+    sprite: {fileID: 21300000, guid: 6ecf197b150e47e6a29417f64a547e44, type: 3}
+  - name: panel_slate
+    sprite: {fileID: 21300000, guid: a92b6838ad5544f5868891e3e10cada9, type: 3}
+  - name: pill_brass
+    sprite: {fileID: 21300000, guid: 71c6c1ea27b44e70ba78b362eb13e884, type: 3}
+  - name: pill_green
+    sprite: {fileID: 21300000, guid: 756eff19252f4f7babaaf6aeba991b3b, type: 3}
+  - name: pill_lav
+    sprite: {fileID: 21300000, guid: a2c28bc260d74007a3d92d3eaae43e50, type: 3}
+  - name: pill_red
+    sprite: {fileID: 21300000, guid: 8c2c8d7d224d472bb21e777d125e47ac, type: 3}
+  - name: pill_slate
+    sprite: {fileID: 21300000, guid: af3a40a848b248e78470fe4273b1a2c0, type: 3}
+  - name: plate_bone_hover
+    sprite: {fileID: 21300000, guid: 264db09fab1b43e0b08d1002a36ba155, type: 3}
+  - name: plate_bone_locked
+    sprite: {fileID: 21300000, guid: 76e9562b8b804a9a9d3f5aa491576b9f, type: 3}
+  - name: plate_bone_pressed
+    sprite: {fileID: 21300000, guid: 54fd705516f646ef8be899ed00382073, type: 3}
+  - name: plate_bone_rest
+    sprite: {fileID: 21300000, guid: 68bee443d32d469dbe9fbdd5587913d6, type: 3}
+  - name: plate_brass_hover
+    sprite: {fileID: 21300000, guid: 4ee4de48a0f34df796e4d277a2cd9c6a, type: 3}
+  - name: plate_brass_locked
+    sprite: {fileID: 21300000, guid: b3ddc863bfdd4263b1e12ae2fd761b08, type: 3}
+  - name: plate_brass_pressed
+    sprite: {fileID: 21300000, guid: 1dd9848fc8c84bcb97209d3612a15513, type: 3}
+  - name: plate_brass_rest
+    sprite: {fileID: 21300000, guid: e9efb1adec7643379d601f6fac03ff22, type: 3}
+  - name: plate_green_hover
+    sprite: {fileID: 21300000, guid: 3bee6d1114ef4e48b26d6e23b43d9279, type: 3}
+  - name: plate_green_locked
+    sprite: {fileID: 21300000, guid: 84d1f341f2154baea462adacc30778f8, type: 3}
+  - name: plate_green_pressed
+    sprite: {fileID: 21300000, guid: d955e59b5f88464a96fec055e6fc6aab, type: 3}
+  - name: plate_green_rest
+    sprite: {fileID: 21300000, guid: 1c5733c89b5b4866a41302232f05411e, type: 3}
+  - name: plate_lav_hover
+    sprite: {fileID: 21300000, guid: 20e4ffe9e01047dcb57d56a0569f533a, type: 3}
+  - name: plate_lav_locked
+    sprite: {fileID: 21300000, guid: 658b2801bc714aaea97d2d27100f7ced, type: 3}
+  - name: plate_lav_pressed
+    sprite: {fileID: 21300000, guid: 66167f2a2d074a9bb64223863d49a363, type: 3}
+  - name: plate_lav_rest
+    sprite: {fileID: 21300000, guid: 3dc6573b92c445e8a892272840ddd685, type: 3}
+  - name: plate_ox_hover
+    sprite: {fileID: 21300000, guid: f81c29dc07b4495c97847ec53fabb9d9, type: 3}
+  - name: plate_ox_locked
+    sprite: {fileID: 21300000, guid: 5c2bb52ef08c47bd806e1b2d45e8eb8a, type: 3}
+  - name: plate_ox_pressed
+    sprite: {fileID: 21300000, guid: 5ca19ca6934548edae164fbb66050ea6, type: 3}
+  - name: plate_ox_rest
+    sprite: {fileID: 21300000, guid: 3ae0121d3c4747c8a42815f43b4d61bc, type: 3}
+  - name: plate_red_hover
+    sprite: {fileID: 21300000, guid: 53de244e78404147b300ba6e4582a8ec, type: 3}
+  - name: plate_red_locked
+    sprite: {fileID: 21300000, guid: 0bfee7fdaaa34051aa22d957f3468375, type: 3}
+  - name: plate_red_pressed
+    sprite: {fileID: 21300000, guid: ed89197e6d0d467e9aae59c9948860ff, type: 3}
+  - name: plate_red_rest
+    sprite: {fileID: 21300000, guid: e2f361ae88764212a7d14919d4ff586e, type: 3}
+  - name: plate_slate_hover
+    sprite: {fileID: 21300000, guid: 0d658d63074749fb9d897a172d137d5e, type: 3}
+  - name: plate_slate_locked
+    sprite: {fileID: 21300000, guid: 9212cc230f37440d953f213ddc5bf684, type: 3}
+  - name: plate_slate_pressed
+    sprite: {fileID: 21300000, guid: 7ba75f0cb8d94c55828808302b90c413, type: 3}
+  - name: plate_slate_rest
+    sprite: {fileID: 21300000, guid: a0f3dfb0237243b8b630ff1fd49efbd7, type: 3}
+  - name: pulltab_left_hover
+    sprite: {fileID: 21300000, guid: 953d21bdd9894da6aaac73b027bc9c23, type: 3}
+  - name: pulltab_left_locked
+    sprite: {fileID: 21300000, guid: 10fe514e0c8b417fbee400d380b0af92, type: 3}
+  - name: pulltab_left_pressed
+    sprite: {fileID: 21300000, guid: 79f3cee970b94c88a215688f02d2b2f4, type: 3}
+  - name: pulltab_left_rest
+    sprite: {fileID: 21300000, guid: 41440ef6685a4d569b25164083284b11, type: 3}
+  - name: pulltab_right_hover
+    sprite: {fileID: 21300000, guid: d2cf2be8cc7e461394b4e3655db80ac9, type: 3}
+  - name: pulltab_right_locked
+    sprite: {fileID: 21300000, guid: b67f2bc2a7f44c99a60eda1b05eabb9a, type: 3}
+  - name: pulltab_right_pressed
+    sprite: {fileID: 21300000, guid: 5a619ce9a4c6468b94ac5aff66496bb0, type: 3}
+  - name: pulltab_right_rest
+    sprite: {fileID: 21300000, guid: cdbd187aaf294f2f8fe591f06f2ecb31, type: 3}
+  - name: ribbon_brass
+    sprite: {fileID: 21300000, guid: 6e6fa95cd4054285a604d2b8269020b1, type: 3}
+  - name: ribbon_green
+    sprite: {fileID: 21300000, guid: 460a7fcf0016406481a9125230b2bad3, type: 3}
+  - name: ribbon_red
+    sprite: {fileID: 21300000, guid: cdc973f1b2f64fe686a6319dc7cc0d1c, type: 3}
+  - name: roundbadge_clock
+    sprite: {fileID: 21300000, guid: ad92165b6f7a49ea8018e07f77b9535a, type: 3}
+  - name: roundbadge_padlock
+    sprite: {fileID: 21300000, guid: 2206bed80942440181114c20b1474e1d, type: 3}
+  - name: roundbadge_tick
+    sprite: {fileID: 21300000, guid: f024f9f3e9a948a188b412059668a741, type: 3}
+  - name: row_highlight
+    sprite: {fileID: 21300000, guid: 3491f489134a4126af93fdddb77e98c7, type: 3}
+  - name: scroll_thumb
+    sprite: {fileID: 21300000, guid: 6b35a5064b294152bcff9a3517250734, type: 3}
+  - name: scroll_track
+    sprite: {fileID: 21300000, guid: ca4a84f2a6a945b19048bb7be2c53f2e, type: 3}
+  - name: segment_off
+    sprite: {fileID: 21300000, guid: 803e61de0cf14a22a153943368843828, type: 3}
+  - name: segment_on
+    sprite: {fileID: 21300000, guid: 87ba2964ba884ff5ae3664f7f6e42caa, type: 3}
+  - name: segmented_track
+    sprite: {fileID: 21300000, guid: 145eb1cdcc4c4b2495b9d9ccd0cf790e, type: 3}
+  - name: slot_lever
+    sprite: {fileID: 21300000, guid: 41d368fefb5347ea86e8d7d0d34ef1e6, type: 3}
+  - name: slot_reel
+    sprite: {fileID: 21300000, guid: 1ee0d90617224f1bb8df76768584962c, type: 3}
+  - name: speech_bubble
+    sprite: {fileID: 21300000, guid: 64bf073db9174232bb6de16318e24626, type: 3}
+  - name: speech_tail
+    sprite: {fileID: 21300000, guid: c097abef984c422ab3e7b1d4c7f6b98a, type: 3}
+  - name: stamp_cited
+    sprite: {fileID: 21300000, guid: c13e6df0c7de44d1a807933c77e8ce23, type: 3}
+  - name: strip_green
+    sprite: {fileID: 21300000, guid: eee985e8a6664c56969a11a9e39a9120, type: 3}
+  - name: strip_red
+    sprite: {fileID: 21300000, guid: 56fc7a18a4614631a894eb8499a647f7, type: 3}
+  - name: strip_slate
+    sprite: {fileID: 21300000, guid: c764a924c91a4d6382a27a14a1f8ce68, type: 3}
+  - name: taskbar
+    sprite: {fileID: 21300000, guid: 62b0cbd8dd3e421e81db610261fb04b1, type: 3}
+  - name: tile_ball_hover
+    sprite: {fileID: 21300000, guid: f2d3e936ddd8481bbfb734d5ee1bda22, type: 3}
+  - name: tile_ball_locked
+    sprite: {fileID: 21300000, guid: fd8b1af0ae574c2abdacdf23d3bb30be, type: 3}
+  - name: tile_ball_rest
+    sprite: {fileID: 21300000, guid: 5923d24f300f44cab804494a34b40aa6, type: 3}
+  - name: tile_bolt_hover
+    sprite: {fileID: 21300000, guid: 0272ffaf1ef840158b4377b8f91e89f3, type: 3}
+  - name: tile_bolt_locked
+    sprite: {fileID: 21300000, guid: 49a2118026654a9295de3c9e9f0a4c25, type: 3}
+  - name: tile_bolt_rest
+    sprite: {fileID: 21300000, guid: a29a23814ccf40f6aff6a4891b7d13e7, type: 3}
+  - name: tile_cat_hover
+    sprite: {fileID: 21300000, guid: 59a76be8ea9f46c3953d0a585b2cc9ab, type: 3}
+  - name: tile_cat_locked
+    sprite: {fileID: 21300000, guid: c848b7983410445795c195f85b8e24b6, type: 3}
+  - name: tile_cat_rest
+    sprite: {fileID: 21300000, guid: 6598c8e13f5c42a9aa8e2f111dd50d3e, type: 3}
+  - name: tile_clock_hover
+    sprite: {fileID: 21300000, guid: b387fe08c20641289a91f94451ab5dd2, type: 3}
+  - name: tile_clock_locked
+    sprite: {fileID: 21300000, guid: ff7a394357da45a9aad909c530b4e820, type: 3}
+  - name: tile_clock_rest
+    sprite: {fileID: 21300000, guid: 2f25f5e4e7ec4e4a9943266962e8f185, type: 3}
+  - name: tile_crate_hover
+    sprite: {fileID: 21300000, guid: 87428a9ec4204f7aa3aa95aa6f68830e, type: 3}
+  - name: tile_crate_locked
+    sprite: {fileID: 21300000, guid: c9161c8b58a148c08fe7a147e5e3d040, type: 3}
+  - name: tile_crate_rest
+    sprite: {fileID: 21300000, guid: 1af53795c38041c792eb265de32c06af, type: 3}
+  - name: tile_dog_hover
+    sprite: {fileID: 21300000, guid: d26353744e6448c79097a64fe3ab88d6, type: 3}
+  - name: tile_dog_locked
+    sprite: {fileID: 21300000, guid: 9c49240541804999aa759218db6ecfa6, type: 3}
+  - name: tile_dog_rest
+    sprite: {fileID: 21300000, guid: b05d59efff904b9084e003723a1855e7, type: 3}
+  - name: tile_eye_hover
+    sprite: {fileID: 21300000, guid: be537eeaacdf4e4bbd372d1a7ed47e5b, type: 3}
+  - name: tile_eye_locked
+    sprite: {fileID: 21300000, guid: 27f0dbc54351441db1c7f8ec952f0dd8, type: 3}
+  - name: tile_eye_rest
+    sprite: {fileID: 21300000, guid: 5abb3b3bfde941e59eb37aaaa8e1816c, type: 3}
+  - name: tile_flame_hover
+    sprite: {fileID: 21300000, guid: 1beb044d584c4321a67cfb04df31c086, type: 3}
+  - name: tile_flame_locked
+    sprite: {fileID: 21300000, guid: d87a555ecd18459585b5688b3e1eccd7, type: 3}
+  - name: tile_flame_rest
+    sprite: {fileID: 21300000, guid: ac45c0e4497643328d6457c674c6760d, type: 3}
+  - name: tile_food_hover
+    sprite: {fileID: 21300000, guid: 4a62739da908470aaa70d73df71912c6, type: 3}
+  - name: tile_food_locked
+    sprite: {fileID: 21300000, guid: 691ad2e681804bda9be8b1f76aff72e6, type: 3}
+  - name: tile_food_rest
+    sprite: {fileID: 21300000, guid: 08c2fda375ed4e07acd598113eecccbf, type: 3}
+  - name: tile_gear_hover
+    sprite: {fileID: 21300000, guid: 447ee98ff53f4cbbbcdaee4eb9bb1269, type: 3}
+  - name: tile_gear_locked
+    sprite: {fileID: 21300000, guid: 22f46f1f80224e568e8769c3f7a1a982, type: 3}
+  - name: tile_gear_rest
+    sprite: {fileID: 21300000, guid: 2adaf923d65445279a9432dbfe0e66b9, type: 3}
+  - name: tile_globe_hover
+    sprite: {fileID: 21300000, guid: 32033a4b672747d7adf7f5c6469884ae, type: 3}
+  - name: tile_globe_locked
+    sprite: {fileID: 21300000, guid: 57e425dc0b9e4752b814eff4b0c89935, type: 3}
+  - name: tile_globe_rest
+    sprite: {fileID: 21300000, guid: 8555dca70be24eb4a4373b44ec76718e, type: 3}
+  - name: tile_house_hover
+    sprite: {fileID: 21300000, guid: af553098ad81443e93903945f08e15d2, type: 3}
+  - name: tile_house_locked
+    sprite: {fileID: 21300000, guid: de79f1f0a844425a9d354e3286e079e5, type: 3}
+  - name: tile_house_rest
+    sprite: {fileID: 21300000, guid: 7935f5c8f3484c89ae2ca459f2e4e4b7, type: 3}
+  - name: tile_idcard_hover
+    sprite: {fileID: 21300000, guid: 79cab23fa7d8459ea69bb7f73575326c, type: 3}
+  - name: tile_idcard_locked
+    sprite: {fileID: 21300000, guid: 4a04a00dfb1444bd8fa8f346337729a0, type: 3}
+  - name: tile_idcard_rest
+    sprite: {fileID: 21300000, guid: 4eb46586feed4e4482eaee2b97161208, type: 3}
+  - name: tile_lamp_hover
+    sprite: {fileID: 21300000, guid: 9b27e4e71d36489c8cd32b67d2cdffd2, type: 3}
+  - name: tile_lamp_locked
+    sprite: {fileID: 21300000, guid: f6e7e67442b44c14a063350b5cd25258, type: 3}
+  - name: tile_lamp_rest
+    sprite: {fileID: 21300000, guid: f860d68dcab041daaebd661580572619, type: 3}
+  - name: tile_magnifier_hover
+    sprite: {fileID: 21300000, guid: 7ea61d9a708b4f97b1ea13e66039c44a, type: 3}
+  - name: tile_magnifier_locked
+    sprite: {fileID: 21300000, guid: f24ee361ae534246a1737f8633f72c62, type: 3}
+  - name: tile_magnifier_rest
+    sprite: {fileID: 21300000, guid: fc3320a8b24d45cb8a9bcce769e6449d, type: 3}
+  - name: tile_mail_hover
+    sprite: {fileID: 21300000, guid: a561843978f348929902a382ea1d9c6c, type: 3}
+  - name: tile_mail_locked
+    sprite: {fileID: 21300000, guid: 23ebcae956394ff5b2483a6b8bfe06e1, type: 3}
+  - name: tile_mail_rest
+    sprite: {fileID: 21300000, guid: 7c232f881e7f4ee3b3d27e2dad269a3c, type: 3}
+  - name: tile_medicine_hover
+    sprite: {fileID: 21300000, guid: 387a93504396411dbe454f826a3148f9, type: 3}
+  - name: tile_medicine_locked
+    sprite: {fileID: 21300000, guid: 4d791dc1c0214c10b41faa98d1550c8f, type: 3}
+  - name: tile_medicine_rest
+    sprite: {fileID: 21300000, guid: 656bf710fcc44e71b2af5e1d474332fb, type: 3}
+  - name: tile_moon_hover
+    sprite: {fileID: 21300000, guid: 5b39829e1dc142639bd02161e424fa21, type: 3}
+  - name: tile_moon_locked
+    sprite: {fileID: 21300000, guid: 34bb87b1c4af41e0aad7c700720eea71, type: 3}
+  - name: tile_moon_rest
+    sprite: {fileID: 21300000, guid: 825329e002b5448bab275b06035231ec, type: 3}
+  - name: tile_notes_hover
+    sprite: {fileID: 21300000, guid: de7956cfa79a4d168dc72cdd5a5184d9, type: 3}
+  - name: tile_notes_locked
+    sprite: {fileID: 21300000, guid: 24047218cbe94d53a939946ce28b712e, type: 3}
+  - name: tile_notes_rest
+    sprite: {fileID: 21300000, guid: 9bf72fb1408e4d69b4182adc0cf114a0, type: 3}
+  - name: tile_padlock_hover
+    sprite: {fileID: 21300000, guid: 16c2eef4a8164effba201bf42cc007fc, type: 3}
+  - name: tile_padlock_locked
+    sprite: {fileID: 21300000, guid: f3239e20941647978a57bcc101a7c678, type: 3}
+  - name: tile_padlock_rest
+    sprite: {fileID: 21300000, guid: 31ee35866a79461fbc356115de08302e, type: 3}
+  - name: tile_paw_hover
+    sprite: {fileID: 21300000, guid: ebcaca229e59439db84836e4521c2393, type: 3}
+  - name: tile_paw_locked
+    sprite: {fileID: 21300000, guid: cf2d7829740341f29af648998477fc64, type: 3}
+  - name: tile_paw_rest
+    sprite: {fileID: 21300000, guid: 1ed7b2c0a23c4ca39491d17e9841eb02, type: 3}
+  - name: tile_person_hover
+    sprite: {fileID: 21300000, guid: 7f2815ca99bc4b21919a291a1079d9a5, type: 3}
+  - name: tile_person_locked
+    sprite: {fileID: 21300000, guid: de9ea7ecae814c97a38172b625546884, type: 3}
+  - name: tile_person_rest
+    sprite: {fileID: 21300000, guid: b468fc9a6fba4affacd74925f8900c2b, type: 3}
+  - name: tile_portal_hover
+    sprite: {fileID: 21300000, guid: d93009a7e1964c96bf235ddbac6cfc3c, type: 3}
+  - name: tile_portal_locked
+    sprite: {fileID: 21300000, guid: ed483fa8765c418eb4a02fb1bcf65896, type: 3}
+  - name: tile_portal_rest
+    sprite: {fileID: 21300000, guid: 261f8e7377774823983e17c91f9a4bd6, type: 3}
+  - name: tile_shield_hover
+    sprite: {fileID: 21300000, guid: e1514aa00cab429686e3880183cdd74d, type: 3}
+  - name: tile_shield_locked
+    sprite: {fileID: 21300000, guid: 09137f55d9a04747b17897f0b3ab3fc5, type: 3}
+  - name: tile_shield_rest
+    sprite: {fileID: 21300000, guid: 585e34ac51114a2887ab30140fc2f0d6, type: 3}
+  - name: tile_sofa_hover
+    sprite: {fileID: 21300000, guid: 890a3ae0f69b4d7c8a34e90c9ad7e6e4, type: 3}
+  - name: tile_sofa_locked
+    sprite: {fileID: 21300000, guid: a649945057854297a28d7f6f568ceb9a, type: 3}
+  - name: tile_sofa_rest
+    sprite: {fileID: 21300000, guid: edb18a3f56574428840b518e297c1a16, type: 3}
+  - name: tile_speech_hover
+    sprite: {fileID: 21300000, guid: 48223758096e49a6b1eae324ee36b1c1, type: 3}
+  - name: tile_speech_locked
+    sprite: {fileID: 21300000, guid: c1a3a9e9d15d497a94c1c4dae4d4004a, type: 3}
+  - name: tile_speech_rest
+    sprite: {fileID: 21300000, guid: 54b4e146aea2451880e40180dbbec1aa, type: 3}
+  - name: tile_star_hover
+    sprite: {fileID: 21300000, guid: 4a2b68992f524734aadb82d9bd99d29e, type: 3}
+  - name: tile_star_locked
+    sprite: {fileID: 21300000, guid: 296e4bce8f454a14bae171e346f89b44, type: 3}
+  - name: tile_star_rest
+    sprite: {fileID: 21300000, guid: 6d3ab6e5a667404197b436668c1081fe, type: 3}
+  - name: tile_tv_hover
+    sprite: {fileID: 21300000, guid: 4e494620141d47798f1915ff22ba3c2a, type: 3}
+  - name: tile_tv_locked
+    sprite: {fileID: 21300000, guid: 992554471b574039ae6588996ccdec09, type: 3}
+  - name: tile_tv_rest
+    sprite: {fileID: 21300000, guid: a75b3c797ab247f0bcb52f38a06b9fac, type: 3}
+  - name: titlebar_slate
+    sprite: {fileID: 21300000, guid: f0a0bd97aa5d4bdeaae7a9d5c6f343e6, type: 3}
+  - name: tooltip
+    sprite: {fileID: 21300000, guid: 04e2debce81447638d05d9ede95eb529, type: 3}
+  - name: tooltip_tail
+    sprite: {fileID: 21300000, guid: 831821226f1e4c89940952c7501d6ccd, type: 3}
+  - name: upgradecard_buyable
+    sprite: {fileID: 21300000, guid: 073442708282402e925c923a31300f94, type: 3}
+  - name: upgradecard_dear
+    sprite: {fileID: 21300000, guid: 153b27a98d284dc6835476fedfb82bb1, type: 3}
+  - name: upgradecard_locked
+    sprite: {fileID: 21300000, guid: f01ce55648474180ba821993070526b1, type: 3}
+  - name: upgradecard_owned
+    sprite: {fileID: 21300000, guid: 11c922417c764fdc90986dda06dd3b63, type: 3}
+  - name: wheel_back
+    sprite: {fileID: 21300000, guid: a74d54c52f8047a4839f42930baa6ef0, type: 3}
+  - name: wheelpill_hover
+    sprite: {fileID: 21300000, guid: 4ddfcb003f3e45d082fc2073b868d292, type: 3}
+  - name: wheelpill_rest
+    sprite: {fileID: 21300000, guid: c02a3f783b7e412186970424dd7dcd78, type: 3}

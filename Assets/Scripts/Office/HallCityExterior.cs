@@ -18,6 +18,8 @@ public sealed class HallCityExterior : MonoBehaviour
     public SpriteRenderer[] panelRenderers;
     MaterialPropertyBlock properties;
     AnimeHallPresentation presentation;
+    // The hall layers that take the city's pan and weather, by shader (found once: Shader.name allocates every read).
+    static Shader waitingBay,deepLayout;
     void LateUpdate()=>Apply(Application.isPlaying?Time.time:0);
     public void Apply(float seconds)
     {
@@ -46,11 +48,13 @@ public sealed class HallCityExterior : MonoBehaviour
         properties.SetFloat("_CitySeconds",seconds);
         properties.SetFloat("_CityMotion",!reduced && animateCity?1:0);panel.SetPropertyBlock(properties);
         }
+        if(waitingBay==null)waitingBay=Shader.Find("NOPE/Hall Waiting Bay Repair");
+        if(deepLayout==null)deepLayout=Shader.Find("NOPE/Hall Deep Layout");
         if(presentation!=null)foreach(var layer in presentation.layers)
         {
             var renderer=layer.renderer;
             if(renderer==null || renderer.sharedMaterial==null ||
-                (renderer.sharedMaterial.shader.name!="NOPE/Hall Waiting Bay Repair" && renderer.sharedMaterial.shader.name!="NOPE/Hall Deep Layout"))continue;
+                (renderer.sharedMaterial.shader!=waitingBay && renderer.sharedMaterial.shader!=deepLayout))continue;
             renderer.GetPropertyBlock(properties);properties.SetFloat("_CityPan",pan);
         properties.SetFloat("_CityRain",rain);
         properties.SetFloat("_CityDepthStrength",depthStrength);

@@ -14,23 +14,23 @@ using UnityEngine.UI;
 /// OF DEMO card: on the run's last day instead of the ending panel, and after
 /// a failure behind the ending panel's "The world you leave behind" button.
 /// The adoption panel (the Home pet spec PS1) comes between New Run and the
-/// office: a dog or a cat, each drawn by a PetStandIn, and a name typed and
-/// checked (PetNames.Check: refused names say why, ui.strings
-/// "adopt.problem.*"). The panels are optional; if unwired,
+/// office: a dog or a cat, each a choice card of the UI kit (the chosen one
+/// framed), and a name typed and checked (PetNames.Check: refused names say
+/// why, ui.strings "adopt.problem.*", and the field turns to the kit's error
+/// field until the name is edited). The title block shows the kit's logo
+/// (the one picture with its words baked in). The panels are optional; if unwired,
 /// TitleSceneController degrades to loading the office scene directly so the
 /// run stays playable.
 /// </summary>
 public sealed class TitleUIController : MonoBehaviour
 {
-    /// <summary>The game's name the title block prints (world_source.json ui.strings; the Title builder previews it too).</summary>
-    public const string NameKey = "title.name";
+    [Header("The UI kit")]
+    /// <summary>The cel UI kit (Assets/Data/UI/UiKit_Default.asset): the name field's error and focus faces.</summary>
+    [SerializeField] private UiKitSO kit;
 
     [Header("Title Panel")]
     /// <summary>Root panel shown when the run has not ended.</summary>
     [SerializeField] private GameObject titlePanel;
-
-    /// <summary>The game's name, large, at the top of the title block (UiText <see cref="NameKey"/>).</summary>
-    [SerializeField] private TMP_Text titleText;
 
     /// <summary>Resumes the saved run (hidden if there is no save).</summary>
     [SerializeField] private Button continueButton;
@@ -48,14 +48,11 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>The panel's line under the title.</summary>
     [SerializeField] private TMP_Text adoptBodyText;
 
-    /// <summary>Chooses the dog.</summary>
+    /// <summary>Chooses the dog (a kit choice card; the chosen card is the one that takes no clicks, its locked face the card's selected one).</summary>
     [SerializeField] private Button adoptDogButton;
 
-    /// <summary>Chooses the cat.</summary>
+    /// <summary>Chooses the cat (a kit choice card, as the dog's).</summary>
     [SerializeField] private Button adoptCatButton;
-
-    /// <summary>The chosen pet, drawn (its art, else the code-drawn stand-in).</summary>
-    [SerializeField] private PetStandIn adoptPreview;
 
     /// <summary>The name the player types.</summary>
     [SerializeField] private TMP_InputField adoptNameInput;
@@ -179,6 +176,9 @@ public sealed class TitleUIController : MonoBehaviour
         adoptNameInput.text = string.Empty;
         if (adoptProblemText != null)
             adoptProblemText.text = string.Empty;
+        ShowNameRefused(false);
+        adoptNameInput.onValueChanged.RemoveAllListeners();
+        adoptNameInput.onValueChanged.AddListener(_ => ShowNameRefused(false));
 
         void Choose(PetKind kind)
         {
@@ -188,7 +188,6 @@ public sealed class TitleUIController : MonoBehaviour
                 adoptNameInput.text = words.Kind(kind)?.suggestedName ?? string.Empty;
             if (adoptDogButton != null) adoptDogButton.interactable = kind != PetKind.Dog;
             if (adoptCatButton != null) adoptCatButton.interactable = kind != PetKind.Cat;
-            if (adoptPreview != null) adoptPreview.Show(kind, PetLook.Happy, true);
         }
 
         _adoptKind = PetKind.Dog;
@@ -204,11 +203,29 @@ public sealed class TitleUIController : MonoBehaviour
             {
                 if (adoptProblemText != null)
                     adoptProblemText.text = UiText.Format("adopt.problem." + problem, words.nameMaxLength);
+                ShowNameRefused(true);
                 return;
             }
             adoptPanel.SetActive(false);
             onAdopt?.Invoke(_adoptKind, PetNames.Clean(adoptNameInput.text));
         });
+    }
+
+    /// <summary>The name field's face: the kit's error field while a refused name stands (<paramref name="refused"/>), else its rest face with the focus face while typing; its reason clears with the error.</summary>
+    private void ShowNameRefused(bool refused)
+    {
+        if (kit == null || adoptNameInput == null || !(adoptNameInput.targetGraphic is Image face))
+            return;
+        Sprite error = kit.Get("field_error"), focus = kit.Get("field_focus"), rest = kit.Get("field_rest");
+        if (rest == null)
+            return;
+        face.sprite = refused && error != null ? error : rest;
+        SpriteState states = adoptNameInput.spriteState;
+        states.selectedSprite = refused && error != null ? error : focus;
+        states.highlightedSprite = refused && error != null ? error : null;
+        adoptNameInput.spriteState = states;
+        if (!refused && adoptProblemText != null)
+            adoptProblemText.text = string.Empty;
     }
 
     /// <summary>Sets a button's label, when it has one.</summary>
@@ -232,9 +249,6 @@ public sealed class TitleUIController : MonoBehaviour
         if (endingPanel != null) endingPanel.SetActive(false);
         if (worldPanel != null) worldPanel.SetActive(false);
         titlePanel.SetActive(true);
-
-        if (titleText != null)
-            titleText.text = UiText.Get(NameKey);
 
         if (continueButton != null)
         {

@@ -188,9 +188,10 @@ public sealed class HoverHighlighter : MonoBehaviour
                     _hull.Add((filter.sharedMesh, r));
         }
         else if (target is Selectable selectable && selectable != null && selectable.targetGraphic != null
-                 && (selectable.targetGraphic.color.a > 0f || !on))
+                 && (selectable.targetGraphic.color.a > 0f || !on) && (selectable.transition != Selectable.Transition.SpriteSwap || !on))
         {
-            // A transparent graphic (a click area) gets no outline: the outline copies its quad opaque.
+            // A transparent graphic (a click area) gets no outline: the outline copies its quad opaque. A UI kit control
+            // (sprite swap) gets none either: its hover face is its highlight (the halo and the star glint).
             GameObject host = selectable.targetGraphic.gameObject;
             if (!host.TryGetComponent(out HoverUIOutline uiOutline))
             {

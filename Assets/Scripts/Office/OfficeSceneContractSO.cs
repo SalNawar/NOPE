@@ -52,6 +52,9 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         }
     }
 
+    /// <summary>The anime hall's credits readout, inside its till (Anchor_Till; the art side moved it there with the cashier's pulse).</summary>
+    public const string TillReadoutPath = "Anime terminal - registered art and preserved desk/Approved 3D desk \u2014 preserved art/Anchor_Till/CreditsNumber";
+
     /// <summary>
     /// Every anchor the gameplay layer resolves. The first fallbacks are the old art
     /// office's (art ea62550: the desk layout of 633e2e5); the later bare names are the
@@ -77,7 +80,8 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         new AnchorSpec(OfficeAnchorId.Clock, new[] { "HybridOffice/Booth/Blender_Clock", "Office_Clock__Plastic_WarmGrey" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutDay, new[] { "GameplayAnchors/DayNumber", "DayNumber" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutStability, new[] { "GameplayAnchors/StabilityPercent", "StabilityPercent" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.ReadoutCredits, new[] { "GameplayAnchors/CreditsNumber", "CreditsNumber" }, false, Vector3.zero),
+        // The hall's till holds its own readout since the hall-art pass (2026-10-07, the cashier pulse): first, as the bare name also matches a desk mesh.
+        new AnchorSpec(OfficeAnchorId.ReadoutCredits, new[] { TillReadoutPath, "GameplayAnchors/CreditsNumber", "CreditsNumber" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutClock, new[] { "GameplayAnchors/ShiftClockDisplay", "ShiftClockDisplay" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutNext, new[] { "GameplayAnchors/NextLabel", "NextLabel" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.OfficeCamera, new[] { "Main Camera", "Anime hall player preview" }, false, Vector3.zero),

@@ -66,7 +66,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The overlay callouts (the speech bubble, the tooltip), placed through the office camera.</summary>
     [SerializeField] private OverlayCallout[] callouts;
 
-    /// <summary>The city view (the desk-first redesign, item 6; optional): posed from the art's Cinemachine camera, turned left.</summary>
+    /// <summary>The city view (the desk-first redesign, item 6; optional): bound to the anime hall's left pan and living city.</summary>
     [SerializeField] private CityView cityView;
 
     /// <summary>Inspection at the desk (the desk-first redesign, item 11; optional): the values' places are seen through the office camera, and the rulebook lies on the desk.</summary>
@@ -437,11 +437,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (deskView != null)
         {
             if (_officeVcam != null)
-            {
                 deskView.Bind(_officeVcam, deskCentre);
-                if (cityView != null)
-                    cityView.Bind(_officeVcam);
-            }
             else
                 Debug.LogWarning("[OfficeSceneBinder] The art office has no Cinemachine camera with a brain on the office camera (Anchor_OfficeVCam): the desk view stays off. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
         }
@@ -616,7 +612,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         return null;
     }
 
-    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (and the hall's lights, their day-night cycle, and the traveller's shade with it), and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings (and their lights) from the day's portals; an art office without one needs nothing.</summary>
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (and the hall's lights, their day-night cycle, and the traveller's shade with it), and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings (and their lights) from the day's portals, and the city view is bound to it (its left pan, its living city); an art office without one needs nothing (the city view stays off).</summary>
     private void BindHall(Scene art)
     {
         if (config == null)
@@ -630,6 +626,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             HallLightingRig lights = FindLights(art);
             gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay), lights, traveller);
             gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects, lights);
+            if (cityView != null)
+                cityView.Bind(hall, hall.GetComponentInChildren<HallCityExterior>(false), lights);
             return;
         }
     }

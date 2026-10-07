@@ -135,39 +135,18 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds the traveller stays after their reaction's last line is fully shown, then leaves (the personalities spec's R4; 0 leaves at once, the reaction only in the transcript); calling the next traveller ends it at once. Authored here: Generate World never writes it.</summary>
     [Min(0f)] public float reactionSeconds = 2.5f;
 
-    [Header("The city view (the desk-first redesign, item 6)")]
-    /// <summary>Degrees the city view turns left of the office view (toward the hall's window wall).</summary>
-    [Range(0f, 180f)] public float cityYaw = 75f;
-
-    /// <summary>Degrees the city view looks below the horizon (negative: up, over the skyline).</summary>
-    [Range(-45f, 45f)] public float cityPitch = -6f;
-
-    /// <summary>Metres from the eye to the stand-in city's nearest towers (the further layers and the sky stand at multiples of it).</summary>
-    [Min(1f)] public float cityDistance = 24f;
-
-    /// <summary>Seconds of the turn to the city and back (a cut under Reduced Motion).</summary>
+    [Header("The city view (the desk-first redesign, item 6; Saleh 2026-10-07)")]
+    /// <summary>Seconds of the hall's turn toward its window wall (the art's left pan) when the player looks at the city; the turn back takes as long (a cut under Reduced Motion).</summary>
     [Min(0f)] public float citySeconds = 0.6f;
 
-    /// <summary>The stand-in's sky by day (the hall's pale morning).</summary>
-    public Color citySkyDay = new Color(0.78f, 0.87f, 0.94f, 1f);
+    /// <summary>The share of the turn (0..1) after which the whole city panorama starts fading in (on the way back it fades out first, then the hall turns back).</summary>
+    [Range(0f, 1f)] public float cityFadeFrom = 0.5f;
 
-    /// <summary>The stand-in's sky at full evening (the hall's dusk).</summary>
-    public Color citySkyEvening = new Color(0.86f, 0.52f, 0.42f, 1f);
+    /// <summary>Seconds of the city panorama's fade in and out (0: a cut at the fade's start).</summary>
+    [Min(0f)] public float cityFadeSeconds = 0.7f;
 
-    /// <summary>The furthest towers by day (hazy).</summary>
-    public Color cityFarDay = new Color(0.64f, 0.71f, 0.8f, 1f);
-
-    /// <summary>The nearest towers by day (the hall's teal-grey).</summary>
-    public Color cityNearDay = new Color(0.33f, 0.42f, 0.5f, 1f);
-
-    /// <summary>The furthest towers at full evening.</summary>
-    public Color cityFarEvening = new Color(0.42f, 0.33f, 0.47f, 1f);
-
-    /// <summary>The nearest towers at full evening (the hall's dark navy).</summary>
-    public Color cityNearEvening = new Color(0.13f, 0.13f, 0.22f, 1f);
-
-    /// <summary>The towers' lit windows (the hall's warm ivory; faint by day, full at evening).</summary>
-    public Color cityWindowLight = new Color(1f, 0.85f, 0.55f, 1f);
+    /// <summary>The colour round the city panorama where it does not fill the screen (it is shown whole, fitted inside the screen; the palette's ink).</summary>
+    public Color cityMatte = new Color(0.169f, 0.11f, 0.141f, 1f);
 
     [Header("Inspection at the desk (the desk-first redesign, item 11)")]
     /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>

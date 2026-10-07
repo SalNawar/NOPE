@@ -11,7 +11,7 @@ using UnityEngine;
 /// (<see cref="ShiftClockDriver.Live"/>) along <see cref="CrowdPaletteBlend"/>;
 /// without a gameplay layer (the art office on its own, edit mode) the crowds keep
 /// their morning colours. Morning and Evening force one end for previews
-/// (Tools > Office Art > Hall Crowds).
+/// (Tools > Terminal Art > Office Scene > Hall Crowds).
 /// </summary>
 [ExecuteAlways, DisallowMultipleComponent]
 public sealed class OfficeHallCrowdPalette : MonoBehaviour
