@@ -87,16 +87,12 @@ Every motion here uses those springs. There are no linear lerps and no DOTween.
 
 ## 3. Shift rituals
 
-- **Time card:**
-  - At shift start the card sits in a rack beside the punch clock (a wall-mounted machine at the desk's edge).
-  - Drag the card into the slot and push: a **ka-chunk**, then the card slides out with the hour printed in purple.
-  - The shift begins on the punch. The briefing's Start button becomes "Clock in", which drops you at the desk with the card glowing.
-  - At shift end you punch out the same way. The card shows both times and the results screen follows.
-  - The card keeps the day's two punches. The hours come from the shift hours (night shifts punch 16:00 and 00:00).
+- **Saleh, 2026-10-07:** "Shift should not start until you press AVAILABLE." The shift clock starts on the first AVAILABLE press (Track P, on main). AVAILABLE is the start ritual.
+- **Time card: dropped** (by the rule above). No punch-in starts the shift and no time card is built.
 - **Intercom (calling the next traveller):**
   - Hold the intercom button. A buzzer starts, and on release a short tired "Next." plays (or a buzz, until the voice clip lands).
   - The booth shutter rolls up with a metal rattle and the traveller steps forward.
-  - This replaces today's automatic arrival.
+  - This replaces today's automatic arrival. It goes through the same AVAILABLE control (the sign, then the next traveller), not a second button.
   - **Decision:** the arrival waits for the player only when the queue has someone. While nobody is there, the AVAILABLE sign stays on and the intercom gives a dead click.
   - At shift start the shutter is down; the first "Next" raises it.
 
@@ -149,7 +145,7 @@ Photo overlay, fingerprints, the glyph decoder and transponder tuning are new **
    - Capture a short frame sequence and a video of: stamp press and release, the date roll, the lever pull with ratchet and thunk, and the portal spin-up.
    - Saleh judges the feel.
 2. **After his OK, two tracks in parallel:**
-   - **(a)** the RETURN and DETAIN hardware, the time card and the intercom/shutter;
+   - **(a)** the RETURN and DETAIN hardware and the intercom/shutter (through AVAILABLE; the time card is dropped);
    - **(b)** paper physics, the scanner, and movable objects.
    - They share the desk code: (a) owns the counter and booth side, (b) owns the desk plane and scanner, and they merge through main.
 
@@ -162,7 +158,7 @@ Photo overlay, fingerprints, the glyph decoder and transponder tuning are new **
   - ink fade;
   - the date-wheel target.
 - Idempotent rebuilds.
-- The audit play, days 1-15, A/B identical. The audit drives the new hardware: punch, intercom, stamp, then lever, RETURN or DETAIN.
+- The audit play, days 1-15, A/B identical. The audit drives the new hardware: AVAILABLE, stamp, then lever, RETURN or DETAIN.
 - The transcripts change only where the new verdict and rituals add lines.
 - Golden notes list every difference.
 - Zero per-frame allocations in idle.
