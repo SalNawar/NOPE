@@ -32,8 +32,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Every pull tab's size (overlay units; sheet 01 B1: a tab a little taller than wide).</summary>
     private static readonly Vector2 PullTabSize = new Vector2(128f, 136f);
 
-    /// <summary>A left pull tab's flat face across its width (shares: from its cut edge to before its grips); a right tab's is its mirror.</summary>
-    private static readonly Vector2 PullTabFace = new Vector2(0.05f, 0.66f);
+    /// <summary>A pull tab's label's margin from the edge it is cut at (the screen's edge), in overlay units; its other side keeps clear of the grips by the sprite's inner 9-slice border (KitPullTab).</summary>
+    private const float PullTabCutMargin = 6f;
 
     /// <summary>The speech bubble's tail (overlay units; the kit's sprite with its pad).</summary>
     private static readonly Vector2 SpeechTailSize = new Vector2(60f, 56f);
@@ -149,7 +149,12 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// A screen-edge pull tab (sheet 01 B1): the slate tab flush to its edge
     /// (<paramref name="left"/> or right), its word in the upper part and a bone
-    /// keycap printed with <paramref name="key"/> under it.
+    /// keycap printed with <paramref name="key"/> under it. The word's room runs
+    /// from the cut edge's margin to the sprite's inner 9-slice border, where
+    /// the grip lines are drawn (kit_manifest.json: the pull tabs' inner
+    /// border holds their grips, so they never stretch; Saleh 2026-10-07: "the
+    /// S touches the two lines in the stamp label"), and the type scale fits
+    /// the word in it.
     /// </summary>
     private static void KitPullTab(Transform tab, bool left, string key)
     {
@@ -160,21 +165,26 @@ public static partial class OfficeSceneUIBuilder
         tabRect.sizeDelta = PullTabSize;
         KitSkin(tab, piece, _kit.overlayScale);
 
-        // The tab's flat face: clear of its grips (on the edge away from the screen's) and of the edge it is cut at.
-        float x0 = left ? PullTabFace.x : 1f - PullTabFace.y, x1 = left ? PullTabFace.y : 1f - PullTabFace.x;
+        // The tab's flat face: from the cut edge's margin to the inner border, which holds the grips (its face is grown past the tab by the sprite's pad).
+        Sprite rest = _kit.Get(piece, KitState.Rest) ?? _kit.Get(piece);
+        float perPixel = rest != null ? 1f / (rest.pixelsPerUnit / 100f * _kit.overlayScale) : 0f;
+        float grips = rest != null ? ((left ? rest.border.z : rest.border.x) - _kit.spritePad) * perPixel : 0f;
+        float inset0 = left ? PullTabCutMargin : grips, inset1 = left ? grips : PullTabCutMargin;
+        float centre = (inset0 + PullTabSize.x - inset1) / 2f / PullTabSize.x;
         Transform label = tab.Find("Label");
         if (label != null)
         {
             var labelRect = (RectTransform)label;
-            labelRect.anchorMin = new Vector2(x0, 0.5f);
-            labelRect.anchorMax = new Vector2(x1, 0.88f);
-            labelRect.offsetMin = labelRect.offsetMax = Vector2.zero;
+            labelRect.anchorMin = new Vector2(0f, 0.5f);
+            labelRect.anchorMax = new Vector2(1f, 0.88f);
+            labelRect.offsetMin = new Vector2(inset0, 0f);
+            labelRect.offsetMax = new Vector2(-inset1, 0f);
             TMP_Text text = label.GetComponent<TMP_Text>();
             text.alignment = TextAlignmentOptions.Center;
             text.margin = Vector4.zero;
             SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, tabRect.sizeDelta.x, _kit.inkOnDark, 0f, tabRect);
         }
-        KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2((x0 + x1) / 2f, 0.3f), PullTabKeycap);
+        KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2(centre, 0.3f), PullTabKeycap);
     }
 
     /// <summary>A keycap printed with <paramref name="key"/> (a child plate in <paramref name="piece"/>, its word in the label face), centred at <paramref name="at"/> of its parent, rebuilt each build.</summary>

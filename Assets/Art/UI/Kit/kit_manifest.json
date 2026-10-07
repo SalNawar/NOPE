@@ -2501,12 +2501,12 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge; the grips sit inside its inner (right) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
     88,
     76,
-    88,
+    150,
     76
    ]
   },
@@ -2523,12 +2523,12 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge; the grips sit inside its inner (right) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
     88,
     76,
-    88,
+    150,
     76
    ]
   },
@@ -2545,12 +2545,12 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge; the grips sit inside its inner (right) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
     88,
     76,
-    88,
+    150,
     76
    ]
   },
@@ -2567,12 +2567,12 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge; the grips sit inside its inner (right) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
     88,
     76,
-    88,
+    150,
     76
    ]
   },
@@ -2589,10 +2589,10 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge; the grips sit inside its inner (left) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
-    88,
+    140,
     76,
     88,
     76
@@ -2611,10 +2611,10 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge; the grips sit inside its inner (left) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
-    88,
+    140,
     76,
     88,
     76
@@ -2633,10 +2633,10 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge; the grips sit inside its inner (left) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
-    88,
+    140,
     76,
     88,
     76
@@ -2655,10 +2655,10 @@
     0.5,
     0.5
    ],
-   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge; the grips sit inside its inner (left) border, so they never stretch and the label keeps clear of them",
    "sliced": true,
    "border": [
-    88,
+    140,
     76,
     88,
     76
