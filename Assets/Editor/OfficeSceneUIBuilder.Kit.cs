@@ -58,6 +58,7 @@ public static partial class OfficeSceneUIBuilder
         KitSpeechBubble(o.Find("SpeechBubble/Panel"));
         KitWheel(o.Find("TravellerWheel/Catcher/Ring"));
         KitDeskProps();
+        KitFallbackHud(o.Find("FallbackHud"));
 
         // The taskbar's window button template at its own width (its row lays it out at run time; at build time it would take the row's rect).
         if (desktop.transform.Find("Taskbar/WindowButtons/WindowButtonTemplate") is RectTransform windowButton)
@@ -221,6 +222,16 @@ public static partial class OfficeSceneUIBuilder
                     text.fontStyle = FontStyles.UpperCase;
                 }
         }
+    }
+
+    /// <summary>The fallback HUD (the readouts the art office lacks) on the kit's phosphor glass, its readouts in the readout face (sheet 02 C4).</summary>
+    private static void KitFallbackHud(Transform hud)
+    {
+        if (hud == null)
+            return;
+        KitSkin(hud, "lcd_glass", _kit.overlayScale);
+        foreach (TMP_Text readout in hud.GetComponentsInChildren<TMP_Text>(true))
+            SceneUiKit.SkinText(readout, _kit.phosphorInk, _kit.readoutFont, true);
     }
 
     /// <summary>The traveller's speech bubble (sheet 05): the kit's cream bubble with the body face in ink.</summary>
