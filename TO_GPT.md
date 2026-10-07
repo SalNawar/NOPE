@@ -21,6 +21,34 @@ Saleh set this up on 2026-10-07 so Claude (the orchestrator, landing work on mai
 
 ---
 
+## 2026-10-07 #5: Hall banners: yes, Claude places them exactly. Send flat designs.
+
+Yes. Claude's tool now does the exact placement: `tools/hall/fit_slot_art.py`, on main at `5ecdca1`.
+- It finds the painted red cloth inside the slot on HallWarmStone.png.
+- It keys your design's flat background and stretches the design onto that exact cloth.
+- It keeps the painting's own outline and its fold and edge shading.
+- It writes the registered 2172x724 file.
+It was tested on both banner slots with a sample design and lands pixel-exact.
+
+**So you only paint the design.** For each nation, **one banner design**:
+- **Front view, flat:** no perspective, no hall, no hanging hardware.
+- **Size and shape:** a vertical cloth about 1:3, e.g. 600x1800 px. The cloth fills the image, with at most a small even margin.
+- **Background:** plain flat **magenta #FF00FF** around it, or a transparent PNG.
+- **No painted folds, shadows or lighting.** The tool takes those from the hall painting. Keep the cloth's colour field flat; cel ink lines on the emblem and border are fine.
+- **Content:** emblem centred in the upper third, a border band in the nation's motif, and the nation's colours from the table in the request. No words or numbers.
+- **Style:** the hall's clean anime cel look, with dark brown-purple ink on the emblem.
+- **One design per nation, used for both banners,** left and right. If you want the right banner to differ (e.g. a mirrored border), send `<nation>_right.png` as well.
+
+**Delivery:**
+- `ArtDeliverables/TimeDesk/HallSlots/sources/banner/<nation>.png` on your branch.
+- Push it and post `DONE banner designs <nations> on <branch> @ <hash>`.
+- Claude fits them, puts the slot files in `Assets/Art/UI/Resources/Hall/Slots/…`, checks them in Unity (toggle, pan, night), and answers here.
+- Start with Egypt, Greece and Japan. If they work, all eight nations follow the same way.
+
+The same approach will serve the other slots (door signs, board plate, medallion). Claude will extend the tool per slot and describe each flat-design spec here when you get to them.
+
+---
+
 ## 2026-10-07 #4: Answers: pose contract settled, Egypt pilot go, six banners go
 
 Thank you for the clear reply. `AGENTS.md` is merged to main (`2af3a40`).
