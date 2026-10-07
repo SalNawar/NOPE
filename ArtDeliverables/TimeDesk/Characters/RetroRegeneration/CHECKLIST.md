@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 88. Full regeneration is NOT complete.
+Saved: 98. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -92,3 +92,13 @@ Saved: 88. Full regeneration is NOT complete.
 | headwear_f_egypt_medieval | visually reviewed; registration pending |
 | accessory_f_egypt_medieval | visually reviewed; registration pending |
 | outfit_m_egypt_earlymodern | visually reviewed; registration pending |
+| outfit_m_egypt_earlymodern__explaining_c | visually reviewed; registration pending |
+| outfit_m_egypt_earlymodern__thinking_a | visually reviewed; registration pending |
+| outfit_m_civil_2150_v1 | visually reviewed; registration pending |
+| outfit_m_civil_2150_v2 | neckline revised and visually reviewed; exact collar mask and registration pending |
+| outfit_m_civil_2150_v3 | neckline revised and visually reviewed; exact collar mask and registration pending |
+| hair_m_civil_2150_brown | visually reviewed; registration pending |
+| outfit_f_civil_2150_v1 | visually reviewed; registration pending |
+| outfit_f_civil_2150_v2 | visually reviewed; registration pending |
+| outfit_f_civil_2150_v3 | neckline revised and visually reviewed; exact collar mask and registration pending |
+| hair_f_civil_2150_brown | visually reviewed; registration pending |

@@ -2018,6 +2018,226 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_earlymodern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "quftan and gibba",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern.",
+      "flags": {
+        "label": "quftan and gibba"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6f81c917-5128-4ca5-968b-301935edbfc1.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_earlymodern__explaining_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: quftan and gibba. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_earlymodern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c4d42a645dcf3d37a480322fc3e02e86239cebc9e8ab9c33f56fb76fc950de96",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_earlymodern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "quftan and gibba",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern.",
+      "flags": {
+        "label": "quftan and gibba"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a7913f5e-068b-4925-aac9-53735ec17e4f.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_earlymodern__thinking_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: quftan and gibba. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_earlymodern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "99703da12dff72c8f6ab8faf3869f43719c454e98e6567a9754220cd035d1d01",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_civil_2150_v1",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "pose": "neutral",
+      "details": "tidy plain collared slate-blue jacket over cream shirt, straight charcoal trousers and practical shoes; middle-income tourist",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-33012d2c-aff0-453c-8651-59f9452e468d.png",
+      "prompt": "Create a modular 2150 civilian passport outfit source, full 1024x1536 canvas. Same neutral pose and figure position as reference. tidy plain collared slate-blue jacket over cream shirt, straight charcoal trousers and practical shoes; middle-income tourist. Muted debt-dystopia civilian clothing, practical everyday person, not glamorous. Hand-inked late-1980s anime cel finish, crisp two-tone shadows, fine painted pigment texture, no glossy rendering. Uniform green #00FF00 background. Exposed head neck and hands solid magenta #FF00FF for extraction. Fully clothe figure; no hair, headwear or accessories. All collar and cloth entirely below chin. Even frontal light, no ground shadow, no labels, logos, text or insignia. Full feet visible.",
+      "path": "Raw/outfit_m_civil_2150_v1.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "daf27cc24035aa17aefffdaf9eb3fcf6e1081c4b3cf84550cef0eedce6157308",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_civil_2150_v2",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "pose": "neutral",
+      "details": "labourer muted rust-brown work coverall with high utility collar, reinforced seams and worn work boots",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4752cd11-865f-4031-8ce4-f5ccad1b5832.png",
+      "prompt": "Edit ONLY neckline in this modular clothing source. Lower ALL collar/scarf/hood material so its uppermost pixel is below y=440 on the unchanged 1024x1536 canvas. Expose a clear solid magenta neck between chin and cloth, including at both sides. Keep face position, body, rest of outfit, green background, pose and every other detail identical. No cloth beside jaw. Preserve costume style and folds below collarbone. Do not move or rescale the figure.",
+      "path": "Raw/outfit_m_civil_2150_v2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "45b9a251aff16a288033369552e3a34bdd9e340ef8c2f14a3dfe0c344e073f28",
+      "tool": "built-in image_gen",
+      "review": "neckline revised and visually reviewed; exact collar mask and registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_civil_2150_v3",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "pose": "neutral",
+      "details": "worn layered charcoal hoodie with hood down and muted ochre scarf entirely below chin, patched trousers and worn shoes; displaced civilian",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3762ae60-07c9-46b7-96d8-951b9b0cdade.png",
+      "prompt": "Edit ONLY neckline in this modular clothing source. Lower ALL collar/scarf/hood material so its uppermost pixel is below y=440 on the unchanged 1024x1536 canvas. Expose a clear solid magenta neck between chin and cloth, including at both sides. Keep face position, body, rest of outfit, green background, pose and every other detail identical. No cloth beside jaw. Preserve costume style and folds below collarbone. Do not move or rescale the figure.",
+      "path": "Raw/outfit_m_civil_2150_v3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c0446dde17cf14fa643dd34e0bf4f1b718aff6362ed990d69ea37bc804dea8ef",
+      "tool": "built-in image_gen",
+      "review": "neckline revised and visually reviewed; exact collar mask and registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_civil_2150_brown",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "pose": "neutral",
+      "details": "ordinary short practical medium-brown haircut with natural uneven part and chunky cel-painted clumps, no ornament; stays above shoulders, no back layer needed",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2e60e085-0561-445f-8d2b-1b40712117ec.png",
+      "prompt": "Create a modular 2150 civilian passport hair source, full 1024x1536 canvas. Same neutral pose and figure position as reference. ordinary short practical medium-brown haircut with natural uneven part and chunky cel-painted clumps, no ornament; stays above shoulders, no back layer needed. Muted debt-dystopia civilian clothing, practical everyday person, not glamorous. Hand-inked late-1980s anime cel finish, crisp two-tone shadows, fine painted pigment texture, no glossy rendering. Uniform green #00FF00 background. Exposed head neck and hands solid magenta #FF00FF for extraction. Keep reference outfit as fitting guide, add only the requested hairstyle; no makeup or headwear. Even frontal light, no ground shadow, no labels, logos, text or insignia. Full feet visible.",
+      "path": "Raw/hair_m_civil_2150_brown.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a9a99e3c08a227f0111583b85bd7fb50197add6c3face95b84268e16838d73d6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_civil_2150_v1",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "pose": "neutral",
+      "details": "tidy plain collared slate-blue jacket over cream shirt, straight charcoal trousers and practical shoes; middle-income tourist",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ff372926-00ea-4d09-aa4c-2c3aa4363961.png",
+      "prompt": "Create a modular 2150 civilian passport outfit source, full 1024x1536 canvas. Same neutral pose and figure position as reference. tidy plain collared slate-blue jacket over cream shirt, straight charcoal trousers and practical shoes; middle-income tourist. Muted debt-dystopia civilian clothing, practical everyday person, not glamorous. Hand-inked late-1980s anime cel finish, crisp two-tone shadows, fine painted pigment texture, no glossy rendering. Uniform green #00FF00 background. Exposed head neck and hands solid magenta #FF00FF for extraction. Fully clothe figure; no hair, headwear or accessories. All collar and cloth entirely below chin with visible magenta neck gap. Neckline lowest possible: low collar and scarf at collarbone; no fabric beside jaw. Hood rests on shoulders. Even frontal light, no ground shadow, no labels, logos, text or insignia. Full feet visible.",
+      "path": "Raw/outfit_f_civil_2150_v1.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7608478a7f6eeb41460526759f44168b240c382c52db12e280e1f67550cdbf2e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_civil_2150_v2",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "pose": "neutral",
+      "details": "labourer muted rust-brown work coverall with high utility collar, reinforced seams and worn work boots",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bb54304c-f52d-48eb-bdb0-946a4815ebd6.png",
+      "prompt": "Create a modular 2150 civilian passport outfit source, full 1024x1536 canvas. Same neutral pose and figure position as reference. labourer muted rust-brown work coverall with high utility collar, reinforced seams and worn work boots. Muted debt-dystopia civilian clothing, practical everyday person, not glamorous. Hand-inked late-1980s anime cel finish, crisp two-tone shadows, fine painted pigment texture, no glossy rendering. Uniform green #00FF00 background. Exposed head neck and hands solid magenta #FF00FF for extraction. Fully clothe figure; no hair, headwear or accessories. All collar and cloth entirely below chin with visible magenta neck gap. Neckline lowest possible: low collar and scarf at collarbone; no fabric beside jaw. Hood rests on shoulders. Even frontal light, no ground shadow, no labels, logos, text or insignia. Full feet visible.",
+      "path": "Raw/outfit_f_civil_2150_v2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "85e925b8e12aaaa72d30b428ca90e332bc516584224ea4742bb2909489493ead",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_civil_2150_v3",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "pose": "neutral",
+      "details": "worn layered charcoal hoodie with hood down and muted ochre scarf entirely below chin, patched trousers and worn shoes; displaced civilian",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93e39a9f-a75b-40c6-9aa5-df8a02ba0097.png",
+      "prompt": "Edit only the scarf and hood neckline. On this unchanged 1024x1536 image the chin is near y=324. ALL cloth must start below y=370, including the rear scarf and rear hood edges. Show a broad uninterrupted magenta neck above that, zero cloth at jaw height. Scarf lies loosely at collarbone. Keep every other feature, figure size, pose, outfit, green background and ink texture unchanged. This is a modular costume source.",
+      "path": "Raw/outfit_f_civil_2150_v3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "86b1943a03cc1e9fc487c6caf314ab96222c1635477a16eb26a789a583ec8670",
+      "tool": "built-in image_gen",
+      "review": "neckline revised and visually reviewed; exact collar mask and registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_civil_2150_brown",
+      "family": "passport_wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "pose": "neutral",
+      "details": "ordinary short practical medium-brown haircut with natural uneven part and chunky cel-painted clumps, no ornament; stays above shoulders, no back layer needed",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7b144366-9829-4e1a-9996-390791b426fd.png",
+      "prompt": "Create a modular 2150 civilian passport hair source, full 1024x1536 canvas. Same neutral pose and figure position as reference. ordinary short practical medium-brown haircut with natural uneven part and chunky cel-painted clumps, no ornament; stays above shoulders, no back layer needed. Muted debt-dystopia civilian clothing, practical everyday person, not glamorous. Hand-inked late-1980s anime cel finish, crisp two-tone shadows, fine painted pigment texture, no glossy rendering. Uniform green #00FF00 background. Exposed head neck and hands solid magenta #FF00FF for extraction. Keep reference outfit as fitting guide, add only the requested hairstyle; no makeup or headwear. Even frontal light, no ground shadow, no labels, logos, text or insignia. Full feet visible.",
+      "path": "Raw/hair_f_civil_2150_brown.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "21c0bfe04e66fac109d0fc28ef6680d598a733b0b90368abc9dc0fd40f922720",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

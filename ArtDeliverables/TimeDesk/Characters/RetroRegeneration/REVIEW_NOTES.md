@@ -18,3 +18,6 @@ The first 77-source checkpoint is already pushed. Female Mamluk costume drafts w
 New-era entries with empty descriptions must use FAMOUS_PREMADES_REQUEST.md clothing definitions; never generate from label alone. repair_retro_descriptions.py filled 22 existing-era missing descriptions from the original brief.
 Headwear_f_egypt_medieval succeeded on a fully clothed fitting figure after an output moderation rejection. Non-rendered support clothing must be discarded during extraction.
 
+
+## Passport sources
+Six civilian outfits and two brown hairstyles saved. These are fitting sources, not extracted runtime layers. Hairstyles contain a clothing guide which MUST be discarded when extracting hair. Male v2/v3 and female v3 necklines were lowered after review; exact collar mask checks still pending, particularly male v2 at the sides of the neck. All eight need registration and passport crop verification. Premade photos for 33 current identities queued, not generated. Old runtime art has not been removed.

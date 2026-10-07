@@ -1,5 +1,572 @@
 [
   {
+    "name": "outfit_m_civil_2150_v1",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "m",
+    "layer": "outfit",
+    "pose": "neutral",
+    "details": "tidy plain collared slate-blue jacket over cream shirt, straight charcoal trousers and practical shoes; middle-income tourist"
+  },
+  {
+    "name": "outfit_m_civil_2150_v2",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "m",
+    "layer": "outfit",
+    "pose": "neutral",
+    "details": "labourer muted rust-brown work coverall with high utility collar, reinforced seams and worn work boots"
+  },
+  {
+    "name": "outfit_m_civil_2150_v3",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "m",
+    "layer": "outfit",
+    "pose": "neutral",
+    "details": "worn layered charcoal hoodie with hood down and muted ochre scarf entirely below chin, patched trousers and worn shoes; displaced civilian"
+  },
+  {
+    "name": "hair_m_civil_2150_brown",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "m",
+    "layer": "hair",
+    "pose": "neutral",
+    "details": "ordinary short practical medium-brown haircut with natural uneven part and chunky cel-painted clumps, no ornament; stays above shoulders, no back layer needed"
+  },
+  {
+    "name": "outfit_f_civil_2150_v1",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "outfit",
+    "pose": "neutral",
+    "details": "tidy plain collared slate-blue jacket over cream shirt, straight charcoal trousers and practical shoes; middle-income tourist"
+  },
+  {
+    "name": "outfit_f_civil_2150_v2",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "outfit",
+    "pose": "neutral",
+    "details": "labourer muted rust-brown work coverall with high utility collar, reinforced seams and worn work boots"
+  },
+  {
+    "name": "outfit_f_civil_2150_v3",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "outfit",
+    "pose": "neutral",
+    "details": "worn layered charcoal hoodie with hood down and muted ochre scarf entirely below chin, patched trousers and worn shoes; displaced civilian"
+  },
+  {
+    "name": "hair_f_civil_2150_brown",
+    "family": "passport_wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "hair",
+    "pose": "neutral",
+    "details": "ordinary short practical medium-brown haircut with natural uneven part and chunky cel-painted clumps, no ornament; stays above shoulders, no back layer needed"
+  },
+  {
+    "name": "premade_caesar_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "caesar",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "caesar",
+      "name": "Julius Caesar",
+      "place": "Republican Rome (Ancient), 50 BCE",
+      "age": "M, 50",
+      "features": "receding hair combed forward, clean-shaven, laurel wreath, toga with a purple border"
+    }
+  },
+  {
+    "name": "premade_ramesses_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "ramesses",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "ramesses",
+      "name": "Ramesses II",
+      "place": "Ramesside Egypt (Ancient), 1250 BCE",
+      "age": "M, 53",
+      "features": "blue khepresh war crown shape as a cloth cap (no cobra), broad gold collar, kohl eyes, proud long jaw"
+    }
+  },
+  {
+    "name": "premade_kurosawa_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "kurosawa",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "kurosawa",
+      "name": "Akira Kurosawa",
+      "place": "Showa Tokyo (Modern), 1980",
+      "age": "M, 70",
+      "features": "tinted glasses, a fisherman's bucket hat, tall and lean"
+    }
+  },
+  {
+    "name": "premade_saladin_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "saladin",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "saladin",
+      "name": "Saladin",
+      "place": "Ayyubid Cairo (Medieval), 1187",
+      "age": "M, 50",
+      "features": "sharbush cap wound with a plain turban cloth, full dark beard, calm eyes, plain mail-free coat"
+    }
+  },
+  {
+    "name": "premade_cleopatra_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "cleopatra",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "cleopatra",
+      "name": "Cleopatra",
+      "place": "Ptolemaic Alexandria (Ancient), 45 BCE",
+      "age": "F, 24",
+      "features": "diadem band (no crown), braided melon bun, pearl earrings, Greek chiton with pinned shoulder"
+    }
+  },
+  {
+    "name": "premade_beethoven_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "beethoven",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "beethoven",
+      "name": "Ludwig van Beethoven",
+      "place": "Electoral Bonn (Industrial), 1790",
+      "age": "M, 20",
+      "features": "nineteen, wild black hair, broad face, high-collared coat, a cravat tied in a hurry"
+    }
+  },
+  {
+    "name": "premade_nobunaga_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "nobunaga",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "nobunaga",
+      "name": "Oda Nobunaga",
+      "place": "Sengoku Azuchi (Early modern), 1576",
+      "age": "M, 42",
+      "features": "shaved pate with a topknot, thin moustache, a red European-style cape over the kamishimo"
+    }
+  },
+  {
+    "name": "premade_alexander_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "alexander",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "alexander",
+      "name": "Alexander the Great",
+      "place": "Macedonian Pella (Ancient), 336 BCE",
+      "age": "M, 20",
+      "features": "young, clean-shaven, lion-mane hair swept up from the brow, tilted head, chlamys pinned at the shoulder"
+    }
+  },
+  {
+    "name": "premade_darwin_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "darwin",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "darwin",
+      "name": "Charles Darwin",
+      "place": "Victorian Britain (Industrial), 1843",
+      "age": "M, 34",
+      "features": "young, clean-shaven with side whiskers, big brow, a beetle on the lapel"
+    }
+  },
+  {
+    "name": "premade_suntzu_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "suntzu",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "suntzu",
+      "name": "Sun Tzu",
+      "place": "Spring and Autumn Lu (Ancient), 500 BCE",
+      "age": "M, 44",
+      "features": "lean face, thin moustache, plain dark robe, a bamboo-slip book at the sash"
+    }
+  },
+  {
+    "name": "premade_einstein_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "einstein",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "einstein",
+      "name": "Albert Einstein",
+      "place": "Weimar Berlin (Modern), 1926",
+      "age": "M, 47",
+      "features": "wild grey-black hair, bushy moustache, baggy cardigan"
+    }
+  },
+  {
+    "name": "premade_marx_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "marx",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "marx",
+      "name": "Karl Marx",
+      "place": "Revolutionary Cologne (Industrial), 1848",
+      "age": "M, 30",
+      "features": "full bushy black beard, swept-back hair, frock coat, a folded newspaper at the pocket"
+    }
+  },
+  {
+    "name": "premade_luther_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "luther",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "luther",
+      "name": "Martin Luther",
+      "place": "Renaissance Nuremberg (Early modern), 1525",
+      "age": "M, 42",
+      "features": "broad face, monk's tonsure grown out, black academic gown, a printed Bible at the chest"
+    }
+  },
+  {
+    "name": "premade_newton_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "newton",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "newton",
+      "name": "Isaac Newton",
+      "place": "Restoration London (Early modern), 1687",
+      "age": "M, 45",
+      "features": "long grey periwig, sharp nose, plain dark coat with a cravat, a prism at the chest pocket"
+    }
+  },
+  {
+    "name": "premade_michelangelo_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "michelangelo",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "michelangelo",
+      "name": "Michelangelo Buonarroti",
+      "place": "Sforza Milan (Early modern), 1495",
+      "age": "M, 20",
+      "features": "broken flattened nose, short dark curls, marble dust on the shoulders, plain work tunic"
+    }
+  },
+  {
+    "name": "premade_turing_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "turing",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "turing",
+      "name": "Alan Turing",
+      "place": "Post-war Britain (Modern), 1950",
+      "age": "M, 38",
+      "features": "(brief section 11 already)"
+    }
+  },
+  {
+    "name": "premade_confucius_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "confucius",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "confucius",
+      "name": "Confucius",
+      "place": "Spring and Autumn Lu (Ancient), 500 BCE",
+      "age": "M, 51",
+      "features": "long thin grey beard, black guan cap, deep robe, hands folded in a bow (drawn open and empty)"
+    }
+  },
+  {
+    "name": "premade_aristotle_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "aristotle",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "aristotle",
+      "name": "Aristotle",
+      "place": "Macedonian Pella (Ancient), 336 BCE",
+      "age": "M, 48",
+      "features": "short trimmed beard, receding hair, thoughtful frown, himation, a scroll tucked at the chest"
+    }
+  },
+  {
+    "name": "premade_hokusai_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "hokusai",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "hokusai",
+      "name": "Katsushika Hokusai",
+      "place": "Late Edo (Industrial), 1830",
+      "age": "M, 70",
+      "features": "seventy, bald with a little grey topknot, thin face, plain kosode, ink on the fingers"
+    }
+  },
+  {
+    "name": "premade_genghis_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "genghis",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "genghis",
+      "name": "Genghis Khan",
+      "place": "Mongol Zhongdu (Medieval), 1215",
+      "age": "M, 53",
+      "features": "weathered face, long drooping moustache, fur-brimmed toortsog hat, deel with a wide sash"
+    }
+  },
+  {
+    "name": "premade_qinshihuang_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "qinshihuang",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "qinshihuang",
+      "name": "Qin Shi Huang",
+      "place": "Qin Xianyang (Ancient), 215 BCE",
+      "age": "M, 44",
+      "features": "black robe, Qin official's cap with a flat board (no imperial tassels), stern eyebrows"
+    }
+  },
+  {
+    "name": "premade_kulthum_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "kulthum",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "kulthum",
+      "name": "Umm Kulthum",
+      "place": "Nasser's Egypt (Modern), 1962",
+      "age": "F, 58",
+      "features": "dark glasses, hair up in a low bun, a folded silk scarf draped at the neck, pearl earrings"
+    }
+  },
+  {
+    "name": "premade_leonardo_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "leonardo",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "leonardo",
+      "name": "Leonardo da Vinci",
+      "place": "Sforza Milan (Early modern), 1495",
+      "age": "M, 43",
+      "features": "(brief section 11 already)"
+    }
+  },
+  {
+    "name": "premade_elizabeth_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "elizabeth",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "elizabeth",
+      "name": "Elizabeth I",
+      "place": "Elizabethan England (Early modern), 1600",
+      "age": "F, 67",
+      "features": "pale face, red curled hair, pearl-strung hair, a wide lace ruff (no crown)"
+    }
+  },
+  {
+    "name": "premade_khwarizmi_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "khwarizmi",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "khwarizmi",
+      "name": "Muhammad al-Khwarizmi",
+      "place": "Abbasid Baghdad (Medieval), 830",
+      "age": "M, 50",
+      "features": "white turban, trimmed grey-black beard, scholar's robe, a pen case at the sash"
+    }
+  },
+  {
+    "name": "premade_shakespeare_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "shakespeare",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "shakespeare",
+      "name": "William Shakespeare",
+      "place": "Elizabethan England (Early modern), 1600",
+      "age": "M, 36",
+      "features": "high bald forehead, moustache and small beard, gold ring earring, white falling collar"
+    }
+  },
+  {
+    "name": "premade_marcopolo_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "marcopolo",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "marcopolo",
+      "name": "Marco Polo",
+      "place": "Venice of the Doges (Medieval), 1295",
+      "age": "M, 41",
+      "features": "trimmed beard, Venetian capuccio hood-hat, a Mongol gold tablet on a cord at the neck"
+    }
+  },
+  {
+    "name": "premade_galileo_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "galileo",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "galileo",
+      "name": "Galileo Galilei",
+      "place": "Galileo's Padua (Early modern), 1610",
+      "age": "M, 46",
+      "features": "broad red-brown beard, receding hair, black scholar's gown, a brass spyglass at the belt"
+    }
+  },
+  {
+    "name": "premade_archimedes_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "archimedes",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "archimedes",
+      "name": "Archimedes",
+      "place": "Hellenistic Syracuse (Ancient), 230 BCE",
+      "age": "M, 57",
+      "features": "full grey beard, wild curls, sun-browned, short tunic, a compass hanging at the belt"
+    }
+  },
+  {
+    "name": "premade_hammurabi_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "hammurabi",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "hammurabi",
+      "name": "Hammurabi",
+      "place": "Babylonia (Ancient), 1760 BCE",
+      "age": "M, 50",
+      "features": "long squared beard in rows of curls, round brimmed cap, fringed shawl over one shoulder"
+    }
+  },
+  {
+    "name": "premade_socrates_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "socrates",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "socrates",
+      "name": "Socrates",
+      "place": "Periclean Athens (Ancient), 430 BCE",
+      "age": "M, 40",
+      "features": "(brief section 11 already)"
+    }
+  },
+  {
+    "name": "premade_ada_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "ada",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "ada",
+      "name": "Ada Lovelace",
+      "place": "Victorian Britain (Industrial), 1843",
+      "age": "F, 28",
+      "features": "(brief section 11 already)"
+    }
+  },
+  {
+    "name": "premade_gutenberg_photo",
+    "family": "unique_photo",
+    "status": "pending",
+    "id": "gutenberg",
+    "expression": "neutral",
+    "pose": "neutral",
+    "roster": {
+      "id": "gutenberg",
+      "name": "Johannes Gutenberg",
+      "place": "Holy Roman Empire (Rhineland) (Medieval), 1440",
+      "age": "M, 40",
+      "features": "(brief section 11 already)"
+    }
+  },
+  {
     "name": "base_m_skin1_facea",
     "family": "base",
     "status": "pending",
