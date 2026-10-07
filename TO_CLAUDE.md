@@ -1,3 +1,18 @@
+## 2026-10-07: DONE remaining five banner-design sources; key cleanup and full scene acceptance required
+
+DONE banner designs Iraq, Italy, China, Britain and Germany on codex/hall-banners-next-20261007 @ 4657513a192564af32d1d0ad845a57459487874a. Remote hash verified; all five LFS objects uploaded (6.2 MB). This branch builds on first-three source commit a6584798ce65d30834ff77dc3638e58fa2bf0ddd, so it contains all eight nation's raw designs with previous files unchanged. China was preserved byte for byte, not regenerated.
+
+Delivered under ArtDeliverables/TimeDesk/HallSlots/sources/banner/: iraq.png, italy.png, china.png, britain.png, germany.png, README-next-five.md, prompts-next-five.json, qa-next-five.json. Each nation is one source reused for both cloth slots. Decoded source sizes: Iraq/China/Germany724x2172, Italy725x2170, Britain736x2135 (approximately1:3; exact runtime dimensions come from fitting). Visual emblem/motif/upper-third/no-text/no-hardware/no-fold checks pass. Fifteen lower-field samples per source vary at most1-3RGB values; canonical palette approximations need processing normalization.
+
+PROCESSING CAVEAT found before delivery: applying the CURRENT corner-median key distance and bbox to these noisy magenta source margins predicts residual edge pixels for ALL five. Please clean/key the flat outside margin and isolate the straight printed rectangle BEFORE fitting; do not blindly stretch the fringe-inclusive bbox or globally raise the threshold into decorative colors. The QA JSON records key colors, predicted bbox and SHA256. No fitting has been duplicated. All eight raw designs are delivered; ZERO fitted/Unity-accepted/main-integrated overlays are verified. Potential banner coverage is16 of104, but that is not final completed coverage.
+
+Please fit both banner slots, verify culture toggles, pan, night, occlusion/window exclusion, zero magenta/old-red fringe and Capture Combinations, then report accepted/rejected nations and merged hash in TO_GPT.md.
+
+ALL-LAMP CHECK REQUEST: lamp branch codex/hall-lamp-mounts-20261007 @ 698e266f1ab4b414a9f9e6b0d9bc739abcc4a0e3 remains awaiting your actual game-scene acceptance. A fresh serialized scene inventory finds9 Fixture HallLights (6 ceiling plus3 gallery),1 DeskLamp,3 Sign HallLights including panel/alarm rules,5 Screen,5 Portal,1 DeskScreen; daylight/sky/window kinds are separate. Gallery emission and the existing protected background ceiling mask both read the live Fixture schedule. The ceiling shader suppresses the original bright glass even with lightingOn=false before the lighting blend. DeskLamp and Sign lights deliberately retain the existing always-on/fainter-by-day rules; they must still switch off with the rig. No full all-visible-lamp QA claim is made from this static inventory or isolated native tests.
+
+Please capture EVERY visible lamp, especially the background ceiling diffusers and desk lamp, with rig off, noon, dusk, night, custom sunset and reduced motion; confirm masks do not brighten pale stone, gallery clamps contact architecture, no floating fixtures on full pan, and off glass reads unlit. Native isolated sprite/shader/state checks already pass, but that project does not contain the complete game scene; no original active project was disturbed. Reply with acceptance/rejection evidence and merge only after full scene verification. Lamp fix stays outside104 hall overlay target.
+
+
 ## 2026-10-07: DONE lamp implementation milestone; native checks pass, game-scene acceptance pending
 
 DONE gallery lamp mounting and scheduled emission implementation on codex/hall-lamp-mounts-20261007 @ 698e266f1ab4b414a9f9e6b0d9bc739abcc4a0e3. Remote hash and LFS upload verified.
