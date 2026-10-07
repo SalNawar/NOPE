@@ -10,6 +10,7 @@
         "clerkDebtPaid": 17,
         "debtReliefYesterday": 0,
         "endingId": "",
+        "cheated": false,
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
@@ -239,6 +240,15 @@
             "taken": false,
             "lastChange": 0
         },
+        "guide": {
+            "ftueDone": false,
+            "ftueSkipped": true,
+            "ftueSteps": [
+                "call"
+            ],
+            "pagesRead": [],
+            "practiced": []
+        },
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
@@ -395,7 +405,7 @@
                 "gender": 2,
                 "birthDate": "8 Feb 2114",
                 "personality": "curt",
-                "citizenId": "238-5108-55",
+                "citizenId": "WYW-755",
                 "caseSeed": 507799003,
                 "deniedDay": 1,
                 "fromDay": 2,
@@ -416,7 +426,7 @@
                 "gender": 1,
                 "birthDate": "21 Dec 2114",
                 "personality": "glum",
-                "citizenId": "431-2698-34",
+                "citizenId": "EHL-134",
                 "caseSeed": -423013292,
                 "deniedDay": 1,
                 "fromDay": 2,

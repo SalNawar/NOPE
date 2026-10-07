@@ -228,8 +228,8 @@ public static class _TimeDeskAuditProfile
         {
             if (Field(o.Ui, "_currentCase") != null)
             {
-                // The stamps' verdict path (the PC has no Accept since the PC clean-up of 2026-10-05).
-                o.Ui.GetType().GetMethod("Decide", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(o.Ui, new object[] { true });
+                // The cheat menu's "Decide correctly" (InvestigationUIController.Decide is gone since the moved stamps, 4315bce).
+                o.Game.CheatDecideCorrectly();
                 yield return Frames(2);
                 if (o.CitationPanel.activeInHierarchy)
                     ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();

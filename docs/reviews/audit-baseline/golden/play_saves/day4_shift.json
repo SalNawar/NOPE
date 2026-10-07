@@ -10,6 +10,7 @@
         "clerkDebtPaid": 94,
         "debtReliefYesterday": 0,
         "endingId": "",
+        "cheated": false,
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
@@ -305,6 +306,22 @@
             "taken": false,
             "lastChange": 0
         },
+        "guide": {
+            "ftueDone": false,
+            "ftueSkipped": true,
+            "ftueSteps": [
+                "call"
+            ],
+            "pagesRead": [
+                "ticket",
+                "board",
+                "seals"
+            ],
+            "practiced": [
+                "board",
+                "seals"
+            ]
+        },
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
@@ -378,9 +395,9 @@
                     "fate": 3,
                     "waivered": false,
                     "fine": 0,
-                    "citizenId": "913-1565-06",
+                    "citizenId": "ZTP-206",
                     "transponder": "Tick-Tock Basic · TT-97927",
-                    "waiverNo": "SW-316721",
+                    "waiverNo": "SW-6721",
                     "debt": 9840,
                     "line": "Clocks near Periclean Athens (Ancient) ran eleven minutes backward last night. The Directorate calls this normal."
                 }
@@ -509,7 +526,7 @@
                 "gender": 2,
                 "birthDate": "8 Feb 2114",
                 "personality": "curt",
-                "citizenId": "238-5108-55",
+                "citizenId": "WYW-755",
                 "caseSeed": 507799003,
                 "deniedDay": 1,
                 "fromDay": 2,
@@ -530,7 +547,7 @@
                 "gender": 1,
                 "birthDate": "21 Dec 2114",
                 "personality": "glum",
-                "citizenId": "431-2698-34",
+                "citizenId": "EHL-134",
                 "caseSeed": -423013292,
                 "deniedDay": 1,
                 "fromDay": 2,
@@ -551,7 +568,7 @@
                 "gender": 1,
                 "birthDate": "27 Jun 2131",
                 "personality": "glum",
-                "citizenId": "909-9421-12",
+                "citizenId": "DXP-512",
                 "caseSeed": -1658936215,
                 "deniedDay": 3,
                 "fromDay": 4,
@@ -572,7 +589,7 @@
                 "gender": 2,
                 "birthDate": "19 Jul 2105",
                 "personality": "grand",
-                "citizenId": "471-3504-74",
+                "citizenId": "AHJ-074",
                 "caseSeed": -2986303,
                 "deniedDay": 4,
                 "fromDay": 5,
@@ -593,7 +610,7 @@
                 "gender": 2,
                 "birthDate": "4 Mar 2106",
                 "personality": "sunny",
-                "citizenId": "458-8072-70",
+                "citizenId": "DUS-570",
                 "caseSeed": 209419503,
                 "deniedDay": 4,
                 "fromDay": 5,
@@ -614,7 +631,7 @@
                 "gender": 2,
                 "birthDate": "28 Dec 2128",
                 "personality": "anxious",
-                "citizenId": "387-8420-33",
+                "citizenId": "FMN-433",
                 "caseSeed": -543902538,
                 "deniedDay": 4,
                 "fromDay": 5,
@@ -666,7 +683,7 @@
             {
                 "day": 4,
                 "briefing": [
-                    "NEW: issuing seals. Every paper's seal must match its office's in the Seal Register, now on your shelf."
+                    "NEW: issuing seals. Every paper's seal must match its office's in the Seal Register, now in your rulebook (the SEALS tab)."
                 ],
                 "news": [
                     "Reports indicate democratic institutions are crumbling across the timeline.",
