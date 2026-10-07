@@ -842,18 +842,39 @@ public sealed class DeskController : MonoBehaviour
         float distance = way.magnitude;
         if (distance <= 0f)
             return true;
-        RaycastHit[] hits = Physics.RaycastAll(from, way / distance, distance + 0.05f, 1 << OfficeLayers.InteractableLayer, QueryTriggerInteraction.Collide);
-        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
-        foreach (RaycastHit hit in hits)
+        // The nearest paper or rulebook on the line of sight decides; no allocation (the guide's arrow asks every frame).
+        int count = Physics.RaycastNonAlloc(from, way / distance, ShowsHits, distance + 0.05f, 1 << OfficeLayers.InteractableLayer, QueryTriggerInteraction.Collide);
+        float nearest = float.MaxValue;
+        DeskDocument top = null;
+        bool book = false;
+        for (int i = 0; i < count; i++)
         {
+            RaycastHit hit = ShowsHits[i];
+            if (hit.distance >= nearest)
+                continue;
             DeskDocument paper = hit.collider.GetComponentInParent<DeskDocument>();
             if (paper != null)
-                return paper.Index == document && (document <= FirstCitationId ? _citations.Contains(paper) : _papers.Contains(paper));
-            if (hit.collider.GetComponentInParent<DeskRulebook>() != null)
-                return false;
+            {
+                nearest = hit.distance;
+                top = paper;
+                book = false;
+            }
+            else if (hit.collider.GetComponentInParent<DeskRulebook>() != null)
+            {
+                nearest = hit.distance;
+                top = null;
+                book = true;
+            }
         }
+        if (book)
+            return false;
+        if (top != null)
+            return top.Index == document && (document <= FirstCitationId ? _citations.Contains(top) : _papers.Contains(top));
         return true;
     }
+
+    /// <summary>Shows' reused hit buffer (more colliders than the desk ever stacks on one line of sight).</summary>
+    private static readonly RaycastHit[] ShowsHits = new RaycastHit[64];
 
     // ---------------- Citations ----------------
 
