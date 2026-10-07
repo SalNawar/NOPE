@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 411. Full regeneration is NOT complete.
+Saved: 423. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -415,3 +415,15 @@ Saved: 411. Full regeneration is NOT complete.
 | hair_m_egypt_ancient2 | visually reviewed; registration pending |
 | headwear_m_egypt_ancient2 | visually reviewed; registration pending |
 | outfit_f_egypt_ancient2 | visually reviewed; registration pending |
+| outfit_f_egypt_ancient2__explaining_a | visually reviewed; registration pending |
+| outfit_f_egypt_ancient2__thinking_b | visually reviewed; registration pending |
+| outfit_f_egypt_ancient2__objecting_c | visually reviewed; registration pending |
+| hair_f_egypt_ancient2 | visually reviewed; registration pending |
+| accessory_f_egypt_ancient2 | visually reviewed; registration pending |
+| outfit_m_egypt_ancient3 | visually reviewed; registration pending |
+| outfit_m_egypt_ancient3__explaining_a | visually reviewed; registration pending |
+| outfit_m_egypt_ancient3__thinking_b | visually reviewed; registration pending |
+| outfit_m_egypt_ancient3__objecting_c | visually reviewed; registration pending |
+| hair_m_egypt_ancient3 | visually reviewed; registration pending |
+| facialhair_m_egypt_ancient3 | visually reviewed; registration pending |
+| headwear_m_egypt_ancient3 | visually reviewed; registration pending |

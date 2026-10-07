@@ -8692,6 +8692,368 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "fringed pleated robe",
+      "details": "",
+      "flags": {
+        "label": "fringed pleated robe"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4fdae615-8749-4c5b-a86a-e9faa2f6905a.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_ancient2__explaining_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT elbow open, right palm up at lower chest, left arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: fringed pleated robe.  Preserve cloth design across pose variants. No text labels. Khepresh means a plain blue cloth cap silhouette with no cobra, crown, or royal insignia. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_ancient2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7bb7f8b9928ec568dfa5b0f31abfc1551739734cbe61ffe08019993bf892db6f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "fringed pleated robe",
+      "details": "",
+      "flags": {
+        "label": "fringed pleated robe"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-337a6b2f-dbb5-4aa6-8b4b-88f215ac4980.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_ancient2__thinking_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: fringed pleated robe.  Preserve cloth design across pose variants. No text labels. Khepresh means a plain blue cloth cap silhouette with no cobra, crown, or royal insignia. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_ancient2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a97eab9097edeb7f2bec051439d4e9d53f3385231ae7aa7c3b77d02e913082c2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "fringed pleated robe",
+      "details": "",
+      "flags": {
+        "label": "fringed pleated robe"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ded158a5-d1ad-4f72-9095-5dc68b9849e4.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_ancient2__objecting_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: fringed pleated robe.  Preserve cloth design across pose variants. No text labels. Khepresh means a plain blue cloth cap silhouette with no cobra, crown, or royal insignia. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_ancient2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f393836763e5d15e8956e384f51f66f7812ffa8e55de692062bcc74db5adb247",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "long braided wig",
+      "details": "",
+      "flags": {
+        "label": "long braided wig"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1e3b1bbf-b00c-465c-a9d8-85fa67c2813b.png",
+      "prompt": "Production modular historical clothing asset hair_f_egypt_ancient2. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: long braided wig.  Preserve cloth design across pose variants. No text labels. Khepresh means a plain blue cloth cap silhouette with no cobra, crown, or royal insignia. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/hair_f_egypt_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f8ac38a225d1f069e1d7b6bdd3e26884d0baf21d92b1c3d6ee49e7be2c04bd94",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_egypt_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "lotus studs",
+      "details": "",
+      "flags": {
+        "label": "lotus studs",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2c650f96-35b0-4d79-bfc9-61fcfce34cad.png",
+      "prompt": "Production modular historical clothing asset accessory_f_egypt_ancient2. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: lotus studs.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/accessory_f_egypt_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "45c1b65dd8bf659ec15928e241f27387b14f4b1faf5dd954fc386d968cc5aa9c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "bordered Greek chiton",
+      "details": "",
+      "flags": {
+        "label": "bordered Greek chiton"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_ancient3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d4d34de1-4bca-4710-8540-9351bc93d838.png",
+      "prompt": "Production modular historical clothing asset outfit_m_egypt_ancient3. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ptolemaic Alexandria. Historical context: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships). Requested item: bordered Greek chiton.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/outfit_m_egypt_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b82cecb91456227a4c043447f72008706a545cd9ac2827764bdde2e27dbb436e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient3__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "bordered Greek chiton",
+      "details": "",
+      "flags": {
+        "label": "bordered Greek chiton"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_egypt_ancient3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7fd0e9dc-7682-42c0-a7a7-78a125ae44ea.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient3__explaining_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT elbow open, right palm up at lower chest, left arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ptolemaic Alexandria. Historical context: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships). Requested item: bordered Greek chiton.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient3__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "70a65f43d13ac06a69ea8e2de1f0d6b87d6f8ad9ca23c3b75004c938a26139b5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient3__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "bordered Greek chiton",
+      "details": "",
+      "flags": {
+        "label": "bordered Greek chiton"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_egypt_ancient3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a37fdd81-d908-4ed4-9bf8-bfb21d74563b.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient3__thinking_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ptolemaic Alexandria. Historical context: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships). Requested item: bordered Greek chiton.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient3__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d3ee8e0ae3880ad375cc4f4dd9d827f2ee608b5bd47c3832d3c3bc12b795aa9e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient3__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "bordered Greek chiton",
+      "details": "",
+      "flags": {
+        "label": "bordered Greek chiton"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_egypt_ancient3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b8abf487-905a-4588-95ee-b2fd523747fd.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient3__objecting_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ptolemaic Alexandria. Historical context: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships). Requested item: bordered Greek chiton.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient3__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "14e7a866ede1cd6e1d6d207e29b8695f4ddf97cce954979bb0863703236a43f3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "short oiled curls",
+      "details": "",
+      "flags": {
+        "label": "short oiled curls"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_ancient3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ab7d8ab5-21a7-4e28-baa7-e9f6f4756782.png",
+      "prompt": "Production modular historical clothing asset hair_m_egypt_ancient3. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ptolemaic Alexandria. Historical context: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships). Requested item: short oiled curls.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/hair_m_egypt_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e6b8478fab306a3086c3a8cb27bb03789466d92b412771d154c717bdf8abf880",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_egypt_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "trimmed short beard",
+      "details": "",
+      "flags": {
+        "label": "trimmed short beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_egypt_ancient3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-81fe9a74-806e-48c7-a9d7-8822c6b5f536.png",
+      "prompt": "Production modular historical clothing asset facialhair_m_egypt_ancient3. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested facialhair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ptolemaic Alexandria. Historical context: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships). Requested item: trimmed short beard.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/facialhair_m_egypt_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6379a532eb25d6154d6bfd128993d490ca10e79b99e80ea1ad23d8ef3901f669",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_egypt_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "wreath of ivy",
+      "details": "",
+      "flags": {
+        "label": "wreath of ivy",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_egypt_ancient3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ee1df158-3d79-4814-9792-0ce5a4a2df7a.png",
+      "prompt": "Production modular historical clothing asset headwear_m_egypt_ancient3. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ptolemaic Alexandria. Historical context: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships). Requested item: wreath of ivy.  Preserve cloth design across pose variants. No text labels. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/headwear_m_egypt_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8ad4839f4606700f6ef76217ce1ff7baecce974f960918f5cea233fe10ae09a3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
