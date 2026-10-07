@@ -45,11 +45,11 @@ public static class MotionPreference
     /// <summary>The Motion intensity, 0 to 1 (1, full, when never set): how far the game feel's springs move (saved at once when set; read from PlayerPrefs once, then cached).</summary>
     public static float Intensity
     {
-        get => _intensity ??= Mathf.Clamp01(PlayerPrefs.GetFloat(IntensityKey, 1f));
+        get => _intensity ??= Mathf.Clamp01(PlayerPrefs.GetFloat(PlayerPrefKeys.For(IntensityKey), 1f));
         set
         {
             float clamped = Mathf.Clamp01(value);
-            PlayerPrefs.SetFloat(IntensityKey, clamped);
+            PlayerPrefs.SetFloat(PlayerPrefKeys.For(IntensityKey), clamped);
             PlayerPrefs.Save();
             _intensity = clamped;
             Changed?.Invoke();

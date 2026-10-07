@@ -121,6 +121,8 @@ public static class _TimeDeskAuditPlay
     private const string ViewHeightKey = "AuditPlay.ViewHeight";
     private static string UiLanguagePref => PlayerPrefKeys.For("TimeDesk.UiLanguage");
     private static string MotionPref => PlayerPrefKeys.For("TimeDesk.ReducedMotion");
+    private const string IntensityKey = "AuditPlay.MotionIntensity";
+    private static string IntensityPref => PlayerPrefKeys.For("TimeDesk.MotionIntensity");
 
     private const int Playing = 1;
     private const int Finishing = 2;
@@ -189,6 +191,8 @@ public static class _TimeDeskAuditPlay
         SessionState.SetString(MotionKey, PlayerPrefs.HasKey(MotionPref) ? PlayerPrefs.GetString(MotionPref) : "<absent>");
         PlayerPrefs.DeleteKey(UiLanguagePref);
         PlayerPrefs.DeleteKey(MotionPref);
+        SessionState.SetString(IntensityKey, PlayerPrefs.HasKey(IntensityPref) ? PlayerPrefs.GetFloat(IntensityPref).ToString("R", System.Globalization.CultureInfo.InvariantCulture) : "<absent>");
+        PlayerPrefs.DeleteKey(IntensityPref);
 
         // The desktop's per-player preferences (icons, split, tab order, zoom, sidebar, steps) start at their defaults and are restored at the end.
         var desktop = new List<string>();
@@ -2421,6 +2425,11 @@ public static class _TimeDeskAuditPlay
             else
                 PlayerPrefs.SetString(pref, value);
         }
+        string intensity = SessionState.GetString(IntensityKey, "<absent>");
+        if (intensity == "<absent>")
+            PlayerPrefs.DeleteKey(IntensityPref);
+        else
+            PlayerPrefs.SetFloat(IntensityPref, float.Parse(intensity, System.Globalization.CultureInfo.InvariantCulture));
         foreach (string entry in SessionState.GetString(DesktopPrefsKey, string.Empty).Split('\u0002').Where(e => e.Length > 0))
         {
             string[] kv = entry.Split('\u0001');
