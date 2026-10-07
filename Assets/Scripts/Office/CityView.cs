@@ -31,7 +31,11 @@ using UnityEngine.UI;
 /// flies over it (cityTrafficPace, cityTrafficScale), lit by the hour. D, the right arrow, a
 /// right-click, Esc (ControlRules) or the "Desk ▶" button at the right edge
 /// runs the same timeline back (CityLookTimeline: the fade first, then the
-/// turn). Reduced Motion cuts both ways and holds the city still.
+/// turn). While it looks at the city only the DESK tab shows: the desk's own
+/// controls (the PC and STAMPS pull tabs, the red inspect button: deskControls)
+/// fade out over DeskConfigSO.cityDeskControlsFadeSeconds and take no clicks,
+/// and fade back in as it returns. Reduced Motion cuts both ways and holds the
+/// city still.
 /// BoothCoordinator says when it may turn (BoothRules.NormalViewLive: the
 /// normal view, no newsletter, wheel or PC) and returns it when the next
 /// traveller steps up or the PC, the wheel or the reading view take over.
@@ -60,6 +64,9 @@ public sealed class CityView : MonoBehaviour
 
     /// <summary>"Desk ▶" at the office's right edge (shown while looking at the city).</summary>
     [SerializeField] private Button backButton;
+
+    /// <summary>The desk's own controls hidden while the city shows (the PC and STAMPS pull tabs, the inspect button): their CanvasGroups fade out and take no clicks; whether each is on stays its owner's.</summary>
+    [SerializeField] private CanvasGroup[] deskControls = Array.Empty<CanvasGroup>();
 
     private const string LivingCityShader = "NOPE/Hall Living City";
     private static readonly int MasksId = Shader.PropertyToID("_Masks");
@@ -101,6 +108,7 @@ public sealed class CityView : MonoBehaviour
     private bool _live;
     private float _clock;
     private float _pan = -1f;
+    private float _deskControls = 1f;
 
     /// <summary>True while the view turns (or has turned) toward the city.</summary>
     public bool IsOn { get; private set; }
@@ -227,6 +235,23 @@ public sealed class CityView : MonoBehaviour
         float total = CityLookTimeline.Total(config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds);
         _clock = CityLookTimeline.Step(_clock, IsOn, Time.unscaledDeltaTime, total, MotionPreference.Reduced);
         Draw(_clock);
+        FadeDeskControls();
+    }
+
+    /// <summary>Fades the desk's own controls out while the city shows and back in at the desk (a cut under Reduced Motion or with no seconds).</summary>
+    private void FadeDeskControls()
+    {
+        float target = IsOn ? 0f : 1f;
+        if (_deskControls == target)
+            return;
+        float seconds = MotionPreference.Reduced ? 0f : config.cityDeskControlsFadeSeconds;
+        _deskControls = seconds > 0f ? Mathf.MoveTowards(_deskControls, target, Time.unscaledDeltaTime / seconds) : target;
+        foreach (CanvasGroup group in deskControls)
+            if (group != null)
+            {
+                group.alpha = _deskControls;
+                group.blocksRaycasts = group.interactable = !IsOn;
+            }
     }
 
     private void Draw(float clock)

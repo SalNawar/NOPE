@@ -173,6 +173,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds of the city panorama's fade in and out (0: a cut at the fade's start).</summary>
     [Min(0f)] public float cityFadeSeconds = 0.7f;
 
+    /// <summary>Seconds the desk's own controls (the PC and STAMPS pull tabs, the red inspect button) take to fade out as the view turns to the city, and back in as it returns (the orchestrator, run 7's integration: in the city view only the DESK tab shows); a cut under Reduced Motion.</summary>
+    [Min(0f)] public float cityDeskControlsFadeSeconds = 0.15f;
+
     /// <summary>The colour round the city panorama where it does not fill the screen (it is shown whole, fitted inside the screen; the palette's ink).</summary>
     public Color cityMatte = new Color(0.169f, 0.11f, 0.141f, 1f);
 

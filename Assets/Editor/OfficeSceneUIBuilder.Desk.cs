@@ -1354,12 +1354,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The stamp bar's grey tab on the overlay's right edge (reference px).</summary>
     private static readonly Vector2 StampTabSize = new Vector2(92f, 170f);
 
-    /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two stamps' distance apart (DENIED left, APPROVED right), the rail's reach past each, its height, how far in front of the stamps it runs (toward the chair: under them on the screen, so it never covers the passport whose visa box is under a stamp) and its section (deep, tall).</summary>
+    /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two daters' distance apart (DENIED left, APPROVED right), the label lip's reach past each, its gap in front of the daters' frames and its section (deep, tall). The lip lies low at the daters' feet, in front of them (toward the chair), its words on its top, so the whole green and red bodies with their wheels show over it (run 7's integration: the rail at the bodies' height hid them).</summary>
     private const float StampSpacing = 0.14f;
     private const float StampRailOverhang = 0.07f;
-    private const float StampRailHeight = 0.07f;
-    private const float StampRailFront = 0.05f;
-    private static readonly Vector2 StampRailSection = new Vector2(0.032f, 0.016f);
+    private const float StampLipGap = 0.004f;
+    private static readonly Vector2 StampRailSection = new Vector2(0.03f, 0.008f);
 
     /// <summary>The art's desk folder (DeskClean): the stamp rack is in its NOPE/Desk Anime materials (the desk polish: the rack matches the desk).</summary>
     private const string DeskCleanFolder = "Assets/Art/Office/DeskClean";
@@ -1476,14 +1475,15 @@ public static partial class OfficeSceneUIBuilder
     /// inactive until the booth shows it), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
     /// In the office: StampRack (inactive until slid out; the office binder
-    /// lays it, its origin at the daters' feet): a rail in the art's DeskClean
-    /// green-dark with wooden end caps, brass arms down to the two daters, and
+    /// lays it, its origin at the daters' feet): a low lip in the art's DeskClean
+    /// green-dark at the daters' feet in front of them, with wooden end caps and
+    /// brass brackets to the two daters, and
     /// the DENIED dater (left) and the APPROVED dater (right), each a click box
     /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
     /// (the click box its proxy: the dater is dragged onto the paper) and a
     /// PointerHold (a held press), holding its body (DaterBody: the prop
     /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED);
-    /// the word printed on the rail's top over each dater, readable from the
+    /// the word printed on the lip's top in front of each dater, readable from the
     /// reading view. The tray gets the papers' style, the date's face and
     /// Saleh's dater sounds (WireDaters). The old overlay bar, the 3D tray of
     /// the desk-first redesign and the overlay's hand-back buttons are destroyed.
@@ -1526,9 +1526,11 @@ public static partial class OfficeSceneUIBuilder
         Material wood = DeskMaterial("Wood", new Color(0.537f, 0.392f, 0.282f));
         Material brass = DeskMaterial("Brass", new Color(0.72f, 0.58f, 0.3f));
         float railLength = 2f * (StampSpacing / 2f + StampRailOverhang);
-        PrimitivePart(rack, "Rail", PrimitiveType.Cube, new Vector3(0f, StampRailHeight, -StampRailFront), new Vector3(railLength, StampRailSection.y, StampRailSection.x), rail);
-        PrimitivePart(rack, "CapLeft", PrimitiveType.Cube, new Vector3(-railLength / 2f, StampRailHeight, -StampRailFront), new Vector3(0.012f, StampRailSection.y + 0.006f, StampRailSection.x + 0.006f), wood);
-        PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, StampRailHeight, -StampRailFront), new Vector3(0.012f, StampRailSection.y + 0.006f, StampRailSection.x + 0.006f), wood);
+        // The lip at the daters' feet, in front of their frames (DaterHalfDepth), its top StampRailSection.y over the feet.
+        float lipZ = -(DaterHalfDepth + StampLipGap + StampRailSection.x / 2f);
+        PrimitivePart(rack, "Rail", PrimitiveType.Cube, new Vector3(0f, StampRailSection.y / 2f, lipZ), new Vector3(railLength, StampRailSection.y, StampRailSection.x), rail);
+        PrimitivePart(rack, "CapLeft", PrimitiveType.Cube, new Vector3(-railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
+        PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
         Color labelInk = new Color(0.95f, 0.93f, 0.86f);
 
         (Clickable stamp, Transform die) Stamp(string name, float x, bool approved, string labelKey)
@@ -1542,9 +1544,9 @@ public static partial class OfficeSceneUIBuilder
             string word = UiText.Get(labelKey);
             Transform die = click.transform.Find("Die");
 
-            // The arm from the rail down to the handle, and the word on the rail's top over the stamp.
-            PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, StampRailHeight - 0.004f, -StampRailFront / 2f), new Vector3(0.012f, 0.008f, StampRailFront), brass);
-            TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailHeight + StampRailSection.y / 2f + 0.0006f, -StampRailFront),
+            // The brass bracket from the lip to the dater's frame, and the word on the lip's top in front of the dater.
+            PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, 0.002f, -(DaterHalfDepth + StampLipGap / 2f)), new Vector3(0.012f, 0.004f, StampLipGap + 0.002f), brass);
+            TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailSection.y + 0.0006f, lipZ),
                                          new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
             label.text = word;
 
@@ -1993,6 +1995,15 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "pcTab", tab);
         SetRef(so, "pcTabLabel", label);
         so.ApplyModifiedProperties();
+
+        // In the city view only the DESK tab shows: the PC and STAMPS tabs and the inspect button fade out (CityView.deskControls).
+        var soCity = new SerializedObject(cityView);
+        SerializedProperty hidden = soCity.FindProperty("deskControls");
+        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("InspectButton") };
+        hidden.arraySize = deskControls.Length;
+        for (int i = 0; i < deskControls.Length; i++)
+            hidden.GetArrayElementAtIndex(i).objectReferenceValue = deskControls[i] != null ? GetOrAdd<CanvasGroup>(deskControls[i].gameObject) : null;
+        soCity.ApplyModifiedProperties();
         return controls;
     }
 
