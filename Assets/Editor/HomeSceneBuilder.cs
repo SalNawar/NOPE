@@ -7,7 +7,7 @@ using static SceneUiKit;
 
 /// <summary>
 /// One-click builder for the Home scene UI added in Alpha Phase 4: HUD
-/// (day/money/stability), the bills panel (the fixed costs, the pet's needs,
+/// (day, money and the Helix River's strip: stability without a number), the bills panel (the fixed costs, the pet's needs,
 /// one row per night's bill; the Home pet spec), the pet's corner (the pet
 /// drawn by PetStandIn, Pet, the toys' rows), the House
 /// (Home's upgrade tree in the old shop panel; the Home upgrades spec §6),
@@ -49,12 +49,14 @@ public static class HomeSceneBuilder
             new Vector2(0f, 0f), new Vector2(0.2f, 1f));
         TMP_Text moneyText = FindOrCreateText(hud, "MoneyText", "Credits: 0", 28, TextAlignmentOptions.Center,
             new Vector2(0.4f, 0f), new Vector2(0.6f, 1f));
-        TMP_Text stabilityText = FindOrCreateText(hud, "StabilityText", "Stability: 100%", 28, TextAlignmentOptions.Right,
-            new Vector2(0.8f, 0f), new Vector2(1f, 1f));
-        // The wallet and stability read the leading culture's labels (UiText): themed like the office tray's, so the
-        // culture's font draws them (an Arabic label in LiberationSans drew boxes); the Tray ink is white on this dark strip.
+        // Stability is the Helix River's strip at the HUD's right end (the old "Stability: 100%" text goes).
+        Transform oldStability = hud.Find("StabilityText");
+        if (oldStability != null)
+            Undo.DestroyObjectImmediate(oldStability.gameObject);
+        HelixRiverAuthoring.UiRiver(hud, "TimelineStrip", new Vector2(0.86f, 0f), new Vector2(0.99f, 1f), new Vector2(0f, 4f), new Vector2(0f, -4f), HomeRiverZoom, 0.18f, false);
+        // The wallet reads the leading culture's labels (UiText): themed like the office tray's, so the
+        // culture's font draws it (an Arabic label in LiberationSans drew boxes); the Tray ink is white on this dark strip.
         Tag(moneyText, ThemeRoleId.Tray, ThemePart.Ink, fit: true);
-        Tag(stabilityText, ThemeRoleId.Tray, ThemePart.Ink, fit: true);
         EnsureHudBacking(hud);
 
         // --- Expenses panel ---
@@ -138,7 +140,6 @@ public static class HomeSceneBuilder
         // --- Wire HomeUIController ---
         var soUi = new SerializedObject(homeUI);
         soUi.FindProperty("moneyText").objectReferenceValue = moneyText;
-        soUi.FindProperty("stabilityText").objectReferenceValue = stabilityText;
         soUi.FindProperty("dayText").objectReferenceValue = dayText;
 
         soUi.FindProperty("expensesPanel").objectReferenceValue = expenses.gameObject;
@@ -193,6 +194,7 @@ public static class HomeSceneBuilder
         slot.gameObject.SetActive(false);
         sleep.gameObject.SetActive(false);
 
+        HelixRiverAuthoring.Wire(homeUI.gameObject.scene, null);
         UiContrastCheck.Check(canvas, canvas.GetComponent<CanvasScaler>() is CanvasScaler s && s.referenceResolution.y > 0f ? 1080f / s.referenceResolution.y : 1f, null, null);
         EditorSceneManager.MarkSceneDirty(homeUI.gameObject.scene);
         Debug.Log("[TimeDesk] Home UI built and wired. Save the scene.");
@@ -336,7 +338,10 @@ public static class HomeSceneBuilder
     /// <summary>The HUD's height on its dark strip (reference px), centred on the HUD's texts.</summary>
     private const float HudBackingHeight = 64f;
 
-    /// <summary>The HUD's strip: dark and mostly opaque, so the white day, wallet and stability read over any part of the room's art.</summary>
+    /// <summary>How much of the Helix River's glass the HUD's strip shows: a thin strip, so closer.</summary>
+    private const float HomeRiverZoom = 2f;
+
+    /// <summary>The HUD's strip: dark and mostly opaque, so the white day and wallet and the river read over any part of the room's art.</summary>
     private static readonly Color HudBackingColour = new Color(0.06f, 0.07f, 0.1f, 0.72f);
 
     /// <summary>The HUD's own height (reference px), re-applied: its texts stretch over it, so the wallet line, which shrinks to fit (UiText.FitLabel), keeps its 28 px instead of shrinking to its floor in a HUD of no height.</summary>

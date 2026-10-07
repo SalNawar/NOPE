@@ -28,9 +28,6 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Shows current money.</summary>
     [SerializeField] private TMP_Text moneyText;
 
-    /// <summary>Shows timeline stability.</summary>
-    [SerializeField] private TMP_Text stabilityText;
-
     /// <summary>Shows the current day number.</summary>
     [SerializeField] private TMP_Text dayText;
 
@@ -218,7 +215,7 @@ public sealed class HomeUIController : MonoBehaviour
             sleepButton.onClick.AddListener(HandleSleepClicked);
     }
 
-    /// <summary>Refreshes the money/stability/day HUD from world state.</summary>
+    /// <summary>Refreshes the money/day HUD from world state (stability is the HUD's Helix River, HelixRiverMonitor, never a number).</summary>
     public void UpdateHud(WorldState world)
     {
         if (world == null)
@@ -226,9 +223,6 @@ public sealed class HomeUIController : MonoBehaviour
 
         if (moneyText != null)
             moneyText.text = $"{UiText.Currency(UiText.WalletForm.Label)}: {world.money}";
-
-        if (stabilityText != null)
-            stabilityText.text = UiText.Format("tray.stability", StabilityRules.Format(world.timelineStability));
 
         if (dayText != null)
             dayText.text = $"Day {world.day}";

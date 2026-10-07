@@ -1,16 +1,16 @@
 using System;
 using System.Globalization;
 
-/// <summary>How close stability stands to the firing line (the office readout's tint; never serialized).</summary>
+/// <summary>How close stability stands to the firing line (the Helix River flickers in the critical band; never serialized).</summary>
 public enum StabilityBand
 {
-    /// <summary>Well above the firing line: the readout's own colour.</summary>
+    /// <summary>Well above the firing line.</summary>
     Normal,
 
-    /// <summary>Within the warning margin above the line: amber.</summary>
+    /// <summary>Within the warning margin above the line.</summary>
     Warning,
 
-    /// <summary>Within the critical margin, or at or under the line: red.</summary>
+    /// <summary>Within the critical margin, or at or under the line.</summary>
     Critical
 }
 
@@ -18,7 +18,8 @@ public enum StabilityBand
 /// Timeline stability (redesign phase 23 part 1b; Saleh: "stability should be
 /// much more resistant, let's have it x.xx and values change slowly but can
 /// compound; we will flesh out this system in a later epic"): a value from 0
-/// to 100 kept and shown in hundredths ("97.43%"), whose every change is a
+/// to 100 kept in hundredths (the player never sees it: the Helix River shows
+/// it, HelixRiver; the cheat menu and the logs print "97.43%"), whose every change is a
 /// share of where it stands: a loss takes a share of the current value, a
 /// gain closes a share of the gap to 100, so changes compound and neither end
 /// is ever reached by steps alone. The share is the change's size in points
@@ -70,10 +71,10 @@ public static class StabilityRules
     /// <summary>Stability from whole hundredths (9743 is 97.43), from 0 to 100.</summary>
     public static float FromHundredths(int hundredths) => Round((float)(Math.Max(0, Math.Min(10000, hundredths)) / 100m));
 
-    /// <summary>How stability is shown everywhere: two decimals and the percent sign ("97.43%").</summary>
+    /// <summary>How the cheat menu and the logs print stability (the player never sees a number): two decimals and the percent sign ("97.43%").</summary>
     public static string Format(float value) => Round(value).ToString("0.00", CultureInfo.InvariantCulture) + "%";
 
-    /// <summary>A change as shown beside it: signed, two decimals ("-2.50", "+0.20"); "0.00" when it rounds to no change.</summary>
+    /// <summary>A change as the cheat menu and the logs print it: signed, two decimals ("-2.50", "+0.20"); "0.00" when it rounds to no change.</summary>
     public static string FormatChange(float delta)
     {
         float rounded = (float)Math.Round((decimal)delta, 2, MidpointRounding.AwayFromZero);
@@ -81,7 +82,7 @@ public static class StabilityRules
     }
 
     /// <summary>
-    /// The readout's band: Critical within <paramref name="criticalMargin"/>
+    /// The band: Critical within <paramref name="criticalMargin"/>
     /// points above <paramref name="firedAt"/> (the firing line) or under it,
     /// Warning within <paramref name="warningMargin"/>, else Normal.
     /// </summary>

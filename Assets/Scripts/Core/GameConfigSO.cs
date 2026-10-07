@@ -94,11 +94,11 @@ public sealed class GameConfigSO : ScriptableObject
     [Range(0f, 100f)]
     public float firedAtStability = 60f;
 
-    /// <summary>The office's stability readout turns amber within this many points above the firing line (StabilityRules.Band).</summary>
+    /// <summary>The Helix River's CRT starts glitching this many points above the firing line, and glitches fully at it (HelixRiver).</summary>
     [Min(0f)]
     public float stabilityWarningMargin = 10f;
 
-    /// <summary>The office's stability readout turns red within this many points above the firing line.</summary>
+    /// <summary>The Helix River's screen flickers within this many points above the firing line (StabilityRules.Band's critical band).</summary>
     [Min(0f)]
     public float stabilityCriticalMargin = 3f;
 

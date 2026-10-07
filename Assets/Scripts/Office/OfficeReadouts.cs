@@ -5,10 +5,9 @@ using UnityEngine;
 /// The office's diegetic readouts: the day calendar (today's date in the
 /// agency's calendar and the day number, "14 MAR 2150 · DAY 1": the
 /// traveller-types spec's F6; its text wraps and shrinks to fit the art's box,
-/// which was drawn for a day number), the timeline stability monitor
-/// (Stability, its text tinted by band) and the cash till (Credits, with a
-/// "ding" when the value rises). The stability text keeps
-/// its own colour while stability is healthy. The texts are the art
+/// which was drawn for a day number) and the cash till (Credits, with a
+/// "ding" when the value rises); the stability monitor shows no number, the
+/// Helix River covers it (HelixRiverMonitor, laid by the binder). The texts are the art
 /// office's own (the office binder hands them over through Bind), or the
 /// gameplay layer's fallback HUD where the art has none. Polls WorldState each
 /// frame from the RunManager so it stays decoupled from GameManager, and (as
@@ -18,13 +17,6 @@ using UnityEngine;
 /// </summary>
 public sealed class OfficeReadouts : MonoBehaviour
 {
-    [Header("Stability bands (the margins above the firing line are GameConfigSO's)")]
-    /// <summary>The text's colour in the warning band.</summary>
-    [SerializeField] private Color amberColor = new Color(0.95f, 0.75f, 0.3f);
-
-    /// <summary>The text's colour when stability is critical.</summary>
-    [SerializeField] private Color redColor = new Color(0.9f, 0.35f, 0.3f);
-
     [Header("Calendar")]
     /// <summary>The smallest size the calendar's date shrinks to, as a share of the text's authored size.</summary>
     [SerializeField, Range(0.1f, 1f)] private float dateMinScale = 0.25f;
@@ -34,9 +26,7 @@ public sealed class OfficeReadouts : MonoBehaviour
     [SerializeField] private AudioSource creditsDing;
 
     private TMP_Text _dayText;
-    private TMP_Text _stabilityText;
     private TMP_Text _creditsText;
-    private Color _stabilityColour;
 
     /// <summary>Last money value seen, to detect increases for the ding.</summary>
     private int _lastMoney;
@@ -47,24 +37,17 @@ public sealed class OfficeReadouts : MonoBehaviour
     /// <summary>The day last written (int.MinValue: none yet, so the next frame writes).</summary>
     private int _shownDay = int.MinValue;
 
-    /// <summary>The stability last written (NaN: none yet; NaN equals nothing, so the next frame writes).</summary>
-    private float _shownStability = float.NaN;
-
     /// <summary>The credits last written (int.MinValue: none yet).</summary>
     private int _shownMoney = int.MinValue;
 
     /// <summary>Sets the texts the readouts write (the office binder: the art's, or the fallback HUD's; null skips one).</summary>
-    public void Bind(TMP_Text day, TMP_Text stability, TMP_Text credits)
+    public void Bind(TMP_Text day, TMP_Text credits)
     {
         _dayText = day;
         if (day != null)
             FitDate(day);
-        _stabilityText = stability;
         _creditsText = credits;
-        if (stability != null)
-            _stabilityColour = stability.color;
         _shownDay = int.MinValue;
-        _shownStability = float.NaN;
         _shownMoney = int.MinValue;
     }
 
@@ -93,7 +76,7 @@ public sealed class OfficeReadouts : MonoBehaviour
         return today != null ? UiText.Format("desk.calendar", today.ToUpperInvariant(), day) : UiText.Format("tray.day", day);
     }
 
-    /// <summary>Refreshes every readout from world state (null-safe): a text is re-formatted only when its value changed since it was last written; the stability tint is kept every frame.</summary>
+    /// <summary>Refreshes every readout from world state (null-safe): a text is re-formatted only when its value changed since it was last written.</summary>
     private void Apply(WorldState world, ContentLibrarySO library)
     {
         if (world == null)
@@ -103,20 +86,6 @@ public sealed class OfficeReadouts : MonoBehaviour
         {
             _dayText.text = CalendarLine(library, world.day);
             _shownDay = world.day;
-        }
-
-        if (_stabilityText != null)
-        {
-            if (world.timelineStability != _shownStability)
-            {
-                _stabilityText.text = StabilityRules.Format(world.timelineStability);
-                _shownStability = world.timelineStability;
-            }
-            GameConfigSO config = RunManager.Instance.Config != null ? RunManager.Instance.Config.gameConfig : null;
-            StabilityBand band = config != null
-                ? StabilityRules.Band(world.timelineStability, config.firedAtStability, config.stabilityWarningMargin, config.stabilityCriticalMargin)
-                : StabilityBand.Normal;
-            _stabilityText.color = band == StabilityBand.Critical ? redColor : band == StabilityBand.Warning ? amberColor : _stabilityColour;
         }
 
         if (_creditsText != null && world.money != _shownMoney)
