@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 314. Full regeneration is NOT complete.
+Saved: 338. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -318,3 +318,27 @@ Saved: 314. Full regeneration is NOT complete.
 | premade_marcopolo__thinking_c | visually reviewed; registration pending |
 | premade_marcopolo__objecting_c | visually reviewed; registration pending |
 | premade_marcopolo_photo | visually reviewed; registration pending |
+| premade_galileo_neutral | visually reviewed; registration pending |
+| premade_galileo_happy | visually reviewed; registration pending |
+| premade_galileo_angry | visually reviewed; registration pending |
+| premade_galileo_worried | visually reviewed; registration pending |
+| premade_galileo__explaining_a | visually reviewed; registration pending |
+| premade_galileo__thinking_a | visually reviewed; registration pending |
+| premade_galileo__objecting_a | visually reviewed; registration pending |
+| premade_galileo_photo | visually reviewed; registration pending |
+| premade_archimedes_neutral | visually reviewed; registration pending |
+| premade_archimedes_happy | visually reviewed; registration pending |
+| premade_archimedes_angry | visually reviewed; registration pending |
+| premade_archimedes_worried | visually reviewed; registration pending |
+| premade_archimedes__explaining_b | visually reviewed; registration pending |
+| premade_archimedes__thinking_b | visually reviewed; registration pending |
+| premade_archimedes__objecting_b | visually reviewed; registration pending |
+| premade_archimedes_photo | visually reviewed; registration pending |
+| premade_hammurabi_neutral | visually reviewed; registration pending |
+| premade_hammurabi_happy | visually reviewed; registration pending |
+| premade_hammurabi_angry | visually reviewed; registration pending |
+| premade_hammurabi_worried | visually reviewed; registration pending |
+| premade_hammurabi__explaining_c | visually reviewed; registration pending |
+| premade_hammurabi__thinking_c | visually reviewed; registration pending |
+| premade_hammurabi__objecting_c | visually reviewed; registration pending |
+| premade_hammurabi_photo | visually reviewed; registration pending |
