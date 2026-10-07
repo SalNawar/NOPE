@@ -1,0 +1,233 @@
+[
+  {
+    "id": "caesar",
+    "name": "Julius Caesar",
+    "place": "Republican Rome (Ancient), 50 BCE",
+    "age": "M, 50",
+    "features": "receding hair combed forward, clean-shaven, laurel wreath, toga with a purple border"
+  },
+  {
+    "id": "ramesses",
+    "name": "Ramesses II",
+    "place": "Ramesside Egypt (Ancient), 1250 BCE",
+    "age": "M, 53",
+    "features": "blue khepresh war crown shape as a cloth cap (no cobra), broad gold collar, kohl eyes, proud long jaw"
+  },
+  {
+    "id": "kurosawa",
+    "name": "Akira Kurosawa",
+    "place": "Showa Tokyo (Modern), 1980",
+    "age": "M, 70",
+    "features": "tinted glasses, a fisherman's bucket hat, tall and lean"
+  },
+  {
+    "id": "saladin",
+    "name": "Saladin",
+    "place": "Ayyubid Cairo (Medieval), 1187",
+    "age": "M, 50",
+    "features": "sharbush cap wound with a plain turban cloth, full dark beard, calm eyes, plain mail-free coat"
+  },
+  {
+    "id": "cleopatra",
+    "name": "Cleopatra",
+    "place": "Ptolemaic Alexandria (Ancient), 45 BCE",
+    "age": "F, 24",
+    "features": "diadem band (no crown), braided melon bun, pearl earrings, Greek chiton with pinned shoulder"
+  },
+  {
+    "id": "beethoven",
+    "name": "Ludwig van Beethoven",
+    "place": "Electoral Bonn (Industrial), 1790",
+    "age": "M, 20",
+    "features": "nineteen, wild black hair, broad face, high-collared coat, a cravat tied in a hurry"
+  },
+  {
+    "id": "nobunaga",
+    "name": "Oda Nobunaga",
+    "place": "Sengoku Azuchi (Early modern), 1576",
+    "age": "M, 42",
+    "features": "shaved pate with a topknot, thin moustache, a red European-style cape over the kamishimo"
+  },
+  {
+    "id": "alexander",
+    "name": "Alexander the Great",
+    "place": "Macedonian Pella (Ancient), 336 BCE",
+    "age": "M, 20",
+    "features": "young, clean-shaven, lion-mane hair swept up from the brow, tilted head, chlamys pinned at the shoulder"
+  },
+  {
+    "id": "darwin",
+    "name": "Charles Darwin",
+    "place": "Victorian Britain (Industrial), 1843",
+    "age": "M, 34",
+    "features": "young, clean-shaven with side whiskers, big brow, a beetle on the lapel"
+  },
+  {
+    "id": "suntzu",
+    "name": "Sun Tzu",
+    "place": "Spring and Autumn Lu (Ancient), 500 BCE",
+    "age": "M, 44",
+    "features": "lean face, thin moustache, plain dark robe, a bamboo-slip book at the sash"
+  },
+  {
+    "id": "einstein",
+    "name": "Albert Einstein",
+    "place": "Weimar Berlin (Modern), 1926",
+    "age": "M, 47",
+    "features": "wild grey-black hair, bushy moustache, baggy cardigan"
+  },
+  {
+    "id": "marx",
+    "name": "Karl Marx",
+    "place": "Revolutionary Cologne (Industrial), 1848",
+    "age": "M, 30",
+    "features": "full bushy black beard, swept-back hair, frock coat, a folded newspaper at the pocket"
+  },
+  {
+    "id": "luther",
+    "name": "Martin Luther",
+    "place": "Renaissance Nuremberg (Early modern), 1525",
+    "age": "M, 42",
+    "features": "broad face, monk's tonsure grown out, black academic gown, a printed Bible at the chest"
+  },
+  {
+    "id": "newton",
+    "name": "Isaac Newton",
+    "place": "Restoration London (Early modern), 1687",
+    "age": "M, 45",
+    "features": "long grey periwig, sharp nose, plain dark coat with a cravat, a prism at the chest pocket"
+  },
+  {
+    "id": "michelangelo",
+    "name": "Michelangelo Buonarroti",
+    "place": "Sforza Milan (Early modern), 1495",
+    "age": "M, 20",
+    "features": "broken flattened nose, short dark curls, marble dust on the shoulders, plain work tunic"
+  },
+  {
+    "id": "turing",
+    "name": "Alan Turing",
+    "place": "Post-war Britain (Modern), 1950",
+    "age": "M, 38",
+    "features": "(brief section 11 already)"
+  },
+  {
+    "id": "confucius",
+    "name": "Confucius",
+    "place": "Spring and Autumn Lu (Ancient), 500 BCE",
+    "age": "M, 51",
+    "features": "long thin grey beard, black guan cap, deep robe, hands folded in a bow (drawn open and empty)"
+  },
+  {
+    "id": "aristotle",
+    "name": "Aristotle",
+    "place": "Macedonian Pella (Ancient), 336 BCE",
+    "age": "M, 48",
+    "features": "short trimmed beard, receding hair, thoughtful frown, himation, a scroll tucked at the chest"
+  },
+  {
+    "id": "hokusai",
+    "name": "Katsushika Hokusai",
+    "place": "Late Edo (Industrial), 1830",
+    "age": "M, 70",
+    "features": "seventy, bald with a little grey topknot, thin face, plain kosode, ink on the fingers"
+  },
+  {
+    "id": "genghis",
+    "name": "Genghis Khan",
+    "place": "Mongol Zhongdu (Medieval), 1215",
+    "age": "M, 53",
+    "features": "weathered face, long drooping moustache, fur-brimmed toortsog hat, deel with a wide sash"
+  },
+  {
+    "id": "qinshihuang",
+    "name": "Qin Shi Huang",
+    "place": "Qin Xianyang (Ancient), 215 BCE",
+    "age": "M, 44",
+    "features": "black robe, Qin official's cap with a flat board (no imperial tassels), stern eyebrows"
+  },
+  {
+    "id": "kulthum",
+    "name": "Umm Kulthum",
+    "place": "Nasser's Egypt (Modern), 1962",
+    "age": "F, 58",
+    "features": "dark glasses, hair up in a low bun, a folded silk scarf draped at the neck, pearl earrings"
+  },
+  {
+    "id": "leonardo",
+    "name": "Leonardo da Vinci",
+    "place": "Sforza Milan (Early modern), 1495",
+    "age": "M, 43",
+    "features": "(brief section 11 already)"
+  },
+  {
+    "id": "elizabeth",
+    "name": "Elizabeth I",
+    "place": "Elizabethan England (Early modern), 1600",
+    "age": "F, 67",
+    "features": "pale face, red curled hair, pearl-strung hair, a wide lace ruff (no crown)"
+  },
+  {
+    "id": "khwarizmi",
+    "name": "Muhammad al-Khwarizmi",
+    "place": "Abbasid Baghdad (Medieval), 830",
+    "age": "M, 50",
+    "features": "white turban, trimmed grey-black beard, scholar's robe, a pen case at the sash"
+  },
+  {
+    "id": "shakespeare",
+    "name": "William Shakespeare",
+    "place": "Elizabethan England (Early modern), 1600",
+    "age": "M, 36",
+    "features": "high bald forehead, moustache and small beard, gold ring earring, white falling collar"
+  },
+  {
+    "id": "marcopolo",
+    "name": "Marco Polo",
+    "place": "Venice of the Doges (Medieval), 1295",
+    "age": "M, 41",
+    "features": "trimmed beard, Venetian capuccio hood-hat, a Mongol gold tablet on a cord at the neck"
+  },
+  {
+    "id": "galileo",
+    "name": "Galileo Galilei",
+    "place": "Galileo's Padua (Early modern), 1610",
+    "age": "M, 46",
+    "features": "broad red-brown beard, receding hair, black scholar's gown, a brass spyglass at the belt"
+  },
+  {
+    "id": "archimedes",
+    "name": "Archimedes",
+    "place": "Hellenistic Syracuse (Ancient), 230 BCE",
+    "age": "M, 57",
+    "features": "full grey beard, wild curls, sun-browned, short tunic, a compass hanging at the belt"
+  },
+  {
+    "id": "hammurabi",
+    "name": "Hammurabi",
+    "place": "Babylonia (Ancient), 1760 BCE",
+    "age": "M, 50",
+    "features": "long squared beard in rows of curls, round brimmed cap, fringed shawl over one shoulder"
+  },
+  {
+    "id": "socrates",
+    "name": "Socrates",
+    "place": "Periclean Athens (Ancient), 430 BCE",
+    "age": "M, 40",
+    "features": "(brief section 11 already)"
+  },
+  {
+    "id": "ada",
+    "name": "Ada Lovelace",
+    "place": "Victorian Britain (Industrial), 1843",
+    "age": "F, 28",
+    "features": "(brief section 11 already)"
+  },
+  {
+    "id": "gutenberg",
+    "name": "Johannes Gutenberg",
+    "place": "Holy Roman Empire (Rhineland) (Medieval), 1440",
+    "age": "M, 40",
+    "features": "(brief section 11 already)"
+  }
+]
