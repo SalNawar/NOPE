@@ -158,7 +158,7 @@ public static class UiContrastCheck
             return false; // a picture: what shows is unknown, the black and white bounds decide
         if (sprite != null && AssetDatabase.GetAssetPath(sprite) != "Resources/unity_builtin_extra")
         {
-            if (!(Mean(sprite, g.rectTransform, rect) is Color mean))
+            if (!(Mean(sprite, g as Image, g.rectTransform, rect) is Color mean))
                 return false;
             colour *= mean;
         }
@@ -170,8 +170,8 @@ public static class UiContrastCheck
         return a + (1f - a) * colour.a >= 0.995f;
     }
 
-    /// <summary>A sprite's mean colour under a world rect (read from its file), or null when the file cannot be read.</summary>
-    private static Color? Mean(Sprite sprite, RectTransform image, Rect world)
+    /// <summary>A sprite's mean colour under a world rect (read from its file; a sliced image's corners and edges mapped as it draws them), or null when the file cannot be read.</summary>
+    private static Color? Mean(Sprite sprite, Image drawn, RectTransform image, Rect world)
     {
         string path = AssetDatabase.GetAssetPath(sprite.texture);
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
@@ -194,6 +194,15 @@ public static class UiContrastCheck
         float u0 = Mathf.Clamp01((Mathf.Min(min.x, max.x) - local.xMin) / local.width), u1 = Mathf.Clamp01((Mathf.Max(min.x, max.x) - local.xMin) / local.width);
         float v0 = Mathf.Clamp01((Mathf.Min(min.y, max.y) - local.yMin) / local.height), v1 = Mathf.Clamp01((Mathf.Max(min.y, max.y) - local.yMin) / local.height);
         Rect px = sprite.textureRect;
+        if (drawn != null && drawn.type == Image.Type.Sliced && sprite.border != Vector4.zero && drawn.pixelsPerUnit * drawn.pixelsPerUnitMultiplier > 0f)
+        {
+            // A 9-slice keeps its borders at their drawn size: map each side's share through its border, the rest through the stretched centre.
+            float unit = drawn.pixelsPerUnit * drawn.pixelsPerUnitMultiplier;
+            u0 = Slice(u0, local.width, sprite.border.x, sprite.border.z, px.width, unit);
+            u1 = Slice(u1, local.width, sprite.border.x, sprite.border.z, px.width, unit);
+            v0 = Slice(v0, local.height, sprite.border.y, sprite.border.w, px.height, unit);
+            v1 = Slice(v1, local.height, sprite.border.y, sprite.border.w, px.height, unit);
+        }
         float sx = (float)tex.width / sprite.texture.width, sy = (float)tex.height / sprite.texture.height;
         int x0 = Mathf.FloorToInt((px.xMin + u0 * px.width) * sx), x1 = Mathf.CeilToInt((px.xMin + u1 * px.width) * sx);
         int y0 = Mathf.FloorToInt((px.yMin + v0 * px.height) * sy), y1 = Mathf.CeilToInt((px.yMin + v1 * px.height) * sy);
@@ -215,6 +224,19 @@ public static class UiContrastCheck
                 n++;
             }
         return n == 0 || a <= 0f ? new Color(0f, 0f, 0f, 0f) : new Color(r / a, g / a, b / a, a / n);
+    }
+
+    /// <summary>A share <paramref name="t"/> along a sliced image's side of <paramref name="length"/> units as a share of its sprite's <paramref name="pixels"/>: inside a border (of <paramref name="lowPx"/> / <paramref name="highPx"/> sprite pixels, drawn at <paramref name="unit"/> pixels a unit) one to one, between them the stretched centre.</summary>
+    private static float Slice(float t, float length, float lowPx, float highPx, float pixels, float unit)
+    {
+        float low = lowPx / unit, high = highPx / unit, at = t * length;
+        if (length <= low + high)
+            return t;
+        if (at <= low)
+            return at * unit / pixels;
+        if (at >= length - high)
+            return (pixels - (length - at) * unit) / pixels;
+        return (lowPx + (at - low) / (length - low - high) * (pixels - lowPx - highPx)) / pixels;
     }
 
     /// <summary>A rect transform's world-space bounds (the canvases here are axis-aligned).</summary>
