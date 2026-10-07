@@ -27,9 +27,12 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector3 ScannerArtBed = new Vector3(0f, 0.059f, 0.01f);
     private const float ScannerSweepHeight = 0.0625f;
 
-    /// <summary>The cyan glow leaking from the shut lid's edges: its strips' width (metres) and colour.</summary>
-    private const float ScannerSpillWidth = 0.008f;
-    private static readonly Color ScannerSpillColour = new Color(0.2f, 0.85f, 0.8f, 0.45f);
+    /// <summary>The cyan glow leaking from the shut lid's edges: its strips' width (metres) and colour (bright enough to read from the chair through the room's light).</summary>
+    private const float ScannerSpillWidth = 0.012f;
+    private static readonly Color ScannerSpillColour = new Color(0.25f, 0.95f, 0.9f, 0.85f);
+
+    /// <summary>How much wider the sweep bar runs than the art's (along its travel): a broad band of light that reads through the smoked glass from the chair.</summary>
+    private const float ScannerSweepWidth = 3f;
 
     /// <summary>The readout's digits' green (the phosphor's).</summary>
     private static readonly Color ScannerReadoutInk = new Color(0.43f, 1f, 0.59f);
@@ -74,6 +77,7 @@ public static partial class OfficeSceneUIBuilder
 
         Transform sweep = m.Find("SweepBar");
         sweep.localPosition = new Vector3(sweep.localPosition.x, ScannerSweepHeight, sweep.localPosition.z);
+        sweep.localScale = new Vector3(1f, 1f, ScannerSweepWidth);
         sweep.gameObject.SetActive(false);
         Transform lid = m.Find("Lid");
 
@@ -113,6 +117,12 @@ public static partial class OfficeSceneUIBuilder
             x.SetFloat("_Blend", 2f); // additive: light, not paint
             UnityEditor.BaseShaderGUI.SetMaterialKeywords(x);
         });
+        if (glow != null && glow.GetColor("_BaseColor") != ScannerSpillColour)
+        {
+            glow.SetColor("_BaseColor", ScannerSpillColour);
+            EditorUtility.SetDirty(glow);
+            AssetDatabase.SaveAssetIfDirty(glow);
+        }
         PrimitivePart(spill, "Front", PrimitiveType.Cube, new Vector3(b.center.x, y, b.min.z - w / 2f), new Vector3(b.size.x * 0.94f, 0.0008f, w), glow);
         PrimitivePart(spill, "Left", PrimitiveType.Cube, new Vector3(b.min.x - w / 2f, y, b.center.z - 0.01f), new Vector3(w, 0.0008f, b.size.z * 0.8f), glow);
         PrimitivePart(spill, "Right", PrimitiveType.Cube, new Vector3(b.max.x + w / 2f, y, b.center.z - 0.01f), new Vector3(w, 0.0008f, b.size.z * 0.8f), glow);
