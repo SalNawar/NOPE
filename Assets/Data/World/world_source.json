@@ -31564,7 +31564,7 @@
           },
           {
             "key": "home.next.slots",
-            "text": "تابع إلى الخانات"
+            "text": "تابع إلى آلة الحظ"
           },
           {
             "key": "adopt.title",
@@ -36731,6 +36731,14 @@
           {
             "native": "الموظف",
             "english": "the clerk"
+          },
+          {
+            "native": "آلة",
+            "english": "machine"
+          },
+          {
+            "native": "الحظ",
+            "english": "of luck"
           }
         ]
       },
@@ -39704,7 +39712,7 @@
           },
           {
             "key": "home.next.slots",
-            "text": "Συνέχεια στις Θέσεις"
+            "text": "Συνέχεια στον κουλοχέρη"
           },
           {
             "key": "adopt.title",
@@ -44371,6 +44379,10 @@
           {
             "native": "υπογράφων",
             "english": "signatory"
+          },
+          {
+            "native": "κουλοχέρη",
+            "english": "slot machine"
           }
         ]
       },

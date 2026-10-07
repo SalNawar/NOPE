@@ -3806,6 +3806,66 @@ MonoBehaviour:
     text: "Regolamento dell'impiegato \xB7 DESK 3"
     gloss: 0
     tier: 0
+  - key: doc.citizen_travel_passport
+    text: Passaporto di viaggio del cittadino
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit
+    text: Permesso di lavoro
+    gloss: 0
+    tier: 0
+  - key: doc.coin_of_home
+    text: Valuta di casa
+    gloss: 0
+    tier: 0
+  - key: doc.day_wage
+    text: Paga giornaliera
+    gloss: 0
+    tier: 0
+  - key: doc.declarant
+    text: Dichiarante
+    gloss: 0
+    tier: 0
+  - key: doc.departure
+    text: Partenza
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_no
+    text: N. di sfollamento
+    gloss: 0
+    tier: 0
+  - key: doc.effects_carried
+    text: Effetti trasportati
+    gloss: 0
+    tier: 0
+  - key: doc.full_name
+    text: Nome completo
+    gloss: 0
+    tier: 0
+  - key: doc.native_tongue
+    text: Lingua madre
+    gloss: 0
+    tier: 0
+  - key: doc.origin
+    text: Origine
+    gloss: 0
+    tier: 0
+  - key: doc.photo
+    text: Foto
+    gloss: 0
+    tier: 0
+  - key: doc.returnee
+    text: Rimpatriato
+    gloss: 0
+    tier: 0
+  - key: doc.signatory
+    text: Firmatario
+    gloss: 0
+    tier: 0
+  - key: doc.worksite
+    text: Luogo di lavoro
+    gloss: 0
+    tier: 0
   words:
   - native: spegni
     english: Turn off
@@ -4113,7 +4173,7 @@ MonoBehaviour:
     english: companion
   - native: completato
     english: complete
-  - native: Completo
+  - native: completo
     english: full
   - native: comune
     english: common
@@ -5553,7 +5613,7 @@ MonoBehaviour:
     english: spoken (said)
   - native: Dicembre
     english: December
-  - native: dichiarante
+  - native: Dichiarante
     english: declarant
   - native: dichiarare
     english: declare
@@ -5769,8 +5829,20 @@ MonoBehaviour:
     english: voluntary
   - native: voyage
     english: travel (French)
+  - native: dell'impiegato
+    english: of the clerk
   - native: all'inizio
-    english: to the home (start)
+    english: at the start
+  - native: d'atto
+    english: of acknowledgment (presa d'atto)
+  - native: madre
+    english: mother (lingua madre = native tongue)
+  - native: trasportati
+    english: carried
+  - native: Rimpatriato
+    english: returnee
+  - native: Firmatario
+    english: signatory
   - native: dell'ufficio
     english: of the office
   - native: nell'Archivio
@@ -5779,13 +5851,9 @@ MonoBehaviour:
     english: of the other
   - native: dell'icona
     english: of the icon
-  - native: d'atto
-    english: of note
   - native: d'ufficio
     english: of office
   - native: dall'agente
     english: from the officer
   - native: all'ordine
     english: to the order
-  - native: dell'impiegato
-    english: of the clerk

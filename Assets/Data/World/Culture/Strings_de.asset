@@ -3799,6 +3799,66 @@ MonoBehaviour:
     text: "Regelbuch des Sachbearbeiters \xB7 DESK 3"
     gloss: 0
     tier: 0
+  - key: doc.citizen_travel_passport
+    text: "B\xFCrger-Reisepass"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit
+    text: Arbeitserlaubnis
+    gloss: 0
+    tier: 0
+  - key: doc.coin_of_home
+    text: "Heimatw\xE4hrung"
+    gloss: 0
+    tier: 0
+  - key: doc.day_wage
+    text: Tageslohn
+    gloss: 0
+    tier: 0
+  - key: doc.declarant
+    text: Anmelder
+    gloss: 0
+    tier: 0
+  - key: doc.departure
+    text: Abreise
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_no
+    text: Vertriebenen-Nr.
+    gloss: 0
+    tier: 0
+  - key: doc.effects_carried
+    text: "Mitgef\xFChrte Habe"
+    gloss: 0
+    tier: 0
+  - key: doc.full_name
+    text: "Vollst\xE4ndiger Name"
+    gloss: 0
+    tier: 0
+  - key: doc.native_tongue
+    text: Muttersprache
+    gloss: 0
+    tier: 0
+  - key: doc.origin
+    text: Herkunft
+    gloss: 0
+    tier: 0
+  - key: doc.photo
+    text: Foto
+    gloss: 0
+    tier: 0
+  - key: doc.returnee
+    text: "R\xFCckkehrer"
+    gloss: 0
+    tier: 0
+  - key: doc.signatory
+    text: Unterzeichner
+    gloss: 0
+    tier: 0
+  - key: doc.worksite
+    text: Arbeitsort
+    gloss: 0
+    tier: 0
   words:
   - native: bildschirm
     english: Screen
@@ -5904,3 +5964,15 @@ MonoBehaviour:
     english: clerk
   - native: DESK
     english: DESK
+  - native: "Heimatw\xE4hrung"
+    english: coin of home
+  - native: Anmelder
+    english: declarant
+  - native: "Vollst\xE4ndiger"
+    english: full
+  - native: Muttersprache
+    english: native tongue
+  - native: "R\xFCckkehrer"
+    english: returnee
+  - native: Unterzeichner
+    english: signatory

@@ -3747,6 +3747,66 @@ MonoBehaviour:
     text: "\u529E\u4E8B\u5458\u89C4\u5219\u624B\u518C \xB7 DESK 3"
     gloss: 0
     tier: 0
+  - key: doc.citizen_travel_passport
+    text: "\u516C\u6C11\u65C5\u884C\u62A4\u7167"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit
+    text: "\u5DE5\u4F5C\u8BB8\u53EF"
+    gloss: 0
+    tier: 0
+  - key: doc.coin_of_home
+    text: "\u672C\u571F\u8D27\u5E01"
+    gloss: 0
+    tier: 0
+  - key: doc.day_wage
+    text: "\u65E5\u85AA"
+    gloss: 0
+    tier: 0
+  - key: doc.declarant
+    text: "\u7533\u62A5\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.departure
+    text: "\u51FA\u53D1"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_no
+    text: "\u6D41\u79BB\u7F16\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.effects_carried
+    text: "\u643A\u5E26\u7269\u54C1"
+    gloss: 0
+    tier: 0
+  - key: doc.full_name
+    text: "\u5168\u540D"
+    gloss: 0
+    tier: 0
+  - key: doc.native_tongue
+    text: "\u6BCD\u8BED"
+    gloss: 0
+    tier: 0
+  - key: doc.origin
+    text: "\u539F\u7C4D"
+    gloss: 0
+    tier: 0
+  - key: doc.photo
+    text: "\u7167\u7247"
+    gloss: 0
+    tier: 0
+  - key: doc.returnee
+    text: "\u8FD4\u7A0B\u8005"
+    gloss: 0
+    tier: 0
+  - key: doc.signatory
+    text: "\u7B7E\u7F72\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.worksite
+    text: "\u5DE5\u5730"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u5173\u95ED"
     english: Turn off
@@ -5510,7 +5570,15 @@ MonoBehaviour:
     english: November
   - native: "\u5341\u4E8C\u6708"
     english: December
-  - native: N
-    english: N (number format)
   - native: "\u529E\u4E8B\u5458"
     english: clerk
+  - native: "\u672C\u571F"
+    english: home
+  - native: "\u5168\u540D"
+    english: full name
+  - native: "\u8FD4\u7A0B\u8005"
+    english: returnee
+  - native: "\u7B7E\u7F72\u4EBA"
+    english: signatory
+  - native: N
+    english: N (number format)

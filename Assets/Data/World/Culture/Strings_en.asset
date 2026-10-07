@@ -3994,4 +3994,64 @@ MonoBehaviour:
     text: "Clerk's Rulebook \xB7 Desk 3"
     gloss: 0
     tier: 1
+  - key: doc.citizen_travel_passport
+    text: Citizen Travel Passport
+    gloss: 0
+    tier: 1
+  - key: doc.work_permit
+    text: Work Permit
+    gloss: 0
+    tier: 1
+  - key: doc.coin_of_home
+    text: Coin of Home
+    gloss: 0
+    tier: 1
+  - key: doc.day_wage
+    text: Day Wage
+    gloss: 0
+    tier: 1
+  - key: doc.declarant
+    text: Declarant
+    gloss: 0
+    tier: 1
+  - key: doc.departure
+    text: Departure
+    gloss: 0
+    tier: 1
+  - key: doc.displacement_no
+    text: Displacement No.
+    gloss: 0
+    tier: 1
+  - key: doc.effects_carried
+    text: Effects Carried
+    gloss: 0
+    tier: 1
+  - key: doc.full_name
+    text: Full Name
+    gloss: 0
+    tier: 1
+  - key: doc.native_tongue
+    text: Native Tongue
+    gloss: 0
+    tier: 1
+  - key: doc.origin
+    text: Origin
+    gloss: 0
+    tier: 1
+  - key: doc.photo
+    text: Photo
+    gloss: 0
+    tier: 1
+  - key: doc.returnee
+    text: Returnee
+    gloss: 0
+    tier: 1
+  - key: doc.signatory
+    text: Signatory
+    gloss: 0
+    tier: 1
+  - key: doc.worksite
+    text: Worksite
+    gloss: 0
+    tier: 1
   words: []

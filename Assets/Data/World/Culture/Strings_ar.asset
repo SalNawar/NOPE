@@ -3372,7 +3372,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.next.slots
-    text: "\u062A\u0627\u0628\u0639 \u0625\u0644\u0649 \u0627\u0644\u062E\u0627\u0646\u0627\u062A"
+    text: "\u062A\u0627\u0628\u0639 \u0625\u0644\u0649 \u0622\u0644\u0629 \u0627\u0644\u062D\u0638"
     gloss: 0
     tier: 0
   - key: adopt.title
@@ -4213,6 +4213,66 @@ MonoBehaviour:
       \xB7 DESK 3"
     gloss: 0
     tier: 0
+  - key: doc.citizen_travel_passport
+    text: "\u062C\u0648\u0627\u0632 \u0633\u0641\u0631 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit
+    text: "\u062A\u0635\u0631\u064A\u062D \u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.coin_of_home
+    text: "\u0639\u0645\u0644\u0629 \u0627\u0644\u0645\u0648\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.day_wage
+    text: "\u0627\u0644\u0623\u062C\u0631 \u0627\u0644\u064A\u0648\u0645\u064A"
+    gloss: 0
+    tier: 0
+  - key: doc.declarant
+    text: "\u0627\u0644\u0645\u0635\u0631\u062D"
+    gloss: 0
+    tier: 0
+  - key: doc.departure
+    text: "\u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_no
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0646\u0632\u0648\u062D"
+    gloss: 0
+    tier: 0
+  - key: doc.effects_carried
+    text: "\u0627\u0644\u0623\u0645\u062A\u0639\u0629 \u0627\u0644\u0645\u062D\u0645\u0648\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.full_name
+    text: "\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.native_tongue
+    text: "\u0627\u0644\u0644\u063A\u0629 \u0627\u0644\u0623\u0645"
+    gloss: 0
+    tier: 0
+  - key: doc.origin
+    text: "\u0627\u0644\u0623\u0635\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.photo
+    text: "\u0627\u0644\u0635\u0648\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.returnee
+    text: "\u0627\u0644\u0639\u0627\u0626\u062F"
+    gloss: 0
+    tier: 0
+  - key: doc.signatory
+    text: "\u0627\u0644\u0645\u0648\u0642\u0639"
+    gloss: 0
+    tier: 0
+  - key: doc.worksite
+    text: "\u0645\u0648\u0642\u0639 \u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u0625\u0637\u0641\u0627\u0621"
     english: Turn off
@@ -4908,8 +4968,6 @@ MonoBehaviour:
     english: occupation
   - native: "\u0627\u0644\u0645\u0648\u0627\u0637\u0646\u064A\u0646"
     english: citizens
-  - native: "\u0627\u0644\u0645\u0648\u0642\u0639"
-    english: site
   - native: "\u0627\u0644\u0645\u064A\u0644\u0627\u062F"
     english: birth
   - native: "\u0627\u0644\u0646\u0627\u0632\u062D\u0648\u0646"
@@ -6382,5 +6440,17 @@ MonoBehaviour:
     english: is cancelled
   - native: "\u064A\u0648\u062B\u0642"
     english: is documented
+  - native: "\u0627\u0644\u0645\u0648\u0637\u0646"
+    english: home
+  - native: "\u0627\u0644\u0623\u0645"
+    english: mother (native)
+  - native: "\u0627\u0644\u0639\u0627\u0626\u062F"
+    english: returnee
+  - native: "\u0627\u0644\u0645\u0648\u0642\u0639"
+    english: signatory; site
   - native: "\u0627\u0644\u0645\u0648\u0638\u0641"
     english: the clerk
+  - native: "\u0622\u0644\u0629"
+    english: machine
+  - native: "\u0627\u0644\u062D\u0638"
+    english: of luck
