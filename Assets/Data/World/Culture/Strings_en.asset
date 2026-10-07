@@ -249,7 +249,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tray.stability
-    text: 'Stability: {0}'
+    text: Stability
     gloss: 0
     tier: 1
   - key: taskbar.desk
@@ -293,11 +293,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: verdict.wrong
-    text: WRONG  ({0} stability)
+    text: WRONG
     gloss: 0
     tier: 0
   - key: verdict.wrongPenalty
-    text: WRONG  ({0} stability, -{1} {2})
+    text: WRONG  (-{0} {1})
     gloss: 0
     tier: 0
   - key: verdict.simpleCorrect
@@ -1770,8 +1770,8 @@ MonoBehaviour:
     text: 'Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)'
     gloss: 0
     tier: 0
-  - key: results.stability
-    text: 'Timeline stability: {0} ({1} today)'
+  - key: results.timeline
+    text: The timeline tonight
     gloss: 0
     tier: 0
   - key: results.citations
@@ -2200,10 +2200,6 @@ MonoBehaviour:
     text: 'Penalty: -{0} {1}.'
     gloss: 0
     tier: 0
-  - key: citation.stability
-    text: Stability {0}
-    gloss: 0
-    tier: 0
   - key: citation.layout
     text: '{0}
 
@@ -2213,7 +2209,7 @@ MonoBehaviour:
 
       {3}
 
-      {4}  {5}'
+      {4}'
     gloss: 0
     tier: 0
   - key: rule.unknownPlace
@@ -2444,7 +2440,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tooltip.stability
-    text: 'Timeline stability: {0}'
+    text: The timeline. Keep it between its banks.
     gloss: 0
     tier: 0
   - key: tooltip.value

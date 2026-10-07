@@ -22079,7 +22079,7 @@
       },
       {
         "key": "tray.stability",
-        "text": "Stability: {0}",
+        "text": "Stability",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -22145,13 +22145,13 @@
       },
       {
         "key": "verdict.wrong",
-        "text": "WRONG  ({0} stability)",
+        "text": "WRONG",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "verdict.wrongPenalty",
-        "text": "WRONG  ({0} stability, -{1} {2})",
+        "text": "WRONG  (-{0} {1})",
         "gloss": "None",
         "tier": "Full"
       },
@@ -24328,8 +24328,8 @@
         "tier": "Full"
       },
       {
-        "key": "results.stability",
-        "text": "Timeline stability: {0} ({1} today)",
+        "key": "results.timeline",
+        "text": "The timeline tonight",
         "gloss": "None",
         "tier": "Full"
       },
@@ -24964,14 +24964,8 @@
         "tier": "Full"
       },
       {
-        "key": "citation.stability",
-        "text": "Stability {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "citation.layout",
-        "text": "{0}\n<b>{1}</b>\n{2}\n{3}\n{4}  {5}",
+        "text": "{0}\n<b>{1}</b>\n{2}\n{3}\n{4}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25301,7 +25295,7 @@
       },
       {
         "key": "tooltip.stability",
-        "text": "Timeline stability: {0}",
+        "text": "The timeline. Keep it between its banks.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -26285,7 +26279,7 @@
           },
           {
             "key": "tray.stability",
-            "text": "الاستقرار: {0}"
+            "text": "الاستقرار"
           },
           {
             "key": "taskbar.desk",
@@ -26541,7 +26535,7 @@
           },
           {
             "key": "tray.stability",
-            "text": "Σταθερότητα: {0}"
+            "text": "Σταθερότητα"
           },
           {
             "key": "taskbar.desk",
@@ -26793,7 +26787,7 @@
           },
           {
             "key": "tray.stability",
-            "text": "Stabilità: {0}"
+            "text": "Stabilità"
           },
           {
             "key": "taskbar.desk",
@@ -27073,7 +27067,7 @@
           },
           {
             "key": "tray.stability",
-            "text": "Stabilität: {0}"
+            "text": "Stabilität"
           },
           {
             "key": "taskbar.desk",
@@ -27305,7 +27299,7 @@
           },
           {
             "key": "tray.stability",
-            "text": "稳定度：{0}"
+            "text": "稳定度"
           },
           {
             "key": "taskbar.desk",
@@ -27533,7 +27527,7 @@
           },
           {
             "key": "tray.stability",
-            "text": "安定度：{0}"
+            "text": "安定度"
           },
           {
             "key": "taskbar.desk",

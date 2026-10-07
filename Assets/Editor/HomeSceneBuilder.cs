@@ -53,6 +53,8 @@ public static class HomeSceneBuilder
         // The wallet reads the leading culture's currency (UiText): themed like the office tray's, so a culture's own script finds its font.
         Tag(moneyText, ThemeRoleId.Tray, ThemePart.Ink, fit: true);
         LayOutHud(hud, kit, dayText, moneyText);
+        // The Helix River fills the HUD's StabilitySlot (stability is never a number).
+        HelixRiverAuthoring.UiRiver(hud.Find("StabilitySlot"), "River", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, HomeRiverZoom, 0.18f, false);
 
         // --- Expenses panel (the bills) ---
         Transform expenses = FindOrCreatePanel(uiRoot, "ExpensesPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -189,6 +191,7 @@ public static class HomeSceneBuilder
         slot.gameObject.SetActive(false);
         sleep.gameObject.SetActive(false);
 
+        HelixRiverAuthoring.Wire(homeUI.gameObject.scene, null);
         UiContrastCheck.Check(canvas, canvas.GetComponent<CanvasScaler>() is CanvasScaler s && s.referenceResolution.y > 0f ? 1080f / s.referenceResolution.y : 1f, null, null);
         EditorSceneManager.MarkSceneDirty(homeUI.gameObject.scene);
         Debug.Log("[TimeDesk] Home UI built and wired. Save the scene.");
@@ -251,6 +254,9 @@ public static class HomeSceneBuilder
         scaler.matchWidthOrHeight = 0f;
     }
 
+    /// <summary>How much of the Helix River's glass the HUD's slot shows: a thin strip, so closer.</summary>
+    private const float HomeRiverZoom = 2f;
+
     /// <summary>The HUD's height (reference px), along the top of the screen.</summary>
     private const float HudHeight = 50f;
 
@@ -261,8 +267,8 @@ public static class HomeSceneBuilder
     /// Re-applies the HUD on every build: along the top of the screen, the
     /// day's and the wallet's phosphor readouts (the kit's lcd_glass, their
     /// texts moved into them) at the top left, and at the top right the
-    /// StabilitySlot, an empty place for the Helix River (the timeline's
-    /// stability is never shown as a number; Track T draws it there). The old
+    /// StabilitySlot, where Build fills the Helix River (the timeline's
+    /// stability is never shown as a number). The old
     /// dark strip and the stability line are removed.
     /// </summary>
     private static void LayOutHud(Transform hud, UiKitSO kit, TMP_Text day, TMP_Text money)
@@ -276,6 +282,7 @@ public static class HomeSceneBuilder
         rt.sizeDelta = new Vector2(0f, HudHeight);
         KitScreens.Remove(hud, "Backing");
         KitScreens.Remove(hud, "StabilityText");
+        KitScreens.Remove(hud, "TimelineStrip");
 
         KitScreens.Readout(hud, "DayReadout", kit, day, 24f, 2f, DayReadoutSize);
         KitScreens.Readout(hud, "WalletReadout", kit, money, 24f + DayReadoutSize.x + 16f, 2f, WalletReadoutSize);

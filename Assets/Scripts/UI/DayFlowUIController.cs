@@ -32,7 +32,7 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>Results title ("Day 3 — Shift Report").</summary>
     [SerializeField] private TMP_Text resultsTitleText;
 
-    /// <summary>Results body (pay breakdown, citations, stability).</summary>
+    /// <summary>Results body (pay breakdown, citations, departures; stability is the panel's Helix River, never a number).</summary>
     [SerializeField] private TMP_Text resultsBodyText;
 
     /// <summary>Leaves the office for the home phase.</summary>
@@ -137,7 +137,8 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// (the right calls times their pay, the free warnings, the wrong calls
     /// times their fine, the stranding fines, the Debt Relief instalment, any
     /// other money, the shift's net in bold, tonight's bills and, in bold, the
-    /// wallet after them), then stability, citations and the departures.
+    /// wallet after them), then citations and the departures (the panel's
+    /// Helix River shows the timeline: no stability number).
     /// Invokes onGoHome when the player clicks Go Home (or immediately if unwired).
     /// </summary>
     public void ShowResults(WorldState world, ShiftLedger ledger, ShiftReport report, ShiftHours hours, Action onGoHome)
@@ -181,7 +182,6 @@ public sealed class DayFlowUIController : MonoBehaviour
             Row(UiText.Get("results.row.bills"), -report.Bills);
             sb.AppendLine(UiText.Format("results.rowBold", UiText.Get("results.row.after"), UiText.Format("results.wallet", report.WalletAfterBills, report.WalletNow)));
             sb.AppendLine();
-            sb.AppendLine(UiText.Format("results.stability", StabilityRules.Format(world.timelineStability), StabilityRules.FormatChange(ledger.TotalStabilityDelta)));
 
             if (world.citationsToday > 0)
                 sb.AppendLine(UiText.Format("results.citations", world.citationsToday));
