@@ -14,8 +14,9 @@
 //   with a passport field linked to a rulebook row, the passport picked up, dropped and moved to the reading view, the
 //   rulebook's tabs, the city's look-left pan and back (only the DESK tab shows there), every pull tab (PC, stamps,
 //   city), the dater rack (the label lip under the daters); then the full day to the shift report, every traveller
-//   decided with the desk machine: a dater pressed over a passport field (its ink over the printed box), a dater on the
-//   booklet's visa page, the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
+//   decided with the desk machine: with the rack out the passport's visa page lies under the daters and the rack covers
+//   none of its fields or its photo; a dater dragged over a passport field (its ink over the printed box), a dater
+//   pressed where it hangs (it prints on the booklet's visa page), the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
 //   cover flipped up, the button pressed); the Citation flying onto the desk (wholly on the screen);
 // - home, night 1: the bills (each toggled; Heating must leave Electricity alone), the pet corner (pat, play), the House
 //   (a card selected, bought when the wallet allows), the Night Slots machine (idle, a lever pull, the spin landing,
@@ -322,7 +323,7 @@ public static class _TimeDeskQASweep
             if (decided == 2)
                 yield return Detain(o, "d1_detain");
             else
-                yield return Decide(o, accept, decided < 2 ? $"d1_slot{decided + 1}" : null, decided == 0 ? PressAt.Field : decided == 1 ? PressAt.Visa : PressAt.Anywhere);
+                yield return Decide(o, accept, decided < 2 ? $"d1_slot{decided + 1}" : null, decided == 0 ? PressAt.Field : decided == 1 ? PressAt.Hanging : PressAt.Anywhere);
             decided++;
             yield return Seconds(0.5f);
             if (o.Citations.Count > citationsBefore)
@@ -659,8 +660,8 @@ public static class _TimeDeskQASweep
 
     // ---- The stamps: the decision ----
 
-    /// <summary>Where a dater is pressed on the passport: anywhere on it, over one of its printed fields' boxes, or on the booklet's visa page (its stamp area).</summary>
-    private enum PressAt { Anywhere, Field, Visa }
+    /// <summary>Where a dater is pressed on the passport: dragged anywhere on it, dragged over one of its printed fields' boxes, dragged onto the booklet's visa page (its stamp area), or clicked where it hangs (it must print on the visa page).</summary>
+    private enum PressAt { Anywhere, Field, Visa, Hanging }
 
     /// <summary>
     /// A traveller decided with the desk machine (the desk machine spec): the
@@ -687,6 +688,7 @@ public static class _TimeDeskQASweep
         yield return Seconds(0.9f);
         Call(o.Desk, "HandlePaperClicked", passport, -1);
         yield return Frames(2);
+        yield return RackClear(o, passport, shotTag);
         Vector3 target = passport.Sheet.TransformPoint(new Vector3(0f, passport.Size.y * 0.2f, 0f));
         Bounds field = default;
         FaceRect visa = default;
@@ -702,7 +704,7 @@ public static class _TimeDeskQASweep
             else
                 Check(false, $"{shotTag}: the passport's field {row} has a box to press over");
         }
-        else if (at == PressAt.Visa)
+        if (at == PressAt.Visa || at == PressAt.Hanging)
         {
             var form = (PlacedForm)Field(passport, "_form");
             float scale = (float)Field(passport, "_scale");
@@ -710,9 +712,19 @@ public static class _TimeDeskQASweep
             float cx = (visa.XMin + visa.XMax) / 2f, cy = (visa.YMin + visa.YMax) / 2f;
             target = passport.Sheet.TransformPoint(new Vector3((cx - form.Width / 2f) * scale, (form.PageHeight / 2f - cy) * scale, 0f));
         }
-        yield return DragStamp(o, accept, target);
+        if (at == PressAt.Hanging)
+        {
+            // A click on a hanging dater presses it where it hangs (DeskStampTray.Press, as PointerHold's quick click does).
+            var click = (Clickable)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp");
+            object handle = ((Array)Field(o.Stamps, "_handles")).Cast<object>().First(h => (Clickable)Field(h, "Click") == click);
+            Call(o.Stamps, "Press", handle, false);
+        }
+        else
+        {
+            yield return DragStamp(o, accept, target);
+        }
         yield return Settle(() => !o.Stamps.IsMoving, 5f);
-        Check(o.Stamps.HasVerdict, $"the {(accept ? "APPROVED" : "DENIED")} dater dragged onto the passport stamps it ({o.Stamps.LastPress})");
+        Check(o.Stamps.HasVerdict, $"the {(accept ? "APPROVED" : "DENIED")} dater {(at == PressAt.Hanging ? "pressed where it hangs" : "dragged onto the passport")} stamps it ({o.Stamps.LastPress})");
         Renderer mark = passport.GetComponentsInChildren<Renderer>(true).FirstOrDefault(r => r.name == "Stamp_1" && r.gameObject.activeSelf);
         if (mark != null && at != PressAt.Anywhere)
             InkOnTop(passport, mark, shotTag);
@@ -721,7 +733,7 @@ public static class _TimeDeskQASweep
             bool over = mark.bounds.min.x < field.max.x && field.min.x < mark.bounds.max.x && mark.bounds.min.z < field.max.z && field.min.z < mark.bounds.max.z;
             Check(over, $"{shotTag}: the dater pressed over the passport's field prints its mark over that field's box (mark {mark.bounds.center}, box {field.center})");
         }
-        if (mark != null && at == PressAt.Visa)
+        if (mark != null && (at == PressAt.Visa || at == PressAt.Hanging))
         {
             float scale = (float)Field(passport, "_scale");
             Vector2 page = passport.PagePoint(mark.bounds.center) / scale;
@@ -747,6 +759,57 @@ public static class _TimeDeskQASweep
         Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
         yield return Frames(3);
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"the stamped passport handed back on the counter decides the traveller ({o.Game.Ledger.verdicts.Count - before} verdict)");
+    }
+
+    /// <summary>
+    /// With the rack out in the reading view (the orchestrator's check from
+    /// run 7's contact sheets): the passport's visa page lies under the daters
+    /// (its stamp area's middle within 1 cm of the dies' middle), and no part
+    /// of the rack covers any of its field boxes or its photo on the screen.
+    /// </summary>
+    private static IEnumerator RackClear(Office o, DeskDocument paper, string tag)
+    {
+        bool shots = tag != null;
+        tag ??= "a traveller";
+        yield return Settle(() => !paper.IsSliding && !o.Stamps.IsMoving, 3f);
+        yield return Seconds(0.4f);
+        var view = (DeskView)Field(o.Desk, "deskView");
+        Camera cam = OfficeRaycaster().eventCamera;
+        var rack = (Transform)Field(o.Stamps, "rack");
+        var parts = rack.GetComponentsInChildren<Renderer>(false).Select(r => (name: r.name, rect: ScreenBounds(cam, r.bounds))).ToList();
+        var fields = new List<(string name, Rect rect)>();
+        for (int s = 0; s < paper.SlotCount; s++)
+            if (paper.TryBoundsOf(s, out Bounds b))
+                fields.Add(($"field {s}", ScreenBounds(cam, b)));
+        var photo = (GameObject)Field(paper, "photoSlot");
+        Renderer[] photoParts = photo != null && photo.activeInHierarchy ? photo.GetComponentsInChildren<Renderer>(false) : new Renderer[0];
+        if (photoParts.Length > 0)
+            fields.Add(("photo", ScreenBounds(cam, BoundsOf(photoParts))));
+        var covered = new List<string>();
+        foreach ((string name, Rect rect) f in fields)
+            foreach ((string name, Rect rect) p in parts)
+            {
+                float w = Mathf.Min(f.rect.xMax, p.rect.xMax) - Mathf.Max(f.rect.xMin, p.rect.xMin), h = Mathf.Min(f.rect.yMax, p.rect.yMax) - Mathf.Max(f.rect.yMin, p.rect.yMin);
+                if (w > 2f && h > 2f)
+                {
+                    covered.Add($"{f.name} {Fmt(f.rect)} under {p.name} {Fmt(p.rect)}");
+                    break;
+                }
+            }
+        Check(view != null && view.IsOn && fields.Count > 0 && covered.Count == 0,
+              $"{tag}: with the rack out in the reading view it covers none of the passport's {fields.Count} field boxes and photo (reading view {view != null && view.IsOn}){List(covered)}");
+        if (paper.TryStampAreaOffset(out Vector3 offset) && o.Stamps.TryDiesPoint(out Vector3 dies))
+        {
+            Vector3 area = paper.transform.position + offset;
+            float off = new Vector2(area.x - dies.x, area.z - dies.z).magnitude;
+            Check(off < 0.01f, $"{tag}: the passport's visa page lies under the daters ({off * 1000f:0} mm from the dies' middle)");
+        }
+        else
+        {
+            Check(false, $"{tag}: the passport has a stamp area and the rack is laid");
+        }
+        if (shots)
+            yield return Shot("office", $"{tag}_rack_out_reading");
     }
 
     /// <summary>DETAIN (the third verdict, any time a traveller is here, stamped or not): the desk's covered button on the screen, its clear cover flipped up, the red button pressed, one detention.</summary>
@@ -1098,15 +1161,19 @@ public static class _TimeDeskQASweep
                 yield return Shot("home", "slots_landed");
             }
             w.money = 0;
+            Call(machine, "ShowWallet", 0); // the machine's credits and the HUD's wallet, as a spin keeps them
             Call(machine, "RefreshBroke");
             yield return Frames(2);
             var price = (TMP_Text)Field(machine, "priceText");
+            string hud = ((TMP_Text)Field(ui, "moneyText")).text, credits = ((TMP_Text)Field(machine, "creditsText")).text;
+            Check(hud.StartsWith("0 ") && credits.StartsWith("0 "), $"home: the HUD's wallet and the machine's credits read the empty wallet ('{hud}', '{credits}')");
             Check(spin != null && !spin.interactable && leverLock != null && leverLock.activeInHierarchy, $"home: with an empty wallet the machine cannot spin: SPIN rests, the lever is locked, the price reads '{price?.text}'");
             Call(machine, "HandleLeverPressed", new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = new Vector2(100f, 600f) });
             yield return Seconds(0.3f);
             Check(w.money == 0 && !machine.Spinning, "home: a pull the wallet cannot afford takes nothing and spins nothing");
             yield return Shot("home", "slots_cannot_afford");
             w.money = keep;
+            Call(machine, "ShowWallet", keep);
             Call(machine, "RefreshBroke");
             ((Button)Field(ui, "slotContinueButton")).onClick.Invoke();
             yield return Seconds(0.8f);
