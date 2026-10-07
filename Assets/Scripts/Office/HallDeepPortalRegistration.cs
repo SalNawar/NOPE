@@ -1,31 +1,47 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-/// <summary>Registers gameplay portal glow to the approved painted openings.</summary>
+/// <summary>Registers gameplay portal glow to the approved painted openings: each
+/// PortalEffect's sprite draws in <see cref="clippedGlow"/>, which confines the glow
+/// to the ring's inner opening. The effects' sprites are found once per loaded scene
+/// (the gameplay layer loads after the hall), not every frame.</summary>
 [DefaultExecutionOrder(230)]
 public sealed class HallDeepPortalRegistration : MonoBehaviour
 {
+    /// <summary>The hall's registered architecture drawing; the glow is applied only while it has a sprite.</summary>
     [SerializeField] SpriteRenderer architecture;
+
+    /// <summary>The clipped portal glow material (NOPE/Hall Deep Portal Glow).</summary>
     [SerializeField] Material clippedGlow;
-    PortalEffect[] effects;
-    MaterialPropertyBlock block;
+
+    SpriteRenderer[] glows;
+
+    /// <summary>Wires the drawing and the glow material (the art's DeepRoom authoring).</summary>
     public void Configure(SpriteRenderer drawing,Material glow){architecture=drawing;clippedGlow=glow;}
+
+    void OnEnable()
+    {
+        glows=null;
+        SceneManager.sceneLoaded+=Forget;
+    }
+
+    void OnDisable()=>SceneManager.sceneLoaded-=Forget;
+
+    void Forget(Scene scene,LoadSceneMode mode)=>glows=null;
+
     void LateUpdate()
     {
         if(architecture==null || architecture.sprite==null || clippedGlow==null)return;
-        if(effects==null || effects.Length==0)effects=FindObjectsByType<PortalEffect>(FindObjectsSortMode.None);
-        block??=new MaterialPropertyBlock();
-        foreach(var effect in effects)
-        {
-            if(effect==null)continue;
-            var renderer=effect.GetComponentInChildren<SpriteRenderer>(true);
-            if(renderer==null)continue;
-            if(renderer.sharedMaterial!=clippedGlow)renderer.sharedMaterial=clippedGlow;
-            renderer.GetPropertyBlock(block);
-            var sprite=architecture.sprite;
-            block.SetMatrix("_ArtToLocal",architecture.transform.worldToLocalMatrix);
-            block.SetVector("_CanvasMetrics",new Vector4(sprite.pixelsPerUnit,sprite.pivot.x,sprite.pivot.y,0));
-            block.SetVector("_CanvasSize",new Vector4(sprite.rect.width,sprite.rect.height,0,0));
-            renderer.SetPropertyBlock(block);
-        }
+        if(glows==null || !Application.isPlaying)Collect();
+        foreach(var renderer in glows)
+            if(renderer!=null && renderer.sharedMaterial!=clippedGlow)renderer.sharedMaterial=clippedGlow;
+    }
+
+    void Collect()
+    {
+        var effects=FindObjectsByType<PortalEffect>(FindObjectsSortMode.None);
+        glows=new SpriteRenderer[effects.Length];
+        for(int i=0;i<effects.Length;i++)
+            glows[i]=effects[i].GetComponentInChildren<SpriteRenderer>(true);
     }
 }
