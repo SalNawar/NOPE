@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 242. Full regeneration is NOT complete.
+Saved: 266. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -246,3 +246,27 @@ Saved: 242. Full regeneration is NOT complete.
 | premade_aristotle__thinking_c | visually reviewed; registration pending |
 | premade_aristotle__objecting_c | visually reviewed; registration pending |
 | premade_aristotle_photo | visually reviewed; registration pending |
+| premade_hokusai_neutral | visually reviewed; registration pending |
+| premade_hokusai_happy | visually reviewed; registration pending |
+| premade_hokusai_angry | visually reviewed; registration pending |
+| premade_hokusai_worried | visually reviewed; registration pending |
+| premade_hokusai__explaining_a | visually reviewed; registration pending |
+| premade_hokusai__thinking_a | visually reviewed; registration pending |
+| premade_hokusai__objecting_a | visually reviewed; registration pending |
+| premade_hokusai_photo | visually reviewed; registration pending |
+| premade_genghis_neutral | visually reviewed; registration pending |
+| premade_genghis_happy | visually reviewed; registration pending |
+| premade_genghis_angry | visually reviewed; registration pending |
+| premade_genghis_worried | visually reviewed; registration pending |
+| premade_genghis__explaining_b | visually reviewed; registration pending |
+| premade_genghis__thinking_b | visually reviewed; registration pending |
+| premade_genghis__objecting_b | visually reviewed; registration pending |
+| premade_genghis_photo | visually reviewed; registration pending |
+| premade_qinshihuang_neutral | visually reviewed; registration pending |
+| premade_qinshihuang_happy | visually reviewed; registration pending |
+| premade_qinshihuang_angry | visually reviewed; registration pending |
+| premade_qinshihuang_worried | visually reviewed; registration pending |
+| premade_qinshihuang__explaining_c | visually reviewed; registration pending |
+| premade_qinshihuang__thinking_c | visually reviewed; registration pending |
+| premade_qinshihuang__objecting_c | visually reviewed; registration pending |
+| premade_qinshihuang_photo | visually reviewed; registration pending |

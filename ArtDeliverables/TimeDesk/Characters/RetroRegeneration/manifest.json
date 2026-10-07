@@ -4956,6 +4956,459 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai_neutral",
+      "family": "unique",
+      "id": "hokusai",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Katsushika Hokusai age70 in Edo1830, elderly Japanese male artist. Slight wiry narrow build, thin angular face with sunken cheeks, heavy eyelids and pronounced age lines, bald crown with small grey topknot and sparse grey side hair, clean-shaven. Plain faded indigo kosode with subtly worn fabric, muted grey narrow obi, pale lower underrobe, simple straw sandals. Dark ink stains only on fingers. Hunched slight elderly shoulders but fully frontal, distinct non-glamorous aged face. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-30d182f2-ead2-49fa-92a9-04addf11074f.png",
+      "path": "Raw/premade_hokusai_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c1af66e3072cc50c2b837bde35cd22a474be551bd9d863ec55ee414f31a15f39",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai_happy",
+      "id": "hokusai",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2810dbf0-e614-4859-a657-d224e50daf08.png",
+      "path": "Raw/premade_hokusai_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8a199a6cd77adcca98e659bfd0bb7a81e5947bd006b428f84ba708b10cc7c43e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai_angry",
+      "id": "hokusai",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-052ba346-77a0-4dc6-9756-3b90da7ff7b3.png",
+      "path": "Raw/premade_hokusai_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f5054c5c8a69375aebdb3c0734bc4dcc045968d5b62c0dfd4594d0a5cfefe5ca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai_worried",
+      "id": "hokusai",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9e6026b8-cf24-4a47-bc47-d22577999f8b.png",
+      "path": "Raw/premade_hokusai_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "218455302b561c137bcae8b19eaeb3fe9f2db705c7a8fd594c9b526404865a69",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai__explaining_a",
+      "id": "hokusai",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_a",
+      "change": "RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.\n\nCorrection: Edit only the raised right hand (viewer left): restore small irregular dark blue-black artist ink stains on its fingertips and nails, matching the lowered left hand. Keep all anatomy, pose, face, clothing, texture, framing and solid green background exactly unchanged. No ink on face. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-64e4fddf-b72d-4070-b3d9-d7fc173df01b.png",
+      "path": "Raw/premade_hokusai__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "73e8ce04267d16d64511d93bd5496d7d5498ad99ac694f6771ca55165775497c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai__thinking_a",
+      "id": "hokusai",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_a",
+      "change": "RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.\n\nCorrection: Edit only the raised right hand (viewer left): restore small irregular dark blue-black artist ink stains on its fingertips and nails, matching the lowered left hand. Keep all anatomy, pose, face, clothing, texture, framing and solid green background exactly unchanged. No ink on face. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-820150f0-3454-44d3-8d8a-5ff3f52440c6.png",
+      "path": "Raw/premade_hokusai__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0f4c6b4cbe952e7129f3040f16cb492ea07b3f0e3cd400b718275a6497277f9a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai__objecting_a",
+      "id": "hokusai",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_a",
+      "change": "RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.\n\nCorrection: Edit only raised right hand viewer left: add small irregular dark blue-black artist ink stains to fingertips and nails, matching lowered hand. Preserve every other detail including pose anatomy face costume texture framing solid green background. No ink on face. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-195f6748-b3fc-4a7c-b279-a32ee1d08361.png",
+      "path": "Raw/premade_hokusai__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a972177d30b746da5fe25c554fcd796cb4187b0e4e870ebdee4f6132990a65ca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_hokusai_photo",
+      "family": "unique_photo",
+      "id": "hokusai",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical clothing with year2150 civilian passport clothing: faded slate work coverall over plain cream undershirt, practical dark shoes. Remove historical topknot, keep bald crown and tidy sparse grey side hair. Clean ink stains from hands for passport. Preserve face age narrow frail build neutral expression and arms-down pose. All clothing below chin.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical clothing with year2150 civilian passport clothing: faded slate work coverall over plain cream undershirt, practical dark shoes. Remove historical topknot, keep bald crown and tidy sparse grey side hair. Clean ink stains from hands for passport. Preserve face age narrow frail build neutral expression and arms-down pose. All clothing below chin. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-478e3d31-556b-4b3e-a1c7-7f5ef2c88b82.png",
+      "path": "Raw/premade_hokusai_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "856ed93fae195486a8cd427cbfb1bb6142eadd737c474df4c01410ee15754f85",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis_neutral",
+      "family": "unique",
+      "id": "genghis",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Genghis Khan age53 at Zhongdu1215, Mongolian man. Broad stocky heavy torso, weathered broad face with high wide cheekbones, narrow dark eyes, sun-weathered medium tan skin, long drooping dark moustache streaked grey and small chin beard. Plain fur-brimmed toortsog hat, dark teal heavy textured deel robe with diagonal closure, muted ochre wide cloth sash, sturdy dark leather riding boots. Unarmed no armour no insignia no jewellery. Stern but neutral, robust ordinary middleaged proportions, not a model. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f518b9ec-3321-49ca-9f23-f34ce05c24f1.png",
+      "path": "Raw/premade_genghis_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "693667b806f4eb6100db3b2744fe6d4795faa57e70d2fdf297e6b063472cf212",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis_happy",
+      "id": "genghis",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b8cbffda-2b27-4b0b-8252-68209697cca2.png",
+      "path": "Raw/premade_genghis_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3936815acef6824b2a29af56ee41484d8b3420a53b43af7082d7627ef9da2fba",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis_angry",
+      "id": "genghis",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-57c3f177-9144-480b-adfc-c95a43ba20f5.png",
+      "path": "Raw/premade_genghis_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bfd7f0b4bc591ac83c66836b29a91dc1d4891b971de6d5db931ade1d073d1c32",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis_worried",
+      "id": "genghis",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a45e56a7-b2b3-4130-bd8e-1fcafefe39fe.png",
+      "path": "Raw/premade_genghis_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f19bdadccc2cd5ed9156e2a0725d80b390d14401a184aa4bbb23e212ec8cc538",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis__explaining_b",
+      "id": "genghis",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_b",
+      "change": "Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c98218a5-09f2-48aa-86d8-0f5b6bae1171.png",
+      "path": "Raw/premade_genghis__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d4106436db86873b7436a13ac182d1fd9f504f973d26b99579a493153dba0bbc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis__thinking_b",
+      "id": "genghis",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_b",
+      "change": "LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c9cb84a5-dd9d-44c9-90ec-99ac020035c1.png",
+      "path": "Raw/premade_genghis__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "92b6e0147072b922271c990d8f714284f44c89a154b0bc88fe5d4426f7aefa7f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis__objecting_b",
+      "id": "genghis",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_b",
+      "change": "Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8eca7233-6f61-495d-9014-a469acf677f9.png",
+      "path": "Raw/premade_genghis__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3975715a83dbd625c90b992801d5b9c06b7373ea38e6ee29f79d6ae0b64f35d7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_genghis_photo",
+      "family": "unique_photo",
+      "id": "genghis",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical clothes and hat with year2150 civilian passport clothing: plain muted brown collared utility jacket over cream shirt, dark work trousers, simple sturdy shoes. Remove hat and sash, reveal neat short black hair with grey temples. Preserve moustache beard facial structure stocky build age neutral expression arms-down pose. Clothing below chin, no historical accessories.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical clothes and hat with year2150 civilian passport clothing: plain muted brown collared utility jacket over cream shirt, dark work trousers, simple sturdy shoes. Remove hat and sash, reveal neat short black hair with grey temples. Preserve moustache beard facial structure stocky build age neutral expression arms-down pose. Clothing below chin, no historical accessories. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3c9ac181-5823-4ecf-ab9c-b18a353ec761.png",
+      "path": "Raw/premade_genghis_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8eec62be4d9dd2c7d5be8adeba12396d2ca8f58d92a028f8a4833885c119788e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang_neutral",
+      "family": "unique",
+      "id": "qinshihuang",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Qin Shi Huang, Chinese man age44 at Xianyang215BCE. Heavy ordinary broad torso and round severe face, prominent stern straight eyebrows, narrow watchful eyes, broad nose, neat black moustache and short tapered chin beard. Black long cross-collared Qin robe with dark maroon understated edging and plain wide cloth belt. Qin official cap with flat horizontal rectangular board and absolutely no dangling beads or imperial tassels. Plain black shoes. No crown, dragon insignia, jewels, sceptre or weapon. Distinct fleshy middle-aged face not sharp handsome model. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-83826c74-538e-44d0-a444-5e06eebe3f68.png",
+      "path": "Raw/premade_qinshihuang_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "25f4ea52e759429025c5129f0e6f14e35cccfa8f7e09ee006367389a39f01edc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang_happy",
+      "id": "qinshihuang",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a19c3e35-6df8-416c-882a-e3e55238236b.png",
+      "path": "Raw/premade_qinshihuang_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "084a2592af862477af648d91dae95cc58bbd6f0fc1c3fa4998ba989990eab785",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang_angry",
+      "id": "qinshihuang",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4761a741-e7c3-4208-920d-b8c65fecb17f.png",
+      "path": "Raw/premade_qinshihuang_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "498932d03950e7a14be8a0c6a7b84a229f1a1144f1e1e10f7cc06e020d4b8d6d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang_worried",
+      "id": "qinshihuang",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cbecfa1f-87af-406b-b354-b74f2cff819d.png",
+      "path": "Raw/premade_qinshihuang_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7983b02c9761e524749bafd266c0441caff5df640082063e77ec2cd2755893aa",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang__explaining_c",
+      "id": "qinshihuang",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_c",
+      "change": "LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9b0658a4-f83e-4b28-81b7-834aebe64229.png",
+      "path": "Raw/premade_qinshihuang__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6c0a955d68081e12fec89f489383e4412f1982c146ad92d33808a8c653afc2ca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang__thinking_c",
+      "id": "qinshihuang",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_c",
+      "change": "Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-38d06ad8-4db1-4fcd-ba29-d3a33757c27e.png",
+      "path": "Raw/premade_qinshihuang__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d405ae4eac2c8039b93f43f8d749a834774106425c3c63f53d55a8cbe513266c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang__objecting_c",
+      "id": "qinshihuang",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_c",
+      "change": "RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-70e5f8a1-cab3-444a-b30b-3b71e99f7f21.png",
+      "path": "Raw/premade_qinshihuang__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a1056d3bf014b1fc4b03db07e22268ce1c954746346eb769ccab589e4777fa08",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_qinshihuang_photo",
+      "family": "unique_photo",
+      "id": "qinshihuang",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace cap and historical robes with year2150 civilian passport clothing: clean muted charcoal collared jacket over plain offwhite shirt, dark straight trousers and simple black shoes. Remove cap entirely, reveal neatly combed short black hair. Preserve face age heavy build moustache beard and neutral arms-down pose exactly. Clothing below chin. No historical accessories.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace cap and historical robes with year2150 civilian passport clothing: clean muted charcoal collared jacket over plain offwhite shirt, dark straight trousers and simple black shoes. Remove cap entirely, reveal neatly combed short black hair. Preserve face age heavy build moustache beard and neutral arms-down pose exactly. Clothing below chin. No historical accessories. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e73cfede-9f6c-4c98-b3d6-3426d69ecd69.png",
+      "path": "Raw/premade_qinshihuang_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8345268e62dce35543e7d1644d36fca861a62bf0a54ab1eee9548a9748ae9c42",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

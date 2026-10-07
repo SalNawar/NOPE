@@ -27,3 +27,6 @@ Cleopatra thinking_b is mirrored from the nominal template: RIGHT fingers at che
 - Einstein thinking_b uses the right hand at the cheek and left arm supporting (mirrored from generic b direction). Accepted as a whole-character pose variation; do not treat as modular arm registration proof.
 
 - Newton thinking_b is also mirrored: right fingers at cheek, left supporting elbow. Whole-character variant accepted; costume prism remains on its original side.
+
+- Hokusai: restored missing artist ink stains on raised fingertips in all three pose sources; passport hands intentionally clean.
+- Genghis thinking_b uses right fingers at cheek and left elbow support (mirrored variant); accepted as a whole-character pose. Registration remains pending.
