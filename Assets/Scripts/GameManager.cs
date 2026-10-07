@@ -244,7 +244,9 @@ public sealed partial class GameManager : MonoBehaviour
         orchestrator.OnDayCompleted += HandleDayCompleted;
 
         // The AVAILABLE sign toggles the desk (only meaningful when wired): while it is on, each waiting traveller is called as the desk frees up.
+        // Its first press opens the shift: the clock starts then, not at Start Shift (Saleh 2026-10-07).
         _desk.Called += CallTraveller;
+        _desk.Opened += OpenShift;
         if (readySign != null)
         {
             readySign.Interactable = false;
@@ -535,7 +537,7 @@ public sealed partial class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotStarted (slot {caseIndex1Based}, awaiting player decision).");
     }
 
-    /// <summary>Starts the day loop and the shift clock together (after the briefing); the AVAILABLE sign takes clicks from here (the desk starts paused).</summary>
+    /// <summary>Starts the day loop (after the briefing); the AVAILABLE sign takes clicks from here (the desk starts paused) and its first press starts the shift clock (OpenShift; Saleh 2026-10-07: "shift should not start until you press AVAILABLE"); without a sign the clock starts at once.</summary>
     private void BeginShift(DayPlanSO plan, int daySeed)
     {
         if (booth != null)
@@ -545,8 +547,8 @@ public sealed partial class GameManager : MonoBehaviour
 
         orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
-        if (shiftClock != null)
-            shiftClock.StartShift();
+        if (readySign == null)
+            OpenShift();
 
         // The desk's guide: day 1's FTUE, a guided day's new page opened in the rulebook, the GUIDE's pages so far.
         if (guide != null)
@@ -572,6 +574,14 @@ public sealed partial class GameManager : MonoBehaviour
             orchestrator.CloseAfterCurrentSlot();
         else
             orchestrator.CloseNow();
+    }
+
+    /// <summary>The shift opens (the AVAILABLE sign's first press, DeskAvailability.Opened; at once without a sign): the shift clock starts from the opening hour, and with it what it times (the hall's light, closing time, the last-hour alarm).</summary>
+    private void OpenShift()
+    {
+        if (shiftClock != null)
+            shiftClock.StartShift();
+        Debug.Log($"[GameManager] Shift started at {ShiftClock.Format(shiftClock != null ? shiftClock.MinuteOfDay : 0f)} on AVAILABLE (day {_worldState.day}).");
     }
 
     /// <summary>The AVAILABLE sign's click: turns the desk available (the waiting traveller is called once the desk is free) or pauses it (the traveller at the desk is finished normally; the shift clock keeps running).</summary>

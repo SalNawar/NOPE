@@ -15,6 +15,36 @@ public class DeskAvailabilityTests
     }
 
     [Test]
+    public void TheFirstClick_OpensTheShift_Once_BeforeTheFirstCall()
+    {
+        // Saleh 2026-10-07: "shift should not start until you press AVAILABLE": the clock starts on Opened.
+        DeskAvailability desk = Desk(out int[] calls, out _);
+        var order = new System.Collections.Generic.List<string>();
+        desk.Opened += () => order.Add("opened at " + calls[0] + " calls");
+        desk.Called += () => order.Add("called");
+        desk.Arm();
+        Assert.IsFalse(desk.HasOpened, "Start Shift does not open the shift");
+        desk.Toggle();
+        Assert.IsTrue(desk.HasOpened);
+        CollectionAssert.AreEqual(new[] { "opened at 0 calls", "called" }, order, "the shift opens before the first traveller is called");
+        desk.Toggle();
+        desk.Toggle();
+        Assert.AreEqual(1, order.FindAll(o => o.StartsWith("opened")).Count, "a pause and a resume never open it again");
+    }
+
+    [Test]
+    public void ADayClosedBeforeTheFirstClick_NeverOpens()
+    {
+        DeskAvailability desk = Desk(out _, out _);
+        int opened = 0;
+        desk.Opened += () => opened++;
+        desk.Close();
+        desk.Toggle();
+        Assert.AreEqual(0, opened);
+        Assert.IsFalse(desk.HasOpened);
+    }
+
+    [Test]
     public void TheShiftStarts_Paused_AndNobodyIsCalled_UntilTheSignIsClicked()
     {
         DeskAvailability desk = Desk(out int[] calls, out _);

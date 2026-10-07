@@ -28910,7 +28910,7 @@
         "categories": [],
         "form": "",
         "target": "sign",
-        "text": "Click the AVAILABLE sign to call the first traveller."
+        "text": "Click the AVAILABLE sign to open the desk: the shift clock starts and the first traveller comes."
       },
       {
         "id": "desk",

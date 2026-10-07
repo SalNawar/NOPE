@@ -264,6 +264,9 @@ public sealed class DeskConfigSO : ScriptableObject
 
     /// <summary>The caption's ink while the desk is paused (the shift's start, a break, after closing; AvailableSignLink): the art's lit ink turned down, like an unlit sign, that still reads on the sign's dark glass (large text: 3.2:1 as drawn in the hall at 1080p, against the lit ink's 16.7:1). Lit, the label keeps the art's own ink.</summary>
     public Color readyPausedInk = new Color(0.42f, 0.4f, 0.37f, 1f);
+
+    /// <summary>The AVAILABLE caption's invitation before the shift opens (AvailableSignLink): one beat of its gentle pulse between the paused and the lit ink, in seconds.</summary>
+    [Min(0.1f)] public float readyInviteSeconds = 1.6f;
 }
 
 /// <summary>One portal's art layers in the anime hall (DeskConfigSO.hallPortalLayers), by their AnimeHallPresentation ids.</summary>

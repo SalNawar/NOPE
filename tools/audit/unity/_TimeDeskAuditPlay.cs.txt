@@ -396,8 +396,14 @@ public static class _TimeDeskAuditPlay
         // The AVAILABLE sign (Saleh 2026-09-30): the desk starts paused; one click and the travellers come one after another.
         Check(!o.Game.Desk.IsAvailable && o.Ready.Interactable, $"day {day}: the desk starts paused and the AVAILABLE sign takes clicks");
         OrderAtThePc(day);
+        // Saleh 2026-10-07: "shift should not start until you press AVAILABLE": the clock holds the opening hour until the first press.
+        yield return Seconds(1f);
+        Check(!o.Clock.Clock.IsStarted && Mathf.Approximately(o.Clock.MinuteOfDay, hours.StartMinute),
+              $"day {day}: before AVAILABLE the shift clock holds the opening hour {hours.Open} ({ShiftClock.Format(o.Clock.MinuteOfDay)}, started {o.Clock.Clock.IsStarted})");
         o.ClickSign();
         Check(o.Game.Desk.IsAvailable, $"day {day}: one click turns the desk available");
+        Check(o.Clock.Clock.IsStarted && o.Game.Desk.HasOpened, $"day {day}: the first click opens the shift and starts its clock");
+        Line($"   shift started at {ShiftClock.Format(o.Clock.MinuteOfDay)} on AVAILABLE");
 
         int presented = 0;
         bool paused = false;
