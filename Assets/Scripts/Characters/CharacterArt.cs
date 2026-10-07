@@ -90,7 +90,7 @@ public sealed class CharacterArt : IDisposable
     /// <summary>The layer's full-canvas sprite: its own art, else its nearest stand-in's; null when there is none (the layer is not drawn).</summary>
     public Sprite Get(LookKey key) => EntryOf(key)?.Full;
 
-    /// <summary>The layer's passport-photo crop (the head and shoulders) of the sprite Get draws; null when Get has none.</summary>
+    /// <summary>The layer's passport-photo crop (the head and shoulders; a premade's whole picture the head and neck, LookCanvas.PhotoRectFor) of the sprite Get draws; null when Get has none.</summary>
     public Sprite GetPhoto(LookKey key)
     {
         Entry e = EntryOf(key);
@@ -99,7 +99,7 @@ public sealed class CharacterArt : IDisposable
         if (e.Photo == null)
         {
             Rect r = e.Full.rect;
-            (float x, float y, float w, float h) = LookCanvas.PhotoRect;
+            (float x, float y, float w, float h) = LookCanvas.PhotoRectFor(key.Layer == LookLayer.Whole);
             var crop = new Rect(r.x + x * r.width, r.y + y * r.height, w * r.width, h * r.height);
             e.Photo = Sprite.Create(e.Full.texture, crop, new Vector2(0.5f, 0.5f), crop.height, 0, SpriteMeshType.FullRect);
             e.Photo.name = e.Full.name + "_photo";

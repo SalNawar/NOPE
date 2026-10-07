@@ -590,6 +590,7 @@ public sealed class CaseFactory
         bool plannedDress = plannedRule != null && plannedRule.type == TravelRuleType.DressForDestination;
         (LookSource source, bool whole) costume = broken != null ? (null, false) : PlanCostume(inst, place, legendary, forcedCostume, honest, plannedDress, authoredFault, plan, caseIndex1Based);
         inst.look = ComposeLook(inst, place, lie, legendary, family, costume, caseIndex1Based);
+        inst.photoDress = PhotoDress(inst);
 
         // 7.5) The photos show who stands at the desk; a visual lie (the document design spec, D4, D8) is printed now, on the lie
         //      stream after the look: a forged seal on one paper, or someone else's photo.
@@ -1427,6 +1428,29 @@ public sealed class CaseFactory
             default:
                 return (kit[costume.SourceIndex], false);
         }
+    }
+
+    /// <summary>
+    /// The 2150 clothes an ID photo is taken in (Looks.PhotoLook; Saleh
+    /// 2026-10-07: no era costume on a passport photo): the present's
+    /// wardrobe drawn as the holder's passport nation's 2150 dress (its
+    /// Future outfit art, `outfit_{g}_{nation}_future`; the present's hair is
+    /// filed under its own art nation), else the present's own; null without
+    /// a present.
+    /// </summary>
+    private LookSource PhotoDress(CaseInstance inst)
+    {
+        LookSource present = PresentSource();
+        if (present == null || inst.passportNation == null)
+            return present;
+        return new LookSource
+        {
+            NationId = inst.passportNation.id,
+            EraId = present.EraId,
+            PlaceId = inst.passportNation.id + "_" + present.EraId,
+            Wardrobe = present.Wardrobe,
+            CultureValue = present.CultureValue
+        };
     }
 
     /// <summary>

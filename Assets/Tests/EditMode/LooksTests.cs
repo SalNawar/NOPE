@@ -12,7 +12,7 @@ using NUnit.Framework;
 /// hyogo-mage (hair back), Nagoya-obi (signature accessory, leakable)).
 /// Claim year 1843; bands 18: a, b; 35: c; 60: d; grey from 60.
 /// </summary>
-public class LooksTests
+public partial class LooksTests
 {
     private const int Year = 1843;
     private const string Born25 = "3 Jun 1818";

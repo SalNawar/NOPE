@@ -547,6 +547,79 @@ public static class Looks
         return $"{g}/skin{look.SkinTone}/face-{look.Face}/{look.HairColour}";
     }
 
+    /// <summary>
+    /// The papers' photo of <paramref name="look"/> (Saleh 2026-10-07: "if
+    /// someone is in disguise, their passport pic shouldn't have them in old
+    /// costumes"): an ID photo is taken in 2150, so it shows the same body,
+    /// head, face, skin, hair colour, hair and facial hair, in
+    /// <paramref name="dress"/>'s outfit for the look's gender (the present's
+    /// 2150 clothes), with no headwear and no accessory; hair a hat or a hood
+    /// hid (no hair part), or a wig, is the dress's hair in the look's colour
+    /// (its back with it). The identity (IdentityKey) is the look's, so the
+    /// photo-against-face check is unchanged and a stranger's photo is still
+    /// a stranger, in 2150 dress too. A premade's whole picture is kept (it
+    /// has no outfit of its own; the photo crops it to the head); without a
+    /// dress (or an outfit in it) the look keeps its own outfit, still without
+    /// headwear and accessory. The photo has no garments to look at.
+    /// Deterministic: no draw. Null for null.
+    /// </summary>
+    public static TravellerLook PhotoLook(TravellerLook look, LookSource dress)
+    {
+        if (look == null || look.PremadeId != null || look.PartOn(LookLayer.Whole) != null)
+            return look;
+
+        TravellerGender g = look.Gender;
+        GenderLook civil = g == TravellerGender.Unknown ? null : dress?.Wardrobe?.For(g);
+        LookItem outfit = civil?.outfit;
+        LookItem hair = civil?.hair;
+        LookPart? ownHair = look.PartOn(LookLayer.Hair);
+        bool wig = ownHair != null && ownHair.Value.Key.HairColour == null;
+        bool dressHair = (ownHair == null || wig) && hair != null && hair.IsPresent;
+
+        var parts = new List<LookPart>();
+        if (dressHair && hair.back)
+            parts.Add(new LookPart(LookLayer.HairBack, LookKeys.Garment(LookLayer.HairBack, g, hair.ArtNation(dress.NationId), dress.EraId, hair.wig ? null : look.HairColour, hair.artVariant), -1));
+        foreach (LookPart part in look.Parts)
+        {
+            switch (part.Layer)
+            {
+                case LookLayer.HairBack:
+                    if (!dressHair)
+                        parts.Add(new LookPart(part.Layer, part.Key, -1));
+                    break;
+                case LookLayer.Outfit:
+                    if (outfit == null || !outfit.IsPresent)
+                        parts.Add(new LookPart(part.Layer, part.Key, -1));
+                    break;
+                case LookLayer.Body:
+                    parts.Add(new LookPart(part.Layer, part.Key, -1));
+                    if (outfit != null && outfit.IsPresent)
+                        parts.Add(new LookPart(LookLayer.Outfit, LookKeys.Garment(LookLayer.Outfit, g, outfit.ArtNation(dress.NationId), dress.EraId, null, outfit.artVariant), -1));
+                    break;
+                case LookLayer.Hair:
+                    if (!dressHair)
+                        parts.Add(new LookPart(part.Layer, part.Key, -1));
+                    break;
+                case LookLayer.Headwear:
+                case LookLayer.Accessory:
+                    break;
+                default:
+                    parts.Add(new LookPart(part.Layer, part.Key, -1));
+                    break;
+            }
+            if (part.Layer == LookLayer.FacialHair || (part.Layer == LookLayer.Head && look.PartOn(LookLayer.FacialHair) == null))
+                AddDressHair(parts, dressHair, hair, g, dress, look.HairColour);
+        }
+        return new TravellerLook(parts, new Garment[0], null, g, look.SkinTone, look.Face, look.HairColour);
+    }
+
+    /// <summary>The dress's hair in <paramref name="colour"/> (a wig in its own), after the head and its facial hair, when the photo takes it.</summary>
+    private static void AddDressHair(List<LookPart> parts, bool dressHair, LookItem hair, TravellerGender g, LookSource dress, string colour)
+    {
+        if (dressHair)
+            parts.Add(new LookPart(LookLayer.Hair, LookKeys.Garment(LookLayer.Hair, g, hair.ArtNation(dress.NationId), dress.EraId, hair.wig ? null : colour, hair.artVariant), -1));
+    }
+
     /// <summary>The least distance between a traveller's skin tone and a stranger's on their papers' photo (Stranger): a whole step reads as the same person under the room's light, two do not.</summary>
     public const int StrangerSkinSteps = 2;
 

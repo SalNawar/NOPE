@@ -219,8 +219,11 @@ public sealed class CaseInstance
     /// <summary>Someone else's look on the traveller's photo (the SwappedPhoto lie, Looks.Stranger; the document design spec, D8); null when the photo is their own.</summary>
     public TravellerLook strangerPhoto;
 
-    /// <summary>Who the papers' photo shows: a stranger's look for someone else's photo, else the traveller's own.</summary>
-    public TravellerLook PhotoLook => strangerPhoto ?? look;
+    /// <summary>The 2150 clothes an ID photo is taken in (the present's, CaseFactory); null: the photo keeps the look's own outfit.</summary>
+    public LookSource photoDress;
+
+    /// <summary>Who the papers' photo shows, as taken in 2150 (Looks.PhotoLook: no era costume, headwear or accessory; Saleh 2026-10-07): a stranger's look for someone else's photo, else the traveller's own.</summary>
+    public TravellerLook PhotoLook => Looks.PhotoLook(strangerPhoto ?? look, photoDress);
 
     /// <summary>
     /// The correct decision (traveller types §5.2): accept only a traveller

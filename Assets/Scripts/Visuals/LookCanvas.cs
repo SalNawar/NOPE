@@ -64,6 +64,18 @@ public static class LookCanvas
         (PhotoLeft / (float)Width, (Height - PhotoBottom) / (float)Height,
          (PhotoRight - PhotoLeft) / (float)Width, (PhotoBottom - PhotoTop) / (float)Height);
 
+    /// <summary>A premade's whole picture's tighter photo crop, its top and bottom edges (head and neck, at the photo's 4:5, centred on the centre line): the picture has no outfit of its own to change, so its costume barely shows on an ID photo taken in 2150 (Saleh 2026-10-07; Looks.PhotoLook).</summary>
+    public const int WholePhotoTop = 225, WholePhotoBottom = 485;
+
+    /// <summary>The photo crop of a layer as fractions of the canvas, bottom-left origin: a premade's whole picture's (<paramref name="whole"/>) tighter one (WholePhotoTop to WholePhotoBottom), every other layer's PhotoRect.</summary>
+    public static (float x, float y, float width, float height) PhotoRectFor(bool whole)
+    {
+        if (!whole)
+            return PhotoRect;
+        float h = WholePhotoBottom - WholePhotoTop, w = h * PhotoAspect;
+        return ((CenterX - w / 2f) / Width, (Height - WholePhotoBottom) / (float)Height, w / Width, h / Height);
+    }
+
     /// <summary>A canvas row (pixels from the top) as a height above the feet, in canvas heights (the sprite's local units).</summary>
     public static float LocalY(int yFromTop) => (Feet - yFromTop) / (float)Height;
 
