@@ -281,6 +281,18 @@ public static class Seeds
     /// </summary>
     public static int ForReturnSlots(int daySeed) => Mix(daySeed, ReturnSlotSalt);
 
+    /// <summary>Salt for the hall's slot picks ("HALL").</summary>
+    public const int HallSlotSalt = 0x48414C4C;
+
+    /// <summary>
+    /// Seed for the pick among a hall slot variant's alternatives (HallSlotPick:
+    /// "one of N" banners for the same culture): one per run and per
+    /// <paramref name="key"/> (the slot's id and the variant's, "13-flag-left-cloth/egypt"),
+    /// so runs differ but a replay of the run shows the same hall, a variant's
+    /// pick never moves another's, and no traveller's draw is touched.
+    /// </summary>
+    public static int ForHallSlot(int runSeed, string key) => Mix(Mix(runSeed, HallSlotSalt), OfKey(key));
+
     /// <summary>Where <see cref="OfKey"/> starts ("KEYS"): the value of an empty key.</summary>
     public const int KeyStart = 0x4B455953;
 

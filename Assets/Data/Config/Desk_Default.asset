@@ -47,3 +47,4 @@ MonoBehaviour:
   bubbleOffset: {x: 0, y: 290}
   reactionSeconds: 2.5
   readyCaptionKey: desk.readyCaption
+  hallSlots: {fileID: 11400000, guid: a8e0ffd72519464393fd8049b9acb358, type: 2}

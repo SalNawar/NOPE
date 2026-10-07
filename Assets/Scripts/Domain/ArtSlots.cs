@@ -93,6 +93,15 @@ public static class ArtSlots
     /// <summary>The pet corner's backdrop (the corner of the flat where the pet sleeps); without it the corner is a plain plate.</summary>
     public const string PetCorner = "Home/pet_corner";
 
+    /// <summary>The folder of the anime hall's swappable slots' art (HallSlotsSO; the hall slots spec): one folder per slot.</summary>
+    public const string HallSlotsFolder = "Hall/Slots/";
+
+    /// <summary>A hall slot variant's art by the slot's id and the variant's file ("13-flag-left-cloth", "egypt" gives Hall/Slots/13-flag-left-cloth/egypt): a painting on the hall's whole source canvas (HallSlotPick names the file).</summary>
+    public static string HallSlot(string slotId, string file) => HallSlotsFolder + slotId + "/" + file;
+
+    /// <summary>The largest side a slot's art keeps when imported: 4096 for the hall's slots (their canvas is the painting's 2172 px), 2048 for the rest.</summary>
+    public static int MaxSide(string slot) => slot != null && slot.StartsWith(HallSlotsFolder, StringComparison.Ordinal) ? 4096 : 2048;
+
     /// <summary>A toy's picture in the pet corner, by the toy's upgrade id (its Orders icon is <see cref="OrderIcon"/>).</summary>
     public static string PetToy(string toyId) => "Home/toy_" + Key(toyId);
 

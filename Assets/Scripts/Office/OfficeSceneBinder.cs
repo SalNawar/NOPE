@@ -612,7 +612,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         return null;
     }
 
-    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (and the hall's lights, their day-night cycle, and the traveller's shade with it), and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings (and their lights) from the day's portals, and the city view is bound to it (its left pan, its living city); an art office without one needs nothing (the city view stays off).</summary>
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (and the hall's lights, their day-night cycle, and the traveller's shade with it), and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings (and their lights) from the day's portals, a third its swappable slots from the hall's variables (HallSlotsLink, when the config names a HallSlotsSO), and the city view is bound to it (its left pan, its living city); an art office without one needs nothing (the city view stays off).</summary>
     private void BindHall(Scene art)
     {
         if (config == null)
@@ -626,6 +626,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             HallLightingRig lights = FindLights(art);
             gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay), lights, traveller);
             gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects, lights);
+            if (config.hallSlots != null)
+                gameObject.AddComponent<HallSlotsLink>().Configure(hall, config.hallSlots);
             if (cityView != null)
                 cityView.Bind(hall, hall.GetComponentInChildren<HallCityExterior>(false), lights);
             return;

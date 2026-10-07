@@ -110,6 +110,22 @@ public readonly struct HelixRiverInput
     }
 }
 
+/// <summary>The Helix River's state in words (HelixRiver.Tier; the reference sheet's four panels): what the hall's art reacts to, never shown as a word or a number.</summary>
+public enum StabilityTier
+{
+    /// <summary>Calm: no oxbow has pinched off.</summary>
+    Steady,
+
+    /// <summary>Oxbows pinch off (the calm under HelixRiverKnobs.oxbowsFrom), above the warning line.</summary>
+    Strained,
+
+    /// <summary>From the warning line (GameConfigSO.stabilityWarningMargin above the firing line): the CRT glitches.</summary>
+    Breaching,
+
+    /// <summary>The critical band (GameConfigSO.stabilityCriticalMargin above the firing line, or under it): the screen flickers.</summary>
+    Collapsing
+}
+
 /// <summary>One frame of the river as the shader draws it (HelixRiverMonitor hands these to the material).</summary>
 public struct HelixRiverFrame
 {
@@ -240,12 +256,37 @@ public sealed class HelixRiver
     }
 
     /// <summary>The calm of <paramref name="stability"/>: 0 at or under the firing line, 1 at or above HelixRiverKnobs.steadyAt, linear between.</summary>
-    public float Calm(float stability, float firedAt)
+    public float Calm(float stability, float firedAt) => CalmOf(stability, firedAt, _knobs);
+
+    /// <summary>The calm of <paramref name="stability"/> on <paramref name="knobs"/> (null: the defaults): 0 at or under the firing line, 1 at or above HelixRiverKnobs.steadyAt, linear between.</summary>
+    public static float CalmOf(float stability, float firedAt, HelixRiverKnobs knobs)
     {
-        float span = _knobs.steadyAt - firedAt;
+        float span = (knobs ?? new HelixRiverKnobs()).steadyAt - firedAt;
         if (span <= 0f)
             return Finite(stability) > firedAt ? 1f : 0f;
         return Clamp01((Finite(stability) - firedAt) / span);
+    }
+
+    /// <summary>
+    /// The river's state in words, for the systems that pick art by it (the
+    /// hall's slots, HallSlotPick; never shown to the player): Collapsing in
+    /// the critical band (where the river flickers), Breaching from the
+    /// warning line (where its glitch starts), Strained once the calm falls
+    /// under HelixRiverKnobs.oxbowsFrom (where oxbows pinch off), else Steady.
+    /// The river's own thresholds, so the hall and the river always agree.
+    /// </summary>
+    public static StabilityTier Tier(float stability, float firedAt, float warningMargin, float criticalMargin, HelixRiverKnobs knobs)
+    {
+        knobs = knobs ?? new HelixRiverKnobs();
+        switch (StabilityRules.Band(Finite(stability), firedAt, warningMargin, criticalMargin))
+        {
+            case StabilityBand.Critical:
+                return StabilityTier.Collapsing;
+            case StabilityBand.Warning:
+                return StabilityTier.Breaching;
+            default:
+                return CalmOf(stability, firedAt, knobs) < knobs.oxbowsFrom ? StabilityTier.Strained : StabilityTier.Steady;
+        }
     }
 
     /// <summary>The river's shape at <paramref name="calm"/> (every damage grows as calm falls; no clock, pulse or glitch).</summary>
