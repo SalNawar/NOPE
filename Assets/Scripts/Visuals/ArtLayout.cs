@@ -107,7 +107,7 @@ public static class ArtLayout
                 if (hand && string.IsNullOrWhiteSpace(value))
                     items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, FormLayout.Unsigned, UnsignedShare * art.valueShare * place.Height, FormTextAlign.Left));
                 else if (!string.IsNullOrEmpty(value))
-                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, art.valueShare * place.Height, f.centre ? FormTextAlign.Centre : FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, art.valueShare * place.Height, FormTextAlign.Left));
                 if (f.relabel && f.label.IsSet)
                 {
                     FaceRect label = On(f.label);

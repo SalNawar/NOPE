@@ -146,6 +146,9 @@ public sealed class MotionKnobs
     /// <summary>How hard an approval's portal spin-up hits as the papers go back (FeelDirector.Hit's strength, 0 to 1), and the DETAIN button's press (a dater's impression is the stamp's own punch, FeelHit.Stamp).</summary>
     public float approveHit = 0.3f, detainHit = 0.5f;
 
+    /// <summary>How hard the citation slip's CITED stamp slams once the slip has printed (FeelDirector.Hit's strength, 0 to 1; 0 none).</summary>
+    public float citedHit = 0.25f;
+
     /// <summary>The feel of a dater's stroke down, of its release springing up (an overshoot) and of a date wheel's click.</summary>
     public MotionFeel daterFeel = MotionFeel.Dater, daterReleaseFeel = MotionFeel.Elastic, wheelFeel = MotionFeel.Firm;
 

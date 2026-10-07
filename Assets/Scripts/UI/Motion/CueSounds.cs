@@ -9,7 +9,7 @@ using UnityEngine;
 /// of SOUND_LIST.md), else a short sound made in code once per id through
 /// the source (a click, a snap, a whoosh, a chirp) until its file
 /// is delivered. Tone and Noise make the placeholders, also for the
-/// stamps' own refusal thunk and a delivered paper's thud (PaperArrival).
+/// stamps' own refusal thunk.
 /// </summary>
 public static class CueSounds
 {

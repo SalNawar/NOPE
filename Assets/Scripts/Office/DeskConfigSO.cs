@@ -99,31 +99,6 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The photo's tint while its paper lies on the desk, full size (evenly lit, unlike travellerTint on the counter).</summary>
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
 
-    [Header("Citations (the Citation lands on the desk, Saleh 2026-10-07)")]
-    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the mat's far half right of centre, clear of the rulebook folder, so it lies wholly on the screen in the office view and the reading view (the reading view shows it right of the folder's page).</summary>
-    public Vector2 citationSpot = new Vector2(0f, 0.14f);
-
-    /// <summary>How far each next citation of the day lands from the last (metres, the same frame): they stack with an offset; a continuation sheet lands a third of it from its first.</summary>
-    public Vector2 citationStep = new Vector2(0.025f, -0.02f);
-
-    /// <summary>A citation's height on the desk relative to its form's (DeskZones' reading height at its form's scale): smaller, so a pile of them does not cover the case's papers and the day's stack fits the reading view's height.</summary>
-    [Range(0.3f, 1f)] public float citationScale = 0.75f;
-
-    /// <summary>Where a citation flies in from: a point of the camera's view (viewport coordinates: off the screen's right, near its top) <see cref="citationFromDepth"/> metres in front of the camera, so it starts large, close to the eye, and flies down onto the desk.</summary>
-    public Vector2 citationFrom = new Vector2(1.08f, 0.9f);
-
-    /// <summary>How far in front of the camera a citation starts its flight (metres).</summary>
-    [Min(0.05f)] public float citationFromDepth = 0.45f;
-
-    /// <summary>A citation's flight: the arc's top over the straight way (metres), the twist about the vertical and the tumble about its long axis at the start (degrees).</summary>
-    [Min(0f)] public float citationArc = 0.12f;
-
-    /// <summary>A citation's twist about the vertical and its tumble about its long axis as it starts its flight (degrees).</summary>
-    public float citationTwist = 28f, citationTumble = 32f;
-
-    /// <summary>A citation's punch as it lands (FeelDirector.Hit's strength, 0 to 1: its hit-stop and camera bump; 0 none), with the sound cue citation_land.</summary>
-    [Range(0f, 1f)] public float citationLandHit = 0.25f;
-
     [Header("Traveller")]
     /// <summary>The traveller figure's height in metres (feet at the traveller anchor).</summary>
     [Min(0.5f)] public float travellerHeight = 1.8f;

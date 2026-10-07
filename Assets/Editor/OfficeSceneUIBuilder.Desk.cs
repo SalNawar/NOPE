@@ -32,9 +32,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The office scene contract, created by the builder when missing (the art side's anchors and a designer's edits are kept).</summary>
     private const string OfficeContractPath = "Assets/Data/Config/OfficeSceneContract.asset";
 
-    /// <summary>The Citation's form (TC-900: its art's places), wired onto the desk (DeskController.Cite).</summary>
-    private const string CitationFormPath = "Assets/Data/Forms/CitationForm_TC900.asset";
-
     /// <summary>Where the desk reactions live (created by the builder when missing; a designer's edits are kept).</summary>
     private const string DeskReactionFolder = "Assets/Data/Config/DeskReactions";
 
@@ -624,7 +621,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soDesk, "counter", counter);
         SetRef(soDesk, "deskView", deskView);
         SetRef(soDesk, "stamps", stampTray);
-        SetRef(soDesk, "citationForm", AssetDatabase.LoadAssetAtPath<CitationFormSO>(CitationFormPath));
         soDesk.ApplyModifiedProperties();
 
         // The traveller and the wheel's openers (the traveller and the desk intercom).

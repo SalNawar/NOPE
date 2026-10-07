@@ -212,8 +212,6 @@ public sealed class CaseVerdict
     /// <summary>The citation's consequence: the free warning or the penalty (empty if none): the Citation's TOTAL PENALTY.</summary>
     public string citationConsequence = string.Empty;
 
-    /// <summary>The citation as the desk prints it (CitationTickets; null without one). Runtime only: never saved.</summary>
-    [NonSerialized] public CitationTicket ticket;
 
     // -----------------------------
     // Investigation (accept/deny)

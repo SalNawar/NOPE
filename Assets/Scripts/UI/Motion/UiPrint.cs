@@ -16,24 +16,29 @@ public sealed class UiPrint : MonoBehaviour, IMotionTick
 {
     private TMP_Text _text;
     private string _land;
+    private System.Action _landed;
     private float _shown;
     private int _lines;
 
-    /// <summary>Prints <paramref name="text"/> line by line with <paramref name="printCue"/>, then <paramref name="landCue"/> and a small bump.</summary>
-    public static void Print(TMP_Text text, string printCue, string landCue)
+    /// <summary>Prints <paramref name="text"/> line by line with <paramref name="printCue"/>, then <paramref name="landCue"/>, a small bump and <paramref name="landed"/> (the slip's stamp slams then; at once under Reduced Motion).</summary>
+    public static void Print(TMP_Text text, string printCue, string landCue, System.Action landed = null)
     {
         if (text == null)
+        {
+            landed?.Invoke();
             return;
+        }
         Sounds.Play(printCue);
         if (!text.TryGetComponent(out UiPrint print))
             print = text.gameObject.AddComponent<UiPrint>();
-        print.Begin(text, landCue);
+        print.Begin(text, landCue, landed);
     }
 
-    private void Begin(TMP_Text text, string landCue)
+    private void Begin(TMP_Text text, string landCue, System.Action landed)
     {
         _text = text;
         _land = landCue;
+        _landed = landed;
         _text.ForceMeshUpdate();
         _lines = Mathf.Max(1, _text.textInfo.lineCount);
         if (UiMotion.Amount.Still)
@@ -70,10 +75,13 @@ public sealed class UiPrint : MonoBehaviour, IMotionTick
             _text.maxVisibleLines = 99999;
     }
 
-    /// <summary>Every line shows; the landing cue.</summary>
+    /// <summary>Every line shows; the landing cue, then the caller's landing.</summary>
     private void Finish()
     {
         _text.maxVisibleLines = 99999;
         Sounds.Play(_land);
+        System.Action landed = _landed;
+        _landed = null;
+        landed?.Invoke();
     }
 }

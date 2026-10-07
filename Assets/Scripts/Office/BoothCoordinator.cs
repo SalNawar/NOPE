@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Applies BoothRules and the wake rules to the office: from the view (the PC
 /// frame open or not), the screen's power, the shift's phase (set by
-/// GameManager), the wheel and the reading view, it
+/// GameManager), the wheel, a pending citation slip and the reading view, it
 /// decides which of the desktop, the PC, the power buttons, the desk props,
 /// the documents, the traveller, the wheel, the stamp bar, inspect mode, the
 /// mat, the reading view's "▲ Back" control and the mouse wheel, the city
@@ -14,7 +14,7 @@ using UnityEngine.UI;
 /// comparable (inspect mode: DeskInspect); it returns the reading view when
 /// the next traveller is called, a newsletter shows or the wheel or the PC
 /// frame opens, wakes the screen for a presented traveller and a finished
-/// scan, lays a citation on the desk (Cite), and shows the day-1 wheel note.
+/// scan, holds it on for a citation slip, and shows the day-1 wheel note.
 /// What a right-click or Esc backs out of is ControlRules' (OfficeControls).
 /// Every reference is optional: a missing view counts as the office view; a
 /// missing screen counts as on. Event-driven (no per-frame code).
@@ -77,6 +77,7 @@ public sealed class BoothCoordinator : MonoBehaviour
 
     private BoothPhase _phase = BoothPhase.NoTraveller;
     private int _day;
+    private bool _citationPending;
     private bool _wheelOpenedToday;
 
     /// <summary>Where the shift is (GameManager): the one input model reads it.</summary>
@@ -157,8 +158,14 @@ public sealed class BoothCoordinator : MonoBehaviour
         Apply();
     }
 
-    /// <summary>Prints <paramref name="ticket"/> and flies it onto the desk (DeskController.Cite), <paramref name="landed"/> once it lies there; false when the office has no desk (nothing is printed or called).</summary>
-    public bool Cite(CitationTicket ticket, System.Action landed) => desk != null && desk.Cite(ticket, landed);
+    /// <summary>A citation slip waits for Acknowledge (or no longer does): it holds the screen on and makes the power buttons inert.</summary>
+    public void SetCitationPending(bool pending)
+    {
+        _citationPending = pending;
+        if (screen != null)
+            screen.SetHeld(pending);
+        Apply();
+    }
 
     private void HandleView(OfficeView _) => Apply();
 
@@ -183,6 +190,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         screenOn: screen == null || screen.IsOn,
         phase: _phase,
         wheelOpen: wheel != null && wheel.IsOpen,
+        citationPending: _citationPending,
         deskView: deskView != null && deskView.IsOn);
 
     /// <summary>Applies the rules. The wheel, the stamp bar, inspect mode and the reading view first: closing, stowing, leaving or returning changes the context the rest reads (their events re-apply too, harmlessly).</summary>

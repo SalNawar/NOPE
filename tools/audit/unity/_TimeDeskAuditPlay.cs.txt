@@ -42,7 +42,7 @@
 // scanner before day 5, the Departure Board before day 3, the Citizen records
 // chip before day 5, the PC apps, every document field; the guided steps and
 // their foot never show), every
-// citation names its rule and a value, and every shift report shows
+// citation slip names its rule and a value, and every shift report shows
 // tonight's bills and the wallet after them. New Run goes through the
 // adoption panel (the Home pet spec: a dog named "Biscuit"; a refused name is
 // tried first and must say why). Home: the bills step with its default care
@@ -831,7 +831,7 @@ public static class _TimeDeskAuditPlay
                 {
                     Call(o.Desk, "HandlePaperClicked", other, -1);
                     yield return Seconds(0.5f);
-                    // A point of that paper that shows (no other paper over it there: DeskController.Shows); the passport's visa page lies under the daters now and may cover the paper's middle.
+                    // A point of that paper that shows (no other paper over it there: DeskController.Shows); the passport's visa page lies under the daters and may cover the paper's middle.
                     yield return DragStamp(o, !accept, ShownPoint(o, other));
                     yield return Settle(() => !o.Stamps.IsMoving, 5f);
                     Check(o.Stamps.LastPress == StampPress.NotPassport && !o.Stamps.HasVerdict,
@@ -917,20 +917,22 @@ public static class _TimeDeskAuditPlay
             _ended = true;
             yield break;
         }
-        // The verdict line as the verdict was committed (the hardware read it then), else as shown now: the day goes on while the Citation flies (the next traveller's call clears it).
+        // The verdict line as the verdict was committed (read at DeskStampTray.Decided), else as shown now.
         string verdictLine = _verdictLine ?? ((TMP_Text)Field(o.OfficeUi, "resultText")).text;
-        if (v.citationIssued)
+        Check(v.citationIssued == o.CitationPanel.activeInHierarchy, $"d{day} slot {slot}: the citation slip shows exactly when a citation is issued ({v.citationIssued}, shown {o.CitationPanel.activeInHierarchy})");
+        if (o.CitationPanel.activeInHierarchy)
         {
-            // The Citation (2026-10-07) lands on the desk; its lines are the slip's (its violation, its rule and values, its consequence).
-            string slip = string.Join("\n", v.citationReason, v.citationDetail, v.citationConsequence);
+            // The citation slip (back since Saleh's 1007b demo): its lines as printed, the verdict's violation, its rule and values, its consequence.
+            string slip = string.Join("\n", new[] { "citationReasonText", "citationDetailText", "citationConsequenceText" }.Select(f => ((TMP_Text)Field(o.OfficeUi, f)).text));
             Line($"   citation slip: {slip.Replace("\n", " / ")}");
             string rule = v.unprovenDenial ? UiText.Get("citation.rule.evidence") : Citations.RuleLine(c.citation, UiText.Get, UiText.Get("citation.rule.numbered"));
             string value = v.unprovenDenial ? "0" : c.citation?.Values.Select(x => x.Value).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
             Check(!string.IsNullOrEmpty(rule) && slip.Contains(rule) && !string.IsNullOrEmpty(value) && slip.Contains(value),
                   $"d{day} slot {slot}: the citation slip names the exact rule ('{rule}') and value ('{value}')");
-            yield return Until(() => !o.CitationFlying, 10f, "the citation on the desk");
             if (ShotsOn && First($"citation {v.faultReason}/{v.unprovenDenial}/{v.accepted}"))
                 yield return Shots($"citation_{(v.accepted ? "accepted" : "denied")}_{(string.IsNullOrEmpty(v.faultReason) ? "honest" : v.faultReason)}{(v.unprovenDenial ? "_unproven" : "")}");
+            ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
+            yield return Frames(2);
         }
         Line($"   verdict line: {verdictLine.Replace("\n", " / ")}");
         _verdictLine = null;
@@ -2546,7 +2548,7 @@ public static class _TimeDeskAuditPlay
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
-        public bool CitationFlying => ((List<DeskDocument>)Field(Desk, "_citations")).Any(p => p.TryGetComponent(out PaperArrival a) && a.Flying);
+        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
         public InvestigationApp App => (InvestigationApp)Field(Ui, "app");
         public AppPane LeftPane => (AppPane)Field(App, "leftPane");
         public AppPane RightPane => (AppPane)Field(App, "rightPane");

@@ -11,10 +11,10 @@ using UnityEngine;
 /// site's archive, WorldState.newsArchive; today's from the morning paper
 /// until the briefing archives it; an issue the archive no longer keeps is
 /// only its link),
-/// a notice for each citation as it is issued this shift, the
+/// a notice for each citation slip once it is acknowledged this shift, the
 /// Orders app's delivery notice for each day something arrived (the order
 /// log, WorldState.orders), and the authored mail. It rebuilds the list (Mailbox.ForDays) when the day
-/// changes and when a citation is issued; opening a message marks it read
+/// changes and when a slip is acknowledged; opening a message marks it read
 /// in WorldState.mailRead, the only saved state. The unread count shows on
 /// the Start menu's Mail entry and in the Mail window's title (retitled
 /// through the window, so its taskbar button follows); phase 17's icon badge
@@ -22,7 +22,7 @@ using UnityEngine;
 /// </summary>
 public sealed class MailFeed : MonoBehaviour
 {
-    /// <summary>The office's game manager (the citations issued).</summary>
+    /// <summary>The office's game manager (the acknowledged citation slips).</summary>
     [SerializeField] private GameManager game;
 
     /// <summary>The Start menu's Mail entry label ("Mail (2)").</summary>
@@ -50,13 +50,13 @@ public sealed class MailFeed : MonoBehaviour
     private void Start()
     {
         if (game != null)
-            game.CitationIssued += HandleCitation;
+            game.CitationAcknowledged += HandleCitation;
     }
 
     private void OnDestroy()
     {
         if (game != null)
-            game.CitationIssued -= HandleCitation;
+            game.CitationAcknowledged -= HandleCitation;
     }
 
     /// <summary>Rebuilds the inbox when the run's day changes (the run starts after this component).</summary>
@@ -78,7 +78,7 @@ public sealed class MailFeed : MonoBehaviour
             Announce();
     }
 
-    /// <summary>A citation was issued: its notice arrives.</summary>
+    /// <summary>A citation slip was acknowledged: its notice arrives.</summary>
     private void HandleCitation(CaseVerdict verdict)
     {
         WorldState world = World;

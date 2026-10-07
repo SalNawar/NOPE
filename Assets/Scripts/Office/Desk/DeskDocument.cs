@@ -50,11 +50,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>How far above the sheet each layer lies (metres toward the camera, never scaled with the paper: PaperLayers, the one stacking rule): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
     private const float SealLift = PaperLayers.Seal, FillLift = PaperLayers.Fill, HighlightLift = PaperLayers.Highlight, LineLift = PaperLayers.Line, PhotoLift = PaperLayers.Photo, TextLift = PaperLayers.Text, InkLift = PaperLayers.Ink;
 
-    /// <summary>The share of its zone's size the paper was last shown at (SetZone).</summary>
-    private float _zoneShare = 1f;
-
-    /// <summary>The sheet's scale in <paramref name="zone"/>: the reading size on the desk (at the art's reading share), the counter's share on the counter; times the paper's own share (a citation's).</summary>
-    private float ZoneScale(DeskZone zone) => _zoneShare * (_config == null ? 1f
+    /// <summary>The sheet's scale in <paramref name="zone"/>: the reading size on the desk (at the art's reading share), the counter's share on the counter.</summary>
+    private float ZoneScale(DeskZone zone) => (_config == null ? 1f
         : zone == DeskZone.Desk ? _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
         : _config.counterScale);
 
@@ -381,13 +378,10 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// DeskConfigSO.readingHeight) and evenly lit (the reading material; the
     /// photo in the reading tint instead of the room's). The size eases there,
     /// or is set at once (<paramref name="instant"/>); a paper on its art reads
-    /// at its art's share of that (FormArt.reading); a paper shown smaller
-    /// than its zone's size (a citation: DeskConfigSO.citationScale) takes
-    /// <paramref name="share"/> of it.
+    /// at its art's share of that (FormArt.reading).
     /// </summary>
-    public void SetZone(DeskZone zone, bool instant, float share = 1f)
+    public void SetZone(DeskZone zone, bool instant)
     {
-        _zoneShare = share;
         Zone = zone;
         float target = ZoneScale(zone);
         _sizeFrom = _sizeNow;

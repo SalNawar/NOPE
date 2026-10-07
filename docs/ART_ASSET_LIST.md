@@ -185,7 +185,6 @@ Saleh 2026-10-05: the player can look left at the 2150 city (item 6) and the day
 |---|---|---|---|---|---|---|
 | Morning briefing sheet | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
 | Shift ledger sheet | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
-| The Citation (TC-900) | after a wrong verdict it flies onto the desk and stays there (replaced the citation slip pop-up, 2026-10-07) | `Assets/Art/UI/Resources/Forms/paper_tc900.png` (`CitationForm_TC900` holds its places) | Saleh's Canva red carbon ticket (1200 × 2545), processed: the row numbers painted out (the game numbers rows across continuation sheets) and a worn dark navy CITED stamp added across the rows | done | 1 | done |
 
 - The two sheets' "Start shift" and "Go home" buttons take the UI kit's button.
 - **Drawn by code, no art:** the verdict line and the idle line.

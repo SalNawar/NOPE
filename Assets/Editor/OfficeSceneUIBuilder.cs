@@ -207,10 +207,11 @@ public static partial class OfficeSceneUIBuilder
         DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
         DestroyChildIfPresent(officeCanvas.transform, "VerdictButtons"); // the prototype's RETURN and DETAIN plates (Saleh 2026-10-07: everything diegetic)
 
-        // The verdict ribbon over the office (OfficeSceneUIBuilder.Kit, the UI kit's). The citation slip is retired (2026-10-07: a citation is a
-        // paper on the desk, DeskController.Cite): it goes from scenes built before.
+        // The verdict ribbon and the citation slip over the office (OfficeSceneUIBuilder.Kit, the UI kit's; Saleh 2026-10-07, after the 1007b
+        // demo: "I like the violation slip better", so the slip is back and the Citation paper on the desk is gone).
         Transform verdictStrip = BuildVerdictRibbon(officeCanvas.transform, out Image verdictRibbon, out TMP_Text verdictText);
-        DestroyChildIfPresent(officeCanvas.transform, "CitationPanel");
+        Transform citation = BuildCitationSlip(officeCanvas.transform, out TMP_Text citationReason, out TMP_Text citationDetail, out TMP_Text citationConsequence,
+                                               out Button citationContinue, out GameObject citationStamp);
 
         var soView = new SerializedObject(officeView);
         SetRef(soView, "frame", pcFrame);
@@ -304,6 +305,12 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soOffice, "resultBackdrop", verdictStrip.gameObject);
         SetRef(soOffice, "resultRibbon", verdictRibbon);
         SetRef(soOffice, "kit", _kit);
+        SetRef(soOffice, "citationPanel", citation.gameObject);
+        SetRef(soOffice, "citationReasonText", citationReason);
+        SetRef(soOffice, "citationDetailText", citationDetail);
+        SetRef(soOffice, "citationConsequenceText", citationConsequence);
+        SetRef(soOffice, "citationContinueButton", citationContinue);
+        SetRef(soOffice, "citationStamp", citationStamp);
         soOffice.ApplyModifiedProperties();
 
         var soFlow = new SerializedObject(dayFlow);
