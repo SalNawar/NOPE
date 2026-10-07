@@ -98,6 +98,9 @@ public static class UiKitNames
         }
     }
 
+    /// <summary>The guide plate's header pill (sheet 05): red over a tutorial step (<paramref name="tutorial"/>: the one with Skip), green over a moment or a practice.</summary>
+    public static string GuidePill(bool tutorial) => tutorial ? "pill_red" : "pill_green";
+
     /// <summary>The pieces whose face is dark (oxblood, slate, red, green, brass and lavender plates and their kin): a label on them prints in bone.</summary>
     private static readonly string[] DarkPieces =
     {

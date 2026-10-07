@@ -102,6 +102,34 @@ public static partial class OfficeSceneUIBuilder
         Color buttonFill = new Color(0.2f, 0.3f, 0.5f, 0.95f);
         Button skip = MakeButton(plate, "Skip", null, new Vector2(0.74f, 0.3f), new Vector2(0.98f, 0.7f), buttonFill, ThemeRoleId.DeskButton, "guide.skip");
         Button ok = MakeButton(plate, "Ok", null, new Vector2(0.74f, 0.3f), new Vector2(0.98f, 0.7f), buttonFill, ThemeRoleId.DeskButton, "guide.gotIt");
+        Image pill = null;
+        if (_kit != null)
+        {
+            // Sheet 05: the header on its pill (GuidePrompt picks red or green), Got it the oxblood plate.
+            Transform pillHost = Panel(plate, "HeaderPill", new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(10f, 30f), Color.white, ThemeRoleId.Tooltip);
+            var pillRect = (RectTransform)pillHost;
+            pillRect.pivot = new Vector2(0f, 1f);
+            pillRect.anchoredPosition = new Vector2(GuidePlateSize.x * 0.03f, -10f);
+            pillHost.GetComponent<Image>().raycastTarget = false;
+            pill = KitSkin(pillHost, UiKitNames.GuidePill(true), _kit.overlayScale);
+            HorizontalLayoutGroup fit = GetOrAdd<HorizontalLayoutGroup>(pillHost.gameObject);
+            fit.padding = new RectOffset(14, 14, 2, 2);
+            fit.childControlWidth = true;
+            fit.childControlHeight = true;
+            fit.childForceExpandWidth = false;
+            fit.childForceExpandHeight = true;
+            ContentSizeFitter grow = GetOrAdd<ContentSizeFitter>(pillHost.gameObject);
+            grow.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            header.transform.SetParent(pillHost, false);
+            header.alignment = TextAlignmentOptions.Center;
+            header.enableAutoSizing = false;
+            header.fontSize = 20f;
+            header.textWrappingMode = TextWrappingModes.NoWrap;
+            SceneUiKit.SkinText(header, _kit.inkOnDark, _kit.labelFont, true);
+            line.rectTransform.anchorMax = new Vector2(0.72f, 0.64f);
+            KitSkin(ok, "plate_ox", _kit.overlayScale);
+            KitLabel(ok, "plate_ox_rest");
+        }
 
         var arrow = (RectTransform)Panel(host, "Arrow", Center, Center, Vector2.zero, GuideArrowSize, Tooltip, ThemeRoleId.Tooltip);
         arrow.pivot = Center;
@@ -117,6 +145,8 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(prompt);
         SetRef(so, "plate", plate);
         SetRef(so, "header", header);
+        SetRef(so, "headerPill", pill);
+        SetRef(so, "kit", _kit);
         SetRef(so, "line", line);
         SetRef(so, "skipButton", skip);
         SetRef(so, "okButton", ok);

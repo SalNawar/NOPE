@@ -62,6 +62,13 @@ public class UiKitNamesTests
     }
 
     [Test]
+    public void GuidePill_RedTutorialGreenMoment()
+    {
+        Assert.AreEqual("pill_red", UiKitNames.GuidePill(true));
+        Assert.AreEqual("pill_green", UiKitNames.GuidePill(false));
+    }
+
+    [Test]
     public void DarkFace_LightFacesPrintInInk()
     {
         Assert.IsFalse(UiKitNames.DarkFace("card"));

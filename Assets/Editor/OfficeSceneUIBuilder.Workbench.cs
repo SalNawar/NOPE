@@ -305,6 +305,8 @@ public static partial class OfficeSceneUIBuilder
         note.overflowMode = TextOverflowModes.Overflow;
         note.gameObject.SetActive(false);
         SidePlate(button.transform);
+        if (_kit != null && KitSkin(button, "listrow_hover", _kit.desktopScale) != null)
+            GhostRow(button, _kit.inkOnLight);
         return button;
     }
 

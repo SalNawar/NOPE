@@ -57,6 +57,7 @@ public static partial class OfficeSceneUIBuilder
         KitInspect(o.Find("InspectButton"));
         KitSpeechBubble(o.Find("SpeechBubble/Panel"));
         KitWheel(o.Find("TravellerWheel/Catcher/Ring"));
+        KitDeskProps();
 
         // The taskbar's window button template at its own width (its row lays it out at run time; at build time it would take the row's rect).
         if (desktop.transform.Find("Taskbar/WindowButtons/WindowButtonTemplate") is RectTransform windowButton)
@@ -69,6 +70,7 @@ public static partial class OfficeSceneUIBuilder
 
         ApplyKitByRole(o, _kit.overlayScale);
         ApplyKitByRole(desktop.transform, _kit.desktopScale);
+        KitStartBanner(desktop.transform.Find("StartMenu"));
     }
 
     /// <summary>Skins a host and remembers it (the role pass leaves it); returns the face.</summary>
@@ -159,6 +161,66 @@ public static partial class OfficeSceneUIBuilder
         if (label != null)
             label.gameObject.SetActive(false);
         KitKeycap(button, "Keycap", "keycap_bone", ControlRules.InspectKey, new Vector2(0.5f, -0.06f), InspectKeycap);
+
+        // Inspect mode on: the button stays lit (its hover face, the halo and the glint) instead of the old square ring.
+        Transform on = button.Find("On");
+        if (on == null)
+            return;
+        foreach (string side in new[] { "Top", "Bottom", "Left", "Right" })
+            DestroyChildIfPresent(on, side);
+        Transform lit = Panel(on, "Lit", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Color.white, ThemeRoleId.DiegeticDevice);
+        lit.SetAsFirstSibling();
+        lit.GetComponent<Image>().raycastTarget = false;
+        KitSkin(lit, "inspect_hover", _kit.overlayScale);
+    }
+
+    /// <summary>The counter strip's three looks (sheet 05: slate COUNTER, green HAND BACK, red STAMP THE PASSPORT FIRST) and the rulebook's folder tabs (manila, the open one lighter).</summary>
+    private static readonly Color KitSlate = new Color(0.29f, 0.345f, 0.447f, 0.92f), KitGreen = new Color(0.373f, 0.522f, 0.314f, 0.92f),
+                                  KitGreenLit = new Color(0.373f, 0.522f, 0.314f, 1f), KitRed = new Color(0.761f, 0.227f, 0.18f, 0.92f),
+                                  KitManila = new Color(0.886f, 0.788f, 0.58f), KitManilaShut = new Color(0.79f, 0.69f, 0.48f);
+
+    /// <summary>
+    /// The desk's 3D pieces in the kit's colours (they are lit quads and flat
+    /// texts on the desk, not UI): the counter strip's tints and its label in
+    /// the label face (bone), the rulebook's tab plates manila and their words
+    /// in the label face.
+    /// </summary>
+    private static void KitDeskProps()
+    {
+        DeskCounter counter = Object.FindFirstObjectByType<DeskCounter>(FindObjectsInactive.Include);
+        if (counter != null)
+        {
+            var so = new SerializedObject(counter);
+            so.FindProperty("plainTint").colorValue = KitSlate;
+            so.FindProperty("handBackTint").colorValue = KitGreen;
+            so.FindProperty("hoverHandBackTint").colorValue = KitGreenLit;
+            so.FindProperty("hoverRefusedTint").colorValue = KitRed;
+            so.ApplyModifiedProperties();
+            if (so.FindProperty("label").objectReferenceValue is TMP_Text label)
+            {
+                label.font = _kit.labelFont;
+                label.color = _kit.inkOnDark;
+                label.characterSpacing = 6f;
+            }
+        }
+
+        DeskRulebook rulebook = Object.FindFirstObjectByType<DeskRulebook>(FindObjectsInactive.Include);
+        if (rulebook != null)
+        {
+            var so = new SerializedObject(rulebook);
+            so.FindProperty("openTab").colorValue = KitManila;
+            so.FindProperty("closedTab").colorValue = KitManilaShut;
+            so.ApplyModifiedProperties();
+            SerializedProperty tabs = so.FindProperty("tabs");
+            for (int i = 0; i < tabs.arraySize; i++)
+                if (tabs.GetArrayElementAtIndex(i).objectReferenceValue is Component tab && tab.transform.Find("Text") is Transform word)
+                {
+                    TMP_Text text = word.GetComponent<TMP_Text>();
+                    text.font = _kit.labelFont;
+                    text.color = _kit.inkOnLight;
+                    text.fontStyle = FontStyles.UpperCase;
+                }
+        }
     }
 
     /// <summary>The traveller's speech bubble (sheet 05): the kit's cream bubble with the body face in ink.</summary>
@@ -198,6 +260,34 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A wheel pill's pictogram tile (overlay units; its sprite's pad round a pill-tall tile).</summary>
     private const float WheelTileSize = 52f;
 
+    /// <summary>The PC's brand, printed on the frame's chin and up the Menu's side banner (a name, never translated).</summary>
+    private const string PcBrand = "CHRONODESK 2150";
+
+    /// <summary>The Menu's side banner's width (desktop units).</summary>
+    private const float StartBannerWidth = 44f;
+
+    /// <summary>The Menu's side banner (sheet 02): an oxblood band up its left side with the PC's brand reading upwards; the entries move right of it.</summary>
+    private static void KitStartBanner(Transform menu)
+    {
+        if (menu == null || !menu.TryGetComponent(out VerticalLayoutGroup list))
+            return;
+        list.padding = new RectOffset((int)StartBannerWidth + 12, list.padding.right, list.padding.top, list.padding.bottom);
+        Transform banner = Panel(menu, "Banner", Vector2.zero, new Vector2(0f, 1f), new Vector2(StartBannerWidth / 2f + 6f, 0f), new Vector2(StartBannerWidth, -12f),
+                                 new Color(0.541f, 0.184f, 0.231f, 1f), ThemeRoleId.StartMenu);
+        Image band = banner.GetComponent<Image>();
+        band.raycastTarget = false;
+        SceneUiKit.Tag(band, ThemeRoleId.StartMenu, ThemePart.Kit);
+        GetOrAdd<LayoutElement>(banner.gameObject).ignoreLayout = true;
+        float length = ((RectTransform)menu).sizeDelta.y - 40f;
+        Transform word = Panel(banner, "Brand", Center, Center, Vector2.zero, new Vector2(length, StartBannerWidth), null);
+        word.localRotation = Quaternion.Euler(0f, 0f, 90f);
+        TMP_Text brand = Text(word, "Text", PcBrand, 28, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, _kit.inkOnDark, ThemeRoleId.StartMenu);
+        brand.raycastTarget = false;
+        brand.textWrappingMode = TextWrappingModes.NoWrap;
+        brand.characterSpacing = 6f;
+        SceneUiKit.SkinText(brand, _kit.inkOnDark, _kit.labelFont, true);
+    }
+
     /// <summary>
     /// The role pass: every themed image under <paramref name="root"/> the desk
     /// pieces did not take gets its role's kit piece (<see cref="RolePiece"/>)
@@ -220,21 +310,7 @@ public static partial class OfficeSceneUIBuilder
 
             if (tag.Role == ThemeRoleId.MenuEntry || tag.Role == ThemeRoleId.QuitEntry)
             {
-                // A menu row is bare until the pointer is on it: the light row fades in.
-                Button row = image.GetComponent<Button>();
-                row.transition = Selectable.Transition.ColorTint;
-                ColorBlock tint = row.colors;
-                tint.normalColor = Color.clear;
-                tint.selectedColor = Color.clear;
-                tint.disabledColor = Color.clear;
-                tint.highlightedColor = Color.white;
-                tint.pressedColor = new Color(0.9f, 0.9f, 0.9f, 1f);
-                tint.colorMultiplier = 1f;
-                tint.fadeDuration = 0.06f;
-                row.colors = tint;
-                Transform label = image.transform.Find("Label");
-                if (label != null)
-                    SceneUiKit.SkinText(label.GetComponent<TMP_Text>(), tag.Role == ThemeRoleId.QuitEntry ? _kit.inkAlert : _kit.inkOnLight, _kit.bodyFont, false);
+                GhostRow(image.GetComponent<Button>(), tag.Role == ThemeRoleId.QuitEntry ? _kit.inkAlert : _kit.inkOnLight);
                 continue;
             }
 
@@ -285,6 +361,30 @@ public static partial class OfficeSceneUIBuilder
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// A menu row (a Menu entry, a drop-down's row) on the kit's light row,
+    /// bare until the pointer is on it (the row fades in), its label in
+    /// <paramref name="ink"/> in the body face. The row must already be skinned.
+    /// </summary>
+    private static void GhostRow(Button row, Color ink)
+    {
+        if (row == null)
+            return;
+        row.transition = Selectable.Transition.ColorTint;
+        ColorBlock tint = row.colors;
+        tint.normalColor = Color.clear;
+        tint.selectedColor = Color.clear;
+        tint.disabledColor = Color.clear;
+        tint.highlightedColor = Color.white;
+        tint.pressedColor = new Color(0.9f, 0.9f, 0.9f, 1f);
+        tint.colorMultiplier = 1f;
+        tint.fadeDuration = 0.06f;
+        row.colors = tint;
+        Transform label = row.transform.Find("Label");
+        if (label != null)
+            SceneUiKit.SkinText(label.GetComponent<TMP_Text>(), ink, _kit.bodyFont, false);
     }
 
     /// <summary>True when one of <paramref name="t"/>'s parents is a kit-skinned image (its text is drawn on a kit face).</summary>
@@ -344,6 +444,7 @@ public static partial class OfficeSceneUIBuilder
             case ThemeRoleId.StartMenu:
                 return "dropdown";
             case ThemeRoleId.Tooltip:
+            case ThemeRoleId.CompareBar:
                 return "tooltip";
             case ThemeRoleId.Toast:
                 return image.GetComponent<Button>() == null ? "panel_dark" : null;

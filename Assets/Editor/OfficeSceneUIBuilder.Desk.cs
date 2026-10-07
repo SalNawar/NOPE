@@ -444,7 +444,7 @@ public static partial class OfficeSceneUIBuilder
         powerLed.sprite = EnsureOfficeShape("crt_led", 8, 8, Center, LedPixel);
         powerLed.raycastTarget = false;
 
-        TMP_Text brand = Text(frame, "Brand", "CHRONODESK 2150", 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), DeviceInk(library),
+        TMP_Text brand = Text(frame, "Brand", PcBrand, 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), DeviceInk(library),
                               ThemeRoleId.DiegeticDevice, style: FontStyles.Bold);
         var brandRect = (RectTransform)brand.transform;
         brandRect.sizeDelta = new Vector2(0f, 60f);

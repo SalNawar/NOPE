@@ -194,6 +194,9 @@ public static partial class OfficeSceneUIBuilder
         return documents;
     }
 
+    /// <summary>The kit checkbox's side (desktop units, its sprite's pad round a 24-unit box).</summary>
+    private const float KitCheckboxSize = 46f;
+
     /// <summary>A labelled checkbox (a Toggle on a Button-role plate: the box, its check, the keyed label at Body size), on by default.</summary>
     private static Toggle BuildToggle(Transform parent, string name, string labelKey, Vector2 aMin, Vector2 aMax)
     {
@@ -212,6 +215,22 @@ public static partial class OfficeSceneUIBuilder
         toggle.targetGraphic = box.GetComponent<Image>();
         toggle.graphic = check.GetComponent<Image>();
         toggle.isOn = true;
+        if (_kit != null)
+        {
+            // Sheet 02 C2: the kit's checkbox, its ticked face over the empty one while on.
+            DestroyChildIfPresent(box, "Frame");
+            foreach ((Transform part, string sprite) in new[] { (box, "checkbox_off"), (check, "checkbox_on") })
+            {
+                Image image = part.GetComponent<Image>();
+                image.sprite = _kit.Get(sprite);
+                image.color = Color.white;
+                image.preserveAspect = true;
+                SceneUiKit.Tag(image, ThemeRoleId.InputField, ThemePart.Kit);
+            }
+            ((RectTransform)box).sizeDelta = new Vector2(KitCheckboxSize, KitCheckboxSize);
+            ((RectTransform)check).sizeDelta = new Vector2(KitCheckboxSize, KitCheckboxSize);
+            SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.bodyFont, false);
+        }
         return toggle;
     }
 
@@ -233,6 +252,12 @@ public static partial class OfficeSceneUIBuilder
         ((RectTransform)line.transform).offsetMin = new Vector2(PcSize.L + 4f, 0f);
         Button open = MakeButton(strip, "OpenButton", null, new Vector2(0.78f, 0.18f), new Vector2(0.97f, 0.82f), null, ThemeRoleId.Button, "app.toast.open");
         ButtonLabel(open, PcType.Body);
+        if (_kit != null)
+        {
+            // Sheet 02 C3: the scan toast's OPEN is an oxblood plate.
+            KitSkin(open, "miniplate_ox", _kit.desktopScale);
+            KitLabel(open, "miniplate_ox_rest");
+        }
         AppToast toast = strip.gameObject.AddComponent<AppToast>();
         var so = new SerializedObject(toast);
         Wire(so, "text", line);
