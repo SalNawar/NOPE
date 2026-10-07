@@ -183,6 +183,47 @@ public static class LookKeys
             yield return Premade(premadeId, expression).Name;
     }
 
+    /// <summary>What separates a key's name from its pose frame's id ("outfit_m_egypt_ancient__explaining_a"): two underscores, which no token holds.</summary>
+    public const string PoseSeparator = "__";
+
+    /// <summary>
+    /// A key drawn in a pose frame (TravellerPose: an instant still frame on a
+    /// dialogue beat): "{key}__{pose}", the same layer and parts; a premade's
+    /// whole picture is "premade_{id}__{pose}" whatever its expression (GPT
+    /// draws a premade's pose frames with the neutral face).
+    /// </summary>
+    public static LookKey Posed(LookKey key, string pose)
+    {
+        bool whole = key.Layer == LookLayer.Whole && key.PremadeId != null;
+        string name = (whole ? $"premade_{key.PremadeId}" : key.Name) + PoseSeparator + pose;
+        return new LookKey(name, key.Layer, key.Gender, key.NationId, key.EraId, key.SkinTone, key.Face, key.HairColour, key.Variant,
+                           key.PremadeId, whole ? NeutralExpression : key.Expression, pose);
+    }
+
+    /// <summary>The hands of a pose that crosses the face, drawn over everything (TravellerPose.CrossesFace): "hands_{g}_skin{N}__{pose}".</summary>
+    public static LookKey Hands(TravellerGender gender, int skin, string pose) =>
+        new LookKey($"hands_{GenderToken(gender)}_skin{skin}{PoseSeparator}{pose}", LookLayer.Hands, gender, null, null, skin, null, null, null, null, null, pose);
+
+    /// <summary>
+    /// Splits a key name at its pose separator: true with the neutral key's
+    /// name ("premade_caesar" for a premade's frame) and the pose id
+    /// ("explaining_a"); false, with the name itself and no pose, for a
+    /// neutral key or a blank pose.
+    /// </summary>
+    public static bool TryParsePose(string keyName, out string neutralName, out string pose)
+    {
+        int at = keyName != null ? keyName.IndexOf(PoseSeparator, StringComparison.Ordinal) : -1;
+        if (at <= 0 || at + PoseSeparator.Length >= keyName.Length)
+        {
+            neutralName = keyName;
+            pose = null;
+            return false;
+        }
+        neutralName = keyName.Substring(0, at);
+        pose = keyName.Substring(at + PoseSeparator.Length);
+        return true;
+    }
+
     /// <summary>The file-name token of a layer.</summary>
     private static string LayerToken(LookLayer layer)
     {
