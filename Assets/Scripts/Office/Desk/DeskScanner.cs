@@ -33,8 +33,28 @@ public sealed class DeskScanner : MonoBehaviour
     /// <summary>The placeholder machine's analysis lamp, shown while the Analysis Scanner is owned (optional).</summary>
     [SerializeField] private GameObject analysisLamp;
 
+    /// <summary>The glowing bar that crosses the glass while a scan runs (drop and go, the scanner app spec §1; optional: the art's scanner may bring its own).</summary>
+    [SerializeField] private Transform sweepBar;
+
+    /// <summary>Where the bar runs, in local Z: from the glass's front edge (x) to its back edge (y).</summary>
+    [SerializeField] private Vector2 sweepZ = new Vector2(-0.115f, 0.135f);
+
     /// <summary>The drop area's size in local XZ.</summary>
     public Vector2 DropSize => dropSize;
+
+    /// <summary>The sweep at <paramref name="progress"/> of a running scan (0 to 1: the bar crosses the glass), or hidden (below 0: no scan).</summary>
+    public void Sweep(float progress)
+    {
+        if (sweepBar == null)
+            return;
+        bool on = progress >= 0f;
+        if (sweepBar.gameObject.activeSelf != on)
+            sweepBar.gameObject.SetActive(on);
+        if (!on)
+            return;
+        Vector3 p = sweepBar.localPosition;
+        sweepBar.localPosition = new Vector3(p.x, p.y, Mathf.Lerp(sweepZ.x, sweepZ.y, Mathf.Clamp01(progress)));
+    }
 
     /// <summary>Sets the drop area (local XZ) and the bed (local).</summary>
     public void Configure(Vector2 drop, Vector3 bed)

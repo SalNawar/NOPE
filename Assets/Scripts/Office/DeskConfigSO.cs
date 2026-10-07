@@ -43,11 +43,11 @@ public sealed class DeskConfigSO : ScriptableObject
     [Range(0.5f, 1f)] public float cloneFill = 0.92f;
 
     [Header("Scanner")]
-    /// <summary>Seconds a desk scan takes (the shift clock keeps running).</summary>
-    [Min(0.1f)] public float scanSeconds = 1.5f;
+    /// <summary>Seconds a desk scan takes per paper (the shift clock keeps running): a fast sweep (drop and go, the scanner app spec §1: about 0.8 s).</summary>
+    [Min(0.1f)] public float scanSeconds = 0.8f;
 
-    /// <summary>Seconds a scan by hand takes with the Analysis Scanner (the analysis pass, the PC redesign SC4); a scan the Auto-Feed Scanner feeds itself keeps scanSeconds.</summary>
-    [Min(0.1f)] public float analysisScanSeconds = 3f;
+    /// <summary>Seconds a scan by hand takes with the Analysis Scanner (its pass: faster sweeps that also mark the first fault, the scanner app spec §1); a scan the Auto-Feed Scanner feeds itself keeps scanSeconds.</summary>
+    [Min(0.1f)] public float analysisScanSeconds = 0.5f;
 
     /// <summary>The deepest shadow behind the scanner, in metres, where its body hides a paper from the office camera (ScannerClearance: a paper left there moves out to the left, right or front; the desk-first redesign, item 4).</summary>
     [Min(0f)] public float scannerShadowMax = 0.35f;

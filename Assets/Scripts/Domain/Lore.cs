@@ -419,15 +419,18 @@ public static class CitizenFile
     /// A file line as a record row's label and value: a line opening with its
     /// own short label ("Registry note: ...", "Archive sources claim ..." has
     /// none) is split at its first ": " (a label of at most
-    /// <see cref="MaxLabelLength"/> characters, no other colon), else the
-    /// whole line under <paramref name="fallback"/>.
+    /// <see cref="MaxLabelLength"/> characters), the value starting with a
+    /// capital, else the whole line under <paramref name="fallback"/>.
     /// </summary>
     public static (string Label, string Value) Split(string line, string fallback)
     {
         string text = (line ?? string.Empty).Trim();
         int colon = text.IndexOf(": ", StringComparison.Ordinal);
         if (colon > 0 && colon <= MaxLabelLength && text.Length > colon + 2)
-            return (text.Substring(0, colon), text.Substring(colon + 2).Trim());
+        {
+            string value = text.Substring(colon + 2).Trim();
+            return (text.Substring(0, colon), char.ToUpperInvariant(value[0]) + value.Substring(1));
+        }
         return (fallback ?? string.Empty, text);
     }
 

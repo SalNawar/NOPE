@@ -160,7 +160,7 @@ public class LoreTests
     [Test]
     public void Split_ALinesOwnShortLabel_ElseTheFallback()
     {
-        Assert.AreEqual(("Registry note", "published the Principia, 1687: the laws of motion."), CitizenFile.Split("Registry note: published the Principia, 1687: the laws of motion.", "Note"));
+        Assert.AreEqual(("Registry note", "Published the Principia, 1687: the laws of motion."), CitizenFile.Split("Registry note: published the Principia, 1687: the laws of motion.", "Note"));
         Assert.AreEqual(("Note", "Archive sources claim he moved house ninety times."), CitizenFile.Split("Archive sources claim he moved house ninety times.", "Note"));
         Assert.AreEqual(("Note", "Answered the advert CLEAR YOUR DEBT: 180 days in the mills."), CitizenFile.Split("Answered the advert CLEAR YOUR DEBT: 180 days in the mills.", "Note"), "a colon far in is no label");
     }
@@ -193,6 +193,7 @@ public class LoreTests
         Assert.AreEqual(2, groups.Count);
         Assert.AreEqual("FILE", groups[0].Title);
         Assert.AreEqual("Clerk note", groups[0].Rows[0].Label);
+        Assert.AreEqual("Honeymoon booked for two.", groups[0].Rows[0].Value, "the value starts with a capital");
         Assert.AreEqual("Note", groups[0].Rows[1].Label);
         Assert.AreEqual("SEEN BEFORE · DETAINED 3 DAYS AGO", groups[1].Title, "the latest earlier verdict; a verdict word without a string reads as itself");
         CollectionAssert.AreEqual(new[] { "24 Mar 2150", "20 Mar 2150" }, groups[1].Rows.Select(r => r.Label).ToArray(), "newest first, never today's or later");

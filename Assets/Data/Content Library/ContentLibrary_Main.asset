@@ -18573,7 +18573,7 @@ MonoBehaviour:
       personality: 
       traits: []
       clue: 
-      text: A {relative} left on Debt Relief the same month. Another worksite.
+      text: Their {relative} left on Debt Relief the same month. Another worksite.
     - id: lab_record
       kinds: 02000000
       personality: 
@@ -18631,7 +18631,7 @@ MonoBehaviour:
       personality: 
       traits: []
       clue: 
-      text: Rift {incident} also took a {relative}. That file is still open.
+      text: Rift {incident} also took their {relative}. That file is still open.
     - id: dis_trade
       kinds: 03000000
       personality: 
@@ -18695,7 +18695,7 @@ MonoBehaviour:
       personality: 
       traits: []
       clue: 
-      text: A {relative} was stranded on an Economy transponder in {year}. Family
+      text: Their {relative} was stranded on an Economy transponder in {year}. Family
         claim pending.
     - id: news_athens
       kinds: 00000000
@@ -18708,7 +18708,8 @@ MonoBehaviour:
       personality: 
       traits: []
       clue: 
-      text: Keeps a photo of a {relative} in the left pocket. Declared at every desk.
+      text: Keeps a photo of their {relative} in the left pocket. Declared at every
+        desk.
     - id: any_address
       kinds: 000000000100000002000000
       personality: 

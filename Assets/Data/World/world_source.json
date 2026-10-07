@@ -19234,7 +19234,7 @@
         "kinds": [
           "Labourer"
         ],
-        "text": "A {relative} left on Debt Relief the same month. Another worksite."
+        "text": "Their {relative} left on Debt Relief the same month. Another worksite."
       },
       {
         "id": "lab_record",
@@ -19297,7 +19297,7 @@
         "kinds": [
           "Displaced"
         ],
-        "text": "Rift {incident} also took a {relative}. That file is still open."
+        "text": "Rift {incident} also took their {relative}. That file is still open."
       },
       {
         "id": "dis_trade",
@@ -19360,7 +19360,7 @@
           "PoorTourist",
           "Labourer"
         ],
-        "text": "A {relative} was stranded on an Economy transponder in {year}. Family claim pending."
+        "text": "Their {relative} was stranded on an Economy transponder in {year}. Family claim pending."
       },
       {
         "id": "news_athens",
@@ -19371,7 +19371,7 @@
       },
       {
         "id": "any_photo",
-        "text": "Keeps a photo of a {relative} in the left pocket. Declared at every desk."
+        "text": "Keeps a photo of their {relative} in the left pocket. Declared at every desk."
       },
       {
         "id": "any_address",
@@ -23068,6 +23068,12 @@
         "tier": "Full"
       },
       {
+        "key": "app.tab.board",
+        "text": "Case board",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "app.side.left",
         "text": "Left",
         "gloss": "None",
@@ -23284,6 +23290,12 @@
         "tier": "Full"
       },
       {
+        "key": "finding.link.NoRecord",
+        "text": "No record",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "finding.note.DifferentDetails",
         "text": "{0} and {1} are different details. Nothing logged.",
         "gloss": "None",
@@ -23404,6 +23416,12 @@
         "tier": "Full"
       },
       {
+        "key": "finding.title.NoRecord",
+        "text": "{0}: no record on file",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "finding.detail",
         "text": "{0} against {1}",
         "gloss": "None",
@@ -23424,6 +23442,12 @@
       {
         "key": "finding.detail.missing",
         "text": "Asked for, not carried",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.detail.noRecord",
+        "text": "Looked up {0}: nothing on file",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25614,6 +25638,270 @@
       {
         "key": "visit.citation",
         "text": "· Citation: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.noScan",
+        "text": "Scan a paper to fill the case board: drop it on the scanner.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.record.found",
+        "text": "RECORD ON FILE · {0} · {1} · OPEN",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.record.noNumber",
+        "text": "no number",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.record.none",
+        "text": "NO RECORD ON FILE · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.record.nothing",
+        "text": "No scanned paper names an ID or a name yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.section.rules",
+        "text": "RULES CHECK",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.rules.none",
+        "text": "Nothing of today's rules to check yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.rule.destination",
+        "text": "Destination",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.rule.paper",
+        "text": "Required paper",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.rule.date",
+        "text": "{0} ({1})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.chip.Valid",
+        "text": "VALID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.chip.Expired",
+        "text": "EXPIRED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.chip.Closed",
+        "text": "CLOSED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.chip.Missing",
+        "text": "MISSING",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.chip.WrongDate",
+        "text": "WRONG DATE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.section.cross",
+        "text": "CROSS-CHECK",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.cross.none",
+        "text": "Scan two papers (or one with a record on file) to compare them here.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.cross.detail",
+        "text": "Detail",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.cross.record",
+        "text": "Record",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.cross.blank",
+        "text": "-",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.cross.agree",
+        "text": "{0} · {1} agree",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.cross.cell",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.sources",
+        "text": "Sources",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.section.overlay",
+        "text": "OVERLAY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.hint",
+        "text": "Drag one source onto another (or click two) to lay them over each other.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.over",
+        "text": "{0} over {1}: slide to fade. Only real differences shimmer.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.nothing",
+        "text": "These two state nothing in common.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.photo",
+        "text": "the photo",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.face",
+        "text": "Their face",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.faceLabel",
+        "text": "Face",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.overlay.register",
+        "text": "Seal Register",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.tab.print",
+        "text": "PRINT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.tab.uv",
+        "text": "UV",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.tab.chip",
+        "text": "CHIP",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.uv.title",
+        "text": "UV LIGHT · HIDDEN LAYER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.uv.none",
+        "text": "Nothing shows under UV light.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.uv.wholePaper",
+        "text": "the whole paper",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.uv.Watermark",
+        "text": "Watermark ({0}): {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.uv.Ghost",
+        "text": "Ghost under {0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.uv.Microprint",
+        "text": "Microprint ({0}): {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.chip.title",
+        "text": "CHIP RECORD",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.chip.none",
+        "text": "This paper carries no chip.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "layers.chip.line",
+        "text": "<b>{0}</b>  {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.file.line",
+        "text": "<b>{0}</b>  {1}",
         "gloss": "None",
         "tier": "Full"
       },

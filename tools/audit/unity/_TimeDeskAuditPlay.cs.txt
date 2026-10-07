@@ -452,6 +452,8 @@ public static class _TimeDeskAuditPlay
         if (practice != null)
             Check(practiceSeen, $"day {day}: the new page's practice ('{practice.id}') showed on a traveller who carries it");
         yield return Frames(3);
+        if (RunManager.Instance.Library.Introductions.Has(day, Feature.Scanner) && !Seen.Contains($"board d{day}"))
+            Line($"-- day {day}: no deviation case's papers and record disagreed on the case board today");
         Line($"-- day {day} shift report ({presented} presented)");
         Line("   " + ((TMP_Text)Field(o.DayFlow(), "resultsTitleText")).text);
         string report = ((TMP_Text)Field(o.DayFlow(), "resultsBodyText")).text;
@@ -666,6 +668,7 @@ public static class _TimeDeskAuditPlay
             yield return VisualProbe(o, c, day, slot);
         if (gatherEvidence)
         {
+            yield return BoardCrossCheck(o, c, day, slot);
             yield return Evidence(o, c, day, slot);
             if (ShotsOn)
                 yield return CaughtShots(o, c);
@@ -1187,6 +1190,49 @@ public static class _TimeDeskAuditPlay
     {
         var registry = (CitizenRegistry)Field(Field(o.Ui, "_reference"), "_registry");
         return FindRecord(registry, c.visitorGivenName);
+    }
+
+    /// <summary>
+    /// The case board's cross-check table (the scanner app spec §2.3) logs the
+    /// evidence of one case a day, from the scanner's day: the first traveller
+    /// with a deviation fault whose scanned papers and record disagree on a
+    /// row (every paper scanned as the desk scanner reports it), the first
+    /// glowing cell clicked (it and its partner through the one compare), the
+    /// finding written to the transcript; a day with none says so at its end.
+    /// </summary>
+    private static IEnumerator BoardCrossCheck(Office o, CaseInstance c, int day, int slot)
+    {
+        if (!RunManager.Instance.Library.Introductions.Has(day, Feature.Scanner) || Seen.Contains($"board d{day}"))
+            yield break;
+        object documents = Field(o.Ui, "_documents");
+        var papers = (CasePapers)Field(documents, "_papers");
+        for (int i = 0; i < c.documents.Count; i++)
+            if (papers.State(i) == PaperState.OnDesk)
+                Call(documents, "Scan", i);
+        yield return Frames(2);
+        CaseBoardView board = (o.RightPane.gameObject.activeInHierarchy ? o.RightPane : o.LeftPane).View(AppTab.Board) as CaseBoardView;
+        if (board == null)
+        {
+            Check(false, $"d{day} slot {slot}: the app hosts the case board");
+            yield break;
+        }
+        CaseBoardModel model = board.Model;
+        for (int r = 0; r < model.Cross.Count; r++)
+        {
+            CrossRow row = model.Cross[r];
+            int cell = row.Cells.FindIndex(x => x.Glows);
+            if (cell < 0)
+                continue;
+            int before = o.App.Board.Log.Count;
+            Call(board, "CellClicked", r, cell);
+            yield return Frames(1);
+            Finding logged = o.App.Board.Log.Items.Count > before ? o.App.Board.Log.Items[o.App.Board.Log.Items.Count - 1] : null;
+            CrossCell partner = row.Cells[row.Cells[cell].Partner];
+            Line($"   board: record {model.By} '{model.Query}'; cross-check {row.Category} '{row.Cells[cell].Value.Value.Value}' ({model.Columns[cell].Title}) against '{partner.Value.Value.Value}' ({model.Columns[row.Cells[cell].Partner].Title}) -> {(logged != null ? logged.Kind + (logged.Proof ? " (evidence)" : string.Empty) : "nothing logged")}");
+            Check(logged != null && FindingRules.IsDifference(logged.Kind), $"d{day} slot {slot}: the case board's cross-check logs a difference ({row.Category})");
+            First($"board d{day}");
+            yield break;
+        }
     }
 
     /// <summary>Proves each of a deviation fault's tells through the real compare path: two papers that disagree first (the cross proof, one pair per category), then each tell picked against the claimed place's book row, else the row its value belongs to (or the traveller's own record row for a record category); a dress tell is picked through the wheel's Look menu. A category already documented is not proven twice.</summary>

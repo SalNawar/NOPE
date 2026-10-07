@@ -74,7 +74,10 @@ public enum DropOutcome
     HandsBack,
 
     /// <summary>A paper from the desk was dropped on the counter before the passport carries a verdict: it goes back to where it was picked up, on the desk, with the note "Stamp the passport first" (Saleh 2026-10-06: "documents can only be returned after stamping").</summary>
-    NotStamped
+    NotStamped,
+
+    /// <summary>It was dropped on the busy scanner: it waits its turn by the glass and feeds through by itself (drop and go, the scanner app spec §1: "a stack feeds through one paper at a time").</summary>
+    Queued
 }
 
 /// <summary>The desk's two zones (Papers, Please's, Saleh 2026-10-06): where a document lies decides its size.</summary>
@@ -148,6 +151,9 @@ public sealed class DeskPapers
     /// <summary>The Auto-Feed queue: the papers waiting to scan themselves, in hand-over order.</summary>
     private readonly List<int> _queue = new List<int>();
 
+    /// <summary>The queued papers dropped on the scanner (drop and go): they scan by hand when their turn comes.</summary>
+    private readonly HashSet<int> _dropped = new HashSet<int>();
+
     /// <summary>The paper being scanned, or -1.</summary>
     private int _scanning = -1;
 
@@ -183,8 +189,14 @@ public sealed class DeskPapers
     /// <summary>True when paper <paramref name="i"/>'s analysis pass has ended (a re-scan of it is AlreadyAnalysed).</summary>
     public bool WasAnalysed(int i) => InRange(i) && _analysed[i];
 
-    /// <summary>The papers waiting to scan themselves (the Auto-Feed queue).</summary>
+    /// <summary>The papers waiting to scan (the Auto-Feed's and those dropped on the busy scanner).</summary>
     public int QueuedCount => _queue.Count;
+
+    /// <summary>How far the running scan is, 0 to 1 (0 while idle): the sweep's place on the glass.</summary>
+    public float Progress => ScannerBusy && _running > 0f ? Math.Min(1f, _elapsed / _running) : 0f;
+
+    /// <summary>True when paper <paramref name="i"/> waits in the feed.</summary>
+    public bool IsQueued(int i) => _queue.Contains(i);
 
     /// <summary>The papers handed over on arrival, in paper order (CaseDocuments.ArrivalIndices).</summary>
     public IReadOnlyList<int> ArrivalIndices { get; }
@@ -258,7 +270,7 @@ public sealed class DeskPapers
             if (StateOf(i) != PaperState.OnDesk || (ready != null && !ready(i)))
                 continue;
 
-            BeginScan(i, false);
+            BeginScan(i, _dropped.Contains(i));
             return i;
         }
         return -1;
@@ -271,7 +283,9 @@ public sealed class DeskPapers
     /// Decides a released paper: a paper that is not on the desk (or an index
     /// out of range) is Refused and nothing changes; over the scanner it
     /// starts scanning by hand while the scanner is idle (a queued paper
-    /// leaves the queue) and is Refused while it is busy; on the counter, once
+    /// leaves the queue) and, while it is busy, joins the feed to scan by hand
+    /// at its turn (Queued: drop and go, the scanner app spec §1); off the
+    /// scanner a waiting paper leaves the feed; on the counter, once
     /// the passport carries its verdict (<paramref name="verdict"/>), any
     /// paper hands the papers back (HandsBack: the controller then ends the
     /// case), and before that a paper from the desk bounces back to it
@@ -286,10 +300,17 @@ public sealed class DeskPapers
         if (overScanner)
         {
             if (ScannerBusy)
-                return DropOutcome.Refused;
+            {
+                if (!_queue.Contains(i))
+                    _queue.Add(i);
+                _dropped.Add(i);
+                return DropOutcome.Queued;
+            }
             BeginScan(i, true);
             return DropOutcome.Scanning;
         }
+        if (_dropped.Remove(i))
+            _queue.Remove(i);
         if (zone == DeskZone.Counter)
         {
             if (verdict)
@@ -336,6 +357,7 @@ public sealed class DeskPapers
             _zones[i] = DeskZone.Counter;
         }
         _queue.Clear();
+        _dropped.Clear();
         _scanning = -1;
         _elapsed = 0f;
         Pass = ScanPass.Plain;
@@ -350,6 +372,7 @@ public sealed class DeskPapers
         Pass = _scanners.PassFor(byHand, _analysed[i]);
         _running = Pass == ScanPass.Analysis ? _analysisSeconds : _scanSeconds;
         _queue.Remove(i);
+        _dropped.Remove(i);
     }
 
     /// <summary>A paper's state (callers check the range).</summary>

@@ -66,6 +66,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The Calendar tabs: today in the agency's calendar.</summary>
     [SerializeField] private CalendarView[] calendarViews = new CalendarView[0];
 
+    /// <summary>The case boards (the scanner app spec §2): the scanned papers against the record and today's rules.</summary>
+    [SerializeField] private CaseBoardView[] caseBoardViews = new CaseBoardView[0];
+
     [Header("Office")]
     /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
     [SerializeField] private InteractionPanelController interactionPanel;
@@ -108,6 +111,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>The current case's evidence and the Report tab.</summary>
     private EvidencePresenter _evidence;
+
+    /// <summary>The current traveller's case board.</summary>
+    private CaseBoardPresenter _caseBoard;
 
     /// <summary>The stamps whose decisions this listens to (null while detached; audit R4-003).</summary>
     private DeskStampTray _stampTrayListening;
@@ -193,6 +199,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview.NotCarried += LogNotCarried;
         _interview.MissingChanged += ShowMissing;
         _documents.PapersChanged += ShowMissing;
+        _documents.PapersChanged += RefreshBoard;
+        _interview.MissingChanged += RefreshBoard;
+        _caseBoard.NoRecord += LogNoRecord;
+        foreach (CaseBoardView board in _caseBoard.Views)
+            if (board != null)
+                board.FlagRequested += FlagMissingFromApp;
         _reference.RecordLookedUp += StepsRecordViewed;
         if (compareController != null)
             compareController.PairCompared += StepsCompared;
@@ -227,6 +239,7 @@ public sealed class InvestigationUIController : MonoBehaviour
                                             RequestPaper, SignWaiver, () => _currentCase, this, index);
         // No Report badge (the desk-first redesign: the Deviation Report leaves the player's view; the findings column is the evidence).
         _evidence = new EvidencePresenter(compareController, reportViews, () => { }, () => _currentCase, () => _agency, () => _reference.Day);
+        _caseBoard = new CaseBoardPresenter(caseBoardViews, recordsViews);
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>
@@ -271,6 +284,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview.NotCarried -= LogNotCarried;
         _interview.MissingChanged -= ShowMissing;
         _documents.PapersChanged -= ShowMissing;
+        _documents.PapersChanged -= RefreshBoard;
+        _interview.MissingChanged -= RefreshBoard;
+        _caseBoard.NoRecord -= LogNoRecord;
+        foreach (CaseBoardView board in _caseBoard.Views)
+            if (board != null)
+                board.FlagRequested -= FlagMissingFromApp;
         _reference.RecordLookedUp -= StepsRecordViewed;
         if (compareController != null)
             compareController.PairCompared -= StepsCompared;
@@ -355,6 +374,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.EndCase();
         if (Steps != null)
             Steps.EndCase();
+        _caseBoard.EndCase();
     }
 
     /// <summary>The desktop's idle line off (a traveller is at the desk) or on.</summary>
@@ -402,6 +422,20 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The Papers menu (or the desk's rulebook) flagged a paper missing.</summary>
     private void FlagMissingFromApp(string requestId) => FlagMissing(requestId);
 
+    /// <summary>The case board's lookup found no record of the scanned papers' number or name: the workbench logs it (the scanner app spec §2.1).</summary>
+    private void LogNoRecord(string query)
+    {
+        if (Board != null && _currentCase != null)
+            Board.LogNoRecord(query);
+    }
+
+    /// <summary>The case board again, from the case's papers, the day's registry, directives and papers menu (a scan, a hand-over, a flag).</summary>
+    private void RefreshBoard()
+    {
+        if (_currentCase != null)
+            _caseBoard.Refresh(_documents.Papers, _documents.Documents, _documents.Shows, _reference.Registry, _reference.Rules, _interview.Missing, _reference.Day, _agency);
+    }
+
     /// <summary>The traveller does not carry a paper they were asked for: the workbench logs it as missing (a difference a denial can rest on).</summary>
     private void LogNotCarried(FormRequest request)
     {
@@ -437,6 +471,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         ShowCaseLayers(true);
 
         _reference.ShowDirectives();
+        _caseBoard.BeginCase(inst);
         _interview.BeginCase(inst);
         app.SetSpeechScript(_interview.Translation.Font);
         _documents.Present(inst, lib != null ? lib.Agency : null, lib != null ? lib.Interview : null, lib != null ? lib.LongestOriginLabel : 0);
@@ -539,6 +574,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>A paper reached the PC: the app decides what that shows (ScanArrival).</summary>
     private void HandleScanned(int paper)
     {
+        RefreshBoard();
         IReadOnlyList<CaseDocument> documents = _documents.Documents;
         if (app != null && paper >= 0 && paper < documents.Count)
             app.Scanned(paper, documents[paper].name);

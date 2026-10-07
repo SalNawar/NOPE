@@ -66,7 +66,10 @@ public enum FindingKind
     OtherOffice,
 
     /// <summary>A paper flagged missing that the traveller, asked for it, says they do not carry ("Not carried"; the desk-first redesign, item 7). Logged; a difference.</summary>
-    PaperMissing
+    PaperMissing,
+
+    /// <summary>The scanned papers name no record on file (the case board's auto lookup, the scanner app spec §2.1: "NO RECORD"). Logged; a difference, never a proof.</summary>
+    NoRecord
 }
 
 /// <summary>How a finding looks: its line's and plate's colour.</summary>
@@ -213,6 +216,7 @@ public static class FindingRules
             case FindingKind.Expired:
             case FindingKind.SealIncorrect:
             case FindingKind.PaperMissing:
+            case FindingKind.NoRecord:
                 return FindingLook.Differ;
             default:
                 return FindingLook.Info;

@@ -565,6 +565,8 @@ public sealed class CaseFactory
 
         // 6) Build the documents the traveller carries today (their fields are filled below).
         BuildDocuments(inst, plan, blueprint);
+        inst.requiredForms = plan.TemplatesOf(blueprint).Where(t => t != null && DocumentHandOvers.IsRequested(t.handOver))
+                                 .Select(t => FormRequests.IdOf(t.askGroup, t.formNumber)).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToList();
 
         // 7) Investigation layer: structured fields (the claim is only spoken: InterviewScript.Opening), then the rolled
         //    lie planned and printed, or the paper side of a broken directive (a form left out or unsigned, a date falsified).

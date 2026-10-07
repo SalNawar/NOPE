@@ -345,6 +345,7 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(soInvest, "reportViews", app.Report);
         SerializedArrays.Set(soInvest, "rulesViews", app.Rules);
         SerializedArrays.Set(soInvest, "calendarViews", app.Calendar);
+        SerializedArrays.Set(soInvest, "caseBoardViews", app.CaseBoards);
         Wire(soInvest, "interactionPanel", interaction);
         Wire(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
         Wire(soInvest, "hud", caseHud);

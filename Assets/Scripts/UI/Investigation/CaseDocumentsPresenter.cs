@@ -36,6 +36,9 @@ public sealed class CaseDocumentsPresenter
     /// <summary>The case's analysis marks so far, each once (a mark lasts for the case).</summary>
     private readonly List<AnalysisMark> _marks = new List<AnalysisMark>();
 
+    /// <summary>The scans' UV and CHIP layers' data (the scanner app spec §2.4): the stub until the document track's hidden and chip data land, then theirs.</summary>
+    private readonly IScanLayers _layers = new StubScanLayers();
+
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new List<CaseDocument>();
 
@@ -152,6 +155,9 @@ public sealed class CaseDocumentsPresenter
         CaseClaim claim = AppLinks.Claim(inst);
         foreach (DocumentsView view in _views)
             if (view != null)
+                view.SetLayers(_layers);
+        foreach (DocumentsView view in _views)
+            if (view != null)
                 view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.PhotoLook : null, _art, claim, requestNames);
 
         if (_desk != null)
@@ -196,6 +202,10 @@ public sealed class CaseDocumentsPresenter
     /// <summary>Which fields today's papers print (SetDay; null: every field).</summary>
     private Func<string, ClueCategory, bool> _shows;
 
+    /// <summary>True when paper <paramref name="document"/> prints its fields of <paramref name="category"/> today (SetDay's rule; every field without one).</summary>
+    public bool Shows(int document, ClueCategory category) =>
+        _shows == null || document < 0 || document >= _caseDocuments.Count || _shows(_caseDocuments[document].formNumber, category);
+
     /// <summary>A paper handed over: onto the desk (its copy reaches the PC when it is scanned), or scanned at once where no desk is reachable.</summary>
     private void Receive(int index)
     {
@@ -238,6 +248,8 @@ public sealed class CaseDocumentsPresenter
         AnalysisMark? mark = PaperAnalysis.First(_caseDocuments, _papers, _documented());
         if (mark.HasValue && !_marks.Contains(mark.Value))
             _marks.Add(mark.Value);
+        if (mark.HasValue)
+            UiCue.Play(UiCue.ScanFlag);
         foreach (DocumentsView view in _views)
             if (view != null)
             {
