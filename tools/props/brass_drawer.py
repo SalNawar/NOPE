@@ -382,7 +382,7 @@ def stand_in_daters(frame_mat, red_body, green_body, window):
         o = bpy.context.active_object
         o.scale = (2 * DATER_HW - 0.002, 2 * DATER_HD, 0.025)
         parts.append(_finish(o, body, 0.004, 3))
-        bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=DATER_HD, depth=2 * DATER_HW - 0.002, location=u2b((cx, 0.058, 0.0)))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=DATER_HD, depth=2 * DATER_HW - 0.005, location=u2b((cx, 0.058, 0.0)))
         o = bpy.context.active_object
         o.rotation_euler = (0.0, math.radians(90), 0.0)
         parts.append(_finish(o, body, 0.0))
