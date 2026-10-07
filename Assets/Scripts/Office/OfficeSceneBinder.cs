@@ -419,7 +419,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             // The shadow behind the scanner its body hides from the office camera (the desk-first redesign, item 4).
             if (this.desk != null && config != null)
             {
-                float body = artScanner ? spot.Bounds.size.y : DeskScanner.PlaceholderHeight;
+                float body = artScanner ? spot.Bounds.size.y : scanner.MachineHeight;
                 Vector3 toScanner = s.position + Vector3.up * body - viewer;
                 float elevation = Mathf.Atan2(-toScanner.y, new Vector2(toScanner.x, toScanner.z).magnitude) * Mathf.Rad2Deg;
                 this.desk.SetScannerView(toScanner, ScannerClearance.Shadow(body, elevation, config.scannerShadowMax));

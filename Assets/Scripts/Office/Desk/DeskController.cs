@@ -685,6 +685,8 @@ public sealed class DeskController : MonoBehaviour
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         DeskZone under = ZoneAt(point);
+        // The scanner's lid opens for a paper dragged near it (ScannerLid).
+        scanner.SetNear(!_scanners.Hidden && scanner.Near(point));
         DeskZone shown = DeskPapers.ShownWhileDragged(paper.Zone, under);
         if (paper.Zone != shown)
             paper.SetZone(shown, false);
@@ -701,6 +703,7 @@ public sealed class DeskController : MonoBehaviour
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = -1;
         _overCounter = false;
+        scanner.SetNear(false);
         ShowCounter();
         DeskZone zone = ZoneAt(released);
         bool verdict = stamps != null && stamps.HasVerdict;
@@ -760,6 +763,7 @@ public sealed class DeskController : MonoBehaviour
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = -1;
+        scanner.SetNear(false);
         if (_overCounter)
         {
             _overCounter = false;

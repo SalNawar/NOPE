@@ -42,6 +42,9 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 20 | `scanner_sweep` | scan light sweeps (loopable 1 s) | 1.0 s | mechanical carriage whirr | loop | P1 |
 | 21 | `scanner_done` | scan finished | 0.4 s | two-tone confirmation beep, retro | ×1 | P1 |
 | 22 | `scanner_flag` | scan finds a fault | 0.5 s | low buzzer | ×1 | P1 |
+| 86 | `scanner_lid_open` | the cream scanner's lid swings open (a paper dragged near it; the scan done) | 0.35 s | xerox/photocopier: a sprung plastic hinge swinging up, a light stop click | ×1 | P2 |
+| 87 | `scanner_lid_close` | the scanner's lid shuts (the paper dropped on the glass; idle) | 0.3 s | xerox/photocopier: the lid's hollow plastic clack, a short rattle | ×1 | P2 |
+| 88 | `scanner_scan` | the scan runs under the shut lid | 1.4 s | xerox/photocopier: a relay tick, the motor spinning up, the carriage's whine out and back, the end clicks | ×1 | P1 |
 | 23 | `inspect_on` | inspect mode toggled on | 0.3 s | lamp switch click plus faint hum | ×1 | P2 |
 | 24 | `inspect_link` | two fields linked in inspect mode | 0.2 s | soft marker tick | ×3 | P2 |
 | 25 | `inspect_match` | a discrepancy confirmed | 0.5 s | sharp "found it" ding, typewriter bell | ×1 | P1 |
@@ -141,4 +144,4 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 75 | `mus_desk_calm` | early shift, low and sparse (synth plus tape warble) | P3 |
 | 76 | `mus_desk_tense` | last hour / low stability layer | P3 |
 
-**Total:** 85 entries; about 165 files counting the variants. **P1 alone:** 42 entries.
+**Total:** 88 entries; about 168 files counting the variants. **P1 alone:** 43 entries.

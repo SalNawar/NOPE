@@ -164,7 +164,13 @@ public sealed class MotionKnobs
     public float drawerCarrySeconds = 0.42f, drawerCarryPower = 2.4f, drawerStopCarry = 0.3f, drawerRaiseFrom = 0.8f, drawerRaiseStagger = 0.14f, drawerLockBounce = 0.25f;
 
     /// <summary>The brass drawer closing: the seconds between APPROVED and DENIED folding down, the shove's seconds and its kick (DrawerSequence.ShoveCurve: 0 an even slide, 1 all speed at the start), and FeelDirector.Hit's strength as the drawer hits its stop.</summary>
-    public float drawerFoldStagger = 0.1f, drawerShoveSeconds = 0.28f, drawerShoveKick = 0.7f, drawerStopHit = 0.12f;
+    public float drawerFoldStagger = 0.1f, drawerShoveSeconds = 0.28f, drawerShoveKick = 0.7f, drawerStopHit = 0.06f;
+
+    /// <summary>The cream scanner's lid (ScannerLid): how far it swings open (degrees about its hinge), how long it stays open after a scan before it shuts by itself (seconds), and how far past the drop area a dragged paper's pointer opens it (metres).</summary>
+    public float scannerLidAngle = 70f, scannerLidIdleSeconds = 2.5f, scannerLidNear = 0.08f;
+
+    /// <summary>The feel of the scanner lid's swing (quick and sprung).</summary>
+    public MotionFeel scannerLidFeel = MotionFeel.Balanced;
 
     /// <summary>The feel of the brass drawer's stop and of its cradles' quarter turns.</summary>
     public MotionFeel drawerFeel = MotionFeel.Drawer, cradleFeel = MotionFeel.Cradle;

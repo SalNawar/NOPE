@@ -310,6 +310,9 @@ public static class PropArt
     public static bool UseArt(bool present, System.Collections.Generic.IEnumerable<string> required, Func<string, bool> has) =>
         present && Missing(required, has).Count == 0;
 
+    /// <summary>The cream scanner's parts (tools/props/scanner/scanner_model.py): its body, the hinged lid, the bed's glass, the sweep bar and the readout.</summary>
+    public static readonly string[] Scanner = { "Body", "Lid", "Glass", "SweepBar", "Readout" };
+
     /// <summary>The brass stamp drawer's parts (tools/props/brass_drawer.py): the tray, and per lane its cradle, pinion, rack, lever and nameplate.</summary>
     public static readonly string[] BrassDrawer =
     {

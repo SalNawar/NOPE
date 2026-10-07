@@ -846,37 +846,29 @@ public static partial class OfficeSceneUIBuilder
     /// the desk plane, inactive until DeskView makes it live); the hand's
     /// Catcher and Examiner retired with Papers, Please's controls (destroyed
     /// when an older scene still holds them); Office/Scanner (the
-    /// DeskScanner, its click box, Clickable and reaction, and a stand-in
-    /// flatbed machine the binder shows where the art has no scanner, with
-    /// the upgrades' feeder tray and analysis lamp, inactive until owned: SC6); the
-    /// day-1 scan note. Idempotent.
+    /// DeskScanner, its click box, Clickable and reaction, its AudioSource and
+    /// sounds, and its machine the binder shows where the art office has no
+    /// scanner: the cream scanner when its art is complete (BuildScannerArt),
+    /// else the stand-in flatbed (BuildScannerStandIn)); the day-1 scan note.
+    /// Idempotent.
     /// </summary>
     private static DeskController BuildDesk(Transform office, DeskConfigSO config, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint)
     {
         Clickable scannerClick = EnsureClickBox(office, "Scanner");
         scanner = GetOrAdd<DeskScanner>(scannerClick.gameObject);
         DestroyChildIfPresent(scannerClick.transform, "Placeholder");
-        Transform machine = EnsureChild(scannerClick.transform, "Placeholder");
-        PrimitivePart(machine, "Base", PrimitiveType.Cube, new Vector3(0f, 0.025f, 0f), new Vector3(0.4f, 0.05f, 0.32f), LitMaterial("Placeholder_ScannerBody", new Color(0.24f, 0.33f, 0.31f), 0.35f));
-        PrimitivePart(machine, "Bed", PrimitiveType.Cube, new Vector3(0f, 0.051f, 0.01f), new Vector3(0.34f, 0.004f, 0.25f), LitMaterial("Placeholder_ScannerGlass", new Color(0.08f, 0.16f, 0.17f), 0.85f));
-        PrimitivePart(machine, "Hinge", PrimitiveType.Cube, new Vector3(0f, 0.06f, 0.15f), new Vector3(0.4f, 0.03f, 0.03f), LitMaterial("Placeholder_ScannerTrim", new Color(0.84f, 0.78f, 0.65f), 0.3f));
-        PrimitivePart(machine, "Light", PrimitiveType.Cube, new Vector3(0.16f, 0.052f, -0.135f), new Vector3(0.02f, 0.006f, 0.02f), LitMaterial("Placeholder_ScannerLight", new Color(0.35f, 0.95f, 0.45f), 0.6f));
-        // The upgrades' parts (SC6), shown by DeskScanner.ShowUpgrades while owned: the Auto-Feed's sheet tray leaning on the hinge, the Analysis's lamp bar across the bed.
-        GameObject tray = UpgradePart(machine, "FeederTray", new Vector3(0f, 0.09f, 0.19f), new Vector3(0.3f, 0.006f, 0.12f), Quaternion.Euler(-35f, 0f, 0f), LitMaterial("Placeholder_ScannerTrim", new Color(0.84f, 0.78f, 0.65f), 0.3f));
-        GameObject lamp = UpgradePart(machine, "AnalysisLamp", new Vector3(0f, 0.11f, -0.1f), new Vector3(0.3f, 0.014f, 0.024f), Quaternion.identity, LitMaterial("Placeholder_ScannerLamp", new Color(0.78f, 0.72f, 0.98f), 0.7f));
-        scannerPlaceholder = machine.gameObject;
-        // Drop and go (the scanner app spec §1): the glowing bar that crosses the glass while a scan runs, over the scanning paper; hidden while idle (DeskScanner.Sweep).
+        DestroyChildIfPresent(scannerClick.transform, "Machine");
         DestroyChildIfPresent(scannerClick.transform, "SweepBar");
-        GameObject sweep = PrimitivePart(scannerClick.transform, "SweepBar", PrimitiveType.Cube, new Vector3(0f, 0.062f, -0.115f), new Vector3(0.36f, 0.004f, 0.012f),
-                                         EnsureMaterial("Placeholder_ScannerSweep", "Universal Render Pipeline/Unlit", m => m.SetColor("_BaseColor", new Color(0.45f, 1f, 0.55f))));
-        sweep.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        sweep.SetActive(false);
         var soScanner = new SerializedObject(scanner);
         soScanner.FindProperty("dropSize").vector2Value = new Vector2(0.4f, 0.32f);
-        soScanner.FindProperty("bedCentre").vector3Value = new Vector3(0f, 0.056f, 0.01f);
-        SetRef(soScanner, "feederTray", tray);
-        SetRef(soScanner, "analysisLamp", lamp);
-        SetRef(soScanner, "sweepBar", sweep.transform);
+        AudioSource scannerSound = GetOrAdd<AudioSource>(scannerClick.gameObject);
+        scannerSound.playOnAwake = false;
+        scannerSound.spatialBlend = 0f;
+        SetRef(soScanner, "sound", scannerSound);
+        SetRef(soScanner, "lidOpenSound", DaterSound("scanner_lid_open"));
+        SetRef(soScanner, "lidCloseSound", DaterSound("scanner_lid_close"));
+        SetRef(soScanner, "scanSound", DaterSound("scanner_scan"));
+        scannerPlaceholder = BuildScannerArt(scannerClick.transform, soScanner, out GameObject art) ? art : BuildScannerStandIn(scannerClick.transform, soScanner);
         soScanner.ApplyModifiedProperties();
 
         scanHint = FloatingNote(office, "ScanHint", true);
