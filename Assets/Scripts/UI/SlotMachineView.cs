@@ -206,6 +206,7 @@ public sealed class SlotMachineView : MonoBehaviour
         if (titleText != null)
             titleText.text = "Night Slots";
         _rollTime = -1f;
+        _shown = int.MinValue;
         ShowWallet(world != null ? world.money : 0);
         RefreshBroke();
         if (lcdText != null)
@@ -314,6 +315,7 @@ public sealed class SlotMachineView : MonoBehaviour
         _rollFrom = before - _cost;
         _rollTo = _world.money;
         _rollTime = -1f;
+        _shown = int.MinValue; // the HUD was just set to the result (HomeManager.RefreshHud): show the cost alone in both
         ShowWallet(_rollFrom);
         ClearCoins();
         ShowGlows(false, 0f);
@@ -577,7 +579,7 @@ public sealed class SlotMachineView : MonoBehaviour
     /// <summary>Shows <paramref name="money"/> on the machine's credits and the HUD's wallet together.</summary>
     private void ShowWallet(int money)
     {
-        if (money == _shown && creditsText != null && !string.IsNullOrEmpty(creditsText.text))
+        if (money == _shown)
             return;
         _shown = money;
         if (creditsText != null)
