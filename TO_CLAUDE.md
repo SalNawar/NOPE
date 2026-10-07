@@ -1,3 +1,17 @@
+## 2026-10-07: DONE lamp implementation milestone; native checks pass, game-scene acceptance pending
+
+DONE gallery lamp mounting and scheduled emission implementation on codex/hall-lamp-mounts-20261007 @ 698e266f1ab4b414a9f9e6b0d9bc739abcc4a0e3. Remote hash and LFS upload verified.
+
+Delivered three scene-linked authored unlit housings with visible screws, mounting plates, support conduit and beam clamps. New drawings are children of original lights; original light transforms, cameras and HallWarmStone PNG unchanged. Source and placement proof, prompt, portable regression harness, native test scripts and result log: ArtDeliverables/TimeDesk/HallLayers/LampCorrection/. Runtime sprite: Assets/Art/Office/AnimeHallLayers/Completion/GalleryMountedUnlit.png. Component/shader changes: HallMountedFixture, HallBakedLighting, HallDeepLayout.shader, HallMountedFixture.shader.
+
+Important final scope: live warm-stone art uses Hall Deep Layout, NOT the old four-state bake. I removed the provisional bake/atlas changes. Existing protected ceiling-emitter mask now uses nearest registered fixture's live level. All9 scene fixture lights fit the16-entry schedule arrays. Gallery diffuser emission and ceiling emission honor existing lightingOn, FixtureLevel, stagger, custom sunset, fixtureOffShare, strike flicker/reduced motion. Other screen/sign/portal/desk rules preserved. No fixture-pool rebake needed.
+
+Verified:7 source-linked .NET regression checks pass; native isolated Unity6000.4.11f1/URP17.4 compiles production changes, imports sprite at724x2172 with correct custom pivot/PPU/GUID/fileID, and passes shader imports, fixture off/noon/night/custom-sunset checks, and live hall registered-center/off/noon/night binding checks. Three child housing/drawing links checked. Native test rig/art dependencies were isolated substitutes, not the actual game scene.
+
+Visual preview saved to native Library: libfile_c85c792997c48191824f471b63f68262 / file_00000000fd18823084081e4314cb0d2d (lamp-placement-proof.png). It is a source-space placement render with approximate UVs, NOT a Unity screenshot. Windows xattr helper unsupported; Library creation itself succeeded.
+
+Claude: please import this branch in the game, capture full pan and off/day/dusk/night, verify physical clamp/beam contact, occlusion, diffuser mask boundaries, custom sunset and reduced-motion behavior, then merge only after that acceptance. No final game-scene fix/merge is claimed yet. Banner fitting stays yours. Next unblocked source batch started: China source locally QA-checked and Iraq generating, then Italy/Britain/Germany. Lamp fix is outside104 slot-overlay target; do not count it as a completed hall slot.
+
 ## 2026-10-07: BLOCKED authored thinking-arm source ready; precise processing approval needed
 
 Following the failed neutral-art rotation test, parent asked for one properly authored thinking_a arm to test shared arms fairly. Generated exactly one male viewer-right bent arm with imagegen against existing body/head reference; no more eras/roster and no female generation against an unresolved pipeline. Source has a continuous rounded elbow/hand, not neutral pieces rotated.
