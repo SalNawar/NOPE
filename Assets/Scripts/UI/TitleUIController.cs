@@ -188,6 +188,8 @@ public sealed class TitleUIController : MonoBehaviour
                 adoptNameInput.text = words.Kind(kind)?.suggestedName ?? string.Empty;
             if (adoptDogButton != null) adoptDogButton.interactable = kind != PetKind.Dog;
             if (adoptCatButton != null) adoptCatButton.interactable = kind != PetKind.Cat;
+            UiJuice.Choose(adoptDogButton, kind == PetKind.Dog); // the chosen card bounces, and a click on it is no refusal
+            UiJuice.Choose(adoptCatButton, kind == PetKind.Cat);
         }
 
         _adoptKind = PetKind.Dog;

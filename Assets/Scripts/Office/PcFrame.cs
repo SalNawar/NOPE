@@ -43,6 +43,8 @@ public sealed class PcFrame : MonoBehaviour
     /// <summary>Opens the frame (fitting the frame camera to the glass) or closes it.</summary>
     public void SetOpen(bool open)
     {
+        if (open != IsOpen && root != null)
+            Sounds.Play(open ? SoundCues.PcOn : SoundCues.PcOff); // the CRT's thump or collapse
         if (root != null)
             root.SetActive(open);
         if (frameCamera != null)
