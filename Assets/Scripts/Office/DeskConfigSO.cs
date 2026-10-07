@@ -94,8 +94,8 @@ public sealed class DeskConfigSO : ScriptableObject
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
 
     [Header("Citations (the Citation lands on the desk, Saleh 2026-10-07)")]
-    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the desk's left, clear of the counter and the scanner.</summary>
-    public Vector2 citationSpot = new Vector2(-0.26f, -0.02f);
+    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the desk's right, near the clerk, clear of the rulebook folder, the counter and the scanner.</summary>
+    public Vector2 citationSpot = new Vector2(0.22f, -0.1f);
 
     /// <summary>How far each next citation of the day lands from the last (metres, the same frame): they stack with an offset; a continuation sheet lands a third of it from its first.</summary>
     public Vector2 citationStep = new Vector2(0.025f, -0.02f);
@@ -171,8 +171,8 @@ public sealed class DeskConfigSO : ScriptableObject
     public Color cityMatte = new Color(0.169f, 0.11f, 0.141f, 1f);
 
     [Header("Inspection at the desk (the desk-first redesign, item 11)")]
-    /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
-    public Vector2 rulebookAt = new Vector2(-0.3f, -0.05f);
+    /// <summary>Where the rulebook folder lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat); its open folder fills the reading view's left, its page (the right sheet) left of where the papers land (DeskController's reading spots).</summary>
+    public Vector2 rulebookAt = new Vector2(-0.25f, -0.06f);
 
     [Header("Stamps (Papers, Please's stamp bar, Saleh 2026-10-06: the art's 3D stamps)")]
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>

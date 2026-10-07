@@ -134,8 +134,8 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>How deep behind the scanner its body hides a paper from the office camera, in metres (SetScannerView).</summary>
     private float _scannerShadow;
 
-    /// <summary>The reading spots across the reading view (viewport x), each next paper sent to the desk by a click taking the next.</summary>
-    private static readonly float[] ReadingSpots = { 0.4f, 0.6f, 0.5f };
+    /// <summary>The reading spots across the reading view (viewport x), each next paper sent to the desk by a click taking the next: right of the rulebook folder's page, which fills the view's left.</summary>
+    private static readonly float[] ReadingSpots = { 0.62f, 0.78f, 0.7f };
 
     /// <summary>The reading spots' height on the screen in the reading view (viewport y).</summary>
     private const float ReadingSpotY = 0.42f;

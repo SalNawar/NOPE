@@ -1294,20 +1294,47 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
     private const float CityButtonHeight = 0.74f;
 
-    /// <summary>The desk's rulebook booklet (metres, width by depth), its RULES rows and their pitch, its PAPERS rows and their pitch (the papers not handed over, to flag missing), and a tab on its top edge (metres).</summary>
-    private static readonly Vector2 RulebookSize = new Vector2(0.26f, 0.3f);
-    private const int RulebookRows = 5;
-    private const float RulebookRowPitch = 0.044f;
+    /// <summary>The desk's rulebook folder (Saleh's Canva art, run 7: "folder too"; ArtSlots.RulebookFolder and its tabs, ArtSlots.RulebookTab), metres (width by depth, at the art's 16:9).</summary>
+    private static readonly Vector2 RulebookFolderSize = new Vector2(0.46f, 0.25875f);
+
+    /// <summary>Places on the folder art as shares of it from its top-left (x0, y0, x1, y1), measured on the art: the right sheet the pages print on, the RULES page's heading between its two printed rules, and its six ruled rows (the art's lines; each row's text above its line).</summary>
+    private static readonly Vector4 RulebookSheet = new Vector4(0.54167f, 0.17778f, 0.93333f, 0.95926f), RulebookHeading = new Vector4(0.57083f, 0.22074f, 0.90417f, 0.26963f);
+
+    /// <inheritdoc cref="RulebookSheet"/>
+    private static readonly Vector4[] RulebookRowPlaces =
+    {
+        new Vector4(0.57167f, 0.25926f, 0.9f, 0.34222f), new Vector4(0.57167f, 0.35407f, 0.9f, 0.43704f), new Vector4(0.57167f, 0.44889f, 0.9f, 0.53185f),
+        new Vector4(0.57167f, 0.5437f, 0.9f, 0.62667f), new Vector4(0.57167f, 0.63852f, 0.9f, 0.72148f), new Vector4(0.57167f, 0.73407f, 0.9f, 0.81704f)
+    };
+
+    /// <summary>The folder's four tabs on its top edge, RULES, PAPERS, GUIDE, SEALS (their art: ArtSlots.RulebookTab, the art's words painted out), and the place of each tab's word, as shares of the folder art from its top-left.</summary>
+    private static readonly Vector4[] RulebookTabPlaces =
+    {
+        new Vector4(0.16583f, 0.01037f, 0.36333f, 0.07259f), new Vector4(0.36167f, 0.01037f, 0.55583f, 0.07259f),
+        new Vector4(0.55917f, 0.01037f, 0.74417f, 0.07259f), new Vector4(0.74833f, 0.01037f, 0.92167f, 0.07259f)
+    }, RulebookTabWords =
+    {
+        new Vector4(0.19f, 0.012f, 0.34f, 0.07f), new Vector4(0.385f, 0.012f, 0.535f, 0.07f),
+        new Vector4(0.585f, 0.012f, 0.72f, 0.07f), new Vector4(0.77f, 0.012f, 0.9f, 0.07f)
+    };
+
+    /// <summary>The tabs' art names in tab order (ArtSlots.RulebookTab).</summary>
+    private static readonly string[] RulebookTabArt = { "rules", "papers", "guide", "seals" };
+
+    /// <summary>The rulebook's page: the folder's right sheet (metres, width by depth); every page prints on it.</summary>
+    private static readonly Vector2 RulebookSize = new Vector2((RulebookSheet.z - RulebookSheet.x) * RulebookFolderSize.x, (RulebookSheet.w - RulebookSheet.y) * RulebookFolderSize.y);
+
+    /// <summary>The RULES page's rows (the art's ruled lines), the PAPERS page's rows and their pitch (the papers not handed over, to flag missing).</summary>
+    private const int RulebookRows = 6;
     private const int RulebookPaperRows = 4;
-    private const float RulebookPaperPitch = 0.04f;
-    private static readonly Vector2 RulebookTabSize = new Vector2(0.058f, 0.03f);
+    private const float RulebookPaperPitch = 0.036f;
 
     /// <summary>The rulebook's SEALS page: its rows (one per office) and their pitch (metres).</summary>
     private const int RulebookSealRows = 8;
-    private const float RulebookSealPitch = 0.029f;
+    private const float RulebookSealPitch = 0.0185f;
 
     /// <summary>The rulebook's GUIDE sheet text box (metres) and its PREV / NEXT buttons (metres).</summary>
-    private static readonly Vector2 RulebookGuideBody = new Vector2(0.236f, 0.205f);
+    private static readonly Vector2 RulebookGuideBody = new Vector2(RulebookSize.x - 0.016f, RulebookSize.y - 0.075f);
     private static readonly Vector2 RulebookGuideButton = new Vector2(0.07f, 0.024f);
 
     /// <summary>The red of the rulebook's NEW marks.</summary>
@@ -1674,73 +1701,82 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The rulebook on the desk, Papers, Please's booklet (Saleh 2026-10-06),
-    /// rebuilt each run: Office/Rulebook (the DeskRulebook and its DeskDraggable;
-    /// the office binder lays it beside the mat on the desk plane) and its
-    /// Booklet (lifted by the papers' stack: DeskRulebook.SetLift): a cream card lying face up,
-    /// its click box (CardClick: its outline and the drag's proxy), three tabs on
-    /// its top edge (RULES, PAPERS, GUIDE: a plate, a word and a click box each;
-    /// GUIDE's NEW badge above it), the
-    /// RULES page (its title, five rows, each a click box on the Interactable
-    /// layer over its text, two lines at most, and the line for a day with no
-    /// directive) and the PAPERS page (its heading, four rows, click boxes over
-    /// their texts: the papers not handed over, to flag missing, and the line
-    /// when none is left) and the GUIDE page (the help guide: a sheet's title,
-    /// its NEW mark, its text, PREV and NEXT click boxes and its number).
-    /// Returns it.
+    /// as Saleh's Canva folder (run 7: "folder too"), rebuilt each run:
+    /// Office/Rulebook (the DeskRulebook and its DeskDraggable; the office
+    /// binder lays it beside the mat on the desk plane) and its Booklet (lifted
+    /// by the papers' stack: DeskRulebook.SetLift): the open manila folder lying
+    /// face up (its art, cut out at its outline; the left cover is the art's
+    /// own, static), its click box (CardClick: its outline and the drag's
+    /// proxy), the four tabs on its top edge at the art's places (RULES, PAPERS,
+    /// GUIDE, SEALS: the tab's art, its word printed live and a click box each;
+    /// GUIDE's NEW badge above it; SEALS shows only once introduced), and the
+    /// pages printed on its right sheet (Page): the RULES page (its title
+    /// between the sheet's two printed rules, a row on each of its six ruled
+    /// lines, each a click box on the Interactable layer over its text, two
+    /// lines at most, and the line for a day with no directive), the PAPERS
+    /// page (its heading, four rows, click boxes over their texts: the papers
+    /// not handed over, to flag missing, and the line when none is left), the
+    /// GUIDE page (the help guide: a sheet's title, its NEW mark, its text,
+    /// PREV and NEXT click boxes and its number) and the SEALS page. Returns it.
     /// </summary>
     private static DeskRulebook BuildRulebook(Transform office, DeskSurface surface, DeskCounter counter)
     {
         DestroyChildIfPresent(office, "Rulebook");
         Transform book = EnsureChild(office, "Rulebook");
         Transform booklet = EnsureChild(book, "Booklet"); // lifted by the papers' stack (DeskController), the root on the desk plane
-        GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookSize.x, RulebookSize.y, 1f), LitMaterial("Rulebook_Card", new Color(0.93f, 0.9f, 0.8f), 0.15f));
+        GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookFolderSize.x, RulebookFolderSize.y, 1f),
+                                        SlotArtMaterial("Rulebook_Folder", ArtSlots.RulebookFolder));
         card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
         Color ink = new Color(0.13f, 0.12f, 0.15f);
 
-        // The tabs on the top edge.
+        // The tabs on the folder's top edge, at the art's places, each its own art (shown only while its page is there: DeskRulebook).
         var tabs = new List<Clickable>();
         var plates = new List<Renderer>();
         string[] tabKeys = { "desk.rulebook.tabRules", "desk.rulebook.tabPapers", "desk.rulebook.tabGuide", "desk.rulebook.tabSeals" };
         for (int i = 0; i < tabKeys.Length; i++)
         {
-            float x = -RulebookSize.x / 2f + RulebookTabSize.x / 2f + 0.01f + i * (RulebookTabSize.x + 0.004f);
-            Vector3 at = new Vector3(x, 0.0002f, RulebookSize.y / 2f + RulebookTabSize.y / 2f);
-            GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, at, new Vector3(RulebookTabSize.x, RulebookTabSize.y, 1f),
-                                             LitMaterial("Rulebook_Tab", new Color(0.93f, 0.9f, 0.8f), 0.15f));
+            Vector3 at = FolderPoint(RulebookTabPlaces[i]) + new Vector3(0f, 0.0002f, 0f);
+            Vector2 size = FolderSize(RulebookTabPlaces[i]);
+            GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, at, new Vector3(size.x, size.y, 1f),
+                                             SlotArtMaterial("Rulebook_Tab_" + RulebookTabArt[i], ArtSlots.RulebookTab(RulebookTabArt[i])));
             plate.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
             plates.Add(plate.GetComponent<Renderer>());
             Clickable tab = EnsureClickBox(booklet, "Tab" + (i + 1));
             tab.transform.localPosition = at + new Vector3(0f, 0.0004f, 0f);
             var box = tab.GetComponent<BoxCollider>();
             box.center = Vector3.zero;
-            box.size = new Vector3(RulebookTabSize.x, PaperBoxThickness, RulebookTabSize.y);
+            box.size = new Vector3(size.x, PaperBoxThickness, size.y);
             tab.SetOutline(new[] { plate.GetComponent<Renderer>() });
-            TextMeshPro word = FlatText(tab.transform, "Text", Vector3.zero, RulebookTabSize - new Vector2(0.008f, 0.006f), 0.11f, ink, FontStyles.Bold);
+            TextMeshPro word = FlatText(tab.transform, "Text", FolderPoint(RulebookTabWords[i]) - at + new Vector3(0f, 0.0004f, 0f), FolderSize(RulebookTabWords[i]), 0.2f, ink, FontStyles.Bold);
             word.text = UiText.Get(tabKeys[i]);
             tabs.Add(tab);
         }
 
-        // The RULES page.
-        Transform rulesPage = EnsureChild(booklet, "RulesPage");
-        TextMeshPro title = FlatText(rulesPage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.2f, ink, FontStyles.Bold);
+        // The pages print on the folder's right sheet.
+        Transform page = EnsureChild(booklet, "Page");
+        page.localPosition = FolderPoint(RulebookSheet);
+
+        // The RULES page: the title between the sheet's printed rules, a row on each ruled line.
+        Transform rulesPage = EnsureChild(page, "RulesPage");
+        TextMeshPro title = FlatText(rulesPage, "Title", FolderPoint(RulebookHeading) - page.localPosition + new Vector3(0f, 0.0006f, 0f), FolderSize(RulebookHeading), 0.2f, ink, FontStyles.Bold);
         var rows = new List<Clickable>();
         for (int i = 0; i < RulebookRows; i++)
         {
-            float z = RulebookSize.y / 2f - 0.058f - i * RulebookRowPitch;
+            Vector2 size = FolderSize(RulebookRowPlaces[i]);
             Clickable row = EnsureClickBox(rulesPage, "Row" + (i + 1));
-            row.transform.localPosition = new Vector3(0f, 0.0006f, z);
+            row.transform.localPosition = FolderPoint(RulebookRowPlaces[i]) - page.localPosition + new Vector3(0f, 0.0006f, 0f);
             var box = row.GetComponent<BoxCollider>();
             box.center = Vector3.zero;
-            box.size = new Vector3(RulebookSize.x - 0.016f, PaperBoxThickness, RulebookRowPitch - 0.004f);
-            TextMeshPro text = FlatText(row.transform, "Text", Vector3.zero, new Vector2(RulebookSize.x - 0.024f, RulebookRowPitch - 0.006f), 0.13f, ink, FontStyles.Normal);
+            box.size = new Vector3(size.x, PaperBoxThickness, size.y);
+            TextMeshPro text = FlatText(row.transform, "Text", Vector3.zero, size - new Vector2(0.004f, 0.002f), 0.16f, ink, FontStyles.Normal);
             text.textWrappingMode = TextWrappingModes.Normal;
-            text.alignment = TextAlignmentOptions.MidlineLeft;
+            text.alignment = TextAlignmentOptions.BottomLeft;
             rows.Add(row);
         }
-        TextMeshPro none = FlatText(rulesPage, "None", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f), new Vector2(RulebookSize.x - 0.024f, 0.03f), 0.13f, ink, FontStyles.Italic);
+        TextMeshPro none = FlatText(rulesPage, "None", FolderPoint(RulebookRowPlaces[0]) - page.localPosition + new Vector3(0f, 0.0006f, 0f), FolderSize(RulebookRowPlaces[0]), 0.13f, ink, FontStyles.Italic);
 
         // The PAPERS page: its heading and a row per paper not handed over (a click flags it missing).
-        Transform papersPage = EnsureChild(booklet, "PapersPage");
+        Transform papersPage = EnsureChild(page, "PapersPage");
         TextMeshPro papersTitle = FlatText(papersPage, "PapersTitle", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.16f, ink, FontStyles.Bold);
         var paperRows = new List<Clickable>();
         for (int i = 0; i < RulebookPaperRows; i++)
@@ -1759,11 +1795,11 @@ public static partial class OfficeSceneUIBuilder
         papersPage.gameObject.SetActive(false);
 
         // The GUIDE page: the help guide's sheet (DeskRulebook.SetGuide), and the tab's NEW badge.
-        Transform guidePage = EnsureChild(booklet, "GuidePage");
+        Transform guidePage = EnsureChild(page, "GuidePage");
         TextMeshPro guideTitle = FlatText(guidePage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.15f, ink, FontStyles.Bold);
         TextMeshPro guideNew = FlatText(guidePage, "New", new Vector3(RulebookSize.x / 2f - 0.035f, 0.0006f, RulebookSize.y / 2f - 0.046f), new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
         guideNew.text = UiText.Get("desk.guide.new");
-        TextMeshPro guideBody = FlatText(guidePage, "Body", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f - RulebookGuideBody.y / 2f), RulebookGuideBody, 0.14f, ink, FontStyles.Normal);
+        TextMeshPro guideBody = FlatText(guidePage, "Body", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.048f - RulebookGuideBody.y / 2f), RulebookGuideBody, 0.15f, ink, FontStyles.Normal);
         guideBody.textWrappingMode = TextWrappingModes.Normal;
         guideBody.alignment = TextAlignmentOptions.TopLeft;
         guideBody.richText = true;
@@ -1784,12 +1820,13 @@ public static partial class OfficeSceneUIBuilder
         TextMeshPro guideNumber = FlatText(guidePage, "Number", new Vector3(0f, 0.0006f, footer), new Vector2(0.07f, 0.02f), 0.09f, ink, FontStyles.Normal);
         guidePage.gameObject.SetActive(false);
         Transform guideTab = tabs[DeskRulebook.GuidePageIndex].transform;
-        TextMeshPro guideBadge = FlatText(booklet, "GuideBadge", guideTab.localPosition + new Vector3(0f, 0f, RulebookTabSize.y / 2f + 0.011f), new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
+        TextMeshPro guideBadge = FlatText(booklet, "GuideBadge", guideTab.localPosition + new Vector3(0f, 0f, FolderSize(RulebookTabPlaces[DeskRulebook.GuidePageIndex]).y / 2f + 0.011f),
+                                          new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
         guideBadge.text = UiText.Get("desk.guide.new");
         guideBadge.gameObject.SetActive(false);
 
         // The SEALS page: the Seal Register at the desk (DeskRulebook.ShowSeals), a row per office: its seal's mark and legend, its name.
-        Transform sealsPage = EnsureChild(booklet, "SealsPage");
+        Transform sealsPage = EnsureChild(page, "SealsPage");
         TextMeshPro sealsTitle = FlatText(sealsPage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.15f, ink, FontStyles.Bold);
         sealsTitle.text = UiText.Get("desk.rulebook.seals");
         Material sealMaterial = FormSealMaterial();
@@ -1825,7 +1862,7 @@ public static partial class OfficeSceneUIBuilder
         Clickable cardClick = EnsureClickBox(booklet, "CardClick");
         var cardBox = cardClick.GetComponent<BoxCollider>();
         cardBox.center = new Vector3(0f, -0.0002f, 0f);
-        cardBox.size = new Vector3(RulebookSize.x, 0.0004f, RulebookSize.y);
+        cardBox.size = new Vector3(RulebookFolderSize.x, 0.0004f, RulebookFolderSize.y);
         cardClick.SetOutline(new[] { card.GetComponent<Renderer>() });
 
         DeskDraggable drag = GetOrAdd<DeskDraggable>(book.gameObject);
@@ -1866,6 +1903,26 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
         return rulebook;
     }
+
+    /// <summary>The centre of a place on the folder art (shares from its top-left: x0, y0, x1, y1) in the booklet's space (metres; the art's top at the folder's far edge).</summary>
+    private static Vector3 FolderPoint(Vector4 place) =>
+        new Vector3(((place.x + place.z) / 2f - 0.5f) * RulebookFolderSize.x, 0f, (0.5f - (place.y + place.w) / 2f) * RulebookFolderSize.y);
+
+    /// <summary>The size of a place on the folder art in metres (width by depth).</summary>
+    private static Vector2 FolderSize(Vector4 place) => new Vector2((place.z - place.x) * RulebookFolderSize.x, (place.w - place.y) * RulebookFolderSize.y);
+
+    /// <summary>A lit material showing the art slot <paramref name="slot"/>'s picture (ArtSlots.AssetRoot), cut out where the art is clear (the folder's and its tabs' outlines); made once.</summary>
+    private static Material SlotArtMaterial(string name, string slot) =>
+        EnsureMaterial(name, "Universal Render Pipeline/Lit", m =>
+        {
+            m.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + slot + ".png"));
+            m.SetColor("_BaseColor", Color.white);
+            m.SetFloat("_Smoothness", 0.15f);
+            m.SetFloat("_Metallic", 0f);
+            m.SetFloat("_AlphaClip", 1f);
+            m.SetFloat("_Cutoff", 0.5f);
+            BaseShaderGUI.SetMaterialKeywords(m);
+        });
 
     /// <summary>
     /// The counter (Papers, Please's, Saleh 2026-10-06), rebuilt each run:

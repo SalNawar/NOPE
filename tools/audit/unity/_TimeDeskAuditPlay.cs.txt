@@ -794,8 +794,7 @@ public static class _TimeDeskAuditPlay
         if (v.citationIssued)
         {
             // The Citation (2026-10-07) lands on the desk; its lines are the slip's (its violation, its rule and values, its consequence).
-            string slip = string.Join("
-", v.citationReason, v.citationDetail, v.citationConsequence);
+            string slip = string.Join("\n", v.citationReason, v.citationDetail, v.citationConsequence);
             Line($"   citation slip: {slip.Replace("\n", " / ")}");
             string rule = v.unprovenDenial ? UiText.Get("citation.rule.evidence") : Citations.RuleLine(c.citation, UiText.Get, UiText.Get("citation.rule.numbered"));
             string value = v.unprovenDenial ? "0" : c.citation?.Values.Select(x => x.Value).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));

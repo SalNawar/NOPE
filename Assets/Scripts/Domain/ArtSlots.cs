@@ -34,6 +34,12 @@ public static class ArtSlots
     /// <summary>Temporal Customs' seal, printed faintly behind a form's header (the builder's code-drawn ring without art).</summary>
     public const string AgencySeal = "Forms/agency_seal";
 
+    /// <summary>The desk rulebook's open folder (Saleh's Canva art, run 7: its tabs, its heading and its line numbers painted out, the game prints them; clear outside its outline).</summary>
+    public const string RulebookFolder = "Forms/rulebook_folder";
+
+    /// <summary>One of the rulebook folder's tabs by its art name ("rules", "papers", "guide", "seals" gives Forms/rulebook_tab_seals): cut from the art, its word painted out.</summary>
+    public static string RulebookTab(string tab) => "Forms/rulebook_tab_" + Key(tab);
+
     /// <summary>The plain agency paper: a desk paper whose kind has no face of its own, and the PC's pages.</summary>
     public const string AgencyFace = "Forms/paper_agency";
 

@@ -214,10 +214,10 @@ public static partial class OfficeSceneUIBuilder
         KitSkin(lit, "inspect_hover", _kit.overlayScale);
     }
 
-    /// <summary>The counter strip's three looks (sheet 05: slate COUNTER, green HAND BACK, red STAMP THE PASSPORT FIRST) and the rulebook's folder tabs (manila, the open one lighter).</summary>
+    /// <summary>The counter strip's three looks (sheet 05: slate COUNTER, green HAND BACK, red STAMP THE PASSPORT FIRST) and the rulebook's folder tabs (their art as drawn when open, a shade darker when shut).</summary>
     private static readonly Color KitSlate = new Color(0.29f, 0.345f, 0.447f, 0.92f), KitGreen = new Color(0.373f, 0.522f, 0.314f, 0.92f),
                                   KitGreenLit = new Color(0.373f, 0.522f, 0.314f, 1f), KitRed = new Color(0.761f, 0.227f, 0.18f, 0.92f),
-                                  KitManila = new Color(0.886f, 0.788f, 0.58f), KitManilaShut = new Color(0.79f, 0.69f, 0.48f);
+                                  KitManila = Color.white, KitManilaShut = new Color(0.82f, 0.79f, 0.74f);
 
     /// <summary>
     /// The desk's 3D pieces in the kit's colours (they are lit quads and flat
