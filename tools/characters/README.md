@@ -275,3 +275,15 @@ bottle green and the jade are not fringe); a **magenta fringe** pixel has
 min(R, B) - G > 12 with R and B balanced (the smaller at least 60% of the
 larger: a madder or wine red is not magenta). `key_colour_px` counts any pixel of at least 10%
 coverage still close to a key colour (gd or ms over 100): it must be 0.
+
+## 1980s sources (`process_retro.py`, 2026-10-07)
+
+GPT's 1980s raw sources (`ArtDeliverables/TimeDesk/Characters/RetroRegeneration/Raw`, merged from `codex/textured-travellers-all`) become the 80s art set (`Assets/Art/Characters/Resources/Characters/80s`, contract section 10). Staging is the ignored `Temp/CharacterRetro` (records, `processing-report.json`); nothing raw is changed.
+
+```
+python tools/characters/process_retro.py --workers 10           # stage every source (about 8 minutes)
+python tools/characters/process_retro.py --qa <dir>             # contact sheets: premades, bases, Egypt looks with their pose frames, ID photos
+python tools/characters/process_retro.py --install              # copy the accepted keys and their metas into the 80s set (existing metas kept)
+```
+
+Decisions: one similarity per gender from the skin-1 fitting figure (every wardrobe source is checked against it, raw space, arms left out for pose sources: drift over 6 px or 1.5% is rejected); premades by GPT's convention (eyes 340, soles 1473; automatic eye finding fails on beards, glasses and veils); heads split at the jaw over the neck's chin-row run, the body's neck continued behind the face; bodies 2-5 recoloured from skin 1 by luminance to GPT's own tones (a hue-window recolour leaves the textured art's light speckles); hair and beards baked in the five colours, `back` hair split; head items keep only what is connected to the head; the civil hair is cut from its jacket guide by colour. Mannequins are fitting guides and never processed. Rejected: `facialhair_m_egypt_modern` (drawn in the fitting figure's magenta-tinted ink).
