@@ -236,9 +236,18 @@ public static class _TimeDeskQASweep
         yield return Frames(5);
         Note("RunManager.JumpToDay(5): the scanner, the Investigation app and every PC app are in from day 5");
         RunManager.Instance.JumpToDay(5);
+        if (Culture.Length == 0 && !string.IsNullOrEmpty(RunManager.Instance.World.history.leaderId))
+        {
+            // The English sweep is also the neutral one: the leader the jump's
+            // nights chose is cleared, so day 5 shows the neutral theme and
+            // its desktop the neutral wallpaper (track LANG's captures).
+            Note($"English: the leader the jump chose ('{RunManager.Instance.World.history.leaderId}') is cleared, so day 5 is neutral (theme and wallpaper)");
+            HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, string.Empty);
+            CultureThemeService.RefreshActive();
+        }
         WorldChange();
         if (Culture.Length == 0)
-            Check(CultureThemeService.Instance == null || CultureThemeService.Instance.Language != LabelLanguage.Culture, $"day 5: Always English keeps the labels English (history's leader '{RunManager.Instance.World.history.leaderId}')");
+            Check(CultureThemeService.Instance == null || CultureThemeService.Instance.Language != LabelLanguage.Culture, $"day 5: the labels read English (Always English, no leader: '{RunManager.Instance.World.history.leaderId}')");
         yield return OfficeDay5();
         if (Culture.Length > 0)
             yield return SwitchLanguage();
