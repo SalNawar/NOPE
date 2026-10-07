@@ -25,3 +25,5 @@ Six civilian outfits and two brown hairstyles saved. These are fitting sources, 
 Cleopatra thinking_b is mirrored from the nominal template: RIGHT fingers at cheek, LEFT hand supports elbow. Accepted as whole-character pose variation; do not use as interchangeable modular arms. First five unique sets are raw sources only; green extraction, exact registration and in-game checks pending.
 
 - Einstein thinking_b uses the right hand at the cheek and left arm supporting (mirrored from generic b direction). Accepted as a whole-character pose variation; do not treat as modular arm registration proof.
+
+- Newton thinking_b is also mirrored: right fingers at cheek, left supporting elbow. Whole-character variant accepted; costume prism remains on its original side.

@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 194. Full regeneration is NOT complete.
+Saved: 218. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -198,3 +198,27 @@ Saved: 194. Full regeneration is NOT complete.
 | premade_marx__thinking_c | visually reviewed; registration pending |
 | premade_marx__objecting_c | visually reviewed; registration pending |
 | premade_marx_photo | visually reviewed; registration pending |
+| premade_luther_neutral | visually reviewed; registration pending |
+| premade_luther_happy | visually reviewed; registration pending |
+| premade_luther_angry | visually reviewed; registration pending |
+| premade_luther_worried | visually reviewed; registration pending |
+| premade_luther__explaining_a | visually reviewed; registration pending |
+| premade_luther__thinking_a | visually reviewed; registration pending |
+| premade_luther__objecting_a | visually reviewed; registration pending |
+| premade_luther_photo | visually reviewed; registration pending |
+| premade_newton_neutral | visually reviewed; registration pending |
+| premade_newton_happy | visually reviewed; registration pending |
+| premade_newton_angry | visually reviewed; registration pending |
+| premade_newton_worried | visually reviewed; registration pending |
+| premade_newton__explaining_b | visually reviewed; registration pending |
+| premade_newton__thinking_b | visually reviewed; registration pending |
+| premade_newton__objecting_b | visually reviewed; registration pending |
+| premade_newton_photo | visually reviewed; registration pending |
+| premade_michelangelo_neutral | visually reviewed; registration pending |
+| premade_michelangelo_happy | visually reviewed; registration pending |
+| premade_michelangelo_angry | visually reviewed; registration pending |
+| premade_michelangelo_worried | visually reviewed; registration pending |
+| premade_michelangelo__explaining_c | visually reviewed; registration pending |
+| premade_michelangelo__thinking_c | visually reviewed; registration pending |
+| premade_michelangelo__objecting_c | visually reviewed; registration pending |
+| premade_michelangelo_photo | visually reviewed; registration pending |
