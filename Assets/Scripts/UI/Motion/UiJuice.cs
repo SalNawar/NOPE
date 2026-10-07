@@ -169,7 +169,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         UiMotion.Run(this);
     }
 
-    /// <summary>Draws the springs: the scale over the rest scale, the shake as a sideways offset (only its change is applied, so a layout keeps the place), the hit area held at the rest rect; once at rest, the rest pose exactly.</summary>
+    /// <summary>Draws the springs: the scale over the rest scale, the shake as a sideways offset (only its change is applied, so a layout keeps the place), the hit area held at the rest rect; once back at rest, the rest pose exactly (a pose it settles on, the hover lift or a held press, stays).</summary>
     private void Apply()
     {
         float sx = _motion.ScaleX, sy = _motion.ScaleY, offset = _motion.OffsetX;
@@ -188,8 +188,8 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             float py = sy > 0.01f ? size.y * (1f - 1f / sy) * 0.5f : 0f;
             _hit.raycastPadding = _restPadding + new Vector4(px, py, px, py);
         }
-        if (_motion.Moving)
-            return;
+        if (_motion.Moving || sx != 1f || sy != 1f || offset != 0f)
+            return; // still moving, or settled on a pose (the hover lift, a held press): kept as drawn
         transform.localScale = _restScale;
         if (_hit != null)
             _hit.raycastPadding = _restPadding;
