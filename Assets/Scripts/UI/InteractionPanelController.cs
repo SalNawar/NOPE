@@ -38,6 +38,9 @@ public sealed class InteractionPanelController : MonoBehaviour
     /// <summary>Optional: where centre actions go (the traveller wheel); none keeps every action in the list.</summary>
     [SerializeField] private Transform centreSlot;
 
+    /// <summary>Optional: the disabled template a centre action is cloned from (the wheel's round BACK button, its arrow in its art: no icon is added); none uses <see cref="actionButtonTemplate"/>.</summary>
+    [SerializeField] private Button centreTemplate;
+
     /// <summary>An action icon's side (reference px; a layout value, like RadialLayoutGroup's sizes).</summary>
     [SerializeField] private float iconSize = 28f;
 
@@ -50,6 +53,8 @@ public sealed class InteractionPanelController : MonoBehaviour
     {
         if (actionButtonTemplate != null)
             actionButtonTemplate.gameObject.SetActive(false);
+        if (centreTemplate != null)
+            centreTemplate.gameObject.SetActive(false);
     }
 
     /// <summary>Replaces the visible actions with the given list.</summary>
@@ -62,8 +67,9 @@ public sealed class InteractionPanelController : MonoBehaviour
 
         foreach (InteractionAction action in actions)
         {
-            Transform parent = action.centre && centreSlot != null ? centreSlot : actionsRoot;
-            Button btn = Instantiate(actionButtonTemplate, parent);
+            bool inCentre = action.centre && centreSlot != null;
+            bool round = inCentre && centreTemplate != null;
+            Button btn = Instantiate(round ? centreTemplate : actionButtonTemplate, inCentre ? centreSlot : actionsRoot);
             btn.gameObject.SetActive(true);
             _spawned.Add(btn.gameObject);
 
@@ -71,7 +77,7 @@ public sealed class InteractionPanelController : MonoBehaviour
             if (label != null)
                 label.text = action.label;
 
-            if (action.icon != null)
+            if (action.icon != null && !round)
                 AddIcon(btn.transform, label, action.icon);
 
             Action execute = action.execute;

@@ -62,6 +62,17 @@ public class UiKitNamesTests
     }
 
     [Test]
+    public void UpgradeTile_BranchTileLockedWhileLocked()
+    {
+        Assert.AreEqual("tile_lamp_rest", UiKitNames.UpgradeTile(UpgradeBranch.Desk, OrderState.Orderable));
+        Assert.AreEqual("tile_speech_locked", UiKitNames.UpgradeTile(UpgradeBranch.Interview, OrderState.Locked));
+        Assert.AreEqual("tile_portal_rest", UiKitNames.UpgradeTile(UpgradeBranch.Portals, OrderState.Owned));
+        Assert.AreEqual("tile_ball_rest", UiKitNames.UpgradeTile(UpgradeBranch.Toys, OrderState.TooDear));
+        Assert.AreEqual("tile_house", UiKitNames.BranchTile(UpgradeBranch.Housing));
+        Assert.AreEqual("tile_food", UiKitNames.BranchTile(UpgradeBranch.Food));
+    }
+
+    [Test]
     public void GuidePill_RedTutorialGreenMoment()
     {
         Assert.AreEqual("pill_red", UiKitNames.GuidePill(true));

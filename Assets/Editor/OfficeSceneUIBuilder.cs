@@ -881,10 +881,13 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
-    private const float MenuButtonWidth = 148f, DeskButtonWidth = 272f;
+    private const float MenuButtonWidth = 148f, DeskButtonWidth = 200f;
 
-    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date).</summary>
-    private const float TrayWidth = 1000f;
+    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date), with the stability's fixed slot; the window buttons keep the rest (run 7: at 1000 they had none and drew over it).</summary>
+    private const float TrayWidth = 780f;
+
+    /// <summary>The tray's fixed slot for the stability display (desktop units): the Helix River's strip takes it (Track T); until then the line shrinks to fit it.</summary>
+    private const float StabilitySlotWidth = 180f;
 
     /// <summary>
     /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the
@@ -915,7 +918,7 @@ public static partial class OfficeSceneUIBuilder
         tray.GetComponent<Image>().raycastTarget = false;
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(tray.gameObject);
         row.padding = new RectOffset(12, 12, 0, 0);
-        row.spacing = 28f;
+        row.spacing = 14f;
         row.childAlignment = TextAnchor.MiddleRight;
         row.childControlWidth = true;
         row.childControlHeight = true;
@@ -923,6 +926,12 @@ public static partial class OfficeSceneUIBuilder
         row.childForceExpandHeight = true;
         moneyText = TrayText(tray, "MoneyText", "Credits: 0");
         stabilityText = TrayText(tray, "StabilityText", "Stability: 100%");
+        LayoutElement slot = GetOrAdd<LayoutElement>(stabilityText.gameObject);
+        slot.minWidth = slot.preferredWidth = StabilitySlotWidth;
+        slot.flexibleWidth = 0f;
+        stabilityText.enableAutoSizing = true;
+        stabilityText.fontSizeMax = PcType.Caption;
+        stabilityText.fontSizeMin = 14f;
         dateButton = MakeButton(tray, "DateButton", null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
         DestroyChildIfPresent(dateButton.transform, "Label");
         HorizontalLayoutGroup datePad = GetOrAdd<HorizontalLayoutGroup>(dateButton.gameObject);

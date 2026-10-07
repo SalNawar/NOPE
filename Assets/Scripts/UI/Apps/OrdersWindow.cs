@@ -96,6 +96,8 @@ public sealed class OrdersWindow : MonoBehaviour
     {
         public RectTransform Card;
         public Image Face;
+        public Image Glyph;
+        public UpgradeBranch Branch;
         public TMP_Text State;
         public Image Badge;
         public CanvasGroup Group;
@@ -344,6 +346,8 @@ public sealed class OrdersWindow : MonoBehaviour
             {
                 Card = (RectTransform)card.transform,
                 Face = Child<Image>(card.transform, UiKitSO.FaceName),
+                Glyph = Child<Image>(card.transform, "Glyph"),
+                Branch = c.Branch,
                 State = Child<TMP_Text>(card.transform, "State"),
                 Badge = Child<Image>(card.transform, "Badge"),
                 Group = card.GetComponent<CanvasGroup>(),
@@ -408,7 +412,16 @@ public sealed class OrdersWindow : MonoBehaviour
             if (node.State != null)
                 node.State.text = OrderLines.State(world, lib, upgrade, state, false);
             if (kit != null)
+            {
                 kit.Show(node.Face, UiKitNames.UpgradeCard(state));
+                // Sheet 03: the card's pictogram tile is its band's, the locked tile while locked.
+                Sprite tile = kit.Get(UiKitNames.UpgradeTile(node.Branch, state));
+                if (node.Glyph != null && tile != null)
+                {
+                    node.Glyph.sprite = tile;
+                    node.Glyph.color = Color.white;
+                }
+            }
             string badgeName = UiKitNames.UpgradeBadge(state);
             Sprite badge = badgeName == null ? null : kit != null && kit.Get(badgeName) != null ? kit.Get(badgeName) : Glyph(badgeName.Substring(BadgePrefix.Length));
             if (node.Badge != null)

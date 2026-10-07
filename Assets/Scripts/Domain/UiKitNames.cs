@@ -77,6 +77,27 @@ public static class UiKitNames
         }
     }
 
+    /// <summary>An upgrade branch's pictogram tile piece (sheet 03: the cards of Orders and the House show their band's tile): the lamp for the desk, a speech balloon for the interview, the portal, a person for contacts, a ball for the toys; the House's food, house, shield, medicine and sofa.</summary>
+    public static string BranchTile(UpgradeBranch branch)
+    {
+        switch (branch)
+        {
+            case UpgradeBranch.Desk: return "tile_lamp";
+            case UpgradeBranch.Interview: return "tile_speech";
+            case UpgradeBranch.Portals: return "tile_portal";
+            case UpgradeBranch.Contacts: return "tile_person";
+            case UpgradeBranch.Food: return "tile_food";
+            case UpgradeBranch.Housing: return "tile_house";
+            case UpgradeBranch.Security: return "tile_shield";
+            case UpgradeBranch.Health: return "tile_medicine";
+            case UpgradeBranch.Comfort: return "tile_sofa";
+            default: return "tile_ball";
+        }
+    }
+
+    /// <summary>An upgrade card's tile sprite for its branch in <paramref name="state"/>: the locked (grey, screentone) tile while locked, else at rest.</summary>
+    public static string UpgradeTile(UpgradeBranch branch, OrderState state) => Of(BranchTile(branch), state == OrderState.Locked ? KitState.Locked : KitState.Rest);
+
     /// <summary>The verdict ribbon (sheet 05): green for a right call, brass for a wrong one let off with a free warning, red for a wrong one; brass for a notice that is no verdict (<paramref name="correct"/> null).</summary>
     public static string VerdictRibbon(bool? correct, bool freeWarning) =>
         correct == true ? "ribbon_green" : correct == false && !freeWarning ? "ribbon_red" : "ribbon_brass";

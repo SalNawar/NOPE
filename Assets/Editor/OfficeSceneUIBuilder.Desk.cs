@@ -1011,9 +1011,10 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// A note floating in the office (the binder places it and turns it to the
     /// camera): light text with a dark outline, auto-sized, inactive until
-    /// shown; with <paramref name="backing"/> (the day-1 hints) a dark plate
-    /// behind it (a Backing quad in FloatingNote_Backing, fitted to the text by
-    /// NoteBacking). Idempotent.
+    /// shown; with <paramref name="backing"/> (the day-1 hints) a plate
+    /// behind it fitted to the text by NoteBacking: the UI kit's card with the
+    /// line in ink (run 7), else a dark Backing quad in FloatingNote_Backing.
+    /// Idempotent.
     /// </summary>
     private static TextMeshPro FloatingNote(Transform parent, string name, bool backing = false)
     {
@@ -1032,7 +1033,30 @@ public static partial class OfficeSceneUIBuilder
         tmp.fontStyle = FontStyles.Bold;
         tmp.fontSharedMaterial = NoteMaterial(tmp.font);
         tmp.sortingLayerID = GameplaySortingLayerId();
-        if (backing)
+        if (backing && _kit != null)
+        {
+            // The UI kit's card behind the note (run 7; sheet 05's hint plate), its line in the kit's ink and bold body face.
+            tmp.font = _kit.bodyBoldFont;
+            tmp.fontSharedMaterial = _kit.bodyBoldFont.material;
+            tmp.fontStyle = FontStyles.Normal;
+            tmp.color = _kit.inkOnLight;
+            var card = new GameObject("Backing", typeof(SpriteRenderer));
+            card.transform.SetParent(go.transform, false);
+            SpriteRenderer cardSprite = card.GetComponent<SpriteRenderer>();
+            cardSprite.sprite = _kit.Get("tooltip");
+            cardSprite.drawMode = SpriteDrawMode.Sliced;
+            cardSprite.sortingLayerID = tmp.sortingLayerID;
+            cardSprite.sortingOrder = -1;
+            cardSprite.shadowCastingMode = ShadowCastingMode.Off;
+            NoteBacking fit = go.AddComponent<NoteBacking>();
+            var so = new SerializedObject(fit);
+            SetRef(so, "text", tmp);
+            SetRef(so, "backing", card.transform);
+            so.FindProperty("margin").vector2Value = NoteBackingMargin + Vector2.one * (_kit.spritePad / 100f * NoteCardScale);
+            so.FindProperty("sliceScale").floatValue = NoteCardScale;
+            so.ApplyModifiedProperties();
+        }
+        else if (backing)
         {
             PrimitivePart(go.transform, "Backing", PrimitiveType.Quad, new Vector3(0f, 0f, 0.002f), Vector3.one, NoteBackingMaterial());
             MeshRenderer plate = go.transform.Find("Backing").GetComponent<MeshRenderer>();
@@ -1049,6 +1073,9 @@ public static partial class OfficeSceneUIBuilder
         go.SetActive(false);
         return tmp;
     }
+
+    /// <summary>The metres one sprite unit of the kit's card behind a floating note is drawn at (its corners about a centimetre round).</summary>
+    private const float NoteCardScale = 0.015f;
 
     /// <summary>The day-1 notes' backing material: unlit, transparent, dark, drawn before the notes' text. Created once; a designer's edits are kept.</summary>
     private static Material NoteBackingMaterial() =>

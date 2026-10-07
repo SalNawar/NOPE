@@ -109,6 +109,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 08059b41cae3420a8cb1546e7857097a, type: 3}
   - name: iconkey_pressed
     sprite: {fileID: 21300000, guid: 11ccd8c522a24fd899f6ad14ee9a094a, type: 3}
+  - name: iconkey_red_hover
+    sprite: {fileID: 21300000, guid: 2e051fd8408a4b279fd9f2cf1681cab5, type: 3}
+  - name: iconkey_red_locked
+    sprite: {fileID: 21300000, guid: 773062340a744cf286c8c762243ca49e, type: 3}
+  - name: iconkey_red_pressed
+    sprite: {fileID: 21300000, guid: d13f11494dba4ec485edcaa220360778, type: 3}
+  - name: iconkey_red_rest
+    sprite: {fileID: 21300000, guid: c3c1892b4022468abe69e241c0e46d33, type: 3}
   - name: iconkey_rest
     sprite: {fileID: 21300000, guid: 299449023a224a31ac8dc326846e4712, type: 3}
   - name: inspect_hover

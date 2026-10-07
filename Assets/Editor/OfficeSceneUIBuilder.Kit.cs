@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 /// <summary>
@@ -59,6 +60,14 @@ public static partial class OfficeSceneUIBuilder
         KitWheel(o.Find("TravellerWheel/Catcher/Ring"));
         KitDeskProps();
         KitFallbackHud(o.Find("FallbackHud"));
+        KitGuideArrow(o.Find("GuidePrompt/Arrow"));
+        foreach (Button close in o.GetComponentsInChildren<Button>(true))
+            if (close.name == "CloseButton" && close.GetComponentInParent<PcFrame>(true) != null)
+            {
+                // The PC frame's big X: the kit's red key with its cross.
+                KitSkin(close, "iconkey_red", _kit.overlayScale);
+                KitGlyph(close, "glyph_cross");
+            }
 
         // The taskbar's window button template at its own width (its row lays it out at run time; at build time it would take the row's rect).
         if (desktop.transform.Find("Taskbar/WindowButtons/WindowButtonTemplate") is RectTransform windowButton)
@@ -208,6 +217,17 @@ public static partial class OfficeSceneUIBuilder
         DeskRulebook rulebook = Object.FindFirstObjectByType<DeskRulebook>(FindObjectsInactive.Include);
         if (rulebook != null)
         {
+            // The guide's NEW tags on oxblood, its pager on bone plates and its page number on the phosphor glass.
+            Transform guide = rulebook.transform.Find("Booklet/GuidePage");
+            foreach (Transform tag in new[] { guide?.Find("New"), rulebook.transform.Find("Booklet/GuideBadge") })
+                if (tag != null)
+                    KitDeskPlate(tag, "miniplate_ox_rest", ((RectTransform)tag).sizeDelta, _kit.inkOnDark, _kit.labelFont);
+            foreach (string page in new[] { "Prev/Text", "Next/Text" })
+                if (guide?.Find(page) is Transform word)
+                    KitDeskPlate(word, "miniplate_bone_rest", ((RectTransform)word).sizeDelta, _kit.inkOnLight, _kit.labelFont);
+            if (guide?.Find("Number") is Transform number)
+                KitDeskPlate(number, "lcd_glass", ((RectTransform)number).sizeDelta, _kit.phosphorInk, _kit.readoutFont);
+
             var so = new SerializedObject(rulebook);
             so.FindProperty("openTab").colorValue = KitManila;
             so.FindProperty("closedTab").colorValue = KitManilaShut;
@@ -223,6 +243,70 @@ public static partial class OfficeSceneUIBuilder
                 }
         }
     }
+
+    /// <summary>
+    /// A kit glyph (a cream glyph_* with its ink keyline, sheet 01 B4) centred
+    /// on an icon key, <paramref name="share"/> of the key's side (its pad
+    /// included), taking no clicks; rebuilt each build.
+    /// </summary>
+    private static void KitGlyph(Component key, string glyph, float share = 0.9f, float turn = 0f)
+    {
+        DestroyChildIfPresent(key.transform, "KitGlyph");
+        float h = share / 2f;
+        Transform g = Panel(key.transform, "KitGlyph", new Vector2(0.5f - h, 0.5f - h), new Vector2(0.5f + h, 0.5f + h), Vector2.zero, Vector2.zero, Color.white,
+                            key.TryGetComponent(out ThemeTag tag) ? tag.Role : ThemeRoleId.DiegeticDevice);
+        SetAnchors(g, new Vector2(0.5f - h, 0.5f - h), new Vector2(0.5f + h, 0.5f + h));
+        g.localRotation = Quaternion.Euler(0f, 0f, turn);
+        Image image = g.GetComponent<Image>();
+        image.sprite = _kit.Get(glyph);
+        image.preserveAspect = true;
+        image.raycastTarget = false;
+        SceneUiKit.Tag(image, tag != null ? tag.Role : ThemeRoleId.DiegeticDevice, ThemePart.Kit);
+    }
+
+    /// <summary>A window key's glyph as a share of the key (its sprite's pad round a glyph of about half its side).</summary>
+    private const float WindowGlyphShare = 1.4f;
+
+    /// <summary>The guide's arrow (sheet 01 B4): a slate icon key with the cream down glyph, its tip at the target.</summary>
+    private static void KitGuideArrow(Transform arrow)
+    {
+        if (arrow == null)
+            return;
+        KitSkin(arrow, "iconkey", _kit.overlayScale);
+        DestroyChildIfPresent(arrow, "Glyph");
+        KitGlyph(arrow, "glyph_back", 0.9f, 90f); // the kit's back arrow turned to point down (its glyph_down is drawn empty)
+    }
+
+    /// <summary>
+    /// A kit plate under a flat world text on the desk (the rulebook's NEW
+    /// tags, its pager): a sliced sprite lying with the text, just under it,
+    /// <paramref name="size"/> metres (its pad round it), drawn before the text;
+    /// the text in <paramref name="ink"/> and <paramref name="face"/>.
+    /// </summary>
+    private static void KitDeskPlate(Transform word, string sprite, Vector2 size, Color ink, TMP_FontAsset face)
+    {
+        if (word == null || !word.TryGetComponent(out TextMeshPro text))
+            return;
+        DestroyChildIfPresent(word, "KitPlate");
+        var plate = new GameObject("KitPlate", typeof(SpriteRenderer));
+        plate.transform.SetParent(word, false);
+        plate.transform.localPosition = new Vector3(0f, 0f, DeskPlateDepth);
+        plate.transform.localScale = new Vector3(DeskPlateScale, DeskPlateScale, 1f);
+        SpriteRenderer renderer = plate.GetComponent<SpriteRenderer>();
+        renderer.sprite = _kit.Get(sprite);
+        renderer.drawMode = SpriteDrawMode.Sliced;
+        float pad = _kit.spritePad / 100f;
+        renderer.size = size / DeskPlateScale + 2f * new Vector2(pad, pad);
+        renderer.sortingLayerID = text.sortingLayerID;
+        renderer.sortingOrder = text.sortingOrder - 1;
+        renderer.shadowCastingMode = ShadowCastingMode.Off;
+        text.font = face;
+        text.color = ink;
+        text.fontStyle = FontStyles.UpperCase;
+    }
+
+    /// <summary>The metres one sprite unit of a desk plate is drawn at, and how far under its text it lies (the text's local z points down into the desk).</summary>
+    private const float DeskPlateScale = 0.006f, DeskPlateDepth = 0.0003f;
 
     /// <summary>The fallback HUD (the readouts the art office lacks) on the kit's phosphor glass, its readouts in the readout face (sheet 02 C4).</summary>
     private static void KitFallbackHud(Transform hud)
@@ -262,12 +346,34 @@ public static partial class OfficeSceneUIBuilder
             return;
         KitSkin(template, "wheelpill", _kit.overlayScale);
         KitLabel(template, "wheelpill_rest");
+        // The centre's BACK (sheet 05): the round oxblood button with its arrow, its word under the arrow.
+        DestroyChildIfPresent(ring, "CentreTemplate");
+        Transform round = Panel(ring, "CentreTemplate", Center, Center, Vector2.zero, WheelBackSize, Color.white, ThemeRoleId.WheelButton);
+        Image face = round.GetComponent<Image>();
+        face.sprite = _kit.Get("wheel_back");
+        face.preserveAspect = true;
+        SceneUiKit.Tag(face, ThemeRoleId.WheelButton, ThemePart.Kit);
+        Button back = GetOrAdd<Button>(round.gameObject);
+        back.targetGraphic = face;
+        TMP_Text word = Text(round, "Label", "", 17, TextAlignmentOptions.Center, new Vector2(0.22f, 0.2f), new Vector2(0.78f, 0.37f), _kit.inkOnDark, ThemeRoleId.WheelButton);
+        word.raycastTarget = false;
+        word.enableAutoSizing = true;
+        word.fontSizeMax = 17f;
+        word.fontSizeMin = 12f;
+        word.textWrappingMode = TextWrappingModes.NoWrap;
+        SceneUiKit.SkinText(word, _kit.inkOnDark, _kit.labelFont, true);
+        round.gameObject.SetActive(false);
+
         // The pill's pictogram tile at its left (TravellerWheel.IconFor), its drawn tile as tall as the pill.
         var so = new SerializedObject(ring.GetComponent<InteractionPanelController>());
         so.FindProperty("iconSize").floatValue = WheelTileSize;
         so.FindProperty("iconPadding").floatValue = 2f;
+        so.FindProperty("centreTemplate").objectReferenceValue = back;
         so.ApplyModifiedProperties();
     }
+
+    /// <summary>The wheel's round BACK (overlay units; its sprite's pad round an 82-unit button).</summary>
+    private static readonly Vector2 WheelBackSize = new Vector2(108f, 108f);
 
     /// <summary>A wheel pill's pictogram tile (overlay units; its sprite's pad round a pill-tall tile).</summary>
     private const float WheelTileSize = 52f;
@@ -311,7 +417,8 @@ public static partial class OfficeSceneUIBuilder
     {
         foreach (ThemeTag tag in root.GetComponentsInChildren<ThemeTag>(true))
         {
-            if (tag.name == UiKitSO.FaceName || tag.Part == ThemePart.Ink || !tag.TryGetComponent(out Image image) || KitDone.Contains(image))
+            // Graphics this build already gave the kit's own colours (a glyph, a tile, a round button) keep them; a builder re-tags what it re-lays out.
+            if (tag == null || tag.name == UiKitSO.FaceName || tag.Part == ThemePart.Ink || tag.Part == ThemePart.Kit || !tag.TryGetComponent(out Image image) || KitDone.Contains(image))
                 continue;
             string piece = RolePiece(tag, image);
             if (piece == null)
@@ -331,6 +438,15 @@ public static partial class OfficeSceneUIBuilder
                 // A field shows its focus ring while it types.
                 field.transition = Selectable.Transition.SpriteSwap;
                 field.spriteState = new SpriteState { selectedSprite = _kit.Get("field_focus"), pressedSprite = _kit.Get("field_focus") };
+                continue;
+            }
+
+            if (image.name == "MinBtn" || image.name == "MaxBtn" || image.name == "CloseBtn")
+            {
+                // A window's keys (sheet 02): the drawn strokes give way to the kit's glyphs.
+                foreach (string stroke in new[] { "Bar", "Top", "Bottom", "Left", "Right", "Stroke1", "Stroke2" })
+                    DestroyChildIfPresent(image.transform, stroke);
+                KitGlyph(image, image.name == "MinBtn" ? "glyph_min" : image.name == "MaxBtn" ? "glyph_max" : "glyph_cross", WindowGlyphShare);
                 continue;
             }
 
@@ -443,7 +559,7 @@ public static partial class OfficeSceneUIBuilder
             case ThemeRoleId.Tab:
                 return button ? (image.name == "MinBtn" || image.name == "MaxBtn" ? "iconkey" : "miniplate_bone") : null;
             case ThemeRoleId.CloseButton:
-                return button ? "iconkey" : null;
+                return button ? "iconkey_red" : null;
             case ThemeRoleId.Taskbar:
                 return image.name == "Taskbar" ? "taskbar" : null;
             case ThemeRoleId.StartButton:

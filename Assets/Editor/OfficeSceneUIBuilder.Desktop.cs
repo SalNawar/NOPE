@@ -46,6 +46,9 @@ public static partial class OfficeSceneUIBuilder
         { DesktopAppIds.Settings, "tile_gear" },
     };
 
+    /// <summary>The gap between a desktop icon's tile and its name plate (desktop units).</summary>
+    private const float IconPlateGap = 8f;
+
     /// <summary>The Menu's entry height (desktop units; the PC UX redesign C8).</summary>
     private const float StartMenuEntryHeight = PcSize.Row;
 
@@ -209,10 +212,27 @@ public static partial class OfficeSceneUIBuilder
             glyphImage.sprite = _kit.Get(tile, KitState.Rest);
             glyphImage.color = Color.white;
             SceneUiKit.Tag(glyphImage, ThemeRoleId.DesktopIcon, ThemePart.Kit);
+            // Sheet 02: the name on a small bone plate under the tile, as wide as the name (one line, at most the cell).
+            var plateRect = (RectTransform)labelPlate;
+            plateRect.anchorMin = plateRect.anchorMax = new Vector2(0.5f, 1f);
+            plateRect.pivot = new Vector2(0.5f, 1f);
+            plateRect.anchoredPosition = new Vector2(0f, -(glyphSize + IconPlateGap));
+            plateRect.sizeDelta = new Vector2(config.iconCellSize.x * 0.8f, PcType.Caption + 12f); // the fitter sizes it to the name at run time
             KitSkin(labelPlate, "miniplate_bone_rest", _kit.desktopScale);
+            HorizontalLayoutGroup fit = GetOrAdd<HorizontalLayoutGroup>(labelPlate.gameObject);
+            fit.padding = new RectOffset(12, 12, 4, 5);
+            fit.childAlignment = TextAnchor.MiddleCenter;
+            fit.childControlWidth = true;
+            fit.childControlHeight = true;
+            fit.childForceExpandWidth = false;
+            fit.childForceExpandHeight = false;
+            ContentSizeFitter grow = GetOrAdd<ContentSizeFitter>(labelPlate.gameObject);
+            grow.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            grow.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            Chrome(label, PcType.Caption);
+            label.margin = Vector4.zero;
+            label.lineSpacing = 0f;
             SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.labelFont, true);
-            label.rectTransform.offsetMin = new Vector2(6f, 4f);
-            label.rectTransform.offsetMax = new Vector2(-6f, -4f);
             KitSkin(selection, "row_highlight", _kit.desktopScale);
         }
 

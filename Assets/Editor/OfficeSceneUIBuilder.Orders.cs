@@ -223,8 +223,11 @@ public static partial class OfficeSceneUIBuilder
             KitSkin(node, UiKitNames.UpgradeCard(OrderState.Orderable), _kit.desktopScale);
             SceneUiKit.SkinText(name, _kit.inkOnLight, _kit.labelFont, true);
             SceneUiKit.SkinText(state, _kit.inkOnLight, _kit.bodyFont, false);
-            glyph.color = _kit.inkOnLight;
+            // The band's pictogram tile (OrdersWindow shows it, locked while locked), drawn the glyph's 48 units inside its pad.
+            glyph.color = Color.white;
+            glyph.sprite = _kit.Get(UiKitNames.UpgradeTile(UpgradeBranch.Desk, OrderState.Orderable));
             SceneUiKit.Tag(glyph, ThemeRoleId.InputField, ThemePart.Kit);
+            PlaceRect(glyph.transform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, -72f), new Vector2(68f, -4f));
             badge.color = Color.white;
             SceneUiKit.Tag(badge, ThemeRoleId.InputField, ThemePart.Kit);
             PlaceRect(badge.transform, Vector2.one, Vector2.one, new Vector2(-34f, -34f), new Vector2(4f, 4f));
