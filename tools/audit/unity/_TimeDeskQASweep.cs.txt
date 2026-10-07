@@ -488,6 +488,7 @@ public static class _TimeDeskQASweep
             }
         }
         yield return DrawOrder(o, $"{tag} papers laid out");
+        DeskDepth(o, $"{tag} papers laid out");
         if (papers.Count < 2)
         {
             Note($"{tag}: one paper only; the overlap is checked on day 5");
@@ -514,6 +515,27 @@ public static class _TimeDeskQASweep
             yield return DrawOrder(o, $"{tag} paper {top.Index} over paper {under.Index}");
             yield return Shot("office", $"{tag}_overlap_{top.Index}_over_{under.Index}");
         }
+    }
+
+    /// <summary>Every paper on the desk and the folder lie over the desk top, their edges too (Saleh's 1007d playtest: papers clipped into the table): each one's lowest mesh point at least half PaperLayers.DeskClearance over it.</summary>
+    private static void DeskDepth(Office o, string when)
+    {
+        float top = ((DeskSurface)Field(o.Desk, "surface")).transform.position.y;
+        var low = new List<string>();
+        foreach (DeskDocument p in o.Papers().Where(p => p.Zone == DeskZone.Desk && p.gameObject.activeInHierarchy))
+        {
+            float lowest = p.Sheet.GetComponentsInChildren<MeshRenderer>(false).Where(r => r.GetComponent<TMP_Text>() == null).Min(r => r.bounds.min.y);
+            if (lowest < top + PaperLayers.DeskClearance * 0.5f)
+                low.Add($"paper {p.Index} {(lowest - top) * 1000f:0.00} mm");
+        }
+        DeskRulebook book = o.Rulebook;
+        if (book != null && book.gameObject.activeInHierarchy)
+        {
+            float lowest = book.GetComponentsInChildren<MeshRenderer>(false).Where(r => r.GetComponent<TMP_Text>() == null).Min(r => r.bounds.min.y);
+            if (lowest < top + PaperLayers.DeskClearance * 0.5f)
+                low.Add($"the folder {(lowest - top) * 1000f:0.00} mm");
+        }
+        Check(low.Count == 0, $"{when}: every paper and the folder lie over the desk top, edges included{List(low)}");
     }
 
     /// <summary>On the desk no paper is drawn over one lying above it: of two papers whose sheets overlap, the higher in the stack sits higher (nearer the camera).</summary>
@@ -828,6 +850,13 @@ public static class _TimeDeskQASweep
         Rect r = ScreenBounds(cam, BoundsOf(detain.GetComponentsInChildren<Renderer>(false)));
         bool inside = r.xMin >= -1f && r.yMin >= -1f && r.xMax <= UnityEngine.Screen.width + 1f && r.yMax <= UnityEngine.Screen.height + 1f && r.width > 8f;
         Check(inside, $"{shotTag}: the DETAIN button lies on the desk, on the screen ({Fmt(r)})");
+        var binder = Office.One<OfficeSceneBinder>();
+        if (binder != null && (bool)Field(binder, "_hasScannerFootprint"))
+        {
+            Bounds d = BoundsOf(detain.GetComponentsInChildren<Renderer>(false)), s = (Bounds)Field(binder, "_scannerFootprint");
+            bool overlap = d.min.x < s.max.x && s.min.x < d.max.x && d.min.z < s.max.z && s.min.z < d.max.z;
+            Check(!overlap, $"{shotTag}: the DETAIN button stands clear of the scanner's footprint (button {d.center} {d.size}, scanner {s.center} {s.size})");
+        }
         var cover = (Clickable)Field(detain, "coverClick");
         var button = (Clickable)Field(detain, "buttonClick");
         cover.onClick.Invoke();
