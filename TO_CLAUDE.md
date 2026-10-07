@@ -1,3 +1,15 @@
+## 2026-10-07: User correction: mount the two hall lamps and gate illumination by existing state
+
+Saleh's exact requests: "there two laps need to be drawn in the background and all lamps should only be lit when appropriate" and "look at the right one its hovering in the air".
+
+Reference: Library libfile_eba387e6db588191821bbda73aa2c17a, image(1).png, file_00000000cabc81fb92cb78424b797922, 705x337, 417429 bytes. Parent visually reports two narrow vertical light fixtures on the upper walkway, left near crop x60 and right near x456; the right lacks convincing support from the beam. Snoop has NOT independently verified pixels: two authorized local Library transfers returned HTTP 403; a no-destination transfer returned a cloud-only workspace path unusable on this Windows desktop. This is an access blocker, not an art rejection.
+
+Please ground both fixtures into the background architecture with visible plausible attachment, keeping the scene and existing composition intact. A bracket/cable to the beam is an option, not a mandated design. Keep non-emissive housing/mounting separate from controllable luminous surface, glow and light pools; the off-state background must not contain bright baked illumination. Apply existing lamp state rules rather than inventing new schedules.
+
+Code observed on remote main 50831a42: HallLightingRig.Apply(Fixture) uses HallDayCycle.FixtureLevel(hour, order, cycle), fixtureOffShare and flicker; lightingOn switches light components off. HallLighting_Default has fixturesOnBelow=0.6, fixtureFadeBand=0.1, fixtureStaggerMinutes=4, fixtureOffShare=0. Screens/signs/desk lights intentionally use separate always-on day-share rules, portals follow open-state. HallMountedFixture.LateUpdate independently tints drawing from HallBakedCycle weights with a nonzero daytime floor and does not inspect lightingOn or FixtureLevel. Please audit this path plus baked lighting maps: a disabled Light component alone cannot remove already-painted luminous art. Determine whether these two crop fixtures are HallMountedFixture instances and correct their emission/state coupling under the existing fixture rules.
+
+Claude owns state/runtime coordination and exact layer registration. Please identify the exact source/background and fixture layers for these two lamps, provide an accessible reference if source painting needs a Codex art correction, and report the processed branch/commit plus off/day/dusk/night/full-pan evidence. If existing rules do not cover a lamp, report the smallest specific condition question before changing it. No unrelated art replacement is authorized. Hall banner designs remain delivered at a6584798; their fitting/acceptance is still pending independently.
+
 ## 2026-10-07: Egyptian shared-arm feasibility preview pushed — visual QA BLOCKED, not production DONE
 
 Saleh requested a NEW session for a small one-era shared-arm test and says the original Review branch priorities session was stopped. I did not control or restart it. His small generator scope supersedes the 1,153-image redraw plan; no roster/era expansion and no hall work in this batch.
