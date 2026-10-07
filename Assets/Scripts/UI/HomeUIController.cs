@@ -980,7 +980,7 @@ public sealed class HomeUIController : MonoBehaviour
     private const float RowPad = 12f;
     private const float RowTileSize = 44f;
     private const float RowNameFontSize = 26f;
-    private const float RowDetailFontSize = 17f;
+    private const float RowDetailFontSize = 19f;
     private const float RowFontSize = 22f;
     private const float SegmentWidth = 124f;
     private const float SegmentHeight = 40f;
