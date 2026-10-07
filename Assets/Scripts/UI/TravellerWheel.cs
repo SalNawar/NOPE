@@ -11,7 +11,9 @@ using UnityEngine.UI;
 /// the traveller or the desk intercom while BoothCoordinator allows it, each
 /// choice with its kind's icon; and the traveller's speech: their lines in a
 /// speech bubble beside them, one after another, typed out and paced
-/// (SpeechQueue), each changing a premade's expression as it starts; from
+/// (SpeechQueue), each changing a premade's expression as it starts, and the
+/// traveller's pose frame on each beat (TravellerPose.ForBeat: the line
+/// they say, thinking while the wheel is open, else neutral); from
 /// translation's first day a line is in the claimed place's tongue, and with
 /// the region's Speech translator its letters flip into English behind the
 /// typing (its hold starts once the flip ends; opening the wheel finishes the
@@ -195,7 +197,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         _icons.Clear();
     }
 
-    /// <summary>Paces the speech bubble; only while open, follows the traveller; places the bubble while it shows (after the ring, which it keeps clear of).</summary>
+    /// <summary>Paces the speech bubble and sets the traveller's pose for the beat; only while open, follows the traveller; places the bubble while it shows (after the ring, which it keeps clear of).</summary>
     private void LateUpdate()
     {
         if (_speech != null)
@@ -203,6 +205,8 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             _speech.Tick(Time.deltaTime);
             ShowSpeech();
         }
+        if (traveller != null)
+            traveller.SetPose(TravellerPose.ForBeat(_speech != null && _speech.Showing ? CurrentLine : null, IsOpen));
 
         if (IsOpen)
             Place();

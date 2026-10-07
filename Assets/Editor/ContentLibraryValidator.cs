@@ -1468,7 +1468,8 @@ public static partial class ContentLibraryValidator
     /// item's artNation counts once), with the first 20 missing names (at
     /// runtime each is drawn with its nearest stand-in, CharacterArtFallbackSO,
     /// or not at all); and warns when that table is missing or leaves a
-    /// nation without neighbours.
+    /// nation without neighbours. Then the same count for the 80s set
+    /// (LookArtSets.Retro) and its pose frames (LookKeys.TryParsePose).
     /// </summary>
     private static void ReportCharacterArt(ContentLibrarySO lib)
     {
@@ -1486,6 +1487,22 @@ public static partial class ContentLibraryValidator
         List<string> missing = distinct.Where(k => !System.IO.File.Exists($"{CharacterArt.AssetFolder}/{k}.png")).ToList();
         int total = distinct.Count;
         Debug.Log($"[ContentLibraryValidator] Character art: {total - missing.Count}/{total} key(s) have art in {CharacterArt.AssetFolder}; the rest are drawn with their nearest stand-in (CharacterArtFallback) or not at all{(missing.Count > 0 ? $" (first missing: {string.Join(", ", missing.Take(20))})" : string.Empty)}.");
+
+        // The 80s set (LookArtSets.Retro): a traveller is drawn from it only when every key of their look is there.
+        string retroFolder = $"{CharacterArt.AssetFolder}/{LookArtSets.Retro}";
+        string[] retroFiles = System.IO.Directory.Exists(retroFolder)
+            ? System.IO.Directory.GetFiles(retroFolder, "*.png").Select(System.IO.Path.GetFileNameWithoutExtension).ToArray()
+            : new string[0];
+        var frames = new HashSet<string>();
+        int poseFrames = 0;
+        foreach (string file in retroFiles)
+            if (LookKeys.TryParsePose(file, out string neutral, out _))
+            {
+                poseFrames++;
+                frames.Add(neutral);
+            }
+        var retro = new HashSet<string>(retroFiles);
+        Debug.Log($"[ContentLibraryValidator] Character art, 80s set: {distinct.Count(retro.Contains)}/{total} key(s) in {retroFolder}, plus {poseFrames} pose frame(s) of {frames.Count} drawing(s) (TravellerPose); a traveller whose look misses one 80s key is drawn from the classic set.");
 
         LookArtFallbackTable table = Resources.Load<CharacterArtFallbackSO>(CharacterArtFallbackSO.ResourcePath)?.table;
         if (table == null)

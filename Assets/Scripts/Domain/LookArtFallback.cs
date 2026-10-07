@@ -120,14 +120,16 @@ public static class LookArtFallback
 {
     /// <summary>
     /// The keys to try for <paramref name="requested"/>, in order: the key
-    /// itself, then each step's keys (each name once).
+    /// itself, then each step's keys (each name once); a pose frame's key
+    /// (LookKey.Pose) only itself.
     /// </summary>
     public static IEnumerable<LookKey> Candidates(LookKey requested, LookArtFallbackTable table, LookArtUniverse universe)
     {
         var seen = new HashSet<string> { requested.Name };
         yield return requested;
 
-        if (table == null || universe == null)
+        // A pose frame has no stand-in: without its art the moving set falls back to neutral as one (TravellerPose).
+        if (table == null || universe == null || requested.Pose != null)
             yield break;
 
         foreach (LookArtFallbackStep step in table.StepsFor(requested.Layer))

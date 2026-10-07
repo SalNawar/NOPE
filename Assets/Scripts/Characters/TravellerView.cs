@@ -161,6 +161,13 @@ public sealed class TravellerView : MonoBehaviour
             figure.SetExpression(expression);
     }
 
+    /// <summary>The traveller takes a pose's frame on a dialogue beat (TravellerWheel; TravellerPose: an instant swap, held until the next beat; Show starts neutral).</summary>
+    public void SetPose(string category)
+    {
+        if (figure != null)
+            figure.SetPose(category);
+    }
+
     /// <summary>Hides the traveller (the decision, or no traveller yet).</summary>
     public void Clear()
     {

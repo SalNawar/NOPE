@@ -1,0 +1,3 @@
+# Athenian pose preview
+Four 1024 x 1536 raw green-background images generated with built-in image_gen, from the same neutral reference: neutral, explaining, thinking, objecting.
+Open index.html to compare or cycle all four. These are full-frame visual previews, not the interchangeable garment/body layers for production. The previous simple horizontal head overlay has been removed because it would erase the raised hand in thinking/objecting. Thinking requires hand-over-face ordering in the eventual layered implementation. All four outputs visually inspected. Minor redrawing of unchanged areas remains; exact registration is not claimed. Unity switching remains Claude's task.
