@@ -368,6 +368,35 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     and the daters' and the button's materials.
   - Profiles not re-taken (round 6's kept).
 
+- **Round 8, the run 7 integration** (`integrate/1007`: main `50831a4` with Tracks FX `e01e63d`, J `42647af`, DOC
+  `becf8a2`, SA `441198f`, DM `aec0700`, SL `5f383fc` and P `0274c55` merged). Re-packed once from the integrated run A;
+  runs A and B were identical (the transcript and all 30 saves byte-equal); each play report passes 6,432 checks and fails
+  none, and logs no warning. Against round 7's pack (DM's), the 215 verdicts, word for word, the day-15 ending
+  (`world_report`), the Welfare notices, the orders and the House purchases are unchanged. The intended changes, by track:
+  - **INT** (read timing): the verdict line and the `world:` line are read as the verdict is committed
+    (`DeskStampTray.Decided`, after the game wrote them). The 30 `verdict line:` entries that read empty after a DETAIN press
+    now show the real line, and the 4 days that end with a detention no longer print the Debt Relief instalment in their
+    last `world:` line.
+  - **P** (`fix/playtest-1007`): the paper leads with the world's news (the "BULLETIN · NEW TODAY" kicker gone; day 1 on
+    the debt line); the bulletin moves to the briefing's Bureau memo (`memo |` lines, days 1-15); "shift started at <hour>
+    on AVAILABLE" each day and the tutorial's step 1 text; the bills: Heating no longer pays Electricity, so night 4's
+    default care costs 9 cr, not 11, and every later wallet and `world:` money field moves by +2 cr (the final wallet
+    123 cr); the pet's corner reads warm instead of cold that night; every save hash (the News archive drops the bulletin).
+  - **SA** (`feat/scanner-app`): the case board's cross-check documents a category once ("cross proof of ...: already
+    documented (the case board's cross-check)"), so two Citizen ID proofs log as the record's difference (RecordMismatch)
+    instead of the papers' (CrossMismatch); the saves carry the citizen file's visits.
+  - **FX** (`fix/day5-guide`): round 6's open day-5 GUIDE check passes; the guide's arrow allocates nothing (checked).
+  - **DOC** (`feat/document-art`): the Citation's lines are read as it lands; no verdict, pay or stability moves.
+  - **J**, **SL**: no transcript change (the play never spins the Night Slots machine).
+  - `cases.txt`: SA's citizen file in every case (registry notes, the random travellers' templates, clues and threads,
+    seen-before visits); every claim, name, paper, tell and verdict input is round 7's.
+  - `scene_OfficeGameplay`: every track's builder (the daters' label lip low in front of them, the city view's desk
+    controls fading out, the case board, the Citation, the memo, the DETAIN button); `scene_HomeScene` (now over 200 kB, so
+    stored gzipped): SL's machine with J's serialized pull; `scene_TitleScene`: J's serialized pull. Each rebuild equals the
+    committed scene. `data_hashes.txt`, `world_generate.txt` (`Assets/Data` 1012 -> 1014 files: DOC's
+    `CitationForm_TC900` and its meta): the merged strings, documents, kit, knobs, sound bank and content.
+  - Profiles not re-taken (round 6's kept).
+
 ## Baseline results (ff3a6e0)
 
 - **Tests:** compile 0 errors; offline EditMode 1067 passed, 0 failed.

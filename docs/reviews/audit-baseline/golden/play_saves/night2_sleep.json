@@ -486,20 +486,162 @@
                 "reported": false
             }
         ],
+        "visits": [
+            {
+                "record": "WYW-755",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "EHL-134",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": "Denied a legitimate, permitted traveler."
+            },
+            {
+                "record": "RQR-503",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "EKR-071",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "JYK-931",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "JSM-559",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "KTC-732",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "HBU-204",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "ZTP-206",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "BHN-829",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Abbasid Baghdad (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "ANS-046",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "NDD-284",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "UPQ-750",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "WYW-755",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "SYL-795",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "MQS-875",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "BJW-858",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "HSH-092",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": "Approved forged papers."
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
-                "briefing": [
-                    "NEW: your desk. Each traveller hands you a Passport. Approve only the destination open today (the Directive Memo names it), a Passport still valid (its Valid Until against the calendar) and a photo of the person at the desk."
-                ],
+                "briefing": [],
                 "news": [],
                 "desk": []
             },
             {
                 "day": 2,
-                "briefing": [
-                    "NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport's, and its departure date must be today."
-                ],
+                "briefing": [],
                 "news": [
                     "Art is now DOMINANT in Periclean Athens.",
                     "HISTORY: Greece now dominates the timeline. The Future belongs to Aegean Commonwealth (2150).",

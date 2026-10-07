@@ -354,12 +354,76 @@
                 "reported": false
             }
         ],
+        "visits": [
+            {
+                "record": "WYW-755",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "EHL-134",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": "Denied a legitimate, permitted traveler."
+            },
+            {
+                "record": "RQR-503",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "EKR-071",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "JYK-931",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "JSM-559",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "KTC-732",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "HBU-204",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
-                "briefing": [
-                    "NEW: your desk. Each traveller hands you a Passport. Approve only the destination open today (the Directive Memo names it), a Passport still valid (its Valid Until against the calendar) and a photo of the person at the desk."
-                ],
+                "briefing": [],
                 "news": [],
                 "desk": []
             }

@@ -77,6 +77,7 @@ Canvas/TitlePanel/ContinueButton image sprite=null color=#00000000 type=Simple r
 Canvas/TitlePanel/ContinueButton Button interactable=True transition=SpriteSwap target=Canvas/TitlePanel/ContinueButton/KitFace:Image
 Canvas/TitlePanel/ContinueButton button calls=[]
 Canvas/TitlePanel/ContinueButton UiJuice enabled=True
+Canvas/TitlePanel/ContinueButton UiJuice.pull=(0, 0)
 Canvas/TitlePanel/ContinueButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/TitlePanel/ContinueButton/KitFace transform pos=(0.000,-38.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/TitlePanel/ContinueButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -100,6 +101,7 @@ Canvas/TitlePanel/NewRunButton image sprite=null color=#00000000 type=Simple ray
 Canvas/TitlePanel/NewRunButton Button interactable=True transition=SpriteSwap target=Canvas/TitlePanel/NewRunButton/KitFace:Image
 Canvas/TitlePanel/NewRunButton button calls=[]
 Canvas/TitlePanel/NewRunButton UiJuice enabled=True
+Canvas/TitlePanel/NewRunButton UiJuice.pull=(0, 0)
 Canvas/TitlePanel/NewRunButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/TitlePanel/NewRunButton/KitFace transform pos=(0.000,-38.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/TitlePanel/NewRunButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -151,6 +153,7 @@ Canvas/EndingPanel/NewRunButton image sprite=null color=#00000000 type=Simple ra
 Canvas/EndingPanel/NewRunButton Button interactable=True transition=SpriteSwap target=Canvas/EndingPanel/NewRunButton/KitFace:Image
 Canvas/EndingPanel/NewRunButton button calls=[]
 Canvas/EndingPanel/NewRunButton UiJuice enabled=True
+Canvas/EndingPanel/NewRunButton UiJuice.pull=(0, 0)
 Canvas/EndingPanel/NewRunButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/EndingPanel/NewRunButton/KitFace transform pos=(220.000,35.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/EndingPanel/NewRunButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -217,6 +220,7 @@ Canvas/EndingPanel/WorldButton image sprite=null color=#00000000 type=Simple ray
 Canvas/EndingPanel/WorldButton Button interactable=True transition=SpriteSwap target=Canvas/EndingPanel/WorldButton/KitFace:Image
 Canvas/EndingPanel/WorldButton button calls=[]
 Canvas/EndingPanel/WorldButton UiJuice enabled=True
+Canvas/EndingPanel/WorldButton UiJuice.pull=(0, 0)
 Canvas/EndingPanel/WorldButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/EndingPanel/WorldButton/KitFace transform pos=(220.000,35.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/EndingPanel/WorldButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -268,6 +272,7 @@ Canvas/WorldPanel/NewRunButton image sprite=null color=#00000000 type=Simple ray
 Canvas/WorldPanel/NewRunButton Button interactable=True transition=SpriteSwap target=Canvas/WorldPanel/NewRunButton/KitFace:Image
 Canvas/WorldPanel/NewRunButton button calls=[]
 Canvas/WorldPanel/NewRunButton UiJuice enabled=True
+Canvas/WorldPanel/NewRunButton UiJuice.pull=(0, 0)
 Canvas/WorldPanel/NewRunButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/WorldPanel/NewRunButton/KitFace transform pos=(220.000,35.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/WorldPanel/NewRunButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -315,6 +320,7 @@ Canvas/AdoptPanel/DogButton image sprite=null color=#00000000 type=Simple raycas
 Canvas/AdoptPanel/DogButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/DogButton/KitFace:Image
 Canvas/AdoptPanel/DogButton button calls=[]
 Canvas/AdoptPanel/DogButton UiJuice enabled=True
+Canvas/AdoptPanel/DogButton UiJuice.pull=(0, 0)
 Canvas/AdoptPanel/DogButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/AdoptPanel/DogButton/KitFace transform pos=(110.000,-130.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/DogButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -354,6 +360,7 @@ Canvas/AdoptPanel/CatButton image sprite=null color=#00000000 type=Simple raycas
 Canvas/AdoptPanel/CatButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/CatButton/KitFace:Image
 Canvas/AdoptPanel/CatButton button calls=[]
 Canvas/AdoptPanel/CatButton UiJuice enabled=True
+Canvas/AdoptPanel/CatButton UiJuice.pull=(0, 0)
 Canvas/AdoptPanel/CatButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/AdoptPanel/CatButton/KitFace transform pos=(110.000,-130.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/CatButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -425,6 +432,7 @@ Canvas/AdoptPanel/AdoptButton image sprite=null color=#00000000 type=Simple rayc
 Canvas/AdoptPanel/AdoptButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/AdoptButton/KitFace:Image
 Canvas/AdoptPanel/AdoptButton button calls=[]
 Canvas/AdoptPanel/AdoptButton UiJuice enabled=True
+Canvas/AdoptPanel/AdoptButton UiJuice.pull=(0, 0)
 Canvas/AdoptPanel/AdoptButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/AdoptPanel/AdoptButton/KitFace transform pos=(-190.000,36.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/AdoptButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
@@ -448,6 +456,7 @@ Canvas/AdoptPanel/BackButton image sprite=null color=#00000000 type=Simple rayca
 Canvas/AdoptPanel/BackButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/BackButton/KitFace:Image
 Canvas/AdoptPanel/BackButton button calls=[]
 Canvas/AdoptPanel/BackButton UiJuice enabled=True
+Canvas/AdoptPanel/BackButton UiJuice.pull=(0, 0)
 Canvas/AdoptPanel/BackButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/AdoptPanel/BackButton/KitFace transform pos=(-115.000,36.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/BackButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
