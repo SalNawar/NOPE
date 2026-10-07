@@ -160,7 +160,7 @@ public static partial class OfficeSceneUIBuilder
     {
         if (tab == null)
             return;
-        string piece = left ? "pulltab_left" : "pulltab_right";
+        string piece = left ? UiKitNames.PullTabLeft : UiKitNames.PullTabRight;
         var tabRect = (RectTransform)tab;
         tabRect.sizeDelta = PullTabSize;
         KitSkin(tab, piece, _kit.overlayScale);

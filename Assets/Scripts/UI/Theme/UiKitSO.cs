@@ -184,7 +184,7 @@ public sealed class UiKitSO : ScriptableObject
             pressedSprite = Get(piece, KitState.Pressed) ?? hover,
             disabledSprite = Get(piece, KitState.Locked)
         };
-        UiJuice.On(control);
+        UiJuice.On(control, piece);
     }
 
     /// <summary>Drops the cached lookup (the builders refresh the sprite list from the manifest).</summary>

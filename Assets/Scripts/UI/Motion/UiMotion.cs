@@ -12,7 +12,7 @@ public interface IMotionTick
 /// The game feel's one driver and its settings: a hidden persistent object
 /// that steps only the motions that move (Run registers one; it leaves the
 /// list when it settles, so an idle control costs nothing per frame), with
-/// unscaled time; and the tuning (RunConfig's MotionTuningSO, else the
+/// unscaled time (or the capture step while one records: Time.captureDeltaTime); and the tuning (RunConfig's MotionTuningSO, else the
 /// defaults with a warning) and the player's amount of motion
 /// (MotionPreference: the Motion intensity, Reduced Motion). No per-frame
 /// allocation: the list is reused and swapped down in place.
@@ -108,7 +108,8 @@ public sealed class UiMotion : MonoBehaviour
     /// <summary>Steps every moving motion; drops those that settled or were destroyed (swapped down in place).</summary>
     private void Update()
     {
-        float dt = Time.unscaledDeltaTime;
+        // Recording at a fixed frame rate (Time.captureDeltaTime: a capture, a trailer) steps the springs by it too, so every recorded frame is one step of the motion.
+        float dt = Time.captureDeltaTime > 0f ? Time.captureDeltaTime : Time.unscaledDeltaTime;
         for (int i = _running.Count - 1; i >= 0; i--)
         {
             IMotionTick motion = _running[i];
