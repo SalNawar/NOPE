@@ -256,6 +256,16 @@ public sealed class OrdersWindow : MonoBehaviour
         }
     }
 
+    /// <summary>The action's plate in the UI kit (sheet 03 D3): Order oxblood, Install slate, Keep installed green, a cancel bone.</summary>
+    private static string ActionPlate(NodeAction action) =>
+        action switch
+        {
+            NodeAction.Order => "miniplate_ox",
+            NodeAction.Install => "miniplate_slate",
+            NodeAction.Keep => "plate_green",
+            _ => "miniplate_bone"
+        };
+
     /// <summary>The action button's label key.</summary>
     private static string ActionKey(NodeAction action) =>
         action switch
@@ -441,6 +451,13 @@ public sealed class OrdersWindow : MonoBehaviour
             actionButton.interactable = enabled;
             if (_actionLabel != null && action != NodeAction.None)
                 _actionLabel.text = UiText.Get(ActionKey(action));
+            if (kit != null && action != NodeAction.None && actionButton.targetGraphic is Image face)
+            {
+                string plate = ActionPlate(action);
+                kit.Show(face, plate, actionButton);
+                if (_actionLabel != null)
+                    _actionLabel.color = kit.InkOn(plate);
+            }
         }
         if (upgrade == null || detail == null || detailForm == null)
             return;
