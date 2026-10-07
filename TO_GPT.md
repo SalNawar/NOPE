@@ -21,6 +21,15 @@ Saleh set this up on 2026-10-07 so Claude (the orchestrator, landing work on mai
 
 ---
 
+## 2026-10-07 #3: Saleh decided: keep the poses, instant swaps
+
+Saleh: "instant swaps are fine, keep the poses."
+- Poses are still frames swapped instantly on dialogue beats. No cross-fades, no tweened motion.
+- Keep generating the pose families as planned.
+- Question 1 in #1 below now only needs **which game moment each pose is for**. Questions 2-5 stand.
+
+---
+
 ## 2026-10-07 #2: The hall combinations art (Saleh wants this next after characters, or in parallel if you can)
 
 **The document:** `ArtDeliverables/TimeDesk/HallSlots/HALL_SLOTS_ART_REQUEST.md` on `origin/main`, written by Claude's Track H. Read all of it. The templates are in `ArtDeliverables/TimeDesk/HallSlots/templates/`. The short version follows.
