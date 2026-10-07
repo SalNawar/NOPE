@@ -11,6 +11,12 @@ public sealed class HallBakedLighting : MonoBehaviour
     /// <summary>The four-state material (NOPE/Hall Four State); nothing is applied without it.</summary>
     [SerializeField] Material material;
     MaterialPropertyBlock properties;
+    HallLight[] fixtures;
+    readonly float[] fixtureLevels=new float[16];
+    readonly Vector4[] fixtureCenters=new Vector4[16];
+    static readonly int FixtureLevelsId=Shader.PropertyToID("_FixtureLevels");
+    static readonly int FixtureCountId=Shader.PropertyToID("_ScheduledFixtureCount");
+    static readonly int FixtureCentersId=Shader.PropertyToID("_FixtureCenters");
     static readonly int StateWeightsId=Shader.PropertyToID("_StateWeights");
     static readonly int ShadowRayId=Shader.PropertyToID("_HallShadowRay");
     static readonly int LightingAmountId=Shader.PropertyToID("_LightingAmount");
@@ -33,6 +39,15 @@ public sealed class HallBakedLighting : MonoBehaviour
         if(rig==null || art==null || material==null) return;
         var weights=HallBakedCycle.Weights(rig.Hour);
         var direction=DaylightDirection(weights);
+        if(fixtures==null || !Application.isPlaying)
+        {
+            var found=rig.GetComponentsInChildren<HallLight>(true);
+            fixtures=System.Array.FindAll(found,l=>l.kind==HallLightKind.Fixture);
+            System.Array.Sort(fixtures,(a,b)=>string.CompareOrdinal(a.name,b.name));
+        }
+        int fixtureCount=System.Math.Min(fixtures.Length,16);
+        for(int i=0;i<fixtureCount;i++)fixtureLevels[i]=fixtures[i]!=null && fixtures[i].gameObject.activeInHierarchy
+            ?fixtures[i].Lit:0;
         properties??=new MaterialPropertyBlock();
         foreach(var layer in art.layers)
         {
@@ -43,6 +58,17 @@ public sealed class HallBakedLighting : MonoBehaviour
             properties.SetFloat(LightingAmountId,rig.Settings!=null && rig.Settings.lightingOn?art.lightingAmount:0);
             properties.SetFloat(CloudMotionId,MotionPreference.Reduced?0:1);
             properties.SetFloat(PaletteAmountId,1);
+            properties.SetFloatArray(FixtureLevelsId,fixtureLevels);
+            properties.SetInt(FixtureCountId,fixtureCount);
+            var sprite=layer.renderer.sprite;
+            if(sprite!=null)
+                for(int i=0;i<fixtureCount;i++)
+                {
+                    var local=layer.renderer.transform.InverseTransformPoint(fixtures[i].transform.position);
+                    fixtureCenters[i]=new Vector4((local.x*sprite.pixelsPerUnit+sprite.pivot.x)/sprite.rect.width,
+                        (local.y*sprite.pixelsPerUnit+sprite.pivot.y)/sprite.rect.height,0,0);
+                }
+            properties.SetVectorArray(FixtureCentersId,fixtureCenters);
             layer.renderer.SetPropertyBlock(properties);
         }
         if(art.daylight!=null)

@@ -6,7 +6,8 @@ using UnityEngine;
 /// slots, ArtSlots; the wheel icons too) on every import (authoritative): a
 /// Single sprite (SlotArt loads sprites), transparent, clamped, at most 2048
 /// px (4096 for the hall's slots, whose paintings span the hall's 2172 px
-/// canvas: ArtSlots.MaxSide); the desk papers' art (ArtSlots.OnDeskPaper: the faces, the photo
+/// canvas: ArtSlots.MaxSide; those with the high-quality compression, so their
+/// dark fields never mottle over the uncompressed painting); the desk papers' art (ArtSlots.OnDeskPaper: the faces, the photo
 /// frame, the ink marks) with mipmaps, UI art without, never sliced (the
 /// sliced faces are the UI kit's since run 7: UiKitImporter), so a
 /// delivered file is ready without touching its import settings.
@@ -26,6 +27,10 @@ public sealed class ArtSlotImporter : AssetPostprocessor
         importer.mipmapEnabled = ArtSlots.OnDeskPaper(slot);
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.maxTextureSize = ArtSlots.MaxSide(slot);
+        // The hall's slots lie pixel for pixel over the uncompressed painting: the default block compression mottles
+        // their large dark fields in play, so they take the high-quality compression (BC7 on PC).
+        if (slot.StartsWith(ArtSlots.HallSlotsFolder, System.StringComparison.Ordinal))
+            importer.textureCompression = TextureImporterCompression.CompressedHQ;
 
         importer.spriteBorder = Vector4.zero;
     }

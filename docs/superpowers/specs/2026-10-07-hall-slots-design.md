@@ -71,6 +71,17 @@ draw nothing. The cheat "Hall: stand-ins" shows every slot's stand-in.
 - `Capture Combinations`: in play, twelve representative combinations (`HallSlotsTools.Combos`) to
   `Logs/HallSlotsCombos`, every stand-in shown, the hour forced per combination.
 - The cheat menu's `Hall:` buttons (`HallSlotsCheats`): step each variable, back to the run's, stand-ins.
+- `tools/hall/fit_slot_art.py`: fits a flat, front-view design (GPT's image tool cannot paint a registered
+  canvas) onto the painting: the banners' cloth (stretched onto the painted cloth, its folds kept) and the
+  board's header plate (contained between the rods, standing on the board); its docstring is the contract.
+
+## Delivered art (2026-10-07)
+
+Both banners and the board's header plate for the eight cultures: GPT's flat designs
+(`ArtDeliverables/TimeDesk/HallSlots/sources/banner|board-plate/`) fitted by the tool, 24 files in
+`Assets/Art/UI/Resources/Hall/Slots/`. Slot art is imported with the high-quality compression (BC7 on
+PC: the default block compression mottled the dark fields over the uncompressed painting), and never takes
+the ceiling diffusers' night glow (the link points the material's fixture reference at black for the slots).
 
 ## Decisions taken on Saleh's behalf
 

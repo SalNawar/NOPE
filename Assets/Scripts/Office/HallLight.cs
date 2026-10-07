@@ -65,6 +65,9 @@ public sealed class HallLight : MonoBehaviour
     /// <summary>A portal light's current share (0 to 1), eased towards its ring's state by the rig.</summary>
     internal float Share;
 
+    /// <summary>A fixture's lit share this frame as the rig set it (its schedule level from `fixtureOffShare` to 1, times the strike flicker; 0 while the rig's lighting is off): the painted diffusers glow by it (HallMountedFixture, HallBakedLighting).</summary>
+    internal float Lit;
+
     /// <summary>Finds the light beside it (the rig calls it once when it gathers its lights).</summary>
     internal void Bind()
     {

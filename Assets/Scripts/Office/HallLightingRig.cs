@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -17,8 +18,9 @@ using UnityEngine;
 /// Light2Ds, the pier shadows, the dust) follows the art's presentation, so
 /// the lights stay on the painted fixtures if the art pans. The dust's knobs
 /// are applied each frame too; with reduced motion the dust is off (or thinned
-/// by the knob). It gathers its lights once when enabled in play (every
-/// frame in edit mode, so a duplicated light joins at once); a frame allocates nothing.
+/// by the knob). It gathers its lights (its own and the mounted lamps drawn
+/// among the art's layers) once when enabled in play (every frame in edit
+/// mode, so a duplicated light joins at once); a frame allocates nothing.
 /// </summary>
 [ExecuteAlways]
 [DisallowMultipleComponent]
@@ -185,7 +187,8 @@ public sealed class HallLightingRig : MonoBehaviour
                 else
                     l.SinceOn += dt;
                 float flicker = HallDayCycle.Flicker(l.SinceOn, _reduced || !settings.fixtureFlicker);
-                Set(l, l.intensity * Mathf.Lerp(settings.fixtureOffShare, 1f, level) * flicker, settings.fixtureColour);
+                l.Lit = Mathf.Lerp(settings.fixtureOffShare, 1f, level) * flicker;
+                Set(l, l.intensity * l.Lit, settings.fixtureColour);
                 break;
 
             case HallLightKind.Screen:
@@ -286,6 +289,7 @@ public sealed class HallLightingRig : MonoBehaviour
                 l.Light2D.enabled = on;
             if (l.Light3D != null)
                 l.Light3D.enabled = on;
+            l.Lit = 0f;
         }
         foreach (ParticleSystem ps in dust)
             if (ps != null)
@@ -304,10 +308,16 @@ public sealed class HallLightingRig : MonoBehaviour
         plane.localScale = new Vector3(scale.x / parent.x, scale.y / parent.y, scale.z / parent.z);
     }
 
-    /// <summary>The HallLights under this object.</summary>
+    /// <summary>The HallLights under this object, and those drawn among the art's layers (the gallery's mounted lamps, children of the presentation): every fixture keeps the one schedule.</summary>
     private void Gather()
     {
         _lights = GetComponentsInChildren<HallLight>(true);
+        if (presentation != null)
+        {
+            HallLight[] drawn = presentation.GetComponentsInChildren<HallLight>(true);
+            if (drawn.Length > 0)
+                _lights = _lights.Concat(drawn).Distinct().ToArray();
+        }
         foreach (HallLight l in _lights)
             l.Bind();
     }

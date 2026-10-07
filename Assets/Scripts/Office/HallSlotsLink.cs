@@ -14,7 +14,8 @@ using UnityEngine;
 /// registered to its source canvas, so the hall's pan carries them and its
 /// time of day lights them like the painting (each frame the painting's
 /// lighting values, written by the art's HallBakedLighting, are copied onto
-/// them; nothing is allocated per frame). It reads the hall's variables from
+/// them; nothing is allocated per frame), except the ceiling diffusers' glow:
+/// a slot's art covers what is behind it, so it never glows there. It reads the hall's variables from
 /// the run (HallState: the leading culture of CultureThemeService, the
 /// Helix River's tier of the stability, the phase of the day, today's
 /// special of the day plans' rules, the famous travellers let through of the
@@ -56,6 +57,8 @@ public sealed class HallSlotsLink : MonoBehaviour
     private static readonly int CloudMotionId = Shader.PropertyToID("_CloudMotion");
     private static readonly int PaletteAmountId = Shader.PropertyToID("_PaletteAmount");
     private static readonly int AmbientColorId = Shader.PropertyToID("_AmbientColor");
+    private static readonly int FixtureReferenceId = Shader.PropertyToID("_FixtureReference");
+    private static readonly int UseFixtureReferenceId = Shader.PropertyToID("_UseFixtureReference");
 
     private HallSlotsSO _settings;
     private SpriteRenderer _painting;
@@ -168,6 +171,9 @@ public sealed class HallSlotsLink : MonoBehaviour
             _write.SetFloat(PaletteAmountId, _read.GetFloat(PaletteAmountId));
         if (_read.HasColor(AmbientColorId))
             _write.SetColor(AmbientColorId, _read.GetColor(AmbientColorId));
+        // A slot's art hangs in front of the ceiling: it never glows (or dims) as the painted diffusers behind it do.
+        _write.SetTexture(FixtureReferenceId, Texture2D.blackTexture);
+        _write.SetFloat(UseFixtureReferenceId, 1f);
         for (int i = 0; i < _slots.Count; i++)
         {
             Slot s = _slots[i];
