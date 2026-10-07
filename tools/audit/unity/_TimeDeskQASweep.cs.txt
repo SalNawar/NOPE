@@ -936,6 +936,11 @@ public static class _TimeDeskQASweep
         var rack = (Transform)Field(o.Stamps, "rack");
         Camera cam = OfficeRaycaster().eventCamera;
         Renderer rail = rack != null ? rack.Find("Rail")?.GetComponent<Renderer>() : null;
+        if (rail == null && rack != null && rack.GetComponentInChildren<BrassDrawer>(true) != null)
+        {
+            Note($"{tag}: the daters stand in the brass drawer (main f645987); the built lip is its fallback only");
+            return;
+        }
         if (rail == null || cam == null)
         {
             Check(false, $"{tag}: the dater rack has its label lip");
