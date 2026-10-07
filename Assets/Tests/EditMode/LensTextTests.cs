@@ -63,6 +63,17 @@ public class LensTextTests
     }
 
     [Test]
+    public void Split_ARichTextTag_IsNeverAWord()
+    {
+        var g = LensWords.Glossary(new List<LensWord> { new LensWord { native = "Dati", english = "Data" } });
+        List<LensSegment> s = LensWords.Split("<b>Dati</b> <pos=76%>x < y", "<b>Data</b>", g);
+
+        Assert.AreEqual(new[] { "Dati", "x", "y" }, s.FindAll(x => x.IsWord).ConvertAll(x => "<b>Dati</b> <pos=76%>x < y".Substring(x.Start, x.Length)).ToArray());
+        Assert.AreEqual("Data", s.Find(x => x.IsWord).English);
+        Assert.AreEqual("Data", LensWords.Split("<b>Dati</b>", "<b>Data</b>", null).Find(x => x.IsWord).English, "a tagged single word still takes the label's English");
+    }
+
+    [Test]
     public void TableProblems_NameTheWordsWithNoEnglish_AndBadEntries()
     {
         var reading = new List<UiStringEntry> { new UiStringEntry { key = "tray.day", text = "Day {0}" }, new UiStringEntry { key = "icon.mail", text = "Mail" } };

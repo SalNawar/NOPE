@@ -194,9 +194,16 @@ public static class LensWords
         while (i < text.Length)
         {
             int start = i;
+            int tag = TagLength(text, i);
+            if (tag > 0)
+            {
+                i += tag;
+                segments.Add(new LensSegment(start, tag, false, null));
+                continue;
+            }
             if (!IsLetter(text, i))
             {
-                while (i < text.Length && !IsLetter(text, i))
+                while (i < text.Length && !IsLetter(text, i) && TagLength(text, i) == 0)
                     i++;
                 segments.Add(new LensSegment(start, i - start, false, null));
                 continue;
@@ -216,7 +223,7 @@ public static class LensWords
         {
             if (s.IsWord)
                 wordCount++;
-            else if (HasLetterOrDigit(text, s.Start, s.Length))
+            else if (TagLength(text, s.Start) != s.Length && HasLetterOrDigit(text, s.Start, s.Length))
                 readable++;
         }
 
@@ -227,7 +234,7 @@ public static class LensWords
                 continue;
             string found = Lookup(glossary, text.Substring(s.Start, s.Length));
             if (found == null && wordCount == 1 && readable == 0 && !string.IsNullOrEmpty(english))
-                found = english.Trim();
+                found = WithoutTags(english).Trim();
             else if (found != null && capitals)
                 found = found.ToUpperInvariant();
             segments[k] = new LensSegment(s.Start, s.Length, true, found);
@@ -378,6 +385,48 @@ public static class LensWords
                 return false;
         }
         return letters;
+    }
+
+    /// <summary>
+    /// The length of the rich-text tag starting at <paramref name="at"/>
+    /// ("&lt;b&gt;", "&lt;/b&gt;", "&lt;pos=76%&gt;": a '&lt;', an optional '/', a
+    /// letter or '#', then anything but angle brackets up to '&gt;'), or 0: a
+    /// tag is never a word (a full UI string keeps its bold and tab stops).
+    /// </summary>
+    private static int TagLength(string text, int at)
+    {
+        if (text[at] != '<')
+            return 0;
+        int i = at + 1;
+        if (i < text.Length && text[i] == '/')
+            i++;
+        if (i >= text.Length || !(text[i] == '#' || (text[i] < 128 && char.IsLetter(text[i]))))
+            return 0;
+        for (; i < text.Length; i++)
+        {
+            if (text[i] == '>')
+                return i - at + 1;
+            if (text[i] == '<')
+                return 0;
+        }
+        return 0;
+    }
+
+    /// <summary><paramref name="text"/> without its rich-text tags (<see cref="TagLength"/>).</summary>
+    private static string WithoutTags(string text)
+    {
+        var sb = new StringBuilder(text.Length);
+        for (int i = 0; i < text.Length;)
+        {
+            int tag = TagLength(text, i);
+            if (tag > 0)
+            {
+                i += tag;
+                continue;
+            }
+            sb.Append(text[i++]);
+        }
+        return sb.ToString();
     }
 
     /// <summary>True when the stretch holds a letter or a digit.</summary>
