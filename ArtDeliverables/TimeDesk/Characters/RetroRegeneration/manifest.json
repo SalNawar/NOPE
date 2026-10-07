@@ -6768,6 +6768,459 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates_neutral",
+      "family": "unique",
+      "id": "socrates",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Socrates of Athens430BCE, male40, as friends described him: stocky soft belly, snub upturned nose, wide-set prominent eyes, full lips, high balding forehead with curly DARK-BROWN hair at sides/back and full bushy DARK-BROWN beard. Warm alert dignified individual, not elderly and never caricature. Only one plain well-worn himation of coarse undyed brown-grey wool, tribon wrapped securely round body and over LEFT shoulder, right shoulder/arm bare, NO tunic beneath. Drapery fully covers torso below upper chest and legs to midcalf. Petasos: flat wide-brimmed undyed tan felt traveller's hat, low crown tilted back with front brim up so face fully clear. BAREFOOT override shoes; all toes visible. No Roman toga, chlamys cloak, props or scrolls. Natural compact build, weathered skin, calm expression. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aadc92e3-996e-48d0-8c85-5482b357aa7e.png",
+      "path": "Raw/premade_socrates_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0f37b29847e4fe37cc1e743b30fc3bac6c87a6f7f0b9e21a7e8652125e75b23c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates_happy",
+      "id": "socrates",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-722b7eae-ac1d-4cea-8c48-e353bd562326.png",
+      "path": "Raw/premade_socrates_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4366377ade190813059e6be58c1202156d24d8e33c5a0234eac9efd60abea3c3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates_angry",
+      "id": "socrates",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9373c458-4417-478f-9970-020a118b67d8.png",
+      "path": "Raw/premade_socrates_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9e959a7e4fea13e609660939286a1e5a1ace33f5c7ee2f79bff63d8171e47d33",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates_worried",
+      "id": "socrates",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-38bb8fab-f948-485f-8513-dfb58cf0e6a0.png",
+      "path": "Raw/premade_socrates_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "de1e600c715d49f0b0f9ad08f0bc64ac01d1f7527cf9cc7ffee3ae4cef2c3897",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates__explaining_a",
+      "id": "socrates",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_a",
+      "change": "RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-119a172c-c970-4795-9aa3-b8366337bc83.png",
+      "path": "Raw/premade_socrates__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f70c2c5c6a03769638bf0f06af5e881f87160df3a828606dd2ce2a7bc9af2f1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates__thinking_a",
+      "id": "socrates",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_a",
+      "change": "RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7b9dce4b-3bb1-4dc4-a22a-77c1fdd2d75e.png",
+      "path": "Raw/premade_socrates__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "903fed86d8bef2eb2a9fd4fc06740c1c3a806bd5134f9d8e2d81bf3ead4e0fe5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates__objecting_a",
+      "id": "socrates",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_a",
+      "change": "RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ff623089-a128-4c18-add9-add9ddabe720.png",
+      "path": "Raw/premade_socrates__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "74f50fd5e61e6d0f9ac6295a662d09e9cfd8e29cb719871c109bba00837bd5e7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_socrates_photo",
+      "family": "unique_photo",
+      "id": "socrates",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical wrap and felt hat with worn2150 civilian charcoal hoodie, hood DOWN, over plain oatmeal shirt, relaxed brown trousers and practical shoes. Entire torso clothed. Preserve same balding forehead, brown beard, face, skin and40year age. Short tidy curls at sides, no hat. Neutral expression arms down. No jewelry props logos or armor.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical wrap and felt hat with worn2150 civilian charcoal hoodie, hood DOWN, over plain oatmeal shirt, relaxed brown trousers and practical shoes. Entire torso clothed. Preserve same balding forehead, brown beard, face, skin and40year age. Short tidy curls at sides, no hat. Neutral expression arms down. No jewelry props logos or armor. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a5bb9af6-c80f-4940-a907-5ad1aa2937a2.png",
+      "path": "Raw/premade_socrates_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c906a70e72424311cd2758ec32ed1d794689577caa7ee8878d55608a37caf46b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada_neutral",
+      "family": "unique",
+      "id": "ada",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Ada Lovelace in Victorian Britain1843, woman28. Intelligent thoughtful long oval face with pale natural skin, strong straight nose, dark arched eyebrows, observant grey-brown eyes and small composed mouth. Dark brown hair center parted, smooth crown, clustered ringlets over ears and bun behind, under deep straw poke bonnet framing but not obscuring face, tied beneath chin with muted plum ribbon. Modest1843 day dress in dark plum small plaid silk: pointed-waist bodice, low sloping shoulders, narrow long sleeves, small white lace collar, full bell-shaped skirt over petticoats, NO bustle. Large subdued rust-and-indigo Paisley shawl around shoulders with visible teardrop pattern. Ordinary natural average proportions, no makeup, no glamour. Black practical period shoes peek below hem; empty hands visible and relaxed down. No gadgets, gears, goggles, books, jewelry or crown. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-220b2cf6-752a-4b87-b6af-1c4d3b4610ab.png",
+      "path": "Raw/premade_ada_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "11f874350936fe5f38c22bbed647c49cc764aa4b72f8032a5cc9005243c414ad",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada_happy",
+      "id": "ada",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a0b06207-d237-49a0-b523-52f809df7ea2.png",
+      "path": "Raw/premade_ada_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c72328873715d5c26fa519b1d3e99aea6240f0db4e16985e61611ad6a11cf6c5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada_angry",
+      "id": "ada",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-571ab3b7-a1be-4270-8085-1e033a832fee.png",
+      "path": "Raw/premade_ada_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "64b27f8394d20b22b4695a033589288e87905e669e1441a0d1c52a0ec1db26e5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada_worried",
+      "id": "ada",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f741345a-3202-4bfc-8d9e-faf8d9bd3b83.png",
+      "path": "Raw/premade_ada_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "43df698e7b5b98c4dd136cffc7673657310403a86a9ec7e7701956e6b3562f7b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada__explaining_b",
+      "id": "ada",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_b",
+      "change": "Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8240859f-6abd-4551-97c4-effe2f277d70.png",
+      "path": "Raw/premade_ada__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fefb4452906bfd0b5a811343c1bc7599abf87224e05d9317667b08faf86e46d7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada__thinking_b",
+      "id": "ada",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_b",
+      "change": "LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6a46afdc-faca-4a75-9b96-4e06b9ad7137.png",
+      "path": "Raw/premade_ada__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "63ccbfe4b6a05717a4059e0c8c713dbfce65ed80f6c7fd9969c7e6cfd00f036f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada__objecting_b",
+      "id": "ada",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_b",
+      "change": "Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cbbb5ad6-b5b0-46e4-9bfb-be97a801919f.png",
+      "path": "Raw/premade_ada__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2a6877bd37cf6d67f71a944268c1b32093ef79adbcb0f48240f74f2fd8766a9d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_ada_photo",
+      "family": "unique_photo",
+      "id": "ada",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical clothing with ordinary2150 civilian muted plum collared jacket over plain ivory shirt, charcoal trousers and practical flat shoes. Remove bonnet, ribbons, shawl, lace and Victorian skirt. Neat brown hair center parted into a simple low bun, no ringlets or ornaments. Preserve same28yearold face, skin, proportions and identity, no makeup. Neutral expression hands down. No logos or jewelry.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical clothing with ordinary2150 civilian muted plum collared jacket over plain ivory shirt, charcoal trousers and practical flat shoes. Remove bonnet, ribbons, shawl, lace and Victorian skirt. Neat brown hair center parted into a simple low bun, no ringlets or ornaments. Preserve same28yearold face, skin, proportions and identity, no makeup. Neutral expression hands down. No logos or jewelry. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c5e84557-975c-42fd-8bd3-e6c2ad074b8b.png",
+      "path": "Raw/premade_ada_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9e6f76904b3609d3434320d10069844490ed50766328f3b9de93d65595ba91d3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg_neutral",
+      "family": "unique",
+      "id": "gutenberg",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Johannes Gutenberg, Rhineland1440, male40. Clean-shaven Rhineland burgher and goldsmith, no true likeness survives. Shrewd patient face, pale ruddy complexion, slightly broad rounded cheeks, uneven heavy eyebrows, grey eyes, substantial straight nose, firm narrow mouth, a few age lines, average slightly thickset build. NO BEARD. Deep brown wool Gugel hood enclosing head and neck, face fully clear, short shoulder cape cut into scalloped leaf-shaped points, long tail behind. Calf-length dark blue wool Tappert gown with regular organ-pipe pleats, high standing collar, wide fur-trimmed sleeves, low hip leather belt with small hanging leather purse. Dark hose, moderately pointed leather shoes. No fur hat, printing press, type, books or props in hands. Practical civilian craftsperson, not model or royal. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b9bb6052-74ef-4972-9458-5326e4e5d848.png",
+      "path": "Raw/premade_gutenberg_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cbeca2e63cd7e2e5bbf9950d28bc6580299e9008f3a2f3188782bc38d72fb738",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg_happy",
+      "id": "gutenberg",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c4fe7457-b9b6-4247-ba1c-36baa1cc9a10.png",
+      "path": "Raw/premade_gutenberg_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "baaf7915891500867bd635288aca9e8ff0ab71dc0c1d79f62d5f8b8d1ef982f5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg_angry",
+      "id": "gutenberg",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4bb7f114-af3f-48c3-a60a-ea42c7a9c3b4.png",
+      "path": "Raw/premade_gutenberg_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6061922b38315f9a447beace8e79ad7db8236dfe21246de6b52af55ffd1e87cc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg_worried",
+      "id": "gutenberg",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9d4ab949-723c-449b-85f1-5e9d331a8185.png",
+      "path": "Raw/premade_gutenberg_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad489039af648869905213f436c97777de770ba4dad7084fcc9820019c2c75fb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg__explaining_c",
+      "id": "gutenberg",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_c",
+      "change": "LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-69264ebb-947f-4788-b97e-06aedf707fc3.png",
+      "path": "Raw/premade_gutenberg__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bf2a383899c2e0910c9915ffe0af763ae5b972333111f642bc92340b418ae806",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg__thinking_c",
+      "id": "gutenberg",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_c",
+      "change": "Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ef855123-1d15-4bcf-9ff0-280a4eca9c8e.png",
+      "path": "Raw/premade_gutenberg__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0a33c3a0b8d9700372840d1b9aac6d47aae5365f65a637a29c7373a60e1be1cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg__objecting_c",
+      "id": "gutenberg",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_c",
+      "change": "RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a23fc602-525f-483e-a756-d8041b38b834.png",
+      "path": "Raw/premade_gutenberg__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bb5c8d6ea93ca4c2f0df5bdf5f1fd68b7f587d58ceb0ef6e2483940e9b47a6ce",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_gutenberg_photo",
+      "family": "unique_photo",
+      "id": "gutenberg",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Replace historical clothing with ordinary2150 civilian worn bluegrey work coverall over beige shirt, practical brown shoes. Remove Gugel hood, fur cuffs, pleated gown, historical belt and purse. Reveal neat short medium brown hair, subtly receding at temples. Same clean-shaven face, age40, skin and build. Neutral expression hands down. No jewelry logos or props.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Replace historical clothing with ordinary2150 civilian worn bluegrey work coverall over beige shirt, practical brown shoes. Remove Gugel hood, fur cuffs, pleated gown, historical belt and purse. Reveal neat short medium brown hair, subtly receding at temples. Same clean-shaven face, age40, skin and build. Neutral expression hands down. No jewelry logos or props. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-91b9d95a-0891-4efa-9cb9-e951ded6496b.png",
+      "path": "Raw/premade_gutenberg_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4c49e6ea78fe5b8178146d136f4706b0deadb08e3b9a1e9dcb41a737fdda0c83",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

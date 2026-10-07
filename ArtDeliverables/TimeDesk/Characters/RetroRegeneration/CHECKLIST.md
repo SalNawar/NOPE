@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 338. Full regeneration is NOT complete.
+Saved: 362. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -342,3 +342,27 @@ Saved: 338. Full regeneration is NOT complete.
 | premade_hammurabi__thinking_c | visually reviewed; registration pending |
 | premade_hammurabi__objecting_c | visually reviewed; registration pending |
 | premade_hammurabi_photo | visually reviewed; registration pending |
+| premade_socrates_neutral | visually reviewed; registration pending |
+| premade_socrates_happy | visually reviewed; registration pending |
+| premade_socrates_angry | visually reviewed; registration pending |
+| premade_socrates_worried | visually reviewed; registration pending |
+| premade_socrates__explaining_a | visually reviewed; registration pending |
+| premade_socrates__thinking_a | visually reviewed; registration pending |
+| premade_socrates__objecting_a | visually reviewed; registration pending |
+| premade_socrates_photo | visually reviewed; registration pending |
+| premade_ada_neutral | visually reviewed; registration pending |
+| premade_ada_happy | visually reviewed; registration pending |
+| premade_ada_angry | visually reviewed; registration pending |
+| premade_ada_worried | visually reviewed; registration pending |
+| premade_ada__explaining_b | visually reviewed; registration pending |
+| premade_ada__thinking_b | visually reviewed; registration pending |
+| premade_ada__objecting_b | visually reviewed; registration pending |
+| premade_ada_photo | visually reviewed; registration pending |
+| premade_gutenberg_neutral | visually reviewed; registration pending |
+| premade_gutenberg_happy | visually reviewed; registration pending |
+| premade_gutenberg_angry | visually reviewed; registration pending |
+| premade_gutenberg_worried | visually reviewed; registration pending |
+| premade_gutenberg__explaining_c | visually reviewed; registration pending |
+| premade_gutenberg__thinking_c | visually reviewed; registration pending |
+| premade_gutenberg__objecting_c | visually reviewed; registration pending |
+| premade_gutenberg_photo | visually reviewed; registration pending |
