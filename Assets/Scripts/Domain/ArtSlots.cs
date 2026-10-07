@@ -49,18 +49,6 @@ public static class ArtSlots
     /// <summary>The plain agency paper: a desk paper whose kind has no face of its own, and the PC's pages.</summary>
     public const string AgencyFace = "Forms/paper_agency";
 
-    /// <summary>The landscape slot machine in the slot panel.</summary>
-    public const string SlotMachine = "Home/slot_machine";
-
-    /// <summary>The slot machine's lever, at the machine's right edge.</summary>
-    public const string SlotLever = "Home/slot_lever";
-
-    /// <summary>The Title's text-free 9-slice button face (Continue, New Run and the ending's New Run; the game prints the labels).</summary>
-    public const string TitleButton = "Title/title_button";
-
-    /// <summary>The Title button face under the pointer.</summary>
-    public const string TitleButtonHover = "Title/title_button_hover";
-
 
     /// <summary>A desktop icon's glyph by its app id (DesktopAppIds).</summary>
     public static string DesktopIcon(string appId) => "Desktop/icon_" + Key(appId);
@@ -146,11 +134,10 @@ public static class ArtSlots
     /// <summary>
     /// The 9-slice border of a slot's art as a share of its shorter side (the
     /// bubble's rounded corners sit inside the outer 32 px of its 128 px
-    /// master; the Title face's inside 32 of its 128 px height); 0 for art
-    /// that is not sliced.
+    /// master); 0 for art that is not sliced.
     /// </summary>
     public static float SliceShare(string slot) =>
-        slot == SpeechBubble || slot == TitleButton || slot == TitleButtonHover ? 0.25f : 0f;
+        slot == SpeechBubble ? 0.25f : 0f;
 
     /// <summary>Whether a slot's art is drawn on the desk's 3D papers (a paper face, the photo frame, an ink mark), so it is imported with mipmaps; UI art is not.</summary>
     public static bool OnDeskPaper(string slot) => slot != null && slot.StartsWith("Forms/", StringComparison.Ordinal);

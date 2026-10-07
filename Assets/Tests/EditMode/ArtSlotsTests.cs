@@ -154,11 +154,9 @@ public class ArtSlotsTests
     }
 
     [Test]
-    public void SliceShare_OnlyTheBubbleAndTheTitleFacesAreSliced()
+    public void SliceShare_OnlyTheBubbleIsSliced()
     {
         Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.SpeechBubble));
-        Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.TitleButton));
-        Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.TitleButtonHover));
         Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.SpeechBubbleTail));
         Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.BriefingPaper));
     }

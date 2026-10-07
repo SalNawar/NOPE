@@ -1,6 +1,6 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -9,29 +9,31 @@ using UnityEngine.UI;
 /// <summary>
 /// Owns the Home phase panels (Phase 4; the Home pet spec): the bills (the
 /// fixed costs paid, the pet's needs in words, and the night's optional
-/// bills, each a row to pay or skip), the pet's corner (the pet drawn by
-/// PetStandIn, petted, played with a toy), the House (Home's upgrade tree:
-/// the office's upgrades are the PC's Orders app's), slot machine, and the
-/// sleep prompt that hands off to the next day. All references are
-/// optional; unwired panels are skipped so the flow degrades gracefully
-/// (HomeManager just calls straight through). Dynamic rows (the bills, the
-/// toys) are spawned at runtime in their panel's own ink (its body text's
-/// colour, as the scene draws the panel), so they read on whatever the panel
-/// is; the House (the old shop panel) draws Home's upgrade tree as cards on
-/// opaque plates with connectors and a detail strip (the Home upgrades spec
-/// §6). A card shows its art when the file exists (redesign phase 27): an
-/// upgrade's icon; the pet its picture (ArtSlots.PetSprite).
+/// bills, each a row with its Paying / Skip pair), the pet's corner (the pet
+/// drawn by PetStandIn, petted, played with a toy), the House (Home's upgrade
+/// tree: the office's upgrades are the PC's Orders app's), slot machine (three
+/// reels and the SPIN dome), and the sleep prompt that hands off to the next
+/// day. All references are optional; unwired panels are skipped so the flow
+/// degrades gracefully (HomeManager just calls straight through). Everything
+/// it spawns at runtime (the bills' and toys' rows, the House's heads, links
+/// and cards, the reels' faces) is drawn in the cel UI kit (docs/UI_KIT.md;
+/// <see cref="kit"/>): kit plates with live TMP labels in the kit's fonts, so
+/// the language settings keep working; without the kit they stay plain. A
+/// card shows its art when the file exists (redesign phase 27): an upgrade's
+/// icon; the pet its picture (ArtSlots.PetSprite); a toy its picture
+/// (ArtSlots.PetToy), else the kit's tile.
 /// </summary>
 public sealed class HomeUIController : MonoBehaviour
 {
+    [Header("The UI kit")]
+    /// <summary>The cel UI kit (Assets/Data/UI/UiKit_Default.asset): the sprites and fonts the spawned rows, cards and reels are drawn with.</summary>
+    [SerializeField] private UiKitSO kit;
+
     [Header("HUD (optional — null-safe)")]
-    /// <summary>Shows current money.</summary>
+    /// <summary>Shows current money (on the HUD's phosphor readout).</summary>
     [SerializeField] private TMP_Text moneyText;
 
-    /// <summary>Shows timeline stability.</summary>
-    [SerializeField] private TMP_Text stabilityText;
-
-    /// <summary>Shows the current day number.</summary>
+    /// <summary>Shows the current day number (on the HUD's phosphor readout).</summary>
     [SerializeField] private TMP_Text dayText;
 
     [Header("Expenses Panel")]
@@ -44,7 +46,7 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>The fixed costs paid, the pet's needs in words, and the night's bills' total.</summary>
     [SerializeField] private TMP_Text expensesBodyText;
 
-    /// <summary>Container for one row per night's bill (Pay or Skip).</summary>
+    /// <summary>Container for one row per night's bill (its Paying / Skip pair).</summary>
     [FormerlySerializedAs("familyRowsRoot")]
     [SerializeField] private Transform billRowsRoot;
 
@@ -77,7 +79,7 @@ public sealed class HomeUIController : MonoBehaviour
     [SerializeField] private Button petContinueButton;
 
     [Header("House Panel (the old shop panel)")]
-    /// <summary>Root of the House panel (the scene's ShopPanel, its art panel_shop.png).</summary>
+    /// <summary>Root of the House panel (the scene's ShopPanel).</summary>
     [SerializeField] private GameObject shopPanel;
 
     /// <summary>The House panel's title.</summary>
@@ -89,7 +91,10 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>The tree's area: the category heads, connectors and cards are spawned into it (from its top-left).</summary>
     [SerializeField] private RectTransform houseTreeRoot;
 
-    /// <summary>The detail strip: the selected upgrade's name, price, upkeep, blurb, effects and state.</summary>
+    /// <summary>The detail card's tile: the selected upgrade's icon (its art, else its category's kit tile).</summary>
+    [SerializeField] private Image houseDetailIcon;
+
+    /// <summary>The detail card: the selected upgrade's name, price, upkeep, blurb, effects and state.</summary>
     [SerializeField] private TMP_Text houseDetailText;
 
     /// <summary>Buys the selected upgrade (interactable only while it is buyable).</summary>
@@ -113,6 +118,9 @@ public sealed class HomeUIController : MonoBehaviour
 
     /// <summary>Continues to the sleep prompt.</summary>
     [SerializeField] private Button slotContinueButton;
+
+    /// <summary>The three reels' symbols (a kit tile each, in its reel window): spun and landed on the outcome's faces (SlotReels).</summary>
+    [SerializeField] private Image[] slotReelFaces = Array.Empty<Image>();
 
     [Header("Sleep Panel")]
     /// <summary>Root of the sleep panel.</summary>
@@ -169,6 +177,9 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Pending callback for the sleep button.</summary>
     private Action _onSleep;
 
+    /// <summary>The reels' spin while it runs (a new spin stops it first).</summary>
+    private Coroutine _reelSpin;
+
     /// <summary>True if the expenses panel and its continue button are wired, so it can be shown and left (audit R4-014: a panel without its button would strand the flow).</summary>
     public bool HasExpensesPanel => expensesPanel != null && expensesContinueButton != null;
 
@@ -218,17 +229,14 @@ public sealed class HomeUIController : MonoBehaviour
             sleepButton.onClick.AddListener(HandleSleepClicked);
     }
 
-    /// <summary>Refreshes the money/stability/day HUD from world state.</summary>
+    /// <summary>Refreshes the money and day readouts from world state (the timeline's stability is never a number: the Helix River shows it).</summary>
     public void UpdateHud(WorldState world)
     {
         if (world == null)
             return;
 
         if (moneyText != null)
-            moneyText.text = $"{UiText.Currency(UiText.WalletForm.Label)}: {world.money}";
-
-        if (stabilityText != null)
-            stabilityText.text = UiText.Format("tray.stability", StabilityRules.Format(world.timelineStability));
+            moneyText.text = $"{world.money} {UiText.Currency(UiText.WalletForm.Short)}";
 
         if (dayText != null)
             dayText.text = $"Day {world.day}";
@@ -238,27 +246,31 @@ public sealed class HomeUIController : MonoBehaviour
     // Expenses panel
     // =========================================================
 
-    /// <summary>One of the night's bills as its row shows it: the bill, its label (name, price, line), its button's label, and whether the button takes clicks.</summary>
+    /// <summary>One of the night's bills as its row shows it: the bill, its name, its price and line, whether tonight's care pays it, and whether its pair takes clicks.</summary>
     public readonly struct BillView
     {
         /// <summary>The bill.</summary>
         public readonly HomeBill Bill;
 
-        /// <summary>The row's label.</summary>
-        public readonly string Label;
+        /// <summary>The bill's name.</summary>
+        public readonly string Name;
 
-        /// <summary>The button's label ("Paying" or "Skip").</summary>
-        public readonly string Button;
+        /// <summary>The line under the name: its price and note.</summary>
+        public readonly string Detail;
 
-        /// <summary>Whether the button takes clicks.</summary>
+        /// <summary>Whether tonight's care pays it (the pair's Paying side is on).</summary>
+        public readonly bool Paying;
+
+        /// <summary>Whether the pair takes clicks.</summary>
         public readonly bool Enabled;
 
         /// <summary>A row.</summary>
-        public BillView(HomeBill bill, string label, string button, bool enabled)
+        public BillView(HomeBill bill, string name, string detail, bool paying, bool enabled)
         {
             Bill = bill;
-            Label = label;
-            Button = button;
+            Name = name;
+            Detail = detail;
+            Paying = paying;
             Enabled = enabled;
         }
     }
@@ -267,13 +279,15 @@ public sealed class HomeUIController : MonoBehaviour
     /// Shows the bills step (the Home pet spec PS2): <paramref name="title"/>,
     /// <paramref name="body"/> (the break-in, the fixed costs paid, the pet's
     /// needs in words, the night's bills' total), one row per bill in
-    /// <paramref name="rows"/> (its button calls <paramref name="onToggle"/>
-    /// with the bill), and the continue button, labelled
-    /// <paramref name="payLabel"/>, taking clicks only while
+    /// <paramref name="rows"/> with its <paramref name="payingLabel"/> /
+    /// <paramref name="skipLabel"/> pair (the side that is off calls
+    /// <paramref name="onToggle"/> with the bill), and the continue button,
+    /// labelled <paramref name="payLabel"/>, taking clicks only while
     /// <paramref name="canPay"/>, calling <paramref name="onPay"/> (or
     /// immediately if unwired). HomeManager shows it again after each toggle.
     /// </summary>
-    public void ShowExpenses(string title, string body, IReadOnlyList<BillView> rows, string payLabel, bool canPay, Action<HomeBill> onToggle, Action onPay)
+    public void ShowExpenses(string title, string body, IReadOnlyList<BillView> rows, string payingLabel, string skipLabel, string payLabel, bool canPay,
+                             Action<HomeBill> onToggle, Action onPay)
     {
         if (!HasExpensesPanel)
         {
@@ -299,7 +313,7 @@ public sealed class HomeUIController : MonoBehaviour
             foreach (BillView row in rows ?? Array.Empty<BillView>())
             {
                 HomeBill bill = row.Bill;
-                _billRows.Add(CreateRow(billRowsRoot, row.Label, row.Button, row.Enabled && onToggle != null, () => onToggle?.Invoke(bill), PanelInk(expensesBodyText)));
+                _billRows.Add(CreateBillRow(row, payingLabel, skipLabel, onToggle != null ? () => onToggle(bill) : null));
             }
         }
 
@@ -319,9 +333,12 @@ public sealed class HomeUIController : MonoBehaviour
     // Pet corner (the Home pet spec PS7)
     // =========================================================
 
-    /// <summary>One owned toy as its row shows it: its label, its button's label, whether it takes clicks, and what playing does.</summary>
+    /// <summary>One owned toy as its row shows it: its id (its picture), its label, its button's label, whether it takes clicks, and what playing does.</summary>
     public readonly struct ToyView
     {
+        /// <summary>The toy's upgrade id (its picture, ArtSlots.PetToy, else the kit's tile named in it).</summary>
+        public readonly string Id;
+
         /// <summary>The row's label (the toy's name).</summary>
         public readonly string Label;
 
@@ -335,8 +352,9 @@ public sealed class HomeUIController : MonoBehaviour
         public readonly Action OnPlay;
 
         /// <summary>A row.</summary>
-        public ToyView(string label, string button, bool enabled, Action onPlay)
+        public ToyView(string id, string label, string button, bool enabled, Action onPlay)
         {
+            Id = id;
             Label = label;
             Button = button;
             Enabled = enabled;
@@ -386,12 +404,11 @@ public sealed class HomeUIController : MonoBehaviour
         if (toyRowsRoot != null)
         {
             ClearRows(_toyRows);
-            Color ink = PanelInk(petBodyText);
             if (toys == null || toys.Count == 0)
-                _toyRows.Add(CreateLabelRow(toyRowsRoot, noToys, ink));
+                _toyRows.Add(CreateLabelRow(toyRowsRoot, noToys, PanelInk(petBodyText)));
             else
                 foreach (ToyView toy in toys)
-                    _toyRows.Add(CreateRow(toyRowsRoot, toy.Label, toy.Button, toy.Enabled && toy.OnPlay != null, toy.OnPlay, ink));
+                    _toyRows.Add(CreateToyRow(toy));
         }
 
         bool opening = !petPanel.activeSelf;
@@ -430,15 +447,16 @@ public sealed class HomeUIController : MonoBehaviour
 
     /// <summary>
     /// Shows the House: <paramref name="upgrades"/> (Home's) as a tree, one
-    /// column per category (UpgradeTree.Layout for the Home venue, each band
-    /// on its side: a slot is a sub-column, a tier a row), a card per upgrade
-    /// in its state (OrderBook.StateOf: Owned, Buyable, Too dear, Locked with
-    /// "Needs ..."), connectors from each prerequisite down to its
-    /// dependants, and a detail strip for the selected card (price, upkeep,
-    /// blurb, effects in words, Buy). Invokes onBuy(upgrade) when Buy is
-    /// clicked, onContinue when the player moves on to the slot machine (or
-    /// immediately if unwired). The selection is kept while the panel is
-    /// shown again after a purchase.
+    /// column per category under its slate head (UpgradeTree.Layout for the
+    /// Home venue, each band on its side: a slot is a sub-column, a tier a
+    /// row), a kit upgrade card per upgrade in its state (OrderBook.StateOf:
+    /// owned with the tick, buyable, too dear with the clock, locked with the
+    /// padlock and "Needs ..."), links from each prerequisite down to its
+    /// dependants (brass once it is owned, dashed before), and the detail card
+    /// for the selected card (price, upkeep, blurb, effects in words, Buy).
+    /// Invokes onBuy(upgrade) when Buy is clicked, onContinue when the player
+    /// moves on to the slot machine (or immediately if unwired). The selection
+    /// is kept while the panel is shown again after a purchase.
     /// </summary>
     public void ShowShop(WorldState world, ContentLibrarySO lib, IReadOnlyList<UpgradeSO> upgrades, Action<UpgradeSO> onBuy, Action onContinue)
     {
@@ -457,16 +475,16 @@ public sealed class HomeUIController : MonoBehaviour
             _selectedId = null;
 
         if (shopTitleText != null)
-            shopTitleText.text = "House";
+            shopTitleText.text = "The House";
 
         if (shopBodyText != null)
             shopBodyText.text = $"{UiText.Currency(UiText.WalletForm.Label)}: {world.money}   ·   Bought tonight, in force from tomorrow night.";
 
-        BuildHouse();
         shopPanel.SetActive(true);
+        BuildHouse();
     }
 
-    /// <summary>Lays the tree out anew (heads, connectors, cards), keeps or picks the selection (the first buyable card, else the first) and fills the detail strip.</summary>
+    /// <summary>Lays the tree out anew (heads, connectors, cards), keeps or picks the selection (the first buyable card, else the first) and fills the detail card.</summary>
     private void BuildHouse()
     {
         ClearRows(_houseItems);
@@ -483,7 +501,6 @@ public sealed class HomeUIController : MonoBehaviour
             }
 
         TreeLayout layout = UpgradeTree.Layout(nodes, UpgradeVenue.Home);
-        Color ink = PanelInk(shopBodyText);
 
         int slots = 0;
         foreach (TreeBand band in layout.Bands)
@@ -499,14 +516,13 @@ public sealed class HomeUIController : MonoBehaviour
         {
             bandX[b] = x;
             float bandWidth = layout.Bands[b].Slots * cardWidth + (layout.Bands[b].Slots - 1) * HouseSlotGap;
-            _houseItems.Add(HouseText(houseTreeRoot, "Head", layout.Bands[b].Branch.ToString().ToUpperInvariant(), HouseHeadFontSize, FontStyles.Bold, ink,
-                                      TextAlignmentOptions.Center, new Vector2(x, 0f), new Vector2(bandWidth, HouseHeadHeight)));
+            _houseItems.Add(BandHead(layout.Bands[b].Branch, new Vector2(x, 0f), bandWidth));
             x += bandWidth + HouseBandGap;
         }
 
         var at = new Dictionary<string, Vector2>(StringComparer.Ordinal);
         foreach (TreeCell cell in layout.Cells)
-            at[cell.Id] = new Vector2(bandX[cell.Band] + cell.Slot * (cardWidth + HouseSlotGap), HouseHeadHeight + cell.Tier * (HouseCardHeight + HouseRowGap));
+            at[cell.Id] = new Vector2(bandX[cell.Band] + cell.Slot * (cardWidth + HouseSlotGap), HouseHeadHeight + HouseHeadGap + cell.Tier * (HouseCardHeight + HouseRowGap));
 
         foreach (TreeLink link in layout.Links)
             AddConnector(at[link.From], at[link.To], cardWidth, _houseWorld.HasUpgrade(link.From));
@@ -524,7 +540,36 @@ public sealed class HomeUIController : MonoBehaviour
         UpdateDetail(_selectedId != null && byId.TryGetValue(_selectedId, out UpgradeSO chosen) ? chosen : null, byId);
     }
 
-    /// <summary>A card at <paramref name="topLeft"/> (tree space, y down): its plate in its state's colour (outlined when selected; a click selects it), its icon when the art exists (ArtSlots.UpgradeIcon), its name and its state line.</summary>
+    /// <summary>A category's head over its column at <paramref name="topLeft"/> (tree space, y down): the kit's slate title bar with the category's tile and its name.</summary>
+    private GameObject BandHead(UpgradeBranch branch, Vector2 topLeft, float width)
+    {
+        var head = new GameObject("Head_" + branch, typeof(RectTransform));
+        head.transform.SetParent(houseTreeRoot, false);
+        Place((RectTransform)head.transform, topLeft, new Vector2(width, HouseHeadHeight));
+        Image face = Face(head.transform, "titlebar_slate");
+        if (face == null)
+            face = head.AddComponent<Image>();
+        face.raycastTarget = false;
+
+        float left = HouseHeadPad;
+        Sprite tile = Kit("tile_" + BranchTile(branch) + "_rest");
+        if (tile != null)
+        {
+            Tile(head.transform, tile, new Vector2(left, (HouseHeadHeight - HouseHeadTile) / 2f), HouseHeadTile);
+            left += HouseHeadTile + HouseHeadPad;
+        }
+        Text(head.transform, "Name", branch.ToString(), HouseHeadFontSize, LabelInk(true), TextAlignmentOptions.MidlineLeft, new Vector2(left, 0f),
+             new Vector2(width - left - HouseHeadPad, HouseHeadHeight), true);
+        return head;
+    }
+
+    /// <summary>
+    /// A card at <paramref name="topLeft"/> (tree space, y down): the kit's
+    /// upgrade card in its state (a click selects it; the selected card wears
+    /// a brass outline), its icon tile (the upgrade's art when it exists,
+    /// ArtSlots.UpgradeIcon, else its category's kit tile), its name, its
+    /// state line and its state's round badge.
+    /// </summary>
     private void AddCard(UpgradeSO upgrade, Vector2 topLeft, float width, Dictionary<string, UpgradeSO> byId)
     {
         OrderState state = OrderBook.StateOf(_houseWorld, _houseLib, upgrade);
@@ -532,16 +577,21 @@ public sealed class HomeUIController : MonoBehaviour
         card.transform.SetParent(houseTreeRoot, false);
         Place((RectTransform)card.transform, topLeft, new Vector2(width, HouseCardHeight));
 
-        Image plate = card.AddComponent<Image>();
-        plate.color = state == OrderState.Owned ? HouseOwnedFill : state == OrderState.Locked ? HouseLockedFill : state == OrderState.TooDear ? HouseTooDearFill : HouseBuyableFill;
+        Image plate = Face(card.transform, UiKitNames.UpgradeCard(state));
+        if (plate == null)
+        {
+            plate = card.AddComponent<Image>();
+            plate.color = state == OrderState.Locked ? HouseLockedFill : HouseBuyableFill;
+        }
         if (upgrade.id == _selectedId)
         {
-            Outline outline = card.AddComponent<Outline>();
+            Outline outline = plate.gameObject.AddComponent<Outline>();
             outline.effectColor = HouseSelectedOutline;
             outline.effectDistance = new Vector2(3f, -3f);
         }
         Button button = card.AddComponent<Button>();
         button.targetGraphic = plate;
+        button.transition = Selectable.Transition.ColorTint;
         string id = upgrade.id;
         button.onClick.AddListener(() =>
         {
@@ -550,61 +600,118 @@ public sealed class HomeUIController : MonoBehaviour
         });
 
         float textLeft = HouseCardPadding;
-        Sprite icon = SlotArt.Sprite(ArtSlots.UpgradeIcon(upgrade.id));
+        Sprite icon = UpgradeTile(upgrade, state == OrderState.Locked);
         if (icon != null)
         {
-            var iconGo = new GameObject("Icon", typeof(RectTransform));
-            iconGo.transform.SetParent(card.transform, false);
-            Place((RectTransform)iconGo.transform, new Vector2(HouseCardPadding, (HouseCardHeight - HouseIconSize) / 2f), new Vector2(HouseIconSize, HouseIconSize));
-            Image image = iconGo.AddComponent<Image>();
-            image.sprite = icon;
-            image.preserveAspect = true;
-            image.raycastTarget = false;
+            Tile(card.transform, icon, new Vector2(HouseCardPadding, (HouseCardHeight - HouseIconSize) / 2f), HouseIconSize);
             textLeft += HouseIconSize + HouseCardPadding;
         }
 
         Color ink = state == OrderState.Locked ? HouseLockedInk : HouseCardInk;
-        float textWidth = width - textLeft - HouseCardPadding;
-        HouseText(card.transform, "Name", upgrade.displayName, HouseNameFontSize, FontStyles.Bold, ink, TextAlignmentOptions.BottomLeft,
-                  new Vector2(textLeft, 4f), new Vector2(textWidth, HouseCardHeight / 2f));
-        HouseText(card.transform, "State", StateLine(upgrade, state, byId), HouseStateFontSize, FontStyles.Normal, state == OrderState.TooDear ? HouseAlertInk : ink,
-                  TextAlignmentOptions.TopLeft, new Vector2(textLeft, HouseCardHeight / 2f + 2f), new Vector2(textWidth, HouseCardHeight / 2f - 6f));
+        float textWidth = width - textLeft - HouseCardPadding - HouseBadgeRoom;
+        TMP_Text name = Text(card.transform, "Name", upgrade.displayName, HouseNameFontSize, ink, TextAlignmentOptions.BottomLeft,
+                             new Vector2(textLeft, 6f), new Vector2(textWidth, HouseNameHeight), true, true);
+        name.characterSpacing = HouseNameSpacing;
+        name.lineSpacing = -12f;
+        Text(card.transform, "State", StateLine(upgrade, state, byId, false), HouseStateFontSize, StateInk(state),
+             TextAlignmentOptions.TopLeft, new Vector2(textLeft, 8f + HouseNameHeight), new Vector2(width - textLeft - HouseCardPadding, HouseCardHeight - HouseNameHeight - 14f), false);
+
+        string badge = UiKitNames.UpgradeBadge(state);
+        Sprite badgeSprite = badge != null ? Kit(badge) : null;
+        if (badgeSprite != null)
+        {
+            Image b = Tile(card.transform, badgeSprite, new Vector2(width - HouseBadgeSize * 0.6f, -HouseBadgeSize * 0.4f), HouseBadgeSize);
+            b.name = "Badge";
+        }
         _houseItems.Add(card);
     }
 
-    /// <summary>A card's state line: "Owned", its price (and its upkeep a night), its price and "not enough", or "Needs ..." with the names of the prerequisites not owned yet.</summary>
-    private string StateLine(UpgradeSO upgrade, OrderState state, Dictionary<string, UpgradeSO> byId)
+    /// <summary>A card's state line: "Installed", its price (and in the detail card, <paramref name="upkeep"/>, its upkeep a night), its price and "too dear", or "Needs ..." with the names of the prerequisites not owned yet.</summary>
+    private string StateLine(UpgradeSO upgrade, OrderState state, Dictionary<string, UpgradeSO> byId, bool upkeep = true)
     {
         string cr = UiText.Currency(UiText.WalletForm.Short);
         switch (state)
         {
             case OrderState.Owned:
-                return "Owned";
+                return "Installed";
             case OrderState.Locked:
                 return "Needs " + string.Join(", ", UpgradeTree.Missing(upgrade.Node, _houseWorld.HasUpgrade).ConvertAll(need => byId.TryGetValue(need, out UpgradeSO u) ? u.displayName : need));
             case OrderState.TooDear:
-                return $"{OrderBook.Price(_houseWorld, _houseLib, upgrade)} {cr} · not enough";
+                return $"{OrderBook.Price(_houseWorld, _houseLib, upgrade)} {cr} · too dear";
             default:
-                float upkeep = Sum(upgrade, EffectOpType.Upkeep);
-                return $"{OrderBook.Price(_houseWorld, _houseLib, upgrade)} {cr}" + (upkeep > 0f ? $" + {upkeep:0.##} a night" : string.Empty);
+                float nightly = upkeep ? Sum(upgrade, EffectOpType.Upkeep) : 0f;
+                return $"{OrderBook.Price(_houseWorld, _houseLib, upgrade)} {cr}" + (nightly > 0f ? $" + {nightly:0.##} a night" : string.Empty);
         }
     }
 
-    /// <summary>A connector from a prerequisite's card at <paramref name="from"/> down to its dependant's at <paramref name="to"/> (tree space, y down): straight down in one sub-column, else down, across and down, bending in the row gap; dark once the prerequisite is owned, pale before.</summary>
+    /// <summary>A state line's ink: green when installed, oxblood with a price, signal red when too dear, grey when locked (the kit's upgrade card, sheet 03).</summary>
+    private static Color StateInk(OrderState state) =>
+        state == OrderState.Owned ? HouseOwnedInk : state == OrderState.TooDear ? HouseAlertInk : state == OrderState.Locked ? HouseLockedInk : HousePriceInk;
+
+    /// <summary>An upgrade's tile: its own art when the file exists (ArtSlots.UpgradeIcon), else its category's kit tile (locked: the screentone tile).</summary>
+    private Sprite UpgradeTile(UpgradeSO upgrade, bool locked)
+    {
+        Sprite art = SlotArt.Sprite(ArtSlots.UpgradeIcon(upgrade.id));
+        return art != null ? art : Kit("tile_" + BranchTile(upgrade.Node.Branch) + (locked ? "_locked" : "_rest"));
+    }
+
+    /// <summary>The kit tile that stands for a Home category (the House's heads and cards without art of their own).</summary>
+    private static string BranchTile(UpgradeBranch branch)
+    {
+        switch (branch)
+        {
+            case UpgradeBranch.Food:
+                return "food";
+            case UpgradeBranch.Housing:
+                return "house";
+            case UpgradeBranch.Security:
+                return "shield";
+            case UpgradeBranch.Health:
+                return "medicine";
+            case UpgradeBranch.Comfort:
+                return "sofa";
+            default:
+                return "star";
+        }
+    }
+
+    /// <summary>A connector from a prerequisite's card at <paramref name="from"/> down to its dependant's at <paramref name="to"/> (tree space, y down): straight down in one sub-column, else down, across and down, bending in the row gap; brass on an ink keyline once the prerequisite is owned, a grey dashed line before.</summary>
     private void AddConnector(Vector2 from, Vector2 to, float cardWidth, bool lit)
     {
-        Color colour = lit ? HouseLinkLit : HouseLinkDim;
         float ax = from.x + cardWidth / 2f, bx = to.x + cardWidth / 2f;
         float top = from.y + HouseCardHeight, bottom = to.y;
         float bend = bottom - HouseRowGap / 2f;
-        if (Mathf.Abs(ax - bx) < 0.5f)
+        var points = Mathf.Abs(ax - bx) < 0.5f
+            ? new[] { new Vector2(ax, top), new Vector2(ax, bottom) }
+            : new[] { new Vector2(ax, top), new Vector2(ax, bend), new Vector2(bx, bend), new Vector2(bx, bottom) };
+        for (int i = 0; i + 1 < points.Length; i++)
         {
-            Segment(new Vector2(ax - HouseLinkWidth / 2f, top), new Vector2(HouseLinkWidth, bottom - top), colour);
-            return;
+            if (lit)
+            {
+                Line(points[i], points[i + 1], HouseLinkKeyline, HouseLinkInk);
+                Line(points[i], points[i + 1], HouseLinkWidth, HouseLinkLit);
+            }
+            else
+                Dashes(points[i], points[i + 1]);
         }
-        Segment(new Vector2(ax - HouseLinkWidth / 2f, top), new Vector2(HouseLinkWidth, bend - top), colour);
-        Segment(new Vector2(Mathf.Min(ax, bx) - HouseLinkWidth / 2f, bend - HouseLinkWidth / 2f), new Vector2(Mathf.Abs(bx - ax) + HouseLinkWidth, HouseLinkWidth), colour);
-        Segment(new Vector2(bx - HouseLinkWidth / 2f, bend), new Vector2(HouseLinkWidth, bottom - bend), colour);
+    }
+
+    /// <summary>A straight axis-aligned line of <paramref name="thickness"/> from <paramref name="a"/> to <paramref name="b"/> (tree space), drawn under the cards.</summary>
+    private void Line(Vector2 a, Vector2 b, float thickness, Color colour)
+    {
+        Vector2 min = Vector2.Min(a, b), max = Vector2.Max(a, b);
+        Segment(new Vector2(min.x - thickness / 2f, min.y - thickness / 2f), new Vector2(max.x - min.x + thickness, max.y - min.y + thickness), colour);
+    }
+
+    /// <summary>A dashed axis-aligned line from <paramref name="a"/> to <paramref name="b"/> (a link whose prerequisite is not owned yet).</summary>
+    private void Dashes(Vector2 a, Vector2 b)
+    {
+        float length = Vector2.Distance(a, b);
+        if (length <= 0f)
+            return;
+        Vector2 step = (b - a) / length;
+        for (float d = 0f; d < length; d += HouseDashPeriod)
+            Line(a + step * d, a + step * Mathf.Min(length, d + HouseDashPeriod * 0.55f), HouseDashWidth, HouseLinkDim);
     }
 
     /// <summary>One connector segment: an untargeted plain image at <paramref name="topLeft"/> (tree space) drawn under the cards.</summary>
@@ -619,7 +726,7 @@ public sealed class HomeUIController : MonoBehaviour
         _houseItems.Add(go);
     }
 
-    /// <summary>The detail strip for <paramref name="upgrade"/> (none: an empty strip): its name, price and upkeep, blurb, effects in words (HouseEffects.Line) and state; Buy only while it is buyable.</summary>
+    /// <summary>The detail card for <paramref name="upgrade"/> (none: an empty card): its tile, its name, price and upkeep, blurb, effects in words (HouseEffects.Line) and state; Buy only while it is buyable.</summary>
     private void UpdateDetail(UpgradeSO upgrade, Dictionary<string, UpgradeSO> byId)
     {
         OrderState state = upgrade != null ? OrderBook.StateOf(_houseWorld, _houseLib, upgrade) : OrderState.Locked;
@@ -634,8 +741,15 @@ public sealed class HomeUIController : MonoBehaviour
                     foreach (EffectOp op in upgrade.unlockEffect.ops)
                         if (op != null)
                             ops.Add((op.type, op.floatParam));
-                houseDetailText.text = $"<b>{upgrade.displayName}</b>   {StateLine(upgrade, state, byId)}\n{upgrade.description}\n{HouseEffects.Line(ops)}";
+                houseDetailText.text = $"<size=130%><b>{upgrade.displayName}</b></size>\n{StateLine(upgrade, state, byId)}\n\n{upgrade.description}\n\n{HouseEffects.Line(ops)}";
             }
+        }
+
+        if (houseDetailIcon != null)
+        {
+            Sprite icon = upgrade != null ? UpgradeTile(upgrade, state == OrderState.Locked) : null;
+            houseDetailIcon.sprite = icon;
+            houseDetailIcon.enabled = icon != null;
         }
 
         if (houseBuyButton != null)
@@ -664,34 +778,6 @@ public sealed class HomeUIController : MonoBehaviour
         return sum;
     }
 
-    /// <summary>Puts <paramref name="rt"/> at <paramref name="topLeft"/> of its parent (y down from the parent's top-left) with <paramref name="size"/>.</summary>
-    private static void Place(RectTransform rt, Vector2 topLeft, Vector2 size)
-    {
-        rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
-        rt.pivot = new Vector2(0f, 1f);
-        rt.anchoredPosition = new Vector2(topLeft.x, -topLeft.y);
-        rt.sizeDelta = size;
-    }
-
-    /// <summary>An untargeted text at <paramref name="topLeft"/> of <paramref name="parent"/> (y down), shrinking rather than overflowing (UiText.FitLabel), never below the House's floor (20 reference px: 13 px at 720p; past it an ellipsis).</summary>
-    private static GameObject HouseText(Transform parent, string name, string text, float size, FontStyles style, Color ink, TextAlignmentOptions alignment, Vector2 topLeft, Vector2 box)
-    {
-        var go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-        Place((RectTransform)go.transform, topLeft, box);
-        var label = go.AddComponent<TextMeshProUGUI>();
-        label.text = text;
-        label.fontSize = size;
-        label.fontStyle = style;
-        label.color = ink;
-        label.alignment = alignment;
-        label.raycastTarget = false;
-        UiText.FitLabel(label);
-        label.fontSizeMin = Mathf.Max(label.fontSizeMin, HouseMinFontSize);
-        label.overflowMode = TextOverflowModes.Ellipsis;
-        return go;
-    }
-
     /// <summary>Shop continue clicked: close and move to the slot machine.</summary>
     private void HandleShopContinueClicked()
     {
@@ -705,13 +791,39 @@ public sealed class HomeUIController : MonoBehaviour
     // Slot panel
     // =========================================================
 
+    /// <summary>What a spin shows: the line, and for a spin that happened the outcome's place in the library and whether it won money (the reels' faces, SlotReels).</summary>
+    public readonly struct SpinView
+    {
+        /// <summary>The line shown under the reels.</summary>
+        public readonly string Line;
+
+        /// <summary>The outcome's index in the library's list; -1 when nothing spun (the reels stay as they are).</summary>
+        public readonly int Outcome;
+
+        /// <summary>Whether the spin won money (one symbol on every reel).</summary>
+        public readonly bool Win;
+
+        /// <summary>A refused or empty spin: a line only.</summary>
+        public SpinView(string line) : this(line, -1, false)
+        {
+        }
+
+        /// <summary>A spin.</summary>
+        public SpinView(string line, int outcome, bool win)
+        {
+            Line = line;
+            Outcome = outcome;
+            Win = win;
+        }
+    }
+
     /// <summary>
     /// Shows the slot machine. onSpin is invoked when the player clicks Spin and
-    /// should return the result line to display (or null/empty if the spin was
-    /// rejected, e.g. insufficient credits). onContinue is invoked when the
-    /// player moves on to sleep (or immediately if unwired).
+    /// returns what to show (its line, and for a spin that happened the reels'
+    /// result: they spin briefly and land on SlotReels' faces). onContinue is
+    /// invoked when the player moves on to sleep (or immediately if unwired).
     /// </summary>
-    public void ShowSlot(WorldState world, GameConfigSO config, Func<string> onSpin, Action onContinue)
+    public void ShowSlot(WorldState world, GameConfigSO config, Func<SpinView> onSpin, Action onContinue)
     {
         if (!HasSlotPanel || world == null)
         {
@@ -722,7 +834,7 @@ public sealed class HomeUIController : MonoBehaviour
         _onSlotContinue = onContinue;
 
         if (slotTitleText != null)
-            slotTitleText.text = "Slot Machine";
+            slotTitleText.text = "Night Slots";
 
         int spinCost = config != null ? config.slotSpinCost : 0;
 
@@ -734,14 +846,67 @@ public sealed class HomeUIController : MonoBehaviour
             slotSpinButton.onClick.RemoveAllListeners();
             slotSpinButton.onClick.AddListener(() =>
             {
-                string result = onSpin != null ? onSpin.Invoke() : null;
-
-                if (slotBodyText != null && !string.IsNullOrEmpty(result))
-                    slotBodyText.text = result;
+                if (onSpin == null)
+                    return;
+                SpinView spin = onSpin.Invoke();
+                if (slotBodyText != null && !string.IsNullOrEmpty(spin.Line))
+                    slotBodyText.text = spin.Line;
+                if (spin.Outcome >= 0)
+                    SpinReels(SlotReels.Faces(spin.Outcome, spin.Win, ReelSymbols.Length));
             });
         }
 
         slotPanel.SetActive(true);
+        ShowReels(SlotReels.Faces(0, false, ReelSymbols.Length));
+    }
+
+    /// <summary>The reels' symbols: kit tiles (SlotReels indexes into this list).</summary>
+    private static readonly string[] ReelSymbols = { "tile_crate_rest", "tile_star_rest", "tile_bolt_rest", "tile_paw_rest", "tile_moon_rest" };
+
+    /// <summary>Spins the reels (each cycles through the symbols, stopping one after another) and lands them on <paramref name="faces"/>.</summary>
+    private void SpinReels(int[] faces)
+    {
+        if (_reelSpin != null)
+            StopCoroutine(_reelSpin);
+        _reelSpin = isActiveAndEnabled ? StartCoroutine(Spin(faces)) : null;
+        if (_reelSpin == null)
+            ShowReels(faces);
+    }
+
+    /// <summary>The reels' spin: every reel cycles, the first stops after <see cref="ReelSpinSeconds"/>, each next one a beat later.</summary>
+    private IEnumerator Spin(int[] faces)
+    {
+        float start = Time.unscaledTime;
+        var shown = new int[faces.Length];
+        int turn = 0;
+        while (true)
+        {
+            float t = Time.unscaledTime - start;
+            bool done = true;
+            for (int i = 0; i < shown.Length; i++)
+            {
+                bool stopped = t >= ReelSpinSeconds + i * ReelStopGap;
+                shown[i] = stopped ? faces[i] : (turn + i * 2) % ReelSymbols.Length;
+                done &= stopped;
+            }
+            ShowReels(shown);
+            if (done)
+                break;
+            turn++;
+            yield return new WaitForSecondsRealtime(ReelFrameSeconds);
+        }
+        _reelSpin = null;
+    }
+
+    /// <summary>Shows <paramref name="faces"/> on the reels (a reel without a face keeps its sprite).</summary>
+    private void ShowReels(int[] faces)
+    {
+        for (int i = 0; i < slotReelFaces.Length && i < faces.Length; i++)
+        {
+            Sprite symbol = Kit(ReelSymbols[faces[i]]);
+            if (slotReelFaces[i] != null && symbol != null)
+                slotReelFaces[i].sprite = symbol;
+        }
     }
 
     /// <summary>Slot continue clicked: close and move to the sleep prompt.</summary>
@@ -793,7 +958,7 @@ public sealed class HomeUIController : MonoBehaviour
     }
 
     // =========================================================
-    // Runtime row helpers
+    // Runtime row helpers (the kit's pieces)
     // =========================================================
 
     /// <summary>Destroys previously spawned rows and clears the tracking list.</summary>
@@ -809,41 +974,160 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>A panel's own ink: its body text's colour (the scene's choice for that panel), white without a body text.</summary>
     private static Color PanelInk(TMP_Text body) => body != null ? body.color : Color.white;
 
-    // The runtime rows' layout (the bills, toys and empty-state rows; audit R4-015).
+    // The runtime rows' layout (reference px; the kit's visible sizes, its sprites' shadow room outside them).
     private const float LabelRowHeight = 36f;
-    private const float RowHeight = 44f;
-    private const float RowSpacing = 12f;
+    private const float RowHeight = 62f;
+    private const float RowPad = 12f;
+    private const float RowTileSize = 44f;
+    private const float RowNameFontSize = 26f;
+    private const float RowDetailFontSize = 17f;
     private const float RowFontSize = 22f;
-    private const float RowButtonWidth = 160f;
-    private const float RowButtonHeight = 40f;
-    private const float RowButtonFontSize = 20f;
+    private const float SegmentWidth = 124f;
+    private const float SegmentHeight = 40f;
+    private const float SegmentFontSize = 19f;
+    private const float RowButtonWidth = 210f;
+    private const float RowButtonHeight = 42f;
+    private const float RowButtonFontSize = 19f;
+    private static readonly Color RowDetailInk = new Color(0.42f, 0.36f, 0.33f, 1f);
     private static readonly Color RowButtonFill = new Color(0.95f, 0.95f, 0.95f, 1f);
-    private static readonly Color RowButtonInk = Color.black;
 
-    // The House's layout (reference px) and colours: opaque plates under dark ink.
-    private const float HouseHeadHeight = 36f;
+    // The reels' spin (seconds).
+    private const float ReelSpinSeconds = 0.6f;
+    private const float ReelStopGap = 0.25f;
+    private const float ReelFrameSeconds = 0.06f;
+
+    // The House's layout (reference px) and colours: the kit's cards under dark ink (sheet 03).
+    private const float HouseHeadHeight = 44f;
+    private const float HouseHeadGap = 18f;
+    private const float HouseHeadPad = 10f;
+    private const float HouseHeadTile = 30f;
     private const float HouseHeadFontSize = 24f;
-    private const float HouseCardHeight = 96f;
+    private const float HouseCardHeight = 100f;
+    private const float HouseNameHeight = 54f;
+    private const float HouseNameSpacing = 1f;
     private const float HouseCardMaxWidth = 300f;
     private const float HouseCardPadding = 10f;
-    private const float HouseIconSize = 64f;
-    private const float HouseNameFontSize = 26f;
-    private const float HouseStateFontSize = 24f;
+    private const float HouseIconSize = 48f;
+    private const float HouseBadgeSize = 32f;
+    private const float HouseBadgeRoom = 14f;
+    private const float HouseNameFontSize = 22f;
+    private const float HouseStateFontSize = 20f;
     private const float HouseMinFontSize = 20f;
-    private const float HouseRowGap = 26f;
-    private const float HouseSlotGap = 14f;
-    private const float HouseBandGap = 36f;
-    private const float HouseLinkWidth = 4f;
-    private static readonly Color HouseBuyableFill = new Color(1f, 0.98f, 0.93f, 1f);
-    private static readonly Color HouseOwnedFill = new Color(0.78f, 0.89f, 0.76f, 1f);
-    private static readonly Color HouseTooDearFill = new Color(0.97f, 0.9f, 0.86f, 1f);
-    private static readonly Color HouseLockedFill = new Color(0.82f, 0.82f, 0.82f, 1f);
-    private static readonly Color HouseCardInk = new Color(0.12f, 0.12f, 0.15f, 1f);
-    private static readonly Color HouseLockedInk = new Color(0.25f, 0.25f, 0.28f, 1f);
-    private static readonly Color HouseAlertInk = new Color(0.62f, 0.08f, 0.08f, 1f);
-    private static readonly Color HouseSelectedOutline = new Color(0.13f, 0.3f, 0.5f, 1f);
-    private static readonly Color HouseLinkLit = new Color(0.2f, 0.32f, 0.45f, 1f);
-    private static readonly Color HouseLinkDim = new Color(0.6f, 0.6f, 0.62f, 1f);
+    private const float HouseRowGap = 28f;
+    private const float HouseSlotGap = 16f;
+    private const float HouseBandGap = 34f;
+    private const float HouseLinkWidth = 5f;
+    private const float HouseLinkKeyline = 9f;
+    private const float HouseDashWidth = 3f;
+    private const float HouseDashPeriod = 12f;
+    private static readonly Color HouseBuyableFill = new Color(0.98f, 0.95f, 0.88f, 1f);
+    private static readonly Color HouseLockedFill = new Color(0.87f, 0.84f, 0.78f, 1f);
+    private static readonly Color HouseCardInk = new Color(0.169f, 0.11f, 0.141f, 1f);
+    private static readonly Color HouseLockedInk = new Color(0.36f, 0.33f, 0.3f, 1f);
+    private static readonly Color HouseOwnedInk = new Color(0.26f, 0.42f, 0.22f, 1f);
+    private static readonly Color HousePriceInk = new Color(0.541f, 0.184f, 0.231f, 1f);
+    private static readonly Color HouseAlertInk = new Color(0.62f, 0.13f, 0.1f, 1f);
+    private static readonly Color HouseSelectedOutline = new Color(0.831f, 0.627f, 0.333f, 1f);
+    private static readonly Color HouseLinkLit = new Color(0.831f, 0.627f, 0.333f, 1f);
+    private static readonly Color HouseLinkInk = new Color(0.169f, 0.11f, 0.141f, 1f);
+    private static readonly Color HouseLinkDim = new Color(0.55f, 0.5f, 0.46f, 1f);
+
+    /// <summary>The kit's sprite called <paramref name="name"/>, or null without the kit or the sprite.</summary>
+    private Sprite Kit(string name) => kit != null ? kit.Get(name) : null;
+
+    /// <summary>A label's ink on a dark kit face (bone) or a light one (ink); white / near-black without the kit.</summary>
+    private Color LabelInk(bool dark) => kit != null ? (dark ? kit.inkOnDark : kit.inkOnLight) : dark ? Color.white : HouseCardInk;
+
+    /// <summary>
+    /// The kit's face for <paramref name="host"/>: a child image of the kit
+    /// sprite <paramref name="sprite"/>, sliced at the kit's scale and reaching
+    /// past the host by the sprite's shadow room, so the host's rect is the
+    /// face as seen; drawn first under the host's other children. Null (and
+    /// nothing made) without the kit or the sprite.
+    /// </summary>
+    private Image Face(Transform host, string sprite)
+    {
+        Sprite s = Kit(sprite);
+        if (s == null)
+            return null;
+        var go = new GameObject("Face", typeof(RectTransform));
+        go.transform.SetParent(host, false);
+        go.transform.SetAsFirstSibling();
+        var rt = (RectTransform)go.transform;
+        float pad = kit.spritePad / kit.overlayScale;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = new Vector2(-pad, -pad);
+        rt.offsetMax = new Vector2(pad, pad);
+        Image image = go.AddComponent<Image>();
+        image.sprite = s;
+        image.type = s.border.sqrMagnitude > 0f ? Image.Type.Sliced : Image.Type.Simple;
+        image.pixelsPerUnitMultiplier = kit.overlayScale;
+        return image;
+    }
+
+    /// <summary>A kit tile (or any square picture) at <paramref name="topLeft"/> of <paramref name="parent"/> (y down) whose visible square is <paramref name="size"/>: the image grows by the kit's shadow room; no raycasts.</summary>
+    private Image Tile(Transform parent, Sprite sprite, Vector2 topLeft, float size)
+    {
+        var go = new GameObject("Tile", typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+        float grow = KitSprite(sprite) ? size * SpritePadShare(sprite) : 0f;
+        Place((RectTransform)go.transform, topLeft - new Vector2(grow, grow), new Vector2(size + 2f * grow, size + 2f * grow));
+        Image image = go.AddComponent<Image>();
+        image.sprite = sprite;
+        image.preserveAspect = true;
+        image.raycastTarget = false;
+        return image;
+    }
+
+    /// <summary>True when <paramref name="sprite"/> is one of the kit's (it carries the kit's shadow room round it).</summary>
+    private bool KitSprite(Sprite sprite)
+    {
+        if (kit == null || sprite == null)
+            return false;
+        foreach (UiKitSO.KitSprite s in kit.sprites)
+            if (s != null && s.sprite == sprite)
+                return true;
+        return false;
+    }
+
+    /// <summary>A kit sprite's shadow room on each side as a share of its visible square.</summary>
+    private float SpritePadShare(Sprite sprite)
+    {
+        float inner = sprite.rect.height - 2f * kit.spritePad;
+        return inner > 0f ? kit.spritePad / inner : 0f;
+    }
+
+    /// <summary>An untargeted text at <paramref name="topLeft"/> of <paramref name="parent"/> (y down), shrinking rather than overflowing (UiText.FitLabel), never below the House's floor (20 reference px: 13 px at 720p; past it an ellipsis); a <paramref name="label"/> in the kit's label face, upper case; wrapping onto more lines when <paramref name="wrap"/>.</summary>
+    private TMP_Text Text(Transform parent, string name, string text, float size, Color ink, TextAlignmentOptions alignment, Vector2 topLeft, Vector2 box, bool label, bool wrap = false)
+    {
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+        Place((RectTransform)go.transform, topLeft, box);
+        var t = go.AddComponent<TextMeshProUGUI>();
+        t.text = text;
+        if (label && kit != null && kit.labelFont != null)
+            t.font = kit.labelFont;
+        t.fontSize = size;
+        t.fontStyle = label ? FontStyles.UpperCase : FontStyles.Normal;
+        t.characterSpacing = label ? 3f : 0f;
+        t.color = ink;
+        t.alignment = alignment;
+        t.raycastTarget = false;
+        UiText.FitLabel(t, wrap);
+        t.fontSizeMin = Mathf.Max(t.fontSizeMin, Mathf.Min(size, HouseMinFontSize));
+        t.overflowMode = TextOverflowModes.Ellipsis;
+        return t;
+    }
+
+    /// <summary>Puts <paramref name="rt"/> at <paramref name="topLeft"/> of its parent (y down from the parent's top-left) with <paramref name="size"/>.</summary>
+    private static void Place(RectTransform rt, Vector2 topLeft, Vector2 size)
+    {
+        rt.anchorMin = rt.anchorMax = new Vector2(0f, 1f);
+        rt.pivot = new Vector2(0f, 1f);
+        rt.anchoredPosition = new Vector2(topLeft.x, -topLeft.y);
+        rt.sizeDelta = size;
+    }
 
     /// <summary>Creates a label-only row (no button) in <paramref name="ink"/> — used for empty-state messages.</summary>
     private static GameObject CreateLabelRow(Transform parent, string label, Color ink)
@@ -863,90 +1147,167 @@ public sealed class HomeUIController : MonoBehaviour
         text.fontSize = RowFontSize;
         text.color = ink;
         text.alignment = TextAlignmentOptions.MidlineLeft;
+        text.textWrappingMode = TextWrappingModes.Normal;
 
         return row;
     }
 
-    /// <summary>Creates a row with <paramref name="icon"/> (when given, a square the row's height) and a label in <paramref name="ink"/> on the left and a button on the right.</summary>
-    private static GameObject CreateRow(Transform parent, string label, string buttonLabel, bool buttonInteractable, Action onClick, Color ink, Sprite icon = null)
+    /// <summary>A kit row in <paramref name="parent"/>: the list row plate (its rect the plate as seen) and a tile on the left when given; returns the row and its text's left edge (the text stretches from there to the room kept on the right).</summary>
+    private GameObject Row(Transform parent, string name, Sprite tile, out float textLeft)
     {
-        var row = new GameObject("Row", typeof(RectTransform));
+        var row = new GameObject(name, typeof(RectTransform));
         row.transform.SetParent(parent, false);
+        var layout = row.AddComponent<LayoutElement>();
+        layout.preferredHeight = RowHeight;
+        layout.flexibleWidth = 1f;
+        ((RectTransform)row.transform).sizeDelta = new Vector2(0f, RowHeight);
 
-        var rowLayout = row.AddComponent<LayoutElement>();
-        rowLayout.preferredHeight = RowHeight;
-        rowLayout.flexibleWidth = 1f;
+        Image plate = Face(row.transform, "listrow_rest");
+        if (plate != null)
+            plate.raycastTarget = false;
 
-        // The rows containers do not control their children's heights: the row takes its own.
-        ((RectTransform)row.transform).sizeDelta = new Vector2(0f, rowLayout.preferredHeight);
-
-        var hLayout = row.AddComponent<HorizontalLayoutGroup>();
-        hLayout.childForceExpandWidth = false;
-        hLayout.childForceExpandHeight = true;
-        hLayout.spacing = RowSpacing;
-        hLayout.childAlignment = TextAnchor.MiddleLeft;
-
-        // Icon (the row's art slot; none without art).
-        if (icon != null)
+        textLeft = RowPad;
+        if (tile != null)
         {
-            var iconGo = new GameObject("Icon", typeof(RectTransform));
-            iconGo.transform.SetParent(row.transform, false);
-            var iconLayout = iconGo.AddComponent<LayoutElement>();
-            iconLayout.preferredWidth = rowLayout.preferredHeight;
-            iconLayout.flexibleWidth = 0f;
-            Image iconImage = iconGo.AddComponent<Image>();
-            iconImage.sprite = icon;
-            iconImage.preserveAspect = true;
-            iconImage.raycastTarget = false;
+            Tile(row.transform, tile, new Vector2(RowPad, (RowHeight - RowTileSize) / 2f), RowTileSize);
+            textLeft += RowTileSize + RowPad;
         }
-
-        // Label.
-        var labelGo = new GameObject("Label", typeof(RectTransform));
-        labelGo.transform.SetParent(row.transform, false);
-
-        var labelLayout = labelGo.AddComponent<LayoutElement>();
-        labelLayout.flexibleWidth = 1f;
-
-        var labelText = labelGo.AddComponent<TextMeshProUGUI>();
-        labelText.text = label;
-        labelText.fontSize = RowFontSize;
-        labelText.color = ink;
-        labelText.alignment = TextAlignmentOptions.MidlineLeft;
-        UiText.FitLabel(labelText); // a long currency name shrinks the price instead of wrapping
-
-        // Button.
-        var buttonGo = new GameObject("Button", typeof(RectTransform));
-        buttonGo.transform.SetParent(row.transform, false);
-
-        var buttonLayout = buttonGo.AddComponent<LayoutElement>();
-        buttonLayout.preferredWidth = RowButtonWidth;
-        buttonLayout.preferredHeight = RowButtonHeight;
-
-        Image img = buttonGo.AddComponent<Image>();
-        img.color = RowButtonFill;
-
-        Button btn = buttonGo.AddComponent<Button>();
-        btn.targetGraphic = img;
-        btn.interactable = buttonInteractable;
-
-        var btnLabelGo = new GameObject("Label", typeof(RectTransform));
-        btnLabelGo.transform.SetParent(buttonGo.transform, false);
-
-        var btnLabelRt = (RectTransform)btnLabelGo.transform;
-        btnLabelRt.anchorMin = Vector2.zero;
-        btnLabelRt.anchorMax = Vector2.one;
-        btnLabelRt.offsetMin = Vector2.zero;
-        btnLabelRt.offsetMax = Vector2.zero;
-
-        var btnLabelText = btnLabelGo.AddComponent<TextMeshProUGUI>();
-        btnLabelText.text = buttonLabel;
-        btnLabelText.fontSize = RowButtonFontSize;
-        btnLabelText.alignment = TextAlignmentOptions.Center;
-        btnLabelText.color = RowButtonInk;
-
-        if (onClick != null)
-            btn.onClick.AddListener(() => onClick());
-
         return row;
+    }
+
+    /// <summary>Stretches a row's text across the row from <paramref name="left"/> to <paramref name="right"/> short of its right edge, <paramref name="top"/> down from its top and <paramref name="height"/> tall.</summary>
+    private static void Across(TMP_Text text, float left, float right, float top, float height)
+    {
+        RectTransform rt = text.rectTransform;
+        rt.anchorMin = new Vector2(0f, 1f);
+        rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(0f, 1f);
+        rt.offsetMin = new Vector2(left, -top - height);
+        rt.offsetMax = new Vector2(-right, -top);
+    }
+
+    /// <summary>Puts <paramref name="rt"/> <paramref name="right"/> in from its parent's right edge and <paramref name="top"/> down, with <paramref name="size"/>.</summary>
+    private static void PlaceRight(RectTransform rt, float right, float top, Vector2 size)
+    {
+        rt.anchorMin = rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(1f, 1f);
+        rt.anchoredPosition = new Vector2(-right, -top);
+        rt.sizeDelta = size;
+    }
+
+    /// <summary>
+    /// A bill's row: its kit tile (food, heating, electricity, TV, medicine;
+    /// locked when the bill is not offered), its name over its price and line,
+    /// and its Paying / Skip pair on the right (the kit's segmented track, the
+    /// side that holds oxblood and pressed, the other bone; clicking the side
+    /// that is off calls <paramref name="onToggle"/>).
+    /// </summary>
+    private GameObject CreateBillRow(BillView view, string payingLabel, string skipLabel, Action onToggle)
+    {
+        Sprite tile = Kit("tile_" + BillTile(view.Bill) + (view.Enabled ? "_rest" : "_locked"));
+        float pair = 2f * SegmentWidth + 8f;
+        GameObject row = Row(billRowsRoot, "Row_" + view.Bill, tile, out float left);
+        float right = pair + 2f * RowPad;
+        Across(Text(row.transform, "Name", view.Name, RowNameFontSize, LabelInk(false), TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.zero, true),
+               left, right, 4f, RowHeight / 2f + 2f);
+        Across(Text(row.transform, "Detail", view.Detail, RowDetailFontSize, RowDetailInk, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.zero, false),
+               left, right, RowHeight / 2f + 6f, RowHeight / 2f - 8f);
+
+        var track = new GameObject("Pair", typeof(RectTransform));
+        track.transform.SetParent(row.transform, false);
+        PlaceRight((RectTransform)track.transform, RowPad, (RowHeight - SegmentHeight - 8f) / 2f, new Vector2(pair, SegmentHeight + 8f));
+        Image trackFace = Face(track.transform, "segmented_track");
+        if (trackFace != null)
+            trackFace.raycastTarget = false;
+        PairSide(track.transform, "Paying", payingLabel, 4f, view.Paying, view.Enabled, onToggle);
+        PairSide(track.transform, "Skip", skipLabel, 4f + SegmentWidth, !view.Paying, view.Enabled, onToggle);
+        return row;
+    }
+
+    /// <summary>One side of a choice pair at <paramref name="x"/> in <paramref name="track"/>: on (the kit's oxblood segment, cream label) or off (bone, ink label; a click calls <paramref name="onPick"/>); locked when not <paramref name="enabled"/>.</summary>
+    private void PairSide(Transform track, string name, string label, float x, bool on, bool enabled, Action onPick)
+    {
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(track, false);
+        Place((RectTransform)go.transform, new Vector2(x, 4f), new Vector2(SegmentWidth, SegmentHeight));
+        Image face = Face(go.transform, on ? "segment_on" : "segment_off");
+        if (face == null)
+        {
+            face = go.AddComponent<Image>();
+            face.color = on ? HousePriceInk : RowButtonFill;
+        }
+        Button button = go.AddComponent<Button>();
+        button.targetGraphic = face;
+        button.interactable = enabled && !on && onPick != null;
+        ColorBlock colours = button.colors;
+        colours.disabledColor = on ? Color.white : new Color(0.85f, 0.85f, 0.85f, 1f);
+        colours.highlightedColor = new Color(1f, 0.96f, 0.86f, 1f);
+        button.colors = colours;
+        if (onPick != null)
+            button.onClick.AddListener(() => onPick());
+        TMP_Text text = Text(go.transform, "Label", label, SegmentFontSize, on ? LabelInk(true) : LabelInk(false), TextAlignmentOptions.Center, Vector2.zero,
+                             new Vector2(SegmentWidth, SegmentHeight), true);
+        if (!enabled)
+            text.alpha = 0.55f;
+    }
+
+    /// <summary>The kit tile that stands for a bill (sheet 04's bills).</summary>
+    private static string BillTile(HomeBill bill)
+    {
+        switch (bill)
+        {
+            case HomeBill.Food:
+                return "food";
+            case HomeBill.Heating:
+                return "flame";
+            case HomeBill.Electricity:
+                return "bolt";
+            case HomeBill.Tv:
+                return "tv";
+            default:
+                return "medicine";
+        }
+    }
+
+    /// <summary>A toy's row: its picture (ArtSlots.PetToy, else the kit tile its id names, else the paw), its name, and its oxblood mini plate (Play; Played tonight is the locked plate).</summary>
+    private GameObject CreateToyRow(ToyView toy)
+    {
+        Sprite tile = SlotArt.Sprite(ArtSlots.PetToy(toy.Id)) ?? ToyTile(toy.Id);
+        GameObject row = Row(toyRowsRoot, "Row_" + toy.Id, tile, out float left);
+        Across(Text(row.transform, "Name", toy.Label, RowNameFontSize, LabelInk(false), TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.zero, true),
+               left, RowButtonWidth + 2f * RowPad, 0f, RowHeight);
+
+        var go = new GameObject("Button", typeof(RectTransform));
+        go.transform.SetParent(row.transform, false);
+        PlaceRight((RectTransform)go.transform, RowPad, (RowHeight - RowButtonHeight) / 2f, new Vector2(RowButtonWidth, RowButtonHeight));
+        Image face = Face(go.transform, "miniplate_ox_rest");
+        if (face == null)
+        {
+            face = go.AddComponent<Image>();
+            face.color = RowButtonFill;
+        }
+        Button button = go.AddComponent<Button>();
+        button.targetGraphic = face;
+        if (kit != null)
+            kit.Show(face, "miniplate_ox", button);
+        button.transition = kit != null ? Selectable.Transition.SpriteSwap : Selectable.Transition.ColorTint;
+        button.interactable = toy.Enabled && toy.OnPlay != null;
+        if (toy.OnPlay != null)
+            button.onClick.AddListener(() => toy.OnPlay());
+        Text(go.transform, "Label", toy.Button, RowButtonFontSize, LabelInk(kit != null), TextAlignmentOptions.Center, Vector2.zero,
+             new Vector2(RowButtonWidth, RowButtonHeight), true);
+        return row;
+    }
+
+    /// <summary>The kit tile a toy's id names (toy_ball: the ball), else the paw.</summary>
+    private Sprite ToyTile(string id)
+    {
+        foreach (string word in (id ?? string.Empty).Split('_'))
+        {
+            Sprite tile = Kit("tile_" + word + "_rest");
+            if (tile != null)
+                return tile;
+        }
+        return Kit("tile_paw_rest");
     }
 }
