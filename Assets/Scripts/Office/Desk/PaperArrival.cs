@@ -9,7 +9,8 @@ using UnityEngine.Rendering;
 /// to its spot along PaperFlight's path (a slight arc, a twist about the
 /// vertical and a tumble about its long axis, a springy settle, a soft squash
 /// as it lands), a soft shadow on the desk under it that sharpens as it comes
-/// down, and a paper thud when it touches; then it lies exactly on its spot
+/// down, and its landing when it touches (the sound bank's cue, else a code-made
+/// paper thud, and FeelDirector.Hit's punch at its strength); then it lies exactly on its spot
 /// and calls back. Reduced Motion: a short straight slide. Reusable for any
 /// delivered paper (the citations today; delivery notes later): Fly is the
 /// whole interface.
@@ -34,6 +35,10 @@ public sealed class PaperArrival : MonoBehaviour
     private Vector2 _size;
     private float _twist, _tumble, _arc, _delay, _t, _length;
     private bool _reduced, _thudded;
+
+    /// <summary>The landing's sound cue (null: the code thud) and punch (FeelDirector.Hit's strength).</summary>
+    private string _landCue;
+    private float _landHit;
     private Action _landed;
     private Transform _shadow;
     private Renderer _shadowRenderer;
@@ -50,9 +55,14 @@ public sealed class PaperArrival : MonoBehaviour
     /// <paramref name="arc"/> metres over the straight way, its shadow
     /// <paramref name="size"/> metres; <paramref name="landed"/> once it lies
     /// still. Reduced Motion (MotionPreference) slides it straight and short.
+    /// As it touches it plays <paramref name="landCue"/> (SoundCues; the code thud
+    /// without one or without its clip) and punches with <paramref name="landHit"/>
+    /// (FeelDirector.Hit, 0 to 1; 0 none).
     /// </summary>
-    public void Fly(Vector3 from, Vector3 to, Vector2 size, float twist, float tumble, float arc, float delay, Action landed)
+    public void Fly(Vector3 from, Vector3 to, Vector2 size, float twist, float tumble, float arc, float delay, Action landed, string landCue = null, float landHit = 0f)
     {
+        _landCue = landCue;
+        _landHit = landHit;
         _from = from;
         _to = to;
         _rest = transform.rotation;
@@ -86,8 +96,12 @@ public sealed class PaperArrival : MonoBehaviour
         if (pose.Landed && !_thudded)
         {
             _thudded = true;
-            _thud ??= CodeTones.Tone("PaperThud", 95f, 0.12f, 0.35f);
-            AudioSource.PlayClipAtPoint(_thud, _to, 0.6f);
+            if (string.IsNullOrEmpty(_landCue) || !Sounds.Play(_landCue))
+            {
+                _thud ??= CodeTones.Tone("PaperThud", 95f, 0.12f, 0.35f);
+                AudioSource.PlayClipAtPoint(_thud, _to, 0.6f);
+            }
+            FeelDirector.Hit(_landHit);
         }
         if (_t >= 1f)
             Land();

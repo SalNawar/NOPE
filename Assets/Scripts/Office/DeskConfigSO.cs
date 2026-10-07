@@ -94,14 +94,14 @@ public sealed class DeskConfigSO : ScriptableObject
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
 
     [Header("Citations (the Citation lands on the desk, Saleh 2026-10-07)")]
-    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the desk's right, near the clerk, clear of the rulebook folder, the counter and the scanner.</summary>
-    public Vector2 citationSpot = new Vector2(0.22f, -0.1f);
+    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the mat's far half right of centre, clear of the rulebook folder, so it lies wholly on the screen in the office view and the reading view (the reading view shows it right of the folder's page).</summary>
+    public Vector2 citationSpot = new Vector2(0f, 0.14f);
 
     /// <summary>How far each next citation of the day lands from the last (metres, the same frame): they stack with an offset; a continuation sheet lands a third of it from its first.</summary>
     public Vector2 citationStep = new Vector2(0.025f, -0.02f);
 
-    /// <summary>A citation's height on the desk relative to its form's (DeskZones' reading height at its form's scale): smaller, so a pile of them does not cover the case's papers.</summary>
-    [Range(0.3f, 1f)] public float citationScale = 1f;
+    /// <summary>A citation's height on the desk relative to its form's (DeskZones' reading height at its form's scale): smaller, so a pile of them does not cover the case's papers and the day's stack fits the reading view's height.</summary>
+    [Range(0.3f, 1f)] public float citationScale = 0.75f;
 
     /// <summary>Where a citation flies in from: a point of the camera's view (viewport coordinates: off the screen's right, near its top) <see cref="citationFromDepth"/> metres in front of the camera, so it starts large, close to the eye, and flies down onto the desk.</summary>
     public Vector2 citationFrom = new Vector2(1.08f, 0.9f);
@@ -114,6 +114,9 @@ public sealed class DeskConfigSO : ScriptableObject
 
     /// <summary>A citation's twist about the vertical and its tumble about its long axis as it starts its flight (degrees).</summary>
     public float citationTwist = 28f, citationTumble = 32f;
+
+    /// <summary>A citation's punch as it lands (FeelDirector.Hit's strength, 0 to 1: its hit-stop and camera bump; 0 none), with the sound cue citation_land.</summary>
+    [Range(0f, 1f)] public float citationLandHit = 0.25f;
 
     [Header("Traveller")]
     /// <summary>The traveller figure's height in metres (feet at the traveller anchor).</summary>

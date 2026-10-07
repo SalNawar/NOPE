@@ -727,7 +727,7 @@ public sealed class DeskController : MonoBehaviour
                 ApplyLive(flown);
                 if (--flying == 0)
                     landed?.Invoke();
-            });
+            }, SoundCues.CitationLand, config.citationLandHit);
             ApplyLive(sheet);
         }
         ApplyStack();
