@@ -239,7 +239,6 @@ public static class SoundList
             case "mouse_click":
             case "window_open":
             case "window_close":
-            case "stamp_bar_in":
             case "slot_lever":
             case "slot_stop":
                 return PlaceholderKind.Click;

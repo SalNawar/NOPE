@@ -23,8 +23,8 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 1 | `stamp_approve` | APPROVED stamp hits the passport | 0.3 s | the reference stamp: heavy thunk with a rubber slap and a little wood resonance | ×3 | P1 |
 | 2 | `stamp_deny` | DENIED stamp hits | 0.3 s | same family as 1, slightly lower and harder | ×3 | P1 |
 | 3 | `stamp_miss` | stamp hits bare desk (no paper) | 0.25 s | dull wood knock, no paper slap | ×2 | P2 |
-| 4 | `stamp_bar_out` | the stamp bar slides out | 0.4 s | wooden drawer on metal runners, ends in a soft stop | ×1 | P1 |
-| 5 | `stamp_bar_in` | stamp bar slides back | 0.35 s | the reverse, ends in a firmer click | ×1 | P1 |
+| 4 | `drawer_open` | the brass stamp drawer opens (TAB): a slow heave, an accelerating carry, a hard stop, then the daters stand up | 1.0 s | typewriter carriage return, heavy brass: the ratchet clicks speed up with the slide, a heavy metal clunk at the stop (0.42 s in), a finer ratchet as the daters stand | ×1 | P1 |
+| 5 | `drawer_close` | the brass stamp drawer shoves shut (after the daters fold down) | 0.75 s | typewriter carriage return, heavy brass, in reverse: a shorter rasp slowing down, a deep thud as it seats (0.28 s in) | ×1 | P1 |
 | 6 | `stamp_lift` | a stamp is raised before the slam | 0.15 s | small creak/whoosh, anticipation | ×2 | P3 |
 | 7 | `paper_pickup` | a paper is picked up | 0.2 s | a crisp paper lift | ×3 | P1 |
 | 8 | `paper_drop` | paper dropped on the desk | 0.3 s | soft paper flop | ×3 | P1 |
@@ -42,6 +42,9 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 20 | `scanner_sweep` | scan light sweeps (loopable 1 s) | 1.0 s | mechanical carriage whirr | loop | P1 |
 | 21 | `scanner_done` | scan finished | 0.4 s | two-tone confirmation beep, retro | ×1 | P1 |
 | 22 | `scanner_flag` | scan finds a fault | 0.5 s | low buzzer | ×1 | P1 |
+| 86 | `scanner_lid_open` | the cream scanner's lid swings open (a paper dragged near it; the scan done) | 0.35 s | xerox/photocopier: a sprung plastic hinge swinging up, a light stop click | ×1 | P2 |
+| 87 | `scanner_lid_close` | the scanner's lid shuts (the paper dropped on the glass; idle) | 0.3 s | xerox/photocopier: the lid's hollow plastic clack, a short rattle | ×1 | P2 |
+| 88 | `scanner_scan` | the scan runs under the shut lid | 1.4 s | xerox/photocopier: a relay tick, the motor spinning up, the carriage's whine out and back, the end clicks | ×1 | P1 |
 | 23 | `inspect_on` | inspect mode toggled on | 0.3 s | lamp switch click plus faint hum | ×1 | P2 |
 | 24 | `inspect_link` | two fields linked in inspect mode | 0.2 s | soft marker tick | ×3 | P2 |
 | 25 | `inspect_match` | a discrepancy confirmed | 0.5 s | sharp "found it" ding, typewriter bell | ×1 | P1 |
@@ -141,4 +144,4 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 75 | `mus_desk_calm` | early shift, low and sparse (synth plus tape warble) | P3 |
 | 76 | `mus_desk_tense` | last hour / low stability layer | P3 |
 
-**Total:** 85 entries; about 165 files counting the variants. **P1 alone:** 42 entries.
+**Total:** 88 entries; about 168 files counting the variants. **P1 alone:** 43 entries.

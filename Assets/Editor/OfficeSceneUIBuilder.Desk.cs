@@ -842,37 +842,29 @@ public static partial class OfficeSceneUIBuilder
     /// the desk plane, inactive until DeskView makes it live); the hand's
     /// Catcher and Examiner retired with Papers, Please's controls (destroyed
     /// when an older scene still holds them); Office/Scanner (the
-    /// DeskScanner, its click box, Clickable and reaction, and a stand-in
-    /// flatbed machine the binder shows where the art has no scanner, with
-    /// the upgrades' feeder tray and analysis lamp, inactive until owned: SC6); the
-    /// day-1 scan note. Idempotent.
+    /// DeskScanner, its click box, Clickable and reaction, its AudioSource and
+    /// sounds, and its machine the binder shows where the art office has no
+    /// scanner: the cream scanner when its art is complete (BuildScannerArt),
+    /// else the stand-in flatbed (BuildScannerStandIn)); the day-1 scan note.
+    /// Idempotent.
     /// </summary>
     private static DeskController BuildDesk(Transform office, DeskConfigSO config, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint)
     {
         Clickable scannerClick = EnsureClickBox(office, "Scanner");
         scanner = GetOrAdd<DeskScanner>(scannerClick.gameObject);
         DestroyChildIfPresent(scannerClick.transform, "Placeholder");
-        Transform machine = EnsureChild(scannerClick.transform, "Placeholder");
-        PrimitivePart(machine, "Base", PrimitiveType.Cube, new Vector3(0f, 0.025f, 0f), new Vector3(0.4f, 0.05f, 0.32f), LitMaterial("Placeholder_ScannerBody", new Color(0.24f, 0.33f, 0.31f), 0.35f));
-        PrimitivePart(machine, "Bed", PrimitiveType.Cube, new Vector3(0f, 0.051f, 0.01f), new Vector3(0.34f, 0.004f, 0.25f), LitMaterial("Placeholder_ScannerGlass", new Color(0.08f, 0.16f, 0.17f), 0.85f));
-        PrimitivePart(machine, "Hinge", PrimitiveType.Cube, new Vector3(0f, 0.06f, 0.15f), new Vector3(0.4f, 0.03f, 0.03f), LitMaterial("Placeholder_ScannerTrim", new Color(0.84f, 0.78f, 0.65f), 0.3f));
-        PrimitivePart(machine, "Light", PrimitiveType.Cube, new Vector3(0.16f, 0.052f, -0.135f), new Vector3(0.02f, 0.006f, 0.02f), LitMaterial("Placeholder_ScannerLight", new Color(0.35f, 0.95f, 0.45f), 0.6f));
-        // The upgrades' parts (SC6), shown by DeskScanner.ShowUpgrades while owned: the Auto-Feed's sheet tray leaning on the hinge, the Analysis's lamp bar across the bed.
-        GameObject tray = UpgradePart(machine, "FeederTray", new Vector3(0f, 0.09f, 0.19f), new Vector3(0.3f, 0.006f, 0.12f), Quaternion.Euler(-35f, 0f, 0f), LitMaterial("Placeholder_ScannerTrim", new Color(0.84f, 0.78f, 0.65f), 0.3f));
-        GameObject lamp = UpgradePart(machine, "AnalysisLamp", new Vector3(0f, 0.11f, -0.1f), new Vector3(0.3f, 0.014f, 0.024f), Quaternion.identity, LitMaterial("Placeholder_ScannerLamp", new Color(0.78f, 0.72f, 0.98f), 0.7f));
-        scannerPlaceholder = machine.gameObject;
-        // Drop and go (the scanner app spec §1): the glowing bar that crosses the glass while a scan runs, over the scanning paper; hidden while idle (DeskScanner.Sweep).
+        DestroyChildIfPresent(scannerClick.transform, "Machine");
         DestroyChildIfPresent(scannerClick.transform, "SweepBar");
-        GameObject sweep = PrimitivePart(scannerClick.transform, "SweepBar", PrimitiveType.Cube, new Vector3(0f, 0.062f, -0.115f), new Vector3(0.36f, 0.004f, 0.012f),
-                                         EnsureMaterial("Placeholder_ScannerSweep", "Universal Render Pipeline/Unlit", m => m.SetColor("_BaseColor", new Color(0.45f, 1f, 0.55f))));
-        sweep.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        sweep.SetActive(false);
         var soScanner = new SerializedObject(scanner);
         soScanner.FindProperty("dropSize").vector2Value = new Vector2(0.4f, 0.32f);
-        soScanner.FindProperty("bedCentre").vector3Value = new Vector3(0f, 0.056f, 0.01f);
-        SetRef(soScanner, "feederTray", tray);
-        SetRef(soScanner, "analysisLamp", lamp);
-        SetRef(soScanner, "sweepBar", sweep.transform);
+        AudioSource scannerSound = GetOrAdd<AudioSource>(scannerClick.gameObject);
+        scannerSound.playOnAwake = false;
+        scannerSound.spatialBlend = 0f;
+        SetRef(soScanner, "sound", scannerSound);
+        SetRef(soScanner, "lidOpenSound", DaterSound("scanner_lid_open"));
+        SetRef(soScanner, "lidCloseSound", DaterSound("scanner_lid_close"));
+        SetRef(soScanner, "scanSound", DaterSound("scanner_scan"));
+        scannerPlaceholder = BuildScannerArt(scannerClick.transform, soScanner, out GameObject art) ? art : BuildScannerStandIn(scannerClick.transform, soScanner);
         soScanner.ApplyModifiedProperties();
 
         scanHint = FloatingNote(office, "ScanHint", true);
@@ -1473,17 +1465,19 @@ public static partial class OfficeSceneUIBuilder
     /// inactive until the booth shows it), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
     /// In the office: StampRack (inactive until slid out; the office binder
-    /// lays it, its origin at the daters' feet): a low lip in the art's DeskClean
-    /// green-dark at the daters' feet in front of them, with wooden end caps and
-    /// brass brackets to the two daters, and
-    /// the DENIED dater (left) and the APPROVED dater (right), each a click box
+    /// lays it, its origin at the daters' feet): the heavy brass drawer when its
+    /// art is in the project and complete (BuildBrassDrawer; PropArt.UseArt over
+    /// PropArt.BrassDrawer), its daters standing in its cradles and the
+    /// verdict words on its enamel plates; else (the fallback) a low lip in the
+    /// art's DeskClean green-dark at the daters' feet in front of them, with
+    /// wooden end caps and brass brackets to the two daters, the words on its
+    /// top; and the DENIED dater (left) and the APPROVED dater (right), each a click box
     /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
     /// (the click box its proxy: the dater is dragged onto the paper) and a
     /// PointerHold (a held press), holding its body (DaterBody: the prop
-    /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED);
-    /// the word printed on the lip's top in front of each dater, readable from the
-    /// reading view. The tray gets the papers' style, the date's face and
-    /// Saleh's dater sounds (WireDaters). The old overlay bar, the 3D tray of
+    /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED).
+    /// The tray gets the papers' style, the date's face,
+    /// Saleh's dater sounds and the drawer's (WireDaters). The old overlay bar, the 3D tray of
     /// the desk-first redesign and the overlay's hand-back buttons are destroyed.
     /// </summary>
     private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
@@ -1520,21 +1514,27 @@ public static partial class OfficeSceneUIBuilder
 
         // The rack in the office: x along the office view's right, z away from the chair, y up from the stamps' feet.
         Transform rack = EnsureChild(office, "StampRack");
+        BrassDrawer drawer = BuildBrassDrawer(rack);
         Material rail = DeskMaterial("GreenDark", new Color(0.204f, 0.294f, 0.275f));
         Material wood = DeskMaterial("Wood", new Color(0.537f, 0.392f, 0.282f));
         Material brass = DeskMaterial("Brass", new Color(0.72f, 0.58f, 0.3f));
         float railLength = 2f * (StampSpacing / 2f + StampRailOverhang);
-        // The lip at the daters' feet, in front of their frames (DaterHalfDepth), its top StampRailSection.y over the feet.
+        // The fallback's lip at the daters' feet, in front of their frames (DaterHalfDepth), its top StampRailSection.y over the feet.
         float lipZ = -(DaterHalfDepth + StampLipGap + StampRailSection.x / 2f);
-        PrimitivePart(rack, "Rail", PrimitiveType.Cube, new Vector3(0f, StampRailSection.y / 2f, lipZ), new Vector3(railLength, StampRailSection.y, StampRailSection.x), rail);
-        PrimitivePart(rack, "CapLeft", PrimitiveType.Cube, new Vector3(-railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
-        PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
+        if (drawer == null)
+        {
+            PrimitivePart(rack, "Rail", PrimitiveType.Cube, new Vector3(0f, StampRailSection.y / 2f, lipZ), new Vector3(railLength, StampRailSection.y, StampRailSection.x), rail);
+            PrimitivePart(rack, "CapLeft", PrimitiveType.Cube, new Vector3(-railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
+            PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
+        }
         Color labelInk = new Color(0.95f, 0.93f, 0.86f);
 
         (Clickable stamp, Transform die) Stamp(string name, float x, bool approved, string labelKey)
         {
-            Clickable click = EnsureClickBox(rack, name);
-            click.transform.localPosition = new Vector3(x, 0f, 0f);
+            // In the brass drawer the dater stands in its cradle (the cradle's origin is its back-foot edge); else on the rack.
+            Transform cradle = drawer != null ? drawer.Cradle(approved ? DrawerSequence.Approved : DrawerSequence.Denied) : null;
+            Clickable click = EnsureClickBox(cradle != null ? cradle : rack, name);
+            click.transform.localPosition = cradle != null ? new Vector3(0f, 0f, -BrassPivotDepth) : new Vector3(x, 0f, 0f);
             StampShape shape = DaterBody(click.transform, approved);
             var box = click.GetComponent<BoxCollider>();
             box.center = new Vector3(0f, shape.Top / 2f, 0f);
@@ -1542,11 +1542,16 @@ public static partial class OfficeSceneUIBuilder
             string word = UiText.Get(labelKey);
             Transform die = click.transform.Find("Die");
 
-            // The brass bracket from the lip to the dater's frame, and the word on the lip's top in front of the dater.
-            PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, 0.002f, -(DaterHalfDepth + StampLipGap / 2f)), new Vector3(0.012f, 0.004f, StampLipGap + 0.002f), brass);
-            TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailSection.y + 0.0006f, lipZ),
-                                         new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
-            label.text = word;
+            if (drawer != null)
+                PlateWord(drawer.transform.Find("Plate" + name), word);
+            else
+            {
+                // The brass bracket from the lip to the dater's frame, and the word on the lip's top in front of the dater.
+                PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, 0.002f, -(DaterHalfDepth + StampLipGap / 2f)), new Vector3(0.012f, 0.004f, StampLipGap + 0.002f), brass);
+                TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailSection.y + 0.0006f, lipZ),
+                                             new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
+                label.text = word;
+            }
 
             click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null && r.name != "Window").ToArray());
             // The dater is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
@@ -1570,6 +1575,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(stamps);
         SetRef(so, "config", config);
         SetRef(so, "rack", rack);
+        SetRef(so, "drawer", drawer);
         SetRef(so, "tab", tab);
         SetRef(so, "approvedStamp", approved);
         SetRef(so, "deniedStamp", denied);

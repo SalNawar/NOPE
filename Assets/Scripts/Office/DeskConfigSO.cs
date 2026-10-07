@@ -192,11 +192,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Where the stamp bar's middle (between its two daters' dies) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y). High on the right (run 7's integration): the passport slides so its visa page lies under the daters (DeskController.PassportUnderDaters), its data page whole and clear below the rack in the view.</summary>
     public Vector2 stampBarView = new Vector2(0.66f, 0.62f);
 
-    /// <summary>How far the stamp bar slides out from the desk's right (metres along the office view's right): in, it waits that far right of where it hangs out, out of the reading view.</summary>
+    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, toward the chair): in, it waits that far beyond where it hangs out, past the reading view's top (its motion's timing is MotionKnobs' drawer tunings).</summary>
     [Min(0.1f)] public float stampBarTravel = 0.6f;
-
-    /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
-    [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
 
     /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
     [Range(0f, 0.2f)] public float daterInkFade = 0.035f;

@@ -80,13 +80,19 @@ public static class HallAmbience
 public static class SoundCues
 {
     /// <summary>The stamps.</summary>
-    public const string StampApprove = "stamp_approve", StampDeny = "stamp_deny", StampMiss = "stamp_miss", StampBarOut = "stamp_bar_out", StampBarIn = "stamp_bar_in", StampLift = "stamp_lift";
+    public const string StampApprove = "stamp_approve", StampDeny = "stamp_deny", StampMiss = "stamp_miss", StampLift = "stamp_lift";
+
+    /// <summary>The brass stamp drawer (Track BR, Saleh 2026-10-08): opening, a typewriter's carriage-return carry and the clunk at the stop; closing, a shorter reverse rasp and a deep thud.</summary>
+    public const string DrawerOpen = "drawer_open", DrawerClose = "drawer_close";
 
     /// <summary>The papers.</summary>
     public const string PaperPickup = "paper_pickup", PaperDrop = "paper_drop", PaperSlide = "paper_slide";
 
     /// <summary>The citation and the scanner.</summary>
     public const string CitationPrint = "citation_print", CitationLand = "citation_land", ScannerStart = "scanner_start", ScannerDone = "scanner_done", ScannerFlag = "scanner_flag";
+
+    /// <summary>The cream scanner (Track BR, Saleh 2026-10-08: "makes a xerox sound as it quickly scans"): its lid swinging open, the lid's clack shut, the xerox scan.</summary>
+    public const string ScannerLidOpen = "scanner_lid_open", ScannerLidClose = "scanner_lid_close", ScannerScan = "scanner_scan";
 
     /// <summary>The scanner's PC app (the scanner app spec's "Feel"): a glow's soft tick (a cell that differs, a paper flagged) and a finding pinned to the board (evidence_pin: added to the list by Track SA).</summary>
     public const string InspectLink = "inspect_link", EvidencePin = "evidence_pin";

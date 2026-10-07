@@ -395,7 +395,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
             else
             {
-                s.SetPositionAndRotation(new Vector3(spot.Position.x, top, spot.Position.z), spot.Rotation);
+                // The gameplay's machine faces the chair (Track BR): its front (local -Z) toward the office camera, its lid hinged away, whatever yaw the anchor carries.
+                Vector3 at = new Vector3(spot.Position.x, top, spot.Position.z);
+                Vector3 away = Vector3.ProjectOnPlane(at - viewer, Vector3.up);
+                s.SetPositionAndRotation(at, away.sqrMagnitude > 1e-6f ? Quaternion.LookRotation(away.normalized, Vector3.up) : spot.Rotation);
             }
 
             if (scanner.TryGetComponent(out BoxCollider box))
@@ -425,7 +428,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             // The shadow behind the scanner its body hides from the office camera (the desk-first redesign, item 4).
             if (this.desk != null && config != null)
             {
-                float body = artScanner ? spot.Bounds.size.y : DeskScanner.PlaceholderHeight;
+                float body = artScanner ? spot.Bounds.size.y : scanner.MachineHeight;
                 Vector3 toScanner = s.position + Vector3.up * body - viewer;
                 float elevation = Mathf.Atan2(-toScanner.y, new Vector2(toScanner.x, toScanner.z).magnitude) * Mathf.Rad2Deg;
                 this.desk.SetScannerView(toScanner, ScannerClearance.Shadow(body, elevation, config.scannerShadowMax));

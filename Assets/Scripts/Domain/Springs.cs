@@ -24,7 +24,13 @@ public enum MotionFeel
     Heavy,
 
     /// <summary>A dater's stroke going down (the desk machine spec §1): stiff, nearly critical, so the body slows into the paper as if against a building spring.</summary>
-    Dater
+    Dater,
+
+    /// <summary>The brass stamp drawer's hard stop (Track BR): very stiff and light on damping, a small overshoot past out and a quick settle.</summary>
+    Drawer,
+
+    /// <summary>A brass drawer's cradle standing up or folding down (Track BR): a quick quarter turn that reaches its stop with speed to spare.</summary>
+    Cradle
 }
 
 /// <summary>
