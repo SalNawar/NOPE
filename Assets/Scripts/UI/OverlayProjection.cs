@@ -23,16 +23,17 @@ public static class OverlayProjection
     }
 
     /// <summary>
-    /// Places <paramref name="target"/> inside <paramref name="canvasRect"/>
-    /// (its root canvas's rect) and below its top <paramref name="topInset"/>
-    /// (canvas reference px); false (the target unmoved) when a reference is
-    /// missing, the point is behind the camera, or it is outside the viewport
-    /// and <paramref name="keepOnScreen"/> is false (with it true, the point is
+    /// A world point in <paramref name="canvasRect"/>'s space (its centre the
+    /// origin, reference px; a target anchored at the centre takes it as its
+    /// anchored position): false when a reference is missing, the point is
+    /// behind the camera, or it is outside the viewport and
+    /// <paramref name="keepOnScreen"/> is false (with it true, the point is
     /// taken at the viewport's nearest edge).
     /// </summary>
-    public static bool TryPlace(RectTransform target, RectTransform canvasRect, Camera camera, Vector3 world, Vector2 offset, bool keepOnScreen = false, float topInset = 0f)
+    public static bool TryToCanvas(RectTransform canvasRect, Camera camera, Vector3 world, bool keepOnScreen, out Vector2 local)
     {
-        if (target == null || canvasRect == null || camera == null)
+        local = default;
+        if (canvasRect == null || camera == null)
             return false;
 
         Vector3 viewport = camera.WorldToViewportPoint(world);
@@ -49,7 +50,20 @@ public static class OverlayProjection
         }
 
         Vector2 screen = camera.ViewportToScreenPoint(viewport);
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screen, null, out Vector2 local))
+        return RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screen, null, out local);
+    }
+
+    /// <summary>
+    /// Places <paramref name="target"/> inside <paramref name="canvasRect"/>
+    /// (its root canvas's rect) and below its top <paramref name="topInset"/>
+    /// (canvas reference px); false (the target unmoved) when a reference is
+    /// missing, the point is behind the camera, or it is outside the viewport
+    /// and <paramref name="keepOnScreen"/> is false (with it true, the point is
+    /// taken at the viewport's nearest edge).
+    /// </summary>
+    public static bool TryPlace(RectTransform target, RectTransform canvasRect, Camera camera, Vector3 world, Vector2 offset, bool keepOnScreen = false, float topInset = 0f)
+    {
+        if (target == null || !TryToCanvas(canvasRect, camera, world, keepOnScreen, out Vector2 local))
             return false;
 
         Vector2 at = local + offset;

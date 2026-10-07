@@ -108,6 +108,16 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>True while the bubble shows a line this wheel put up.</summary>
     private bool _bubbleUp;
     private readonly Dictionary<DialogChoiceKind, Sprite> _icons = new Dictionary<DialogChoiceKind, Sprite>();
+
+    /// <summary>The open wheel's pills in canvas space, the speech bubble's obstacles (reused each frame).</summary>
+    private readonly List<FaceRect> _pills = new List<FaceRect>();
+
+    /// <summary>A pill's world corners (reused).</summary>
+    private readonly Vector3[] _corners = new Vector3[4];
+
+    /// <summary>The bubble's tail (its panel's Tail child: the kit's), found once, with its length out of the box and how far it tucks under the box's ink line (the builder's).</summary>
+    private RectTransform _tail;
+    private float _tailLength, _tailTuck;
     private readonly List<UnityEngine.Object> _generated = new List<UnityEngine.Object>();
 
     /// <summary>True while the wheel is open.</summary>
@@ -158,6 +168,16 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         _canvasRect = OverlayProjection.CanvasRectOf(this);
         if (catcher != null)
             catcher.SetActive(false);
+        if (bubble != null)
+        {
+            bubble.PlacedByOwner = true; // the bubble belongs to the traveller and keeps clear of the wheel: PlaceBubble
+            _tail = bubble.Panel != null ? bubble.Panel.Find("Tail") as RectTransform : null;
+            if (_tail != null)
+            {
+                _tailTuck = Mathf.Max(0f, _tail.anchoredPosition.y);
+                _tailLength = Mathf.Max(0f, _tail.rect.height - _tailTuck);
+            }
+        }
         if (bubbleButton != null)
         {
             bubbleButton.interactable = false;
@@ -175,7 +195,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         _icons.Clear();
     }
 
-    /// <summary>Paces the speech bubble; only while open, follows the traveller.</summary>
+    /// <summary>Paces the speech bubble; only while open, follows the traveller; places the bubble while it shows (after the ring, which it keeps clear of).</summary>
     private void LateUpdate()
     {
         if (_speech != null)
@@ -184,10 +204,63 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             ShowSpeech();
         }
 
-        if (!IsOpen)
+        if (IsOpen)
+            Place();
+        PlaceBubble();
+    }
+
+    /// <summary>
+    /// Places the speech bubble by the traveller (BubbleLayout, Saleh
+    /// 2026-10-07: the bubble belongs to the traveller and never covers the
+    /// wheel): beside and above the head, moved the least it must to clear
+    /// the face and the open wheel's pills (their rects this frame, canvas
+    /// space) and stay on the screen under the HUD's band; its tail turned to
+    /// point at the mouth. Only while the bubble shows; no allocation.
+    /// </summary>
+    private void PlaceBubble()
+    {
+        if (bubble == null || !_bubbleUp || traveller == null || bubble.Panel == null || !bubble.Panel.gameObject.activeSelf)
+            return;
+        RectTransform canvas = bubble.CanvasRect;
+        Camera cam = bubble.Camera != null ? bubble.Camera : _camera;
+        if (!OverlayProjection.TryToCanvas(canvas, cam, traveller.HeadTop, true, out Vector2 head)
+            || !OverlayProjection.TryToCanvas(canvas, cam, traveller.Mouth, true, out Vector2 mouth))
             return;
 
-        Place();
+        _pills.Clear();
+        if (IsOpen && layout != null)
+        {
+            Transform pills = layout.transform;
+            for (int i = 0; i < pills.childCount; i++)
+                AddObstacle(pills.GetChild(i) as RectTransform, canvas);
+            AddObstacle(centreSlot, canvas);
+        }
+
+        Rect bounds = canvas.rect;
+        var screen = new FaceRect(bounds.xMin, bounds.yMin, bounds.xMax, bounds.yMax - bubble.TopInset);
+        Vector2 size = bubble.Panel.rect.size;
+        BubblePlacement p = BubbleLayout.Place(head.x, head.y, mouth.x, mouth.y, size.x, size.y, _tailLength, screen, _pills, BubbleGap);
+        bubble.Panel.anchoredPosition = new Vector2(p.Box.CentreX, p.Box.CentreY);
+        if (_tail == null)
+            return;
+        // The tail leaves the edge facing the mouth (its pivot, its top, at that edge, tucked under the box's ink line), turned toward the mouth.
+        _tail.anchorMin = _tail.anchorMax = new Vector2((p.TailBaseX - p.Box.XMin) / Mathf.Max(1f, p.Box.Width), (p.TailBaseY - p.Box.YMin) / Mathf.Max(1f, p.Box.Height));
+        var toMouth = new Vector2(p.TailTipX - p.TailBaseX, p.TailTipY - p.TailBaseY);
+        _tail.anchoredPosition = -toMouth.normalized * _tailTuck;
+        _tail.localRotation = Quaternion.Euler(0f, 0f, p.TailDegrees);
+    }
+
+    /// <summary>The least gap between the bubble and a pill (canvas reference px).</summary>
+    private const float BubbleGap = 8f;
+
+    /// <summary>Adds an active pill's rect in canvas space to the bubble's obstacles.</summary>
+    private void AddObstacle(RectTransform pill, RectTransform canvas)
+    {
+        if (pill == null || !pill.gameObject.activeInHierarchy)
+            return;
+        pill.GetWorldCorners(_corners);
+        Vector3 a = canvas.InverseTransformPoint(_corners[0]), b = canvas.InverseTransformPoint(_corners[2]);
+        _pills.Add(new FaceRect(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y)));
     }
 
     /// <summary>The office camera the ring and the bubble are placed through (the office binder's, from the art office).</summary>
@@ -452,7 +525,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
 
         if (started || !_bubbleUp)
         {
-            bubble.Show(_speech.Text, traveller != null ? traveller.Anchor : null, config.bubbleOffset, float.PositiveInfinity);
+            bubble.Show(_speech.Text, traveller != null ? traveller.Anchor : null, Vector2.zero, float.PositiveInfinity); // placed by PlaceBubble
             _flip.Show(bubble.Label, _speech.Text, _translation.Bubble(CurrentLine, _speech.LineSeconds), _translation);
             _bubbleUp = true;
             RefreshBubbleInput();

@@ -23,6 +23,9 @@ public static class LookCanvas
     /// <summary>The chin.</summary>
     public const int Chin = 424;
 
+    /// <summary>The mouth (a quarter of the head above the chin): where the speech bubble's tail points.</summary>
+    public const int Mouth = 383;
+
     /// <summary>The shoulder line.</summary>
     public const int Shoulders = 500;
 
