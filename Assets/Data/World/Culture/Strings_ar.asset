@@ -4273,6 +4273,50 @@ MonoBehaviour:
     text: "\u0645\u0648\u0642\u0639 \u0627\u0644\u0639\u0645\u0644"
     gloss: 0
     tier: 0
+  - key: doc.their_face
+    text: "\u0648\u062C\u0647\u0647"
+    gloss: 0
+    tier: 0
+  - key: doc.look
+    text: "\u0627\u0646\u0638\u0631 >"
+    gloss: 0
+    tier: 0
+  - key: doc.passport_office
+    text: "\u0645\u0643\u062A\u0628 \u0627\u0644\u062C\u0648\u0627\u0632\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch
+    text: "\u0625\u0631\u0633\u0627\u0644 \u0642\u0627\u0639\u0629 \u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_directorate
+    text: "\u0645\u062F\u064A\u0631\u064A\u0629 \u062A\u0633\u0648\u064A\u0629 \u0627\u0644\u062F\u064A\u0648\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.labour_placement_bureau
+    text: "\u0645\u0643\u062A\u0628 \u062A\u0648\u0638\u064A\u0641 \u0627\u0644\u0639\u0645\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry
+    text: "\u0633\u062C\u0644 \u0627\u0644\u0646\u0627\u0632\u062D\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.returns_office
+    text: "\u0645\u0643\u062A\u0628 \u0627\u0644\u0639\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.the_temporal_times
+    text: "\u0635\u062D\u064A\u0641\u0629 \u0627\u0644\u0632\u0645\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.chronopedia
+    text: "\u0645\u0648\u0633\u0648\u0639\u0629 \u0627\u0644\u0632\u0645\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.lineage_archive
+    text: "\u0623\u0631\u0634\u064A\u0641 \u0627\u0644\u0623\u0646\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u0625\u0637\u0641\u0627\u0621"
     english: Turn off
@@ -6448,6 +6492,14 @@ MonoBehaviour:
     english: returnee
   - native: "\u0627\u0644\u0645\u0648\u0642\u0639"
     english: signatory; site
+  - native: "\u0627\u0644\u062C\u0648\u0627\u0632\u0627\u062A"
+    english: passports
+  - native: "\u062A\u0648\u0638\u064A\u0641"
+    english: placement
+  - native: "\u0645\u0648\u0633\u0648\u0639\u0629"
+    english: encyclopedia
+  - native: "\u0627\u0644\u0639\u0645\u0627\u0644\u0629"
+    english: labour
   - native: "\u0627\u0644\u0645\u0648\u0638\u0641"
     english: the clerk
   - native: "\u0622\u0644\u0629"

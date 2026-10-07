@@ -3866,6 +3866,50 @@ MonoBehaviour:
     text: Luogo di lavoro
     gloss: 0
     tier: 0
+  - key: doc.their_face
+    text: Il suo volto
+    gloss: 0
+    tier: 0
+  - key: doc.look
+    text: Guarda >
+    gloss: 0
+    tier: 0
+  - key: doc.passport_office
+    text: Ufficio Passaporti
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch
+    text: Spedizioni Sala dei Portali
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_directorate
+    text: Direzione Sgravio del debito
+    gloss: 0
+    tier: 0
+  - key: doc.labour_placement_bureau
+    text: Ufficio Collocamento Lavoro
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry
+    text: Registro degli sfollati
+    gloss: 0
+    tier: 0
+  - key: doc.returns_office
+    text: Ufficio Rientri
+    gloss: 0
+    tier: 0
+  - key: doc.the_temporal_times
+    text: Il Corriere del Tempo
+    gloss: 0
+    tier: 0
+  - key: doc.chronopedia
+    text: Cronopedia
+    gloss: 0
+    tier: 0
+  - key: doc.lineage_archive
+    text: Archivio delle stirpi
+    gloss: 0
+    tier: 0
   words:
   - native: spegni
     english: Turn off
@@ -5843,6 +5887,12 @@ MonoBehaviour:
     english: returnee
   - native: Firmatario
     english: signatory
+  - native: Passaporti
+    english: passports
+  - native: Collocamento
+    english: placement
+  - native: Cronopedia
+    english: Chronopedia
   - native: dell'ufficio
     english: of the office
   - native: nell'Archivio

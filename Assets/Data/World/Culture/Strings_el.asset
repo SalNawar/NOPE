@@ -4585,6 +4585,53 @@ MonoBehaviour:
     text: "\u03A4\u03CC\u03C0\u03BF\u03C2 \u03B5\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\u03C2"
     gloss: 0
     tier: 0
+  - key: doc.their_face
+    text: "\u03A4\u03BF \u03C0\u03C1\u03CC\u03C3\u03C9\u03C0\u03CC \u03C4\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.look
+    text: "\u039A\u03BF\u03AF\u03C4\u03B1 >"
+    gloss: 0
+    tier: 0
+  - key: doc.passport_office
+    text: "\u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF \u0394\u03B9\u03B1\u03B2\u03B1\u03C4\u03B7\u03C1\u03AF\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch
+    text: "\u0391\u03C0\u03BF\u03C3\u03C4\u03BF\u03BB\u03AE \u0391\u03AF\u03B8\u03BF\u03C5\u03C3\u03B1\u03C2
+      \u03A0\u03C5\u03BB\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_directorate
+    text: "\u0394\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7 \u0395\u03BB\u03AC\u03C6\u03C1\u03C5\u03BD\u03C3\u03B7\u03C2
+      \u03A7\u03C1\u03AD\u03BF\u03C5\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.labour_placement_bureau
+    text: "\u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1 \u03A4\u03BF\u03C0\u03BF\u03B8\u03AD\u03C4\u03B7\u03C3\u03B7\u03C2
+      \u0395\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry
+    text: "\u039C\u03B7\u03C4\u03C1\u03CE\u03BF \u0395\u03BA\u03C4\u03BF\u03C0\u03B9\u03C3\u03BC\u03AD\u03BD\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.returns_office
+    text: "\u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF \u0395\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.the_temporal_times
+    text: "\u0397 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03AE \u0395\u03C6\u03B7\u03BC\u03B5\u03C1\u03AF\u03B4\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.chronopedia
+    text: "\u03A7\u03C1\u03BF\u03BD\u03BF\u03C0\u03B1\u03AF\u03B4\u03B5\u03B9\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.lineage_archive
+    text: "\u0391\u03C1\u03C7\u03B5\u03AF\u03BF \u039A\u03B1\u03C4\u03B1\u03B3\u03C9\u03B3\u03AE\u03C2"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u03C3\u03B2\u03AE\u03C3\u03B9\u03BC\u03BF"
     english: Turn off
@@ -6514,3 +6561,9 @@ MonoBehaviour:
     english: signatory
   - native: "\u03BA\u03BF\u03C5\u03BB\u03BF\u03C7\u03AD\u03C1\u03B7"
     english: slot machine
+  - native: "\u03B4\u03B9\u03B1\u03B2\u03B1\u03C4\u03B7\u03C1\u03AF\u03C9\u03BD"
+    english: passports
+  - native: "\u03C4\u03BF\u03C0\u03BF\u03B8\u03AD\u03C4\u03B7\u03C3\u03B7\u03C2"
+    english: placement
+  - native: "\u03C7\u03C1\u03BF\u03BD\u03BF\u03C0\u03B1\u03AF\u03B4\u03B5\u03B9\u03B1"
+    english: Chronopedia

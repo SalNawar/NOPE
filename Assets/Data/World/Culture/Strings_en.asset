@@ -4054,4 +4054,48 @@ MonoBehaviour:
     text: Worksite
     gloss: 0
     tier: 1
+  - key: doc.their_face
+    text: Their face
+    gloss: 0
+    tier: 1
+  - key: doc.look
+    text: Look >
+    gloss: 0
+    tier: 1
+  - key: doc.passport_office
+    text: Passport Office
+    gloss: 0
+    tier: 1
+  - key: doc.portal_hall_dispatch
+    text: Portal Hall Dispatch
+    gloss: 0
+    tier: 1
+  - key: doc.debt_relief_directorate
+    text: Debt Relief Directorate
+    gloss: 0
+    tier: 1
+  - key: doc.labour_placement_bureau
+    text: Labour Placement Bureau
+    gloss: 0
+    tier: 1
+  - key: doc.displacement_registry
+    text: Displacement Registry
+    gloss: 0
+    tier: 1
+  - key: doc.returns_office
+    text: Returns Office
+    gloss: 0
+    tier: 1
+  - key: doc.the_temporal_times
+    text: The Temporal Times
+    gloss: 0
+    tier: 1
+  - key: doc.chronopedia
+    text: Chronopedia
+    gloss: 0
+    tier: 1
+  - key: doc.lineage_archive
+    text: Lineage Archive
+    gloss: 0
+    tier: 1
   words: []

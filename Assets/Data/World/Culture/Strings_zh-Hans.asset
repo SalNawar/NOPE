@@ -3807,6 +3807,50 @@ MonoBehaviour:
     text: "\u5DE5\u5730"
     gloss: 0
     tier: 0
+  - key: doc.their_face
+    text: "\u5176\u9762\u5BB9"
+    gloss: 0
+    tier: 0
+  - key: doc.look
+    text: "\u67E5\u770B >"
+    gloss: 0
+    tier: 0
+  - key: doc.passport_office
+    text: "\u62A4\u7167\u529E\u516C\u5BA4"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch
+    text: "\u4F20\u9001\u95E8\u5927\u5385\u8C03\u5EA6"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_directorate
+    text: "\u503A\u52A1\u51CF\u514D\u603B\u7F72"
+    gloss: 0
+    tier: 0
+  - key: doc.labour_placement_bureau
+    text: "\u52B3\u52A1\u6D3E\u9063\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry
+    text: "\u6D41\u79BB\u8005\u767B\u8BB0\u5904"
+    gloss: 0
+    tier: 0
+  - key: doc.returns_office
+    text: "\u8FD4\u7A0B\u529E\u516C\u5BA4"
+    gloss: 0
+    tier: 0
+  - key: doc.the_temporal_times
+    text: "\u65F6\u95F4\u65F6\u62A5"
+    gloss: 0
+    tier: 0
+  - key: doc.chronopedia
+    text: "\u65F6\u95F4\u767E\u79D1"
+    gloss: 0
+    tier: 0
+  - key: doc.lineage_archive
+    text: "\u4E16\u7CFB\u6863\u6848\u9986"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u5173\u95ED"
     english: Turn off
@@ -5580,5 +5624,11 @@ MonoBehaviour:
     english: returnee
   - native: "\u7B7E\u7F72\u4EBA"
     english: signatory
+  - native: "\u52B3\u52A1"
+    english: labour
+  - native: "\u6D3E\u9063"
+    english: placement
+  - native: "\u767E\u79D1"
+    english: encyclopedia
   - native: N
     english: N (number format)

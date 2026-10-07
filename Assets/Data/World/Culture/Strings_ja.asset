@@ -3831,6 +3831,50 @@ MonoBehaviour:
     text: "\u4F5C\u696D\u73FE\u5834"
     gloss: 0
     tier: 0
+  - key: doc.their_face
+    text: "\u672C\u4EBA\u306E\u9854"
+    gloss: 0
+    tier: 0
+  - key: doc.look
+    text: "\u898B\u308B >"
+    gloss: 0
+    tier: 0
+  - key: doc.passport_office
+    text: "\u65C5\u5238\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch
+    text: "\u30DD\u30FC\u30BF\u30EB\u30DB\u30FC\u30EB\u767A\u9001\u4FC2"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_directorate
+    text: "\u50B5\u52D9\u6551\u6E08\u7DCF\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.labour_placement_bureau
+    text: "\u52B4\u50CD\u65A1\u65CB\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry
+    text: "\u6F02\u6D41\u8005\u767B\u9332\u7C3F"
+    gloss: 0
+    tier: 0
+  - key: doc.returns_office
+    text: "\u5E30\u9084\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.the_temporal_times
+    text: "\u6642\u7A7A\u65B0\u5831"
+    gloss: 0
+    tier: 0
+  - key: doc.chronopedia
+    text: "\u30AF\u30ED\u30CE\u30DA\u30C7\u30A3\u30A2"
+    gloss: 0
+    tier: 0
+  - key: doc.lineage_archive
+    text: "\u7CFB\u8B5C\u6587\u66F8\u9928"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u753B\u9762"
     english: Screen
@@ -5236,6 +5280,10 @@ MonoBehaviour:
     english: P
   - native: N
     english: N
+  - native: "\u65A1\u65CB"
+    english: placement
+  - native: "\u30AF\u30ED\u30CE\u30DA\u30C7\u30A3\u30A2"
+    english: Chronopedia
   - native: "\u4FC2\u54E1"
     english: clerk
   - native: "\u96C6"

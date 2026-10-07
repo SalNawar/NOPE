@@ -3859,6 +3859,50 @@ MonoBehaviour:
     text: Arbeitsort
     gloss: 0
     tier: 0
+  - key: doc.their_face
+    text: Ihr Gesicht
+    gloss: 0
+    tier: 0
+  - key: doc.look
+    text: Ansehen >
+    gloss: 0
+    tier: 0
+  - key: doc.passport_office
+    text: Passamt
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch
+    text: Abfertigung Portalhalle
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_directorate
+    text: "Direktion f\xFCr Schuldenerlass"
+    gloss: 0
+    tier: 0
+  - key: doc.labour_placement_bureau
+    text: "Amt f\xFCr Arbeitsvermittlung"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry
+    text: Vertriebenenregister
+    gloss: 0
+    tier: 0
+  - key: doc.returns_office
+    text: "Amt f\xFCr R\xFCckf\xFChrungen"
+    gloss: 0
+    tier: 0
+  - key: doc.the_temporal_times
+    text: Der Zeitbote
+    gloss: 0
+    tier: 0
+  - key: doc.chronopedia
+    text: "Chronop\xE4die"
+    gloss: 0
+    tier: 0
+  - key: doc.lineage_archive
+    text: Abstammungsarchiv
+    gloss: 0
+    tier: 0
   words:
   - native: bildschirm
     english: Screen
@@ -4019,7 +4063,7 @@ MonoBehaviour:
   - native: anordnen
     english: arrange
   - native: Ansehen
-    english: standing
+    english: standing / look
   - native: Antwort
     english: answer
   - native: Antworten
@@ -5976,3 +6020,9 @@ MonoBehaviour:
     english: returnee
   - native: Unterzeichner
     english: signatory
+  - native: Passamt
+    english: passport office
+  - native: Arbeitsvermittlung
+    english: labour placement
+  - native: "Chronop\xE4die"
+    english: Chronopedia
