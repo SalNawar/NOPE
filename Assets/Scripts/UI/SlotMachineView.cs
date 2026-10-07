@@ -538,7 +538,7 @@ public sealed class SlotMachineView : MonoBehaviour
             titleText.color = dim || _broke ? new Color(_titleColour.r * 0.75f, _titleColour.g * 0.75f, _titleColour.b * 0.75f, _titleColour.a) : _titleColour;
     }
 
-    /// <summary>The price plate (blinking "Insert credits" without the credits) and the SPACE keycap's face.</summary>
+    /// <summary>The price plate ("Insert credits" blinking red and brass without the credits) and the SPACE keycap's face.</summary>
     private void DrawDeck(SlotSpinKnobs knobs, MotionAmount amount)
     {
         bool blinkOn = !_broke || amount.Reduced || Mathf.FloorToInt(_since / Mathf.Max(0.05f, knobs.insertBlinkSeconds)) % 2 == 0;
@@ -549,11 +549,7 @@ public sealed class SlotMachineView : MonoBehaviour
                 priceFace.sprite = plate;
         }
         if (priceText != null)
-        {
-            Color ink = _broke ? (kit != null ? kit.inkOnDark : Color.white) : (kit != null ? kit.inkOnLight : Color.black);
-            ink.a = blinkOn ? 1f : 0.35f;
-            priceText.color = ink;
-        }
+            priceText.color = _broke && blinkOn ? (kit != null ? kit.inkOnDark : Color.white) : (kit != null ? kit.inkOnLight : Color.black); // the plate blinks red and brass, the words stay readable on both
         if (keyFace != null)
         {
             Sprite cap = Kit(_broke ? "keycap_bone_locked" : _since < _keyUntil ? "keycap_bone_pressed" : "keycap_bone_rest");
