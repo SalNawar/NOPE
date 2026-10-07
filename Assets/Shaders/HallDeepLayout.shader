@@ -29,6 +29,7 @@ Shader "NOPE/Hall Deep Layout"
  TEXTURE2D(_MorningShadow);SAMPLER(sampler_MorningShadow);
  TEXTURE2D(_NoonShadow);TEXTURE2D(_EveningShadow);
  float4 _StateWeights,_CanvasSize;float _LightingAmount,_CloudMotion,_Region,_CityPan,_CeilingCutoff;
+ float _FixtureLevels[16];float4 _FixtureCenters[16];int _ScheduledFixtureCount;
  struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  V vert(A v){V o;o.position=TransformObjectToHClip(v.position.xyz);o.uv=v.uv;o.color=v.color;return o;}
@@ -61,7 +62,17 @@ Shader "NOPE/Hall Deep Layout"
   half3 fixture=lerp(source.rgb,SAMPLE_TEXTURE2D(_FixtureReference,sampler_FixtureReference,v.uv).rgb,saturate(_UseFixtureReference));
   half neutral=min(fixture.r,min(fixture.g,fixture.b));
   half emission=smoothstep(.76,.94,neutral)*step(p.y,_CeilingCutoff)*step(_CanvasSize.x*.36,p.x)*(1-max(mask.r,mask.g));
-  half3 lit=source.rgb*tint*(1-shadow*mask.b)+emission*half3(1,.78,.5)*(.18*_StateWeights.z+.45*_StateWeights.w);
+  // Ceiling diffusers use the nearest registered fixture's live schedule,
+  // including the lighting switch, stagger, custom sunset and strike flicker.
+  float level=0,nearest=1e20;
+  [loop] for(int i=0;i<_ScheduledFixtureCount;i++)
+  {
+   float2 d=(v.uv-_FixtureCenters[i].xy)*_CanvasSize.xy;float distance=dot(d,d);
+   if(distance<nearest){nearest=distance;level=_FixtureLevels[i];}
+  }
+  // Unlit glass stays visible; bright emission is separate from the background.
+  source.rgb*=lerp(1,.38,emission*(1-level));
+  half3 lit=source.rgb*tint*(1-shadow*mask.b)+emission*half3(1,.78,.5)*(.45*level);
   source.rgb=lerp(source.rgb,lit,saturate(_LightingAmount));
   return source;
  }
