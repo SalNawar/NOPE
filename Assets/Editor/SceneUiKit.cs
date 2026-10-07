@@ -298,7 +298,9 @@ internal static class SceneUiKit
     /// <paramref name="scale"/> sprite pixels per unit, grown past the host by
     /// the sprite's empty pad so the drawn plate fills the host's rect; a
     /// control on the host (a Button, a Toggle, an input field) swaps the
-    /// piece's sprites (rest, hover, pressed, locked) on its face. A stateful
+    /// piece's sprites (rest, hover, pressed, locked) on its face and gets its
+    /// game feel (UiKitSO.Show adds its UiJuice; the motion's assets are made
+    /// and wired here, MotionAuthoring.EnsureAssets). A stateful
     /// piece is named without its state ("plate_ox"), any other by its sprite
     /// ("panel_bone"). Returns the face, or null (with an error) when the kit
     /// has no such piece.
@@ -373,6 +375,7 @@ internal static class SceneUiKit
             bool states = kit.Get(piece, KitState.Hover) != null;
             control.transition = states ? Selectable.Transition.SpriteSwap : Selectable.Transition.None;
             kit.Show(face, piece, states ? control : null);
+            MotionAuthoring.EnsureAssets();
         }
         EditorUtility.SetDirty(host);
         return face;

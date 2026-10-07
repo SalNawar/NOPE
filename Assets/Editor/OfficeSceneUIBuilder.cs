@@ -1090,7 +1090,8 @@ public static partial class OfficeSceneUIBuilder
     /// present, placeholders otherwise, with click points derived from the art;
     /// the office objects' outline hull material) and assigns them to RunConfig, from which
     /// InteractionFeedbackBootstrap builds the one persistent HoverHighlighter
-    /// used in every scene. Idempotent.
+    /// used in every scene; and the game feel's motion tuning and sounds
+    /// (MotionAuthoring.EnsureAssets). Idempotent.
     /// </summary>
     private static void BuildInteractionFeedback()
     {
@@ -1136,6 +1137,7 @@ public static partial class OfficeSceneUIBuilder
             runConfig.interactionFeedback = settings;
             EditorUtility.SetDirty(runConfig);
         }
+        MotionAuthoring.EnsureAssets();
 
         AssetDatabase.SaveAssets();
     }
