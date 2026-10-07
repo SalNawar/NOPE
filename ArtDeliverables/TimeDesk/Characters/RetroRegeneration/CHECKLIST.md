@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 266. Full regeneration is NOT complete.
+Saved: 290. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -270,3 +270,27 @@ Saved: 266. Full regeneration is NOT complete.
 | premade_qinshihuang__thinking_c | visually reviewed; registration pending |
 | premade_qinshihuang__objecting_c | visually reviewed; registration pending |
 | premade_qinshihuang_photo | visually reviewed; registration pending |
+| premade_kulthum_neutral | visually reviewed; registration pending |
+| premade_kulthum_happy | visually reviewed; registration pending |
+| premade_kulthum_angry | visually reviewed; registration pending |
+| premade_kulthum_worried | visually reviewed; registration pending |
+| premade_kulthum__explaining_a | visually reviewed; registration pending |
+| premade_kulthum__thinking_a | visually reviewed; registration pending |
+| premade_kulthum__objecting_a | visually reviewed; registration pending |
+| premade_kulthum_photo | visually reviewed; registration pending |
+| premade_leonardo_neutral | visually reviewed; registration pending |
+| premade_leonardo_happy | visually reviewed; registration pending |
+| premade_leonardo_angry | visually reviewed; registration pending |
+| premade_leonardo_worried | visually reviewed; registration pending |
+| premade_leonardo__explaining_b | visually reviewed; registration pending |
+| premade_leonardo__thinking_b | visually reviewed; registration pending |
+| premade_leonardo__objecting_b | visually reviewed; registration pending |
+| premade_leonardo_photo | visually reviewed; registration pending |
+| premade_elizabeth_neutral | visually reviewed; registration pending |
+| premade_elizabeth_happy | visually reviewed; registration pending |
+| premade_elizabeth_angry | visually reviewed; registration pending |
+| premade_elizabeth_worried | visually reviewed; registration pending |
+| premade_elizabeth__explaining_c | visually reviewed; registration pending |
+| premade_elizabeth__thinking_c | visually reviewed; registration pending |
+| premade_elizabeth__objecting_c | visually reviewed; registration pending |
+| premade_elizabeth_photo | visually reviewed; registration pending |
