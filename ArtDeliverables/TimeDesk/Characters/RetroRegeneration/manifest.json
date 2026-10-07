@@ -7937,6 +7937,761 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "striped yelek robe",
+      "details": "Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial.",
+      "flags": {
+        "label": "striped yelek robe"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-59c27e19-d661-4d1f-85fe-eb04c4367d03.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_industrial__objecting_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: striped yelek robe. Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "212ad1be7ed71c6d493dfffd894b6b3cb5ee3d770680eaa793f1f63223c7596c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "curtain of thin plaits",
+      "details": "Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Centre-parted, with many long thin plaits falling behind the shoulders, spread wide so they show on both sides of the neck, each plait ending in small gold safa ornaments\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw hair_f_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "curtain of thin plaits",
+        "back": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6482631c-ea05-4eb1-8a65-a8401e3337d5.png",
+      "prompt": "Production modular historical clothing asset hair_f_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: curtain of thin plaits. Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Centre-parted, with many long thin plaits falling behind the shoulders, spread wide so they show on both sides of the neck, each plait ending in small gold safa ornaments\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw hair_f_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_f_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "85f95c3a618cb5bdeafa3fa0b2cc1d1fad321b512d8cf81b64f1809237bf3c8c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "tarha veil",
+      "details": "Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Tarha: a long white muslin head veil with its ends embroidered in coloured silk and gold thread. It rests on the head and falls over both shoulders and down the sides of the body to below the knee, and the face is fully uncovered.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw headwear_f_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "tarha veil",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a7966188-3b0e-425e-9db2-d3fd0ae3fa77.png",
+      "prompt": "Production modular historical clothing asset headwear_f_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: tarha veil. Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Tarha: a long white muslin head veil with its ends embroidered in coloured silk and gold thread. It rests on the head and falls over both shoulders and down the sides of the body to below the knee, and the face is fully uncovered.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw headwear_f_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/headwear_f_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9da1a95d043261c80e02794600c8177f3b79b9c61a33f1c6d80471ef9a75aa61",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "kirdan choker",
+      "details": "Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Kirdan: a gold choker-collar necklace hung with a row of teardrop and disc pendants\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw accessory_f_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "kirdan choker"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e3ce7a7b-3e32-436b-a02a-e41ca4829a55.png",
+      "prompt": "Production modular historical clothing asset accessory_f_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: kirdan choker. Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Kirdan: a gold choker-collar necklace hung with a row of teardrop and disc pendants\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw accessory_f_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_f_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e8060ac1a68c3e7284bd1d85e17f98186db9fbacb97b653cb23c3eaca588a2bf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "galabiya and jacket",
+      "details": "Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern.",
+      "flags": {
+        "label": "galabiya and jacket"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2e488c9f-d337-4895-aa53-331766f81722.png",
+      "prompt": "Production modular historical clothing asset outfit_m_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: galabiya and jacket. Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_m_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e30da9bb03a8d5b2bc3d633168ab4f3b7479897c326187c9b999dc187ef2231f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_modern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "galabiya and jacket",
+      "details": "Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern.",
+      "flags": {
+        "label": "galabiya and jacket"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1206c785-6122-4e86-a7d5-67dada5835b4.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_modern__explaining_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: galabiya and jacket. Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_modern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "320aa51b9b724f363e1e9c5ff8d2a9fd08ddb3ece8095a35dc9606a1094658b1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_modern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "galabiya and jacket",
+      "details": "Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern.",
+      "flags": {
+        "label": "galabiya and jacket"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0cd9c9b0-aacf-4320-b1a4-a99c7b6a3bcb.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_modern__thinking_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: galabiya and jacket. Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_modern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "422caa98cf70050c2475bfb1dffba01d6cdf1c412c5d80f4bde082b05a619348",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_modern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "galabiya and jacket",
+      "details": "Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern.",
+      "flags": {
+        "label": "galabiya and jacket"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3c1ac301-3ddd-4baa-a706-9b3bfd399eb6.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_modern__objecting_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: galabiya and jacket. Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_m_egypt_modern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_modern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "24deaafb4a12e34e430f0ef30e3780a34310d3bb9883a1c3568ef1a82933ba55",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "combed-back hair",
+      "details": "Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Short hair combed straight back from a high forehead\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw hair_m_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "combed-back hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8df56d84-982a-4136-92ed-703fd18de2bf.png",
+      "prompt": "Production modular historical clothing asset hair_m_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: combed-back hair. Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Short hair combed straight back from a high forehead\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw hair_m_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_m_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b931fd88d806d78907cfb0b97202fbd3e050f4c95cdd40cb244a02c361f14cfe",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "thick moustache",
+      "details": "Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Thick, neat moustache, otherwise clean-shaven\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw facialhair_m_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "thick moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d3832ce5-4821-4e36-b840-847c9bd42b5c.png",
+      "prompt": "Production modular historical clothing asset facialhair_m_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested facialhair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: thick moustache. Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Thick, neat moustache, otherwise clean-shaven\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw facialhair_m_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/facialhair_m_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "380e6d77fbbe7b84a3d31e6a696bbc934653a8353133053e1742f2432206cf38",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "fringed shal",
+      "details": "Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Shal: a long, plain dark wool scarf (brown, charcoal or camel) with a knotted fringe, draped round the neck so both ends hang straight down the chest outside the jacket. No stripes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw accessory_m_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "fringed shal",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2663ecdb-1fc1-4dad-8e12-f1fcbe512bad.png",
+      "prompt": "Production modular historical clothing asset accessory_m_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: fringed shal. Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Shal: a long, plain dark wool scarf (brown, charcoal or camel) with a knotted fringe, draped round the neck so both ends hang straight down the chest outside the jacket. No stripes.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw accessory_m_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_m_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c512c7ed9e7394c12efe001b160b06471bad4107e7eacdf89a7857e64f0f44cb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "printed galabiya",
+      "details": "Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern.",
+      "flags": {
+        "label": "printed galabiya"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3c9ec242-813a-4adc-b3fe-b39bf5a0ea58.png",
+      "prompt": "Production modular historical clothing asset outfit_f_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: printed galabiya. Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_f_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "539ec67867aeabf365d82f93b645f8e76c85d7b902505f48805b011ad5ee2172",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_modern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "printed galabiya",
+      "details": "Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern.",
+      "flags": {
+        "label": "printed galabiya"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-35d8e7f9-787b-40e2-b3c4-3d47ff0361d4.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_modern__explaining_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: printed galabiya. Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_modern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b26c8a072f35651ade9094a7fa479ecec0b8782ff86aecdc9f86f9cdab633304",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_modern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "printed galabiya",
+      "details": "Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern.",
+      "flags": {
+        "label": "printed galabiya"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-44de4985-3441-4258-9fa9-e531fc121f00.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_modern__thinking_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: printed galabiya. Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_modern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2181cdc756aca75a93a6e108837be425394c44b373896eefe92f2dc043bf9937",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_modern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "printed galabiya",
+      "details": "Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern.",
+      "flags": {
+        "label": "printed galabiya"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1986575e-7ed6-4aa8-9756-7fbb999ad24c.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_modern__objecting_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: printed galabiya. Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw outfit_f_egypt_modern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_modern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "398c6e004d981f1babeda2be2dedd468f2b9c23c457467a3e3266f43581cce06",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "smooth plaited hair",
+      "details": "Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Long hair, centre-parted and smoothed flat to the head, in one thick plait hanging down the back, hidden from the front\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw hair_f_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "smooth plaited hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aa59d012-8e33-4c6c-8098-7c86435cee0d.png",
+      "prompt": "Production modular historical clothing asset hair_f_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: smooth plaited hair. Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Long hair, centre-parted and smoothed flat to the head, in one thick plait hanging down the back, hidden from the front\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw hair_f_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_f_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "28468c84a8acce9963cfa69bbda62128e8e1f5f49a33bcbbee49c764fd5c31ca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "mandil",
+      "details": "Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Mandil abu oya: a coloured triangular cotton headscarf tied at the back of the head (knot at the nape, point covering the back of the head), its front edge trimmed with a fringe of tiny crocheted flowers or beads that frames the forehead. Face, chin and neck fully visible.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw headwear_f_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "mandil",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0919f712-7075-46ac-a386-4ec03e397419.png",
+      "prompt": "Production modular historical clothing asset headwear_f_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: mandil. Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Mandil abu oya: a coloured triangular cotton headscarf tied at the back of the head (knot at the nape, point covering the back of the head), its front edge trimmed with a fringe of tiny crocheted flowers or beads that frames the forehead. Face, chin and neck fully visible.\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw headwear_f_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/headwear_f_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0a00848601cd70a7ebc25a11e0114695cd5140eebe901462f872c981002422a7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_egypt_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "country": "egypt",
+      "era": "modern",
+      "label": "gold bangles",
+      "details": "Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ghawayesh: a stack of thick gold bangles on each wrist\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw accessory_f_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "gold bangles"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_egypt_modern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0c2fea18-1cce-415f-9d67-536307ba040c.png",
+      "prompt": "Production modular historical clothing asset accessory_f_egypt_modern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Nasser's Egypt. Historical context: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956). Requested item: gold bangles. Subject: woman of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).\nDraw: Ghawayesh: a stack of thick gold bangles on each wrist\nAvoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume\nOutput one full-canvas raw accessory_f_egypt_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_f_egypt_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "15067b52692a5669ef7a9ef3dd4fc4adcd22d2d829f7bff5643e65cd1805beac",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "pleated sash kilt",
+      "details": "",
+      "flags": {
+        "label": "pleated sash kilt"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6932f9c3-62b1-44c9-b888-466625a8d0ae.png",
+      "prompt": "Production modular historical clothing asset outfit_m_egypt_ancient2. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: pleated sash kilt.  Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_m_egypt_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bd4fd7d1289b5b039491122e9c9e641a75cf9a1ac5feeca7ef793a96cb29665d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "pleated sash kilt",
+      "details": "",
+      "flags": {
+        "label": "pleated sash kilt"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1cdf8425-808f-4c26-8514-aea57a564fc8.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient2__explaining_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: pleated sash kilt.  Preserve cloth design across pose variants. No text labels. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e8a4fe438aa1da60dde3739df15cda38d4516ecbcddd8c41d32d9ffd00967f7d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "pleated sash kilt",
+      "details": "",
+      "flags": {
+        "label": "pleated sash kilt"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2add7380-66a7-409a-bb02-30c5eaff22fd.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient2__thinking_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: pleated sash kilt.  Preserve cloth design across pose variants. No text labels. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d1a76dacc1e77230cbdd18dde79b08e000cb5a51b1ae5121b466fd88579f3a8b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "pleated sash kilt",
+      "details": "",
+      "flags": {
+        "label": "pleated sash kilt"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-979fb011-8b47-466f-87c4-39116ab568d8.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient2__objecting_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: pleated sash kilt.  Preserve cloth design across pose variants. No text labels. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "53ec9bc03295be74bc64b1dfa4626b2ab40802c96b4fa7df8a5ebb497f7da22e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "striped short wig",
+      "details": "",
+      "flags": {
+        "label": "striped short wig"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-dda416d9-70f0-4b09-949a-d05d5f47d2a0.png",
+      "prompt": "Production modular historical clothing asset hair_m_egypt_ancient2. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: striped short wig.  Preserve cloth design across pose variants. No text labels. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/hair_m_egypt_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "72f67290ef4eba87157615597b357f2964f3b1cc117787d4db019b987a018383",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_egypt_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "khepresh cap",
+      "details": "",
+      "flags": {
+        "label": "khepresh cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-955940e0-60e8-43bc-abb9-c5215a056f16.png",
+      "prompt": "Production modular historical clothing asset headwear_m_egypt_ancient2. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: khepresh cap.  Preserve cloth design across pose variants. No text labels. Khepresh means a plain blue cloth cap silhouette with no cobra, crown, or royal insignia. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings. Correct ONLY the headwear: compact rounded bulbous blue linen khepresh-shaped cap, raised rounded front, fitted down to nape. No dangling tail, no scarf, no turban folds, no cone. Blue fabric only with a narrow blue lower band. Preserve the rest of the image and full canvas.",
+      "path": "Raw/headwear_m_egypt_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "54075dad3327c3ed968eab6ab9fc5b8bb594113c2438b367e8960ffce17c9b30",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "country": "egypt",
+      "era": "ancient2",
+      "label": "fringed pleated robe",
+      "details": "",
+      "flags": {
+        "label": "fringed pleated robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_ancient2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f327b233-a4f9-4f6a-baf3-266d4d23a387.png",
+      "prompt": "Production modular historical clothing asset outfit_f_egypt_ancient2. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ramesside Egypt. Historical context: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites). Requested item: fringed pleated robe.  Preserve cloth design across pose variants. No text labels. Khepresh means a plain blue cloth cap silhouette with no cobra, crown, or royal insignia. All exposed magenta regions have no anatomical markings. Non-outfit fitting guides wear an opaque magenta long sleeve shirt and trousers. For headwear hair or accessories the guide wears an opaque magenta long sleeve shirt and trousers. For any exposed magenta areas use flat featureless fill without anatomical markings.",
+      "path": "Raw/outfit_f_egypt_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8eaeb6254fb6780da12795f11917389db9975f8ea4e3bf1020a63709f88c767d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
