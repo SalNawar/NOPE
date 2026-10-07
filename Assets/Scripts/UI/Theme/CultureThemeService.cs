@@ -12,7 +12,8 @@ using UnityEngine.UI;
 /// leader) is applied to every ThemeTag in the loaded scene when the scene
 /// loads, never during a shift: colours by role, the culture's font, its
 /// labels (or English, by setting or when no installed font draws them), the
-/// wallpaper, the compare colours; diegetic roles are skipped. It also holds
+/// wallpaper (the most recent world change's: DesktopWallpaper), the compare
+/// colours; diegetic roles are skipped. It also holds
 /// the string lookup UiText reads and the Future currency the wallet shows.
 /// From the Translation Lens's day (TranslationLens.LanguageLocked) the
 /// player's "Always English" no longer applies: the labels follow history and
@@ -51,6 +52,9 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
     /// <summary>The themed texts' font; null = the project's default TMP font.</summary>
     private TMP_FontAsset _font;
+
+    /// <summary>The desktop's wallpaper (ResolveWallpaper).</summary>
+    private Sprite _wallpaper;
 
     /// <summary>The runtime font cache.</summary>
     private RuntimeFonts _fonts;
@@ -154,6 +158,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
                                 cultureLabels ? cultureTable.words : null);
 
         FutureCurrency = ResolveFutureCurrency(id);
+        _wallpaper = ResolveWallpaper(id);
 
         if (_target.HasValue)
         {
@@ -245,6 +250,27 @@ public sealed class CultureThemeService : TimelineCueReceiver
         return currency;
     }
 
+    /// <summary>
+    /// The desktop's wallpaper: the most recent world change's
+    /// (DesktopWallpaper.Pick over the latched answers, WorldState.leads, so
+    /// it changes the morning after the night that changed the world), else
+    /// the theme's (the leading culture's, or neutral). Without a run (the
+    /// title) the theme's.
+    /// </summary>
+    private Sprite ResolveWallpaper(string cultureId)
+    {
+        if (!RunManager.HasInstance || RunManager.Instance.World == null)
+            return ActiveTheme.wallpaper;
+
+        WallpaperPick pick = DesktopWallpaper.Pick(Library.World.PullFactors(), RunManager.Instance.World.leads, cultureId);
+        if (pick.IsCulture)
+            return ActiveTheme.wallpaper;
+        Sprite outcome = Library.NeutralTheme.OutcomeWallpaper(pick.Factor, pick.Outcome);
+        if (outcome == null)
+            WarnOnce("wallpaper:" + pick.Factor + "/" + pick.Outcome, $"[CultureThemeService] No wallpaper for the world outcome '{pick.Factor}/{pick.Outcome}'; the desktop keeps the culture's. Run Tools > TimeDesk > Generate World.");
+        return outcome != null ? outcome : ActiveTheme.wallpaper;
+    }
+
     /// <summary>Applies the theme to every root of a loaded scene.</summary>
     private void ApplyScene(Scene scene)
     {
@@ -296,7 +322,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
         if (tag.Role == ThemeRoleId.Desktop)
         {
-            Sprite wallpaper = ActiveTheme.wallpaper;
+            Sprite wallpaper = _wallpaper;
             image.sprite = wallpaper;
             image.color = wallpaper != null ? Color.white : entry.fill;
             if (wallpaper != null && tag.TryGetComponent(out AspectRatioFitter fitter))

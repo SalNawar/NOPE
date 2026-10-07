@@ -22538,6 +22538,88 @@
       ],
       "wallpaper": "Assets/Art/Generated/xp_bliss.png"
     },
+    "wallpapers": [
+      {
+        "factor": "government",
+        "outcome": "democracy",
+        "wallpaper": "Assets/Art/Wallpapers/government_democracy.png"
+      },
+      {
+        "factor": "government",
+        "outcome": "monarchy",
+        "wallpaper": "Assets/Art/Wallpapers/government_monarchy.png"
+      },
+      {
+        "factor": "government",
+        "outcome": "fascism",
+        "wallpaper": "Assets/Art/Wallpapers/government_fascism.png"
+      },
+      {
+        "factor": "government",
+        "outcome": "communism",
+        "wallpaper": "Assets/Art/Wallpapers/government_communism.png"
+      },
+      {
+        "factor": "government",
+        "outcome": "theocracy",
+        "wallpaper": "Assets/Art/Wallpapers/government_theocracy.png"
+      },
+      {
+        "factor": "government",
+        "outcome": "technocracy",
+        "wallpaper": "Assets/Art/Wallpapers/government_technocracy.png"
+      },
+      {
+        "factor": "government",
+        "outcome": "corporate_board",
+        "wallpaper": "Assets/Art/Wallpapers/government_corporate_board.png"
+      },
+      {
+        "factor": "future",
+        "outcome": "nuclear",
+        "wallpaper": "Assets/Art/Wallpapers/future_nuclear.png"
+      },
+      {
+        "factor": "future",
+        "outcome": "cybernetic",
+        "wallpaper": "Assets/Art/Wallpapers/future_cybernetic.png"
+      },
+      {
+        "factor": "future",
+        "outcome": "space_age",
+        "wallpaper": "Assets/Art/Wallpapers/future_space_age.png"
+      },
+      {
+        "factor": "future",
+        "outcome": "naturalism",
+        "wallpaper": "Assets/Art/Wallpapers/future_naturalism.png"
+      },
+      {
+        "factor": "future",
+        "outcome": "anarchy",
+        "wallpaper": "Assets/Art/Wallpapers/future_anarchy.png"
+      },
+      {
+        "factor": "money",
+        "outcome": "jubilee",
+        "wallpaper": "Assets/Art/Wallpapers/money_jubilee.png"
+      },
+      {
+        "factor": "money",
+        "outcome": "company_towns",
+        "wallpaper": "Assets/Art/Wallpapers/money_company_towns.png"
+      },
+      {
+        "factor": "money",
+        "outcome": "commons",
+        "wallpaper": "Assets/Art/Wallpapers/money_commons.png"
+      },
+      {
+        "factor": "money",
+        "outcome": "banking_houses",
+        "wallpaper": "Assets/Art/Wallpapers/money_banking_houses.png"
+      }
+    ],
     "strings": [
       {
         "key": "accept",

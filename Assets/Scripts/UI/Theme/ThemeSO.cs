@@ -49,6 +49,22 @@ public sealed class ThemeSO : ScriptableObject
     /// <summary>The desktop wallpaper (text-free art; a generated placeholder until final art exists).</summary>
     public Sprite wallpaper;
 
+    /// <summary>
+    /// The neutral theme's only: the wallpaper of each world outcome that is
+    /// not "as the run found it" (world_source.json ui.wallpapers), shown
+    /// when that change is the most recent (DesktopWallpaper.Pick).
+    /// </summary>
+    public List<OutcomeWallpaper> outcomeWallpapers = new List<OutcomeWallpaper>();
+
+    /// <summary>The wallpaper of <paramref name="factor"/>'s outcome <paramref name="outcome"/>, or null.</summary>
+    public Sprite OutcomeWallpaper(string factor, string outcome)
+    {
+        foreach (OutcomeWallpaper w in outcomeWallpapers)
+            if (w != null && w.factor == factor && w.outcome == outcome)
+                return w.wallpaper;
+        return null;
+    }
+
     /// <summary>Palette entries by role (built on first use).</summary>
     [NonSerialized] private Dictionary<ThemeRoleId, PaletteEntry> _byRole;
 
@@ -70,6 +86,20 @@ public sealed class ThemeSO : ScriptableObject
 
     /// <summary>Drops the cached lookup after a reload.</summary>
     private void OnEnable() => _byRole = null;
+}
+
+/// <summary>A world outcome's desktop wallpaper (ThemeSO.outcomeWallpapers).</summary>
+[Serializable]
+public sealed class OutcomeWallpaper
+{
+    /// <summary>The factor's id ("government").</summary>
+    public string factor;
+
+    /// <summary>The outcome's id ("democracy").</summary>
+    public string outcome;
+
+    /// <summary>Its text-free wallpaper.</summary>
+    public Sprite wallpaper;
 }
 
 /// <summary>One OS font to try: a font file (and face index for .ttc collections) found through Font.GetPathsToOSFonts, else a family and style name.</summary>

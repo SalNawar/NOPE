@@ -770,7 +770,8 @@ public static partial class ContentLibraryValidator
     /// UiStrings.TableProblems; every theme has a colour for every role and
     /// passes the contrast check with its stored palette and rings (the same
     /// pairs as Generate World); a theme whose labels need an OS font names one;
-    /// a missing wallpaper is a warning.
+    /// a missing wallpaper is a warning, and so is a world outcome (other
+    /// than the one the run found) with no wallpaper in the neutral theme.
     /// </summary>
     private static int CheckCulture(ContentLibrarySO lib)
     {
@@ -837,6 +838,15 @@ public static partial class ContentLibraryValidator
             if (theme.wallpaper == null)
             {
                 Debug.LogWarning($"[ContentLibraryValidator] Theme '{theme.cultureId}' has no wallpaper in '{lib.name}': the desktop shows its plain colour.", theme);
+                issues++;
+            }
+        }
+
+        foreach (PullFactor f in lib.World.PullFactors())
+        {
+            foreach (string outcome in f.Outcomes.Where(o => o != f.StatusQuo && neutral.OutcomeWallpaper(f.Id, o) == null))
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] World outcome '{f.Id}/{outcome}' has no wallpaper in the neutral theme of '{lib.name}': the desktop keeps the culture's when it changes.", neutral);
                 issues++;
             }
         }

@@ -121,7 +121,36 @@ public static partial class WorldContentGenerator
             if (theme != null)
                 plan.themes.Add(theme);
         }
+
+        CheckOutcomeWallpapers(ui.wallpapers, BuildWorld(src.world, null), errors);
         return plan;
+    }
+
+    /// <summary>
+    /// The world outcomes' wallpapers (ui.wallpapers; DesktopWallpaper): each
+    /// row names a factor answered by pulls and one of its outcomes other than
+    /// its "as you found it" one (that one shows the culture's), once, with an
+    /// existing .png under Assets/Art/; every such outcome has a row.
+    /// </summary>
+    private static void CheckOutcomeWallpapers(WallpaperData[] rows, WorldContent world, List<string> errors)
+    {
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        string root = System.IO.Directory.GetParent(Application.dataPath).FullName;
+        foreach (WallpaperData w in rows ?? Array.Empty<WallpaperData>())
+        {
+            string owner = $"ui.wallpapers '{w?.factor}/{w?.outcome}'";
+            errors.AddRange(world.RefProblems(owner, w?.factor, w?.outcome, null));
+            if (world.Factor(w?.factor)?.statusQuo == w?.outcome)
+                errors.Add($"{owner} is the factor's \"as you found it\" outcome, which shows the culture's wallpaper.");
+            if (!seen.Add(w?.factor + "/" + w?.outcome))
+                errors.Add($"{owner} is listed twice.");
+            if (string.IsNullOrWhiteSpace(w?.wallpaper) || !w.wallpaper.StartsWith("Assets/Art/") || !w.wallpaper.EndsWith(".png") ||
+                !System.IO.File.Exists(System.IO.Path.Combine(root, w.wallpaper)))
+                errors.Add($"{owner}: wallpaper '{w?.wallpaper}' must be an existing .png under Assets/Art/.");
+        }
+        foreach (PullFactor f in world.PullFactors())
+            foreach (string outcome in f.Outcomes.Where(o => o != f.StatusQuo && !seen.Contains(f.Id + "/" + o)))
+                errors.Add($"ui.wallpapers has no row for '{f.Id}/{outcome}': the desktop would show nothing new when it changes the world.");
     }
 
     /// <summary>Resolves and checks one theme; null when its block is missing.</summary>
@@ -176,6 +205,10 @@ public static partial class WorldContentGenerator
         tables.AddRange(plan.languages.Select(l => MakeStringTable(l.data.language, l.data.rtl, l.entries, l.data.words, written)));
 
         ThemeSO neutral = MakeTheme(plan.neutral, written);
+        neutral.outcomeWallpapers = (plan.ui.wallpapers ?? Array.Empty<WallpaperData>())
+            .Select(w => new OutcomeWallpaper { factor = w.factor, outcome = w.outcome, wallpaper = ImportWallpaper(w.wallpaper) })
+            .ToList();
+        EditorUtility.SetDirty(neutral);
         ThemeSO[] themes = plan.themes.Select(t => MakeTheme(t, written)).ToArray();
         return (neutral, themes, tables.ToArray());
     }
@@ -238,7 +271,12 @@ public static partial class WorldContentGenerator
                                  CulturePlaceholders.Wallpaper(WallpaperWidth, WallpaperHeight, colours[0], colours[1], colours[2], colours[3], colours[4]));
             Debug.Log($"[WorldContentGenerator] No art at {path}; generated a text-free placeholder. Replace the PNG in place (keep its .meta) with final text-free art.");
         }
+        return ImportWallpaper(path);
+    }
 
+    /// <summary>The wallpaper sprite at an existing path, its import kept a single sprite with mipmaps (the live monitor shows it small, K18).</summary>
+    private static Sprite ImportWallpaper(string path)
+    {
         if (AssetImporter.GetAtPath(path) is TextureImporter imp &&
             (imp.textureType != TextureImporterType.Sprite || imp.spriteImportMode != SpriteImportMode.Single || !imp.mipmapEnabled))
         {
@@ -333,7 +371,11 @@ public static partial class WorldContentGenerator
         public CultureData neutral;
         public StringData[] strings;
         public LanguageData[] languages;
+        public WallpaperData[] wallpapers;
     }
+
+    /// <summary>One world outcome's desktop wallpaper (ui.wallpapers).</summary>
+    [Serializable] private sealed class WallpaperData { public string factor; public string outcome; public string wallpaper; }
 
     /// <summary>One palette-map rule (textClass as a ContrastClass name).</summary>
     [Serializable] private sealed class RoleRuleData { public string role; public string fill; public float alpha = 1f; public string ink; public string textClass; }

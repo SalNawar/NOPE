@@ -414,3 +414,52 @@ MonoBehaviour:
   ringDark: {r: 0.03529412, g: 0.18039216, b: 0.4392157, a: 1}
   ringLight: {r: 1, g: 0.84313726, b: 0.43137255, a: 1}
   wallpaper: {fileID: 21300000, guid: 3b76634ee0f0e304ba0958315f4369f4, type: 3}
+  outcomeWallpapers:
+  - factor: government
+    outcome: democracy
+    wallpaper: {fileID: 21300000, guid: b761b1c4515c41aa997743f8bb8ddbac, type: 3}
+  - factor: government
+    outcome: monarchy
+    wallpaper: {fileID: 21300000, guid: 14c3a8aec7894db6baae0b20e569e11a, type: 3}
+  - factor: government
+    outcome: fascism
+    wallpaper: {fileID: 21300000, guid: ba6e5f4026764c8d95972aad3081926b, type: 3}
+  - factor: government
+    outcome: communism
+    wallpaper: {fileID: 21300000, guid: cec500d9e2c641cf94024ba4cb132c18, type: 3}
+  - factor: government
+    outcome: theocracy
+    wallpaper: {fileID: 21300000, guid: dd46b01cb6c5444999e1edf8a790cc6a, type: 3}
+  - factor: government
+    outcome: technocracy
+    wallpaper: {fileID: 21300000, guid: 24669712b1b54aacba48449cfcb92994, type: 3}
+  - factor: government
+    outcome: corporate_board
+    wallpaper: {fileID: 21300000, guid: 5f5bf93655ec47998c48beb29bf72682, type: 3}
+  - factor: future
+    outcome: nuclear
+    wallpaper: {fileID: 21300000, guid: bb54af9bde064c018966eb527e615694, type: 3}
+  - factor: future
+    outcome: cybernetic
+    wallpaper: {fileID: 21300000, guid: 9c2a575b6685479080b5c952e758cc4b, type: 3}
+  - factor: future
+    outcome: space_age
+    wallpaper: {fileID: 21300000, guid: a5bbc6c1855c439781f54aa68cf9f94d, type: 3}
+  - factor: future
+    outcome: naturalism
+    wallpaper: {fileID: 21300000, guid: 1d09b475aa0f4954ac3cda8c9607b65c, type: 3}
+  - factor: future
+    outcome: anarchy
+    wallpaper: {fileID: 21300000, guid: 69745cc26e3a48609807c5e48cf4e0b3, type: 3}
+  - factor: money
+    outcome: jubilee
+    wallpaper: {fileID: 21300000, guid: 58cd9d5ee9f04bb38dde1dfc136943b6, type: 3}
+  - factor: money
+    outcome: company_towns
+    wallpaper: {fileID: 21300000, guid: 6286b22b046b4c6c9619507bc76785d1, type: 3}
+  - factor: money
+    outcome: commons
+    wallpaper: {fileID: 21300000, guid: ec185e65f9ed441c8efb259914611aa4, type: 3}
+  - factor: money
+    outcome: banking_houses
+    wallpaper: {fileID: 21300000, guid: c0f43c4e83ae43cdb69efe7ba646ad24, type: 3}

@@ -364,3 +364,4 @@ MonoBehaviour:
   ringDark: {r: 0.05882353, g: 0.16470589, b: 0.3019608, a: 1}
   ringLight: {r: 0.9490196, g: 0.8235294, b: 0.47843137, a: 1}
   wallpaper: {fileID: 21300000, guid: d06feeac701c1ba42b27772eefe67efa, type: 3}
+  outcomeWallpapers: []
