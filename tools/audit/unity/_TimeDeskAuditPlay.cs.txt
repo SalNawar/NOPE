@@ -502,9 +502,16 @@ public static class _TimeDeskAuditPlay
         }
         GuidePage moment = guide.MomentPage(day);
         if (moment != null)
-            Check(o.Guide.ShowingNow == "moment" && book.Page == DeskRulebook.GuidePageIndex && book.GuideSheets[book.GuideSheetIndex].Id == moment.id &&
-                  o.Guide.Prompt.Line.Contains(moment.title) && !book.GuideBadge,
-                  $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it");
+        {
+            string open = book.GuideSheetIndex < book.GuideSheets.Count ? book.GuideSheets[book.GuideSheetIndex].Id : "?";
+            Check(o.Guide.ShowingNow == "moment" && book.Page == DeskRulebook.GuidePageIndex && open == moment.id && o.Guide.Prompt.Line.Contains(moment.title),
+                  $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it (page {book.Page}, sheet '{open}')");
+            // The badge marks a page added today until it is opened (the guide spec 2026-10-06 section 7): the moment opens the day's first
+            // new page, so it goes out, unless the day adds another (day 5: the scanner's page is opened, the Travel Permit's still waits).
+            List<string> unread = guide.NewOn(day).Where(g => g.id != moment.id).Select(g => g.id).ToList();
+            Check(book.GuideBadge == unread.Count > 0,
+                  $"day {day}: the GUIDE tab's badge stays exactly while another of today's pages is unread ([{string.Join(", ", unread)}], badge {book.GuideBadge})");
+        }
         else
             Check(o.Guide.ShowingNow.Length == 0 && book.GuideBadge == guide.NewOn(day).Count > 0, $"day {day}: no moment; the GUIDE tab's badge marks a new page");
     }
