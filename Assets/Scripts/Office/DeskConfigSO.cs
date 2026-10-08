@@ -90,8 +90,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
     [Min(0f)] public float counterRowDepth = 0.05f;
 
-    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the STAMPS tab and the inspect button): the spread lays them inside it (PaperSpread).</summary>
-    public Rect readingArea = new Rect(0.02f, 0.03f, 0.88f, 0.8f);
+    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the STAMPS tab, the inspect button and, at the bottom, the stamp drawer's band, stampBarView): the spread lays them inside it (PaperSpread).</summary>
+    public Rect readingArea = new Rect(0.02f, 0.2f, 0.88f, 0.63f);
 
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
@@ -160,7 +160,7 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The colour round the city panorama where it does not fill the screen (it is shown whole, fitted inside the screen; the palette's ink).</summary>
     public Color cityMatte = new Color(0.169f, 0.11f, 0.141f, 1f);
 
-    /// <summary>The city's depth parallax as it comes into view (Saleh 2026-10-07: "why is the city not animated and no parallax when you switch to it"): its pan (the living city shader's _CityPan, in shares of the painting) at the fade's start, settling to 0 over citySettleSeconds, the near roofs sweeping further than the sky (its depth map); the panorama is cropped by as much at each side so the sweep never runs off the painting.</summary>
+    /// <summary>The city's depth parallax as it comes into view (Saleh 2026-10-07: "why is the city not animated and no parallax when you switch to it"): its pan (the whole painting slides, in shares of the painting; the flying traffic in front slides further; never the shader's depth-map reprojection, which doubled the painted edges full screen, Saleh 2026-10-08) at the reveal, settling to 0 over citySettleSeconds; the panorama is cropped by as much at each side so the sweep never runs off the painting.</summary>
     [Range(0f, 0.2f)] public float cityParallax = 0.05f;
 
     /// <summary>Seconds the city's parallax sweep takes to settle once the city shows.</summary>
@@ -175,7 +175,7 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The headlights' size in the city view, against the hall window's (the shader's _HeadlightSize).</summary>
     [Min(0.1f)] public float cityHeadlightSize = 6f;
 
-    /// <summary>The flying traffic in the city view (the hall window's lanes, HallCityExterior.lanes, drawn over the panorama): its speed against the hall window's.</summary>
+    /// <summary>The flying traffic in the city view (the hall window's lanes, HallCityExterior.lanes, drawn over the panorama, each pass from off one edge of the frame to off the other): its speed against the hall window's.</summary>
     [Min(0f)] public float cityTrafficPace = 2.5f;
 
     /// <summary>The flying traffic's size in the city view, against its size in the hall window.</summary>
@@ -189,11 +189,17 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
     [Min(0.005f)] public float stampHover = 0.03f;
 
-    /// <summary>Where the stamp bar's middle (between its two daters' dies) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y). High on the right (run 7's integration): the passport slides so its visa page lies under the daters (DeskController.PassportUnderDaters), its data page whole and clear below the rack in the view.</summary>
-    public Vector2 stampBarView = new Vector2(0.66f, 0.62f);
+    /// <summary>Where the stamp drawer's middle (between its two daters' dies) stands out on the desk: the point of the desk the reading view shows there (viewport x, y). Low, at the view's bottom edge (Saleh's 1008a playtest: "the drawer is blocking the stamp area can we have it smaller and from the bottom"): the drawer rises from the bottom edge, below the papers' reading area.</summary>
+    public Vector2 stampBarView = new Vector2(0.6f, 0.108f);
 
-    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, toward the chair): in, it waits that far beyond where it hangs out, past the reading view's top (its motion's timing is MotionKnobs' drawer tunings).</summary>
-    [Min(0.1f)] public float stampBarTravel = 0.6f;
+    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, away from the chair): in, it waits that far nearer the chair, below the reading view's bottom edge (its motion's timing is MotionKnobs' drawer tunings).</summary>
+    [Min(0.1f)] public float stampBarTravel = 0.3f;
+
+    /// <summary>The stamp drawer's size against the model's (the drawer, its mechanism and its daters; Saleh's 1008a playtest: smaller).</summary>
+    [Range(0.3f, 1f)] public float stampDrawerScale = 0.58f;
+
+    /// <summary>Where the passport's stamp area goes as the drawer opens (DeskController.PassportToStampSpot): the point of the desk the reading view shows there (viewport x, y), above the drawer, so the whole passport lies clear of it.</summary>
+    public Vector2 stampSpotView = new Vector2(0.6f, 0.66f);
 
     /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
     [Range(0f, 0.2f)] public float daterInkFade = 0.035f;
@@ -204,8 +210,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much one print's density may vary around the pad's.</summary>
     [Range(0f, 0.3f)] public float daterInkSpread = 0.08f;
 
-    /// <summary>Where the DETAIN button stands on the desk (the desk machine spec §2: within easy reach, near the daters on the counter side): the point of the desk's plane the office view shows there (viewport x, y).</summary>
-    public Vector2 detainView = new Vector2(0.7f, 0.09f);
+    /// <summary>Where the DETAIN button stands on the desk: the point of the desk's plane the office view shows there at 16:9 (viewport x, y; the same spot of the desk at every aspect). Off the mat, where no paper lands (Saleh's 1008a playtest: "detain button is on the inspection area"): on the free desk between the cash register and the AVAILABLE sign, clear of the drawer, the scanner and the inspect button.</summary>
+    public Vector2 detainView = new Vector2(0.405f, 0.21f);
 
     /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;

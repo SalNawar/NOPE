@@ -332,10 +332,11 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>
     /// Lays the rack (the office binder, once the desk and the reading view
     /// are placed): out where the reading view shows the desk at
-    /// DeskConfigSO.stampBarView, the daters' feet stampHover above the desk,
-    /// facing along the office view's level <paramref name="levelForward"/>;
-    /// in stampBarTravel beyond it (away from the chair: the drawer slides
-    /// out toward the chair, as a drawer does).
+    /// DeskConfigSO.stampBarView (its bottom edge), the daters' feet
+    /// stampHover above the desk, facing along the office view's level
+    /// <paramref name="levelForward"/>, at DeskConfigSO.stampDrawerScale; in
+    /// stampBarTravel nearer the chair, below the view's bottom edge (the
+    /// drawer rises from the bottom, Saleh's 1008a playtest).
     /// </summary>
     public void Lay(Vector3 levelForward)
     {
@@ -349,8 +350,9 @@ public sealed class DeskStampTray : MonoBehaviour
         if (deskView == null || !deskView.TryViewPoint(config.stampBarView, desk, out Vector3 at))
             at = surface.transform.position;
         _out = new Vector3(at.x, desk + config.stampHover, at.z);
-        _in = _out + forward * config.stampBarTravel;
+        _in = _out - forward * config.stampBarTravel;
         _laid = true;
+        rack.localScale = Vector3.one * config.stampDrawerScale;
         rack.SetPositionAndRotation(Vector3.LerpUnclamped(_in, _out, _drawer.Travel), Quaternion.LookRotation(forward, Vector3.up));
     }
 
@@ -440,11 +442,11 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The paper that takes the verdict (-1: none, nobody here).</summary>
     public int Passport => _passport;
 
-    /// <summary>The point on the desk straight under the middle of the daters' dies while the bar is out (where the passport's visa page goes, DeskController); false before the rack is laid.</summary>
-    public bool TryDiesPoint(out Vector3 point)
+    /// <summary>The point on the desk where the passport's stamp area goes as the drawer opens (DeskConfigSO.stampSpotView in the reading view, above the drawer; DeskController); false without the reading view.</summary>
+    public bool TryStampSpot(out Vector3 point)
     {
-        point = _laid && surface != null ? new Vector3(_out.x, surface.transform.position.y, _out.z) : default;
-        return _laid && surface != null;
+        point = default;
+        return surface != null && config != null && deskView != null && deskView.TryViewPoint(config.stampSpotView, surface.transform.position.y, out point);
     }
 
     public void BeginCase(int passport)
@@ -809,9 +811,11 @@ public sealed class DeskStampTray : MonoBehaviour
             // The way up settles loosely (a millimetre): the dater heads back to the rack while its last wobble dies out.
             bool moving = handle.Stroke == Stroke.Down ? handle.Depth.Step(dt, tuning, 1e-5f, 1e-3f) : handle.Depth.Step(dt, tuning, 1e-3f, 0.05f);
             float depth = handle.Depth.Value, drop = Drop;
-            root.localPosition = handle.PressedAt + Vector3.down * Mathf.Min(depth, drop);
+            // The stroke is in metres; the dater's parent (the drawer, DeskConfigSO.stampDrawerScale) may be scaled.
+            float perMetre = root.parent != null && root.parent.lossyScale.y > 1e-4f ? 1f / root.parent.lossyScale.y : 1f;
+            root.localPosition = handle.PressedAt + Vector3.down * (Mathf.Min(depth, drop) * perMetre);
             if (handle.Body != null)
-                handle.Body.localPosition = handle.BodyHome + Vector3.down * Mathf.Max(0f, depth - drop);
+                handle.Body.localPosition = handle.BodyHome + Vector3.down * (Mathf.Max(0f, depth - drop) * perMetre);
             if (handle.Stroke == Stroke.Down)
             {
                 if (!handle.Contact && depth >= drop + knobs.daterCompress * 0.8f)

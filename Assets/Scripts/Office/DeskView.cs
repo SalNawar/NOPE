@@ -68,6 +68,9 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>True once posed from the art office's Cinemachine camera (Bind): the view can tilt, so the papers on the desk move only while it is on (BoothRules).</summary>
     public bool IsBound => _office != null;
 
+    /// <summary>The "▲ Back" control (the guide points at it for a thing only the office view shows), or null.</summary>
+    public RectTransform BackControl => backButton != null ? (RectTransform)backButton.transform : null;
+
     /// <summary>Raised after the view turns on or off.</summary>
     public event Action Changed;
 

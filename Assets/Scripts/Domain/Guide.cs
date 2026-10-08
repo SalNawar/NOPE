@@ -305,6 +305,25 @@ public static class GuideTargets
         return form != null;
     }
 
+    /// <summary>
+    /// The two ends of a comparison's arrow (Saleh's 1008a playtest: "the ftue
+    /// points to the papers on the folder"): first the value to pick, on the
+    /// paper (<c>pick</c>: the step's own "field:" target, else the Passport's
+    /// field of the step's first detail), then, once a value is held, what it is
+    /// held against (<c>against</c>: the step's own named target, else the
+    /// Passport's Citizen ID for another paper's Citizen ID, else today's rules
+    /// in the rulebook). Any other step points at its target throughout.
+    /// </summary>
+    public static (string pick, string against) CompareEnds(GuideStep step)
+    {
+        if (step == null || step.action != GuideAction.Compare || step.categories == null || step.categories.Count == 0)
+            return (step?.target, step?.target);
+        if (!TryField(step.target, out string form, out ClueCategory category))
+            return ($"field:{Directives.Visa}/{step.categories[0]}", step.target);
+        string against = category == ClueCategory.CitizenId && form != Directives.Visa ? $"field:{Directives.Visa}/{ClueCategory.CitizenId}" : "rulebook";
+        return (step.target, against);
+    }
+
     /// <summary>The form and the detail of a "field:form/Category" target.</summary>
     public static bool TryField(string target, out string form, out ClueCategory category)
     {

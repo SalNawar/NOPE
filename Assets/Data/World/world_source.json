@@ -76967,7 +76967,7 @@
             "Destination"
           ],
           "form": "",
-          "target": "board",
+          "target": "rulebook",
           "text": "Practice: two routes are open today (the board). Press {inspect}, click the Destination, then today's rule."
         }
       },
@@ -77283,7 +77283,7 @@
         "categories": [],
         "form": "",
         "target": "stamps",
-        "text": "Press {stamps} (or the grey STAMPS tab) to bring out the stamps."
+        "text": "Press {stamps} (or the STAMPS tab) to open the brass stamp drawer."
       },
       {
         "id": "stamp",

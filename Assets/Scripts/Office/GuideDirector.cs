@@ -95,10 +95,28 @@ public sealed class GuideDirector : MonoBehaviour
     private bool _shift;
     private bool _replayed;
     private Showing _showing;
+    /// <summary>A target read once (GuideTargets): its name, and for a "paper:" or "field:" one its form and detail.</summary>
+    private struct Target
+    {
+        public string Name;
+        public string Form;
+        public bool Field;
+        public ClueCategory Category;
+
+        public static Target Of(string name)
+        {
+            var t = new Target { Name = name };
+            t.Field = GuideTargets.TryField(name, out _, out t.Category);
+            GuideTargets.TryForm(name, out t.Form);
+            return t;
+        }
+    }
+
+    /// <summary>The arrow's target (a comparison's pick: the value on the paper), and where it points once a value is held (GuideTargets.CompareEnds).</summary>
+    private Target _pick, _against;
+
+    /// <summary>The arrow's target as shown first (the probes read it).</summary>
     private string _target;
-    private string _targetForm;
-    private bool _targetField;
-    private ClueCategory _targetCategory;
 
     /// <summary>TryPaper's reused list of one paper's field boxes (no allocation per frame).</summary>
     private readonly List<Bounds> _boxes = new List<Bounds>();
@@ -200,7 +218,7 @@ public sealed class GuideDirector : MonoBehaviour
                 deskView.TiltIn();
             Show(Showing.Moment, UiText.Get("guide.newToday"),
                  UiText.Format("guide.moment", page.title, GuideText.Keys(page.check)),
-                 false, page.point);
+                 false, (page.point, page.point));
         }
         else
         {
@@ -331,7 +349,7 @@ public sealed class GuideDirector : MonoBehaviour
             if (_guide.Record(_state, e))
             {
                 if (_state.ftueDone)
-                    Show(Showing.Done, UiText.Get("guide.done"), GuideText.Keys(_guide.Content.ftueDone), false, null);
+                    Show(Showing.Done, UiText.Get("guide.done"), GuideText.Keys(_guide.Content.ftueDone), false, (null, null));
                 else
                     ShowStep();
             }
@@ -369,7 +387,7 @@ public sealed class GuideDirector : MonoBehaviour
             Hide();
             return;
         }
-        Show(Showing.Step, UiText.Format("guide.step", _guide.StepNumber(_state), _guide.Content.ftue.Count), GuideText.Keys(step.text), true, step.target);
+        Show(Showing.Step, UiText.Format("guide.step", _guide.StepNumber(_state), _guide.Content.ftue.Count), GuideText.Keys(step.text), true, GuideTargets.CompareEnds(step));
     }
 
     /// <summary>The day's practice, when the traveller at the desk carries its feature.</summary>
@@ -379,10 +397,10 @@ public sealed class GuideDirector : MonoBehaviour
             return;
         IEnumerable<string> forms = _case.documents.Where(d => d != null && d.template != null).Select(d => d.template.formNumber);
         if (Guide.Carries(_practice, forms))
-            Show(Showing.Practice, UiText.Get("guide.practice"), GuideText.Keys(_practice.practice.text), false, _practice.practice.target);
+            Show(Showing.Practice, UiText.Get("guide.practice"), GuideText.Keys(_practice.practice.text), false, GuideTargets.CompareEnds(_practice.practice));
     }
 
-    private void Show(Showing what, string header, string line, bool skip, string target)
+    private void Show(Showing what, string header, string line, bool skip, (string pick, string against) target)
     {
         _showing = what;
         SetTarget(target);
@@ -393,17 +411,17 @@ public sealed class GuideDirector : MonoBehaviour
     private void Hide()
     {
         _showing = Showing.None;
-        SetTarget(null);
+        SetTarget((null, null));
         if (prompt != null)
             prompt.Hide();
     }
 
-    /// <summary>Where the arrow points from now on: a "paper:" or "field:" target is read once here (GuideTargets), so placing the arrow every frame allocates nothing.</summary>
-    private void SetTarget(string target)
+    /// <summary>Where the arrow points from now on (and, for a comparison, once a value is held): each target is read once here (GuideTargets), so placing the arrow every frame allocates nothing.</summary>
+    private void SetTarget((string pick, string against) target)
     {
-        _target = target;
-        _targetField = GuideTargets.TryField(target, out _, out _targetCategory);
-        GuideTargets.TryForm(target, out _targetForm);
+        _target = target.pick;
+        _pick = Target.Of(target.pick);
+        _against = target.against == target.pick ? _pick : Target.Of(target.against);
     }
 
     // ---- The arrow ----
@@ -416,7 +434,7 @@ public sealed class GuideDirector : MonoBehaviour
         bool pc = view != null && view.Current == OfficeView.MonitorFocus;
         if (pc)
         {
-            if (_target == "pc")
+            if (_pick.Name == "pc")
                 prompt.HideArrow();
             else
                 prompt.Hide();
@@ -424,15 +442,24 @@ public sealed class GuideDirector : MonoBehaviour
         }
         if (!prompt.IsShown)
             prompt.Show(prompt.Header, prompt.Line, _showing == Showing.Step);
-        if (string.IsNullOrEmpty(_target) || (city != null && city.IsOn))
+        Target target = inspect != null && inspect.ValueHeld ? _against : _pick;
+        if (string.IsNullOrEmpty(target.Name) || (city != null && city.IsOn))
         {
             prompt.HideArrow();
             return;
         }
-        if (TryUi(_target, out RectTransform ui))
+        if (TryUi(target.Name, out RectTransform ui))
             prompt.PointAt(ui);
-        else if (TryWorld(_target, out Vector3 world) && _camera != null)
-            prompt.PointAt(_camera, world);
+        else if (TryWorld(target, out Vector3 world) && _camera != null)
+        {
+            // A thing the reading view does not show (the calendar, the board, the scanner): the way back to the office, where it is.
+            Vector3 v = _camera.WorldToViewportPoint(world);
+            bool onScreen = v.z > 0f && v.x >= 0f && v.x <= 1f && v.y >= 0f && v.y <= 1f;
+            if (!onScreen && deskView != null && deskView.IsOn && deskView.BackControl != null)
+                prompt.PointAt(deskView.BackControl);
+            else
+                prompt.PointAt(_camera, world);
+        }
         else
             prompt.HideArrow();
     }
@@ -449,11 +476,11 @@ public sealed class GuideDirector : MonoBehaviour
         return ui != null;
     }
 
-    /// <summary>A world target's point: a named prop, or a paper of the traveller's (its printed fields' middle) or one field of it; a paper not on the desk yet points at the rulebook (its PAPERS tab).</summary>
-    private bool TryWorld(string target, out Vector3 world)
+    /// <summary>A world target's point: a named prop, today's rules in the rulebook, or a paper of the traveller's (its printed fields' middle) or one field of it; a paper the traveller has not handed over yet points at the traveller (ask them for it); with nobody at the desk (the morning's moment) a paper has no arrow.</summary>
+    private bool TryWorld(Target target, out Vector3 world)
     {
         world = default;
-        Transform t = target switch
+        Transform t = target.Name switch
         {
             "sign" => sign,
             "calendar" => calendar,
@@ -467,32 +494,22 @@ public sealed class GuideDirector : MonoBehaviour
             world = t.position;
             return true;
         }
-        if (target == "rulebook" || _targetForm != null)
+        if (target.Name == "rulebook")
+            return rulebook != null && rulebook.TryRulesPoint(out world);
+        if (target.Form != null)
         {
-            if (TryPaper(out world, out bool covered))
+            if (TryPaper(target, out world, out bool covered))
                 return true;
             if (covered)
                 return false; // on the desk but under other papers: no arrow over them (Saleh's playtest 2026-10-07)
-            if (TryRulebook(out world))
-                return true;
         }
-        if (target == "traveller" && traveller != null)
+        if ((target.Name == "traveller" || (target.Form != null && _case != null)) && traveller != null)
         {
             world = traveller.bounds.center;
             return true;
         }
         return false;
     }
-
-    /// <summary>The rulebook's tabs (its top edge: the arrow sits over the tabs, never over the page's text).</summary>
-    private bool TryRulebook(out Vector3 world)
-    {
-        world = rulebook != null ? rulebook.transform.TransformPoint(RulebookTabs) : default;
-        return rulebook != null;
-    }
-
-    /// <summary>Where the rulebook's tabs are in its own space (metres: the folder's PAPERS tab on its top edge; Build Office UI's folder, RulebookTabPlaces).</summary>
-    private static readonly Vector3 RulebookTabs = new Vector3(-0.019f, 0f, 0.119f);
 
     /// <summary>
     /// Where the traveller's paper the "paper:" or "field:" target names lies on
@@ -503,15 +520,15 @@ public sealed class GuideDirector : MonoBehaviour
     /// arrow never floats over a paper to point under it. Allocates nothing: the
     /// target is parsed once when it changes and the boxes list is reused.
     /// </summary>
-    private bool TryPaper(out Vector3 world, out bool covered)
+    private bool TryPaper(Target target, out Vector3 world, out bool covered)
     {
         world = default;
         covered = false;
-        string form = _targetForm;
+        string form = target.Form;
         if (_case == null || desk == null || form == null)
             return false;
-        bool field = _targetField;
-        ClueCategory category = _targetCategory;
+        bool field = target.Field;
+        ClueCategory category = target.Category;
         for (int d = 0; d < _case.documents.Count; d++)
         {
             DocumentInstance doc = _case.documents[d];

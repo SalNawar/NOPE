@@ -460,8 +460,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The 3D stamp bar hangs where the reading view shows the desk's right (Saleh 2026-10-06: "I want the 3D stamp").
         if (stampTray != null && _office != null)
             stampTray.Lay(_office.transform.forward);
-        // The DETAIN button stands on the desk where the office view shows DeskConfigSO.detainView (the desk machine spec §2).
-        if (detainButton != null && config != null && _officeVcam != null && detainButton.Lay(_officeVcam, _office != null ? _office.aspect : 16f / 9f, top, config.detainView))
+        // The DETAIN button stands on the desk where the office view shows DeskConfigSO.detainView at 16:9 (the same spot of the desk at every aspect).
+        if (detainButton != null && config != null && _officeVcam != null && detainButton.Lay(_officeVcam, 16f / 9f, top, config.detainView))
             ClearOfScanner(detainButton.transform, deskRect);
         if (rulebook != null && config != null && _office != null)
         {

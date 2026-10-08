@@ -467,7 +467,7 @@ public sealed class DeskController : MonoBehaviour
         _stack.BringToFront(paper.Index);
         ApplyStack();
         paper.SetZone(DeskZone.Desk, false);
-        // The passport brought to the desk while the dater rack is out lands with its visa page under the daters (PassportUnderDaters).
+        // The passport brought to the desk while the stamp drawer is out lands with its stamp area at the stamp spot, above the drawer (PassportUnderDaters).
         Vector3 under = default;
         bool underDaters = stamps != null && stamps.BarOut && paper.Index == stamps.Passport && TryUnderDaters(paper, out under);
         spot = underDaters ? under : ClearOfBlockers(paper, spot);
@@ -477,16 +477,14 @@ public sealed class DeskController : MonoBehaviour
     }
 
     /// <summary>
-    /// The passport's visa page under the daters (run 7's integration, the
-    /// orchestrator's call from the QA sweep: the rack hung over the data
-    /// page's photo and fields in the reading view, and a dater pressed where it
-    /// hangs printed over them). When the bar slides out, the passport lying on
-    /// the desk (not held, not sliding) slides so the middle of its stamp area
-    /// (DeskDocument.TryStampAreaCentre) lies straight under the middle of the
-    /// daters' dies (DeskStampTray.TryDiesPoint), and comes to the top; the
-    /// rack hangs high in the reading view (DeskConfigSO.stampBarView), so the
-    /// data page below it stays clear (Papers, Please: the visa page goes under
-    /// the stamp bar).
+    /// The passport ready to stamp, clear of the drawer (Saleh's 1008a
+    /// playtest: "the drawer is blocking the stamp area"). When the drawer
+    /// slides out of the reading view's bottom edge, the passport lying on the
+    /// desk (not held, not sliding) slides so the middle of its stamp area
+    /// (DeskDocument.TryStampAreaCentre) lies at the stamp spot above the
+    /// drawer (DeskStampTray.TryStampSpot, DeskConfigSO.stampSpotView), and
+    /// comes to the top: the whole passport shows above the drawer, a short
+    /// drag from the daters.
     /// </summary>
     private void PassportUnderDaters()
     {
@@ -509,7 +507,7 @@ public sealed class DeskController : MonoBehaviour
     private bool TryUnderDaters(DeskDocument paper, out Vector3 target)
     {
         target = default;
-        if (stamps == null || surface == null || !stamps.TryDiesPoint(out Vector3 dies) || !paper.TryStampAreaOffset(out Vector3 area))
+        if (stamps == null || surface == null || !stamps.TryStampSpot(out Vector3 dies) || !paper.TryStampAreaOffset(out Vector3 area))
             return false;
         target = surface.Clamp(new Vector3(dies.x - area.x, dies.y, dies.z - area.z));
         return true;

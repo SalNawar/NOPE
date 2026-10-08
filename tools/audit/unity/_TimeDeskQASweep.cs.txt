@@ -945,11 +945,11 @@ public static class _TimeDeskQASweep
             }
         Check(view != null && view.IsOn && fields.Count > 0 && covered.Count == 0,
               $"{tag}: with the rack out in the reading view it covers none of the passport's {fields.Count} field boxes and photo (reading view {view != null && view.IsOn}){List(covered)}");
-        if (paper.TryStampAreaOffset(out Vector3 offset) && o.Stamps.TryDiesPoint(out Vector3 dies))
+        if (paper.TryStampAreaOffset(out Vector3 offset) && o.Stamps.TryStampSpot(out Vector3 dies))
         {
             Vector3 area = paper.transform.position + offset;
             float off = new Vector2(area.x - dies.x, area.z - dies.z).magnitude;
-            Check(off < 0.01f, $"{tag}: the passport's visa page lies under the daters ({off * 1000f:0} mm from the dies' middle)");
+            Check(off < 0.01f, $"{tag}: the passport's stamp area lies at the stamp spot above the drawer ({off * 1000f:0} mm from it)");
         }
         else
         {
