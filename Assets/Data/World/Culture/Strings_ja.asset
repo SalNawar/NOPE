@@ -1158,6 +1158,18 @@ MonoBehaviour:
     text: "\u5F37\u3055"
     gloss: 0
     tier: 0
+  - key: settings.cameraSway
+    text: "\u30AB\u30E1\u30E9\u306E\u63FA\u308C"
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOff
+    text: "\u30AA\u30D5"
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOn
+    text: "\u30AA\u30F3"
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\u30A2\u30A4\u30B3\u30F3\u3092\u958B\u304F\u64CD\u4F5C"
     gloss: 0
@@ -3023,7 +3035,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: adopt.body
-    text: "\u7DCF\u5C40\u306E\u4FDD\u8B77\u65BD\u8A2D\u3067\u72AC\u3068\u732B\u304C\u5F85\u3063\u3066\u3044\u307E\u3059\u3002\u4ECA\u591C\u3069\u3061\u3089\u304B\u304C\u3042\u306A\u305F\u3068\u5BB6\u306B\u5E30\u308A\u307E\u3059\u3002\u9078\u3093\u3067\u3001\u540D\u524D\u3092\u3064\u3051\u3066\u304F\u3060\u3055\u3044\u3002"
+    text: "\u7DCF\u5C40\u306E\u4FDD\u8B77\u65BD\u8A2D\u3067\u72AC\u3068\u732B\u304C\u5F85\u3063\u3066\u3044\u307E\u3059\u3002\u4ECA\u591C\u3069\u3061\u3089\u304B\u304C\u3042\u306A\u305F\u3068\u5BB6\u306B\u5E30\u308A\u307E\u3059\u3002\u4E00\u5339\u3068\u6BDB\u8272\u3092\u9078\u3093\u3067\u3001\u540D\u524D\u3092\u3064\u3051\u3066\u304F\u3060\u3055\u3044\u3002"
     gloss: 0
     tier: 0
   - key: adopt.dog
@@ -3032,6 +3044,42 @@ MonoBehaviour:
     tier: 0
   - key: adopt.cat
     text: "\u732B"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.cream
+    text: "\u30AF\u30EA\u30FC\u30E0"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.tan
+    text: "\u6DE1\u3044\u8336"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.chocolate
+    text: "\u30C1\u30E7\u30B3\u30EC\u30FC\u30C8"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.charcoal
+    text: "\u30C1\u30E3\u30B3\u30FC\u30EB"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.grey
+    text: "\u30B0\u30EC\u30FC"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.white
+    text: "\u767D"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.ginger
+    text: "\u30AA\u30EC\u30F3\u30B8"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.slate
+    text: "\u30B9\u30EC\u30FC\u30C8"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.black
+    text: "\u9ED2"
     gloss: 0
     tier: 0
   - key: adopt.placeholder
@@ -5682,3 +5730,33 @@ MonoBehaviour:
     english: is done
   - native: "\u306A\u3044"
     english: not
+  - native: "\u30AF\u30EA\u30FC\u30E0"
+    english: cream
+  - native: "\u6DE1\u3044"
+    english: light
+  - native: "\u8336"
+    english: brown
+  - native: "\u30C1\u30E7\u30B3\u30EC\u30FC\u30C8"
+    english: chocolate
+  - native: "\u30C1\u30E3\u30B3\u30FC\u30EB"
+    english: charcoal
+  - native: "\u30B0\u30EC\u30FC"
+    english: grey
+  - native: "\u767D"
+    english: white
+  - native: "\u30AA\u30EC\u30F3\u30B8"
+    english: ginger
+  - native: "\u30B9\u30EC\u30FC\u30C8"
+    english: slate
+  - native: "\u9ED2"
+    english: black
+  - native: "\u4E00\u5339"
+    english: one (animal)
+  - native: "\u6BDB\u8272"
+    english: coat colour
+  - native: "\u30AB\u30E1\u30E9"
+    english: camera
+  - native: "\u63FA\u308C"
+    english: sway
+  - native: "\u30AA\u30F3"
+    english: on

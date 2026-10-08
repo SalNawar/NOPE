@@ -77,4 +77,40 @@ public class ScannerClearanceTests
         Assert.IsFalse(ScannerClearance.Overlaps(new DeskRect(x, y, 0.26f, 0.2f), near));
         Assert.Less(x, 0.4f);
     }
+
+    /// <summary>
+    /// The DETAIN button never stands on the scanner (Saleh's 1007d playtest):
+    /// it is laid by the office view's viewport, so at 16:9, 16:10, 21:9 and
+    /// 4:3 it lands at different places on the desk; wherever that is, over
+    /// the scanner's footprint (today's stand-in and a bigger new model) or
+    /// beside it, ClearProp leaves it clear of the footprint by at least the
+    /// gap, its centre on the desk, and a prop already clear does not move.
+    /// </summary>
+    [Test]
+    public void AProp_AtEveryAspectsPlace_IsLeftClearOfTheScannersFootprint()
+    {
+        var footprints = new[] { Scanner, new DeskRect(0.62f, 0.02f, 0.5f, 0.42f) };
+        // Where a viewport point lands across the desk at each aspect: the wider the screen, the further right the same viewport x.
+        float[] aspects = { 16f / 9f, 16f / 10f, 21f / 9f, 4f / 3f };
+        foreach (DeskRect scanner in footprints)
+            foreach (float aspect in aspects)
+                for (int ix = 0; ix <= 10; ix++)
+                    for (int iy = 0; iy <= 6; iy++)
+                    {
+                        float x = (ix / 10f - 0.5f) * 0.9f * aspect / (16f / 9f);
+                        float y = (iy / 6f - 0.5f) * 0.8f;
+                        var prop = new DeskRect(x, y, 0.12f, 0.1f);
+                        (float cx, float cy) = ScannerClearance.ClearProp(prop, scanner, Desk);
+                        var placed = new DeskRect(cx, cy, prop.Width, prop.Height);
+                        Assert.IsFalse(ScannerClearance.Overlaps(placed, scanner), $"aspect {aspect:0.00}: a prop at ({x:0.00},{y:0.00}) ends at ({cx:0.00},{cy:0.00}), on the scanner");
+                        bool apart = System.Math.Abs(cx - scanner.CentreX) * 2f >= scanner.Width + prop.Width + 2f * ScannerClearance.Gap - Eps
+                                     || System.Math.Abs(cy - scanner.CentreY) * 2f >= scanner.Height + prop.Height + 2f * ScannerClearance.Gap - Eps
+                                     || !ScannerClearance.Overlaps(prop, scanner);
+                        Assert.IsTrue(apart, $"aspect {aspect:0.00}: a moved prop keeps the gap from the scanner");
+                        Assert.IsTrue(cx >= Desk.CentreX - Desk.Width / 2f - Eps && cx <= Desk.CentreX + Desk.Width / 2f + Eps && cy >= Desk.CentreY - Desk.Height / 2f - Eps && cy <= Desk.CentreY + Desk.Height / 2f + Eps,
+                                      "the prop stays on the desk");
+                        if (!ScannerClearance.Overlaps(prop, scanner))
+                            Assert.AreEqual((x, y), (cx, cy), "a prop clear of the scanner stays where it was laid");
+                    }
+    }
 }

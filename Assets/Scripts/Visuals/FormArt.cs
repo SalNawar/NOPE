@@ -70,9 +70,6 @@ public sealed class ArtField
 
     /// <summary>The words the art's own label prints, in English ("SURNAME / GIVEN NAMES"; blank: the field's label): printed in the reading language over the art's clean face (FormArt.captions) when a culture's language is read.</summary>
     public string labelText = string.Empty;
-
-    /// <summary>True when the value is centred across its place (a row's number, a tick in a box); else it starts at the place's left.</summary>
-    public bool centre;
 }
 
 /// <summary>How an art caption is set (ArtCaption.kind): append only (serialized).</summary>

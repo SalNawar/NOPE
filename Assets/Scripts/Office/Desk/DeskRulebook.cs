@@ -50,6 +50,9 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The booklet's visible part and its click boxes, lifted off the desk plane by the stack (SetLift); the root stays on the plane, where the drag moves it.</summary>
     [SerializeField] private Transform booklet;
 
+    /// <summary>The folder's edge (a child of its card quad, in its unit space; a vertex-coloured material): its board and its pages seen from the side (PaperEdge; Saleh's 1007d playtest).</summary>
+    [SerializeField] private MeshFilter edge;
+
     /// <summary>The rules page's title ("TODAY'S RULES").</summary>
     [SerializeField] private TMP_Text title;
 
@@ -293,10 +296,43 @@ public sealed class DeskRulebook : MonoBehaviour
         CultureThemeService.LabelsChanged -= PrintLabels;
         if (drag != null)
             drag.DragEnded -= Dropped;
+        if (_edgeMesh != null)
+            Destroy(_edgeMesh);
     }
 
     /// <summary>Lays the booklet on the desk at <paramref name="at"/> (on the desk plane), turned to <paramref name="rotation"/> (the office binder).</summary>
     public void Place(Vector3 at, Quaternion rotation) => transform.SetPositionAndRotation(at, rotation);
+
+    /// <summary>The folder's thickness (metres; DeskConfigSO.folderThickness through ShowEdge): its room in the papers' stack.</summary>
+    public float Thickness { get; private set; } = 0.0025f;
+
+    /// <summary>The folder's body on its card (shares of the card, centre and size): the art's opaque folder, its tabs above it left out.</summary>
+    private const float BodyCentreX = 0.005f, BodyCentreY = -0.04f, BodyWidth = 0.93f, BodyHeight = 0.88f;
+
+    /// <summary>The board's and the pages' colours on the folder's edge.</summary>
+    private static readonly Color BoardTone = new Color(0.55f, 0.43f, 0.27f, 1f), PageLight = new Color(0.93f, 0.9f, 0.82f, 1f), PageDark = new Color(0.8f, 0.76f, 0.68f, 1f);
+
+    private Mesh _edgeMesh;
+
+    /// <summary>Builds the folder's edge <paramref name="thickness"/> metres deep (PaperEdge.Folder: its pages' edges over its board) under its body (DeskController, at load).</summary>
+    public void ShowEdge(float thickness)
+    {
+        Thickness = thickness;
+        if (edge == null)
+            return;
+        var outline = PaperEdge.Rectangle(BodyWidth, BodyHeight).ConvertAll(p => (p.x + BodyCentreX, p.y + BodyCentreY));
+        var vertices = new List<(float x, float y, float z)>();
+        var tones = new List<EdgeTone>();
+        var triangles = new List<int>();
+        PaperEdge.Walls(outline, PaperEdge.Bands(PaperKind.Folder, thickness), vertices, tones, triangles);
+        _edgeMesh ??= new Mesh { name = "FolderEdge" };
+        _edgeMesh.Clear();
+        _edgeMesh.SetVertices(vertices.ConvertAll(v => new Vector3(v.x, v.y, v.z)));
+        _edgeMesh.SetColors(tones.ConvertAll(t => t == EdgeTone.Cover ? BoardTone : t == EdgeTone.PageDark ? PageDark : PageLight));
+        _edgeMesh.SetTriangles(triangles, 0);
+        _edgeMesh.RecalculateBounds();
+        edge.sharedMesh = _edgeMesh;
+    }
 
     /// <summary>Lifts the booklet <paramref name="height"/> metres off the desk plane (its place in the papers' stack, or the drag's lift: DeskController).</summary>
     public void SetLift(float height)

@@ -24447,6 +24447,24 @@
         "tier": "Full"
       },
       {
+        "key": "settings.cameraSway",
+        "text": "Camera sway",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.cameraSwayOff",
+        "text": "Off",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.cameraSwayOn",
+        "text": "On",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "settings.desktop",
         "text": "Desktop icons open with",
         "gloss": "None",
@@ -27376,7 +27394,7 @@
       },
       {
         "key": "adopt.body",
-        "text": "The Directorate's shelter has a dog and a cat waiting. One of them goes home with you tonight. Choose, and give them a name.",
+        "text": "The Directorate's shelter has a dog and a cat waiting. One of them goes home with you tonight. Choose one and its coat, and give them a name.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -27389,6 +27407,60 @@
       {
         "key": "adopt.cat",
         "text": "Cat",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.cream",
+        "text": "Cream",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.tan",
+        "text": "Tan",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.chocolate",
+        "text": "Chocolate",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.charcoal",
+        "text": "Charcoal",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.grey",
+        "text": "Grey",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.white",
+        "text": "White",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.ginger",
+        "text": "Ginger",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.slate",
+        "text": "Slate",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "adopt.coat.black",
+        "text": "Black",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -29805,6 +29877,18 @@
             "text": "الشدة"
           },
           {
+            "key": "settings.cameraSway",
+            "text": "اهتزاز الكاميرا"
+          },
+          {
+            "key": "settings.cameraSwayOff",
+            "text": "إيقاف"
+          },
+          {
+            "key": "settings.cameraSwayOn",
+            "text": "تشغيل"
+          },
+          {
             "key": "settings.desktop",
             "text": "فتح أيقونات سطح المكتب بواسطة"
           },
@@ -31638,7 +31722,7 @@
           },
           {
             "key": "adopt.body",
-            "text": "في ملجأ المديرية كلب وقطة ينتظران. أحدهما يذهب معك إلى البيت الليلة. اختر, وأعطه اسما."
+            "text": "في ملجأ المديرية كلب وقطة ينتظران. أحدهما يذهب معك إلى البيت الليلة. اختر واحدا ولون فروه, وأعطه اسما."
           },
           {
             "key": "adopt.dog",
@@ -31647,6 +31731,42 @@
           {
             "key": "adopt.cat",
             "text": "قطة"
+          },
+          {
+            "key": "adopt.coat.cream",
+            "text": "كريمي"
+          },
+          {
+            "key": "adopt.coat.tan",
+            "text": "بني فاتح"
+          },
+          {
+            "key": "adopt.coat.chocolate",
+            "text": "شوكولاتة"
+          },
+          {
+            "key": "adopt.coat.charcoal",
+            "text": "فحمي"
+          },
+          {
+            "key": "adopt.coat.grey",
+            "text": "رمادي"
+          },
+          {
+            "key": "adopt.coat.white",
+            "text": "أبيض"
+          },
+          {
+            "key": "adopt.coat.ginger",
+            "text": "برتقالي"
+          },
+          {
+            "key": "adopt.coat.slate",
+            "text": "رصاصي"
+          },
+          {
+            "key": "adopt.coat.black",
+            "text": "أسود"
           },
           {
             "key": "adopt.placeholder",
@@ -36865,6 +36985,70 @@
           {
             "native": "الحظ",
             "english": "of luck"
+          },
+          {
+            "native": "كريمي",
+            "english": "Cream"
+          },
+          {
+            "native": "بني",
+            "english": "Brown"
+          },
+          {
+            "native": "فاتح",
+            "english": "Light"
+          },
+          {
+            "native": "شوكولاتة",
+            "english": "Chocolate"
+          },
+          {
+            "native": "فحمي",
+            "english": "Charcoal"
+          },
+          {
+            "native": "رمادي",
+            "english": "Grey"
+          },
+          {
+            "native": "أبيض",
+            "english": "White"
+          },
+          {
+            "native": "برتقالي",
+            "english": "Ginger"
+          },
+          {
+            "native": "رصاصي",
+            "english": "Slate"
+          },
+          {
+            "native": "أسود",
+            "english": "Black"
+          },
+          {
+            "native": "ولون",
+            "english": "and colour"
+          },
+          {
+            "native": "فروه",
+            "english": "its coat"
+          },
+          {
+            "native": "اهتزاز",
+            "english": "Sway"
+          },
+          {
+            "native": "الكاميرا",
+            "english": "camera"
+          },
+          {
+            "native": "إيقاف",
+            "english": "Off"
+          },
+          {
+            "native": "تشغيل",
+            "english": "On"
           }
         ]
       },
@@ -38011,6 +38195,18 @@
           {
             "key": "settings.motionIntensity",
             "text": "Ένταση"
+          },
+          {
+            "key": "settings.cameraSway",
+            "text": "Κούνημα κάμερας"
+          },
+          {
+            "key": "settings.cameraSwayOff",
+            "text": "Ανενεργό"
+          },
+          {
+            "key": "settings.cameraSwayOn",
+            "text": "Ενεργό"
           },
           {
             "key": "settings.desktop",
@@ -39846,7 +40042,7 @@
           },
           {
             "key": "adopt.body",
-            "text": "Το καταφύγιο της Διεύθυνσης έχει έναν σκύλο και μια γάτα που περιμένουν. Ένας από τους δύο έρχεται σπίτι μαζί σου απόψε. Διάλεξε και δώσε του όνομα."
+            "text": "Το καταφύγιο της Διεύθυνσης έχει έναν σκύλο και μια γάτα που περιμένουν. Ένας από τους δύο έρχεται σπίτι μαζί σου απόψε. Διάλεξε έναν και το τρίχωμά του, και δώσε του όνομα."
           },
           {
             "key": "adopt.dog",
@@ -39855,6 +40051,42 @@
           {
             "key": "adopt.cat",
             "text": "Γάτα"
+          },
+          {
+            "key": "adopt.coat.cream",
+            "text": "Κρεμ"
+          },
+          {
+            "key": "adopt.coat.tan",
+            "text": "Ανοιχτό καφέ"
+          },
+          {
+            "key": "adopt.coat.chocolate",
+            "text": "Σοκολατί"
+          },
+          {
+            "key": "adopt.coat.charcoal",
+            "text": "Ανθρακί"
+          },
+          {
+            "key": "adopt.coat.grey",
+            "text": "Γκρι"
+          },
+          {
+            "key": "adopt.coat.white",
+            "text": "Λευκό"
+          },
+          {
+            "key": "adopt.coat.ginger",
+            "text": "Πορτοκαλί"
+          },
+          {
+            "key": "adopt.coat.slate",
+            "text": "Μολυβί"
+          },
+          {
+            "key": "adopt.coat.black",
+            "text": "Μαύρο"
           },
           {
             "key": "adopt.placeholder",
@@ -44565,6 +44797,58 @@
           {
             "native": "χρονοπαίδεια",
             "english": "Chronopedia"
+          },
+          {
+            "native": "Κρεμ",
+            "english": "Cream"
+          },
+          {
+            "native": "καφέ",
+            "english": "brown"
+          },
+          {
+            "native": "Σοκολατί",
+            "english": "Chocolate"
+          },
+          {
+            "native": "Ανθρακί",
+            "english": "Charcoal"
+          },
+          {
+            "native": "Λευκό",
+            "english": "White"
+          },
+          {
+            "native": "Πορτοκαλί",
+            "english": "Ginger"
+          },
+          {
+            "native": "Μολυβί",
+            "english": "Slate"
+          },
+          {
+            "native": "Μαύρο",
+            "english": "Black"
+          },
+          {
+            "native": "τρίχωμά",
+            "english": "coat"
+          },
+          {
+            "native": "Κούνημα",
+            "english": "Sway"
+          },
+          {
+            "native": "κάμερας",
+            "english": "camera"
+          },
+          {
+            "native": "Ανενεργό",
+            "english": "Off"
+          },
+          {
+            "native": "Ενεργό",
+            "english": "On"
           }
         ]
       },
@@ -45711,6 +45995,18 @@
           {
             "key": "settings.motionIntensity",
             "text": "Intensità"
+          },
+          {
+            "key": "settings.cameraSway",
+            "text": "Oscillazione camera"
+          },
+          {
+            "key": "settings.cameraSwayOff",
+            "text": "Disattivata"
+          },
+          {
+            "key": "settings.cameraSwayOn",
+            "text": "Attivata"
           },
           {
             "key": "settings.desktop",
@@ -47546,7 +47842,7 @@
           },
           {
             "key": "adopt.body",
-            "text": "Il rifugio della Direzione ha un cane e un gatto in attesa. Uno dei due stasera torna a casa con te. Scegli, e dagli un nome."
+            "text": "Il rifugio della Direzione ha un cane e un gatto in attesa. Uno dei due stasera torna a casa con te. Scegli uno e il suo mantello, e dagli un nome."
           },
           {
             "key": "adopt.dog",
@@ -47555,6 +47851,42 @@
           {
             "key": "adopt.cat",
             "text": "Gatto"
+          },
+          {
+            "key": "adopt.coat.cream",
+            "text": "Crema"
+          },
+          {
+            "key": "adopt.coat.tan",
+            "text": "Fulvo"
+          },
+          {
+            "key": "adopt.coat.chocolate",
+            "text": "Cioccolato"
+          },
+          {
+            "key": "adopt.coat.charcoal",
+            "text": "Antracite"
+          },
+          {
+            "key": "adopt.coat.grey",
+            "text": "Grigio"
+          },
+          {
+            "key": "adopt.coat.white",
+            "text": "Bianco"
+          },
+          {
+            "key": "adopt.coat.ginger",
+            "text": "Rosso"
+          },
+          {
+            "key": "adopt.coat.slate",
+            "text": "Ardesia"
+          },
+          {
+            "key": "adopt.coat.black",
+            "text": "Nero"
           },
           {
             "key": "adopt.placeholder",
@@ -52389,6 +52721,58 @@
           {
             "native": "all'ordine",
             "english": "to the order"
+          },
+          {
+            "native": "Crema",
+            "english": "Cream"
+          },
+          {
+            "native": "Fulvo",
+            "english": "Tan"
+          },
+          {
+            "native": "Cioccolato",
+            "english": "Chocolate"
+          },
+          {
+            "native": "Antracite",
+            "english": "Charcoal"
+          },
+          {
+            "native": "Grigio",
+            "english": "Grey"
+          },
+          {
+            "native": "Bianco",
+            "english": "White"
+          },
+          {
+            "native": "Ardesia",
+            "english": "Slate"
+          },
+          {
+            "native": "Nero",
+            "english": "Black"
+          },
+          {
+            "native": "mantello",
+            "english": "coat"
+          },
+          {
+            "native": "Oscillazione",
+            "english": "Sway"
+          },
+          {
+            "native": "camera",
+            "english": "camera"
+          },
+          {
+            "native": "Disattivata",
+            "english": "Off"
+          },
+          {
+            "native": "Attivata",
+            "english": "On"
           }
         ]
       },
@@ -53535,6 +53919,18 @@
           {
             "key": "settings.motionIntensity",
             "text": "Stärke"
+          },
+          {
+            "key": "settings.cameraSway",
+            "text": "Kamerawackeln"
+          },
+          {
+            "key": "settings.cameraSwayOff",
+            "text": "Aus"
+          },
+          {
+            "key": "settings.cameraSwayOn",
+            "text": "An"
           },
           {
             "key": "settings.desktop",
@@ -55370,7 +55766,7 @@
           },
           {
             "key": "adopt.body",
-            "text": "Im Tierheim der Direktion warten ein Hund und eine Katze. Einer von ihnen geht heute Abend mit dir nach Hause. Wähle und gib ihm einen Namen."
+            "text": "Im Tierheim der Direktion warten ein Hund und eine Katze. Einer von ihnen geht heute Abend mit dir nach Hause. Wähle einen und sein Fell, und gib ihm einen Namen."
           },
           {
             "key": "adopt.dog",
@@ -55379,6 +55775,42 @@
           {
             "key": "adopt.cat",
             "text": "Katze"
+          },
+          {
+            "key": "adopt.coat.cream",
+            "text": "Creme"
+          },
+          {
+            "key": "adopt.coat.tan",
+            "text": "Hellbraun"
+          },
+          {
+            "key": "adopt.coat.chocolate",
+            "text": "Schokobraun"
+          },
+          {
+            "key": "adopt.coat.charcoal",
+            "text": "Anthrazit"
+          },
+          {
+            "key": "adopt.coat.grey",
+            "text": "Grau"
+          },
+          {
+            "key": "adopt.coat.white",
+            "text": "Weiß"
+          },
+          {
+            "key": "adopt.coat.ginger",
+            "text": "Rot"
+          },
+          {
+            "key": "adopt.coat.slate",
+            "text": "Schiefergrau"
+          },
+          {
+            "key": "adopt.coat.black",
+            "text": "Schwarz"
           },
           {
             "key": "adopt.placeholder",
@@ -60465,6 +60897,54 @@
           {
             "native": "Chronopädie",
             "english": "Chronopedia"
+          },
+          {
+            "native": "Creme",
+            "english": "Cream"
+          },
+          {
+            "native": "Hellbraun",
+            "english": "Tan"
+          },
+          {
+            "native": "Schokobraun",
+            "english": "Chocolate"
+          },
+          {
+            "native": "Anthrazit",
+            "english": "Charcoal"
+          },
+          {
+            "native": "Grau",
+            "english": "Grey"
+          },
+          {
+            "native": "Weiß",
+            "english": "White"
+          },
+          {
+            "native": "Rot",
+            "english": "Ginger"
+          },
+          {
+            "native": "Schiefergrau",
+            "english": "Slate"
+          },
+          {
+            "native": "Schwarz",
+            "english": "Black"
+          },
+          {
+            "native": "sein",
+            "english": "its"
+          },
+          {
+            "native": "Fell",
+            "english": "coat"
+          },
+          {
+            "native": "Kamerawackeln",
+            "english": "Camera sway"
           }
         ]
       },
@@ -61611,6 +62091,18 @@
           {
             "key": "settings.motionIntensity",
             "text": "强度"
+          },
+          {
+            "key": "settings.cameraSway",
+            "text": "镜头晃动"
+          },
+          {
+            "key": "settings.cameraSwayOff",
+            "text": "关"
+          },
+          {
+            "key": "settings.cameraSwayOn",
+            "text": "开"
           },
           {
             "key": "settings.desktop",
@@ -63446,7 +63938,7 @@
           },
           {
             "key": "adopt.body",
-            "text": "总署的收容所有一只狗和一只猫在等待。今晚其中一只会跟你回家。选择并为它取个名字。"
+            "text": "总署的收容所有一只狗和一只猫在等待。今晚其中一只会跟你回家。选择一只和它的毛色，并为它取个名字。"
           },
           {
             "key": "adopt.dog",
@@ -63455,6 +63947,42 @@
           {
             "key": "adopt.cat",
             "text": "猫"
+          },
+          {
+            "key": "adopt.coat.cream",
+            "text": "奶油色"
+          },
+          {
+            "key": "adopt.coat.tan",
+            "text": "棕褐色"
+          },
+          {
+            "key": "adopt.coat.chocolate",
+            "text": "巧克力色"
+          },
+          {
+            "key": "adopt.coat.charcoal",
+            "text": "炭灰色"
+          },
+          {
+            "key": "adopt.coat.grey",
+            "text": "灰色"
+          },
+          {
+            "key": "adopt.coat.white",
+            "text": "白色"
+          },
+          {
+            "key": "adopt.coat.ginger",
+            "text": "橘色"
+          },
+          {
+            "key": "adopt.coat.slate",
+            "text": "石板灰"
+          },
+          {
+            "key": "adopt.coat.black",
+            "text": "黑色"
           },
           {
             "key": "adopt.placeholder",
@@ -67857,6 +68385,70 @@
           {
             "native": "N",
             "english": "N (number format)"
+          },
+          {
+            "native": "奶油",
+            "english": "cream"
+          },
+          {
+            "native": "色",
+            "english": "colour"
+          },
+          {
+            "native": "棕褐",
+            "english": "tan"
+          },
+          {
+            "native": "巧克力",
+            "english": "chocolate"
+          },
+          {
+            "native": "炭",
+            "english": "charcoal"
+          },
+          {
+            "native": "灰",
+            "english": "grey"
+          },
+          {
+            "native": "白",
+            "english": "white"
+          },
+          {
+            "native": "橘",
+            "english": "orange (ginger)"
+          },
+          {
+            "native": "石板",
+            "english": "slate"
+          },
+          {
+            "native": "黑",
+            "english": "black"
+          },
+          {
+            "native": "毛色",
+            "english": "coat colour"
+          },
+          {
+            "native": "它的",
+            "english": "its"
+          },
+          {
+            "native": "镜头",
+            "english": "camera"
+          },
+          {
+            "native": "晃动",
+            "english": "sway"
+          },
+          {
+            "native": "关",
+            "english": "off"
+          },
+          {
+            "native": "开",
+            "english": "on"
           }
         ]
       },
@@ -69003,6 +69595,18 @@
           {
             "key": "settings.motionIntensity",
             "text": "強さ"
+          },
+          {
+            "key": "settings.cameraSway",
+            "text": "カメラの揺れ"
+          },
+          {
+            "key": "settings.cameraSwayOff",
+            "text": "オフ"
+          },
+          {
+            "key": "settings.cameraSwayOn",
+            "text": "オン"
           },
           {
             "key": "settings.desktop",
@@ -70838,7 +71442,7 @@
           },
           {
             "key": "adopt.body",
-            "text": "総局の保護施設で犬と猫が待っています。今夜どちらかがあなたと家に帰ります。選んで、名前をつけてください。"
+            "text": "総局の保護施設で犬と猫が待っています。今夜どちらかがあなたと家に帰ります。一匹と毛色を選んで、名前をつけてください。"
           },
           {
             "key": "adopt.dog",
@@ -70847,6 +71451,42 @@
           {
             "key": "adopt.cat",
             "text": "猫"
+          },
+          {
+            "key": "adopt.coat.cream",
+            "text": "クリーム"
+          },
+          {
+            "key": "adopt.coat.tan",
+            "text": "淡い茶"
+          },
+          {
+            "key": "adopt.coat.chocolate",
+            "text": "チョコレート"
+          },
+          {
+            "key": "adopt.coat.charcoal",
+            "text": "チャコール"
+          },
+          {
+            "key": "adopt.coat.grey",
+            "text": "グレー"
+          },
+          {
+            "key": "adopt.coat.white",
+            "text": "白"
+          },
+          {
+            "key": "adopt.coat.ginger",
+            "text": "オレンジ"
+          },
+          {
+            "key": "adopt.coat.slate",
+            "text": "スレート"
+          },
+          {
+            "key": "adopt.coat.black",
+            "text": "黒"
           },
           {
             "key": "adopt.placeholder",
@@ -75301,6 +75941,66 @@
           {
             "native": "ない",
             "english": "not"
+          },
+          {
+            "native": "クリーム",
+            "english": "cream"
+          },
+          {
+            "native": "淡い",
+            "english": "light"
+          },
+          {
+            "native": "茶",
+            "english": "brown"
+          },
+          {
+            "native": "チョコレート",
+            "english": "chocolate"
+          },
+          {
+            "native": "チャコール",
+            "english": "charcoal"
+          },
+          {
+            "native": "グレー",
+            "english": "grey"
+          },
+          {
+            "native": "白",
+            "english": "white"
+          },
+          {
+            "native": "オレンジ",
+            "english": "ginger"
+          },
+          {
+            "native": "スレート",
+            "english": "slate"
+          },
+          {
+            "native": "黒",
+            "english": "black"
+          },
+          {
+            "native": "一匹",
+            "english": "one (animal)"
+          },
+          {
+            "native": "毛色",
+            "english": "coat colour"
+          },
+          {
+            "native": "カメラ",
+            "english": "camera"
+          },
+          {
+            "native": "揺れ",
+            "english": "sway"
+          },
+          {
+            "native": "オン",
+            "english": "on"
           }
         ]
       }
@@ -76024,6 +76724,28 @@
             "{name} carries the {toy} round the flat like a trophy.",
             "{name} drops the {toy} at your feet. Again. And again.",
             "{name} guards the {toy} from an invisible rival."
+          ],
+          "coats": [
+            {
+              "id": "cream",
+              "nameKey": "adopt.coat.cream"
+            },
+            {
+              "id": "tan",
+              "nameKey": "adopt.coat.tan"
+            },
+            {
+              "id": "chocolate",
+              "nameKey": "adopt.coat.chocolate"
+            },
+            {
+              "id": "charcoal",
+              "nameKey": "adopt.coat.charcoal"
+            },
+            {
+              "id": "grey",
+              "nameKey": "adopt.coat.grey"
+            }
           ]
         },
         {
@@ -76040,6 +76762,28 @@
             "{name} ambushes the {toy} from under the sofa.",
             "{name} bats the {toy} under the radiator and stares at you.",
             "{name} decides the {toy} is beneath them, then pounces anyway."
+          ],
+          "coats": [
+            {
+              "id": "white",
+              "nameKey": "adopt.coat.white"
+            },
+            {
+              "id": "ginger",
+              "nameKey": "adopt.coat.ginger"
+            },
+            {
+              "id": "slate",
+              "nameKey": "adopt.coat.slate"
+            },
+            {
+              "id": "black",
+              "nameKey": "adopt.coat.black"
+            },
+            {
+              "id": "cream",
+              "nameKey": "adopt.coat.cream"
+            }
           ]
         }
       ],

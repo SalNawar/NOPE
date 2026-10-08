@@ -96,33 +96,14 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
 
+    /// <summary>How thick each thing lying on the desk is (metres; Saleh's 1007d playtest: "too flat when you see them from the side"): a sheet of paper, a plastic card, a passport booklet (its cover and pages), the rulebook's folder (its pages over its board). Their edges show it (PaperEdge) and the stack makes room for it (PaperLayers.Lifts).</summary>
+    [Min(0.0001f)] public float paperThickness = 0.0007f, cardThickness = 0.0009f, bookletThickness = 0.003f, folderThickness = 0.0025f;
+
+    /// <summary>A plain sheet's edge colour before its shade (a paper whose look names no tint: the agency's cream).</summary>
+    public Color paperEdgeTint = new Color(0.95f, 0.93f, 0.87f, 1f);
+
     /// <summary>The photo's tint while its paper lies on the desk, full size (evenly lit, unlike travellerTint on the counter).</summary>
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
-
-    [Header("Citations (the Citation lands on the desk, Saleh 2026-10-07)")]
-    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the mat's far half right of centre, clear of the rulebook folder, so it lies wholly on the screen in the office view and the reading view (the reading view shows it right of the folder's page).</summary>
-    public Vector2 citationSpot = new Vector2(0f, 0.14f);
-
-    /// <summary>How far each next citation of the day lands from the last (metres, the same frame): they stack with an offset; a continuation sheet lands a third of it from its first.</summary>
-    public Vector2 citationStep = new Vector2(0.025f, -0.02f);
-
-    /// <summary>A citation's height on the desk relative to its form's (DeskZones' reading height at its form's scale): smaller, so a pile of them does not cover the case's papers and the day's stack fits the reading view's height.</summary>
-    [Range(0.3f, 1f)] public float citationScale = 0.75f;
-
-    /// <summary>Where a citation flies in from: a point of the camera's view (viewport coordinates: off the screen's right, near its top) <see cref="citationFromDepth"/> metres in front of the camera, so it starts large, close to the eye, and flies down onto the desk.</summary>
-    public Vector2 citationFrom = new Vector2(1.08f, 0.9f);
-
-    /// <summary>How far in front of the camera a citation starts its flight (metres).</summary>
-    [Min(0.05f)] public float citationFromDepth = 0.45f;
-
-    /// <summary>A citation's flight: the arc's top over the straight way (metres), the twist about the vertical and the tumble about its long axis at the start (degrees).</summary>
-    [Min(0f)] public float citationArc = 0.12f;
-
-    /// <summary>A citation's twist about the vertical and its tumble about its long axis as it starts its flight (degrees).</summary>
-    public float citationTwist = 28f, citationTumble = 32f;
-
-    /// <summary>A citation's punch as it lands (FeelDirector.Hit's strength, 0 to 1: its hit-stop and camera bump; 0 none), with the sound cue citation_land.</summary>
-    [Range(0f, 1f)] public float citationLandHit = 0.25f;
 
     [Header("Traveller")]
     /// <summary>The traveller figure's height in metres (feet at the traveller anchor).</summary>
@@ -211,11 +192,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Where the stamp bar's middle (between its two daters' dies) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y). High on the right (run 7's integration): the passport slides so its visa page lies under the daters (DeskController.PassportUnderDaters), its data page whole and clear below the rack in the view.</summary>
     public Vector2 stampBarView = new Vector2(0.66f, 0.62f);
 
-    /// <summary>How far the stamp bar slides out from the desk's right (metres along the office view's right): in, it waits that far right of where it hangs out, out of the reading view.</summary>
+    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, toward the chair): in, it waits that far beyond where it hangs out, past the reading view's top (its motion's timing is MotionKnobs' drawer tunings).</summary>
     [Min(0.1f)] public float stampBarTravel = 0.6f;
-
-    /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
-    [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
 
     /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
     [Range(0f, 0.2f)] public float daterInkFade = 0.035f;

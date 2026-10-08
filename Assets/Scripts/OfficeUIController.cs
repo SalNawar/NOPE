@@ -1,11 +1,12 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The office's HUD and verdict line (the case itself is shown by the
-/// investigation desk; the legacy era-pick screen is gone, audit R3-011; a
-/// citation is a paper on the desk since 2026-10-07: DeskController.Cite).
+/// The office's HUD, verdict line and citation slip (the case itself is
+/// shown by the investigation desk; the legacy era-pick screen is gone,
+/// audit R3-011).
 /// </summary>
 public sealed class OfficeUIController : MonoBehaviour
 {
@@ -34,6 +35,28 @@ public sealed class OfficeUIController : MonoBehaviour
 
     /// <summary>The Investigation app (the date is held on its workbench).</summary>
     [SerializeField] private InvestigationApp app;
+
+    [Header("Citation Slip (optional — null-safe)")]
+    /// <summary>Panel shown when a citation is issued.</summary>
+    [SerializeField] private GameObject citationPanel;
+
+    /// <summary>The slip's reason line (CaseVerdict.citationReason).</summary>
+    [SerializeField] private TMP_Text citationReasonText;
+
+    /// <summary>The slip's rule and values (CaseVerdict.citationDetail).</summary>
+    [SerializeField] private TMP_Text citationDetailText;
+
+    /// <summary>The slip's warning or penalty (CaseVerdict.citationConsequence).</summary>
+    [SerializeField] private TMP_Text citationConsequenceText;
+
+    /// <summary>Button that dismisses the citation and continues the day.</summary>
+    [SerializeField] private Button citationContinueButton;
+
+    /// <summary>The slip's CITED stamp: hidden as the slip drops in, it slams on (a pop, FeelDirector.Hit at MotionKnobs.citedHit) once the slip has printed.</summary>
+    [SerializeField] private GameObject citationStamp;
+
+    /// <summary>Pending continue callback while a citation slip is open.</summary>
+    private Action _onCitationDismissed;
 
     /// <summary>
     /// Updates the result label (call from GameManager after validation), on the notice ribbon.
@@ -90,11 +113,18 @@ public sealed class OfficeUIController : MonoBehaviour
             dateButton.onClick.AddListener(app.HoldToday);
     }
 
-    /// <summary>Shows a verdict's result line (the pay, the penalty or the plain wrong).</summary>
-    public void ShowVerdict(CaseVerdict verdict)
+    /// <summary>
+    /// Shows a verdict: result line, plus a citation slip when issued.
+    /// If the citation panel is wired, the day pauses until the player dismisses it;
+    /// otherwise onContinue is invoked immediately.
+    /// </summary>
+    public void ShowVerdict(CaseVerdict verdict, Action onContinue)
     {
         if (verdict == null)
+        {
+            onContinue?.Invoke();
             return;
+        }
 
         string credits = UiText.Currency(UiText.WalletForm.Inline);
         SetResult(verdict.correct
@@ -103,5 +133,62 @@ public sealed class OfficeUIController : MonoBehaviour
                 ? UiText.Format("verdict.wrongPenalty", verdict.moneyPenalty, credits)
                 : UiText.Get("verdict.wrong"),
             UiKitNames.VerdictRibbon(verdict.correct, verdict.wasFreeWarning));
+
+        bool canShowSlip = verdict.citationIssued && citationPanel != null;
+
+        if (!canShowSlip)
+        {
+            onContinue?.Invoke();
+            return;
+        }
+
+        // Open the slip and hold the day until dismissed: it drops in and prints line by line (the game feel; the text is whole at once),
+        // then its CITED stamp slams on.
+        _onCitationDismissed = onContinue;
+        if (citationReasonText != null)
+            citationReasonText.text = verdict.citationReason;
+        if (citationDetailText != null)
+            citationDetailText.text = verdict.citationDetail;
+        if (citationConsequenceText != null)
+            citationConsequenceText.text = verdict.citationConsequence;
+        citationPanel.SetActive(true);
+        UiAppear.Of(citationPanel, AppearStyle.Drop).Open();
+        if (citationStamp != null)
+            citationStamp.SetActive(false);
+        UiPrint.Print(citationDetailText, SoundCues.CitationPrint, SoundCues.CitationLand, SlamStamp);
+
+        if (citationContinueButton != null)
+        {
+            citationContinueButton.onClick.RemoveListener(HandleCitationDismissed);
+            citationContinueButton.onClick.AddListener(HandleCitationDismissed);
+        }
+        else
+        {
+            // No button wired: leave the slip visible (next case hides it)
+            // but don't block the day.
+            _onCitationDismissed = null;
+            onContinue?.Invoke();
+        }
+    }
+
+    /// <summary>The CITED stamp slams onto the printed slip: it pops on with a hit (MotionKnobs.citedHit).</summary>
+    private void SlamStamp()
+    {
+        if (citationStamp == null || citationPanel == null || !citationPanel.activeInHierarchy)
+            return;
+        citationStamp.SetActive(true);
+        UiAppear.Of(citationStamp, AppearStyle.Pop).Open();
+        FeelDirector.Hit(UiMotion.Knobs.citedHit);
+    }
+
+    /// <summary>
+    /// Closes the citation slip and resumes the day.
+    /// </summary>
+    private void HandleCitationDismissed()
+    {
+        if (citationPanel != null)
+            citationPanel.SetActive(false);
+
+        OneShot.Fire(ref _onCitationDismissed);
     }
 }

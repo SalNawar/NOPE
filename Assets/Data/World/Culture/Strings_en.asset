@@ -1234,6 +1234,18 @@ MonoBehaviour:
     text: '{0} %'
     gloss: 0
     tier: 0
+  - key: settings.cameraSway
+    text: Camera sway
+    gloss: 0
+    tier: 1
+  - key: settings.cameraSwayOff
+    text: Off
+    gloss: 0
+    tier: 1
+  - key: settings.cameraSwayOn
+    text: On
+    gloss: 0
+    tier: 1
   - key: settings.desktop
     text: Desktop icons open with
     gloss: 0
@@ -3231,7 +3243,7 @@ MonoBehaviour:
     tier: 1
   - key: adopt.body
     text: The Directorate's shelter has a dog and a cat waiting. One of them goes
-      home with you tonight. Choose, and give them a name.
+      home with you tonight. Choose one and its coat, and give them a name.
     gloss: 0
     tier: 1
   - key: adopt.dog
@@ -3240,6 +3252,42 @@ MonoBehaviour:
     tier: 1
   - key: adopt.cat
     text: Cat
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.cream
+    text: Cream
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.tan
+    text: Tan
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.chocolate
+    text: Chocolate
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.charcoal
+    text: Charcoal
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.grey
+    text: Grey
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.white
+    text: White
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.ginger
+    text: Ginger
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.slate
+    text: Slate
+    gloss: 0
+    tier: 1
+  - key: adopt.coat.black
+    text: Black
     gloss: 0
     tier: 1
   - key: adopt.placeholder

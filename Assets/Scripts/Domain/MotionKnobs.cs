@@ -32,6 +32,12 @@ public sealed class MotionKnobs
     /// <summary>A dater's stroke going down (ratio 0.95, stiff): about 60 ms to the paper, slowing into it.</summary>
     public SpringTuning dater = SpringTuning.WithRatio(2600f, 0.95f);
 
+    /// <summary>The brass stamp drawer's hard stop (ratio 0.35, very stiff): the carry's last speed swings it about a centimetre past out and it settles in about a quarter second.</summary>
+    public SpringTuning drawer = SpringTuning.WithRatio(2200f, 0.35f);
+
+    /// <summary>A brass drawer's cradle standing a dater up or laying it down (ratio 0.45): a quarter turn in about 0.18 s, reaching its stop still moving (the lock's bounce).</summary>
+    public SpringTuning cradle = SpringTuning.WithRatio(160f, 0.45f);
+
     /// <summary>How far a control's face lifts under the pointer (px; Saleh 2026-10-07, round 2: a 1-2 px lift and the glint, no growth).</summary>
     public float hoverLift = 1.5f;
 
@@ -86,9 +92,6 @@ public sealed class MotionKnobs
     /// </summary>
     public float stretchPerSpeed = 0.00012f, squashPerAccel = 0.0000012f, maxStretch = 0.25f;
 
-    /// <summary>The desk's travelling objects' stretch (the stamp bar sliding out and back): per metre per second and their squash per metre per second², at most maxStretch.</summary>
-    public float deskStretchPerSpeed = 0.06f, deskSquashPerAccel = 0.0005f;
-
     /// <summary>The seconds a fade takes in place of a motion under Reduced Motion.</summary>
     public float reducedFadeSeconds = 0.12f;
 
@@ -113,7 +116,7 @@ public sealed class MotionKnobs
     /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, and a stamp's rebound.</summary>
     public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Firm;
 
-    /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack, the stamp bar): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>
+    /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>
     public MotionFeel deskMoveFeel = MotionFeel.Firm;
 
     /// <summary>The curve of the desk camera's blend (the reading view, the PC zoom): a heavy settle with a slight overshoot.</summary>
@@ -146,8 +149,34 @@ public sealed class MotionKnobs
     /// <summary>How hard an approval's portal spin-up hits as the papers go back (FeelDirector.Hit's strength, 0 to 1), and the DETAIN button's press (a dater's impression is the stamp's own punch, FeelHit.Stamp).</summary>
     public float approveHit = 0.3f, detainHit = 0.5f;
 
+    /// <summary>How hard the citation slip's CITED stamp slams once the slip has printed (FeelDirector.Hit's strength, 0 to 1; 0 none).</summary>
+    public float citedHit = 0.25f;
+
     /// <summary>The feel of a dater's stroke down, of its release springing up (an overshoot) and of a date wheel's click.</summary>
     public MotionFeel daterFeel = MotionFeel.Dater, daterReleaseFeel = MotionFeel.Elastic, wheelFeel = MotionFeel.Firm;
+
+    /// <summary>
+    /// The brass stamp drawer (Track BR; DrawerSequence): the opening's carry
+    /// (seconds from rest to the stop, and its power: travel = (t/T)^power, a
+    /// slow start and an accelerating carry), the share of the carry's last
+    /// speed the stop's spring takes (its overshoot), the share of the carry
+    /// after which the cradles start to stand and the seconds between DENIED
+    /// and APPROVED standing, and the share of a cradle's speed it bounces
+    /// back with off its stop.
+    /// </summary>
+    public float drawerCarrySeconds = 0.42f, drawerCarryPower = 2.4f, drawerStopCarry = 0.3f, drawerRaiseFrom = 0.8f, drawerRaiseStagger = 0.14f, drawerLockBounce = 0.25f;
+
+    /// <summary>The brass drawer closing: the seconds between APPROVED and DENIED folding down, the shove's seconds and its kick (DrawerSequence.ShoveCurve: 0 an even slide, 1 all speed at the start), and FeelDirector.Hit's strength as the drawer hits its stop.</summary>
+    public float drawerFoldStagger = 0.1f, drawerShoveSeconds = 0.28f, drawerShoveKick = 0.7f, drawerStopHit = 0.06f;
+
+    /// <summary>The cream scanner's lid (ScannerLid): how far it swings open (degrees about its hinge), how long it stays open after a scan before it shuts by itself (seconds), and how far past the drop area a dragged paper's pointer opens it (metres).</summary>
+    public float scannerLidAngle = 70f, scannerLidIdleSeconds = 2.5f, scannerLidNear = 0.08f;
+
+    /// <summary>The feel of the scanner lid's swing (quick and sprung).</summary>
+    public MotionFeel scannerLidFeel = MotionFeel.Balanced;
+
+    /// <summary>The feel of the brass drawer's stop and of its cradles' quarter turns.</summary>
+    public MotionFeel drawerFeel = MotionFeel.Drawer, cradleFeel = MotionFeel.Cradle;
 
     /// <summary>The DETAIN button on the desk (the desk machine spec §2): how far its safety cover swings up on its hinge (degrees), how long it stays open unused before it closes by itself (seconds), and how deep the mushroom button presses (metres).</summary>
     public float detainCoverAngle = 105f, detainCoverSeconds = 4f, detainPress = 0.01f;
@@ -179,6 +208,10 @@ public sealed class MotionKnobs
                 return heavy;
             case MotionFeel.Dater:
                 return dater;
+            case MotionFeel.Drawer:
+                return drawer;
+            case MotionFeel.Cradle:
+                return cradle;
             default:
                 return balanced;
         }

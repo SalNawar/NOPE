@@ -12,8 +12,21 @@ using UnityEngine.UI;
 /// TAB, and "two stamps that I physically move ... I should be able to stamp
 /// anywhere on the document"). A grey tab on the right edge of the office
 /// overlay ("STAMPS" over "TAB"), the TAB key (OfficeControls) and the desk's
-/// stamp prop slide the bar out over the desk and back (ToggleBar); out, it
-/// brings the reading view. The bar is a rack holding the DENIED dater
+/// stamp prop open the bar over the desk and close it (ToggleBar); out, it
+/// brings the reading view. The bar is the heavy brass drawer (Track BR,
+/// Saleh 2026-10-08: "a heavy brass drawer that makes the sound a typewriter
+/// makes when the carriage returns"): it slides out toward the chair from
+/// under the counter's side with a slow start, an accelerating carry and a
+/// hard stop (DrawerSequence: the carry, the stiff Drawer spring's overshoot
+/// and settle, FeelDirector's small hit, SoundCues.DrawerOpen's ratchet
+/// carry), and its brass mechanism (BrassDrawer: a lever, a rack and
+/// pinion, a cradle per dater) stands the daters up from flat on their
+/// backs, DENIED then APPROVED, each locking upright with a click; closing,
+/// they fold down first (a dater still away comes back first), then a shove
+/// seats the drawer (SoundCues.DrawerClose: the reverse rasp and the thud).
+/// A dater takes input once its cradle is locked. Without the drawer's art
+/// the built rack (a lip with end caps) moves the same way without the
+/// mechanism. The rack holds the DENIED dater
 /// (left) and the APPROVED dater (right), self-inking daters after Saleh's
 /// S-401 reference, built under a prop contract (a root with Body, Frame,
 /// Die, Wheels and Button: the art may replace the meshes): a glossy body,
@@ -61,8 +74,14 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The desk plane (the bar's height and, without the reading view, its place; the daters are dragged over it).</summary>
     [SerializeField] private DeskSurface surface;
 
-    /// <summary>The rack in the office (the rail, the arms, the two daters): hidden while in.</summary>
+    /// <summary>The rack in the office (the brass drawer or the built lip, the two daters): hidden while all the way in.</summary>
     [SerializeField] private Transform rack;
+
+    /// <summary>The brass drawer's mechanism on the rack (optional: the built rack has none; its daters stand all the time).</summary>
+    [SerializeField] private BrassDrawer drawer;
+
+    /// <summary>The drawer's placeholder sounds (tools/audio/make_drawer_sfx.py) until the sound bank has SoundCues.DrawerOpen / DrawerClose: the opening's typewriter carriage-return carry and clunk, the closing's reverse rasp and thud.</summary>
+    [SerializeField] private AudioClip drawerOpen, drawerClose;
 
     /// <summary>The grey tab (with "TAB" printed on it): a click slides the bar out or back.</summary>
     [SerializeField] private Button tab;
@@ -130,6 +149,9 @@ public sealed class DeskStampTray : MonoBehaviour
     private sealed class Handle
     {
         public DeskStamp Kind;
+
+        /// <summary>Its lane in the drawer (DrawerSequence.Denied or Approved).</summary>
+        public int Lane;
         public Clickable Click;
         public Transform Die;
         public DeskDraggable Drag;
@@ -191,7 +213,7 @@ public sealed class DeskStampTray : MonoBehaviour
     private Handle _carried;
     private int _passport = -1;
     private bool _live;
-    private float _slide;
+    private readonly DrawerSequence _drawer = new DrawerSequence();
     private Vector3 _out, _in;
     private bool _laid;
     private string _noteKey;
@@ -205,10 +227,6 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>True while the passport carries a verdict (stamped; handed back or not).</summary>
     public bool HasVerdict => _flow.Verdict != DeskStamp.None;
-
-    /// <summary>The rack's rest scale, and its speed last frame (m/s along its travel: its change squashes it).</summary>
-    private Vector3 _rackScale = Vector3.one;
-    private float _barSpeed;
 
     /// <summary>True while a traveller stands at the desk with their case, not yet committed (DETAIN can take them).</summary>
     public bool TravellerHere => _flow.TravellerHere && !_flow.Committed;
@@ -249,10 +267,7 @@ public sealed class DeskStampTray : MonoBehaviour
             tab.onClick.AddListener(ToggleBar);
         _handles = new[] { MakeHandle(DeskStamp.Approved, approvedStamp, approvedDie), MakeHandle(DeskStamp.Denied, deniedStamp, deniedDie) };
         if (rack != null)
-        {
-            _rackScale = rack.localScale;
             rack.gameObject.SetActive(false);
-        }
         _thunk = CueSounds.Tone("StampThunk", 70f, 0.16f, 0.7f);
         Show();
     }
@@ -260,7 +275,7 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>A dater of the rack: its parts by the prop contract's names, its drag (carried stampHover over the desk, its die over the pointer's spot), its hold (a held press) and its side button (re-ink).</summary>
     private Handle MakeHandle(DeskStamp kind, Clickable click, Transform die)
     {
-        var handle = new Handle { Kind = kind, Click = click, Die = die, Back = Spring.At(1f) };
+        var handle = new Handle { Kind = kind, Lane = kind == DeskStamp.Denied ? DrawerSequence.Denied : DrawerSequence.Approved, Click = click, Die = die, Back = Spring.At(1f) };
         if (click == null)
             return handle;
         Transform root = click.transform;
@@ -319,7 +334,8 @@ public sealed class DeskStampTray : MonoBehaviour
     /// are placed): out where the reading view shows the desk at
     /// DeskConfigSO.stampBarView, the daters' feet stampHover above the desk,
     /// facing along the office view's level <paramref name="levelForward"/>;
-    /// in stampBarTravel to the right of it.
+    /// in stampBarTravel beyond it (away from the chair: the drawer slides
+    /// out toward the chair, as a drawer does).
     /// </summary>
     public void Lay(Vector3 levelForward)
     {
@@ -329,14 +345,13 @@ public sealed class DeskStampTray : MonoBehaviour
         if (forward.sqrMagnitude < 1e-6f)
             forward = Vector3.forward;
         forward.Normalize();
-        Vector3 right = Vector3.Cross(Vector3.up, forward);
         float desk = surface.transform.position.y;
         if (deskView == null || !deskView.TryViewPoint(config.stampBarView, desk, out Vector3 at))
             at = surface.transform.position;
         _out = new Vector3(at.x, desk + config.stampHover, at.z);
-        _in = _out + right * config.stampBarTravel;
+        _in = _out + forward * config.stampBarTravel;
         _laid = true;
-        rack.SetPositionAndRotation(Vector3.LerpUnclamped(_in, _out, BarCurve(config.stampBarSeconds)), Quaternion.LookRotation(forward, Vector3.up));
+        rack.SetPositionAndRotation(Vector3.LerpUnclamped(_in, _out, _drawer.Travel), Quaternion.LookRotation(forward, Vector3.up));
     }
 
     /// <summary>
@@ -374,7 +389,7 @@ public sealed class DeskStampTray : MonoBehaviour
     public Texture2D Impression(bool approved) =>
         DaterImpressionArt.Paint(Word(approved), Ink(approved), _dateText, _byLine, daterFont, 1f, _day * 977 + _presses++);
 
-    /// <summary>The grey tab, TAB, the desk's stamp: slides the bar out (bringing the reading view) or back; nothing while the daters take no input.</summary>
+    /// <summary>The grey tab, TAB, the desk's stamp: opens the drawer (bringing the reading view) or closes it; nothing while the daters take no input.</summary>
     public void ToggleBar()
     {
         Deselect();
@@ -382,7 +397,6 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         CancelCarry();
         bool slidOut = _flow.ToggleBar();
-        Sounds.Play(slidOut ? SoundCues.StampBarOut : SoundCues.StampBarIn);
         if (slidOut && deskView != null)
             deskView.TiltIn();
         Raise();
@@ -394,7 +408,6 @@ public sealed class DeskStampTray : MonoBehaviour
         CancelCarry();
         if (!_flow.StowBar())
             return false;
-        Sounds.Play(SoundCues.StampBarIn);
         Raise();
         return true;
     }
@@ -460,8 +473,7 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_flow.HandBack())
             return false;
         CancelCarry();
-        if (_flow.StowBar())
-            Sounds.Play(SoundCues.StampBarIn);
+        _flow.StowBar();
         Sounds.Play(SoundCues.PaperSlide);
         if (deskView != null)
             deskView.Return();
@@ -762,11 +774,11 @@ public sealed class DeskStampTray : MonoBehaviour
         return best;
     }
 
-    /// <summary>Slides the bar, moves each dater (a held press waking into a stroke, the stroke, the shake, the way back, the wheels) and lets a note go once its time is up.</summary>
+    /// <summary>Moves the drawer, moves each dater (a held press waking into a stroke, the stroke, the shake, the way back, the wheels) and lets a note go once its time is up.</summary>
     private void Update()
     {
-        SlideBar();
         float dt = UiMotion.Delta(Time.unscaledDeltaTime);
+        MoveDrawer(dt);
         foreach (Handle handle in _handles)
             Move(handle, dt);
         if (_noteKey != null && UiMotion.Now >= _noteUntil)
@@ -887,60 +899,53 @@ public sealed class DeskStampTray : MonoBehaviour
         handle.Returning = true;
     }
 
-    /// <summary>Eases the bar toward out or in (a cut under Reduced Motion); the rack shows while it is not all the way in.</summary>
-    private void SlideBar()
+    /// <summary>
+    /// The drawer this frame (DrawerSequence on MotionKnobs' drawer tunings; a
+    /// snap under Reduced Motion): its place between in and out, the
+    /// mechanism's pose, and its moments: the opening's carry (DrawerOpen),
+    /// the stop's small hit, a click as each cradle locks or lands (a lock
+    /// lets its dater take input), the closing's shove (DrawerClose). The
+    /// cradles wait to fold while a dater is away from its place. The rack
+    /// shows unless the drawer is all the way in.
+    /// </summary>
+    private void MoveDrawer(float dt)
     {
-        if (rack == null)
+        if (rack == null || (_drawer.Closed && !_flow.BarOut))
             return;
-        float target = _flow.BarOut ? 1f : 0f;
-        if (Mathf.Approximately(_slide, target))
-        {
-            StretchBar(0f);
-            return;
-        }
-        float seconds = config != null && !MotionPreference.Reduced ? config.stampBarSeconds : 0f;
-        _slide = seconds > 0f ? Mathf.MoveTowards(_slide, target, UiMotion.Delta(Time.unscaledDeltaTime) / seconds) : target;
+        bool away = false;
+        foreach (Handle h in _handles)
+            away |= h == _carried || h.Stroke != Stroke.None || h.Returning;
+        MotionKnobs knobs = UiMotion.Knobs;
+        DrawerEvents events = _drawer.Step(dt, _flow.BarOut, knobs, UiMotion.Amount.Still, away);
         if (_laid)
+            rack.position = Vector3.LerpUnclamped(_in, _out, _drawer.Travel);
+        if (drawer != null)
+            drawer.Pose(_drawer.Raise(DrawerSequence.Denied), _drawer.Raise(DrawerSequence.Approved));
+        if ((events & DrawerEvents.Carried) != 0)
+            PlayCue(SoundCues.DrawerOpen, drawerOpen);
+        if ((events & DrawerEvents.Stopped) != 0)
+            FeelDirector.Hit(knobs.drawerStopHit);
+        if ((events & (DrawerEvents.LockedDenied | DrawerEvents.LockedApproved | DrawerEvents.FoldedDenied | DrawerEvents.FoldedApproved)) != 0)
         {
-            Vector3 was = rack.position;
-            rack.position = Vector3.LerpUnclamped(_in, _out, BarCurve(seconds));
-            StretchBar(Time.unscaledDeltaTime > 0f && !Mathf.Approximately(_slide, target) ? Vector3.Dot(rack.position - was, rack.right) / Time.unscaledDeltaTime : 0f);
+            // Each cradle's lock (and landing) clicks: the date wheels' ratchet click, pitched down for the heavier catch.
+            CueSounds.Play(SoundCues.DaterWheelClick, sound, LockPitch);
+            Show();
         }
-        bool shown = _slide > 0f;
+        if ((events & DrawerEvents.Shoved) != 0)
+            PlayCue(SoundCues.DrawerClose, drawerClose);
+        bool shown = !_drawer.Closed;
         if (rack.gameObject.activeSelf != shown)
             rack.gameObject.SetActive(shown);
     }
 
-    /// <summary>
-    /// The bar's shape for its <paramref name="speed"/> along its travel (m/s;
-    /// Saleh 2026-10-07, round 2: what travels stretches): longer along the
-    /// rail by its speed, squashed by its change of speed (the launch, the
-    /// arrival), its volume kept (SquashStretch.FromMotion); its rest scale
-    /// at 0 once it stops.
-    /// </summary>
-    private void StretchBar(float speed)
-    {
-        float dt = Time.unscaledDeltaTime;
-        float acceleration = dt > 0f ? (speed - _barSpeed) / dt : 0f;
-        _barSpeed = speed;
-        if (speed == 0f)
-        {
-            if (rack.localScale != _rackScale)
-                rack.localScale = _rackScale;
-            return;
-        }
-        MotionKnobs knobs = UiMotion.Knobs;
-        float share = UiMotion.Amount.Share;
-        Stretch s = SquashStretch.FromMotion(speed * share, acceleration * share, knobs.deskStretchPerSpeed, knobs.deskSquashPerAccel, knobs.maxStretch);
-        float across = Mathf.Sqrt(s.Across); // the two other axes share the area's rule, so the volume keeps
-        rack.localScale = new Vector3(_rackScale.x * s.Along, _rackScale.y * across, _rackScale.z * across);
-    }
+    /// <summary>The pitch of a cradle's lock click (the wheels' ratchet click, lower: a heavier catch).</summary>
+    private const float LockPitch = 0.62f;
 
-    /// <summary>Where the bar is along its travel (0 in, 1 out) on the desk's spring curve: past out as it arrives, past in as it goes back, wobbling (MotionKnobs.slideFeel, UiMotion.Ease over <paramref name="seconds"/>).</summary>
-    private float BarCurve(float seconds)
+    /// <summary>Plays <paramref name="cue"/> from the sound bank, else its placeholder <paramref name="placeholder"/> through the tray's source.</summary>
+    private void PlayCue(string cue, AudioClip placeholder)
     {
-        MotionFeel feel = UiMotion.Knobs.slideFeel;
-        return _flow.BarOut ? UiMotion.Ease(_slide, feel, seconds) : 1f - UiMotion.Ease(1f - _slide, feel, seconds);
+        if (!Sounds.Play(cue))
+            Play(placeholder, 1f);
     }
 
     private void Play(AudioClip clip, float pitch)
@@ -965,12 +970,12 @@ public sealed class DeskStampTray : MonoBehaviour
         Changed?.Invoke();
     }
 
-    /// <summary>The daters' input (pressed and dragged while the bar is out) and the hint: a note while it lasts; else, out, to drag a dater onto the passport, or (stamped) to hand the papers back on the counter.</summary>
+    /// <summary>The daters' input (pressed and dragged while the bar is out and its cradle is locked upright) and the hint: a note while it lasts; else, out, to drag a dater onto the passport, or (stamped) to hand the papers back on the counter.</summary>
     private void Show()
     {
-        bool usable = _live && _flow.BarOut;
         foreach (Handle handle in _handles)
         {
+            bool usable = _live && _flow.BarOut && _drawer.Locked(handle.Lane);
             if (handle.Click != null)
                 handle.Click.Interactable = usable;
             if (handle.Drag != null && handle.Drag.enabled != usable)

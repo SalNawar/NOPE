@@ -1165,6 +1165,18 @@ MonoBehaviour:
     text: "St\xE4rke"
     gloss: 0
     tier: 0
+  - key: settings.cameraSway
+    text: Kamerawackeln
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOff
+    text: Aus
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOn
+    text: An
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "Desktop-Symbole \xF6ffnen mit"
     gloss: 0
@@ -3036,7 +3048,8 @@ MonoBehaviour:
     tier: 0
   - key: adopt.body
     text: "Im Tierheim der Direktion warten ein Hund und eine Katze. Einer von ihnen
-      geht heute Abend mit dir nach Hause. W\xE4hle und gib ihm einen Namen."
+      geht heute Abend mit dir nach Hause. W\xE4hle einen und sein Fell, und gib
+      ihm einen Namen."
     gloss: 0
     tier: 0
   - key: adopt.dog
@@ -3045,6 +3058,42 @@ MonoBehaviour:
     tier: 0
   - key: adopt.cat
     text: Katze
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.cream
+    text: Creme
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.tan
+    text: Hellbraun
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.chocolate
+    text: Schokobraun
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.charcoal
+    text: Anthrazit
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.grey
+    text: Grau
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.white
+    text: "Wei\xDF"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.ginger
+    text: Rot
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.slate
+    text: Schiefergrau
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.black
+    text: Schwarz
     gloss: 0
     tier: 0
   - key: adopt.placeholder
@@ -6026,3 +6075,27 @@ MonoBehaviour:
     english: labour placement
   - native: "Chronop\xE4die"
     english: Chronopedia
+  - native: Creme
+    english: Cream
+  - native: Hellbraun
+    english: Tan
+  - native: Schokobraun
+    english: Chocolate
+  - native: Anthrazit
+    english: Charcoal
+  - native: Grau
+    english: Grey
+  - native: "Wei\xDF"
+    english: White
+  - native: Rot
+    english: Ginger
+  - native: Schiefergrau
+    english: Slate
+  - native: Schwarz
+    english: Black
+  - native: sein
+    english: its
+  - native: Fell
+    english: coat
+  - native: Kamerawackeln
+    english: Camera sway

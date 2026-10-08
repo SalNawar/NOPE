@@ -103,12 +103,12 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
         listener.ReactionSettings = new CinemachineImpulseListener.ImpulseReaction { AmplitudeGain = 1f, FrequencyGain = 1f, Duration = 1f };
     }
 
-    /// <summary>The idle breathing on both cameras at the Motion intensity (off under Reduced Motion or without a noise profile).</summary>
+    /// <summary>The idle breathing on both cameras at the Motion intensity: only while the player turned the camera sway on in Settings (MotionPreference.CameraSway, off by default: it made Saleh motion sick), never under Reduced Motion or without a noise profile.</summary>
     private void Breathe()
     {
         MotionTuningSO tuning = UiMotion.Tuning;
         MotionKnobs knobs = UiMotion.Knobs;
-        float share = UiMotion.Amount.Share;
+        float share = MotionPreference.CameraSway && !MotionPreference.Reduced ? UiMotion.Amount.Share : 0f;
         foreach (CinemachineCamera cam in new[] { _office, _desk })
         {
             if (cam == null)

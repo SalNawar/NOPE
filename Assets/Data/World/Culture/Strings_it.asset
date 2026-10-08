@@ -1166,6 +1166,18 @@ MonoBehaviour:
     text: "Intensit\xE0"
     gloss: 0
     tier: 0
+  - key: settings.cameraSway
+    text: Oscillazione camera
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOff
+    text: Disattivata
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOn
+    text: Attivata
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: Le icone del desktop si aprono con
     gloss: 0
@@ -3040,7 +3052,7 @@ MonoBehaviour:
     tier: 0
   - key: adopt.body
     text: Il rifugio della Direzione ha un cane e un gatto in attesa. Uno dei due
-      stasera torna a casa con te. Scegli, e dagli un nome.
+      stasera torna a casa con te. Scegli uno e il suo mantello, e dagli un nome.
     gloss: 0
     tier: 0
   - key: adopt.dog
@@ -3049,6 +3061,42 @@ MonoBehaviour:
     tier: 0
   - key: adopt.cat
     text: Gatto
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.cream
+    text: Crema
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.tan
+    text: Fulvo
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.chocolate
+    text: Cioccolato
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.charcoal
+    text: Antracite
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.grey
+    text: Grigio
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.white
+    text: Bianco
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.ginger
+    text: Rosso
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.slate
+    text: Ardesia
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.black
+    text: Nero
     gloss: 0
     tier: 0
   - key: adopt.placeholder
@@ -5907,3 +5955,29 @@ MonoBehaviour:
     english: from the officer
   - native: all'ordine
     english: to the order
+  - native: Crema
+    english: Cream
+  - native: Fulvo
+    english: Tan
+  - native: Cioccolato
+    english: Chocolate
+  - native: Antracite
+    english: Charcoal
+  - native: Grigio
+    english: Grey
+  - native: Bianco
+    english: White
+  - native: Ardesia
+    english: Slate
+  - native: Nero
+    english: Black
+  - native: mantello
+    english: coat
+  - native: Oscillazione
+    english: Sway
+  - native: camera
+    english: camera
+  - native: Disattivata
+    english: Off
+  - native: Attivata
+    english: On

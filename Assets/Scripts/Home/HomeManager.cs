@@ -82,7 +82,7 @@ public sealed class HomeManager : MonoBehaviour
         _config = run.Config != null ? run.Config.gameConfig : null;
         _daySeed = run.GetDaySeed();
         if (!Pet.Adopted)
-            DayCycle.Adopt(_world, _lib, run.Config.startingPetKind, null);
+            DayCycle.Adopt(_world, _lib, run.Config.startingPetKind, null, null);
 
         Debug.Log($"[HomeManager] Day {_world.day} home phase starting: money={_world.money}, stability={_world.timelineStability:0.00}, pet='{Pet.name}' ({Pet.kind}).");
 
@@ -254,7 +254,7 @@ public sealed class HomeManager : MonoBehaviour
             toys.Add(new HomeUIController.ToyView(toy.id, toy.displayName, UiText.Get(_care.Played ? "home.pet.played" : "home.pet.play"), !_care.Played, () => HandlePlay(chosen)));
         }
         string body = NeedsText(tonight, "\n") + (_care.Electricity ? string.Empty : "\n" + UiText.Get("home.pet.dark"));
-        homeUI.ShowPet(UiText.Format("home.pet.title", Pet.name), body, Pet.kind, PetRules.Look(tonight), _care.Electricity, reaction,
+        homeUI.ShowPet(UiText.Format("home.pet.title", Pet.name), body, Pet.kind, Pet.coat, PetRules.Look(tonight), _care.Electricity, reaction,
                        UiText.Format("home.pet.pat", Pet.name), HandlePat, toys, UiText.Get("home.pet.noToys"),
                        UiText.Get(ShopNext ? "home.next.house" : "home.next.slots"), ShowShop, played);
     }

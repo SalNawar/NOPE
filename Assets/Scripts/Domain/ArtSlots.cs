@@ -98,8 +98,19 @@ public static class ArtSlots
     /// <summary>A nation's passport emblem by its emblem's name (EmblemShapes: "WingedSun" gives Forms/emblem_wingedsun; the travel documents spec, TD5): white or one ink on clear, tinted by the cover's colour like the code-drawn stand-in.</summary>
     public static string Emblem(string emblem) => "Forms/emblem_" + Key(emblem);
 
-    /// <summary>The pet's picture in its corner for how it looks (the Home pet spec PS7, the art request's four states): Home/pet_&lt;kind&gt;_&lt;look&gt; ("Home/pet_dog_happy"); without it the corner draws the code-drawn stand-in.</summary>
-    public static string PetSprite(PetKind kind, PetLook look) => "Home/pet_" + Key(kind.ToString()) + "_" + Key(look.ToString());
+    /// <summary>
+    /// The pictures the pet tries for how it looks (the Home pet spec PS7 and
+    /// PS11), in order: its coat's (Home/pet_&lt;kind&gt;_&lt;coat&gt;_&lt;look&gt;,
+    /// "Home/pet_cat_ginger_sick"), then the kind's own
+    /// (Home/pet_&lt;kind&gt;_&lt;look&gt;, the art request's first four states); a
+    /// blank <paramref name="coat"/> tries the kind's only. Without any the
+    /// corner draws the code-drawn stand-in (PetStandIn).
+    /// </summary>
+    public static string[] PetSprite(PetKind kind, string coat, PetLook look)
+    {
+        string k = Key(kind.ToString()), c = Key(coat), l = Key(look.ToString());
+        return c.Length == 0 ? new[] { "Home/pet_" + k + "_" + l } : new[] { "Home/pet_" + k + "_" + c + "_" + l, "Home/pet_" + k + "_" + l };
+    }
 
     /// <summary>The pet corner's backdrop (the corner of the flat where the pet sleeps); without it the corner is a plain plate.</summary>
     public const string PetCorner = "Home/pet_corner";

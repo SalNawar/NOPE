@@ -5,7 +5,7 @@ using UnityEngine;
 /// by letter) or Reduced (a translation shows at once; the game feel's
 /// springs cut to a short fade or a snap: no squash, no shake), and the
 /// Motion intensity (0 to 100 %: how far every spring of the game feel
-/// moves, UiMotion). Per-player preferences kept in PlayerPrefs, outside the
+/// moves, UiMotion), and the cameras' idle sway (off by default). Per-player preferences kept in PlayerPrefs, outside the
 /// run save (the UiLanguagePreference pattern); motion is read each time a
 /// traveller is presented, the intensity at each motion.
 /// </summary>
@@ -28,6 +28,12 @@ public static class MotionPreference
 
     /// <summary>The stored intensity once read (every change goes through <see cref="Intensity"/>'s setter).</summary>
     private static float? _intensity;
+
+    /// <summary>The camera sway's PlayerPrefs key ("on" or absent/"off").</summary>
+    private const string SwayKey = "TimeDesk.CameraSway";
+
+    /// <summary>The stored camera sway once read (every change goes through <see cref="CameraSway"/>'s setter).</summary>
+    private static bool? _sway;
 
     /// <summary>True when the player chose Reduced motion (saved at once when set; read from PlayerPrefs once, then cached).</summary>
     public static bool Reduced
@@ -52,6 +58,25 @@ public static class MotionPreference
             PlayerPrefs.SetFloat(PlayerPrefKeys.For(IntensityKey), clamped);
             PlayerPrefs.Save();
             _intensity = clamped;
+            Changed?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// True when the player turned the cameras' idle sway on (Saleh 2026-10-07:
+    /// "the sway in the camera is not good, it causes motion sickness. Have it
+    /// off by default and have an option to turn it on in the settings"): off
+    /// unless chosen; Reduced Motion turns it off whatever is stored (CameraFeel).
+    /// Saved at once when set; read from PlayerPrefs once, then cached.
+    /// </summary>
+    public static bool CameraSway
+    {
+        get => _sway ??= PlayerPrefs.GetString(PlayerPrefKeys.For(SwayKey), "off") == "on";
+        set
+        {
+            PlayerPrefs.SetString(PlayerPrefKeys.For(SwayKey), value ? "on" : "off");
+            PlayerPrefs.Save();
+            _sway = value;
             Changed?.Invoke();
         }
     }

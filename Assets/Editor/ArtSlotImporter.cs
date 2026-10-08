@@ -9,8 +9,10 @@ using UnityEngine;
 /// canvas: ArtSlots.MaxSide; those with the high-quality compression, so their
 /// dark fields never mottle over the uncompressed painting); the desk papers' art (ArtSlots.OnDeskPaper: the faces, the photo
 /// frame, the ink marks) with mipmaps, UI art without, never sliced (the
-/// sliced faces are the UI kit's since run 7: UiKitImporter), so a
-/// delivered file is ready without touching its import settings.
+/// sliced faces are the UI kit's since run 7: UiKitImporter), always a 2D
+/// texture (a delivered file whose .meta holds only its fixed GUID, like the
+/// pet's coats, otherwise imports as a cube map), so a delivered file is
+/// ready without touching its import settings.
 /// </summary>
 public sealed class ArtSlotImporter : AssetPostprocessor
 {
@@ -22,6 +24,7 @@ public sealed class ArtSlotImporter : AssetPostprocessor
 
         var importer = (TextureImporter)assetImporter;
         importer.textureType = TextureImporterType.Sprite;
+        importer.textureShape = TextureImporterShape.Texture2D;
         importer.spriteImportMode = SpriteImportMode.Single;
         importer.alphaIsTransparency = true;
         importer.mipmapEnabled = ArtSlots.OnDeskPaper(slot);

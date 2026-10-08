@@ -318,6 +318,15 @@ public static partial class OfficeSceneUIBuilder
         Chrome(intensityValue, PcType.Body);
         intensityValue.raycastTarget = false;
         GetOrAdd<LayoutElement>(intensityValue.gameObject).flexibleWidth = 0.5f;
+        // Camera sway (Saleh 2026-10-07: off by default, it caused motion sickness): its word, then the Off / On pair.
+        Transform swayRow = SettingsRow(column, "CameraSwayRow");
+        TMP_Text swayLabel = Text(swayRow, "CameraSwayLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
+                                  ThemeRoleId.WindowBody, "settings.cameraSway");
+        Chrome(swayLabel, PcType.Body);
+        swayLabel.raycastTarget = false;
+        GetOrAdd<LayoutElement>(swayLabel.gameObject).flexibleWidth = 1f;
+        Button swayOff = SettingsChoice(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
+        Button swayOn = SettingsChoice(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
 
         SettingsHeading(column, "DesktopLabel", "settings.desktop");
         Transform icons = SettingsRow(column, "IconOpenRow");
@@ -360,6 +369,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "reducedMotionButton", reduced);
         SetRef(so, "motionIntensitySlider", intensity);
         SetRef(so, "motionIntensityText", intensityValue);
+        SetRef(so, "cameraSwayOffButton", swayOff);
+        SetRef(so, "cameraSwayOnButton", swayOn);
         SetRef(so, "iconDoubleClickButton", iconDouble);
         SetRef(so, "iconSingleClickButton", iconSingle);
         SetRef(so, "resetIconsButton", resetIcons);
@@ -373,13 +384,16 @@ public static partial class OfficeSceneUIBuilder
         return chrome;
     }
 
+    /// <summary>A Settings heading's height (reference px): 40 since the Camera sway row joined the Motion group, so the window still holds every row and the note.</summary>
+    private const float SettingsHeadingHeight = 40f;
+
     /// <summary>A Settings group's heading: Title size, bold, with room above it.</summary>
     private static void SettingsHeading(Transform column, string name, string key)
     {
         TMP_Text heading = Text(column, name, null, PcType.Title, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, key,
                                 FontStyles.Bold, ThemeTextKind.Heading, true);
         heading.raycastTarget = false;
-        SetLayoutHeight(heading, 52f);
+        SetLayoutHeight(heading, SettingsHeadingHeight);
     }
 
     /// <summary>A Settings row: its choices share its width, PcSize.Row tall.</summary>

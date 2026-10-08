@@ -1155,6 +1155,18 @@ MonoBehaviour:
     text: "\u5F3A\u5EA6"
     gloss: 0
     tier: 0
+  - key: settings.cameraSway
+    text: "\u955C\u5934\u6643\u52A8"
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOff
+    text: "\u5173"
+    gloss: 0
+    tier: 0
+  - key: settings.cameraSwayOn
+    text: "\u5F00"
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "\u684C\u9762\u56FE\u6807\u6253\u5F00\u65B9\u5F0F"
     gloss: 0
@@ -2999,7 +3011,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: adopt.body
-    text: "\u603B\u7F72\u7684\u6536\u5BB9\u6240\u6709\u4E00\u53EA\u72D7\u548C\u4E00\u53EA\u732B\u5728\u7B49\u5F85\u3002\u4ECA\u665A\u5176\u4E2D\u4E00\u53EA\u4F1A\u8DDF\u4F60\u56DE\u5BB6\u3002\u9009\u62E9\u5E76\u4E3A\u5B83\u53D6\u4E2A\u540D\u5B57\u3002"
+    text: "\u603B\u7F72\u7684\u6536\u5BB9\u6240\u6709\u4E00\u53EA\u72D7\u548C\u4E00\u53EA\u732B\u5728\u7B49\u5F85\u3002\u4ECA\u665A\u5176\u4E2D\u4E00\u53EA\u4F1A\u8DDF\u4F60\u56DE\u5BB6\u3002\u9009\u62E9\u4E00\u53EA\u548C\u5B83\u7684\u6BDB\u8272\uFF0C\u5E76\u4E3A\u5B83\u53D6\u4E2A\u540D\u5B57\u3002"
     gloss: 0
     tier: 0
   - key: adopt.dog
@@ -3008,6 +3020,42 @@ MonoBehaviour:
     tier: 0
   - key: adopt.cat
     text: "\u732B"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.cream
+    text: "\u5976\u6CB9\u8272"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.tan
+    text: "\u68D5\u8910\u8272"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.chocolate
+    text: "\u5DE7\u514B\u529B\u8272"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.charcoal
+    text: "\u70AD\u7070\u8272"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.grey
+    text: "\u7070\u8272"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.white
+    text: "\u767D\u8272"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.ginger
+    text: "\u6A58\u8272"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.slate
+    text: "\u77F3\u677F\u7070"
+    gloss: 0
+    tier: 0
+  - key: adopt.coat.black
+    text: "\u9ED1\u8272"
     gloss: 0
     tier: 0
   - key: adopt.placeholder
@@ -5632,3 +5680,35 @@ MonoBehaviour:
     english: encyclopedia
   - native: N
     english: N (number format)
+  - native: "\u5976\u6CB9"
+    english: cream
+  - native: "\u8272"
+    english: colour
+  - native: "\u68D5\u8910"
+    english: tan
+  - native: "\u5DE7\u514B\u529B"
+    english: chocolate
+  - native: "\u70AD"
+    english: charcoal
+  - native: "\u7070"
+    english: grey
+  - native: "\u767D"
+    english: white
+  - native: "\u6A58"
+    english: orange (ginger)
+  - native: "\u77F3\u677F"
+    english: slate
+  - native: "\u9ED1"
+    english: black
+  - native: "\u6BDB\u8272"
+    english: coat colour
+  - native: "\u5B83\u7684"
+    english: its
+  - native: "\u955C\u5934"
+    english: camera
+  - native: "\u6643\u52A8"
+    english: sway
+  - native: "\u5173"
+    english: off
+  - native: "\u5F00"
+    english: on

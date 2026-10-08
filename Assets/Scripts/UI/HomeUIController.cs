@@ -378,7 +378,7 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>
     /// Shows the pet's corner: <paramref name="title"/>, the pet's needs after
     /// tonight's care in words (<paramref name="body"/>), the pet
-    /// (<paramref name="kind"/> looking <paramref name="look"/>, the room
+    /// (<paramref name="kind"/> in its <paramref name="coat"/> looking <paramref name="look"/>, the room
     /// dark unless <paramref name="lit"/>), <paramref name="reaction"/> (what
     /// it just did), the pat button (<paramref name="patLabel"/>: a hop and
     /// a heart, and <paramref name="onPat"/>'s line), one row per owned toy
@@ -387,7 +387,7 @@ public sealed class HomeUIController : MonoBehaviour
     /// <paramref name="onContinue"/> (or immediately if unwired). Shown again
     /// after a toy (<paramref name="played"/>), the pet spins.
     /// </summary>
-    public void ShowPet(string title, string body, PetKind kind, PetLook look, bool lit, string reaction, string patLabel, Func<string> onPat,
+    public void ShowPet(string title, string body, PetKind kind, string coat, PetLook look, bool lit, string reaction, string patLabel, Func<string> onPat,
                         IReadOnlyList<ToyView> toys, string noToys, string continueLabel, Action onContinue, bool played = false)
     {
         if (!HasPetPanel)
@@ -429,7 +429,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (petView != null)
         {
             if (opening || played)
-                petView.Show(kind, look, lit);
+                petView.Show(kind, coat, look, lit);
             if (played)
                 petView.Play();
         }

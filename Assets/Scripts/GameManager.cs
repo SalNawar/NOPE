@@ -104,11 +104,8 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>Raised when an accepted traveller leaves, with the portal they leave through (PortalDay.DepartureFor; the hall's rings pulse it, VX4).</summary>
     public event System.Action<int> Departed;
 
-    /// <summary>Raised when a citation is issued (Mail's citation notice arrives then; redesign phase 25).</summary>
-    public event System.Action<CaseVerdict> CitationIssued;
-
-    /// <summary>Raised when a citation lands on the desk (the Helix River's red pulse runs then).</summary>
-    public event System.Action<CaseVerdict> CitationLanded;
+    /// <summary>Raised when the player acknowledges a citation slip (Mail's citation notice arrives then, redesign phase 25; the Helix River's red pulse runs then).</summary>
+    public event System.Action<CaseVerdict> CitationAcknowledged;
 
     /// <summary>Raised once a traveller is decided and scored (the game feel reacts: FeelDirector): the case, the verdict, whether they were accepted and the stability before the decision (after is the world's).</summary>
     public event System.Action<CaseInstance, CaseVerdict, bool, float> Resolved;
@@ -804,23 +801,38 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the verdict line and, for a citation, prints it and flies it
-    /// onto the desk (BoothCoordinator.Cite; the Citation replaces the slip,
-    /// Saleh 2026-10-07: Papers, Please's way, nothing waits for it):
-    /// CitationIssued at once (Mail's copy), CitationLanded when it lies on
-    /// the desk (the Helix River's pulse); then the continuation, at once.
+    /// Shows the verdict slip if a UI is wired (pausing the shift clock while a
+    /// citation slip is up, and holding the PC screen on so the slip can never
+    /// sit on a dark screen), then runs the continuation (Saleh 2026-10-07,
+    /// after the 1007b demo: "I like the violation slip better": the slip is
+    /// back and the Citation paper on the desk is gone).
     /// </summary>
     private void ShowVerdictThen(CaseVerdict verdict, System.Action onContinue)
     {
-        if (officeUI != null)
-            officeUI.ShowVerdict(verdict);
-        if (verdict != null && verdict.citationIssued)
+        if (officeUI == null)
         {
-            CitationIssued?.Invoke(verdict);
-            if (booth == null || !booth.Cite(verdict.ticket, () => CitationLanded?.Invoke(verdict)))
-                CitationLanded?.Invoke(verdict);
+            onContinue?.Invoke();
+            return;
         }
-        onContinue?.Invoke();
+
+        // A citation slip holds the day, the shift clock and the screen until acknowledged.
+        bool citation = verdict != null && verdict.citationIssued;
+        bool holdsClock = shiftClock != null && citation;
+        if (holdsClock)
+            shiftClock.Pause();
+        if (citation && booth != null)
+            booth.SetCitationPending(true);
+
+        officeUI.ShowVerdict(verdict, () =>
+        {
+            if (citation && booth != null)
+                booth.SetCitationPending(false);
+            if (holdsClock)
+                shiftClock.Resume();
+            if (citation)
+                CitationAcknowledged?.Invoke(verdict);
+            onContinue?.Invoke();
+        });
     }
 
     /// <summary>
