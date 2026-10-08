@@ -11,13 +11,15 @@ using UnityEngine.UI;
 /// timeline leader's culture:{id} cue (piece 5); its theme (neutral before any
 /// leader) is applied to every ThemeTag in the loaded scene when the scene
 /// loads, never during a shift: colours by role, the culture's font, its
-/// labels (or English, by setting or when no installed font draws them), the
+/// labels (or English: by setting, the default before the Translation Lens's
+/// day, CultureChoice.EnglishBySetting; or when no installed font draws them), the
 /// wallpaper (the most recent world change's: DesktopWallpaper), the compare
 /// colours; diegetic roles are skipped. It also holds
 /// the string lookup UiText reads and the Future currency the wallet shows.
 /// From the Translation Lens's day (TranslationLens.LanguageLocked) the
-/// player's "Always English" no longer applies: the labels follow history and
-/// the lens (TranslationLensPresenter, on the same host) reads them.
+/// player's "Always English" (the default) no longer applies: the labels, the
+/// papers' printed words and every app follow history and the lens
+/// (TranslationLensPresenter, on the same host) reads them.
 /// Every decision is a tested rule (CultureCue.Pick, CultureChoice, UiStrings,
 /// ThemeRoles); this class only reads engine objects and sets them.
 /// </summary>
@@ -164,7 +166,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
         UiStringTableSO cultureTable = ActiveTheme.language != ui.readingLanguage ? Library.GetStringTable(ActiveTheme.language) : null;
 
         RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, () => Sample(reading, cultureTable, ui.glossPercent));
-        Language = CultureChoice.Language(ActiveTheme.language, ui.readingLanguage, cultureTable != null, UiLanguagePreference.AlwaysEnglish && !LanguageLocked, font.Covers);
+        Language = CultureChoice.Language(ActiveTheme.language, ui.readingLanguage, cultureTable != null, CultureChoice.EnglishBySetting(UiLanguagePreference.Stored, LanguageLocked), font.Covers);
         if (Language == LabelLanguage.EnglishNoFont)
             WarnOnce("font:" + ActiveTheme.cultureId, $"[CultureThemeService] No installed font draws the '{ActiveTheme.cultureId}' labels (missing {font.Missing}; tried {font.Tried}); the desk shows English labels in its colours.");
         _font = Language == LabelLanguage.EnglishNoFont ? null : font.Asset;

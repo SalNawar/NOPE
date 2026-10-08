@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The Settings window's per-player choices: the UI language (piece 6 U12),
-/// "Follow history" or "Always English" (UiLanguagePreference; labels change
+/// "Follow history" or "Always English" (the default; UiLanguagePreference; labels change
 /// at the next scene load, colours, fonts and the wallpaper follow history
 /// either way), a free choice until the Translation Lens's day (day 8): from
 /// then on both buttons are disabled, "Follow history" shows as chosen and a
@@ -184,7 +184,7 @@ public sealed class SettingsWindowController : MonoBehaviour
         CultureThemeService service = CultureThemeService.Instance;
         ThemeSO theme = service != null ? service.ActiveTheme : null;
         bool locked = CultureThemeService.LanguageLocked;
-        bool english = UiLanguagePreference.AlwaysEnglish && !locked;
+        bool english = CultureChoice.EnglishBySetting(UiLanguagePreference.Stored, locked);
         Paint(followHistoryButton, !english, theme);
         Paint(alwaysEnglishButton, english, theme);
         if (followHistoryButton != null)

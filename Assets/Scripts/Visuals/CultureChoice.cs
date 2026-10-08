@@ -10,7 +10,7 @@ public enum LabelLanguage
     /// <summary>The content has no table for the culture's language.</summary>
     NoTable,
 
-    /// <summary>The player chose "Always English" in Settings.</summary>
+    /// <summary>"Always English" in Settings (the default before the Translation Lens's day: CultureChoice.EnglishBySetting).</summary>
     EnglishBySetting,
 
     /// <summary>No installed font can draw the culture's labels.</summary>
@@ -40,6 +40,33 @@ public static class CultureChoice
             return LabelLanguage.EnglishNoFont;
         return LabelLanguage.Culture;
     }
+
+    /// <summary>The value Settings stores for "Follow history" (UiLanguagePreference); any other value, or none, reads as "Always English".</summary>
+    public const string FollowHistoryChoice = "history";
+
+    /// <summary>The value Settings stores for "Always English" (UiLanguagePreference).</summary>
+    public const string AlwaysEnglishChoice = "english";
+
+    /// <summary>
+    /// True when the stored Settings choice is "Always English": any value but
+    /// <see cref="FollowHistoryChoice"/>, none included (the default: track
+    /// LANG's decision of 2026-10-08, after Saleh's playtest of demo 1008a,
+    /// "second day language switched already and also hovering didn't
+    /// translate": a player reads English until the Translation Lens's day
+    /// unless they opt into Follow history).
+    /// </summary>
+    public static bool ChoseEnglish(string storedChoice) =>
+        !string.Equals(storedChoice, FollowHistoryChoice, System.StringComparison.Ordinal);
+
+    /// <summary>
+    /// True when the labels read English by the player's setting: the stored
+    /// choice is English (<see cref="ChoseEnglish"/>, the default) and the
+    /// language is not locked yet. From the Translation Lens's day
+    /// (<paramref name="languageLocked"/>: TranslationLens.LanguageLocked) the
+    /// labels follow history whatever the choice, and the lens reads them.
+    /// </summary>
+    public static bool EnglishBySetting(string storedChoice, bool languageLocked) =>
+        !languageLocked && ChoseEnglish(storedChoice);
 
     /// <summary>The wallet's word: the Future currency when a culture leads and its Future place has one, else the fallback (the neutral word).</summary>
     public static string Wallet(string cultureId, string futureCurrency, string fallback) =>
