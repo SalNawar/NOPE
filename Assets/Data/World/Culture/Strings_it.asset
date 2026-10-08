@@ -2276,8 +2276,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.unproven
-    text: 'Rifiutato senza prove registrate. Registra cosa non va prima di rifiutare:
-      una differenza nei documenti, una regola violata o una data non valida.'
+    text: 'Rifiutato senza prove registrate. Prima registra l''errore: una differenza
+      nei documenti, una regola violata o una data non valida.'
     gloss: 0
     tier: 0
   - key: citation.acceptedWrong
@@ -5981,3 +5981,5 @@ MonoBehaviour:
     english: Off
   - native: Attivata
     english: On
+  - native: l'errore
+    english: the error

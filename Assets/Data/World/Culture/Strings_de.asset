@@ -2275,9 +2275,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.unproven
-    text: "Ohne erfasste Beweise abgelehnt. Erfasse vor dem Ablehnen, was falsch
-      ist: einen Unterschied in den Papieren, eine verletzte Regel oder ein ung\xFCltiges
-      Datum."
+    text: "Ohne erfasste Beweise abgelehnt. Erst den Fehler erfassen: ein Unterschied
+      in den Papieren, eine verletzte Regel, ein ung\xFCltiges Datum."
     gloss: 0
     tier: 0
   - key: citation.acceptedWrong
@@ -6099,3 +6098,5 @@ MonoBehaviour:
     english: coat
   - native: Kamerawackeln
     english: Camera sway
+  - native: Erst
+    english: First

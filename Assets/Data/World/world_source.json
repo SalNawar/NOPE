@@ -39282,7 +39282,7 @@
           },
           {
             "key": "citation.unproven",
-            "text": "Απόρριψη χωρίς καταγεγραμμένο αποδεικτικό. Κατάγραψε τι δεν πάει καλά πριν απορρίψεις: μια διαφορά στα έγγραφα, έναν κανόνα που παραβιάζουν ή μια ημερομηνία που δεν ισχύει."
+            "text": "Απόρριψη χωρίς καταγεγραμμένο στοιχείο. Κατάγραψε το λάθος πριν απορρίψεις: διαφορά στα έγγραφα, παραβίαση κανόνα ή άκυρη ημερομηνία."
           },
           {
             "key": "citation.acceptedWrong",
@@ -44849,6 +44849,14 @@
           {
             "native": "Ενεργό",
             "english": "On"
+          },
+          {
+            "native": "παραβίαση",
+            "english": "breach"
+          },
+          {
+            "native": "άκυρη",
+            "english": "invalid"
           }
         ]
       },
@@ -47082,7 +47090,7 @@
           },
           {
             "key": "citation.unproven",
-            "text": "Rifiutato senza prove registrate. Registra cosa non va prima di rifiutare: una differenza nei documenti, una regola violata o una data non valida."
+            "text": "Rifiutato senza prove registrate. Prima registra l'errore: una differenza nei documenti, una regola violata o una data non valida."
           },
           {
             "key": "citation.acceptedWrong",
@@ -52773,6 +52781,10 @@
           {
             "native": "Attivata",
             "english": "On"
+          },
+          {
+            "native": "l'errore",
+            "english": "the error"
           }
         ]
       },
@@ -55006,7 +55018,7 @@
           },
           {
             "key": "citation.unproven",
-            "text": "Ohne erfasste Beweise abgelehnt. Erfasse vor dem Ablehnen, was falsch ist: einen Unterschied in den Papieren, eine verletzte Regel oder ein ungültiges Datum."
+            "text": "Ohne erfasste Beweise abgelehnt. Erst den Fehler erfassen: ein Unterschied in den Papieren, eine verletzte Regel, ein ungültiges Datum."
           },
           {
             "key": "citation.acceptedWrong",
@@ -60945,6 +60957,10 @@
           {
             "native": "Kamerawackeln",
             "english": "Camera sway"
+          },
+          {
+            "native": "Erst",
+            "english": "First"
           }
         ]
       },
