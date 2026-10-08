@@ -491,6 +491,26 @@ public sealed class DeskRulebook : MonoBehaviour
             GuideRead?.Invoke(sheet.Id);
     }
 
+    /// <summary>Where today's rules are to look at (the guide's "rulebook" arrow): the first row of the open RULES or SEALS page, else the tab that turns to RULES; false while the booklet is hidden.</summary>
+    public bool TryRulesPoint(out Vector3 world)
+    {
+        world = default;
+        if (!isActiveAndEnabled)
+            return false;
+        Clickable[] open = Page == SealsPageIndex ? sealRows : Page == 0 ? rows : null;
+        Clickable first = open != null && open.Length > 0 ? open[0] : null;
+        if (first != null && first.gameObject.activeInHierarchy && first.TryGetComponent(out Collider box))
+        {
+            world = box.bounds.center;
+            return true;
+        }
+        Clickable tab = tabs.Length > 0 ? tabs[0] : null;
+        if (tab == null)
+            return false;
+        world = tab.TryGetComponent(out Collider tabBox) ? tabBox.bounds.center : tab.transform.position;
+        return true;
+    }
+
     /// <summary>The world bounds of the row printing directive <paramref name="ruleIndex"/> (a match line meets it there); false when it prints no row, its page is closed or the booklet is hidden.</summary>
     public bool TryRowBounds(int ruleIndex, out Bounds bounds)
     {

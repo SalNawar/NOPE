@@ -17941,7 +17941,7 @@ MonoBehaviour:
         action: 4
         categories: 0a000000
         form: 
-        target: board
+        target: rulebook
         text: 'Practice: two routes are open today (the board). Press {inspect},
           click the Destination, then today''s rule.'
     - id: seals
@@ -18208,7 +18208,7 @@ MonoBehaviour:
       categories: 
       form: 
       target: stamps
-      text: Press {stamps} (or the grey STAMPS tab) to bring out the stamps.
+      text: Press {stamps} (or the STAMPS tab) to open the brass stamp drawer.
     - id: stamp
       action: 6
       categories: 

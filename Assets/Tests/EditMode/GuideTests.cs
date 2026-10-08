@@ -217,4 +217,16 @@ public class GuideTests
                         GuideText.Keys("Press {inspect}, {stamps}, {pc}; {back}."));
         Assert.AreEqual(string.Empty, GuideText.Keys(null));
     }
+
+    [Test]
+    public void CompareEnds_PointAtTheValueFirst_ThenWhatItIsHeldAgainst()
+    {
+        // Saleh's 1008a playtest: the arrows pointed at the folder, not at the Passport's value.
+        Assert.AreEqual(("field:TC-101/Destination", "rulebook"), GuideTargets.CompareEnds(Step("d", GuideAction.Compare, "rulebook", ClueCategory.Destination)));
+        Assert.AreEqual(("field:TC-101/Expiry", "calendar"), GuideTargets.CompareEnds(Step("e", GuideAction.Compare, "calendar", ClueCategory.Expiry)));
+        Assert.AreEqual(("field:TC-230/CitizenId", "field:TC-101/CitizenId"), GuideTargets.CompareEnds(Step("t", GuideAction.Compare, "field:TC-230/CitizenId", ClueCategory.CitizenId)));
+        Assert.AreEqual(("field:TC-240/TransponderClass", "rulebook"), GuideTargets.CompareEnds(Step("c", GuideAction.Compare, "field:TC-240/TransponderClass", ClueCategory.AccountStatus, ClueCategory.TransponderClass)));
+        Assert.AreEqual(("stamps", "stamps"), GuideTargets.CompareEnds(Step("s", GuideAction.StampsOut, "stamps")));
+        Assert.IsTrue(GuideTargets.IsKnown(GuideTargets.CompareEnds(Step("d", GuideAction.Compare, "rulebook", ClueCategory.Destination)).pick));
+    }
 }
