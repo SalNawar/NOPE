@@ -476,10 +476,91 @@ public sealed class DeskRulebook : MonoBehaviour
             if (on && rows[r].GetComponentInChildren<TMP_Text>(true) is TMP_Text text)
                 text.text = $"{r + 1}. {_rules[_indices[r]].Summary()}";
         }
+        LayRows();
         if (none != null)
             none.gameObject.SetActive(_indices.Count == 0);
         SetInspecting(_inspecting);
         ShowPage(0);
+    }
+
+    /// <summary>A rule row as built: its place, its text's place and size, its click box's centre and size (taken on the first LayRows).</summary>
+    private struct RowHome
+    {
+        public Vector3 Row, TextPosition, BoxCentre, BoxSize;
+        public Vector2 TextSize;
+    }
+
+    /// <summary>The rule rows as built (empty until the first LayRows).</summary>
+    private RowHome[] _rowHomes = Array.Empty<RowHome>();
+
+    /// <summary>The least share of its built size a rule row's text shrinks to so that the rows stay on the page.</summary>
+    private const float RowTextFloor = 0.6f;
+
+    /// <summary>
+    /// Lays the shown rule rows down the page (the orchestrator's catch on
+    /// 2026-10-08: rule 3's last line printed over rule 4's first): each row
+    /// grows downward to fit its wrapped text (its text's box, its click box)
+    /// and pushes the rows under it down by as much; when the rows would run
+    /// past the last row's place, every row's text shrinks a step (down to
+    /// RowTextFloor of its built size) and they are laid again. A row whose
+    /// text fits keeps its place on the art's line.
+    /// </summary>
+    private void LayRows()
+    {
+        if (_rowHomes.Length != rows.Length)
+        {
+            _rowHomes = new RowHome[rows.Length];
+            for (int r = 0; r < rows.Length; r++)
+            {
+                if (rows[r] == null)
+                    continue;
+                TMP_Text t = rows[r].GetComponentInChildren<TMP_Text>(true);
+                BoxCollider b = rows[r].GetComponent<BoxCollider>();
+                _rowHomes[r] = new RowHome
+                {
+                    Row = rows[r].transform.localPosition,
+                    TextPosition = t != null ? t.transform.localPosition : Vector3.zero,
+                    TextSize = t != null ? t.rectTransform.sizeDelta : Vector2.zero,
+                    BoxCentre = b != null ? b.center : Vector3.zero,
+                    BoxSize = b != null ? b.size : Vector3.zero,
+                };
+            }
+        }
+        int count = Mathf.Min(_indices.Count, rows.Length);
+        if (count == 0 || rows[rows.Length - 1] == null)
+            return;
+        RowHome lastPlace = _rowHomes[rows.Length - 1];
+        float pageBottom = lastPlace.Row.z - lastPlace.BoxSize.z / 2f;
+        for (float share = 1f; ; share -= 0.1f)
+        {
+            float shift = 0f, bottom = float.MaxValue;
+            for (int r = 0; r < count; r++)
+            {
+                if (rows[r] == null)
+                    continue;
+                RowHome home = _rowHomes[r];
+                TMP_Text t = rows[r].GetComponentInChildren<TMP_Text>(true);
+                float extra = 0f;
+                if (t != null)
+                {
+                    t.enableAutoSizing = false;
+                    t.fontSize = t.fontSizeMax * share;
+                    extra = Mathf.Max(0f, t.GetPreferredValues(t.text, home.TextSize.x, 0f).y - home.TextSize.y);
+                    t.rectTransform.sizeDelta = new Vector2(home.TextSize.x, home.TextSize.y + extra);
+                    t.transform.localPosition = home.TextPosition - new Vector3(0f, 0f, extra / 2f); // its top stays on the row's top
+                }
+                rows[r].transform.localPosition = home.Row - new Vector3(0f, 0f, shift);
+                if (rows[r].TryGetComponent(out BoxCollider b))
+                {
+                    b.center = home.BoxCentre - new Vector3(0f, 0f, extra / 2f);
+                    b.size = home.BoxSize + new Vector3(0f, 0f, extra);
+                }
+                shift += extra;
+                bottom = home.Row.z - shift - home.BoxSize.z / 2f; // its click box's foot
+            }
+            if (bottom >= pageBottom - 0.0001f || share <= RowTextFloor + 0.001f)
+                return;
+        }
     }
 
     /// <summary>The GUIDE's sheets (BASICS first, then the day's pages: the guide director); the sheet open stays open (by id; the first when gone).</summary>
