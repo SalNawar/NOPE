@@ -54,7 +54,9 @@ public sealed class UiStringEntry
 /// reading entry has a gloss shows the English word with it. Every culture
 /// label it returns is remembered as a LensPhrase (its text as drawn, its
 /// English, its words), so the Translation Lens can find and translate it
-/// wherever it is shown.
+/// wherever it is shown; so is the same label in capitals (a paper's printed
+/// words, a label styled in capitals, a form's section head: ArtLayout.Capitals
+/// and plain upper case), its English in capitals.
 /// </summary>
 public sealed class UiStrings
 {
@@ -115,9 +117,14 @@ public sealed class UiStrings
             string english = hasEnglish ? Fill(reading.text, args) : null;
             if (!_phrases.ContainsKey(native))
             {
-                var phrase = new LensPhrase(logical, english, _rightToLeft, _glossary);
-                _phrases.Add(native, phrase);
-                _phraseList.Add(phrase);
+                Remember(native, logical, english);
+                // The label printed in capitals is the same label to the lens (Saleh's 1008a playtest: hovering a paper's
+                // printed words did not translate them): ArtLayout.Capitals (a Greek capital bare) and plain upper case
+                // (FormLayout's section heads, which keep a Greek accent); a tag's name is never upper-cased.
+                string capitalsEnglish = english != null ? ArtLayout.Capitals(english) : null;
+                RememberCapitals(logical, ArtLayout.Capitals(logical), capitalsEnglish);
+                if (logical.IndexOf('<') < 0)
+                    RememberCapitals(logical, logical.ToUpperInvariant(), capitalsEnglish);
             }
             if (!hasEnglish)
                 return native;
@@ -138,6 +145,24 @@ public sealed class UiStrings
         if (_missingSet.Add(key))
             _missing.Add(key);
         return key;
+    }
+
+    /// <summary>Remembers a culture label for the lens under its text as drawn (<paramref name="native"/>), once.</summary>
+    private void Remember(string native, string logical, string english)
+    {
+        if (_phrases.ContainsKey(native))
+            return;
+        var phrase = new LensPhrase(logical, english, _rightToLeft, _glossary);
+        _phrases.Add(native, phrase);
+        _phraseList.Add(phrase);
+    }
+
+    /// <summary>Remembers <paramref name="logical"/> in capitals (<paramref name="capitals"/>, when it differs) with its English in capitals.</summary>
+    private void RememberCapitals(string logical, string capitals, string capitalsEnglish)
+    {
+        if (string.Equals(capitals, logical, StringComparison.Ordinal))
+            return;
+        Remember(_rightToLeft ? ArabicShaper.ToVisual(capitals) : capitals, capitals, capitalsEnglish);
     }
 
     /// <summary>The distinct placeholder tokens of a template in first-appearance order ("0", "1:+0.#;-0.#").</summary>

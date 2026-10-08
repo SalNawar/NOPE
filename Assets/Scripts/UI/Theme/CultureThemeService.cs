@@ -81,6 +81,8 @@ public sealed class CultureThemeService : TimelineCueReceiver
         _fonts = new RuntimeFonts(library.CultureUi.latinFallbackFont);
         ActiveTheme = library.NeutralTheme;
         Strings = new UiStrings(ReadingTable()?.entries, null, false, library.CultureUi.glossPercent);
+        _stringsTable = null;
+        _stringsBuilt = false;
     }
 
     /// <summary>
@@ -113,6 +115,12 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// the next time they show).
     /// </summary>
     public static event System.Action LabelsChanged;
+
+    /// <summary>The culture table <see cref="Strings"/> was built over (null: the reading language's only), once built after Configure.</summary>
+    private UiStringTableSO _stringsTable;
+
+    /// <summary>True once OnCuesChanged built <see cref="Strings"/> for the scene in place (Configure's reading-only lookup, and a scene loaded on its own, are given a new one on the next apply).</summary>
+    private bool _stringsBuilt;
 
     /// <summary>The language the labels were last applied in (the table's language, or the reading language), to raise <see cref="LabelsChanged"/> only on a change.</summary>
     private string _labelsLanguage;
@@ -174,8 +182,16 @@ public sealed class CultureThemeService : TimelineCueReceiver
         SetGlobalFallback(Language == LabelLanguage.Culture ? _font : null);
 
         bool cultureLabels = Language == LabelLanguage.Culture;
-        Strings = new UiStrings(reading?.entries, cultureLabels ? cultureTable.entries : null, cultureLabels && cultureTable.rightToLeft, ui.glossPercent,
-                                cultureLabels ? cultureTable.words : null);
+        UiStringTableSO labelsTable = cultureLabels ? cultureTable : null;
+        if (!_stringsBuilt || labelsTable != _stringsTable)
+        {
+            // A new lookup only when the labels' table changes: a refresh in the same language keeps the labels the
+            // lens already knows (a title the game printed before GameManager.Start refreshed, the papers' printed words).
+            Strings = new UiStrings(reading?.entries, cultureLabels ? cultureTable.entries : null, cultureLabels && cultureTable.rightToLeft, ui.glossPercent,
+                                    cultureLabels ? cultureTable.words : null);
+            _stringsTable = labelsTable;
+            _stringsBuilt = true;
+        }
 
         FutureCurrency = ResolveFutureCurrency(id);
         _wallpaper = ResolveWallpaper(id);
@@ -222,6 +238,8 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>A new scene: theme it before its first Start (the briefing never flashes the neutral look).</summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (mode == LoadSceneMode.Single)
+            _stringsBuilt = false; // a new place (title, office, home): the lens's labels start afresh, so they never pile up over a session
         _target = scene;
         try
         {

@@ -18,6 +18,7 @@ public class DocumentWordsTests
     {
         Assert.AreEqual("ΥΠΗΡΕΣΙΑ ΧΡΟΝΙΚΟΥ ΤΕΛΩΝΕΙΟΥ", ArtLayout.Capitals("Υπηρεσία Χρονικού Τελωνείου"));
         Assert.AreEqual("ΠΡΩΤΕΪΝΗ", ArtLayout.Capitals("πρωτεΐνη"), "the diaeresis stays");
+        Assert.AreEqual("ΚΑΝΟΝΙΣΜΟΣ ΥΠΑΛΛΗΛΟΥ", ArtLayout.Capitals("Κανονισμός υπαλλήλου"), "a final sigma as Σ (the lens probe saw ΚΑΝΟΝΙΣΜΟς in Unity)");
         Assert.AreEqual("BÜRGER-ID", ArtLayout.Capitals("Bürger-ID"));
         Assert.AreEqual("入境签证", ArtLayout.Capitals("入境签证"));
         Assert.AreEqual("ΔΕΧΟΜΑΙ\n<size=60%><noparse>Accept</noparse></size>".Replace("Accept", "ACCEPT"),

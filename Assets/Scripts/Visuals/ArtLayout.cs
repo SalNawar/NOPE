@@ -39,7 +39,7 @@ public static class ArtLayout
     /// <summary>
     /// <paramref name="text"/> in capitals as a printed form sets them: upper
     /// case (invariant), a Greek capital without its accent (Greek writes
-    /// capitals bare: "Υπηρεσία" gives ΥΠΗΡΕΣΙΑ; the diaeresis stays); a
+    /// capitals bare: "Υπηρεσία" gives ΥΠΗΡΕΣΙΑ; the diaeresis stays) and a final sigma as Σ (Unity's runtime leaves ς lower case); a
     /// rich-text tag ("&lt;size=60%&gt;") is kept as it is.
     /// </summary>
     public static string Capitals(string text)
@@ -79,7 +79,7 @@ public static class ArtLayout
         var sb = new System.Text.StringBuilder(text.Length);
         foreach (char c in text.Normalize(System.Text.NormalizationForm.FormD).ToUpperInvariant())
             if (c != '\u0301' && c != '\u0300' && c != '\u0342' && c != '\u0313' && c != '\u0314' && c != '\u0345')
-                sb.Append(c);
+                sb.Append(c == '\u03C2' ? '\u03A3' : c);
         return sb.ToString().Normalize(System.Text.NormalizationForm.FormC);
     }
 

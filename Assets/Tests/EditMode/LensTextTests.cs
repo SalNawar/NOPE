@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
@@ -154,5 +155,23 @@ public class LensTextTests
         Assert.AreEqual("Day 8", strings.Phrases[1].English);
         Assert.AreEqual("day", strings.Phrases[1].EnglishWord(0));
         Assert.AreEqual(0, new UiStrings(reading, null, false, 60).Phrases.Count, "English labels need no lens");
+    }
+
+    [Test]
+    public void UiStrings_RemembersALabelInCapitalsToo_ItsEnglishInCapitals()
+    {
+        // Saleh's 1008a playtest: a paper prints its labels in capitals (ArtLayout.Capitals), and the lens did not find them.
+        var reading = new List<UiStringEntry> { new UiStringEntry { key = "doc.nationality", text = "Nationality", tier = StringTier.Flavour } };
+        var culture = new List<UiStringEntry> { new UiStringEntry { key = "doc.nationality", text = "Υπηκοότητα" } };
+        var strings = new UiStrings(reading, culture, false, 60, new List<LensWord> { new LensWord { native = "υπηκοότητα", english = "nationality" } });
+        Assert.AreEqual("Υπηκοότητα", strings.Get("doc.nationality"));
+        LensPhrase bare = strings.Phrases.FirstOrDefault(p => p.Visual == "ΥΠΗΚΟΟΤΗΤΑ");
+        Assert.IsNotNull(bare, "the printed capitals (a Greek capital bare)");
+        Assert.AreEqual("NATIONALITY", bare.English);
+        Assert.AreEqual("NATIONALITY", bare.EnglishWord(0), "a word of a capitals label in capitals");
+        Assert.IsNotNull(strings.Phrases.FirstOrDefault(p => p.Visual == "ΥΠΗΚΟΌΤΗΤΑ"), "plain upper case (a section head) keeps the accent");
+        Assert.AreEqual(3, strings.Phrases.Count);
+        strings.Get("doc.nationality");
+        Assert.AreEqual(3, strings.Phrases.Count, "each once");
     }
 }

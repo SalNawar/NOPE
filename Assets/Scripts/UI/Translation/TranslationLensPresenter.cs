@@ -10,13 +10,19 @@ using UnityEngine.SceneManagement;
 /// The Translation Lens on screen (Saleh 2026-10-06: "translates any word the
 /// player hovers on. When a word is being translated the letters flip back
 /// to English"). Lives on the persistent culture host (CultureThemeBootstrap)
-/// and reads every UI text of the loaded scenes: wherever a culture label
+/// and reads every text of the loaded scenes, the UI's and the desk's printed
+/// words (a paper's, the rulebook folder's: world-space TextMeshPro under the
+/// office camera's PhysicsRaycaster; Saleh's 1008a playtest, "hovering didn't
+/// translate"): wherever a culture label
 /// (UiStrings.Phrases) is shown, hovering it with the lens flips what the
 /// hover covers (TranslationLens.Covered) into English letter by letter
 /// (LensFlip) and back when the pointer leaves: at level 1 the word under the
 /// pointer (its glossary English, LensWords), at level 2 the whole label as
-/// its English sentence, at level 3 every label of the object (its window, or
-/// its top panel such as the morning paper), one after another. Reduced
+/// its English sentence, at level 3 every label of the object (its window, its
+/// top panel such as the morning paper, or the desk object: the paper or the
+/// folder, the DeskDraggable it lies on), one after another. A desk word is
+/// read only when no UI is over it and it lies on the desk object the pointer
+/// is over (the top paper of a stack). Reduced
 /// motion swaps at once. While a label is translated its auto-size is held and
 /// its size eases to fit the English (TranslationLensSettings.resizeSeconds), so nothing
 /// around it moves. Nothing runs while the pointer rests and nothing flips:
@@ -97,6 +103,10 @@ public sealed class TranslationLensPresenter : MonoBehaviour
 
     private PointerEventData _pointer;
     private EventSystem _pointerSystem;
+
+    /// <summary>The desk object under the pointer (the office camera's first physics hit, ObjectRoot), or null; and the camera that found it.</summary>
+    private Transform _deskHit;
+    private Camera _deskCamera;
     private UiStrings _strings;
     private int _phraseCount;
     private Vector2 _lastPosition = new Vector2(float.NaN, float.NaN);
@@ -201,7 +211,7 @@ public sealed class TranslationLensPresenter : MonoBehaviour
     private void Rescan(UiStrings strings, float now)
     {
         _candidates.Clear();
-        _candidates.AddRange(FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include, FindObjectsSortMode.None));
+        _candidates.AddRange(FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None));
         _byLength.Clear();
         _byLength.AddRange(strings.Phrases);
         _byLength.Sort((a, b) => b.Visual.Length.CompareTo(a.Visual.Length));
@@ -218,6 +228,7 @@ public sealed class TranslationLensPresenter : MonoBehaviour
     {
         Transform top = TopHit(position);
         Transform topRoot = top != null ? ObjectRoot(top) : null;
+        Transform deskRoot = topRoot == null && _deskHit != null ? ObjectRoot(_deskHit) : null;
 
         TextState hoveredState = null;
         Occurrence hovered = null;
@@ -226,15 +237,27 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         {
             if (text == null || !text.isActiveAndEnabled)
                 continue;
-            if (topRoot != null && ObjectRoot(text.transform) != topRoot)
-                continue; // under another window
-            Camera cam = CameraOf(text);
-            if (!RectTransformUtility.RectangleContainsScreenPoint(text.rectTransform, position, cam))
+            Camera cam;
+            if (text is TextMeshPro desk)
+            {
+                // A desk word: never under the UI, only on the desk object the pointer is over, and only when drawn.
+                if (deskRoot == null || !desk.renderer.enabled || ObjectRoot(text.transform) != deskRoot)
+                    continue;
+                cam = _deskCamera;
+            }
+            else
+            {
+                if (topRoot != null && ObjectRoot(text.transform) != topRoot)
+                    continue; // under another window
+                cam = CameraOf(text);
+            }
+            // A printed paper word may overflow its box (it shrinks to fit only so far): a desk word is found by its letters alone.
+            if (!(text is TextMeshPro) && !RectTransformUtility.RectangleContainsScreenPoint(text.rectTransform, position, cam))
                 continue;
             TextState state = StateOf(text);
             if (state.Occurrences.Count == 0)
                 continue;
-            int index = TMP_TextUtilities.FindIntersectingCharacter(text, position, cam, false);
+            int index = text is TextMeshPro ? DeskCharacterAt(text, position, cam) : TMP_TextUtilities.FindIntersectingCharacter(text, position, cam, false);
             if (index < 0 || index >= text.textInfo.characterCount)
                 continue;
             int source = text.textInfo.characterInfo[index].index;
@@ -259,7 +282,7 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         bool overObject = false;
         if (_reach == LensReach.Object)
         {
-            Transform root = topRoot != null ? topRoot : hoveredState != null ? ObjectRoot(hoveredState.Text.transform) : null;
+            Transform root = topRoot != null ? topRoot : deskRoot != null ? deskRoot : hoveredState != null ? ObjectRoot(hoveredState.Text.transform) : null;
             overObject = root != null;
             if (root != null)
             {
@@ -619,9 +642,11 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         return false;
     }
 
-    /// <summary>The topmost UI element under the point (null without an event system or over no UI).</summary>
+    /// <summary>The topmost UI element under the point (null without an event system or over no UI); notes the first desk object hit (_deskHit, by a PhysicsRaycaster).</summary>
     private Transform TopHit(Vector2 position)
     {
+        _deskHit = null;
+        _deskCamera = null;
         EventSystem system = EventSystem.current;
         if (system == null)
             return null;
@@ -634,15 +659,29 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         _hits.Clear();
         system.RaycastAll(_pointer, _hits);
         foreach (RaycastResult hit in _hits)
-            if (hit.gameObject != null && hit.module is UnityEngine.UI.GraphicRaycaster)
+        {
+            if (hit.gameObject == null)
+                continue;
+            if (hit.module is UnityEngine.UI.GraphicRaycaster)
                 return hit.gameObject.transform;
+            if (_deskHit == null && hit.module is PhysicsRaycaster && !(hit.module is Physics2DRaycaster))
+            {
+                _deskHit = hit.gameObject.transform;
+                _deskCamera = hit.module.eventCamera;
+            }
+        }
         return null;
     }
 
-    /// <summary>The object a UI element belongs to: its window (DesktopWindow), else its top panel (the child of its root canvas).</summary>
+    /// <summary>The object a UI element belongs to: its window (DesktopWindow), else its top panel (the child of its root canvas); a desk object's (no canvas): the DeskDraggable it is part of (a paper, the rulebook folder), else its top object.</summary>
     private static Transform ObjectRoot(Transform t)
     {
         Canvas canvas = t.GetComponentInParent<Canvas>();
+        if (canvas == null)
+        {
+            DeskDraggable desk = t.GetComponentInParent<DeskDraggable>();
+            return desk != null ? desk.transform : t.root;
+        }
         Transform rootCanvas = canvas != null ? canvas.rootCanvas.transform : null;
         if (t == rootCanvas)
             return t;
@@ -655,6 +694,42 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         }
         return t;
     }
+
+    /// <summary>
+    /// The character of a desk word under the screen point, or -1: each
+    /// letter's box as the camera draws it (its four corners on the screen),
+    /// so a word printed on a paper lying at any angle is found where it shows
+    /// (TMP's own test found nothing on some of the papers' and the folder's words).
+    /// </summary>
+    private static int DeskCharacterAt(TMP_Text text, Vector2 position, Camera cam)
+    {
+        if (cam == null)
+            return -1;
+        Transform t = text.transform;
+        TMP_TextInfo info = text.textInfo;
+        for (int i = 0; i < info.characterCount; i++)
+        {
+            TMP_CharacterInfo c = info.characterInfo[i];
+            Vector2 bl = cam.WorldToScreenPoint(t.TransformPoint(c.bottomLeft));
+            Vector2 tl = cam.WorldToScreenPoint(t.TransformPoint(new Vector3(c.bottomLeft.x, c.topRight.y, c.bottomLeft.z)));
+            Vector2 tr = cam.WorldToScreenPoint(t.TransformPoint(c.topRight));
+            Vector2 br = cam.WorldToScreenPoint(t.TransformPoint(new Vector3(c.topRight.x, c.bottomLeft.y, c.bottomLeft.z)));
+            if (InQuad(position, bl, tl, tr, br))
+                return i;
+        }
+        return -1;
+    }
+
+    /// <summary>True when <paramref name="p"/> lies inside the convex quad a-b-c-d (either winding; a degenerate quad holds nothing).</summary>
+    private static bool InQuad(Vector2 p, Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+    {
+        float s1 = Cross(a, b, p), s2 = Cross(b, c, p), s3 = Cross(c, d, p), s4 = Cross(d, a, p);
+        bool anyArea = Mathf.Abs(Cross(a, b, c)) > 1e-6f;
+        return anyArea && ((s1 >= 0f && s2 >= 0f && s3 >= 0f && s4 >= 0f) || (s1 <= 0f && s2 <= 0f && s3 <= 0f && s4 <= 0f));
+    }
+
+    /// <summary>The z of (b - a) x (p - a).</summary>
+    private static float Cross(Vector2 a, Vector2 b, Vector2 p) => (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
 
     /// <summary>The camera a text's canvas is drawn by (null for an overlay).</summary>
     private static Camera CameraOf(TMP_Text text)
