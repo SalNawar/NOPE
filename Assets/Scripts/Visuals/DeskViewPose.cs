@@ -15,7 +15,7 @@ public sealed class DeskViewTuning
     public float pitch = 80f;
 
     /// <summary>Metres from the aim point back to the camera along its view (smaller zooms closer).</summary>
-    public float distance = 0.62f;
+    public float distance = 0.8f;
 
     /// <summary>Metres the aim point lies right of the mat's centre, along the office view's level right (toward the scanner and the stamps).</summary>
     public float aimRight = 0f;
