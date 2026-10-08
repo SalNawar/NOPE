@@ -16,6 +16,7 @@ Shader "NOPE/Hall Living City"
  _Atmosphere("Cloud smoke ship bus atlas",2D)="black"{}
  _AtmospherePace("Clouds, airship, bus and headlights pace (1: the hall window's)",Float)=1
  _HeadlightSize("Headlight size (1: the hall window's)",Float)=1
+ _CityView("Full-screen city view (0: the hall window)",Float)=0
  }
  SubShader {
  Tags {"Queue"="Transparent" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline"}
@@ -28,7 +29,7 @@ Shader "NOPE/Hall Living City"
  TEXTURE2D(_MorningRain);TEXTURE2D(_NoonRain);TEXTURE2D(_EveningRain);TEXTURE2D(_NightRain);
  TEXTURE2D(_CityDepth);TEXTURE2D(_Atmosphere);
  float4 _StateWeights;
- float _Region,_CityPan,_CityRain,_CityDepthStrength,_CitySeconds,_CityMotion,_AtmospherePace,_HeadlightSize;
+ float _Region,_CityPan,_CityRain,_CityDepthStrength,_CitySeconds,_CityMotion,_AtmospherePace,_HeadlightSize,_CityView;
  struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  V vert(A v){V o;o.position=TransformObjectToHClip(v.position.xyz);o.uv=v.uv;o.color=v.color;return o;}
@@ -40,6 +41,10 @@ Shader "NOPE/Hall Living City"
   half4 c=SAMPLE_TEXTURE2D(_Atmosphere,sampler_MorningClear,(clamp(q,.002,.998)+cell)*.5);
   c.a*=inside;return c;
  }
+ // Where a flyer's centre is across the painting at frac f of its pass: the hall window keeps f (its
+ // apertures hide the wrap); the city view (CityView, _CityView 1) runs it from wholly off one edge
+ // to wholly off the other (halfWidth past each edge), so it never pops in or out in view.
+ float Fly(float f,float halfWidth){return lerp(f,f*(1+2*halfWidth+.004)-halfWidth-.002,_CityView);}
  half3 Over(half3 baseColor,half4 layer,half opacity,half3 light)
  {return lerp(baseColor,layer.rgb*light,saturate(layer.a*opacity));}
  half4 frag(V v):SV_Target
@@ -69,8 +74,9 @@ Shader "NOPE/Hall Living City"
   float glow=4000000/max(_HeadlightSize*_HeadlightSize,.0001);
   half3 light=half3(.95,.97,1)*w.x+half3(1,1,1)*w.y+half3(.75,.55,.55)*w.z+half3(.22,.29,.43)*w.w;
   half sky=1-smoothstep(.015,.06,Depth(uv));
-  rgb=Over(rgb,Fx(uv,float2(frac(.16+tf*.0011),.91),float2(.35,.22),float2(0,1)),.5*sky*(1-wet*.5),light);
-  rgb=Over(rgb,Fx(uv,float2(frac(.68+tf*.0007),.86),float2(.26,.18),float2(0,1)),.3*sky,light);
+  rgb=Over(rgb,Fx(uv,float2(Fly(frac(.16+tf*.0011),.175),.91),float2(.35,.22),float2(0,1)),.5*sky*(1-wet*.5),light);
+  // The second cloud is the first's picture again: full screen it reads as a ghost copy, so the city view draws one.
+  rgb=Over(rgb,Fx(uv,float2(frac(.68+tf*.0007),.86),float2(.26,.18),float2(0,1)),.3*sky*(1-_CityView),light);
   // Plumes remain attached to the existing industrial stacks.
   [unroll] for(int s=0;s<3;s++)
   {
@@ -79,8 +85,8 @@ Shader "NOPE/Hall Living City"
    float2 smokeUV=uv;smokeUV.x+=sin(t*.35+s)*.0015*saturate((uv.y-origin.y)/height);
    rgb=Over(rgb,Fx(smokeUV,origin+float2(.009,height*.5),float2(.055,height),float2(1,1)),.23+.04*sin(t*.4+s),light);
   }
-  rgb=Over(rgb,Fx(uv,float2(frac(.32+tf*.0005),.81),float2(.044,.095),float2(0,0)),.85,light);
-  rgb=Over(rgb,Fx(uv,float2(1-frac(.68+tf*.0013),.61),float2(.023,.055),float2(1,0)),.9,light);
+  rgb=Over(rgb,Fx(uv,float2(Fly(frac(.32+tf*.0005),.022),.81),float2(.044,.095),float2(0,0)),.85,light);
+  rgb=Over(rgb,Fx(uv,float2(1-Fly(frac(.68+tf*.0013),.0115),.61),float2(.023,.055),float2(1,0)),.9,light);
   // Sparse warm building lights gently vary rather than flashing the whole image.
   half warm=step(rgb.b*1.5,rgb.r)*step(.22,rgb.r)*step(.1,Depth(uv));
   rgb+=warm*(w.z+w.w)*.018*(.5+.5*sin(floor(uv.x*390)+floor(uv.y*210)+t*.6));
@@ -89,11 +95,19 @@ Shader "NOPE/Hall Living City"
   {
    float2 a=lane==0?float2(.035,.42):lane==1?float2(.12,.16):float2(.39,.375);
    float2 b=lane==0?float2(.295,.54):lane==1?float2(.29,.01):float2(.68,.45);
+   // Full screen the cars keep to the painted roads, from the frame's edge or from behind a
+   // building to behind a building or off the frame (the upper-left highway in from the left
+   // edge to the tower; the lower highway from the tower to the bottom edge; the middle
+   // viaduct between its two towers).
+   a=lerp(a,lane==0?float2(-.01,.537):lane==1?float2(.152,.17):float2(.414,.395),_CityView);
+   b=lerp(b,lane==0?float2(.239,.406):lane==1?float2(.33,-.02):float2(.594,.435),_CityView);
    [unroll] for(int car=0;car<5;car++)
    {
     float travel=frac(tf*(.007+lane*.002)+car*.19+lane*.27);
     float2 head=lerp(a,b,travel);float2 d=(uv-head)*float2(3,1);
-    rgb+=half3(1,.74,.38)*exp(-dot(d,d)*glow)*(.25+.55*w.w);
+    // ...and come out from behind the building and go behind the next one (a short fade at the ends).
+    half emerge=lerp(1,smoothstep(0,.06,travel)*(1-smoothstep(.94,1,travel)),_CityView);
+    rgb+=half3(1,.74,.38)*exp(-dot(d,d)*glow)*(.25+.55*w.w)*emerge;
    }
   }
   // A fine moving rain layer stays inside the exterior aperture.

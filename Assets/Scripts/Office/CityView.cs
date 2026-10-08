@@ -13,22 +13,30 @@ using UnityEngine.UI;
 /// left arrow (OfficeControls: Look), or the "◀ City" button at the office's
 /// left edge, turns the hall toward its window wall (the art's own left pan,
 /// AnimeHallPresentation.SetPan, over DeskConfigSO.citySeconds, eased) and,
-/// from DeskConfigSO.cityFadeFrom of that turn, fades in (cityFadeSeconds)
-/// the whole city panorama over the screen: the art's living city (the hall
+/// from DeskConfigSO.cityFadeFrom of that turn, fades (cityFadeSeconds)
+/// through the matte to the whole city panorama (the matte first hides the
+/// hall, whose windows show the same city elsewhere, then the city comes up
+/// over it: never both at once; Saleh 2026-10-08: "it shows everything
+/// doubled"): the art's living city (the hall
 /// windows' "NOPE/Hall Living City" material, its eight time and weather
 /// paintings, depth map and moving atmosphere) drawn unmasked, fitted
 /// whole inside the screen on the cityMatte colour, at the hall's hour
 /// (HallBakedCycle, the lights' clock) and its rain. The city lives (Saleh
 /// 2026-10-07: "why is the city not animated and no parallax when you switch
-/// to it? GPT made the assets for it"): it comes into view with a depth
-/// parallax sweep (the shader's depth reprojection, _CityPan, from
-/// DeskConfigSO.cityParallax to 0 over citySettleSeconds, the near roofs
-/// sweeping further than the sky; the painting cropped by as much each side),
-/// then follows the pointer a little (cityLookParallax); its sky, airship,
-/// bus and headlights move at a pace that reads full screen
-/// (cityAtmospherePace, cityHeadlightSize) and the hall window's flying
-/// traffic (HallCityExterior.lanes, the same vehicles on the same lanes)
-/// flies over it (cityTrafficPace, cityTrafficScale), lit by the hour. D, the right arrow, a
+/// to it? GPT made the assets for it"): it comes into view with a gentle
+/// pan of the whole painting (its uvRect, from DeskConfigSO.cityParallax to
+/// 0 over citySettleSeconds; the painting cropped by as much each side), then
+/// follows the pointer a little (cityLookParallax), the flying traffic in
+/// front panning further (TrafficDepth): one painting and one layer of
+/// flyers, never the shader's depth reprojection, whose coarse depth map
+/// smeared and doubled the painted edges full screen; its sky, airship, bus
+/// and headlights move at a pace that reads full screen (cityAtmospherePace,
+/// cityHeadlightSize; the shader's _CityView: one cloud, the flyers wrap off
+/// the frame, the headlights keep to the painted roads) and the hall
+/// window's flying traffic (HallCityExterior.lanes, the same vehicles at the
+/// same heights, speeds and directions) flies over it whole, entering and
+/// leaving off the frame (CityLookTimeline.Flight; cityTrafficPace,
+/// cityTrafficScale), the farther (smaller) behind, lit by the hour. D, the right arrow, a
 /// right-click, Esc (ControlRules) or the "Desk ▶" button at the right edge
 /// runs the same timeline back (CityLookTimeline: the fade first, then the
 /// turn). While it looks at the city only the DESK tab shows: the desk's own
@@ -53,7 +61,7 @@ public sealed class CityView : MonoBehaviour
     /// <summary>The full-screen matte behind the panorama (DeskConfigSO.cityMatte).</summary>
     [SerializeField] private Image matte;
 
-    /// <summary>The panorama, fitted whole inside the screen (its fitter takes the paintings' aspect at bind).</summary>
+    /// <summary>The panorama, fitted whole inside the screen (its fitter takes the paintings' aspect at bind; its alpha is the city's reveal over the matte).</summary>
     [SerializeField] private RawImage panorama;
 
     /// <summary>Keeps the panorama's aspect, fitted inside the screen.</summary>
@@ -77,12 +85,12 @@ public sealed class CityView : MonoBehaviour
     private static readonly int MotionId = Shader.PropertyToID("_CityMotion");
     private static readonly int WeightsId = Shader.PropertyToID("_StateWeights");
     private static readonly int MorningId = Shader.PropertyToID("_MorningClear");
-    private static readonly int DepthId = Shader.PropertyToID("_CityDepthStrength");
+    private static readonly int ViewId = Shader.PropertyToID("_CityView");
     private static readonly int PaceId = Shader.PropertyToID("_AtmospherePace");
     private static readonly int HeadlightId = Shader.PropertyToID("_HeadlightSize");
 
-    /// <summary>Where the flying traffic sits in the city's depth (0 the sky, 1 the nearest roof): its share of the parallax sweep.</summary>
-    private const float TrafficDepth = 0.5f;
+    /// <summary>The flying traffic flies in front of the painting: it pans this many times the painting's pan.</summary>
+    private const float TrafficDepth = 1.25f;
 
     /// <summary>How fast the pointer's look follows it (per second).</summary>
     private const float LookFollow = 4f;
@@ -97,6 +105,7 @@ public sealed class CityView : MonoBehaviour
 
     private readonly List<Vehicle> _traffic = new List<Vehicle>();
     private float _crop;
+    private float _reach;
     private float _shown;
     private float _look;
     private Vector2 _canvas;
@@ -155,14 +164,15 @@ public sealed class CityView : MonoBehaviour
         _material = new Material(living) { name = "CityView panorama (runtime)", hideFlags = HideFlags.DontSave };
         _material.SetTexture(MasksId, Texture2D.whiteTexture);
         _material.SetFloat(RegionId, 1f);
-        _material.SetFloat(PanId, 0f);
-        _material.SetFloat(DepthId, exterior.depthStrength);
+        _material.SetFloat(PanId, 0f); // the painting pans whole (uvRect), never by its depth map
+        _material.SetFloat(ViewId, 1f);
         if (config != null)
         {
             _material.SetFloat(PaceId, config.cityAtmospherePace);
             _material.SetFloat(HeadlightId, config.cityHeadlightSize);
             _crop = Mathf.Clamp(config.cityParallax + config.cityLookParallax, 0f, 0.45f);
         }
+        _reach = CityLookTimeline.Reach(_crop, TrafficDepth);
         panorama.material = _material;
         panorama.texture = Texture2D.whiteTexture;
         panorama.uvRect = new Rect(_crop, 0f, 1f - 2f * _crop, 1f);
@@ -174,7 +184,7 @@ public sealed class CityView : MonoBehaviour
         BuildTraffic(exterior);
     }
 
-    /// <summary>The hall window's flying traffic over the panorama: one image per lane's vehicle (its sprite, untinted but by the hour), placed each frame (DrawTraffic).</summary>
+    /// <summary>The hall window's flying traffic over the panorama: one image per lane's vehicle (its sprite, untinted but by the hour), the smaller (farther) drawn first, placed each frame (DrawTraffic).</summary>
     private void BuildTraffic(HallCityExterior exterior)
     {
         foreach (Vehicle v in _traffic)
@@ -185,7 +195,9 @@ public sealed class CityView : MonoBehaviour
         if (canvas == null || exterior.lanes == null)
             return;
         _canvas = canvas.rect.size;
-        foreach (HallCityExterior.Lane lane in exterior.lanes)
+        var lanes = new List<HallCityExterior.Lane>(exterior.lanes);
+        lanes.Sort((a, b) => a == null || b == null ? 0 : a.widthPixels.CompareTo(b.widthPixels));
+        foreach (HallCityExterior.Lane lane in lanes)
         {
             if (lane == null || lane.vehicle == null || lane.vehicle.sprite == null)
                 continue;
@@ -256,12 +268,13 @@ public sealed class CityView : MonoBehaviour
 
     private void Draw(float clock)
     {
-        float fade = config != null ? CityLookTimeline.Fade(clock, config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
+        float veil = config != null ? CityLookTimeline.Veil(clock, config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
+        float reveal = config != null ? CityLookTimeline.Reveal(clock, config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
         if (screen != null)
         {
-            screen.alpha = fade;
+            screen.alpha = veil;
             screen.blocksRaycasts = IsOn;
-            bool shown = fade > 0f;
+            bool shown = veil > 0f;
             if (screen.gameObject.activeSelf != shown)
                 screen.gameObject.SetActive(shown);
         }
@@ -276,7 +289,14 @@ public sealed class CityView : MonoBehaviour
                 _hall.SetPan(pan);
             }
         }
-        if (_material == null || fade <= 0f)
+        if (panorama != null && panorama.color.a != reveal)
+        {
+            panorama.color = new Color(1f, 1f, 1f, reveal);
+            foreach (Vehicle v in _traffic)
+                if (reveal <= 0f && v.Image != null)
+                    v.Image.color = Color.clear;
+        }
+        if (_material == null || reveal <= 0f)
         {
             _shown = 0f;
             return;
@@ -299,31 +319,32 @@ public sealed class CityView : MonoBehaviour
             _look = Mathf.Lerp(_look, x * config.cityLookParallax, 1f - Mathf.Exp(-dt * LookFollow));
             cityPan = config.cityParallax * CityLookTimeline.Sweep(_shown, config.citySettleSeconds) + _look;
         }
-        _material.SetFloat(PanId, cityPan);
-        DrawTraffic(cityPan, moving, w);
+        panorama.uvRect = new Rect(_crop + cityPan, 0f, 1f - 2f * _crop, 1f);
+        DrawTraffic(cityPan, moving, w, reveal);
     }
 
-    /// <summary>The traffic at its place on its lane (CityLookTimeline.Travel at cityTrafficPace), in the panorama's crop and its share of the parallax, sized cityTrafficScale times the hall window's, lit by the hour as the city is (the shader's light).</summary>
-    private void DrawTraffic(float pan, bool moving, HallBakedCycle.Weights4 w)
+    /// <summary>The traffic at its place on its pass (CityLookTimeline.Travel at cityTrafficPace over CityLookTimeline.Flight: the lane's height, speed and direction, across the whole painting from off the frame to off the frame), in the panorama's crop and TrafficDepth times its pan, sized cityTrafficScale times the hall window's, lit by the hour as the city is (the shader's light), as revealed as the city.</summary>
+    private void DrawTraffic(float pan, bool moving, HallBakedCycle.Weights4 w, float reveal)
     {
         if (_traffic.Count == 0 || _canvas.x <= 0f || _canvas.y <= 0f || config == null)
             return;
         Rect area = panorama.rectTransform.rect;
         float span = 1f - 2f * _crop;
-        float shift = pan * (0.3f + 0.7f * (_exterior != null ? _exterior.depthStrength : 0f) * TrafficDepth);
+        float shift = pan * TrafficDepth;
         float total = w.x + w.y + w.z + w.w;
         Color light = total > 0f
             ? (new Color(0.95f, 0.97f, 1f) * w.x + Color.white * w.y + new Color(0.75f, 0.55f, 0.55f) * w.z + new Color(0.22f, 0.29f, 0.43f) * w.w) / total
             : Color.white;
-        light.a = 1f;
+        light.a = reveal;
         float seconds = moving ? Time.time * config.cityTrafficPace : 0f;
         foreach (Vehicle v in _traffic)
         {
             HallCityExterior.Lane lane = v.Lane;
-            float along = CityLookTimeline.Travel(seconds, lane.phase, lane.speed, Mathf.Abs(lane.xEnd - lane.xStart));
-            float u = Mathf.Lerp(lane.xStart, lane.xEnd, along) / _canvas.x;
-            float x = (u - shift - _crop) / span, y = 1f - lane.yPixels / _canvas.y;
             Vector2 sprite = v.Image.sprite.rect.size;
+            float half = lane.widthPixels * config.cityTrafficScale * 0.5f / _canvas.x;
+            float along = CityLookTimeline.Travel(seconds, lane.phase, lane.speed, CityLookTimeline.FlightLength(half, _reach) * _canvas.x);
+            float u = CityLookTimeline.Flight(along, lane.xEnd >= lane.xStart, half, _reach);
+            float x = (u - shift - _crop) / span, y = 1f - lane.yPixels / _canvas.y;
             float width = lane.widthPixels / _canvas.x / span * area.width * config.cityTrafficScale;
             v.Rect.anchoredPosition = new Vector2(x * area.width, y * area.height);
             v.Rect.sizeDelta = new Vector2(width, sprite.x > 0f ? width * sprite.y / sprite.x : width);
