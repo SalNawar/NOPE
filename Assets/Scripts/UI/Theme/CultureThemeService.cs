@@ -135,6 +135,19 @@ public sealed class CultureThemeService : TimelineCueReceiver
             Instance.Refresh();
     }
 
+    /// <summary>
+    /// New Run's adoption panel (QA2 2026-10-16: it showed a day-9 save's
+    /// Chinese): the scenes take a fresh run's culture, no leader (the neutral
+    /// theme, English labels), not the saved run's; null-safe. Back to the
+    /// title re-applies the saved run's (<see cref="RefreshActive"/>), and the
+    /// office applies the new run's when it loads.
+    /// </summary>
+    public static void ShowFreshRun()
+    {
+        if (Instance != null)
+            Instance.OnCuesChanged(System.Array.Empty<string>());
+    }
+
     /// <summary>Applies the current theme under one root (UI built at runtime, such as the investigation text fallback).</summary>
     public void ApplyTo(GameObject root)
     {

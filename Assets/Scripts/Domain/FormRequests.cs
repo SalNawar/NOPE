@@ -187,7 +187,7 @@ public static class FormRequests
                 id = "doc:" + i;
             if (!ids.Add(id))
                 continue;
-            requests.Add(new FormRequest { Id = id, Label = d.name, Document = i });
+            requests.Add(new FormRequest { Id = id, Label = d.SentenceName, Document = i });
         }
 
         return requests;

@@ -610,10 +610,7 @@ public sealed partial class InvestigationApp
         if (IsContent(_region) && target != null)
             foreach (PaneZoom zoom in zooms)
                 if (zoom != null && target != zoom.transform && target.IsChildOf(zoom.transform))
-                {
                     clip = RevealInView(target, (RectTransform)zoom.transform);
-                    zoom.Reveal(target);
-                }
         if ((_region == AppRegion.Results || _region == AppRegion.Findings) && target != null)
             clip = RevealInView(target, null);
         focusRing.Show(target, clip);

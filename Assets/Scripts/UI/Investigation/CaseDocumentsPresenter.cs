@@ -111,6 +111,7 @@ public sealed class CaseDocumentsPresenter
         return new CaseDocument
         {
             name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
+            englishName = template != null ? template.displayName : null,
             fields = doc != null ? doc.fields : null,
             handOver = template != null ? template.handOver : DocumentHandOver.OnRequest,
             showsPhoto = template != null && template.showsPhoto,

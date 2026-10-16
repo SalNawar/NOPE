@@ -440,9 +440,9 @@ public static class InterviewScript
     private static DialogChoice AskEntry(InterviewLines lines) =>
         new DialogChoice { Id = AskNodeId, Label = lines != null ? lines.askLabel : null, Next = AskNodeId, Kind = DialogChoiceKind.Question, HideWhenSpent = true };
 
-    /// <summary>The name of paper <paramref name="index"/> of the case; blank when unknown.</summary>
+    /// <summary>The name of paper <paramref name="index"/> of the case as the desk's sentence says it (CaseDocument.SentenceName: English); blank when unknown.</summary>
     private static string DocumentName(InterviewCase c, int index) =>
-        c != null && c.documents != null && index >= 0 && index < c.documents.Count && c.documents[index] != null ? c.documents[index].name : string.Empty;
+        c != null && c.documents != null && index >= 0 && index < c.documents.Count && c.documents[index] != null ? c.documents[index].SentenceName : string.Empty;
 
     /// <summary>
     /// A request entry (one-shot, staying where it was chosen): the desk's

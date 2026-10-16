@@ -75,12 +75,25 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(header.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -head), Vector2.zero);
         HairlineEdge(header.transform, "Rule", 1);
         string sideKey = left ? "app.side.left" : "app.side.right";
-        Transform tagTarget = PaneTag(header.transform, "TagTarget", sideKey, WbAction, ThemeRoleId.PrimaryAction);
-        Transform tag = PaneTag(header.transform, "Tag", sideKey, WbInfoBg, ThemeRoleId.Info);
+        // The side tag and the title in a row: the tag as wide as its word in any language (QA2 2026-10-16: "Αριστερά" ran out of a
+        // fixed 72), the title the rest, up to the target hint (AppPane moves the row's right end).
+        Transform lead = Panel(header.transform, "Lead", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(lead, Vector2.zero, Vector2.one, new Vector2(PcSize.L, 0f), new Vector2(-(PaneHintWidth + PcSize.L), 0f));
+        HorizontalLayoutGroup leadRow = GetOrAdd<HorizontalLayoutGroup>(lead.gameObject);
+        leadRow.spacing = PcSize.M;
+        leadRow.childAlignment = TextAnchor.MiddleLeft;
+        leadRow.childControlWidth = true;
+        leadRow.childControlHeight = true;
+        leadRow.childForceExpandWidth = false;
+        leadRow.childForceExpandHeight = false;
+        Transform tagTarget = PaneTag(lead, "TagTarget", sideKey, WbAction, ThemeRoleId.PrimaryAction);
+        Transform tag = PaneTag(lead, "Tag", sideKey, WbInfoBg, ThemeRoleId.Info);
         // The title is the pane's to write (the document shown), never a theme's keyed label (a theme applied again would reset it).
-        TMP_Text title = WbText(header.transform, "TitleText", null, UiText.Get(AppTabTitleKey(start)), PcType.Body, ThemeRoleId.Surface, TextAlignmentOptions.MidlineLeft,
+        TMP_Text title = WbText(lead, "TitleText", null, UiText.Get(AppTabTitleKey(start)), PcType.Body, ThemeRoleId.Surface, TextAlignmentOptions.MidlineLeft,
                                 FontStyles.Bold);
-        PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L + PaneTagSize.x + PcSize.M, 0f), new Vector2(-(PaneHintWidth + PcSize.L), 0f));
+        LayoutElement titleRoom = GetOrAdd<LayoutElement>(title.gameObject);
+        titleRoom.minWidth = 0f;
+        titleRoom.flexibleWidth = 1f;
         title.enableAutoSizing = true;
         title.fontSizeMax = PcType.Body;
         title.fontSizeMin = PcType.Caption;
@@ -123,6 +136,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(pane);
         SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules, views.Calendar, views.Board });
         Wire(so, "titleText", title);
+        Wire(so, "titleRow", lead);
         Wire(so, "headerButton", header);
         Wire(so, "noCase", noCase.gameObject);
         SerializedArrays.Set(so, "targetParts", new Object[] { tagTarget.gameObject, hint.gameObject, strong.gameObject });
@@ -137,11 +151,21 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A source's name key ("app.tab.documents").</summary>
     private static string AppTabTitleKey(AppTab tab) => "app.tab." + tab.ToString().ToLowerInvariant();
 
-    /// <summary>A side tag in a pane's header: a plate in <paramref name="role"/>'s colours with its keyed word (Caption, bold).</summary>
-    private static Transform PaneTag(Transform header, string name, string key, Color fill, ThemeRoleId role)
+    /// <summary>A side tag in a pane's header row: a plate in <paramref name="role"/>'s colours with its keyed word (Caption, bold), at least <see cref="PaneTagSize"/> and as wide as the word with a margin.</summary>
+    private static Transform PaneTag(Transform row, string name, string key, Color fill, ThemeRoleId role)
     {
-        Transform tag = Panel(header, name, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(PcSize.L + PaneTagSize.x / 2f, 0f), PaneTagSize, fill, role);
+        Transform tag = Panel(row, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, fill, role);
         tag.GetComponent<Image>().raycastTarget = false;
+        LayoutElement size = GetOrAdd<LayoutElement>(tag.gameObject);
+        size.minWidth = PaneTagSize.x;
+        size.preferredHeight = PaneTagSize.y;
+        HorizontalLayoutGroup pad = GetOrAdd<HorizontalLayoutGroup>(tag.gameObject);
+        pad.padding = new RectOffset((int)PcSize.S, (int)PcSize.S, 0, 0);
+        pad.childAlignment = TextAnchor.MiddleCenter;
+        pad.childControlWidth = true;
+        pad.childControlHeight = true;
+        pad.childForceExpandWidth = true;
+        pad.childForceExpandHeight = true;
         TMP_Text word = WbText(tag, "Text", key, null, PcType.Caption, role, TextAlignmentOptions.Center, FontStyles.Bold);
         word.overflowMode = TextOverflowModes.Overflow;
         return tag;

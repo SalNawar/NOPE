@@ -135,7 +135,7 @@ public sealed class TitleSceneController : MonoBehaviour
             Debug.LogWarning("[TitleSceneController] Continue with no RunManager instance: nothing to resume.");
     }
 
-    /// <summary>New Run: the adoption panel when it is wired (Back returns to what the Title showed), else a fresh run with the default pet; then the office.</summary>
+    /// <summary>New Run: the adoption panel when it is wired, in a fresh run's language (CultureThemeService.ShowFreshRun; Back returns to what the Title showed, in the saved run's), else a fresh run with the default pet; then the office.</summary>
     private void HandleNewRun()
     {
         if (!RunManager.HasInstance)
@@ -147,12 +147,20 @@ public sealed class TitleSceneController : MonoBehaviour
         RunManager run = RunManager.Instance;
         if (titleUI != null && titleUI.HasAdoptPanel)
         {
-            titleUI.ShowAdopt(run.Library != null ? run.Library.Home.pet : null, HandleAdopt, Start);
+            CultureThemeService.ShowFreshRun();
+            titleUI.ShowAdopt(run.Library != null ? run.Library.Home.pet : null, HandleAdopt, BackToTitle);
             return;
         }
 
         run.NewRun();
         run.LoadOfficeScene();
+    }
+
+    /// <summary>The adoption's Back: the saved run's language again, then what the Title showed.</summary>
+    private void BackToTitle()
+    {
+        CultureThemeService.RefreshActive();
+        Start();
     }
 
     /// <summary>Adopt clicked with a sound name: clears the save, starts a fresh run with that pet, and heads to the office.</summary>

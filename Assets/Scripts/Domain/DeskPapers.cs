@@ -21,8 +21,14 @@ public static class DocumentHandOvers
 /// <summary>One of the current traveller's documents, as the desk and the interview see it.</summary>
 public sealed class CaseDocument
 {
-    /// <summary>The document's display name ("Travel Passport").</summary>
+    /// <summary>The document's display name ("Travel Passport"), in the reading language: the label a view shows on its own.</summary>
     public string name;
+
+    /// <summary>The document's English name (its template's display name), or blank: a content sentence names the paper in English, as its words are (Saleh 2026-10-16: only labels translate).</summary>
+    public string englishName;
+
+    /// <summary>The name a content sentence ("Your {document} says {value}.") says: the English name, else the display name.</summary>
+    public string SentenceName => string.IsNullOrEmpty(englishName) ? name : englishName;
 
     /// <summary>The document's fields: the boxes its paper's form shows.</summary>
     public IReadOnlyList<DocumentField> fields;

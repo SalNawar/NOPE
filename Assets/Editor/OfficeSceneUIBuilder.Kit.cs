@@ -35,6 +35,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A pull tab's label's margin from the edge it is cut at (the screen's edge), in overlay units; its other side keeps clear of the grips by the sprite's inner 9-slice border (KitPullTab).</summary>
     private const float PullTabCutMargin = 6f;
 
+    /// <summary>The least a pull tab's label shrinks to (overlay units) when a culture's word is long (QA2 2026-10-16: "ΓΡΑΦΕΙΟ" at the kit's floor of 16 ran past the tab's face to the screen's edge).</summary>
+    private const float PullTabLabelLeast = 12f;
+
     /// <summary>A pull tab's word's ink: the palette's card (#FAF2E1), a shade lighter than the kit's bone ink on dark faces, because the word sits on the tab's airbrushed sheen (the left tab's word, kept clear of its grips, reads 4.4:1 in bone; the readability check needs 4.5:1).</summary>
     private static readonly Color PullTabInk = new Color(0.98f, 0.949f, 0.882f, 1f);
 
@@ -79,7 +82,7 @@ public static partial class OfficeSceneUIBuilder
             }
 
         // The taskbar's window button template at its own width (its row lays it out at run time; at build time it would take the row's rect).
-        if (desktop.transform.Find("Taskbar/WindowButtons/WindowButtonTemplate") is RectTransform windowButton)
+        if (desktop.transform.Find("Taskbar/TrayRow/WindowButtons/WindowButtonTemplate") is RectTransform windowButton)
         {
             windowButton.anchorMin = Vector2.zero;
             windowButton.anchorMax = new Vector2(0f, 1f);
@@ -189,6 +192,7 @@ public static partial class OfficeSceneUIBuilder
             text.alignment = TextAlignmentOptions.Center;
             text.margin = Vector4.zero;
             SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, tabRect.sizeDelta.x, PullTabInk, 0f, tabRect);
+            text.fontSizeMin = Mathf.Min(text.fontSizeMin, PullTabLabelLeast);
         }
         KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2(centre, 0.3f), PullTabKeycap);
     }

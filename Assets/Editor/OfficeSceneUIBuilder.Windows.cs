@@ -70,12 +70,17 @@ public static partial class OfficeSceneUIBuilder
         Transform root = canvas.transform;
         DesktopWindowManager manager = GetOrAdd<DesktopWindowManager>(root.gameObject);
 
-        Transform taskbar = root.Find("Taskbar");
-        float from = PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth + PcSize.L;
-        Transform strip = Panel(taskbar, "WindowButtons", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(strip, Vector2.zero, Vector2.one, new Vector2(from, 4f), new Vector2(-(PcSize.S + TrayWidth + PcSize.L), -4f));
+        // The window buttons lie left of the tray in their shared row (BuildTaskbar), taking the room the tray's words leave.
+        Transform trayRow = root.Find("Taskbar/TrayRow");
+        Transform strip = Panel(trayRow, "WindowButtons", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        strip.SetAsFirstSibling();
+        LayoutElement room = GetOrAdd<LayoutElement>(strip.gameObject);
+        room.minWidth = 0f;
+        room.preferredWidth = 0f;
+        room.flexibleWidth = 1f;
         GetOrAdd<RectMask2D>(strip.gameObject); // many windows: the buttons shrink to their least, and never draw over the tray
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(strip.gameObject);
+        row.padding = new RectOffset(0, 0, 4, 4);
         row.spacing = 4f;
         row.childAlignment = TextAnchor.MiddleLeft;
         row.childControlWidth = true;

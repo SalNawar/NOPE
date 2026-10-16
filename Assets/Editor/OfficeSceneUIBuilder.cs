@@ -894,8 +894,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
     private const float MenuButtonWidth = 148f, DeskButtonWidth = 200f;
 
-    /// <summary>The tray's width at the taskbar's right end (Credits, the Helix River's strip, the date, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date) and the river's fixed strip; the window buttons keep the rest (run 7: at 1000 they had none and drew over it; at 780 the kit's type scale, its readouts half the bar's height, ran 24 past it).</summary>
-    private const float TrayWidth = 840f;
+    /// <summary>Where the taskbar's row of window buttons and tray starts: after the Menu and Back to desk buttons.</summary>
+    private const float TrayRowFrom = PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth + PcSize.L;
 
     /// <summary>
     /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the
@@ -903,7 +903,10 @@ public static partial class OfficeSceneUIBuilder
     /// (the StartButton role) at its left, the tray at its right with
     /// Credits, the Helix River's live strip (stability without a number;
     /// OfficeSceneUIBuilder.HelixRiver), today's date and the clock at Caption
-    /// size in a row sized by their words. The date ("14 MAR 2150 · Day 1"; the
+    /// size in a row sized by their words, the tray as wide as they are in any
+    /// language (QA2 2026-10-16: a fixed 840 let the Greek wallet run over the
+    /// river and the date into the clock): it and the window buttons share a
+    /// row (TrayRow) where the buttons take what the tray leaves. The date ("14 MAR 2150 · Day 1"; the
     /// desk-first redesign: "the date should be on the PC") sits beside the
     /// clock on a clear button: a click holds today on the workbench, to
     /// compare with an expiry or a ticket's date. Back to desk and the window
@@ -920,9 +923,19 @@ public static partial class OfficeSceneUIBuilder
                              ThemeRoleId.StartButton, "taskbar.start", FontStyles.Bold, ThemeTextKind.Button, true);
         menu.raycastTarget = false;
 
+        // The row the window buttons (BuildWindowManager) and the tray share: the tray as wide as its words, the buttons the rest.
+        Transform trayRow = Panel(bar, "TrayRow", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(trayRow, Vector2.zero, Vector2.one, new Vector2(TrayRowFrom, 0f), new Vector2(-PcSize.S, 0f));
+        HorizontalLayoutGroup shared = GetOrAdd<HorizontalLayoutGroup>(trayRow.gameObject);
+        shared.spacing = PcSize.L;
+        shared.childAlignment = TextAnchor.MiddleRight;
+        shared.childControlWidth = true;
+        shared.childControlHeight = true;
+        shared.childForceExpandWidth = false;
+        shared.childForceExpandHeight = true;
+
         // System tray: Credits | the Helix River | Date | Clock, right to left from the bar's end, each as wide as its words (the river as its strip).
-        Transform tray = Panel(bar, "Tray", new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.S + TrayWidth / 2f), 0f), new Vector2(TrayWidth, 0f),
-                               new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
+        Transform tray = Panel(trayRow, "Tray", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
         tray.GetComponent<Image>().raycastTarget = false;
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(tray.gameObject);
         row.padding = new RectOffset(12, 12, 0, 0);

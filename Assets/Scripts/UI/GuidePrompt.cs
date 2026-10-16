@@ -115,7 +115,17 @@ public sealed class GuidePrompt : MonoBehaviour
         if (arrow == null)
             return;
         arrow.gameObject.SetActive(true);
+        Face(false);
         if (!OverlayProjection.TryPlace(arrow, _canvasRect, office, world, new Vector2(0f, arrowLift + Bob())))
+        {
+            HideArrow();
+            return;
+        }
+        if (!OverPlate())
+            return;
+        // Above the point it would sit on the plate (QA2 2026-10-16): under it, pointing up.
+        Face(true);
+        if (!OverlayProjection.TryPlace(arrow, _canvasRect, office, world, new Vector2(0f, -(arrowLift + Bob()))) || OverPlate())
             HideArrow();
     }
 
@@ -134,12 +144,49 @@ public sealed class GuidePrompt : MonoBehaviour
             return;
         }
         arrow.gameObject.SetActive(true);
-        Rect bounds = _canvasRect.rect;
+        Face(false);
         Vector2 half = arrow.rect.size * 0.5f;
-        Vector2 at = local + new Vector2(0f, arrowLift * 0.5f + half.y + Bob());
+        float gap = arrowLift * 0.5f + half.y + Bob();
+        Place(local + new Vector2(0f, gap), half);
+        if (!OverPlate())
+            return;
+        // Above the control it would sit on the plate (the Back control under it, QA2 2026-10-16): under it, pointing up.
+        Vector3 bottom = target.TransformPoint(new Vector3(target.rect.center.x, target.rect.yMin, 0f));
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, RectTransformUtility.WorldToScreenPoint(null, bottom), null, out Vector2 under))
+        {
+            HideArrow();
+            return;
+        }
+        Face(true);
+        Place(under - new Vector2(0f, gap), half);
+        if (OverPlate())
+            HideArrow();
+    }
+
+    /// <summary>Puts the arrow's centre at <paramref name="at"/> (canvas px from the centre), kept inside the screen.</summary>
+    private void Place(Vector2 at, Vector2 half)
+    {
+        Rect bounds = _canvasRect.rect;
         at.x = Mathf.Clamp(at.x, bounds.xMin + half.x, bounds.xMax - half.x);
         at.y = Mathf.Clamp(at.y, bounds.yMin + half.y, bounds.yMax - half.y);
         arrow.anchoredPosition = at;
+    }
+
+    /// <summary>Turns the arrow to point down (its tip at its bottom, the default) or, when <paramref name="up"/>, up from under its target.</summary>
+    private void Face(bool up) => arrow.localEulerAngles = up ? new Vector3(0f, 0f, 180f) : Vector3.zero;
+
+    /// <summary>True when the arrow, where it sits now, overlaps the shown plate (it would cover the prompt's line).</summary>
+    private bool OverPlate() => plate != null && _canvasRect != null && plate.gameObject.activeInHierarchy && CanvasRect(arrow).Overlaps(CanvasRect(plate));
+
+    private readonly Vector3[] _corners = new Vector3[4];
+
+    /// <summary><paramref name="rt"/>'s bounds in the canvas's local space.</summary>
+    private Rect CanvasRect(RectTransform rt)
+    {
+        rt.GetWorldCorners(_corners);
+        Vector2 a = _canvasRect.InverseTransformPoint(_corners[0]);
+        Vector2 b = _canvasRect.InverseTransformPoint(_corners[2]);
+        return Rect.MinMaxRect(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
     }
 
     /// <summary>The arrow's bob this frame (unscaled time: it bobs while the clock is held).</summary>

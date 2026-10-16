@@ -45,7 +45,10 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>The header's parts shown while it is not (the quiet side tag, the hairline frame).</summary>
     [SerializeField] private GameObject[] otherParts = new GameObject[0];
 
-    /// <summary>The title's right inset while this side is the target (room for "Opens here"), and while it is not.</summary>
+    /// <summary>The header's row of the side tag and the title (its right end moves for "Opens here"); null: the title alone.</summary>
+    [SerializeField] private RectTransform titleRow;
+
+    /// <summary>The title row's right inset while this side is the target (room for "Opens here"), and while it is not.</summary>
     [SerializeField] private Vector2 titleRightInsets = new Vector2(-216f, -16f);
 
     /// <summary>The source the pane shows first.</summary>
@@ -194,8 +197,9 @@ public sealed partial class AppPane : MonoBehaviour
         foreach (GameObject part in otherParts)
             if (part != null && part.activeSelf == on)
                 part.SetActive(!on);
-        if (titleText != null)
-            titleText.rectTransform.offsetMax = new Vector2(on ? titleRightInsets.x : titleRightInsets.y, titleText.rectTransform.offsetMax.y);
+        RectTransform inset = titleRow != null ? titleRow : titleText != null ? titleText.rectTransform : null;
+        if (inset != null)
+            inset.offsetMax = new Vector2(on ? titleRightInsets.x : titleRightInsets.y, inset.offsetMax.y);
     }
 
     /// <summary>The pane shows (the app split, the window opened): it is set up and shows its source.</summary>

@@ -202,6 +202,26 @@ public class ConfrontationsTests
     }
 
     [Test]
+    public void Confront_ASentenceNamesThePapersInEnglish_WhileTheirLabelsAreTranslated()
+    {
+        // Saleh 2026-10-16: content sentences stay English, only labels translate ("Your Ταξιδιωτικό διαβατήριο πολίτη says" mixed them).
+        InterviewCase c = Case();
+        c.documents = new[]
+        {
+            new CaseDocument { name = "Θεώρηση αναχώρησης", englishName = "Leisure Departure Visa" },
+            new CaseDocument { name = "Δηλωτικό αναχώρησης", englishName = "Departure Manifest" }
+        };
+        var cross = new Discrepancy
+        {
+            category = ClueCategory.TransponderClass, documentValue = "Premium", expectedValue = "Economy",
+            provedBy = DiscrepancyProof.CrossMismatch, source = EvidenceKind.DocumentField, statementDocument = 0, otherDocument = 1
+        };
+        DialogChoice q = InterviewScript.Confront(Lines(), c, cross, "TRANSPONDER CLASS", ConfrontOutcome.DoubleDown, Faults.Forged, null);
+        CollectionAssert.AreEqual(new[] { "Your Leisure Departure Visa says Premium.", "Your Departure Manifest says Economy." }, q.Lines.Take(2).Select(l => l.Text).ToArray());
+        Assert.AreEqual("Θεώρηση αναχώρησης", new CaseDocument { name = "Θεώρηση αναχώρησης" }.SentenceName, "no English name: the display name");
+    }
+
+    [Test]
     public void AddConfront_JoinsTheAskMenu_ItsEntryShowingWhileAQuestionIsLeft()
     {
         InterviewLines lines = Lines();
