@@ -401,6 +401,28 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     hash changes (the rebuilt scene; its semantic dump is unchanged).
   - Profiles not re-taken (round 6's kept).
 
+- **Round 9, the QA sweep of 2026-10-16** (`qa/sweep-1016`: main `23c309e` with the sweep's fixes). Re-packed from run A;
+  runs A and B were identical (the transcript, but for the 5 lines below that only run A's audit wrote, and all 30 saves
+  byte-equal; run B ran before that audit change); each play report passes 6,647 checks and fails none, and logs no warning. Round 8's pack was never re-taken
+  after main's CH, PET, BR, INT, city view, DR, LANG and FX2 rounds. Against it the 215 verdicts, pay, fines, stability,
+  orders, House purchases and the day-15 ending are unchanged; every difference has one of these causes:
+  - CH (`c223705`, the 80s set): 26 premades drawn whole (`look=premade <id>`, `Photo=premade:<id>`, "Period dress":
+    1,240 `cases.txt` lines, 52 transcript lines); `validator.txt`'s 80s-set line.
+  - PET (`1bb176d`): every save's `world.pet.coat`; `scene_TitleScene` (the adoption panel's coat row and pet frame).
+  - The slip restored (`a7c39ee`, landed with `98637f5`): the red Citation paper retired (`Assets/Data` 1014 -> 1012 files,
+    `CitationForm_TC900` gone from `data_hashes.txt`); the citation slip's panel in `scene_OfficeGameplay`.
+  - LANG (`40dd8b9`: `e03caad`, `c38902c`, `bfa01ce`, `2506df2`, `aa296de`): English before the lens's day, so days 2-7's
+    briefing, shift report and citation texts read English where round 8 read Greek (21 lines); from day 8 the Greek-led run
+    reads Greek in the verdict lines, the shift reports, Home's bills, the evidence labels, the board's Return Gate and the
+    papers' names (336 lines), its briefing heading and the paper's headline in capitals (14 lines, and the 5 lines below); the strings, themes,
+    wallpapers and document templates in `data_hashes.txt`; the keyed labels in `scene_OfficeGameplay`.
+  - BR, DR, the papers' depth, FX2 (`9ecc78a`, `ac41943`, `8997938`, `86c5412`, `5d449d4`, `23c309e`):
+    `scene_OfficeGameplay`'s brass drawer and cream scanner, the papers' and the folder's edges, the city view's hidden
+    callouts, the rulebook's inspect ink.
+  - This branch: the audit finds a decided traveller's name in the paper in any case (the capitals headline), so its
+    "paper names a traveller" lines stay on days 9, 10, 13, 14 and 15; the rulebook drawn unlit changes only materials.
+  - Profiles not re-taken (round 6's kept).
+
 ## Baseline results (ff3a6e0)
 
 - **Tests:** compile 0 errors; offline EditMode 1067 passed, 0 failed.

@@ -217,6 +217,7 @@
         "pet": {
             "kind": 0,
             "name": "Biscuit",
+            "coat": "cream",
             "adoptedDay": 1,
             "hunger": 0,
             "cold": 0,

@@ -16,6 +16,9 @@ Canvas TitleUIController.adoptTitleText=Canvas/AdoptPanel/TitleText:TextMeshProU
 Canvas TitleUIController.adoptBodyText=Canvas/AdoptPanel/BodyText:TextMeshProUGUI
 Canvas TitleUIController.adoptDogButton=Canvas/AdoptPanel/DogButton:Button
 Canvas TitleUIController.adoptCatButton=Canvas/AdoptPanel/CatButton:Button
+Canvas TitleUIController.adoptPreview=Canvas/AdoptPanel/PetFrame/PetView:PetStandIn
+Canvas TitleUIController.adoptCoatRow=Canvas/AdoptPanel/CoatRow:RectTransform
+Canvas TitleUIController.adoptCoatSwatch=Canvas/AdoptPanel/CoatRow/CoatSwatch:Button
 Canvas TitleUIController.adoptNameInput=Canvas/AdoptPanel/NameInput:TMP_InputField
 Canvas TitleUIController.adoptProblemText=Canvas/AdoptPanel/ProblemText:TextMeshProUGUI
 Canvas TitleUIController.adoptButton=Canvas/AdoptPanel/AdoptButton:Button
@@ -291,7 +294,7 @@ Canvas/WorldPanel/NewRunButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5
 Canvas/WorldPanel/NewRunButton/Label text='New Run' size=29 auto=True min=16 max=29 color=#EEE5D0FF font=Assets/Fonts/Kit/BigShoulders-Bold SDF.asset:BigShoulders-Bold SDF align=Center wrap=NoWrap raycast=False
 Canvas/AdoptPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
 Canvas/AdoptPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(1180.0,620.0)
+Canvas/AdoptPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(1280.0,700.0)
 Canvas/AdoptPanel image sprite=null color=#00000000 type=Simple raycast=True material=null
 Canvas/AdoptPanel/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
 Canvas/AdoptPanel/KitFace transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
@@ -306,23 +309,23 @@ Canvas/AdoptPanel/KitFace ThemeTag.textKind=0
 Canvas/AdoptPanel/KitFace ThemeTag.shrinkToFit=False
 Canvas/AdoptPanel/KitFace ThemeTag.face=null
 Canvas/AdoptPanel/TitleText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/AdoptPanel/TitleText transform pos=(0.000,284.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/TitleText transform pos=(0.000,324.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/TitleText rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-26.0) size=(-72.0,60.0)
 Canvas/AdoptPanel/TitleText text='Adopt a companion' size=40 auto=True min=24 max=40 color=#2B1C24FF font=Assets/Fonts/Kit/BigShoulders-Bold SDF.asset:BigShoulders-Bold SDF align=MidlineLeft wrap=NoWrap raycast=True
 Canvas/AdoptPanel/BodyText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/AdoptPanel/BodyText transform pos=(0.000,218.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/BodyText transform pos=(0.000,258.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/BodyText rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-92.0) size=(-72.0,70.0)
 Canvas/AdoptPanel/BodyText text='...' size=22 auto=True min=16 max=22 color=#2B1C24FF font=Assets/Fonts/Kit/Outfit-Regular SDF.asset:Outfit-Regular SDF align=TopLeft wrap=Normal raycast=False
 Canvas/AdoptPanel/DogButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,UiJuice]
-Canvas/AdoptPanel/DogButton transform pos=(-554.000,124.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/DogButton rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(36.0,-186.0) size=(220.0,260.0)
+Canvas/AdoptPanel/DogButton transform pos=(-144.000,164.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/DogButton rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(496.0,-186.0) size=(200.0,236.0)
 Canvas/AdoptPanel/DogButton image sprite=null color=#00000000 type=Simple raycast=True material=null
 Canvas/AdoptPanel/DogButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/DogButton/KitFace:Image
 Canvas/AdoptPanel/DogButton button calls=[]
 Canvas/AdoptPanel/DogButton UiJuice enabled=True
 Canvas/AdoptPanel/DogButton UiJuice.pull=(0, 0)
 Canvas/AdoptPanel/DogButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
-Canvas/AdoptPanel/DogButton/KitFace transform pos=(110.000,-130.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/DogButton/KitFace transform pos=(100.000,-118.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/DogButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
 Canvas/AdoptPanel/DogButton/KitFace image sprite=Assets/Art/UI/Kit/choicecard_rest.png:choicecard_rest color=#FFFFFFFF type=Sliced raycast=False material=null
 Canvas/AdoptPanel/DogButton/KitFace ThemeTag enabled=True
@@ -334,11 +337,11 @@ Canvas/AdoptPanel/DogButton/KitFace ThemeTag.textKind=0
 Canvas/AdoptPanel/DogButton/KitFace ThemeTag.shrinkToFit=False
 Canvas/AdoptPanel/DogButton/KitFace ThemeTag.face=null
 Canvas/AdoptPanel/DogButton/Tile active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
-Canvas/AdoptPanel/DogButton/Tile transform pos=(46.000,-26.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/DogButton/Tile rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(46.0,-26.0) size=(128.0,128.0)
+Canvas/AdoptPanel/DogButton/Tile transform pos=(40.000,-26.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/DogButton/Tile rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(40.0,-26.0) size=(120.0,120.0)
 Canvas/AdoptPanel/DogButton/Tile image sprite=null color=#00000000 type=Simple raycast=False material=null
 Canvas/AdoptPanel/DogButton/Tile/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
-Canvas/AdoptPanel/DogButton/Tile/KitFace transform pos=(64.000,-64.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/DogButton/Tile/KitFace transform pos=(60.000,-60.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/DogButton/Tile/KitFace rect min=(-0.2,-0.2) max=(1.2,1.2) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/AdoptPanel/DogButton/Tile/KitFace image sprite=Assets/Art/UI/Kit/tile_dog_rest.png:tile_dog_rest color=#FFFFFFFF type=Simple raycast=False material=null
 Canvas/AdoptPanel/DogButton/Tile/KitFace ThemeTag enabled=True
@@ -350,19 +353,19 @@ Canvas/AdoptPanel/DogButton/Tile/KitFace ThemeTag.textKind=0
 Canvas/AdoptPanel/DogButton/Tile/KitFace ThemeTag.shrinkToFit=False
 Canvas/AdoptPanel/DogButton/Tile/KitFace ThemeTag.face=null
 Canvas/AdoptPanel/DogButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/AdoptPanel/DogButton/Label transform pos=(110.000,-170.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/DogButton/Label rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-170.0) size=(-24.0,60.0)
+Canvas/AdoptPanel/DogButton/Label transform pos=(100.000,-162.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/DogButton/Label rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-162.0) size=(-24.0,60.0)
 Canvas/AdoptPanel/DogButton/Label text='Dog' size=28 auto=True min=14 max=28 color=#2B1C24FF font=Assets/Fonts/Kit/BigShoulders-Bold SDF.asset:BigShoulders-Bold SDF align=Center wrap=Normal raycast=False
 Canvas/AdoptPanel/CatButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,UiJuice]
-Canvas/AdoptPanel/CatButton transform pos=(-310.000,124.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/CatButton rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(280.0,-186.0) size=(220.0,260.0)
+Canvas/AdoptPanel/CatButton transform pos=(80.000,164.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CatButton rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(720.0,-186.0) size=(200.0,236.0)
 Canvas/AdoptPanel/CatButton image sprite=null color=#00000000 type=Simple raycast=True material=null
 Canvas/AdoptPanel/CatButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/CatButton/KitFace:Image
 Canvas/AdoptPanel/CatButton button calls=[]
 Canvas/AdoptPanel/CatButton UiJuice enabled=True
 Canvas/AdoptPanel/CatButton UiJuice.pull=(0, 0)
 Canvas/AdoptPanel/CatButton/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
-Canvas/AdoptPanel/CatButton/KitFace transform pos=(110.000,-130.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CatButton/KitFace transform pos=(100.000,-118.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/CatButton/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
 Canvas/AdoptPanel/CatButton/KitFace image sprite=Assets/Art/UI/Kit/choicecard_rest.png:choicecard_rest color=#FFFFFFFF type=Sliced raycast=False material=null
 Canvas/AdoptPanel/CatButton/KitFace ThemeTag enabled=True
@@ -374,11 +377,11 @@ Canvas/AdoptPanel/CatButton/KitFace ThemeTag.textKind=0
 Canvas/AdoptPanel/CatButton/KitFace ThemeTag.shrinkToFit=False
 Canvas/AdoptPanel/CatButton/KitFace ThemeTag.face=null
 Canvas/AdoptPanel/CatButton/Tile active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
-Canvas/AdoptPanel/CatButton/Tile transform pos=(46.000,-26.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/CatButton/Tile rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(46.0,-26.0) size=(128.0,128.0)
+Canvas/AdoptPanel/CatButton/Tile transform pos=(40.000,-26.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CatButton/Tile rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(40.0,-26.0) size=(120.0,120.0)
 Canvas/AdoptPanel/CatButton/Tile image sprite=null color=#00000000 type=Simple raycast=False material=null
 Canvas/AdoptPanel/CatButton/Tile/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
-Canvas/AdoptPanel/CatButton/Tile/KitFace transform pos=(64.000,-64.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CatButton/Tile/KitFace transform pos=(60.000,-60.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/CatButton/Tile/KitFace rect min=(-0.2,-0.2) max=(1.2,1.2) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/AdoptPanel/CatButton/Tile/KitFace image sprite=Assets/Art/UI/Kit/tile_cat_rest.png:tile_cat_rest color=#FFFFFFFF type=Simple raycast=False material=null
 Canvas/AdoptPanel/CatButton/Tile/KitFace ThemeTag enabled=True
@@ -390,16 +393,16 @@ Canvas/AdoptPanel/CatButton/Tile/KitFace ThemeTag.textKind=0
 Canvas/AdoptPanel/CatButton/Tile/KitFace ThemeTag.shrinkToFit=False
 Canvas/AdoptPanel/CatButton/Tile/KitFace ThemeTag.face=null
 Canvas/AdoptPanel/CatButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/AdoptPanel/CatButton/Label transform pos=(110.000,-170.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/CatButton/Label rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-170.0) size=(-24.0,60.0)
+Canvas/AdoptPanel/CatButton/Label transform pos=(100.000,-162.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CatButton/Label rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-162.0) size=(-24.0,60.0)
 Canvas/AdoptPanel/CatButton/Label text='Cat' size=28 auto=True min=14 max=28 color=#2B1C24FF font=Assets/Fonts/Kit/BigShoulders-Bold SDF.asset:BigShoulders-Bold SDF align=Center wrap=Normal raycast=False
 Canvas/AdoptPanel/NameInput active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,TMP_InputField]
-Canvas/AdoptPanel/NameInput transform pos=(-34.000,104.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/NameInput rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(556.0,-206.0) size=(588.0,64.0)
+Canvas/AdoptPanel/NameInput transform pos=(312.000,144.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/NameInput rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(952.0,-206.0) size=(292.0,64.0)
 Canvas/AdoptPanel/NameInput image sprite=null color=#00000000 type=Simple raycast=True material=null
 Canvas/AdoptPanel/NameInput TMP_InputField interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/NameInput/KitFace:Image
 Canvas/AdoptPanel/NameInput/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
-Canvas/AdoptPanel/NameInput/KitFace transform pos=(294.000,-32.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/NameInput/KitFace transform pos=(146.000,-32.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/NameInput/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
 Canvas/AdoptPanel/NameInput/KitFace image sprite=Assets/Art/UI/Kit/field_rest.png:field_rest color=#FFFFFFFF type=Sliced raycast=False material=null
 Canvas/AdoptPanel/NameInput/KitFace ThemeTag enabled=True
@@ -411,7 +414,7 @@ Canvas/AdoptPanel/NameInput/KitFace ThemeTag.textKind=0
 Canvas/AdoptPanel/NameInput/KitFace ThemeTag.shrinkToFit=False
 Canvas/AdoptPanel/NameInput/KitFace ThemeTag.face=null
 Canvas/AdoptPanel/NameInput/TextArea active=True layer=0 tag=Untagged components=[RectTransform,RectMask2D]
-Canvas/AdoptPanel/NameInput/TextArea transform pos=(294.000,-32.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/NameInput/TextArea transform pos=(146.000,-32.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/NameInput/TextArea rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(-28.0,-8.0)
 Canvas/AdoptPanel/NameInput/TextArea/Placeholder active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
 Canvas/AdoptPanel/NameInput/TextArea/Placeholder transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
@@ -422,11 +425,11 @@ Canvas/AdoptPanel/NameInput/TextArea/Text transform pos=(0.000,0.000,0.000) rot=
 Canvas/AdoptPanel/NameInput/TextArea/Text rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/AdoptPanel/NameInput/TextArea/Text text='' size=28 auto=False min=18 max=72 color=#2B1C24FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=MidlineLeft wrap=PreserveWhitespaceNoWrap raycast=True
 Canvas/AdoptPanel/ProblemText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/AdoptPanel/ProblemText transform pos=(-30.000,28.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/AdoptPanel/ProblemText rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(560.0,-282.0) size=(580.0,60.0)
+Canvas/AdoptPanel/ProblemText transform pos=(316.000,68.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/ProblemText rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(956.0,-282.0) size=(284.0,120.0)
 Canvas/AdoptPanel/ProblemText text='' size=22 auto=True min=16 max=22 color=#C23A2EFF font=Assets/Fonts/Kit/Outfit-Regular SDF.asset:Outfit-Regular SDF align=TopLeft wrap=Normal raycast=False
 Canvas/AdoptPanel/AdoptButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,UiJuice]
-Canvas/AdoptPanel/AdoptButton transform pos=(554.000,-278.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/AdoptButton transform pos=(604.000,-318.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/AdoptButton rect min=(1.0,0.0) max=(1.0,0.0) pivot=(1.0,0.0) pos=(-36.0,32.0) size=(380.0,72.0)
 Canvas/AdoptPanel/AdoptButton image sprite=null color=#00000000 type=Simple raycast=True material=null
 Canvas/AdoptPanel/AdoptButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/AdoptButton/KitFace:Image
@@ -450,7 +453,7 @@ Canvas/AdoptPanel/AdoptButton/Label transform pos=(-190.000,36.000,0.000) rot=(0
 Canvas/AdoptPanel/AdoptButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/AdoptPanel/AdoptButton/Label text='Adopt and start' size=30 auto=True min=16 max=30 color=#EEE5D0FF font=Assets/Fonts/Kit/BigShoulders-Bold SDF.asset:BigShoulders-Bold SDF align=Center wrap=NoWrap raycast=False
 Canvas/AdoptPanel/BackButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,UiJuice]
-Canvas/AdoptPanel/BackButton transform pos=(152.000,-278.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/BackButton transform pos=(202.000,-318.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/BackButton rect min=(1.0,0.0) max=(1.0,0.0) pivot=(1.0,0.0) pos=(-438.0,32.0) size=(230.0,72.0)
 Canvas/AdoptPanel/BackButton image sprite=null color=#00000000 type=Simple raycast=True material=null
 Canvas/AdoptPanel/BackButton Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/BackButton/KitFace:Image
@@ -473,6 +476,62 @@ Canvas/AdoptPanel/BackButton/Label active=True layer=0 tag=Untagged components=[
 Canvas/AdoptPanel/BackButton/Label transform pos=(-115.000,36.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/AdoptPanel/BackButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/AdoptPanel/BackButton/Label text='Back' size=30 auto=True min=16 max=30 color=#EEE5D0FF font=Assets/Fonts/Kit/BigShoulders-Bold SDF.asset:BigShoulders-Bold SDF align=Center wrap=NoWrap raycast=False
+Canvas/AdoptPanel/PetFrame active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/AdoptPanel/PetFrame transform pos=(-604.000,164.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/PetFrame rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(36.0,-186.0) size=(420.0,440.0)
+Canvas/AdoptPanel/PetFrame image sprite=null color=#00000000 type=Simple raycast=True material=null
+Canvas/AdoptPanel/PetFrame/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
+Canvas/AdoptPanel/PetFrame/KitFace transform pos=(210.000,-220.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/PetFrame/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
+Canvas/AdoptPanel/PetFrame/KitFace image sprite=Assets/Art/UI/Kit/content_inset.png:content_inset color=#FFFFFFFF type=Sliced raycast=False material=null
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag enabled=True
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag.role=36
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag.part=2
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag.labelKey=''
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag.baseStyle=0
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag.textKind=0
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag.shrinkToFit=False
+Canvas/AdoptPanel/PetFrame/KitFace ThemeTag.face=null
+Canvas/AdoptPanel/PetFrame/PetView active=True layer=0 tag=Untagged components=[RectTransform,PetStandIn]
+Canvas/AdoptPanel/PetFrame/PetView transform pos=(210.000,-220.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/PetFrame/PetView rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(-24.0,-24.0)
+Canvas/AdoptPanel/PetFrame/PetView PetStandIn enabled=True
+Canvas/AdoptPanel/PetFrame/PetView PetStandIn.plateColour=#DBCCADFF
+Canvas/AdoptPanel/CoatRow active=True layer=0 tag=Untagged components=[RectTransform]
+Canvas/AdoptPanel/CoatRow transform pos=(-144.000,-90.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CoatRow rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(496.0,-440.0) size=(748.0,132.0)
+Canvas/AdoptPanel/CoatRow/CoatSwatch active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,UiJuice]
+Canvas/AdoptPanel/CoatRow/CoatSwatch transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CoatRow/CoatSwatch rect min=(0.0,1.0) max=(0.0,1.0) pivot=(0.0,1.0) pos=(0.0,0.0) size=(140.0,132.0)
+Canvas/AdoptPanel/CoatRow/CoatSwatch image sprite=null color=#00000000 type=Simple raycast=True material=null
+Canvas/AdoptPanel/CoatRow/CoatSwatch Button interactable=True transition=SpriteSwap target=Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace:Image
+Canvas/AdoptPanel/CoatRow/CoatSwatch button calls=[]
+Canvas/AdoptPanel/CoatRow/CoatSwatch UiJuice enabled=True
+Canvas/AdoptPanel/CoatRow/CoatSwatch UiJuice.pull=(0, 0)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ThemeTag,LayoutElement]
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace transform pos=(70.000,-66.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(28.0,28.0)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace image sprite=Assets/Art/UI/Kit/choicecard_rest.png:choicecard_rest color=#FFFFFFFF type=Sliced raycast=False material=null
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag enabled=True
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag.role=36
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag.part=2
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag.labelKey=''
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag.baseStyle=0
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag.textKind=0
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag.shrinkToFit=False
+Canvas/AdoptPanel/CoatRow/CoatSwatch/KitFace ThemeTag.face=null
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Well active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Well transform pos=(70.000,-8.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Well rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-8.0) size=(-20.0,88.0)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Well image sprite=null color=#DBCCADFF type=Simple raycast=False material=null
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Swatch active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Swatch transform pos=(70.000,-8.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Swatch rect min=(0.5,1.0) max=(0.5,1.0) pivot=(0.5,1.0) pos=(0.0,-8.0) size=(88.0,88.0)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Swatch image sprite=Assets/Art/UI/Kit/tile_dog_rest.png:tile_dog_rest color=#FFFFFFFF type=Simple raycast=False material=null
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Label transform pos=(70.000,-98.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Label rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,1.0) pos=(0.0,-98.0) size=(-8.0,30.0)
+Canvas/AdoptPanel/CoatRow/CoatSwatch/Label text='Coat' size=19 auto=True min=14 max=19 color=#2B1C24FF font=Assets/Fonts/Kit/BigShoulders-Bold SDF.asset:BigShoulders-Bold SDF align=Center wrap=NoWrap raycast=False
 EventSystem active=True layer=0 tag=Untagged components=[Transform,EventSystem,InputSystemUIInputModule]
 EventSystem transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 TitleSceneController active=True layer=0 tag=Untagged components=[Transform,TitleSceneController]
