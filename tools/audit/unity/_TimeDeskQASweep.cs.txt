@@ -755,11 +755,12 @@ public static class _TimeDeskQASweep
         var screen = (CanvasGroup)Field(city, "screen");
         Check(screen != null && screen.alpha >= 0.99f, $"{tag}: the whole city panorama shows (alpha {(screen != null ? screen.alpha : -1f):0.00})");
         yield return Shot("office", $"{tag}_city");
-        // Only the DESK tab shows over the city: the PC and STAMPS tabs and the inspect button are faded out and take no clicks.
+        // Only the DESK tab shows over the city: the PC and STAMPS tabs and the inspect button are faded out and take no clicks, and
+        // so are the office callouts the city view also hides since fix/leftovers-1016 (the speech bubble, the tooltips, the case HUD).
         var back = (Button)Field(city, "backButton");
         var hidden = (CanvasGroup[])Field(city, "deskControls");
         string Names(IEnumerable<CanvasGroup> gs) => string.Join(", ", gs.Select(g => g != null ? $"{g.name} {g.alpha:0.00}/{g.blocksRaycasts}" : "null"));
-        Check(hidden.Length == 3 && hidden.All(g => g != null && g.alpha <= 0.01f && !g.blocksRaycasts), $"{tag}: in the city view the PC and STAMPS tabs and the inspect button are hidden [{Names(hidden)}]");
+        Check(hidden.Length >= 3 && hidden.All(g => g != null && g.alpha <= 0.01f && !g.blocksRaycasts), $"{tag}: in the city view the PC and STAMPS tabs, the inspect button and the office callouts are hidden [{Names(hidden)}]");
         Check(back != null && back.gameObject.activeInHierarchy && back.interactable, $"{tag}: in the city view the DESK tab shows");
         yield return KitChecks("office", $"{tag} city");
         if (back != null && back.gameObject.activeInHierarchy && back.interactable)
