@@ -1173,7 +1173,8 @@ public static class _TimeDeskAuditPlay
     private static void PaperNames(int day)
     {
         string paper = PaperText();
-        List<string> named = Lines(paper).Where(l => Decided.Any(n => l.Contains(n))).ToList();
+        // Any case: a culture whose labels read in capitals prints the headline in capitals (track LANG, 2506df2).
+        List<string> named = Lines(paper).Where(l => Decided.Any(n => l.IndexOf(n, StringComparison.OrdinalIgnoreCase) >= 0)).ToList();
         foreach (string l in named)
             Line($"   paper names a traveller: {l}");
         if (named.Count > 0)
