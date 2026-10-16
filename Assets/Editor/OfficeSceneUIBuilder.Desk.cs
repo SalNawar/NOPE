@@ -2055,10 +2055,12 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "pcTabLabel", label);
         so.ApplyModifiedProperties();
 
-        // In the city view only the DESK tab shows: the PC and STAMPS tabs and the inspect button fade out (CityView.deskControls).
+        // In the city view only the DESK tab shows: the PC and STAMPS tabs and the inspect button fade out (CityView.deskControls),
+        // and so do the office's callouts over the hall (the traveller's speech bubble, the props' tooltips, the case HUD's strip).
         var soCity = new SerializedObject(cityView);
         SerializedProperty hidden = soCity.FindProperty("deskControls");
-        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("InspectButton") };
+        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("InspectButton"),
+                                     overlay.Find("SpeechBubble"), overlay.Find("DeskTooltip"), overlay.Find("BoardTooltip"), overlay.Find("OfficeCaseHud") };
         hidden.arraySize = deskControls.Length;
         for (int i = 0; i < deskControls.Length; i++)
             hidden.GetArrayElementAtIndex(i).objectReferenceValue = deskControls[i] != null ? GetOrAdd<CanvasGroup>(deskControls[i].gameObject) : null;

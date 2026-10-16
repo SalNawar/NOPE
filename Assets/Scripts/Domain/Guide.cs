@@ -269,6 +269,7 @@ public sealed class GuideContent
 /// <summary>
 /// Where a guide arrow may point: the AVAILABLE sign, the red inspect button,
 /// the grey stamp tab, the PC's grey tab, the rulebook, the calendar, the
+/// Seal Register (the rulebook's SEALS tab), the
 /// Departure Board, the scanner, the counter, the traveller, a paper by its
 /// form ("paper:TC-230") or one field of it ("field:TC-230/CitizenId"). A
 /// paper not on the desk yet points at the rulebook (its PAPERS tab lists the
@@ -277,7 +278,7 @@ public sealed class GuideContent
 public static class GuideTargets
 {
     /// <summary>The named targets.</summary>
-    public static readonly IReadOnlyList<string> Named = new[] { "sign", "inspect", "stamps", "pc", "rulebook", "calendar", "board", "scanner", "counter", "traveller" };
+    public static readonly IReadOnlyList<string> Named = new[] { "sign", "inspect", "stamps", "pc", "rulebook", "seals", "calendar", "board", "scanner", "counter", "traveller" };
 
     /// <summary>The targets in words, for a problem's message.</summary>
     public static string Describe => string.Join(", ", Named) + ", paper:<form>, field:<form>/<ClueCategory>";
@@ -311,7 +312,8 @@ public static class GuideTargets
     /// paper (<c>pick</c>: the step's own "field:" target, else the Passport's
     /// field of the step's first detail), then, once a value is held, what it is
     /// held against (<c>against</c>: the step's own named target, else the
-    /// Passport's Citizen ID for another paper's Citizen ID, else today's rules
+    /// Passport's Citizen ID for another paper's Citizen ID, else the issuing
+    /// office's row in the rulebook's SEALS tab for a seal, else today's rules
     /// in the rulebook). Any other step points at its target throughout.
     /// </summary>
     public static (string pick, string against) CompareEnds(GuideStep step)
@@ -320,7 +322,8 @@ public static class GuideTargets
             return (step?.target, step?.target);
         if (!TryField(step.target, out string form, out ClueCategory category))
             return ($"field:{Directives.Visa}/{step.categories[0]}", step.target);
-        string against = category == ClueCategory.CitizenId && form != Directives.Visa ? $"field:{Directives.Visa}/{ClueCategory.CitizenId}" : "rulebook";
+        string against = category == ClueCategory.CitizenId && form != Directives.Visa ? $"field:{Directives.Visa}/{ClueCategory.CitizenId}"
+                       : category == ClueCategory.Seal ? "seals" : "rulebook";
         return (step.target, against);
     }
 

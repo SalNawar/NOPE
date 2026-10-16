@@ -622,21 +622,28 @@ public sealed class DeskRulebook : MonoBehaviour
             GuideRead?.Invoke(sheet.Id);
     }
 
-    /// <summary>Where today's rules are to look at (the guide's "rulebook" arrow): the first row of the open RULES or SEALS page, else the tab that turns to RULES; false while the booklet is hidden.</summary>
-    public bool TryRulesPoint(out Vector3 world)
+    /// <summary>
+    /// Where the guide's arrow looks in the booklet: today's rules (its
+    /// "rulebook" target: <paramref name="seals"/> false) or the Seal Register
+    /// (its "seals" target): on that page, open, its row <paramref name="row"/>
+    /// (the first when out of range), else the tab that turns to it; false
+    /// while the booklet (or the SEALS tab, before the register is introduced) is hidden.
+    /// </summary>
+    public bool TryRulesPoint(bool seals, int row, out Vector3 world)
     {
         world = default;
         if (!isActiveAndEnabled)
             return false;
-        Clickable[] open = Page == SealsPageIndex ? sealRows : Page == 0 ? rows : null;
-        Clickable first = open != null && open.Length > 0 ? open[0] : null;
-        if (first != null && first.gameObject.activeInHierarchy && first.TryGetComponent(out Collider box))
+        int page = seals ? SealsPageIndex : 0;
+        Clickable[] open = seals ? sealRows : rows;
+        Clickable at = Page == page && open.Length > 0 ? open[row >= 0 && row < open.Length ? row : 0] : null;
+        if (at != null && at.gameObject.activeInHierarchy && at.TryGetComponent(out Collider box))
         {
             world = box.bounds.center;
             return true;
         }
-        Clickable tab = tabs.Length > 0 ? tabs[0] : null;
-        if (tab == null)
+        Clickable tab = page < tabs.Length ? tabs[page] : null;
+        if (tab == null || !tab.gameObject.activeInHierarchy)
             return false;
         world = tab.TryGetComponent(out Collider tabBox) ? tabBox.bounds.center : tab.transform.position;
         return true;

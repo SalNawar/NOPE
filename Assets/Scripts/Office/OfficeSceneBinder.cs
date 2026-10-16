@@ -214,6 +214,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The art's office Cinemachine camera when the office camera has a brain to blend it (the desk view needs both), else null.</summary>
     private CinemachineCamera _officeVcam;
 
+    /// <summary>The office Cinemachine camera's field of view and pose as the art set them (its 16:9 framing), and the aspect the lens was last fitted to (FitLens).</summary>
+    private float _officeFov, _fittedAspect;
+    private Quaternion _officeRotation;
+
     private void Awake()
     {
         Scene art = OfficeScenes.ArtScene;
@@ -309,8 +313,38 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         {
             office.Priority = OfficeCameraPriority;
             if (cam.TryGetComponent(out CinemachineBrain _))
+            {
                 _officeVcam = office;
+                _officeFov = office.Lens.FieldOfView;
+                _officeRotation = office.transform.rotation;
+            }
         }
+    }
+
+    private void Update() => FitLens();
+
+    /// <summary>
+    /// The office view keeps the desk's width at a screen narrower than 16:9
+    /// (leftover 2026-10-08: at 5:4 it cut off the PC and the phone): whenever
+    /// the screen's aspect changes, the office Cinemachine camera's field of
+    /// view widens and the camera tilts down by LensFit.Fit (its top edge
+    /// kept, down to DeskConfigSO.officeViewBottom); at 16:9 and wider the
+    /// lens and the pose are the art's. The desk view and DETAIN, laid from
+    /// the art's lens at bind, keep theirs.
+    /// </summary>
+    private void FitLens()
+    {
+        if (_officeVcam == null || config == null || Screen.height <= 0)
+            return;
+        float aspect = (float)Screen.width / Screen.height;
+        if (aspect == _fittedAspect)
+            return;
+        _fittedAspect = aspect;
+        (float fov, float tilt) = LensFit.Fit(_officeFov, LensFit.DesignAspect, aspect, config.officeViewBottom);
+        LensSettings lens = _officeVcam.Lens;
+        lens.FieldOfView = fov;
+        _officeVcam.Lens = lens;
+        _officeVcam.transform.rotation = Quaternion.AngleAxis(tilt, _officeRotation * Vector3.right) * _officeRotation;
     }
 
     // -----------------------------
@@ -461,7 +495,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (stampTray != null && _office != null)
             stampTray.Lay(_office.transform.forward);
         // The DETAIN button stands on the desk where the office view shows DeskConfigSO.detainView at 16:9 (the same spot of the desk at every aspect).
-        if (detainButton != null && config != null && _officeVcam != null && detainButton.Lay(_officeVcam, 16f / 9f, top, config.detainView))
+        if (detainButton != null && config != null && _officeVcam != null && detainButton.Lay(_officeVcam, LensFit.DesignAspect, top, config.detainView))
             ClearOfScanner(detainButton.transform, deskRect);
         if (rulebook != null && config != null && _office != null)
         {

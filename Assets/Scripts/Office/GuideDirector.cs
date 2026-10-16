@@ -476,7 +476,7 @@ public sealed class GuideDirector : MonoBehaviour
         return ui != null;
     }
 
-    /// <summary>A world target's point: a named prop, today's rules in the rulebook, or a paper of the traveller's (its printed fields' middle) or one field of it; a paper the traveller has not handed over yet points at the traveller (ask them for it); with nobody at the desk (the morning's moment) a paper has no arrow.</summary>
+    /// <summary>A world target's point: a named prop, today's rules or (a held seal) its office's row in the Seal Register in the rulebook, or a paper of the traveller's (its printed fields' middle) or one field of it; a paper the traveller has not handed over yet points at the traveller (ask them for it); with nobody at the desk (the morning's moment) a paper has no arrow.</summary>
     private bool TryWorld(Target target, out Vector3 world)
     {
         world = default;
@@ -494,8 +494,11 @@ public sealed class GuideDirector : MonoBehaviour
             world = t.position;
             return true;
         }
-        if (target.Name == "rulebook")
-            return rulebook != null && rulebook.TryRulesPoint(out world);
+        if (target.Name == "rulebook" || target.Name == "seals")
+        {
+            bool seals = target.Name == "seals";
+            return rulebook != null && rulebook.TryRulesPoint(seals, seals && inspect != null ? inspect.SealRow(_pick.Form) : 0, out world);
+        }
         if (target.Form != null)
         {
             if (TryPaper(target, out world, out bool covered))
