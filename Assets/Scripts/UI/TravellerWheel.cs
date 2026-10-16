@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -111,7 +112,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     private bool _bubbleUp;
     private readonly Dictionary<DialogChoiceKind, Sprite> _icons = new Dictionary<DialogChoiceKind, Sprite>();
 
-    /// <summary>The open wheel's pills in canvas space, the speech bubble's obstacles (reused each frame).</summary>
+    /// <summary>The open wheel's pills (and the note over the head) in canvas space, the speech bubble's obstacles (reused each frame).</summary>
     private readonly List<FaceRect> _pills = new List<FaceRect>();
 
     /// <summary>A pill's world corners (reused).</summary>
@@ -239,6 +240,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
                 AddObstacle(pills.GetChild(i) as RectTransform, canvas);
             AddObstacle(centreSlot, canvas);
         }
+        AddNoteObstacle(canvas, cam);
 
         Rect bounds = canvas.rect;
         var screen = new FaceRect(bounds.xMin, bounds.yMin, bounds.xMax, bounds.yMax - bubble.TopInset);
@@ -269,6 +271,29 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
 
     /// <summary>The office camera the ring and the bubble are placed through (the office binder's, from the art office).</summary>
     public void SetCamera(Camera office) => _camera = office;
+
+    /// <summary>The note floating over the traveller's head ("Click the traveller to talk...", the office binder's WheelHint): the bubble keeps clear of it while it shows (leftover 2026-10-08: on day 1 the note sat half under the bubble).</summary>
+    private TMP_Text _note;
+
+    /// <summary>The office binder hands over the note floating over the traveller's head, which the bubble keeps clear of.</summary>
+    public void KeepClearOf(TMP_Text note) => _note = note;
+
+    /// <summary>Adds the floating note's printed text (its text bounds' four corners seen through the office camera, in canvas space) to the bubble's obstacles while it shows.</summary>
+    private void AddNoteObstacle(RectTransform canvas, Camera cam)
+    {
+        if (_note == null || !_note.gameObject.activeInHierarchy || string.IsNullOrEmpty(_note.text))
+            return;
+        Bounds b = _note.textBounds;
+        float x0 = float.MaxValue, y0 = float.MaxValue, x1 = float.MinValue, y1 = float.MinValue;
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 corner = _note.transform.TransformPoint(new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, 0f));
+            if (!OverlayProjection.TryToCanvas(canvas, cam, corner, false, out Vector2 c))
+                return;
+            x0 = Mathf.Min(x0, c.x); y0 = Mathf.Min(y0, c.y); x1 = Mathf.Max(x1, c.x); y1 = Mathf.Max(y1, c.y);
+        }
+        _pills.Add(new FaceRect(x0, y0, x1, y1));
+    }
 
     /// <summary>The current traveller's translation (InvestigationUIController sets it before they speak).</summary>
     public void SetTranslation(CaseTranslation translation) => _translation = translation ?? CaseTranslation.None;

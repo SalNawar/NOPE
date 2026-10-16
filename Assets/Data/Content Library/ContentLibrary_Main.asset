@@ -17952,7 +17952,7 @@ MonoBehaviour:
       against: 'Its issuing office''s seal in the Seal Register: the rulebook''s
         SEALS tab (and, from day 5, the PC''s shelf).'
       fault: 'A seal with the wrong emblem or ring: forged.'
-      point: rulebook
+      point: seals
       practice:
         id: seals_practice
         action: 4

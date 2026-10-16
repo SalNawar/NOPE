@@ -200,8 +200,7 @@ public sealed class DeskRulebook : MonoBehaviour
     private void PrintLabels()
     {
         ShowCover();
-        if (title != null)
-            title.text = UiText.Get("desk.rulebook.title");
+        PrintTitle();
         if (none != null)
             none.text = UiText.Get("desk.rulebook.none");
         if (papersTitle != null)
@@ -265,7 +264,7 @@ public sealed class DeskRulebook : MonoBehaviour
         {
             int page = i;
             if (tabs[i] != null)
-                tabs[i].onClick.AddListener(() => ShowPage(page));
+                tabs[i].onClick.AddListener(() => TabClicked(page));
         }
         for (int i = 0; i < sealRows.Length; i++)
         {
@@ -459,7 +458,13 @@ public sealed class DeskRulebook : MonoBehaviour
             papersNone.gameObject.SetActive(_paperIds.Count == 0);
     }
 
-    /// <summary>Prints today's directives (<paramref name="rules"/>, the day's list; a rule with no summary prints no row), one per row, and opens on RULES.</summary>
+    /// <summary>
+    /// Prints today's directives (<paramref name="rules"/>, the day's list; a
+    /// rule with no summary prints no row), one per row, on as many RULES
+    /// sheets as they need (RuleSheets: those that do not fit a sheet at the
+    /// least readable size go on the next; leftover 2026-10-08), and opens on
+    /// RULES at the first sheet.
+    /// </summary>
     public void Show(IReadOnlyList<TravelRuleSO> rules)
     {
         _rules = rules ?? Array.Empty<TravelRuleSO>();
@@ -467,20 +472,74 @@ public sealed class DeskRulebook : MonoBehaviour
         for (int i = 0; i < _rules.Count; i++)
             if (_rules[i] != null && !string.IsNullOrWhiteSpace(_rules[i].Summary()))
                 _indices.Add(i);
-        for (int r = 0; r < rows.Length; r++)
+        _sheetStarts = RuleSheets.Starts(_indices.Count, rows.Length, (start, count) =>
         {
-            if (rows[r] == null)
-                continue;
-            bool on = r < _indices.Count;
-            rows[r].gameObject.SetActive(on);
-            if (on && rows[r].GetComponentInChildren<TMP_Text>(true) is TMP_Text text)
-                text.text = $"{r + 1}. {_rules[_indices[r]].Summary()}";
-        }
-        LayRows();
+            PrintRows(start, count);
+            return LayRows(count);
+        });
+        ShowRuleSheet(0);
         if (none != null)
             none.gameObject.SetActive(_indices.Count == 0);
         SetInspecting(_inspecting);
         ShowPage(0);
+    }
+
+    /// <summary>The first directive (of _indices) on each RULES sheet (RuleSheets.Starts).</summary>
+    private List<int> _sheetStarts = new List<int> { 0 };
+
+    /// <summary>The RULES sheet shown.</summary>
+    private int _ruleSheet;
+
+    /// <summary>The first directive (of _indices) the open RULES sheet prints.</summary>
+    private int SheetStart => _sheetStarts[_ruleSheet];
+
+    /// <summary>How many directives the open RULES sheet prints.</summary>
+    private int SheetCount => (_ruleSheet + 1 < _sheetStarts.Count ? _sheetStarts[_ruleSheet + 1] : _indices.Count) - SheetStart;
+
+    /// <summary>Prints and lays RULES sheet <paramref name="sheet"/> (wrapping), its number in the title when there are several.</summary>
+    private void ShowRuleSheet(int sheet)
+    {
+        _ruleSheet = ((sheet % _sheetStarts.Count) + _sheetStarts.Count) % _sheetStarts.Count;
+        PrintRows(SheetStart, SheetCount);
+        LayRows(SheetCount);
+        SetInspecting(_inspecting);
+        PrintTitle();
+    }
+
+    /// <summary>Rows from the first print directives <paramref name="start"/> on, <paramref name="count"/> of them (numbered as the day's list); the other rows hide.</summary>
+    private void PrintRows(int start, int count)
+    {
+        for (int r = 0; r < rows.Length; r++)
+        {
+            if (rows[r] == null)
+                continue;
+            bool on = r < count && start + r < _indices.Count;
+            rows[r].gameObject.SetActive(on);
+            if (on && rows[r].GetComponentInChildren<TMP_Text>(true) is TMP_Text text)
+                text.text = $"{start + r + 1}. {_rules[_indices[start + r]].Summary()}";
+        }
+    }
+
+    /// <summary>The RULES title: "TODAY'S RULES", and the open sheet's number ("1 / 2") when the rules take more than one (a click on the RULES tab turns to the next).</summary>
+    private void PrintTitle()
+    {
+        if (title == null)
+            return;
+        string head = UiText.Get("desk.rulebook.title");
+        title.text = _sheetStarts.Count > 1 ? $"{head}  {UiText.Format("desk.guide.page", _ruleSheet + 1, _sheetStarts.Count)}" : head;
+    }
+
+    /// <summary>A tab clicked: turns to its page (RULES at its first sheet); the RULES tab clicked on an open RULES page with several sheets turns to the next sheet.</summary>
+    private void TabClicked(int page)
+    {
+        if (page == 0 && Page == 0 && _sheetStarts.Count > 1)
+        {
+            ShowRuleSheet(_ruleSheet + 1);
+            return;
+        }
+        if (page == 0 && _ruleSheet != 0)
+            ShowRuleSheet(0);
+        ShowPage(page);
     }
 
     /// <summary>A rule row as built: its place, its text's place and size, its click box's centre and size (taken on the first LayRows).</summary>
@@ -494,9 +553,9 @@ public sealed class DeskRulebook : MonoBehaviour
     private RowHome[] _rowHomes = Array.Empty<RowHome>();
 
     /// <summary>The least share of its built size a rule row's text shrinks to so that the rows stay on the page.</summary>
-    private const float RowTextFloor = 0.4f;
+    private const float RowTextFloor = 0.6f;
 
-    /// <summary>The sheet's blank foot under the last ruled line the rows may run into (metres; the art's sheet ends 0.037 m below it): day 12's six rules ran off the page and the screen at the old floor (leftover 2026-10-08).</summary>
+    /// <summary>The sheet's blank foot under the last ruled line the rows may run into (metres; the art's sheet ends 0.037 m below it): day 12's six rules ran off the page and the screen (leftover 2026-10-08).</summary>
     private const float RowsFoot = 0.03f;
 
     /// <summary>
@@ -507,9 +566,11 @@ public sealed class DeskRulebook : MonoBehaviour
     /// past the last row's place and the sheet's foot under it (RowsFoot),
     /// every row's text shrinks a step (down to RowTextFloor of its built
     /// size) and they are laid again. A row whose text fits keeps its place on
-    /// the art's line.
+    /// the art's line. Lays the first <paramref name="count"/> rows; false
+    /// when they run past the page even at the floor (RuleSheets then moves
+    /// the last to the next sheet).
     /// </summary>
-    private void LayRows()
+    private bool LayRows(int count)
     {
         if (_rowHomes.Length != rows.Length)
         {
@@ -530,9 +591,9 @@ public sealed class DeskRulebook : MonoBehaviour
                 };
             }
         }
-        int count = Mathf.Min(_indices.Count, rows.Length);
+        count = Mathf.Min(count, rows.Length);
         if (count == 0 || rows[rows.Length - 1] == null)
-            return;
+            return true;
         RowHome lastPlace = _rowHomes[rows.Length - 1];
         float pageBottom = lastPlace.Row.z - lastPlace.BoxSize.z / 2f - RowsFoot;
         for (float share = 1f; ; share -= 0.1f)
@@ -562,8 +623,10 @@ public sealed class DeskRulebook : MonoBehaviour
                 shift += extra;
                 bottom = home.Row.z - shift - home.BoxSize.z / 2f; // its click box's foot
             }
-            if (bottom >= pageBottom - 0.0001f || share <= RowTextFloor + 0.001f)
-                return;
+            if (bottom >= pageBottom - 0.0001f)
+                return true;
+            if (share <= RowTextFloor + 0.001f)
+                return false;
         }
     }
 
@@ -657,7 +720,9 @@ public sealed class DeskRulebook : MonoBehaviour
     public bool TryRowBounds(int ruleIndex, out Bounds bounds)
     {
         bounds = default;
-        int row = _indices.IndexOf(ruleIndex);
+        int row = _indices.IndexOf(ruleIndex) - SheetStart;
+        if (row >= SheetCount)
+            return false;
         if (!isActiveAndEnabled || row < 0 || row >= rows.Length || rows[row] == null || !rows[row].gameObject.activeInHierarchy ||
             !rows[row].TryGetComponent(out Collider box))
             return false;
@@ -681,8 +746,8 @@ public sealed class DeskRulebook : MonoBehaviour
 
     private void Click(int row)
     {
-        if (row < _indices.Count)
-            RowClicked?.Invoke(_indices[row], _rules[_indices[row]]);
+        if (row < SheetCount)
+            RowClicked?.Invoke(_indices[SheetStart + row], _rules[_indices[SheetStart + row]]);
     }
 }
 

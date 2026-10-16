@@ -258,7 +258,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (guide != null)
             guide.SetCamera(office);
         if (wheel != null)
+        {
             wheel.SetCamera(office);
+            wheel.KeepClearOf(wheelHint != null ? wheelHint.GetComponent<TMP_Text>() : null);
+        }
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())
             if (callout != null)
                 callout.SetCamera(office);
