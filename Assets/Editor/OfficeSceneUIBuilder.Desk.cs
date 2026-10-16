@@ -1894,14 +1894,12 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The size of a place on the folder art in metres (width by depth).</summary>
     private static Vector2 FolderSize(Vector4 place) => new Vector2((place.z - place.x) * RulebookFolderSize.x, (place.w - place.y) * RulebookFolderSize.y);
 
-    /// <summary>A lit material showing the art slot <paramref name="slot"/>'s picture (ArtSlots.AssetRoot), cut out where the art is clear (the folder's and its tabs' outlines); made once.</summary>
+    /// <summary>An unlit material showing the art slot <paramref name="slot"/>'s picture (ArtSlots.AssetRoot), cut out where the art is clear (the folder's and its tabs' outlines); made once. Unlit like the papers on the desk (evenly lit: no shadow band from the desk's props under the low evening sun, no night darkening of the rules; QA sweep 2026-10-16).</summary>
     private static Material SlotArtMaterial(string name, string slot) =>
-        EnsureMaterial(name, "Universal Render Pipeline/Lit", m =>
+        EnsureMaterial(name, "Universal Render Pipeline/Unlit", m =>
         {
             m.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + slot + ".png"));
             m.SetColor("_BaseColor", Color.white);
-            m.SetFloat("_Smoothness", 0.15f);
-            m.SetFloat("_Metallic", 0f);
             m.SetFloat("_AlphaClip", 1f);
             m.SetFloat("_Cutoff", 0.5f);
             BaseShaderGUI.SetMaterialKeywords(m);
