@@ -40,9 +40,11 @@ using UnityEngine.UI;
 /// right-click, Esc (ControlRules) or the "Desk ▶" button at the right edge
 /// runs the same timeline back (CityLookTimeline: the fade first, then the
 /// turn). While it looks at the city only the DESK tab shows: the desk's own
-/// controls (the PC and STAMPS pull tabs, the red inspect button: deskControls)
-/// fade out over DeskConfigSO.cityDeskControlsFadeSeconds and take no clicks,
-/// and fade back in as it returns. Reduced Motion cuts both ways and holds the
+/// controls (the PC and STAMPS pull tabs, the red inspect button) and the
+/// office's callouts over the hall (the traveller's speech bubble, the props'
+/// tooltips, the case HUD's strip: deskControls) fade out over
+/// DeskConfigSO.cityDeskControlsFadeSeconds and take no clicks, and fade back
+/// in as it returns. Reduced Motion cuts both ways and holds the
 /// city still.
 /// BoothCoordinator says when it may turn (BoothRules.NormalViewLive: the
 /// normal view, no newsletter, wheel or PC) and returns it when the next
@@ -73,7 +75,7 @@ public sealed class CityView : MonoBehaviour
     /// <summary>"Desk ▶" at the office's right edge (shown while looking at the city).</summary>
     [SerializeField] private Button backButton;
 
-    /// <summary>The desk's own controls hidden while the city shows (the PC and STAMPS pull tabs, the inspect button): their CanvasGroups fade out and take no clicks; whether each is on stays its owner's.</summary>
+    /// <summary>The desk's own controls and callouts hidden while the city shows (the PC and STAMPS pull tabs, the inspect button; the traveller's speech bubble, the props' tooltips, the case HUD's strip, which drew over the city): their CanvasGroups fade out and take no clicks; whether each is on stays its owner's.</summary>
     [SerializeField] private CanvasGroup[] deskControls = Array.Empty<CanvasGroup>();
 
     private const string LivingCityShader = "NOPE/Hall Living City";

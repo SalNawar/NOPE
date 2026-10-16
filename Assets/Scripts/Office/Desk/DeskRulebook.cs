@@ -140,8 +140,8 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The counter (optional): the booklet dropped there goes back to where it was picked up.</summary>
     [SerializeField] private DeskCounter counter;
 
-    /// <summary>The rows' ink, and their ink in inspect mode (comparable).</summary>
-    [SerializeField] private Color rowInk = new Color(0.13f, 0.12f, 0.15f), inspectInk = new Color(0.62f, 0.38f, 0.02f);
+    /// <summary>The rows' ink, and their ink in inspect mode (comparable: a dark amber, readable on the manila sheet under the hall's bright hours; the old light amber washed out, leftover 2026-10-08).</summary>
+    [SerializeField] private Color rowInk = new Color(0.13f, 0.12f, 0.15f), inspectInk = new Color(0.45f, 0.22f, 0f);
 
     /// <summary>The open tab's plate and the other tab's.</summary>
     [SerializeField] private Color openTab = new Color(0.93f, 0.9f, 0.8f), closedTab = new Color(0.66f, 0.62f, 0.52f);
@@ -494,16 +494,20 @@ public sealed class DeskRulebook : MonoBehaviour
     private RowHome[] _rowHomes = Array.Empty<RowHome>();
 
     /// <summary>The least share of its built size a rule row's text shrinks to so that the rows stay on the page.</summary>
-    private const float RowTextFloor = 0.6f;
+    private const float RowTextFloor = 0.4f;
+
+    /// <summary>The sheet's blank foot under the last ruled line the rows may run into (metres; the art's sheet ends 0.037 m below it): day 12's six rules ran off the page and the screen at the old floor (leftover 2026-10-08).</summary>
+    private const float RowsFoot = 0.03f;
 
     /// <summary>
     /// Lays the shown rule rows down the page (the orchestrator's catch on
     /// 2026-10-08: rule 3's last line printed over rule 4's first): each row
     /// grows downward to fit its wrapped text (its text's box, its click box)
     /// and pushes the rows under it down by as much; when the rows would run
-    /// past the last row's place, every row's text shrinks a step (down to
-    /// RowTextFloor of its built size) and they are laid again. A row whose
-    /// text fits keeps its place on the art's line.
+    /// past the last row's place and the sheet's foot under it (RowsFoot),
+    /// every row's text shrinks a step (down to RowTextFloor of its built
+    /// size) and they are laid again. A row whose text fits keeps its place on
+    /// the art's line.
     /// </summary>
     private void LayRows()
     {
@@ -530,7 +534,7 @@ public sealed class DeskRulebook : MonoBehaviour
         if (count == 0 || rows[rows.Length - 1] == null)
             return;
         RowHome lastPlace = _rowHomes[rows.Length - 1];
-        float pageBottom = lastPlace.Row.z - lastPlace.BoxSize.z / 2f;
+        float pageBottom = lastPlace.Row.z - lastPlace.BoxSize.z / 2f - RowsFoot;
         for (float share = 1f; ; share -= 0.1f)
         {
             float shift = 0f, bottom = float.MaxValue;
@@ -622,21 +626,28 @@ public sealed class DeskRulebook : MonoBehaviour
             GuideRead?.Invoke(sheet.Id);
     }
 
-    /// <summary>Where today's rules are to look at (the guide's "rulebook" arrow): the first row of the open RULES or SEALS page, else the tab that turns to RULES; false while the booklet is hidden.</summary>
-    public bool TryRulesPoint(out Vector3 world)
+    /// <summary>
+    /// Where the guide's arrow looks in the booklet: today's rules (its
+    /// "rulebook" target: <paramref name="seals"/> false) or the Seal Register
+    /// (its "seals" target): on that page, open, its row <paramref name="row"/>
+    /// (the first when out of range), else the tab that turns to it; false
+    /// while the booklet (or the SEALS tab, before the register is introduced) is hidden.
+    /// </summary>
+    public bool TryRulesPoint(bool seals, int row, out Vector3 world)
     {
         world = default;
         if (!isActiveAndEnabled)
             return false;
-        Clickable[] open = Page == SealsPageIndex ? sealRows : Page == 0 ? rows : null;
-        Clickable first = open != null && open.Length > 0 ? open[0] : null;
-        if (first != null && first.gameObject.activeInHierarchy && first.TryGetComponent(out Collider box))
+        int page = seals ? SealsPageIndex : 0;
+        Clickable[] open = seals ? sealRows : rows;
+        Clickable at = Page == page && open.Length > 0 ? open[row >= 0 && row < open.Length ? row : 0] : null;
+        if (at != null && at.gameObject.activeInHierarchy && at.TryGetComponent(out Collider box))
         {
             world = box.bounds.center;
             return true;
         }
-        Clickable tab = tabs.Length > 0 ? tabs[0] : null;
-        if (tab == null)
+        Clickable tab = page < tabs.Length ? tabs[page] : null;
+        if (tab == null || !tab.gameObject.activeInHierarchy)
             return false;
         world = tab.TryGetComponent(out Collider tabBox) ? tabBox.bounds.center : tab.transform.position;
         return true;

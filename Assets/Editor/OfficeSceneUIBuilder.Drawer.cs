@@ -92,7 +92,7 @@ public static partial class OfficeSceneUIBuilder
         switch (slot)
         {
             case "BrassDark":
-                return BrassMaterial("Drawer_BrassDark", new Color(0.56f, 0.39f, 0.18f), 0.22f, false);
+                return BrassMaterial("Drawer_BrassDark", new Color(0.82f, 0.62f, 0.34f), 0.62f, false);
             case "Steel":
                 return DaterMaterial("Drawer_Steel", new Color(0.4f, 0.4f, 0.43f), 0.3f, 0.12f);
             case "EnamelRed":
@@ -100,24 +100,18 @@ public static partial class OfficeSceneUIBuilder
             case "EnamelGreen":
                 return DaterMaterial("Drawer_EnamelGreen", new Color(0.12f, 0.42f, 0.22f), 0.35f, 0.1f);
             default:
-                return BrassMaterial("Drawer_Brass", new Color(0.83f, 0.63f, 0.33f), 0.4f, true);
+                return BrassMaterial("Drawer_Brass", new Color(1f, 0.86f, 0.52f), 0.72f, true);
         }
     }
 
-    /// <summary>A brass material in the desk's NOPE/Desk Anime shader: warm gold, its shadow band a darker brown-gold (a warm shadow tint), a bright painted highlight and the metal sheen, the brushed texture on the bright brass (URP Lit where that shader is missing).</summary>
-    private static Material BrassMaterial(string name, Color colour, float highlight, bool brushed) =>
-        Shader.Find("NOPE/Desk Anime") != null
-            ? EnsureMaterial(name, "NOPE/Desk Anime", m =>
-            {
-                m.SetColor("_BaseColor", colour);
-                m.SetVector("_ShadowTint", new Vector4(0.7f, 0.52f, 0.4f, 0f));
-                m.SetVector("_LightTint", new Vector4(1.1f, 1.03f, 0.86f, 0f));
-                m.SetFloat("_HighlightStrength", highlight);
-                m.SetFloat("_HighlightSize", 0.16f);
-                m.SetFloat("_EdgeStrength", 0.14f);
-                m.SetFloat("_Metallic", 0.55f);
-                if (brushed)
-                    m.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(BrassDrawerTexture));
-            })
-            : LitMaterial(name, colour, 0.6f);
+    /// <summary>A brass material in URP Lit, metallic and smooth (leftover 2026-10-08: in the desk's NOPE/Desk Anime shader, which paints no reflection, the drawer read as varnished wood): warm gold whose reflections and specular highlight take its warmth, the brushed texture on the bright brass.</summary>
+    private static Material BrassMaterial(string name, Color colour, float smoothness, bool brushed) =>
+        EnsureMaterial(name, "Universal Render Pipeline/Lit", m =>
+        {
+            m.SetColor("_BaseColor", colour);
+            m.SetFloat("_Metallic", 0.55f);
+            m.SetFloat("_Smoothness", smoothness);
+            if (brushed)
+                m.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(BrassDrawerTexture));
+        });
 }

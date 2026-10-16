@@ -227,6 +227,9 @@ public class GuideTests
         Assert.AreEqual(("field:TC-230/CitizenId", "field:TC-101/CitizenId"), GuideTargets.CompareEnds(Step("t", GuideAction.Compare, "field:TC-230/CitizenId", ClueCategory.CitizenId)));
         Assert.AreEqual(("field:TC-240/TransponderClass", "rulebook"), GuideTargets.CompareEnds(Step("c", GuideAction.Compare, "field:TC-240/TransponderClass", ClueCategory.AccountStatus, ClueCategory.TransponderClass)));
         Assert.AreEqual(("stamps", "stamps"), GuideTargets.CompareEnds(Step("s", GuideAction.StampsOut, "stamps")));
+        // A held seal is held against its office's row in the rulebook's SEALS tab, never today's RULES (leftover 2026-10-08).
+        Assert.AreEqual(("field:TC-101/Seal", "seals"), GuideTargets.CompareEnds(Step("seal", GuideAction.Compare, "field:TC-101/Seal", ClueCategory.Seal)));
+        Assert.IsTrue(GuideTargets.IsKnown("seals"));
         Assert.IsTrue(GuideTargets.IsKnown(GuideTargets.CompareEnds(Step("d", GuideAction.Compare, "rulebook", ClueCategory.Destination)).pick));
     }
 }

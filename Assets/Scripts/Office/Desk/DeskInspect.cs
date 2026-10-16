@@ -259,6 +259,15 @@ public sealed class DeskInspect : MonoBehaviour
             rulebook.ShowSeals(shown);
     }
 
+    /// <summary>The Seal Register's row of the office that issues form <paramref name="form"/> ("TC-101"), or -1 (the guide's "seals" arrow).</summary>
+    public int SealRow(string form)
+    {
+        for (int i = 0; i < _seals.Count; i++)
+            if (_seals[i].office.forms != null && _seals[i].office.forms.Contains(form))
+                return i;
+        return -1;
+    }
+
     /// <summary>The agency's offices with a valid seal and their seals' words (the Seal Register's rows, as the PC lists them), in content order.</summary>
     private readonly List<(AgencyOffice office, string seal)> _seals = new List<(AgencyOffice, string)>();
 

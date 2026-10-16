@@ -213,6 +213,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Where the DETAIN button stands on the desk: the point of the desk's plane the office view shows there at 16:9 (viewport x, y; the same spot of the desk at every aspect). Off the mat, where no paper lands (Saleh's 1008a playtest: "detain button is on the inspection area"): on the free desk between the cash register and the AVAILABLE sign, clear of the drawer, the scanner and the inspect button.</summary>
     public Vector2 detainView = new Vector2(0.405f, 0.21f);
 
+    /// <summary>How far below the office camera's forward (degrees, the art's pose) the desk still fills the view: on a screen narrower than 16:9 the office view widens toward the 16:9 width and tilts down, its top edge kept, no further than this (LensFit; past it the floor under the desk shows).</summary>
+    [Range(0f, 89f)] public float officeViewBottom = 42f;
+
     /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;
 
