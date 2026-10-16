@@ -71,7 +71,7 @@ public sealed class GuideDirector : MonoBehaviour
     /// <summary>The scanner ("scanner").</summary>
     [SerializeField] private Transform scanner;
 
-    /// <summary>The counter ("counter").</summary>
+    /// <summary>The counter ("counter"): the arrow points at its strip (DeskCounter.Strip), where the papers are handed back.</summary>
     [SerializeField] private Transform counter;
 
     /// <summary>The traveller's hit zone ("traveller").</summary>
@@ -122,6 +122,9 @@ public sealed class GuideDirector : MonoBehaviour
     private readonly List<Bounds> _boxes = new List<Bounds>();
     private CaseInstance _case;
     private GuidePage _practice;
+
+    /// <summary>The counter's DeskCounter, read once (OnEnable), so the arrow finds its strip without a lookup per frame.</summary>
+    private DeskCounter _counter;
     private bool _inspecting, _barOut, _stamped;
 
     /// <summary>What the prompt shows: "step", "done", "moment", "practice" or "" (the probe and the audit read it).</summary>
@@ -135,6 +138,8 @@ public sealed class GuideDirector : MonoBehaviour
 
     private void OnEnable()
     {
+        if (counter != null)
+            counter.TryGetComponent(out _counter);
         if (desk != null)
         {
             desk.PaperExamined += HandleExamined;
@@ -486,7 +491,7 @@ public sealed class GuideDirector : MonoBehaviour
             "calendar" => calendar,
             "board" => departureBoard,
             "scanner" => scanner,
-            "counter" => counter,
+            "counter" => _counter != null ? _counter.Strip : counter,
             _ => null
         };
         if (t != null)

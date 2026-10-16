@@ -65,6 +65,9 @@ public sealed class DeskCounter : MonoBehaviour
     private bool _handBack;
     private bool _hover;
 
+    /// <summary>The strip papers are handed back on, where Bind lays it (the guide's "counter" arrow points here; this object itself stays where the builder put it).</summary>
+    public Transform Strip => zone != null ? zone.transform : transform;
+
     /// <summary>Lays the counter along the office view's level <paramref name="levelForward"/> (the office binder, once the desk and the reading view are placed).</summary>
     public void Bind(Vector3 levelForward)
     {

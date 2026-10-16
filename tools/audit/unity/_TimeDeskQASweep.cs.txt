@@ -17,7 +17,8 @@
 //   city), the dater rack (the label lip under the daters); then the full day to the shift report, every traveller
 //   decided with the desk machine: with the rack out the passport's visa page lies under the daters and the rack covers
 //   none of its fields or its photo; a dater dragged over a passport field (its ink over the printed box), a dater
-//   pressed where it hangs (it prints on the booklet's visa page), the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
+//   pressed where it hangs (a dry press since the bottom drawer: the passport lies above the drawer; then dragged onto the
+//   booklet's visa page), the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
 //   cover flipped up, the button pressed); the citation slip (shown on the screen, its lines readable, its CITED stamp
 //   slamming on once printed, ACKNOWLEDGE putting it away); the cameras' idle sway off by default, on and off again;
 // - home, night 1: the bills (each toggled; Heating must leave Electricity alone), the pet corner (pat, play; the pet drawn
@@ -861,17 +862,22 @@ public static class _TimeDeskQASweep
         }
         if (at == PressAt.Hanging)
         {
-            // A click on a hanging dater presses it where it hangs (DeskStampTray.Press, as PointerHold's quick click does).
+            // A click on a hanging dater presses it where it hangs (DeskStampTray.Press, as PointerHold's quick click does). Since the
+            // bottom drawer (main d8ce4a4, Saleh's 1008a playtest: "the drawer is blocking the stamp area") the passport's stamp area
+            // lies at the stamp spot above the drawer, not under the daters, so a press in place is a dry press: nothing is stamped
+            // and no verdict is taken; the dater is then dragged onto the visa page as the player does.
             var click = (Clickable)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp");
             object handle = ((Array)Field(o.Stamps, "_handles")).Cast<object>().First(h => (Clickable)Field(h, "Click") == click);
             Call(o.Stamps, "Press", handle, false);
+            yield return Settle(() => !o.Stamps.IsMoving, 5f);
+            Check(!o.Stamps.HasVerdict && o.Stamps.LastPress == StampPress.Nothing,
+                  $"the {(accept ? "APPROVED" : "DENIED")} dater pressed where it hangs is a dry press: the passport lies at the stamp spot above the drawer ({o.Stamps.LastPress})");
+            Note("a dater pressed where it hangs no longer stamps the passport: since the bottom drawer (d8ce4a4) it lies above the drawer; dragged onto the visa page instead");
+            yield return Settle(() => !o.Stamps.IsCarrying, 5f);
         }
-        else
-        {
-            yield return DragStamp(o, accept, target);
-        }
+        yield return DragStamp(o, accept, target);
         yield return Settle(() => !o.Stamps.IsMoving, 5f);
-        Check(o.Stamps.HasVerdict, $"the {(accept ? "APPROVED" : "DENIED")} dater {(at == PressAt.Hanging ? "pressed where it hangs" : "dragged onto the passport")} stamps it ({o.Stamps.LastPress})");
+        Check(o.Stamps.HasVerdict, $"the {(accept ? "APPROVED" : "DENIED")} dater dragged onto the passport{(at == PressAt.Hanging ? "'s visa page" : string.Empty)} stamps it ({o.Stamps.LastPress})");
         Renderer mark = passport.GetComponentsInChildren<Renderer>(true).FirstOrDefault(r => r.name == "Stamp_1" && r.gameObject.activeSelf);
         if (mark != null && at != PressAt.Anywhere)
             InkOnTop(passport, mark, shotTag);
