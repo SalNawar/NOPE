@@ -1351,9 +1351,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A paper's and a rulebook part's click box thickness (metres, before a paper's zone scale): thin, so the papers' stack (DeskConfigSO.paperStackStep a place) alone decides which of two overlapping papers, or a paper and the rulebook, a click or a stamp meets (Saleh 2026-10-06: documents clipping).</summary>
     private const float PaperBoxThickness = 0.0004f;
 
-    /// <summary>The STAMPS tab on the overlay's top edge beside the drawer (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"; DeskStampTray.PlaceTab keeps it beside the drawer), and how far it rises past the edge (cut by it, like the side pull tabs).</summary>
-    private static readonly Vector2 StampTabSize = new Vector2(236f, 78f);
-    private const float StampTabSink = 16f;
+    /// <summary>The STAMPS tab on the overlay's top edge beside the drawer, flush on the edge (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"; DeskStampTray.PlaceTab keeps it beside the drawer).</summary>
+    private static readonly Vector2 StampTabSize = new Vector2(236f, 64f);
 
     /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two daters' distance apart (DENIED left, APPROVED right), the label lip's reach past each, its gap in front of the daters' frames and its section (deep, tall). The lip lies low at the daters' feet, in front of them (toward the chair), its words on its top, so the whole green and red bodies with their wheels show over it (run 7's integration: the rail at the bodies' height hid them).</summary>
     private const float StampSpacing = 0.14f;
@@ -1383,7 +1382,7 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 StampHintSize = new Vector2(560f, 50f);
 
     /// <summary>Where the stamps' hint plate starts below the overlay's top (reference px): under the STAMPS tab on the top edge and the guide's arrow's room under it (clear of the case HUD's strip too).</summary>
-    private static readonly float StampPlateTop = StampTabSize.y - StampTabSink + StampArrowRoom;
+    private static readonly float StampPlateTop = StampTabSize.y + StampArrowRoom;
 
     /// <summary>The room under the STAMPS tab on the top edge for the guide's arrow pointing up at it (reference px): the stamps' hint plate starts below it.</summary>
     private const float StampArrowRoom = 80f;
@@ -1508,7 +1507,7 @@ public static partial class OfficeSceneUIBuilder
         var tabRect = (RectTransform)tab.transform;
         tabRect.anchorMin = tabRect.anchorMax = new Vector2(config.stampBarView.x, 1f);
         tabRect.pivot = new Vector2(0f, 1f);
-        tabRect.anchoredPosition = new Vector2(0f, StampTabSink);
+        tabRect.anchoredPosition = Vector2.zero;
         tabRect.sizeDelta = StampTabSize;
         TMP_Text tabLabel = tab.transform.Find("Label").GetComponent<TMP_Text>();
         tabLabel.text = $"{UiText.Get("controls.stampsTab")}  <b>{ControlRules.StampsKey}</b>";

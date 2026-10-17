@@ -194,9 +194,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The STAMPS tab on the top edge beside the drawer (Saleh's 1016a
     /// playtest: "the ui for it should be the same area it spawns so not on
-    /// the side"): the kit's slate plate risen past the edge by StampTabSink
-    /// (cut by it, as the side pull tabs are), its word on the left of the
-    /// part that shows, keyed, its TAB keycap on the right.
+    /// the side"): the kit's slate plate flush on the edge, its word on the
+    /// left, keyed, its TAB keycap on the right.
     /// </summary>
     private static void KitStampsTab(Transform tab)
     {
@@ -204,13 +203,12 @@ public static partial class OfficeSceneUIBuilder
             return;
         var tabRect = (RectTransform)tab;
         KitSkin(tab, "plate_slate", _kit.overlayScale);
-        float shown = 1f - StampTabSink / StampTabSize.y;
         Transform label = tab.Find("Label");
         if (label != null)
         {
             var labelRect = (RectTransform)label;
             labelRect.anchorMin = new Vector2(0f, 0f);
-            labelRect.anchorMax = new Vector2(0.62f, shown);
+            labelRect.anchorMax = new Vector2(0.62f, 1f);
             labelRect.offsetMin = new Vector2(KitLabelInset.x * 2f, KitLabelInset.y);
             labelRect.offsetMax = new Vector2(0f, -KitLabelInset.y);
             TMP_Text text = label.GetComponent<TMP_Text>();
@@ -221,7 +219,7 @@ public static partial class OfficeSceneUIBuilder
             SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, PullTabSize.x, PullTabInk, 0f, tabRect);
             text.fontSizeMin = Mathf.Min(text.fontSizeMin, PullTabLabelLeast);
         }
-        KitKeycap(tab, "Keycap", "keycap_bone", ControlRules.StampsKey, new Vector2(0.8f, shown / 2f), PullTabKeycap);
+        KitKeycap(tab, "Keycap", "keycap_bone", ControlRules.StampsKey, new Vector2(0.8f, 0.5f), PullTabKeycap);
     }
 
     /// <summary>A keycap printed with <paramref name="key"/> (a child plate in <paramref name="piece"/>, its word in the label face), centred at <paramref name="at"/> of its parent, rebuilt each build.</summary>
