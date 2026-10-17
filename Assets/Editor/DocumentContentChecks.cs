@@ -27,6 +27,7 @@ public static class DocumentContentChecks
 
         problems.AddRange(Seals.Problems(agency.offices, fields.Keys));
         problems.AddRange(FaultCanon.Problems(agency.faults, fields));
+        problems.AddRange(HiddenLies.Problems(agency.faults, agency.hidden, null, null));
 
         foreach (FaultVariant v in FaultCanon.Variants(agency.faults, LieKind.ForgedSeal))
             if (!Enum.TryParse(v.Name, true, out SealForgery _))

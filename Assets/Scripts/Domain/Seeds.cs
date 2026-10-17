@@ -270,6 +270,17 @@ public static class Seeds
     /// </summary>
     public static int ForReturn(int caseSeed) => Mix(caseSeed, ReturnSalt);
 
+    /// <summary>Salt for a traveller's hidden-layer stream ("HIDN"; the desk machines spec §3).</summary>
+    public const int HiddenSalt = 0x4849444E;
+
+    /// <summary>
+    /// A traveller's hidden-layer stream (the desk machines spec §3): the
+    /// ghosts a forged box leaves under UV and a hidden lie's values
+    /// (HiddenLayers, HiddenLies) draw here, apart from the lie and fault
+    /// streams, so a case's printed papers never move with them.
+    /// </summary>
+    public static int ForHidden(int caseSeed) => Mix(caseSeed, HiddenSalt);
+
     /// <summary>Salt for the day's returning travellers' slots ("RSLT").</summary>
     public const int ReturnSlotSalt = 0x52534C54;
 

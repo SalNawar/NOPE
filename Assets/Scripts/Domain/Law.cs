@@ -2,7 +2,7 @@
 /// What breaking the law means (the desk machine spec §2; Saleh 2026-10-07:
 /// "detain only if the traveller breaks the law"). One place in the domain:
 /// a forgery (a forged seal, a doctored value: every record lie and the
-/// forged seal), a false identity (someone else's photo) and contraband
+/// forged seal; a cloned chip or a washed paper, the hidden lies), a false identity (someone else's photo) and contraband
 /// (smuggling the present's goods out). A lie about one's home (a false
 /// origin, the fake displaced) and a costume error are deviation faults, not
 /// crimes, and a directive fault (missing papers, a closed destination, a
@@ -23,6 +23,6 @@ public static class Law
         if (lie == null)
             return false;
         LieKind kind = lie.Value;
-        return LieKinds.IsRecordLie(kind) || LieKinds.IsVisualLie(kind) || kind == LieKind.Smuggling;
+        return LieKinds.IsRecordLie(kind) || LieKinds.IsVisualLie(kind) || LieKinds.IsHiddenLie(kind) || kind == LieKind.Smuggling;
     }
 }

@@ -77,16 +77,34 @@ public class LieKindsTests
     }
 
     [Test]
-    public void ThePlaceLies_AreTheFalseOriginTheFakeDisplacedAndSmuggling_TheVisualLiesTheSealAndThePhoto_EveryOtherLieIsARecordLie()
+    public void ThePlaceLies_AreTheFalseOriginTheFakeDisplacedAndSmuggling_TheVisualLiesTheSealAndThePhoto_TheHiddenLiesTheChipAndTheWash_EveryOtherLieIsARecordLie()
     {
         foreach (LieKind lie in (LieKind[])System.Enum.GetValues(typeof(LieKind)))
         {
             bool place = lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced || lie == LieKind.Smuggling;
             bool visual = lie == LieKind.ForgedSeal || lie == LieKind.SwappedPhoto;
+            bool hidden = lie == LieKind.ClonedChip || lie == LieKind.WashedPaper;
             Assert.AreEqual(place, LieKinds.IsPlaceLie(lie), lie.ToString());
             Assert.AreEqual(visual, LieKinds.IsVisualLie(lie), lie.ToString());
-            Assert.AreEqual(!place && !visual, LieKinds.IsRecordLie(lie), lie.ToString());
+            Assert.AreEqual(hidden, LieKinds.IsHiddenLie(lie), lie.ToString());
+            Assert.AreEqual(!place && !visual && !hidden, LieKinds.IsRecordLie(lie), lie.ToString());
         }
+    }
+
+    /// <summary>The desk machines spec §2-3: a hidden lie fits every kind, is a forgery (a crime, DETAIN) and names the machine that shows it.</summary>
+    [Test]
+    public void TheHiddenLies_FitEveryKind_AreForgedPapers_AndNameTheirMachine()
+    {
+        foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
+        {
+            Assert.IsTrue(LieKinds.AppliesTo(LieKind.ClonedChip, kind), kind.ToString());
+            Assert.IsTrue(LieKinds.AppliesTo(LieKind.WashedPaper, kind), kind.ToString());
+        }
+        Assert.AreEqual(Faults.Forged, Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.ClonedChip));
+        Assert.IsTrue(Law.Breaks(LieKind.WashedPaper));
+        Assert.AreEqual(Feature.ChipReader, LieKinds.MachineOf(LieKind.ClonedChip));
+        Assert.AreEqual(Feature.UvTorch, LieKinds.MachineOf(LieKind.WashedPaper));
+        Assert.IsNull(LieKinds.MachineOf(LieKind.ForgedSeal));
     }
 
     [Test]

@@ -59,6 +59,9 @@ public sealed class AgencyContent
     /// <summary>The published fault canon (agency.faults; the document design spec, D9): every fault a document can carry; the case factory draws only from it (FaultCanon.Problems checks it).</summary>
     public List<FaultEntry> faults = new List<FaultEntry>();
 
+    /// <summary>The hidden layers' content (agency.hidden; the desk machines spec §3): the forms that carry a chip and the ghost chance of a forged box (HiddenContent.Problems checks it).</summary>
+    public HiddenContent hidden = new HiddenContent();
+
     /// <summary>The printed names of the employers of <paramref name="eraId"/>, in authored order.</summary>
     public List<string> EmployersOf(string eraId) =>
         (employers ?? new List<Employer>()).Where(e => e != null && e.era == eraId).Select(e => e.name).ToList();
@@ -104,6 +107,7 @@ public sealed class AgencyContent
             else if (e.name.Length > FactTable.MaxValueLength)
                 problems.Add($"agency.employers '{e.id}': '{e.name}' is {e.name.Length} characters; a form's box and a book row hold {FactTable.MaxValueLength}.");
         }
+        problems.AddRange(hidden != null ? hidden.Problems() : new List<string> { "agency.hidden is missing: the chip forms and the ghost chance." });
         return problems;
     }
 }

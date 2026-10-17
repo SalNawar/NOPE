@@ -20,7 +20,7 @@ using UnityEditor;
 public static partial class WorldContentGenerator
 {
     /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs"; phase 13b the stranding chance; phase 9 the employers).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public FateData[] strandingFates; public StrandingReportContent strandingReport; public Employer[] employers; public PortalData[] portals; public AgencyOffice[] offices; public FaultEntry[] faults; }
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public FateData[] strandingFates; public StrandingReportContent strandingReport; public Employer[] employers; public PortalData[] portals; public AgencyOffice[] offices; public FaultEntry[] faults; public HiddenContent hidden; }
 
     /// <summary>One stranding fate as authored ("agency.strandingFates"; the fate by name; the endings and strandings spec §6.2).</summary>
     [Serializable] private sealed class FateData { public string id; public string fate; public float weightWaivered; public float weightUnwaivered; public float stability; public string status; public StrandingFateLine[] lines; }
@@ -111,7 +111,8 @@ public static partial class WorldContentGenerator
             employers = (a.employers ?? Array.Empty<Employer>()).Where(e => e != null).ToList(),
             portals = BuildPortals(a.portals),
             offices = (a.offices ?? Array.Empty<AgencyOffice>()).Where(o => o != null).ToList(),
-            faults = (a.faults ?? Array.Empty<FaultEntry>()).Where(f => f != null).ToList()
+            faults = (a.faults ?? Array.Empty<FaultEntry>()).Where(f => f != null).ToList(),
+            hidden = a.hidden ?? new HiddenContent()
         };
 
     /// <summary>The clerk's rows (verbatim; a missing block reads blank and fails ClerkContent.Problems).</summary>

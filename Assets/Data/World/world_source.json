@@ -1990,8 +1990,65 @@
         "variant": "recall",
         "against": "Today's rules · recalls",
         "note": "The ticket books a recalled model."
+      },
+      {
+        "id": "clonedPassportChip",
+        "form": "TC-101",
+        "field": "CitizenId",
+        "lie": "ClonedChip",
+        "directive": "",
+        "variant": "cloned",
+        "against": "the chip reader · the chip's Citizen ID",
+        "note": "The passport's chip was copied from another citizen's: every printed value is true, but the chip reads another Citizen ID."
+      },
+      {
+        "id": "clonedCardChip",
+        "form": "TC-240",
+        "field": "CitizenId",
+        "lie": "ClonedChip",
+        "directive": "",
+        "variant": "cloned",
+        "against": "the chip reader · the chip's Citizen ID",
+        "note": "The Transponder Card's chip was copied from another citizen's card: the chip reads another Citizen ID than the print."
+      },
+      {
+        "id": "washedPassport",
+        "form": "TC-101",
+        "field": "Name",
+        "lie": "WashedPaper",
+        "directive": "",
+        "variant": "washed",
+        "against": "the UV torch · the ghost under the name",
+        "note": "Someone else's passport, washed and printed over with the traveller's own true details: under UV the first holder's name ghosts beneath theirs."
+      },
+      {
+        "id": "washedWaiver",
+        "form": "TC-310",
+        "field": "Name",
+        "lie": "WashedPaper",
+        "directive": "",
+        "variant": "washed",
+        "against": "the UV torch · the ghost under the name",
+        "note": "Someone else's Stranding Waiver, washed and printed over: under UV the first holder's name ghosts beneath the traveller's."
+      },
+      {
+        "id": "washedPermit",
+        "form": "TC-520",
+        "field": "Name",
+        "lie": "WashedPaper",
+        "directive": "",
+        "variant": "washed",
+        "against": "the UV torch · the ghost under the name",
+        "note": "Someone else's Work Permit, washed and printed over: under UV the first holder's name ghosts beneath the traveller's."
       }
-    ]
+    ],
+    "hidden": {
+      "chipForms": [
+        "TC-101",
+        "TC-240"
+      ],
+      "ghostChance": 0.5
+    }
   },
   "eras": [
     {
@@ -10444,7 +10501,8 @@
       ],
       "introduces": [
         "field:Signature",
-        "field:WaiverNo"
+        "field:WaiverNo",
+        "tool:uv_torch"
       ],
       "tells": 1,
       "channels": [
@@ -10600,7 +10658,8 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper"
       ],
       "kinds": [
         {
@@ -10746,7 +10805,8 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper"
       ],
       "kinds": [
         {
@@ -10893,7 +10953,8 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper"
       ],
       "kinds": [
         {
@@ -11019,6 +11080,9 @@
         "TC-310",
         "TC-520"
       ],
+      "introduces": [
+        "tool:chip_reader"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
@@ -11031,7 +11095,8 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper"
       ],
       "kinds": [
         {
@@ -11215,7 +11280,9 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper",
+        "ClonedChip"
       ],
       "kinds": [
         {
@@ -11355,7 +11422,9 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper",
+        "ClonedChip"
       ],
       "kinds": [
         {
@@ -11513,7 +11582,9 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper",
+        "ClonedChip"
       ],
       "kinds": [
         {
@@ -11694,7 +11765,9 @@
         "ForgedContract",
         "FakeWaiver",
         "SwappedPhoto",
-        "ForgedSeal"
+        "ForgedSeal",
+        "WashedPaper",
+        "ClonedChip"
       ],
       "kinds": [
         {
@@ -16386,6 +16459,26 @@
           "personality": "glum",
           "lie": "Smuggling",
           "text": "My luggage is exactly as boring as it looks. Please don't look."
+        },
+        {
+          "personality": "chatty",
+          "lie": "WashedPaper",
+          "text": "The ink's a bit fresh, I know. I write everything twice. Habit."
+        },
+        {
+          "personality": "stickler",
+          "lie": "ClonedChip",
+          "text": "The chip? I've never had it read. I didn't know you could read it."
+        },
+        {
+          "personality": "anxious",
+          "lie": "WashedPaper",
+          "text": "Why are you holding it up to the light? It's paper. It's just paper."
+        },
+        {
+          "personality": "curt",
+          "lie": "ClonedChip",
+          "text": "Don't put that in the machine. It's fine. It's a passport."
         },
         {
           "premade": "socrates",

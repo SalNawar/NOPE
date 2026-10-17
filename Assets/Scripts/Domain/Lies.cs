@@ -155,7 +155,9 @@ public sealed class LiePlan
     /// tell: a Papers place tell rewrites every field of its category on every
     /// paper; a record tell rewrites the fields of its category on its own
     /// paper only (a borrowed manifest rewrites that form, not every Citizen
-    /// ID). An Answer or Appearance tell leaves the papers on the cover.
+    /// ID), keeping the value it covers (DocumentField.erased: what the chip
+    /// still holds, the desk machines spec §3). An Answer or Appearance tell
+    /// leaves the papers on the cover.
     /// Changes nothing for an Honest or NoPossibleLie plan. Null papers and
     /// fields are skipped.
     /// </summary>
@@ -185,6 +187,8 @@ public sealed class LiePlan
                 {
                     if (tell.Document == d && tell.Category == field.category)
                     {
+                        if (string.IsNullOrEmpty(field.erased))
+                            field.erased = field.value ?? string.Empty;
                         field.value = tell.Value;
                         field.isAnachronism = true;
                     }

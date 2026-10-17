@@ -76,7 +76,9 @@ public class SerializedEnumsTests
         Assert.AreEqual(8, (int)LieKind.ForgedProof);
         Assert.AreEqual(9, (int)LieKind.ForgedSeal);
         Assert.AreEqual(10, (int)LieKind.SwappedPhoto);
-        Assert.AreEqual(11, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(11, (int)LieKind.ClonedChip);
+        Assert.AreEqual(12, (int)LieKind.WashedPaper);
+        Assert.AreEqual(13, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
     }
 
     /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 10 appends DressForDestination, phase 7 Procedure, phase 12 ReturnHome, phase 11 NoPresentGoods and PaperDates, phase 9 PaperSet and DebtStanding.</summary>

@@ -57,6 +57,7 @@ public class SeedsTests
         { "personality", Seeds.ForPersonality },
         { "waiverSign", Seeds.ForWaiverSign },
         { "return", Seeds.ForReturn },
+        { "hidden", Seeds.ForHidden },
     };
 
     [TestCase("lie")]
@@ -69,6 +70,7 @@ public class SeedsTests
     [TestCase("personality")]
     [TestCase("waiverSign")]
     [TestCase("return")]
+    [TestCase("hidden")]
     public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
     {
         Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
@@ -123,7 +125,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt, Seeds.HallSlotSalt, Seeds.LoreSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt, Seeds.HallSlotSalt, Seeds.LoreSalt, Seeds.HiddenSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 

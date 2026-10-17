@@ -571,7 +571,7 @@ public sealed class CaseFactory
         // 7) Investigation layer: structured fields (the claim is only spoken: InterviewScript.Opening), then the rolled
         //    lie planned and printed, or the paper side of a broken directive (a form left out or unsigned, a date falsified).
         PopulateDocumentFields(inst);
-        LiePlan lie = lieKind == null || LieKinds.IsVisualLie(lieKind.Value) ? null
+        LiePlan lie = lieKind == null || LieKinds.IsVisualLie(lieKind.Value) || LieKinds.IsHiddenLie(lieKind.Value) ? null
             : !LieKinds.IsPlaceLie(lieKind.Value) ? Forge(inst, lieKind.Value, plan, place, caseIndex1Based)
             : lieKind == LieKind.Smuggling ? Smuggle(inst, plan, caseIndex1Based)
             : Disguise(inst, plan, caseIndex1Based, place, legendary, lieKind.Value);
@@ -598,6 +598,14 @@ public sealed class CaseFactory
         PrintPhotos(inst);
         if (lieKind != null && LieKinds.IsVisualLie(lieKind.Value))
             ForgeVisual(inst, lieKind.Value, caseIndex1Based);
+
+        // 7.6) The hidden layers (the desk machines spec §3), on the case's own hidden stream after the papers are printed: a
+        //      hidden lie's tell (a cloned chip, a washed paper), then each paper's UV marks and chip (HiddenLayers.Build).
+        var hiddenRng = new SeededRandom(Seeds.ForHidden(_caseSeed));
+        if (lieKind != null && LieKinds.IsHiddenLie(lieKind.Value))
+            ForgeHidden(inst, lieKind.Value, hiddenRng, caseIndex1Based);
+        inst.hidden = HiddenLayers.Build(inst.documents.Select(d => new HiddenPaper(d.template != null ? d.template.formNumber : null, d.fields)).ToList(),
+                                         inst.hiddenTells, _lib.Agency.hidden, hiddenRng);
 
         // 8) The Directives read the finished papers and account (traveller types P1, P3): the first rule broken is the fault.
         inst.facts = Facts(inst, plan);
@@ -644,7 +652,8 @@ public sealed class CaseFactory
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
-        string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}"));
+        string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}")
+                                                   .Concat(inst.hiddenTells.Select(t => $"{t.Layer}:{t.Category}@{t.Document}")));
         Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, personality={(string.IsNullOrEmpty(inst.personality) ? "none" : inst.personality)}, slip={(inst.slip != null ? inst.slip.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, pad={inst.waiverPadReply}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
@@ -877,6 +886,15 @@ public sealed class CaseFactory
             Add(UiText.Get("citation.label.garment"), inst.CostumeItem);
             Add(UiText.Get("citation.label.destination"), inst.originLabel);
         }
+        else if (inst.hiddenTells.Count > 0)
+        {
+            // A hidden lie (the desk machines spec §2-3): the box printed true, and what the machine reads there instead.
+            HiddenTell tell = inst.hiddenTells[0];
+            bool chip = tell.Layer == ScanLayer.Chip;
+            Rule(Of(TravelRuleType.Procedure), chip ? "citation.rule.chip" : "citation.rule.uv");
+            AddBox(c, inst, d => inst.documents.IndexOf(d) == tell.Document, f => f.category == tell.Category);
+            Add(UiText.Get(chip ? "citation.label.chip" : "citation.label.ghost"), tell.Value);
+        }
         else if (inst.IsForger)
         {
             Rule(Of(TravelRuleType.Procedure), "citation.rule.record");
@@ -1088,11 +1106,37 @@ public sealed class CaseFactory
             foreach (DocumentField f in inst.documents[tell.Document].fields)
                 if (f != null && f.category == tell.Category)
                 {
+                    if (tell.Category == ClueCategory.Seal && string.IsNullOrEmpty(f.erased))
+                        f.erased = f.value ?? string.Empty; // the seal the office printed: the microprint the forgery lacks (HiddenLayers)
                     f.value = tell.Value;
                     f.isAnachronism = true;
                 }
         inst.strangerPhoto = stranger;
         inst.recordTells = tells;
+        inst.lie = kind;
+    }
+
+    /// <summary>
+    /// Plans a rolled hidden lie (the desk machines spec §2-3) on the case's
+    /// hidden stream, from the published canon (agency.faults): a cloned chip
+    /// (HiddenLies.PlanChip: another citizen's Citizen ID in a chipped paper's
+    /// chip) or a washed paper (HiddenLies.PlanWash: the ghost of its first
+    /// holder's name under UV). Nothing printed changes. Nothing to plan (no
+    /// canon row, no chipped paper, no other name) leaves the traveller
+    /// honest with a warning.
+    /// </summary>
+    private void ForgeHidden(CaseInstance inst, LieKind kind, IRandomSource rng, int caseIndex1Based)
+    {
+        List<RecordForm> forms = ShownForms(inst);
+        List<HiddenTell> tells = kind == LieKind.ClonedChip
+            ? HiddenLies.PlanChip(_lib.Agency.faults, forms, _lib.Agency.hidden, _agencyNumbers, rng)
+            : HiddenLies.PlanWash(_lib.Agency.faults, forms, _citizenNames.All, rng);
+        if (tells.Count == 0)
+        {
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled {kind}, but no paper of theirs can carry it (the canon's rows, agency.hidden.chipForms, the names), so the traveller stays honest. Check agency.faults and agency.hidden.");
+            return;
+        }
+        inst.hiddenTells = tells;
         inst.lie = kind;
     }
 

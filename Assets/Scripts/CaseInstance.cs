@@ -170,8 +170,18 @@ public sealed class CaseInstance
     /// </summary>
     public IReadOnlyList<RecordTell> recordTells = System.Array.Empty<RecordTell>();
 
-    /// <summary>True when the traveller's papers forge record fields (a record lie: poor posing as rich, a doctored identity).</summary>
-    public bool IsForger => recordTells.Count > 0;
+    /// <summary>
+    /// A hidden lie's tells (HiddenLies; the desk machines spec §2-3): the box
+    /// whose chip or UV ghost reads another value than its true print (a cloned
+    /// chip, a washed paper). Empty for everyone else.
+    /// </summary>
+    public IReadOnlyList<HiddenTell> hiddenTells = System.Array.Empty<HiddenTell>();
+
+    /// <summary>The case's hidden layers (HiddenLayers.Build; the desk machines spec §3): what each paper shows under the UV torch and what its chip holds; the scanned copy's UV and CHIP tabs, the torch and the chip reader read it.</summary>
+    public CaseHidden hidden = CaseHidden.None;
+
+    /// <summary>True when the traveller's papers are forged: record fields (a record lie: poor posing as rich, a doctored identity; a visual lie) or a chip or washed paper (a hidden lie).</summary>
+    public bool IsForger => recordTells.Count > 0 || hiddenTells.Count > 0;
 
     /// <summary>True when the traveller breaks the law (Law.Breaks: their lie is a forgery, a false identity or contraband): only then is detaining them right (the desk machine spec §2).</summary>
     public bool BreaksLaw => Law.Breaks(lie);

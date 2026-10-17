@@ -63,6 +63,11 @@ public static partial class WorldContentGenerator
                 .ToList());
         }
 
+        // A fault only a machine shows arrives no earlier than the machine (the desk machines spec §2): each day's hidden lies against the ramp.
+        var ramp = new Introductions(days.Select(d => (d.day, (IEnumerable<string>)(d.introduces ?? Array.Empty<string>()))));
+        errors.AddRange(HiddenLies.Problems(null, null, days.Select(d => (d.day, (d.lies ?? Array.Empty<string>()).Select(n => ParseEnum(n, out LieKind lie) ? lie : (LieKind?)null)
+                                                                                           .Where(l => l != null).Select(l => l.Value))), ramp.FirstDay));
+
         List<List<string>> newPapers = DayPacing.NewByDay(papers), newRules = DayPacing.NewByDay(directives);
         for (int i = 0; i < days.Length; i++)
         {

@@ -42,4 +42,7 @@ public sealed class DocumentField
 
     /// <summary>A seal field's office (the document design spec, D4): the office that issues the paper's form (agency.offices), whose Seal Register row the seal is held against; blank on every other field.</summary>
     public string issuer = string.Empty;
+
+    /// <summary>The value the office issued, where a forger printed over it (a record lie's box, a forged seal; the desk machines spec §3): what the chip still holds and what may ghost under UV; blank on a box nobody forged.</summary>
+    public string erased = string.Empty;
 }

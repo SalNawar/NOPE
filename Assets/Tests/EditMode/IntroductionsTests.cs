@@ -69,6 +69,8 @@ public class IntroductionsTests
     [TestCase("tool:board", true)]
     [TestCase("tool:calendar", true)]
     [TestCase("tool:rulebook", true)]
+    [TestCase("tool:uv_torch", true)]
+    [TestCase("tool:chip_reader", true)]
     [TestCase("wheel:clothes", true)]
     [TestCase("pc:records", true)]
     [TestCase("pc:standing", true)]

@@ -56,6 +56,12 @@ public static class Feature
     /// <summary>The Translation Lens (Saleh 2026-10-06): on its first day the office's language stops being a choice (TranslationLens.LanguageLocked) and the Bureau issues the lens's first level.</summary>
     public const string Lens = "tool:lens";
 
+    /// <summary>The UV torch (Saleh 2026-10-17: "uv light should be an actual uv flashlight you can use to see the hidden watermarks and symbols"; the desk machines spec §1-2): issued on its day; from then the papers' hidden layer shows under its cone and the faults only it shows can be generated.</summary>
+    public const string UvTorch = "tool:uv_torch";
+
+    /// <summary>The chip reader (Saleh 2026-10-17: "the chip reader should be an actual machine that reads the chip"; the desk machines spec §1-2): issued on its day; from then a paper's chip is read on it and the faults only it shows can be generated.</summary>
+    public const string ChipReader = "tool:chip_reader";
+
     // ---- Wheel entries (the requests follow the papers, the questions their own keys) ----
 
     /// <summary>The Look menu's garments (their clothes, against the Costume Guide; with the dress rule). Their face shows from day 1.</summary>
@@ -210,7 +216,7 @@ public sealed class Introductions
     /// <summary>The fixed named keys (tools, wheel entries, PC).</summary>
     private static readonly HashSet<string> Named = new HashSet<string>(StringComparer.Ordinal)
     {
-        Feature.Scanner, Feature.Board, Feature.Calendar, Feature.Rulebook, Feature.Lens, Feature.Clothes, Feature.Records, Feature.Standing
+        Feature.Scanner, Feature.Board, Feature.Calendar, Feature.Rulebook, Feature.Lens, Feature.UvTorch, Feature.ChipReader, Feature.Clothes, Feature.Records, Feature.Standing
     };
 
     /// <summary>One message per key of a day's introduces list that is not a named key (<see cref="IsNamedKey"/>) or is listed twice.</summary>

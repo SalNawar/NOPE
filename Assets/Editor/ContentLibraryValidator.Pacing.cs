@@ -54,6 +54,13 @@ public static partial class ContentLibraryValidator
             directives.Add(plan.ActiveTravelRules.Where(r => r != null).Select(r => DayPacing.RuleKey(r.name, r.IsClosure, r.kinds != null && r.kinds.Length > 0, r.type == TravelRuleType.OpenDestinations)).ToList());
         }
 
+        // A fault only a machine shows arrives no earlier than the machine (the desk machines spec §2).
+        foreach (string problem in HiddenLies.Problems(null, null, plans.Select(p => (p.DayNumber, (IEnumerable<LieKind>)p.EnabledLies)), lib.Introductions.FirstDay))
+        {
+            Debug.LogError($"[ContentLibraryValidator] {problem} (world_source.json days[].lies and days[].introduces; run Tools > TimeDesk > Generate World)", lib);
+            issues++;
+        }
+
         List<List<string>> newPapers = DayPacing.NewByDay(papers), newRules = DayPacing.NewByDay(directives);
         for (int i = 0; i < plans.Count; i++)
             foreach (string problem in DayPacing.Problems(plans[i].name, newPapers[i], newRules[i], plans[i].Bulletin, i == 0))
