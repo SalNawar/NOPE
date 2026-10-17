@@ -936,11 +936,7 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(sheet, "Paper", PrimitiveType.Quad, Vector3.zero, new Vector3(size.x, size.y, 1f), paperMaterial);
         MeshRenderer paper = sheet.Find("Paper").GetComponent<MeshRenderer>();
         paper.shadowCastingMode = ShadowCastingMode.Off;
-        Material examineMaterial = EnsureMaterial("Paper_Examine", "Universal Render Pipeline/Unlit", m =>
-        {
-            m.SetTexture("_BaseMap", paperSprite.texture);
-            m.SetColor("_BaseColor", Color.white);
-        });
+        Material examineMaterial = CelMaterial("Paper_ExamineCel", paperSprite.texture, 0f);
 
         // The photo frame: PhotoAspect by 1 (the paper scales it to its form's photo cell) with the crop sprites one unit tall inside.
         Transform frame = EnsureChild(sheet, "PhotoSlot");
@@ -963,7 +959,7 @@ public static partial class OfficeSceneUIBuilder
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "proxy", box);
         soDrag.ApplyModifiedProperties();
-        DeskPaperDepth paperDepth = DepthParts(paper.transform, drag, true);
+        DeskPaperDepth paperDepth = DepthParts(paper.transform, drag, null, true);
 
         DeskDocument doc = root.gameObject.AddComponent<DeskDocument>();
         var so = new SerializedObject(doc);
@@ -1323,7 +1319,7 @@ public static partial class OfficeSceneUIBuilder
         new Vector4(0.585f, 0.012f, 0.72f, 0.07f), new Vector4(0.77f, 0.012f, 0.9f, 0.07f)
     };
 
-    /// <summary>How far a tab's plate lies over the folder's face (metres): a raised card, its edge reaching down to the face (DeskRulebook.ShowDepth), its word over it.</summary>
+    /// <summary>How far a tab's plate lies over the folder's plane (metres): a raised card, its model's edge reaching down to the plane, its word over it.</summary>
     private const float RulebookTabPlateLift = 0.0006f;
 
     /// <summary>The tabs' art names in tab order (ArtSlots.RulebookTab).</summary>
@@ -1641,43 +1637,83 @@ public static partial class OfficeSceneUIBuilder
             ? EnsureMaterial(name, "NOPE/Desk Anime", m => m.SetColor("_BaseColor", colour))
             : LitMaterial(name, colour, 0.3f);
 
-    /// <summary>The render queues of the desk documents' depth (TimeDesk/PaperDepth): the edges before the printed layers (the seal at 2975), after the opaque desk; the face's shade over the lines (2995), under the texts (3000); the contact shadows after everything printed (the paper art at 3005), so a shadow lies over the paper under it, print and all, and only depth hides it.</summary>
-    private const int EdgeQueue = 2970, ShadeQueue = 2998, ShadowQueue = 3010;
+    /// <summary>The contact shadows' render queue (TimeDesk/PaperDepth): after everything printed (the paper art at 3005), so a shadow lies over the paper under it, print and all, and only depth hides it.</summary>
+    private const int ShadowQueue = 3010;
 
-    /// <summary>The desk documents' depth materials (TimeDesk/PaperDepth, unlit, vertex-coloured): Paper_Lip (the edges: opaque, writing depth), Paper_Shade and Paper_Shadow (blended, writing none); made once, their queues kept.</summary>
-    private static Material DepthMaterial(string name, bool blended, int queue)
+    /// <summary>The desk documents' models (Saleh 2026-10-17: "use canva and blender to make actual 3d documents"; made headless by tools/props/documents/docs_models.py) and their edge atlas.</summary>
+    private const string DocumentsFolder = GameplayArtFolder + "/Documents";
+
+    /// <summary>
+    /// The mesh <paramref name="mesh"/> of the document model <paramref name="model"/>
+    /// (Documents/&lt;model&gt;.fbx: each model's Top, its readable face in the
+    /// face quad's unit space, and its Body), the model imported without
+    /// materials or animation (the builder gives the materials).
+    /// </summary>
+    private static Mesh DocumentMesh(string model, string mesh)
     {
-        Material m = EnsureMaterial(name, "TimeDesk/PaperDepth", mat =>
+        string path = $"{DocumentsFolder}/{model}.fbx";
+        if (AssetImporter.GetAtPath(path) is ModelImporter importer
+            && (importer.materialImportMode != ModelImporterMaterialImportMode.None || importer.importAnimation || importer.importCameras || importer.importLights))
         {
-            mat.SetFloat("_SrcBlend", (float)(blended ? BlendMode.SrcAlpha : BlendMode.One));
-            mat.SetFloat("_DstBlend", (float)(blended ? BlendMode.OneMinusSrcAlpha : BlendMode.Zero));
-            mat.SetFloat("_ZWrite", blended ? 0f : 1f);
+            importer.materialImportMode = ModelImporterMaterialImportMode.None;
+            importer.importAnimation = false;
+            importer.importCameras = false;
+            importer.importLights = false;
+            importer.SaveAndReimport();
+        }
+        Mesh found = AssetDatabase.LoadAllAssetsAtPath(path).OfType<Mesh>().FirstOrDefault(m => m.name == mesh);
+        if (found == null)
+            Debug.LogError($"[TimeDesk] {path} has no mesh '{mesh}': run tools/props/documents/docs_models.py.");
+        return found;
+    }
+
+    /// <summary>A cel material (TimeDesk/DocumentCel) showing <paramref name="art"/> (a face's art, or the edge atlas), cut out at <paramref name="cutoff"/> (0: none); made once.</summary>
+    private static Material CelMaterial(string name, Texture2D art, float cutoff) =>
+        EnsureMaterial(name, "TimeDesk/DocumentCel", m =>
+        {
+            m.SetTexture("_BaseMap", art);
+            m.SetColor("_BaseColor", Color.white);
+            m.SetFloat("_Cutoff", cutoff);
         });
-        if (m != null && m.renderQueue != queue)
+
+    /// <summary>The models' sides, page blocks, stitches and rims (the edge atlas, Documents/docs_edges.png, in the cel shader).</summary>
+    private static Material EdgesMaterial() => CelMaterial("Docs_Edges", AssetDatabase.LoadAssetAtPath<Texture2D>($"{DocumentsFolder}/docs_edges.png"), 0f);
+
+    /// <summary>The contact shadows' material (TimeDesk/PaperDepth: blended, writing no depth; Paper_Shadow), its queue kept.</summary>
+    private static Material ShadowMaterial()
+    {
+        Material m = EnsureMaterial("Paper_Shadow", "TimeDesk/PaperDepth", mat =>
         {
-            m.renderQueue = queue;
+            mat.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+            mat.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+            mat.SetFloat("_ZWrite", 0f);
+        });
+        if (m != null && m.renderQueue != ShadowQueue)
+        {
+            m.renderQueue = ShadowQueue;
             EditorUtility.SetDirty(m);
         }
         return m;
     }
 
     /// <summary>
-    /// The drawn depth of a thing on the desk under <paramref name="face"/> (a
-    /// paper's quad, the folder's card or a tab's plate; in its unit space):
+    /// The modelled body of a thing on the desk under <paramref name="face"/>
+    /// (a paper's quad, the folder's card or a tab's plate; in its unit space;
+    /// Saleh 2026-10-17: "use canva and blender to make actual 3d documents"):
     /// a Depth child with its DeskPaperDepth (lifting its shadow while
-    /// <paramref name="drag"/> holds it, if any) and its empty Edge, Shadow and,
-    /// with <paramref name="shade"/>, Shade meshes in their materials, casting
-    /// and taking no shadow and taking no click. Their meshes are
-    /// runtime-built (Saleh 2026-10-17: "all documents need to feel 3d"), so
-    /// the scene keeps none.
+    /// <paramref name="drag"/> holds it, if any), its Body (the model's sides,
+    /// <paramref name="body"/>; a paper's is chosen when it binds) and its
+    /// Shadow (runtime-built), casting and taking no shadow and taking no
+    /// click. A paper's (<paramref name="paper"/>) also carries the papers'
+    /// models, and its face takes its kind's Top when it binds.
     /// </summary>
-    private static DeskPaperDepth DepthParts(Transform face, DeskDraggable drag, bool shade)
+    private static DeskPaperDepth DepthParts(Transform face, DeskDraggable drag, Mesh body, bool paper)
     {
         var host = new GameObject("Depth");
         host.transform.SetParent(face, false);
         host.layer = face.gameObject.layer;
         DeskPaperDepth depth = host.AddComponent<DeskPaperDepth>();
-        MeshFilter Part(string name, Material material)
+        MeshFilter Part(string name, Material material, Mesh mesh)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             go.transform.SetParent(host.transform, false);
@@ -1686,14 +1722,25 @@ public static partial class OfficeSceneUIBuilder
             renderer.sharedMaterial = material;
             renderer.shadowCastingMode = ShadowCastingMode.Off;
             renderer.receiveShadows = false;
-            return go.GetComponent<MeshFilter>();
+            MeshFilter filter = go.GetComponent<MeshFilter>();
+            filter.sharedMesh = mesh;
+            return filter;
         }
         var so = new SerializedObject(depth);
-        SetRef(so, "edge", Part("Edge", DepthMaterial("Paper_Lip", false, EdgeQueue)));
-        SetRef(so, "shadow", Part("Shadow", DepthMaterial("Paper_Shadow", true, ShadowQueue)));
-        if (shade)
-            SetRef(so, "shade", Part("Shade", DepthMaterial("Paper_Shade", true, ShadeQueue)));
+        SetRef(so, "body", Part("Body", EdgesMaterial(), body));
+        SetRef(so, "shadow", Part("Shadow", ShadowMaterial(), null));
         SetRef(so, "drag", drag);
+        SetRef(so, "face", face.GetComponent<MeshFilter>()); // its Top: a paper's takes its kind's when it binds; every model sags through it while it moves
+        if (paper)
+        {
+            SetRef(so, "sheetTop", DocumentMesh("Sheet", "SheetTop"));
+            SetRef(so, "sheetBody", DocumentMesh("Sheet", "SheetBody"));
+            SetRef(so, "bookletTop", DocumentMesh("Booklet", "BookletTop"));
+            SetRef(so, "bookletBody", DocumentMesh("Booklet", "BookletBody"));
+            SetRef(so, "cardTop", DocumentMesh("Card", "CardTop"));
+            SetRef(so, "cardBody", DocumentMesh("Card", "CardBody"));
+            SetRef(so, "bookletShade", AssetDatabase.LoadAssetAtPath<Texture2D>($"{DocumentsFolder}/booklet_shade.png"));
+        }
         so.ApplyModifiedProperties();
         return depth;
     }
@@ -1723,9 +1770,18 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(office, "Rulebook");
         Transform book = EnsureChild(office, "Rulebook");
         Transform booklet = EnsureChild(book, "Booklet"); // lifted by the papers' stack (DeskController), the root on the desk plane
+        // The folder is its model (Saleh 2026-10-17: "use canva and blender to make actual 3d documents"): its art on its top (the rules print on its top sheet, on this plane), its boards, spine, sheets, flaps and clip under it.
         GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookFolderSize.x, RulebookFolderSize.y, 1f),
-                                        SlotArtMaterial("Rulebook_Folder", ArtSlots.RulebookFolder));
+                                        CelMaterial("Rulebook_FolderModel", AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.RulebookFolder + ".png"), 0f));
         card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+        card.GetComponent<MeshFilter>().sharedMesh = DocumentMesh("Folder", "FolderTop");
+        Material folderMaterial = card.GetComponent<MeshRenderer>().sharedMaterial;
+        Texture2D folderShade = AssetDatabase.LoadAssetAtPath<Texture2D>($"{DocumentsFolder}/folder_shade.png");
+        if (folderMaterial != null && folderMaterial.GetTexture("_ShadeMap") != folderShade)
+        {
+            folderMaterial.SetTexture("_ShadeMap", folderShade); // its sheets', flaps' and clip's shadows on it, baked with the model
+            EditorUtility.SetDirty(folderMaterial);
+        }
         Color ink = new Color(0.13f, 0.12f, 0.15f);
 
         // The folder cover's words, printed over its clean face only while a culture's language is read (DeskRulebook.ShowCover).
@@ -1749,12 +1805,13 @@ public static partial class OfficeSceneUIBuilder
         {
             Vector3 at = FolderPoint(RulebookTabPlaces[i]) + new Vector3(0f, 0.0002f, 0f);
             Vector2 size = FolderSize(RulebookTabPlaces[i]);
-            // The plate is a raised card (DeskRulebook.ShowDepth gives it its edge down to the folder's face and its shadow), under its word.
+            // The plate is a raised card, its model (its art on top, its edge down to the folder's plane; its shadow: DeskRulebook.ShowDepth), under its word.
             GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, FolderPoint(RulebookTabPlaces[i]) + new Vector3(0f, RulebookTabPlateLift, 0f), new Vector3(size.x, size.y, 1f),
-                                             SlotArtMaterial("Rulebook_Tab_" + RulebookTabArt[i], ArtSlots.RulebookTab(RulebookTabArt[i])));
+                                             CelMaterial("Rulebook_TabModel_" + RulebookTabArt[i], AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.RulebookTab(RulebookTabArt[i]) + ".png"), 0.5f));
             plate.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            plate.GetComponent<MeshFilter>().sharedMesh = DocumentMesh("FolderTab", "FolderTabTop");
             plates.Add(plate.GetComponent<Renderer>());
-            tabDepths.Add(DepthParts(plate.transform, null, false));
+            tabDepths.Add(DepthParts(plate.transform, null, DocumentMesh("FolderTab", "FolderTabBody"), false));
             Clickable tab = EnsureClickBox(booklet, "Tab" + (i + 1));
             tab.transform.localPosition = at + new Vector3(0f, 0.0004f, 0f);
             var box = tab.GetComponent<BoxCollider>();
@@ -1888,7 +1945,7 @@ public static partial class OfficeSceneUIBuilder
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "proxy", cardBox);
         soDrag.ApplyModifiedProperties();
-        DeskPaperDepth folderDepth = DepthParts(card.transform, drag, true);
+        DeskPaperDepth folderDepth = DepthParts(card.transform, drag, DocumentMesh("Folder", "FolderBody"), false);
 
         DeskRulebook rulebook = GetOrAdd<DeskRulebook>(book.gameObject);
         var so = new SerializedObject(rulebook);
@@ -1935,17 +1992,6 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The size of a place on the folder art in metres (width by depth).</summary>
     private static Vector2 FolderSize(Vector4 place) => new Vector2((place.z - place.x) * RulebookFolderSize.x, (place.w - place.y) * RulebookFolderSize.y);
-
-    /// <summary>An unlit material showing the art slot <paramref name="slot"/>'s picture (ArtSlots.AssetRoot), cut out where the art is clear (the folder's and its tabs' outlines); made once. Unlit like the papers on the desk (evenly lit: no shadow band from the desk's props under the low evening sun, no night darkening of the rules; QA sweep 2026-10-16).</summary>
-    private static Material SlotArtMaterial(string name, string slot) =>
-        EnsureMaterial(name, "Universal Render Pipeline/Unlit", m =>
-        {
-            m.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + slot + ".png"));
-            m.SetColor("_BaseColor", Color.white);
-            m.SetFloat("_AlphaClip", 1f);
-            m.SetFloat("_Cutoff", 0.5f);
-            BaseShaderGUI.SetMaterialKeywords(m);
-        });
 
     /// <summary>
     /// The counter (Papers, Please's, Saleh 2026-10-06), rebuilt each run:

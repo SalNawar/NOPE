@@ -50,10 +50,10 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The booklet's visible part and its click boxes, lifted off the desk plane by the stack (SetLift); the root stays on the plane, where the drag moves it.</summary>
     [SerializeField] private Transform booklet;
 
-    /// <summary>The folder's drawn depth (a child of its card quad, in its unit space; DeskPaperDepth): its board's leaning edge, its contact shadow (lifting while it is dragged) and its face's cel shade (the spine, the page blocks; Saleh 2026-10-17: "all documents need to feel 3d especially the folder").</summary>
+    /// <summary>The folder's contact shadow (a child of its card, in its unit space; DeskPaperDepth: lifting while it is dragged; the card wears the folder's model, Saleh 2026-10-17: "use canva and blender to make actual 3d documents").</summary>
     [SerializeField] private DeskPaperDepth depth;
 
-    /// <summary>Each tab's drawn depth, as tabPlates (a raised card: its edge and its small shadow on the folder).</summary>
+    /// <summary>Each tab's contact shadow, as tabPlates (a raised card: its model from the builder, its small shadow on the folder).</summary>
     [SerializeField] private DeskPaperDepth[] tabDepths = Array.Empty<DeskPaperDepth>();
 
     /// <summary>The rules page's title ("TODAY'S RULES").</summary>
@@ -318,54 +318,29 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>Lays the booklet on the desk at <paramref name="at"/> (on the desk plane), turned to <paramref name="rotation"/> (the office binder).</summary>
     public void Place(Vector3 at, Quaternion rotation) => transform.SetPositionAndRotation(at, rotation);
 
-    /// <summary>The folder's thickness (metres; DeskConfigSO.folderThickness through ShowDepth): its room in the papers' stack.</summary>
-    public float Thickness { get; private set; } = 0.005f;
+    /// <summary>The folder's thickness (metres; DeskConfigSO.folderThickness through ShowDepth, as deep as its model under the face its pages print on): its room in the papers' stack.</summary>
+    public float Thickness { get; private set; } = 0.0055f;
 
     /// <summary>The folder's body on its card (shares of the card, centre and size): the art's opaque folder (measured on Forms/rulebook_folder), its tabs above it left out.</summary>
     private const float BodyCentreX = 0.003f, BodyCentreY = -0.0275f, BodyWidth = 0.957f, BodyHeight = 0.917f;
 
-    /// <summary>The folder's spine on its card (the art's gutter between its halves: its centre x and half width, card shares from the centre).</summary>
-    private const float SpineX = 0.005f, SpineHalf = 0.038f;
-
-    /// <summary>The sheets lying in the folder (card shares from the centre: x0, y0, x1, y1, measured on the art): the right one the pages print on (its right side under the pocket's flap below FlapTop), the left one its cover sheet (its pages show only below it: beside it they would line the spine); how many page edges each shows and how far each next one lies out (metres).</summary>
-    private static readonly (float x0, float y0, float x1, float y1) RightSheet = (0.045f, -0.468f, 0.422f, 0.36f), LeftSheet = (-0.395f, -0.455f, -0.03f, 0.4f);
-
-    /// <inheritdoc cref="RightSheet"/>
-    private const float FlapTop = 0.04f, PageStep = 0.001f;
-
-    /// <inheritdoc cref="RightSheet"/>
-    private const int RightPages = 4, LeftPages = 2;
-
-    /// <summary>The cel shade at the spine (the halves dip into it: the folder lying open) and how it fades across each half.</summary>
-    private const float SpineShade = 0.26f, SpineEdgeShade = 0.16f, HalfShade = 0.05f;
-
-    /// <summary>A tab's outline on its plate (unit space, counter-clockwise from its bottom left; measured on the tab art: a slight trapezoid, its top corners rounded).</summary>
+    /// <summary>A tab's outline on its plate (unit space, counter-clockwise from its bottom left; measured on the tab art: a slight trapezoid, its top corners rounded, as its model).</summary>
     private static readonly List<(float x, float y)> TabOutline = new List<(float x, float y)>
     {
         (-0.5f, -0.49f), (0.498f, -0.49f), (0.481f, -0.262f), (0.466f, 0.214f), (0.435f, 0.405f), (-0.447f, 0.405f), (-0.477f, 0.31f), (-0.483f, 0.024f)
     };
 
-    /// <summary>A tab's raised card: its thickness (metres, from its plate down to the folder's face) and its shadow's share of the folder's darkness.</summary>
-    private const float TabThickness = 0.00055f, TabShadow = 0.7f;
-
-    /// <summary>The folder's edge colours: its board's lit cut edge, its board (manila in the cel shade) and the ink at every edge's foot.</summary>
-    private static readonly Color BoardLit = new Color(0.87f, 0.75f, 0.53f, 1f), Board = new Color(0.56f, 0.41f, 0.28f, 1f), EdgeInk = new Color(0.23f, 0.15f, 0.19f, 1f);
-
-    /// <summary>The folder face's colours: its pages' edges (light and dark, alternating), the ink line under each and the cel shade (purple-tinted, never grey).</summary>
-    private static readonly Rgba PageLight = new Rgba(0.96f, 0.93f, 0.85f, 1f), PageDark = new Rgba(0.82f, 0.77f, 0.7f, 1f), PageInk = new Rgba(0.36f, 0.26f, 0.25f, 1f), Shade = new Rgba(0.29f, 0.19f, 0.33f, 1f);
-
-    /// <summary>How far over the face its shade lies (metres; under the cover's words, the tabs and the pages' texts).</summary>
-    private const float ShadeLift = 0.00015f;
+    /// <summary>A tab's raised card: its thickness (metres, its model's) and its shadow's share of the folder's darkness.</summary>
+    private const float TabThickness = 0.0006f, TabShadow = 0.7f;
 
     /// <summary>
-    /// Builds the folder's drawn depth from <paramref name="config"/>
-    /// (DeskController, at load; Saleh 2026-10-17: "all documents need to feel
-    /// 3d especially the folder"): its board, folderThickness deep, leaning
-    /// out at its bottom and right sides (its lit cut edge over the board,
-    /// inked at its foot); its contact shadow; on its face the spine's cel
-    /// shade (the two halves dip into it, as a folder lying open) and the page
-    /// edges stepping out from under its two sheets (PaperDepth.PageBlock);
-    /// and each tab a raised card with its own edge and small shadow.
+    /// The folder's contact shadows from <paramref name="config"/> (DeskController,
+    /// at load; Saleh 2026-10-17: "use canva and blender to make actual 3d
+    /// documents ... especially the folder"): the folder wears its model from
+    /// Build Office UI (card boards with a creased spine, the loose sheets, the
+    /// pocket flaps, the clip, its art on top), folderThickness deep under the
+    /// face its pages print on; its shadow lies under its body (lifting while
+    /// it is dragged) and each raised tab casts its own small one.
     /// </summary>
     public void ShowDepth(DeskConfigSO config)
     {
@@ -374,43 +349,63 @@ public sealed class DeskRulebook : MonoBehaviour
         Thickness = config.folderThickness;
         if (depth != null && folderFace != null)
         {
-            Vector2 size = folderFace.transform.localScale;
             var outline = PaperEdge.Rectangle(BodyWidth, BodyHeight).ConvertAll(p => (p.x + BodyCentreX, p.y + BodyCentreY));
-            depth.Build(outline, PaperKind.Folder, Thickness, size, FolderTone, null, FaceShade(size), config);
+            depth.Build(outline, Thickness, folderFace.transform.localScale, config);
         }
         for (int i = 0; i < tabDepths.Length && i < tabPlates.Length; i++)
             if (tabDepths[i] != null && tabPlates[i] != null)
-                tabDepths[i].Build(TabOutline, PaperKind.Folder, TabThickness, tabPlates[i].transform.localScale, FolderTone, null, null, config, TabShadow);
-    }
-
-    /// <summary>A band of the folder's edges in its colour.</summary>
-    private static Color FolderTone(EdgeTone tone) => tone == EdgeTone.Lit ? BoardLit : tone == EdgeTone.Ink ? EdgeInk : Board;
-
-    /// <summary>The folder face's cel shade for a card <paramref name="size"/> metres: the spine's band, then each sheet's page edges.</summary>
-    private static DepthMesh FaceShade(Vector2 size)
-    {
-        float left = BodyCentreX - BodyWidth / 2f, right = BodyCentreX + BodyWidth / 2f;
-        float bottom = BodyCentreY - BodyHeight / 2f, top = BodyCentreY + BodyHeight / 2f;
-        DepthMesh shade = PaperDepth.Strip(new List<(float at, Rgba colour)>
-        {
-            (left, Shade.WithAlpha(0f)),
-            (SpineX - 0.2f, Shade.WithAlpha(HalfShade)),
-            (SpineX - SpineHalf, Shade.WithAlpha(SpineEdgeShade)),
-            (SpineX, Shade.WithAlpha(SpineShade)),
-            (SpineX + SpineHalf, Shade.WithAlpha(SpineEdgeShade)),
-            (SpineX + 0.2f, Shade.WithAlpha(HalfShade)),
-            (right, Shade.WithAlpha(0f)),
-        }, true, bottom, top, -ShadeLift);
-        shade.Append(PaperDepth.PageBlock(LeftSheet, LeftPages, PageStep, size.x, size.y, -ShadeLift, PageLight, PageDark, PageInk, LeftSheet.y1));
-        shade.Append(PaperDepth.PageBlock(RightSheet, RightPages, PageStep, size.x, size.y, -ShadeLift, PageLight, PageDark, PageInk, FlapTop));
-        return shade;
+                tabDepths[i].Build(TabOutline, TabThickness, tabPlates[i].transform.localScale, config, TabShadow);
     }
 
     /// <summary>Lifts the booklet <paramref name="height"/> metres off the desk plane (its place in the papers' stack, or the drag's lift: DeskController).</summary>
     public void SetLift(float height)
     {
-        if (booklet != null)
-            booklet.localPosition = new Vector3(0f, height, 0f);
+        _height = height;
+        ShowMotion();
+    }
+
+    /// <summary>The booklet's height in the stack (SetLift), its hop over it when dropped and the turn its drops have left it (degrees about its up).</summary>
+    private float _height, _restYaw;
+    private Spring _hop;
+
+    /// <summary>The folder's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; the folder "can be nudged and slides with weight"): heavier than a paper (MotionKnobs.folderWeight), it swings less, slides to rest slower, and its loose sheets sag while it moves.</summary>
+    private PaperPhysics _physics;
+
+    /// <summary>Each frame: the folder's swing, slide, spin and hop on top of where the desk puts it (the drag moves its root).</summary>
+    private void Update()
+    {
+        if (booklet == null)
+            return;
+        MotionKnobs knobs = UiMotion.Knobs;
+        MotionAmount amount = UiMotion.Amount;
+        _physics ??= new PaperPhysics(knobs.folderWeight);
+        Vector3 at = transform.position;
+        bool held = drag != null && drag.IsDragging;
+        (float spin, float hop) = _physics.Step(Time.unscaledDeltaTime, Vector3.Dot(at, transform.right), Vector3.Dot(at, transform.forward), held, knobs, amount);
+        _restYaw = Mathf.Clamp(_restYaw + spin, -3f, 3f);
+        SpringTuning tuning = knobs.Get(knobs.paperFeel);
+        if (hop > 0f)
+            _hop.Kick(tuning.KickFor(hop));
+        _hop.Step(Time.unscaledDeltaTime, tuning, 1e-5f, 1e-4f);
+        if (_hop.Value < 0f)
+        {
+            _hop.Value = 0f; // it never sinks into what lies under it
+            _hop.Velocity = Mathf.Max(0f, _hop.Velocity);
+        }
+        if (depth != null)
+            depth.SetFlex(_physics.Sag, _physics.SagDirX, _physics.SagDirZ);
+        if (_physics.Moving || spin != 0f || !_hop.AtRest)
+            ShowMotion();
+    }
+
+    /// <summary>Draws the booklet at its height, hop, slide and turn.</summary>
+    private void ShowMotion()
+    {
+        if (booklet == null)
+            return;
+        float ox = _physics != null ? _physics.OffsetX : 0f, oz = _physics != null ? _physics.OffsetZ : 0f, yaw = _physics != null ? _physics.Yaw : 0f;
+        booklet.localPosition = new Vector3(ox, _height + _hop.Value, oz);
+        booklet.localRotation = Quaternion.Euler(0f, _restYaw + yaw, 0f);
     }
 
     /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced): its rows show, the others' hide; its tab looks open. The GUIDE shows its sheet (read).</summary>

@@ -1,11 +1,8 @@
-// The desk documents' depth cues (PaperDepth; Saleh 2026-10-17: "all documents
-// need to feel 3d especially the folder"): their leaning edges, their soft
-// contact shadows and the cel shading on their faces, each a runtime mesh whose
-// vertex colours (authored in sRGB, their alpha the cue's strength) are the
-// whole look. Unlit, so no hour's light ever crosses the text: the depth is
-// drawn, not lit. The edges draw opaque and write depth (Paper_Lip), so a
-// paper's own shadow never darkens them; the shadows and shades blend over
-// what lies under them without writing depth (Paper_Shadow, Paper_Shade).
+// The soft contact shadow under each desk document (PaperDepth.Shadow; the documents themselves
+// are modelled, DeskPaperDepth and TimeDesk/DocumentCel): a runtime mesh whose vertex colours
+// (authored in sRGB, their alpha the shadow's darkness) are the whole look. Unlit, so no hour's
+// light ever crosses the text: the shadow is drawn, not lit. Paper_Shadow blends it over what lies
+// under it without writing depth; the blend and depth-write are properties so one shader serves.
 Shader "TimeDesk/PaperDepth"
 {
     Properties

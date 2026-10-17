@@ -19,9 +19,6 @@ public static class PaperLayers
     /// <summary>Each part's height over its sheet (metres).</summary>
     public const float Seal = 0.0001f, Fill = 0.0002f, Highlight = 0.0003f, Line = 0.0004f, Photo = 0.0005f, Text = 0.0007f, Ink = 0.0008f;
 
-    /// <summary>The face's cel shading (PaperDepth: a lifted corner's curl, a booklet's gutter), over the print and the photo, under the texts (metres over its sheet).</summary>
-    public const float Shade = 0.00065f;
-
     /// <summary>The portrait's height over its photo frame (the builder's Photo child of the PhotoSlot).</summary>
     public const float PhotoInset = 0.0001f;
 
@@ -64,5 +61,5 @@ public static class PaperLayers
         (float)(Math.Abs(halfDepth * Math.Sin(tiltXDegrees * Math.PI / 180.0)) + Math.Abs(halfWidth * Math.Sin(tiltZDegrees * Math.PI / 180.0)));
 
     /// <summary>The parts' heights in stacking order, bottom first (the tests check each is under PartsDepth and in order).</summary>
-    public static readonly float[] Order = { Seal, Fill, Highlight, Line, Photo, Photo + PhotoInset, Shade, Text, Ink };
+    public static readonly float[] Order = { Seal, Fill, Highlight, Line, Photo, Photo + PhotoInset, Text, Ink };
 }
