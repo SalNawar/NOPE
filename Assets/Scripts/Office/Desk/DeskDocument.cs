@@ -136,7 +136,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The paper quad (its material swaps to the reading material while on the desk).</summary>
     [SerializeField] private Renderer paperQuad;
 
-    /// <summary>The paper's drawn depth under and on its face (a child of the paper quad, in its unit space): its leaning edge, its contact shadow and its face's cel shade (DeskPaperDepth; Saleh's 1007d playtest: "too flat when you see them from the side"; 2026-10-17: "all documents need to feel 3d").</summary>
+    /// <summary>The paper's model and contact shadow (DeskPaperDepth, a child of the paper quad, in its unit space; Saleh's 1007d playtest: "too flat when you see them from the side"; 2026-10-17: "use canva and blender to make actual 3d documents").</summary>
     [SerializeField] private DeskPaperDepth depth;
 
     /// <summary>The paper's unlit material while it lies on the desk, full size (the paper's texture, evenly lit); optional.</summary>
@@ -345,7 +345,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
         PaperKind kind = PaperEdge.KindOf(look.frame);
         Thickness = kind == PaperKind.Booklet ? config.bookletThickness : kind == PaperKind.Card ? config.cardThickness : config.paperThickness;
-        Rect? gutter = null;
         Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(form.Data.FormNumber) }) : null;
 
         foreach (FormItem item in _form.Items)
@@ -367,9 +366,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 case FormItemKind.StampArea:
                     _keys.Add(Share(Local(item.Rect))); // the visa box: the spread keeps it clear for the stamp
                     break;
-                case FormItemKind.Spine:
-                    gutter = Local(item.Rect); // a booklet's fold: its gutter's shade
-                    break;
                 case FormItemKind.Emblem:
                     PlaceMark("Emblem", item.Rect, EmblemArt.Texture(item.Text), cover, TextLift);
                     break;
@@ -388,9 +384,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             (q.Layer == FormPaintLayer.Fill ? fillMesh : lineMesh).Rect(Local(q.Rect), new Color(q.Colour.R, q.Colour.G, q.Colour.B, q.Colour.A));
         fillMesh.Apply(fills, FillLift);
         lineMesh.Apply(lines, LineLift);
-        int seed = Seed(index, form.Data.FormNumber);
-        BuildDepth(outline, kind, string.IsNullOrEmpty(look.paper) ? config.paperEdgeTint : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f), cover, gutter, seed);
-        Jitter(seed);
+        BuildDepth(outline, kind);
+        Jitter(Seed(index, form.Data.FormNumber));
 
         foreach (FormSlot s in _form.Slots)
         {
@@ -738,55 +733,23 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         return outline.ConvertAll(p => (p.x / Size.x, p.y / Size.y));
     }
 
-    /// <summary>The paper's thickness on the desk (metres; DeskConfigSO's for its kind: a sheet, a booklet, a card): its edge's depth, and its room in the stack (DeskController, PaperLayers.Lifts).</summary>
+    /// <summary>The paper's thickness on the desk (metres; DeskConfigSO's for its kind: a sheet, a booklet, a card, as deep as its model): its shadow's depth, and its room in the stack (DeskController, PaperLayers.Lifts).</summary>
     public float Thickness { get; private set; } = 0.0007f;
 
     /// <summary>
-    /// Builds the paper's drawn depth (DeskPaperDepth; Saleh 2026-10-17: "all
-    /// documents need to feel 3d"): the side walls of its outline
-    /// (<paramref name="outline"/>, in the quad's unit space) down its
-    /// thickness in its kind's bands, leaning out toward the bottom right,
-    /// coloured from its face's tint <paramref name="paper"/> (its cel shade,
-    /// purple-tinted; a booklet's pages cream and grey) and a booklet's
-    /// <paramref name="cover"/>, each band's foot inked; its contact shadow;
-    /// and on its face a single sheet's lifted corner (one of the three the
-    /// camera sees, by <paramref name="seed"/>: its edge leans further there
-    /// and a soft cel shade lies in it) or a booklet's gutter (a band of shade
-    /// either side of its fold, <paramref name="gutter"/>, the sheet's metres).
+    /// The paper as a modelled object (DeskPaperDepth; Saleh 2026-10-17: "use
+    /// canva and blender to make actual 3d documents"): it wears its
+    /// <paramref name="kind"/>'s model (a sheet with a gentle curl and a lifted
+    /// corner, an open passport booklet, a thick card), its face art mapped
+    /// where the flat quad showed it, and its contact shadow lies under its
+    /// <paramref name="outline"/> (the quad's unit space).
     /// </summary>
-    private void BuildDepth(List<(float x, float y)> outline, PaperKind kind, Color paper, Color cover, Rect? gutter, int seed)
+    private void BuildDepth(List<(float x, float y)> outline, PaperKind kind)
     {
         if (depth == null || _config == null)
             return;
-        Color edgeTone = Shaded(paper), light = Color.Lerp(paper, PageCream, 0.6f), dark = Shaded(light), coverTone = Shaded(cover);
-        Color Tone(EdgeTone t) => t == EdgeTone.Cover ? coverTone : t == EdgeTone.PageLight ? light : t == EdgeTone.PageDark ? dark : t == EdgeTone.Ink ? EdgeInk : edgeTone;
-
-        int? corner = kind == PaperKind.Sheet ? PaperDepth.CurlCorner(seed) : (int?)null;
-        List<float> lift = corner.HasValue ? PaperDepth.CornerLift(outline, corner, _config.curlLift) : null;
-        DepthMesh shade = null;
-        if (corner.HasValue)
-            shade = PaperDepth.Curl(outline, corner.Value, Size.x, Size.y, _config.curlReach, -PaperLayers.Shade, FaceShade.WithAlpha(_config.curlShadeAlpha));
-        else if (gutter.HasValue && Size.y > 0f)
-        {
-            float centre = gutter.Value.center.y / Size.y, half = gutter.Value.height / 2f / Size.y, reach = GutterReach / Size.y;
-            shade = PaperDepth.Strip(new List<(float at, Rgba colour)>
-            {
-                (centre - half - reach, FaceShade.WithAlpha(0f)),
-                (centre - half, FaceShade.WithAlpha(GutterShade * 0.6f)),
-                (centre, FaceShade.WithAlpha(GutterShade)),
-                (centre + half, FaceShade.WithAlpha(GutterShade * 0.6f)),
-                (centre + half + reach, FaceShade.WithAlpha(0f)),
-            }, false, -0.5f, 0.5f, -PaperLayers.Shade);
-        }
-        depth.Build(outline, kind, Thickness, Size, Tone, lift, shade, _config);
-    }
-
-    /// <summary>A face's colour in its edge's cel shade: darker and toward the kit's lavender (the shadow side faces away from the light).</summary>
-    private static Color Shaded(Color face)
-    {
-        Color c = Color.Lerp(face * EdgeShade, Lavender, 0.18f);
-        c.a = 1f;
-        return c;
+        depth.Wear(kind);
+        depth.Build(outline, Thickness, Size, _config);
     }
 
     /// <summary>
@@ -802,9 +765,24 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _builtRest ??= _sheetRest ?? sheet.localRotation;
         uint mixed = unchecked((uint)seed * 2654435761u);
         float share = (mixed >> 12) % 2001u / 1000f - 1f;
-        _sheetRest = Quaternion.Euler(0f, share * _config.paperJitter, 0f) * _builtRest.Value;
-        sheet.localRotation = Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+        _restYaw = share * _config.paperJitter;
+        Rest();
     }
+
+    /// <summary>The paper's turn on the desk (degrees about its up): its own jitter, then each drop's spin (PaperPhysics: it lies where its momentum left it), kept within twice the jitter either way of square.</summary>
+    private float _restYaw;
+
+    /// <summary>Lays the sheet at its turn (_restYaw) under its tilt.</summary>
+    private void Rest()
+    {
+        if (sheet == null || _builtRest == null)
+            return;
+        _sheetRest = Quaternion.Euler(0f, _restYaw, 0f) * _builtRest.Value;
+        sheet.localRotation = Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+    }
+
+    /// <summary>The paper's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"): its swing and sag while held, its slide, spin and hop when let go.</summary>
+    private readonly PaperPhysics _physics = new PaperPhysics();
 
     /// <summary>The paper's own number for its look (its index and its form's number: the same paper lies the same way every time).</summary>
     private static int Seed(int index, string formNumber)
@@ -820,14 +798,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     /// <summary>The sheet's rotation as the builder made it (Jitter turns it from there).</summary>
     private Quaternion? _builtRest;
-
-    /// <summary>The edge's shade of its face's colour, a page's cream, the kit's lavender the shade leans to, and the ink at the edge's foot (the cel kit's brown-purple outline).</summary>
-    private const float EdgeShade = 0.8f;
-    private static readonly Color PageCream = new Color(0.96f, 0.93f, 0.85f, 1f), Lavender = new Color(0.596f, 0.525f, 0.659f, 1f), EdgeInk = new Color(0.23f, 0.15f, 0.19f, 1f);
-
-    /// <summary>The face's cel shade colour (a curl, a gutter: purple-tinted, never grey), the gutter's darkest share and how far its shade reaches past the fold (metres).</summary>
-    private static readonly Rgba FaceShade = new Rgba(0.29f, 0.19f, 0.33f, 1f);
-    private const float GutterShade = 0.2f, GutterReach = 0.022f;
 
     /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres: the first place at once, then on the paper's spring (a picked-up paper rises, a dropped one settles; a cut without motion).</summary>
     public void SetLift(float height)
@@ -874,6 +844,18 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 _tiltX.Kick(paper.KickFor(knobs.paperTiltMax * 0.25f * amount.Share)); // the flutter as it lands
             }
         }
+        // The physics feel on top of where the desk puts it (the desk's drop sizing and the scanner's snap decide the place).
+        (float spin, float hop) = _physics.Step(dt, Vector3.Dot(position, transform.right), Vector3.Dot(position, transform.forward), dragged, knobs, amount);
+        if (spin != 0f && _config != null)
+        {
+            float most = Mathf.Max(_config.paperJitter * 2f, 0.5f);
+            _restYaw = Mathf.Clamp(_restYaw + spin, -most, most);
+            Rest();
+        }
+        if (hop > 0f)
+            _lift.Kick(knobs.Get(knobs.paperFeel).KickFor(hop));
+        if (depth != null)
+            depth.SetFlex(_physics.Sag, _physics.SagDirX, _physics.SagDirZ);
         if (dragged && dt > 0f && !amount.Still)
         {
             Vector3 travel = transform.InverseTransformDirection(position - _lastPosition) / dt;
@@ -884,7 +866,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         else
             _tiltX.Target = _tiltZ.Target = 0f;
         _lastPosition = position;
-        if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest)
+        if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest && !_physics.Moving)
             return;
         SpringTuning tuning = knobs.Get(knobs.paperFeel);
         _lift.Step(dt, tuning, knobs.settleValue * 0.01f, knobs.settleSpeed * 0.01f); // metres
@@ -910,9 +892,11 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         float lift = _settling ? Mathf.Max(_lift.Value, _lift.Target) : _lift.Value;
         float half = _sizeNow * (1f + _squash.Value) / 2f;
         lift += PaperLayers.TiltDrop(Size.x * half, Size.y * half, _tiltX.Value, _tiltZ.Value);
-        sheet.localPosition = new Vector3(0f, lift, 0f);
+        sheet.localPosition = new Vector3(_physics.OffsetX, lift, _physics.OffsetZ);
         _sheetRest ??= sheet.localRotation;
-        sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f ? _sheetRest.Value : Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+        sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f && _physics.Yaw == 0f
+            ? _sheetRest.Value
+            : Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
         ShowSheetScale();
     }
 
