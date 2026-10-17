@@ -379,6 +379,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soGm, "shiftClock", shiftClock);
         SetRef(soGm, "travellerView", officeView.transform.Find("Traveller").GetComponent<TravellerView>());
         SetRef(soGm, "booth", booth);
+        SetRef(soGm, "deskUpgrades", Object.FindFirstObjectByType<DeskUpgrades>(FindObjectsInactive.Include));
         SetRef(soGm, "desktopConfig", EnsureDesktopConfig());
         soGm.ApplyModifiedProperties();
 

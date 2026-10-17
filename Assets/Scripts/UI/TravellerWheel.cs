@@ -129,6 +129,9 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>Raised when the wheel opens or closes.</summary>
     public event Action OpenChanged;
 
+    /// <summary>Raised as a line in a foreign tongue goes up translated (its tongue's id): the BABEL rack's cartridge glows (DeskUpgrades).</summary>
+    public static event Action<string> TongueTranslated;
+
     /// <summary>Raised when the bubble's answer is clicked, with the line said.</summary>
     public event Action<DialogLine> LineClicked;
 
@@ -473,16 +476,20 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     private void Speak(IReadOnlyList<DialogLine> lines)
     {
         SpeechTranslation speech = _translation.Speech;
+        bool translated = false;
         foreach (DialogLine line in lines)
         {
             if (line == null)
                 continue;
             _said.Add(line);
             Reveal flip = _translation.Bubble(line, 0f);
+            translated |= flip.Kind == RevealKind.Flipping;
             _speech.Say(line.Text, line.Expression,
                 flip.Kind == RevealKind.Flipping ? DisplayText.Remaining(line.Text, flip, speech.Timing, speech.ReducedMotion) : 0f,
                 _said.Count - 1);
         }
+        if (translated)
+            TongueTranslated?.Invoke(_translation.TongueId);
 
         ShowSpeech();
     }

@@ -41,6 +41,7 @@ public static partial class OfficeSceneUIBuilder
         DeskHardware hardware = GetOrAdd<DeskHardware>(root.gameObject);
         ChipReader reader = BuildChipReader(root);
         UvTorch torch = BuildUvTorch(root);
+        DeskUpgrades upgrades = BuildDeskUpgrades(root, config);
 
         TextMeshPro uvHint = FloatingNote(root, "UvHint", true);
         TextMeshPro chipHint = FloatingNote(root, "ChipHint", true);
@@ -57,6 +58,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(hardware);
         SetRef(so, "chipReader", reader);
         SetRef(so, "uvTorch", torch);
+        SetRef(so, "upgrades", upgrades);
         SetRef(so, "config", config);
         SetRef(so, "uvHint", uvHint);
         SetRef(so, "chipHint", chipHint);
@@ -70,9 +72,9 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>A machine's model under <paramref name="parent"/> as its child Machine, in the desk's materials (by the imported slot's name, <paramref name="material"/>), no shadows cast by what glows; null (with a warning) when the model is missing or lacks a part of <paramref name="contract"/>.</summary>
-    private static GameObject MachineArt(Transform parent, string path, string[] contract, System.Func<string, Material> material)
+    private static GameObject MachineArt(Transform parent, string path, string[] contract, System.Func<string, Material> material, string name = "Machine")
     {
-        DestroyChildIfPresent(parent, "Machine");
+        DestroyChildIfPresent(parent, name);
         var model = AssetDatabase.LoadAssetAtPath<GameObject>(path);
         bool Has(string part) => model != null && model.transform.Find(part) != null;
         if (!PropArt.UseArt(model != null, contract, Has))
@@ -81,7 +83,7 @@ public static partial class OfficeSceneUIBuilder
             return null;
         }
         GameObject machine = Object.Instantiate(model, parent, false);
-        machine.name = "Machine";
+        machine.name = name;
         machine.transform.localPosition = Vector3.zero;
         machine.transform.localRotation = Quaternion.identity;
         machine.transform.localScale = Vector3.one;

@@ -322,6 +322,47 @@ public static class PropArt
     /// <summary>The UV torch's parts (tools/props/machines/uv_torch_model.py): the torch with its thumb switch, lens and beam, and the cradle.</summary>
     public static readonly string[] UvTorch = { "UvTorch", "UvTorch/Switch", "UvTorch/Lens", "UvTorch/BeamFX", "Cradle" };
 
+    /// <summary>The upgrades' desk objects' parts (tools/props/machines/upgrade_props_model.py; the desk machines spec §4), as paths under each model's root. The supply crate: its four flaps, the tape, the label and the point its tag rises from.</summary>
+    public static readonly string[] SupplyCrate =
+    {
+        "Crate", "Crate/Flap_Left", "Crate/Flap_Right", "Crate/Flap_Front", "Crate/Flap_Back", "Crate/Tape", "Crate/Label", "Crate/ItemPoint"
+    };
+
+    /// <summary>The Auto-Feed tray (on the scanner, in its frame): the rollers and the feed lamp.</summary>
+    public static readonly string[] ScannerFeeder = { "Feeder", "Feeder/Rollers", "Feeder/FeedLED" };
+
+    /// <summary>The Analysis beacon (on the scanner, in its frame): the pod, its mirror and its lamp.</summary>
+    public static readonly string[] AnalysisBeacon = { "Beacon", "Beacon/BeaconPod", "Beacon/BeaconPod/Reflector", "Beacon/BeaconPod/BeaconLamp" };
+
+    /// <summary>The Interview Protocols' card ring: the stand, the ring and its four cards.</summary>
+    public static readonly string[] ProtocolRing =
+    {
+        "ProtocolStand", "ProtocolStand/Ring", "ProtocolStand/Ring/Card_0", "ProtocolStand/Ring/Card_1", "ProtocolStand/Ring/Card_2", "ProtocolStand/Ring/Card_3"
+    };
+
+    /// <summary>The BABEL rack: the needle and the four cartridges with their lamps.</summary>
+    public static readonly string[] BabelRack =
+    {
+        "BabelRack", "BabelRack/Needle",
+        "BabelRack/Cartridge_0", "BabelRack/Cartridge_1", "BabelRack/Cartridge_2", "BabelRack/Cartridge_3",
+        "BabelRack/Cartridge_0/CartridgeLED_0", "BabelRack/Cartridge_1/CartridgeLED_1", "BabelRack/Cartridge_2/CartridgeLED_2", "BabelRack/Cartridge_3/CartridgeLED_3"
+    };
+
+    /// <summary>The Translation Lens's stand: the loupe, the bar magnifier and the Fresnel arm with its hinged upper part.</summary>
+    public static readonly string[] LensKit = { "LensStand", "LensStand/Loupe", "LensStand/BarMagnifier", "LensStand/FresnelArm", "LensStand/FresnelArm/ArmUpper" };
+
+    /// <summary>The Rolodex: the drum and the knob.</summary>
+    public static readonly string[] Rolodex = { "Rolodex", "Rolodex/Drum", "Rolodex/Knob" };
+
+    /// <summary>The RING SERVICE panel: per module (1 to 5) its lamp, breaker and sticker.</summary>
+    public static readonly string[] RingPanel =
+    {
+        "RingPanel",
+        "RingPanel/Lamp_1", "RingPanel/Lamp_2", "RingPanel/Lamp_3", "RingPanel/Lamp_4", "RingPanel/Lamp_5",
+        "RingPanel/Breaker_1", "RingPanel/Breaker_2", "RingPanel/Breaker_3", "RingPanel/Breaker_4", "RingPanel/Breaker_5",
+        "RingPanel/Sticker_1", "RingPanel/Sticker_2", "RingPanel/Sticker_3", "RingPanel/Sticker_4", "RingPanel/Sticker_5"
+    };
+
     /// <summary>The brass stamp drawer's parts (tools/props/brass_drawer.py): the tray, and per lane its cradle, pinion, rack, lever and nameplate.</summary>
     public static readonly string[] BrassDrawer =
     {

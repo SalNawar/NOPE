@@ -31,6 +31,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public sealed class TranslationLensPresenter : MonoBehaviour
 {
+    /// <summary>Raised as the lens starts turning a word to English: the lens stand's loupe ticks (DeskUpgrades).</summary>
+    public static event System.Action WordTurned;
+
     /// <summary>Seconds between two rescans of the scenes' texts while the pointer moves (runtime-built UI).</summary>
     private const float RescanSeconds = 5f;
 
@@ -391,7 +394,10 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         flip.ToEnglish = toEnglish;
         flip.Started = started;
         if (toEnglish)
+        {
             Activate(state, now);
+            WordTurned?.Invoke();
+        }
         state.Settled = false;
     }
 

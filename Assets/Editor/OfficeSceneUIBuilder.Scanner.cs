@@ -41,7 +41,8 @@ public static partial class OfficeSceneUIBuilder
     /// The scanner's art under <paramref name="scanner"/> (Machine, its parts in
     /// the desk's materials, no shadows cast by its glows), wired on the
     /// DeskScanner through <paramref name="so"/> (its bed, height, sweep bar,
-    /// lid, spill and readout; no feeder tray or lamp: the art has none yet);
+    /// lid, spill and readout; the Auto-Feed tray and the Analysis beacon as
+    /// its feeder tray and lamp, BuildScannerAddOns);
     /// false (nothing built) when the model is missing or lacks a part.
     /// </summary>
     private static bool BuildScannerArt(Transform scanner, SerializedObject so, out GameObject machine)
@@ -87,8 +88,10 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "lid", lid);
         SetRef(so, "spill", ScannerSpill(m, lid));
         SetRef(so, "readout", ScannerReadout(m.Find("Readout")));
-        SetRef(so, "feederTray", null);
-        SetRef(so, "analysisLamp", null);
+        // The scanner's upgrades on the art (the desk machines spec §4): the Auto-Feed tray and the Analysis beacon, from their models.
+        SetRef(so, "addOns", BuildScannerAddOns(scanner, m, out GameObject feeder, out GameObject beacon));
+        SetRef(so, "feederTray", feeder);
+        SetRef(so, "analysisLamp", beacon);
         return true;
     }
 
@@ -246,6 +249,7 @@ public static partial class OfficeSceneUIBuilder
         so.FindProperty("machineHeight").floatValue = StandInScannerHeight;
         SetRef(so, "feederTray", tray);
         SetRef(so, "analysisLamp", lamp);
+        SetRef(so, "addOns", null);
         SetRef(so, "sweepBar", sweep.transform);
         SetRef(so, "lid", null);
         SetRef(so, "spill", null);

@@ -267,6 +267,8 @@ public sealed class CaseDocumentsPresenter
             _marks.Add(mark.Value);
         if (mark.HasValue)
             Sounds.Play(SoundCues.ScannerFlag);
+        if (_desk != null)
+            _desk.FlagAnalysis(mark.HasValue);
         foreach (DocumentsView view in _views)
             if (view != null)
             {

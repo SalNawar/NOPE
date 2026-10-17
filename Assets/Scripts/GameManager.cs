@@ -47,6 +47,9 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>Optional: the booth's input and wake rules.</summary>
     [SerializeField] private BoothCoordinator booth;
 
+    /// <summary>The upgrades' objects on the desk (the desk machines spec §4): each day starts them with the world; the shift's opening opens the supply crate; a departure flashes the RING SERVICE panel.</summary>
+    [SerializeField] private DeskUpgrades deskUpgrades;
+
     /// <summary>Optional: the desk's guide (day 1's FTUE, the guided days' new rule, the rulebook's GUIDE pages).</summary>
     [SerializeField] private GuideDirector guide;
 
@@ -260,6 +263,12 @@ public sealed partial class GameManager : MonoBehaviour
             booth.BeginDay(_worldState.day, scanners);
         if (investigationUI != null)
             investigationUI.SetIntroductions(contentLibrary.Introductions, _worldState.day);
+        if (deskUpgrades != null)
+        {
+            deskUpgrades.BeginDay(_worldState, contentLibrary, Portals);
+            _desk.Opened += deskUpgrades.ShiftOpened;
+            Departed += deskUpgrades.Departed;
+        }
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 

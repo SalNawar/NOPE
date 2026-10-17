@@ -28,6 +28,9 @@ public sealed class DeskHardware : MonoBehaviour
     /// <summary>The UV torch (optional: none without its art).</summary>
     [SerializeField] private UvTorch uvTorch;
 
+    /// <summary>The upgrades' objects on the desk (optional; laid with the machines).</summary>
+    [SerializeField] private DeskUpgrades upgrades;
+
     /// <summary>The desk tuning (the machines' places, the reader's cycle, the cone, the notes).</summary>
     [SerializeField] private DeskConfigSO config;
 
@@ -71,6 +74,9 @@ public sealed class DeskHardware : MonoBehaviour
 
     /// <summary>The desk tuning.</summary>
     public DeskConfigSO Config => config;
+
+    /// <summary>The upgrades' objects on the desk (null without them).</summary>
+    public DeskUpgrades Upgrades => upgrades;
 
     /// <summary>A reading picked at the desk in inspect mode: the paper, the box's index in its fields, what the machine reads there and on which layer (CaseDocumentsPresenter logs it against the box).</summary>
     public event Action<int, int, string, ScanLayer> Picked;
@@ -132,6 +138,8 @@ public sealed class DeskHardware : MonoBehaviour
         _layers.Clear();
         if (chipReader != null)
             chipReader.ResetCase();
+        if (upgrades != null)
+            upgrades.BeginCase();
     }
 
     /// <summary>The case ends: the reader stops, the torch goes back, the papers' layers go with their papers.</summary>
@@ -211,7 +219,8 @@ public sealed class DeskHardware : MonoBehaviour
     /// (DeskConfigSO), turned by its yaw; returns the laid roots so the binder
     /// keeps them clear of the scanner. The UV torch's cradle lies on the mat's
     /// corner instead (DeskConfigSO.uvTorchAt, from <paramref name="deskCentre"/>),
-    /// inside the reading view.
+    /// inside the reading view. The upgrades' objects are laid with them
+    /// (DeskUpgrades.Lay).
     /// </summary>
     public List<Transform> Lay(CinemachineCamera office, float aspect, float deskTop, Vector3 deskCentre)
     {
@@ -233,6 +242,8 @@ public sealed class DeskHardware : MonoBehaviour
             uvTorch.transform.localScale = Vector3.one * config.uvTorchScale;
             laid.Add(uvTorch.transform);
         }
+        if (upgrades != null)
+            upgrades.Lay(office, aspect, deskTop, laid);
         return laid;
     }
 

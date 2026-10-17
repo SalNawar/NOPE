@@ -273,7 +273,11 @@ public sealed class DeskController : MonoBehaviour
 
         // An Auto-Fed paper goes back to where it lay once scanned, as a dragged paper goes back to where it was picked up.
         if (!_waiting.Remove(next))
+        {
             _papers[next].Drag.RememberPosition();
+            if (_scanners.AutoFeed && scanner != null)
+                scanner.Fed(); // the Auto-Feed tray's rollers take it in
+        }
         StartScan(_papers[next]);
         _stack.BringToFront(next);
         ApplyStack();
@@ -297,6 +301,13 @@ public sealed class DeskController : MonoBehaviour
         _viewForward = levelForward.normalized;
         _viewRight = Vector3.Cross(Vector3.up, _viewForward);
         _scannerShadow = Mathf.Max(0f, shadow);
+    }
+
+    /// <summary>An analysis pass ended (CaseDocumentsPresenter), <paramref name="marked"/> when it marked a pair: the Analysis beacon on the scanner pops.</summary>
+    public void FlagAnalysis(bool marked)
+    {
+        if (scanner != null)
+            scanner.Flag(marked);
     }
 
     /// <summary>Starts a day with its scanner upgrades (<paramref name="scanners"/>: the day-start snapshot's, so a scanner bought tonight works tomorrow): nothing read or scanned yet (the scan note may show again on its days); the placeholder scanner shows the owned upgrades' parts.</summary>

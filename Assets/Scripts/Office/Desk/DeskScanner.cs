@@ -41,6 +41,9 @@ public sealed class DeskScanner : MonoBehaviour
     /// <summary>The stand-in machine's analysis lamp, shown while the Analysis Scanner is owned (optional: the cream scanner has none yet).</summary>
     [SerializeField] private GameObject analysisLamp;
 
+    /// <summary>The scanner's upgrades as objects on it (the Auto-Feed tray, the Analysis beacon; optional): shown by ShowUpgrades in place of the stand-in's parts.</summary>
+    [SerializeField] private ScannerAddOns addOns;
+
     /// <summary>The glowing bar that crosses the glass while a scan runs (drop and go, the scanner app spec §1), over the scanning paper; hidden while idle.</summary>
     [SerializeField] private Transform sweepBar;
 
@@ -107,6 +110,8 @@ public sealed class DeskScanner : MonoBehaviour
                 _sinceScan = 0f;
             if (spill != null)
                 spill.SetActive(on);
+            if (addOns != null)
+                addOns.Scanning(on);
         }
         if (on)
             ShowCount(ScannerLid.Count(progress));
@@ -232,6 +237,20 @@ public sealed class DeskScanner : MonoBehaviour
             feederTray.SetActive(day.AutoFeed);
         if (analysisLamp != null)
             analysisLamp.SetActive(day.Analysis);
+    }
+
+    /// <summary>The Auto-Feed took a paper in (DeskController's feed): its rollers' zip.</summary>
+    public void Fed()
+    {
+        if (addOns != null)
+            addOns.Fed();
+    }
+
+    /// <summary>An analysis pass ended, <paramref name="marked"/> when it marked a pair: the Analysis beacon pops.</summary>
+    public void Flag(bool marked)
+    {
+        if (addOns != null)
+            addOns.Flag(marked);
     }
 
     /// <summary>Plays the scanner's reaction and its done beep (a finished scan).</summary>

@@ -277,6 +277,46 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The desk notes by each machine on its first day: UI string keys (world_source.json ui.strings).</summary>
     public string uvHintKey = "desk.uvHint", chipHintKey = "desk.chipHint";
 
+    [Header("The upgrades' desk objects (the desk machines spec §4)")]
+    /// <summary>The upgrades' objects' size against their models' life size (a little smaller than the machines': they share the desk's edges with the art's props).</summary>
+    [Min(0.1f)] public float upgradeScale = 1.25f;
+
+    /// <summary>Where the supply crate stands on a delivery morning: the point of the desk's plane the office view shows there at 16:9 (viewport x, y), and its turn (degrees). On the mat, right of the rulebook: no paper lies there before the shift opens, and it opens itself then.</summary>
+    public Vector2 supplyCrateView = new Vector2(0.56f, 0.14f);
+
+    /// <inheritdoc cref="supplyCrateView"/>
+    public float supplyCrateYaw = 8f;
+
+    /// <summary>Where the Interview Protocols' card ring stands (viewport at 16:9) and its turn: on the free desk left of the mat.</summary>
+    public Vector2 protocolRingView = new Vector2(0.33f, 0.18f);
+
+    /// <inheritdoc cref="protocolRingView"/>
+    public float protocolRingYaw = 10f;
+
+    /// <summary>Where the BABEL rack of the Speech translators stands (viewport at 16:9) and its turn: behind the DETAIN button, between the cash register and the AVAILABLE sign, toward the traveller.</summary>
+    public Vector2 babelRackView = new Vector2(0.385f, 0.255f);
+
+    /// <inheritdoc cref="babelRackView"/>
+    public float babelRackYaw = 6f;
+
+    /// <summary>Where the Translation Lens's stand stands (viewport at 16:9) and its turn: at the desk's front left, between the PC and the mat.</summary>
+    public Vector2 lensKitView = new Vector2(0.27f, 0.115f);
+
+    /// <inheritdoc cref="lensKitView"/>
+    public float lensKitYaw = 18f;
+
+    /// <summary>Where the Diplomatic Contacts' Rolodex stands (viewport at 16:9) and its turn: right of the chip reader.</summary>
+    public Vector2 rolodexView = new Vector2(0.73f, 0.215f);
+
+    /// <inheritdoc cref="rolodexView"/>
+    public float rolodexYaw = -16f;
+
+    /// <summary>Where the RING SERVICE panel stands (viewport at 16:9) and its turn: at the desk's right, toward the portals.</summary>
+    public Vector2 ringPanelView = new Vector2(0.8f, 0.18f);
+
+    /// <inheritdoc cref="ringPanelView"/>
+    public float ringPanelYaw = -20f;
+
     /// <summary>How far below the office camera's forward (degrees, the art's pose) the desk still fills the view: on a screen narrower than 16:9 the office view widens toward the 16:9 width and tilts down, its top edge kept, no further than this (LensFit; past it the floor under the desk shows).</summary>
     [Range(0f, 89f)] public float officeViewBottom = 42f;
 
