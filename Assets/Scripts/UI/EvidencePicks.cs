@@ -28,7 +28,7 @@ public static class EvidencePicks
     /// <summary>A Seal Register row (the document design spec, D4): "Seal Register · Visa Office", the office's true seal as its value (Seals.Describe's words), a truth source for that office's papers.</summary>
     public static ComparePick ForSeal(ReferenceBookSO book, AgencyOffice office, string seal) =>
         new ComparePick(PickKeys.Seal(office.id),
-            UiText.Format("book.compareLabel", book != null ? book.displayName : UiText.Get("book.untitled"), office.name),
+            UiText.Format("book.compareLabel", book != null ? book.displayName : UiText.Get("book.untitled"), UiText.DocumentWord(office.name)),
             seal,
             CompareEvidence.ForSealRow(seal, office.id, office.name));
 

@@ -253,7 +253,7 @@ public sealed class DeskInspect : MonoBehaviour
             if (office != null && office.TryGetSeal(out Seal seal))
             {
                 _seals.Add((office, Seals.Describe(seal)));
-                shown.Add((office.name, seal));
+                shown.Add((UiText.DocumentWord(office.name), seal)); // an office's name is a label: the reading language's (Saleh 2026-10-17)
             }
         if (rulebook != null)
             rulebook.ShowSeals(shown);

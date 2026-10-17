@@ -898,7 +898,7 @@ public sealed class CaseFactory
                 // A forged seal is held against its issuing office's seal in the Seal Register, never a place's fact.
                 string form = inst.documents[tell.Document].template != null ? inst.documents[tell.Document].template.formNumber : null;
                 AgencyOffice office = Seals.OfficeOf(_lib.Agency.offices, form);
-                Add(UiText.Format("citation.label.book", UiText.Category(ClueCategory.Seal), office != null ? office.name : form), SealValue(office, form));
+                Add(UiText.Format("citation.label.book", UiText.Category(ClueCategory.Seal), office != null ? UiText.DocumentWord(office.name) : form), SealValue(office, form));
             }
             else
                 Add(record, ResolveFieldValue(tell.Category, inst));
