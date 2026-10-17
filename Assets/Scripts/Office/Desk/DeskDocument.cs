@@ -68,8 +68,37 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// </summary>
     public IReadOnlyList<Rect> KeyShares => _keys;
 
-    /// <summary>The paper's size in metres once it lies in <paramref name="zone"/> (its sheet's scale there, as SetZone gives it).</summary>
+    /// <summary>The paper's size in metres once it lies in <paramref name="zone"/> and is read there (its sheet's scale in the reading view).</summary>
     public Vector2 SizeIn(DeskZone zone) => Size * ZoneScale(zone);
+
+    /// <summary>The sheet's scale lying in <paramref name="zone"/> now: the desk's reading size only while the reading view is on (DeskPapers.ShownFullSize), else the counter's, its normal size.</summary>
+    private float ShownScale(DeskZone zone) => ZoneScale(DeskPapers.ShownFullSize(zone, _focused) ? DeskZone.Desk : DeskZone.Counter);
+
+    /// <summary>True while the reading view is on (SetFocused): a paper on the desk shows at its reading size only then.</summary>
+    private bool _focused;
+
+    /// <summary>
+    /// The reading view turned on or off (DeskController): a paper lying on
+    /// the desk eases to its reading size or back to its normal size; a
+    /// carried paper keeps its size until it is dropped (Saleh's 1016a
+    /// playtest: "documents should stay their size").
+    /// </summary>
+    public void SetFocused(bool focused)
+    {
+        if (_focused == focused)
+            return;
+        _focused = focused;
+        if (drag == null || !drag.IsDragging)
+            EaseTo(ShownScale(Zone));
+    }
+
+    /// <summary>The sheet eases from its size now to <paramref name="target"/>.</summary>
+    private void EaseTo(float target)
+    {
+        _sizeFrom = _sizeNow;
+        _sizeTarget = target;
+        _sizeElapsed = 0f;
+    }
 
     /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider and the printed form.</summary>
     [SerializeField] private Transform sheet;
@@ -202,6 +231,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     private Vector3 _slideFrom;
     private Vector3 _slideTo;
+
+    /// <summary>The slide's turn: the paper's rotation where it started and where it ends (the same when the slide does not turn it).</summary>
+    private Quaternion _turnFrom = Quaternion.identity, _turnTo = Quaternion.identity;
     private float _slideSeconds;
     private float _slideElapsed;
     private Action _slideDone;
@@ -250,7 +282,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
         _slideElapsed += Time.deltaTime;
         float t = _slideSeconds > 0f ? Mathf.Clamp01(_slideElapsed / _slideSeconds) : 1f;
-        transform.position = Vector3.LerpUnclamped(_slideFrom, _slideTo, UiMotion.Ease(t, UiMotion.Knobs.deskMoveFeel, _slideSeconds));
+        float along = UiMotion.Ease(t, UiMotion.Knobs.deskMoveFeel, _slideSeconds);
+        transform.position = Vector3.LerpUnclamped(_slideFrom, _slideTo, along);
+        transform.rotation = t >= 1f ? _turnTo : Quaternion.SlerpUnclamped(_turnFrom, _turnTo, along);
         if (t < 1f)
             return;
 
@@ -386,20 +420,19 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     /// <summary>
     /// Shows the paper for <paramref name="zone"/> (Papers, Please's counter and
-    /// desk): on the counter small (DeskConfigSO.counterScale of its size), lit
-    /// by the room; on the desk full size (DeskZones.ReadingScale to
-    /// DeskConfigSO.readingHeight) and evenly lit (the reading material; the
-    /// photo in the reading tint instead of the room's). The size eases there,
-    /// or is set at once (<paramref name="instant"/>); a paper on its art reads
-    /// at its art's share of that (FormArt.reading).
+    /// desk): on the counter at its normal size (DeskConfigSO.counterScale of
+    /// its size), lit by the room; on the desk evenly lit (the reading
+    /// material; the photo in the reading tint instead of the room's), at full
+    /// size (DeskZones.ReadingScale to DeskConfigSO.readingHeight) while the
+    /// reading view is on, else at its normal size (ShownScale). The size eases
+    /// there, or is set at once (<paramref name="instant"/>); a paper on its
+    /// art reads at its art's share of that (FormArt.reading).
     /// </summary>
     public void SetZone(DeskZone zone, bool instant)
     {
         Zone = zone;
-        float target = ZoneScale(zone);
-        _sizeFrom = _sizeNow;
-        _sizeTarget = target;
-        _sizeElapsed = 0f;
+        float target = ShownScale(zone);
+        EaseTo(target);
         if (instant)
         {
             _sizeNow = target;
@@ -897,8 +930,13 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     }
 
     /// <summary>Slides the paper to a world point in <paramref name="seconds"/> (on the desk's spring curve, MotionKnobs.deskMoveFeel: it lands with a little overshoot, exactly there at the end), then calls <paramref name="done"/>.</summary>
-    public void SlideTo(Vector3 target, float seconds, Action done)
+    public void SlideTo(Vector3 target, float seconds, Action done) => SlideTo(target, transform.rotation, seconds, done);
+
+    /// <summary>As SlideTo, turning the paper on the same eased curve to lie at <paramref name="facing"/> (a level rotation: its sheet square to the scanner's bed, or upright toward the chair).</summary>
+    public void SlideTo(Vector3 target, Quaternion facing, float seconds, Action done)
     {
+        _turnFrom = transform.rotation;
+        _turnTo = facing;
         _slideFrom = transform.position;
         _slideTo = target;
         _slideSeconds = seconds;

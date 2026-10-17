@@ -298,11 +298,12 @@ public class DeskPapersTests
     }
 
     [Test]
-    public void ADraggedPaper_GrowsOverTheDesk_AndNeverShrinksBeforeItIsHandedBack()
+    public void APaper_ShowsFullSize_OnlyOnTheDesk_InTheReadingView()
     {
-        Assert.AreEqual(DeskZone.Desk, DeskPapers.ShownWhileDragged(DeskZone.Counter, DeskZone.Desk), "off the counter it grows at once");
-        Assert.AreEqual(DeskZone.Counter, DeskPapers.ShownWhileDragged(DeskZone.Counter, DeskZone.Counter), "still over the counter: small");
-        Assert.AreEqual(DeskZone.Desk, DeskPapers.ShownWhileDragged(DeskZone.Desk, DeskZone.Counter), "over the counter it keeps its size (Saleh: no shrinking as I stamp)");
+        Assert.IsTrue(DeskPapers.ShownFullSize(DeskZone.Desk, true), "on the desk, the reading view on: read at full size");
+        Assert.IsFalse(DeskPapers.ShownFullSize(DeskZone.Desk, false), "on the desk in the office view: its normal size (Saleh's 1016a playtest)");
+        Assert.IsFalse(DeskPapers.ShownFullSize(DeskZone.Counter, true), "on the counter: its normal size, whatever the view");
+        Assert.IsFalse(DeskPapers.ShownFullSize(DeskZone.Counter, false), "on the counter in the office view: its normal size");
     }
 
     [Test]

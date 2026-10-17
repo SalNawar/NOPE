@@ -7,7 +7,9 @@ using UnityEngine;
 /// <summary>
 /// The heavy brass stamp drawer's art (Track BR, Saleh 2026-10-08: the brass
 /// concept, "a heavy brass drawer that makes the sound a typewriter makes when
-/// the carriage returns"): the model tools/props/brass_drawer.py writes
+/// the carriage returns"; flipped and deep since Saleh's 1016a playtest: its
+/// labelled bar on the far side, the daters in a cast-brass box in front of
+/// it): the model tools/props/brass_drawer.py writes
 /// (BrassDrawer.fbx, every part in the rack's space, upright) installed under
 /// the stamp rack in the desk's NOPE/Desk Anime materials, its mechanism
 /// wired (BrassDrawer) and its enamel plates carrying the verdict words as
@@ -20,7 +22,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The drawer's model and its brushed brass texture.</summary>
     private const string BrassDrawerModel = "Assets/Art/Office/Props/BrassDrawer/BrassDrawer.fbx", BrassDrawerTexture = "Assets/Art/Office/Props/BrassDrawer/BrassDrawer_Brass.png";
 
-    /// <summary>The model's measures the game needs (tools/props/brass_drawer.py: keep in step): a cradle's pivot behind the dater's centre (its back-foot edge), the pinions' radius, the levers' length, the rack's pin past its middle, and the plates' tilt toward the chair (degrees from flat) and their face's height over their origin.</summary>
+    /// <summary>The model's measures the game needs (tools/props/brass_drawer.py: keep in step): a cradle's pivot in front of the dater's centre (its front-foot edge, toward the chair: the dater folds that way), the pinions' radius, the levers' length, the rack's pin past its middle, and the plates' tilt toward the chair (degrees from flat) and their face's height over their origin.</summary>
     private const float BrassPivotDepth = 0.023f, BrassPinionRadius = 0.011f, BrassLeverLength = 0.021f, BrassPinReach = 0.027f, BrassPlateTilt = 35f, BrassPlateFace = 0.0019f;
 
     /// <summary>The words' box on a plate (metres) and their ink (the kit's bone).</summary>

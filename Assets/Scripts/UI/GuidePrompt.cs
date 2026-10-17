@@ -129,7 +129,7 @@ public sealed class GuidePrompt : MonoBehaviour
             HideArrow();
     }
 
-    /// <summary>Points the arrow down at the top of the overlay control <paramref name="target"/>; hidden while it is hidden.</summary>
+    /// <summary>Points the arrow down at the top of the overlay control <paramref name="target"/> (up at it from under it when it lies on the screen's top edge or the arrow would cover the plate); hidden while it is hidden.</summary>
     public void PointAt(RectTransform target)
     {
         if (arrow == null || _canvasRect == null || target == null || !target.gameObject.activeInHierarchy)
@@ -147,10 +147,12 @@ public sealed class GuidePrompt : MonoBehaviour
         Face(false);
         Vector2 half = arrow.rect.size * 0.5f;
         float gap = arrowLift * 0.5f + half.y + Bob();
-        Place(local + new Vector2(0f, gap), half);
-        if (!OverPlate())
+        bool room = local.y + gap + half.y <= _canvasRect.rect.yMax;
+        if (room)
+            Place(local + new Vector2(0f, gap), half);
+        if (room && !OverPlate())
             return;
-        // Above the control it would sit on the plate (the Back control under it, QA2 2026-10-16): under it, pointing up.
+        // Above the control it would sit on the plate (the Back control under it, QA2 2026-10-16), or past the screen's top (the STAMPS tab on the top edge): under it, pointing up.
         Vector3 bottom = target.TransformPoint(new Vector3(target.rect.center.x, target.rect.yMin, 0f));
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, RectTransformUtility.WorldToScreenPoint(null, bottom), null, out Vector2 under))
         {
