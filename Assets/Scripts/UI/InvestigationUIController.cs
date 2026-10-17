@@ -494,7 +494,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>The traveller's papers as the steps count them: each form's number, whether it is asked for, whether it is the photo paper, its fields.</summary>
     private static List<StepPaper> StepPapers(CaseInstance inst) =>
-        inst.documents.Select(d => new StepPaper(FormOf(d), d != null && d.template != null && d.template.handOver == DocumentHandOver.OnRequest,
+        inst.documents.Select(d => new StepPaper(FormOf(d), d != null && d.template != null && DocumentHandOvers.IsRequested(d.handOver),
                                                  d != null && d.template != null && d.template.showsPhoto, d != null ? d.fields : null)).ToList();
 
     /// <summary>A document's form number (blank without a template).</summary>

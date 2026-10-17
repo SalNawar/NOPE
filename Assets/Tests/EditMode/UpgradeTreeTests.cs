@@ -283,14 +283,30 @@ public class UpgradeTreeTests
         }));
     }
 
-    /// <summary>Each venue has its own bands (the Home upgrades spec HU1): the Orders app's four, then Home's five, every branch in exactly one.</summary>
+    /// <summary>Each venue has its own bands (the Home upgrades spec HU1): the Orders app's four, then Home's five and the pet's toys (Saleh 2026-10-17: "cat upgrade is at work instead of home"), every branch in exactly one.</summary>
     [Test]
     public void BranchesOf_EachVenueItsOwn_EveryBranchInOne()
     {
-        CollectionAssert.AreEqual(new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts, UpgradeBranch.Toys }, UpgradeTree.BranchesOf(UpgradeVenue.Orders));
-        CollectionAssert.AreEqual(new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort }, UpgradeTree.BranchesOf(UpgradeVenue.Home));
+        CollectionAssert.AreEqual(new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts }, UpgradeTree.BranchesOf(UpgradeVenue.Orders));
+        CollectionAssert.AreEqual(new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort, UpgradeBranch.Toys }, UpgradeTree.BranchesOf(UpgradeVenue.Home));
         CollectionAssert.AreEquivalent((UpgradeBranch[])System.Enum.GetValues(typeof(UpgradeBranch)),
                                        UpgradeTree.BranchesOf(UpgradeVenue.Orders).Concat(UpgradeTree.BranchesOf(UpgradeVenue.Home)).ToArray());
+    }
+
+    /// <summary>The House draws Home's five categories; the toys are Home's too but sold in the pet's corner, not the House.</summary>
+    [Test]
+    public void InTheHouse_HomesCategoriesButNotTheToysNorTheOffice()
+    {
+        CollectionAssert.AreEqual(new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort },
+                                  ((UpgradeBranch[])System.Enum.GetValues(typeof(UpgradeBranch))).Where(UpgradeTree.InTheHouse).ToArray());
+    }
+
+    /// <summary>A toy sold at Home is sound; one left in the Orders app sits in the other venue's band.</summary>
+    [Test]
+    public void Problems_AToyIsSoldAtHome()
+    {
+        CollectionAssert.IsEmpty(UpgradeTree.Problems(new[] { new TreeNode("toy_ball", UpgradeVenue.Home, UpgradeBranch.Toys, 20, null) }));
+        CollectionAssert.IsNotEmpty(UpgradeTree.Problems(new[] { new TreeNode("toy_ball", UpgradeVenue.Orders, UpgradeBranch.Toys, 20, null) }));
     }
 
     [Test]

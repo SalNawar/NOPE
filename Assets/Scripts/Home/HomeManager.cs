@@ -9,10 +9,11 @@ using UnityEngine;
 /// The bills step offers the night's optional bills (food, heating,
 /// electricity, TV, medicine; each paid or skipped, electricity powering the
 /// heating and the TV) with the pet's needs in words; the corner shows the pet
-/// as tonight's care leaves it, to pet and to play with an owned toy (once a
-/// night). The House shows only the Home upgrades (UpgradeSO.venue Home: the
-/// house upgrades' tree; the office's moved to the PC's Orders app, Saleh
-/// 2026-09-29) and is skipped while none is stocked; with the radio owned
+/// as tonight's care leaves it, to pet, to buy toys for and to play with an
+/// owned toy (once a night). The House shows only the house upgrades
+/// (HomeEconomy.HouseUpgrades: venue Home, not the pet's toys; the office's
+/// moved to the PC's Orders app, Saleh 2026-09-29) and is skipped while none
+/// is stocked; with the radio owned
 /// the sleep panel plays the night's radio line (ContentLibrarySO.Home).
 /// Sleep settles the pet's night (HomeEconomy.PetNight) and hands off to
 /// RunManager.Sleep() (day-boundary endings, the Welfare Office's among them,
@@ -248,10 +249,15 @@ public sealed class HomeManager : MonoBehaviour
         PetContent words = Words;
         PetNeeds tonight = PetRules.Settle(Pet.Needs, _care, HomeEconomy.NeedMax(_config));
         var toys = new List<HomeUIController.ToyView>();
-        foreach (UpgradeSO toy in HomeEconomy.OwnedToys(_world, _lib))
+        string cr = UiText.Currency(UiText.WalletForm.Short);
+        foreach (UpgradeSO toy in HomeEconomy.Toys(_lib))
         {
             UpgradeSO chosen = toy;
-            toys.Add(new HomeUIController.ToyView(toy.id, toy.displayName, UiText.Get(_care.Played ? "home.pet.played" : "home.pet.play"), !_care.Played, () => HandlePlay(chosen)));
+            if (_world.HasUpgrade(toy.id))
+                toys.Add(new HomeUIController.ToyView(toy.id, toy.displayName, UiText.Get(_care.Played ? "home.pet.played" : "home.pet.play"), !_care.Played, () => HandlePlay(chosen)));
+            else
+                toys.Add(new HomeUIController.ToyView(toy.id, toy.displayName, UiText.Format("home.pet.buy", OrderBook.Price(_world, _lib, toy), cr),
+                                                      OrderBook.StateOf(_world, _lib, toy) == OrderState.Orderable, () => HandleBuyToy(chosen)));
         }
         string body = NeedsText(tonight, "\n") + (_care.Electricity ? string.Empty : "\n" + UiText.Get("home.pet.dark"));
         homeUI.ShowPet(UiText.Format("home.pet.title", Pet.name), body, Pet.kind, Pet.coat, PetRules.Look(tonight), _care.Electricity, reaction,
@@ -264,6 +270,19 @@ public sealed class HomeManager : MonoBehaviour
     {
         PetKindContent kind = Words.Kind(Pet.kind);
         return kind != null ? Words.InTurn(kind.reactions, _world.day + _pats++, Pet) : string.Empty;
+    }
+
+    /// <summary>Buys <paramref name="toy"/> in the pet's corner (HomeEconomy.BuyHouseUpgrade: owned at once, its Mood op from tonight's night; refused when the wallet cannot cover it), then the corner again, the toy's row now offering Play.</summary>
+    private void HandleBuyToy(UpgradeSO toy)
+    {
+        int cost = HomeEconomy.BuyHouseUpgrade(_world, _lib, toy);
+        if (cost < 0)
+            return;
+        _purchases += cost;
+        RefreshHud();
+        RecordStatement();
+        Debug.Log($"[HomeManager] Bought the toy '{toy.id}' for {cost}; money={_world.money}.");
+        ShowPet(string.Empty, false);
     }
 
     /// <summary>Plays with <paramref name="toy"/> (once a night: boredom a step lower tonight, PetRules.Settle), then the corner again with the kind's toy line.</summary>
@@ -282,19 +301,8 @@ public sealed class HomeManager : MonoBehaviour
     // Step 3: the House
     // ---------------------------------------------------------------
 
-    /// <summary>The upgrades Home sells (venue Home: household improvements), in the library's order.</summary>
-    private List<UpgradeSO> HomeUpgrades()
-    {
-        var upgrades = new List<UpgradeSO>();
-        if (_lib != null)
-            foreach (UpgradeSO u in _lib.Upgrades)
-                if (u != null && u.venue == UpgradeVenue.Home)
-                    upgrades.Add(u);
-        return upgrades;
-    }
-
     /// <summary>True when the shop step shows (its panel is wired and Home stocks an upgrade).</summary>
-    private bool ShopNext => homeUI != null && homeUI.HasShopPanel && HomeUpgrades().Count > 0;
+    private bool ShopNext => homeUI != null && homeUI.HasShopPanel && HomeEconomy.HouseUpgrades(_lib).Count > 0;
 
     /// <summary>Step 3: the House (the Home upgrades' tree), skipped while Home stocks none.</summary>
     private void ShowShop()
@@ -304,7 +312,7 @@ public sealed class HomeManager : MonoBehaviour
         RefreshHud();
 
         if (ShopNext)
-            homeUI.ShowShop(_world, _lib, HomeUpgrades(), HandleBuyUpgrade, ShowSlot);
+            homeUI.ShowShop(_world, _lib, HomeEconomy.HouseUpgrades(_lib), HandleBuyUpgrade, ShowSlot);
         else
         {
             Debug.Log("[HomeManager] ShowShop: no shop panel or no Home upgrade stocked (the office's are in the PC's Orders app), skipping to Slot.");
@@ -330,7 +338,7 @@ public sealed class HomeManager : MonoBehaviour
 
         // Re-show to refresh rows (costs/owned state) without advancing the flow.
         if (homeUI != null && homeUI.HasShopPanel)
-            homeUI.ShowShop(_world, _lib, HomeUpgrades(), HandleBuyUpgrade, ShowSlot);
+            homeUI.ShowShop(_world, _lib, HomeEconomy.HouseUpgrades(_lib), HandleBuyUpgrade, ShowSlot);
 
         Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade (bought '{upgrade.displayName}' for {cost}, money={_world.money}).");
     }

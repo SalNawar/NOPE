@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Slightly bald. It bounces in 2150 the way it bounced in 2026.
   cost: 20
   unlockEffect: {fileID: 11400000, guid: c297605e25c0fcf4da78f9d8b18f3783, type: 2}
-  venue: 0
+  venue: 1
   branch: 9
   requires: []
   installSlot: 

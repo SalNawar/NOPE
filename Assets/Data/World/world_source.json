@@ -10006,7 +10006,7 @@
       "asset": "DayPlan_Inv_Day2",
       "day": 2,
       "queue": 10,
-      "bulletin": "NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport's, and its departure date must be today.",
+      "bulletin": "NEW: the Entry Ticket. Most travellers hand it over with their Passport; ask for it when one forgets. Its Citizen ID must match the Passport's, and its departure date must be today.",
       "papers": [
         "TC-101",
         "TC-230"
@@ -11926,7 +11926,8 @@
       "note": "Tells you everything, then a bit more.",
       "waiverRefusal": 0.05,
       "strandingFate": "News",
-      "confess": 0.6
+      "confess": 0.6,
+      "forgetPaper": 0.3
     },
     {
       "id": "curt",
@@ -11934,7 +11935,8 @@
       "weight": 1,
       "note": "Time is money, and in 2150 the queue bills by the minute.",
       "waiverRefusal": 0.3,
-      "confess": 0.3
+      "confess": 0.3,
+      "forgetPaper": 0.15
     },
     {
       "id": "anxious",
@@ -11943,7 +11945,8 @@
       "note": "Worried about paradoxes, transponders, butterflies and you.",
       "waiverRefusal": 0.05,
       "strandingFate": "Forgotten",
-      "confess": 0.8
+      "confess": 0.8,
+      "forgetPaper": 0.35
     },
     {
       "id": "sunny",
@@ -11951,7 +11954,8 @@
       "weight": 1,
       "note": "Believes every word the agency prints.",
       "waiverRefusal": 0.05,
-      "confess": 0.7
+      "confess": 0.7,
+      "forgetPaper": 0.15
     },
     {
       "id": "grand",
@@ -11960,7 +11964,8 @@
       "note": "Treats the desk as staff, whatever their account says.",
       "waiverRefusal": 0.5,
       "strandingFate": "Carry",
-      "confess": 0.15
+      "confess": 0.15,
+      "forgetPaper": 0.3
     },
     {
       "id": "stickler",
@@ -11968,7 +11973,8 @@
       "weight": 1,
       "note": "Knows the regulations better than the clerk and says so.",
       "waiverRefusal": 0.1,
-      "confess": 0.5
+      "confess": 0.5,
+      "forgetPaper": 0.05
     },
     {
       "id": "glum",
@@ -11977,7 +11983,8 @@
       "note": "The debt won years ago; this is just the paperwork.",
       "waiverRefusal": 0.05,
       "strandingFate": "Forgotten",
-      "confess": 0.4
+      "confess": 0.4,
+      "forgetPaper": 0.25
     }
   ],
   "interview": {
@@ -25710,6 +25717,24 @@
         "tier": "Flavour"
       },
       {
+        "key": "compare.notUnderstood",
+        "text": "NOT UNDERSTOOD",
+        "gloss": "Inline",
+        "tier": "Flavour"
+      },
+      {
+        "key": "finding.link.NotUnderstood",
+        "text": "Not understood",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "finding.note.NotUnderstood",
+        "text": "That answer was not translated: you did not understand it. Nothing logged.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "slot.Outfit",
         "text": "OUTFIT",
         "gloss": "None",
@@ -27558,8 +27583,14 @@
         "tier": "Flavour"
       },
       {
+        "key": "home.pet.buy",
+        "text": "Buy · {0} {1}",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "home.pet.noToys",
-        "text": "No toys yet. The Orders app on your PC sells them.",
+        "text": "No toys for sale tonight.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -30792,6 +30823,18 @@
             "text": "({0} غير مترجم, مترجم {1})"
           },
           {
+            "key": "compare.notUnderstood",
+            "text": "غير مفهوم"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "غير مفهوم"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "لم تترجم تلك الإجابة: لم تفهمها. لم يسجل شيء."
+          },
+          {
             "key": "slot.Outfit",
             "text": "الزي"
           },
@@ -31960,8 +32003,12 @@
             "text": "لعب الليلة"
           },
           {
+            "key": "home.pet.buy",
+            "text": "اشتر · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "لا ألعاب بعد. تطبيق الطلبات على حاسوبك يبيعها."
+            "text": "لا ألعاب للبيع الليلة."
           },
           {
             "key": "home.pet.dark",
@@ -32869,6 +32916,14 @@
           }
         ],
         "words": [
+          {
+            "native": "اشتر",
+            "english": "buy"
+          },
+          {
+            "native": "للبيع",
+            "english": "for sale"
+          },
           {
             "native": "الأعلى",
             "english": "the top"
@@ -37396,6 +37451,26 @@
           {
             "native": "ير",
             "english": "seen"
+          },
+          {
+            "native": "مفهوم",
+            "english": "understood"
+          },
+          {
+            "native": "تترجم",
+            "english": "translated"
+          },
+          {
+            "native": "تلك",
+            "english": "that"
+          },
+          {
+            "native": "الإجابة",
+            "english": "answer"
+          },
+          {
+            "native": "تفهمها",
+            "english": "understand it"
           }
         ]
       },
@@ -39264,6 +39339,18 @@
             "text": "(αμετάφραστο {0}· Μεταφραστής {1})"
           },
           {
+            "key": "compare.notUnderstood",
+            "text": "ΔΕΝ ΚΑΤΑΝΟΗΘΗΚΕ"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Δεν κατανοήθηκε"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Αυτή η απάντηση δεν μεταφράστηκε: δεν την κατάλαβες. Δεν καταγράφηκε τίποτα."
+          },
+          {
             "key": "slot.Outfit",
             "text": "ΕΝΔΥΜΑΣΙΑ"
           },
@@ -40432,8 +40519,12 @@
             "text": "Παίξατε απόψε"
           },
           {
+            "key": "home.pet.buy",
+            "text": "Αγορά · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "Κανένα παιχνίδι ακόμη. Η εφαρμογή Παραγγελίες στον υπολογιστή σου τα πουλάει."
+            "text": "Δεν πουλιούνται παιχνίδια απόψε."
           },
           {
             "key": "home.pet.dark",
@@ -41341,6 +41432,18 @@
           }
         ],
         "words": [
+          {
+            "native": "Αγορά",
+            "english": "Buy"
+          },
+          {
+            "native": "πουλιούνται",
+            "english": "are sold"
+          },
+          {
+            "native": "παιχνίδια",
+            "english": "toys"
+          },
           {
             "native": "συρτάρι",
             "english": "drawer"
@@ -45336,6 +45439,18 @@
           {
             "native": "ασυμφωνια",
             "english": "mismatch"
+          },
+          {
+            "native": "κατανοήθηκε",
+            "english": "understood"
+          },
+          {
+            "native": "μεταφράστηκε",
+            "english": "translated"
+          },
+          {
+            "native": "κατάλαβες",
+            "english": "you understood"
           }
         ]
       },
@@ -47204,6 +47319,18 @@
             "text": "(non tradotto {0}; Traduttore {1})"
           },
           {
+            "key": "compare.notUnderstood",
+            "text": "NON CAPITO"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Non capito"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Quella risposta non era tradotta: non l'hai capita. Nulla registrato."
+          },
+          {
             "key": "slot.Outfit",
             "text": "ABITO"
           },
@@ -48372,8 +48499,12 @@
             "text": "Ha giocato stasera"
           },
           {
+            "key": "home.pet.buy",
+            "text": "Compra · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "Ancora nessun giocattolo. L'app Ordini sul tuo PC li vende."
+            "text": "Nessun giocattolo in vendita stasera."
           },
           {
             "key": "home.pet.dark",
@@ -49281,6 +49412,14 @@
           }
         ],
         "words": [
+          {
+            "native": "Compra",
+            "english": "Buy"
+          },
+          {
+            "native": "vendita",
+            "english": "sale"
+          },
           {
             "native": "cassetto",
             "english": "drawer"
@@ -53404,6 +53543,14 @@
           {
             "native": "ok",
             "english": "OK"
+          },
+          {
+            "native": "l'hai",
+            "english": "you have it"
+          },
+          {
+            "native": "capita",
+            "english": "understood"
           }
         ]
       },
@@ -55272,6 +55419,18 @@
             "text": "(unübersetzt {0}; {1}-Übersetzer)"
           },
           {
+            "key": "compare.notUnderstood",
+            "text": "NICHT VERSTANDEN"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Nicht verstanden"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Diese Antwort war nicht übersetzt: Sie haben sie nicht verstanden. Nichts erfasst."
+          },
+          {
             "key": "slot.Outfit",
             "text": "KLEIDUNG"
           },
@@ -56440,8 +56599,12 @@
             "text": "Heute gespielt"
           },
           {
+            "key": "home.pet.buy",
+            "text": "Kaufen · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "Noch kein Spielzeug. Die Bestell-App auf deinem PC verkauft welches."
+            "text": "Heute Abend gibt es kein Spielzeug zu kaufen."
           },
           {
             "key": "home.pet.dark",
@@ -57349,6 +57512,10 @@
           }
         ],
         "words": [
+          {
+            "native": "kaufen",
+            "english": "buy"
+          },
           {
             "native": "Stempelschublade",
             "english": "stamp drawer"
@@ -61712,6 +61879,10 @@
           {
             "native": "ok",
             "english": "OK"
+          },
+          {
+            "native": "übersetzt",
+            "english": "translated"
           }
         ]
       },
@@ -63580,6 +63751,18 @@
             "text": "（未翻译的{0}；{1}翻译器）"
           },
           {
+            "key": "compare.notUnderstood",
+            "text": "未听懂"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "未听懂"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "该回答未翻译：你没听懂。未记录。"
+          },
+          {
             "key": "slot.Outfit",
             "text": "服装"
           },
@@ -64748,8 +64931,12 @@
             "text": "今晚已玩过"
           },
           {
+            "key": "home.pet.buy",
+            "text": "购买 · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "还没有玩具。电脑上的订单应用有售。"
+            "text": "今晚没有玩具出售。"
           },
           {
             "key": "home.pet.dark",
@@ -65657,6 +65844,14 @@
           }
         ],
         "words": [
+          {
+            "native": "购买",
+            "english": "buy"
+          },
+          {
+            "native": "出",
+            "english": "out"
+          },
           {
             "native": "顶",
             "english": "top"
@@ -69356,6 +69551,14 @@
           {
             "native": "正常",
             "english": "OK"
+          },
+          {
+            "native": "听懂",
+            "english": "understood"
+          },
+          {
+            "native": "没听懂",
+            "english": "did not understand"
           }
         ]
       },
@@ -71224,6 +71427,18 @@
             "text": "(未翻訳の{0}; {1}翻訳機)"
           },
           {
+            "key": "compare.notUnderstood",
+            "text": "理解できない"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "理解できない"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "その回答は未翻訳です。理解できませんでした。記録なし。"
+          },
+          {
             "key": "slot.Outfit",
             "text": "服装"
           },
@@ -72392,8 +72607,12 @@
             "text": "今夜は遊んだ"
           },
           {
+            "key": "home.pet.buy",
+            "text": "買う · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "おもちゃはまだありません。PCの注文アプリで買えます。"
+            "text": "今夜は売っているおもちゃがない。"
           },
           {
             "key": "home.pet.dark",
@@ -73301,6 +73520,18 @@
           }
         ],
         "words": [
+          {
+            "native": "買う",
+            "english": "buy"
+          },
+          {
+            "native": "売っ",
+            "english": "sold"
+          },
+          {
+            "native": "いる",
+            "english": "is"
+          },
           {
             "native": "引き出",
             "english": "drawer"
@@ -77052,6 +77283,14 @@
           {
             "native": "不一致",
             "english": "mismatch"
+          },
+          {
+            "native": "理解",
+            "english": "understanding"
+          },
+          {
+            "native": "きません",
+            "english": "cannot"
           }
         ]
       }
@@ -77971,7 +78210,7 @@
         "feature": "paper:TC-230",
         "title": "THE ENTRY TICKET",
         "named": "Entry Ticket",
-        "check": "Its Citizen ID and its departure date. Ask for it: flag it on the PAPERS tab, then ask on the wheel.",
+        "check": "Its Citizen ID and its departure date. Most travellers hand it over with their Passport; when one forgets it, flag it on the PAPERS tab, then ask on the wheel.",
         "against": "The Passport's Citizen ID; the calendar for the date.",
         "fault": "KTR-418 on the Passport, KTR-481 on the ticket: doctored.",
         "point": "field:TC-230/CitizenId",

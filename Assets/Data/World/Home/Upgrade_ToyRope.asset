@@ -18,7 +18,7 @@ MonoBehaviour:
     warranty.
   cost: 25
   unlockEffect: {fileID: 11400000, guid: 6dd7439177a48b44c9e17a5e25538710, type: 2}
-  venue: 0
+  venue: 1
   branch: 9
   requires: []
   installSlot: 

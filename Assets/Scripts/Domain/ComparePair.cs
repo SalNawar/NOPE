@@ -68,7 +68,10 @@ public sealed class ComparePair
     /// (a garment shows its item but matches on its place's Culture value)
     /// under Values.Match; false before a pair.
     /// </summary>
-    public bool Matches => IsPaired && Values.Match(A.Evidence.MatchValue(A.Shown), B.Evidence.MatchValue(B.Shown));
+    public bool Matches => IsPaired && Understood && Values.Match(A.Evidence.MatchValue(A.Shown), B.Evidence.MatchValue(B.Shown));
+
+    /// <summary>False when a side is an answer heard untranslated (CompareEvidence.notUnderstood): the pair then neither matches nor differs (Saleh 2026-10-17).</summary>
+    public bool Understood => !A.Evidence.notUnderstood && !B.Evidence.notUnderstood;
 
     /// <summary>Picks a value (see the class summary) and says what it did.</summary>
     public CompareStep Select(ComparePick pick)

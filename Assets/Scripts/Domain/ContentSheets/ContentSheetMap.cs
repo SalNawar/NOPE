@@ -438,7 +438,8 @@ public static class ContentSheetMap
             Text("note").Note("for authors: the tone in one line (never shown in the game)"),
             Num("waiverRefusal").Note("the chance they refuse the desk's waiver pad, in character (0 to 1; never shown)"),
             Text("strandingFate").Omit().OneOf(System.Enum.GetNames(typeof(StrandingFate))).Note("the stranding fate their tilt multiplies (blank: none)"),
-            Num("confess").Note("the chance a lying traveller cracks when the desk asks about a difference the clerk logged (0 to 1; otherwise they double down; never shown)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
+            Num("confess").Note("the chance a lying traveller cracks when the desk asks about a difference the clerk logged (0 to 1; otherwise they double down; never shown)"),
+            Num("forgetPaper").Note("the chance they forget to hand over the Entry Ticket with their other papers, so the desk must ask for it (0 to 1; never shown)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
 
     /// <summary>One voice slot's sheet (interview.voices.{list}; the personalities spec's §9.1): the voice (a personality or a premade, exactly one), the slot's keys, the kinds and era it is for, the line.</summary>
     private static SheetSpec VoiceSheet(string sheet, string path, string note, params ColumnSpec[] keys) =>

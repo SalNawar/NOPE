@@ -183,7 +183,11 @@ public sealed class CompareController : MonoBehaviour
         _stripNote = false;
         ShowStrip();
 
-        if (_pair.IsPaired)
+        if (_pair.IsPaired && !_pair.Understood)
+        {
+            WriteVerdict(UiText.Format("compare.pair", UiText.Get("compare.notUnderstood"), _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), neutralColor);
+        }
+        else if (_pair.IsPaired)
         {
             bool match = _pair.Matches;
             string verdict = UiText.Get(match ? "compare.match" : "compare.mismatch");

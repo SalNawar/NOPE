@@ -17,7 +17,7 @@ MonoBehaviour:
   description: A real feather, from a bird of no fixed nationality.
   cost: 30
   unlockEffect: {fileID: 11400000, guid: 57c4638cc999a534ca4f75a3534d0824, type: 2}
-  venue: 0
+  venue: 1
   branch: 9
   requires: []
   installSlot: 

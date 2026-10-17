@@ -69,7 +69,10 @@ public enum FindingKind
     PaperMissing,
 
     /// <summary>The scanned papers name no record on file (the case board's auto lookup, the scanner app spec §2.1: "NO RECORD"). Logged; a difference, never a proof.</summary>
-    NoRecord
+    NoRecord,
+
+    /// <summary>An answer heard untranslated held against anything ("Not understood"; Saleh 2026-10-17: a traveller in a tongue the clerk cannot read gives no understandable answer). Not logged.</summary>
+    NotUnderstood
 }
 
 /// <summary>How a finding looks: its line's and plate's colour.</summary>
@@ -119,12 +122,16 @@ public static class FindingRules
     /// differ; a proof a difference (Elsewhere for a foreign origin); two
     /// truths nothing; a book row of another place than the claim, or a
     /// record row of another person, nothing; otherwise a match when the
-    /// values match (Values.Match) and a difference when they do not. Seals
+    /// values match (Values.Match) and a difference when they do not; an
+    /// answer heard untranslated (CompareEvidence.notUnderstood) says nothing
+    /// first, whatever it is held against. Seals
     /// are read by office (ClassifySeal); a photo against the person is a
     /// match or a difference like any value.
     /// </summary>
     public static FindingKind Classify(CompareEvidence a, CompareEvidence b, Discrepancy proof, string claimedNationId, string claimedEraId, string travellerName)
     {
+        if (a.notUnderstood || b.notUnderstood)
+            return FindingKind.NotUnderstood;
         if (a.category != b.category)
             return FindingKind.DifferentDetails;
         if (a.category == ClueCategory.Seal)

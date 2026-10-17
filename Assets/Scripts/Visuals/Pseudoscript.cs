@@ -5,7 +5,9 @@ using System.Collections.Generic;
 /// cells stands for the letters a..z. Letters map case-insensitively after
 /// Latin-1 letters are folded to their base letter; an upper-case letter
 /// upper-cases a one-character cell (Greek β becomes Β; scripts without case
-/// are unchanged); digits, spaces, punctuation and symbols pass through. One
+/// are unchanged); a digit shows as a cell too (Saleh 2026-10-17: a date in an
+/// untranslated answer is not understood; a line's digits that stay English are
+/// its key words), while spaces, punctuation and symbols pass through. One
 /// cell per canonical character, so the flip can turn cell i into character
 /// i. A line's English spans (its key words, the traveller-types spec's
 /// §8.1) are never glyphs: IsGlyph says which characters are. The same text
@@ -87,13 +89,26 @@ public static class Pseudoscript
         return letter >= 'a' && letter <= 'z' ? letter - 'a' : -1;
     }
 
-    /// <summary>The cell a character shows as: its letter's cell (upper-cased for an upper-case letter when the cell is one character), else the character itself.</summary>
-    public static string Cell(char c, IReadOnlyList<string> table) => Cell(c, table, LetterIndex(c));
+    /// <summary>
+    /// The cell index a character shows as: a letter's (LetterIndex), a
+    /// digit's own cell (0 to 9 spread over the table, each its own: 7d + 3
+    /// mod 26), else -1 (it passes through).
+    /// </summary>
+    public static int GlyphIndex(char c)
+    {
+        int letter = LetterIndex(c);
+        if (letter >= 0)
+            return letter;
+        return c >= '0' && c <= '9' ? ((c - '0') * 7 + 3) % TableSize : -1;
+    }
 
-    /// <summary>Cell <paramref name="index"/> shown in place of letter <paramref name="c"/>, in the letter's case (the flip's scramble glyphs); the character itself when it is not a letter or the index or table is out of range.</summary>
+    /// <summary>The cell a character shows as: its letter's or digit's cell (upper-cased for an upper-case letter when the cell is one character), else the character itself.</summary>
+    public static string Cell(char c, IReadOnlyList<string> table) => Cell(c, table, GlyphIndex(c));
+
+    /// <summary>Cell <paramref name="index"/> shown in place of letter or digit <paramref name="c"/>, in the letter's case (the flip's scramble glyphs); the character itself when it is neither or the index or table is out of range.</summary>
     public static string Cell(char c, IReadOnlyList<string> table, int index)
     {
-        if (LetterIndex(c) < 0 || table == null || table.Count != TableSize || index < 0 || index >= TableSize)
+        if (GlyphIndex(c) < 0 || table == null || table.Count != TableSize || index < 0 || index >= TableSize)
             return c.ToString();
 
         string cell = table[index];
@@ -102,13 +117,13 @@ public static class Pseudoscript
 
     /// <summary>
     /// True when character <paramref name="index"/> of <paramref name="text"/>
-    /// shows as a glyph: a letter (LetterIndex) outside every span of
+    /// shows as a glyph: a letter or a digit (GlyphIndex) outside every span of
     /// <paramref name="english"/> (start, length; null: none), which stay
     /// English. False for anything else and for an index outside the text.
     /// </summary>
     public static bool IsGlyph(string text, int index, IReadOnlyList<(int start, int length)> english)
     {
-        if (text == null || index < 0 || index >= text.Length || LetterIndex(text[index]) < 0)
+        if (text == null || index < 0 || index >= text.Length || GlyphIndex(text[index]) < 0)
             return false;
         for (int i = 0; english != null && i < english.Count; i++)
             if (index >= english[i].start && index < english[i].start + english[i].length)

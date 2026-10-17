@@ -1,0 +1,161 @@
+{
+  "about": "The pets' regions (Saleh 2026-10-17), in each picture's own coordinates (0..1, x right, y down; every coat of a mood shares them), for tools/art/pets: make_pets.py paints the marks (pale fur: muzzle, chest, paws, tail tip; a dog's inner ear; tabby stripe zones, axis the direction the stripes repeat along, in degrees) and the closed eyes of the blink (eyes; none when the picture's eyes are already shut); make_pet_frames.py draws the frame-by-frame animation's frames from the parts: a part is a pivot it turns about and an ellipse (centre, radius) of the fur it moves, fully inside 0.6 of the radius and fading to nothing at its edge (a tail bends more towards its tip; the body's pivot is the ground under it, the breath raising the fur above it)",
+  "rigs": [
+    {
+      "kind": "Dog", "mood": "Idle",
+      "head": { "pivot": [0.43, 0.42], "center": [0.37, 0.22], "radius": [0.22, 0.22] },
+      "ears": [
+        { "pivot": [0.30, 0.15], "center": [0.28, 0.08], "radius": [0.07, 0.09], "tip": [0.27, 0.02] },
+        { "pivot": [0.51, 0.16], "center": [0.555, 0.22], "radius": [0.07, 0.10], "tip": [0.56, 0.29] }
+      ],
+      "tail": { "pivot": [0.73, 0.79], "center": [0.79, 0.87], "radius": [0.13, 0.11], "tip": [0.70, 0.95] },
+      "body": { "pivot": [0.48, 0.95], "center": [0.48, 0.62], "radius": [0.28, 0.34] },
+      "eyes": [ { "center": [0.302, 0.252], "radius": [0.022, 0.032] }, { "center": [0.408, 0.272], "radius": [0.028, 0.034] } ],
+      "marks": [
+        { "type": "pale", "center": [0.31, 0.355], "radius": [0.10, 0.065], "angle": -10 },
+        { "type": "pale", "center": [0.40, 0.50], "radius": [0.09, 0.15], "angle": 0 },
+        { "type": "pale", "center": [0.31, 0.905], "radius": [0.065, 0.045], "angle": 0 },
+        { "type": "pale", "center": [0.44, 0.925], "radius": [0.065, 0.045], "angle": 0 },
+        { "type": "pale", "center": [0.59, 0.905], "radius": [0.08, 0.045], "angle": 0 },
+        { "type": "inner", "center": [0.29, 0.095], "radius": [0.022, 0.05], "angle": -18 },
+        { "type": "pale", "center": [0.72, 0.94], "radius": [0.06, 0.04], "angle": 0 }
+      ]
+    },
+    {
+      "kind": "Dog", "mood": "Happy",
+      "head": { "pivot": [0.43, 0.42], "center": [0.37, 0.22], "radius": [0.22, 0.22] },
+      "ears": [
+        { "pivot": [0.30, 0.15], "center": [0.28, 0.08], "radius": [0.07, 0.09], "tip": [0.27, 0.02] },
+        { "pivot": [0.51, 0.16], "center": [0.555, 0.22], "radius": [0.07, 0.10], "tip": [0.56, 0.29] }
+      ],
+      "tail": { "pivot": [0.75, 0.76], "center": [0.83, 0.65], "radius": [0.12, 0.15], "tip": [0.86, 0.55] },
+      "body": { "pivot": [0.48, 0.95], "center": [0.48, 0.62], "radius": [0.28, 0.34] },
+      "eyes": [],
+      "marks": [
+        { "type": "pale", "center": [0.32, 0.37], "radius": [0.10, 0.07], "angle": -10 },
+        { "type": "pale", "center": [0.40, 0.50], "radius": [0.09, 0.15], "angle": 0 },
+        { "type": "pale", "center": [0.31, 0.905], "radius": [0.065, 0.045], "angle": 0 },
+        { "type": "pale", "center": [0.44, 0.925], "radius": [0.065, 0.045], "angle": 0 },
+        { "type": "pale", "center": [0.59, 0.905], "radius": [0.08, 0.045], "angle": 0 },
+        { "type": "inner", "center": [0.29, 0.095], "radius": [0.022, 0.05], "angle": -18 },
+        { "type": "pale", "center": [0.86, 0.57], "radius": [0.06, 0.05], "angle": 0 }
+      ]
+    },
+    {
+      "kind": "Dog", "mood": "Sad",
+      "head": { "pivot": [0.50, 0.62], "center": [0.27, 0.62], "radius": [0.25, 0.19] },
+      "ears": [
+        { "pivot": [0.12, 0.55], "center": [0.10, 0.61], "radius": [0.06, 0.09], "tip": [0.10, 0.69] },
+        { "pivot": [0.43, 0.52], "center": [0.46, 0.60], "radius": [0.06, 0.10], "tip": [0.48, 0.69] }
+      ],
+      "tail": { "pivot": [0.84, 0.65], "center": [0.88, 0.72], "radius": [0.10, 0.10], "tip": [0.80, 0.79] },
+      "body": { "pivot": [0.66, 0.78], "center": [0.66, 0.58], "radius": [0.24, 0.18] },
+      "eyes": [ { "center": [0.196, 0.646], "radius": [0.022, 0.032] }, { "center": [0.330, 0.664], "radius": [0.028, 0.034] } ],
+      "marks": [
+        { "type": "pale", "center": [0.21, 0.725], "radius": [0.09, 0.06], "angle": 0 },
+        { "type": "pale", "center": [0.09, 0.765], "radius": [0.06, 0.04], "angle": 0 },
+        { "type": "pale", "center": [0.31, 0.80], "radius": [0.07, 0.045], "angle": 0 },
+        { "type": "pale", "center": [0.67, 0.74], "radius": [0.08, 0.04], "angle": 0 },
+        { "type": "pale", "center": [0.82, 0.78], "radius": [0.05, 0.04], "angle": 0 }
+      ]
+    },
+    {
+      "kind": "Dog", "mood": "Sick",
+      "head": { "pivot": [0.48, 0.55], "center": [0.27, 0.52], "radius": [0.23, 0.17] },
+      "ears": [
+        { "pivot": [0.13, 0.46], "center": [0.11, 0.52], "radius": [0.06, 0.08], "tip": [0.11, 0.59] },
+        { "pivot": [0.40, 0.45], "center": [0.43, 0.53], "radius": [0.06, 0.09], "tip": [0.45, 0.59] }
+      ],
+      "tail": null,
+      "body": { "pivot": [0.62, 0.72], "center": [0.62, 0.48], "radius": [0.26, 0.20] },
+      "eyes": [ { "center": [0.190, 0.562], "radius": [0.022, 0.026] }, { "center": [0.310, 0.567], "radius": [0.028, 0.028] } ],
+      "marks": [
+        { "type": "pale", "center": [0.20, 0.635], "radius": [0.08, 0.055], "angle": 0 },
+        { "type": "pale", "center": [0.12, 0.68], "radius": [0.06, 0.035], "angle": 0 },
+        { "type": "pale", "center": [0.30, 0.69], "radius": [0.06, 0.04], "angle": 0 },
+        { "type": "pale", "center": [0.52, 0.68], "radius": [0.06, 0.035], "angle": 0 }
+      ]
+    },
+    {
+      "kind": "Cat", "mood": "Idle",
+      "head": { "pivot": [0.45, 0.42], "center": [0.43, 0.24], "radius": [0.20, 0.21] },
+      "ears": [
+        { "pivot": [0.33, 0.15], "center": [0.32, 0.10], "radius": [0.06, 0.08], "tip": [0.30, 0.05] },
+        { "pivot": [0.53, 0.15], "center": [0.545, 0.10], "radius": [0.06, 0.08], "tip": [0.56, 0.05] }
+      ],
+      "tail": { "pivot": [0.76, 0.82], "center": [0.66, 0.90], "radius": [0.15, 0.07], "tip": [0.47, 0.94] },
+      "body": { "pivot": [0.52, 0.95], "center": [0.52, 0.62], "radius": [0.24, 0.32] },
+      "eyes": [ { "center": [0.302, 0.265], "radius": [0.020, 0.028] }, { "center": [0.420, 0.282], "radius": [0.040, 0.030] } ],
+      "marks": [
+        { "type": "pale", "center": [0.31, 0.335], "radius": [0.07, 0.045], "angle": 0 },
+        { "type": "pale", "center": [0.40, 0.49], "radius": [0.08, 0.13], "angle": 0 },
+        { "type": "pale", "center": [0.37, 0.88], "radius": [0.05, 0.04], "angle": 0 },
+        { "type": "pale", "center": [0.46, 0.89], "radius": [0.05, 0.04], "angle": 0 },
+        { "type": "pale", "center": [0.48, 0.94], "radius": [0.04, 0.03], "angle": 0 },
+        { "type": "stripes", "center": [0.63, 0.62], "radius": [0.15, 0.24], "angle": 10, "period": 0.045 },
+        { "type": "stripes", "center": [0.62, 0.91], "radius": [0.16, 0.07], "angle": 0, "period": 0.05 },
+        { "type": "stripes", "center": [0.41, 0.70], "radius": [0.07, 0.13], "angle": 90, "period": 0.04 },
+        { "type": "stripes", "center": [0.43, 0.165], "radius": [0.06, 0.04], "angle": 0, "period": 0.022 }
+      ]
+    },
+    {
+      "kind": "Cat", "mood": "Happy",
+      "head": { "pivot": [0.45, 0.42], "center": [0.43, 0.24], "radius": [0.20, 0.21] },
+      "ears": [
+        { "pivot": [0.33, 0.15], "center": [0.32, 0.10], "radius": [0.06, 0.08], "tip": [0.30, 0.05] },
+        { "pivot": [0.53, 0.15], "center": [0.545, 0.10], "radius": [0.06, 0.08], "tip": [0.56, 0.05] }
+      ],
+      "tail": { "pivot": [0.70, 0.86], "center": [0.737, 0.66], "radius": [0.05, 0.13], "tip": [0.72, 0.57] },
+      "body": { "pivot": [0.52, 0.95], "center": [0.52, 0.62], "radius": [0.24, 0.32] },
+      "eyes": [],
+      "marks": [
+        { "type": "pale", "center": [0.31, 0.335], "radius": [0.07, 0.045], "angle": 0 },
+        { "type": "pale", "center": [0.40, 0.49], "radius": [0.08, 0.13], "angle": 0 },
+        { "type": "pale", "center": [0.37, 0.88], "radius": [0.05, 0.04], "angle": 0 },
+        { "type": "pale", "center": [0.46, 0.89], "radius": [0.05, 0.04], "angle": 0 },
+        { "type": "stripes", "center": [0.60, 0.64], "radius": [0.13, 0.22], "angle": 10, "period": 0.045 },
+        { "type": "stripes", "center": [0.74, 0.68], "radius": [0.07, 0.14], "angle": 90, "period": 0.05 },
+        { "type": "stripes", "center": [0.41, 0.70], "radius": [0.07, 0.13], "angle": 90, "period": 0.04 },
+        { "type": "stripes", "center": [0.43, 0.165], "radius": [0.06, 0.04], "angle": 0, "period": 0.022 }
+      ]
+    },
+    {
+      "kind": "Cat", "mood": "Sad",
+      "head": { "pivot": [0.48, 0.52], "center": [0.37, 0.37], "radius": [0.21, 0.16] },
+      "ears": [
+        { "pivot": [0.28, 0.31], "center": [0.25, 0.31], "radius": [0.05, 0.04], "tip": [0.22, 0.30] },
+        { "pivot": [0.52, 0.36], "center": [0.57, 0.37], "radius": [0.06, 0.04], "tip": [0.61, 0.39] }
+      ],
+      "tail": { "pivot": [0.75, 0.78], "center": [0.63, 0.85], "radius": [0.16, 0.07], "tip": [0.49, 0.88] },
+      "body": { "pivot": [0.55, 0.88], "center": [0.55, 0.65], "radius": [0.20, 0.23] },
+      "eyes": [ { "center": [0.292, 0.402], "radius": [0.022, 0.034] }, { "center": [0.413, 0.422], "radius": [0.038, 0.036] } ],
+      "marks": [
+        { "type": "pale", "center": [0.30, 0.465], "radius": [0.06, 0.035], "angle": 0 },
+        { "type": "pale", "center": [0.38, 0.56], "radius": [0.07, 0.09], "angle": 0 },
+        { "type": "pale", "center": [0.39, 0.82], "radius": [0.05, 0.035], "angle": 0 },
+        { "type": "pale", "center": [0.46, 0.83], "radius": [0.05, 0.035], "angle": 0 },
+        { "type": "stripes", "center": [0.62, 0.66], "radius": [0.13, 0.17], "angle": 10, "period": 0.045 },
+        { "type": "stripes", "center": [0.63, 0.85], "radius": [0.15, 0.06], "angle": 0, "period": 0.05 },
+        { "type": "stripes", "center": [0.40, 0.29], "radius": [0.06, 0.035], "angle": 0, "period": 0.022 }
+      ]
+    },
+    {
+      "kind": "Cat", "mood": "Sick",
+      "head": { "pivot": [0.48, 0.56], "center": [0.30, 0.56], "radius": [0.21, 0.15] },
+      "ears": [
+        { "pivot": [0.18, 0.50], "center": [0.15, 0.53], "radius": [0.05, 0.04], "tip": [0.11, 0.55] },
+        { "pivot": [0.40, 0.52], "center": [0.43, 0.54], "radius": [0.05, 0.04], "tip": [0.46, 0.55] }
+      ],
+      "tail": null,
+      "body": { "pivot": [0.62, 0.72], "center": [0.62, 0.50], "radius": [0.24, 0.18] },
+      "eyes": [ { "center": [0.218, 0.620], "radius": [0.024, 0.020] }, { "center": [0.336, 0.615], "radius": [0.038, 0.022] } ],
+      "marks": [
+        { "type": "pale", "center": [0.26, 0.655], "radius": [0.06, 0.035], "angle": 0 },
+        { "type": "pale", "center": [0.25, 0.71], "radius": [0.06, 0.03], "angle": 0 },
+        { "type": "pale", "center": [0.33, 0.72], "radius": [0.06, 0.03], "angle": 0 },
+        { "type": "stripes", "center": [0.30, 0.48], "radius": [0.06, 0.035], "angle": 0, "period": 0.022 },
+        { "type": "stripes", "center": [0.57, 0.62], "radius": [0.08, 0.07], "angle": 10, "period": 0.045 }
+      ]
+    }
+  ]
+}

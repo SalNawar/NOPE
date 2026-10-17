@@ -303,7 +303,7 @@ public static class ArtLayout
             case ArtPrintKind.Serial:
                 return data.Serial ?? string.Empty;
             case ArtPrintKind.Office:
-                return data.Programme ?? string.Empty;
+                return data.Word(data.Programme) ?? string.Empty; // a name printed as a label: the reading language's (Saleh 2026-10-17)
             default:
                 return p.text ?? string.Empty;
         }

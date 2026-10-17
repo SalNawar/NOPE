@@ -125,7 +125,7 @@ public sealed class CaseDocumentsPresenter
             name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
             englishName = template != null ? template.displayName : null,
             fields = doc != null ? doc.fields : null,
-            handOver = template != null ? template.handOver : DocumentHandOver.OnRequest,
+            handOver = template != null ? doc.handOver : DocumentHandOver.OnRequest,
             showsPhoto = template != null && template.showsPhoto,
             formNumber = template != null ? template.formNumber : string.Empty,
             askGroup = template != null ? template.askGroup : string.Empty

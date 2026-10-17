@@ -2215,10 +2215,6 @@ MonoBehaviour:
     text: "\u038C\u03C7\u03B9 \u03C4\u03BF \u03AF\u03B4\u03B9\u03BF \u03C0\u03C1\u03CC\u03C3\u03C9\u03C0\u03BF"
     gloss: 0
     tier: 0
-  - key: report.proof.hiddenMismatch
-    text: "\u0391\u03BD\u03AC\u03B3\u03BD\u03C9\u03C3\u03B7 \u03BC\u03B7\u03C7\u03B1\u03BD\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2"
-    gloss: 0
-    tier: 0
   - key: form.interview.head
     text: "{0} \xB7 \u03A5\u03C0\u03AC\u03BB\u03BB\u03B7\u03BB\u03BF\u03C2 \u03B3\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF\u03C5:
       {1} \xB7 {2}"
@@ -2295,6 +2291,22 @@ MonoBehaviour:
   - key: compare.untranslated
     text: "(\u03B1\u03BC\u03B5\u03C4\u03AC\u03C6\u03C1\u03B1\u03C3\u03C4\u03BF {0}\xB7
       \u039C\u03B5\u03C4\u03B1\u03C6\u03C1\u03B1\u03C3\u03C4\u03AE\u03C2 {1})"
+    gloss: 0
+    tier: 0
+  - key: compare.notUnderstood
+    text: "\u0394\u0395\u039D \u039A\u0391\u03A4\u0391\u039D\u039F\u0397\u0398\u0397\u039A\u0395"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotUnderstood
+    text: "\u0394\u03B5\u03BD \u03BA\u03B1\u03C4\u03B1\u03BD\u03BF\u03AE\u03B8\u03B7\u03BA\u03B5"
+    gloss: 0
+    tier: 0
+  - key: finding.note.NotUnderstood
+    text: "\u0391\u03C5\u03C4\u03AE \u03B7 \u03B1\u03C0\u03AC\u03BD\u03C4\u03B7\u03C3\u03B7
+      \u03B4\u03B5\u03BD \u03BC\u03B5\u03C4\u03B1\u03C6\u03C1\u03AC\u03C3\u03C4\u03B7\u03BA\u03B5:
+      \u03B4\u03B5\u03BD \u03C4\u03B7\u03BD \u03BA\u03B1\u03C4\u03AC\u03BB\u03B1\u03B2\u03B5\u03C2.
+      \u0394\u03B5\u03BD \u03BA\u03B1\u03C4\u03B1\u03B3\u03C1\u03AC\u03C6\u03B7\u03BA\u03B5
+      \u03C4\u03AF\u03C0\u03BF\u03C4\u03B1."
     gloss: 0
     tier: 0
   - key: slot.Outfit
@@ -2562,12 +2574,6 @@ MonoBehaviour:
       \u03C3\u03C4\u03BF \u03C6\u03C9\u03C2 UV."
     gloss: 0
     tier: 0
-  - key: layers.uv.unseen
-    text: "\u03A4\u03AF\u03C0\u03BF\u03C4\u03B1 \u03B1\u03BA\u03CC\u03BC\u03B1: \u03C0\u03AD\u03C1\u03B1\u03C3\u03B5
-      \u03C4\u03BF\u03BD \u03C6\u03B1\u03BA\u03CC UV \u03C0\u03AC\u03BD\u03C9 \u03B1\u03C0\u03CC
-      \u03C4\u03BF \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF."
-    gloss: 0
-    tier: 0
   - key: layers.uv.wholePaper
     text: "\u03CC\u03BB\u03BF \u03C4\u03BF \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF"
     gloss: 0
@@ -2587,11 +2593,6 @@ MonoBehaviour:
       {1}"
     gloss: 0
     tier: 0
-  - key: layers.uv.MicroprintMissing
-    text: "\u039C\u03B9\u03BA\u03C1\u03BF\u03C4\u03CD\u03C0\u03C9\u03BC\u03B1 ({0}):
-      \u03BA\u03B1\u03BD\u03AD\u03BD\u03B1"
-    gloss: 0
-    tier: 0
   - key: layers.chip.title
     text: "\u0395\u0393\u0393\u03A1\u0391\u03A6\u0397 \u03A4\u03A3\u0399\u03A0"
     gloss: 0
@@ -2599,13 +2600,6 @@ MonoBehaviour:
   - key: layers.chip.none
     text: "\u0391\u03C5\u03C4\u03CC \u03C4\u03BF \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF
       \u03B4\u03B5\u03BD \u03AD\u03C7\u03B5\u03B9 \u03C4\u03C3\u03B9\u03C0."
-    gloss: 0
-    tier: 0
-  - key: layers.chip.unread
-    text: "\u0394\u03B5\u03BD \u03AD\u03C7\u03B5\u03B9 \u03B4\u03B9\u03B1\u03B2\u03B1\u03C3\u03C4\u03B5\u03AF
-      \u03B1\u03BA\u03CC\u03BC\u03B1: \u03B2\u03AC\u03BB\u03B5 \u03C4\u03BF \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF
-      \u03C3\u03C4\u03BF\u03BD \u03B1\u03BD\u03B1\u03B3\u03BD\u03CE\u03C3\u03C4\u03B7
-      \u03C4\u03C3\u03B9\u03C0."
     gloss: 0
     tier: 0
   - key: records.row.number
@@ -2836,20 +2830,6 @@ MonoBehaviour:
       \u03C3\u03C4\u03BF\u03BD \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03B9\u03C3\u03C4\u03AE."
     gloss: 0
     tier: 0
-  - key: desk.uvHint
-    text: "\u039D\u0395\u039F: \u03BF \u03C6\u03B1\u03BA\u03CC\u03C2 UV. \u03A0\u03AC\u03C4\u03B1
-      \u03C4\u03BF\u03BD, \u03C3\u03CD\u03C1\u03B5 \u03C4\u03BF\u03BD \u03C0\u03AC\u03BD\u03C9
-      \u03B1\u03C0\u03CC \u03AD\u03BD\u03B1 \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF,
-      \u03AC\u03C6\u03B7\u03C3\u03AD \u03C4\u03BF\u03BD."
-    gloss: 0
-    tier: 0
-  - key: desk.chipHint
-    text: "\u039D\u0395\u039F: \u03BF \u03B1\u03BD\u03B1\u03B3\u03BD\u03CE\u03C3\u03C4\u03B7\u03C2
-      \u03C4\u03C3\u03B9\u03C0. \u0386\u03C6\u03B7\u03C3\u03B5 \u03C0\u03AC\u03BD\u03C9
-      \u03C4\u03BF\u03C5 \u03AD\u03BD\u03B1 \u03B4\u03B9\u03B1\u03B2\u03B1\u03C4\u03AE\u03C1\u03B9\u03BF
-      \u03AE \u03BC\u03B9\u03B1 \u03BA\u03AC\u03C1\u03C4\u03B1."
-    gloss: 0
-    tier: 0
   - key: desk.wheelHint
     text: "\u039A\u03AC\u03BD\u03B5 \u03BA\u03BB\u03B9\u03BA \u03C3\u03C4\u03BF\u03BD
       \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7 \u03B3\u03B9\u03B1 \u03BD\u03B1
@@ -2908,26 +2888,6 @@ MonoBehaviour:
     tier: 0
   - key: hardware.detain
     text: "\u039A\u03A1\u0391\u03A4\u0397\u03A3\u0397"
-    gloss: 0
-    tier: 0
-  - key: machine.chip.ready
-    text: "\u0395\u03A4\u039F\u0399\u039C\u039F"
-    gloss: 0
-    tier: 0
-  - key: machine.chip.reading
-    text: "\u0391\u039D\u0391\u0393\u039D\u03A9\u03A3\u0397"
-    gloss: 0
-    tier: 0
-  - key: machine.chip.ok
-    text: "\u03A4\u03A3\u0399\u03A0 \u03A3\u03A9\u03A3\u03A4\u039F"
-    gloss: 0
-    tier: 0
-  - key: machine.chip.none
-    text: "\u03A7\u03A9\u03A1\u0399\u03A3 \u03A4\u03A3\u0399\u03A0"
-    gloss: 0
-    tier: 0
-  - key: machine.chip.mismatch
-    text: "\u0391\u03A3\u03A5\u039C\u03A6\u03A9\u039D\u0399\u0391"
     gloss: 0
     tier: 0
   - key: stamp.dater.by
@@ -3168,12 +3128,6 @@ MonoBehaviour:
       \u03C3\u03C4\u03BF \u03B3\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF"
     gloss: 0
     tier: 0
-  - key: deviation.hiddenMismatch.papers
-    text: "{0} \u039B\u0391\u0398\u039F\u03A3 \u2014 \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03B1:
-      \xAB{1}\xBB  /  \u03C4\u03BF \u03BC\u03B7\u03C7\u03AC\u03BD\u03B7\u03BC\u03B1
-      \u03B4\u03B9\u03B1\u03B2\u03AC\u03B6\u03B5\u03B9: \xAB{2}\xBB"
-    gloss: 0
-    tier: 0
   - key: category.Language
     text: "\u0393\u039B\u03A9\u03A3\u03A3\u0391"
     gloss: 0
@@ -3275,19 +3229,6 @@ MonoBehaviour:
       \u03BD\u03B1 \u03C4\u03B1\u03B9\u03C1\u03B9\u03AC\u03B6\u03B5\u03B9 \u03BC\u03B5
       \u03C4\u03BF\u03BD \u039B\u03BF\u03B3\u03B1\u03C1\u03B9\u03B1\u03C3\u03BC\u03CC
       \u03C0\u03BF\u03BB\u03AF\u03C4\u03B7."
-    gloss: 0
-    tier: 0
-  - key: citation.rule.chip
-    text: "\u03A4\u03BF \u03C4\u03C3\u03B9\u03C0 \u03B5\u03BD\u03CC\u03C2 \u03B5\u03B3\u03B3\u03C1\u03AC\u03C6\u03BF\u03C5
-      \u03C0\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03C0\u03B5\u03C1\u03B9\u03AD\u03C7\u03B5\u03B9
-      \u03B1\u03C5\u03C4\u03CC \u03C0\u03BF\u03C5 \u03C4\u03C5\u03C0\u03CE\u03BD\u03B5\u03B9."
-    gloss: 0
-    tier: 0
-  - key: citation.rule.uv
-    text: "\u039A\u03B1\u03BD\u03AD\u03BD\u03B1 \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF
-      \u03B4\u03B5\u03BD \u03B5\u03C0\u03B9\u03C4\u03C1\u03AD\u03C0\u03B5\u03C4\u03B1\u03B9
-      \u03BD\u03B1 \u03C0\u03BB\u03C5\u03B8\u03B5\u03AF \u03BA\u03B1\u03B9 \u03BD\u03B1
-      \u03BE\u03B1\u03BD\u03B1\u03C4\u03C5\u03C0\u03C9\u03B8\u03B5\u03AF."
     gloss: 0
     tier: 0
   - key: citation.rule.origin
@@ -3396,14 +3337,6 @@ MonoBehaviour:
     tier: 0
   - key: citation.label.registry
     text: "\u039C\u03B7\u03C4\u03C1\u03CE\u03BF \u0395\u03BA\u03C4\u03BF\u03C0\u03B9\u03C3\u03BC\u03AD\u03BD\u03C9\u03BD"
-    gloss: 0
-    tier: 0
-  - key: citation.label.chip
-    text: "\u03A4\u03BF \u03C4\u03C3\u03B9\u03C0 \u03C4\u03BF\u03C5"
-    gloss: 0
-    tier: 0
-  - key: citation.label.ghost
-    text: "\u03A3\u03C4\u03BF \u03C6\u03C9\u03C2 UV"
     gloss: 0
     tier: 0
   - key: citation.label.standing
@@ -3704,12 +3637,13 @@ MonoBehaviour:
     text: "\u03A0\u03B1\u03AF\u03BE\u03B1\u03C4\u03B5 \u03B1\u03C0\u03CC\u03C8\u03B5"
     gloss: 0
     tier: 0
+  - key: home.pet.buy
+    text: "\u0391\u03B3\u03BF\u03C1\u03AC \xB7 {0} {1}"
+    gloss: 0
+    tier: 0
   - key: home.pet.noToys
-    text: "\u039A\u03B1\u03BD\u03AD\u03BD\u03B1 \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9
-      \u03B1\u03BA\u03CC\u03BC\u03B7. \u0397 \u03B5\u03C6\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE
-      \u03A0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B5\u03C2 \u03C3\u03C4\u03BF\u03BD
-      \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03B9\u03C3\u03C4\u03AE \u03C3\u03BF\u03C5
-      \u03C4\u03B1 \u03C0\u03BF\u03C5\u03BB\u03AC\u03B5\u03B9."
+    text: "\u0394\u03B5\u03BD \u03C0\u03BF\u03C5\u03BB\u03B9\u03BF\u03CD\u03BD\u03C4\u03B1\u03B9
+      \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9\u03B1 \u03B1\u03C0\u03CC\u03C8\u03B5."
     gloss: 0
     tier: 0
   - key: home.pet.dark
@@ -4762,6 +4696,12 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u0391\u03B3\u03BF\u03C1\u03AC"
+    english: Buy
+  - native: "\u03C0\u03BF\u03C5\u03BB\u03B9\u03BF\u03CD\u03BD\u03C4\u03B1\u03B9"
+    english: are sold
+  - native: "\u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9\u03B1"
+    english: toys
   - native: "\u03C3\u03C5\u03C1\u03C4\u03AC\u03C1\u03B9"
     english: drawer
   - native: "\u03C3\u03B2\u03AE\u03C3\u03B9\u03BC\u03BF"
@@ -6728,35 +6668,9 @@ MonoBehaviour:
     english: breach
   - native: "\u03AC\u03BA\u03C5\u03C1\u03B7"
     english: invalid
-  - native: "\u03BC\u03B7\u03C7\u03AC\u03BD\u03B7\u03BC\u03B1"
-    english: machine
-  - native: "\u03B1\u03BD\u03AC\u03B3\u03BD\u03C9\u03C3\u03B7"
-    english: reading
-  - native: "\u03BC\u03B7\u03C7\u03B1\u03BD\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2"
-    english: of the machine
-  - native: "\u03C0\u03B5\u03C1\u03B9\u03AD\u03C7\u03B5\u03B9"
-    english: hold
-  - native: "\u03C4\u03C5\u03C0\u03CE\u03BD\u03B5\u03B9"
-    english: prints
-  - native: "\u03B5\u03C0\u03B9\u03C4\u03C1\u03AD\u03C0\u03B5\u03C4\u03B1\u03B9"
-    english: may
-  - native: "\u03C0\u03BB\u03C5\u03B8\u03B5\u03AF"
-    english: be washed
-  - native: "\u03BE\u03B1\u03BD\u03B1\u03C4\u03C5\u03C0\u03C9\u03B8\u03B5\u03AF"
-    english: be printed over
-  - native: "\u03B4\u03B9\u03B1\u03B2\u03B1\u03C3\u03C4\u03B5\u03AF"
-    english: been read
-  - native: "\u03B1\u03BA\u03CC\u03BC\u03B1"
-    english: yet
-  - native: "\u03B2\u03AC\u03BB\u03B5"
-    english: lay
-  - native: "\u03B1\u03BD\u03B1\u03B3\u03BD\u03CE\u03C3\u03C4\u03B7"
-    english: reader
-  - native: "\u03C6\u03B1\u03BA\u03CC"
-    english: torch
-  - native: "\u03B1\u03BD\u03B1\u03B3\u03BD\u03CE\u03C3\u03C4\u03B7\u03C2"
-    english: reader
-  - native: "\u03B5\u03C4\u03BF\u03B9\u03BC\u03BF"
-    english: ready
-  - native: "\u03B1\u03C3\u03C5\u03BC\u03C6\u03C9\u03BD\u03B9\u03B1"
-    english: mismatch
+  - native: "\u03BA\u03B1\u03C4\u03B1\u03BD\u03BF\u03AE\u03B8\u03B7\u03BA\u03B5"
+    english: understood
+  - native: "\u03BC\u03B5\u03C4\u03B1\u03C6\u03C1\u03AC\u03C3\u03C4\u03B7\u03BA\u03B5"
+    english: translated
+  - native: "\u03BA\u03B1\u03C4\u03AC\u03BB\u03B1\u03B2\u03B5\u03C2"
+    english: you understood

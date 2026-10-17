@@ -2035,6 +2035,18 @@ MonoBehaviour:
     text: (untranslated {0}; {1} Translator)
     gloss: 0
     tier: 1
+  - key: compare.notUnderstood
+    text: NOT UNDERSTOOD
+    gloss: 2
+    tier: 1
+  - key: finding.link.NotUnderstood
+    text: Not understood
+    gloss: 0
+    tier: 1
+  - key: finding.note.NotUnderstood
+    text: 'That answer was not translated: you did not understand it. Nothing logged.'
+    gloss: 0
+    tier: 1
   - key: slot.Outfit
     text: OUTFIT
     gloss: 0
@@ -3289,8 +3301,12 @@ MonoBehaviour:
     text: Played tonight
     gloss: 0
     tier: 1
+  - key: home.pet.buy
+    text: "Buy \xB7 {0} {1}"
+    gloss: 0
+    tier: 1
   - key: home.pet.noToys
-    text: No toys yet. The Orders app on your PC sells them.
+    text: No toys for sale tonight.
     gloss: 0
     tier: 1
   - key: home.pet.dark

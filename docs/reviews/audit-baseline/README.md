@@ -422,6 +422,26 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
   - This branch: the audit finds a decided traveller's name in the paper in any case (the capitals headline), so its
     "paper names a traveller" lines stay on days 9, 10, 13, 14 and 15; the rulebook drawn unlit changes only materials.
   - Profiles not re-taken (round 6's kept).
+- **Round 10, the travellers fixes of 2026-10-17** (`fix/travellers-1017`: main `95670c9` with the ticket hand-over, the
+  untranslated answers and the office names in the reading language). Re-packed from run A (run B not taken); the play report
+  passes 6,497 checks and fails none. A run A of the untouched base (`95670c9`) was taken first, so each difference is
+  attributed: against round 9 the base itself differs only by `95670c9`'s own commit (the desk's confrontation sentences name the
+  papers in English, 53 transcript lines; the taskbar's TrayRow and the pull tabs' 12 pt floor in `scene_OfficeGameplay` and
+  `scenes_summary.txt`). Against that base run, this branch changes:
+  - The Entry Ticket handed over with the papers (`7758ef7`): 113 "Your Entry Ticket, please." exchanges (the desk's request
+    and the traveller's hand-over line) are gone from the transcript, the remembered tickets now on the desk at arrival (the
+    rest, forgotten, are still flagged and asked for); day 2's memo and the GUIDE's ticket moment carry the new wording
+    (2 lines); the 215 verdicts, pay, fines, stability, orders, House purchases, every save and the day-15 ending are
+    byte-identical (asking costs no shift money, and no case draw moved: the forgetting draw has its own stream).
+    `cases.txt` is unchanged (the dump prints no hand-over).
+  - `data_hashes.txt`: the library, day 2's plan, the TC-230 template, the seven string tables and the JSON (11 lines).
+  - The untranslated answers (`c56f67d`) and the office names (`88ec674`) change no golden line: seed 12345's run asks no
+    answer whose tell needs proving (answer tells start on day 14 and none fall to it), and the transcript records the
+    canonical text and English labels.
+  - `play_warnings.txt` is packed empty as before: both runs (base and branch) logged one environment warning, "Importer
+    (NativeFormatImporter) generated inconsistent result" for the worktree's locally rewritten TMP
+    `LiberationSans SDF - Fallback.asset`, which no commit touches.
+  - Profiles not re-taken (round 6's kept).
 
 ## Baseline results (ff3a6e0)
 

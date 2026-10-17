@@ -151,6 +151,23 @@ public partial class FormLayoutTests
         Assert.IsFalse(OnArt(ArtPassport(), data).Items.Any(i => i.Role == FormTextRole.Hand), "a hidden field's copy is not printed either");
     }
 
+    /// <summary>Saleh 2026-10-17 (Greek from day 8: "Labour Placement Bureau" stayed English): the issuing office's name printed on the art is a label, so it prints in the reading language (FormData.Word), and the validator asks for its doc.* string.</summary>
+    [Test]
+    public void Art_TheIssuingOfficesName_PrintsInTheReadingLanguage()
+    {
+        FormSpec spec = ArtPassport();
+        spec.look.art.prints = spec.look.art.prints.Concat(new[] { new ArtPrint { kind = ArtPrintKind.Office, rect = Box(0.4f, 0.95f, 0.7f, 0.98f) } }).ToArray();
+        FormData data = BookletData();
+        data.Programme = "Labour Placement Bureau";
+        Assert.IsTrue(OnArt(spec, data).Items.Any(i => i.Kind == FormItemKind.Text && i.Role == FormTextRole.Hand && i.Text == "Labour Placement Bureau"), "in English as given");
+        CollectionAssert.Contains(FormLayout.PrintedWords(spec, data), "Labour Placement Bureau");
+
+        data.Words = w => w == "Labour Placement Bureau" ? "Υπηρεσία Τοποθέτησης Εργασίας" : w;
+        PlacedForm greek = OnArt(spec, data);
+        Assert.IsTrue(greek.Items.Any(i => i.Kind == FormItemKind.Text && i.Text == "Υπηρεσία Τοποθέτησης Εργασίας"), "the office's name in Greek");
+        Assert.IsFalse(greek.Items.Any(i => i.Kind == FormItemKind.Text && i.Text == "Labour Placement Bureau"));
+    }
+
     [Test]
     public void Art_ASignedFieldPrintsInAHand_UnsignedWhenBlank()
     {
