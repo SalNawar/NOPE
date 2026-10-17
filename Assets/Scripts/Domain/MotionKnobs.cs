@@ -112,10 +112,10 @@ public sealed class MotionKnobs
     /// paperDropSpinMax) and its hop (metres high); its speed smoothed over
     /// paperSpeedSmoothing seconds. The folder takes them divided by its weight.
     /// </summary>
-    public float paperSwayPerSpeed = 5f, paperSwayMax = 5f, paperSagPerSpeed = 0.004f, paperSagMax = 0.006f;
+    public float paperSwayPerSpeed = 9f, paperSwayMax = 7f, paperSagPerSpeed = 0.01f, paperSagMax = 0.008f;
 
     /// <inheritdoc cref="paperSwayPerSpeed"/>
-    public float paperSlideSeconds = 0.09f, paperSlideMax = 0.03f, paperDropSpinPerSpeed = 3f, paperDropSpinMax = 4f, paperDropHop = 0.003f, paperSpeedSmoothing = 0.05f;
+    public float paperSlideSeconds = 0.16f, paperSlideMax = 0.04f, paperDropSpinPerSpeed = 6f, paperDropSpinMax = 5f, paperDropHop = 0.004f, paperSpeedSmoothing = 0.05f;
 
     /// <summary>How heavy the rulebook folder moves against a paper (PaperPhysics.Weight): it swings and sags less and slides to rest slower.</summary>
     public float folderWeight = 2.5f;
