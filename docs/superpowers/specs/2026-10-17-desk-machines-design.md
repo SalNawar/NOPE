@@ -158,3 +158,75 @@ Every object moves on Track J's springs. Reduced Motion turns the springs into s
   - **Chip reader:** `Body`, `Pad`, `SlotFlap`, `Readout`, `LED_Power`, `LED_Read`, `LED_Fault`, `Keys`, `Badge`, `SlotLabel`, `Cable`, and the empties `CardSlot` and `PadCentre`.
   - **Torch:** the `UvTorch` root, at the grip, with the children `Switch` (10 mm of travel), `Lens` (where the cone starts), `Label` and `BeamFX`.
   - **Cradle:** `Cradle`, with its child `CradleLabel`.
+
+## 7. Saleh's answers (2026-10-17, relayed by the orchestrator)
+1. **Unlock:** option A. The Bureau issues the UV torch on day 7 and the chip reader on day 11. The days stay in the JSON.
+2. **Build every desk object in §4 now:**
+   - the supply crate;
+   - the scanner's Auto-Feed tray and Analysis beacon;
+   - the BABEL rack;
+   - the loupe, the bar magnifier and the Fresnel arm;
+   - the Rolodex;
+   - the Interview Protocols card ring;
+   - the RING SERVICE panel.
+
+   The pet toys stay with the pets track: they are Home items now.
+3. **The supply crate:** yes.
+4. **The four candidate machines:** all four are picked, for design only (§8). None is built yet.
+
+## 8. The four later machines (design only; not built)
+Every line below is a **Decision**, except the picks themselves, which are Saleh's.
+
+Each machine follows the same pattern as the two machines above:
+- the Bureau issues it on the ramp day its rule arrives, as a `tool:*` key in `days[].introduces`, with a bulletin, a GUIDE page and a desk note on its first day;
+- the faults only it can catch are generated only from that day, gated through `Introductions`;
+- its use is one physical action, with no confirm step;
+- what it finds is logged the Papers, Please way: in inspect mode, click its readout line, then the paper's box.
+
+### 8.1 Transponder tuner
+- **Saleh's idea:** "transponder set to return them to the wrong date".
+- **Object:** a chunky dial box, slate and brass, with a big knurled knob and a split-flap date window. It sits at the counter's left end beside the relay panel.
+- **Use:**
+  - Drop the Transponder Card into its tray.
+  - Turn the knob by dragging it in a circle. The flaps clatter through dates; the knob clicks every notch and gets heavier near the stored date.
+  - When the flaps reach the card's return date, the knob locks with a thunk, a green lamp lights, and the window shows the date the transponder will actually return to.
+- **Rule:** the return date must equal the Entry Ticket's departure plus the trip. A transponder set to another date is a forgery, so DETAIN may be used.
+- **Unlock:** day 12, with bans. The new fault is "returns to the wrong date".
+- **Feel:**
+  - sounds: **new** `tuner_notch` ×3, **new** `tuner_lock`, and `board_flip` for the flaps;
+  - a camera nudge on the lock.
+
+### 8.2 Thumbprint pad
+- **Object:** a cream glass pad on a drawer that slides out through the counter hatch toward the traveller. A print card ejects onto the counter.
+- **Use:**
+  - Click the hatch handle: the drawer slides out and the traveller presses a thumb (their arm animates).
+  - The drawer slides back and a small print card comes out of the slot: the thumbprint plus its ridge code.
+  - Lay the card next to the record's print on the PC, or drop it on the scanner for an overlay. A false identity shows as different ridges.
+- **Rule:** the person is not the holder (a false identity), which is a crime under `Law.Breaks`, so DETAIN applies.
+- **Unlock:** day 13. It also lets SwappedPhoto cases be proven by print, not only by eye.
+- **Feel:**
+  - sounds: **new** `hatch_slide`, **new** `pad_press` (a squeak on glass), **new** `card_eject`;
+  - the pad's backlight glows while the thumb is on it.
+
+### 8.3 Booth camera
+- **Object:** a Polaroid-style camera on a jointed arm clamped to the counter edge, aimed at the traveller.
+- **Use:**
+  - Click the camera: a flash, a whirr, and a photo slides out.
+  - The photo develops from blank to the image over about 2 s as it is dragged.
+  - Lay it on the passport and the overlay compare shimmers wherever the faces differ. This is the physical twin of the PC's overlay compare (scanner-app spec §2.5).
+- **Rule:** no new fault. It makes SwappedPhoto and false-identity cases provable at the desk.
+- **Unlock:** day 9, with the clothes and the look menu, as the second look tool.
+- **Feel:**
+  - sounds: **new** `camera_flash`, **new** `photo_eject`;
+  - a white flash over the booth, and a small camera nudge.
+
+### 8.4 Luggage scale and X-ray belt
+- **Object:** a floor scale on the traveller's side, whose dial shows on the counter, and a short X-ray belt with a green monitor at the desk's right end.
+- **Use:**
+  - Click the belt's switch: the bag rides through and the monitor scans line by line.
+  - Contraband shows as a bright shape. The scale's needle settles on the measured weight, to compare with the declared weight on the Entry Ticket.
+- **Rule:** contraband, the third crime under `Law.Breaks`, which the game doesn't have yet. It needs its own content: what each era forbids, and declared weights.
+- **Unlock:** a later week. This is the largest of the four, because it adds a new content type.
+- **Feel:**
+  - sounds: **new** `belt_run` (a loop), **new** `xray_scan`, **new** `scale_settle` (a needle wobble);
+  - the monitor's scanline sweeps.
