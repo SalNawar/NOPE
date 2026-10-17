@@ -180,6 +180,150 @@ def uv_lens(path, s=256):
     img.filter(ImageFilter.GaussianBlur(1)).save(path)
 
 
+def barcode(d, x, y, w, h, seed, fill=INK):
+    import random
+    r = random.Random(seed)
+    cx = x
+    while cx < x + w:
+        bw = r.choice((2, 3, 5))
+        if r.random() < 0.55:
+            d.rectangle([cx, y, cx + bw - 1, y + h], fill=fill)
+        cx += bw + r.choice((1, 2, 3))
+
+
+def crate_label(path, w=768, h=512):
+    """The supply crate's shipping label: Bureau mark, sender, a barcode, FRAGILE and THIS SIDE UP."""
+    img = Image.new("RGB", (w, h), CARD)
+    d = ImageDraw.Draw(img)
+    d.rectangle([6, 6, w - 7, h - 7], outline=INK, width=6)
+    tcb_logo(d, 30, 30, 120, OXBLOOD, CARD)
+    d.text((176, 28), "TEMPORAL CUSTOMS", font=font(64), fill=INK)
+    d.text((178, 98), "SUPPLY · REQUISITION DELIVERY", font=font(36), fill=OXBLOOD)
+    d.line([24, 176, w - 24, 176], fill=INK, width=4)
+    barcode(d, 30, 200, 440, 150, 7)
+    d.text((30, 360), "TC-980 / DESK 7", font=mono(40), fill=INK)
+    d.rounded_rectangle([500, 200, w - 30, 290], radius=10, fill=SIGNAL)
+    centred(d, (500, 200, w - 30, 290), "FRAGILE", font(60), CARD)
+    centred(d, (500, 300, w - 30, 360), "THIS SIDE UP", font(36), INK)
+    d.text((30, 430), "BUREAU PROPERTY · DO NOT RESELL", font=font(34), fill=SLATE)
+    img.save(path)
+
+
+def crate_tape(path, w=1024, h=96):
+    img = Image.new("RGB", (w, h), SIGNAL)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, w, 8], fill=(160, 44, 36))
+    d.rectangle([0, h - 9, w, h], fill=(160, 44, 36))
+    x = 10
+    while x < w:
+        d.text((x, 16), "TCB SUPPLY ·", font=font(56), fill=CARD)
+        x += 300
+    img.save(path)
+
+
+def plate(path, title, sub=None, w=512, h=128, bg=SLATE, fg=BONE, rim=BRASS, kana_text=None):
+    """A small machine plate: a rim, the Bureau mark, a title and an optional sub line."""
+    img = Image.new("RGB", (w, h), bg)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([3, 3, w - 4, h - 4], radius=12, outline=rim, width=5)
+    tcb_logo(d, 16, 18, h - 36, fg, bg)
+    x0 = 16 + h - 36 + 16
+    if sub:
+        d.text((x0, 8), title, font=font(int(h * 0.48)), fill=fg)
+        d.text((x0 + 2, int(h * 0.64)), sub, font=font(int(h * 0.22)), fill=MANILA)
+    else:
+        d.text((x0, int(h * 0.12)), title, font=font(int(h * 0.62)), fill=fg)
+    k = kana(int(h * 0.18)) if kana_text else None
+    if k:
+        d.text((w - 18 - int(h * 0.18) * len(kana_text), int(h * 0.70)), kana_text, font=k, fill=MANILA)
+    img.save(path)
+
+
+def protocol_card(path, w=512, h=320):
+    """A laminated protocol card: a header band and ruled lines (the game prints the question in live text)."""
+    img = Image.new("RGB", (w, h), CARD)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=26, fill=CARD, outline=SLATE, width=8)
+    d.rounded_rectangle([0, 0, w - 1, 84], radius=26, fill=SLATE)
+    d.rectangle([0, 50, w - 1, 84], fill=SLATE)
+    d.ellipse([w // 2 - 18, 16, w // 2 + 18, 52], fill=CARD, outline=INK, width=4)   # the ring's punch hole
+    d.text((24, 22), "TCB", font=font(44), fill=BONE)
+    d.text((w - 196, 22), "PROTOCOL", font=font(44), fill=BONE)
+    for y in range(140, h - 30, 46):
+        d.line([28, y, w - 28, y], fill=(205, 196, 178), width=3)
+    img.save(path)
+
+
+def vu_face(path, w=384, h=192):
+    img = Image.new("RGB", (w, h), (238, 222, 170))
+    d = ImageDraw.Draw(img)
+    cx, cy, r = w // 2, h + 40, h + 10
+    d.arc([cx - r, cy - r, cx + r, cy + r], 222, 318, fill=INK, width=5)
+    d.arc([cx - r, cy - r, cx + r, cy + r], 296, 318, fill=SIGNAL, width=12)
+    for i in range(11):
+        a = math.radians(222 + i * 9.6)
+        tick = 26 if i % 5 == 0 else 14
+        d.line([cx + math.cos(a) * r, cy + math.sin(a) * r, cx + math.cos(a) * (r - tick), cy + math.sin(a) * (r - tick)], fill=INK, width=4)
+    d.text((18, h - 54), "VU", font=font(44), fill=INK)
+    d.text((w - 120, h - 54), "BABEL", font=font(44), fill=OXBLOOD)
+    img.save(path)
+
+
+def cartridge_label(path, title, colour, w=384, h=128):
+    img = Image.new("RGB", (w, h), colour)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 40, h], fill=INK)
+    for k in range(4):
+        d.rectangle([10, 14 + k * 28, 30, 30 + k * 28], fill=BRASS)
+    centred(d, (48, 6, w - 8, int(h * 0.62)), title, font(40 if len(title) > 10 else 52), CARD)
+    centred(d, (48, int(h * 0.58), w - 8, h - 6), "SPEECH PACK", font(28), BONE)
+    img.save(path)
+
+
+def index_card(path, gold=False, w=384, h=256):
+    img = Image.new("RGB", (w, h), (246, 238, 218) if not gold else (250, 236, 196))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, w - 1, 40], fill=BRASS if gold else (200, 70, 60))
+    for y in range(78, h - 10, 34):
+        d.line([20, y, w - 20, y], fill=(150, 170, 200), width=2)
+    d.line([60, 44, 60, h], fill=(220, 120, 120), width=2)
+    d.ellipse([w // 2 - 50, h - 30, w // 2 - 20, h], fill=(60, 50, 50))
+    d.ellipse([w // 2 + 20, h - 30, w // 2 + 50, h], fill=(60, 50, 50))
+    img.save(path)
+
+
+RING_LABELS = ("01", "02", "03", "04", "05")   # agency.portals: 03 is the Return Gate
+
+
+def relay_face(path, w=1024, h=256, labels=RING_LABELS):
+    """The RING SERVICE panel's face: a header strip and one module plate per ring, numbered."""
+    img = Image.new("RGB", (w, h), SLATE)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, w, 56], fill=INK)
+    tcb_logo(d, 12, 8, 40, BONE, INK)
+    d.text((66, 6), "RING SERVICE", font=font(44), fill=BONE)
+    k = kana(26)
+    if k:
+        d.text((w - 210, 14), "リングサービス", font=k, fill=MANILA)
+    cw = w / len(labels)
+    for i, lab in enumerate(labels):
+        x0, x1 = int(i * cw) + 8, int((i + 1) * cw) - 8
+        d.rounded_rectangle([x0, 66, x1, h - 8], radius=10, fill=(62, 74, 98), outline=BONE, width=3)
+        centred(d, (x0, h - 70, x1, h - 14), lab, font(48), BONE)
+        if lab == "03":
+            centred(d, (x0, h - 104, x1, h - 66), "RETURN", font(26), MANILA)
+    img.save(path)
+
+
+def serviced_sticker(path, w=256, h=96):
+    img = Image.new("RGB", (w, h), (120, 196, 120))
+    d = ImageDraw.Draw(img)
+    d.rectangle([3, 3, w - 4, h - 4], outline=INK, width=4)
+    centred(d, (0, 0, w, int(h * 0.66)), "SERVICED", font(44), INK)
+    centred(d, (0, int(h * 0.56), w, h - 4), "TCB · OK", font(26), INK)
+    img.save(path)
+
+
 TEXTURES = {
     "ChipReader_VFD.png": lambda p: vfd(p, ["TCB CR-11  READY", "INSERT CARD >"]),
     "ChipReader_Badge.png": chip_badge,
@@ -188,7 +332,45 @@ TEXTURES = {
     "UvTorch_Label.png": uv_label,
     "UvTorch_Cradle.png": uv_cradle,
     "UvTorch_Lens.png": uv_lens,
+    "Crate_Label.png": lambda p: crate_label(p),
+    "Crate_Tape.png": lambda p: crate_tape(p),
+    "Feeder_Plate.png": lambda p: plate(p, "AUTO-FEED", "SHEET FEEDER SF-2"),
+    "Beacon_Plate.png": lambda p: plate(p, "ANALYSIS", "FAULT BEACON", bg=OXBLOOD),
+    "Protocol_Card.png": lambda p: protocol_card(p),
+    "Babel_Plate.png": lambda p: plate(p, "BABEL", "SPEECH TRANSLATOR", w=640, kana_text="バベル"),
+    "Babel_VU.png": lambda p: vu_face(p),
+    "Cartridge_NearEast.png": lambda p: cartridge_label(p, "NEAR EAST", BRASS),
+    "Cartridge_Mediterranean.png": lambda p: cartridge_label(p, "MEDITERRANEAN", SLATE),
+    "Cartridge_EastAsia.png": lambda p: cartridge_label(p, "EAST ASIA", SIGNAL),
+    "Cartridge_NorthEurope.png": lambda p: cartridge_label(p, "NORTHERN EUROPE", LAVENDER),
+    "Rolodex_Card.png": lambda p: index_card(p),
+    "Rolodex_GoldCard.png": lambda p: index_card(p, gold=True),
+    "Relay_Face.png": lambda p: relay_face(p),
+    "Relay_Serviced.png": lambda p: serviced_sticker(p),
 }
+
+
+def fresnel_rings(path, w=600, h=440):
+    """The Fresnel page magnifier's sheet (LensKit, Object level): pale cyan acrylic, concentric grooves
+    closing in toward the rim (zone radii ~ sqrt(k)), a thin rim line and a small maker's mark."""
+    img = Image.new("RGB", (w, h), (214, 238, 240))
+    d = ImageDraw.Draw(img)
+    cx, cy = w / 2, h / 2
+    rmax = math.hypot(cx, cy)
+    k = 1
+    while True:
+        r = 46.0 * math.sqrt(k)
+        if r > rmax:
+            break
+        shade = (150, 196, 204) if k % 4 else (112, 160, 176)
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=shade, width=2 if k % 4 else 3)
+        k += 1
+    d.rectangle([4, 4, w - 5, h - 5], outline=SLATE, width=4)
+    d.text((16, h - 40), "TCB · FRESNEL 3×", font=font(24), fill=SLATE)
+    img.save(path)
+
+
+TEXTURES["LensKit_Fresnel.png"] = fresnel_rings
 
 
 def main():
