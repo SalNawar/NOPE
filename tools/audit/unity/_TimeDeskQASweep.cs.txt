@@ -1247,8 +1247,6 @@ public static class _TimeDeskQASweep
         {
             string corner = PetPicture((PetStandIn)Field(ui, "petView"));
             Check(corner != null && corner.StartsWith("pet_dog_charcoal_"), $"home: the pet's corner draws it in its charcoal coat ('{corner}')");
-            Transform blink = ((PetStandIn)Field(ui, "petView")).transform.Find("Figure/Blink");
-            Check(corner == null || corner.EndsWith("_happy") || (blink != null && blink.GetComponent<PetPuppet>().mainTexture.name == corner + "_blink"), $"home: the corner's puppet has its blink picture ('{(blink != null ? blink.GetComponent<PetPuppet>().mainTexture.name : "none")}')");
             ((Button)Field(ui, "petPatButton")).onClick.Invoke();
             yield return Seconds(0.6f);
             string reaction = ((TMP_Text)Field(ui, "petReactionText")).text;
@@ -2170,8 +2168,8 @@ public static class _TimeDeskQASweep
     private static string PetPicture(PetStandIn view)
     {
         Transform picture = view != null ? view.transform.Find("Figure/Picture") : null;
-        PetPuppet puppet = picture != null ? picture.GetComponent<PetPuppet>() : null;
-        return puppet != null && puppet.mainTexture != null ? puppet.mainTexture.name : null;
+        Image image = picture != null ? picture.GetComponent<Image>() : null;
+        return image != null && image.sprite != null ? image.sprite.name : null;
     }
 
     private static object Field(object target, string name)
