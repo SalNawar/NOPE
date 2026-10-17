@@ -1541,6 +1541,39 @@ public static class _TimeDeskAuditPlay
             }
         }
 
+        // Hidden tells (the desk machines spec §1): the machine reads the paper (the chip reader reads its chip; the UV torch's cone
+        // shows the ghost), then its reading is picked against the box at the desk (DeskHardware.Pick: the tick's or the readout's click).
+        DeskHardware hardware = o.Desk != null ? o.Desk.Hardware : null;
+        foreach (HiddenTell t in c.hiddenTells)
+        {
+            if (Documented(t.Category))
+            {
+                Line($"   hidden {t.Layer} {t.Category}: already documented");
+                continue;
+            }
+            int field = c.documents[t.Document].fields.FindIndex(f => f != null && f.category == t.Category);
+            if (hardware == null || field < 0)
+            {
+                Line($"   evidence FAILED for the hidden {t.Layer} {t.Category} (no desk machines, or no box)");
+                Check(false, $"d{day} slot {slot}: the hidden {t.Layer} tell is proven by its machine");
+                continue;
+            }
+            int before = o.Ui.EvidenceCount;
+            if (t.Layer == ScanLayer.Chip)
+                hardware.Readings.ReadChip(t.Document);
+            else
+            {
+                IReadOnlyList<UvMark> marks = hardware.Hidden.Marks(t.Document);
+                for (int m = 0; m < marks.Count; m++)
+                    if (marks[m].Field == field && marks[m].Fault)
+                        hardware.Readings.See(t.Document, m);
+            }
+            hardware.Pick(t.Document, field, t.Value, t.Layer);
+            yield return Frames(1);
+            Line($"   hidden {t.Layer} {t.Category} on paper {t.Document}: '{t.Value}' -> {(o.Ui.EvidenceCount > before ? "logged" : "nothing logged")}");
+            Check(o.Ui.EvidenceCount > before, $"d{day} slot {slot}: the hidden {t.Layer} tell is proven by its machine's reading");
+        }
+
         // Answers: the tell line in the transcript (every question was asked).
         foreach (InterviewAnswer a in c.answers.Where(x => x.isTell))
         {
