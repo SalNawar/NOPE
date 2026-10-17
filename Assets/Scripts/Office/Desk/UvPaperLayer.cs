@@ -174,8 +174,10 @@ public sealed class UvPaperLayer : MonoBehaviour
         text.enableWordWrapping = false;
         text.alignment = TextAlignmentOptions.Midline;
         text.color = Color.white;
-        text.rectTransform.sizeDelta = new Vector2(local.width * 0.8f, local.height * 1.15f);
-        text.rectTransform.localPosition = new Vector3(local.center.x + local.width * 0.06f, local.center.y - local.height * 0.12f, -(PaperLayers.Text + 0.00005f));
+        text.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        text.rectTransform.sizeDelta = new Vector2(local.width * 0.8f, local.height * 0.9f);
+        text.rectTransform.localPosition = new Vector3(local.center.x + local.width * 0.04f, local.center.y, -(PaperLayers.Text + 0.00005f));
+        text.margin = Vector4.zero;
         text.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 3.5f);
         var r = go.GetComponent<MeshRenderer>();
         r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
