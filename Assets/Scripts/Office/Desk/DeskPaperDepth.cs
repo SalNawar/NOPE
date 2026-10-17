@@ -45,10 +45,7 @@ public sealed class DeskPaperDepth : MonoBehaviour
     private Mesh _edgeMesh, _shadowMesh, _shadeMesh;
 
     /// <summary>How far the thing is held up now, 0 lying to 1 held (eases between them).</summary>
-    public float Held { get; private set; }
-
-    /// <summary>The contact shadow's reach now (metres outside the outline; the probes report it).</summary>
-    public float ShadowSpread { get; private set; }
+    private float _held;
 
     /// <summary>
     /// Builds the thing's depth: the edge of <paramref name="outline"/> (the
@@ -86,7 +83,7 @@ public sealed class DeskPaperDepth : MonoBehaviour
         }
         if (shade != null)
             Apply(shade, faceShade ?? new DepthMesh(), ref _shadeMesh, "PaperShade");
-        Held = drag != null && drag.IsDragging ? 1f : 0f;
+        _held = drag != null && drag.IsDragging ? 1f : 0f;
         ShowShadow();
     }
 
@@ -96,10 +93,10 @@ public sealed class DeskPaperDepth : MonoBehaviour
         if (!_built || _config == null)
             return;
         float target = drag != null && drag.IsDragging ? 1f : 0f;
-        if (Mathf.Approximately(Held, target))
+        if (Mathf.Approximately(_held, target))
             return;
-        float seconds = UiMotion.Amount.Still ? 0f : (target > Held ? _config.shadowLiftSeconds : _config.shadowDropSeconds);
-        Held = seconds > 0f ? Mathf.MoveTowards(Held, target, Time.unscaledDeltaTime / seconds) : target;
+        float seconds = UiMotion.Amount.Still ? 0f : (target > _held ? _config.shadowLiftSeconds : _config.shadowDropSeconds);
+        _held = seconds > 0f ? Mathf.MoveTowards(_held, target, Time.unscaledDeltaTime / seconds) : target;
         ShowShadow();
     }
 
@@ -108,12 +105,12 @@ public sealed class DeskPaperDepth : MonoBehaviour
     {
         if (shadow == null || _config == null)
             return;
-        float eased = Held * Held * (3f - 2f * Held);
-        ShadowSpread = Mathf.Lerp(_config.shadowSpread, _config.shadowHeldSpread, eased);
+        float eased = _held * _held * (3f - 2f * _held);
+        float spread = Mathf.Lerp(_config.shadowSpread, _config.shadowHeldSpread, eased);
         // From the edge's foot (its lean times its thickness out to the bottom right), so the shadow is never hidden under the edge.
         float offset = _config.edgeLean * _thickness + Mathf.Lerp(_config.shadowOffset, _config.shadowHeldOffset, eased);
         float alpha = Mathf.Lerp(_config.shadowAlpha, _config.shadowHeldAlpha, eased) * _strength;
-        DepthMesh mesh = PaperDepth.Shadow(_outline, _size.x, _size.y, _thickness + ShadowGap, ShadowSpread,
+        DepthMesh mesh = PaperDepth.Shadow(_outline, _size.x, _size.y, _thickness + ShadowGap, spread,
                                            offset * PaperDepth.LeanRight, -offset * PaperDepth.LeanNear, alpha, _lift);
         Apply(shadow, mesh, ref _shadowMesh, "PaperShadow");
     }
@@ -131,10 +128,7 @@ public sealed class DeskPaperDepth : MonoBehaviour
     }
 
     /// <summary>An engine-free colour as Unity's.</summary>
-    public static Color Colour(Rgba c) => new Color(c.R, c.G, c.B, c.A);
-
-    /// <summary>A Unity colour as an engine-free one.</summary>
-    public static Rgba ToRgba(Color c) => new Rgba(c.r, c.g, c.b, c.a);
+    private static Color Colour(Rgba c) => new Color(c.R, c.G, c.B, c.A);
 
     private void OnDestroy()
     {
