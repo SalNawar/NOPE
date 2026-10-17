@@ -1440,7 +1440,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: keys.desk.stamps
-    text: 'The stamp drawer (the tab at the bottom): drag a stamp onto the passport
+    text: 'The stamp drawer (the tab at the top): drag a stamp onto the passport
       and let go'
     gloss: 0
     tier: 1

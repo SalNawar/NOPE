@@ -1373,7 +1373,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: 'Il cassetto dei timbri (la linguetta in basso): trascina un timbro sul
+    text: 'Il cassetto dei timbri (la linguetta in alto): trascina un timbro sul
       passaporto e rilascialo'
     gloss: 0
     tier: 0
@@ -3961,8 +3961,8 @@ MonoBehaviour:
   words:
   - native: cassetto
     english: drawer
-  - native: basso
-    english: bottom
+  - native: alto
+    english: top
   - native: spegni
     english: Turn off
   - native: lo

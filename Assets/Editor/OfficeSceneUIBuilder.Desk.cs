@@ -1348,7 +1348,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A paper's and a rulebook part's click box thickness (metres, before a paper's zone scale): thin, so the papers' stack (DeskConfigSO.paperStackStep a place) alone decides which of two overlapping papers, or a paper and the rulebook, a click or a stamp meets (Saleh 2026-10-06: documents clipping).</summary>
     private const float PaperBoxThickness = 0.0004f;
 
-    /// <summary>The STAMPS tab on the overlay's bottom edge where the drawer comes out (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"), and how far it sinks below the edge (cut by it, like the side pull tabs).</summary>
+    /// <summary>The STAMPS tab on the overlay's top edge beside the drawer (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"; DeskStampTray.PlaceTab keeps it beside the drawer), and how far it rises past the edge (cut by it, like the side pull tabs).</summary>
     private static readonly Vector2 StampTabSize = new Vector2(236f, 78f);
     private const float StampTabSink = 16f;
 
@@ -1379,8 +1379,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The stamps' hint plate (reference px), at the top right under the case HUD's strip.</summary>
     private static readonly Vector2 StampHintSize = new Vector2(560f, 50f);
 
-    /// <summary>Where the stamps' hint plate starts below the overlay's top (reference px): under the case HUD's strip.</summary>
-    private static readonly float StampPlateTop = CaseHudClearance;
+    /// <summary>Where the stamps' hint plate starts below the overlay's top (reference px): under the STAMPS tab on the top edge and the guide's arrow's room under it (clear of the case HUD's strip too).</summary>
+    private static readonly float StampPlateTop = StampTabSize.y - StampTabSink + StampArrowRoom;
+
+    /// <summary>The room under the STAMPS tab on the top edge for the guide's arrow pointing up at it (reference px): the stamps' hint plate starts below it.</summary>
+    private const float StampArrowRoom = 80f;
 
     /// <summary>A strip at the top centre of the overlay, <paramref name="top"/> px down, with its text (auto-sized, no raycasts).</summary>
     private static TMP_Text TopStrip(Transform parent, string name, Vector2 size, float top, Color background, ThemeRoleId role, int fontSize, Color ink, out Transform strip)
@@ -1469,8 +1472,8 @@ public static partial class OfficeSceneUIBuilder
     /// the stamp stuff, and the Tab shortcut"), its stamps the two daters (the
     /// desk machine spec §1), rebuilt each run. On the office overlay:
     /// StampBar (the DeskStampTray, an always-active full-screen host) with
-    /// the Tab on the bottom edge where the drawer comes out, at
-    /// DeskConfigSO.stampBarView's x ("STAMPS" beside the key, TAB; inactive
+    /// the Tab on the top edge beside where the drawer comes in (placed there
+    /// at run time, DeskStampTray.PlaceTab; "STAMPS" beside the key, TAB; inactive
     /// until the booth shows it), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
     /// In the office: StampRack (inactive until slid out; the office binder
@@ -1500,9 +1503,9 @@ public static partial class OfficeSceneUIBuilder
 
         Button tab = MakeButton(host, "Tab", null, Vector2.zero, Vector2.one, StampGrey, ThemeRoleId.DiegeticDevice);
         var tabRect = (RectTransform)tab.transform;
-        tabRect.anchorMin = tabRect.anchorMax = new Vector2(config.stampBarView.x, 0f);
-        tabRect.pivot = new Vector2(0.5f, 0f);
-        tabRect.anchoredPosition = new Vector2(0f, -StampTabSink);
+        tabRect.anchorMin = tabRect.anchorMax = new Vector2(config.stampBarView.x, 1f);
+        tabRect.pivot = new Vector2(0f, 1f);
+        tabRect.anchoredPosition = new Vector2(0f, StampTabSink);
         tabRect.sizeDelta = StampTabSize;
         TMP_Text tabLabel = tab.transform.Find("Label").GetComponent<TMP_Text>();
         tabLabel.text = $"{UiText.Get("controls.stampsTab")}  <b>{ControlRules.StampsKey}</b>";

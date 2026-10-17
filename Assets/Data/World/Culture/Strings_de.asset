@@ -1374,7 +1374,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: 'Die Stempelschublade (der Reiter unten): ziehe einen Stempel auf den Pass
+    text: 'Die Stempelschublade (der Reiter oben): ziehe einen Stempel auf den Pass
       und lass los'
     gloss: 0
     tier: 0
@@ -3954,6 +3954,8 @@ MonoBehaviour:
   words:
   - native: Stempelschublade
     english: stamp drawer
+  - native: oben
+    english: at the top
   - native: bildschirm
     english: Screen
   - native: aus

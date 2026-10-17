@@ -24736,7 +24736,7 @@
       },
       {
         "key": "keys.desk.stamps",
-        "text": "The stamp drawer (the tab at the bottom): drag a stamp onto the passport and let go",
+        "text": "The stamp drawer (the tab at the top): drag a stamp onto the passport and let go",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -30070,7 +30070,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "درج الأختام (اللسان في الأسفل): اسحب ختما إلى الجواز وأفلته"
+            "text": "درج الأختام (اللسان في الأعلى): اسحب ختما إلى الجواز وأفلته"
           },
           {
             "key": "keys.desk.pc",
@@ -32611,8 +32611,8 @@
         ],
         "words": [
           {
-            "native": "الأسفل",
-            "english": "the bottom"
+            "native": "الأعلى",
+            "english": "the top"
           },
           {
             "native": "إطفاء",
@@ -38394,7 +38394,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Το συρτάρι με τις στάμπες (η καρτέλα κάτω): σύρε μια στάμπα πάνω στο διαβατήριο και άφησέ την"
+            "text": "Το συρτάρι με τις στάμπες (η καρτέλα πάνω): σύρε μια στάμπα πάνω στο διαβατήριο και άφησέ την"
           },
           {
             "key": "keys.desk.pc",
@@ -46206,7 +46206,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Il cassetto dei timbri (la linguetta in basso): trascina un timbro sul passaporto e rilascialo"
+            "text": "Il cassetto dei timbri (la linguetta in alto): trascina un timbro sul passaporto e rilascialo"
           },
           {
             "key": "keys.desk.pc",
@@ -48751,8 +48751,8 @@
             "english": "drawer"
           },
           {
-            "native": "basso",
-            "english": "bottom"
+            "native": "alto",
+            "english": "top"
           },
           {
             "native": "spegni",
@@ -54142,7 +54142,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Die Stempelschublade (der Reiter unten): ziehe einen Stempel auf den Pass und lass los"
+            "text": "Die Stempelschublade (der Reiter oben): ziehe einen Stempel auf den Pass und lass los"
           },
           {
             "key": "keys.desk.pc",
@@ -56685,6 +56685,10 @@
           {
             "native": "Stempelschublade",
             "english": "stamp drawer"
+          },
+          {
+            "native": "oben",
+            "english": "at the top"
           },
           {
             "native": "bildschirm",
@@ -62322,7 +62326,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "印章抽屉（底部的标签）：将印章拖到护照上再松开"
+            "text": "印章抽屉（顶部的标签）：将印章拖到护照上再松开"
           },
           {
             "key": "keys.desk.pc",
@@ -64863,8 +64867,8 @@
         ],
         "words": [
           {
-            "native": "底",
-            "english": "bottom"
+            "native": "顶",
+            "english": "top"
           },
           {
             "native": "关闭",
@@ -69830,7 +69834,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "スタンプの引き出し (下のタブ): スタンプをパスポートにドラッグして放す"
+            "text": "スタンプの引き出し (上のタブ): スタンプをパスポートにドラッグして放す"
           },
           {
             "key": "keys.desk.pc",

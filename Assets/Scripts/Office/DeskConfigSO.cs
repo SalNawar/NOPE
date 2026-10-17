@@ -90,8 +90,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
     [Min(0f)] public float counterRowDepth = 0.05f;
 
-    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the STAMPS tab, the inspect button and, at the bottom, the stamp drawer's band, stampBarView): the spread lays them inside it (PaperSpread).</summary>
-    public Rect readingArea = new Rect(0.02f, 0.2f, 0.88f, 0.63f);
+    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the inspect button and, at the top, the stamp drawer's band and its STAMPS tab, stampBarView): the spread lays them inside it (PaperSpread).</summary>
+    public Rect readingArea = new Rect(0.02f, 0.04f, 0.88f, 0.7f);
 
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
@@ -189,17 +189,17 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
     [Min(0.005f)] public float stampHover = 0.03f;
 
-    /// <summary>Where the stamp drawer stands out, tethered to the screen's bottom edge (Saleh's 1016a playtest: "tethered to the edge of the screen"; DeskStampTray.Tether): its middle at viewport x, its near edge where the reading view's ray through viewport y meets the desk (0: flush on the bottom edge), below the papers' reading area. The STAMPS tab sits on the bottom edge at the same x.</summary>
-    public Vector2 stampBarView = new Vector2(0.6f, 0f);
+    /// <summary>Where the stamp drawer stands out, tethered to the screen's top edge (Saleh's 1016a playtest: "tethered to the edge of the screen", "the other way around from top to bottom"; DeskStampTray.Tether): its middle at viewport x, its far top edge on the reading view's ray through viewport y (1: flush on the top edge), above the papers' reading area. The STAMPS tab sits on the top edge beside it.</summary>
+    public Vector2 stampBarView = new Vector2(0.66f, 1f);
 
-    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, away from the chair): in, it waits that far nearer the chair, below the reading view's bottom edge (its motion's timing is MotionKnobs' drawer tunings).</summary>
+    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, toward the chair): in, it waits that far further from the chair, above the reading view's top edge (its motion's timing is MotionKnobs' drawer tunings).</summary>
     [Min(0.1f)] public float stampBarTravel = 0.3f;
 
     /// <summary>The stamp drawer's size against the model's (the drawer, its mechanism and its daters; Saleh's 1008a playtest: smaller).</summary>
     [Range(0.3f, 1f)] public float stampDrawerScale = 0.58f;
 
-    /// <summary>Where the passport's stamp area goes as the drawer opens (DeskController.PassportToStampSpot): the point of the desk the reading view shows there (viewport x, y), above the drawer, so the whole passport lies clear of it.</summary>
-    public Vector2 stampSpotView = new Vector2(0.6f, 0.66f);
+    /// <summary>Where the passport's stamp area goes as the drawer opens (DeskController.PassportToStampSpot): the point of the desk the reading view shows there (viewport x, y), below the drawer at the top, so the whole passport lies clear of it and the daters drop a short way down onto it.</summary>
+    public Vector2 stampSpotView = new Vector2(0.6f, 0.58f);
 
     /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
     [Range(0f, 0.2f)] public float daterInkFade = 0.035f;

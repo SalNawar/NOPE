@@ -501,11 +501,11 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>
     /// The passport ready to stamp, clear of the drawer (Saleh's 1008a
     /// playtest: "the drawer is blocking the stamp area"). When the drawer
-    /// slides out of the reading view's bottom edge, the passport lying on the
-    /// desk (not held, not sliding) slides so the middle of its stamp area
-    /// (DeskDocument.TryStampAreaCentre) lies at the stamp spot above the
+    /// slides down out of the reading view's top edge, the passport lying on
+    /// the desk (not held, not sliding) slides so the middle of its stamp area
+    /// (DeskDocument.TryStampAreaCentre) lies at the stamp spot below the
     /// drawer (DeskStampTray.TryStampSpot, DeskConfigSO.stampSpotView), and
-    /// comes to the top: the whole passport shows above the drawer, a short
+    /// comes to the top: the whole passport shows below the drawer, a short
     /// drag from the daters.
     /// </summary>
     private void PassportUnderDaters()
