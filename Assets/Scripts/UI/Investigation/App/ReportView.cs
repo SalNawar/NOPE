@@ -76,6 +76,7 @@ public sealed class ReportView : AppView
                  : proof == DiscrepancyProof.RecordMismatch ? "report.proof.recordMismatch"
                  : proof == DiscrepancyProof.CrossMismatch ? "report.proof.crossMismatch"
                  : proof == DiscrepancyProof.PersonMismatch ? "report.proof.personMismatch"
+                 : proof == DiscrepancyProof.HiddenMismatch ? "report.proof.hiddenMismatch"
                  : "report.proof.claimMismatch");
 
     /// <summary>The entry a row's slot shows, or null.</summary>

@@ -77,7 +77,7 @@ MonoBehaviour:
   costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 010000000200000006000000070000000a00000009000000
+  lieKinds: 010000000200000006000000070000000a000000090000000c000000
   violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: c3666c51d7e278c4ba3b8753516c1a39, type: 2}

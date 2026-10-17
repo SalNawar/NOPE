@@ -25578,6 +25578,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "report.proof.hiddenMismatch",
+        "text": "Machine reading",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "form.report.caseLine",
         "text": "{0} · {1}",
         "gloss": "None",
@@ -26076,6 +26082,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "layers.uv.unseen",
+        "text": "Nothing seen yet: hold the UV torch over the paper.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "layers.uv.wholePaper",
         "text": "the whole paper",
         "gloss": "None",
@@ -26100,6 +26112,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "layers.uv.MicroprintMissing",
+        "text": "Microprint ({0}): none",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "layers.chip.title",
         "text": "CHIP RECORD",
         "gloss": "None",
@@ -26108,6 +26126,12 @@
       {
         "key": "layers.chip.none",
         "text": "This paper carries no chip.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "layers.chip.unread",
+        "text": "Not read yet: lay the paper on the chip reader.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -26418,6 +26442,18 @@
         "tier": "Flavour"
       },
       {
+        "key": "desk.uvHint",
+        "text": "NEW: the UV torch. Press it, drag it over a paper, let go.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "desk.chipHint",
+        "text": "NEW: the chip reader. Drop a passport or a card on it.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "desk.wheelHint",
         "text": "Click the traveller to talk and ask for papers.",
         "gloss": "None",
@@ -26488,6 +26524,42 @@
         "text": "DETAIN",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "machine.chip.ready",
+        "text": "READY",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "machine.chip.reading",
+        "text": "READING",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "machine.chip.ok",
+        "text": "CHIP OK",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "machine.chip.none",
+        "text": "NO CHIP",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "machine.chip.mismatch",
+        "text": "MISMATCH",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "machine.chip.line",
+        "text": "{0} {1}",
+        "gloss": "None",
+        "tier": "Full"
       },
       {
         "key": "stamp.dater.by",
@@ -26802,6 +26874,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "deviation.hiddenMismatch.papers",
+        "text": "{0} INCORRECT — papers: \"{1}\"  /  the machine reads: \"{2}\"",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "category.Language",
         "text": "LANGUAGE",
         "gloss": "None",
@@ -26958,6 +27036,18 @@
         "tier": "Flavour"
       },
       {
+        "key": "citation.rule.chip",
+        "text": "A paper's chip must hold what it prints.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "citation.rule.uv",
+        "text": "No paper may be washed and printed over.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "citation.rule.origin",
         "text": "The displaced return only to their own time: their papers and answers must match their origin.",
         "gloss": "None",
@@ -27056,6 +27146,18 @@
       {
         "key": "citation.label.registry",
         "text": "Displacement Registry",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "citation.label.chip",
+        "text": "Its chip",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "citation.label.ghost",
+        "text": "Under UV light",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -30618,6 +30720,10 @@
             "text": "ليس الشخص نفسه"
           },
           {
+            "key": "report.proof.hiddenMismatch",
+            "text": "قراءة الآلة"
+          },
+          {
             "key": "form.interview.head",
             "text": "{0} · موظف المكتب: {1} · {2}"
           },
@@ -30918,6 +31024,10 @@
             "text": "لا شيء يظهر تحت ضوء UV."
           },
           {
+            "key": "layers.uv.unseen",
+            "text": "لم ير شيء بعد: مرر مصباح UV فوق الورقة."
+          },
+          {
             "key": "layers.uv.wholePaper",
             "text": "الورقة كلها"
           },
@@ -30934,12 +31044,20 @@
             "text": "طباعة دقيقة ({0}): {1}"
           },
           {
+            "key": "layers.uv.MicroprintMissing",
+            "text": "طباعة دقيقة ({0}): لا شيء"
+          },
+          {
             "key": "layers.chip.title",
             "text": "سجل الشريحة"
           },
           {
             "key": "layers.chip.none",
             "text": "هذه الورقة بلا شريحة."
+          },
+          {
+            "key": "layers.chip.unread",
+            "text": "لم تقرأ بعد: ضع الورقة على قارئ الشرائح."
           },
           {
             "key": "records.row.number",
@@ -31130,6 +31248,14 @@
             "text": "اسحب ورقة إلى الماسح لفتحها على الحاسوب."
           },
           {
+            "key": "desk.uvHint",
+            "text": "جديد: مصباح UV. اضغطه, اسحبه فوق ورقة, ثم اتركه."
+          },
+          {
+            "key": "desk.chipHint",
+            "text": "جديد: قارئ الشرائح. ضع عليه جوازا أو بطاقة."
+          },
+          {
             "key": "desk.wheelHint",
             "text": "انقر المسافر للحديث وطلب الأوراق."
           },
@@ -31176,6 +31302,26 @@
           {
             "key": "hardware.detain",
             "text": "احتجاز"
+          },
+          {
+            "key": "machine.chip.ready",
+            "text": "جاهز"
+          },
+          {
+            "key": "machine.chip.reading",
+            "text": "جار القراءة"
+          },
+          {
+            "key": "machine.chip.ok",
+            "text": "الشريحة سليمة"
+          },
+          {
+            "key": "machine.chip.none",
+            "text": "لا شريحة"
+          },
+          {
+            "key": "machine.chip.mismatch",
+            "text": "عدم تطابق"
           },
           {
             "key": "stamp.dater.by",
@@ -31374,6 +31520,10 @@
             "text": "{0} غير صحيح — الصورة في الأوراق ليست للمسافر عند المكتب"
           },
           {
+            "key": "deviation.hiddenMismatch.papers",
+            "text": "{0} غير صحيح — الأوراق: \"{1}\"  /  تقرأ الآلة: \"{2}\""
+          },
+          {
             "key": "category.Language",
             "text": "اللغة"
           },
@@ -31470,6 +31620,14 @@
             "text": "يجب أن تطابق كل ورقة حساب المواطن."
           },
           {
+            "key": "citation.rule.chip",
+            "text": "يجب أن تحمل شريحة الورقة ما تطبعه."
+          },
+          {
+            "key": "citation.rule.uv",
+            "text": "لا يجوز غسل أي ورقة والطباعة فوقها."
+          },
+          {
             "key": "citation.rule.origin",
             "text": "النازحون يعودون إلى زمنهم فقط: يجب أن تطابق أوراقهم وإجاباتهم أصلهم."
           },
@@ -31536,6 +31694,14 @@
           {
             "key": "citation.label.registry",
             "text": "سجل النازحين"
+          },
+          {
+            "key": "citation.label.chip",
+            "text": "شريحتها"
+          },
+          {
+            "key": "citation.label.ghost",
+            "text": "تحت ضوء UV"
           },
           {
             "key": "citation.label.standing",
@@ -37146,6 +37312,90 @@
           {
             "native": "تشغيل",
             "english": "On"
+          },
+          {
+            "native": "تقرأ",
+            "english": "reads"
+          },
+          {
+            "native": "الآلة",
+            "english": "the machine"
+          },
+          {
+            "native": "قراءة",
+            "english": "reading"
+          },
+          {
+            "native": "تطبعه",
+            "english": "it prints"
+          },
+          {
+            "native": "يجوز",
+            "english": "may"
+          },
+          {
+            "native": "غسل",
+            "english": "washing"
+          },
+          {
+            "native": "والطباعة",
+            "english": "and printing"
+          },
+          {
+            "native": "فوقها",
+            "english": "over it"
+          },
+          {
+            "native": "شريحتها",
+            "english": "its chip"
+          },
+          {
+            "native": "ضع",
+            "english": "lay"
+          },
+          {
+            "native": "قارئ",
+            "english": "reader"
+          },
+          {
+            "native": "الشرائح",
+            "english": "chips"
+          },
+          {
+            "native": "مصباح",
+            "english": "torch"
+          },
+          {
+            "native": "اضغطه",
+            "english": "press it"
+          },
+          {
+            "native": "اسحبه",
+            "english": "drag it"
+          },
+          {
+            "native": "اتركه",
+            "english": "let go"
+          },
+          {
+            "native": "جوازا",
+            "english": "a passport"
+          },
+          {
+            "native": "جاهز",
+            "english": "ready"
+          },
+          {
+            "native": "جار",
+            "english": "in progress"
+          },
+          {
+            "native": "سليمة",
+            "english": "sound"
+          },
+          {
+            "native": "ير",
+            "english": "seen"
           }
         ]
       },
@@ -38942,6 +39192,10 @@
             "text": "Όχι το ίδιο πρόσωπο"
           },
           {
+            "key": "report.proof.hiddenMismatch",
+            "text": "Ανάγνωση μηχανήματος"
+          },
+          {
             "key": "form.interview.head",
             "text": "{0} · Υπάλληλος γραφείου: {1} · {2}"
           },
@@ -39242,6 +39496,10 @@
             "text": "Τίποτα δεν φαίνεται στο φως UV."
           },
           {
+            "key": "layers.uv.unseen",
+            "text": "Τίποτα ακόμα: πέρασε τον φακό UV πάνω από το έγγραφο."
+          },
+          {
             "key": "layers.uv.wholePaper",
             "text": "όλο το έγγραφο"
           },
@@ -39258,12 +39516,20 @@
             "text": "Μικροτύπωμα ({0}): {1}"
           },
           {
+            "key": "layers.uv.MicroprintMissing",
+            "text": "Μικροτύπωμα ({0}): κανένα"
+          },
+          {
             "key": "layers.chip.title",
             "text": "ΕΓΓΡΑΦΗ ΤΣΙΠ"
           },
           {
             "key": "layers.chip.none",
             "text": "Αυτό το έγγραφο δεν έχει τσιπ."
+          },
+          {
+            "key": "layers.chip.unread",
+            "text": "Δεν έχει διαβαστεί ακόμα: βάλε το έγγραφο στον αναγνώστη τσιπ."
           },
           {
             "key": "records.row.number",
@@ -39454,6 +39720,14 @@
             "text": "Σύρε ένα έγγραφο στον σαρωτή για να το ανοίξεις στον υπολογιστή."
           },
           {
+            "key": "desk.uvHint",
+            "text": "ΝΕΟ: ο φακός UV. Πάτα τον, σύρε τον πάνω από ένα έγγραφο, άφησέ τον."
+          },
+          {
+            "key": "desk.chipHint",
+            "text": "ΝΕΟ: ο αναγνώστης τσιπ. Άφησε πάνω του ένα διαβατήριο ή μια κάρτα."
+          },
+          {
             "key": "desk.wheelHint",
             "text": "Κάνε κλικ στον ταξιδιώτη για να μιλήσεις και να ζητήσεις έγγραφα."
           },
@@ -39500,6 +39774,26 @@
           {
             "key": "hardware.detain",
             "text": "ΚΡΑΤΗΣΗ"
+          },
+          {
+            "key": "machine.chip.ready",
+            "text": "ΕΤΟΙΜΟ"
+          },
+          {
+            "key": "machine.chip.reading",
+            "text": "ΑΝΑΓΝΩΣΗ"
+          },
+          {
+            "key": "machine.chip.ok",
+            "text": "ΤΣΙΠ ΣΩΣΤΟ"
+          },
+          {
+            "key": "machine.chip.none",
+            "text": "ΧΩΡΙΣ ΤΣΙΠ"
+          },
+          {
+            "key": "machine.chip.mismatch",
+            "text": "ΑΣΥΜΦΩΝΙΑ"
           },
           {
             "key": "stamp.dater.by",
@@ -39698,6 +39992,10 @@
             "text": "{0} ΛΑΘΟΣ — η φωτογραφία στα έγγραφα δεν είναι ο ταξιδιώτης στο γραφείο"
           },
           {
+            "key": "deviation.hiddenMismatch.papers",
+            "text": "{0} ΛΑΘΟΣ — έγγραφα: «{1}»  /  το μηχάνημα διαβάζει: «{2}»"
+          },
+          {
             "key": "category.Language",
             "text": "ΓΛΩΣΣΑ"
           },
@@ -39794,6 +40092,14 @@
             "text": "Κάθε έγγραφο πρέπει να ταιριάζει με τον Λογαριασμό πολίτη."
           },
           {
+            "key": "citation.rule.chip",
+            "text": "Το τσιπ ενός εγγράφου πρέπει να περιέχει αυτό που τυπώνει."
+          },
+          {
+            "key": "citation.rule.uv",
+            "text": "Κανένα έγγραφο δεν επιτρέπεται να πλυθεί και να ξανατυπωθεί."
+          },
+          {
             "key": "citation.rule.origin",
             "text": "Οι εκτοπισμένοι επιστρέφουν μόνο στη δική τους εποχή: τα έγγραφα και οι απαντήσεις τους πρέπει να ταιριάζουν με την προέλευσή τους."
           },
@@ -39860,6 +40166,14 @@
           {
             "key": "citation.label.registry",
             "text": "Μητρώο Εκτοπισμένων"
+          },
+          {
+            "key": "citation.label.chip",
+            "text": "Το τσιπ του"
+          },
+          {
+            "key": "citation.label.ghost",
+            "text": "Στο φως UV"
           },
           {
             "key": "citation.label.standing",
@@ -44958,6 +45272,70 @@
           {
             "native": "άκυρη",
             "english": "invalid"
+          },
+          {
+            "native": "μηχάνημα",
+            "english": "machine"
+          },
+          {
+            "native": "ανάγνωση",
+            "english": "reading"
+          },
+          {
+            "native": "μηχανήματος",
+            "english": "of the machine"
+          },
+          {
+            "native": "περιέχει",
+            "english": "hold"
+          },
+          {
+            "native": "τυπώνει",
+            "english": "prints"
+          },
+          {
+            "native": "επιτρέπεται",
+            "english": "may"
+          },
+          {
+            "native": "πλυθεί",
+            "english": "be washed"
+          },
+          {
+            "native": "ξανατυπωθεί",
+            "english": "be printed over"
+          },
+          {
+            "native": "διαβαστεί",
+            "english": "been read"
+          },
+          {
+            "native": "ακόμα",
+            "english": "yet"
+          },
+          {
+            "native": "βάλε",
+            "english": "lay"
+          },
+          {
+            "native": "αναγνώστη",
+            "english": "reader"
+          },
+          {
+            "native": "φακό",
+            "english": "torch"
+          },
+          {
+            "native": "αναγνώστης",
+            "english": "reader"
+          },
+          {
+            "native": "ετοιμο",
+            "english": "ready"
+          },
+          {
+            "native": "ασυμφωνια",
+            "english": "mismatch"
           }
         ]
       },
@@ -46754,6 +47132,10 @@
             "text": "Non è la persona"
           },
           {
+            "key": "report.proof.hiddenMismatch",
+            "text": "Lettura della macchina"
+          },
+          {
             "key": "form.interview.head",
             "text": "{0} · Agente di sportello: {1} · {2}"
           },
@@ -47054,6 +47436,10 @@
             "text": "Nulla appare sotto la luce UV."
           },
           {
+            "key": "layers.uv.unseen",
+            "text": "Ancora nulla: passa la torcia UV sul documento."
+          },
+          {
             "key": "layers.uv.wholePaper",
             "text": "l'intero documento"
           },
@@ -47070,12 +47456,20 @@
             "text": "Microstampa ({0}): {1}"
           },
           {
+            "key": "layers.uv.MicroprintMissing",
+            "text": "Microstampa ({0}): nessuna"
+          },
+          {
             "key": "layers.chip.title",
             "text": "DATI DEL CHIP"
           },
           {
             "key": "layers.chip.none",
             "text": "Questo documento non ha un chip."
+          },
+          {
+            "key": "layers.chip.unread",
+            "text": "Non ancora letto: posa il documento sul lettore di chip."
           },
           {
             "key": "records.row.number",
@@ -47266,6 +47660,14 @@
             "text": "Trascina un documento sullo scanner per aprirlo sul PC."
           },
           {
+            "key": "desk.uvHint",
+            "text": "NOVITÀ: la torcia UV. Premila, trascinala su un documento, lasciala."
+          },
+          {
+            "key": "desk.chipHint",
+            "text": "NOVITÀ: il lettore di chip. Posaci sopra un passaporto o una tessera."
+          },
+          {
             "key": "desk.wheelHint",
             "text": "Clicca il viaggiatore per parlare e chiedere i documenti."
           },
@@ -47312,6 +47714,26 @@
           {
             "key": "hardware.detain",
             "text": "TRATTIENI"
+          },
+          {
+            "key": "machine.chip.ready",
+            "text": "PRONTO"
+          },
+          {
+            "key": "machine.chip.reading",
+            "text": "LETTURA"
+          },
+          {
+            "key": "machine.chip.ok",
+            "text": "CHIP OK"
+          },
+          {
+            "key": "machine.chip.none",
+            "text": "NESSUN CHIP"
+          },
+          {
+            "key": "machine.chip.mismatch",
+            "text": "NON CORRISPONDE"
           },
           {
             "key": "stamp.dater.by",
@@ -47510,6 +47932,10 @@
             "text": "{0} ERRATO — la foto sui documenti non è il viaggiatore alla scrivania"
           },
           {
+            "key": "deviation.hiddenMismatch.papers",
+            "text": "{0} ERRATO — documenti: \"{1}\"  /  la macchina legge: \"{2}\""
+          },
+          {
             "key": "category.Language",
             "text": "LINGUA"
           },
@@ -47606,6 +48032,14 @@
             "text": "Ogni documento deve corrispondere al Conto del cittadino."
           },
           {
+            "key": "citation.rule.chip",
+            "text": "Il chip di un documento deve contenere ciò che stampa."
+          },
+          {
+            "key": "citation.rule.uv",
+            "text": "Nessun documento può essere lavato e ristampato."
+          },
+          {
             "key": "citation.rule.origin",
             "text": "Gli sfollati tornano solo al proprio tempo: documenti e risposte devono corrispondere alla loro origine."
           },
@@ -47672,6 +48106,14 @@
           {
             "key": "citation.label.registry",
             "text": "Registro degli sfollati"
+          },
+          {
+            "key": "citation.label.chip",
+            "text": "Il suo chip"
+          },
+          {
+            "key": "citation.label.ghost",
+            "text": "Sotto la luce UV"
           },
           {
             "key": "citation.label.standing",
@@ -52894,6 +53336,74 @@
           {
             "native": "l'errore",
             "english": "the error"
+          },
+          {
+            "native": "macchina",
+            "english": "machine"
+          },
+          {
+            "native": "contenere",
+            "english": "hold"
+          },
+          {
+            "native": "ciò",
+            "english": "what"
+          },
+          {
+            "native": "essere",
+            "english": "be"
+          },
+          {
+            "native": "lavato",
+            "english": "washed"
+          },
+          {
+            "native": "ristampato",
+            "english": "printed over"
+          },
+          {
+            "native": "letto",
+            "english": "read"
+          },
+          {
+            "native": "posa",
+            "english": "lay"
+          },
+          {
+            "native": "lettore",
+            "english": "reader"
+          },
+          {
+            "native": "torcia",
+            "english": "torch"
+          },
+          {
+            "native": "novità",
+            "english": "new"
+          },
+          {
+            "native": "premila",
+            "english": "press it"
+          },
+          {
+            "native": "trascinala",
+            "english": "drag it"
+          },
+          {
+            "native": "lasciala",
+            "english": "let it go"
+          },
+          {
+            "native": "posaci",
+            "english": "lay on it"
+          },
+          {
+            "native": "pronto",
+            "english": "ready"
+          },
+          {
+            "native": "ok",
+            "english": "OK"
           }
         ]
       },
@@ -54690,6 +55200,10 @@
             "text": "Nicht die Person"
           },
           {
+            "key": "report.proof.hiddenMismatch",
+            "text": "Maschinenablesung"
+          },
+          {
             "key": "form.interview.head",
             "text": "{0} · Schalterbeamter: {1} · {2}"
           },
@@ -54990,6 +55504,10 @@
             "text": "Unter UV-Licht zeigt sich nichts."
           },
           {
+            "key": "layers.uv.unseen",
+            "text": "Noch nichts gesehen: halte die UV-Lampe über das Papier."
+          },
+          {
             "key": "layers.uv.wholePaper",
             "text": "das ganze Papier"
           },
@@ -55006,12 +55524,20 @@
             "text": "Mikrodruck ({0}): {1}"
           },
           {
+            "key": "layers.uv.MicroprintMissing",
+            "text": "Mikrodruck ({0}): keiner"
+          },
+          {
             "key": "layers.chip.title",
             "text": "CHIPDATEN"
           },
           {
             "key": "layers.chip.none",
             "text": "Dieses Papier trägt keinen Chip."
+          },
+          {
+            "key": "layers.chip.unread",
+            "text": "Noch nicht gelesen: leg das Papier auf das Chiplesegerät."
           },
           {
             "key": "records.row.number",
@@ -55202,6 +55728,14 @@
             "text": "Zieh ein Papier auf den Scanner, um es am PC zu öffnen."
           },
           {
+            "key": "desk.uvHint",
+            "text": "NEU: die UV-Lampe. Drück sie, zieh sie über ein Papier, lass los."
+          },
+          {
+            "key": "desk.chipHint",
+            "text": "NEU: das Chiplesegerät. Leg einen Pass oder eine Karte darauf."
+          },
+          {
             "key": "desk.wheelHint",
             "text": "Klicke den Reisenden, um zu sprechen und Papiere zu verlangen."
           },
@@ -55248,6 +55782,26 @@
           {
             "key": "hardware.detain",
             "text": "FESTNEHMEN"
+          },
+          {
+            "key": "machine.chip.ready",
+            "text": "BEREIT"
+          },
+          {
+            "key": "machine.chip.reading",
+            "text": "LESE"
+          },
+          {
+            "key": "machine.chip.ok",
+            "text": "CHIP OK"
+          },
+          {
+            "key": "machine.chip.none",
+            "text": "KEIN CHIP"
+          },
+          {
+            "key": "machine.chip.mismatch",
+            "text": "ABWEICHUNG"
           },
           {
             "key": "stamp.dater.by",
@@ -55446,6 +56000,10 @@
             "text": "{0} FALSCH — das Foto in den Papieren ist nicht der Reisende am Schreibtisch"
           },
           {
+            "key": "deviation.hiddenMismatch.papers",
+            "text": "{0} FALSCH — Papiere: „{1}“  /  die Maschine liest: „{2}“"
+          },
+          {
             "key": "category.Language",
             "text": "SPRACHE"
           },
@@ -55542,6 +56100,14 @@
             "text": "Jedes Papier muss zum Bürgerkonto passen."
           },
           {
+            "key": "citation.rule.chip",
+            "text": "Der Chip eines Papiers muss enthalten, was es druckt."
+          },
+          {
+            "key": "citation.rule.uv",
+            "text": "Kein Papier darf gewaschen und überdruckt werden."
+          },
+          {
             "key": "citation.rule.origin",
             "text": "Vertriebene kehren nur in ihre eigene Zeit zurück: Ihre Papiere und Antworten müssen zu ihrer Herkunft passen."
           },
@@ -55608,6 +56174,14 @@
           {
             "key": "citation.label.registry",
             "text": "Vertriebenenregister"
+          },
+          {
+            "key": "citation.label.chip",
+            "text": "Sein Chip"
+          },
+          {
+            "key": "citation.label.ghost",
+            "text": "Unter UV-Licht"
           },
           {
             "key": "citation.label.standing",
@@ -61078,6 +61652,66 @@
           {
             "native": "Erst",
             "english": "First"
+          },
+          {
+            "native": "maschine",
+            "english": "machine"
+          },
+          {
+            "native": "liest",
+            "english": "reads"
+          },
+          {
+            "native": "maschinenablesung",
+            "english": "machine reading"
+          },
+          {
+            "native": "enthalten",
+            "english": "hold"
+          },
+          {
+            "native": "druckt",
+            "english": "prints"
+          },
+          {
+            "native": "gewaschen",
+            "english": "washed"
+          },
+          {
+            "native": "überdruckt",
+            "english": "printed over"
+          },
+          {
+            "native": "gelesen",
+            "english": "read"
+          },
+          {
+            "native": "chiplesegerät",
+            "english": "chip reader"
+          },
+          {
+            "native": "lampe",
+            "english": "torch"
+          },
+          {
+            "native": "keiner",
+            "english": "none"
+          },
+          {
+            "native": "darauf",
+            "english": "on it"
+          },
+          {
+            "native": "bereit",
+            "english": "ready"
+          },
+          {
+            "native": "lese",
+            "english": "reading"
+          },
+          {
+            "native": "ok",
+            "english": "OK"
           }
         ]
       },
@@ -62874,6 +63508,10 @@
             "text": "并非本人"
           },
           {
+            "key": "report.proof.hiddenMismatch",
+            "text": "机器读数"
+          },
+          {
             "key": "form.interview.head",
             "text": "{0} · 柜台职员：{1} · {2}"
           },
@@ -63174,6 +63812,10 @@
             "text": "紫外线下无任何显示。"
           },
           {
+            "key": "layers.uv.unseen",
+            "text": "尚未看到：请用紫外线手电照过证件。"
+          },
+          {
             "key": "layers.uv.wholePaper",
             "text": "整张证件"
           },
@@ -63190,12 +63832,20 @@
             "text": "微缩印刷（{0}）：{1}"
           },
           {
+            "key": "layers.uv.MicroprintMissing",
+            "text": "微缩印刷（{0}）：无"
+          },
+          {
             "key": "layers.chip.title",
             "text": "芯片记录"
           },
           {
             "key": "layers.chip.none",
             "text": "此证件没有芯片。"
+          },
+          {
+            "key": "layers.chip.unread",
+            "text": "尚未读取：请将证件放在芯片读取器上。"
           },
           {
             "key": "records.row.number",
@@ -63386,6 +64036,14 @@
             "text": "将证件拖到扫描仪上，即可在电脑上打开。"
           },
           {
+            "key": "desk.uvHint",
+            "text": "新：紫外线手电。按住它，拖过证件，再松开。"
+          },
+          {
+            "key": "desk.chipHint",
+            "text": "新：芯片读取器。把护照或卡片放上去。"
+          },
+          {
             "key": "desk.wheelHint",
             "text": "点击旅客进行交谈并索要证件。"
           },
@@ -63432,6 +64090,26 @@
           {
             "key": "hardware.detain",
             "text": "拘留"
+          },
+          {
+            "key": "machine.chip.ready",
+            "text": "就绪"
+          },
+          {
+            "key": "machine.chip.reading",
+            "text": "读取中"
+          },
+          {
+            "key": "machine.chip.ok",
+            "text": "芯片正常"
+          },
+          {
+            "key": "machine.chip.none",
+            "text": "无芯片"
+          },
+          {
+            "key": "machine.chip.mismatch",
+            "text": "不一致"
           },
           {
             "key": "stamp.dater.by",
@@ -63630,6 +64308,10 @@
             "text": "{0}有误 — 证件上的照片不是桌前的旅客"
           },
           {
+            "key": "deviation.hiddenMismatch.papers",
+            "text": "{0}有误 — 证件：“{1}”  /  机器读出：“{2}”"
+          },
+          {
             "key": "category.Language",
             "text": "语言"
           },
@@ -63726,6 +64408,14 @@
             "text": "所有证件必须与公民账户一致。"
           },
           {
+            "key": "citation.rule.chip",
+            "text": "证件芯片必须与其印刷内容一致。"
+          },
+          {
+            "key": "citation.rule.uv",
+            "text": "任何证件不得洗去后重新印刷。"
+          },
+          {
             "key": "citation.rule.origin",
             "text": "流离者只能返回自己的时代：其证件与回答必须与原籍一致。"
           },
@@ -63792,6 +64482,14 @@
           {
             "key": "citation.label.registry",
             "text": "流离者登记处"
+          },
+          {
+            "key": "citation.label.chip",
+            "text": "其芯片"
+          },
+          {
+            "key": "citation.label.ghost",
+            "text": "紫外线下"
           },
           {
             "key": "citation.label.standing",
@@ -68586,6 +69284,78 @@
           {
             "native": "开",
             "english": "on"
+          },
+          {
+            "native": "机器",
+            "english": "machine"
+          },
+          {
+            "native": "读出",
+            "english": "reads"
+          },
+          {
+            "native": "读数",
+            "english": "reading"
+          },
+          {
+            "native": "洗去",
+            "english": "wash off"
+          },
+          {
+            "native": "重新",
+            "english": "again"
+          },
+          {
+            "native": "读取",
+            "english": "read"
+          },
+          {
+            "native": "放在",
+            "english": "place on"
+          },
+          {
+            "native": "读取器",
+            "english": "reader"
+          },
+          {
+            "native": "看到",
+            "english": "seen"
+          },
+          {
+            "native": "手电",
+            "english": "torch"
+          },
+          {
+            "native": "照过",
+            "english": "shine over"
+          },
+          {
+            "native": "按住",
+            "english": "press"
+          },
+          {
+            "native": "拖过",
+            "english": "drag over"
+          },
+          {
+            "native": "把",
+            "english": "(object marker)"
+          },
+          {
+            "native": "放上去",
+            "english": "put on it"
+          },
+          {
+            "native": "就绪",
+            "english": "ready"
+          },
+          {
+            "native": "读取中",
+            "english": "reading"
+          },
+          {
+            "native": "正常",
+            "english": "OK"
           }
         ]
       },
@@ -70382,6 +71152,10 @@
             "text": "本人ではない"
           },
           {
+            "key": "report.proof.hiddenMismatch",
+            "text": "機械の読み取り"
+          },
+          {
             "key": "form.interview.head",
             "text": "{0} · デスク職員: {1} · {2}"
           },
@@ -70682,6 +71456,10 @@
             "text": "UVライトでは何も見えません。"
           },
           {
+            "key": "layers.uv.unseen",
+            "text": "まだ何も見えません: UVライトを書類にかざしてください。"
+          },
+          {
             "key": "layers.uv.wholePaper",
             "text": "書類全体"
           },
@@ -70698,12 +71476,20 @@
             "text": "マイクロ印刷 ({0}): {1}"
           },
           {
+            "key": "layers.uv.MicroprintMissing",
+            "text": "マイクロ印刷 ({0}): なし"
+          },
+          {
             "key": "layers.chip.title",
             "text": "チップ記録"
           },
           {
             "key": "layers.chip.none",
             "text": "この書類にチップはありません。"
+          },
+          {
+            "key": "layers.chip.unread",
+            "text": "未読取: 書類をチップリーダーに置いてください。"
           },
           {
             "key": "records.row.number",
@@ -70894,6 +71680,14 @@
             "text": "書類をスキャナーにドラッグするとPCで開きます。"
           },
           {
+            "key": "desk.uvHint",
+            "text": "新登場: UVライト。押して、書類の上をなぞり、離してください。"
+          },
+          {
+            "key": "desk.chipHint",
+            "text": "新登場: チップリーダー。パスポートかカードを置いてください。"
+          },
+          {
             "key": "desk.wheelHint",
             "text": "渡航者をクリックして話し、書類を求める。"
           },
@@ -70940,6 +71734,26 @@
           {
             "key": "hardware.detain",
             "text": "拘留"
+          },
+          {
+            "key": "machine.chip.ready",
+            "text": "準備完了"
+          },
+          {
+            "key": "machine.chip.reading",
+            "text": "読取中"
+          },
+          {
+            "key": "machine.chip.ok",
+            "text": "チップ正常"
+          },
+          {
+            "key": "machine.chip.none",
+            "text": "チップなし"
+          },
+          {
+            "key": "machine.chip.mismatch",
+            "text": "不一致"
           },
           {
             "key": "stamp.dater.by",
@@ -71138,6 +71952,10 @@
             "text": "{0} 不正 — 書類の写真はデスクの渡航者ではない"
           },
           {
+            "key": "deviation.hiddenMismatch.papers",
+            "text": "{0} 不正 — 書類: 「{1}」  /  機械の読み取り: 「{2}」"
+          },
+          {
             "key": "category.Language",
             "text": "言語"
           },
@@ -71234,6 +72052,14 @@
             "text": "全書類は市民口座と一致すること。"
           },
           {
+            "key": "citation.rule.chip",
+            "text": "書類のチップは印字と一致すること。"
+          },
+          {
+            "key": "citation.rule.uv",
+            "text": "書類を洗浄して上から印字してはならない。"
+          },
+          {
             "key": "citation.rule.origin",
             "text": "漂流者は自分の時代にのみ帰還する: 書類と回答は出身と一致すること。"
           },
@@ -71300,6 +72126,14 @@
           {
             "key": "citation.label.registry",
             "text": "漂流者登録簿"
+          },
+          {
+            "key": "citation.label.chip",
+            "text": "そのチップ"
+          },
+          {
+            "key": "citation.label.ghost",
+            "text": "UVライトの下"
           },
           {
             "key": "citation.label.standing",
@@ -76142,6 +76976,82 @@
           {
             "native": "オン",
             "english": "on"
+          },
+          {
+            "native": "機械",
+            "english": "machine"
+          },
+          {
+            "native": "読み取り",
+            "english": "reading"
+          },
+          {
+            "native": "印字",
+            "english": "print"
+          },
+          {
+            "native": "すること",
+            "english": "must"
+          },
+          {
+            "native": "洗浄",
+            "english": "wash"
+          },
+          {
+            "native": "上から",
+            "english": "over"
+          },
+          {
+            "native": "してはならない",
+            "english": "must not"
+          },
+          {
+            "native": "未読取",
+            "english": "not read yet"
+          },
+          {
+            "native": "チップリーダー",
+            "english": "chip reader"
+          },
+          {
+            "native": "置いてください",
+            "english": "please place"
+          },
+          {
+            "native": "かざしてください",
+            "english": "please hold over"
+          },
+          {
+            "native": "マイクロ",
+            "english": "micro"
+          },
+          {
+            "native": "新登場",
+            "english": "new"
+          },
+          {
+            "native": "なぞり",
+            "english": "trace"
+          },
+          {
+            "native": "離してください",
+            "english": "please let go"
+          },
+          {
+            "native": "準備完了",
+            "english": "ready"
+          },
+          {
+            "native": "読取中",
+            "english": "reading"
+          },
+          {
+            "native": "正常",
+            "english": "OK"
+          },
+          {
+            "native": "不一致",
+            "english": "mismatch"
           }
         ]
       }

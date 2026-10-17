@@ -22,7 +22,10 @@ public enum EvidenceKind
     Appearance,
 
     /// <summary>The traveller at the desk as seen (the Look menu's face; the document design spec, D8): the truth a paper's photo is held against.</summary>
-    Person
+    Person,
+
+    /// <summary>What a desk machine reads on one of the traveller's papers (the desk machines spec §1): a line of its chip (the chip reader) or a mark under UV (the torch): the truth that paper's own print is held against.</summary>
+    Hidden
 }
 
 /// <summary>How a discrepancy was proved.</summary>
@@ -45,7 +48,10 @@ public enum DiscrepancyProof
     CrossMismatch,
 
     /// <summary>A paper's photo shows someone other than the traveller at the desk (the document design spec, D8): a statement against the person.</summary>
-    PersonMismatch
+    PersonMismatch,
+
+    /// <summary>A paper's print differs from what a desk machine reads on that same paper (the desk machines spec §1-3): its chip holds another value, or under UV a ghost or a missing microprint shows.</summary>
+    HiddenMismatch
 }
 
 /// <summary>
@@ -124,6 +130,16 @@ public struct CompareEvidence
         kind = EvidenceKind.Person,
         category = ClueCategory.Photo,
         value = identity
+    };
+
+    /// <summary>Evidence for what a desk machine reads on paper <paramref name="document"/> (the desk machines spec §1): a chip line or a UV mark of <paramref name="category"/> reading <paramref name="value"/>, a fault when the machine marks one (<paramref name="fault"/>: a chip line that differs from the print, a ghost, a missing microprint).</summary>
+    public static CompareEvidence ForHidden(ClueCategory category, string value, int document, bool fault) => new CompareEvidence
+    {
+        kind = EvidenceKind.Hidden,
+        category = category,
+        value = value ?? string.Empty,
+        isAnachronism = fault,
+        document = document
     };
 
     /// <summary>Evidence for a clicked field of <paramref name="owner"/>'s citizen record.</summary>
@@ -211,12 +227,13 @@ public sealed class Discrepancy
     /// </summary>
     public static string ReportKeyFor(DiscrepancyProof proof, EvidenceKind statement)
     {
-        string how = proof == DiscrepancyProof.ForeignOrigin ? "foreignOrigin"
+        string how = proof == DiscrepancyProof.HiddenMismatch ? "hiddenMismatch"
+                   : proof == DiscrepancyProof.ForeignOrigin ? "foreignOrigin"
                    : proof == DiscrepancyProof.RecordMismatch ? "recordMismatch"
                    : proof == DiscrepancyProof.CrossMismatch ? "crossMismatch"
                    : proof == DiscrepancyProof.PersonMismatch ? "personMismatch"
                    : "claimMismatch";
-        string who = proof == DiscrepancyProof.CrossMismatch || proof == DiscrepancyProof.PersonMismatch ? "papers"
+        string who = proof == DiscrepancyProof.CrossMismatch || proof == DiscrepancyProof.PersonMismatch || proof == DiscrepancyProof.HiddenMismatch ? "papers"
                    : statement == EvidenceKind.Answer ? "said" : statement == EvidenceKind.Appearance ? "worn" : "papers";
         return "deviation." + how + "." + who;
     }
@@ -279,6 +296,8 @@ public sealed class DiscrepancyLog
     /// </summary>
     public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId, string travellerName)
     {
+        if (a.kind == EvidenceKind.Hidden || b.kind == EvidenceKind.Hidden)
+            return HiddenProof(a, b);
         if (a.category == ClueCategory.Seal || b.category == ClueCategory.Seal)
             return SealProof(a, b);
         if (a.category == ClueCategory.Photo || b.category == ClueCategory.Photo)
@@ -431,6 +450,32 @@ public sealed class DiscrepancyLog
             provedBy = DiscrepancyProof.PersonMismatch,
             source = EvidenceKind.DocumentField,
             statementDocument = PaperOf(statement)
+        };
+    }
+
+    /// <summary>
+    /// Hidden proof (the desk machines spec §1-3): a paper's printed box
+    /// against what a desk machine reads on that same paper and box category
+    /// (its chip's line, or a mark under UV), when the machine marks a fault
+    /// there and the two differ. The print need not be a tell: a hidden lie's
+    /// print is true to the eye. Anything else (another paper, another
+    /// category, an honest chip line, two machine readings) proves nothing.
+    /// </summary>
+    private static Discrepancy HiddenProof(CompareEvidence a, CompareEvidence b)
+    {
+        CompareEvidence statement = a.kind == EvidenceKind.DocumentField ? a : b;
+        CompareEvidence hidden = a.kind == EvidenceKind.Hidden ? a : b;
+        if (statement.kind != EvidenceKind.DocumentField || hidden.kind != EvidenceKind.Hidden || statement.category != hidden.category
+            || statement.document < 0 || statement.document != hidden.document || !hidden.isAnachronism || Values.Match(statement.value, hidden.value))
+            return null;
+        return new Discrepancy
+        {
+            category = statement.category,
+            documentValue = statement.value,
+            expectedValue = hidden.value,
+            provedBy = DiscrepancyProof.HiddenMismatch,
+            source = EvidenceKind.DocumentField,
+            statementDocument = statement.document
         };
     }
 

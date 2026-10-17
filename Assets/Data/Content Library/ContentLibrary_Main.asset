@@ -13578,6 +13578,74 @@ MonoBehaviour:
         then:
           id: 
           text: 
+      - personality: chatty
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: WashedPaper
+        outcome: 0
+        line:
+          id: interview.voices.slips.chatty.3
+          text: The ink's a bit fresh, I know. I write everything twice. Habit.
+        then:
+          id: 
+          text: 
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: ClonedChip
+        outcome: 0
+        line:
+          id: interview.voices.slips.stickler.3
+          text: The chip? I've never had it read. I didn't know you could read it.
+        then:
+          id: 
+          text: 
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: WashedPaper
+        outcome: 0
+        line:
+          id: interview.voices.slips.anxious.3
+          text: Why are you holding it up to the light? It's paper. It's just paper.
+        then:
+          id: 
+          text: 
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: ClonedChip
+        outcome: 0
+        line:
+          id: interview.voices.slips.curt.3
+          text: Don't put that in the machine. It's fine. It's a passport.
+        then:
+          id: 
+          text: 
       - personality: 
         premade: socrates
         kinds: 
@@ -17737,6 +17805,61 @@ MonoBehaviour:
       optional: 0
       against: "Today's rules \xB7 recalls"
       note: The ticket books a recalled model.
+    - id: clonedPassportChip
+      form: TC-101
+      field: CitizenId
+      lie: ClonedChip
+      directive: 
+      variant: cloned
+      optional: 0
+      against: "the chip reader \xB7 the chip's Citizen ID"
+      note: 'The passport''s chip was copied from another citizen''s: every printed
+        value is true, but the chip reads another Citizen ID.'
+    - id: clonedCardChip
+      form: TC-240
+      field: CitizenId
+      lie: ClonedChip
+      directive: 
+      variant: cloned
+      optional: 0
+      against: "the chip reader \xB7 the chip's Citizen ID"
+      note: 'The Transponder Card''s chip was copied from another citizen''s card:
+        the chip reads another Citizen ID than the print.'
+    - id: washedPassport
+      form: TC-101
+      field: Name
+      lie: WashedPaper
+      directive: 
+      variant: washed
+      optional: 0
+      against: "the UV torch \xB7 the ghost under the name"
+      note: 'Someone else''s passport, washed and printed over with the traveller''s
+        own true details: under UV the first holder''s name ghosts beneath theirs.'
+    - id: washedWaiver
+      form: TC-310
+      field: Name
+      lie: WashedPaper
+      directive: 
+      variant: washed
+      optional: 0
+      against: "the UV torch \xB7 the ghost under the name"
+      note: 'Someone else''s Stranding Waiver, washed and printed over: under UV
+        the first holder''s name ghosts beneath the traveller''s.'
+    - id: washedPermit
+      form: TC-520
+      field: Name
+      lie: WashedPaper
+      directive: 
+      variant: washed
+      optional: 0
+      against: "the UV torch \xB7 the ghost under the name"
+      note: 'Someone else''s Work Permit, washed and printed over: under UV the first
+        holder''s name ghosts beneath the traveller''s.'
+    hidden:
+      chipForms:
+      - TC-101
+      - TC-240
+      ghostChance: 0.5
   home:
     radioUpgrade: house_radio
     radio:

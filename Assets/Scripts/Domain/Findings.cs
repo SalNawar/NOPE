@@ -244,8 +244,8 @@ public static class FindingRules
     /// <summary>The ui string key of the line's label ("finding.link.Match").</summary>
     public static string LinkKey(FindingKind kind) => "finding.link." + kind;
 
-    /// <summary>A truth source: a reference book's row or a record's row.</summary>
-    private static bool IsTruth(EvidenceKind kind) => kind == EvidenceKind.ReferenceEntry || kind == EvidenceKind.RecordField;
+    /// <summary>A truth source: a reference book's row, a record's row, or what a desk machine reads (a chip line, a UV mark).</summary>
+    private static bool IsTruth(EvidenceKind kind) => kind == EvidenceKind.ReferenceEntry || kind == EvidenceKind.RecordField || kind == EvidenceKind.Hidden;
 }
 
 /// <summary>

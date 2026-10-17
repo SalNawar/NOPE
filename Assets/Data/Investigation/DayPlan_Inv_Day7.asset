@@ -27,6 +27,7 @@ MonoBehaviour:
   introduces:
   - field:Signature
   - field:WaiverNo
+  - tool:uv_torch
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2

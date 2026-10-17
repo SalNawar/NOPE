@@ -25,7 +25,8 @@ MonoBehaviour:
   - TC-240
   - TC-310
   - TC-520
-  introduces: []
+  introduces:
+  - tool:chip_reader
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -72,7 +73,7 @@ MonoBehaviour:
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 01000000020000000500000006000000070000000a00000009000000
+  lieKinds: 01000000020000000500000006000000070000000a000000090000000c000000
   violationChance: 0.06
   activeTravelRules:
   - {fileID: 11400000, guid: f0aa0a6c420abad4096715c64fd46f53, type: 2}

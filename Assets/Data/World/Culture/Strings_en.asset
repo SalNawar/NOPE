@@ -1947,6 +1947,10 @@ MonoBehaviour:
     text: Not the person
     gloss: 0
     tier: 1
+  - key: report.proof.hiddenMismatch
+    text: Machine reading
+    gloss: 0
+    tier: 1
   - key: form.report.caseLine
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -2279,6 +2283,10 @@ MonoBehaviour:
     text: Nothing shows under UV light.
     gloss: 0
     tier: 1
+  - key: layers.uv.unseen
+    text: 'Nothing seen yet: hold the UV torch over the paper.'
+    gloss: 0
+    tier: 1
   - key: layers.uv.wholePaper
     text: the whole paper
     gloss: 0
@@ -2295,12 +2303,20 @@ MonoBehaviour:
     text: 'Microprint ({0}): {1}'
     gloss: 0
     tier: 1
+  - key: layers.uv.MicroprintMissing
+    text: 'Microprint ({0}): none'
+    gloss: 0
+    tier: 1
   - key: layers.chip.title
     text: CHIP RECORD
     gloss: 0
     tier: 1
   - key: layers.chip.none
     text: This paper carries no chip.
+    gloss: 0
+    tier: 1
+  - key: layers.chip.unread
+    text: 'Not read yet: lay the paper on the chip reader.'
     gloss: 0
     tier: 1
   - key: layers.chip.line
@@ -2517,6 +2533,14 @@ MonoBehaviour:
     text: Drag a paper onto the scanner to open it on the PC.
     gloss: 0
     tier: 1
+  - key: desk.uvHint
+    text: 'NEW: the UV torch. Press it, drag it over a paper, let go.'
+    gloss: 0
+    tier: 1
+  - key: desk.chipHint
+    text: 'NEW: the chip reader. Drop a passport or a card on it.'
+    gloss: 0
+    tier: 1
   - key: desk.wheelHint
     text: Click the traveller to talk and ask for papers.
     gloss: 0
@@ -2565,6 +2589,30 @@ MonoBehaviour:
     text: DETAIN
     gloss: 0
     tier: 1
+  - key: machine.chip.ready
+    text: READY
+    gloss: 0
+    tier: 1
+  - key: machine.chip.reading
+    text: READING
+    gloss: 0
+    tier: 1
+  - key: machine.chip.ok
+    text: CHIP OK
+    gloss: 0
+    tier: 1
+  - key: machine.chip.none
+    text: NO CHIP
+    gloss: 0
+    tier: 1
+  - key: machine.chip.mismatch
+    text: MISMATCH
+    gloss: 0
+    tier: 1
+  - key: machine.chip.line
+    text: '{0} {1}'
+    gloss: 0
+    tier: 0
   - key: stamp.dater.by
     text: 'BY: {0}'
     gloss: 0
@@ -2783,6 +2831,10 @@ MonoBehaviour:
       desk"
     gloss: 0
     tier: 1
+  - key: deviation.hiddenMismatch.papers
+    text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  the machine reads: \"{2}\""
+    gloss: 0
+    tier: 1
   - key: category.Language
     text: LANGUAGE
     gloss: 0
@@ -2887,6 +2939,14 @@ MonoBehaviour:
     text: Every paper must match the Citizen Account.
     gloss: 0
     tier: 1
+  - key: citation.rule.chip
+    text: A paper's chip must hold what it prints.
+    gloss: 0
+    tier: 1
+  - key: citation.rule.uv
+    text: No paper may be washed and printed over.
+    gloss: 0
+    tier: 1
   - key: citation.rule.origin
     text: 'The displaced return only to their own time: their papers and answers
       must match their origin.'
@@ -2954,6 +3014,14 @@ MonoBehaviour:
     tier: 1
   - key: citation.label.registry
     text: Displacement Registry
+    gloss: 0
+    tier: 1
+  - key: citation.label.chip
+    text: Its chip
+    gloss: 0
+    tier: 1
+  - key: citation.label.ghost
+    text: Under UV light
     gloss: 0
     tier: 1
   - key: citation.label.standing
