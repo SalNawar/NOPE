@@ -145,3 +145,16 @@ Every object moves on Track J's springs. Reduced Motion turns the springs into s
 2. **Thumbprint pad.** A glass pad that slides out through the counter hatch. The traveller presses a thumb, and a print comes back to compare with the record. It catches false identity, a crime under `Law.Breaks`.
 3. **Booth camera.** A Polaroid-style camera on an arm. It snaps the traveller and prints a photo to lay next to the passport photo: a physical overlay compare.
 4. **Luggage scale and X-ray belt.** A declared weight against the measured one, for contraband, as in Papers, Please.
+
+## 6. Art (made, step 2)
+- **Models.** `tools/props/machines/chip_reader_model.py` and `uv_torch_model.py`, run with Blender 5.2 in background mode, using the shared `machine_kit.py`.
+- **Textures.** `machine_textures.py` paints them procedurally with Pillow: the kit palette, BigShoulders, and a katakana line.
+  - **Canva was not used.** Getting a Canva design into the repo means downloading an export, and that needs Saleh's say-so.
+- **Output.** `Assets/Art/Office/Gameplay/Machines/`: `ChipReader.fbx`, `UvTorch.fbx` and their PNGs.
+- **Both models are low-poly and UV-mapped:**
+  - the chip reader is about 4.4k triangles, 0.23 by 0.23 m and 0.074 m tall;
+  - the torch is 0.21 m long, and with its cradle about 3.7k triangles.
+- **The prop contracts (object names) are in each script's header.** Unity's front is local -Z.
+  - **Chip reader:** `Body`, `Pad`, `SlotFlap`, `Readout`, `LED_Power`, `LED_Read`, `LED_Fault`, `Keys`, `Badge`, `SlotLabel`, `Cable`, and the empties `CardSlot` and `PadCentre`.
+  - **Torch:** the `UvTorch` root, at the grip, with the children `Switch` (10 mm of travel), `Lens` (where the cone starts), `Label` and `BeamFX`.
+  - **Cradle:** `Cradle`, with its child `CradleLabel`.
