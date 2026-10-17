@@ -18,7 +18,11 @@
         { "type": "pale", "center": [0.44, 0.925], "radius": [0.065, 0.045], "angle": 0 },
         { "type": "pale", "center": [0.59, 0.905], "radius": [0.08, 0.045], "angle": 0 },
         { "type": "inner", "center": [0.29, 0.095], "radius": [0.022, 0.05], "angle": -18 },
-        { "type": "pale", "center": [0.72, 0.94], "radius": [0.06, 0.04], "angle": 0 }
+        { "type": "pale", "center": [0.72, 0.94], "radius": [0.06, 0.04], "angle": 0, "part": "tail" }
+      ],
+      "frames": [
+        { "frame": "tail_up", "marks": [ { "type": "pale", "center": [0.83, 0.555], "radius": [0.055, 0.05], "angle": 0, "part": "tail" } ] },
+        { "frame": "tail_low", "marks": [ { "type": "pale", "center": [0.635, 0.945], "radius": [0.055, 0.035], "angle": 0, "part": "tail" } ] }
       ]
     },
     {
