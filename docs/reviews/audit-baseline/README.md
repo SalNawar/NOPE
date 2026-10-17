@@ -442,6 +442,31 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     (NativeFormatImporter) generated inconsistent result" for the worktree's locally rewritten TMP
     `LiberationSans SDF - Fallback.asset`, which no commit touches.
   - Profiles not re-taken (round 6's kept).
+- **Round 11, the desk machines of 2026-10-17** (`feat/desk-machines`: main `603b928` with the chip reader, the UV torch, the
+  hidden lies and the upgrades' desk objects). Re-packed from run A (static and play, taken before the merge of `603b928`);
+  run B (static and play, after it) is byte-equal to run A in every deterministic file, so the pets' frame animation changes no
+  golden line. Each play report passes 6,480 checks and fails none. The audit play now proves a hidden lie as the clerk does:
+  the machine reads the paper (the chip reader reads its chip, the UV torch's cone shows the ghost) and its reading is logged
+  against the box at the desk (`DeskHardware.Pick`, "proven by its machine's reading", 6 proofs: `COVER proof
+  HiddenMismatch`); the case lines print `hiddenTells=[...]`. Against round 10 the verdicts stay right, and every save, pay,
+  fine, stability, order, House purchase and the day-15 ending are byte-identical; every difference has one of these causes:
+  - The machines' days (`days[].introduces`, bulletins, GUIDE pages): day 7's memo names the UV torch, and from day 7 the
+    GUIDE sheets list `uvtorch` (from day 11 `chipreader`) (11 transcript lines differ).
+  - The hidden lies join the days' lie lists (`WashedPaper` days 8-15, `ClonedChip` days 12-15), so the lie draw has more
+    kinds: 16 of seed 12345's travellers on days 8-15 roll another lie (6 of them a hidden one: 2 washed papers, 4 cloned
+    chips) and are caught and denied as before (the rest of the 243 diff lines, both sides: their papers, the board's cross-checks,
+    the confrontations and the evidence). `cases.txt`: every traveller line gains the `hiddenTells` field (95 cases carry a
+    hidden tell); without it, 246 traveller lines on days 8-15 across the 20 seeds roll another lie; days 1-7 and every world
+    line are unchanged.
+  - `data_hashes.txt` (22 files): the library, the day plans of days 7-15, the seven string tables (the machines' strings and
+    lens words) and the JSON; and main's toys at Home (`08038d2`: the four toy upgrades), which main merged without a re-pack.
+  - `scene_OfficeGameplay`, `scenes_summary.txt`: the desk machines (DeskHardware: the chip reader, the UV torch, their notes)
+    and the upgrades' objects (DeskUpgrades; the Auto-Feed tray and the Analysis beacon on the scanner): 824 added lines; the
+    rest is main's documents and desk work since round 10, merged without a re-pack (the rulebook's model, the paper
+    template's depth, the stamp drawer and its tab). Each rebuild equals the committed scene.
+  - `play_warnings.txt` is kept empty as before: both runs logged the one environment warning about the worktree's locally
+    rewritten TMP `LiberationSans SDF - Fallback.asset` (`--allow play_warnings.txt`).
+  - Profiles not re-taken (round 6's kept).
 
 ## Baseline results (ff3a6e0)
 
