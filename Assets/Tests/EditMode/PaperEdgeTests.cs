@@ -75,6 +75,14 @@ public class PaperEdgeTests
         Assert.Greater(lean.x, 0f, "out to the right");
         Assert.Less(lean.y, 0f, "and toward the camera (down the face)");
         PaperEdge.Walls(square, bands, vertices, tones, triangles, lean);
+        Assert.AreEqual(2 * 4 * bands.Count, vertices.Count, "walls only on the two sides it leans toward (the bottom and the right)");
+        foreach ((float x, float y, float z) v in vertices)
+            Assert.IsTrue(v.x - lean.x * v.z > 0.5f - 1e-5f || v.y - lean.y * v.z < -0.5f + 1e-5f, "on the right side or the bottom");
+        var reversed = new List<(float x, float y)>(square);
+        reversed.Reverse();
+        PaperEdge.Walls(reversed, bands, vertices, tones, triangles, lean);
+        Assert.AreEqual(2 * 4 * bands.Count, vertices.Count, "whichever way the outline turns");
+        PaperEdge.Walls(square, bands, vertices, tones, triangles, lean);
         foreach ((float x, float y, float z) v in vertices)
         {
             float flatX = v.x - lean.x * v.z, flatY = v.y - lean.y * v.z;

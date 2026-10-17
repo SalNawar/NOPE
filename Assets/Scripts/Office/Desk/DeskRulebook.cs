@@ -312,7 +312,7 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The folder's spine on its card (the art's gutter between its halves: its centre x and half width, card shares from the centre).</summary>
     private const float SpineX = 0.005f, SpineHalf = 0.038f;
 
-    /// <summary>The sheets lying in the folder (card shares from the centre: x0, y0, x1, y1, measured on the art): the right one the pages print on (its right side under the pocket's flap below FlapTop), the left one its cover sheet; how many page edges each shows and how far each next one lies out (metres).</summary>
+    /// <summary>The sheets lying in the folder (card shares from the centre: x0, y0, x1, y1, measured on the art): the right one the pages print on (its right side under the pocket's flap below FlapTop), the left one its cover sheet (its pages show only below it: beside it they would line the spine); how many page edges each shows and how far each next one lies out (metres).</summary>
     private static readonly (float x0, float y0, float x1, float y1) RightSheet = (0.045f, -0.468f, 0.422f, 0.36f), LeftSheet = (-0.395f, -0.455f, -0.03f, 0.4f);
 
     /// <inheritdoc cref="RightSheet"/>
@@ -386,7 +386,7 @@ public sealed class DeskRulebook : MonoBehaviour
             (SpineX + 0.2f, Shade.WithAlpha(HalfShade)),
             (right, Shade.WithAlpha(0f)),
         }, true, bottom, top, -ShadeLift);
-        shade.Append(PaperDepth.PageBlock(LeftSheet, LeftPages, PageStep, size.x, size.y, -ShadeLift, PageLight, PageDark, PageInk));
+        shade.Append(PaperDepth.PageBlock(LeftSheet, LeftPages, PageStep, size.x, size.y, -ShadeLift, PageLight, PageDark, PageInk, LeftSheet.y1));
         shade.Append(PaperDepth.PageBlock(RightSheet, RightPages, PageStep, size.x, size.y, -ShadeLift, PageLight, PageDark, PageInk, FlapTop));
         return shade;
     }
