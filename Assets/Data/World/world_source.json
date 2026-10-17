@@ -25618,6 +25618,24 @@
         "tier": "Flavour"
       },
       {
+        "key": "compare.notUnderstood",
+        "text": "NOT UNDERSTOOD",
+        "gloss": "Inline",
+        "tier": "Flavour"
+      },
+      {
+        "key": "finding.link.NotUnderstood",
+        "text": "Not understood",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "finding.note.NotUnderstood",
+        "text": "That answer was not translated: you did not understand it. Nothing logged.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "slot.Outfit",
         "text": "OUTFIT",
         "gloss": "None",
@@ -30598,6 +30616,18 @@
           {
             "key": "compare.untranslated",
             "text": "({0} غير مترجم, مترجم {1})"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "غير مفهوم"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "غير مفهوم"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "لم تترجم تلك الإجابة: لم تفهمها. لم يسجل شيء."
           },
           {
             "key": "slot.Outfit",
@@ -37056,6 +37086,26 @@
           {
             "native": "تشغيل",
             "english": "On"
+          },
+          {
+            "native": "مفهوم",
+            "english": "understood"
+          },
+          {
+            "native": "تترجم",
+            "english": "translated"
+          },
+          {
+            "native": "تلك",
+            "english": "that"
+          },
+          {
+            "native": "الإجابة",
+            "english": "answer"
+          },
+          {
+            "native": "تفهمها",
+            "english": "understand it"
           }
         ]
       },
@@ -38918,6 +38968,18 @@
           {
             "key": "compare.untranslated",
             "text": "(αμετάφραστο {0}· Μεταφραστής {1})"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "ΔΕΝ ΚΑΤΑΝΟΗΘΗΚΕ"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Δεν κατανοήθηκε"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Αυτή η απάντηση δεν μεταφράστηκε: δεν την κατάλαβες. Δεν καταγράφηκε τίποτα."
           },
           {
             "key": "slot.Outfit",
@@ -44864,6 +44926,18 @@
           {
             "native": "άκυρη",
             "english": "invalid"
+          },
+          {
+            "native": "κατανοήθηκε",
+            "english": "understood"
+          },
+          {
+            "native": "μεταφράστηκε",
+            "english": "translated"
+          },
+          {
+            "native": "κατάλαβες",
+            "english": "you understood"
           }
         ]
       },
@@ -46726,6 +46800,18 @@
           {
             "key": "compare.untranslated",
             "text": "(non tradotto {0}; Traduttore {1})"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "NON CAPITO"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Non capito"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Quella risposta non era tradotta: non l'hai capita. Nulla registrato."
           },
           {
             "key": "slot.Outfit",
@@ -52792,6 +52878,14 @@
           {
             "native": "l'errore",
             "english": "the error"
+          },
+          {
+            "native": "l'hai",
+            "english": "you have it"
+          },
+          {
+            "native": "capita",
+            "english": "understood"
           }
         ]
       },
@@ -54654,6 +54748,18 @@
           {
             "key": "compare.untranslated",
             "text": "(unübersetzt {0}; {1}-Übersetzer)"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "NICHT VERSTANDEN"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Nicht verstanden"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Diese Antwort war nicht übersetzt: Sie haben sie nicht verstanden. Nichts erfasst."
           },
           {
             "key": "slot.Outfit",
@@ -60968,6 +61074,10 @@
           {
             "native": "Erst",
             "english": "First"
+          },
+          {
+            "native": "übersetzt",
+            "english": "translated"
           }
         ]
       },
@@ -62830,6 +62940,18 @@
           {
             "key": "compare.untranslated",
             "text": "（未翻译的{0}；{1}翻译器）"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "未听懂"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "未听懂"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "该回答未翻译：你没听懂。未记录。"
           },
           {
             "key": "slot.Outfit",
@@ -68472,6 +68594,14 @@
           {
             "native": "开",
             "english": "on"
+          },
+          {
+            "native": "听懂",
+            "english": "understood"
+          },
+          {
+            "native": "没听懂",
+            "english": "did not understand"
           }
         ]
       },
@@ -70334,6 +70464,18 @@
           {
             "key": "compare.untranslated",
             "text": "(未翻訳の{0}; {1}翻訳機)"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "理解できない"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "理解できない"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "その回答は未翻訳です。理解できませんでした。記録なし。"
           },
           {
             "key": "slot.Outfit",
@@ -76024,6 +76166,14 @@
           {
             "native": "オン",
             "english": "on"
+          },
+          {
+            "native": "理解",
+            "english": "understanding"
+          },
+          {
+            "native": "きません",
+            "english": "cannot"
           }
         ]
       }

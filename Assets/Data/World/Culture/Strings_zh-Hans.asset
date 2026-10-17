@@ -1875,6 +1875,18 @@ MonoBehaviour:
     text: "\uFF08\u672A\u7FFB\u8BD1\u7684{0}\uFF1B{1}\u7FFB\u8BD1\u5668\uFF09"
     gloss: 0
     tier: 0
+  - key: compare.notUnderstood
+    text: "\u672A\u542C\u61C2"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotUnderstood
+    text: "\u672A\u542C\u61C2"
+    gloss: 0
+    tier: 0
+  - key: finding.note.NotUnderstood
+    text: "\u8BE5\u56DE\u7B54\u672A\u7FFB\u8BD1\uFF1A\u4F60\u6CA1\u542C\u61C2\u3002\u672A\u8BB0\u5F55\u3002"
+    gloss: 0
+    tier: 0
   - key: slot.Outfit
     text: "\u670D\u88C5"
     gloss: 0
@@ -5712,3 +5724,7 @@ MonoBehaviour:
     english: off
   - native: "\u5F00"
     english: on
+  - native: "\u542C\u61C2"
+    english: understood
+  - native: "\u6CA1\u542C\u61C2"
+    english: did not understand

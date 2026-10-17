@@ -1906,6 +1906,18 @@ MonoBehaviour:
     text: (non tradotto {0}; Traduttore {1})
     gloss: 0
     tier: 0
+  - key: compare.notUnderstood
+    text: NON CAPITO
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotUnderstood
+    text: Non capito
+    gloss: 0
+    tier: 0
+  - key: finding.note.NotUnderstood
+    text: 'Quella risposta non era tradotta: non l''hai capita. Nulla registrato.'
+    gloss: 0
+    tier: 0
   - key: slot.Outfit
     text: ABITO
     gloss: 0
@@ -5983,3 +5995,7 @@ MonoBehaviour:
     english: On
   - native: l'errore
     english: the error
+  - native: l'hai
+    english: you have it
+  - native: capita
+    english: understood
