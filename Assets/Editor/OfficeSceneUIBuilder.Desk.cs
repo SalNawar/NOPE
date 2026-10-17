@@ -1348,8 +1348,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A paper's and a rulebook part's click box thickness (metres, before a paper's zone scale): thin, so the papers' stack (DeskConfigSO.paperStackStep a place) alone decides which of two overlapping papers, or a paper and the rulebook, a click or a stamp meets (Saleh 2026-10-06: documents clipping).</summary>
     private const float PaperBoxThickness = 0.0004f;
 
-    /// <summary>The stamp bar's grey tab on the overlay's right edge (reference px).</summary>
-    private static readonly Vector2 StampTabSize = new Vector2(92f, 170f);
+    /// <summary>The STAMPS tab on the overlay's bottom edge where the drawer comes out (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"), and how far it sinks below the edge (cut by it, like the side pull tabs).</summary>
+    private static readonly Vector2 StampTabSize = new Vector2(236f, 78f);
+    private const float StampTabSink = 16f;
 
     /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two daters' distance apart (DENIED left, APPROVED right), the label lip's reach past each, its gap in front of the daters' frames and its section (deep, tall). The lip lies low at the daters' feet, in front of them (toward the chair), its words on its top, so the whole green and red bodies with their wheels show over it (run 7's integration: the rail at the bodies' height hid them).</summary>
     private const float StampSpacing = 0.14f;
@@ -1468,8 +1469,9 @@ public static partial class OfficeSceneUIBuilder
     /// the stamp stuff, and the Tab shortcut"), its stamps the two daters (the
     /// desk machine spec §1), rebuilt each run. On the office overlay:
     /// StampBar (the DeskStampTray, an always-active full-screen host) with
-    /// the grey Tab at the right edge's middle ("STAMPS" over the key, TAB;
-    /// inactive until the booth shows it), the hint's plate at the top right
+    /// the Tab on the bottom edge where the drawer comes out, at
+    /// DeskConfigSO.stampBarView's x ("STAMPS" beside the key, TAB; inactive
+    /// until the booth shows it), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
     /// In the office: StampRack (inactive until slid out; the office binder
     /// lays it, its origin at the daters' feet): the heavy brass drawer when its
@@ -1480,8 +1482,8 @@ public static partial class OfficeSceneUIBuilder
     /// wooden end caps and brass brackets to the two daters, the words on its
     /// top; and the DENIED dater (left) and the APPROVED dater (right), each a click box
     /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
-    /// (the click box its proxy: the dater is dragged onto the paper) and a
-    /// PointerHold (a held press), holding its body (DaterBody: the prop
+    /// (the click box its proxy: the dater is dragged onto the paper; stamping
+    /// is drag-only), holding its body (DaterBody: the prop
     /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED).
     /// The tray gets the papers' style, the date's face,
     /// Saleh's dater sounds and the drawer's (WireDaters). The old overlay bar, the 3D tray of
@@ -1498,12 +1500,12 @@ public static partial class OfficeSceneUIBuilder
 
         Button tab = MakeButton(host, "Tab", null, Vector2.zero, Vector2.one, StampGrey, ThemeRoleId.DiegeticDevice);
         var tabRect = (RectTransform)tab.transform;
-        tabRect.anchorMin = tabRect.anchorMax = new Vector2(1f, 0.5f);
-        tabRect.pivot = new Vector2(1f, 0.5f);
-        tabRect.anchoredPosition = Vector2.zero;
+        tabRect.anchorMin = tabRect.anchorMax = new Vector2(config.stampBarView.x, 0f);
+        tabRect.pivot = new Vector2(0.5f, 0f);
+        tabRect.anchoredPosition = new Vector2(0f, -StampTabSink);
         tabRect.sizeDelta = StampTabSize;
         TMP_Text tabLabel = tab.transform.Find("Label").GetComponent<TMP_Text>();
-        tabLabel.text = $"<size=72%>{UiText.Get("controls.stampsTab")}</size>\n<b>{ControlRules.StampsKey}</b>";
+        tabLabel.text = $"{UiText.Get("controls.stampsTab")}  <b>{ControlRules.StampsKey}</b>";
         tabLabel.color = Color.white;
         tabLabel.enableAutoSizing = false;
         tabLabel.fontSize = 26f;
@@ -1538,10 +1540,10 @@ public static partial class OfficeSceneUIBuilder
 
         (Clickable stamp, Transform die) Stamp(string name, float x, bool approved, string labelKey)
         {
-            // In the brass drawer the dater stands in its cradle (the cradle's origin is its back-foot edge); else on the rack.
+            // In the brass drawer the dater stands in its cradle (the cradle's origin is its front-foot edge, toward the chair); else on the rack.
             Transform cradle = drawer != null ? drawer.Cradle(approved ? DrawerSequence.Approved : DrawerSequence.Denied) : null;
             Clickable click = EnsureClickBox(cradle != null ? cradle : rack, name);
-            click.transform.localPosition = cradle != null ? new Vector3(0f, 0f, -BrassPivotDepth) : new Vector3(x, 0f, 0f);
+            click.transform.localPosition = cradle != null ? new Vector3(0f, 0f, BrassPivotDepth) : new Vector3(x, 0f, 0f);
             StampShape shape = DaterBody(click.transform, approved);
             var box = click.GetComponent<BoxCollider>();
             box.center = new Vector3(0f, shape.Top / 2f, 0f);
@@ -1563,8 +1565,7 @@ public static partial class OfficeSceneUIBuilder
 
             click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null && r.name != "Window").ToArray());
             // The dater is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
-            // A left-press held on it strokes it where it hangs (the desk machine spec §1: "holding the button holds the stamp down").
-            GetOrAdd<PointerHold>(click.gameObject);
+            // Stamping is drag-only (Saleh's 1016a playtest: "should be dragging"): a click on a hanging dater strokes nothing.
             DeskDraggable drag = GetOrAdd<DeskDraggable>(click.gameObject);
             var soDrag = new SerializedObject(drag);
             SetRef(soDrag, "proxy", box);
@@ -1859,6 +1860,7 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(so, "coverWords", cover);
         SetRef(so, "title", title);
         SerializedArrays.Set(so, "rows", rows);
+        so.FindProperty("sheetSize").vector2Value = RulebookSize;
         SetRef(so, "none", none);
         SetRef(so, "papersTitle", papersTitle);
         SerializedArrays.Set(so, "paperRows", paperRows);

@@ -10,20 +10,27 @@ using UnityEngine.UI;
 /// 2026-10-07: "the stamps need to be retro two-click stamps … one saying
 /// approved, one denied"; before it, 2026-10-06: Papers, Please's grey tab,
 /// TAB, and "two stamps that I physically move ... I should be able to stamp
-/// anywhere on the document"). A grey tab on the right edge of the office
-/// overlay ("STAMPS" over "TAB"), the TAB key (OfficeControls) and the desk's
-/// stamp prop open the bar over the desk and close it (ToggleBar); out, it
-/// brings the reading view. The bar is the heavy brass drawer (Track BR,
-/// Saleh 2026-10-08: "a heavy brass drawer that makes the sound a typewriter
-/// makes when the carriage returns"): it slides out toward the chair from
-/// under the counter's side with a slow start, an accelerating carry and a
-/// hard stop (DrawerSequence: the carry, the stiff Drawer spring's overshoot
-/// and settle, FeelDirector's small hit, SoundCues.DrawerOpen's ratchet
-/// carry), and its brass mechanism (BrassDrawer: a lever, a rack and
-/// pinion, a cradle per dater) stands the daters up from flat on their
-/// backs, DENIED then APPROVED, each locking upright with a click; closing,
-/// they fold down first (a dater still away comes back first), then a shove
-/// seats the drawer (SoundCues.DrawerClose: the reverse rasp and the thud).
+/// anywhere on the document"). A tab on the screen's bottom edge where the
+/// drawer comes out ("STAMPS" beside "TAB"; Saleh's 1016a playtest,
+/// 2026-10-17: "the ui for it should be the same area it spawns so not on the
+/// side"), the TAB key (OfficeControls) and the desk's stamp prop open the bar
+/// over the desk and close it (ToggleBar); out, it brings the reading view.
+/// The bar is the heavy brass drawer (Track BR, Saleh 2026-10-08: "a heavy
+/// brass drawer that makes the sound a typewriter makes when the carriage
+/// returns"), flipped and deep since the 1016a playtest ("flip the drawer and
+/// give it depth": a cast-brass box, its labelled bar on the far side, the
+/// daters in front of it toward the edge): it rises out of the screen's
+/// bottom edge with a slow start, an accelerating carry and a hard stop
+/// (DrawerSequence: the carry, the stiff Drawer spring's overshoot and
+/// settle, FeelDirector's small hit, SoundCues.DrawerOpen's ratchet carry),
+/// tethered there at every aspect (Tether: its near edge on the bottom edge
+/// as the reading camera shows it, recomputed every frame; Saleh: "tethered
+/// to the edge of the screen", as in Papers, Please), and its brass
+/// mechanism (BrassDrawer: a lever, a rack and pinion, a cradle per dater)
+/// stands the daters up from lying folded toward the edge, DENIED then
+/// APPROVED, each locking upright with a click; closing, they fold down first
+/// (a dater still away comes back first), then a shove seats the drawer
+/// (SoundCues.DrawerClose: the reverse rasp and the thud).
 /// A dater takes input once its cradle is locked. Without the drawer's art
 /// the built rack (a lip with end caps) moves the same way without the
 /// mechanism. The rack holds the DENIED dater
@@ -35,10 +42,9 @@ using UnityEngine.UI;
 /// frame, the date wheels seen through it and a lighter side button. A dater is moved, not the paper: left-press and drag it (its
 /// DeskDraggable) and its die is carried over the pointer's spot on the
 /// papers; letting go strokes it there (down and straight back up: both
-/// clacks), then it goes back to its place in the rack; a left-press on a
-/// hanging dater held past MotionKnobs.daterHoldDelay strokes it where it
-/// hangs and holds it down until the button comes up, a quick click strokes
-/// it down and up. A stroke (all motion on springs, MotionKnobs' Dater
+/// clacks), then it goes back to its place in the rack. Stamping is
+/// drag-only (Saleh's 1016a playtest: "should be dragging"): a click or a
+/// held press on a hanging dater strokes nothing. A stroke (all motion on springs, MotionKnobs' Dater
 /// tunings): the press clack as it starts (the die flipping off the pad:
 /// Saleh's "cha-ka", the deep one on DENIED, the pitch ±3 % a press), the
 /// dater drops onto the paper and its body sinks over its frame against
@@ -83,10 +89,10 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The drawer's placeholder sounds (tools/audio/make_drawer_sfx.py) until the sound bank has SoundCues.DrawerOpen / DrawerClose: the opening's typewriter carriage-return carry and clunk, the closing's reverse rasp and thud.</summary>
     [SerializeField] private AudioClip drawerOpen, drawerClose;
 
-    /// <summary>The grey tab (with "TAB" printed on it): a click slides the bar out or back.</summary>
+    /// <summary>The tab on the screen's bottom edge where the drawer comes out ("STAMPS" beside its "TAB" key): a click slides the bar out or back.</summary>
     [SerializeField] private Button tab;
 
-    /// <summary>The APPROVED dater's click box: its root (the prop contract's Body, Frame, Die, Wheels and Button are its children), with its DeskDraggable and PointerHold.</summary>
+    /// <summary>The APPROVED dater's click box: its root (the prop contract's Body, Frame, Die, Wheels and Button are its children), with its DeskDraggable.</summary>
     [SerializeField] private Clickable approvedStamp;
 
     /// <summary>The DENIED dater's click box.</summary>
@@ -155,7 +161,6 @@ public sealed class DeskStampTray : MonoBehaviour
         public Clickable Click;
         public Transform Die;
         public DeskDraggable Drag;
-        public PointerHold Hold;
         public Clickable Reink;
         public Transform Body;
         public Vector3 BodyHome;
@@ -182,7 +187,6 @@ public sealed class DeskStampTray : MonoBehaviour
 
         public Stroke Stroke;
         public bool Contact;
-        public bool Holding;
         public float ContactAt;
 
         /// <summary>The print the stroke owes the passport when it bottoms out (null: none).</summary>
@@ -193,10 +197,6 @@ public sealed class DeskStampTray : MonoBehaviour
         public Spring Back;
         public bool Returning;
         public Vector3 ReturnFrom;
-
-        /// <summary>A press of the pointer waiting to become a held stroke (no drag yet), and when it went down.</summary>
-        public bool Gripped;
-        public float GripAt;
 
         /// <summary>Prints since its pad was last inked, and true once its wheels rolled today.</summary>
         public int Prints;
@@ -216,6 +216,12 @@ public sealed class DeskStampTray : MonoBehaviour
     private readonly DrawerSequence _drawer = new DrawerSequence();
     private Vector3 _out, _in;
     private bool _laid;
+
+    /// <summary>The office view's level forward the rack faces (Lay).</summary>
+    private Vector3 _forward = Vector3.forward;
+
+    /// <summary>The drawer's near edge and its underside in the rack's space, unscaled (Lay: its box's measures): the near edge stands on the screen's bottom edge, the underside on the desk.</summary>
+    private float _nearEdge, _underside;
     private string _noteKey;
     private float _noteUntil;
     private AudioClip _thunk;
@@ -272,7 +278,7 @@ public sealed class DeskStampTray : MonoBehaviour
         Show();
     }
 
-    /// <summary>A dater of the rack: its parts by the prop contract's names, its drag (carried stampHover over the desk, its die over the pointer's spot), its hold (a held press) and its side button (re-ink).</summary>
+    /// <summary>A dater of the rack: its parts by the prop contract's names, its drag (carried stampHover over the desk, its die over the pointer's spot) and its side button (re-ink).</summary>
     private Handle MakeHandle(DeskStamp kind, Clickable click, Transform die)
     {
         var handle = new Handle { Kind = kind, Lane = kind == DeskStamp.Denied ? DrawerSequence.Denied : DrawerSequence.Approved, Click = click, Die = die, Back = Spring.At(1f) };
@@ -306,12 +312,6 @@ public sealed class DeskStampTray : MonoBehaviour
             handle.Drag.DragEnded += (_, _) => LetGo(handle);
             handle.Drag.DragCancelled += _ => PutBack(handle);
         }
-        handle.Hold = click.GetComponent<PointerHold>();
-        if (handle.Hold != null)
-        {
-            handle.Hold.Down += _ => Grip(handle);
-            handle.Hold.Up += _ => Ungrip(handle);
-        }
         return handle;
     }
 
@@ -331,12 +331,9 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>
     /// Lays the rack (the office binder, once the desk and the reading view
-    /// are placed): out where the reading view shows the desk at
-    /// DeskConfigSO.stampBarView (its bottom edge), the daters' feet
-    /// stampHover above the desk, facing along the office view's level
-    /// <paramref name="levelForward"/>, at DeskConfigSO.stampDrawerScale; in
-    /// stampBarTravel nearer the chair, below the view's bottom edge (the
-    /// drawer rises from the bottom, Saleh's 1008a playtest).
+    /// are placed): facing along the office view's level
+    /// <paramref name="levelForward"/>, at DeskConfigSO.stampDrawerScale, its
+    /// box standing on the desk; where it stands is the tether's (Tether).
     /// </summary>
     public void Lay(Vector3 levelForward)
     {
@@ -345,15 +342,59 @@ public sealed class DeskStampTray : MonoBehaviour
         Vector3 forward = Vector3.ProjectOnPlane(levelForward, Vector3.up);
         if (forward.sqrMagnitude < 1e-6f)
             forward = Vector3.forward;
-        forward.Normalize();
-        float desk = surface.transform.position.y;
-        if (deskView == null || !deskView.TryViewPoint(config.stampBarView, desk, out Vector3 at))
-            at = surface.transform.position;
-        _out = new Vector3(at.x, desk + config.stampHover, at.z);
-        _in = _out - forward * config.stampBarTravel;
-        _laid = true;
+        _forward = forward.normalized;
         rack.localScale = Vector3.one * config.stampDrawerScale;
-        rack.SetPositionAndRotation(Vector3.LerpUnclamped(_in, _out, _drawer.Travel), Quaternion.LookRotation(forward, Vector3.up));
+        rack.rotation = Quaternion.LookRotation(_forward, Vector3.up);
+        Measure();
+        _laid = true;
+        Tether();
+        rack.position = Vector3.LerpUnclamped(_in, _out, _drawer.Travel);
+    }
+
+    /// <summary>The drawer's near edge (its least z) and underside (its least y) in the rack's space: the box's (the drawer's Tray part) or, for the built rack, every part's, from the meshes' own bounds (the mechanism at rest, upright).</summary>
+    private void Measure()
+    {
+        Transform box = drawer != null ? drawer.transform.Find("Tray") : null;
+        _nearEdge = _underside = 0f;
+        bool any = false;
+        foreach (MeshFilter mesh in (box != null ? box : rack).GetComponentsInChildren<MeshFilter>(true))
+        {
+            if (mesh.sharedMesh == null || mesh.GetComponent<TMP_Text>() != null)
+                continue;
+            Bounds b = mesh.sharedMesh.bounds;
+            for (int i = 0; i < 8; i++)
+            {
+                Vector3 corner = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z);
+                Vector3 local = Vector3.Scale(rack.InverseTransformPoint(mesh.transform.TransformPoint(corner)), rack.localScale);
+                _nearEdge = any ? Mathf.Min(_nearEdge, local.z) : local.z;
+                _underside = any ? Mathf.Min(_underside, local.y) : local.y;
+                any = true;
+            }
+        }
+        _nearEdge /= Mathf.Max(1e-4f, config.stampDrawerScale);
+        _underside /= Mathf.Max(1e-4f, config.stampDrawerScale);
+    }
+
+    /// <summary>
+    /// The drawer tethered to the screen's bottom edge (Saleh's 1016a
+    /// playtest: "tethered to the edge of the screen", as in Papers, Please),
+    /// anchored in screen space from the reading camera as it is now (its
+    /// push-in included, DeskView.TryLiveViewPoint) at every aspect: out, its
+    /// near edge stands on the desk where the reading view's ray through
+    /// DeskConfigSO.stampBarView (x: the drawer's middle; y: where its near
+    /// edge meets the screen, 0 the bottom edge) comes down, its box on the
+    /// desk; in, stampBarTravel nearer the chair, out of sight below that
+    /// edge. Without the reading view it stands at the desk's middle.
+    /// </summary>
+    private void Tether()
+    {
+        if (!_laid)
+            return;
+        float desk = surface.transform.position.y, scale = config.stampDrawerScale;
+        if (deskView == null || !deskView.TryLiveViewPoint(config.stampBarView, desk, out Vector3 edge))
+            edge = surface.transform.position;
+        _out = new Vector3(edge.x, desk, edge.z) + _forward * (-_nearEdge * scale) + Vector3.up * (-_underside * scale);
+        _in = _out - _forward * config.stampBarTravel;
     }
 
     /// <summary>
@@ -509,15 +550,14 @@ public sealed class DeskStampTray : MonoBehaviour
     }
 
     /// <summary>
-    /// Presses <paramref name="handle"/> on what lies under its die (a ray
-    /// straight down from the die's centre meets a document or the rulebook
-    /// first, or nothing): StampFlow decides; an accepted press strokes the
-    /// dater down (the print lands as it bottoms out; held while
-    /// <paramref name="hold"/>, else straight back up); a refused one
-    /// thunks, shakes the dater and says why; over the bare desk the dater
-    /// just goes back.
+    /// Presses <paramref name="handle"/>, let go after a drag, on what lies
+    /// under its die (a ray straight down from the die's centre meets a
+    /// document or the rulebook first, or nothing): StampFlow decides; an
+    /// accepted press strokes the dater down and straight back up (the print
+    /// lands as it bottoms out); a refused one thunks, shakes the dater and
+    /// says why; over the bare desk the dater just goes back.
     /// </summary>
-    private void Press(Handle handle, bool hold)
+    private void Press(Handle handle)
     {
         Deselect();
         if (!_live || !_flow.BarOut || handle.Click == null || handle.Stroke != Stroke.None)
@@ -540,7 +580,7 @@ public sealed class DeskStampTray : MonoBehaviour
         {
             handle.PrintOn = paper;
             handle.PrintAt = paper.PagePoint(point);
-            BeginStroke(handle, hold);
+            BeginStroke(handle);
         }
         else
         {
@@ -557,14 +597,13 @@ public sealed class DeskStampTray : MonoBehaviour
     }
 
     /// <summary>A stroke begins where the dater is: the press clack, the drop and the sink on the Dater spring (a cut under Reduced Motion).</summary>
-    private void BeginStroke(Handle handle, bool hold)
+    private void BeginStroke(Handle handle)
     {
         MotionKnobs knobs = UiMotion.Knobs;
         handle.Returning = false;
         handle.PressedAt = handle.Click.transform.localPosition;
         handle.Stroke = Stroke.Down;
         handle.Contact = false;
-        handle.Holding = hold;
         handle.Depth.Target = Drop + knobs.daterCompress;
         if (UiMotion.Amount.Still)
             handle.Depth.Snap(handle.Depth.Target);
@@ -598,45 +637,16 @@ public sealed class DeskStampTray : MonoBehaviour
         if (handle.Stroke != Stroke.Down)
             return;
         handle.Stroke = Stroke.Up;
-        handle.Holding = false;
         handle.Depth.Target = 0f;
         if (UiMotion.Amount.Still)
             handle.Depth.Snap(0f);
         Play(handle.Kind == DeskStamp.Approved ? approvedRelease : deniedRelease, Pitch());
     }
 
-    /// <summary>The left button went down on a hanging dater: it waits to see a drag (a carry) or a hold (a held stroke); the first touch of the day rolls its wheels.</summary>
-    private void Grip(Handle handle)
-    {
-        if (!_live || !_flow.BarOut)
-            return;
-        Roll(handle);
-        handle.Gripped = true;
-        handle.GripAt = UiMotion.Now;
-    }
-
-    /// <summary>The button came back up: a held stroke releases (at once, or as soon as it bottoms out); a click that neither dragged nor held yet strokes down and straight up.</summary>
-    private void Ungrip(Handle handle)
-    {
-        if (handle.Stroke == Stroke.Down && handle.Holding)
-        {
-            handle.Holding = false;
-            if (handle.Contact)
-                Release(handle);
-            return;
-        }
-        if (!handle.Gripped)
-            return;
-        handle.Gripped = false;
-        if (handle.Drag == null || !handle.Drag.IsDragging)
-            Press(handle, false);
-    }
-
     /// <summary>A dater's drag begins: it is carried (a running stroke is cut, its motion stops where it is); the first touch of the day rolls its wheels.</summary>
     private void PickUp(Handle handle)
     {
         Deselect();
-        handle.Gripped = false;
         Roll(handle);
         EndStroke(handle);
         handle.Returning = false;
@@ -648,7 +658,7 @@ public sealed class DeskStampTray : MonoBehaviour
     {
         if (_carried == handle)
             _carried = null;
-        Press(handle, false);
+        Press(handle);
     }
 
     /// <summary>A carried dater's drag cut short (a right-click or Esc, the bar stowed, the daters' input taken away): it goes back to the rack without a press.</summary>
@@ -776,7 +786,7 @@ public sealed class DeskStampTray : MonoBehaviour
         return best;
     }
 
-    /// <summary>Moves the drawer, moves each dater (a held press waking into a stroke, the stroke, the shake, the way back, the wheels) and lets a note go once its time is up.</summary>
+    /// <summary>Moves the drawer, moves each dater (the stroke, the shake, the way back, the wheels) and lets a note go once its time is up.</summary>
     private void Update()
     {
         float dt = UiMotion.Delta(Time.unscaledDeltaTime);
@@ -796,13 +806,6 @@ public sealed class DeskStampTray : MonoBehaviour
         if (handle.Click == null)
             return;
         MotionKnobs knobs = UiMotion.Knobs;
-        if (handle.Gripped && handle.Stroke == Stroke.None && (handle.Drag == null || !handle.Drag.IsDragging)
-            && UiMotion.Now - handle.GripAt >= knobs.daterHoldDelay)
-        {
-            handle.Gripped = false;
-            Press(handle, true);
-        }
-
         Transform root = handle.Click.transform;
         bool placed = handle.Stroke != Stroke.None || handle.Returning; // this frame sets the dater's place outright
         if (handle.Stroke != Stroke.None)
@@ -820,7 +823,7 @@ public sealed class DeskStampTray : MonoBehaviour
             {
                 if (!handle.Contact && depth >= drop + knobs.daterCompress * 0.8f)
                     Bottom(handle);
-                if (handle.Contact && !handle.Holding && UiMotion.Now - handle.ContactAt >= knobs.daterQuickHold)
+                if (handle.Contact && UiMotion.Now - handle.ContactAt >= knobs.daterQuickHold)
                     Release(handle);
             }
             else if (!moving)
@@ -881,7 +884,6 @@ public sealed class DeskStampTray : MonoBehaviour
         if (handle.Stroke == Stroke.None)
             return;
         handle.Stroke = Stroke.None;
-        handle.Holding = false;
         handle.PrintOn = null;
         handle.Depth.Snap(0f);
         if (handle.Body != null)
@@ -905,7 +907,8 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>
     /// The drawer this frame (DrawerSequence on MotionKnobs' drawer tunings; a
-    /// snap under Reduced Motion): its place between in and out, the
+    /// snap under Reduced Motion): its place between in and out (tethered to
+    /// the screen's bottom edge as the reading camera shows it now: Tether), the
     /// mechanism's pose, and its moments: the opening's carry (DrawerOpen),
     /// the stop's small hit, a click as each cradle locks or lands (a lock
     /// lets its dater take input), the closing's shove (DrawerClose). The
@@ -922,7 +925,10 @@ public sealed class DeskStampTray : MonoBehaviour
         MotionKnobs knobs = UiMotion.Knobs;
         DrawerEvents events = _drawer.Step(dt, _flow.BarOut, knobs, UiMotion.Amount.Still, away);
         if (_laid)
+        {
+            Tether();
             rack.position = Vector3.LerpUnclamped(_in, _out, _drawer.Travel);
+        }
         if (drawer != null)
             drawer.Pose(_drawer.Raise(DrawerSequence.Denied), _drawer.Raise(DrawerSequence.Approved));
         if ((events & DrawerEvents.Carried) != 0)

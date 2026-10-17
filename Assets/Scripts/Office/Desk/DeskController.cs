@@ -9,11 +9,17 @@ using UnityEngine;
 /// the traveller's side onto the counter (DeskCounter: a row of spots), small;
 /// left-press and drag moves a document (DeskDraggable), the only way to move
 /// it, in either view; on the counter it is small, on the desk full size
-/// (DeskDocument.SetZone): dragged off the counter it grows at once, and it
-/// never shrinks while dragged (DeskPapers.ShownWhileDragged; Saleh
-/// 2026-10-06: "it keeps shrinking the documents as I try to stamp"): the
-/// slim counter only lights while the pointer is over it (DeskCounter.Show's
-/// hover). A document dropped on the desk brings the reading view by itself
+/// (DeskDocument.SetZone), but a paper keeps its size: a grab and a carry
+/// never change it, and it shows at full size only on the desk while the
+/// reading view is on, easing back to its normal size (the counter's) when
+/// the view returns (DeskPapers.ShownFullSize; Saleh's 1016a playtest:
+/// "documents should stay their size, if we are zooming then it should be
+/// only when you are focused on the table"): the slim counter only lights
+/// while the pointer is over it (DeskCounter.Show's hover). Every paper lies
+/// upright toward the chair (DeskView.LevelForward); dropped on the scanner
+/// it eases square onto its bed (DeskScanner.BedFacing) and, scanned, back
+/// upright as it slides off (Saleh's 1016a playtest: "documents have weird
+/// orientation when you scan them"). A document dropped on the desk brings the reading view by itself
 /// (DeskView.TiltIn). Each drop is decided through DeskPapers: it stays in
 /// the zone it was dropped in, it scans on the scanner, it slides back to
 /// where it was picked up (a busy scanner; or a paper from the desk dropped
@@ -154,6 +160,8 @@ public sealed class DeskController : MonoBehaviour
             stamps.Changed += ShowCounter;
             stamps.Changed += PassportUnderDaters;
         }
+        if (deskView != null)
+            deskView.Changed += Focus;
         if (rulebook != null && config != null)
             rulebook.ShowEdge(config.folderThickness);
         if (rulebook != null && rulebook.Drag != null)
@@ -175,6 +183,8 @@ public sealed class DeskController : MonoBehaviour
             stamps.Changed -= ShowCounter;
             stamps.Changed -= PassportUnderDaters;
         }
+        if (deskView != null)
+            deskView.Changed -= Focus;
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan -= RulebookLifted;
@@ -182,6 +192,17 @@ public sealed class DeskController : MonoBehaviour
             rulebook.Drag.DragCancelled -= RulebookLifted;
         }
     }
+
+    /// <summary>The reading view turned on or off: every paper on the desk eases to its reading size or back to its normal size (a carried one keeps its size).</summary>
+    private void Focus()
+    {
+        foreach (DeskDocument paper in _papers)
+            if (paper != null)
+                paper.SetFocused(deskView.IsOn);
+    }
+
+    /// <summary>A paper's rotation lying upright toward the chair: its top away from it, along the office view's level forward.</summary>
+    private Quaternion Upright => Quaternion.LookRotation(deskView != null ? deskView.LevelForward : Vector3.forward, Vector3.up);
 
     /// <summary>The stack with no case paper: the rulebook alone.</summary>
     private void ResetStack()
@@ -221,7 +242,7 @@ public sealed class DeskController : MonoBehaviour
             return;
 
         DeskDocument paper = _papers[done];
-        Slide(paper, ClearOfBlockers(paper, paper.Drag.PickUpPosition));
+        Slide(paper, ClearOfBlockers(paper, paper.Drag.PickUpPosition), Upright);
         scanner.Pulse();
         _scansToday++;
         RefreshHint();
@@ -321,12 +342,13 @@ public sealed class DeskController : MonoBehaviour
             _state.Enqueue(i);
 
         DeskDocument paper = Instantiate(paperTemplate, paperRoot);
-        paper.transform.position = handOverPoint.position;
+        paper.transform.SetPositionAndRotation(handOverPoint.position, Upright);
         paper.gameObject.SetActive(true);
         paper.Bind(i, _documents[i], i < _forms.Count ? _forms[i] : null, config);
         DocumentForm form = i < _forms.Count ? _forms[i] : null;
         bool photo = _documents[i] != null && (_documents[i].showsPhoto || (form != null && ArtLayout.ShowsPhoto(form.Spec, form.Data)));
         paper.ShowPhoto(photo ? _look : null, _art, config.travellerTint);
+        paper.SetFocused(deskView != null && deskView.IsOn);
         paper.SetZone(DeskZone.Counter, true);
         paper.SetInspecting(_inspecting);
 
@@ -651,16 +673,12 @@ public sealed class DeskController : MonoBehaviour
         ApplyStack();
     }
 
-    /// <summary>The dragged paper follows the pointer: over the desk it grows to full size, over the counter it keeps its size (DeskPapers.ShownWhileDragged) and the counter's strip lights.</summary>
+    /// <summary>The dragged paper follows the pointer, keeping its size (the drop and the view decide it: DeskPapers.ShownFullSize); over the counter the counter's strip lights.</summary>
     private void HandleDragged(DeskDraggable drag, Vector3 point)
     {
-        DeskDocument paper = drag.GetComponent<DeskDocument>();
         DeskZone under = ZoneAt(point);
         // The scanner's lid opens for a paper dragged near it (ScannerLid).
         scanner.SetNear(!_scanners.Hidden && scanner.Near(point));
-        DeskZone shown = DeskPapers.ShownWhileDragged(paper.Zone, under);
-        if (paper.Zone != shown)
-            paper.SetZone(shown, false);
         if (_overCounter != (under == DeskZone.Counter))
         {
             _overCounter = under == DeskZone.Counter;
@@ -813,9 +831,12 @@ public sealed class DeskController : MonoBehaviour
     }
 
     /// <summary>Slides a paper; it is inert while sliding, and its liveness is re-applied when it lands.</summary>
-    private void Slide(DeskDocument paper, Vector3 target)
+    private void Slide(DeskDocument paper, Vector3 target) => Slide(paper, target, paper.transform.rotation);
+
+    /// <summary>Slides a paper, turning it to lie at <paramref name="facing"/> on the way (eased with the slide).</summary>
+    private void Slide(DeskDocument paper, Vector3 target, Quaternion facing)
     {
-        paper.SlideTo(target, config.paperSlideSeconds, () => ApplyLive(paper));
+        paper.SlideTo(target, facing, config.paperSlideSeconds, () => ApplyLive(paper));
         ApplyLive(paper);
     }
 
@@ -918,7 +939,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>A paper slides onto the bed and its scan starts: the relay click (scanner_start), the glowing bar crossing the glass as the scan runs (DeskScanner.Sweep); the done beep is DeskScanner.Pulse's.</summary>
     private void StartScan(DeskDocument paper)
     {
-        Slide(paper, scanner.BedPoint);
+        Slide(paper, scanner.BedPoint, scanner.BedFacing);
         Sounds.Play(SoundCues.ScannerStart);
     }
 

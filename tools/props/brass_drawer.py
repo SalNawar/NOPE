@@ -14,11 +14,12 @@ drawer (front 3/4, side, top) plus one of it closed, on a neutral background.
 The prop contract (DeskStampTray / BrassDrawer in the game; the builder checks
 these names, PropArt.Missing, and falls back to the built rack without them):
 
-    Tray                       the cast-brass drawer: front rail, domed end caps,
-                               rings, rivets and filigree, side runners, back
-                               plate, the bed rails the daters lie on, bearings
+    Tray                       the cast-brass drawer: the box (floor, walls, rims,
+                               lining), the bar on its far wall with domed end caps,
+                               rings, rivets and filigree, the bed rails the daters
+                               lie on, bearings
     CradleDenied/Approved      the yoke a dater stands in; origin on its pivot
-                               (the dater's back-foot edge); turns about x
+                               (the dater's front-foot edge, toward the chair); turns about x
     PinionDenied/Approved      the gear on the cradle's shaft; origin on the shaft
     RackDenied/Approved        the toothed bar riding on the pinion (slides along z)
                                with the slotted block the lever's pin rides in
@@ -27,6 +28,15 @@ these names, PropArt.Missing, and falls back to the built rack without them):
     PlateDenied/Approved       the enamel nameplates on the front rail (no words:
                                the game prints them, live TMP text); origin on the
                                face's centre
+
+Since Saleh's 1016a playtest (2026-10-17: "flip the drawer and give it depth")
+the drawer is flipped and deep: the brass bar with the nameplates lies on its far
+side (the top of the screen in the reading view) and the daters stand in front
+of it, toward the chair (the screen's bottom edge, where the drawer comes out);
+each dater folds toward the chair (FOLD), its cradle pivoting on the dater's
+front-foot edge, into a cast-brass box (a floor, two side walls, a near wall
+and a far wall under the bar, rolled rims, a dark lining) so the drawer reads
+as a 3D tray, not a flat frame.
 
 Everything is modelled in the OPEN pose (the daters upright) in the game's rack
 space: metres, x to the right, y up, z away from the chair, the origin between
@@ -51,23 +61,30 @@ SPACING = 0.14            # the daters' distance apart (StampSpacing)
 DATER_HW = 0.034          # a dater's half width
 DATER_HD = 0.023          # a dater's half depth
 DATER_H = 0.081           # a dater's height (frame top 0.033 + body 0.048)
-PIVOT_Y, PIVOT_Z = 0.0, DATER_HD   # the cradle's pivot: the dater's back-foot edge
+FOLD = -1.0               # the way a dater folds: its top toward the chair (-z; BrassDrawer.Fold)
+PIVOT_Y, PIVOT_Z = 0.0, FOLD * DATER_HD   # the cradle's pivot: the dater's foot edge on the side it folds to
 PINION_R = 0.011          # BrassDrawer.pinionRadius
 PINION_X = 0.114          # the pinion's and the rack's x (outside each dater)
 LEVER_L = 0.021           # BrassDrawer.leverLength
 LEVER_X = 0.135           # the lever's pivot x
 HALF = 0.152              # the drawer's half width (to the side runners' middle)
 RAIL_R = 0.017            # the front rail's radius
-RAIL_Y, RAIL_Z = 0.002, -0.044
+RAIL_Y, RAIL_Z = 0.028, 0.066   # the bar on the far wall, past the daters' tops as the reading view sees them
 PLATE_TILT = 35.0         # the nameplates' tilt toward the chair (degrees from flat)
 PLATE_W, PLATE_H = 0.092, 0.017
 
 TRAVEL = PINION_R * math.pi / 2.0          # the rack's travel over the cradle's quarter turn
 RACK_LEN = 0.045
 RACK_Y = PINION_R + 0.0025                 # the rack's middle height (on the pinion's top)
-RACK_Z_UP = PIVOT_Z - 0.004                # the rack's middle along z, upright
-PIN_DZ = RACK_LEN / 2.0 + 0.0045           # the slotted block's pin past the rack's middle
-LEVER_Z = RACK_Z_UP + PIN_DZ + TRAVEL / 2.0  # the lever's pivot z (the pin's mid travel)
+RACK_Z_UP = PIVOT_Z - FOLD * 0.004         # the rack's middle along z, upright
+PIN_DZ = RACK_LEN / 2.0 + 0.0045           # the slotted block's pin past the rack's middle (away from the fold)
+LEVER_Z = RACK_Z_UP + FOLD * (PIN_DZ + TRAVEL / 2.0)  # the lever's pivot z (the pin's mid travel)
+
+# The box (absolute rack space): the walls' outer half width and thickness, the near wall's outer face (toward
+# the chair), the far wall's outer face (under the bar), the floor's underside and top, the walls' top.
+BOX_X, WALL_T = 0.167, 0.010
+BOX_NEAR, BOX_FAR = -0.128, 0.067
+BOX_BOTTOM, FLOOR_TOP, WALL_TOP = -0.032, -0.014, 0.024
 
 
 def u2b(v):
@@ -172,9 +189,11 @@ def torus_x(group, centre, major, minor, mat):
 
 
 def rivet(group, centre, mat, r=0.0022, normal="y"):
-    """A domed rivet head on a face whose outward normal is the rack-space axis given ('y' up, '-z' toward the chair)."""
+    """A domed rivet head on a face whose outward normal is the rack-space axis given ('y' up, 'x' sideways, '-z' toward the chair)."""
     if normal == "y":
         return sphere(group, centre, r, (1.0, 0.5, 1.0), mat)
+    if normal == "x":
+        return sphere(group, centre, r, (0.5, 1.0, 1.0), mat)
     return sphere(group, centre, r, (1.0, 1.0, 0.5), mat)
 
 
@@ -248,24 +267,37 @@ def build(brass, dark, steel, red, green, plate_brass):
         for x in (s * 0.03, s * 0.11):
             sphere("Tray", rail_point(-40, 0.0005, x), 0.0018, (1, 1, 1), dark)
 
-    # The side runners and the back plate (a frame: the papers under the drawer show through it).
+    # The box: a cast floor, the side walls, the near wall (the edge it comes out of) and the far wall under the bar,
+    # each wall with a rolled rim on top and a dark lining inside, so the drawer reads as a deep brass tray.
+    length = BOX_FAR - BOX_NEAR
+    mid_z = (BOX_FAR + BOX_NEAR) / 2.0
+    wall_h = WALL_TOP - BOX_BOTTOM
+    wall_y = (WALL_TOP + BOX_BOTTOM) / 2.0
+    box("Tray", (0.0, (BOX_BOTTOM + FLOOR_TOP) / 2.0, mid_z), (2 * BOX_X, FLOOR_TOP - BOX_BOTTOM, length), dark, 0.002)
+    lining_h = WALL_TOP - FLOOR_TOP - 0.003
+    lining_y = FLOOR_TOP + lining_h / 2.0
     for s in (-1.0, 1.0):
-        box("Tray", (s * side_x, 0.003, 0.034), (0.010, 0.022, 0.156), brass, 0.002)
-        box("Tray", (s * side_x, -0.006, 0.034), (0.016, 0.004, 0.156), dark, 0.001)
-        for z in (-0.02, 0.03, 0.08):
-            rivet("Tray", (s * side_x, 0.0145, z), dark, 0.0018)
-    box("Tray", (0.0, 0.004, 0.113), (2 * side_x + 0.01, 0.024, 0.012), brass, 0.002)
-    for x in (-0.12, -0.04, 0.04, 0.12):
-        rivet("Tray", (x, 0.0165, 0.113), dark, 0.0019)
-    # The centre bridge between the two lanes and the decks under the mechanism.
-    box("Tray", (0.0, -0.005, 0.04), (0.06, 0.006, 0.14), brass, 0.0015)
+        box("Tray", (s * (BOX_X - WALL_T / 2.0), wall_y, mid_z), (WALL_T, wall_h, length), brass, 0.002)
+        box("Tray", (s * (BOX_X - WALL_T - 0.0012), lining_y, mid_z), (0.0024, lining_h, length - 2 * WALL_T), dark, 0.0008)
+        cylinder("Tray", (s * (BOX_X - WALL_T / 2.0), WALL_TOP, mid_z), WALL_T * 0.62, length, "z", brass, verts=24, bevel=0.001)
+        for z in (BOX_NEAR + 0.03, mid_z, BOX_FAR - 0.03):
+            rivet("Tray", (s * BOX_X, WALL_TOP - 0.012, z), dark, 0.0019, normal="x")
+    for z0, inward in ((BOX_NEAR, 1.0), (BOX_FAR, -1.0)):
+        box("Tray", (0.0, wall_y, z0 + inward * WALL_T / 2.0), (2 * BOX_X, wall_h, WALL_T), brass, 0.002)
+        box("Tray", (0.0, lining_y, z0 + inward * (WALL_T + 0.0012)), (2 * (BOX_X - WALL_T), lining_h, 0.0024), dark, 0.0008)
+    # The near wall's rolled lip (the edge the drawer comes out of) and its rivets toward the chair.
+    cylinder("Tray", (0.0, WALL_TOP, BOX_NEAR + WALL_T / 2.0), WALL_T * 0.7, 2 * BOX_X, "x", brass, verts=28, bevel=0.001)
+    for x in (-0.13, -0.065, 0.0, 0.065, 0.13):
+        rivet("Tray", (x, (WALL_TOP + BOX_BOTTOM) / 2.0, BOX_NEAR - 0.0004), dark, 0.0021, normal="-z")
+    # The centre bridge between the two lanes and the decks under the mechanism (on the floor).
+    box("Tray", (0.0, -0.005, FOLD * 0.04), (0.06, 0.006, 0.14), brass, 0.0015)
     for s in (-1.0, 1.0):
-        box("Tray", (s * 0.126, -0.006, 0.04), (0.038, 0.004, 0.14), dark, 0.001)
-        # The bed rails the lying dater rests on (its back), two a lane.
+        box("Tray", (s * 0.126, -0.006, FOLD * 0.04), (0.038, 0.004, 0.14), dark, 0.001)
+        # The bed rails the folded dater rests on, two a lane.
         for dx in (-0.022, 0.022):
-            box("Tray", (s * SPACING / 2 + dx, -0.0075, 0.068), (0.008, 0.005, 0.074), brass, 0.0012)
+            box("Tray", (s * SPACING / 2 + dx, -0.0075, FOLD * 0.068), (0.008, 0.005, 0.074), brass, 0.0012)
         # The cross bars that tie the bed rails to the bridge and the decks.
-        box("Tray", (s * SPACING / 2, -0.0075, 0.104), (0.07, 0.004, 0.006), dark, 0.001)
+        box("Tray", (s * SPACING / 2, -0.0075, FOLD * 0.104), (0.07, 0.004, 0.006), dark, 0.001)
         # The bearings: a pillow block each side of the lane on the pivot's axis, and a cheek boss.
         for inner in (-1.0, 1.0):
             bx = s * SPACING / 2 + inner * (DATER_HW + 0.0075)
@@ -276,7 +308,7 @@ def build(brass, dark, steel, red, green, plate_brass):
         cylinder("Tray", (s * LEVER_X, RACK_Y - 0.006, LEVER_Z), 0.005, 0.016, "y", dark, verts=20)
         # The rack's guide: two rails along z either side of it.
         for g in (-1.0, 1.0):
-            box("Tray", (s * PINION_X + g * 0.0062, RACK_Y - 0.003, RACK_Z_UP + TRAVEL / 2), (0.002, 0.008, RACK_LEN + TRAVEL + 0.004), dark, 0.0006)
+            box("Tray", (s * PINION_X + g * 0.0062, RACK_Y - 0.003, RACK_Z_UP + FOLD * TRAVEL / 2), (0.002, 0.008, RACK_LEN + TRAVEL + 0.004), dark, 0.0006)
 
     # The cradles (upright), their shafts, pinions, racks and levers.
     for name, s in (("Denied", -1.0), ("Approved", 1.0)):
@@ -285,11 +317,11 @@ def build(brass, dark, steel, red, green, plate_brass):
         for side in (-1.0, 1.0):
             px = cx + side * (DATER_HW + 0.0022)
             # The side cheek: a plate hugging the dater's frame, and a round ear on the pivot.
-            box(g, (px, 0.017, PIVOT_Z - 0.019), (0.003, 0.03, 0.03), brass, 0.001)
-            cylinder(g, (px, PIVOT_Y + 0.001, PIVOT_Z - 0.002), 0.012, 0.0034, "x", brass, verts=32, bevel=0.0008)
-            sphere(g, (px + side * 0.0018, 0.026, PIVOT_Z - 0.026), 0.0016, (1, 1, 1), dark)
-        # The back plate the dater leans on, and the shaft through both bearings to the pinion.
-        box(g, (cx, 0.016, PIVOT_Z + 0.0022), (2 * DATER_HW + 0.008, 0.03, 0.0035), brass, 0.001)
+            box(g, (px, 0.017, PIVOT_Z - FOLD * 0.019), (0.003, 0.03, 0.03), brass, 0.001)
+            cylinder(g, (px, PIVOT_Y + 0.001, PIVOT_Z - FOLD * 0.002), 0.012, 0.0034, "x", brass, verts=32, bevel=0.0008)
+            sphere(g, (px + side * 0.0018, 0.026, PIVOT_Z - FOLD * 0.026), 0.0016, (1, 1, 1), dark)
+        # The plate the dater leans on as it folds, and the shaft through both bearings to the pinion.
+        box(g, (cx, 0.016, PIVOT_Z + FOLD * 0.0022), (2 * DATER_HW + 0.008, 0.03, 0.0035), brass, 0.001)
         shaft_from, shaft_to = cx - s * (DATER_HW + 0.012), s * (PINION_X + 0.006)
         cylinder(g, ((shaft_from + shaft_to) / 2, PIVOT_Y, PIVOT_Z), 0.0028, abs(shaft_to - shaft_from), "x", steel, verts=16)
         gear("Pinion" + name, (s * PINION_X, PIVOT_Y, PIVOT_Z), PINION_R, 0.006, 12, brass)
@@ -300,7 +332,7 @@ def build(brass, dark, steel, red, green, plate_brass):
         for i in range(n):
             z = RACK_Z_UP - RACK_LEN / 2 + (i + 0.5) * RACK_LEN / n
             box(r, (s * PINION_X, RACK_Y - 0.002, z), (0.0085, 0.0018, RACK_LEN / n * 0.5), brass, 0.0003)
-        pin_z = RACK_Z_UP + PIN_DZ
+        pin_z = RACK_Z_UP + FOLD * PIN_DZ
         for g2 in (-1.0, 1.0):
             box(r, (s * PINION_X, RACK_Y + 0.0012, pin_z + g2 * 0.0035), (0.016, 0.005, 0.0025), dark, 0.0005)
         # The lever: a boss on its pivot, a tapered arm toward the rack (along x) and the pin riding in the slot.
@@ -412,9 +444,9 @@ def stand_in_daters(frame_mat, red_body, green_body, window):
 
 def pose(objs, raise_):
     """Poses the mechanism for a raise of 0 (flat) to 1 (upright): the same kinematics as BrassDrawer.Pose in the game."""
-    theta = math.radians(90.0 * (1.0 - raise_))
+    theta = FOLD * math.radians(90.0 * (1.0 - raise_))
     for name, s in (("Denied", -1.0), ("Approved", 1.0)):
-        # Rack +x rotation by theta (the top toward +z) is Blender's rotation about x by theta as well ((-x,-z,y) keeps the x axis' sense).
+        # Rack +x rotation by theta (the top toward +z for a positive theta, toward the chair with FOLD) is Blender's rotation about x by theta as well ((-x,-z,y) keeps the x axis' sense).
         for key in ("Cradle", "Pinion", "StandIn"):
             o = objs.get(key + name)
             if o is not None:
@@ -423,7 +455,7 @@ def pose(objs, raise_):
         dz = PINION_R * theta
         base = rack.get("base")
         rack.location = Vector(base) + u2b((0.0, 0.0, dz))
-        pin_z = RACK_Z_UP + PIN_DZ + dz
+        pin_z = RACK_Z_UP + FOLD * PIN_DZ + dz
         a = math.asin(max(-1.0, min(1.0, (pin_z - LEVER_Z) / LEVER_L)))
         lever = objs["Lever" + name]
         toward = -s
@@ -455,8 +487,8 @@ def preview(folder, objs):
     world.node_tree.nodes["Background"].inputs["Color"].default_value = (0.42, 0.42, 0.43, 1.0)
     world.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.35
     scene.world = world
-    # A neutral desk-grey floor 3 cm under the daters' feet (where the desk is).
-    bpy.ops.mesh.primitive_plane_add(size=3.0, location=u2b((0.0, -0.03, 0.0)))
+    # A neutral desk-grey floor under the box (where the desk is).
+    bpy.ops.mesh.primitive_plane_add(size=3.0, location=u2b((0.0, BOX_BOTTOM - 0.0005, 0.0)))
     floor = bpy.context.active_object
     fm = material("PreviewFloor", (0.5, 0.5, 0.5), 0.0, 0.8)
     floor.data.materials.append(fm)
@@ -491,6 +523,8 @@ def preview(folder, objs):
     shot("brass_drawer_front34.png", (-0.32, 0.36, -0.52), look)
     shot("brass_drawer_side.png", (0.62, 0.1, 0.03), look)
     shot("brass_drawer_top.png", (0.0, 0.72, 0.03), look, straight_down=True)
+    # The reading view's look: from the chair's side, pitched 80 degrees down.
+    shot("brass_drawer_reading.png", (0.0, 0.62, -0.13), (0.0, 0.0, -0.02))
     pose(objs, 0.0)
     shot("brass_drawer_closed_front34.png", (-0.32, 0.36, -0.52), look)
     pose(objs, 1.0)

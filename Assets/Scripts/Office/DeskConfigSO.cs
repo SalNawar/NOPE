@@ -189,8 +189,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
     [Min(0.005f)] public float stampHover = 0.03f;
 
-    /// <summary>Where the stamp drawer's middle (between its two daters' dies) stands out on the desk: the point of the desk the reading view shows there (viewport x, y). Low, at the view's bottom edge (Saleh's 1008a playtest: "the drawer is blocking the stamp area can we have it smaller and from the bottom"): the drawer rises from the bottom edge, below the papers' reading area.</summary>
-    public Vector2 stampBarView = new Vector2(0.6f, 0.108f);
+    /// <summary>Where the stamp drawer stands out, tethered to the screen's bottom edge (Saleh's 1016a playtest: "tethered to the edge of the screen"; DeskStampTray.Tether): its middle at viewport x, its near edge where the reading view's ray through viewport y meets the desk (0: flush on the bottom edge), below the papers' reading area. The STAMPS tab sits on the bottom edge at the same x.</summary>
+    public Vector2 stampBarView = new Vector2(0.6f, 0f);
 
     /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, away from the chair): in, it waits that far nearer the chair, below the reading view's bottom edge (its motion's timing is MotionKnobs' drawer tunings).</summary>
     [Min(0.1f)] public float stampBarTravel = 0.3f;

@@ -140,8 +140,8 @@ public sealed class MotionKnobs
     /// <summary>How far a dater's body sinks over its frame once the frame stands on the paper (metres): the self-inker's stroke.</summary>
     public float daterCompress = 0.012f;
 
-    /// <summary>A dater held down: how long a click on a hanging dater waits before its stroke goes down and holds (seconds; a drag starting sooner carries it instead), and the least time a quick stroke stays down.</summary>
-    public float daterHoldDelay = 0.12f, daterQuickHold = 0.07f;
+    /// <summary>The least time a dater's stroke stays down on the paper before it springs back up (seconds).</summary>
+    public float daterQuickHold = 0.07f;
 
     /// <summary>The seconds between two ratchet clicks of the date wheels' morning roll.</summary>
     public float daterWheelClick = 0.07f;

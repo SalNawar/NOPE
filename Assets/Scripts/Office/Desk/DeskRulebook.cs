@@ -59,6 +59,9 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The rules' rows, top first: each a click box (Clickable, a collider) with its text as its child.</summary>
     [SerializeField] private Clickable[] rows = Array.Empty<Clickable>();
 
+    /// <summary>The folder's right sheet every page prints on (metres, width by depth, centred on the pages' parent: the builder's measure of the art): no rule's text leaves it (LayRows).</summary>
+    [SerializeField] private Vector2 sheetSize = new Vector2(0.18f, 0.2f);
+
     /// <summary>The line printed when the day has no directive.</summary>
     [SerializeField] private TMP_Text none;
 
@@ -200,6 +203,8 @@ public sealed class DeskRulebook : MonoBehaviour
     private void PrintLabels()
     {
         ShowCover();
+        if (_indices.Count > 0)
+            Paginate(_ruleSheet); // a rule may print words of the reading language (TravelRuleSO.Summary)
         PrintTitle();
         if (none != null)
             none.text = UiText.Get("desk.rulebook.none");
@@ -289,6 +294,16 @@ public sealed class DeskRulebook : MonoBehaviour
         Show(_rules);
         ShowMissing(MissingPapers.None, null);
     }
+
+    /// <summary>Rules printed while the folder was hidden are laid again once it shows (a hidden text's measures are not to be trusted).</summary>
+    private void OnEnable()
+    {
+        if (_laidHidden)
+            Paginate(_ruleSheet);
+    }
+
+    /// <summary>True when the rules were last laid while the folder was hidden.</summary>
+    private bool _laidHidden;
 
     private void OnDestroy()
     {
@@ -462,8 +477,10 @@ public sealed class DeskRulebook : MonoBehaviour
     /// Prints today's directives (<paramref name="rules"/>, the day's list; a
     /// rule with no summary prints no row), one per row, on as many RULES
     /// sheets as they need (RuleSheets: those that do not fit a sheet at the
-    /// least readable size go on the next; leftover 2026-10-08), and opens on
-    /// RULES at the first sheet.
+    /// least readable size go on the next; leftover 2026-10-08; every text
+    /// measured on the sheet itself, Saleh's 1016a playtest: "when there are
+    /// many rules the text overflows out of the folder"), and opens on RULES
+    /// at the first sheet.
     /// </summary>
     public void Show(IReadOnlyList<TravelRuleSO> rules)
     {
@@ -472,16 +489,32 @@ public sealed class DeskRulebook : MonoBehaviour
         for (int i = 0; i < _rules.Count; i++)
             if (_rules[i] != null && !string.IsNullOrWhiteSpace(_rules[i].Summary()))
                 _indices.Add(i);
+        ShowPage(0);
+        Paginate(0);
+        if (none != null)
+            none.gameObject.SetActive(_indices.Count == 0);
+    }
+
+    /// <summary>
+    /// Splits the directives into RULES sheets (RuleSheets.Starts over
+    /// LayRows, the RULES page shown while it measures so its texts measure
+    /// live, the page shown before kept) and prints sheet
+    /// <paramref name="sheet"/> (the last when there are fewer).
+    /// </summary>
+    private void Paginate(int sheet)
+    {
+        bool shown = rulesPage == null || rulesPage.activeSelf;
+        if (rulesPage != null)
+            rulesPage.SetActive(true);
+        _laidHidden = !isActiveAndEnabled;
         _sheetStarts = RuleSheets.Starts(_indices.Count, rows.Length, (start, count) =>
         {
             PrintRows(start, count);
-            return LayRows(count);
+            return LayRows(count, false);
         });
-        ShowRuleSheet(0);
-        if (none != null)
-            none.gameObject.SetActive(_indices.Count == 0);
-        SetInspecting(_inspecting);
-        ShowPage(0);
+        ShowRuleSheet(Mathf.Clamp(sheet, 0, _sheetStarts.Count - 1));
+        if (rulesPage != null)
+            rulesPage.SetActive(shown);
     }
 
     /// <summary>The first directive (of _indices) on each RULES sheet (RuleSheets.Starts).</summary>
@@ -501,7 +534,7 @@ public sealed class DeskRulebook : MonoBehaviour
     {
         _ruleSheet = ((sheet % _sheetStarts.Count) + _sheetStarts.Count) % _sheetStarts.Count;
         PrintRows(SheetStart, SheetCount);
-        LayRows(SheetCount);
+        LayRows(SheetCount, true);
         SetInspecting(_inspecting);
         PrintTitle();
     }
@@ -555,6 +588,12 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The least share of its built size a rule row's text shrinks to so that the rows stay on the page.</summary>
     private const float RowTextFloor = 0.6f;
 
+    /// <summary>The least share a rule alone on its sheet shrinks to when even at RowTextFloor it would leave the sheet (it never does: it shrinks instead).</summary>
+    private const float RowTextLeast = 0.3f;
+
+    /// <summary>How far inside the sheet's edges every rule's printed text stays (metres).</summary>
+    private const float SheetMargin = 0.003f;
+
     /// <summary>The sheet's blank foot under the last ruled line the rows may run into (metres; the art's sheet ends 0.037 m below it): day 12's six rules ran off the page and the screen (leftover 2026-10-08).</summary>
     private const float RowsFoot = 0.03f;
 
@@ -563,14 +602,19 @@ public sealed class DeskRulebook : MonoBehaviour
     /// 2026-10-08: rule 3's last line printed over rule 4's first): each row
     /// grows downward to fit its wrapped text (its text's box, its click box)
     /// and pushes the rows under it down by as much; when the rows would run
-    /// past the last row's place and the sheet's foot under it (RowsFoot),
-    /// every row's text shrinks a step (down to RowTextFloor of its built
-    /// size) and they are laid again. A row whose text fits keeps its place on
-    /// the art's line. Lays the first <paramref name="count"/> rows; false
-    /// when they run past the page even at the floor (RuleSheets then moves
-    /// the last to the next sheet).
+    /// past the last row's place and the sheet's foot under it (RowsFoot), or
+    /// any row's printed text, measured as drawn, would leave the sheet
+    /// (sheetSize, SheetMargin inside its edges: a long word, a line the
+    /// estimate missed; Saleh's 1016a playtest: "when there are many rules
+    /// the text overflows out of the folder"), every row's text shrinks a
+    /// step (down to RowTextFloor of its built size) and they are laid again.
+    /// A row whose text fits keeps its place on the art's line. Lays the first
+    /// <paramref name="count"/> rows; false when they run past the page even
+    /// at the floor (RuleSheets then moves the last to the next sheet), unless
+    /// <paramref name="final"/> or the rule is alone on its sheet: then it
+    /// shrinks on, down to RowTextLeast, so no text ever leaves the sheet.
     /// </summary>
-    private bool LayRows(int count)
+    private bool LayRows(int count, bool final)
     {
         if (_rowHomes.Length != rows.Length)
         {
@@ -596,7 +640,7 @@ public sealed class DeskRulebook : MonoBehaviour
             return true;
         RowHome lastPlace = _rowHomes[rows.Length - 1];
         float pageBottom = lastPlace.Row.z - lastPlace.BoxSize.z / 2f - RowsFoot;
-        for (float share = 1f; ; share -= 0.1f)
+        for (float share = 1f; ; share -= 0.05f)
         {
             float shift = 0f, bottom = float.MaxValue;
             for (int r = 0; r < count; r++)
@@ -623,11 +667,43 @@ public sealed class DeskRulebook : MonoBehaviour
                 shift += extra;
                 bottom = home.Row.z - shift - home.BoxSize.z / 2f; // its click box's foot
             }
-            if (bottom >= pageBottom - 0.0001f)
+            if (bottom >= pageBottom - 0.0001f && OnSheet(count))
                 return true;
-            if (share <= RowTextFloor + 0.001f)
+            if (share <= RowTextLeast + 0.001f || (share <= RowTextFloor + 0.001f && !final && count > 1))
                 return false;
         }
+    }
+
+    private readonly Vector3[] _corners = new Vector3[4];
+
+    /// <summary>True when the printed text of each of the first <paramref name="count"/> rule rows, measured as drawn, lies on the sheet (sheetSize about the pages' parent, SheetMargin inside its edges).</summary>
+    private bool OnSheet(int count)
+    {
+        Transform page = rulesPage != null ? rulesPage.transform.parent : null;
+        if (page == null)
+            return true;
+        float hx = sheetSize.x / 2f - SheetMargin, hz = sheetSize.y / 2f - SheetMargin;
+        for (int r = 0; r < count && r < rows.Length; r++)
+        {
+            TMP_Text t = rows[r] != null ? rows[r].GetComponentInChildren<TMP_Text>(true) : null;
+            if (t == null)
+                continue;
+            t.ForceMeshUpdate(true);
+            Bounds b = t.textBounds;
+            if (t.textInfo.characterCount == 0)
+                continue;
+            _corners[0] = new Vector3(b.min.x, b.min.y, 0f);
+            _corners[1] = new Vector3(b.max.x, b.min.y, 0f);
+            _corners[2] = new Vector3(b.min.x, b.max.y, 0f);
+            _corners[3] = new Vector3(b.max.x, b.max.y, 0f);
+            foreach (Vector3 corner in _corners)
+            {
+                Vector3 local = page.InverseTransformPoint(t.transform.TransformPoint(corner));
+                if (local.x < -hx || local.x > hx || local.z < -hz || local.z > hz)
+                    return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>The GUIDE's sheets (BASICS first, then the day's pages: the guide director); the sheet open stays open (by id; the first when gone).</summary>
