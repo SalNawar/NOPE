@@ -27388,8 +27388,14 @@
         "tier": "Flavour"
       },
       {
+        "key": "home.pet.buy",
+        "text": "Buy · {0} {1}",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "home.pet.noToys",
-        "text": "No toys yet. The Orders app on your PC sells them.",
+        "text": "No toys for sale tonight.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -31738,8 +31744,12 @@
             "text": "لعب الليلة"
           },
           {
+            "key": "home.pet.buy",
+            "text": "اشتر · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "لا ألعاب بعد. تطبيق الطلبات على حاسوبك يبيعها."
+            "text": "لا ألعاب للبيع الليلة."
           },
           {
             "key": "home.pet.dark",
@@ -32647,6 +32657,14 @@
           }
         ],
         "words": [
+          {
+            "native": "اشتر",
+            "english": "buy"
+          },
+          {
+            "native": "للبيع",
+            "english": "for sale"
+          },
           {
             "native": "الأعلى",
             "english": "the top"
@@ -40094,8 +40112,12 @@
             "text": "Παίξατε απόψε"
           },
           {
+            "key": "home.pet.buy",
+            "text": "Αγορά · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "Κανένα παιχνίδι ακόμη. Η εφαρμογή Παραγγελίες στον υπολογιστή σου τα πουλάει."
+            "text": "Δεν πουλιούνται παιχνίδια απόψε."
           },
           {
             "key": "home.pet.dark",
@@ -41003,6 +41025,18 @@
           }
         ],
         "words": [
+          {
+            "native": "Αγορά",
+            "english": "Buy"
+          },
+          {
+            "native": "πουλιούνται",
+            "english": "are sold"
+          },
+          {
+            "native": "παιχνίδια",
+            "english": "toys"
+          },
           {
             "native": "συρτάρι",
             "english": "drawer"
@@ -47930,8 +47964,12 @@
             "text": "Ha giocato stasera"
           },
           {
+            "key": "home.pet.buy",
+            "text": "Compra · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "Ancora nessun giocattolo. L'app Ordini sul tuo PC li vende."
+            "text": "Nessun giocattolo in vendita stasera."
           },
           {
             "key": "home.pet.dark",
@@ -48839,6 +48877,14 @@
           }
         ],
         "words": [
+          {
+            "native": "Compra",
+            "english": "Buy"
+          },
+          {
+            "native": "vendita",
+            "english": "sale"
+          },
           {
             "native": "cassetto",
             "english": "drawer"
@@ -55886,8 +55932,12 @@
             "text": "Heute gespielt"
           },
           {
+            "key": "home.pet.buy",
+            "text": "Kaufen · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "Noch kein Spielzeug. Die Bestell-App auf deinem PC verkauft welches."
+            "text": "Heute Abend gibt es kein Spielzeug zu kaufen."
           },
           {
             "key": "home.pet.dark",
@@ -56795,6 +56845,10 @@
           }
         ],
         "words": [
+          {
+            "native": "kaufen",
+            "english": "buy"
+          },
           {
             "native": "Stempelschublade",
             "english": "stamp drawer"
@@ -64086,8 +64140,12 @@
             "text": "今晚已玩过"
           },
           {
+            "key": "home.pet.buy",
+            "text": "购买 · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "还没有玩具。电脑上的订单应用有售。"
+            "text": "今晚没有玩具出售。"
           },
           {
             "key": "home.pet.dark",
@@ -64995,6 +65053,14 @@
           }
         ],
         "words": [
+          {
+            "native": "购买",
+            "english": "buy"
+          },
+          {
+            "native": "出",
+            "english": "out"
+          },
           {
             "native": "顶",
             "english": "top"
@@ -71614,8 +71680,12 @@
             "text": "今夜は遊んだ"
           },
           {
+            "key": "home.pet.buy",
+            "text": "買う · {0} {1}"
+          },
+          {
             "key": "home.pet.noToys",
-            "text": "おもちゃはまだありません。PCの注文アプリで買えます。"
+            "text": "今夜は売っているおもちゃがない。"
           },
           {
             "key": "home.pet.dark",
@@ -72523,6 +72593,18 @@
           }
         ],
         "words": [
+          {
+            "native": "買う",
+            "english": "buy"
+          },
+          {
+            "native": "売っ",
+            "english": "sold"
+          },
+          {
+            "native": "いる",
+            "english": "is"
+          },
           {
             "native": "引き出",
             "english": "drawer"

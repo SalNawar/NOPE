@@ -10,7 +10,7 @@ using UnityEditor;
 /// bills, the pet's words) and written: one house upgrade (venue Home, its
 /// category as its branch, its prerequisites) and one permanent effect with
 /// a household op per non-zero effect column for each row, and one toy
-/// (venue Orders, the Toys band, its Mood op) for each home.toys row, into
+/// (venue Home, the Toys band the pet's corner sells, its Mood op) for each home.toys row, into
 /// the owned Assets/Data/World/Home, listed in the library after the
 /// hand-authored upgrades and effects; the radio, the bills and the pet's
 /// words go into the library's Home content.
@@ -107,9 +107,9 @@ public static partial class WorldContentGenerator
     private static HouseUpgradeData[] HouseRows(WorldSource src) =>
         (src.home?.upgrades ?? Array.Empty<HouseUpgradeData>()).Where(u => u != null).ToArray();
 
-    /// <summary>A row's category as its branch, when it names one of Home's (UpgradeTree.BranchesOf).</summary>
+    /// <summary>A row's category as its branch, when it names one of the House's columns (UpgradeTree.InTheHouse: Home's, not the pet's toys, which are home.toys rows).</summary>
     private static bool HouseBranch(HouseUpgradeData u, out UpgradeBranch branch) =>
-        Enum.TryParse(u.category, out branch) && Array.IndexOf(UpgradeTree.BranchesOf(UpgradeVenue.Home), branch) >= 0;
+        Enum.TryParse(u.category, out branch) && UpgradeTree.InTheHouse(branch);
 
     /// <summary>
     /// Checks "home" (errors added, nothing written): each row's category is
@@ -127,7 +127,7 @@ public static partial class WorldContentGenerator
         foreach (HouseUpgradeData u in rows)
         {
             if (!HouseBranch(u, out UpgradeBranch branch))
-                errors.Add($"home.upgrades '{u.id}': category '{u.category}' is none of {string.Join(", ", UpgradeTree.BranchesOf(UpgradeVenue.Home))}.");
+                errors.Add($"home.upgrades '{u.id}': category '{u.category}' is none of {string.Join(", ", UpgradeTree.BranchesOf(UpgradeVenue.Home).Where(UpgradeTree.InTheHouse))}.");
             if (u.cost < 0 || u.upkeep < 0)
                 errors.Add($"home.upgrades '{u.id}': cost and upkeep are 0 cr or more.");
             if (others.Contains(u.id ?? string.Empty))
@@ -254,7 +254,8 @@ public static partial class WorldContentGenerator
             effects.Add(fx);
         }
 
-        // The toys (the Home pet spec PS7): Orders upgrades in the Toys band, each a permanent Mood op once delivered.
+        // The toys (the Home pet spec PS7): Home upgrades in the Toys band, sold in the pet's corner (Saleh 2026-10-17: "cat
+        // upgrade is at work instead of home"), each a permanent Mood op once bought.
         foreach (ToyData t in ToyRows(src))
         {
             EffectSO fx = LoadOrCreate<EffectSO>($"{HomeFolder}/Effect_{Pascal(t.id)}.asset", written);
@@ -271,7 +272,7 @@ public static partial class WorldContentGenerator
             so.description = t.blurb;
             so.cost = t.cost;
             so.unlockEffect = fx;
-            so.venue = UpgradeVenue.Orders;
+            so.venue = UpgradeVenue.Home;
             so.branch = UpgradeBranch.Toys;
             so.requires = Array.Empty<string>();
             so.installSlot = string.Empty;

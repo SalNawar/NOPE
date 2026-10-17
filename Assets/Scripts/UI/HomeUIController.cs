@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// Owns the Home phase panels (Phase 4; the Home pet spec): the bills (the
 /// fixed costs paid, the pet's needs in words, and the night's optional
 /// bills, each a row with its Paying / Skip pair), the pet's corner (the pet
-/// drawn by PetStandIn, petted, played with a toy), the House (Home's upgrade
+/// drawn by PetStandIn, petted, its toys bought and played with), the House (Home's upgrade
 /// tree: the office's upgrades are the PC's Orders app's), the Night Slots
 /// machine (SlotMachineView: its reels, lever and tray; it keeps the HUD's
 /// wallet in step with its credits), and the sleep prompt that hands off to the next
@@ -346,7 +346,7 @@ public sealed class HomeUIController : MonoBehaviour
     // Pet corner (the Home pet spec PS7)
     // =========================================================
 
-    /// <summary>One owned toy as its row shows it: its id (its picture), its label, its button's label, whether it takes clicks, and what playing does.</summary>
+    /// <summary>One toy as its row shows it: its id (its picture), its label, its button's label, whether it takes clicks, and what the click does (play with an owned toy, buy one for sale).</summary>
     public readonly struct ToyView
     {
         /// <summary>The toy's upgrade id (its picture, ArtSlots.PetToy, else the kit's tile named in it).</summary>
@@ -355,13 +355,13 @@ public sealed class HomeUIController : MonoBehaviour
         /// <summary>The row's label (the toy's name).</summary>
         public readonly string Label;
 
-        /// <summary>The button's label ("Play" or "Played tonight").</summary>
+        /// <summary>The button's label ("Play" or "Played tonight" when owned, "Buy · 20 cr" when for sale).</summary>
         public readonly string Button;
 
-        /// <summary>Whether the button takes clicks (once a night).</summary>
+        /// <summary>Whether the button takes clicks (play: once a night; buy: while the wallet covers it).</summary>
         public readonly bool Enabled;
 
-        /// <summary>Plays with it (HomeManager shows the corner again with the pet's line).</summary>
+        /// <summary>Plays with it or buys it (HomeManager shows the corner again: the pet's line after a play, the toy's Play row after a purchase).</summary>
         public readonly Action OnPlay;
 
         /// <summary>A row.</summary>
@@ -381,8 +381,8 @@ public sealed class HomeUIController : MonoBehaviour
     /// (<paramref name="kind"/> in its <paramref name="coat"/> looking <paramref name="look"/>, the room
     /// dark unless <paramref name="lit"/>), <paramref name="reaction"/> (what
     /// it just did), the pat button (<paramref name="patLabel"/>: a hop and
-    /// a heart, and <paramref name="onPat"/>'s line), one row per owned toy
-    /// (<paramref name="toys"/>; <paramref name="noToys"/> without one), and
+    /// a heart, and <paramref name="onPat"/>'s line), one row per toy, owned
+    /// or for sale (<paramref name="toys"/>; <paramref name="noToys"/> without one), and
     /// the continue button, labelled <paramref name="continueLabel"/>, calling
     /// <paramref name="onContinue"/> (or immediately if unwired). Shown again
     /// after a toy (<paramref name="played"/>), the pet spins.

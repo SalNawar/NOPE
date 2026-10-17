@@ -150,16 +150,38 @@ public static class HomeEconomy
         return total;
     }
 
-    /// <summary>The toys the clerk owns (Orders upgrades in the Toys band, delivered), in the library's order.</summary>
+    /// <summary>The toys the clerk owns (Home upgrades in the Toys band, bought in the pet's corner; a save from before 2026-10-17 may own ones the Orders app delivered), in the library's order.</summary>
     public static List<UpgradeSO> OwnedToys(WorldState world, ContentLibrarySO lib)
     {
         var toys = new List<UpgradeSO>();
-        if (world == null || lib == null)
+        if (world == null)
             return toys;
-        foreach (UpgradeSO u in lib.Upgrades)
-            if (u != null && u.branch == UpgradeBranch.Toys && world.HasUpgrade(u.id))
+        foreach (UpgradeSO u in Toys(lib))
+            if (world.HasUpgrade(u.id))
                 toys.Add(u);
         return toys;
+    }
+
+    /// <summary>Every toy the pet's corner sells (the Toys band), in the library's order.</summary>
+    public static List<UpgradeSO> Toys(ContentLibrarySO lib)
+    {
+        var toys = new List<UpgradeSO>();
+        if (lib != null)
+            foreach (UpgradeSO u in lib.Upgrades)
+                if (u != null && u.branch == UpgradeBranch.Toys)
+                    toys.Add(u);
+        return toys;
+    }
+
+    /// <summary>The House's upgrades (Home's, in one of its columns, UpgradeTree.InTheHouse: not the pet's toys), in the library's order: what the House draws and the balance simulation's shoppers buy from.</summary>
+    public static List<UpgradeSO> HouseUpgrades(ContentLibrarySO lib)
+    {
+        var upgrades = new List<UpgradeSO>();
+        if (lib != null)
+            foreach (UpgradeSO u in lib.Upgrades)
+                if (u != null && u.venue == UpgradeVenue.Home && UpgradeTree.InTheHouse(u.branch))
+                    upgrades.Add(u);
+        return upgrades;
     }
 
     /// <summary>
@@ -205,8 +227,8 @@ public static class HomeEconomy
     /// today (TimelineService.ActivateEffect), so tonight's fixed bill,
     /// settled when Home opened, is untouched, and tonight's pet night at
     /// Sleep and the next evening read it. Returns the price paid, or -1 when
-    /// refused. The House and the balance simulation's buyer both buy through
-    /// here.
+    /// refused. The House, the pet's corner (its toys) and the balance
+    /// simulation's buyer all buy through here.
     /// </summary>
     public static int BuyHouseUpgrade(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade)
     {

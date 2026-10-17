@@ -3042,8 +3042,12 @@ MonoBehaviour:
     text: Ha giocato stasera
     gloss: 0
     tier: 0
+  - key: home.pet.buy
+    text: "Compra \xB7 {0} {1}"
+    gloss: 0
+    tier: 0
   - key: home.pet.noToys
-    text: Ancora nessun giocattolo. L'app Ordini sul tuo PC li vende.
+    text: Nessun giocattolo in vendita stasera.
     gloss: 0
     tier: 0
   - key: home.pet.dark
@@ -3971,6 +3975,10 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: Compra
+    english: Buy
+  - native: vendita
+    english: sale
   - native: cassetto
     english: drawer
   - native: alto

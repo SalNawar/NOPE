@@ -11,7 +11,7 @@ public enum UpgradeVenue
     /// <summary>The PC's Orders app: paid when ordered, delivered at the start of the next day, a node of the upgrade tree.</summary>
     Orders,
 
-    /// <summary>Home's House panel (household improvements): bought and owned at once, a tree of its own (Home's categories, prerequisites at Home).</summary>
+    /// <summary>Home: bought and owned at once, a tree of its own (Home's categories, prerequisites at Home): the House panel's household improvements and the pet corner's toys.</summary>
     Home
 }
 
@@ -50,7 +50,7 @@ public enum UpgradeBranch
     /// <summary>Home: small comforts (the household's mood).</summary>
     Comfort,
 
-    /// <summary>The Orders app: the pet's toys (the Home pet spec PS7: a Mood op each, and one to play with each night).</summary>
+    /// <summary>Home: the pet's toys (the Home pet spec PS7: a Mood op each, and one to play with each night), sold in the pet's corner, not the House (Saleh 2026-10-17: "cat upgrade is at work instead of home"; they were the Orders app's until then).</summary>
     Toys
 }
 
@@ -341,10 +341,13 @@ public static class UpgradeTree
         return missing;
     }
 
-    /// <summary>The branches <paramref name="venue"/> draws, in band order: the Orders app's Desk, Interview, Portals, Contacts and Toys (the pet's); Home's Food, Housing, Security, Health and Comfort (an explicit list, so a branch appended later is placed on purpose).</summary>
+    /// <summary>The branches sold at <paramref name="venue"/>, in band order: the Orders app's Desk, Interview, Portals and Contacts; Home's Food, Housing, Security, Health and Comfort (the House's columns) and Toys (the pet's, sold in its corner) (an explicit list, so a branch appended later is placed on purpose).</summary>
     public static UpgradeBranch[] BranchesOf(UpgradeVenue venue) => venue == UpgradeVenue.Home
-        ? new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort }
-        : new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts, UpgradeBranch.Toys };
+        ? new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort, UpgradeBranch.Toys }
+        : new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts };
+
+    /// <summary>True for a column of the House (one of Home's branches but the pet's toys, which its corner sells).</summary>
+    public static bool InTheHouse(UpgradeBranch branch) => branch != UpgradeBranch.Toys && Array.IndexOf(BranchesOf(UpgradeVenue.Home), branch) >= 0;
 
     /// <summary>
     /// What Generate World and the validator refuse in the catalogue (every

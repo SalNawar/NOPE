@@ -1255,16 +1255,42 @@ public static class _TimeDeskQASweep
             string reaction = ((TMP_Text)Field(ui, "petReactionText")).text;
             Check(reaction.Length > 0, $"home: petting gets a reaction ('{reaction}')");
             yield return Shot("home", "pet_corner_pat");
-            List<UpgradeSO> toys = HomeEconomy.OwnedToys(RunManager.Instance.World, RunManager.Instance.Library);
+            // The toys are sold here, in the pet's corner (Saleh 2026-10-17: "cat upgrade is at work instead of home").
+            WorldState world = RunManager.Instance.World;
+            List<UpgradeSO> forSale = HomeEconomy.Toys(RunManager.Instance.Library);
+            var toyRows = (RectTransform)Field(ui, "toyRowsRoot");
+            Check(forSale.Count > 0 && forSale.All(t => t.venue == UpgradeVenue.Home), $"home: every toy is sold at Home ({forSale.Count} toys)");
+            Check(toyRows != null && forSale.All(t => toyRows.Find("Row_" + t.id) != null), "home: the pet's corner has a row for every toy");
+            UpgradeSO cheapest = forSale.Where(t => !world.HasUpgrade(t.id)).OrderBy(t => t.cost).FirstOrDefault();
+            if (cheapest != null && toyRows != null)
+            {
+                Button buy = toyRows.Find("Row_" + cheapest.id + "/Button")?.GetComponent<Button>();
+                int price = OrderBook.Price(world, RunManager.Instance.Library, cheapest);
+                Check(buy != null && buy.interactable == (world.money >= price), $"home: the {cheapest.id} row's Buy takes clicks exactly when the wallet covers it ({world.money} cr, {price} cr)");
+                if (buy != null && buy.interactable)
+                {
+                    int before = world.money;
+                    buy.onClick.Invoke();
+                    yield return Seconds(0.4f);
+                    Check(world.HasUpgrade(cheapest.id) && world.money == before - price, $"home: buying the {cheapest.id} in the corner owns it and charges {price} cr ({before} -> {world.money})");
+                    yield return Shot("home", "pet_corner_toy_bought");
+                }
+            }
+            List<UpgradeSO> toys = HomeEconomy.OwnedToys(world, RunManager.Instance.Library);
             if (toys.Count > 0)
             {
-                Call(manager, "HandlePlay", toys[0]);
+                Button play = toyRows != null ? toyRows.Find("Row_" + toys[0].id + "/Button")?.GetComponent<Button>() : null;
+                Check(play != null && play.interactable, $"home: the owned {toys[0].id} offers Play");
+                if (play != null)
+                    play.onClick.Invoke();
+                else
+                    Call(manager, "HandlePlay", toys[0]);
                 yield return Seconds(0.5f);
                 yield return Shot("home", "pet_corner_play");
             }
             else
             {
-                Note("home: no toy owned on night 1, so the pet's play is not tried");
+                Note("home: no toy owned (the wallet is short), so the pet's play is not tried");
             }
             yield return KitChecks("home", "pet corner");
             ((Button)Field(ui, "petContinueButton")).onClick.Invoke();
@@ -1663,6 +1689,7 @@ public static class _TimeDeskQASweep
         Check(tree.Level > before, $"pc: the Orders tree zooms in ({before} -> {tree.Level})");
         orders.Zoom(0);
         yield return Frames(3);
+        Check(OrderBook.Layout(RunManager.Instance.Library).Cells.All(c => c.Branch != UpgradeBranch.Toys), "pc: the Orders tree sells no pet toy (they are Home's)");
         UpgradeSO first = RunManager.Instance.Library.Upgrades.FirstOrDefault(u => u != null && u.venue != UpgradeVenue.Home);
         if (first != null)
         {
