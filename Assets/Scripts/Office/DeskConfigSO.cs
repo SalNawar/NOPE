@@ -90,17 +90,47 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
     [Min(0f)] public float counterRowDepth = 0.05f;
 
-    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the STAMPS tab, the inspect button and, at the bottom, the stamp drawer's band, stampBarView): the spread lays them inside it (PaperSpread).</summary>
-    public Rect readingArea = new Rect(0.02f, 0.2f, 0.88f, 0.63f);
+    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the inspect button and, at the top, the stamp drawer's band and its STAMPS tab, stampBarView): the spread lays them inside it (PaperSpread).</summary>
+    public Rect readingArea = new Rect(0.02f, 0.04f, 0.88f, 0.7f);
 
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
 
     /// <summary>How thick each thing lying on the desk is (metres; Saleh's 1007d playtest: "too flat when you see them from the side"): a sheet of paper, a plastic card, a passport booklet (its cover and pages), the rulebook's folder (its pages over its board). Their edges show it (PaperEdge) and the stack makes room for it (PaperLayers.Lifts).</summary>
-    [Min(0.0001f)] public float paperThickness = 0.0007f, cardThickness = 0.0009f, bookletThickness = 0.003f, folderThickness = 0.0025f;
+    [Min(0.0001f)] public float paperThickness = 0.0007f, cardThickness = 0.0009f, bookletThickness = 0.003f, folderThickness = 0.005f;
 
     /// <summary>A plain sheet's edge colour before its shade (a paper whose look names no tint: the agency's cream).</summary>
     public Color paperEdgeTint = new Color(0.95f, 0.93f, 0.87f, 1f);
+
+    /// <summary>How far each thing's edge leans out under its face toward the bottom right of the reading view (metres per metre of thickness; Saleh 2026-10-17: "all documents need to feel 3d"): the near camera looking down sees its thickness there (PaperDepth.Lean, DeskPaperDepth).</summary>
+    [Min(0f)] public float edgeLean = 1.8f;
+
+    /// <summary>The contact shadow of a thing lying on the desk (DeskPaperDepth): how far it reaches outside the outline and how far it falls toward the bottom right (metres), and its darkness (0 to 1).</summary>
+    [Min(0f)] public float shadowSpread = 0.008f, shadowOffset = 0.0035f;
+
+    /// <inheritdoc cref="shadowSpread"/>
+    [Range(0f, 1f)] public float shadowAlpha = 0.5f;
+
+    /// <summary>The contact shadow while the thing is held up by a drag: wider, further and softer (DeskPaperDepth eases to it in shadowLiftSeconds and back in shadowDropSeconds).</summary>
+    [Min(0f)] public float shadowHeldSpread = 0.026f, shadowHeldOffset = 0.02f;
+
+    /// <inheritdoc cref="shadowHeldSpread"/>
+    [Range(0f, 1f)] public float shadowHeldAlpha = 0.3f;
+
+    /// <inheritdoc cref="shadowHeldSpread"/>
+    [Min(0f)] public float shadowLiftSeconds = 0.12f, shadowDropSeconds = 0.08f;
+
+    /// <summary>A single sheet's lifted corner (PaperDepth.CornerLift, Curl): its edge leans this many times further there, and a cel shade of curlShadeAlpha reaches curlReach metres along its sides.</summary>
+    [Min(1f)] public float curlLift = 2.6f;
+
+    /// <inheritdoc cref="curlLift"/>
+    [Min(0f)] public float curlReach = 0.06f;
+
+    /// <inheritdoc cref="curlLift"/>
+    [Range(0f, 1f)] public float curlShadeAlpha = 0.16f;
+
+    /// <summary>How far a paper lies turned from square on the desk, at most (degrees; each paper its own share of it, fixed for the paper: it lies as if dropped by hand).</summary>
+    [Range(0f, 10f)] public float paperJitter = 1.4f;
 
     /// <summary>The photo's tint while its paper lies on the desk, full size (evenly lit, unlike travellerTint on the counter).</summary>
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
@@ -189,17 +219,17 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
     [Min(0.005f)] public float stampHover = 0.03f;
 
-    /// <summary>Where the stamp drawer's middle (between its two daters' dies) stands out on the desk: the point of the desk the reading view shows there (viewport x, y). Low, at the view's bottom edge (Saleh's 1008a playtest: "the drawer is blocking the stamp area can we have it smaller and from the bottom"): the drawer rises from the bottom edge, below the papers' reading area.</summary>
-    public Vector2 stampBarView = new Vector2(0.6f, 0.108f);
+    /// <summary>Where the stamp drawer stands out, tethered to the screen's top edge (Saleh's 1016a playtest: "tethered to the edge of the screen", "the other way around from top to bottom"; DeskStampTray.Tether): its middle at viewport x, its far top edge on the reading view's ray through viewport y (1: flush on the top edge), above the papers' reading area. The STAMPS tab sits on the top edge beside it.</summary>
+    public Vector2 stampBarView = new Vector2(0.66f, 1f);
 
-    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, away from the chair): in, it waits that far nearer the chair, below the reading view's bottom edge (its motion's timing is MotionKnobs' drawer tunings).</summary>
+    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, toward the chair): in, it waits that far further from the chair, above the reading view's top edge (its motion's timing is MotionKnobs' drawer tunings).</summary>
     [Min(0.1f)] public float stampBarTravel = 0.3f;
 
     /// <summary>The stamp drawer's size against the model's (the drawer, its mechanism and its daters; Saleh's 1008a playtest: smaller).</summary>
     [Range(0.3f, 1f)] public float stampDrawerScale = 0.58f;
 
-    /// <summary>Where the passport's stamp area goes as the drawer opens (DeskController.PassportToStampSpot): the point of the desk the reading view shows there (viewport x, y), above the drawer, so the whole passport lies clear of it.</summary>
-    public Vector2 stampSpotView = new Vector2(0.6f, 0.66f);
+    /// <summary>Where the passport's stamp area goes as the drawer opens (DeskController.PassportToStampSpot): the point of the desk the reading view shows there (viewport x, y), below the drawer at the top, so the whole passport lies clear of it and the daters drop a short way down onto it.</summary>
+    public Vector2 stampSpotView = new Vector2(0.6f, 0.58f);
 
     /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
     [Range(0f, 0.2f)] public float daterInkFade = 0.035f;

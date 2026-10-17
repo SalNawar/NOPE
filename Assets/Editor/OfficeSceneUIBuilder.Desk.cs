@@ -936,7 +936,6 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(sheet, "Paper", PrimitiveType.Quad, Vector3.zero, new Vector3(size.x, size.y, 1f), paperMaterial);
         MeshRenderer paper = sheet.Find("Paper").GetComponent<MeshRenderer>();
         paper.shadowCastingMode = ShadowCastingMode.Off;
-        MeshFilter paperEdge = EdgeMesh(paper.transform);
         Material examineMaterial = EnsureMaterial("Paper_Examine", "Universal Render Pipeline/Unlit", m =>
         {
             m.SetTexture("_BaseMap", paperSprite.texture);
@@ -964,6 +963,7 @@ public static partial class OfficeSceneUIBuilder
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "proxy", box);
         soDrag.ApplyModifiedProperties();
+        DeskPaperDepth paperDepth = DepthParts(paper.transform, drag, true);
 
         DeskDocument doc = root.gameObject.AddComponent<DeskDocument>();
         var so = new SerializedObject(doc);
@@ -977,7 +977,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "highlightTemplate", print.Slot);
         SetRef(so, "style", EnsureFormStyle());
         SetRef(so, "paperQuad", paper);
-        SetRef(so, "edge", paperEdge);
+        SetRef(so, "depth", paperDepth);
         SetRef(so, "examineMaterial", examineMaterial);
         SetRef(so, "click", click);
         SetRef(so, "drag", drag);
@@ -1323,6 +1323,9 @@ public static partial class OfficeSceneUIBuilder
         new Vector4(0.585f, 0.012f, 0.72f, 0.07f), new Vector4(0.77f, 0.012f, 0.9f, 0.07f)
     };
 
+    /// <summary>How far a tab's plate lies over the folder's face (metres): a raised card, its edge reaching down to the face (DeskRulebook.ShowDepth), its word over it.</summary>
+    private const float RulebookTabPlateLift = 0.0006f;
+
     /// <summary>The tabs' art names in tab order (ArtSlots.RulebookTab).</summary>
     private static readonly string[] RulebookTabArt = { "rules", "papers", "guide", "seals" };
 
@@ -1348,8 +1351,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A paper's and a rulebook part's click box thickness (metres, before a paper's zone scale): thin, so the papers' stack (DeskConfigSO.paperStackStep a place) alone decides which of two overlapping papers, or a paper and the rulebook, a click or a stamp meets (Saleh 2026-10-06: documents clipping).</summary>
     private const float PaperBoxThickness = 0.0004f;
 
-    /// <summary>The stamp bar's grey tab on the overlay's right edge (reference px).</summary>
-    private static readonly Vector2 StampTabSize = new Vector2(92f, 170f);
+    /// <summary>The STAMPS tab on the overlay's top edge beside the drawer, flush on the edge (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"; DeskStampTray.PlaceTab keeps it beside the drawer).</summary>
+    private static readonly Vector2 StampTabSize = new Vector2(236f, 64f);
 
     /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two daters' distance apart (DENIED left, APPROVED right), the label lip's reach past each, its gap in front of the daters' frames and its section (deep, tall). The lip lies low at the daters' feet, in front of them (toward the chair), its words on its top, so the whole green and red bodies with their wheels show over it (run 7's integration: the rail at the bodies' height hid them).</summary>
     private const float StampSpacing = 0.14f;
@@ -1378,8 +1381,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The stamps' hint plate (reference px), at the top right under the case HUD's strip.</summary>
     private static readonly Vector2 StampHintSize = new Vector2(560f, 50f);
 
-    /// <summary>Where the stamps' hint plate starts below the overlay's top (reference px): under the case HUD's strip.</summary>
-    private static readonly float StampPlateTop = CaseHudClearance;
+    /// <summary>Where the stamps' hint plate starts below the overlay's top (reference px): under the STAMPS tab on the top edge and the guide's arrow's room under it (clear of the case HUD's strip too).</summary>
+    private static readonly float StampPlateTop = StampTabSize.y + StampArrowRoom;
+
+    /// <summary>The room under the STAMPS tab on the top edge for the guide's arrow pointing up at it (reference px): the stamps' hint plate starts below it.</summary>
+    private const float StampArrowRoom = 80f;
 
     /// <summary>A strip at the top centre of the overlay, <paramref name="top"/> px down, with its text (auto-sized, no raycasts).</summary>
     private static TMP_Text TopStrip(Transform parent, string name, Vector2 size, float top, Color background, ThemeRoleId role, int fontSize, Color ink, out Transform strip)
@@ -1468,8 +1474,9 @@ public static partial class OfficeSceneUIBuilder
     /// the stamp stuff, and the Tab shortcut"), its stamps the two daters (the
     /// desk machine spec §1), rebuilt each run. On the office overlay:
     /// StampBar (the DeskStampTray, an always-active full-screen host) with
-    /// the grey Tab at the right edge's middle ("STAMPS" over the key, TAB;
-    /// inactive until the booth shows it), the hint's plate at the top right
+    /// the Tab on the top edge beside where the drawer comes in (placed there
+    /// at run time, DeskStampTray.PlaceTab; "STAMPS" beside the key, TAB; inactive
+    /// until the booth shows it), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
     /// In the office: StampRack (inactive until slid out; the office binder
     /// lays it, its origin at the daters' feet): the heavy brass drawer when its
@@ -1480,8 +1487,8 @@ public static partial class OfficeSceneUIBuilder
     /// wooden end caps and brass brackets to the two daters, the words on its
     /// top; and the DENIED dater (left) and the APPROVED dater (right), each a click box
     /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
-    /// (the click box its proxy: the dater is dragged onto the paper) and a
-    /// PointerHold (a held press), holding its body (DaterBody: the prop
+    /// (the click box its proxy: the dater is dragged onto the paper; stamping
+    /// is drag-only), holding its body (DaterBody: the prop
     /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED).
     /// The tray gets the papers' style, the date's face,
     /// Saleh's dater sounds and the drawer's (WireDaters). The old overlay bar, the 3D tray of
@@ -1498,12 +1505,12 @@ public static partial class OfficeSceneUIBuilder
 
         Button tab = MakeButton(host, "Tab", null, Vector2.zero, Vector2.one, StampGrey, ThemeRoleId.DiegeticDevice);
         var tabRect = (RectTransform)tab.transform;
-        tabRect.anchorMin = tabRect.anchorMax = new Vector2(1f, 0.5f);
-        tabRect.pivot = new Vector2(1f, 0.5f);
+        tabRect.anchorMin = tabRect.anchorMax = new Vector2(config.stampBarView.x, 1f);
+        tabRect.pivot = new Vector2(0f, 1f);
         tabRect.anchoredPosition = Vector2.zero;
         tabRect.sizeDelta = StampTabSize;
         TMP_Text tabLabel = tab.transform.Find("Label").GetComponent<TMP_Text>();
-        tabLabel.text = $"<size=72%>{UiText.Get("controls.stampsTab")}</size>\n<b>{ControlRules.StampsKey}</b>";
+        tabLabel.text = $"{UiText.Get("controls.stampsTab")}  <b>{ControlRules.StampsKey}</b>";
         tabLabel.color = Color.white;
         tabLabel.enableAutoSizing = false;
         tabLabel.fontSize = 26f;
@@ -1538,10 +1545,10 @@ public static partial class OfficeSceneUIBuilder
 
         (Clickable stamp, Transform die) Stamp(string name, float x, bool approved, string labelKey)
         {
-            // In the brass drawer the dater stands in its cradle (the cradle's origin is its back-foot edge); else on the rack.
+            // In the brass drawer the dater stands in its cradle (the cradle's origin is its front-foot edge, toward the chair); else on the rack.
             Transform cradle = drawer != null ? drawer.Cradle(approved ? DrawerSequence.Approved : DrawerSequence.Denied) : null;
             Clickable click = EnsureClickBox(cradle != null ? cradle : rack, name);
-            click.transform.localPosition = cradle != null ? new Vector3(0f, 0f, -BrassPivotDepth) : new Vector3(x, 0f, 0f);
+            click.transform.localPosition = cradle != null ? new Vector3(0f, 0f, BrassPivotDepth) : new Vector3(x, 0f, 0f);
             StampShape shape = DaterBody(click.transform, approved);
             var box = click.GetComponent<BoxCollider>();
             box.center = new Vector3(0f, shape.Top / 2f, 0f);
@@ -1563,8 +1570,7 @@ public static partial class OfficeSceneUIBuilder
 
             click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null && r.name != "Window").ToArray());
             // The dater is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
-            // A left-press held on it strokes it where it hangs (the desk machine spec §1: "holding the button holds the stamp down").
-            GetOrAdd<PointerHold>(click.gameObject);
+            // Stamping is drag-only (Saleh's 1016a playtest: "should be dragging"): a click on a hanging dater strokes nothing.
             DeskDraggable drag = GetOrAdd<DeskDraggable>(click.gameObject);
             var soDrag = new SerializedObject(drag);
             SetRef(soDrag, "proxy", box);
@@ -1635,30 +1641,61 @@ public static partial class OfficeSceneUIBuilder
             ? EnsureMaterial(name, "NOPE/Desk Anime", m => m.SetColor("_BaseColor", colour))
             : LitMaterial(name, colour, 0.3f);
 
-    /// <summary>The render queue of the papers' and the folder's edges: before the printed layers (the seal at 2975), after the opaque desk.</summary>
-    private const int EdgeQueue = 2970;
+    /// <summary>The render queues of the desk documents' depth (TimeDesk/PaperDepth): the edges before the printed layers (the seal at 2975), after the opaque desk; the face's shade over the lines (2995), under the texts (3000); the contact shadows after everything printed (the paper art at 3005), so a shadow lies over the paper under it, print and all, and only depth hides it.</summary>
+    private const int EdgeQueue = 2970, ShadeQueue = 2998, ShadowQueue = 3010;
 
-    /// <summary>
-    /// An empty edge mesh under <paramref name="face"/> (a paper's quad or the
-    /// folder's card; in its unit space), in a vertex-coloured unlit material
-    /// (the desk paper and the folder build its walls: PaperEdge), casting and
-    /// taking no shadow. Its mesh is runtime-built, so the scene keeps none.
-    /// </summary>
-    private static MeshFilter EdgeMesh(Transform face)
+    /// <summary>The desk documents' depth materials (TimeDesk/PaperDepth, unlit, vertex-coloured): Paper_Lip (the edges: opaque, writing depth), Paper_Shade and Paper_Shadow (blended, writing none); made once, their queues kept.</summary>
+    private static Material DepthMaterial(string name, bool blended, int queue)
     {
-        var go = new GameObject("Edge", typeof(MeshFilter), typeof(MeshRenderer));
-        go.transform.SetParent(face, false);
-        var renderer = go.GetComponent<MeshRenderer>();
-        Material m = EnsureMaterial("Paper_Edge", "Sprites/Default", mat => mat.SetColor("_Color", Color.white));
-        if (m != null && m.renderQueue != EdgeQueue)
+        Material m = EnsureMaterial(name, "TimeDesk/PaperDepth", mat =>
         {
-            m.renderQueue = EdgeQueue;
+            mat.SetFloat("_SrcBlend", (float)(blended ? BlendMode.SrcAlpha : BlendMode.One));
+            mat.SetFloat("_DstBlend", (float)(blended ? BlendMode.OneMinusSrcAlpha : BlendMode.Zero));
+            mat.SetFloat("_ZWrite", blended ? 0f : 1f);
+        });
+        if (m != null && m.renderQueue != queue)
+        {
+            m.renderQueue = queue;
             EditorUtility.SetDirty(m);
         }
-        renderer.sharedMaterial = m;
-        renderer.shadowCastingMode = ShadowCastingMode.Off;
-        renderer.receiveShadows = false;
-        return go.GetComponent<MeshFilter>();
+        return m;
+    }
+
+    /// <summary>
+    /// The drawn depth of a thing on the desk under <paramref name="face"/> (a
+    /// paper's quad, the folder's card or a tab's plate; in its unit space):
+    /// a Depth child with its DeskPaperDepth (lifting its shadow while
+    /// <paramref name="drag"/> holds it, if any) and its empty Edge, Shadow and,
+    /// with <paramref name="shade"/>, Shade meshes in their materials, casting
+    /// and taking no shadow and taking no click. Their meshes are
+    /// runtime-built (Saleh 2026-10-17: "all documents need to feel 3d"), so
+    /// the scene keeps none.
+    /// </summary>
+    private static DeskPaperDepth DepthParts(Transform face, DeskDraggable drag, bool shade)
+    {
+        var host = new GameObject("Depth");
+        host.transform.SetParent(face, false);
+        host.layer = face.gameObject.layer;
+        DeskPaperDepth depth = host.AddComponent<DeskPaperDepth>();
+        MeshFilter Part(string name, Material material)
+        {
+            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
+            go.transform.SetParent(host.transform, false);
+            go.layer = face.gameObject.layer;
+            var renderer = go.GetComponent<MeshRenderer>();
+            renderer.sharedMaterial = material;
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            return go.GetComponent<MeshFilter>();
+        }
+        var so = new SerializedObject(depth);
+        SetRef(so, "edge", Part("Edge", DepthMaterial("Paper_Lip", false, EdgeQueue)));
+        SetRef(so, "shadow", Part("Shadow", DepthMaterial("Paper_Shadow", true, ShadowQueue)));
+        if (shade)
+            SetRef(so, "shade", Part("Shade", DepthMaterial("Paper_Shade", true, ShadeQueue)));
+        SetRef(so, "drag", drag);
+        so.ApplyModifiedProperties();
+        return depth;
     }
 
     /// <summary>
@@ -1689,7 +1726,6 @@ public static partial class OfficeSceneUIBuilder
         GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookFolderSize.x, RulebookFolderSize.y, 1f),
                                         SlotArtMaterial("Rulebook_Folder", ArtSlots.RulebookFolder));
         card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-        MeshFilter folderEdge = EdgeMesh(card.transform);
         Color ink = new Color(0.13f, 0.12f, 0.15f);
 
         // The folder cover's words, printed over its clean face only while a culture's language is read (DeskRulebook.ShowCover).
@@ -1707,15 +1743,18 @@ public static partial class OfficeSceneUIBuilder
         // The tabs on the folder's top edge, at the art's places, each its own art (shown only while its page is there: DeskRulebook).
         var tabs = new List<Clickable>();
         var plates = new List<Renderer>();
+        var tabDepths = new List<DeskPaperDepth>();
         string[] tabKeys = { "desk.rulebook.tabRules", "desk.rulebook.tabPapers", "desk.rulebook.tabGuide", "desk.rulebook.tabSeals" };
         for (int i = 0; i < tabKeys.Length; i++)
         {
             Vector3 at = FolderPoint(RulebookTabPlaces[i]) + new Vector3(0f, 0.0002f, 0f);
             Vector2 size = FolderSize(RulebookTabPlaces[i]);
-            GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, at, new Vector3(size.x, size.y, 1f),
+            // The plate is a raised card (DeskRulebook.ShowDepth gives it its edge down to the folder's face and its shadow), under its word.
+            GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, FolderPoint(RulebookTabPlaces[i]) + new Vector3(0f, RulebookTabPlateLift, 0f), new Vector3(size.x, size.y, 1f),
                                              SlotArtMaterial("Rulebook_Tab_" + RulebookTabArt[i], ArtSlots.RulebookTab(RulebookTabArt[i])));
             plate.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
             plates.Add(plate.GetComponent<Renderer>());
+            tabDepths.Add(DepthParts(plate.transform, null, false));
             Clickable tab = EnsureClickBox(booklet, "Tab" + (i + 1));
             tab.transform.localPosition = at + new Vector3(0f, 0.0004f, 0f);
             var box = tab.GetComponent<BoxCollider>();
@@ -1849,16 +1888,19 @@ public static partial class OfficeSceneUIBuilder
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "proxy", cardBox);
         soDrag.ApplyModifiedProperties();
+        DeskPaperDepth folderDepth = DepthParts(card.transform, drag, true);
 
         DeskRulebook rulebook = GetOrAdd<DeskRulebook>(book.gameObject);
         var so = new SerializedObject(rulebook);
         SetRef(so, "booklet", booklet);
-        SetRef(so, "edge", folderEdge);
+        SetRef(so, "depth", folderDepth);
+        SerializedArrays.Set(so, "tabDepths", tabDepths);
         SetRef(so, "card", cardClick);
         SetRef(so, "folderFace", card.GetComponent<Renderer>());
         SerializedArrays.Set(so, "coverWords", cover);
         SetRef(so, "title", title);
         SerializedArrays.Set(so, "rows", rows);
+        so.FindProperty("sheetSize").vector2Value = RulebookSize;
         SetRef(so, "none", none);
         SetRef(so, "papersTitle", papersTitle);
         SerializedArrays.Set(so, "paperRows", paperRows);

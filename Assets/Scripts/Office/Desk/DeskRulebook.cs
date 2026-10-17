@@ -50,14 +50,20 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The booklet's visible part and its click boxes, lifted off the desk plane by the stack (SetLift); the root stays on the plane, where the drag moves it.</summary>
     [SerializeField] private Transform booklet;
 
-    /// <summary>The folder's edge (a child of its card quad, in its unit space; a vertex-coloured material): its board and its pages seen from the side (PaperEdge; Saleh's 1007d playtest).</summary>
-    [SerializeField] private MeshFilter edge;
+    /// <summary>The folder's drawn depth (a child of its card quad, in its unit space; DeskPaperDepth): its board's leaning edge, its contact shadow (lifting while it is dragged) and its face's cel shade (the spine, the page blocks; Saleh 2026-10-17: "all documents need to feel 3d especially the folder").</summary>
+    [SerializeField] private DeskPaperDepth depth;
+
+    /// <summary>Each tab's drawn depth, as tabPlates (a raised card: its edge and its small shadow on the folder).</summary>
+    [SerializeField] private DeskPaperDepth[] tabDepths = Array.Empty<DeskPaperDepth>();
 
     /// <summary>The rules page's title ("TODAY'S RULES").</summary>
     [SerializeField] private TMP_Text title;
 
     /// <summary>The rules' rows, top first: each a click box (Clickable, a collider) with its text as its child.</summary>
     [SerializeField] private Clickable[] rows = Array.Empty<Clickable>();
+
+    /// <summary>The folder's right sheet every page prints on (metres, width by depth, centred on the pages' parent: the builder's measure of the art): no rule's text leaves it (LayRows).</summary>
+    [SerializeField] private Vector2 sheetSize = new Vector2(0.18f, 0.2f);
 
     /// <summary>The line printed when the day has no directive.</summary>
     [SerializeField] private TMP_Text none;
@@ -200,6 +206,8 @@ public sealed class DeskRulebook : MonoBehaviour
     private void PrintLabels()
     {
         ShowCover();
+        if (_indices.Count > 0)
+            Paginate(_ruleSheet); // a rule may print words of the reading language (TravelRuleSO.Summary)
         PrintTitle();
         if (none != null)
             none.text = UiText.Get("desk.rulebook.none");
@@ -290,47 +298,112 @@ public sealed class DeskRulebook : MonoBehaviour
         ShowMissing(MissingPapers.None, null);
     }
 
+    /// <summary>Rules printed while the folder was hidden are laid again once it shows (a hidden text's measures are not to be trusted).</summary>
+    private void OnEnable()
+    {
+        if (_laidHidden)
+            Paginate(_ruleSheet);
+    }
+
+    /// <summary>True when the rules were last laid while the folder was hidden.</summary>
+    private bool _laidHidden;
+
     private void OnDestroy()
     {
         CultureThemeService.LabelsChanged -= PrintLabels;
         if (drag != null)
             drag.DragEnded -= Dropped;
-        if (_edgeMesh != null)
-            Destroy(_edgeMesh);
     }
 
     /// <summary>Lays the booklet on the desk at <paramref name="at"/> (on the desk plane), turned to <paramref name="rotation"/> (the office binder).</summary>
     public void Place(Vector3 at, Quaternion rotation) => transform.SetPositionAndRotation(at, rotation);
 
-    /// <summary>The folder's thickness (metres; DeskConfigSO.folderThickness through ShowEdge): its room in the papers' stack.</summary>
-    public float Thickness { get; private set; } = 0.0025f;
+    /// <summary>The folder's thickness (metres; DeskConfigSO.folderThickness through ShowDepth): its room in the papers' stack.</summary>
+    public float Thickness { get; private set; } = 0.005f;
 
-    /// <summary>The folder's body on its card (shares of the card, centre and size): the art's opaque folder, its tabs above it left out.</summary>
-    private const float BodyCentreX = 0.005f, BodyCentreY = -0.04f, BodyWidth = 0.93f, BodyHeight = 0.88f;
+    /// <summary>The folder's body on its card (shares of the card, centre and size): the art's opaque folder (measured on Forms/rulebook_folder), its tabs above it left out.</summary>
+    private const float BodyCentreX = 0.003f, BodyCentreY = -0.0275f, BodyWidth = 0.957f, BodyHeight = 0.917f;
 
-    /// <summary>The board's and the pages' colours on the folder's edge.</summary>
-    private static readonly Color BoardTone = new Color(0.55f, 0.43f, 0.27f, 1f), PageLight = new Color(0.93f, 0.9f, 0.82f, 1f), PageDark = new Color(0.8f, 0.76f, 0.68f, 1f);
+    /// <summary>The folder's spine on its card (the art's gutter between its halves: its centre x and half width, card shares from the centre).</summary>
+    private const float SpineX = 0.005f, SpineHalf = 0.038f;
 
-    private Mesh _edgeMesh;
+    /// <summary>The sheets lying in the folder (card shares from the centre: x0, y0, x1, y1, measured on the art): the right one the pages print on (its right side under the pocket's flap below FlapTop), the left one its cover sheet (its pages show only below it: beside it they would line the spine); how many page edges each shows and how far each next one lies out (metres).</summary>
+    private static readonly (float x0, float y0, float x1, float y1) RightSheet = (0.045f, -0.468f, 0.422f, 0.36f), LeftSheet = (-0.395f, -0.455f, -0.03f, 0.4f);
 
-    /// <summary>Builds the folder's edge <paramref name="thickness"/> metres deep (PaperEdge.Folder: its pages' edges over its board) under its body (DeskController, at load).</summary>
-    public void ShowEdge(float thickness)
+    /// <inheritdoc cref="RightSheet"/>
+    private const float FlapTop = 0.04f, PageStep = 0.001f;
+
+    /// <inheritdoc cref="RightSheet"/>
+    private const int RightPages = 4, LeftPages = 2;
+
+    /// <summary>The cel shade at the spine (the halves dip into it: the folder lying open) and how it fades across each half.</summary>
+    private const float SpineShade = 0.26f, SpineEdgeShade = 0.16f, HalfShade = 0.05f;
+
+    /// <summary>A tab's outline on its plate (unit space, counter-clockwise from its bottom left; measured on the tab art: a slight trapezoid, its top corners rounded).</summary>
+    private static readonly List<(float x, float y)> TabOutline = new List<(float x, float y)>
     {
-        Thickness = thickness;
-        if (edge == null)
+        (-0.5f, -0.49f), (0.498f, -0.49f), (0.481f, -0.262f), (0.466f, 0.214f), (0.435f, 0.405f), (-0.447f, 0.405f), (-0.477f, 0.31f), (-0.483f, 0.024f)
+    };
+
+    /// <summary>A tab's raised card: its thickness (metres, from its plate down to the folder's face) and its shadow's share of the folder's darkness.</summary>
+    private const float TabThickness = 0.00055f, TabShadow = 0.7f;
+
+    /// <summary>The folder's edge colours: its board's lit cut edge, its board (manila in the cel shade) and the ink at every edge's foot.</summary>
+    private static readonly Color BoardLit = new Color(0.87f, 0.75f, 0.53f, 1f), Board = new Color(0.56f, 0.41f, 0.28f, 1f), EdgeInk = new Color(0.23f, 0.15f, 0.19f, 1f);
+
+    /// <summary>The folder face's colours: its pages' edges (light and dark, alternating), the ink line under each and the cel shade (purple-tinted, never grey).</summary>
+    private static readonly Rgba PageLight = new Rgba(0.96f, 0.93f, 0.85f, 1f), PageDark = new Rgba(0.82f, 0.77f, 0.7f, 1f), PageInk = new Rgba(0.36f, 0.26f, 0.25f, 1f), Shade = new Rgba(0.29f, 0.19f, 0.33f, 1f);
+
+    /// <summary>How far over the face its shade lies (metres; under the cover's words, the tabs and the pages' texts).</summary>
+    private const float ShadeLift = 0.00015f;
+
+    /// <summary>
+    /// Builds the folder's drawn depth from <paramref name="config"/>
+    /// (DeskController, at load; Saleh 2026-10-17: "all documents need to feel
+    /// 3d especially the folder"): its board, folderThickness deep, leaning
+    /// out at its bottom and right sides (its lit cut edge over the board,
+    /// inked at its foot); its contact shadow; on its face the spine's cel
+    /// shade (the two halves dip into it, as a folder lying open) and the page
+    /// edges stepping out from under its two sheets (PaperDepth.PageBlock);
+    /// and each tab a raised card with its own edge and small shadow.
+    /// </summary>
+    public void ShowDepth(DeskConfigSO config)
+    {
+        if (config == null)
             return;
-        var outline = PaperEdge.Rectangle(BodyWidth, BodyHeight).ConvertAll(p => (p.x + BodyCentreX, p.y + BodyCentreY));
-        var vertices = new List<(float x, float y, float z)>();
-        var tones = new List<EdgeTone>();
-        var triangles = new List<int>();
-        PaperEdge.Walls(outline, PaperEdge.Bands(PaperKind.Folder, thickness), vertices, tones, triangles);
-        _edgeMesh ??= new Mesh { name = "FolderEdge" };
-        _edgeMesh.Clear();
-        _edgeMesh.SetVertices(vertices.ConvertAll(v => new Vector3(v.x, v.y, v.z)));
-        _edgeMesh.SetColors(tones.ConvertAll(t => t == EdgeTone.Cover ? BoardTone : t == EdgeTone.PageDark ? PageDark : PageLight));
-        _edgeMesh.SetTriangles(triangles, 0);
-        _edgeMesh.RecalculateBounds();
-        edge.sharedMesh = _edgeMesh;
+        Thickness = config.folderThickness;
+        if (depth != null && folderFace != null)
+        {
+            Vector2 size = folderFace.transform.localScale;
+            var outline = PaperEdge.Rectangle(BodyWidth, BodyHeight).ConvertAll(p => (p.x + BodyCentreX, p.y + BodyCentreY));
+            depth.Build(outline, PaperKind.Folder, Thickness, size, FolderTone, null, FaceShade(size), config);
+        }
+        for (int i = 0; i < tabDepths.Length && i < tabPlates.Length; i++)
+            if (tabDepths[i] != null && tabPlates[i] != null)
+                tabDepths[i].Build(TabOutline, PaperKind.Folder, TabThickness, tabPlates[i].transform.localScale, FolderTone, null, null, config, TabShadow);
+    }
+
+    /// <summary>A band of the folder's edges in its colour.</summary>
+    private static Color FolderTone(EdgeTone tone) => tone == EdgeTone.Lit ? BoardLit : tone == EdgeTone.Ink ? EdgeInk : Board;
+
+    /// <summary>The folder face's cel shade for a card <paramref name="size"/> metres: the spine's band, then each sheet's page edges.</summary>
+    private static DepthMesh FaceShade(Vector2 size)
+    {
+        float left = BodyCentreX - BodyWidth / 2f, right = BodyCentreX + BodyWidth / 2f;
+        float bottom = BodyCentreY - BodyHeight / 2f, top = BodyCentreY + BodyHeight / 2f;
+        DepthMesh shade = PaperDepth.Strip(new List<(float at, Rgba colour)>
+        {
+            (left, Shade.WithAlpha(0f)),
+            (SpineX - 0.2f, Shade.WithAlpha(HalfShade)),
+            (SpineX - SpineHalf, Shade.WithAlpha(SpineEdgeShade)),
+            (SpineX, Shade.WithAlpha(SpineShade)),
+            (SpineX + SpineHalf, Shade.WithAlpha(SpineEdgeShade)),
+            (SpineX + 0.2f, Shade.WithAlpha(HalfShade)),
+            (right, Shade.WithAlpha(0f)),
+        }, true, bottom, top, -ShadeLift);
+        shade.Append(PaperDepth.PageBlock(LeftSheet, LeftPages, PageStep, size.x, size.y, -ShadeLift, PageLight, PageDark, PageInk, LeftSheet.y1));
+        shade.Append(PaperDepth.PageBlock(RightSheet, RightPages, PageStep, size.x, size.y, -ShadeLift, PageLight, PageDark, PageInk, FlapTop));
+        return shade;
     }
 
     /// <summary>Lifts the booklet <paramref name="height"/> metres off the desk plane (its place in the papers' stack, or the drag's lift: DeskController).</summary>
@@ -462,8 +535,10 @@ public sealed class DeskRulebook : MonoBehaviour
     /// Prints today's directives (<paramref name="rules"/>, the day's list; a
     /// rule with no summary prints no row), one per row, on as many RULES
     /// sheets as they need (RuleSheets: those that do not fit a sheet at the
-    /// least readable size go on the next; leftover 2026-10-08), and opens on
-    /// RULES at the first sheet.
+    /// least readable size go on the next; leftover 2026-10-08; every text
+    /// measured on the sheet itself, Saleh's 1016a playtest: "when there are
+    /// many rules the text overflows out of the folder"), and opens on RULES
+    /// at the first sheet.
     /// </summary>
     public void Show(IReadOnlyList<TravelRuleSO> rules)
     {
@@ -472,16 +547,32 @@ public sealed class DeskRulebook : MonoBehaviour
         for (int i = 0; i < _rules.Count; i++)
             if (_rules[i] != null && !string.IsNullOrWhiteSpace(_rules[i].Summary()))
                 _indices.Add(i);
+        ShowPage(0);
+        Paginate(0);
+        if (none != null)
+            none.gameObject.SetActive(_indices.Count == 0);
+    }
+
+    /// <summary>
+    /// Splits the directives into RULES sheets (RuleSheets.Starts over
+    /// LayRows, the RULES page shown while it measures so its texts measure
+    /// live, the page shown before kept) and prints sheet
+    /// <paramref name="sheet"/> (the last when there are fewer).
+    /// </summary>
+    private void Paginate(int sheet)
+    {
+        bool shown = rulesPage == null || rulesPage.activeSelf;
+        if (rulesPage != null)
+            rulesPage.SetActive(true);
+        _laidHidden = !isActiveAndEnabled;
         _sheetStarts = RuleSheets.Starts(_indices.Count, rows.Length, (start, count) =>
         {
             PrintRows(start, count);
-            return LayRows(count);
+            return LayRows(count, false);
         });
-        ShowRuleSheet(0);
-        if (none != null)
-            none.gameObject.SetActive(_indices.Count == 0);
-        SetInspecting(_inspecting);
-        ShowPage(0);
+        ShowRuleSheet(Mathf.Clamp(sheet, 0, _sheetStarts.Count - 1));
+        if (rulesPage != null)
+            rulesPage.SetActive(shown);
     }
 
     /// <summary>The first directive (of _indices) on each RULES sheet (RuleSheets.Starts).</summary>
@@ -501,7 +592,7 @@ public sealed class DeskRulebook : MonoBehaviour
     {
         _ruleSheet = ((sheet % _sheetStarts.Count) + _sheetStarts.Count) % _sheetStarts.Count;
         PrintRows(SheetStart, SheetCount);
-        LayRows(SheetCount);
+        LayRows(SheetCount, true);
         SetInspecting(_inspecting);
         PrintTitle();
     }
@@ -555,6 +646,12 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The least share of its built size a rule row's text shrinks to so that the rows stay on the page.</summary>
     private const float RowTextFloor = 0.6f;
 
+    /// <summary>The least share a rule alone on its sheet shrinks to when even at RowTextFloor it would leave the sheet (it never does: it shrinks instead).</summary>
+    private const float RowTextLeast = 0.3f;
+
+    /// <summary>How far inside the sheet's edges every rule's printed text stays (metres).</summary>
+    private const float SheetMargin = 0.003f;
+
     /// <summary>The sheet's blank foot under the last ruled line the rows may run into (metres; the art's sheet ends 0.037 m below it): day 12's six rules ran off the page and the screen (leftover 2026-10-08).</summary>
     private const float RowsFoot = 0.03f;
 
@@ -563,14 +660,19 @@ public sealed class DeskRulebook : MonoBehaviour
     /// 2026-10-08: rule 3's last line printed over rule 4's first): each row
     /// grows downward to fit its wrapped text (its text's box, its click box)
     /// and pushes the rows under it down by as much; when the rows would run
-    /// past the last row's place and the sheet's foot under it (RowsFoot),
-    /// every row's text shrinks a step (down to RowTextFloor of its built
-    /// size) and they are laid again. A row whose text fits keeps its place on
-    /// the art's line. Lays the first <paramref name="count"/> rows; false
-    /// when they run past the page even at the floor (RuleSheets then moves
-    /// the last to the next sheet).
+    /// past the last row's place and the sheet's foot under it (RowsFoot), or
+    /// any row's printed text, measured as drawn, would leave the sheet
+    /// (sheetSize, SheetMargin inside its edges: a long word, a line the
+    /// estimate missed; Saleh's 1016a playtest: "when there are many rules
+    /// the text overflows out of the folder"), every row's text shrinks a
+    /// step (down to RowTextFloor of its built size) and they are laid again.
+    /// A row whose text fits keeps its place on the art's line. Lays the first
+    /// <paramref name="count"/> rows; false when they run past the page even
+    /// at the floor (RuleSheets then moves the last to the next sheet), unless
+    /// <paramref name="final"/> or the rule is alone on its sheet: then it
+    /// shrinks on, down to RowTextLeast, so no text ever leaves the sheet.
     /// </summary>
-    private bool LayRows(int count)
+    private bool LayRows(int count, bool final)
     {
         if (_rowHomes.Length != rows.Length)
         {
@@ -596,7 +698,7 @@ public sealed class DeskRulebook : MonoBehaviour
             return true;
         RowHome lastPlace = _rowHomes[rows.Length - 1];
         float pageBottom = lastPlace.Row.z - lastPlace.BoxSize.z / 2f - RowsFoot;
-        for (float share = 1f; ; share -= 0.1f)
+        for (float share = 1f; ; share -= 0.05f)
         {
             float shift = 0f, bottom = float.MaxValue;
             for (int r = 0; r < count; r++)
@@ -623,11 +725,43 @@ public sealed class DeskRulebook : MonoBehaviour
                 shift += extra;
                 bottom = home.Row.z - shift - home.BoxSize.z / 2f; // its click box's foot
             }
-            if (bottom >= pageBottom - 0.0001f)
+            if (bottom >= pageBottom - 0.0001f && OnSheet(count))
                 return true;
-            if (share <= RowTextFloor + 0.001f)
+            if (share <= RowTextLeast + 0.001f || (share <= RowTextFloor + 0.001f && !final && count > 1))
                 return false;
         }
+    }
+
+    private readonly Vector3[] _corners = new Vector3[4];
+
+    /// <summary>True when the printed text of each of the first <paramref name="count"/> rule rows, measured as drawn, lies on the sheet (sheetSize about the pages' parent, SheetMargin inside its edges).</summary>
+    private bool OnSheet(int count)
+    {
+        Transform page = rulesPage != null ? rulesPage.transform.parent : null;
+        if (page == null)
+            return true;
+        float hx = sheetSize.x / 2f - SheetMargin, hz = sheetSize.y / 2f - SheetMargin;
+        for (int r = 0; r < count && r < rows.Length; r++)
+        {
+            TMP_Text t = rows[r] != null ? rows[r].GetComponentInChildren<TMP_Text>(true) : null;
+            if (t == null)
+                continue;
+            t.ForceMeshUpdate(true);
+            Bounds b = t.textBounds;
+            if (t.textInfo.characterCount == 0)
+                continue;
+            _corners[0] = new Vector3(b.min.x, b.min.y, 0f);
+            _corners[1] = new Vector3(b.max.x, b.min.y, 0f);
+            _corners[2] = new Vector3(b.min.x, b.max.y, 0f);
+            _corners[3] = new Vector3(b.max.x, b.max.y, 0f);
+            foreach (Vector3 corner in _corners)
+            {
+                Vector3 local = page.InverseTransformPoint(t.transform.TransformPoint(corner));
+                if (local.x < -hx || local.x > hx || local.z < -hz || local.z > hz)
+                    return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>The GUIDE's sheets (BASICS first, then the day's pages: the guide director); the sheet open stays open (by id; the first when gone).</summary>

@@ -17,7 +17,7 @@
 //   city), the dater rack (the label lip under the daters); then the full day to the shift report, every traveller
 //   decided with the desk machine: with the rack out the passport's visa page lies under the daters and the rack covers
 //   none of its fields or its photo; a dater dragged over a passport field (its ink over the printed box), a dater
-//   pressed where it hangs (a dry press since the bottom drawer: the passport lies above the drawer; then dragged onto the
+//   clicked where it hangs (it presses nothing: stamping is drag-only since Saleh's 1016a playtest; then dragged onto the
 //   booklet's visa page), the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
 //   cover flipped up, the button pressed); the citation slip (shown on the screen, its lines readable, its CITED stamp
 //   slamming on once printed, ACKNOWLEDGE putting it away); the cameras' idle sway off by default, on and off again;
@@ -809,7 +809,7 @@ public static class _TimeDeskQASweep
 
     // ---- The stamps: the decision ----
 
-    /// <summary>Where a dater is pressed on the passport: dragged anywhere on it, dragged over one of its printed fields' boxes, dragged onto the booklet's visa page (its stamp area), or clicked where it hangs (it must print on the visa page).</summary>
+    /// <summary>Where a dater is pressed on the passport: dragged anywhere on it, dragged over one of its printed fields' boxes, dragged onto the booklet's visa page (its stamp area), or first clicked where it hangs (it presses nothing) and then dragged onto the visa page.</summary>
     private enum PressAt { Anywhere, Field, Visa, Hanging }
 
     /// <summary>
@@ -863,17 +863,20 @@ public static class _TimeDeskQASweep
         }
         if (at == PressAt.Hanging)
         {
-            // A click on a hanging dater presses it where it hangs (DeskStampTray.Press, as PointerHold's quick click does). Since the
-            // bottom drawer (main d8ce4a4, Saleh's 1008a playtest: "the drawer is blocking the stamp area") the passport's stamp area
-            // lies at the stamp spot above the drawer, not under the daters, so a press in place is a dry press: nothing is stamped
-            // and no verdict is taken; the dater is then dragged onto the visa page as the player does.
+            // Stamping is drag-only (Saleh's 1016a playtest, 2026-10-17: "should be dragging"): a click, quick or held, on a hanging
+            // dater presses nothing (no stroke, no verdict); the dater is then dragged onto the visa page as the player does.
             var click = (Clickable)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp");
-            object handle = ((Array)Field(o.Stamps, "_handles")).Cast<object>().First(h => (Clickable)Field(h, "Click") == click);
-            Call(o.Stamps, "Press", handle, false);
+            var pointProp = typeof(DeskStampTray).GetProperty("LastPressPoint");
+            Vector3 sentinel = new Vector3(999f, 999f, 999f);
+            pointProp.SetValue(o.Stamps, sentinel);
+            var pd = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, pointerPressRaycast = new RaycastResult { module = OfficeRaycaster(), gameObject = click.gameObject } };
+            ExecuteEvents.Execute(click.gameObject, pd, ExecuteEvents.pointerDownHandler);
+            yield return Seconds(0.4f);
+            ExecuteEvents.Execute(click.gameObject, pd, ExecuteEvents.pointerUpHandler);
+            ExecuteEvents.Execute(click.gameObject, pd, ExecuteEvents.pointerClickHandler);
             yield return Settle(() => !o.Stamps.IsMoving, 5f);
-            Check(!o.Stamps.HasVerdict && o.Stamps.LastPress == StampPress.Nothing,
-                  $"the {(accept ? "APPROVED" : "DENIED")} dater pressed where it hangs is a dry press: the passport lies at the stamp spot above the drawer ({o.Stamps.LastPress})");
-            Note("a dater pressed where it hangs no longer stamps the passport: since the bottom drawer (d8ce4a4) it lies above the drawer; dragged onto the visa page instead");
+            Check(!o.Stamps.HasVerdict && (Vector3)pointProp.GetValue(o.Stamps) == sentinel,
+                  $"the {(accept ? "APPROVED" : "DENIED")} dater clicked and held where it hangs presses nothing: stamping is drag-only ({o.Stamps.LastPress})");
             yield return Settle(() => !o.Stamps.IsCarrying, 5f);
         }
         yield return DragStamp(o, accept, target);

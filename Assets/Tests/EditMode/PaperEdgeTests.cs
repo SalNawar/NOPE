@@ -27,16 +27,22 @@ public class PaperEdgeTests
     }
 
     [Test]
-    public void ABooklet_ShowsItsCoverTopAndBottom_AndItsPages_AFolderItsPagesOverItsBoard()
+    public void ABooklet_ShowsItsCoverTopAndBottom_AndItsPages_AFolderItsLitBoard_EachInkedAtItsFoot()
     {
         List<EdgeBand> booklet = PaperEdge.Bands(PaperKind.Booklet, 0.003f);
         Assert.AreEqual(EdgeTone.Cover, booklet[0].Tone);
-        Assert.AreEqual(EdgeTone.Cover, booklet[booklet.Count - 1].Tone);
+        Assert.AreEqual(EdgeTone.Cover, booklet[booklet.Count - 2].Tone, "its back cover over the ink");
         Assert.AreEqual(PaperEdge.PageBands, booklet.FindAll(b => b.Tone == EdgeTone.PageLight || b.Tone == EdgeTone.PageDark).Count);
-        List<EdgeBand> folder = PaperEdge.Bands(PaperKind.Folder, 0.0025f);
-        Assert.AreNotEqual(EdgeTone.Cover, folder[0].Tone, "a folder's pages lie on top");
-        Assert.AreEqual(EdgeTone.Cover, folder[folder.Count - 1].Tone, "its board under them");
-        Assert.AreEqual(1, PaperEdge.Bands(PaperKind.Sheet, 0.0007f).Count);
+        List<EdgeBand> folder = PaperEdge.Bands(PaperKind.Folder, 0.0035f);
+        Assert.AreEqual(EdgeTone.Lit, folder[0].Tone, "a folder board's cut edge catches the light");
+        Assert.AreEqual(EdgeTone.Cover, folder[1].Tone, "its board under it");
+        foreach (PaperKind kind in new[] { PaperKind.Sheet, PaperKind.Card, PaperKind.Booklet, PaperKind.Folder })
+        {
+            List<EdgeBand> bands = PaperEdge.Bands(kind, 0.003f);
+            Assert.AreEqual(EdgeTone.Ink, bands[bands.Count - 1].Tone, $"{kind}: the cel ink line at the edge's foot");
+            Assert.AreEqual(1, bands.FindAll(b => b.Tone == EdgeTone.Ink).Count, $"{kind}: one ink line");
+        }
+        Assert.AreEqual(2, PaperEdge.Bands(PaperKind.Sheet, 0.0007f).Count, "a sheet: its edge and its ink");
         Assert.AreEqual(PaperKind.Booklet, PaperEdge.KindOf(FormFrame.Booklet));
         Assert.AreEqual(PaperKind.Card, PaperEdge.KindOf(FormFrame.Card));
         Assert.AreEqual(PaperKind.Sheet, PaperEdge.KindOf(FormFrame.TopBand));
@@ -55,6 +61,43 @@ public class PaperEdgeTests
         Assert.AreEqual(12 * 4 * bands.Count, triangles.Count, "two triangles each way per side per band");
         foreach ((float x, float y, float z) v in vertices)
             Assert.IsTrue(v.z >= PaperEdge.TopGap - Eps && v.z <= 0.003f + Eps, "every corner within the edge's depth");
+    }
+
+    [Test]
+    public void Walls_LeanOutByTheirDepth_TowardTheBottomRight_FurtherAtALiftedCorner()
+    {
+        var vertices = new List<(float x, float y, float z)>();
+        var tones = new List<EdgeTone>();
+        var triangles = new List<int>();
+        List<EdgeBand> bands = PaperEdge.Bands(PaperKind.Sheet, 0.001f);
+        List<(float x, float y)> square = PaperEdge.Rectangle(1f, 1f);
+        (float x, float y) lean = PaperDepth.Lean(2f, 0.2f, 0.3f);
+        Assert.Greater(lean.x, 0f, "out to the right");
+        Assert.Less(lean.y, 0f, "and toward the camera (down the face)");
+        PaperEdge.Walls(square, bands, vertices, tones, triangles, lean);
+        Assert.AreEqual(2 * 4 * bands.Count, vertices.Count, "walls only on the two sides it leans toward (the bottom and the right)");
+        foreach ((float x, float y, float z) v in vertices)
+            Assert.IsTrue(v.x - lean.x * v.z > 0.5f - 1e-5f || v.y - lean.y * v.z < -0.5f + 1e-5f, "on the right side or the bottom");
+        var reversed = new List<(float x, float y)>(square);
+        reversed.Reverse();
+        PaperEdge.Walls(reversed, bands, vertices, tones, triangles, lean);
+        Assert.AreEqual(2 * 4 * bands.Count, vertices.Count, "whichever way the outline turns");
+        PaperEdge.Walls(square, bands, vertices, tones, triangles, lean);
+        foreach ((float x, float y, float z) v in vertices)
+        {
+            float flatX = v.x - lean.x * v.z, flatY = v.y - lean.y * v.z;
+            Assert.AreEqual(0.5f, System.Math.Abs(flatX), 1e-5f, "each corner is its outline corner moved by the lean times its depth");
+            Assert.AreEqual(0.5f, System.Math.Abs(flatY), 1e-5f);
+        }
+        List<float> lift = PaperDepth.CornerLift(square, 1, 3f);
+        Assert.AreEqual(3f, lift[1], Eps, "the lifted corner leans the most");
+        Assert.AreEqual(1f, lift[3], Eps, "the far corner not at all");
+        Assert.AreEqual(1f, lift[0], Eps, "a unit away: no more");
+        PaperEdge.Walls(square, bands, vertices, tones, triangles, lean, lift);
+        float most = 0f;
+        foreach ((float x, float y, float z) v in vertices)
+            most = System.Math.Max(most, v.x - 0.5f);
+        Assert.AreEqual(lean.x * 3f * 0.001f, most, 1e-6f, "the lifted corner's foot lies three times further out");
     }
 
     [Test]
