@@ -1730,9 +1730,9 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "body", Part("Body", EdgesMaterial(), body));
         SetRef(so, "shadow", Part("Shadow", ShadowMaterial(), null));
         SetRef(so, "drag", drag);
+        SetRef(so, "face", face.GetComponent<MeshFilter>()); // its Top: a paper's takes its kind's when it binds; every model sags through it while it moves
         if (paper)
         {
-            SetRef(so, "face", face.GetComponent<MeshFilter>());
             SetRef(so, "sheetTop", DocumentMesh("Sheet", "SheetTop"));
             SetRef(so, "sheetBody", DocumentMesh("Sheet", "SheetBody"));
             SetRef(so, "bookletTop", DocumentMesh("Booklet", "BookletTop"));

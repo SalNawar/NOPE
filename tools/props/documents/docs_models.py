@@ -44,9 +44,10 @@ class Part:
     def __init__(self, name, width, depth):
         self.name, self.width, self.depth = name, width, depth
         self.faces = []  # (points [(x, y, h)], uvs [(u, v)], colours [(r, g, b, a)])
+        self.flex = 1.0  # the vertex colours' alpha: how much the part sags with the body's motion (DocumentCel's _Flex)
 
     def face(self, pts, uvs, cols):
-        self.faces.append((pts, uvs, cols))
+        self.faces.append((pts, uvs, [(c[0], c[1], c[2], self.flex) for c in cols]))
 
     def art_uv(self, x, y):
         return (x / self.width + 0.5, y / self.depth + 0.5)
@@ -179,6 +180,7 @@ def F(sx, sy):
 def folder():
     top = Part('FolderTop', FW, FD)
     body = Part('FolderBody', FW, FD)
+    top.flex = body.flex = 0.0  # the boards, spine, flaps and clip are stiff; the loose sheets flex
     board_top, board_bot = -0.0032, -0.0052
     sheet = 0.0004
     spine_l, spine_r = 0.466, 0.543
@@ -264,6 +266,7 @@ def folder():
     # The loose sheets: the cover sheet on the left (3), the rules on the right (8, the top one exactly the art's).
     import random
     rnd = random.Random(11)
+    top.flex = body.flex = 1.0
     for (x0, y0, x1, y1), n, top_h in (((0.098, 0.105, 0.470, 0.962), 3, board_top + 3 * sheet),
                                        ((0.545, 0.139, 0.922, 0.968), 8, 0.0)):
         for k in range(n):
@@ -278,6 +281,7 @@ def folder():
                      cy + (px - cx) * math.sin(ang) + (py - cy) * math.cos(ang) + dy) for px, py in poly]
             slab(top, body, poly, h_t, h_t - sheet, EDGE_SHEET, bevel=0.0, top_col=lambda x, y: grey(0.97 if k else 1.0), ink=0.0005)
 
+    top.flex = body.flex = 0.0
     # The clip on the rules: a brass bar and its ring, low over the top sheet (under the parts' 1 mm).
     (bx0, by0), (bx1, by1) = F(0.651, 0.204), F(0.816, 0.160)
     slab(top, body, rounded_rect(bx0, by0, bx1, by1, (0.0045,) * 4, seg=3), 0.0008, 0.0, None, bevel=0.0006, bevel_shade=0.75, side_solid='brass', side_shade=0.8, ink=0.0005)
@@ -293,6 +297,7 @@ def tab():
     tw, td = 1.0, 1.0  # unit space: the builder scales the tab plate to its art's size
     top = Part('FolderTabTop', tw, td)
     body = Part('FolderTabBody', tw, td)
+    top.flex = body.flex = 0.0
     poly = [(-0.5, -0.49), (0.498, -0.49), (0.481, -0.262), (0.466, 0.214), (0.435, 0.405), (-0.447, 0.405), (-0.477, 0.31), (-0.483, 0.024)]
     slab(top, body, poly, 0.0, -0.0006, EDGE_BOARD, bevel=0.0, ink=0.0005, scale=(0.0907, 0.0161))
     return [top, body]
@@ -313,7 +318,9 @@ def booklet():
     # pages, and its sides take the border's colour, so its edge is the cover's.
     corner = 0.0025
     outline = rounded_rect(-0.5, -0.5, 0.5, 0.5, (corner * MX,) * 4, seg=3)
+    top.flex = body.flex = 0.3  # the hard cover gives a little
     slab(top, body, outline, cover_top, cover_bot, EDGE_SHEET, bevel=0.0, side_shade=0.72, side_art=True, ink=0.0008, scale=(0.14, 0.22))
+    top.flex = body.flex = 1.0  # the pages flex
     # The page blocks: two, each its page, curving down into the gutter at y 0 and stitched there.
     gutter = 0.07  # shares of the height the pages curve over toward the fold
     rows = 6
@@ -391,7 +398,7 @@ def sheet():
         pts = [a, (a[0], a[1], a[2] - th), (b[0], b[1], b[2] - th), b]
         body.face(pts, [edge_uv(EDGE_SHEET, s, 0), edge_uv(EDGE_SHEET, s, 1), edge_uv(EDGE_SHEET, s + ln, 1), edge_uv(EDGE_SHEET, s + ln, 0)], [grey(1.0)] * 4)
         s += ln
-    rim(body, [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)], -th + 0.00005, 0.0005, (0.26, 0.34))
+    rim(body, [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)], -th + 0.00005, 0.0006, (0.26, 0.34))
     return [top, body]
 
 
@@ -401,10 +408,12 @@ def sheet():
 def card():
     top = Part('CardTop', 1.0, 1.0)
     body = Part('CardBody', 1.0, 1.0)
+    top.flex = body.flex = 0.1
     # The card is about 0.21 x 0.12 m on the desk: a 7 mm corner, a 0.6 mm bevel.
     W, D = 0.21, 0.12
     outline = rounded_rect(-W / 2, -D / 2, W / 2, D / 2, (0.007,) * 4, seg=5)
     tmp_top, tmp_body = Part('t', W, D), Part('b', W, D)
+    tmp_top.flex = tmp_body.flex = 0.1  # plastic: barely gives
     slab(tmp_top, tmp_body, outline, 0.0, -0.0012, EDGE_SHEET, bevel=0.0006, bevel_shade=0.82, ink=0.0007)
     for src, dst in ((tmp_top, top), (tmp_body, body)):
         for pts, uvs, cs in src.faces:

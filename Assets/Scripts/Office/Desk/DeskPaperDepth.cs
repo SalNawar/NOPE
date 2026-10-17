@@ -40,6 +40,12 @@ public sealed class DeskPaperDepth : MonoBehaviour
     [SerializeField] private Texture2D bookletShade;
 
     private static readonly int ShadeMapId = Shader.PropertyToID("_ShadeMap");
+    private static readonly int FlexId = Shader.PropertyToID("_Flex");
+
+    /// <summary>The model's renderers (its face's and its body's), found once.</summary>
+    private Renderer[] _flexed;
+    private MaterialPropertyBlock _flexBlock;
+    private Vector4 _flexShown;
 
     /// <summary>How far under the bottom of the thing the shadow lies (metres): clear of it for the depth buffer.</summary>
     private const float ShadowGap = 0.00005f;
@@ -69,6 +75,37 @@ public sealed class DeskPaperDepth : MonoBehaviour
             faceRenderer.GetPropertyBlock(block);
             block.SetTexture(ShadeMapId, kind == PaperKind.Booklet && bookletShade != null ? bookletShade : Texture2D.whiteTexture);
             faceRenderer.SetPropertyBlock(block);
+        }
+    }
+
+    /// <summary>
+    /// Bends the model while it moves (PaperPhysics; Saleh 2026-10-17: "GIVE IT
+    /// PHYSICS"): its flexible parts (loose sheets, pages; DocumentCel's vertex
+    /// alpha) sag <paramref name="sag"/> metres at their edges across its travel
+    /// (<paramref name="dirX"/>, <paramref name="dirY"/>: a unit vector in the
+    /// face's plane). Flat again at 0.
+    /// </summary>
+    public void SetFlex(float sag, float dirX, float dirY)
+    {
+        var flex = new Vector4(dirX, dirY, sag, 0f);
+        if (flex == _flexShown)
+            return;
+        _flexShown = flex;
+        if (_flexed == null)
+        {
+            var found = new List<Renderer>();
+            if (face != null && face.TryGetComponent(out Renderer faceRenderer))
+                found.Add(faceRenderer);
+            if (body != null && body.TryGetComponent(out Renderer bodyRenderer))
+                found.Add(bodyRenderer);
+            _flexed = found.ToArray();
+        }
+        _flexBlock ??= new MaterialPropertyBlock();
+        foreach (Renderer r in _flexed)
+        {
+            r.GetPropertyBlock(_flexBlock);
+            _flexBlock.SetVector(FlexId, flex);
+            r.SetPropertyBlock(_flexBlock);
         }
     }
 

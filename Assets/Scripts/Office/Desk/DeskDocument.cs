@@ -749,9 +749,24 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _builtRest ??= _sheetRest ?? sheet.localRotation;
         uint mixed = unchecked((uint)seed * 2654435761u);
         float share = (mixed >> 12) % 2001u / 1000f - 1f;
-        _sheetRest = Quaternion.Euler(0f, share * _config.paperJitter, 0f) * _builtRest.Value;
-        sheet.localRotation = Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+        _restYaw = share * _config.paperJitter;
+        Rest();
     }
+
+    /// <summary>The paper's turn on the desk (degrees about its up): its own jitter, then each drop's spin (PaperPhysics: it lies where its momentum left it), kept within twice the jitter either way of square.</summary>
+    private float _restYaw;
+
+    /// <summary>Lays the sheet at its turn (_restYaw) under its tilt.</summary>
+    private void Rest()
+    {
+        if (sheet == null || _builtRest == null)
+            return;
+        _sheetRest = Quaternion.Euler(0f, _restYaw, 0f) * _builtRest.Value;
+        sheet.localRotation = Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+    }
+
+    /// <summary>The paper's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"): its swing and sag while held, its slide, spin and hop when let go.</summary>
+    private readonly PaperPhysics _physics = new PaperPhysics();
 
     /// <summary>The paper's own number for its look (its index and its form's number: the same paper lies the same way every time).</summary>
     private static int Seed(int index, string formNumber)
@@ -813,6 +828,18 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 _tiltX.Kick(paper.KickFor(knobs.paperTiltMax * 0.25f * amount.Share)); // the flutter as it lands
             }
         }
+        // The physics feel on top of where the desk puts it (the desk's drop sizing and the scanner's snap decide the place).
+        (float spin, float hop) = _physics.Step(dt, Vector3.Dot(position, transform.right), Vector3.Dot(position, transform.forward), dragged, knobs, amount);
+        if (spin != 0f && _config != null)
+        {
+            float most = Mathf.Max(_config.paperJitter * 2f, 0.5f);
+            _restYaw = Mathf.Clamp(_restYaw + spin, -most, most);
+            Rest();
+        }
+        if (hop > 0f)
+            _lift.Kick(knobs.Get(knobs.paperFeel).KickFor(hop));
+        if (depth != null)
+            depth.SetFlex(_physics.Sag, _physics.SagDirX, _physics.SagDirZ);
         if (dragged && dt > 0f && !amount.Still)
         {
             Vector3 travel = transform.InverseTransformDirection(position - _lastPosition) / dt;
@@ -823,7 +850,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         else
             _tiltX.Target = _tiltZ.Target = 0f;
         _lastPosition = position;
-        if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest)
+        if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest && !_physics.Moving)
             return;
         SpringTuning tuning = knobs.Get(knobs.paperFeel);
         _lift.Step(dt, tuning, knobs.settleValue * 0.01f, knobs.settleSpeed * 0.01f); // metres
@@ -849,9 +876,11 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         float lift = _settling ? Mathf.Max(_lift.Value, _lift.Target) : _lift.Value;
         float half = _sizeNow * (1f + _squash.Value) / 2f;
         lift += PaperLayers.TiltDrop(Size.x * half, Size.y * half, _tiltX.Value, _tiltZ.Value);
-        sheet.localPosition = new Vector3(0f, lift, 0f);
+        sheet.localPosition = new Vector3(_physics.OffsetX, lift, _physics.OffsetZ);
         _sheetRest ??= sheet.localRotation;
-        sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f ? _sheetRest.Value : Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+        sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f && _physics.Yaw == 0f
+            ? _sheetRest.Value
+            : Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
         ShowSheetScale();
     }
 

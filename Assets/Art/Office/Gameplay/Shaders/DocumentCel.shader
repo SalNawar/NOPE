@@ -6,7 +6,8 @@
 // to the camera always shows its art at full strength and a document's sides and folds fall into
 // its shade. Unlit by the hall: no hour's light or real-time shadow ever crosses the printed text.
 // Drawn from both sides (the normal turned to the viewer), opaque, writing depth; an optional
-// alpha cut-out (_Cutoff above 0) for art drawn on a cut-out.
+// alpha cut-out (_Cutoff above 0) for art drawn on a cut-out. _Flex sags the flexible parts (their
+// vertex alpha) while the document moves, so pages and loose sheets bend a little in motion.
 Shader "TimeDesk/DocumentCel"
 {
     Properties
@@ -17,6 +18,7 @@ Shader "TimeDesk/DocumentCel"
         _ShadeColor ("Shade tone", Color) = (0.84, 0.79, 0.9, 1)
         _DarkColor ("Dark tone", Color) = (0.62, 0.55, 0.72, 1)
         _Cutoff ("Alpha cut-out (0: none)", Range(0, 1)) = 0
+        _Flex ("Sag while moving (x, y: travel in the face's plane; z: metres at the edge)", Vector) = (1, 0, 0, 0)
         _HoleColor ("Colour where the art is clear (no cut-out)", Color) = (0.68, 0.53, 0.36, 1)
     }
 
@@ -49,6 +51,7 @@ Shader "TimeDesk/DocumentCel"
                 half4 _DarkColor;
                 half _Cutoff;
                 half4 _HoleColor;
+                float4 _Flex;
             CBUFFER_END
 
             struct Attributes
@@ -71,7 +74,12 @@ Shader "TimeDesk/DocumentCel"
             Varyings Vert(Attributes input)
             {
                 Varyings output;
-                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
+                // While it moves its free edges sag away from the camera (+z, under the face) across its travel,
+                // as much as its vertex colour's alpha lets them (stiff boards 0, loose pages 1; PaperPhysics).
+                float3 p = input.positionOS.xyz;
+                float d = dot(p.xy, _Flex.xy) * 2.0;
+                p.z += _Flex.z * input.color.a * d * d;
+                output.positionCS = TransformObjectToHClip(p);
                 output.uv = TRANSFORM_TEX(input.uv, _BaseMap);
                 output.meshUv = input.uv;
                 output.normalVS = TransformWorldToViewDir(TransformObjectToWorldNormal(input.normalOS));

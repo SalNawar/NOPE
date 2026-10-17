@@ -360,8 +360,52 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>Lifts the booklet <paramref name="height"/> metres off the desk plane (its place in the papers' stack, or the drag's lift: DeskController).</summary>
     public void SetLift(float height)
     {
-        if (booklet != null)
-            booklet.localPosition = new Vector3(0f, height, 0f);
+        _height = height;
+        ShowMotion();
+    }
+
+    /// <summary>The booklet's height in the stack (SetLift), its hop over it when dropped and the turn its drops have left it (degrees about its up).</summary>
+    private float _height, _restYaw;
+    private Spring _hop;
+
+    /// <summary>The folder's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; the folder "can be nudged and slides with weight"): heavier than a paper (MotionKnobs.folderWeight), it swings less, slides to rest slower, and its loose sheets sag while it moves.</summary>
+    private PaperPhysics _physics;
+
+    /// <summary>Each frame: the folder's swing, slide, spin and hop on top of where the desk puts it (the drag moves its root).</summary>
+    private void Update()
+    {
+        if (booklet == null)
+            return;
+        MotionKnobs knobs = UiMotion.Knobs;
+        MotionAmount amount = UiMotion.Amount;
+        _physics ??= new PaperPhysics(knobs.folderWeight);
+        Vector3 at = transform.position;
+        bool held = drag != null && drag.IsDragging;
+        (float spin, float hop) = _physics.Step(Time.unscaledDeltaTime, Vector3.Dot(at, transform.right), Vector3.Dot(at, transform.forward), held, knobs, amount);
+        _restYaw = Mathf.Clamp(_restYaw + spin, -3f, 3f);
+        SpringTuning tuning = knobs.Get(knobs.paperFeel);
+        if (hop > 0f)
+            _hop.Kick(tuning.KickFor(hop));
+        _hop.Step(Time.unscaledDeltaTime, tuning, 1e-5f, 1e-4f);
+        if (_hop.Value < 0f)
+        {
+            _hop.Value = 0f; // it never sinks into what lies under it
+            _hop.Velocity = Mathf.Max(0f, _hop.Velocity);
+        }
+        if (depth != null)
+            depth.SetFlex(_physics.Sag, _physics.SagDirX, _physics.SagDirZ);
+        if (_physics.Moving || spin != 0f || !_hop.AtRest)
+            ShowMotion();
+    }
+
+    /// <summary>Draws the booklet at its height, hop, slide and turn.</summary>
+    private void ShowMotion()
+    {
+        if (booklet == null)
+            return;
+        float ox = _physics != null ? _physics.OffsetX : 0f, oz = _physics != null ? _physics.OffsetZ : 0f, yaw = _physics != null ? _physics.Yaw : 0f;
+        booklet.localPosition = new Vector3(ox, _height + _hop.Value, oz);
+        booklet.localRotation = Quaternion.Euler(0f, _restYaw + yaw, 0f);
     }
 
     /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced): its rows show, the others' hide; its tab looks open. The GUIDE shows its sheet (read).</summary>

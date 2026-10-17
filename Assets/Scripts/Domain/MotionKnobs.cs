@@ -101,6 +101,25 @@ public sealed class MotionKnobs
     /// <summary>How much a dropped paper squashes as it lands (0.06: 6 % flatter).</summary>
     public float paperDropSquash = 0.06f;
 
+    /// <summary>
+    /// The desk's physics feel (PaperPhysics; Saleh 2026-10-17: "KEEP IT TOP
+    /// DOWN BUT GIVE IT PHYSICS"): a held paper's swing against its travel
+    /// (degrees per metre per second, at most paperSwayMax) and its free
+    /// edges' sag (metres per metre per second, at most paperSagMax); let go,
+    /// its slide on into its place (its momentum over paperSlideSeconds, at
+    /// most paperSlideMax metres, stopped by friction), the turn its sideways
+    /// momentum leaves it (degrees per metre per second, at most
+    /// paperDropSpinMax) and its hop (metres high); its speed smoothed over
+    /// paperSpeedSmoothing seconds. The folder takes them divided by its weight.
+    /// </summary>
+    public float paperSwayPerSpeed = 5f, paperSwayMax = 5f, paperSagPerSpeed = 0.004f, paperSagMax = 0.006f;
+
+    /// <inheritdoc cref="paperSwayPerSpeed"/>
+    public float paperSlideSeconds = 0.09f, paperSlideMax = 0.03f, paperDropSpinPerSpeed = 3f, paperDropSpinMax = 4f, paperDropHop = 0.003f, paperSpeedSmoothing = 0.05f;
+
+    /// <summary>How heavy the rulebook folder moves against a paper (PaperPhysics.Weight): it swings and sags less and slides to rest slower.</summary>
+    public float folderWeight = 2.5f;
+
     /// <summary>How far a stamp rises before its slam (the anticipation).</summary>
     public float stampLift = 0.025f;
 
