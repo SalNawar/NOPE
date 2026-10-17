@@ -13,13 +13,13 @@ chest and paws, a charcoal dog's white blaze, a ginger cat's cream chin and ches
 inner ear, and tabby stripes for the ginger and cream cats (bands across the flank, the legs, the tail and the brow,
 their wobble from a seeded noise). A black cat's highlights lean blue (its sheen).
 
-The blink (the pets' animation, PetAnimator): for each mood whose eyes are open, pet_<kind>_<coat>_<mood>_blink.png
+The blink (make_pet_frames.py): for each mood whose eyes are open, pet_<kind>_<coat>_<mood>_blink.png
 is the picture's eyes shut: each eye's ellipse (the rig's eyes) filled with the fur around it (a normalized
 convolution of the fur outside) and a closed lid drawn across it in the line art's ink; transparent elsewhere, so the
 game lays it over the coat's picture for a blink.
 
 Output: Assets/Art/UI/Resources/Home/pet_<kind>_<coat>_<mood>.png (1024x1024, transparent; ArtSlots.PetSprite) and
-the blinks (ArtSlots.PetBlink), each with a .meta whose GUID is fixed (derived from the file's name), so a regenerated
+the blinks (for the frame-by-frame animation, make_pet_frames.py), each with a .meta whose GUID is fixed (derived from the file's name), so a regenerated
 file keeps its GUID. Unity fills in the importer's settings on import (ArtSlotImporter). The coats' ids must match
 world_source.json home.pet.kinds[].coats.
 
