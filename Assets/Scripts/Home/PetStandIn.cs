@@ -9,10 +9,17 @@ using UnityEngine.UI;
 /// else a stand-in drawn in code from a few shapes (a body, a head, ears, eyes,
 /// a nose and a tail; a dog's ears droop, a cat's stand; a sick pet under a
 /// blanket), on the corner's backdrop (ArtSlots.PetCorner, else a plain
-/// plate), dimmed while the electricity is off. It breathes while idle, hops
-/// with a heart when petted and spins when played with. The Home pet corner
-/// and the Title's adoption panel each host one; it builds its children on
-/// demand and owns them.
+/// plate), dimmed while the electricity is off. The picture is a puppet
+/// (PetPuppet on its look's rig, ArtSlots.PetRigs; Saleh 2026-10-17: a real
+/// animation, not a squash): its mood's loop (PetAnimator.Pose: an idle pet
+/// breathes calmly, sways its head, flicks an ear and blinks; a happy one
+/// wags hard and hops; a sad one droops, barely wags and blinks slowly; a sick
+/// one breathes heavily and shivers), the blink laid over it from its blink
+/// picture (ArtSlots.PetBlink); petted it leans into the hand, eyes shut, with
+/// a heart; fed it bobs its head down to the bowl; played with it hops. The
+/// stand-in wags and hops the same way. The Home pet corner and the Title's
+/// adoption panel each host one; it builds its children on demand and owns
+/// them.
 /// </summary>
 public sealed class PetStandIn : MonoBehaviour
 {
@@ -34,17 +41,44 @@ public sealed class PetStandIn : MonoBehaviour
     /// <summary>The drawn parts (rebuilt on Show).</summary>
     private readonly List<GameObject> _parts = new();
 
-    /// <summary>The figure's root: what breathes, hops and spins.</summary>
+    /// <summary>The figure's root: fitted to the host's rect (the stand-in hops it).</summary>
     private RectTransform _figure;
 
-    /// <summary>The tail (wags), when drawn.</summary>
+    /// <summary>The picture as a puppet, when the art exists.</summary>
+    private PetPuppet _puppet;
+
+    /// <summary>The eyes shut over it (a blink), when its blink picture exists.</summary>
+    private PetPuppet _blink;
+
+    /// <summary>The stand-in's tail (wags), when drawn.</summary>
     private RectTransform _tail;
 
     /// <summary>The heart shown after a pat.</summary>
     private Image _heart;
 
-    /// <summary>Seconds left of the hop (after a pat) and of the spin (after a toy).</summary>
-    private float _hop, _spin;
+    /// <summary>The rig of the picture shown (null: none, the stand-in).</summary>
+    private PetRig _rig;
+
+    /// <summary>Its look's loop (null: still).</summary>
+    private PetMoodMotion _mood;
+
+    /// <summary>The reaction under way (None: the loop alone).</summary>
+    private PetReaction _reaction;
+
+    /// <summary>The reaction's motion (null: none).</summary>
+    private PetReactionMotion _reactionMotion;
+
+    /// <summary>When the reaction began (unscaled seconds).</summary>
+    private float _reactionStart;
+
+    /// <summary>When it was shown (unscaled seconds): its loop's time starts there.</summary>
+    private float _shownAt;
+
+    /// <summary>The rigs and motion knobs (Home/pet_rigs.json), read once.</summary>
+    private static PetRigs _rigs;
+
+    /// <summary>True once the rigs were read (the file may be missing).</summary>
+    private static bool _rigsRead;
 
     /// <summary>The generated shapes, made once.</summary>
     private static Sprite _disc, _triangle, _heartShape;
@@ -62,10 +96,10 @@ public sealed class PetStandIn : MonoBehaviour
         Build();
     }
 
-    /// <summary>A pat: a small hop and a heart.</summary>
+    /// <summary>A pat: it leans into the hand, eyes shut, tail going, and a heart rises.</summary>
     public void Pat()
     {
-        _hop = 0.6f;
+        React(PetReaction.Pat);
         if (_heart != null)
         {
             _heart.gameObject.SetActive(true);
@@ -73,36 +107,68 @@ public sealed class PetStandIn : MonoBehaviour
         }
     }
 
-    /// <summary>A toy: a happy spin.</summary>
-    public void Play() => _spin = 0.8f;
+    /// <summary>A toy: it hops, tail going.</summary>
+    public void Play() => React(PetReaction.Play);
 
-    /// <summary>Breathing, the tail's wag, the hop with its heart and the spin.</summary>
+    /// <summary>Fed (the night's food paid): its head goes down to the bowl, bobbing as it eats.</summary>
+    public void Feed() => React(PetReaction.Fed);
+
+    /// <summary>Starts <paramref name="reaction"/> now (its motion from the rigs' knobs; none: the loop goes on).</summary>
+    private void React(PetReaction reaction)
+    {
+        _reaction = reaction;
+        _reactionMotion = Rigs()?.Reaction(reaction);
+        _reactionStart = Time.unscaledTime;
+    }
+
+    /// <summary>The pose now (its mood's loop and the reaction under way) on the puppet and its blink, or on the stand-in's tail and figure; the heart rising while petted.</summary>
     private void Update()
     {
         if (_figure == null)
             return;
-        float t = Time.unscaledTime;
-        float breathe = 1f + 0.02f * Mathf.Sin(t * (_look == PetLook.Sick ? 1.2f : 2.4f));
-        float hop = _hop > 0f ? Mathf.Sin((0.6f - _hop) / 0.6f * Mathf.PI) * 40f : 0f;
-        _figure.localScale = new Vector3(breathe, 1f / breathe, 1f) * FitScale();
-        _figure.anchoredPosition = new Vector2(0f, hop * FitScale());
-        _figure.localEulerAngles = new Vector3(0f, _spin > 0f ? (0.8f - _spin) / 0.8f * 360f : 0f, 0f);
-        if (_tail != null)
+        float now = Time.unscaledTime;
+        float since = _reaction != PetReaction.None ? now - _reactionStart : -1f;
+        PetPose pose = PetAnimator.Pose(_mood, _reactionMotion, since, now - _shownAt, (int)_kind * 7 + (int)_look);
+        float fit = FitScale();
+        _figure.localScale = new Vector3(fit, fit, 1f);
+        if (_puppet != null)
         {
-            float speed = _look == PetLook.Happy ? 9f : _look == PetLook.Idle ? 4f : 1.5f;
-            float swing = _look == PetLook.Sick || _look == PetLook.Sad ? 4f : 14f;
-            _tail.localEulerAngles = new Vector3(0f, 0f, TailAngle() + swing * Mathf.Sin(t * speed));
+            _puppet.Pose(pose);
+            if (_blink != null)
+            {
+                _blink.enabled = pose.Blink;
+                _blink.Pose(pose);
+            }
+        }
+        else
+        {
+            _figure.anchoredPosition = new Vector2(pose.Shiver * Box * fit, pose.Hop * Box * fit);
+            if (_tail != null)
+                _tail.localEulerAngles = new Vector3(0f, 0f, TailAngle() - pose.TailAngle);
         }
         if (_heart != null && _heart.gameObject.activeSelf)
         {
-            float k = Mathf.Clamp01(_hop / 0.6f);
+            float length = _reaction == PetReaction.Pat && _reactionMotion != null ? _reactionMotion.length : 1f;
+            float k = _reaction == PetReaction.Pat ? Mathf.Clamp01(1f - since / length) : 0f;
             _heart.rectTransform.anchoredPosition = new Vector2(-70f, 150f + (1f - k) * 60f);
             _heart.color = new Color(0.9f, 0.3f, 0.42f, k);
-            if (_hop <= 0f)
+            if (k <= 0f)
                 _heart.gameObject.SetActive(false);
         }
-        _hop = Mathf.Max(0f, _hop - Time.unscaledDeltaTime);
-        _spin = Mathf.Max(0f, _spin - Time.unscaledDeltaTime);
+        if (since >= 0f && (_reactionMotion == null || since >= _reactionMotion.length))
+            _reaction = PetReaction.None;
+    }
+
+    /// <summary>The rigs and motion knobs (Home/pet_rigs.json through JsonUtility), read once; null without the file.</summary>
+    private static PetRigs Rigs()
+    {
+        if (!_rigsRead)
+        {
+            _rigsRead = true;
+            TextAsset json = Resources.Load<TextAsset>(ArtSlots.PetRigs);
+            _rigs = json != null ? JsonUtility.FromJson<PetRigs>(json.text) : null;
+        }
+        return _rigs;
     }
 
     /// <summary>The figure's scale: the design box fitted into the host's rect.</summary>
@@ -121,6 +187,12 @@ public sealed class PetStandIn : MonoBehaviour
         _parts.Clear();
         _tail = null;
         _heart = null;
+        _puppet = null;
+        _blink = null;
+        _reaction = PetReaction.None;
+        _shownAt = Time.unscaledTime;
+        _mood = Rigs()?.Mood(_look);
+        _rig = null;
 
         Image back = Part(transform, "Backdrop", Vector2.zero, Vector2.zero, null, _lit ? plateColour : new Color(plateColour.r * 0.45f, plateColour.g * 0.45f, plateColour.b * 0.5f, 1f));
         Stretch(back.rectTransform);
@@ -141,8 +213,16 @@ public sealed class PetStandIn : MonoBehaviour
         Sprite art = SlotArt.Sprite(ArtSlots.PetSprite(_kind, _coat, _look));
         if (art != null)
         {
-            Image picture = Part(_figure, "Picture", Vector2.zero, new Vector2(Box, Box), art, _lit ? Color.white : new Color(0.55f, 0.55f, 0.6f, 1f));
-            picture.preserveAspect = true;
+            _rig = Rigs()?.Rig(_kind, _look);
+            Color tint = _lit ? Color.white : new Color(0.55f, 0.55f, 0.6f, 1f);
+            _puppet = Puppet("Picture", art, tint);
+            string blinkSlot = ArtSlots.PetBlink(_kind, _coat, _look);
+            Sprite shut = _rig != null && _rig.CanBlink && blinkSlot != null ? SlotArt.Sprite(blinkSlot) : null;
+            if (shut != null)
+            {
+                _blink = Puppet("Blink", shut, tint);
+                _blink.enabled = false;
+            }
         }
         else
             DrawStandIn();
@@ -204,6 +284,20 @@ public sealed class PetStandIn : MonoBehaviour
 
         if (_look == PetLook.Sick)
             Part(_figure, "Blanket", new Vector2(35f, -95f), new Vector2(240f, 105f), Disc(), new Color(0.36f, 0.5f, 0.72f, 1f));
+    }
+
+    /// <summary>A puppet named <paramref name="name"/> filling the figure: <paramref name="sprite"/> on the rig, tinted <paramref name="tint"/>.</summary>
+    private PetPuppet Puppet(string name, Sprite sprite, Color tint)
+    {
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(_figure, false);
+        var rt = (RectTransform)go.transform;
+        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = new Vector2(Box, Box);
+        PetPuppet puppet = go.AddComponent<PetPuppet>();
+        puppet.color = tint;
+        puppet.Show(sprite, _rig);
+        return puppet;
     }
 
     /// <summary>The tail's resting angle for how it looks (down when sad or sick).</summary>

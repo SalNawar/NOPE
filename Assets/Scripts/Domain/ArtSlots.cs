@@ -112,6 +112,21 @@ public static class ArtSlots
         return c.Length == 0 ? new[] { "Home/pet_" + k + "_" + l } : new[] { "Home/pet_" + k + "_" + c + "_" + l, "Home/pet_" + k + "_" + l };
     }
 
+    /// <summary>
+    /// The pet's eyes shut in its coat for how it looks
+    /// (Home/pet_&lt;kind&gt;_&lt;coat&gt;_&lt;look&gt;_blink, laid over its picture for a
+    /// blink; painted by tools/art/pets/make_pets.py for each look whose eyes
+    /// are open); none without a coat (the kind's own pictures have no blink).
+    /// </summary>
+    public static string PetBlink(PetKind kind, string coat, PetLook look)
+    {
+        string c = Key(coat);
+        return c.Length == 0 ? null : "Home/pet_" + Key(kind.ToString()) + "_" + c + "_" + Key(look.ToString()) + "_blink";
+    }
+
+    /// <summary>The pets' puppet rigs and motion knobs (a JSON text asset, PetRigs; read by tools/art/pets/make_pets.py too).</summary>
+    public const string PetRigs = "Home/pet_rigs";
+
     /// <summary>The pet corner's backdrop (the corner of the flat where the pet sleeps); without it the corner is a plain plate.</summary>
     public const string PetCorner = "Home/pet_corner";
 
