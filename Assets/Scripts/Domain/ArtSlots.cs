@@ -112,6 +112,21 @@ public static class ArtSlots
         return c.Length == 0 ? new[] { "Home/pet_" + k + "_" + l } : new[] { "Home/pet_" + k + "_" + c + "_" + l, "Home/pet_" + k + "_" + l };
     }
 
+    /// <summary>
+    /// A drawn frame of the pet's animation in its coat for how it looks
+    /// (Home/pet_&lt;kind&gt;_&lt;coat&gt;_&lt;look&gt;_&lt;frame&gt;, "Home/pet_dog_tan_idle_blink";
+    /// tools/art/pets/make_pet_frames.py); the rest frame is its picture
+    /// (<see cref="PetSprite"/>), and without a coat there are no frames.
+    /// </summary>
+    public static string PetFrame(PetKind kind, string coat, PetLook look, string frame)
+    {
+        string c = Key(coat), f = Key(frame);
+        return c.Length == 0 || f.Length == 0 || f == PetAnimation.Rest ? null : "Home/pet_" + Key(kind.ToString()) + "_" + c + "_" + Key(look.ToString()) + "_" + f;
+    }
+
+    /// <summary>The pets' frame-by-frame loops and reactions (a JSON text asset, PetAnimations; read by tools/art/pets/make_pet_frames.py too).</summary>
+    public const string PetLoops = "Home/pet_loops";
+
     /// <summary>The pet corner's backdrop (the corner of the flat where the pet sleeps); without it the corner is a plain plate.</summary>
     public const string PetCorner = "Home/pet_corner";
 

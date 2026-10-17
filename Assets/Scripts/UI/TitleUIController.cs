@@ -170,7 +170,7 @@ public sealed class TitleUIController : MonoBehaviour
     /// in the field (<paramref name="words"/>); choosing a kind lays out its
     /// coats (keeping the coat when the kind has it, else its first) and
     /// swaps a suggested name for the other's; choosing a coat shows the pet
-    /// in it in the preview, which hops; Adopt checks the name
+    /// in it in the preview, which plays its Pat reaction; Adopt checks the name
     /// (PetNames.Check at home.pet.nameMaxLength: a refusal says why and
     /// adopts nothing) and calls <paramref name="onAdopt"/> with the kind, the
     /// cleaned name and the coat; Back calls <paramref name="onBack"/>. The
@@ -290,7 +290,7 @@ public sealed class TitleUIController : MonoBehaviour
         }
     }
 
-    /// <summary>Chooses <paramref name="coat"/>: its swatch framed and taking no clicks (it pops, UiJuice.Choose), the others live; the preview shows the kind in it, idle, and hops when the player chose it (<paramref name="hop"/>).</summary>
+    /// <summary>Chooses <paramref name="coat"/>: its swatch framed and taking no clicks (it pops, UiJuice.Choose), the others live; the preview shows the kind in it, idle, and plays its Pat reaction when the player chose it (<paramref name="hop"/>).</summary>
     private void ChooseCoat(string coat, bool hop)
     {
         _adoptCoat = coat ?? string.Empty;

@@ -1,0 +1,48 @@
+{
+  "about": "The pets' frame-by-frame animation (Saleh 2026-10-17: \"just make normal animations\"; PetAnimation). Each mood's loop and each reaction is a list of drawn frames, each held for a number of frames at fps; \"rest\" is the mood's own picture (Home/pet_<kind>_<coat>_<mood>), any other frame Home/pet_<kind>_<coat>_<mood>_<frame> (drawn in Canva, painted per coat by tools/art/pets/make_pet_frames.py, which reads this file for the frames to make). A reaction plays once, then the loop again; a frame a mood has not got is its rest picture.",
+  "fps": 10,
+  "loops": [
+    { "kind": "Dog", "mood": "Idle", "frames": [
+      { "frame": "rest", "hold": 10 }, { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 },
+      { "frame": "rest", "hold": 1 }, { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 },
+      { "frame": "rest", "hold": 8 }, { "frame": "blink", "hold": 1 }, { "frame": "rest", "hold": 12 }, { "frame": "tail_a", "hold": 2 },
+      { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 }, { "frame": "rest", "hold": 6 } ] },
+    { "kind": "Dog", "mood": "Happy", "frames": [
+      { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 }, { "frame": "rest", "hold": 1 },
+      { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 }, { "frame": "rest", "hold": 4 },
+      { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 }, { "frame": "rest", "hold": 1 },
+      { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 }, { "frame": "rest", "hold": 6 } ] },
+    { "kind": "Dog", "mood": "Sad", "frames": [
+      { "frame": "rest", "hold": 20 }, { "frame": "blink", "hold": 2 }, { "frame": "rest", "hold": 15 }, { "frame": "tail_a", "hold": 3 },
+      { "frame": "rest", "hold": 10 }, { "frame": "ear", "hold": 2 }, { "frame": "rest", "hold": 12 } ] },
+    { "kind": "Dog", "mood": "Sick", "frames": [
+      { "frame": "rest", "hold": 25 }, { "frame": "blink", "hold": 6 }, { "frame": "rest", "hold": 20 }, { "frame": "ear", "hold": 2 },
+      { "frame": "rest", "hold": 15 } ] },
+    { "kind": "Cat", "mood": "Idle", "frames": [
+      { "frame": "rest", "hold": 15 }, { "frame": "blink", "hold": 1 }, { "frame": "rest", "hold": 12 }, { "frame": "tail_a", "hold": 4 },
+      { "frame": "rest", "hold": 10 }, { "frame": "ear", "hold": 2 }, { "frame": "rest", "hold": 8 } ] },
+    { "kind": "Cat", "mood": "Happy", "frames": [
+      { "frame": "rest", "hold": 6 }, { "frame": "tail_a", "hold": 4 }, { "frame": "rest", "hold": 3 }, { "frame": "tail_b", "hold": 4 },
+      { "frame": "rest", "hold": 6 }, { "frame": "ear", "hold": 2 }, { "frame": "rest", "hold": 4 } ] },
+    { "kind": "Cat", "mood": "Sad", "frames": [
+      { "frame": "rest", "hold": 18 }, { "frame": "blink", "hold": 3 }, { "frame": "rest", "hold": 14 }, { "frame": "tail_a", "hold": 3 },
+      { "frame": "rest", "hold": 12 } ] },
+    { "kind": "Cat", "mood": "Sick", "frames": [
+      { "frame": "rest", "hold": 22 }, { "frame": "blink", "hold": 8 }, { "frame": "rest", "hold": 18 }, { "frame": "ear", "hold": 2 },
+      { "frame": "rest", "hold": 12 } ] }
+  ],
+  "reactions": [
+    { "reaction": "Pat", "frames": [
+      { "frame": "blink", "hold": 4 }, { "frame": "tail_a", "hold": 2 }, { "frame": "blink", "hold": 3 }, { "frame": "tail_b", "hold": 2 },
+      { "frame": "blink", "hold": 4 } ] },
+    { "reaction": "Fed", "frames": [
+      { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 }, { "frame": "rest", "hold": 1 },
+      { "frame": "tail_a", "hold": 2 }, { "frame": "rest", "hold": 1 }, { "frame": "tail_b", "hold": 2 }, { "frame": "rest", "hold": 1 },
+      { "frame": "blink", "hold": 3 } ] },
+    { "reaction": "Play", "frames": [
+      { "frame": "tail_a", "hold": 1 }, { "frame": "tail_b", "hold": 1 }, { "frame": "tail_a", "hold": 1 }, { "frame": "tail_b", "hold": 1 },
+      { "frame": "tail_a", "hold": 1 }, { "frame": "tail_b", "hold": 1 }, { "frame": "tail_a", "hold": 1 }, { "frame": "tail_b", "hold": 1 },
+      { "frame": "ear", "hold": 2 }, { "frame": "tail_a", "hold": 1 }, { "frame": "tail_b", "hold": 1 }, { "frame": "tail_a", "hold": 1 },
+      { "frame": "tail_b", "hold": 1 } ] }
+  ]
+}

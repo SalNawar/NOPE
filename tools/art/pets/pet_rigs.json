@@ -18,7 +18,11 @@
         { "type": "pale", "center": [0.44, 0.925], "radius": [0.065, 0.045], "angle": 0 },
         { "type": "pale", "center": [0.59, 0.905], "radius": [0.08, 0.045], "angle": 0 },
         { "type": "inner", "center": [0.29, 0.095], "radius": [0.022, 0.05], "angle": -18 },
-        { "type": "pale", "center": [0.72, 0.94], "radius": [0.06, 0.04], "angle": 0 }
+        { "type": "pale", "center": [0.72, 0.94], "radius": [0.06, 0.04], "angle": 0, "part": "tail" }
+      ],
+      "frames": [
+        { "frame": "tail_a", "marks": [ { "type": "pale", "center": [0.83, 0.555], "radius": [0.055, 0.05], "angle": 0, "part": "tail" } ] },
+        { "frame": "tail_b", "marks": [ { "type": "pale", "center": [0.635, 0.945], "radius": [0.055, 0.035], "angle": 0, "part": "tail" } ] }
       ]
     },
     {
@@ -38,7 +42,7 @@
         { "type": "pale", "center": [0.44, 0.925], "radius": [0.065, 0.045], "angle": 0 },
         { "type": "pale", "center": [0.59, 0.905], "radius": [0.08, 0.045], "angle": 0 },
         { "type": "inner", "center": [0.29, 0.095], "radius": [0.022, 0.05], "angle": -18 },
-        { "type": "pale", "center": [0.86, 0.57], "radius": [0.06, 0.05], "angle": 0 }
+        { "type": "pale", "center": [0.86, 0.57], "radius": [0.06, 0.05], "angle": 0, "part": "tail" }
       ]
     },
     {
@@ -56,7 +60,7 @@
         { "type": "pale", "center": [0.09, 0.765], "radius": [0.06, 0.04], "angle": 0 },
         { "type": "pale", "center": [0.31, 0.80], "radius": [0.07, 0.045], "angle": 0 },
         { "type": "pale", "center": [0.67, 0.74], "radius": [0.08, 0.04], "angle": 0 },
-        { "type": "pale", "center": [0.82, 0.78], "radius": [0.05, 0.04], "angle": 0 }
+        { "type": "pale", "center": [0.82, 0.78], "radius": [0.05, 0.04], "angle": 0, "part": "tail" }
       ]
     },
     {
@@ -94,6 +98,7 @@
         { "type": "pale", "center": [0.48, 0.94], "radius": [0.04, 0.03], "angle": 0 },
         { "type": "stripes", "center": [0.63, 0.62], "radius": [0.15, 0.24], "angle": 10, "period": 0.045 },
         { "type": "stripes", "center": [0.62, 0.91], "radius": [0.16, 0.07], "angle": 0, "period": 0.05 },
+        { "type": "stripes", "center": [0.82, 0.78], "radius": [0.06, 0.12], "angle": 90, "period": 0.05 },
         { "type": "stripes", "center": [0.41, 0.70], "radius": [0.07, 0.13], "angle": 90, "period": 0.04 },
         { "type": "stripes", "center": [0.43, 0.165], "radius": [0.06, 0.04], "angle": 0, "period": 0.022 }
       ]
@@ -115,6 +120,7 @@
         { "type": "pale", "center": [0.46, 0.89], "radius": [0.05, 0.04], "angle": 0 },
         { "type": "stripes", "center": [0.60, 0.64], "radius": [0.13, 0.22], "angle": 10, "period": 0.045 },
         { "type": "stripes", "center": [0.74, 0.68], "radius": [0.07, 0.14], "angle": 90, "period": 0.05 },
+        { "type": "stripes", "center": [0.735, 0.46], "radius": [0.06, 0.24], "angle": 90, "period": 0.05 },
         { "type": "stripes", "center": [0.41, 0.70], "radius": [0.07, 0.13], "angle": 90, "period": 0.04 },
         { "type": "stripes", "center": [0.43, 0.165], "radius": [0.06, 0.04], "angle": 0, "period": 0.022 }
       ]

@@ -9,10 +9,16 @@ using UnityEngine.UI;
 /// else a stand-in drawn in code from a few shapes (a body, a head, ears, eyes,
 /// a nose and a tail; a dog's ears droop, a cat's stand; a sick pet under a
 /// blanket), on the corner's backdrop (ArtSlots.PetCorner, else a plain
-/// plate), dimmed while the electricity is off. It breathes while idle, hops
-/// with a heart when petted and spins when played with. The Home pet corner
-/// and the Title's adoption panel each host one; it builds its children on
-/// demand and owns them.
+/// plate), dimmed while the electricity is off. The picture is animated frame
+/// by frame (Saleh 2026-10-17: "just make normal animations"): its mood's loop
+/// of drawn frames (Home/pet_loops.json, PetAnimations; ArtSlots.PetFrame:
+/// a blink, the tail swung, an ear twitched), each held, never scaled or
+/// moved; petted it plays the Pat reaction (eyes shut, a wag) with a heart
+/// rising, fed (the corner opened on a night its food was paid) the Fed
+/// reaction, played with a toy the Play reaction (a fast wag), then its loop
+/// again. A frame its coat lacks shows the picture. The stand-in holds still.
+/// The Home pet corner and the Title's adoption panel each host one; it builds
+/// its children on demand and owns them.
 /// </summary>
 public sealed class PetStandIn : MonoBehaviour
 {
@@ -34,17 +40,38 @@ public sealed class PetStandIn : MonoBehaviour
     /// <summary>The drawn parts (rebuilt on Show).</summary>
     private readonly List<GameObject> _parts = new();
 
-    /// <summary>The figure's root: what breathes, hops and spins.</summary>
+    /// <summary>The figure's root, fitted to the host's rect.</summary>
     private RectTransform _figure;
 
-    /// <summary>The tail (wags), when drawn.</summary>
-    private RectTransform _tail;
+    /// <summary>The picture (its frames swap on it), when the art exists.</summary>
+    private Image _picture;
+
+    /// <summary>The drawn frames by name ("rest" is the picture), those its coat has.</summary>
+    private readonly Dictionary<string, Sprite> _frames = new();
+
+    /// <summary>Its mood's loop.</summary>
+    private PetFrameHold[] _loop = System.Array.Empty<PetFrameHold>();
+
+    /// <summary>The reaction under way (null: none).</summary>
+    private PetFrameHold[] _reaction;
+
+    /// <summary>When the reaction began (unscaled seconds).</summary>
+    private float _reactionStart;
+
+    /// <summary>True while the reaction under way is a pat (the heart rises with it).</summary>
+    private bool _patting;
+
+    /// <summary>When the loop began (unscaled seconds).</summary>
+    private float _shownAt;
 
     /// <summary>The heart shown after a pat.</summary>
     private Image _heart;
 
-    /// <summary>Seconds left of the hop (after a pat) and of the spin (after a toy).</summary>
-    private float _hop, _spin;
+    /// <summary>The loops and reactions (Home/pet_loops.json), read once.</summary>
+    private static PetAnimations _animations;
+
+    /// <summary>True once they were read (the file may be missing).</summary>
+    private static bool _animationsRead;
 
     /// <summary>The generated shapes, made once.</summary>
     private static Sprite _disc, _triangle, _heartShape;
@@ -62,10 +89,10 @@ public sealed class PetStandIn : MonoBehaviour
         Build();
     }
 
-    /// <summary>A pat: a small hop and a heart.</summary>
+    /// <summary>A pat: the Pat reaction (eyes shut, a wag) and a heart rising.</summary>
     public void Pat()
     {
-        _hop = 0.6f;
+        React(PetReaction.Pat);
         if (_heart != null)
         {
             _heart.gameObject.SetActive(true);
@@ -73,36 +100,64 @@ public sealed class PetStandIn : MonoBehaviour
         }
     }
 
-    /// <summary>A toy: a happy spin.</summary>
-    public void Play() => _spin = 0.8f;
+    /// <summary>A toy: the Play reaction (a fast wag).</summary>
+    public void Play() => React(PetReaction.Play);
 
-    /// <summary>Breathing, the tail's wag, the hop with its heart and the spin.</summary>
+    /// <summary>Fed (the night's food paid): the Fed reaction (a happy wag).</summary>
+    public void Feed() => React(PetReaction.Fed);
+
+    /// <summary>Starts <paramref name="reaction"/>'s frames now, once.</summary>
+    private void React(PetReaction reaction)
+    {
+        PetFrameHold[] steps = Animations()?.Reaction(reaction);
+        _reaction = steps != null && steps.Length > 0 ? steps : null;
+        _reactionStart = Time.unscaledTime;
+        _patting = reaction == PetReaction.Pat;
+    }
+
+    /// <summary>The frame of the reaction under way (else of the loop) on the picture; the heart rising while petted.</summary>
     private void Update()
     {
         if (_figure == null)
             return;
-        float t = Time.unscaledTime;
-        float breathe = 1f + 0.02f * Mathf.Sin(t * (_look == PetLook.Sick ? 1.2f : 2.4f));
-        float hop = _hop > 0f ? Mathf.Sin((0.6f - _hop) / 0.6f * Mathf.PI) * 40f : 0f;
-        _figure.localScale = new Vector3(breathe, 1f / breathe, 1f) * FitScale();
-        _figure.anchoredPosition = new Vector2(0f, hop * FitScale());
-        _figure.localEulerAngles = new Vector3(0f, _spin > 0f ? (0.8f - _spin) / 0.8f * 360f : 0f, 0f);
-        if (_tail != null)
+        float now = Time.unscaledTime;
+        float fit = FitScale();
+        _figure.localScale = new Vector3(fit, fit, 1f);
+        int fps = Mathf.Max(1, Animations()?.fps ?? 10);
+        string frame = null;
+        if (_reaction != null)
         {
-            float speed = _look == PetLook.Happy ? 9f : _look == PetLook.Idle ? 4f : 1.5f;
-            float swing = _look == PetLook.Sick || _look == PetLook.Sad ? 4f : 14f;
-            _tail.localEulerAngles = new Vector3(0f, 0f, TailAngle() + swing * Mathf.Sin(t * speed));
+            frame = PetAnimation.FrameAt(_reaction, (long)((now - _reactionStart) * fps), false);
+            if (frame == null)
+            {
+                _reaction = null;
+                _patting = false;
+            }
         }
+        frame ??= PetAnimation.FrameAt(_loop, (long)((now - _shownAt) * fps), true);
+        if (_picture != null && (_frames.TryGetValue(frame, out Sprite sprite) || _frames.TryGetValue(PetAnimation.Rest, out sprite)))
+            _picture.sprite = sprite;
         if (_heart != null && _heart.gameObject.activeSelf)
         {
-            float k = Mathf.Clamp01(_hop / 0.6f);
+            float length = _reaction != null ? PetAnimation.Length(_reaction) / (float)fps : 1f;
+            float k = _patting ? Mathf.Clamp01(1f - (now - _reactionStart) / length) : 0f;
             _heart.rectTransform.anchoredPosition = new Vector2(-70f, 150f + (1f - k) * 60f);
             _heart.color = new Color(0.9f, 0.3f, 0.42f, k);
-            if (_hop <= 0f)
+            if (k <= 0f)
                 _heart.gameObject.SetActive(false);
         }
-        _hop = Mathf.Max(0f, _hop - Time.unscaledDeltaTime);
-        _spin = Mathf.Max(0f, _spin - Time.unscaledDeltaTime);
+    }
+
+    /// <summary>The loops and reactions (Home/pet_loops.json through JsonUtility), read once; null without the file.</summary>
+    private static PetAnimations Animations()
+    {
+        if (!_animationsRead)
+        {
+            _animationsRead = true;
+            TextAsset json = Resources.Load<TextAsset>(ArtSlots.PetLoops);
+            _animations = json != null ? JsonUtility.FromJson<PetAnimations>(json.text) : null;
+        }
+        return _animations;
     }
 
     /// <summary>The figure's scale: the design box fitted into the host's rect.</summary>
@@ -119,8 +174,13 @@ public sealed class PetStandIn : MonoBehaviour
             if (part != null)
                 Destroy(part);
         _parts.Clear();
-        _tail = null;
         _heart = null;
+        _picture = null;
+        _frames.Clear();
+        _reaction = null;
+        _patting = false;
+        _shownAt = Time.unscaledTime;
+        _loop = Animations()?.Loop(_kind, _look) ?? System.Array.Empty<PetFrameHold>();
 
         Image back = Part(transform, "Backdrop", Vector2.zero, Vector2.zero, null, _lit ? plateColour : new Color(plateColour.r * 0.45f, plateColour.g * 0.45f, plateColour.b * 0.5f, 1f));
         Stretch(back.rectTransform);
@@ -141,8 +201,16 @@ public sealed class PetStandIn : MonoBehaviour
         Sprite art = SlotArt.Sprite(ArtSlots.PetSprite(_kind, _coat, _look));
         if (art != null)
         {
-            Image picture = Part(_figure, "Picture", Vector2.zero, new Vector2(Box, Box), art, _lit ? Color.white : new Color(0.55f, 0.55f, 0.6f, 1f));
-            picture.preserveAspect = true;
+            _picture = Part(_figure, "Picture", Vector2.zero, new Vector2(Box, Box), art, _lit ? Color.white : new Color(0.55f, 0.55f, 0.6f, 1f));
+            _picture.preserveAspect = true;
+            _frames[PetAnimation.Rest] = art;
+            foreach (string name in Animations()?.FrameNames(_kind, _look) ?? new List<string>())
+            {
+                string slot = ArtSlots.PetFrame(_kind, _coat, _look, name);
+                Sprite drawn = slot != null ? SlotArt.Sprite(slot) : null;
+                if (drawn != null)
+                    _frames[name] = drawn;
+            }
         }
         else
             DrawStandIn();
@@ -169,8 +237,9 @@ public sealed class PetStandIn : MonoBehaviour
         float headDrop = sad ? -18f : 0f;
 
         Part(_figure, "Shadow", new Vector2(0f, -140f), new Vector2(300f, 46f), Disc(), new Color(0f, 0f, 0f, 0.18f));
-        _tail = Part(_figure, "Tail", dog ? new Vector2(115f, -55f) : new Vector2(95f, -60f), dog ? new Vector2(34f, 110f) : new Vector2(24f, 140f), Disc(), dark).rectTransform;
-        _tail.pivot = new Vector2(0.5f, 0f);
+        RectTransform tail = Part(_figure, "Tail", dog ? new Vector2(115f, -55f) : new Vector2(95f, -60f), dog ? new Vector2(34f, 110f) : new Vector2(24f, 140f), Disc(), dark).rectTransform;
+        tail.pivot = new Vector2(0.5f, 0f);
+        tail.localEulerAngles = new Vector3(0f, 0f, TailAngle());
         Part(_figure, "Body", new Vector2(10f, -70f), new Vector2(dog ? 250f : 220f, dog ? 150f : 130f), Disc(), fur);
         Part(_figure, "Chest", new Vector2(-60f, -80f), new Vector2(90f, 90f), Disc(), light);
 
