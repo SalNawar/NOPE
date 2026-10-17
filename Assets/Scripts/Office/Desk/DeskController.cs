@@ -163,7 +163,7 @@ public sealed class DeskController : MonoBehaviour
         if (deskView != null)
             deskView.Changed += Focus;
         if (rulebook != null && config != null)
-            rulebook.ShowEdge(config.folderThickness);
+            rulebook.ShowDepth(config);
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan += RulebookLifted;

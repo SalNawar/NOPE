@@ -936,7 +936,6 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(sheet, "Paper", PrimitiveType.Quad, Vector3.zero, new Vector3(size.x, size.y, 1f), paperMaterial);
         MeshRenderer paper = sheet.Find("Paper").GetComponent<MeshRenderer>();
         paper.shadowCastingMode = ShadowCastingMode.Off;
-        MeshFilter paperEdge = EdgeMesh(paper.transform);
         Material examineMaterial = EnsureMaterial("Paper_Examine", "Universal Render Pipeline/Unlit", m =>
         {
             m.SetTexture("_BaseMap", paperSprite.texture);
@@ -964,6 +963,7 @@ public static partial class OfficeSceneUIBuilder
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "proxy", box);
         soDrag.ApplyModifiedProperties();
+        DeskPaperDepth paperDepth = DepthParts(paper.transform, drag, true);
 
         DeskDocument doc = root.gameObject.AddComponent<DeskDocument>();
         var so = new SerializedObject(doc);
@@ -977,7 +977,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "highlightTemplate", print.Slot);
         SetRef(so, "style", EnsureFormStyle());
         SetRef(so, "paperQuad", paper);
-        SetRef(so, "edge", paperEdge);
+        SetRef(so, "depth", paperDepth);
         SetRef(so, "examineMaterial", examineMaterial);
         SetRef(so, "click", click);
         SetRef(so, "drag", drag);
@@ -1323,6 +1323,9 @@ public static partial class OfficeSceneUIBuilder
         new Vector4(0.585f, 0.012f, 0.72f, 0.07f), new Vector4(0.77f, 0.012f, 0.9f, 0.07f)
     };
 
+    /// <summary>How far a tab's plate lies over the folder's face (metres): a raised card, its edge reaching down to the face (DeskRulebook.ShowDepth), its word over it.</summary>
+    private const float RulebookTabPlateLift = 0.0006f;
+
     /// <summary>The tabs' art names in tab order (ArtSlots.RulebookTab).</summary>
     private static readonly string[] RulebookTabArt = { "rules", "papers", "guide", "seals" };
 
@@ -1639,30 +1642,61 @@ public static partial class OfficeSceneUIBuilder
             ? EnsureMaterial(name, "NOPE/Desk Anime", m => m.SetColor("_BaseColor", colour))
             : LitMaterial(name, colour, 0.3f);
 
-    /// <summary>The render queue of the papers' and the folder's edges: before the printed layers (the seal at 2975), after the opaque desk.</summary>
-    private const int EdgeQueue = 2970;
+    /// <summary>The render queues of the desk documents' depth (TimeDesk/PaperDepth): the edges before the printed layers (the seal at 2975), after the opaque desk; the face's shade over the lines (2995), under the texts (3000); the contact shadows after everything printed (the paper art at 3005), so a shadow lies over the paper under it, print and all, and only depth hides it.</summary>
+    private const int EdgeQueue = 2970, ShadeQueue = 2998, ShadowQueue = 3010;
 
-    /// <summary>
-    /// An empty edge mesh under <paramref name="face"/> (a paper's quad or the
-    /// folder's card; in its unit space), in a vertex-coloured unlit material
-    /// (the desk paper and the folder build its walls: PaperEdge), casting and
-    /// taking no shadow. Its mesh is runtime-built, so the scene keeps none.
-    /// </summary>
-    private static MeshFilter EdgeMesh(Transform face)
+    /// <summary>The desk documents' depth materials (TimeDesk/PaperDepth, unlit, vertex-coloured): Paper_Lip (the edges: opaque, writing depth), Paper_Shade and Paper_Shadow (blended, writing none); made once, their queues kept.</summary>
+    private static Material DepthMaterial(string name, bool blended, int queue)
     {
-        var go = new GameObject("Edge", typeof(MeshFilter), typeof(MeshRenderer));
-        go.transform.SetParent(face, false);
-        var renderer = go.GetComponent<MeshRenderer>();
-        Material m = EnsureMaterial("Paper_Edge", "Sprites/Default", mat => mat.SetColor("_Color", Color.white));
-        if (m != null && m.renderQueue != EdgeQueue)
+        Material m = EnsureMaterial(name, "TimeDesk/PaperDepth", mat =>
         {
-            m.renderQueue = EdgeQueue;
+            mat.SetFloat("_SrcBlend", (float)(blended ? BlendMode.SrcAlpha : BlendMode.One));
+            mat.SetFloat("_DstBlend", (float)(blended ? BlendMode.OneMinusSrcAlpha : BlendMode.Zero));
+            mat.SetFloat("_ZWrite", blended ? 0f : 1f);
+        });
+        if (m != null && m.renderQueue != queue)
+        {
+            m.renderQueue = queue;
             EditorUtility.SetDirty(m);
         }
-        renderer.sharedMaterial = m;
-        renderer.shadowCastingMode = ShadowCastingMode.Off;
-        renderer.receiveShadows = false;
-        return go.GetComponent<MeshFilter>();
+        return m;
+    }
+
+    /// <summary>
+    /// The drawn depth of a thing on the desk under <paramref name="face"/> (a
+    /// paper's quad, the folder's card or a tab's plate; in its unit space):
+    /// a Depth child with its DeskPaperDepth (lifting its shadow while
+    /// <paramref name="drag"/> holds it, if any) and its empty Edge, Shadow and,
+    /// with <paramref name="shade"/>, Shade meshes in their materials, casting
+    /// and taking no shadow and taking no click. Their meshes are
+    /// runtime-built (Saleh 2026-10-17: "all documents need to feel 3d"), so
+    /// the scene keeps none.
+    /// </summary>
+    private static DeskPaperDepth DepthParts(Transform face, DeskDraggable drag, bool shade)
+    {
+        var host = new GameObject("Depth");
+        host.transform.SetParent(face, false);
+        host.layer = face.gameObject.layer;
+        DeskPaperDepth depth = host.AddComponent<DeskPaperDepth>();
+        MeshFilter Part(string name, Material material)
+        {
+            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
+            go.transform.SetParent(host.transform, false);
+            go.layer = face.gameObject.layer;
+            var renderer = go.GetComponent<MeshRenderer>();
+            renderer.sharedMaterial = material;
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            return go.GetComponent<MeshFilter>();
+        }
+        var so = new SerializedObject(depth);
+        SetRef(so, "edge", Part("Edge", DepthMaterial("Paper_Lip", false, EdgeQueue)));
+        SetRef(so, "shadow", Part("Shadow", DepthMaterial("Paper_Shadow", true, ShadowQueue)));
+        if (shade)
+            SetRef(so, "shade", Part("Shade", DepthMaterial("Paper_Shade", true, ShadeQueue)));
+        SetRef(so, "drag", drag);
+        so.ApplyModifiedProperties();
+        return depth;
     }
 
     /// <summary>
@@ -1693,7 +1727,6 @@ public static partial class OfficeSceneUIBuilder
         GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookFolderSize.x, RulebookFolderSize.y, 1f),
                                         SlotArtMaterial("Rulebook_Folder", ArtSlots.RulebookFolder));
         card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
-        MeshFilter folderEdge = EdgeMesh(card.transform);
         Color ink = new Color(0.13f, 0.12f, 0.15f);
 
         // The folder cover's words, printed over its clean face only while a culture's language is read (DeskRulebook.ShowCover).
@@ -1711,15 +1744,18 @@ public static partial class OfficeSceneUIBuilder
         // The tabs on the folder's top edge, at the art's places, each its own art (shown only while its page is there: DeskRulebook).
         var tabs = new List<Clickable>();
         var plates = new List<Renderer>();
+        var tabDepths = new List<DeskPaperDepth>();
         string[] tabKeys = { "desk.rulebook.tabRules", "desk.rulebook.tabPapers", "desk.rulebook.tabGuide", "desk.rulebook.tabSeals" };
         for (int i = 0; i < tabKeys.Length; i++)
         {
             Vector3 at = FolderPoint(RulebookTabPlaces[i]) + new Vector3(0f, 0.0002f, 0f);
             Vector2 size = FolderSize(RulebookTabPlaces[i]);
-            GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, at, new Vector3(size.x, size.y, 1f),
+            // The plate is a raised card (DeskRulebook.ShowDepth gives it its edge down to the folder's face and its shadow), under its word.
+            GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, FolderPoint(RulebookTabPlaces[i]) + new Vector3(0f, RulebookTabPlateLift, 0f), new Vector3(size.x, size.y, 1f),
                                              SlotArtMaterial("Rulebook_Tab_" + RulebookTabArt[i], ArtSlots.RulebookTab(RulebookTabArt[i])));
             plate.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
             plates.Add(plate.GetComponent<Renderer>());
+            tabDepths.Add(DepthParts(plate.transform, null, false));
             Clickable tab = EnsureClickBox(booklet, "Tab" + (i + 1));
             tab.transform.localPosition = at + new Vector3(0f, 0.0004f, 0f);
             var box = tab.GetComponent<BoxCollider>();
@@ -1853,11 +1889,13 @@ public static partial class OfficeSceneUIBuilder
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "proxy", cardBox);
         soDrag.ApplyModifiedProperties();
+        DeskPaperDepth folderDepth = DepthParts(card.transform, drag, true);
 
         DeskRulebook rulebook = GetOrAdd<DeskRulebook>(book.gameObject);
         var so = new SerializedObject(rulebook);
         SetRef(so, "booklet", booklet);
-        SetRef(so, "edge", folderEdge);
+        SetRef(so, "depth", folderDepth);
+        SerializedArrays.Set(so, "tabDepths", tabDepths);
         SetRef(so, "card", cardClick);
         SetRef(so, "folderFace", card.GetComponent<Renderer>());
         SerializedArrays.Set(so, "coverWords", cover);

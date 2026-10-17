@@ -136,8 +136,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The paper quad (its material swaps to the reading material while on the desk).</summary>
     [SerializeField] private Renderer paperQuad;
 
-    /// <summary>The paper's edge under its face (a child of the paper quad, in its unit space; a vertex-coloured material): its thickness seen from the side (PaperEdge; Saleh's 1007d playtest: "too flat when you see them from the side").</summary>
-    [SerializeField] private MeshFilter edge;
+    /// <summary>The paper's drawn depth under and on its face (a child of the paper quad, in its unit space): its leaning edge, its contact shadow and its face's cel shade (DeskPaperDepth; Saleh's 1007d playtest: "too flat when you see them from the side"; 2026-10-17: "all documents need to feel 3d").</summary>
+    [SerializeField] private DeskPaperDepth depth;
 
     /// <summary>The paper's unlit material while it lies on the desk, full size (the paper's texture, evenly lit); optional.</summary>
     [SerializeField] private Material examineMaterial;
@@ -302,8 +302,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 Destroy(filter.sharedMesh);
         if (_shapedMesh != null)
             Destroy(_shapedMesh);
-        if (_edgeMesh != null)
-            Destroy(_edgeMesh);
         if (_ownMarkMaterial != null)
             Destroy(_ownMarkMaterial);
         foreach (Texture2D impression in _impressions)
@@ -347,7 +345,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
         PaperKind kind = PaperEdge.KindOf(look.frame);
         Thickness = kind == PaperKind.Booklet ? config.bookletThickness : kind == PaperKind.Card ? config.cardThickness : config.paperThickness;
-        BuildEdge(outline, kind, string.IsNullOrEmpty(look.paper) ? config.paperEdgeTint : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f), cover);
+        Rect? gutter = null;
         Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(form.Data.FormNumber) }) : null;
 
         foreach (FormItem item in _form.Items)
@@ -369,6 +367,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 case FormItemKind.StampArea:
                     _keys.Add(Share(Local(item.Rect))); // the visa box: the spread keeps it clear for the stamp
                     break;
+                case FormItemKind.Spine:
+                    gutter = Local(item.Rect); // a booklet's fold: its gutter's shade
+                    break;
                 case FormItemKind.Emblem:
                     PlaceMark("Emblem", item.Rect, EmblemArt.Texture(item.Text), cover, TextLift);
                     break;
@@ -387,6 +388,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             (q.Layer == FormPaintLayer.Fill ? fillMesh : lineMesh).Rect(Local(q.Rect), new Color(q.Colour.R, q.Colour.G, q.Colour.B, q.Colour.A));
         fillMesh.Apply(fills, FillLift);
         lineMesh.Apply(lines, LineLift);
+        int seed = Seed(index, form.Data.FormNumber);
+        BuildDepth(outline, kind, string.IsNullOrEmpty(look.paper) ? config.paperEdgeTint : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f), cover, gutter, seed);
+        Jitter(seed);
 
         foreach (FormSlot s in _form.Slots)
         {
@@ -722,36 +726,92 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     public float Thickness { get; private set; } = 0.0007f;
 
     /// <summary>
-    /// Builds the paper's edge (PaperEdge): the side walls of its outline
+    /// Builds the paper's drawn depth (DeskPaperDepth; Saleh 2026-10-17: "all
+    /// documents need to feel 3d"): the side walls of its outline
     /// (<paramref name="outline"/>, in the quad's unit space) down its
-    /// thickness in its kind's bands, coloured from its face's tint
-    /// <paramref name="paper"/> (a shade darker; a booklet's pages cream and
-    /// grey) and a booklet's <paramref name="cover"/>.
+    /// thickness in its kind's bands, leaning out toward the bottom right,
+    /// coloured from its face's tint <paramref name="paper"/> (its cel shade,
+    /// purple-tinted; a booklet's pages cream and grey) and a booklet's
+    /// <paramref name="cover"/>, each band's foot inked; its contact shadow;
+    /// and on its face a single sheet's lifted corner (one of the three the
+    /// camera sees, by <paramref name="seed"/>: its edge leans further there
+    /// and a soft cel shade lies in it) or a booklet's gutter (a band of shade
+    /// either side of its fold, <paramref name="gutter"/>, the sheet's metres).
     /// </summary>
-    private void BuildEdge(List<(float x, float y)> outline, PaperKind kind, Color paper, Color cover)
+    private void BuildDepth(List<(float x, float y)> outline, PaperKind kind, Color paper, Color cover, Rect? gutter, int seed)
     {
-        if (edge == null)
+        if (depth == null || _config == null)
             return;
-        var vertices = new List<(float x, float y, float z)>();
-        var tones = new List<EdgeTone>();
-        var triangles = new List<int>();
-        PaperEdge.Walls(outline, PaperEdge.Bands(kind, Thickness), vertices, tones, triangles);
-        _edgeMesh ??= new Mesh { name = "PaperEdge" };
-        _edgeMesh.Clear();
-        _edgeMesh.SetVertices(vertices.ConvertAll(v => new Vector3(v.x, v.y, v.z)));
-        Color edgeTone = paper * EdgeShade, light = Color.Lerp(paper, PageCream, 0.6f), dark = light * EdgeShade, coverTone = cover * EdgeShade;
-        edgeTone.a = light.a = dark.a = coverTone.a = 1f;
-        _edgeMesh.SetColors(tones.ConvertAll(t => t == EdgeTone.Cover ? coverTone : t == EdgeTone.PageLight ? light : t == EdgeTone.PageDark ? dark : edgeTone));
-        _edgeMesh.SetTriangles(triangles, 0);
-        _edgeMesh.RecalculateBounds();
-        edge.sharedMesh = _edgeMesh;
+        Color edgeTone = Shaded(paper), light = Color.Lerp(paper, PageCream, 0.6f), dark = Shaded(light), coverTone = Shaded(cover);
+        Color Tone(EdgeTone t) => t == EdgeTone.Cover ? coverTone : t == EdgeTone.PageLight ? light : t == EdgeTone.PageDark ? dark : t == EdgeTone.Ink ? EdgeInk : edgeTone;
+
+        int? corner = kind == PaperKind.Sheet ? PaperDepth.CurlCorner(seed) : (int?)null;
+        List<float> lift = corner.HasValue ? PaperDepth.CornerLift(outline, corner, _config.curlLift) : null;
+        DepthMesh shade = null;
+        if (corner.HasValue)
+            shade = PaperDepth.Curl(outline, corner.Value, Size.x, Size.y, _config.curlReach, -PaperLayers.Shade, FaceShade.WithAlpha(_config.curlShadeAlpha));
+        else if (gutter.HasValue && Size.y > 0f)
+        {
+            float centre = gutter.Value.center.y / Size.y, half = gutter.Value.height / 2f / Size.y, reach = GutterReach / Size.y;
+            shade = PaperDepth.Strip(new List<(float at, Rgba colour)>
+            {
+                (centre - half - reach, FaceShade.WithAlpha(0f)),
+                (centre - half, FaceShade.WithAlpha(GutterShade * 0.6f)),
+                (centre, FaceShade.WithAlpha(GutterShade)),
+                (centre + half, FaceShade.WithAlpha(GutterShade * 0.6f)),
+                (centre + half + reach, FaceShade.WithAlpha(0f)),
+            }, false, -0.5f, 0.5f, -PaperLayers.Shade);
+        }
+        depth.Build(outline, kind, Thickness, Size, Tone, lift, shade, _config);
     }
 
-    /// <summary>The edge's shade of its face's colour, and a page's cream.</summary>
-    private const float EdgeShade = 0.82f;
-    private static readonly Color PageCream = new Color(0.96f, 0.93f, 0.85f, 1f);
+    /// <summary>A face's colour in its edge's cel shade: darker and toward the kit's lavender (the shadow side faces away from the light).</summary>
+    private static Color Shaded(Color face)
+    {
+        Color c = Color.Lerp(face * EdgeShade, Lavender, 0.18f);
+        c.a = 1f;
+        return c;
+    }
 
-    private Mesh _edgeMesh;
+    /// <summary>
+    /// Turns the paper a little on the desk, as if dropped by hand: its own
+    /// share (by <paramref name="seed"/>) of DeskConfigSO.paperJitter degrees
+    /// about the desk's up, fixed for the paper. The sheet turns, its click
+    /// box with it, so what is clicked is what shows.
+    /// </summary>
+    private void Jitter(int seed)
+    {
+        if (sheet == null || _config == null)
+            return;
+        _builtRest ??= _sheetRest ?? sheet.localRotation;
+        uint mixed = unchecked((uint)seed * 2654435761u);
+        float share = (mixed >> 12) % 2001u / 1000f - 1f;
+        _sheetRest = Quaternion.Euler(0f, share * _config.paperJitter, 0f) * _builtRest.Value;
+        sheet.localRotation = Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+    }
+
+    /// <summary>The paper's own number for its look (its index and its form's number: the same paper lies the same way every time).</summary>
+    private static int Seed(int index, string formNumber)
+    {
+        unchecked
+        {
+            int h = 17 + index * 7919;
+            foreach (char c in formNumber ?? string.Empty)
+                h = h * 31 + c;
+            return h & int.MaxValue;
+        }
+    }
+
+    /// <summary>The sheet's rotation as the builder made it (Jitter turns it from there).</summary>
+    private Quaternion? _builtRest;
+
+    /// <summary>The edge's shade of its face's colour, a page's cream, the kit's lavender the shade leans to, and the ink at the edge's foot (the cel kit's brown-purple outline).</summary>
+    private const float EdgeShade = 0.8f;
+    private static readonly Color PageCream = new Color(0.96f, 0.93f, 0.85f, 1f), Lavender = new Color(0.596f, 0.525f, 0.659f, 1f), EdgeInk = new Color(0.23f, 0.15f, 0.19f, 1f);
+
+    /// <summary>The face's cel shade colour (a curl, a gutter: purple-tinted, never grey), the gutter's darkest share and how far its shade reaches past the fold (metres).</summary>
+    private static readonly Rgba FaceShade = new Rgba(0.29f, 0.19f, 0.33f, 1f);
+    private const float GutterShade = 0.2f, GutterReach = 0.022f;
 
     /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres: the first place at once, then on the paper's spring (a picked-up paper rises, a dropped one settles; a cut without motion).</summary>
     public void SetLift(float height)
