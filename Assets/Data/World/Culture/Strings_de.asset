@@ -1838,6 +1838,10 @@ MonoBehaviour:
     text: Nicht die Person
     gloss: 0
     tier: 0
+  - key: report.proof.hiddenMismatch
+    text: Maschinenablesung
+    gloss: 0
+    tier: 0
   - key: form.interview.head
     text: "{0} \xB7 Schalterbeamter: {1} \xB7 {2}"
     gloss: 0
@@ -2151,6 +2155,10 @@ MonoBehaviour:
     text: Unter UV-Licht zeigt sich nichts.
     gloss: 0
     tier: 0
+  - key: layers.uv.unseen
+    text: "Noch nichts gesehen: halte die UV-Lampe \xFCber das Papier."
+    gloss: 0
+    tier: 0
   - key: layers.uv.wholePaper
     text: das ganze Papier
     gloss: 0
@@ -2167,12 +2175,20 @@ MonoBehaviour:
     text: 'Mikrodruck ({0}): {1}'
     gloss: 0
     tier: 0
+  - key: layers.uv.MicroprintMissing
+    text: 'Mikrodruck ({0}): keiner'
+    gloss: 0
+    tier: 0
   - key: layers.chip.title
     text: CHIPDATEN
     gloss: 0
     tier: 0
   - key: layers.chip.none
     text: "Dieses Papier tr\xE4gt keinen Chip."
+    gloss: 0
+    tier: 0
+  - key: layers.chip.unread
+    text: "Noch nicht gelesen: leg das Papier auf das Chipleseger\xE4t."
     gloss: 0
     tier: 0
   - key: records.row.number
@@ -2365,6 +2381,14 @@ MonoBehaviour:
     text: "Zieh ein Papier auf den Scanner, um es am PC zu \xF6ffnen."
     gloss: 0
     tier: 0
+  - key: desk.uvHint
+    text: "NEU: die UV-Lampe. Dr\xFCck sie, zieh sie \xFCber ein Papier, lass los."
+    gloss: 0
+    tier: 0
+  - key: desk.chipHint
+    text: "NEU: das Chipleseger\xE4t. Leg einen Pass oder eine Karte darauf."
+    gloss: 0
+    tier: 0
   - key: desk.wheelHint
     text: Klicke den Reisenden, um zu sprechen und Papiere zu verlangen.
     gloss: 0
@@ -2411,6 +2435,26 @@ MonoBehaviour:
     tier: 0
   - key: hardware.detain
     text: FESTNEHMEN
+    gloss: 0
+    tier: 0
+  - key: machine.chip.ready
+    text: BEREIT
+    gloss: 0
+    tier: 0
+  - key: machine.chip.reading
+    text: LESE
+    gloss: 0
+    tier: 0
+  - key: machine.chip.ok
+    text: CHIP OK
+    gloss: 0
+    tier: 0
+  - key: machine.chip.none
+    text: KEIN CHIP
+    gloss: 0
+    tier: 0
+  - key: machine.chip.mismatch
+    text: ABWEICHUNG
     gloss: 0
     tier: 0
   - key: stamp.dater.by
@@ -2615,6 +2659,10 @@ MonoBehaviour:
     text: "{0} FALSCH \u2014 das Foto in den Papieren ist nicht der Reisende am Schreibtisch"
     gloss: 0
     tier: 0
+  - key: deviation.hiddenMismatch.papers
+    text: "{0} FALSCH \u2014 Papiere: \u201E{1}\u201C  /  die Maschine liest: \u201E{2}\u201C"
+    gloss: 0
+    tier: 0
   - key: category.Language
     text: SPRACHE
     gloss: 0
@@ -2711,6 +2759,14 @@ MonoBehaviour:
     text: "Jedes Papier muss zum B\xFCrgerkonto passen."
     gloss: 0
     tier: 0
+  - key: citation.rule.chip
+    text: Der Chip eines Papiers muss enthalten, was es druckt.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.uv
+    text: "Kein Papier darf gewaschen und \xFCberdruckt werden."
+    gloss: 0
+    tier: 0
   - key: citation.rule.origin
     text: "Vertriebene kehren nur in ihre eigene Zeit zur\xFCck: Ihre Papiere und
       Antworten m\xFCssen zu ihrer Herkunft passen."
@@ -2779,6 +2835,14 @@ MonoBehaviour:
     tier: 0
   - key: citation.label.registry
     text: Vertriebenenregister
+    gloss: 0
+    tier: 0
+  - key: citation.label.chip
+    text: Sein Chip
+    gloss: 0
+    tier: 0
+  - key: citation.label.ghost
+    text: Unter UV-Licht
     gloss: 0
     tier: 0
   - key: citation.label.standing
@@ -6123,5 +6187,35 @@ MonoBehaviour:
     english: Camera sway
   - native: Erst
     english: First
+  - native: maschine
+    english: machine
+  - native: liest
+    english: reads
+  - native: maschinenablesung
+    english: machine reading
+  - native: enthalten
+    english: hold
+  - native: druckt
+    english: prints
+  - native: gewaschen
+    english: washed
+  - native: "\xFCberdruckt"
+    english: printed over
+  - native: gelesen
+    english: read
+  - native: "chipleseger\xE4t"
+    english: chip reader
+  - native: lampe
+    english: torch
+  - native: keiner
+    english: none
+  - native: darauf
+    english: on it
+  - native: bereit
+    english: ready
+  - native: lese
+    english: reading
+  - native: ok
+    english: OK
   - native: "\xFCbersetzt"
     english: translated

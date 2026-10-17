@@ -1838,6 +1838,10 @@ MonoBehaviour:
     text: "Non \xE8 la persona"
     gloss: 0
     tier: 0
+  - key: report.proof.hiddenMismatch
+    text: Lettura della macchina
+    gloss: 0
+    tier: 0
   - key: form.interview.head
     text: "{0} \xB7 Agente di sportello: {1} \xB7 {2}"
     gloss: 0
@@ -2151,6 +2155,10 @@ MonoBehaviour:
     text: Nulla appare sotto la luce UV.
     gloss: 0
     tier: 0
+  - key: layers.uv.unseen
+    text: 'Ancora nulla: passa la torcia UV sul documento.'
+    gloss: 0
+    tier: 0
   - key: layers.uv.wholePaper
     text: l'intero documento
     gloss: 0
@@ -2167,12 +2175,20 @@ MonoBehaviour:
     text: 'Microstampa ({0}): {1}'
     gloss: 0
     tier: 0
+  - key: layers.uv.MicroprintMissing
+    text: 'Microstampa ({0}): nessuna'
+    gloss: 0
+    tier: 0
   - key: layers.chip.title
     text: DATI DEL CHIP
     gloss: 0
     tier: 0
   - key: layers.chip.none
     text: Questo documento non ha un chip.
+    gloss: 0
+    tier: 0
+  - key: layers.chip.unread
+    text: 'Non ancora letto: posa il documento sul lettore di chip.'
     gloss: 0
     tier: 0
   - key: records.row.number
@@ -2365,6 +2381,14 @@ MonoBehaviour:
     text: Trascina un documento sullo scanner per aprirlo sul PC.
     gloss: 0
     tier: 0
+  - key: desk.uvHint
+    text: "NOVIT\xC0: la torcia UV. Premila, trascinala su un documento, lasciala."
+    gloss: 0
+    tier: 0
+  - key: desk.chipHint
+    text: "NOVIT\xC0: il lettore di chip. Posaci sopra un passaporto o una tessera."
+    gloss: 0
+    tier: 0
   - key: desk.wheelHint
     text: Clicca il viaggiatore per parlare e chiedere i documenti.
     gloss: 0
@@ -2411,6 +2435,26 @@ MonoBehaviour:
     tier: 0
   - key: hardware.detain
     text: TRATTIENI
+    gloss: 0
+    tier: 0
+  - key: machine.chip.ready
+    text: PRONTO
+    gloss: 0
+    tier: 0
+  - key: machine.chip.reading
+    text: LETTURA
+    gloss: 0
+    tier: 0
+  - key: machine.chip.ok
+    text: CHIP OK
+    gloss: 0
+    tier: 0
+  - key: machine.chip.none
+    text: NESSUN CHIP
+    gloss: 0
+    tier: 0
+  - key: machine.chip.mismatch
+    text: NON CORRISPONDE
     gloss: 0
     tier: 0
   - key: stamp.dater.by
@@ -2620,6 +2664,10 @@ MonoBehaviour:
     text: "{0} ERRATO \u2014 la foto sui documenti non \xE8 il viaggiatore alla scrivania"
     gloss: 0
     tier: 0
+  - key: deviation.hiddenMismatch.papers
+    text: "{0} ERRATO \u2014 documenti: \"{1}\"  /  la macchina legge: \"{2}\""
+    gloss: 0
+    tier: 0
   - key: category.Language
     text: LINGUA
     gloss: 0
@@ -2716,6 +2764,14 @@ MonoBehaviour:
     text: Ogni documento deve corrispondere al Conto del cittadino.
     gloss: 0
     tier: 0
+  - key: citation.rule.chip
+    text: "Il chip di un documento deve contenere ci\xF2 che stampa."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.uv
+    text: "Nessun documento pu\xF2 essere lavato e ristampato."
+    gloss: 0
+    tier: 0
   - key: citation.rule.origin
     text: 'Gli sfollati tornano solo al proprio tempo: documenti e risposte devono
       corrispondere alla loro origine.'
@@ -2783,6 +2839,14 @@ MonoBehaviour:
     tier: 0
   - key: citation.label.registry
     text: Registro degli sfollati
+    gloss: 0
+    tier: 0
+  - key: citation.label.chip
+    text: Il suo chip
+    gloss: 0
+    tier: 0
+  - key: citation.label.ghost
+    text: Sotto la luce UV
     gloss: 0
     tier: 0
   - key: citation.label.standing
@@ -6007,6 +6071,40 @@ MonoBehaviour:
     english: On
   - native: l'errore
     english: the error
+  - native: macchina
+    english: machine
+  - native: contenere
+    english: hold
+  - native: "ci\xF2"
+    english: what
+  - native: essere
+    english: be
+  - native: lavato
+    english: washed
+  - native: ristampato
+    english: printed over
+  - native: letto
+    english: read
+  - native: posa
+    english: lay
+  - native: lettore
+    english: reader
+  - native: torcia
+    english: torch
+  - native: "novit\xE0"
+    english: new
+  - native: premila
+    english: press it
+  - native: trascinala
+    english: drag it
+  - native: lasciala
+    english: let it go
+  - native: posaci
+    english: lay on it
+  - native: pronto
+    english: ready
+  - native: ok
+    english: OK
   - native: l'hai
     english: you have it
   - native: capita

@@ -1807,6 +1807,10 @@ MonoBehaviour:
     text: "\u5E76\u975E\u672C\u4EBA"
     gloss: 0
     tier: 0
+  - key: report.proof.hiddenMismatch
+    text: "\u673A\u5668\u8BFB\u6570"
+    gloss: 0
+    tier: 0
   - key: form.interview.head
     text: "{0} \xB7 \u67DC\u53F0\u804C\u5458\uFF1A{1} \xB7 {2}"
     gloss: 0
@@ -2120,6 +2124,10 @@ MonoBehaviour:
     text: "\u7D2B\u5916\u7EBF\u4E0B\u65E0\u4EFB\u4F55\u663E\u793A\u3002"
     gloss: 0
     tier: 0
+  - key: layers.uv.unseen
+    text: "\u5C1A\u672A\u770B\u5230\uFF1A\u8BF7\u7528\u7D2B\u5916\u7EBF\u624B\u7535\u7167\u8FC7\u8BC1\u4EF6\u3002"
+    gloss: 0
+    tier: 0
   - key: layers.uv.wholePaper
     text: "\u6574\u5F20\u8BC1\u4EF6"
     gloss: 0
@@ -2136,12 +2144,20 @@ MonoBehaviour:
     text: "\u5FAE\u7F29\u5370\u5237\uFF08{0}\uFF09\uFF1A{1}"
     gloss: 0
     tier: 0
+  - key: layers.uv.MicroprintMissing
+    text: "\u5FAE\u7F29\u5370\u5237\uFF08{0}\uFF09\uFF1A\u65E0"
+    gloss: 0
+    tier: 0
   - key: layers.chip.title
     text: "\u82AF\u7247\u8BB0\u5F55"
     gloss: 0
     tier: 0
   - key: layers.chip.none
     text: "\u6B64\u8BC1\u4EF6\u6CA1\u6709\u82AF\u7247\u3002"
+    gloss: 0
+    tier: 0
+  - key: layers.chip.unread
+    text: "\u5C1A\u672A\u8BFB\u53D6\uFF1A\u8BF7\u5C06\u8BC1\u4EF6\u653E\u5728\u82AF\u7247\u8BFB\u53D6\u5668\u4E0A\u3002"
     gloss: 0
     tier: 0
   - key: records.row.number
@@ -2332,6 +2348,14 @@ MonoBehaviour:
     text: "\u5C06\u8BC1\u4EF6\u62D6\u5230\u626B\u63CF\u4EEA\u4E0A\uFF0C\u5373\u53EF\u5728\u7535\u8111\u4E0A\u6253\u5F00\u3002"
     gloss: 0
     tier: 0
+  - key: desk.uvHint
+    text: "\u65B0\uFF1A\u7D2B\u5916\u7EBF\u624B\u7535\u3002\u6309\u4F4F\u5B83\uFF0C\u62D6\u8FC7\u8BC1\u4EF6\uFF0C\u518D\u677E\u5F00\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.chipHint
+    text: "\u65B0\uFF1A\u82AF\u7247\u8BFB\u53D6\u5668\u3002\u628A\u62A4\u7167\u6216\u5361\u7247\u653E\u4E0A\u53BB\u3002"
+    gloss: 0
+    tier: 0
   - key: desk.wheelHint
     text: "\u70B9\u51FB\u65C5\u5BA2\u8FDB\u884C\u4EA4\u8C08\u5E76\u7D22\u8981\u8BC1\u4EF6\u3002"
     gloss: 0
@@ -2378,6 +2402,26 @@ MonoBehaviour:
     tier: 0
   - key: hardware.detain
     text: "\u62D8\u7559"
+    gloss: 0
+    tier: 0
+  - key: machine.chip.ready
+    text: "\u5C31\u7EEA"
+    gloss: 0
+    tier: 0
+  - key: machine.chip.reading
+    text: "\u8BFB\u53D6\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: machine.chip.ok
+    text: "\u82AF\u7247\u6B63\u5E38"
+    gloss: 0
+    tier: 0
+  - key: machine.chip.none
+    text: "\u65E0\u82AF\u7247"
+    gloss: 0
+    tier: 0
+  - key: machine.chip.mismatch
+    text: "\u4E0D\u4E00\u81F4"
     gloss: 0
     tier: 0
   - key: stamp.dater.by
@@ -2581,6 +2625,10 @@ MonoBehaviour:
     text: "{0}\u6709\u8BEF \u2014 \u8BC1\u4EF6\u4E0A\u7684\u7167\u7247\u4E0D\u662F\u684C\u524D\u7684\u65C5\u5BA2"
     gloss: 0
     tier: 0
+  - key: deviation.hiddenMismatch.papers
+    text: "{0}\u6709\u8BEF \u2014 \u8BC1\u4EF6\uFF1A\u201C{1}\u201D  /  \u673A\u5668\u8BFB\u51FA\uFF1A\u201C{2}\u201D"
+    gloss: 0
+    tier: 0
   - key: category.Language
     text: "\u8BED\u8A00"
     gloss: 0
@@ -2677,6 +2725,14 @@ MonoBehaviour:
     text: "\u6240\u6709\u8BC1\u4EF6\u5FC5\u987B\u4E0E\u516C\u6C11\u8D26\u6237\u4E00\u81F4\u3002"
     gloss: 0
     tier: 0
+  - key: citation.rule.chip
+    text: "\u8BC1\u4EF6\u82AF\u7247\u5FC5\u987B\u4E0E\u5176\u5370\u5237\u5185\u5BB9\u4E00\u81F4\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.uv
+    text: "\u4EFB\u4F55\u8BC1\u4EF6\u4E0D\u5F97\u6D17\u53BB\u540E\u91CD\u65B0\u5370\u5237\u3002"
+    gloss: 0
+    tier: 0
   - key: citation.rule.origin
     text: "\u6D41\u79BB\u8005\u53EA\u80FD\u8FD4\u56DE\u81EA\u5DF1\u7684\u65F6\u4EE3\uFF1A\u5176\u8BC1\u4EF6\u4E0E\u56DE\u7B54\u5FC5\u987B\u4E0E\u539F\u7C4D\u4E00\u81F4\u3002"
     gloss: 0
@@ -2743,6 +2799,14 @@ MonoBehaviour:
     tier: 0
   - key: citation.label.registry
     text: "\u6D41\u79BB\u8005\u767B\u8BB0\u5904"
+    gloss: 0
+    tier: 0
+  - key: citation.label.chip
+    text: "\u5176\u82AF\u7247"
+    gloss: 0
+    tier: 0
+  - key: citation.label.ghost
+    text: "\u7D2B\u5916\u7EBF\u4E0B"
     gloss: 0
     tier: 0
   - key: citation.label.standing
@@ -5734,6 +5798,42 @@ MonoBehaviour:
     english: off
   - native: "\u5F00"
     english: on
+  - native: "\u673A\u5668"
+    english: machine
+  - native: "\u8BFB\u51FA"
+    english: reads
+  - native: "\u8BFB\u6570"
+    english: reading
+  - native: "\u6D17\u53BB"
+    english: wash off
+  - native: "\u91CD\u65B0"
+    english: again
+  - native: "\u8BFB\u53D6"
+    english: read
+  - native: "\u653E\u5728"
+    english: place on
+  - native: "\u8BFB\u53D6\u5668"
+    english: reader
+  - native: "\u770B\u5230"
+    english: seen
+  - native: "\u624B\u7535"
+    english: torch
+  - native: "\u7167\u8FC7"
+    english: shine over
+  - native: "\u6309\u4F4F"
+    english: press
+  - native: "\u62D6\u8FC7"
+    english: drag over
+  - native: "\u628A"
+    english: (object marker)
+  - native: "\u653E\u4E0A\u53BB"
+    english: put on it
+  - native: "\u5C31\u7EEA"
+    english: ready
+  - native: "\u8BFB\u53D6\u4E2D"
+    english: reading
+  - native: "\u6B63\u5E38"
+    english: OK
   - native: "\u542C\u61C2"
     english: understood
   - native: "\u6CA1\u542C\u61C2"
