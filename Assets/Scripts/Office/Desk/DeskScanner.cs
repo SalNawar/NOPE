@@ -214,6 +214,16 @@ public sealed class DeskScanner : MonoBehaviour
     /// <summary>The bed's centre in world space.</summary>
     public Vector3 BedPoint => transform.TransformPoint(bedCentre);
 
+    /// <summary>How a paper lies square on the bed, upright as the scanner faces (its top along the scanner's level forward, away from its front): a paper dropped on it eases to this (Saleh's 1016a playtest: "documents have weird orientation when you scan them").</summary>
+    public Quaternion BedFacing
+    {
+        get
+        {
+            Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+            return forward.sqrMagnitude > 1e-6f ? Quaternion.LookRotation(forward.normalized, Vector3.up) : Quaternion.identity;
+        }
+    }
+
     /// <summary>Shows the stand-in's parts of the day's upgrades: the feeder tray with the Auto-Feed, the lamp with the Analysis (SC6).</summary>
     public void ShowUpgrades(ScannerDay day)
     {

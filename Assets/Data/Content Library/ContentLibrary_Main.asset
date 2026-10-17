@@ -15222,6 +15222,7 @@ MonoBehaviour:
     note: Tells you everything, then a bit more.
     waiverRefusal: 0.05
     confess: 0.6
+    forgetPaper: 0.3
     strandingFate: News
   - id: curt
     name: Curt
@@ -15229,6 +15230,7 @@ MonoBehaviour:
     note: Time is money, and in 2150 the queue bills by the minute.
     waiverRefusal: 0.3
     confess: 0.3
+    forgetPaper: 0.15
     strandingFate: 
   - id: anxious
     name: Anxious
@@ -15236,6 +15238,7 @@ MonoBehaviour:
     note: Worried about paradoxes, transponders, butterflies and you.
     waiverRefusal: 0.05
     confess: 0.8
+    forgetPaper: 0.35
     strandingFate: Forgotten
   - id: sunny
     name: Sunny
@@ -15243,6 +15246,7 @@ MonoBehaviour:
     note: Believes every word the agency prints.
     waiverRefusal: 0.05
     confess: 0.7
+    forgetPaper: 0.15
     strandingFate: 
   - id: grand
     name: Grand
@@ -15250,6 +15254,7 @@ MonoBehaviour:
     note: Treats the desk as staff, whatever their account says.
     waiverRefusal: 0.5
     confess: 0.15
+    forgetPaper: 0.3
     strandingFate: Carry
   - id: stickler
     name: Stickler
@@ -15257,6 +15262,7 @@ MonoBehaviour:
     note: Knows the regulations better than the clerk and says so.
     waiverRefusal: 0.1
     confess: 0.5
+    forgetPaper: 0.05
     strandingFate: 
   - id: glum
     name: Glum
@@ -15264,6 +15270,7 @@ MonoBehaviour:
     note: The debt won years ago; this is just the paperwork.
     waiverRefusal: 0.05
     confess: 0.4
+    forgetPaper: 0.25
     strandingFate: Forgotten
   dialogs:
   - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
@@ -17914,8 +17921,9 @@ MonoBehaviour:
       feature: paper:TC-230
       title: THE ENTRY TICKET
       named: Entry Ticket
-      check: 'Its Citizen ID and its departure date. Ask for it: flag it on the PAPERS
-        tab, then ask on the wheel.'
+      check: Its Citizen ID and its departure date. Most travellers hand it over
+        with their Passport; when one forgets it, flag it on the PAPERS tab, then
+        ask on the wheel.
       against: The Passport's Citizen ID; the calendar for the date.
       fault: 'KTR-418 on the Passport, KTR-481 on the ticket: doctored.'
       point: field:TC-230/CitizenId

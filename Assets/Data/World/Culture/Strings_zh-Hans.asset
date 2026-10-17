@@ -1349,7 +1349,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: "\u5370\u7AE0\u680F\uFF08\u53F3\u4FA7\u7684\u7070\u8272\u6807\u7B7E\uFF09\uFF1A\u5C06\u5370\u7AE0\u62D6\u5230\u62A4\u7167\u4E0A\u518D\u677E\u5F00"
+    text: "\u5370\u7AE0\u62BD\u5C49\uFF08\u9876\u90E8\u7684\u6807\u7B7E\uFF09\uFF1A\u5C06\u5370\u7AE0\u62D6\u5230\u62A4\u7167\u4E0A\u518D\u677E\u5F00"
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -1873,6 +1873,18 @@ MonoBehaviour:
     tier: 0
   - key: compare.untranslated
     text: "\uFF08\u672A\u7FFB\u8BD1\u7684{0}\uFF1B{1}\u7FFB\u8BD1\u5668\uFF09"
+    gloss: 0
+    tier: 0
+  - key: compare.notUnderstood
+    text: "\u672A\u542C\u61C2"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotUnderstood
+    text: "\u672A\u542C\u61C2"
+    gloss: 0
+    tier: 0
+  - key: finding.note.NotUnderstood
+    text: "\u8BE5\u56DE\u7B54\u672A\u7FFB\u8BD1\uFF1A\u4F60\u6CA1\u542C\u61C2\u3002\u672A\u8BB0\u5F55\u3002"
     gloss: 0
     tier: 0
   - key: slot.Outfit
@@ -3900,6 +3912,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u9876"
+    english: top
   - native: "\u5173\u95ED"
     english: Turn off
   - native: "\u5C4F\u5E55"
@@ -5712,3 +5726,7 @@ MonoBehaviour:
     english: off
   - native: "\u5F00"
     english: on
+  - native: "\u542C\u61C2"
+    english: understood
+  - native: "\u6CA1\u542C\u61C2"
+    english: did not understand

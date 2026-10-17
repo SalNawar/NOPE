@@ -281,7 +281,7 @@ public sealed class ReferenceView : AppView, IAppItems
         data.FormNumber = RegisterPage.FormNumber(registerForm.form.formNumber, index);
         data.Title = book.displayName;
         data.Text = new Dictionary<string, string> { { RegisterPage.EditionSlot, UiText.Format("book.edition", _day) } };
-        data.Seals = seals.Select(s => (s.office.name, s.seal)).ToList();
+        data.Seals = seals.Select(s => (UiText.DocumentWord(s.office.name), s.seal)).ToList();
         page.Form.Bind(_compare, slot => TrySeal(slot, out AgencyOffice office, out _) ? PickKeys.Seal(office.id) : null);
         page.Show(sealRegisterForm.form, data, slot => TrySeal(slot, out _, out _) && _compare != null);
         MarkRows(index);
@@ -347,7 +347,7 @@ public sealed class ReferenceView : AppView, IAppItems
             if (TrySeal(slot, out AgencyOffice office, out string seal))
             {
                 ComparePick sealPick = EvidencePicks.ForSeal(_books[index], office, seal);
-                AppRow.Mark(button.gameObject, AppTab.Reference, sealPick.Key, sealPick.Label, office.name, seal, button);
+                AppRow.Mark(button.gameObject, AppTab.Reference, sealPick.Key, sealPick.Label, UiText.DocumentWord(office.name), seal, button);
                 if (sealPick.Key == _foundKeys[index])
                     found = slot.Index;
                 continue;

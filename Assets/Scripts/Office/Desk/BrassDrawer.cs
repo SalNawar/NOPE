@@ -4,8 +4,9 @@ using UnityEngine;
 /// The brass stamp drawer's mechanism (Track BR; the art's prop contract,
 /// tools/props/brass_drawer.py, built by Build Office UI when the model is
 /// there): per lane (DENIED, APPROVED) the cradle the dater stands in (it
-/// turns about the rack's x on its pivot, the dater's back-foot edge: flat on
-/// its back at 0, upright at 1), the pinion on the cradle's shaft (it turns
+/// turns about the rack's x on its pivot, the dater's front-foot edge: lying
+/// folded toward the chair at 0, upright at 1; the drawer is flipped since
+/// Saleh's 1016a playtest, its labelled bar on the far side), the pinion on the cradle's shaft (it turns
 /// with it), the rack riding on the pinion (it slides along z by the arc the
 /// pinion's top travels) and the lever whose pin rides in the rack's slotted
 /// block (it swings about y so its pin stays in the slot). The model is
@@ -67,16 +68,19 @@ public sealed class BrassDrawer : MonoBehaviour
         PoseLane(1, approved);
     }
 
+    /// <summary>The way a dater folds about x: its top toward the chair (-z; tools/props/brass_drawer.py's FOLD).</summary>
+    private const float Fold = -1f;
+
     private void PoseLane(int lane, float raise)
     {
-        // Lying is a quarter turn about x that tips the top away from the chair (+z); upright is the model's rest.
-        float turn = 90f * (1f - raise);
+        // Lying is a quarter turn about x that tips the top toward the chair (Fold); upright is the model's rest.
+        float turn = Fold * 90f * (1f - raise);
         Quaternion about = Quaternion.AngleAxis(turn, Vector3.right);
         if (Part(cradles, lane) != null)
             cradles[lane].localRotation = about * _cradleRest[lane];
         if (Part(pinions, lane) != null)
             pinions[lane].localRotation = about * _pinionRest[lane];
-        // The pinion's top moves +z by its arc as the cradle lies down: the rack rides along.
+        // The pinion's top moves along z by its arc as the cradle lies down (toward the chair): the rack rides along.
         float slide = pinionRadius * turn * Mathf.Deg2Rad;
         if (Part(racks, lane) != null)
             racks[lane].localPosition = _rackRest[lane] + Vector3.forward * slide;
@@ -84,8 +88,8 @@ public sealed class BrassDrawer : MonoBehaviour
             return;
         // The lever's pivot sits at the pin's mid travel; its pin follows the slotted block along z (it slides along x in the slot).
         float travel = pinionRadius * Mathf.PI / 2f;
-        float pinZ = _rackRest[lane].z + pinReach + slide;
-        float pivotZ = _rackRest[lane].z + pinReach + travel / 2f;
+        float pinZ = _rackRest[lane].z + Fold * pinReach + slide;
+        float pivotZ = _rackRest[lane].z + Fold * (pinReach + travel / 2f);
         float swing = Mathf.Asin(Mathf.Clamp((pinZ - pivotZ) / leverLength, -1f, 1f)) * Mathf.Rad2Deg;
         // Pointing toward the middle (-x on the right, +x on the left), a turn of a about y moves the tip's z by -side·L·sin(a).
         float side = levers[lane].localPosition.x >= 0f ? -1f : 1f;

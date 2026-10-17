@@ -3,7 +3,8 @@
 /// the PC or at the desk, becomes a ComparePick here: its key (PickKeys, so
 /// the same value is one pick on every surface), the bar's label, the text the
 /// bar shows (the canonical value, or piece 9's placeholder for an
-/// untranslated answer) and the canonical evidence. Its labels come from
+/// untranslated answer) and the canonical evidence (an untranslated answer's
+/// marked not understood). Its labels come from
 /// UiText and an answer's shown text from CaseTranslation, so it lives with
 /// them; the keys and the evidence are the tested PickKeys and CompareEvidence.
 /// </summary>
@@ -27,18 +28,18 @@ public static class EvidencePicks
     /// <summary>A Seal Register row (the document design spec, D4): "Seal Register · Visa Office", the office's true seal as its value (Seals.Describe's words), a truth source for that office's papers.</summary>
     public static ComparePick ForSeal(ReferenceBookSO book, AgencyOffice office, string seal) =>
         new ComparePick(PickKeys.Seal(office.id),
-            UiText.Format("book.compareLabel", book != null ? book.displayName : UiText.Get("book.untitled"), office.name),
+            UiText.Format("book.compareLabel", book != null ? book.displayName : UiText.Get("book.untitled"), UiText.DocumentWord(office.name)),
             seal,
             CompareEvidence.ForSealRow(seal, office.id, office.name));
 
-    /// <summary>A traveller's answer (the transcript's row or the bubble's line <paramref name="lineIndex"/> of the transcript): "Traveller · CURRENCY"; an untranslated answer shows the placeholder.</summary>
+    /// <summary>A traveller's answer (the transcript's row or the bubble's line <paramref name="lineIndex"/> of the transcript): "Traveller · CURRENCY"; an untranslated answer shows the placeholder and, not understood, proves and matches nothing (Saleh 2026-10-17).</summary>
     public static ComparePick ForAnswer(int lineIndex, DialogLine line, CaseTranslation tr)
     {
         tr = tr ?? CaseTranslation.None;
         return new ComparePick(PickKeys.Line(lineIndex),
             UiText.Format("compare.travellerLabel", UiText.Category(line.Category)),
             tr.Shown(line),
-            CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell));
+            CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell, tr.Understood(line)));
     }
 
     /// <summary>A garment the player looked at (the wheel's Look menu): its slot as the label, its item as the shown value, its place's Culture value as the evidence.</summary>

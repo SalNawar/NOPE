@@ -141,9 +141,10 @@ public static class FormRequests
     /// A traveller's request entries: one per form of <paramref name="askable"/>
     /// (the day's papers menu, MetSoFar), a group once at its first
     /// form, in that order, labelled by the group's label or the form's name,
-    /// each handing over the first paper of <paramref name="documents"/> that
-    /// is handed over on request and is of the form (or of the group), or
-    /// none; then, so every paper can be asked for, one entry per remaining
+    /// each handing over the first paper of <paramref name="documents"/> of
+    /// the form (or of the group), or none (a forgettable paper this traveller
+    /// handed over on arrival is matched too, so its request finds it on the
+    /// desk); then, so every paper can be asked for, one entry per remaining
     /// paper handed over on request (named by its form, keyed by its form
     /// number, or by its index when it has none). Null lists count as empty.
     /// </summary>
@@ -166,7 +167,7 @@ public static class FormRequests
             for (int i = 0; i < count && document < 0; i++)
             {
                 CaseDocument d = documents[i];
-                if (d == null || !d.Requested || matched[i])
+                if (d == null || matched[i])
                     continue;
                 bool same = string.IsNullOrEmpty(f.AskGroup) ? d.formNumber == f.FormNumber : d.askGroup == f.AskGroup;
                 if (same)

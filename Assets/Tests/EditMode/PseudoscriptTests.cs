@@ -135,11 +135,28 @@ public class PseudoscriptTests
     }
 
     [Test]
-    public void Cell_NonLettersPassThrough()
+    public void Cell_NonLettersAndNonDigitsPassThrough()
     {
         IReadOnlyList<string> han = Table(Chinese);
-        foreach (char c in "0123456789 ().,;:'-&£¥")
+        foreach (char c in " ().,;:'-&£¥")
             Assert.AreEqual(c.ToString(), Pseudoscript.Cell(c, han), c.ToString());
+    }
+
+    /// <summary>Saleh 2026-10-17: a digit outside the key words is a glyph too, each digit its own cell (7d + 3 mod 26), so an untranslated date is not understood.</summary>
+    [Test]
+    public void Cell_EachDigitHasItsOwnCell()
+    {
+        IReadOnlyList<string> han = Table(Chinese);
+        var cells = new HashSet<string>();
+        for (char c = '0'; c <= '9'; c++)
+        {
+            Assert.AreEqual(((c - '0') * 7 + 3) % 26, Pseudoscript.GlyphIndex(c));
+            Assert.AreEqual(han[Pseudoscript.GlyphIndex(c)], Pseudoscript.Cell(c, han));
+            cells.Add(Pseudoscript.Cell(c, han));
+        }
+        Assert.AreEqual(10, cells.Count, "ten digits, ten cells");
+        Assert.AreEqual(-1, Pseudoscript.GlyphIndex('.'));
+        Assert.AreEqual(Pseudoscript.LetterIndex('q'), Pseudoscript.GlyphIndex('q'));
     }
 
     [Test]
@@ -161,15 +178,15 @@ public class PseudoscriptTests
         Assert.AreEqual("小一火下衣大 小天衣木衣火 (文由 口衣一月天上)", Render("Silver shekel (by weight)", Table(Chinese)));
     }
 
-    /// <summary>The key words (the traveller-types spec's §8.1): a letter inside an English span is never a glyph; a letter outside is; nothing else ever is.</summary>
+    /// <summary>The key words (the traveller-types spec's §8.1): a letter or digit inside an English span is never a glyph; one outside is; nothing else ever is.</summary>
     [Test]
     public void IsGlyph_ALetterOutsideTheEnglishSpans()
     {
         const string line = "Go home, 12 x";
         var english = new List<(int start, int length)> { (3, 4) };
         bool[] glyphs = Enumerable.Range(0, line.Length).Select(i => Pseudoscript.IsGlyph(line, i, english)).ToArray();
-        CollectionAssert.AreEqual(new[] { true, true, false, false, false, false, false, false, false, false, false, false, true }, glyphs,
-            "G o | the space | h o m e (kept) | , space 1 2 space (no letters) | x");
+        CollectionAssert.AreEqual(new[] { true, true, false, false, false, false, false, false, false, true, true, false, true }, glyphs,
+            "G o | the space | h o m e (kept) | , space (no glyphs) | 1 2 (digits are glyphs) | space | x");
         Assert.IsTrue(Pseudoscript.IsGlyph(line, 3, null), "no spans: every letter is a glyph");
         Assert.IsFalse(Pseudoscript.IsGlyph(line, 99, null), "past the end");
         Assert.IsFalse(Pseudoscript.IsGlyph(null, 0, null));

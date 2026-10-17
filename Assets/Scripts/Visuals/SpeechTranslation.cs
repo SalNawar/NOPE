@@ -48,9 +48,12 @@ public sealed class SpeechTranslation
     /// <summary>True when the player chose reduced motion (translations show at once).</summary>
     public bool ReducedMotion { get; }
 
-    /// <summary>A transcript line, settled: plain when not foreign, not in the tongue (<paramref name="inTongue"/> false: the desk's) or translated; else untranslated but for its <paramref name="english"/> spans (its key words).</summary>
+    /// <summary>True when the clerk understands a line: not foreign, not in the tongue (<paramref name="inTongue"/> false: the desk's) or translated (Saleh 2026-10-17: an answer not understood gives no finding).</summary>
+    public bool Understood(bool inTongue) => !_foreign || !inTongue || _translated;
+
+    /// <summary>A transcript line, settled: plain when understood; else untranslated but for its <paramref name="english"/> spans (its key words).</summary>
     public Reveal Line(bool inTongue, IReadOnlyList<(int start, int length)> english) =>
-        !_foreign || !inTongue || _translated ? Reveal.Plain : Reveal.Untranslated(_text, english);
+        Understood(inTongue) ? Reveal.Plain : Reveal.Untranslated(_text, english);
 
     /// <summary>The bubble's traveller line <paramref name="lineSeconds"/> after it started: plain when not foreign, flipping on the line's clock when translated, else untranslated; its <paramref name="english"/> spans (its key words) always as they are.</summary>
     public Reveal Bubble(float lineSeconds, IReadOnlyList<(int start, int length)> english)
@@ -60,7 +63,7 @@ public sealed class SpeechTranslation
         return _translated ? Reveal.Flipping(_text, lineSeconds, english) : Reveal.Untranslated(_text, english);
     }
 
-    /// <summary>The compare bar's text for an answer: its canonical value when it reads (not foreign, not in the tongue, or translated), else the placeholder. The evidence stays canonical either way.</summary>
+    /// <summary>The compare bar's text for an answer: its canonical value when it is understood, else the placeholder (its evidence then says it is not understood: EvidencePicks.ForAnswer).</summary>
     public string Shown(bool inTongue, string canonical) =>
-        !_foreign || !inTongue || _translated ? canonical : _placeholder;
+        Understood(inTongue) ? canonical : _placeholder;
 }

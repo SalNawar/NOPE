@@ -45,12 +45,17 @@ public class DisplayTextTests
     }
 
     [Test]
-    public void Untranslated_ShowsEveryLettersCell_AndKeepsDigitsAndPunctuation()
+    public void Untranslated_ShowsEveryLettersAndDigitsCell_AndKeepsPunctuation()
     {
-        Assert.AreEqual("Βηφδαέ βραταφ (λω ζαηπργ) 1897.", For(Shekel + " 1897.", Reveal.Untranslated(Foreign(Greek))));
+        Assert.AreEqual("Βηφδαέ βραταφ (λω ζαηπργ) τρυο.", For(Shekel + " 1897.", Reveal.Untranslated(Foreign(Greek))),
+            "a digit outside the key words is a cell too (Saleh 2026-10-17: an untranslated date is not understood)");
+        Assert.AreEqual("Βηφδαέ βραταφ (λω ζαηπργ) 1897.", For(Shekel + " 1897.", Reveal.Untranslated(Foreign(Greek), new[] { (Shekel.Length + 1, 4) })),
+            "digits in a key-word span stay as they are");
         Assert.AreEqual(float.PositiveInfinity, DisplayText.Remaining(Shekel, Reveal.Untranslated(Foreign(Greek)), Timing, false));
         Assert.IsTrue(DisplayText.ShowsForeign(Shekel, Reveal.Untranslated(Foreign(Greek)), Timing, false));
-        Assert.IsFalse(DisplayText.ShowsForeign("1897", Reveal.Untranslated(Foreign(Greek)), Timing, false), "no letter, nothing foreign");
+        Assert.IsTrue(DisplayText.ShowsForeign("1897", Reveal.Untranslated(Foreign(Greek)), Timing, false), "digits alone are foreign");
+        Assert.IsFalse(DisplayText.ShowsForeign("1897", Reveal.Untranslated(Foreign(Greek), new[] { (0, 4) }), Timing, false), "all key words, nothing foreign");
+        Assert.IsFalse(DisplayText.ShowsForeign("(.)", Reveal.Untranslated(Foreign(Greek)), Timing, false), "no letter or digit, nothing foreign");
         Assert.AreEqual(0, DisplayText.Progress(Shekel, Reveal.Untranslated(Foreign(Greek)), Timing, false));
     }
 
@@ -112,7 +117,7 @@ public class DisplayTextTests
         Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 5f), Timing, false, "script", "own"), "settled");
         Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 0f), Timing, true, "script", "own"), "reduced motion");
         Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Plain, Timing, false, "script", "own"), "a plain line after a foreign one: its own font again");
-        Assert.AreEqual("own", DisplayText.FontFor("1897", Reveal.Untranslated(greek), Timing, false, "script", "own"), "no letter, nothing foreign");
+        Assert.AreEqual("own", DisplayText.FontFor("1897", Reveal.Untranslated(greek, new[] { (0, 4) }), Timing, false, "script", "own"), "all key words, nothing foreign");
         Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Untranslated(greek), Timing, false, null, "own"), "the fallback cipher draws in the text's own font");
     }
 
@@ -172,7 +177,7 @@ public class DisplayTextTests
     [Test]
     public void Typed_DigitsInARightToLeftLine_TypeInTheirOwnOrder()
     {
-        Reveal arabic = Reveal.Untranslated(Foreign(Arabic, true));
+        Reveal arabic = Reveal.Untranslated(Foreign(Arabic, true), new[] { (3, 2) }); // the digits a key word, so they stay digits
         string shown = For("ab 12", arabic);
         Assert.AreEqual("12", shown.Substring(0, 2), "the digit run is at the left, in its order");
 
@@ -202,7 +207,7 @@ public class DisplayTextTests
         Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", greek, Timing, false));
         Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", Reveal.Plain, Timing, false));
         Assert.IsFalse(DisplayText.ReadsRightToLeft(Shekel, Reveal.Flipping(Foreign(Arabic, true), 5f), Timing, false), "settled into English");
-        Assert.IsFalse(DisplayText.ReadsRightToLeft("1897", Reveal.Untranslated(Foreign(Arabic, true)), Timing, false), "no letter, nothing reversed");
+        Assert.IsFalse(DisplayText.ReadsRightToLeft("1897", Reveal.Untranslated(Foreign(Arabic, true), new[] { (0, 4) }), Timing, false), "all key words, nothing reversed");
         Assert.AreEqual(string.Empty, Typed(null, greek, 0));
     }
 

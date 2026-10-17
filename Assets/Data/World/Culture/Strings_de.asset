@@ -1374,8 +1374,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: 'Die Stempelleiste (der graue Reiter rechts): ziehe einen Stempel auf den
-      Pass und lass los'
+    text: 'Die Stempelschublade (der Reiter oben): ziehe einen Stempel auf den Pass
+      und lass los'
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -1904,6 +1904,19 @@ MonoBehaviour:
     tier: 0
   - key: compare.untranslated
     text: "(un\xFCbersetzt {0}; {1}-\xDCbersetzer)"
+    gloss: 0
+    tier: 0
+  - key: compare.notUnderstood
+    text: NICHT VERSTANDEN
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotUnderstood
+    text: Nicht verstanden
+    gloss: 0
+    tier: 0
+  - key: finding.note.NotUnderstood
+    text: "Diese Antwort war nicht \xFCbersetzt: Sie haben sie nicht verstanden.
+      Nichts erfasst."
     gloss: 0
     tier: 0
   - key: slot.Outfit
@@ -3952,6 +3965,10 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: Stempelschublade
+    english: stamp drawer
+  - native: oben
+    english: at the top
   - native: bildschirm
     english: Screen
   - native: aus
@@ -6100,3 +6117,5 @@ MonoBehaviour:
     english: Camera sway
   - native: Erst
     english: First
+  - native: "\xFCbersetzt"
+    english: translated

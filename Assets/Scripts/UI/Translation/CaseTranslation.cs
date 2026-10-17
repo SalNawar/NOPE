@@ -44,6 +44,9 @@ public sealed class CaseTranslation
     /// <summary>The bubble's traveller <paramref name="line"/> <paramref name="lineSeconds"/> after it started: plain, untranslated, or flipping, its key words in English (a null line: no key words).</summary>
     public Reveal Bubble(DialogLine line, float lineSeconds) => Speech.Bubble(lineSeconds, line != null ? line.English : null);
 
+    /// <summary>True when the clerk understands <paramref name="line"/> (the desk's always; the traveller's unless their tongue is foreign today without its Speech translator).</summary>
+    public bool Understood(DialogLine line) => line == null || Speech.Understood(Translation.InTongue(line.Speaker));
+
     /// <summary>The compare bar's text for an answer: its canonical value when it reads, else the placeholder.</summary>
     public string Shown(DialogLine answer) => Speech.Shown(Translation.InTongue(answer.Speaker), answer.Value);
 }

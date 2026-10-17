@@ -9949,7 +9949,7 @@
       "asset": "DayPlan_Inv_Day2",
       "day": 2,
       "queue": 10,
-      "bulletin": "NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport's, and its departure date must be today.",
+      "bulletin": "NEW: the Entry Ticket. Most travellers hand it over with their Passport; ask for it when one forgets. Its Citizen ID must match the Passport's, and its departure date must be today.",
       "papers": [
         "TC-101",
         "TC-230"
@@ -11853,7 +11853,8 @@
       "note": "Tells you everything, then a bit more.",
       "waiverRefusal": 0.05,
       "strandingFate": "News",
-      "confess": 0.6
+      "confess": 0.6,
+      "forgetPaper": 0.3
     },
     {
       "id": "curt",
@@ -11861,7 +11862,8 @@
       "weight": 1,
       "note": "Time is money, and in 2150 the queue bills by the minute.",
       "waiverRefusal": 0.3,
-      "confess": 0.3
+      "confess": 0.3,
+      "forgetPaper": 0.15
     },
     {
       "id": "anxious",
@@ -11870,7 +11872,8 @@
       "note": "Worried about paradoxes, transponders, butterflies and you.",
       "waiverRefusal": 0.05,
       "strandingFate": "Forgotten",
-      "confess": 0.8
+      "confess": 0.8,
+      "forgetPaper": 0.35
     },
     {
       "id": "sunny",
@@ -11878,7 +11881,8 @@
       "weight": 1,
       "note": "Believes every word the agency prints.",
       "waiverRefusal": 0.05,
-      "confess": 0.7
+      "confess": 0.7,
+      "forgetPaper": 0.15
     },
     {
       "id": "grand",
@@ -11887,7 +11891,8 @@
       "note": "Treats the desk as staff, whatever their account says.",
       "waiverRefusal": 0.5,
       "strandingFate": "Carry",
-      "confess": 0.15
+      "confess": 0.15,
+      "forgetPaper": 0.3
     },
     {
       "id": "stickler",
@@ -11895,7 +11900,8 @@
       "weight": 1,
       "note": "Knows the regulations better than the clerk and says so.",
       "waiverRefusal": 0.1,
-      "confess": 0.5
+      "confess": 0.5,
+      "forgetPaper": 0.05
     },
     {
       "id": "glum",
@@ -11904,7 +11910,8 @@
       "note": "The debt won years ago; this is just the paperwork.",
       "waiverRefusal": 0.05,
       "strandingFate": "Forgotten",
-      "confess": 0.4
+      "confess": 0.4,
+      "forgetPaper": 0.25
     }
   ],
   "interview": {
@@ -24736,7 +24743,7 @@
       },
       {
         "key": "keys.desk.stamps",
-        "text": "The stamp bar (the grey tab on the right): drag a stamp onto the passport and let go",
+        "text": "The stamp drawer (the tab at the top): drag a stamp onto the passport and let go",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -25607,6 +25614,24 @@
       {
         "key": "compare.untranslated",
         "text": "(untranslated {0}; {1} Translator)",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "compare.notUnderstood",
+        "text": "NOT UNDERSTOOD",
+        "gloss": "Inline",
+        "tier": "Flavour"
+      },
+      {
+        "key": "finding.link.NotUnderstood",
+        "text": "Not understood",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "finding.note.NotUnderstood",
+        "text": "That answer was not translated: you did not understand it. Nothing logged.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -30070,7 +30095,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "شريط الأختام (اللسان الرمادي على اليمين): اسحب ختما إلى الجواز وأفلته"
+            "text": "درج الأختام (اللسان في الأعلى): اسحب ختما إلى الجواز وأفلته"
           },
           {
             "key": "keys.desk.pc",
@@ -30591,6 +30616,18 @@
           {
             "key": "compare.untranslated",
             "text": "({0} غير مترجم, مترجم {1})"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "غير مفهوم"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "غير مفهوم"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "لم تترجم تلك الإجابة: لم تفهمها. لم يسجل شيء."
           },
           {
             "key": "slot.Outfit",
@@ -32610,6 +32647,10 @@
           }
         ],
         "words": [
+          {
+            "native": "الأعلى",
+            "english": "the top"
+          },
           {
             "native": "إطفاء",
             "english": "Turn off"
@@ -37049,6 +37090,26 @@
           {
             "native": "تشغيل",
             "english": "On"
+          },
+          {
+            "native": "مفهوم",
+            "english": "understood"
+          },
+          {
+            "native": "تترجم",
+            "english": "translated"
+          },
+          {
+            "native": "تلك",
+            "english": "that"
+          },
+          {
+            "native": "الإجابة",
+            "english": "answer"
+          },
+          {
+            "native": "تفهمها",
+            "english": "understand it"
           }
         ]
       },
@@ -38390,7 +38451,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Η μπάρα με τις στάμπες (η γκρι καρτέλα δεξιά): σύρε μια στάμπα πάνω στο διαβατήριο και άφησέ την"
+            "text": "Το συρτάρι με τις στάμπες (η καρτέλα πάνω): σύρε μια στάμπα πάνω στο διαβατήριο και άφησέ την"
           },
           {
             "key": "keys.desk.pc",
@@ -38911,6 +38972,18 @@
           {
             "key": "compare.untranslated",
             "text": "(αμετάφραστο {0}· Μεταφραστής {1})"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "ΔΕΝ ΚΑΤΑΝΟΗΘΗΚΕ"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Δεν κατανοήθηκε"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Αυτή η απάντηση δεν μεταφράστηκε: δεν την κατάλαβες. Δεν καταγράφηκε τίποτα."
           },
           {
             "key": "slot.Outfit",
@@ -40930,6 +41003,10 @@
           }
         ],
         "words": [
+          {
+            "native": "συρτάρι",
+            "english": "drawer"
+          },
           {
             "native": "σβήσιμο",
             "english": "Turn off"
@@ -44857,6 +44934,18 @@
           {
             "native": "άκυρη",
             "english": "invalid"
+          },
+          {
+            "native": "κατανοήθηκε",
+            "english": "understood"
+          },
+          {
+            "native": "μεταφράστηκε",
+            "english": "translated"
+          },
+          {
+            "native": "κατάλαβες",
+            "english": "you understood"
           }
         ]
       },
@@ -46198,7 +46287,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "La barra dei timbri (la linguetta grigia a destra): trascina un timbro sul passaporto e rilascialo"
+            "text": "Il cassetto dei timbri (la linguetta in alto): trascina un timbro sul passaporto e rilascialo"
           },
           {
             "key": "keys.desk.pc",
@@ -46719,6 +46808,18 @@
           {
             "key": "compare.untranslated",
             "text": "(non tradotto {0}; Traduttore {1})"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "NON CAPITO"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Non capito"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Quella risposta non era tradotta: non l'hai capita. Nulla registrato."
           },
           {
             "key": "slot.Outfit",
@@ -48738,6 +48839,14 @@
           }
         ],
         "words": [
+          {
+            "native": "cassetto",
+            "english": "drawer"
+          },
+          {
+            "native": "alto",
+            "english": "top"
+          },
           {
             "native": "spegni",
             "english": "Turn off"
@@ -52785,6 +52894,14 @@
           {
             "native": "l'errore",
             "english": "the error"
+          },
+          {
+            "native": "l'hai",
+            "english": "you have it"
+          },
+          {
+            "native": "capita",
+            "english": "understood"
           }
         ]
       },
@@ -54126,7 +54243,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Die Stempelleiste (der graue Reiter rechts): ziehe einen Stempel auf den Pass und lass los"
+            "text": "Die Stempelschublade (der Reiter oben): ziehe einen Stempel auf den Pass und lass los"
           },
           {
             "key": "keys.desk.pc",
@@ -54647,6 +54764,18 @@
           {
             "key": "compare.untranslated",
             "text": "(unübersetzt {0}; {1}-Übersetzer)"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "NICHT VERSTANDEN"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "Nicht verstanden"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "Diese Antwort war nicht übersetzt: Sie haben sie nicht verstanden. Nichts erfasst."
           },
           {
             "key": "slot.Outfit",
@@ -56666,6 +56795,14 @@
           }
         ],
         "words": [
+          {
+            "native": "Stempelschublade",
+            "english": "stamp drawer"
+          },
+          {
+            "native": "oben",
+            "english": "at the top"
+          },
           {
             "native": "bildschirm",
             "english": "Screen"
@@ -60961,6 +61098,10 @@
           {
             "native": "Erst",
             "english": "First"
+          },
+          {
+            "native": "übersetzt",
+            "english": "translated"
           }
         ]
       },
@@ -62302,7 +62443,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "印章栏（右侧的灰色标签）：将印章拖到护照上再松开"
+            "text": "印章抽屉（顶部的标签）：将印章拖到护照上再松开"
           },
           {
             "key": "keys.desk.pc",
@@ -62823,6 +62964,18 @@
           {
             "key": "compare.untranslated",
             "text": "（未翻译的{0}；{1}翻译器）"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "未听懂"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "未听懂"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "该回答未翻译：你没听懂。未记录。"
           },
           {
             "key": "slot.Outfit",
@@ -64842,6 +64995,10 @@
           }
         ],
         "words": [
+          {
+            "native": "顶",
+            "english": "top"
+          },
           {
             "native": "关闭",
             "english": "Turn off"
@@ -68465,6 +68622,14 @@
           {
             "native": "开",
             "english": "on"
+          },
+          {
+            "native": "听懂",
+            "english": "understood"
+          },
+          {
+            "native": "没听懂",
+            "english": "did not understand"
           }
         ]
       },
@@ -69806,7 +69971,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "スタンプバー (右の灰色のタブ): スタンプをパスポートにドラッグして放す"
+            "text": "スタンプの引き出し (上のタブ): スタンプをパスポートにドラッグして放す"
           },
           {
             "key": "keys.desk.pc",
@@ -70327,6 +70492,18 @@
           {
             "key": "compare.untranslated",
             "text": "(未翻訳の{0}; {1}翻訳機)"
+          },
+          {
+            "key": "compare.notUnderstood",
+            "text": "理解できない"
+          },
+          {
+            "key": "finding.link.NotUnderstood",
+            "text": "理解できない"
+          },
+          {
+            "key": "finding.note.NotUnderstood",
+            "text": "その回答は未翻訳です。理解できませんでした。記録なし。"
           },
           {
             "key": "slot.Outfit",
@@ -72346,6 +72523,10 @@
           }
         ],
         "words": [
+          {
+            "native": "引き出",
+            "english": "drawer"
+          },
           {
             "native": "画面",
             "english": "Screen"
@@ -76017,6 +76198,14 @@
           {
             "native": "オン",
             "english": "on"
+          },
+          {
+            "native": "理解",
+            "english": "understanding"
+          },
+          {
+            "native": "きません",
+            "english": "cannot"
           }
         ]
       }
@@ -76936,7 +77125,7 @@
         "feature": "paper:TC-230",
         "title": "THE ENTRY TICKET",
         "named": "Entry Ticket",
-        "check": "Its Citizen ID and its departure date. Ask for it: flag it on the PAPERS tab, then ask on the wheel.",
+        "check": "Its Citizen ID and its departure date. Most travellers hand it over with their Passport; when one forgets it, flag it on the PAPERS tab, then ask on the wheel.",
         "against": "The Passport's Citizen ID; the calendar for the date.",
         "fault": "KTR-418 on the Passport, KTR-481 on the ticket: doctored.",
         "point": "field:TC-230/CitizenId",

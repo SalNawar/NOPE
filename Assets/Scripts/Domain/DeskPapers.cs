@@ -8,14 +8,33 @@ public enum DocumentHandOver
     OnRequest,
 
     /// <summary>When the traveller steps up to the desk.</summary>
-    OnArrival
+    OnArrival,
+
+    /// <summary>With the arrival papers, unless the traveller forgets it (Saleh 2026-10-17: "they should forget to give it to you some time"; a seeded chance, their personality's forgetPaper): forgotten, the desk asks for it.</summary>
+    Forgettable
 }
 
 /// <summary>The one rule over DocumentHandOver.</summary>
 public static class DocumentHandOvers
 {
-    /// <summary>True when a document with this hand-over waits for the desk to ask (it then gets a hub request and counts toward the hub's size).</summary>
-    public static bool IsRequested(DocumentHandOver handOver) => handOver == DocumentHandOver.OnRequest;
+    /// <summary>True when a document with this hand-over may wait for the desk to ask (it then gets a request on the papers menu and counts toward the hub's size): on request, or a paper a traveller can forget.</summary>
+    public static bool IsRequested(DocumentHandOver handOver) => handOver == DocumentHandOver.OnRequest || handOver == DocumentHandOver.Forgettable;
+
+    /// <summary>One traveller's hand-over of a paper whose template says <paramref name="handOver"/>: a forgettable paper comes with the arrival papers, or on request when they <paramref name="forgot"/> it; any other as its template says.</summary>
+    public static DocumentHandOver ForTraveller(DocumentHandOver handOver, bool forgot) =>
+        handOver != DocumentHandOver.Forgettable ? handOver : forgot ? DocumentHandOver.OnRequest : DocumentHandOver.OnArrival;
+
+    /// <summary>
+    /// Whether a traveller forgets their forgettable papers: one draw of
+    /// <paramref name="rng"/> (their own stream, Seeds.ForForgetting) against
+    /// <paramref name="chance"/> (their personality's forgetPaper), made
+    /// whatever they carry, so it never depends on the papers.
+    /// </summary>
+    public static bool Forgets(float chance, IRandomSource rng)
+    {
+        float u = rng != null ? rng.Value() : 1f;
+        return u < chance;
+    }
 }
 
 /// <summary>One of the current traveller's documents, as the desk and the interview see it.</summary>
@@ -33,7 +52,7 @@ public sealed class CaseDocument
     /// <summary>The document's fields: the boxes its paper's form shows.</summary>
     public IReadOnlyList<DocumentField> fields;
 
-    /// <summary>When the traveller hands it over.</summary>
+    /// <summary>When this traveller hands it over (DocumentHandOvers.ForTraveller: a forgettable paper on arrival, or on request when forgotten).</summary>
     public DocumentHandOver handOver;
 
     /// <summary>True when the paper carries the traveller's photo (DocumentTemplateSO.showsPhoto).</summary>
@@ -221,14 +240,16 @@ public sealed class DeskPapers
     }
 
     /// <summary>
-    /// What size a dragged document shows while the pointer is over
-    /// <paramref name="under"/>, having shown <paramref name="shown"/>: over
-    /// the desk it grows to full size at once; over the counter it keeps the
-    /// size it has (Saleh 2026-10-06: "it keeps shrinking the documents as I
-    /// try to stamp"), so a document from the desk shrinks only once it is
-    /// handed back.
+    /// True when a document lying in <paramref name="zone"/> shows at its full
+    /// reading size: only on the desk while the reading view is on
+    /// (<paramref name="readingView"/>); anywhere else it keeps its normal
+    /// size, the counter's (Saleh's 1016a playtest, 2026-10-17: "documents
+    /// should stay their size, if we are zooming then it should be only when
+    /// you are focused on the table and should return to normal size when you
+    /// drop them"). A grab never changes it: a carried paper keeps the size it
+    /// had (DeskController), the view's change and the drop decide.
     /// </summary>
-    public static DeskZone ShownWhileDragged(DeskZone shown, DeskZone under) => under == DeskZone.Desk ? DeskZone.Desk : shown;
+    public static bool ShownFullSize(DeskZone zone, bool readingView) => zone == DeskZone.Desk && readingView;
 
     /// <summary>The zone paper <paramref name="i"/> lies in (the counter until it is dropped on the desk; the counter out of range).</summary>
     public DeskZone ZoneOf(int i) => InRange(i) ? _zones[i] : DeskZone.Counter;

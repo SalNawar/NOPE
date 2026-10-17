@@ -1440,7 +1440,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: keys.desk.stamps
-    text: 'The stamp bar (the grey tab on the right): drag a stamp onto the passport
+    text: 'The stamp drawer (the tab at the top): drag a stamp onto the passport
       and let go'
     gloss: 0
     tier: 1
@@ -2029,6 +2029,18 @@ MonoBehaviour:
     tier: 1
   - key: compare.untranslated
     text: (untranslated {0}; {1} Translator)
+    gloss: 0
+    tier: 1
+  - key: compare.notUnderstood
+    text: NOT UNDERSTOOD
+    gloss: 2
+    tier: 1
+  - key: finding.link.NotUnderstood
+    text: Not understood
+    gloss: 0
+    tier: 1
+  - key: finding.note.NotUnderstood
+    text: 'That answer was not translated: you did not understand it. Nothing logged.'
     gloss: 0
     tier: 1
   - key: slot.Outfit
