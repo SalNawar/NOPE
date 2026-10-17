@@ -1349,7 +1349,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: "\u5370\u7AE0\u680F\uFF08\u53F3\u4FA7\u7684\u7070\u8272\u6807\u7B7E\uFF09\uFF1A\u5C06\u5370\u7AE0\u62D6\u5230\u62A4\u7167\u4E0A\u518D\u677E\u5F00"
+    text: "\u5370\u7AE0\u62BD\u5C49\uFF08\u9876\u90E8\u7684\u6807\u7B7E\uFF09\uFF1A\u5C06\u5370\u7AE0\u62D6\u5230\u62A4\u7167\u4E0A\u518D\u677E\u5F00"
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -3912,6 +3912,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u9876"
+    english: top
   - native: "\u5173\u95ED"
     english: Turn off
   - native: "\u5C4F\u5E55"

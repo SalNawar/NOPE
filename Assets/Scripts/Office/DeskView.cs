@@ -65,6 +65,9 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>True while the camera is (or is blending) over the desk.</summary>
     public bool IsOn { get; private set; }
 
+    /// <summary>The office view's level forward on the desk (Bind; +z before): the papers lie upright along it, toward the chair.</summary>
+    public Vector3 LevelForward { get; private set; } = Vector3.forward;
+
     /// <summary>True once posed from the art office's Cinemachine camera (Bind): the view can tilt, so the papers on the desk move only while it is on (BoothRules).</summary>
     public bool IsBound => _office != null;
 
@@ -116,6 +119,7 @@ public sealed class DeskView : MonoBehaviour
         if (level.sqrMagnitude < 1e-6f)
             level = Vector3.ProjectOnPlane(art.up, Vector3.up);
         level.Normalize();
+        LevelForward = level;
 
         DeskViewTuning tuning = config.deskView;
         Vector3 right = Vector3.Cross(Vector3.up, level);
@@ -135,13 +139,36 @@ public sealed class DeskView : MonoBehaviour
     }
 
     /// <summary>Where the desk view's ray through <paramref name="viewport"/> (0..1 each, from the bottom left) meets the level plane at <paramref name="height"/>: what of the desk the view shows there (false while unbound, or for a ray that never comes down to it).</summary>
-    public bool TryViewPoint(Vector2 viewport, float height, out Vector3 point)
+    public bool TryViewPoint(Vector2 viewport, float height, out Vector3 point) => TryViewPoint(viewport, height, _boundFov, out point);
+
+    /// <summary>As TryViewPoint, through the desk camera's lens as it is now (CameraFeel's push-in included): what the reading view shows there this frame, for a thing tethered to the screen's edge (the stamp drawer).</summary>
+    public bool TryLiveViewPoint(Vector2 viewport, float height, out Vector3 point) =>
+        TryViewPoint(viewport, height, deskCamera != null ? deskCamera.Lens.FieldOfView : _boundFov, out point);
+
+    /// <summary>Where <paramref name="world"/> shows in the reading view through the desk camera's lens as it is now (viewport, 0..1 from the bottom left; the inverse of TryLiveViewPoint); false while unbound or for a point behind the camera.</summary>
+    public bool TryLiveViewport(Vector3 world, out Vector2 viewport)
+    {
+        viewport = default;
+        if (_office == null || deskCamera == null)
+            return false;
+        Transform t = deskCamera.transform;
+        Vector3 d = world - t.position;
+        float depth = Vector3.Dot(d, t.forward);
+        if (depth <= 1e-5f)
+            return false;
+        float tan = Mathf.Tan(deskCamera.Lens.FieldOfView * 0.5f * Mathf.Deg2Rad);
+        float aspect = Screen.height > 0 ? (float)Screen.width / Screen.height : 16f / 9f;
+        viewport = new Vector2((Vector3.Dot(d, t.right) / (depth * tan * aspect) + 1f) / 2f, (Vector3.Dot(d, t.up) / (depth * tan) + 1f) / 2f);
+        return true;
+    }
+
+    private bool TryViewPoint(Vector2 viewport, float height, float fieldOfView, out Vector3 point)
     {
         point = default;
         if (_office == null || deskCamera == null)
             return false;
         Transform t = deskCamera.transform;
-        float tan = Mathf.Tan(_boundFov * 0.5f * Mathf.Deg2Rad);
+        float tan = Mathf.Tan(fieldOfView * 0.5f * Mathf.Deg2Rad);
         float aspect = Screen.height > 0 ? (float)Screen.width / Screen.height : 16f / 9f;
         Vector3 ray = t.forward + t.up * ((viewport.y * 2f - 1f) * tan) + t.right * ((viewport.x * 2f - 1f) * tan * aspect);
         if (ray.y > -1e-5f)

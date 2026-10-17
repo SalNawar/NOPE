@@ -240,14 +240,16 @@ public sealed class DeskPapers
     }
 
     /// <summary>
-    /// What size a dragged document shows while the pointer is over
-    /// <paramref name="under"/>, having shown <paramref name="shown"/>: over
-    /// the desk it grows to full size at once; over the counter it keeps the
-    /// size it has (Saleh 2026-10-06: "it keeps shrinking the documents as I
-    /// try to stamp"), so a document from the desk shrinks only once it is
-    /// handed back.
+    /// True when a document lying in <paramref name="zone"/> shows at its full
+    /// reading size: only on the desk while the reading view is on
+    /// (<paramref name="readingView"/>); anywhere else it keeps its normal
+    /// size, the counter's (Saleh's 1016a playtest, 2026-10-17: "documents
+    /// should stay their size, if we are zooming then it should be only when
+    /// you are focused on the table and should return to normal size when you
+    /// drop them"). A grab never changes it: a carried paper keeps the size it
+    /// had (DeskController), the view's change and the drop decide.
     /// </summary>
-    public static DeskZone ShownWhileDragged(DeskZone shown, DeskZone under) => under == DeskZone.Desk ? DeskZone.Desk : shown;
+    public static bool ShownFullSize(DeskZone zone, bool readingView) => zone == DeskZone.Desk && readingView;
 
     /// <summary>The zone paper <paramref name="i"/> lies in (the counter until it is dropped on the desk; the counter out of range).</summary>
     public DeskZone ZoneOf(int i) => InRange(i) ? _zones[i] : DeskZone.Counter;

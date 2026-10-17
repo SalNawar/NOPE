@@ -58,13 +58,7 @@ public static partial class OfficeSceneUIBuilder
         Transform o = overlay.transform;
 
         KitPullTab(o.Find("PcTab"), true, ControlRules.PcKey);
-        KitPullTab(o.Find("StampBar/Tab"), false, ControlRules.StampsKey);
-        TMP_Text stampsWord = o.Find("StampBar/Tab/Label")?.GetComponent<TMP_Text>();
-        if (stampsWord != null)
-        {
-            stampsWord.text = UiText.Get("controls.stampsTab");
-            Keyed(stampsWord, "controls.stampsTab");
-        }
+        KitStampsTab(o.Find("StampBar/Tab"));
         KitPullTab(o.Find("CityLook"), true, ControlRules.CityKey);
         KitPullTab(o.Find("CityBack"), false, ControlRules.CityBackKey);
         KitInspect(o.Find("InspectButton"));
@@ -195,6 +189,37 @@ public static partial class OfficeSceneUIBuilder
             text.fontSizeMin = Mathf.Min(text.fontSizeMin, PullTabLabelLeast);
         }
         KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2(centre, 0.3f), PullTabKeycap);
+    }
+
+    /// <summary>
+    /// The STAMPS tab on the top edge beside the drawer (Saleh's 1016a
+    /// playtest: "the ui for it should be the same area it spawns so not on
+    /// the side"): the kit's slate plate flush on the edge, its word on the
+    /// left, keyed, its TAB keycap on the right.
+    /// </summary>
+    private static void KitStampsTab(Transform tab)
+    {
+        if (tab == null)
+            return;
+        var tabRect = (RectTransform)tab;
+        KitSkin(tab, "plate_slate", _kit.overlayScale);
+        Transform label = tab.Find("Label");
+        if (label != null)
+        {
+            var labelRect = (RectTransform)label;
+            labelRect.anchorMin = new Vector2(0f, 0f);
+            labelRect.anchorMax = new Vector2(0.62f, 1f);
+            labelRect.offsetMin = new Vector2(KitLabelInset.x * 2f, KitLabelInset.y);
+            labelRect.offsetMax = new Vector2(0f, -KitLabelInset.y);
+            TMP_Text text = label.GetComponent<TMP_Text>();
+            text.text = UiText.Get("controls.stampsTab");
+            Keyed(text, "controls.stampsTab");
+            text.alignment = TextAlignmentOptions.Center;
+            text.margin = Vector4.zero;
+            SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, PullTabSize.x, PullTabInk, 0f, tabRect);
+            text.fontSizeMin = Mathf.Min(text.fontSizeMin, PullTabLabelLeast);
+        }
+        KitKeycap(tab, "Keycap", "keycap_bone", ControlRules.StampsKey, new Vector2(0.8f, 0.5f), PullTabKeycap);
     }
 
     /// <summary>A keycap printed with <paramref name="key"/> (a child plate in <paramref name="piece"/>, its word in the label face), centred at <paramref name="at"/> of its parent, rebuilt each build.</summary>

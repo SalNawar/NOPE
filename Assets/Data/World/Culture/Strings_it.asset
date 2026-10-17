@@ -1373,8 +1373,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: 'La barra dei timbri (la linguetta grigia a destra): trascina un timbro
-      sul passaporto e rilascialo'
+    text: 'Il cassetto dei timbri (la linguetta in alto): trascina un timbro sul
+      passaporto e rilascialo'
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -3971,6 +3971,10 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: cassetto
+    english: drawer
+  - native: alto
+    english: top
   - native: spegni
     english: Turn off
   - native: lo
