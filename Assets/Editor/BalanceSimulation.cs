@@ -358,8 +358,8 @@ public static class BalanceSimulation
             }
 
             // Home, as HomeManager plays it: the break-in and the fixed bill; the pet's bills as a careful carer (PetPolicy,
-            // every run); the shopper buys (the plain runs buy nothing); the pet's night at Sleep. No run spins the slot
-            // machine, orders at the PC (so no toy) or pets the pet.
+            // every run); the shopper buys house upgrades (the plain runs buy nothing); the pet's night at Sleep. No run spins
+            // the slot machine, orders at the PC, buys a toy in the pet's corner or pets the pet.
             int nightSeed = Seeds.Day(seed, day);
             HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, lib, config, nightSeed);
             PetCare care = PetPolicy.Care(world.pet.Needs, world.money, b => HomeEconomy.BillPrice(world, lib, b), _houseReserve, HomeEconomy.OwnedToys(world, lib).Count > 0);
@@ -421,7 +421,7 @@ public static class BalanceSimulation
     /// </summary>
     private static int ShopperNight(WorldState world, ContentLibrarySO lib, RunResult r, int day, Shopper shopper)
     {
-        List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        List<UpgradeSO> house = HomeEconomy.HouseUpgrades(lib);
         int spent = 0;
         while (true)
         {
@@ -745,7 +745,7 @@ public static class BalanceSimulation
     /// </summary>
     private static void House(StringBuilder sb, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, Dictionary<(PlayStyle, int, int), List<RunResult>> shoppers)
     {
-        List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        List<UpgradeSO> house = HomeEconomy.HouseUpgrades(lib);
         sb.AppendLine();
         sb.AppendLine($"== The House: the plain runs against its shoppers (reserve {_houseReserve} cr; the top tier from {_topTierPrice} cr) ==");
         sb.AppendLine($"the tree (content spreadsheet, homeUpgrades): {house.Count} upgrades, {house.Sum(u => u.cost)} cr in all: {string.Join(", ", house.OrderBy(u => u.cost).Select(u => $"{u.id} {u.cost}"))}");

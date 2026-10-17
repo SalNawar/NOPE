@@ -2346,7 +2346,7 @@ public static class _TimeDeskAuditPlay
         }
         WorldState w = RunManager.Instance.World;
         ContentLibrarySO lib = RunManager.Instance.Library;
-        List<UpgradeSO> home = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        List<UpgradeSO> home = HomeEconomy.HouseUpgrades(lib);
         Line($"   house: {string.Join(", ", home.Select(u => $"{u.id}={OrderBook.StateOf(w, lib, u)}/{OrderBook.Price(w, lib, u)}"))}");
         if (ShotsOn && First("house"))
             yield return Shots($"house_night{day}");
