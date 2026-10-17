@@ -109,7 +109,7 @@ public sealed class DeskConfigSO : ScriptableObject
     [Min(0f)] public float shadowHeldSpread = 0.022f, shadowHeldOffset = 0.026f;
 
     /// <inheritdoc cref="shadowHeldSpread"/>
-    [Range(0f, 1f)] public float shadowHeldAlpha = 0.32f;
+    [Range(0f, 1f)] public float shadowHeldAlpha = 0.4f;
 
     /// <inheritdoc cref="shadowHeldSpread"/>
     [Min(0f)] public float shadowLiftSeconds = 0.12f, shadowDropSeconds = 0.08f;

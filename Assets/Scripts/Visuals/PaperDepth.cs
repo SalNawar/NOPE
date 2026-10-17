@@ -25,8 +25,8 @@ public sealed class DepthMesh
         return Vertices.Count - 1;
     }
 
-    /// <summary>Adds a triangle wound both ways (it shows from either side, whatever way the outline turns).</summary>
-    public void Both(int a, int b, int c) => Triangles.AddRange(new[] { a, b, c, a, c, b });
+    /// <summary>Adds a triangle once (the shadow's shader draws both sides: a second winding would darken it twice).</summary>
+    public void Tri(int a, int b, int c) => Triangles.AddRange(new[] { a, b, c });
 }
 
 /// <summary>
@@ -77,7 +77,7 @@ public static class PaperDepth
         for (int i = 0; i < n; i++)
             area += p[i].x * p[(i + 1) % n].y - p[(i + 1) % n].x * p[i].y;
         float turn = area >= 0f ? 1f : -1f;
-        float core = Math.Min(spread * 0.35f, 0.3f * Math.Min(width, height));
+        float core = spread * 0.35f;
         Rgba solid = Ink.WithAlpha(alpha), half = Ink.WithAlpha(alpha * 0.45f), none = Ink.WithAlpha(0f);
         int centre = mesh.Add((cx + offsetX) / width, (cy + offsetY) / height, depth, solid);
         int first = mesh.Vertices.Count;
@@ -85,18 +85,21 @@ public static class PaperDepth
         {
             (float nx, float ny) = Normal(p, i, turn);
             float ox = offsetX, oy = offsetY;
-            mesh.Add((p[i].x - nx * core + ox) / width, (p[i].y - ny * core + oy) / height, depth, solid);
+            // the solid core's edge: toward the centre (never past it, so a round corner's points never cross)
+            float toCentre = (float)Math.Sqrt((cx - p[i].x) * (cx - p[i].x) + (cy - p[i].y) * (cy - p[i].y));
+            float t = toCentre > 1e-6f ? Math.Min(0.5f, core / toCentre) : 0f;
+            mesh.Add((p[i].x + (cx - p[i].x) * t + ox) / width, (p[i].y + (cy - p[i].y) * t + oy) / height, depth, solid);
             mesh.Add((p[i].x + nx * spread * 0.35f + ox) / width, (p[i].y + ny * spread * 0.35f + oy) / height, depth, half);
             mesh.Add((p[i].x + nx * spread + ox) / width, (p[i].y + ny * spread + oy) / height, depth, none);
         }
         for (int i = 0; i < n; i++)
         {
             int a = first + i * 3, b = first + (i + 1) % n * 3;
-            mesh.Both(centre, a, b);
+            mesh.Tri(centre, a, b);
             for (int ring = 0; ring < 2; ring++)
             {
-                mesh.Both(a + ring, b + ring, b + ring + 1);
-                mesh.Both(a + ring, b + ring + 1, a + ring + 1);
+                mesh.Tri(a + ring, b + ring, b + ring + 1);
+                mesh.Tri(a + ring, b + ring + 1, a + ring + 1);
             }
         }
         return mesh;

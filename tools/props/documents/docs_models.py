@@ -182,7 +182,7 @@ def folder():
     board_top, board_bot = -0.0032, -0.0052
     sheet = 0.0004
     spine_l, spine_r = 0.466, 0.543
-    y_top, y_bot = 0.069, 0.986
+    y_top, y_bot = 0.072, 0.983
     ramp = 0.045  # shares of the width each half dips over toward the spine (the halves lie open)
     dip = 0.0006
 
@@ -194,10 +194,10 @@ def folder():
     # Each half: a flat board with its outer corners rounded, then a ramp dipping into the spine.
     for side in ('left', 'right'):
         if side == 'left':
-            x0, x1, xr = 0.0244, spine_l - ramp, spine_l
+            x0, x1, xr = 0.027, spine_l - ramp, spine_l
             radii = (0.006, 0.0, 0.0, 0.006)
         else:
-            x0, x1, xr = spine_r + ramp, 0.9814, spine_r
+            x0, x1, xr = spine_r + ramp, 0.979, spine_r
             radii = (0.0, 0.006, 0.006, 0.0)
         (ax, ay), (bx, by) = F(x0, y_bot), F(x1, y_top)
         poly = rounded_rect(ax, ay, bx, by, radii)
@@ -254,8 +254,8 @@ def folder():
 
     # The pocket flaps: a card on each half (the art's), standing proud of the board.
     flaps = [
-        [(0.020, 0.970), (0.095, 0.895), (0.098, 0.335), (0.090, 0.312), (0.075, 0.305), (0.030, 0.310), (0.022, 0.330)],
-        [(0.924, 0.910), (0.935, 0.925), (0.982, 0.968), (0.982, 0.462), (0.930, 0.548), (0.924, 0.565)],
+        [(0.027, 0.962), (0.095, 0.895), (0.098, 0.335), (0.090, 0.312), (0.075, 0.305), (0.032, 0.312), (0.027, 0.330)],
+        [(0.924, 0.910), (0.935, 0.925), (0.978, 0.962), (0.978, 0.468), (0.930, 0.548), (0.924, 0.565)],
     ]
     for poly in flaps:
         pts = [F(sx, sy) for sx, sy in poly]

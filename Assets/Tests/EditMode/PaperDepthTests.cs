@@ -71,4 +71,20 @@ public class PaperDepthTests
         Assert.AreEqual(Reach(a), Reach(b), Eps, "the rim lies outside both ways");
         Assert.Greater(Reach(b), 0.5f);
     }
+
+    [Test]
+    public void Shadow_ARoundCornersSolidCore_NeverCrossesItself_EvenWide()
+    {
+        // A card's round corner (a 3 mm radius) under a held paper's wide shadow (22 mm): before, its core points
+        // passed the corner's centre and their triangles folded over, darkening wedges at the corners.
+        List<(float x, float y)> outline = PaperSilhouette.Outline(0.14f, 0.22f, 0.003f).ConvertAll(q => (q.x / 0.14f, q.y / 0.22f));
+        DepthMesh shadow = PaperDepth.Shadow(outline, 0.14f, 0.22f, 0f, 0.022f, 0f, 0f, 0.4f);
+        for (int i = 0; i < outline.Count; i++)
+        {
+            (float x, float y, float z) core = shadow.Vertices[1 + i * 3];
+            Assert.LessOrEqual(System.Math.Abs(core.x), System.Math.Abs(outline[i].x) + 1e-5f, "each core point lies between its outline point and the centre");
+            Assert.LessOrEqual(System.Math.Abs(core.y), System.Math.Abs(outline[i].y) + 1e-5f);
+        }
+        Assert.AreEqual(3 * (outline.Count + 4 * outline.Count), shadow.Triangles.Count, "each triangle once (the shader draws both sides)");
+    }
 }

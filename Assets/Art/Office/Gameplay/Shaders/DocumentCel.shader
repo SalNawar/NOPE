@@ -17,6 +17,7 @@ Shader "TimeDesk/DocumentCel"
         _ShadeColor ("Shade tone", Color) = (0.84, 0.79, 0.9, 1)
         _DarkColor ("Dark tone", Color) = (0.62, 0.55, 0.72, 1)
         _Cutoff ("Alpha cut-out (0: none)", Range(0, 1)) = 0
+        _HoleColor ("Colour where the art is clear (no cut-out)", Color) = (0.68, 0.53, 0.36, 1)
     }
 
     SubShader
@@ -47,6 +48,7 @@ Shader "TimeDesk/DocumentCel"
                 half4 _ShadeColor;
                 half4 _DarkColor;
                 half _Cutoff;
+                half4 _HoleColor;
             CBUFFER_END
 
             struct Attributes
@@ -82,6 +84,8 @@ Shader "TimeDesk/DocumentCel"
                 half4 art = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
                 if (_Cutoff > 0)
                     clip(art.a - _Cutoff);
+                else if (art.a < 0.5)
+                    art.rgb = _HoleColor.rgb; // a model's edge over the art's clear margin: the card's own colour, not the clear texels' leftovers
                 float3 n = normalize(input.normalVS);
                 // The side turned to the viewer (view space looks down -z: a face toward the camera has n.z > 0).
                 if (n.z < 0)
