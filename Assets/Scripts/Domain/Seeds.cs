@@ -215,6 +215,17 @@ public static class Seeds
     /// </summary>
     public static int ForWaiverSign(int caseSeed) => Mix(caseSeed, WaiverSignSalt);
 
+    /// <summary>Salt for a traveller's forgetting stream ("FRGT").</summary>
+    public const int ForgetSalt = 0x46524754;
+
+    /// <summary>
+    /// Seed for whether one traveller forgets their forgettable papers (the
+    /// Entry Ticket; DocumentHandOvers.Forgets): one draw against their
+    /// personality's forgetPaper chance. Its own stream, so forgetting never
+    /// moves who travels, who lies or what they carry.
+    /// </summary>
+    public static int ForForgetting(int caseSeed) => Mix(caseSeed, ForgetSalt);
+
     /// <summary>Salt for a liar's slip stream ("SLIP").</summary>
     public const int SlipSalt = 0x534C4950;
 

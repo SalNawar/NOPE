@@ -9949,7 +9949,7 @@
       "asset": "DayPlan_Inv_Day2",
       "day": 2,
       "queue": 10,
-      "bulletin": "NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport's, and its departure date must be today.",
+      "bulletin": "NEW: the Entry Ticket. Most travellers hand it over with their Passport; ask for it when one forgets. Its Citizen ID must match the Passport's, and its departure date must be today.",
       "papers": [
         "TC-101",
         "TC-230"
@@ -11853,7 +11853,8 @@
       "note": "Tells you everything, then a bit more.",
       "waiverRefusal": 0.05,
       "strandingFate": "News",
-      "confess": 0.6
+      "confess": 0.6,
+      "forgetPaper": 0.3
     },
     {
       "id": "curt",
@@ -11861,7 +11862,8 @@
       "weight": 1,
       "note": "Time is money, and in 2150 the queue bills by the minute.",
       "waiverRefusal": 0.3,
-      "confess": 0.3
+      "confess": 0.3,
+      "forgetPaper": 0.15
     },
     {
       "id": "anxious",
@@ -11870,7 +11872,8 @@
       "note": "Worried about paradoxes, transponders, butterflies and you.",
       "waiverRefusal": 0.05,
       "strandingFate": "Forgotten",
-      "confess": 0.8
+      "confess": 0.8,
+      "forgetPaper": 0.35
     },
     {
       "id": "sunny",
@@ -11878,7 +11881,8 @@
       "weight": 1,
       "note": "Believes every word the agency prints.",
       "waiverRefusal": 0.05,
-      "confess": 0.7
+      "confess": 0.7,
+      "forgetPaper": 0.15
     },
     {
       "id": "grand",
@@ -11887,7 +11891,8 @@
       "note": "Treats the desk as staff, whatever their account says.",
       "waiverRefusal": 0.5,
       "strandingFate": "Carry",
-      "confess": 0.15
+      "confess": 0.15,
+      "forgetPaper": 0.3
     },
     {
       "id": "stickler",
@@ -11895,7 +11900,8 @@
       "weight": 1,
       "note": "Knows the regulations better than the clerk and says so.",
       "waiverRefusal": 0.1,
-      "confess": 0.5
+      "confess": 0.5,
+      "forgetPaper": 0.05
     },
     {
       "id": "glum",
@@ -11904,7 +11910,8 @@
       "note": "The debt won years ago; this is just the paperwork.",
       "waiverRefusal": 0.05,
       "strandingFate": "Forgotten",
-      "confess": 0.4
+      "confess": 0.4,
+      "forgetPaper": 0.25
     }
   ],
   "interview": {
@@ -76936,7 +76943,7 @@
         "feature": "paper:TC-230",
         "title": "THE ENTRY TICKET",
         "named": "Entry Ticket",
-        "check": "Its Citizen ID and its departure date. Ask for it: flag it on the PAPERS tab, then ask on the wheel.",
+        "check": "Its Citizen ID and its departure date. Most travellers hand it over with their Passport; when one forgets it, flag it on the PAPERS tab, then ask on the wheel.",
         "against": "The Passport's Citizen ID; the calendar for the date.",
         "fault": "KTR-418 on the Passport, KTR-481 on the ticket: doctored.",
         "point": "field:TC-230/CitizenId",

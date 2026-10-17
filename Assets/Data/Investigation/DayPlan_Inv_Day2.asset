@@ -16,8 +16,9 @@ MonoBehaviour:
   visitorsCount: 10
   shiftStartMinute: -1
   shiftEndMinute: -1
-  bulletin: 'NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport''s,
-    and its departure date must be today.'
+  bulletin: 'NEW: the Entry Ticket. Most travellers hand it over with their Passport;
+    ask for it when one forgets. Its Citizen ID must match the Passport''s, and its
+    departure date must be today.'
   papers:
   - TC-101
   - TC-230

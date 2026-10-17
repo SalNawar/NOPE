@@ -8,14 +8,33 @@ public enum DocumentHandOver
     OnRequest,
 
     /// <summary>When the traveller steps up to the desk.</summary>
-    OnArrival
+    OnArrival,
+
+    /// <summary>With the arrival papers, unless the traveller forgets it (Saleh 2026-10-17: "they should forget to give it to you some time"; a seeded chance, their personality's forgetPaper): forgotten, the desk asks for it.</summary>
+    Forgettable
 }
 
 /// <summary>The one rule over DocumentHandOver.</summary>
 public static class DocumentHandOvers
 {
-    /// <summary>True when a document with this hand-over waits for the desk to ask (it then gets a hub request and counts toward the hub's size).</summary>
-    public static bool IsRequested(DocumentHandOver handOver) => handOver == DocumentHandOver.OnRequest;
+    /// <summary>True when a document with this hand-over may wait for the desk to ask (it then gets a request on the papers menu and counts toward the hub's size): on request, or a paper a traveller can forget.</summary>
+    public static bool IsRequested(DocumentHandOver handOver) => handOver == DocumentHandOver.OnRequest || handOver == DocumentHandOver.Forgettable;
+
+    /// <summary>One traveller's hand-over of a paper whose template says <paramref name="handOver"/>: a forgettable paper comes with the arrival papers, or on request when they <paramref name="forgot"/> it; any other as its template says.</summary>
+    public static DocumentHandOver ForTraveller(DocumentHandOver handOver, bool forgot) =>
+        handOver != DocumentHandOver.Forgettable ? handOver : forgot ? DocumentHandOver.OnRequest : DocumentHandOver.OnArrival;
+
+    /// <summary>
+    /// Whether a traveller forgets their forgettable papers: one draw of
+    /// <paramref name="rng"/> (their own stream, Seeds.ForForgetting) against
+    /// <paramref name="chance"/> (their personality's forgetPaper), made
+    /// whatever they carry, so it never depends on the papers.
+    /// </summary>
+    public static bool Forgets(float chance, IRandomSource rng)
+    {
+        float u = rng != null ? rng.Value() : 1f;
+        return u < chance;
+    }
 }
 
 /// <summary>One of the current traveller's documents, as the desk and the interview see it.</summary>
@@ -33,7 +52,7 @@ public sealed class CaseDocument
     /// <summary>The document's fields: the boxes its paper's form shows.</summary>
     public IReadOnlyList<DocumentField> fields;
 
-    /// <summary>When the traveller hands it over.</summary>
+    /// <summary>When this traveller hands it over (DocumentHandOvers.ForTraveller: a forgettable paper on arrival, or on request when forgotten).</summary>
     public DocumentHandOver handOver;
 
     /// <summary>True when the paper carries the traveller's photo (DocumentTemplateSO.showsPhoto).</summary>

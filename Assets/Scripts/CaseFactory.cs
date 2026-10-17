@@ -96,6 +96,9 @@ public sealed class CaseFactory
     /// <summary>The current traveller's waiver-signing stream (Seeds.ForWaiverSign): their one answer to the desk's pad, which reads nothing but the chance.</summary>
     private IRandomSource _waiverSignRng = new SeededRandom(0);
 
+    /// <summary>The current traveller's forgetting stream (Seeds.ForForgetting): one draw, whether they forget their forgettable papers (the Entry Ticket), which reads nothing but the chance.</summary>
+    private IRandomSource _forgetRng = new SeededRandom(0);
+
     /// <summary>The current traveller's look stream (Seeds.ForLooks): gender when unknown, skin, face, hair colour.</summary>
     private IRandomSource _looksRng = new SeededRandom(0);
 
@@ -263,6 +266,7 @@ public sealed class CaseFactory
             _personalityRng = new SeededRandom(Seeds.ForPersonality(caseSeed));
             _slipRng = new SeededRandom(Seeds.ForSlip(caseSeed));
             _waiverSignRng = new SeededRandom(Seeds.ForWaiverSign(caseSeed));
+            _forgetRng = new SeededRandom(Seeds.ForForgetting(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
             _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
@@ -622,6 +626,13 @@ public sealed class CaseFactory
         inst.confess = voice != null ? voice.confess : 0f;
         bool carriesSigned = inst.documents.Any(d => d != null && d.template != null && d.template.formNumber == Directives.Waiver && Directives.IsSigned(d.fields));
         inst.waiverPadReply = Waivers.PadReply(inst.deskWaiver != null, carriesSigned, voice != null ? voice.waiverRefusal : 0f, _waiverSignRng);
+
+        // 8.25) The papers they hand over unasked (Saleh 2026-10-17): a forgettable paper (the Entry Ticket) comes with the
+        //       arrival papers unless they forget it, one draw on their own stream against their personality's chance.
+        bool forgets = DocumentHandOvers.Forgets(voice != null ? voice.forgetPaper : 0f, _forgetRng);
+        foreach (DocumentInstance doc in inst.documents)
+            if (doc != null && doc.template != null)
+                doc.handOver = DocumentHandOvers.ForTraveller(doc.template.handOver, forgets);
 
         // 8.3) What a citation slip would name (lesson 6): the rule and the exact values of their fault, or the line of a wrong denial.
         inst.citation = CitationOf(inst, plan, lie);
