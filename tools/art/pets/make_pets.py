@@ -1,5 +1,5 @@
 """Pet coats (the Home pet spec PS11): keys the Canva pet art's magenta background and paints the white coat into five
-coats per animal, then installs them as the game's art slots, each with its closed-eye blink picture.
+coats per animal, then installs them as the game's art slots (their animation frames: make_pet_frames.py).
 
 The base art (src/pet_<kind>_<mood>.png, made in Canva for run 7) is a white-coated dog and cat in four moods each
 (idle, happy, sad, sick), drawn in the same pose so the game can swap them in place. Every coat is painted over the same
@@ -8,18 +8,13 @@ pixels, so all coats and moods line up, and the line art, the eyes, the nose and
 v3 (Saleh 2026-10-17: "dog and cat coats are weird"): a coat is no longer a flat two-colour tint. The white fur's own
 cel shading (its luminance: the lit fur, its shadow, the hatching's deep tone and the sheen) is mapped through a
 four-tone ramp per coat (deep, shadow, base, highlight; shadows lean violet as the game's cel style does), and the
-markings come from the rigs' marks (Assets/Art/UI/Resources/Home/pet_rigs.json): pale fur (a tan dog's cream muzzle,
+markings come from the rigs' marks (tools/art/pets/pet_rigs.json): pale fur (a tan dog's cream muzzle,
 chest and paws, a charcoal dog's white blaze, a ginger cat's cream chin and chest) with a fur-ragged edge, a dog's
 inner ear, and tabby stripes for the ginger and cream cats (bands across the flank, the legs, the tail and the brow,
 their wobble from a seeded noise). A black cat's highlights lean blue (its sheen).
 
-The blink (make_pet_frames.py): for each mood whose eyes are open, pet_<kind>_<coat>_<mood>_blink.png
-is the picture's eyes shut: each eye's ellipse (the rig's eyes) filled with the fur around it (a normalized
-convolution of the fur outside) and a closed lid drawn across it in the line art's ink; transparent elsewhere, so the
-game lays it over the coat's picture for a blink.
-
-Output: Assets/Art/UI/Resources/Home/pet_<kind>_<coat>_<mood>.png (1024x1024, transparent; ArtSlots.PetSprite) and
-the blinks (for the frame-by-frame animation, make_pet_frames.py), each with a .meta whose GUID is fixed (derived from the file's name), so a regenerated
+Output: Assets/Art/UI/Resources/Home/pet_<kind>_<coat>_<mood>.png (1024x1024, transparent; ArtSlots.PetSprite), each
+with a .meta whose GUID is fixed (derived from the file's name), so a regenerated
 file keeps its GUID. Unity fills in the importer's settings on import (ArtSlotImporter). The coats' ids must match
 world_source.json home.pet.kinds[].coats.
 
@@ -41,14 +36,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "src")
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 OUT = os.path.join(REPO, "Assets", "Art", "UI", "Resources", "Home")
-RIGS = os.path.join(OUT, "pet_rigs.json")
+RIGS = os.path.join(HERE, "pet_rigs.json")
 MOODS = ["idle", "happy", "sad", "sick"]
 SIZE = 1024
 LUMA = np.array([0.299, 0.587, 0.114], dtype=np.float32)
 MAX_HIGHLIGHT_PIXELS = 500  # at 1024x1024: eye highlights are under 300 px (a far leg's fur is ~2,600)
 HIGHLIGHT_RING_LUM = 0.36  # an eye highlight's ring (iris, pupil) is darker than this; a fur speck's is lighter
 STOPS = {"dog": [0.58, 0.78, 0.94, 0.985], "cat": [0.55, 0.73, 0.96, 0.995]}  # the white fur's tones: hatching, cel shadow, lit fur, sheen
-INK = (58, 38, 46)  # the closed lid's line: the art's brown-violet ink
 
 # A coat: ramps of four colours (deep, shadow, base, highlight) at its kind's STOPS for the fur, the pale marks and the stripes
 # (with the stripes' strength), and the inner ear's colour. None: the art's own white, untouched (a white cat).
@@ -229,42 +223,6 @@ def line_darkening(coat) -> float:
     return float(np.clip(shadow_lum / 0.45, 0.4, 1.0))
 
 
-def blink(rgb: np.ndarray, fur: np.ndarray, rig, ink) -> np.ndarray:
-    """The eyes shut: each eye's ellipse filled with the fur around it and a closed lid drawn across in <ink>; RGBA,
-    transparent elsewhere."""
-    out = np.zeros((SIZE, SIZE, 4), np.float32)
-    lids = Image.new("L", (SIZE * 4, SIZE * 4), 0)
-    draw = ImageDraw.Draw(lids)
-    for e in rig["eyes"]:
-        grown = dict(center=e["center"], radius=[e["radius"][0] * 1.12, e["radius"][1] * 1.18])
-        d = ellipse_distance(grown)
-        # The fur just round the eye, less any other tone (a pale muzzle below, a shadow above): the median's.
-        ring = (fur > 0.85) & (d > 1.05) & (d < 1.6)
-        lum = rgb @ LUMA / 255
-        mid = np.median(lum[ring]) if ring.any() else 0.5
-        known = ring & (np.abs(lum - mid) < 0.06)
-        sigma = e["radius"][1] * SIZE * 0.8
-        wk = ndimage.gaussian_filter(known.astype(np.float32), sigma)
-        fill = np.stack([ndimage.gaussian_filter(rgb[..., c] * known, sigma) for c in range(3)], -1) / (wk[..., None] + 1e-6)
-        a = 1 - smoothstep(0.92, 1.0, d)
-        sel = a > 0
-        out[sel, :3] = fill[sel]
-        out[sel, 3] = np.maximum(out[sel, 3], a[sel])
-        # The lid: a gentle downward curve across the eye, a little below its middle, with a lash at the outer corner.
-        cx, cy = e["center"][0] * SIZE * 4, e["center"][1] * SIZE * 4
-        rx, ry = e["radius"][0] * SIZE * 4, e["radius"][1] * SIZE * 4
-        width = max(12, int(ry * 0.2))
-        pts = [(cx + rx * 0.95 * t, cy + ry * 0.12 + ry * 0.32 * (1 - t * t)) for t in np.linspace(-1, 1, 24)]
-        draw.line(pts, fill=255, width=width, joint="curve")
-        outer = 1 if cx > SIZE * 4 * rig["head"]["center"][0] else -1
-        end = pts[-1] if outer > 0 else pts[0]
-        draw.line([end, (end[0] + outer * rx * 0.28, end[1] - ry * 0.22)], fill=255, width=max(8, width * 2 // 3))
-    lid = np.asarray(lids.resize((SIZE, SIZE), Image.LANCZOS)).astype(np.float32) / 255
-    out[..., :3] = out[..., :3] * (1 - lid[..., None]) + ink * lid[..., None]
-    out[..., 3] = np.maximum(out[..., 3], lid)
-    return out
-
-
 def fixed_guid(name: str) -> str:
     """A GUID derived from the file's name: the same file always gets the same one."""
     return hashlib.md5(("TimeSorter/Art/UI/Resources/Home/" + name).encode("utf-8")).hexdigest()
@@ -317,14 +275,9 @@ def main():
                 alpha = key(src)
                 rgb = despill(src, alpha)
                 seed = 1000 * (kind == "cat") + 10 * mi  # the same stripes and ragged edges for every coat of a mood
-                painted, fur = paint(rgb, rig, colours, seed, STOPS[kind])
+                painted, _ = paint(rgb, rig, colours, seed, STOPS[kind])
                 img = Image.fromarray(np.dstack([np.clip(painted, 0, 255), alpha * 255]).astype(np.uint8), "RGBA")
                 save(img, f"pet_{kind}_{coat}_{mood}.png")
-                if rig["eyes"]:
-                    b = blink(painted, fur, rig, np.array(INK, np.float32) * line_darkening(colours))
-                    b[..., 3] *= alpha
-                    b[..., 3] *= 255
-                    save(Image.fromarray(np.clip(b, 0, 255).astype(np.uint8), "RGBA"), f"pet_{kind}_{coat}_{mood}_blink.png")
                 imgs.append((mood, img))
             rows.append((kind, coat, imgs))
             print("painted", kind, coat, flush=True)
