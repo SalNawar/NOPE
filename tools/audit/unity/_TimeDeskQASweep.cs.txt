@@ -360,7 +360,7 @@ public static class _TimeDeskQASweep
         yield return Seconds(0.5f);
         Check(charcoal != null && !charcoal.interactable && CoatButton(title, "cream").interactable, "adopt: the charcoal swatch shows it is chosen, the default one is live again");
         string preview = PetPicture((PetStandIn)Field(title, "adoptPreview"));
-        Check(preview == "pet_dog_charcoal_idle", $"adopt: the preview shows the dog in the charcoal coat, idle ('{preview}')");
+        Check(preview != null && preview.StartsWith("pet_dog_charcoal_idle"), $"adopt: the preview shows the dog in the charcoal coat, idle, a frame of its loop ('{preview}')");
         yield return Shot("title", "adopt_coat");
         input.text = "Biscuit";
         ((Button)Field(title, "adoptButton")).onClick.Invoke();
