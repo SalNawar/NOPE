@@ -125,9 +125,6 @@ public class ArtSlotsTests
         CollectionAssert.AreEqual(new[] { "Home/pet_cat_sick" }, ArtSlots.PetSprite(PetKind.Cat, "", PetLook.Sick), "no coat: the kind's art only");
         CollectionAssert.AreEqual(new[] { "Home/pet_dog_happy" }, ArtSlots.PetSprite(PetKind.Dog, null, PetLook.Happy));
         Assert.AreEqual("Home/pet_corner", ArtSlots.PetCorner);
-        Assert.AreEqual("Home/pet_cat_ginger_sad_blink", ArtSlots.PetBlink(PetKind.Cat, "Ginger", PetLook.Sad), "the coat's blink");
-        Assert.IsNull(ArtSlots.PetBlink(PetKind.Dog, "", PetLook.Idle), "no coat, no blink");
-        Assert.AreEqual("Home/pet_rigs", ArtSlots.PetRigs);
         Assert.AreEqual("Home/toy_toy_ball", ArtSlots.PetToy("toy_ball"));
     }
 

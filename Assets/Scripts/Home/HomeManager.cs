@@ -262,7 +262,7 @@ public sealed class HomeManager : MonoBehaviour
         string body = NeedsText(tonight, "\n") + (_care.Electricity ? string.Empty : "\n" + UiText.Get("home.pet.dark"));
         homeUI.ShowPet(UiText.Format("home.pet.title", Pet.name), body, Pet.kind, Pet.coat, PetRules.Look(tonight), _care.Electricity, reaction,
                        UiText.Format("home.pet.pat", Pet.name), HandlePat, toys, UiText.Get("home.pet.noToys"),
-                       UiText.Get(ShopNext ? "home.next.house" : "home.next.slots"), ShowShop, played, _care.Food);
+                       UiText.Get(ShopNext ? "home.next.house" : "home.next.slots"), ShowShop, played);
     }
 
     /// <summary>A pat: the kind's next reaction line (PetContent.InTurn), no change to its needs.</summary>

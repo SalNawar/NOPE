@@ -385,11 +385,10 @@ public sealed class HomeUIController : MonoBehaviour
     /// or for sale (<paramref name="toys"/>; <paramref name="noToys"/> without one), and
     /// the continue button, labelled <paramref name="continueLabel"/>, calling
     /// <paramref name="onContinue"/> (or immediately if unwired). Shown again
-    /// after a toy (<paramref name="played"/>), the pet hops; opened on a night
-    /// its food was paid (<paramref name="fed"/>), it eats.
+    /// after a toy (<paramref name="played"/>), the pet spins.
     /// </summary>
     public void ShowPet(string title, string body, PetKind kind, string coat, PetLook look, bool lit, string reaction, string patLabel, Func<string> onPat,
-                        IReadOnlyList<ToyView> toys, string noToys, string continueLabel, Action onContinue, bool played = false, bool fed = false)
+                        IReadOnlyList<ToyView> toys, string noToys, string continueLabel, Action onContinue, bool played = false)
     {
         if (!HasPetPanel)
         {
@@ -433,8 +432,6 @@ public sealed class HomeUIController : MonoBehaviour
                 petView.Show(kind, coat, look, lit);
             if (played)
                 petView.Play();
-            else if (opening && fed)
-                petView.Feed();
         }
     }
 
