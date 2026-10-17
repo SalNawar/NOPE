@@ -230,3 +230,36 @@ Each machine follows the same pattern as the two machines above:
 - **Feel:**
   - sounds: **new** `belt_run` (a loop), **new** `xray_scan`, **new** `scale_settle` (a needle wobble);
   - the monitor's scanline sweeps.
+
+## 9. As built (2026-10-17)
+What landed on `feat/desk-machines`, and where the build departs from §1 and §4. Every departure is **my decision**, not Saleh's; each can be turned back.
+
+### 9.1 The two machines
+- **Chip reader** (`ChipReader`, `DeskHardware`): a paper is dropped on its pad (a passport or a card alike; no separate card slot). It slides in, READING ticks, then CHIP OK, NO CHIP or MISMATCH. Decision: the VFD is one line, so after MISMATCH it cycles each differing line ("CITIZEN ID QRT-301"). In inspect mode a click on the readout logs the shown line against its box.
+- **UV torch** (`UvTorch`): Decision: the cradle sits on the mat's front-right corner, inside the reading view, not the front-left edge (from the left it was out of the reading view, and the held torch covered the papers). The torch is held as a right hand holds it, so its body never hides what its cone shows. A fault mark seen in the cone leaves a violet tick on its box; in inspect mode a click on the tick logs it.
+- **Hidden lies join the day after their machine** (Decision): `WashedPaper` days 8-15, `ClonedChip` days 12-15. Generate World refuses a hidden lie listed before its machine (`HiddenLies.Problems`).
+- **One-click logging** (Decision): a machine's reading is logged as a pair (the reading and its box) from the desk (tick, readout) or from the scanned copy's UV and CHIP tabs.
+
+### 9.2 The upgrades' desk objects
+All placed by `DeskConfigSO` knobs (a viewport point of the office view at 16:9 and a yaw each; `upgradeScale` 1.25). Built by Build Office UI from the props' models (`tools/props/machines/upgrade_props_model.py`); a model missing a part of its contract (`PropArt`) leaves its object out with a warning. What each shows is pure Domain (`UpgradeObjects`, tested).
+
+| Object | Shown when | Where (Decision) | Interaction as built | Cues |
+|---|---|---|---|---|
+| Supply crate (`SupplyCrate`) | a morning with deliveries (`Orders.DeliveredOn`) | on the mat, right of the rulebook; it shows once the briefing is closed | click: the tape tears, the four flaps pop one by one, a tag with the delivered upgrades' names springs up; the day's new objects pop onto the desk and a new cartridge drops into the rack; the crate sinks away. Left shut, it opens itself when AVAILABLE is pressed | `crate_tear`, `crate_pop` |
+| Auto-Feed tray (`ScannerAddOns`) | the Auto-Feed Scanner installed | on the scanner's left side (its own model, in the scanner's frame) | a paper it takes in zips through the rollers and blinks the FEED lamp; the rollers turn while a scan runs. Decision: no click, and no crate under the desk when it is owned but not installed (nothing shows) | `adf_feed` |
+| Analysis beacon (`ScannerAddOns`) | the Analysis Scanner installed | on the scanner's back right corner | every analysis pass pops the pod: lit amber and spinning for 2.6 s when it marks a pair, half way and unlit when it marks none. Decision: no click to push it down, no extra readout row | `beacon_pop`, `scanner_flag` |
+| Protocol card ring (`ProtocolRing`) | `interview_protocols` owned | Decision: on its own weighted stand at the desk's left, by the cash register (the art office has no microphone stem) | click: the four cards flick over the ring one after another; a new traveller flicks the front card | `ui_tab` |
+| BABEL rack (`BabelRack`) | any Speech translator owned | behind the DETAIN button, between the cash register and the AVAILABLE sign | a cartridge per owned pack (packs' order); one delivered today drops into its bay when the crate opens; while a translated line goes up its lamp glows and the VU needle dances (`TravellerWheel.TongueTranslated`); click: test chirp, the needle swings to the red, the lamps blink | `cartridge_in`, `translator_chirp` |
+| Lens stand (`LensKit`) | the Translation Lens's reach (`TranslationLens.Reach`) | the desk's front left, between the PC and the mat | the loupe (Word), the bar magnifier (Sentence), the Fresnel arm (Object); every word the lens turns ticks the loupe a notch (`TranslationLensPresenter.WordTurned`); click: the arm folds down over the desk or back up (without the arm, the loupe spins). Decision: no glint or sheen yet | `loupe_tick`, `arm_fold` |
+| Rolodex (`Rolodex`) | `diplo_contacts` owned | right of the chip reader, behind the calculator | drag it up or down and the drum turns with the pointer, spins on and settles on a card; a click flicks it on a few cards. Decision: no lore line on the card yet | `rolodex_flick` |
+| RING SERVICE panel (`RingPanel`) | any ring's repair owned | the desk's right, toward the portals | module n shows portal n: lamp lit while in service today, breaker up, a SERVICED sticker once its repair is owned; click a breaker: the relay clacks, the breaker snaps and its lamp blinks; a traveller going through a portal flashes its lamp (`GameManager.Departed`). Decision: no pulse of the ring in the hall | `relay_clack` |
+
+The pet toys stay with the pets track (Saleh's answer 2).
+
+### 9.3 Sounds
+The cues above are `SoundCues` and rows 89-106 of `SOUND_LIST.md` (`ui_tab` and `scanner_flag` already existed). Until their files land, each plays a placeholder made in code (`CueSounds`).
+
+### 9.4 Overlaps
+- `fix/desk-1017` (scanner snapping, drops): `DeskController.FeedScanner` and `DeskScanner` gained one call each (the Auto-Feed's `Fed`, the beacon's `Flag`), and the builder's scanner art wires the add-ons.
+- `fix/travellers-1017` (dialogue): `TravellerWheel.Speak` raises `TongueTranslated`.
+- `feat/docs-3d-models` (papers): the UV layer is a child of each desk paper (`UvPaperLayer`), drawn over the paper's own quads.
