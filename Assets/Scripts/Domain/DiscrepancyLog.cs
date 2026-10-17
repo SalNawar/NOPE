@@ -86,6 +86,9 @@ public struct CompareEvidence
     /// <summary>A seal's office (the document design spec, D4): a paper's seal names the office that issues its form (DocumentField.issuer), a Seal Register row the office it pictures; blank for everything else.</summary>
     public string issuer;
 
+    /// <summary>Answer side: the clerk heard it untranslated (the traveller's tongue foreign today and its Speech translator not owned; Saleh 2026-10-17), so what it says is not understood: it proves nothing and matches nothing (FindingKind.NotUnderstood).</summary>
+    public bool notUnderstood;
+
     /// <summary>Evidence for a clicked document-field row of paper <paramref name="document"/> (its index in the case; -1 when unknown).</summary>
     public static CompareEvidence FromDocumentField(DocumentField field, int document) => new CompareEvidence
     {
@@ -135,13 +138,14 @@ public struct CompareEvidence
         recordOwner = owner
     };
 
-    /// <summary>Evidence for a clicked interview answer row: the canonical value the traveller said, a tell when <paramref name="isTell"/>.</summary>
-    public static CompareEvidence ForAnswer(ClueCategory category, string value, bool isTell) => new CompareEvidence
+    /// <summary>Evidence for a clicked interview answer row: the canonical value the traveller said, a tell when <paramref name="isTell"/>; not <paramref name="understood"/> when the clerk heard it untranslated (it then proves and matches nothing).</summary>
+    public static CompareEvidence ForAnswer(ClueCategory category, string value, bool isTell, bool understood = true) => new CompareEvidence
     {
         kind = EvidenceKind.Answer,
         category = category,
         value = value,
-        isAnachronism = isTell
+        isAnachronism = isTell,
+        notUnderstood = !understood
     };
 
     /// <summary>Evidence for a garment the player looked at: its source place's Culture value, a tell when <paramref name="isTell"/>.</summary>
@@ -279,6 +283,8 @@ public sealed class DiscrepancyLog
     /// </summary>
     public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId, string travellerName)
     {
+        if (a.notUnderstood || b.notUnderstood)
+            return null; // an answer heard untranslated says nothing the clerk understood (Saleh 2026-10-17)
         if (a.category == ClueCategory.Seal || b.category == ClueCategory.Seal)
             return SealProof(a, b);
         if (a.category == ClueCategory.Photo || b.category == ClueCategory.Photo)

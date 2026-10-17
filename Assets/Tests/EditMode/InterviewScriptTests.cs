@@ -906,13 +906,13 @@ public class InterviewScriptTests
     }
 
     [Test]
-    public void AnAnswer_KeepsItsValueInTheTongue_ButItsDigitsAndKeyWords()
+    public void AnAnswer_KeepsItsValueWhollyInTheTongue_ItsDigitsAndListedWordsToo()
     {
         InterviewCase c = Case(keyWords: KeyWordRule());
         c.answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "No coin: 1000 deben of copper", isTell = false } };
         DialogLine answer = Build(c).Node(InterviewScript.AskNodeId).Choices[1].Lines[1];
         Assert.AreEqual("We trade with No coin: 1000 deben of copper.", answer.Text);
-        Assert.AreEqual("No|1000", English(answer), "{value} is not a key slot; a listed word and digits inside it still are");
+        Assert.AreEqual("", English(answer), "Saleh 2026-10-17: untranslated, the answer's value is not understood: no listed word or digit inside it stays English");
     }
 
     [Test]

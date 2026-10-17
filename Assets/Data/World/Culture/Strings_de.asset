@@ -1906,6 +1906,19 @@ MonoBehaviour:
     text: "(un\xFCbersetzt {0}; {1}-\xDCbersetzer)"
     gloss: 0
     tier: 0
+  - key: compare.notUnderstood
+    text: NICHT VERSTANDEN
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotUnderstood
+    text: Nicht verstanden
+    gloss: 0
+    tier: 0
+  - key: finding.note.NotUnderstood
+    text: "Diese Antwort war nicht \xFCbersetzt: Sie haben sie nicht verstanden.
+      Nichts erfasst."
+    gloss: 0
+    tier: 0
   - key: slot.Outfit
     text: KLEIDUNG
     gloss: 0
@@ -6110,3 +6123,5 @@ MonoBehaviour:
     english: Camera sway
   - native: Erst
     english: First
+  - native: "\xFCbersetzt"
+    english: translated

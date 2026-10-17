@@ -315,6 +315,9 @@ public sealed class DocumentInstance
     /// <summary>Template this document was built from.</summary>
     public DocumentTemplateSO template;
 
+    /// <summary>When this traveller hands it over (CaseFactory: DocumentHandOvers.ForTraveller over its template's, so a forgettable paper is on arrival or, forgotten, on request).</summary>
+    public DocumentHandOver handOver;
+
     /// <summary>Structured, checkable fields (investigation feature).</summary>
     public readonly List<DocumentField> fields = new();
 

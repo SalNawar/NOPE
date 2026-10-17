@@ -141,7 +141,7 @@ public sealed class CaseBoardPresenter
         {
             AgencyOffice office = agency != null && agency.offices != null ? agency.offices.FirstOrDefault(o => o != null && o.id == id) : null;
             if (office != null && office.TryGetSeal(out Seal seal))
-                register.Add(new OverlayValue(ClueCategory.Seal, office.name, Seals.Describe(seal), office.id));
+                register.Add(new OverlayValue(ClueCategory.Seal, UiText.DocumentWord(office.name), Seals.Describe(seal), office.id));
         }
         if (register.Count > 0)
             sources.Add(new OverlaySource(UiText.Get("board.overlay.register"), register));

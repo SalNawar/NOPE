@@ -184,7 +184,7 @@ public static class DisplayText
         for (int k = 0; k < canonical.Length; k++)
         {
             char c = canonical[k];
-            int letter = Pseudoscript.LetterIndex(c);
+            int letter = Pseudoscript.GlyphIndex(c);
             if (!Pseudoscript.IsGlyph(canonical, k, reveal.English))
             {
                 sb.Append(c);

@@ -158,7 +158,9 @@ public static class InterviewScript
     /// and claimed era (Voices.Answer: the voice's row, else the question's
     /// override, else its answer) with the canonical value and the claimed
     /// place, carrying the answer's fact (the sentence around a tell's value is
-    /// the honest sentence, T3) and its key-word spans.
+    /// the honest sentence, T3) and its key-word spans, none inside the value:
+    /// untranslated, the value is wholly in the tongue, its digits too (Saleh
+    /// 2026-10-17: no understandable answer from a tongue the clerk cannot read).
     /// </summary>
     public static DialogLine AnswerLine(InterviewLines lines, InterviewQuestion q, InterviewCase c, InterviewAnswer a)
     {
@@ -166,7 +168,7 @@ public static class InterviewScript
         string value = a != null ? a.value : null;
         var fills = new Dictionary<string, string> { { Interview.ValueToken, value }, { Interview.PlaceToken, c?.claimPlace } };
         string text = Interview.Fill(Interview.Fill(answer.text, Interview.ValueToken, value), Interview.PlaceToken, c?.claimPlace);
-        return DialogLine.Answer(answer.id, text, a, KeyWords.Spans(answer.text, fills, c?.keyWords));
+        return DialogLine.Answer(answer.id, text, a, KeyWords.Spans(answer.text, fills, c?.keyWords, Interview.ValueToken));
     }
 
     /// <summary>

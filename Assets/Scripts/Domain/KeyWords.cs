@@ -25,13 +25,24 @@ public static class KeyWords
     /// rule asks. Sorted by start, overlapping or touching spans merged; empty
     /// for a null template or rule.
     /// </summary>
-    public static IReadOnlyList<(int start, int length)> Spans(string template, IReadOnlyDictionary<string, string> fills, KeyWordRule rule)
+    public static IReadOnlyList<(int start, int length)> Spans(string template, IReadOnlyDictionary<string, string> fills, KeyWordRule rule) =>
+        Spans(template, fills, rule, null);
+
+    /// <summary>
+    /// <see cref="Spans(string, IReadOnlyDictionary{string, string}, KeyWordRule)"/>
+    /// with <paramref name="tongueSlot"/>'s fill wholly in the tongue: no key
+    /// word, listed word or digit inside it stays English (Saleh 2026-10-17:
+    /// an answer's value, so a traveller the clerk cannot understand gives no
+    /// understandable answer, a date's digits included). Null: none.
+    /// </summary>
+    public static IReadOnlyList<(int start, int length)> Spans(string template, IReadOnlyDictionary<string, string> fills, KeyWordRule rule, string tongueSlot)
     {
         var spans = new List<(int start, int length)>();
         if (template == null || rule == null)
             return spans;
 
-        string text = Fill(template, fills, rule, spans);
+        var quiet = new List<(int start, int length)>();
+        string text = Fill(template, fills, rule, spans, tongueSlot, quiet);
         var map = new List<int>();
         string folded = TextMatch.Fold(text, map);
         foreach (string word in rule.words ?? new List<string>())
@@ -39,7 +50,31 @@ public static class KeyWords
                 AddWholeWords(text, folded, map, TextMatch.Fold(word, null), spans);
         if (rule.digits)
             AddDigitRuns(text, spans);
-        return Merge(spans);
+        return Cut(Merge(spans), quiet);
+    }
+
+    /// <summary>The spans with every character inside <paramref name="quiet"/> taken out (a span cut in two where a quiet range lies inside it).</summary>
+    private static List<(int start, int length)> Cut(List<(int start, int length)> spans, List<(int start, int length)> quiet)
+    {
+        foreach ((int qs, int ql) in quiet)
+        {
+            var kept = new List<(int start, int length)>();
+            foreach ((int s, int l) in spans)
+            {
+                int end = s + l, qEnd = qs + ql;
+                if (end <= qs || s >= qEnd)
+                {
+                    kept.Add((s, l));
+                    continue;
+                }
+                if (s < qs)
+                    kept.Add((s, qs - s));
+                if (end > qEnd)
+                    kept.Add((qEnd, end - qEnd));
+            }
+            spans = kept;
+        }
+        return spans;
     }
 
     /// <summary>
@@ -77,8 +112,9 @@ public static class KeyWords
         slot == Interview.PlaceToken || slot == Interview.NameToken || slot == Interview.DocumentToken ||
         slot == Interview.ValueToken || slot == Interview.HonorificToken;
 
-    /// <summary>The template with its filled slots (one pass, left to right), adding each listed slot's non-empty fill as a span.</summary>
-    private static string Fill(string template, IReadOnlyDictionary<string, string> fills, KeyWordRule rule, List<(int start, int length)> spans)
+    /// <summary>The template with its filled slots (one pass, left to right), adding each listed slot's non-empty fill as a span and <paramref name="tongueSlot"/>'s fills to <paramref name="quiet"/>.</summary>
+    private static string Fill(string template, IReadOnlyDictionary<string, string> fills, KeyWordRule rule, List<(int start, int length)> spans,
+                               string tongueSlot, List<(int start, int length)> quiet)
     {
         if (fills == null || fills.Count == 0)
             return template;
@@ -95,7 +131,9 @@ public static class KeyWords
             }
 
             value = value ?? string.Empty;
-            if (value.Length > 0 && rule.slots != null && rule.slots.Contains(slot))
+            if (value.Length > 0 && slot == tongueSlot)
+                quiet.Add((sb.Length, value.Length));
+            else if (value.Length > 0 && rule.slots != null && rule.slots.Contains(slot))
                 spans.Add((sb.Length, value.Length));
             sb.Append(value);
             i = close;

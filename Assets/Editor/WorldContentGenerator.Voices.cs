@@ -187,7 +187,7 @@ public static partial class WorldContentGenerator
         (cast ?? Array.Empty<PersonalityData>()).Select(p => p == null ? null : new Personality
         {
             id = p.id, name = p.name, weight = p.weight, note = p.note ?? string.Empty, waiverRefusal = p.waiverRefusal, strandingFate = p.strandingFate ?? string.Empty,
-            confess = p.confess
+            confess = p.confess, forgetPaper = p.forgetPaper
         }).ToList();
 
     /// <summary>Writes the cast into the library's personalities (field by field: the list holds plain rows).</summary>
@@ -206,6 +206,7 @@ public static partial class WorldContentGenerator
             row.FindPropertyRelative("note").stringValue = built[i].note;
             row.FindPropertyRelative("waiverRefusal").floatValue = built[i].waiverRefusal;
             row.FindPropertyRelative("confess").floatValue = built[i].confess;
+            row.FindPropertyRelative("forgetPaper").floatValue = built[i].forgetPaper;
             row.FindPropertyRelative("strandingFate").stringValue = built[i].strandingFate;
         }
         so.ApplyModifiedProperties();
@@ -345,7 +346,7 @@ public static partial class WorldContentGenerator
     // -----------------------------
 
     /// <summary>A personality of the cast (world_source.json "personalities").</summary>
-    [Serializable] private sealed class PersonalityData { public string id; public string name; public float weight; public string note; public float waiverRefusal; public string strandingFate; public float confess; }
+    [Serializable] private sealed class PersonalityData { public string id; public string name; public float weight; public string note; public float waiverRefusal; public string strandingFate; public float confess; public float forgetPaper; }
 
     /// <summary>interview.smallTalkWeights.</summary>
     [Serializable] private sealed class SmallTalkWeightsData { public float personality; public float home; public float kind; }

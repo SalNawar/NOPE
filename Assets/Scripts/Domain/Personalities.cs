@@ -29,6 +29,9 @@ public sealed class Personality
     /// <summary>The chance they crack when the desk asks about a difference the clerk logged while they lie (Confrontations.Outcome; wave 5, lesson 3): 0 to 1; otherwise they double down.</summary>
     public float confess;
 
+    /// <summary>The chance they forget to hand over a forgettable paper (the Entry Ticket) with the others, so the desk has to ask for it (DocumentHandOvers.Forgets; Saleh 2026-10-17): 0 to 1.</summary>
+    public float forgetPaper;
+
     /// <summary>The stranding fate their tilt multiplies (a StrandingFate's name; the spec's §6.2: GameConfigSO.strandingFateTilt); blank: none.</summary>
     public string strandingFate = string.Empty;
 
@@ -83,6 +86,8 @@ public static class Personalities
                 problems.Add($"personalities: '{p.id}' has a negative weight ({p.weight.ToString("0.###", CultureInfo.InvariantCulture)}).");
             if (!(p.waiverRefusal >= 0f && p.waiverRefusal <= 1f))
                 problems.Add($"personalities: '{p.id}' has a waiverRefusal of {p.waiverRefusal.ToString("0.###", CultureInfo.InvariantCulture)}; it is a chance from 0 to 1.");
+            if (!(p.forgetPaper >= 0f && p.forgetPaper <= 1f))
+                problems.Add($"personalities: '{p.id}' has a forgetPaper chance of {p.forgetPaper.ToString("0.###", CultureInfo.InvariantCulture)}; it is a chance from 0 to 1.");
             if (!(p.confess >= 0f && p.confess <= 1f))
                 problems.Add($"personalities: '{p.id}' has a confess chance of {p.confess.ToString("0.###", CultureInfo.InvariantCulture)}; it is a chance from 0 to 1.");
             if (!string.IsNullOrWhiteSpace(p.strandingFate) && p.StrandingTilt == null)

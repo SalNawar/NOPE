@@ -29,7 +29,7 @@ MonoBehaviour:
     label: Departure
   - category: 26
     label: Issuing Seal
-  handOver: 0
+  handOver: 2
   showsPhoto: 0
   askGroup: 
   form:
