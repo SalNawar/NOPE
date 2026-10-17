@@ -491,6 +491,8 @@ public sealed class GuideDirector : MonoBehaviour
             "calendar" => calendar,
             "board" => departureBoard,
             "scanner" => scanner,
+            "uv_torch" => desk != null && desk.Hardware != null && desk.Hardware.Torch != null ? desk.Hardware.Torch.transform : null,
+            "chip_reader" => desk != null && desk.Hardware != null && desk.Hardware.Reader != null ? desk.Hardware.Reader.transform : null,
             "counter" => _counter != null ? _counter.Strip : counter,
             _ => null
         };

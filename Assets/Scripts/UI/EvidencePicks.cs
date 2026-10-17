@@ -19,6 +19,17 @@ public static class EvidencePicks
             CompareEvidence.FromDocumentField(f, document));
     }
 
+    /// <summary>What a desk machine reads on a document's field (the desk machines spec §1): "Travel Passport · Its chip" or "· Under UV light", the reading as its value (a missing microprint: the layer's "none" line), a fault the machine marks: the truth that box is held against (DiscrepancyLog's hidden proof).</summary>
+    public static ComparePick ForHidden(int document, DocumentRow row, string value, ScanLayer layer, string documentName)
+    {
+        DocumentField f = row.Field;
+        string shown = string.IsNullOrEmpty(value) ? UiText.Format("layers.uv.MicroprintMissing", UiText.DocumentWord(f.label)) : value;
+        return new ComparePick(PickKeys.Hidden(document, row.Index, layer),
+            UiText.Format("document.compareLabel", documentName, UiText.Get(layer == ScanLayer.Chip ? "citation.label.chip" : "citation.label.ghost")),
+            shown,
+            CompareEvidence.ForHidden(f.category, value, document, true));
+    }
+
     /// <summary>The traveller's face (the look menu; the document design spec, D8): "Traveller · FACE", shown as the person at the desk, its evidence who they are (Looks.IdentityKey), the truth a photo is held against.</summary>
     public static ComparePick ForFace(TravellerLook look) =>
         new ComparePick(PickKeys.Face, UiText.Format("compare.travellerLabel", UiText.Get("compare.faceSlot")), UiText.Get("compare.faceShown"),

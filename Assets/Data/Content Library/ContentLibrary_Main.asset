@@ -18152,6 +18152,25 @@ MonoBehaviour:
         target: field:TC-310/Signature
         text: 'Practice: on a Standard passport, ask for the waiver, then hold today''s
           waiver rule against its signature.'
+    - id: uvtorch
+      feature: tool:uv_torch
+      title: THE UV TORCH
+      named: UV torch
+      check: 'A paper''s hidden layer: press the torch, drag its violet light over
+        the paper and let go. Every genuine paper shows the Bureau''s watermark;
+        every genuine seal its office''s microprint ring.'
+      against: 'The paper as printed: a ghost under a box (the value washed off it),
+        or a seal with no microprint, is a forgery. A seen fault leaves a violet
+        tick on its box: in inspect mode, click the tick to log it.'
+      fault: 'Under the name, the ghost of another name: a washed paper.'
+      point: uv_torch
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
     - id: workpermit
       feature: paper:TC-520
       title: THE WORK PERMIT
@@ -18225,6 +18244,24 @@ MonoBehaviour:
       against: 'The recall rule: every Driftbox 3 is grounded.'
       fault: Any departure on a Driftbox 3.
       point: paper:TC-240
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: chipreader
+      feature: tool:chip_reader
+      title: THE CHIP READER
+      named: chip reader
+      check: 'A chipped paper (the Passport, the Transponder Card): drop it on the
+        reader. READY, READING, then CHIP OK or MISMATCH and the line that differs.'
+      against: 'The paper''s own print: the chip holds what the office issued. In
+        inspect mode, click the reader''s line to log it; the scanned copy''s CHIP
+        tab shows it too.'
+      fault: 'A chip that reads another Citizen ID than the print: a cloned chip.'
+      point: chip_reader
       practice:
         id: 
         action: 0

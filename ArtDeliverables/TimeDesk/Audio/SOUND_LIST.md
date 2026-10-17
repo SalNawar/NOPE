@@ -144,4 +144,27 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 75 | `mus_desk_calm` | early shift, low and sparse (synth plus tape warble) | P3 |
 | 76 | `mus_desk_tense` | last hour / low stability layer | P3 |
 
-**Total:** 88 entries; about 168 files counting the variants. **P1 alone:** 43 entries.
+## 9. Desk machines and the upgrades' desk objects (the desk machines spec, 2026-10-17)
+
+| # | File | When it plays | Length | Character | Var | P |
+|---|---|---|---|---|---|---|
+| 89 | `chip_insert` | a paper slides onto the chip reader's pad, its slot flap flicking | 0.15 s | a chunky plastic clunk, a sprung flap | ×1 | P1 |
+| 90 | `chip_read` | the chip reader's readout ticks while it reads (six ticks) | 0.04 s | a tiny electronic tick, an 80s terminal's | ×2 | P2 |
+| 91 | `chip_ok` | the chip holds what the paper prints (CHIP OK) | 0.3 s | a two-tone rising beep, a card terminal's approval | ×1 | P1 |
+| 92 | `chip_fault` | the chip holds another value (MISMATCH) | 0.5 s | a low buzz, the terminal's refusal | ×1 | P1 |
+| 93 | `chip_eject` | the paper comes back off the reader | 0.12 s | a short mechanical push-out | ×1 | P2 |
+| 94 | `uv_on` | the UV torch's thumb switch slides on | 0.05 s | a small plastic slide switch's click | ×1 | P1 |
+| 95 | `uv_off` | the UV torch's switch slides off as it goes back to its cradle | 0.05 s | the same switch, a little softer | ×1 | P1 |
+| 96 | `uv_hum` | the UV torch's lamp while it is lit (loopable 1 s) | 1.0 s | a blacklight tube's soft ballast hum, faintly buzzing | loop | P2 |
+| 97 | `crate_tear` | the supply crate's tape is torn off on a delivery morning | 0.4 s | packing tape ripping off cardboard | ×2 | P2 |
+| 98 | `crate_pop` | the crate's flaps pop open, the item springs out | 0.2 s | cardboard flaps flopping, a small whoosh | ×1 | P2 |
+| 99 | `adf_feed` | the Auto-Feed's rollers pull a paper in | 0.5 s | rubber rollers zipping paper through | ×2 | P2 |
+| 100 | `beacon_pop` | the Analysis beacon pops up and spins | 0.2 s | a sprung pop and a motor starting | ×1 | P2 |
+| 101 | `cartridge_in` | a translator cartridge clunks into the BABEL rack | 0.12 s | a cartridge seating with a solid click | ×1 | P2 |
+| 102 | `translator_chirp` | the BABEL rack's test chirp (a click on it) | 0.2 s | a short rising electronic chirp | ×1 | P3 |
+| 103 | `loupe_tick` | the loupe's ring ticks as the Translation Lens flips a word | 0.03 s | a tiny brass detent | ×3 | P3 |
+| 104 | `arm_fold` | the Fresnel arm folds or unfolds | 0.25 s | a stiff hinge swinging with a soft stop | ×1 | P3 |
+| 105 | `relay_clack` | a RING SERVICE lamp or breaker is clicked | 0.06 s | a heavy relay closing | ×2 | P2 |
+| 106 | `rolodex_flick` | the Rolodex's cards flick past | 0.03 s | an index card flicking over a rail | ×4 | P3 |
+
+**Total:** 106 entries; about 194 files counting the variants. **P1 alone:** 48 entries.

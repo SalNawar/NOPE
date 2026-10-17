@@ -130,6 +130,9 @@ public static class PickKeys
     /// <summary>A Citizen Records row by the record it belongs to (CitizenRecord.Id: its number, else its name) and its category ("record:MRV-552:BirthDate"), so two records' rows are two picks (audit R4-009).</summary>
     public static string Record(ClueCategory category, string recordId) => "record:" + recordId + ":" + category;
 
+    /// <summary>What a desk machine reads on a document's field (the desk machines spec §1): its chip's line or a mark under UV, by the document's and the field's indices and the layer ("hidden:0:2:Chip").</summary>
+    public static string Hidden(int document, int field, ScanLayer layer) => "hidden:" + document + ":" + field + ":" + layer;
+
     /// <summary>The traveller's face (the look menu; the document design spec, D8): one per case.</summary>
     public const string Face = "face";
 

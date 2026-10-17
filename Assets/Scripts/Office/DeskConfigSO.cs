@@ -243,6 +243,40 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Where the DETAIN button stands on the desk: the point of the desk's plane the office view shows there at 16:9 (viewport x, y; the same spot of the desk at every aspect). Off the mat, where no paper lands (Saleh's 1008a playtest: "detain button is on the inspection area"): on the free desk between the cash register and the AVAILABLE sign, clear of the drawer, the scanner and the inspect button.</summary>
     public Vector2 detainView = new Vector2(0.405f, 0.21f);
 
+    [Header("Desk machines (the desk machines spec §1)")]
+    /// <summary>Where the chip reader stands on the desk: the point of the desk's plane the office view shows there at 16:9 (viewport x, y), and its turn from facing the chair (degrees). On the free desk between the AVAILABLE sign and the calculator, off the mat.</summary>
+    public Vector2 chipReaderView = new Vector2(0.62f, 0.19f);
+
+    /// <summary>The chip reader's turn from facing the chair (degrees; + turns its front toward the viewer's left).</summary>
+    public float chipReaderYaw = -12f;
+
+    /// <summary>Where the UV torch's cradle stands: from the desk's centre (the mat's), metres to the right and away from the chair in the office view's frame (rulebookAt's way). On the mat's front-right corner, inside the reading view, so the torch is taken up wherever the papers are read; papers keep clear of it.</summary>
+    public Vector2 uvTorchAt = new Vector2(0.36f, -0.16f);
+
+    /// <summary>The cradle's turn from facing the chair (degrees): -90 lays the torch across the view, its lens toward the mat.</summary>
+    public float uvTorchYaw = -90f;
+
+    /// <summary>The machines' size on the desk against their models' life size: the art office's desk props are drawn larger than life so they read from the chair, and the machines match them.</summary>
+    [Min(0.1f)] public float machineScale = 1.6f;
+
+    /// <summary>The UV torch's size against its model's life size (smaller than the other machines': it is held over the papers, close to the reading view).</summary>
+    [Min(0.1f)] public float uvTorchScale = 1f;
+
+    /// <summary>The chip reader's cycle (ChipReaderCycle): seconds a paper takes to go in, to be read, to show its result before it comes out, and to come out.</summary>
+    [Min(0f)] public float chipInsertSeconds = 0.35f, chipReadSeconds = 1.1f, chipResultSeconds = 1.2f, chipEjectSeconds = 0.35f;
+
+    /// <summary>Seconds each line stays on the reader's one-line readout before the next (it cycles MISMATCH and each differing line).</summary>
+    [Min(0.3f)] public float chipLineSeconds = 1.8f;
+
+    /// <summary>The UV torch's cone on the desk: its radius in metres.</summary>
+    [Min(0.01f)] public float uvConeRadius = 0.075f;
+
+    /// <summary>Where the held torch's lens rides from the lit spot (metres): how high over the desk, how far toward the chair and how far to the right (a right hand's hold, so the torch never hides what its cone shows).</summary>
+    [Min(0f)] public float uvHoldHeight = 0.12f, uvHoldBack = 0.04f, uvHoldSide = 0.14f;
+
+    /// <summary>The desk notes by each machine on its first day: UI string keys (world_source.json ui.strings).</summary>
+    public string uvHintKey = "desk.uvHint", chipHintKey = "desk.chipHint";
+
     /// <summary>How far below the office camera's forward (degrees, the art's pose) the desk still fills the view: on a screen narrower than 16:9 the office view widens toward the 16:9 width and tilts down, its top edge kept, no further than this (LensFit; past it the floor under the desk shows).</summary>
     [Range(0f, 89f)] public float officeViewBottom = 42f;
 

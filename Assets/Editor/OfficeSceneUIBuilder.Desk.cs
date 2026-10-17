@@ -616,8 +616,12 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();
 
+        // The desk machines (the desk machines spec §1): the chip reader and the UV torch.
+        DeskHardware hardware = BuildDeskHardware(office, config);
+
         // The documents land on the counter and come to the reading view by themselves (Papers, Please's zones).
         var soDesk = new SerializedObject(desk);
+        SetRef(soDesk, "hardware", hardware);
         SetRef(soDesk, "counter", counter);
         SetRef(soDesk, "deskView", deskView);
         SetRef(soDesk, "stamps", stampTray);
@@ -741,6 +745,7 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(soBinder, "callouts", callouts);
         SetRef(soBinder, "stampTray", stampTray);
         SetRef(soBinder, "detainButton", BuildDetainButton(office, stampTray));
+        SetRef(soBinder, "hardware", hardware);
         SetRef(soBinder, "counter", counter);
         SetRef(soBinder, "deskInspect", inspect);
         SetRef(soBinder, "rulebook", rulebook);

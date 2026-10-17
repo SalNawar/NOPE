@@ -36,8 +36,11 @@ public sealed class CaseDocumentsPresenter
     /// <summary>The case's analysis marks so far, each once (a mark lasts for the case).</summary>
     private readonly List<AnalysisMark> _marks = new List<AnalysisMark>();
 
-    /// <summary>The scans' UV and CHIP layers' data (the scanner app spec §2.4): the stub until the document track's hidden and chip data land, then theirs.</summary>
-    private readonly IScanLayers _layers = new StubScanLayers();
+    /// <summary>The desk machines (the desk machines spec §1; null without the desk or its machines): the case's hidden layers, what the machines read of them, and their readings picked at the desk.</summary>
+    private readonly DeskHardware _hardware;
+
+    /// <summary>The current case's hidden layers (the scanned copies' UV and CHIP tabs where no machines are wired).</summary>
+    private CaseHidden _hidden = CaseHidden.None;
 
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new List<CaseDocument>();
@@ -62,6 +65,15 @@ public sealed class CaseDocumentsPresenter
         _compare = compare;
         _documented = documented ?? throw new ArgumentNullException(nameof(documented));
         _index = index;
+        _hardware = reachableDesk != null ? reachableDesk.Hardware : null;
+        foreach (DocumentsView view in _views)
+            if (view != null && view.Layers != null)
+                view.Layers.Picked += LogHidden;
+        if (_hardware != null)
+        {
+            _hardware.Picked += LogHidden;
+            _hardware.Readings.Changed += _ => RefreshLayers();
+        }
     }
 
     /// <summary>A paper reached the PC (its index): scanned at the desk, or handed over where no desk is wired.</summary>
@@ -154,9 +166,13 @@ public sealed class CaseDocumentsPresenter
 
         _papers = new CasePapers(_caseDocuments.Count);
         CaseClaim claim = AppLinks.Claim(inst);
+        _hidden = inst != null ? inst.hidden : CaseHidden.None;
+        if (_hardware != null)
+            _hardware.BeginCase(_hidden);
+        MachineLayers layers = _hardware != null ? _hardware.Layers : new MachineLayers(_hidden, null, false, false);
         foreach (DocumentsView view in _views)
             if (view != null)
-                view.SetLayers(_layers);
+                view.SetLayers(layers);
         foreach (DocumentsView view in _views)
             if (view != null)
                 view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.PhotoLook : null, _art, claim, requestNames);
@@ -295,6 +311,35 @@ public sealed class CaseDocumentsPresenter
 
     /// <summary>A paper lifted into the hand: announced.</summary>
     private void HandleExamined(int index) => Examined?.Invoke(index);
+
+    /// <summary>The scanned copies' layers drawn again (a machine read something).</summary>
+    private void RefreshLayers()
+    {
+        foreach (DocumentsView view in _views)
+            if (view != null && view.Layers != null)
+                view.Layers.Refresh();
+    }
+
+    /// <summary>
+    /// A machine's reading picked (a glowing UV or CHIP line on the PC; a
+    /// tick or the reader's line at the desk in inspect mode; the desk
+    /// machines spec §1): the reading and its box go into the compare as a
+    /// pair, as a cross-check cell does, so the workbench logs the hidden
+    /// proof in one click.
+    /// </summary>
+    private void LogHidden(int document, int field, string value, ScanLayer layer)
+    {
+        if (_compare == null || document < 0 || document >= _caseDocuments.Count)
+            return;
+        IReadOnlyList<DocumentField> fields = _caseDocuments[document].fields;
+        if (fields == null || field < 0 || field >= fields.Count || fields[field] == null)
+            return;
+        var row = new DocumentRow(field, fields[field]);
+        string name = _caseDocuments[document].name;
+        _compare.Clear();
+        _compare.Select(EvidencePicks.ForHidden(document, row, value, layer, name), null);
+        _compare.Select(EvidencePicks.ForField(document, row, name), null);
+    }
 
     /// <summary>A held paper's row picked at the desk: it goes into the compare (the same pick as its scanned copy's row).</summary>
     private void HandleFieldPicked(int index, DocumentRow row, ICompareHighlight highlight)

@@ -100,6 +100,14 @@ public static class SoundCues
     /// <summary>The desk machine (the desk machine spec, Track DM): the date wheels' ratchet click, the re-ink squish, the DETAIN button's cover snapping open or shut, DETAIN's chirp.</summary>
     public const string DaterWheelClick = "dater_wheel_click", DaterReink = "dater_reink", DetainCover = "detain_cover", Detain = "detain";
 
+    /// <summary>The desk machines (the desk machines spec §1, §4): the chip reader's card clunking in, its readout's reading ticks, the OK beep, the fault buzz and the eject; the UV torch's switch on and off and its hum while lit.</summary>
+    public const string ChipInsert = "chip_insert", ChipRead = "chip_read", ChipOk = "chip_ok", ChipFault = "chip_fault", ChipEject = "chip_eject",
+                        UvOn = "uv_on", UvOff = "uv_off", UvHum = "uv_hum";
+
+    /// <summary>The upgrades' desk objects (the desk machines spec §4): the supply crate's tape tearing and flaps popping, the Auto-Feed's roller zip, the Analysis beacon popping up, a translator cartridge clunking in and its test chirp, the loupe's ring ticking, the Fresnel arm folding, the RING SERVICE relay's clack, the Rolodex's cards flicking.</summary>
+    public const string CrateTear = "crate_tear", CratePop = "crate_pop", AdfFeed = "adf_feed", BeaconPop = "beacon_pop", CartridgeIn = "cartridge_in",
+                        TranslatorChirp = "translator_chirp", LoupeTick = "loupe_tick", ArmFold = "arm_fold", RelayClack = "relay_clack", RolodexFlick = "rolodex_flick";
+
     /// <summary>The booth.</summary>
     public const string CallNext = "call_next", PortalThrough = "portal_through", DialogueBlip = "dialogue_blip";
 

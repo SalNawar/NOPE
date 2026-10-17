@@ -84,6 +84,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The DETAIN button (optional; the desk machine spec §2): laid on the desk where the office view shows DeskConfigSO.detainView.</summary>
     [SerializeField] private DetainButton detainButton;
 
+    /// <summary>The desk machines (the desk machines spec §1): laid where the office view shows their places, clear of the scanner, their first-day notes over them.</summary>
+    [SerializeField] private DeskHardware hardware;
+
     /// <summary>The counter (optional): laid along the desk's far edge in the office view's frame, once the desk view is posed.</summary>
     [SerializeField] private DeskCounter counter;
 
@@ -500,6 +503,16 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The DETAIN button stands on the desk where the office view shows DeskConfigSO.detainView at 16:9 (the same spot of the desk at every aspect).
         if (detainButton != null && config != null && _officeVcam != null && detainButton.Lay(_officeVcam, LensFit.DesignAspect, top, config.detainView))
             ClearOfScanner(detainButton.transform, deskRect);
+        // The desk machines stand where the office view shows their places at 16:9 (DeskConfigSO), clear of the scanner, each first-day note over its machine.
+        if (hardware != null && _officeVcam != null)
+        {
+            foreach (Transform laid in hardware.Lay(_officeVcam, LensFit.DesignAspect, top, deskCentre))
+                ClearOfScanner(laid, deskRect);
+            if (hardware.UvNote != null && hardware.Torch != null)
+                FaceCamera(hardware.UvNote, hardware.Torch.transform.position + Vector3.up * HintHeight, viewer);
+            if (hardware.ChipNote != null && hardware.Reader != null)
+                FaceCamera(hardware.ChipNote, hardware.Reader.transform.position + Vector3.up * HintHeight, viewer);
+        }
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;

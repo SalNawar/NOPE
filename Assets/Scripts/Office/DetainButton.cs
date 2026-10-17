@@ -78,24 +78,7 @@ public sealed class DetainButton : MonoBehaviour
     /// chair along the view's level forward. False (it stays where it is)
     /// without a camera or when that point misses the plane.
     /// </summary>
-    public bool Lay(CinemachineCamera office, float aspect, float deskTop, Vector2 viewport)
-    {
-        if (office == null)
-            return false;
-        Transform view = office.transform;
-        float tan = Mathf.Tan(office.Lens.FieldOfView * 0.5f * Mathf.Deg2Rad);
-        Vector3 dir = view.rotation * new Vector3((viewport.x * 2f - 1f) * tan * aspect, (viewport.y * 2f - 1f) * tan, 1f);
-        if (Mathf.Abs(dir.y) < 1e-5f)
-            return false;
-        float t = (deskTop - view.position.y) / dir.y;
-        if (t <= 0f)
-            return false;
-        Vector3 level = Vector3.ProjectOnPlane(view.forward, Vector3.up);
-        if (level.sqrMagnitude < 1e-6f)
-            level = Vector3.forward;
-        transform.SetPositionAndRotation(view.position + dir * t, Quaternion.LookRotation(level.normalized, Vector3.up));
-        return true;
-    }
+    public bool Lay(CinemachineCamera office, float aspect, float deskTop, Vector2 viewport) => DeskLay.Lay(transform, office, aspect, deskTop, viewport);
 
     /// <summary>The cover clicked: it flips up (or closes when up), a snap.</summary>
     public void ToggleCover()

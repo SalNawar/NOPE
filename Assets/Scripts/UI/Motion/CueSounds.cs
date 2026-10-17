@@ -41,6 +41,24 @@ public static class CueSounds
             case SoundCues.PortalThrough: return Sweep("PortalThrough", 180f, 900f, 1.2f, 0.4f);
             case SoundCues.Detain: return Sweep("Detain", 1400f, 900f, 0.5f, 0.35f);
             case SoundCues.UiError: return Tone("Error", 70f, 0.16f, 0.7f);
+            case SoundCues.ChipInsert: return Noise("ChipInsert", 0.12f, 0.6f, 900f);
+            case SoundCues.ChipRead: return Tone("ChipRead", 1800f, 0.03f, 0.18f);
+            case SoundCues.ChipOk: return Sweep("ChipOk", 1250f, 1650f, 0.22f, 0.25f);
+            case SoundCues.ChipFault: return Sweep("ChipFault", 220f, 180f, 0.45f, 0.35f);
+            case SoundCues.ChipEject: return Noise("ChipEject", 0.09f, 0.45f, 1400f);
+            case SoundCues.UvOn: return Noise("UvOn", 0.035f, 0.5f, 3000f);
+            case SoundCues.UvOff: return Noise("UvOff", 0.03f, 0.4f, 2400f);
+            case SoundCues.UvHum: return Hum("UvHum", 120f, 1f, 0.06f);
+            case SoundCues.CrateTear: return Noise("CrateTear", 0.4f, 0.5f, 2200f);
+            case SoundCues.CratePop: return Noise("CratePop", 0.14f, 0.5f, 700f);
+            case SoundCues.AdfFeed: return Sweep("AdfFeed", 300f, 520f, 0.5f, 0.18f);
+            case SoundCues.BeaconPop: return Sweep("BeaconPop", 500f, 1100f, 0.18f, 0.3f);
+            case SoundCues.CartridgeIn: return Noise("CartridgeIn", 0.1f, 0.6f, 800f);
+            case SoundCues.TranslatorChirp: return Sweep("TranslatorChirp", 900f, 2200f, 0.16f, 0.22f);
+            case SoundCues.LoupeTick: return Noise("LoupeTick", 0.02f, 0.3f, 3200f);
+            case SoundCues.ArmFold: return Noise("ArmFold", 0.22f, 0.4f, 1000f);
+            case SoundCues.RelayClack: return Noise("RelayClack", 0.06f, 0.6f, 1600f);
+            case SoundCues.RolodexFlick: return Noise("RolodexFlick", 0.03f, 0.35f, 2800f);
             default: return null;
         }
     }
@@ -88,6 +106,30 @@ public static class CueSounds
             samples[i] = volume * square * Mathf.Sin(Mathf.PI * k);
         }
         return Clip(name, samples);
+    }
+
+    /// <summary>A steady hum (<paramref name="hertz"/> with a little of its octave, <paramref name="seconds"/> long, whole cycles so it loops): a lamp's ballast.</summary>
+    public static AudioClip Hum(string name, float hertz, float seconds, float volume)
+    {
+        int cycles = Mathf.Max(1, Mathf.RoundToInt(hertz * seconds));
+        int n = Mathf.Max(1, Mathf.RoundToInt(Rate * cycles / hertz));
+        var samples = new float[n];
+        for (int i = 0; i < n; i++)
+        {
+            float phase = 2f * Mathf.PI * cycles * i / n;
+            samples[i] = volume * (Mathf.Sin(phase) + 0.35f * Mathf.Sin(2f * phase));
+        }
+        return Clip(name, samples);
+    }
+
+    /// <summary>The placeholder clip of <paramref name="cue"/> (made once), for a source that loops it (the UV torch's hum): the bank's clip when it has one.</summary>
+    public static AudioClip ClipOf(string cue)
+    {
+        if (Sounds.TryClip(cue, out AudioClip bank))
+            return bank;
+        if (!Placeholders.TryGetValue(cue, out AudioClip clip) || clip == null)
+            Placeholders[cue] = clip = Make(cue);
+        return clip;
     }
 
     private static AudioClip Clip(string name, float[] samples)

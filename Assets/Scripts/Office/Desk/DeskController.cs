@@ -85,6 +85,15 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The rulebook (optional): it lies in the papers' stack, over or under each paper as they were last touched, a dragged one above them all (Saleh 2026-10-06: "documents on desk like the folder with the rules are clipping with the desk").</summary>
     [SerializeField] private DeskRulebook rulebook;
 
+    /// <summary>The desk machines (optional; the desk machines spec §1): the chip reader a paper is dropped on, the UV torch, each paper's UV layer.</summary>
+    [SerializeField] private DeskHardware hardware;
+
+    /// <summary>The desk machines (null when none are wired).</summary>
+    public DeskHardware Hardware => hardware;
+
+    /// <summary>The papers in the chip reader (inert until it gives them back).</summary>
+    private readonly HashSet<int> _inReader = new HashSet<int>();
+
     /// <summary>The rulebook's place in the stack (papers are 0 and up).</summary>
     private const int RulebookId = -1;
 
@@ -363,6 +372,8 @@ public sealed class DeskController : MonoBehaviour
         _papers[i] = paper;
         _stack.Add(i);
         ApplyStack();
+        if (hardware != null)
+            hardware.PaperAdded(paper);
 
         Vector3 target = counter != null ? counter.Spot(_handedOver) : surface.transform.position;
         _handedOver++;
@@ -386,6 +397,9 @@ public sealed class DeskController : MonoBehaviour
     {
         _state.ReturnAll();
         _waiting.Clear();
+        _inReader.Clear();
+        if (hardware != null)
+            hardware.EndCase();
         if (scanner != null)
             scanner.Sweep(-1f);
         foreach (DeskDocument paper in _papers)
@@ -422,6 +436,8 @@ public sealed class DeskController : MonoBehaviour
     public void SetInspecting(bool inspecting)
     {
         _inspecting = inspecting;
+        if (hardware != null)
+            hardware.SetInspecting(inspecting);
         foreach (DeskDocument paper in _papers)
             if (paper != null)
                 paper.SetInspecting(inspecting);
@@ -697,6 +713,13 @@ public sealed class DeskController : MonoBehaviour
         DeskZone zone = ZoneAt(released);
         bool verdict = stamps != null && stamps.HasVerdict;
 
+        // The chip reader (the desk machines spec §1): a paper dropped on it is read, then comes back to where it was picked up.
+        if (hardware != null && hardware.OnReader(released))
+        {
+            ReadOnReader(paper, drag.PickUpPosition);
+            return;
+        }
+
         DropOutcome outcome = _state.Drop(paper.Index, OnScanner(released), zone, verdict);
         if (outcome != DropOutcome.Queued)
             _waiting.Remove(paper.Index);
@@ -739,6 +762,29 @@ public sealed class DeskController : MonoBehaviour
         _stack.BringToFront(paper.Index);
         ApplyStack();
         RefreshHint();
+    }
+
+    /// <summary>A paper dropped on the chip reader: it goes in and is read, inert meanwhile, and slides back to <paramref name="back"/> (where it was picked up) as the reader gives it back; a busy reader refuses it (it slides back at once).</summary>
+    private void ReadOnReader(DeskDocument paper, Vector3 back)
+    {
+        int index = paper.Index;
+        CaseDocument doc = index >= 0 && index < _documents.Count ? _documents[index] : null;
+        bool reading = doc != null && hardware.Read(paper, doc.fields, () =>
+        {
+            _inReader.Remove(index);
+            if (_papers.Contains(paper))
+                Slide(paper, ClearOfBlockers(paper, back), Upright);
+        });
+        if (!reading)
+        {
+            Sounds.Play(SoundCues.UiError);
+            Slide(paper, ClearOfBlockers(paper, back));
+            return;
+        }
+        _inReader.Add(index);
+        ApplyLive(paper);
+        _stack.BringToFront(index);
+        ApplyStack();
     }
 
     /// <summary>
@@ -808,6 +854,9 @@ public sealed class DeskController : MonoBehaviour
         DeskRect desk = InViewFrame(surface.Corners());
         DeskRect sheet = InViewFrame(Footprint(paper, at));
         (float x, float y) = ScannerClearance.Clear(sheet, InViewFrame(scanner.Corners()), _scannerShadow, desk);
+        // The UV torch's cradle on the mat's corner (the desk machines spec §1): no paper lies over it either.
+        if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
+            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(cradle), desk);
         if (Mathf.Approximately(x, sheet.CentreX) && Mathf.Approximately(y, sheet.CentreY))
             return at;
         Vector3 moved = at + _viewRight * (x - sheet.CentreX) + _viewForward * (y - sheet.CentreY);
@@ -843,7 +892,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>A paper on the desk takes input while the papers are allowed, DeskPapers lets it be dragged and it is not sliding, and is in the raycast while the papers are allowed.</summary>
     private void ApplyLive(DeskDocument paper)
     {
-        bool live = _live && !paper.IsSliding && _state != null && _state.CanDrag(paper.Index);
+        bool live = _live && !paper.IsSliding && _state != null && _state.CanDrag(paper.Index) && !_inReader.Contains(paper.Index);
         paper.SetLive(live, live, _live);
     }
 

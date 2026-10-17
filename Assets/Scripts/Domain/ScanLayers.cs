@@ -53,45 +53,6 @@ public readonly struct UvMark
     public bool Fault { get; }
 }
 
-/// <summary>
-/// The scan layers' data (the scanner app spec §2.4): a paper's hidden layer
-/// and its chip record, by its index in the case and its printed fields.
-/// The document track's `hidden` and `chip` data provide them once it lands;
-/// until then <see cref="StubScanLayers"/> does.
-/// </summary>
-public interface IScanLayers
-{
-    /// <summary>The marks paper <paramref name="document"/> shows under UV (its printed <paramref name="print"/> fields).</summary>
-    IReadOnlyList<UvMark> Uv(int document, IReadOnlyList<DocumentField> print);
-
-    /// <summary>The chip's stored fields of paper <paramref name="document"/>, one per printed field in the print's order (null: the paper has no chip).</summary>
-    IReadOnlyList<DocumentField> Chip(int document, IReadOnlyList<DocumentField> print);
-}
-
-/// <summary>
-/// The scan layers until the document track's data lands (the orchestrator's
-/// brief): every paper shows the agency's watermark, intact, and no ghost;
-/// a paper that prints a Citizen ID carries a chip that stores exactly what
-/// it prints, so nothing differs and nothing is ever a false alarm.
-/// </summary>
-public sealed class StubScanLayers : IScanLayers
-{
-    /// <summary>The watermark's words.</summary>
-    public const string WatermarkText = "TEMPORAL CUSTOMS";
-
-    /// <inheritdoc />
-    public IReadOnlyList<UvMark> Uv(int document, IReadOnlyList<DocumentField> print) =>
-        new[] { new UvMark(UvMarkKind.Watermark, -1, WatermarkText, false) };
-
-    /// <inheritdoc />
-    public IReadOnlyList<DocumentField> Chip(int document, IReadOnlyList<DocumentField> print)
-    {
-        if (print == null || !print.Any(f => f != null && f.category == ClueCategory.CitizenId))
-            return null;
-        return print.Select(f => f == null ? null : new DocumentField { category = f.category, label = f.label, value = f.value, page = f.page, issuer = f.issuer }).ToList();
-    }
-}
-
 /// <summary>The scan layers' rules, pure.</summary>
 public static class ScanLayers
 {

@@ -1,0 +1,1248 @@
+fileFormatVersion: 2
+guid: 56ed790eaf60ba1499a3273d0bb56169
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3213476519095311047
+    second: UvMicroprint_0
+  - first:
+      213: -6216782084003497096
+    second: UvMicroprint_1
+  - first:
+      213: 3105476160755351696
+    second: UvMicroprint_2
+  - first:
+      213: 1519451090854992652
+    second: UvMicroprint_3
+  - first:
+      213: -8182035949697930651
+    second: UvMicroprint_4
+  - first:
+      213: 7459503179450543557
+    second: UvMicroprint_5
+  - first:
+      213: -8654561531280164760
+    second: UvMicroprint_6
+  - first:
+      213: -3253201925240810559
+    second: UvMicroprint_7
+  - first:
+      213: 5049298671450503376
+    second: UvMicroprint_8
+  - first:
+      213: 8953573350088984572
+    second: UvMicroprint_9
+  - first:
+      213: 781305089293775570
+    second: UvMicroprint_10
+  - first:
+      213: -6763775070344580547
+    second: UvMicroprint_11
+  - first:
+      213: -7241914153727238041
+    second: UvMicroprint_12
+  - first:
+      213: -5336163238336656160
+    second: UvMicroprint_13
+  - first:
+      213: 2905797696259553166
+    second: UvMicroprint_14
+  - first:
+      213: 4353452684835969967
+    second: UvMicroprint_15
+  - first:
+      213: -8190879863629003992
+    second: UvMicroprint_16
+  - first:
+      213: -2872797267169023179
+    second: UvMicroprint_17
+  - first:
+      213: -5913389127303106872
+    second: UvMicroprint_18
+  - first:
+      213: 2170943070851735569
+    second: UvMicroprint_19
+  - first:
+      213: 5645206971852494365
+    second: UvMicroprint_20
+  - first:
+      213: 5159738907371025997
+    second: UvMicroprint_21
+  - first:
+      213: 8430145503522158273
+    second: UvMicroprint_22
+  - first:
+      213: -7735417302348810420
+    second: UvMicroprint_23
+  - first:
+      213: -8906614600158198670
+    second: UvMicroprint_24
+  - first:
+      213: -8268074039284941801
+    second: UvMicroprint_25
+  - first:
+      213: -471755914366905036
+    second: UvMicroprint_26
+  - first:
+      213: 4724230533514544380
+    second: UvMicroprint_27
+  - first:
+      213: 1924542361831255993
+    second: UvMicroprint_28
+  - first:
+      213: 2600098787198977670
+    second: UvMicroprint_29
+  - first:
+      213: 4532519089704242762
+    second: UvMicroprint_30
+  - first:
+      213: -4046891206033492073
+    second: UvMicroprint_31
+  - first:
+      213: 8594565613172379188
+    second: UvMicroprint_32
+  - first:
+      213: 6825646776364659963
+    second: UvMicroprint_33
+  - first:
+      213: -6461542633845351888
+    second: UvMicroprint_34
+  - first:
+      213: -1850578467388414241
+    second: UvMicroprint_35
+  - first:
+      213: 8396636906871041673
+    second: UvMicroprint_36
+  - first:
+      213: 314658666937790258
+    second: UvMicroprint_37
+  - first:
+      213: -1252862893315884230
+    second: UvMicroprint_38
+  - first:
+      213: -1657057473848700653
+    second: UvMicroprint_39
+  - first:
+      213: -3632921954951000368
+    second: UvMicroprint_40
+  - first:
+      213: 6890310354873338916
+    second: UvMicroprint_41
+  - first:
+      213: 4717211246543028580
+    second: UvMicroprint_42
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: UvMicroprint_0
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 448
+        width: 21
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ca1cbe4edf889c20800000000000000
+      internalID: 3213476519095311047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_1
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 454
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87b75fce1ad89b9a0800000000000000
+      internalID: -6216782084003497096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_2
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 459
+        width: 18
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 090444c5d1ed81b20800000000000000
+      internalID: 3105476160755351696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_3
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 461
+        width: 14
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0bddfb77bc261510800000000000000
+      internalID: 1519451090854992652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_4
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 460
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56a67ce67a1937e80800000000000000
+      internalID: -8182035949697930651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_5
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 451
+        width: 40
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cdeb0c9e9a758760800000000000000
+      internalID: 7459503179450543557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_6
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 434
+        width: 23
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 868f8412422d4e780800000000000000
+      internalID: -8654561531280164760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_7
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 70
+        width: 372
+        height: 372
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c3976fc51e4ad2d0800000000000000
+      internalID: -3253201925240810559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_8
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 420
+        width: 25
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d8b8aca366b21640800000000000000
+      internalID: 5049298671450503376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_9
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 431
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf7457a168b714c70800000000000000
+      internalID: 8953573350088984572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_10
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 425
+        width: 27
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d27f84d6d0c7da00800000000000000
+      internalID: 781305089293775570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_11
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 345
+        width: 30
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d32f777d86e3222a0800000000000000
+      internalID: -6763775070344580547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_12
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 361
+        width: 39
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 760e63d427d8f7b90800000000000000
+      internalID: -7241914153727238041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_13
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 368
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ec02739ec322f5b0800000000000000
+      internalID: -5336163238336656160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_14
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 328
+        width: 29
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e87f2b2fb97735820800000000000000
+      internalID: 2905797696259553166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_15
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 342
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fab5e1ab6229a6c30800000000000000
+      internalID: 4353452684835969967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_16
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 288
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8234e724926245e80800000000000000
+      internalID: -8190879863629003992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_17
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 292
+        width: 28
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53b6da23b16c128d0800000000000000
+      internalID: -2872797267169023179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_18
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 273
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cee0705beb6feda0800000000000000
+      internalID: -5913389127303106872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_19
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 247
+        width: 26
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 110a6b5883db02e10800000000000000
+      internalID: 2170943070851735569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_20
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 252
+        width: 26
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1693d0d4ddc75e40800000000000000
+      internalID: 5645206971852494365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_21
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 224
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d46bc93e2331b9740800000000000000
+      internalID: 5159738907371025997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_22
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 229
+        width: 29
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c67b4eaba4edf470800000000000000
+      internalID: 8430145503522158273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_23
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 203
+        width: 28
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c47b61092f646a490800000000000000
+      internalID: -7735417302348810420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_24
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 185
+        width: 33
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 274434ed539556480800000000000000
+      internalID: -8906614600158198670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_25
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 179
+        width: 31
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71cbac7a776e14d80800000000000000
+      internalID: -8268074039284941801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_26
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 160
+        width: 32
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 435987fce7cf379f0800000000000000
+      internalID: -471755914366905036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_27
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 164
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf44033e3a6df8140800000000000000
+      internalID: 4724230533514544380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_28
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 140
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bfa428d41955ba10800000000000000
+      internalID: 1924542361831255993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_29
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 122
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6864bef2218651420800000000000000
+      internalID: 2600098787198977670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_30
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 127
+        width: 29
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4e8f77091eb6ee30800000000000000
+      internalID: 4532519089704242762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_31
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 144
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 797b8b3b3ed86d7c0800000000000000
+      internalID: -4046891206033492073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_32
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 60
+        width: 27
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43e4de3a3e7064770800000000000000
+      internalID: 8594565613172379188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_33
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 50
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf4718b449199be50800000000000000
+      internalID: 6825646776364659963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_34
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 39
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03a1b90953df356a0800000000000000
+      internalID: -6461542633845351888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_35
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 34
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd6a35e40bc6156e0800000000000000
+      internalID: -1850578467388414241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_36
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 36
+        width: 21
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98eabfd87c8d68470800000000000000
+      internalID: 8396636906871041673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_37
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 42
+        width: 19
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23f2354f364ed5400800000000000000
+      internalID: 314658666937790258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_38
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 53
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3b73a326dfec9ee0800000000000000
+      internalID: -1252862893315884230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_39
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 63
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31197dac103f009e0800000000000000
+      internalID: -1657057473848700653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_40
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 28
+        width: 19
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0de8d62eab4459dc0800000000000000
+      internalID: -3632921954951000368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_41
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 25
+        width: 17
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42ccb66e2cc4f9f50800000000000000
+      internalID: 6890310354873338916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UvMicroprint_42
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 27
+        width: 38
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 461cca8c2a6e67140800000000000000
+      internalID: 4717211246543028580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      UvMicroprint_0: 3213476519095311047
+      UvMicroprint_1: -6216782084003497096
+      UvMicroprint_10: 781305089293775570
+      UvMicroprint_11: -6763775070344580547
+      UvMicroprint_12: -7241914153727238041
+      UvMicroprint_13: -5336163238336656160
+      UvMicroprint_14: 2905797696259553166
+      UvMicroprint_15: 4353452684835969967
+      UvMicroprint_16: -8190879863629003992
+      UvMicroprint_17: -2872797267169023179
+      UvMicroprint_18: -5913389127303106872
+      UvMicroprint_19: 2170943070851735569
+      UvMicroprint_2: 3105476160755351696
+      UvMicroprint_20: 5645206971852494365
+      UvMicroprint_21: 5159738907371025997
+      UvMicroprint_22: 8430145503522158273
+      UvMicroprint_23: -7735417302348810420
+      UvMicroprint_24: -8906614600158198670
+      UvMicroprint_25: -8268074039284941801
+      UvMicroprint_26: -471755914366905036
+      UvMicroprint_27: 4724230533514544380
+      UvMicroprint_28: 1924542361831255993
+      UvMicroprint_29: 2600098787198977670
+      UvMicroprint_3: 1519451090854992652
+      UvMicroprint_30: 4532519089704242762
+      UvMicroprint_31: -4046891206033492073
+      UvMicroprint_32: 8594565613172379188
+      UvMicroprint_33: 6825646776364659963
+      UvMicroprint_34: -6461542633845351888
+      UvMicroprint_35: -1850578467388414241
+      UvMicroprint_36: 8396636906871041673
+      UvMicroprint_37: 314658666937790258
+      UvMicroprint_38: -1252862893315884230
+      UvMicroprint_39: -1657057473848700653
+      UvMicroprint_4: -8182035949697930651
+      UvMicroprint_40: -3632921954951000368
+      UvMicroprint_41: 6890310354873338916
+      UvMicroprint_42: 4717211246543028580
+      UvMicroprint_5: 7459503179450543557
+      UvMicroprint_6: -8654561531280164760
+      UvMicroprint_7: -3253201925240810559
+      UvMicroprint_8: 5049298671450503376
+      UvMicroprint_9: 8953573350088984572
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

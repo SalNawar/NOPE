@@ -3,10 +3,9 @@ using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
-/// The scanner app spec §2.4-§2.5: the scan layers (the stub until the
-/// document track's hidden and chip data land: an intact watermark, a chip
-/// that stores what is printed) and the overlay compare (a line shimmers
-/// only where the data really differs).
+/// The scanner app spec §2.4-§2.5: the chip layer's differences (the hidden
+/// layers themselves: HiddenLayersTests) and the overlay compare (a line
+/// shimmers only where the data really differs).
 /// </summary>
 public class ScanLayersTests
 {
@@ -16,21 +15,6 @@ public class ScanLayersTests
     {
         F(ClueCategory.Name, "Pell Quimby"), F(ClueCategory.CitizenId, "NHA-512"), F(ClueCategory.BirthDate, "4 Jul 2124"), F(ClueCategory.Seal, "Blue hexagon · VO", "visa")
     };
-
-    [Test]
-    public void Stub_AnIntactWatermark_AChipThatStoresThePrint_NeverADifference()
-    {
-        var stub = new StubScanLayers();
-        IReadOnlyList<UvMark> uv = stub.Uv(0, Passport);
-        Assert.AreEqual(1, uv.Count);
-        Assert.AreEqual(UvMarkKind.Watermark, uv[0].Kind);
-        Assert.IsFalse(uv[0].Fault);
-        IReadOnlyList<DocumentField> chip = stub.Chip(0, Passport);
-        Assert.AreEqual(Passport.Length, chip.Count, "a field per printed field, in the print's order");
-        Assert.IsEmpty(ScanLayers.ChipDifferences(Passport, chip));
-        Assert.AreNotSame(Passport[0], chip[0], "a copy: the chip never edits the print");
-        Assert.IsNull(stub.Chip(1, new[] { F(ClueCategory.Expiry, "1 Jan 2151") }), "a paper without a Citizen ID has no chip");
-    }
 
     [Test]
     public void ChipDifferences_OnlyValuesThatAreNotTheSameValue()

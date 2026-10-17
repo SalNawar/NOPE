@@ -17,7 +17,8 @@ MonoBehaviour:
   shiftStartMinute: -1
   shiftEndMinute: -1
   bulletin: 'NEW: the Stranding Waiver. A Standard passport on an Economy transponder
-    also needs a signed waiver: ask for it.'
+    also needs a signed waiver: ask for it. The Bureau issues a UV torch: press it
+    and drag it over a paper to see its hidden marks.'
   papers:
   - TC-101
   - TC-230

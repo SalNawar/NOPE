@@ -332,6 +332,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.SetIntroductions(known, day);
         if (deskInspect != null)
             deskInspect.SetIntroductions(known, day);
+        if (desk != null && desk.Hardware != null)
+            desk.Hardware.BeginDay(day, known);
     }
 
     /// <summary>Injects today's facts (the Reference tab's registers render these rows).</summary>

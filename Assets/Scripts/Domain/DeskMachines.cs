@@ -76,7 +76,7 @@ public sealed class DeskReadings
 /// lists only the marks seen under the cone. Before the reader's day the CHIP
 /// tab is hidden; after it, a chip shows once read. Pure.
 /// </summary>
-public sealed class MachineLayers : IScanLayers
+public sealed class MachineLayers
 {
     private readonly CaseHidden _hidden;
     private readonly DeskReadings _readings;
@@ -104,8 +104,14 @@ public sealed class MachineLayers : IScanLayers
     public LayerState ChipState(int document) =>
         !Reader ? LayerState.Unavailable : !_hidden.HasChip(document) ? LayerState.None : _readings.ChipRead(document) ? LayerState.Shown : LayerState.NotYet;
 
+    /// <summary>The case's hidden layers it views.</summary>
+    public CaseHidden Hidden => _hidden;
+
+    /// <summary>The indices (in the paper's marks, CaseHidden.Marks) of paper <paramref name="document"/>'s marks seen under the torch, in mark order (none before the torch's day).</summary>
+    public List<int> SeenMarks(int document) => Torch ? _readings.SeenMarks(document) : new List<int>();
+
     /// <summary>The marks of paper <paramref name="document"/> seen under the torch, in mark order (none before the torch's day).</summary>
-    public IReadOnlyList<UvMark> Uv(int document, IReadOnlyList<DocumentField> print)
+    public IReadOnlyList<UvMark> Uv(int document)
     {
         if (!Torch)
             return Array.Empty<UvMark>();
@@ -114,7 +120,7 @@ public sealed class MachineLayers : IScanLayers
     }
 
     /// <summary>Paper <paramref name="document"/>'s chip once the reader has read it; null before (or with no chip).</summary>
-    public IReadOnlyList<DocumentField> Chip(int document, IReadOnlyList<DocumentField> print) =>
+    public IReadOnlyList<DocumentField> Chip(int document) =>
         ChipState(document) == LayerState.Shown ? _hidden.ChipOf(document) : null;
 }
 

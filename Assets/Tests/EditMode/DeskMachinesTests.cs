@@ -48,21 +48,22 @@ public class DeskMachinesTests
         var before = new MachineLayers(hidden, readings, false, false);
         Assert.AreEqual(LayerState.Unavailable, before.UvState(0));
         Assert.AreEqual(LayerState.Unavailable, before.ChipState(0));
-        CollectionAssert.IsEmpty(before.Uv(0, Passport()));
-        Assert.IsNull(before.Chip(0, Passport()));
+        CollectionAssert.IsEmpty(before.Uv(0));
+        Assert.IsNull(before.Chip(0));
 
         var after = new MachineLayers(hidden, readings, true, true);
         Assert.AreEqual(LayerState.NotYet, after.UvState(0));
         Assert.AreEqual(LayerState.NotYet, after.ChipState(0));
         Assert.AreEqual(LayerState.None, after.ChipState(1), "the ticket carries no chip");
-        Assert.IsNull(after.Chip(0, Passport()), "not read yet");
+        Assert.IsNull(after.Chip(0), "not read yet");
 
         readings.ReadChip(0);
         readings.See(0, 0);
         Assert.AreEqual(LayerState.Shown, after.ChipState(0));
-        Assert.AreEqual("NHA-777", after.Chip(0, Passport())[1].value, "the chip holds the issued Citizen ID");
+        Assert.AreEqual("NHA-777", after.Chip(0)[1].value, "the chip holds the issued Citizen ID");
         Assert.AreEqual(LayerState.Shown, after.UvState(0));
-        Assert.AreEqual(UvMarkKind.Watermark, after.Uv(0, Passport()).Single().Kind, "only the marks seen");
+        Assert.AreEqual(UvMarkKind.Watermark, after.Uv(0).Single().Kind, "only the marks seen");
+        CollectionAssert.AreEqual(new[] { 0 }, after.SeenMarks(0));
     }
 
     [Test]

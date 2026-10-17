@@ -737,7 +737,7 @@ public static class ContentSheetMap
                 Text("check").Note("what to check"),
                 Text("against").Note("what to check it against"),
                 Text("fault").Note("an example of a fault"),
-                Text("point").Note("where the new rule's moment points: sign, inspect, stamps, pc, rulebook, calendar, board, scanner, counter, traveller, paper:<form>, field:<form>/<detail>"),
+                Text("point").Note("where the new rule's moment points: sign, inspect, stamps, pc, rulebook, calendar, board, scanner, counter, traveller, uv_torch, chip_reader, paper:<form>, field:<form>/<detail>"),
                 Text("practice.id").Note("the practice's id (blank: no practice)"),
                 Text("practice.action").OneOf("", "Call", "OnDesk", "Inspect", "Compare", "StampsOut", "Stamp", "HandBack", "Scan").Note("what completes the practice on the first traveller who carries the page's feature (blank: no practice)"),
                 List("practice.categories").Note("for Compare: the details the comparison must be about, any of them (blank: any)"),

@@ -94,8 +94,11 @@ public sealed class DocumentsView : AppView, IAppItems
         Refresh();
     }
 
-    /// <summary>Where the copies' UV and CHIP layers come from (the document track's data, or the stub).</summary>
-    public void SetLayers(IScanLayers provider)
+    /// <summary>The copies' layer switch (null when the builder made none): its glowing lines log a machine's reading (ScanLayerSwitch.Picked).</summary>
+    public ScanLayerSwitch Layers => layers;
+
+    /// <summary>Where the copies' UV and CHIP layers come from: the case's hidden layers as the desk machines reveal them.</summary>
+    public void SetLayers(MachineLayers provider)
     {
         if (layers != null)
             layers.SetProvider(provider);

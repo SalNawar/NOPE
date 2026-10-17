@@ -70,7 +70,9 @@ public static class LieKinds
     /// poor tourist's; smuggling is every kind's (the days decide when: 2150
     /// citizens from day 4, the displaced from day 5); so are the visual lies,
     /// a forged seal and someone else's photo (every kind's papers carry
-    /// seals and a photo).
+    /// seals and a photo); the hidden lies, a cloned chip and a washed paper,
+    /// are a 2150 citizen's (only their passport, transponder card, waiver and
+    /// contract carry a chip or a name to wash; the displaced carry none).
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
     {
@@ -78,9 +80,10 @@ public static class LieKinds
         {
             case LieKind.ForgedSeal:
             case LieKind.SwappedPhoto:
+                return true;
             case LieKind.ClonedChip:
             case LieKind.WashedPaper:
-                return true;
+                return kind != TravellerKind.Displaced;
             case LieKind.FalseOrigin:
             case LieKind.FakeDisplaced:
                 return kind == TravellerKind.Displaced;

@@ -91,14 +91,14 @@ public class LieKindsTests
         }
     }
 
-    /// <summary>The desk machines spec §2-3: a hidden lie fits every kind, is a forgery (a crime, DETAIN) and names the machine that shows it.</summary>
+    /// <summary>The desk machines spec §2-3: a hidden lie fits every 2150 citizen (the displaced carry no chipped paper and no name to wash), is a forgery (a crime, DETAIN) and names the machine that shows it.</summary>
     [Test]
-    public void TheHiddenLies_FitEveryKind_AreForgedPapers_AndNameTheirMachine()
+    public void TheHiddenLies_FitThe2150Citizens_AreForgedPapers_AndNameTheirMachine()
     {
         foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
         {
-            Assert.IsTrue(LieKinds.AppliesTo(LieKind.ClonedChip, kind), kind.ToString());
-            Assert.IsTrue(LieKinds.AppliesTo(LieKind.WashedPaper, kind), kind.ToString());
+            Assert.AreEqual(kind != TravellerKind.Displaced, LieKinds.AppliesTo(LieKind.ClonedChip, kind), kind.ToString());
+            Assert.AreEqual(kind != TravellerKind.Displaced, LieKinds.AppliesTo(LieKind.WashedPaper, kind), kind.ToString());
         }
         Assert.AreEqual(Faults.Forged, Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.ClonedChip));
         Assert.IsTrue(Law.Breaks(LieKind.WashedPaper));

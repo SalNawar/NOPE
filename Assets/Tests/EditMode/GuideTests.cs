@@ -198,6 +198,8 @@ public class GuideTests
     public void Targets_NamedPapersAndFields()
     {
         Assert.IsTrue(GuideTargets.IsKnown("sign"));
+        Assert.IsTrue(GuideTargets.IsKnown("uv_torch"), "the desk machines (the desk machines spec §1)");
+        Assert.IsTrue(GuideTargets.IsKnown("chip_reader"));
         Assert.IsTrue(GuideTargets.IsKnown("paper:TC-230"));
         Assert.IsTrue(GuideTargets.TryField("field:TC-230/CitizenId", out string form, out ClueCategory category));
         Assert.AreEqual("TC-230", form);

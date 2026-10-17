@@ -494,6 +494,22 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         return true;
     }
 
+    /// <summary>Box <paramref name="slot"/>'s rectangle in the sheet's own plane (its local x and y; the desk machines' UV marks lie over it); false for no such box.</summary>
+    public bool TryLocalRectOf(int slot, out Rect rect)
+    {
+        rect = default;
+        if (slot < 0 || slot >= _slots.Count || _slots[slot].Highlight == null)
+            return false;
+        Transform quad = _slots[slot].Highlight.transform;
+        Vector3 a = sheet.InverseTransformPoint(quad.TransformPoint(new Vector3(-0.5f, -0.5f, 0f)));
+        Vector3 b = sheet.InverseTransformPoint(quad.TransformPoint(new Vector3(0.5f, 0.5f, 0f)));
+        rect = Rect.MinMaxRect(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
+        return true;
+    }
+
+    /// <summary>The font the paper prints in (its text template's): the UV layer's ghosts are written in it.</summary>
+    public TMP_FontAsset TextFont => textTemplate != null ? textTemplate.font : null;
+
     /// <summary>Marks box <paramref name="slot"/> as a clear mistake found (its tint stays for the case, under a pick or hover tint), or clears it with a clear colour.</summary>
     public void SetMarked(int slot, Color colour)
     {

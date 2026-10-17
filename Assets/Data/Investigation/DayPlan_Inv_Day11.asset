@@ -17,7 +17,8 @@ MonoBehaviour:
   shiftStartMinute: 780
   shiftEndMinute: 1260
   bulletin: 'NEW: the Driftbox 3 recall. Every Driftbox 3 transponder is grounded:
-    refuse any departure on one.'
+    refuse any departure on one. The Bureau issues a chip reader: drop a passport
+    or a card on it to read its chip.'
   papers:
   - TC-101
   - TC-230

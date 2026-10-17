@@ -89,10 +89,10 @@ public readonly struct HiddenPaper
 /// <summary>
 /// One case's hidden layers (the desk machines spec §1-3): per paper, the
 /// marks the UV torch shows and the record its chip holds. The scanned copy's
-/// UV and CHIP tabs read it (IScanLayers), and so do the torch and the reader
+/// UV and CHIP tabs read it (MachineLayers), and so do the torch and the reader
 /// at the desk. Built once per case by <see cref="HiddenLayers.Build"/>.
 /// </summary>
-public sealed class CaseHidden : IScanLayers
+public sealed class CaseHidden
 {
     private readonly IReadOnlyList<UvMark>[] _marks;
     private readonly IReadOnlyList<DocumentField>[] _chips;
@@ -121,12 +121,6 @@ public sealed class CaseHidden : IScanLayers
     /// <summary>True when paper <paramref name="document"/> carries a chip.</summary>
     public bool HasChip(int document) => ChipOf(document) != null;
 
-    /// <inheritdoc />
-    public IReadOnlyList<UvMark> Uv(int document, IReadOnlyList<DocumentField> print) => Marks(document);
-
-    /// <inheritdoc />
-    public IReadOnlyList<DocumentField> Chip(int document, IReadOnlyList<DocumentField> print) => ChipOf(document);
-
     /// <summary>The marks of paper <paramref name="document"/> that show a fault (a ghost, a missing microprint).</summary>
     public List<UvMark> Faults(int document) => Marks(document).Where(m => m.Fault).ToList();
 }
@@ -148,8 +142,8 @@ public sealed class CaseHidden : IScanLayers
 /// </summary>
 public static class HiddenLayers
 {
-    /// <summary>The Bureau's watermark, as it reads under UV (StubScanLayers' words).</summary>
-    public const string Watermark = StubScanLayers.WatermarkText;
+    /// <summary>The Bureau's watermark, as it reads under UV.</summary>
+    public const string Watermark = "TEMPORAL CUSTOMS";
 
     /// <summary>The layers of <paramref name="papers"/>, with <paramref name="tells"/> (a hidden lie's, or none) written in.</summary>
     public static CaseHidden Build(IReadOnlyList<HiddenPaper> papers, IReadOnlyList<HiddenTell> tells, HiddenContent content, IRandomSource rng)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,10 +12,14 @@ using UnityEngine.UI;
 /// ghost of an erased value, the microprint; a mark that shows a fault
 /// glows); CHIP lays the chip's stored record over it, a line per printed
 /// field in the print's order, so differences line up (a field whose chip
-/// value differs glows: ScanLayers.ChipDifferences). The data come from an
-/// IScanLayers (the document track's hidden and chip data; StubScanLayers
-/// until they land), set by CaseDocumentsPresenter. Each Documents view has
-/// one; a paper shown anew opens on PRINT.
+/// value differs glows: ScanLayers.ChipDifferences). The data are the
+/// case's hidden layers as the desk machines reveal them (MachineLayers; the
+/// desk machines spec §1), set by CaseDocumentsPresenter: the UV tab shows
+/// only from the UV torch's day and lists only the marks its cone has shown,
+/// the CHIP tab only from the chip reader's day and a chip once read; a
+/// glowing line is clicked to log it (Picked: the machine's reading held
+/// against its box). Each Documents view has one; a paper shown anew opens
+/// on PRINT.
 /// </summary>
 public sealed class ScanLayerSwitch : MonoBehaviour
 {
@@ -51,13 +56,16 @@ public sealed class ScanLayerSwitch : MonoBehaviour
     [SerializeField, Min(0.01f)] private float wipeSeconds = 0.25f;
 
     private readonly List<GameObject> _lines = new List<GameObject>();
-    private IScanLayers _provider = new StubScanLayers();
+    private MachineLayers _provider = new MachineLayers(CaseHidden.None, null, false, false);
     private IReadOnlyList<DocumentField> _fields;
     private int _document = -1;
     private bool _wired;
 
     /// <summary>The layer shown.</summary>
     public ScanLayer Layer { get; private set; }
+
+    /// <summary>A glowing line clicked (the desk machines spec §1): the paper, the box's index in its fields, what the machine reads there and on which layer; CaseDocumentsPresenter logs it against the box.</summary>
+    public event Action<int, int, string, ScanLayer> Picked;
 
     private void Awake() => Wire();
 
@@ -80,8 +88,23 @@ public sealed class ScanLayerSwitch : MonoBehaviour
             wipe.gameObject.SetActive(false);
     }
 
-    /// <summary>Where the layers' data come from (the document track's, or the stub).</summary>
-    public void SetProvider(IScanLayers provider) => _provider = provider ?? new StubScanLayers();
+    /// <summary>Where the layers' data come from (the case's hidden layers through the desk machines' readings); the tabs show by the machines on the desk today.</summary>
+    public void SetProvider(MachineLayers provider)
+    {
+        _provider = provider ?? new MachineLayers(CaseHidden.None, null, false, false);
+        Refresh();
+    }
+
+    /// <summary>The shown layer drawn again (a machine read something: the presenter's call), with no wipe.</summary>
+    public void Refresh()
+    {
+        Wire();
+        if (_document >= 0)
+            Apply(Available(Layer) ? Layer : ScanLayer.Print, false);
+    }
+
+    /// <summary>True when <paramref name="layer"/>'s machine is on the desk today (PRINT always is).</summary>
+    private bool Available(ScanLayer layer) => layer == ScanLayer.Print || (layer == ScanLayer.Uv ? _provider.Torch : _provider.Reader);
 
     /// <summary>The copy of paper <paramref name="document"/> (its printed <paramref name="fields"/>) shows, on PRINT; -1: no copy shows, the tabs hide.</summary>
     public void Show(int document, IReadOnlyList<DocumentField> fields)
@@ -101,7 +124,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
     public void Select(ScanLayer layer)
     {
         Wire();
-        if (_document < 0)
+        if (_document < 0 || !Available(layer))
             return;
         Apply(layer, layer != Layer && isActiveAndEnabled);
         Sounds.Play(SoundCues.UiTab);
@@ -110,6 +133,10 @@ public sealed class ScanLayerSwitch : MonoBehaviour
     private void Apply(ScanLayer layer, bool animate)
     {
         Layer = layer;
+        if (uvTab != null && uvTab.gameObject.activeSelf != _provider.Torch)
+            uvTab.gameObject.SetActive(_provider.Torch);
+        if (chipTab != null && chipTab.gameObject.activeSelf != _provider.Reader)
+            chipTab.gameObject.SetActive(_provider.Reader);
         Mark(printTab, layer == ScanLayer.Print);
         Mark(uvTab, layer == ScanLayer.Uv);
         Mark(chipTab, layer == ScanLayer.Chip);
@@ -127,21 +154,24 @@ public sealed class ScanLayerSwitch : MonoBehaviour
             StartCoroutine(Wipe());
     }
 
-    /// <summary>The hidden layer's marks: what each is, where and what it reads; a fault glows.</summary>
+    /// <summary>The marks the UV torch's cone has shown on the paper: what each is, where and what it reads; a fault glows and is clicked to log it. None seen yet: how to see them.</summary>
     private void DrawUv()
     {
         if (title != null)
             title.text = UiText.Get("layers.uv.title");
-        IReadOnlyList<UvMark> marks = _provider.Uv(_document, _fields);
-        if (marks == null || marks.Count == 0)
+        if (_provider.UvState(_document) != LayerState.Shown)
         {
-            Line(UiText.Get("layers.uv.none"), false);
+            Line(UiText.Get("layers.uv.unseen"), false, null);
             return;
         }
-        foreach (UvMark mark in marks)
+        int document = _document;
+        foreach (UvMark mark in _provider.Uv(document))
         {
             string where = mark.Field >= 0 && _fields != null && mark.Field < _fields.Count && _fields[mark.Field] != null ? UiText.DocumentWord(_fields[mark.Field].label) : UiText.Get("layers.uv.wholePaper");
-            Line(UiText.Format("layers.uv." + mark.Kind, where, mark.Text), mark.Fault);
+            bool missing = mark.Kind == UvMarkKind.Microprint && mark.Fault && string.IsNullOrEmpty(mark.Text);
+            string text = missing ? UiText.Format("layers.uv.MicroprintMissing", where) : UiText.Format("layers.uv." + mark.Kind, where, mark.Text);
+            UvMark picked = mark;
+            Line(text, mark.Fault, mark.Fault && mark.Field >= 0 ? () => Picked?.Invoke(document, picked.Field, picked.Text, ScanLayer.Uv) : (Action)null);
         }
     }
 
@@ -150,19 +180,27 @@ public sealed class ScanLayerSwitch : MonoBehaviour
     {
         if (title != null)
             title.text = UiText.Get("layers.chip.title");
-        IReadOnlyList<DocumentField> chip = _provider.Chip(_document, _fields);
-        if (chip == null)
+        LayerState state = _provider.ChipState(_document);
+        IReadOnlyList<DocumentField> chip = _provider.Chip(_document);
+        if (state != LayerState.Shown || chip == null)
         {
-            Line(UiText.Get("layers.chip.none"), false);
+            Line(UiText.Get(state == LayerState.NotYet ? "layers.chip.unread" : "layers.chip.none"), false, null);
             return;
         }
+        int document = _document;
         List<int> differ = ScanLayers.ChipDifferences(_fields, chip);
         for (int i = 0; i < chip.Count; i++)
             if (chip[i] != null && chip[i].category != ClueCategory.Photo && chip[i].category != ClueCategory.Seal)
-                Line(UiText.Format("layers.chip.line", UiText.DocumentWord(chip[i].label), chip[i].value), differ.Contains(i));
+            {
+                int field = i;
+                string value = chip[i].value;
+                bool glows = differ.Contains(i);
+                Line(UiText.Format("layers.chip.line", UiText.DocumentWord(chip[i].label), value), glows, glows ? () => Picked?.Invoke(document, field, value, ScanLayer.Chip) : (Action)null);
+            }
     }
 
-    private void Line(string text, bool glows)
+    /// <summary>A line of the layer; a glowing one, clicked, runs <paramref name="clicked"/> (logs the reading).</summary>
+    private void Line(string text, bool glows, Action clicked)
     {
         GameObject template = glows ? rowGlowTemplate : rowTemplate != null ? rowTemplate.gameObject : null;
         if (template == null || rows == null)
@@ -173,6 +211,15 @@ public sealed class ScanLayerSwitch : MonoBehaviour
         TMP_Text label = child != null ? child.GetComponent<TMP_Text>() : line.GetComponent<TMP_Text>();
         if (label != null)
             label.text = text;
+        if (clicked != null && line.GetComponent<Graphic>() != null)
+        {
+            Button button = line.GetComponent<Button>() ?? line.AddComponent<Button>();
+            button.onClick.AddListener(() =>
+            {
+                Sounds.Play(SoundCues.UiPress);
+                clicked();
+            });
+        }
         _lines.Add(line);
     }
 

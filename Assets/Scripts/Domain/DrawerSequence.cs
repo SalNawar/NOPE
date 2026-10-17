@@ -313,6 +313,15 @@ public static class PropArt
     /// <summary>The cream scanner's parts (tools/props/scanner/scanner_model.py): its body, the hinged lid, the bed's glass, the sweep bar and the readout.</summary>
     public static readonly string[] Scanner = { "Body", "Lid", "Glass", "SweepBar", "Readout" };
 
+    /// <summary>The chip reader's parts (tools/props/machines/chip_reader_model.py; the desk machines spec §1), as paths under the model's root: the body, the pad and its centre, the slot's flap, the readout and the three lamps.</summary>
+    public static readonly string[] ChipReader =
+    {
+        "Body", "Body/Pad", "Body/PadCentre", "Body/SlotFlap", "Body/Readout", "Body/LED_Power", "Body/LED_Read", "Body/LED_Fault"
+    };
+
+    /// <summary>The UV torch's parts (tools/props/machines/uv_torch_model.py): the torch with its thumb switch, lens and beam, and the cradle.</summary>
+    public static readonly string[] UvTorch = { "UvTorch", "UvTorch/Switch", "UvTorch/Lens", "UvTorch/BeamFX", "Cradle" };
+
     /// <summary>The brass stamp drawer's parts (tools/props/brass_drawer.py): the tray, and per lane its cradle, pinion, rack, lever and nameplate.</summary>
     public static readonly string[] BrassDrawer =
     {

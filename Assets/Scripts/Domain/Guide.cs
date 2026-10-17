@@ -278,7 +278,7 @@ public sealed class GuideContent
 public static class GuideTargets
 {
     /// <summary>The named targets.</summary>
-    public static readonly IReadOnlyList<string> Named = new[] { "sign", "inspect", "stamps", "pc", "rulebook", "seals", "calendar", "board", "scanner", "counter", "traveller" };
+    public static readonly IReadOnlyList<string> Named = new[] { "sign", "inspect", "stamps", "pc", "rulebook", "seals", "calendar", "board", "scanner", "counter", "traveller", "uv_torch", "chip_reader" };
 
     /// <summary>The targets in words, for a problem's message.</summary>
     public static string Describe => string.Join(", ", Named) + ", paper:<form>, field:<form>/<ClueCategory>";

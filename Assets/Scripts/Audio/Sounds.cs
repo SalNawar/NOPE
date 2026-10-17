@@ -52,6 +52,14 @@ public static class Sounds
         return true;
     }
 
+    /// <summary>The bank's first clip of cue <paramref name="id"/>, for a source that plays it itself (the UV torch's looping hum); false without one.</summary>
+    public static bool TryClip(string id, out AudioClip clip)
+    {
+        SoundBankSO.Cue cue = Bank != null ? Bank.Find(id) : null;
+        clip = cue != null && cue.clips != null && cue.clips.Length > 0 ? cue.clips[0] : null;
+        return clip != null;
+    }
+
     /// <summary>Sets the hall's ambience beds to <paramref name="mix"/> (they fade there); null fades every bed out (the office closed).</summary>
     public static void SetBeds(AmbienceMix? mix)
     {
