@@ -31708,7 +31708,7 @@
           },
           {
             "key": "home.pet.buy",
-            "text": "اشترِ · {0} {1}"
+            "text": "اشتر · {0} {1}"
           },
           {
             "key": "home.pet.noToys",
@@ -32620,6 +32620,14 @@
           }
         ],
         "words": [
+          {
+            "native": "اشتر",
+            "english": "buy"
+          },
+          {
+            "native": "للبيع",
+            "english": "for sale"
+          },
           {
             "native": "إطفاء",
             "english": "Turn off"
@@ -40945,6 +40953,18 @@
         ],
         "words": [
           {
+            "native": "Αγορά",
+            "english": "Buy"
+          },
+          {
+            "native": "πουλιούνται",
+            "english": "are sold"
+          },
+          {
+            "native": "παιχνίδια",
+            "english": "toys"
+          },
+          {
             "native": "σβήσιμο",
             "english": "Turn off"
           },
@@ -48756,6 +48776,14 @@
           }
         ],
         "words": [
+          {
+            "native": "Compra",
+            "english": "Buy"
+          },
+          {
+            "native": "vendita",
+            "english": "sale"
+          },
           {
             "native": "spegni",
             "english": "Turn off"
@@ -56688,6 +56716,10 @@
           }
         ],
         "words": [
+          {
+            "native": "kaufen",
+            "english": "buy"
+          },
           {
             "native": "bildschirm",
             "english": "Screen"
@@ -64869,6 +64901,14 @@
         ],
         "words": [
           {
+            "native": "购买",
+            "english": "buy"
+          },
+          {
+            "native": "出",
+            "english": "out"
+          },
+          {
             "native": "关闭",
             "english": "Turn off"
           },
@@ -72376,6 +72416,18 @@
           }
         ],
         "words": [
+          {
+            "native": "買う",
+            "english": "buy"
+          },
+          {
+            "native": "売っ",
+            "english": "sold"
+          },
+          {
+            "native": "いる",
+            "english": "is"
+          },
           {
             "native": "画面",
             "english": "Screen"

@@ -3025,8 +3025,12 @@ MonoBehaviour:
     text: Heute gespielt
     gloss: 0
     tier: 0
+  - key: home.pet.buy
+    text: "Kaufen \xB7 {0} {1}"
+    gloss: 0
+    tier: 0
   - key: home.pet.noToys
-    text: Noch kein Spielzeug. Die Bestell-App auf deinem PC verkauft welches.
+    text: Heute Abend gibt es kein Spielzeug zu kaufen.
     gloss: 0
     tier: 0
   - key: home.pet.dark
@@ -3952,6 +3956,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: kaufen
+    english: buy
   - native: bildschirm
     english: Screen
   - native: aus

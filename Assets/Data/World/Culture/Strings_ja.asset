@@ -3014,8 +3014,12 @@ MonoBehaviour:
     text: "\u4ECA\u591C\u306F\u904A\u3093\u3060"
     gloss: 0
     tier: 0
+  - key: home.pet.buy
+    text: "\u8CB7\u3046 \xB7 {0} {1}"
+    gloss: 0
+    tier: 0
   - key: home.pet.noToys
-    text: "\u304A\u3082\u3061\u3083\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002PC\u306E\u6CE8\u6587\u30A2\u30D7\u30EA\u3067\u8CB7\u3048\u307E\u3059\u3002"
+    text: "\u4ECA\u591C\u306F\u58F2\u3063\u3066\u3044\u308B\u304A\u3082\u3061\u3083\u304C\u306A\u3044\u3002"
     gloss: 0
     tier: 0
   - key: home.pet.dark
@@ -3924,6 +3928,12 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u8CB7\u3046"
+    english: buy
+  - native: "\u58F2\u3063"
+    english: sold
+  - native: "\u3044\u308B"
+    english: is
   - native: "\u753B\u9762"
     english: Screen
   - native: "\u30AA\u30D5"

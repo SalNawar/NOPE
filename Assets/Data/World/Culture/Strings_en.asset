@@ -3221,8 +3221,12 @@ MonoBehaviour:
     text: Played tonight
     gloss: 0
     tier: 1
+  - key: home.pet.buy
+    text: "Buy \xB7 {0} {1}"
+    gloss: 0
+    tier: 1
   - key: home.pet.noToys
-    text: No toys yet. The Orders app on your PC sells them.
+    text: No toys for sale tonight.
     gloss: 0
     tier: 1
   - key: home.pet.dark
