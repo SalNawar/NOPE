@@ -155,7 +155,7 @@ public sealed class DeskController : MonoBehaviour
             stamps.Changed += PassportUnderDaters;
         }
         if (rulebook != null && config != null)
-            rulebook.ShowEdge(config.folderThickness);
+            rulebook.ShowDepth(config);
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan += RulebookLifted;
