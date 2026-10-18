@@ -2,7 +2,8 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Shows the shift clock as HH:MM in the desktop's taskbar tray and on the
+/// Shows the shift clock as HH:MM in the desktop's taskbar tray, on the desk
+/// CRT's clock plate (CrtClock) and on the
 /// office's digital clock (the art office's own text, handed over by the
 /// office binder through Bind, or the fallback HUD's). Polls the driver each
 /// frame (as OfficeReadouts polls WorldState) and writes only when the minute
@@ -15,6 +16,9 @@ public sealed class ShiftClockReadouts : MonoBehaviour
 
     /// <summary>Tray clock text on the desktop's taskbar ("09:00").</summary>
     [SerializeField] private TMP_Text trayClockText;
+
+    /// <summary>The desk CRT's clock plate's time ("09:00"; optional).</summary>
+    [SerializeField] private TMP_Text crtClockText;
 
     /// <summary>The office's digital clock text.</summary>
     private TMP_Text _officeClockText;
@@ -41,6 +45,8 @@ public sealed class ShiftClockReadouts : MonoBehaviour
         string text = ShiftClock.Format(driver.Clock.CurrentMinute);
         if (trayClockText != null)
             trayClockText.text = text;
+        if (crtClockText != null)
+            crtClockText.text = text;
         if (_officeClockText != null)
             _officeClockText.text = text;
         _shownMinute = whole;

@@ -706,7 +706,12 @@ public static partial class OfficeSceneUIBuilder
         var soClock = new SerializedObject(clockReadouts);
         SetRef(soClock, "driver", clock);
         SetRef(soClock, "trayClockText", trayClockText);
+        CrtClock crtClock = BuildCrtClock(office, config, trayClockText);
+        SetRef(soClock, "crtClockText", crtClock.transform.Find("Time").GetComponent<TMP_Text>());
         soClock.ApplyModifiedProperties();
+        var soScreenClone = new SerializedObject(screen.GetComponent<PcScreenClone>());
+        SetRef(soScreenClone, "clock", crtClock);
+        soScreenClone.ApplyModifiedProperties();
 
         // The booth coordinator applies the input rules to all of it.
         BoothCoordinator coordinator = GetOrAdd<BoothCoordinator>(office.gameObject);
@@ -731,10 +736,19 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
 
         // The one input model: the office's keys, the right-click back-out and the PC's grey tab (Papers, Please's controls).
-        OfficeControls controls = BuildControls(deskViewBack.transform.parent, view, coordinator, wheel, inspect, stampTray, deskView, cityView, desk);
+        OfficeControls controls = BuildControls(deskViewBack.transform.parent, view, coordinator, wheel, inspect, stampTray, deskView, cityView, desk, config);
         var soControls = new SerializedObject(coordinator);
         SetRef(soControls, "controls", controls);
         soControls.ApplyModifiedProperties();
+
+        // The edge pull tabs (the PC tab, the CITY tab) keep clear of the calendar on the corkboard (Saleh 2026-10-18).
+        EdgeTabClearance tabClearance = GetOrAdd<EdgeTabClearance>(view.gameObject);
+        var soClear = new SerializedObject(tabClearance);
+        SetRef(soClear, "config", config);
+        SetRef(soClear, "calendar", propsRoot.Find("Calendar"));
+        Transform edgeOverlay = deskViewBack.transform.parent;
+        SerializedArrays.Set(soClear, "tabs", new[] { (RectTransform)edgeOverlay.Find("PcTab"), (RectTransform)edgeOverlay.Find("CityLook") });
+        soClear.ApplyModifiedProperties();
 
         // The binder puts all of it on the art office at load.
         OfficeSceneBinder binder = GetOrAdd<OfficeSceneBinder>(office.gameObject);
@@ -742,6 +756,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "contract", contract);
         SetRef(soBinder, "config", config);
         SetRef(soBinder, "wheel", wheel);
+        SetRef(soBinder, "tabClearance", tabClearance);
         SerializedArrays.Set(soBinder, "callouts", callouts);
         SetRef(soBinder, "stampTray", stampTray);
         SetRef(soBinder, "detainButton", BuildDetainButton(office, stampTray));
@@ -817,6 +832,61 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>A primitive part of a stand-in prop (no collider: the prop's click box takes the clicks).</summary>
+    /// <summary>
+    /// The desk CRT's clock plate (CrtClock; Saleh 2026-10-18), rebuilt each
+    /// run under the Office root, inactive until the screen shows the desktop
+    /// (PcScreenClone lays it on the glass at bind): a dark unlit quad, the
+    /// taskbar tray's colour, with the time over the date in the tray clock's
+    /// face and ink (world texts on the gameplay's sorting layer).
+    /// </summary>
+    private static CrtClock BuildCrtClock(Transform office, DeskConfigSO config, TMP_Text trayClock)
+    {
+        DestroyChildIfPresent(office, "CrtClock");
+        Transform host = EnsureChild(office, "CrtClock");
+        Material plateMaterial = EnsureMaterial("CrtClock_Plate", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetColor("_BaseColor", CrtClockPlate);
+            BaseShaderGUI.SetMaterialKeywords(m);
+        });
+        GameObject plate = PrimitivePart(host, "Plate", PrimitiveType.Quad, Vector3.zero, Vector3.one, plateMaterial);
+        plate.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
+
+        TextMeshPro Line(string name, FontStyles style)
+        {
+            var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));
+            go.transform.SetParent(host, false);
+            TextMeshPro tmp = go.GetComponent<TextMeshPro>();
+            tmp.text = string.Empty;
+            if (trayClock != null && trayClock.font != null)
+            {
+                tmp.font = trayClock.font;
+                tmp.fontSharedMaterial = trayClock.font.material;
+            }
+            tmp.color = trayClock != null ? trayClock.color : Color.white;
+            tmp.fontStyle = style;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.textWrappingMode = TextWrappingModes.NoWrap;
+            tmp.enableAutoSizing = true;
+            tmp.sortingLayerID = GameplaySortingLayerId();
+            return tmp;
+        }
+        TextMeshPro time = Line("Time", FontStyles.Bold);
+        TextMeshPro date = Line("Date", FontStyles.Normal);
+
+        CrtClock clock = host.gameObject.AddComponent<CrtClock>();
+        var so = new SerializedObject(clock);
+        SetRef(so, "config", config);
+        SetRef(so, "plate", plate.transform);
+        SetRef(so, "timeText", time);
+        SetRef(so, "dateText", date);
+        so.ApplyModifiedProperties();
+        host.gameObject.SetActive(false);
+        return clock;
+    }
+
+    /// <summary>The CRT clock plate's colour: the taskbar tray's dark glass.</summary>
+    private static readonly Color CrtClockPlate = new Color(0.07f, 0.1f, 0.09f, 1f);
+
     private static GameObject PrimitivePart(Transform parent, string name, PrimitiveType type, Vector3 position, Vector3 size, Material material)
     {
         GameObject part = GameObject.CreatePrimitive(type);
@@ -2111,10 +2181,12 @@ public static partial class OfficeSceneUIBuilder
     /// reading and city views and the desk; and the PC's grey tab on the
     /// overlay's left edge ("PC" over the key, Q; inactive until the booth makes
     /// the switch live), last on the overlay so it stays on top of the open PC
-    /// frame. Returns the controls.
+    /// frame; and the office's callouts (OfficeCallouts on the Office root:
+    /// the speech bubble and the board's tooltip, hidden in the reading view
+    /// and the city view). Returns the controls.
     /// </summary>
     private static OfficeControls BuildControls(Transform overlay, OfficeViewController view, BoothCoordinator booth, TravellerWheel wheel, DeskInspect inspect,
-                                                DeskStampTray stamps, DeskView deskView, CityView cityView, DeskController desk)
+                                                DeskStampTray stamps, DeskView deskView, CityView cityView, DeskController desk, DeskConfigSO config)
     {
         DestroyChildIfPresent(overlay, "PcTab");
         Button tab = MakeButton(overlay, "PcTab", null, Vector2.zero, Vector2.one, StampGrey, ThemeRoleId.DiegeticDevice);
@@ -2147,15 +2219,24 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
 
         // In the city view only the DESK tab shows: the PC and STAMPS tabs and the inspect button fade out (CityView.deskControls),
-        // and so do the office's callouts over the hall (the traveller's speech bubble, the props' tooltips, the case HUD's strip).
+        // and so do the props' tooltips and the case HUD's strip, which drew over the city.
         var soCity = new SerializedObject(cityView);
         SerializedProperty hidden = soCity.FindProperty("deskControls");
-        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("InspectButton"),
-                                     overlay.Find("SpeechBubble"), overlay.Find("DeskTooltip"), overlay.Find("BoardTooltip"), overlay.Find("OfficeCaseHud") };
+        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("InspectButton"), overlay.Find("DeskTooltip"), overlay.Find("OfficeCaseHud") };
         hidden.arraySize = deskControls.Length;
         for (int i = 0; i < deskControls.Length; i++)
             hidden.GetArrayElementAtIndex(i).objectReferenceValue = deskControls[i] != null ? GetOrAdd<CanvasGroup>(deskControls[i].gameObject) : null;
         soCity.ApplyModifiedProperties();
+
+        // The office's callouts over the hall (the traveller's speech bubble, the board's tooltip) show only in the office view:
+        // the reading view and the city view hide them (Saleh 2026-10-18: "dialogue bubles stay visible when you click on the table").
+        OfficeCallouts callouts = GetOrAdd<OfficeCallouts>(view.gameObject);
+        var soCallouts = new SerializedObject(callouts);
+        SetRef(soCallouts, "config", config);
+        SetRef(soCallouts, "deskView", deskView);
+        SetRef(soCallouts, "cityView", cityView);
+        SerializedArrays.Set(soCallouts, "callouts", new[] { GetOrAdd<CanvasGroup>(overlay.Find("SpeechBubble").gameObject), GetOrAdd<CanvasGroup>(overlay.Find("BoardTooltip").gameObject) });
+        soCallouts.ApplyModifiedProperties();
         return controls;
     }
 

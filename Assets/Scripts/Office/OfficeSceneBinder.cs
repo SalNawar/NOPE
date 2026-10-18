@@ -97,6 +97,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The PC frame (its camera draws the desktop into the glass right after the office camera).</summary>
     [SerializeField] private PcFrame frame;
 
+    /// <summary>Keeps the office's edge pull tabs clear of the calendar (optional): bound to the office camera and the office view's Cinemachine camera.</summary>
+    [SerializeField] private EdgeTabClearance tabClearance;
+
     /// <summary>The PC's click (opens the frame); its box is fitted to the PC.</summary>
     [SerializeField] private Clickable pc;
 
@@ -270,6 +273,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 callout.SetCamera(office);
         if (frame != null)
             frame.DrawAfter(office);
+        if (tabClearance != null)
+            tabClearance.Bind(office, _officeVcam);
 
         Vector3 viewer = office.transform.position;
         BindPc(office);

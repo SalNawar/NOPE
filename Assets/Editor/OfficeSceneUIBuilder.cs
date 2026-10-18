@@ -299,6 +299,8 @@ public static partial class OfficeSceneUIBuilder
         var soOffice = new SerializedObject(officeUI);
         SetRef(soOffice, "moneyText", moneyText);
         SetRef(soOffice, "dayText", dayText);
+        CrtClock crtClock = Object.FindFirstObjectByType<CrtClock>(FindObjectsInactive.Include);
+        SetRef(soOffice, "crtDateText", crtClock != null ? crtClock.transform.Find("Date").GetComponent<TMP_Text>() : null);
         SetRef(soOffice, "dateButton", dateButton);
         SetRef(soOffice, "app", app.App);
         SetRef(soOffice, "resultText", verdictText);

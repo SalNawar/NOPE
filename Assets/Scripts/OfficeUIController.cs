@@ -30,6 +30,9 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>Shows today's date and the day number in the taskbar ("14 MAR 2150 · Day 1"; the desk-first redesign: "the date should be on the PC").</summary>
     [SerializeField] private TMP_Text dayText;
 
+    /// <summary>The desk CRT's clock plate's date ("14 MAR 2150", CrtClock; optional).</summary>
+    [SerializeField] private TMP_Text crtDateText;
+
     /// <summary>The date's button: a click holds today's date on the Investigation app's workbench, to compare with an expiry or a ticket's date.</summary>
     [SerializeField] private Button dateButton;
 
@@ -96,14 +99,26 @@ public sealed class OfficeUIController : MonoBehaviour
 
         if (dayText != null)
             dayText.text = TrayDate(world.day);
+        if (crtDateText != null)
+            crtDateText.text = CrtDate(world.day);
+    }
+
+    /// <summary>The desk CRT's date for <paramref name="day"/>: today in the agency's calendar, in capitals ("14 MAR 2150"), or the plain day when the library has no readable first date.</summary>
+    private static string CrtDate(int day) => Today(day) ?? UiText.Format("tray.day", day);
+
+    /// <summary>Today (shift day <paramref name="day"/>) in the agency's calendar, in capitals ("14 MAR 2150"), or null when the library has no readable first date.</summary>
+    private static string Today(int day)
+    {
+        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+        string today = library != null ? AgencyCalendar.Today(library.Agency.firstDate, day) : null;
+        return today?.ToUpperInvariant();
     }
 
     /// <summary>The taskbar's date for <paramref name="day"/>: today in the agency's calendar, in capitals, and the day ("14 MAR 2150 · Day 1"), or the plain day when the library has no readable first date.</summary>
     private static string TrayDate(int day)
     {
-        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
-        string today = library != null ? AgencyCalendar.Today(library.Agency.firstDate, day) : null;
-        return today != null ? UiText.Format("tray.date", today.ToUpperInvariant(), day) : UiText.Format("tray.day", day);
+        string today = Today(day);
+        return today != null ? UiText.Format("tray.date", today, day) : UiText.Format("tray.day", day);
     }
 
     /// <summary>The date's button holds today on the app's workbench.</summary>
