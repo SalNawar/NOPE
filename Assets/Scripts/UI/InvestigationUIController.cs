@@ -426,6 +426,15 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The Papers menu (or the desk's rulebook) flagged a paper missing.</summary>
     private void FlagMissingFromApp(string requestId) => FlagMissing(requestId);
 
+    /// <summary>The Interview Protocols' cards for the traveller at the desk (InterviewPresenter.ProtocolCards; none between travellers): the questions the desk's card ring asks.</summary>
+    public List<ProtocolCard> ProtocolCards() => _currentCase != null && _interview != null ? _interview.ProtocolCards() : new List<ProtocolCard>();
+
+    /// <summary>Counts the interview's changes (InterviewPresenter.Version; -2 between travellers): the card ring redraws when it moves.</summary>
+    public int InterviewVersion => _currentCase != null && _interview != null ? _interview.Version : -2;
+
+    /// <summary>Asks question <paramref name="choiceId"/> from the desk's card ring (InterviewPresenter.Ask); false when nothing was asked.</summary>
+    public bool AskProtocol(string choiceId) => _currentCase != null && _interview != null && _interview.Ask(choiceId);
+
     /// <summary>The case board's lookup found no record of the scanned papers' number or name: the workbench logs it (the scanner app spec §2.1).</summary>
     private void LogNoRecord(string query)
     {

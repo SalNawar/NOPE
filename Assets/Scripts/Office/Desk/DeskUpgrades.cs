@@ -41,6 +41,16 @@ public sealed class DeskUpgrades : MonoBehaviour
     /// <summary>The supply crate (null without its art).</summary>
     public SupplyCrate Crate => crate;
 
+    /// <summary>The Interview Protocols' card ring (null without its art; the probes drive it).</summary>
+    public ProtocolRing ProtocolRing => protocolRing;
+
+    /// <summary>Wires the objects that work with the investigation (GameManager, once, before the first day): the card ring asks its questions.</summary>
+    public void Bind(InvestigationUIController investigation)
+    {
+        if (protocolRing != null)
+            protocolRing.Bind(investigation);
+    }
+
     /// <summary>The objects on the desk today (the binder keeps them clear of the scanner; the probes read them).</summary>
     public IEnumerable<Component> Shown
     {

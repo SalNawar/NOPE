@@ -126,6 +126,9 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>True while the wheel is open.</summary>
     public bool IsOpen => catcher != null && catcher.activeSelf;
 
+    /// <summary>True while the wheel may open (BoothRules.WheelAllowed: a traveller at the desk to be asked); the Interview Protocols' card ring asks only then.</summary>
+    public bool CanOpen => _canOpen;
+
     /// <summary>Raised when the wheel opens or closes.</summary>
     public event Action OpenChanged;
 

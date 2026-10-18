@@ -75,6 +75,9 @@ public sealed class InterviewPresenter
     /// <summary>The papers the clerk can flag missing for the current traveller (the desk-first redesign, item 7).</summary>
     private MissingPapers _missing = MissingPapers.None;
 
+    /// <summary>Counts the interview's changes (RefreshChoices: a new traveller, a choice played, a question unlocked or added).</summary>
+    private int _version;
+
     /// <summary>Raised when the traveller, asked for a paper flagged missing, says they do not carry it (the workbench logs it: FindingKind.PaperMissing).</summary>
     public event Action<FormRequest> NotCarried;
 
@@ -92,6 +95,42 @@ public sealed class InterviewPresenter
 
     /// <summary>The categories of the questions offered to the current traveller (none when the interview is not reachable).</summary>
     public IReadOnlyList<ClueCategory> QuestionCategories => _questionCategories;
+
+    /// <summary>Counts the interview's changes (a new traveller, a choice played, a question unlocked or added): the Interview Protocols' card ring redraws its cards when it moves.</summary>
+    public int Version => _version;
+
+    /// <summary>The Interview Protocols' cards (the desk machines spec §10): one per question the current traveller can be asked now, the ask menu's open choices in its order (DialogRunner.Offered); none between travellers or while the interview is out of reach.</summary>
+    public List<ProtocolCard> ProtocolCards()
+    {
+        var cards = new List<ProtocolCard>();
+        if (_runner == null || !_interviewReachable)
+            return cards;
+        foreach (DialogChoice c in _runner.Offered(InterviewScript.AskNodeId))
+            cards.Add(new ProtocolCard(c.Id, c.Label));
+        return cards;
+    }
+
+    /// <summary>
+    /// Asks question <paramref name="choiceId"/> from the Interview Protocols'
+    /// card ring (Saleh 2026-10-18, demo 1018a note 14; the desk machines spec
+    /// §10), the wheel shut or open: exactly as the wheel's ask menu does (the
+    /// desk's prompt and the traveller's answer in the transcript and the
+    /// bubble, the shift's time, the answer announced), the wheel staying
+    /// where it is (DialogRunner.ChooseFrom). False, nothing asked, when the
+    /// traveller cannot be asked now (none at the desk, the interview out of
+    /// reach, the question not open).
+    /// </summary>
+    public bool Ask(string choiceId)
+    {
+        if (_runner == null || !_interviewReachable || (_wheel != null && !_wheel.CanOpen))
+            return false;
+        int before = _runner.Transcript.Count;
+        DialogChoice choice = _runner.ChooseFrom(InterviewScript.AskNodeId, choiceId);
+        if (choice == null)
+            return false;
+        Played(choice, before);
+        return true;
+    }
 
     /// <summary>
     /// The wheel's ring, the transcripts (one per pane; null entries are
@@ -287,6 +326,7 @@ public sealed class InterviewPresenter
     /// </summary>
     private void RefreshChoices()
     {
+        _version++;
         if (_ring == null || _runner == null)
             return;
 
@@ -329,7 +369,12 @@ public sealed class InterviewPresenter
         DialogChoice choice = _runner.Choose(choiceId);
         if (choice == null)
             return;
+        Played(choice, before);
+    }
 
+    /// <summary>What a choice played does once its lines are in the transcript from <paramref name="before"/> (Choose; Ask, the card ring's): see Choose.</summary>
+    private void Played(DialogChoice choice, int before)
+    {
         foreach (TranscriptView transcript in _transcripts)
             if (transcript != null)
                 transcript.Refresh();

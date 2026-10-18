@@ -162,6 +162,31 @@ public static partial class OfficeSceneUIBuilder
         return click;
     }
 
+    /// <summary>A live text named <paramref name="name"/> on a prop's face (<paramref name="parent"/>'s local frame: centred at <paramref name="at"/>, <paramref name="size"/> metres, read from local -Z), in the kit font <paramref name="font"/>, auto-sized up to <paramref name="maxSize"/>, on the Gameplay sorting layer; empty until the game prints it.</summary>
+    private static TextMeshPro PropText(Transform parent, string name, Vector3 at, Vector2 size, string font, Color colour, float maxSize)
+    {
+        DestroyChildIfPresent(parent, name);
+        var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));
+        go.transform.SetParent(parent, false);
+        go.transform.localPosition = at;
+        go.transform.localRotation = Quaternion.identity;
+        var text = go.GetComponent<TextMeshPro>();
+        ((RectTransform)go.transform).sizeDelta = size;
+        var asset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(font);
+        if (asset != null)
+            text.font = asset;
+        text.enableAutoSizing = true;
+        text.fontSizeMin = maxSize * 0.15f;
+        text.fontSizeMax = maxSize;
+        text.alignment = TextAlignmentOptions.Center;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.color = colour;
+        text.margin = Vector4.zero;
+        text.sortingLayerID = GameplaySortingLayerId();
+        text.text = string.Empty;
+        return text;
+    }
+
     /// <summary>Office/DeskHardware/DeskUpgrades: the upgrades' objects (each inactive until DeskUpgrades.BeginDay shows it), wired with the config.</summary>
     private static DeskUpgrades BuildDeskUpgrades(Transform hardwareRoot, DeskConfigSO config)
     {
@@ -238,8 +263,14 @@ public static partial class OfficeSceneUIBuilder
             return null;
         ProtocolRing ring = GetOrAdd<ProtocolRing>(host.gameObject);
         Transform r = m.Find("ProtocolStand/Ring");
+        // Each card's question, printed on its face below the header band (upgrade_props_model.py: the face centre (0, -0.0217, -0.0008), outward -Z, 0.085 x 0.055, the header the top 26 %).
+        var labels = new Object[4];
+        for (int i = 0; i < 4; i++)
+            labels[i] = PropText(r.Find("Card_" + i), "Label", new Vector3(0f, -0.0289f, -0.0009f), new Vector2(0.076f, 0.034f), UiKitFonts.Label, Hex("#2B1C24"), 0.12f);
         var so = new SerializedObject(ring);
         SetArray(so, "cards", Enumerable.Range(0, 4).Select(i => (Object)r.Find("Card_" + i)).ToArray());
+        SetArray(so, "labels", labels);
+        SetRef(so, "ring", r);
         SetRef(so, "click", PropClick(host, "Click", m.Find("ProtocolStand")));
         SetRef(so, "sound", host.GetComponent<AudioSource>());
         so.ApplyModifiedProperties();

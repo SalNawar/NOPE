@@ -265,6 +265,7 @@ public sealed partial class GameManager : MonoBehaviour
             investigationUI.SetIntroductions(contentLibrary.Introductions, _worldState.day);
         if (deskUpgrades != null)
         {
+            deskUpgrades.Bind(investigationUI);
             deskUpgrades.BeginDay(_worldState, contentLibrary, Portals);
             _desk.Opened += deskUpgrades.ShiftOpened;
             Departed += deskUpgrades.Departed;
