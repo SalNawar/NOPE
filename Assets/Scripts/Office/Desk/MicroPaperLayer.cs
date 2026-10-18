@@ -30,6 +30,7 @@ public sealed class MicroPaperLayer : MonoBehaviour
     private GameObject _tick;
     private BoxCollider _box;
     private float _held, _pop;
+    private int _readableFrame = -2;
 
     /// <summary>The paper's index in the case.</summary>
     public int Document => _paper != null ? _paper.Index : -1;
@@ -110,7 +111,16 @@ public sealed class MicroPaperLayer : MonoBehaviour
         Vector2 b = toLens(sheet.TransformPoint(new Vector3(_band.xMax, _band.center.y, 0f)));
         float length = _band.width * sheet.lossyScale.x;
         float shown = on ? MicroLens.Shown(a.x, a.y, b.x, b.y, shape, halfWidth, halfHeight) : 0f;
-        _held = MicroLens.Held(_held, MicroLens.Readable(shown, length), dt);
+        // Two magnifiers may look at once (the loupe held, the Fresnel laid): the line counts while any of them shows it, once a frame.
+        int frame = Time.frameCount;
+        bool readable = MicroLens.Readable(shown, length);
+        if (readable && _readableFrame != frame)
+        {
+            _held = MicroLens.Held(_held, true, dt);
+            _readableFrame = frame;
+        }
+        else if (!readable && _readableFrame < frame - 1)
+            _held = 0f;
         if (!UvCone.IsSeen(_held) || !_hardware.Readings.ReadMicro(Document))
             return;
         Shown(true);
