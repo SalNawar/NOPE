@@ -136,6 +136,27 @@ public static class UiText
         text.fontSizeMin = size * library.CultureUi.labelMinScale;
     }
 
+    /// <summary>
+    /// Sizes a one-line text that its plate grows around (a content size
+    /// fitter: auto-sizing never shrinks it) so it is at most
+    /// <paramref name="width"/> wide: <paramref name="size"/> when it fits,
+    /// else just small enough, never under CultureUiSettings.labelMinScale of
+    /// it (the 1018 language pass: a long desktop icon name reached past the
+    /// screen's edge). Without a content library it keeps <paramref name="size"/>.
+    /// </summary>
+    public static void FitWidth(TMP_Text text, float width, float size)
+    {
+        if (text == null || size <= 0f)
+            return;
+        text.enableAutoSizing = false;
+        text.fontSize = size;
+        ContentLibrarySO library = Library();
+        float needed = text.GetPreferredValues(text.text, float.PositiveInfinity, float.PositiveInfinity).x;
+        if (library == null || width <= 0f || needed <= width)
+            return;
+        text.fontSize = Mathf.Max(size * library.CultureUi.labelMinScale, size * width / needed);
+    }
+
     /// <summary>The lookup in use (null when no content library is reachable).</summary>
     private static UiStrings Strings()
     {

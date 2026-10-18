@@ -543,7 +543,8 @@ public static partial class OfficeSceneUIBuilder
         caption.fontStyle = FontStyles.Bold | FontStyles.UpperCase;
         caption.characterSpacing = 4f;
         caption.overflowMode = TextOverflowModes.Overflow;
-        SceneUiKit.Tag(caption, ThemeRoleId.SurfaceMuted, ThemePart.Ink, "calendar.title", FontStyles.Bold | FontStyles.UpperCase, ThemeTextKind.Heading, false);
+        // A culture's longer title (Italian's CALENDARIO DELL'AGENZIA) shrinks to the card rather than spilling past it (the 1018 language pass).
+        SceneUiKit.Tag(caption, ThemeRoleId.SurfaceMuted, ThemePart.Ink, "calendar.title", FontStyles.Bold | FontStyles.UpperCase, ThemeTextKind.Heading, true);
         CardRow(caption, 16f, 48f);
         TMP_Text day = WbText(card, "Day", null, "30", 96, ThemeRoleId.Surface, TextAlignmentOptions.TopLeft, FontStyles.Bold);
         day.overflowMode = TextOverflowModes.Overflow;

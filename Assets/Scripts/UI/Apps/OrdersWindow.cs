@@ -334,6 +334,9 @@ public sealed class OrdersWindow : MonoBehaviour
             card.name = "Node_" + c.Id;
             Place((RectTransform)card.transform, at[c.Id], node);
             SetText(card.transform, "Name", upgrade.displayName);
+            // A long name or state (a culture's words, its currency) shrinks to its box rather than spilling over the card (the 1018 language pass).
+            UiText.FitLabel(Child<TMP_Text>(card.transform, "Name"), true);
+            UiText.FitLabel(Child<TMP_Text>(card.transform, "State"), true);
             Sprite art = SlotArt.Sprite(ArtSlots.OrderIcon(c.Id));
             SetImage(card.transform, "Glyph", art ?? Glyph("branch_" + ArtSlots.Key(c.Branch.ToString())));
             if (art != null)

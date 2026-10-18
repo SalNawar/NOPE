@@ -54,6 +54,9 @@ public sealed class CalendarView : AppView
 
     private void Awake()
     {
+        // Each day of the week on one line over its number, shrinking rather than breaking a weekday's name (the 1018 language pass: "We|d" at 150 %).
+        foreach (TMP_Text day in weekTexts)
+            UiText.FitLabel(day);
         if (todayButton != null)
             todayButton.onClick.AddListener(() =>
             {

@@ -895,7 +895,7 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
-    private const float MenuButtonWidth = 148f, DeskButtonWidth = 200f;
+    private const float MenuButtonWidth = 148f, DeskButtonWidth = 224f; // the desk button holds German's ZURÜCK ZUM SCHREIBTISCH over its gloss (the 1018 language pass)
 
     /// <summary>Where the taskbar's row of window buttons and tray starts: after the Menu and Back to desk buttons.</summary>
     private const float TrayRowFrom = PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth + PcSize.L;
