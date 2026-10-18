@@ -467,6 +467,38 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
   - `play_warnings.txt` is kept empty as before: both runs logged the one environment warning about the worktree's locally
     rewritten TMP `LiberationSans SDF - Fallback.asset` (`--allow play_warnings.txt`).
   - Profiles not re-taken (round 6's kept).
+- **Round 12, the 2026-10-18 integration** (`integrate/1018`: main `12ae753` with LAY, FUN, DOC2, UI, HALL and PET3, and the
+  integration's fixes). Re-packed from run A (static) and run B (play, profiles A and B); run A's play is byte-equal to run B's
+  in every deterministic file (the transcript and the 30 saves), and static run B equals run A (cases, scenes, data) but for
+  the environment warning below, so the pass is deterministic. Run B's play report passes 6,491 checks and fails none (run A's 85 fails were the audit play's own
+  PC checks, fixed in `e0a7c47`: since UI's PC-always-English the Citizen Account's rows and the workbench's line labels read
+  English from day 8, when the world's language locks). The four planned mistakes are made, every other verdict is right, each
+  deviation is proven before its denial, and the hidden proofs include the reprinted paper read through the lens stand's
+  magnifier (`COVER lie ReprintedPaper: 1`, `COVER proof HiddenMismatch: 4`). Seed 12345's run owns no repaired portal, so no
+  repaired-route draw shows here (HALL's honest draws over repaired routes move only runs with repairs). Against round 11 the
+  saves are byte-identical (pay, fines, stability, orders, House, the day-15 ending); every difference has one of these causes:
+  - `cases.txt` (239 traveller lines, days 9-15 of 17 seeds; days 1-8 and every world line unchanged): FUN's `ReprintedPaper`
+    joins the lie lists of days 9-15, so those days' lie draws have one kind more (42 lines now carry a `Micro:` hidden tell).
+    FUN's contacts draw on `Seeds.ForContacts` and move no traveller.
+  - `play_transcript.txt` (95 lines out, 133 in): the tutorial has 7 steps, not 8 (LAY: the stamp drawer's step is gone, the
+    stamp step points at the rack); the GUIDE's and the memos' new wording (the scanner and lens pages, day 8's "the papers on
+    your desk read the world's language", day 9's reprinted-paper warning); the case board's cross-checks name the papers in
+    English (UI: the PC is English); and the redrawn lies of days 9-15 above (their papers, the board, the confrontations and
+    the evidence, one reprinted Work Permit's microprint logged by the machine reading).
+  - `data_hashes.txt` (20 files): the library, the day plans of days 8-15, the seven string tables, the JSON, `Desk_Default`,
+    `HallLighting_Default` and the Auto-Feed Scanner's upgrade.
+  - `validator.txt`: one warning, two Full-tier strings without translations (`settings.languageDesk`, UI;
+    `rule.openRepaired`, HALL): they stay English in every culture, by design for v1.
+  - `scene_OfficeGameplay`, `scenes_summary.txt` (297 dump lines in, 54 out): LAY's Settings row (Machine close-ups), FUN's
+    protocol-card labels, Auto-Feed and beacon click boxes and the lens stand's magnifiers (DeskMagnifier, Grab boxes), HALL's
+    PortalEffect meshes, UI's CRT clock and edge-tab clearance and wider desk and Go buttons, and the integration's Settings
+    window (800 x 1010, tighter column). Each rebuild equals the committed scene; the art office stays byte-unchanged.
+  - Profiles re-taken (round 6's were kept until now): the office's PlayerLoop is 0.87 ms idle and 3.5 ms in the busy views
+    (round 6: 0.77 and 2.9 to 3.4 ms; per-frame GC unchanged at 436 B); the scene loads are slower: title to office 2.9 s
+    (1.8 s), Home to office 2.1 s (1.0 s), office to Home 0.4 s (0.3 s). One new allocation site in our code:
+    `MachineCloseUp.Update` (LAY) looks for the upgrades' objects once a second (2 allocations in 1-2 of 240 frames).
+  - `play_warnings.txt` is kept empty as before: run A logged the one environment warning about the worktree's locally
+    rewritten TMP `LiberationSans SDF - Fallback.asset` (`--allow play_warnings.txt`).
 
 ## Baseline results (ff3a6e0)
 
