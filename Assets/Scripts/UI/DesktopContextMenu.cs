@@ -105,7 +105,7 @@ public sealed class DesktopContextMenu : MonoBehaviour
         {
             TMP_Text label = pinEntry.GetComponentInChildren<TMP_Text>(true);
             if (label != null)
-                label.text = UiText.Get(pinned ? "menu.unpin" : "menu.pin");
+                label.text = UiText.Pc.Get(pinned ? "menu.unpin" : "menu.pin");
         }
         gameObject.SetActive(true);
         transform.SetAsLastSibling();

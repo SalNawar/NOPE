@@ -62,17 +62,17 @@ public sealed class ReportView : AppView
         string date = agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null;
         data.Text = new Dictionary<string, string>
         {
-            { ReportPage.CaseLineSlot, date != null ? UiText.Format("form.report.caseLine", date, caseLine ?? string.Empty) : caseLine ?? string.Empty },
-            { ReportPage.TailSlot, _entries.Count == 0 ? UiText.Get("scanner.idle") : UiText.Format("scanner.summary", _entries.Count) },
+            { ReportPage.CaseLineSlot, date != null ? UiText.Pc.Format("form.report.caseLine", date, caseLine ?? string.Empty) : caseLine ?? string.Empty },
+            { ReportPage.TailSlot, _entries.Count == 0 ? UiText.Pc.Get("scanner.idle") : UiText.Pc.Format("scanner.summary", _entries.Count) },
             { ReportPage.SignatureSlot, agency != null && agency.clerk != null ? agency.clerk.name : string.Empty }
         };
-        data.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { ReportPage.RowsSlot, ReportPage.Rows(_entries, UiText.Category, Proof) } };
+        data.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { ReportPage.RowsSlot, ReportPage.Rows(_entries, UiText.Pc.Category, Proof) } };
         page.Show(reportForm.form, data, _ => false, null, CellLinkHint);
     }
 
     /// <summary>The proof's word on the report ("Mismatch", "Belongs elsewhere", "Agency records", "Papers disagree", "Not the person").</summary>
     private static string Proof(DiscrepancyProof proof) =>
-        UiText.Get(proof == DiscrepancyProof.ForeignOrigin ? "report.proof.foreignOrigin"
+        UiText.Pc.Get(proof == DiscrepancyProof.ForeignOrigin ? "report.proof.foreignOrigin"
                  : proof == DiscrepancyProof.RecordMismatch ? "report.proof.recordMismatch"
                  : proof == DiscrepancyProof.CrossMismatch ? "report.proof.crossMismatch"
                  : proof == DiscrepancyProof.PersonMismatch ? "report.proof.personMismatch"
@@ -97,7 +97,7 @@ public sealed class ReportView : AppView
         if (Link(slot, cell).IsNone)
             return null;
         ReportEntry entry = EntryOf(slot);
-        return UiText.Format("app.link.pick", cell == ReportPage.StatementCell ? entry.Statement.Label : entry.Truth.Label);
+        return UiText.Pc.Format("app.link.pick", cell == ReportPage.StatementCell ? entry.Statement.Label : entry.Truth.Label);
     }
 
     /// <summary>A side's ↗ was clicked: its link, through the pane this report is in (LK2).</summary>

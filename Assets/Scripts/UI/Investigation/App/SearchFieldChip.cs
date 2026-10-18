@@ -84,7 +84,7 @@ public sealed class SearchFieldChip : MonoBehaviour
         if (chip != null)
             chip.SetActive(clip != null);
         if (chipLabel != null)
-            chipLabel.text = clip != null ? UiText.Format("search.chip", clip.SourceLabel, clip.TongueName) : string.Empty;
+            chipLabel.text = clip != null ? UiText.Pc.Format("search.chip", clip.SourceLabel, clip.TongueName) : string.Empty;
         if (app != null)
             app.SetChip(clip != null ? new SearchChip(clip.TongueId, clip.Canonical) : (SearchChip?)null);
         if (_viewport != null && chip != null)

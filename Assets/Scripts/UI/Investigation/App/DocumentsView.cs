@@ -86,10 +86,10 @@ public sealed class DocumentsView : AppView, IAppItems
                 page.gameObject.SetActive(false);
                 page.SetDocument(documents[i], i, forms != null && i < forms.Count ? forms[i] : null, compare, look, art, claim);
                 _pages.Add(page);
-                string name = documents[i] != null ? documents[i].DisplayName : UiText.Get("document.untitled");
+                string name = documents[i] != null ? documents[i].DisplayName : UiText.Pc.Get("document.untitled");
                 _names.Add(name);
                 _fields.Add(documents[i] != null ? documents[i].fields : null);
-                _requestNames.Add(requestNames != null && i < requestNames.Count && !string.IsNullOrEmpty(requestNames[i]) ? UiText.DocumentWord(requestNames[i]) : name);
+                _requestNames.Add(requestNames != null && i < requestNames.Count && !string.IsNullOrEmpty(requestNames[i]) ? UiText.Pc.DocumentWord(requestNames[i]) : name);
             }
         Refresh();
     }
@@ -198,9 +198,9 @@ public sealed class DocumentsView : AppView, IAppItems
             case PaperState.Scanned:
                 return new AppChip(_names[index], true);
             case PaperState.OnDesk:
-                return new AppChip(UiText.Format("app.chip.onDesk", _names[index]), false);
+                return new AppChip(UiText.Pc.Format("app.chip.onDesk", _names[index]), false);
             default:
-                return new AppChip(UiText.Format("app.chip.notHandedOver", _requestNames[index]), false);
+                return new AppChip(UiText.Pc.Format("app.chip.notHandedOver", _requestNames[index]), false);
         }
     }
 
@@ -218,8 +218,8 @@ public sealed class DocumentsView : AppView, IAppItems
         if (hintText == null)
             return;
         hintText.gameObject.SetActive(!showCopy);
-        hintText.text = _selected < 0 ? UiText.Get("app.doc.none")
-            : state == PaperState.OnDesk ? UiText.Get("app.doc.scanHint")
-            : UiText.Get("app.doc.askHint");
+        hintText.text = _selected < 0 ? UiText.Pc.Get("app.doc.none")
+            : state == PaperState.OnDesk ? UiText.Pc.Get("app.doc.scanHint")
+            : UiText.Pc.Get("app.doc.askHint");
     }
 }

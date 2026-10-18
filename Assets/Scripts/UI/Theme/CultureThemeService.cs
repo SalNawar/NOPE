@@ -17,9 +17,13 @@ using UnityEngine.UI;
 /// colours; diegetic roles are skipped. It also holds
 /// the string lookup UiText reads and the Future currency the wallet shows.
 /// From the Translation Lens's day (TranslationLens.LanguageLocked) the
-/// player's "Always English" (the default) no longer applies: the labels, the
-/// papers' printed words and every app follow history and the lens
-/// (TranslationLensPresenter, on the same host) reads them.
+/// player's "Always English" (the default) no longer applies: the desk's
+/// labels and the papers' printed words follow history and the lens
+/// (TranslationLensPresenter, on the same host) reads them. The PC never
+/// changes language (Saleh 2026-10-18): a tag on the desktop's layer takes
+/// its colours from the theme but its words in English and its kit face
+/// (CultureChoice.Surface, UiText.Pc), so a scanned paper's copy reads in
+/// English there.
 /// Every decision is a tested rule (CultureCue.Pick, CultureChoice, UiStrings,
 /// ThemeRoles); this class only reads engine objects and sets them.
 /// </summary>
@@ -388,7 +392,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
                 if (tag.ShrinkToFit)
                     Fit(tag, evidence);
                 if (!string.IsNullOrEmpty(tag.LabelKey))
-                    evidence.text = UiText.Get(tag.LabelKey);
+                    evidence.text = UiText.Get(tag.LabelKey, UiText.SurfaceOf(tag));
             }
             return;
         }
@@ -430,7 +434,9 @@ public sealed class CultureThemeService : TimelineCueReceiver
         if (entry.hasInk && tag.Part != ThemePart.Kit)
             text.color = entry.ink;
 
-        TMP_FontAsset font = tag.Face != null && Language != LabelLanguage.Culture ? tag.Face : _font != null ? _font : TMP_Settings.defaultFontAsset;
+        // The PC's words stay English (UiText.Pc): its texts keep their kit faces, as the desk's do while English is read.
+        bool culture = CultureChoice.ShowsCulture(CultureChoice.Surface(UiText.SurfaceOf(tag), Language));
+        TMP_FontAsset font = tag.Face != null && !culture ? tag.Face : _font != null ? _font : TMP_Settings.defaultFontAsset;
         if (font != null)
             text.font = font;
 
@@ -441,8 +447,8 @@ public sealed class CultureThemeService : TimelineCueReceiver
             Fit(tag, text);
 
         if (!string.IsNullOrEmpty(tag.LabelKey))
-            text.text = UiText.Get(tag.LabelKey);
-        if ((text.fontStyle & FontStyles.UpperCase) != 0 && Language == LabelLanguage.Culture)
+            text.text = UiText.Get(tag.LabelKey, UiText.SurfaceOf(tag));
+        if ((text.fontStyle & FontStyles.UpperCase) != 0 && culture)
             text.text = ArtLayout.Capitals(text.text);
     }
 

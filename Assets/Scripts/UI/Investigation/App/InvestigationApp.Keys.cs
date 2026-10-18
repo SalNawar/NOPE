@@ -318,7 +318,7 @@ public sealed partial class InvestigationApp
         if (_clipboard.Current != clip)
             return;
         GUIUtility.systemCopyBuffer = clip.Text;
-        Notice(UiText.Format("app.copied", clip.Foreign ? clip.SourceLabel : clip.Text));
+        Notice(UiText.Pc.Format("app.copied", clip.Foreign ? clip.SourceLabel : clip.Text));
     }
 
     /// <summary>Pins <paramref name="row"/>, or unpins it.</summary>
@@ -343,7 +343,7 @@ public sealed partial class InvestigationApp
         LinkTarget target = SmartLinks.ForEntry(item.Ref.Key, _papers);
         if (target.IsNone || !OpenOnTarget(target))
         {
-            Notice(UiText.Get("app.jump.gone"));
+            Notice(UiText.Pc.Get("app.jump.gone"));
             return;
         }
         _recent.Touch(item.Ref, item.Label);
@@ -515,7 +515,7 @@ public sealed partial class InvestigationApp
         if (!EntryKeys.TryRef(key, out EntryRef entry))
             return;
         if (_pins.Toggle(entry, label) == PinChange.Full)
-            Notice(UiText.Get("app.pins.full"));
+            Notice(UiText.Pc.Get("app.pins.full"));
         DrawLists();
     }
 

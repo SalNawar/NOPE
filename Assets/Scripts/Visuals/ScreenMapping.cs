@@ -3,7 +3,9 @@ using System;
 /// <summary>
 /// Maps the PC's 4:3 desktop onto screens: fitted inside a CRT glass of any
 /// aspect (the office PC's live clone), and the PC frame's glass rectangle as
-/// a camera viewport (the frame camera draws the desktop there).
+/// a camera viewport (the frame camera draws the desktop there); and how far
+/// a piece of the overlay moves to keep clear of something on the screen (the
+/// office's edge pull tabs and the calendar).
 /// </summary>
 public static class ScreenMapping
 {
@@ -43,4 +45,40 @@ public static class ScreenMapping
             return (0f, 0f, 0f, 0f);
         return (x0, y0, x1 - x0, y1 - y0);
     }
+
+    /// <summary>
+    /// How far (signed, along one axis) the span [<paramref name="start"/>,
+    /// <paramref name="end"/>] moves so it no longer overlaps the obstacle
+    /// [<paramref name="lo"/>, <paramref name="hi"/>] grown by
+    /// <paramref name="margin"/>: 0 when it is clear; else just past the
+    /// obstacle on the side its centre lies on (below or at the obstacle's
+    /// centre: toward lower values), or the other side when that one would
+    /// leave [<paramref name="floor"/>, <paramref name="ceiling"/>]; with no
+    /// room either way, the preferred side kept inside the bounds.
+    /// </summary>
+    public static float ClearShift(float start, float end, float lo, float hi, float margin, float floor, float ceiling)
+    {
+        float a = lo - margin, b = hi + margin;
+        if (end <= a || start >= b)
+            return 0f;
+        float down = a - end, up = b - start;
+        bool fitsDown = start + down >= floor, fitsUp = end + up <= ceiling;
+        bool preferDown = (start + end) / 2f <= (lo + hi) / 2f;
+        if (preferDown ? fitsDown : !fitsUp && fitsDown)
+            return down;
+        if (fitsUp)
+            return up;
+        float d = preferDown ? down : up;
+        return Math.Min(Math.Max(d, floor - start), ceiling - end);
+    }
+
+    /// <summary>
+    /// True when an overlay piece anchored at (<paramref name="anchorX"/>,
+    /// <paramref name="anchorY"/>) sits on the screen's top or bottom edge
+    /// away from its corners (the STAMPS tab on the top edge), so it keeps
+    /// clear of something by sliding along that edge (x); false for one on
+    /// the left or right edge (the PC and CITY tabs), which slides up or down.
+    /// </summary>
+    public static bool SlidesAlongX(float anchorX, float anchorY) =>
+        (anchorY <= 0f || anchorY >= 1f) && anchorX > 0f && anchorX < 1f;
 }

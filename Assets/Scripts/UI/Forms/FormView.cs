@@ -240,9 +240,9 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         if (width > 0f)
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         _measure ??= new TmpFormText(MeasureText());
-        data = UiText.InReadingLanguage(data);
-        TMP_FontAsset culture = data != null && data.Translated && CultureThemeService.Instance != null ? CultureThemeService.Instance.CultureFont : null;
-        _measure.ScriptOf = culture == null ? scriptOf : text => (scriptOf != null ? scriptOf(text) : null) ?? culture;
+        // A form on the PC prints its own English words whatever language the desk's papers read (Saleh 2026-10-18: scanning is how a
+        // foreign paper is read cleanly); its values stay as printed.
+        _measure.ScriptOf = scriptOf;
         _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure, linkHint != null ? linkSize : 0f);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _form.Height);
         FormPalette palette = look.Palette(style.Palette());

@@ -28,6 +28,26 @@ public class ArabicShaperTests
         Assert.AreEqual(expected, Codes(ArabicShaper.ToVisual(logical)));
     }
 
+    [Test]
+    public void ToVisual_LinesKeepTheirOrder_EachShapedOnItsOwn()
+    {
+        // TMP draws a line break where it lies: each line goes into visual order by itself, the first line staying first (the 1018 language pass: a two-line Arabic label read bottom line first).
+        string first = "قبول", second = "رفض";
+        Assert.AreEqual(ArabicShaper.ToVisual(first) + "\n" + ArabicShaper.ToVisual(second), ArabicShaper.ToVisual(first + "\n" + second));
+    }
+
+    [Test]
+    public void ToVisual_AcrossLines_ReportsEachCharactersLogicalSource()
+    {
+        string logical = "قبول\nرفض";
+        var sources = new List<int>();
+        string visual = ArabicShaper.ToVisual(logical, sources);
+        Assert.AreEqual(visual.Length, sources.Count);
+        Assert.AreEqual(4, sources[visual.IndexOf('\n')]);
+        Assert.IsTrue(sources.Take(visual.IndexOf('\n')).All(i => i < 4));
+        Assert.IsTrue(sources.Skip(visual.IndexOf('\n') + 1).All(i => i > 4));
+    }
+
     [TestCase("ACCEPT 1", Description = "Latin keeps its order and its plain space")]
     [TestCase("批准")]
     [TestCase("")]

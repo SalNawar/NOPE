@@ -37,7 +37,7 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>Chooses "Always English".</summary>
     [SerializeField] private Button alwaysEnglishButton;
 
-    /// <summary>The line under the language pair, shown while the language is locked (settings.languageLocked).</summary>
+    /// <summary>The line under the language pair: the choice is the desk's only, the PC always reads English (settings.languageDesk), or, once the language is locked, why (settings.languageLocked).</summary>
     [SerializeField] private TMP_Text languageLockText;
 
     /// <summary>Chooses Full motion (translations flip letter by letter).</summary>
@@ -212,10 +212,12 @@ public sealed class SettingsWindowController : MonoBehaviour
             alwaysEnglishButton.interactable = !locked;
         if (languageLockText != null)
         {
-            languageLockText.gameObject.SetActive(locked);
-            if (locked)
-                languageLockText.text = UiText.Format("settings.languageLocked",
-                    RunManager.HasInstance && RunManager.Instance.Library != null ? TranslationLens.LockDay(RunManager.Instance.Library.Introductions) : 0);
+            // The choice is the desk's only: the PC always reads English (Saleh 2026-10-18), and the line under the pair says so.
+            languageLockText.gameObject.SetActive(true);
+            languageLockText.text = locked
+                ? UiText.Pc.Format("settings.languageLocked",
+                    RunManager.HasInstance && RunManager.Instance.Library != null ? TranslationLens.LockDay(RunManager.Instance.Library.Introductions) : 0)
+                : UiText.Pc.Get("settings.languageDesk");
         }
         bool reduced = MotionPreference.Reduced;
         Paint(fullMotionButton, !reduced, theme);
@@ -227,7 +229,7 @@ public sealed class SettingsWindowController : MonoBehaviour
             motionIntensitySlider.interactable = !reduced;
         }
         if (motionIntensityText != null)
-            motionIntensityText.text = UiText.Format("settings.motionIntensityValue", percent);
+            motionIntensityText.text = UiText.Pc.Format("settings.motionIntensityValue", percent);
         bool sway = MotionPreference.CameraSway && !reduced;
         Paint(cameraSwayOffButton, !sway, theme);
         Paint(cameraSwayOnButton, sway, theme);

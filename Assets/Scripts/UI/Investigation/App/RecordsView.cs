@@ -85,7 +85,7 @@ public sealed class RecordsView : AppView, IAppItems
     public string ItemKey => _current != null ? EntryKeys.RecordCard(_current.Id) : null;
 
     /// <inheritdoc />
-    public string ItemTitle => _current != null ? UiText.Format("app.item.record", _current.FullName) : null;
+    public string ItemTitle => _current != null ? UiText.Pc.Format("app.item.record", _current.FullName) : null;
 
     /// <summary>The extract's form (null without a page).</summary>
     private FormView Form => page != null ? page.Form : null;
@@ -207,9 +207,9 @@ public sealed class RecordsView : AppView, IAppItems
         {
             {
                 RecordExtractPage.QuerySlot,
-                Query == null ? UiText.Get("records.idle")
-                : _current != null ? UiText.Format("records.onFile", Query, _today ?? string.Empty)
-                : UiText.Format("records.noRecord", Query, _today ?? string.Empty)
+                Query == null ? UiText.Pc.Get("records.idle")
+                : _current != null ? UiText.Pc.Format("records.onFile", Query, _today ?? string.Empty)
+                : UiText.Pc.Format("records.noRecord", Query, _today ?? string.Empty)
             }
         };
         var groups = new List<FormGroup>();
@@ -257,7 +257,7 @@ public sealed class RecordsView : AppView, IAppItems
             if (!TryRow(slot, out RecordRow row))
                 continue;
             string key = PickKeys.Record(row.Category, _current.Id);
-            AppRow.Mark(button.gameObject, AppTab.Records, key, UiText.Format("app.row.record", _current.FullName, row.Label), row.Label, row.Value, button);
+            AppRow.Mark(button.gameObject, AppTab.Records, key, UiText.Pc.Format("app.row.record", _current.FullName, row.Label), row.Label, row.Value, button);
             if (key == _foundKey)
                 found = slot.Index;
         }

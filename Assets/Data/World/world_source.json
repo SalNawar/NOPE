@@ -10747,7 +10747,7 @@
       "queue": 14,
       "shiftStart": "13:00",
       "shiftEnd": "21:00",
-      "bulletin": "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the office reads the world's language: the Bureau issues you a Translation Lens. Hover a word to read it.",
+      "bulletin": "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the papers on your desk read the world's language: the Bureau issues you a Translation Lens. Hover a word to read it. Your PC stays in English: scan a paper to read its copy cleanly.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -24638,9 +24638,15 @@
       },
       {
         "key": "settings.languageLocked",
-        "text": "Locked from day {0}: the office reads the world's language now. Hover a word to translate it (the Translation Lens).",
+        "text": "Locked from day {0}: the papers and labels on your desk read the world's language now; hover a word to translate it (the Translation Lens). The PC always reads English: scan a paper to read its copy cleanly.",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "settings.languageDesk",
+        "text": "For the papers and labels on your desk. The PC always reads English.",
+        "gloss": "None",
+        "tier": "Full"
       },
       {
         "key": "settings.motion",
@@ -30246,7 +30252,7 @@
           },
           {
             "key": "settings.languageLocked",
-            "text": "مقفلة منذ اليوم {0}: المكتب يقرأ لغة العالم الآن. مرر المؤشر فوق كلمة لترجمتها (عدسة الترجمة)."
+            "text": "مقفلة منذ اليوم {0}: المكتب يقرأ لغة العالم الآن.\nمرر المؤشر فوق كلمة لترجمتها (عدسة الترجمة)."
           },
           {
             "key": "settings.motion",
@@ -78592,7 +78598,7 @@
         "feature": "tool:scanner",
         "title": "THE SCANNER AND THE INVESTIGATION APP",
         "named": "scanner",
-        "check": "Every paper's details: drop a paper on the scanner and its copy opens in the Investigation app, new on your PC today ({pc}).",
+        "check": "Every paper's details: drop a paper on the scanner and its copy opens in the Investigation app, new on your PC today ({pc}). The copy's labels always read in English, whatever language the paper prints in.",
         "against": "The traveller's record in the app: the Citizen Account, or the Displacement Registry for the displaced.",
         "fault": "A birth date on the Passport that the record does not have.",
         "point": "scanner",
@@ -78706,10 +78712,10 @@
         "feature": "tool:lens",
         "title": "THE TRANSLATION LENS",
         "named": "Translation Lens",
-        "check": "Any word the office prints in the world's language: on the PC, the morning paper, a notice. Hover it and it flips into English.",
-        "against": "From today the language follows history: Settings no longer switches it. Orders sells the lens's Sentences and Objects. The lens stand's loupe magnifies: hold it over a paper's foot to read its microprint, which repeats the holder's Citizen ID.",
-        "fault": "Clicking a button you cannot read: hover it first.",
-        "point": "pc",
+        "check": "Any word your desk prints in the world's language: a paper's labels, the rulebook, the morning paper, a notice. Hover it and it flips into English.",
+        "against": "From today the desk's language follows history: Settings no longer switches it. The PC stays in English: scan a paper to read its copy cleanly. Orders sells the lens's Sentences and Objects. The lens stand's loupe magnifies: hold it over a paper's foot to read its microprint, which repeats the holder's Citizen ID.",
+        "fault": "Stamping a paper you cannot read: hover its words first, or scan it.",
+        "point": "rulebook",
         "practice": {
           "id": "",
           "action": "",

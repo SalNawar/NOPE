@@ -334,6 +334,9 @@ public sealed class OrdersWindow : MonoBehaviour
             card.name = "Node_" + c.Id;
             Place((RectTransform)card.transform, at[c.Id], node);
             SetText(card.transform, "Name", upgrade.displayName);
+            // A long name or state (a culture's words, its currency) shrinks to its box rather than spilling over the card (the 1018 language pass).
+            UiText.FitLabel(Child<TMP_Text>(card.transform, "Name"), true);
+            UiText.FitLabel(Child<TMP_Text>(card.transform, "State"), true);
             Sprite art = SlotArt.Sprite(ArtSlots.OrderIcon(c.Id));
             SetImage(card.transform, "Glyph", art ?? Glyph("branch_" + ArtSlots.Key(c.Branch.ToString())));
             if (art != null)
@@ -463,7 +466,7 @@ public sealed class OrdersWindow : MonoBehaviour
             actionButton.gameObject.SetActive(action != NodeAction.None);
             actionButton.interactable = enabled;
             if (_actionLabel != null && action != NodeAction.None)
-                _actionLabel.text = UiText.Get(ActionKey(action));
+                _actionLabel.text = UiText.Pc.Get(ActionKey(action));
             if (kit != null && action != NodeAction.None && actionButton.targetGraphic is Image face)
             {
                 string plate = ActionPlate(action);
@@ -493,7 +496,7 @@ public sealed class OrdersWindow : MonoBehaviour
     {
         int level = view != null ? view.Level : AppZoom.Normal;
         if (zoomText != null)
-            zoomText.text = UiText.Format("app.orders.zoom", level);
+            zoomText.text = UiText.Pc.Format("app.orders.zoom", level);
         if (zoomOutButton != null)
             zoomOutButton.interactable = view != null && view.CanStep(-1);
         if (zoomInButton != null)

@@ -85,12 +85,12 @@ public sealed class CaseBoardPresenter
         SeenBefore? flag = own ? Visits.Flag(_case.seenBefore, day) : null;
         if (flag.HasValue)
         {
-            string word = UiText.Get("visit.verdict." + flag.Value.Verdict);
-            model.Flag = UiText.Format("records.group.seen", Visits.FlagText(flag.Value, word == "visit.verdict." + flag.Value.Verdict ? null : word,
-                                                                               UiText.Get("visit.flag.days"), UiText.Get("visit.flag.yesterday")));
+            string word = UiText.Pc.Get("visit.verdict." + flag.Value.Verdict);
+            model.Flag = UiText.Pc.Format("records.group.seen", Visits.FlagText(flag.Value, word == "visit.verdict." + flag.Value.Verdict ? null : word,
+                                                                               UiText.Pc.Get("visit.flag.days"), UiText.Pc.Get("visit.flag.yesterday")));
         }
         if (own)
-            model.File = CitizenFile.Groups(_case.file, _case.seenBefore, day, UiText.Get);
+            model.File = CitizenFile.Groups(_case.file, _case.seenBefore, day, UiText.Pc.Get);
 
         var required = new List<RequiredPaper>();
         if (missing != null)
@@ -103,9 +103,9 @@ public sealed class CaseBoardPresenter
 
         foreach (BoardPaper paper in model.Scanned)
             model.Columns.Add(new CrossColumn(paper.Name, false, paper.Document,
-                paper.Fields.Select((f, i) => f != null ? new CrossValue(f.category, i, UiText.DocumentWord(f.label), f.value) : (CrossValue?)null).Where(v => v.HasValue).Select(v => v.Value)));
+                paper.Fields.Select((f, i) => f != null ? new CrossValue(f.category, i, UiText.Pc.DocumentWord(f.label), f.value) : (CrossValue?)null).Where(v => v.HasValue).Select(v => v.Value)));
         if (model.Record != null)
-            model.Columns.Add(new CrossColumn(UiText.Get("board.cross.record"), true, -1, RecordLookup.RecordValues(model.Record)));
+            model.Columns.Add(new CrossColumn(UiText.Pc.Get("board.cross.record"), true, -1, RecordLookup.RecordValues(model.Record)));
         model.Cross = CrossCheck.Rows(model.Columns);
         model.Overlays = Overlays(model, agency);
 
@@ -126,25 +126,25 @@ public sealed class CaseBoardPresenter
         var offices = new List<string>();
         foreach (BoardPaper paper in model.Scanned)
         {
-            sources.Add(new OverlaySource(paper.Name, paper.Fields.Where(f => f != null).Select(f => new OverlayValue(f.category, UiText.DocumentWord(f.label), f.value, f.issuer))));
+            sources.Add(new OverlaySource(paper.Name, paper.Fields.Where(f => f != null).Select(f => new OverlayValue(f.category, UiText.Pc.DocumentWord(f.label), f.value, f.issuer))));
             foreach (DocumentField seal in paper.Fields.Where(f => f != null && f.category == ClueCategory.Seal && !string.IsNullOrEmpty(f.issuer)))
                 if (!offices.Contains(seal.issuer))
                     offices.Add(seal.issuer);
         }
         if (model.Record != null)
-            sources.Add(new OverlaySource(UiText.Get("board.cross.record"), RecordLookup.RecordValues(model.Record).Select(v => new OverlayValue(v.Category, v.Label, v.Value))));
+            sources.Add(new OverlaySource(UiText.Pc.Get("board.cross.record"), RecordLookup.RecordValues(model.Record).Select(v => new OverlayValue(v.Category, v.Label, v.Value))));
         if (_case.look != null)
-            sources.Add(new OverlaySource(UiText.Get("board.overlay.face"),
-                                          new[] { new OverlayValue(ClueCategory.Photo, UiText.Get("board.overlay.faceLabel"), Looks.IdentityKey(_case.look)) }));
+            sources.Add(new OverlaySource(UiText.Pc.Get("board.overlay.face"),
+                                          new[] { new OverlayValue(ClueCategory.Photo, UiText.Pc.Get("board.overlay.faceLabel"), Looks.IdentityKey(_case.look)) }));
         var register = new List<OverlayValue>();
         foreach (string id in offices)
         {
             AgencyOffice office = agency != null && agency.offices != null ? agency.offices.FirstOrDefault(o => o != null && o.id == id) : null;
             if (office != null && office.TryGetSeal(out Seal seal))
-                register.Add(new OverlayValue(ClueCategory.Seal, UiText.DocumentWord(office.name), Seals.Describe(seal), office.id));
+                register.Add(new OverlayValue(ClueCategory.Seal, UiText.Pc.DocumentWord(office.name), Seals.Describe(seal), office.id));
         }
         if (register.Count > 0)
-            sources.Add(new OverlaySource(UiText.Get("board.overlay.register"), register));
+            sources.Add(new OverlaySource(UiText.Pc.Get("board.overlay.register"), register));
         return sources;
     }
 }

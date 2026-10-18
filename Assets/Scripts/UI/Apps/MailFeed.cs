@@ -127,7 +127,7 @@ public sealed class MailFeed : MonoBehaviour
         if (plan != null)
             foreach (TravelRuleSO rule in plan.ActiveTravelRules)
                 if (rule != null)
-                    lines.Add(rule.Summary());
+                    lines.Add(rule.Summary(TextSurface.Pc));
         return lines;
     }
 
@@ -148,9 +148,9 @@ public sealed class MailFeed : MonoBehaviour
     {
         int unread = Unread;
         if (startEntryLabel != null)
-            startEntryLabel.text = unread > 0 ? UiText.Format("startmenu.mailUnread", unread) : UiText.Get("startmenu.mail");
+            startEntryLabel.text = unread > 0 ? UiText.Pc.Format("startmenu.mailUnread", unread) : UiText.Pc.Get("startmenu.mail");
         if (mailWindow != null)
-            mailWindow.SetTitle(unread > 0 ? UiText.Format("window.mailUnread", unread) : UiText.Get("window.mail"));
+            mailWindow.SetTitle(unread > 0 ? UiText.Pc.Format("window.mailUnread", unread) : UiText.Pc.Get("window.mail"));
         Changed?.Invoke();
     }
 }

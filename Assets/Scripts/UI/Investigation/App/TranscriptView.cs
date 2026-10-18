@@ -180,10 +180,10 @@ public sealed class TranscriptView : AppView, IAppItems
             return;
         FormData data = interviewForm.Page(_agency);
         string date = _agency != null ? AgencyCalendar.Today(_agency.firstDate, _day) : null;
-        data.Text = new Dictionary<string, string> { { InterviewPage.HeadSlot, UiText.Format("form.interview.head", _travellerName, _deskName, date ?? string.Empty) } };
+        data.Text = new Dictionary<string, string> { { InterviewPage.HeadSlot, UiText.Pc.Format("form.interview.head", _travellerName, _deskName, date ?? string.Empty) } };
         data.Rows = new Dictionary<string, IReadOnlyList<string[]>>
         {
-            { InterviewPage.RowsSlot, InterviewPage.Rows(_lines, answersOnly != null && answersOnly.isOn, _deskName, _travellerName, Shown, UiText.Get("form.interview.answerMark"), _lineOfRow) }
+            { InterviewPage.RowsSlot, InterviewPage.Rows(_lines, answersOnly != null && answersOnly.isOn, _deskName, _travellerName, Shown, UiText.Pc.Get("form.interview.answerMark"), _lineOfRow) }
         };
         _scriptLines.Clear();
         _scriptGlyphs.Clear();
@@ -276,7 +276,7 @@ public sealed class TranscriptView : AppView, IAppItems
             string speaker = dialog.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
             string key = PickKeys.Line(line);
             button.interactable = dialog.IsAnswer;
-            AppRow marked = AppRow.Mark(button.gameObject, AppTab.Transcript, key, UiText.Format("app.row.line", speaker, line + 1), speaker, Shown(dialog), button);
+            AppRow marked = AppRow.Mark(button.gameObject, AppTab.Transcript, key, UiText.Pc.Format("app.row.line", speaker, line + 1), speaker, Shown(dialog), button);
             marked.SetLink(Link(slot));
             if (_translation.Untranslated(dialog))
                 marked.MarkUntranslated(_translation.TongueId, _translation.TongueName, dialog.Text);

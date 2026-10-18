@@ -86,4 +86,36 @@ public class CultureChoiceTests
         Assert.AreEqual(bold | italic | smallCaps, CultureChoice.ComposeStyle(bold | italic, italic, false, smallCaps));
         Assert.AreEqual(0, CultureChoice.ComposeStyle(0, italic, true, 0));
     }
+
+    // The PC is always in English; the desk follows the culture rule (Saleh 2026-10-18: "language in the pc shouldn't change this will give scaning a porpose").
+
+    [TestCase(LabelLanguage.Culture)]
+    [TestCase(LabelLanguage.SameAsReading)]
+    [TestCase(LabelLanguage.NoTable)]
+    [TestCase(LabelLanguage.EnglishBySetting)]
+    [TestCase(LabelLanguage.EnglishNoFont)]
+    public void Surface_ThePc_ReadsTheReadingLanguageWhateverTheDesk(LabelLanguage desk)
+    {
+        Assert.AreEqual(LabelLanguage.EnglishOnPc, CultureChoice.Surface(TextSurface.Pc, desk));
+        Assert.IsFalse(CultureChoice.ShowsCulture(CultureChoice.Surface(TextSurface.Pc, desk)));
+    }
+
+    [TestCase(LabelLanguage.Culture, true)]
+    [TestCase(LabelLanguage.SameAsReading, false)]
+    [TestCase(LabelLanguage.NoTable, false)]
+    [TestCase(LabelLanguage.EnglishBySetting, false)]
+    [TestCase(LabelLanguage.EnglishNoFont, false)]
+    public void Surface_TheDesk_FollowsTheCultureRule(LabelLanguage desk, bool culture)
+    {
+        Assert.AreEqual(desk, CultureChoice.Surface(TextSurface.Desk, desk));
+        Assert.AreEqual(culture, CultureChoice.ShowsCulture(CultureChoice.Surface(TextSurface.Desk, desk)));
+    }
+
+    [Test]
+    public void Surface_ThePcOnTheLensDayWithFollowHistory_StillReadsEnglish()
+    {
+        LabelLanguage desk = CultureChoice.Language("el", "en", true, CultureChoice.EnglishBySetting(CultureChoice.FollowHistoryChoice, true), true);
+        Assert.AreEqual(LabelLanguage.Culture, desk);
+        Assert.AreEqual(LabelLanguage.EnglishOnPc, CultureChoice.Surface(TextSurface.Pc, desk));
+    }
 }

@@ -289,6 +289,6 @@ public sealed partial class AppPane : MonoBehaviour
         if (titleText == null)
             return;
         string item = !Blocked && _views.TryGetValue(_active, out IAppView view) && view is IAppItems items ? items.ItemTitle : null;
-        titleText.text = string.IsNullOrEmpty(item) ? UiText.Get("app.tab." + _active.ToString().ToLowerInvariant()) : item;
+        titleText.text = string.IsNullOrEmpty(item) ? UiText.Pc.Get("app.tab." + _active.ToString().ToLowerInvariant()) : item;
     }
 }

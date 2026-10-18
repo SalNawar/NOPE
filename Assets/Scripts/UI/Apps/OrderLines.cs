@@ -15,10 +15,10 @@ public static class OrderLines
     private static readonly string[] BranchKeys = MakeBranchKeys();
 
     /// <summary>The wallet line over the tree.</summary>
-    public static string Wallet(WorldState world) => UiText.Format("app.orders.wallet", Money(world.money));
+    public static string Wallet(WorldState world) => UiText.Pc.Format("app.orders.wallet", Money(world.money));
 
     /// <summary>A branch's name (a band's head and the form's section).</summary>
-    public static string Branch(UpgradeBranch branch) => UiText.Get(BranchKeys[(int)branch]);
+    public static string Branch(UpgradeBranch branch) => UiText.Pc.Get(BranchKeys[(int)branch]);
 
     /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned"; for an owned scanner where it stands (on the node alone, where room is short; after the delivery day on the <paramref name="full"/> detail card).</summary>
     public static string State(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, OrderState state, bool full)
@@ -26,14 +26,14 @@ public static class OrderLines
         switch (state)
         {
             case OrderState.Locked:
-                return UiText.Format("app.orders.needs", string.Join(", ", UpgradeTree.Missing(upgrade.Node, world.HasUpgrade).ConvertAll(id => NameOf(lib, id))));
+                return UiText.Pc.Format("app.orders.needs", string.Join(", ", UpgradeTree.Missing(upgrade.Node, world.HasUpgrade).ConvertAll(id => NameOf(lib, id))));
             case OrderState.TooDear:
-                return UiText.Format("app.orders.tooDear", OrderBook.Price(world, lib, upgrade), UiText.Currency(UiText.WalletForm.Short));
+                return UiText.Pc.Format("app.orders.tooDear", OrderBook.Price(world, lib, upgrade), UiText.Pc.Currency(UiText.WalletForm.Short));
             case OrderState.InTransit:
-                return UiText.Format("app.orders.inTransit", Orders.ArrivalDay(Orders.Pending(world.orders, upgrade.id)));
+                return UiText.Pc.Format("app.orders.inTransit", Orders.ArrivalDay(Orders.Pending(world.orders, upgrade.id)));
             case OrderState.Owned:
                 OrderEntry delivery = Orders.Delivery(world.orders, upgrade.id);
-                string owned = delivery != null ? UiText.Format("app.orders.delivered", delivery.deliveredDay) : UiText.Get("app.orders.owned");
+                string owned = delivery != null ? UiText.Pc.Format("app.orders.delivered", delivery.deliveredDay) : UiText.Pc.Get("app.orders.owned");
                 string install = Install(OrderBook.InstallStateOf(world, lib, upgrade));
                 return install == null ? owned : full ? owned + " · " + install : install;
             default:
@@ -46,21 +46,21 @@ public static class OrderLines
     {
         var names = new List<string>();
         foreach (string id in upgrade.requires ?? Array.Empty<string>())
-            names.Add(NameOf(lib, id) + (world.HasUpgrade(id) ? " (" + UiText.Get("app.orders.owned") + ")" : string.Empty));
-        return names.Count > 0 ? string.Join(", ", names) : UiText.Get("app.orders.none");
+            names.Add(NameOf(lib, id) + (world.HasUpgrade(id) ? " (" + UiText.Pc.Get("app.orders.owned") + ")" : string.Empty));
+        return names.Count > 0 ? string.Join(", ", names) : UiText.Pc.Get("app.orders.none");
     }
 
     /// <summary>An amount in the wallet's currency ("200 cr").</summary>
-    public static string Money(int amount) => UiText.Format("app.orders.price", amount, UiText.Currency(UiText.WalletForm.Short));
+    public static string Money(int amount) => UiText.Pc.Format("app.orders.price", amount, UiText.Pc.Currency(UiText.WalletForm.Short));
 
     /// <summary>An owned scanner's place: Installed, In storage, Installs tomorrow, Swapped out tomorrow; null without a slot.</summary>
     private static string Install(InstallState state) =>
         state switch
         {
-            InstallState.Installed => UiText.Get("app.orders.installed"),
-            InstallState.Stored => UiText.Get("app.orders.stored"),
-            InstallState.InstallsTomorrow => UiText.Get("app.orders.installsTomorrow"),
-            InstallState.LeavesTomorrow => UiText.Get("app.orders.leavesTomorrow"),
+            InstallState.Installed => UiText.Pc.Get("app.orders.installed"),
+            InstallState.Stored => UiText.Pc.Get("app.orders.stored"),
+            InstallState.InstallsTomorrow => UiText.Pc.Get("app.orders.installsTomorrow"),
+            InstallState.LeavesTomorrow => UiText.Pc.Get("app.orders.leavesTomorrow"),
             _ => null
         };
 

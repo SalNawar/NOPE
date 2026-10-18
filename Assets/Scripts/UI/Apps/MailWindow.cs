@@ -122,10 +122,10 @@ public sealed class MailWindow : MonoBehaviour
 
             MailItem m = items[i];
             bool read = feed != null && feed.IsRead(m.Id);
-            string subject = read ? MailText.Subject(m) : "<b>" + UiText.Format("mail.unreadRow", MailText.Subject(m)) + "</b>";
+            string subject = read ? MailText.Subject(m) : "<b>" + UiText.Pc.Format("mail.unreadRow", MailText.Subject(m)) + "</b>";
             TMP_Text label = _rows[i].GetComponentInChildren<TMP_Text>(true);
             if (label != null)
-                label.text = subject + "\n<size=92%>" + UiText.Format("mail.rowMeta", m.Day, MailText.From(m)) + "</size>";
+                label.text = subject + "\n<size=92%>" + UiText.Pc.Format("mail.rowMeta", m.Day, MailText.From(m)) + "</size>";
             AppRows.MarkSelected(_rows[i], m == open);
         }
     }
@@ -156,7 +156,7 @@ public sealed class MailWindow : MonoBehaviour
             FormData page = memoForm.Page(library != null ? library.Agency : null);
             page.Text = new Dictionary<string, string>
             {
-                { "to", UiText.Get("mail.to") },
+                { "to", UiText.Pc.Get("mail.to") },
                 { "date", MailText.Date(m.Day) },
                 { "from", MailText.From(m) },
                 { "ref", MailText.Ref(m) },
@@ -172,7 +172,7 @@ public sealed class MailWindow : MonoBehaviour
         {
             TMP_Text label = linkButton.GetComponentInChildren<TMP_Text>(true);
             if (label != null)
-                label.text = UiText.Get(m.Link == MailLink.Rules ? "mail.link.rules" : "mail.link.news");
+                label.text = UiText.Pc.Get(m.Link == MailLink.Rules ? "mail.link.rules" : "mail.link.news");
         }
     }
 
@@ -229,7 +229,7 @@ public static class MailText
     /// <summary>The sender: the Customs Directorate (memo), the Times, the Timeline Integrity Office (citation), Temporal Customs Supply (a delivery), Transponder Liability (a failure report) or the authored sender.</summary>
     public static string From(MailItem m) =>
         m.Kind == MailKind.Authored ? m.From
-        : UiText.Get(m.Kind switch
+        : UiText.Pc.Get(m.Kind switch
         {
             MailKind.TimesIssue => "mail.from.times",
             MailKind.CitationNotice => "mail.from.integrity",
@@ -242,11 +242,11 @@ public static class MailText
     public static string Subject(MailItem m) =>
         m.Kind switch
         {
-            MailKind.DirectiveMemo => UiText.Get("mail.subject.memo"),
-            MailKind.TimesIssue => UiText.Format("mail.subject.times", m.Day),
-            MailKind.CitationNotice => UiText.Format("mail.subject.citation", m.Slot),
-            MailKind.Delivery => UiText.Get("mail.subject.delivery"),
-            MailKind.StrandingReport => UiText.Format("mail.subject.stranding", m.Subject),
+            MailKind.DirectiveMemo => UiText.Pc.Get("mail.subject.memo"),
+            MailKind.TimesIssue => UiText.Pc.Format("mail.subject.times", m.Day),
+            MailKind.CitationNotice => UiText.Pc.Format("mail.subject.citation", m.Slot),
+            MailKind.Delivery => UiText.Pc.Get("mail.subject.delivery"),
+            MailKind.StrandingReport => UiText.Pc.Format("mail.subject.stranding", m.Subject),
             _ => m.Subject
         };
 
@@ -255,7 +255,7 @@ public static class MailText
     {
         ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
         string date = library != null ? AgencyCalendar.Today(library.Agency.firstDate, day) : null;
-        return date ?? UiText.Format("notes.day", day);
+        return date ?? UiText.Pc.Format("notes.day", day);
     }
 
     /// <summary>The directive memo's reference for <paramref name="day"/> ("D-3"): Mail's copy and the Investigation app's Rules tab print the same.</summary>
@@ -281,25 +281,25 @@ public static class MailText
         {
             case MailKind.DirectiveMemo:
                 if (m.Body.Count == 0)
-                    sb.Append(UiText.Get("mail.body.noDirectives"));
+                    sb.Append(UiText.Pc.Get("mail.body.noDirectives"));
                 foreach (string line in m.Body)
-                    sb.AppendLine(UiText.Format("list.bullet", line));
+                    sb.AppendLine(UiText.Pc.Format("list.bullet", line));
                 break;
             case MailKind.TimesIssue:
                 foreach (string line in m.Body)
-                    sb.AppendLine(UiText.Format("list.bullet", line));
+                    sb.AppendLine(UiText.Pc.Format("list.bullet", line));
                 if (m.Body.Count > 0)
                     sb.AppendLine();
                 bool today = m.IssueOnHand && RunManager.HasInstance && RunManager.Instance.World.day == m.Day;
-                sb.Append(UiText.Get(today ? "mail.body.times" : "mail.body.timesArchived"));
+                sb.Append(UiText.Pc.Get(today ? "mail.body.times" : "mail.body.timesArchived"));
                 break;
             case MailKind.Delivery:
-                sb.AppendLine(UiText.Get("mail.body.delivery"));
+                sb.AppendLine(UiText.Pc.Get("mail.body.delivery"));
                 foreach (string line in m.Body)
-                    sb.AppendLine(UiText.Format("list.bullet", line));
+                    sb.AppendLine(UiText.Pc.Format("list.bullet", line));
                 break;
             case MailKind.CitationNotice:
-                sb.AppendLine(UiText.Get("mail.body.citation"));
+                sb.AppendLine(UiText.Pc.Get("mail.body.citation"));
                 sb.AppendLine();
                 foreach (string line in m.Body)
                     sb.AppendLine(line);

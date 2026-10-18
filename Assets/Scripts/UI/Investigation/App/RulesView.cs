@@ -73,18 +73,18 @@ public sealed class RulesView : AppView
             return;
         var directives = new List<string>(_rules.Count);
         foreach (TravelRuleSO rule in _rules)
-            directives.Add(rule != null ? rule.Summary() : null);
+            directives.Add(rule != null ? rule.Summary(TextSurface.Pc) : null);
         List<string[]> rows = DirectiveMemoPage.Rows(directives);
 
         FormData data = memoForm.Page(agency);
         string date = agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null;
         data.Text = new Dictionary<string, string>
         {
-            { DirectiveMemoPage.ToSlot, UiText.Get("rules.memo.to") },
+            { DirectiveMemoPage.ToSlot, UiText.Pc.Get("rules.memo.to") },
             { DirectiveMemoPage.DateSlot, date ?? string.Empty },
-            { DirectiveMemoPage.FromSlot, UiText.Get("mail.from.directorate") },
+            { DirectiveMemoPage.FromSlot, UiText.Pc.Get("mail.from.directorate") },
             { DirectiveMemoPage.RefSlot, MailText.DirectiveRef(day) },
-            { DirectiveMemoPage.NoneSlot, rows.Count == 0 ? UiText.Get("directives.none") : string.Empty }
+            { DirectiveMemoPage.NoneSlot, rows.Count == 0 ? UiText.Pc.Get("directives.none") : string.Empty }
         };
         data.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { DirectiveMemoPage.RowsSlot, rows } };
         page.Show(memoForm.form, data, slot => board != null && RuleOf(slot) != null, LinkHint);
@@ -104,7 +104,7 @@ public sealed class RulesView : AppView
         for (int i = 0; i < _rules.Count; i++)
         {
             TravelRuleSO rule = _rules[i];
-            if (rule == null || string.IsNullOrWhiteSpace(rule.Summary()))
+            if (rule == null || string.IsNullOrWhiteSpace(rule.Summary(TextSurface.Pc)))
                 continue;
             if (at++ == slot.Row)
             {
@@ -133,8 +133,8 @@ public sealed class RulesView : AppView
         {
             TravelRuleSO rule = RuleOf(slot, out int index);
             if (rule != null)
-                AppRow.Mark(button.gameObject, AppTab.Rules, EntryKeys.Rule(index), UiText.Format("app.row.rule", index + 1), UiText.Get("app.tab.rules"),
-                            rule.Summary(), button);
+                AppRow.Mark(button.gameObject, AppTab.Rules, EntryKeys.Rule(index), UiText.Pc.Format("app.row.rule", index + 1), UiText.Pc.Get("app.tab.rules"),
+                            rule.Summary(TextSurface.Pc), button);
         }
     }
 
@@ -151,7 +151,7 @@ public sealed class RulesView : AppView
         if (Link(slot).IsNone)
             return null;
         TravelRuleSO rule = RuleOf(slot);
-        return UiText.Format("app.link.place", OriginLabels.Format(rule.nation.displayName, rule.era.displayName));
+        return UiText.Pc.Format("app.link.place", OriginLabels.Format(rule.nation.displayName, rule.era.displayName));
     }
 
     /// <summary>A ↗ was clicked: the directive's place, through the pane this memo is in (LK2).</summary>

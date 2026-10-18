@@ -41,10 +41,10 @@ using UnityEngine.UI;
 /// runs the same timeline back (CityLookTimeline: the fade first, then the
 /// turn). While it looks at the city only the DESK tab shows: the desk's own
 /// controls (the PC and STAMPS pull tabs, the red inspect button) and the
-/// office's callouts over the hall (the traveller's speech bubble, the props'
-/// tooltips, the case HUD's strip: deskControls) fade out over
+/// props' tooltips and the case HUD's strip (deskControls) fade out over
 /// DeskConfigSO.cityDeskControlsFadeSeconds and take no clicks, and fade back
-/// in as it returns. Reduced Motion cuts both ways and holds the
+/// in as it returns (the traveller's speech bubble and the board's tooltip
+/// fade with them: OfficeCallouts). Reduced Motion cuts both ways and holds the
 /// city still.
 /// BoothCoordinator says when it may turn (BoothRules.NormalViewLive: the
 /// normal view, no newsletter, wheel or PC) and returns it when the next
@@ -75,7 +75,7 @@ public sealed class CityView : MonoBehaviour
     /// <summary>"Desk ▶" at the office's right edge (shown while looking at the city).</summary>
     [SerializeField] private Button backButton;
 
-    /// <summary>The desk's own controls and callouts hidden while the city shows (the PC and STAMPS pull tabs, the inspect button; the traveller's speech bubble, the props' tooltips, the case HUD's strip, which drew over the city): their CanvasGroups fade out and take no clicks; whether each is on stays its owner's.</summary>
+    /// <summary>The desk's own controls hidden while the city shows (the PC and STAMPS pull tabs, the inspect button; the props' tooltips, the case HUD's strip, which drew over the city): their CanvasGroups fade out and take no clicks; whether each is on stays its owner's.</summary>
     [SerializeField] private CanvasGroup[] deskControls = Array.Empty<CanvasGroup>();
 
     private const string LivingCityShader = "NOPE/Hall Living City";
@@ -255,17 +255,8 @@ public sealed class CityView : MonoBehaviour
     /// <summary>Fades the desk's own controls out while the city shows and back in at the desk (a cut under Reduced Motion or with no seconds).</summary>
     private void FadeDeskControls()
     {
-        float target = IsOn ? 0f : 1f;
-        if (_deskControls == target)
-            return;
         float seconds = MotionPreference.Reduced ? 0f : config.cityDeskControlsFadeSeconds;
-        _deskControls = seconds > 0f ? Mathf.MoveTowards(_deskControls, target, Time.unscaledDeltaTime / seconds) : target;
-        foreach (CanvasGroup group in deskControls)
-            if (group != null)
-            {
-                group.alpha = _deskControls;
-                group.blocksRaycasts = group.interactable = !IsOn;
-            }
+        _deskControls = CanvasGroupFade.Step(deskControls, _deskControls, !IsOn, seconds, Time.unscaledDeltaTime);
     }
 
     private void Draw(float clock)

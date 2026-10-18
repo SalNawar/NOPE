@@ -45,12 +45,12 @@ public sealed class PortalsWindow : MonoBehaviour
         FormData data = form.Page(library != null ? library.Agency : null);
         data.Text = new Dictionary<string, string>
         {
-            { "date", UiText.Format("portals.date", UiText.Format("desk.calendar", date ?? string.Empty, today)) },
-            { "footer", UiText.Format("portals.footer", PortalText.Number(day.Default)) }
+            { "date", UiText.Pc.Format("portals.date", UiText.Pc.Format("desk.calendar", date ?? string.Empty, today)) },
+            { "footer", UiText.Pc.Format("portals.footer", PortalText.Number(day.Default)) }
         };
         data.Rows = new Dictionary<string, IReadOnlyList<string[]>>
         {
-            { "rows", PortalText.AppRows(day, p => EraName(library, p), p => PlaceName(library, p), UiText.Get, p => RepairLine(world, library, day, p)) }
+            { "rows", PortalText.AppRows(day, p => EraName(library, p), p => PlaceName(library, p), UiText.Pc.Get, p => RepairLine(world, library, day, p)) }
         };
         page.Show(form.form, data, _ => false);
 
@@ -80,11 +80,11 @@ public sealed class PortalsWindow : MonoBehaviour
     {
         UpgradeSO repair = library != null ? library.GetUpgradeById(portal.Repair) : null;
         if (repair == null || world == null)
-            return PortalText.RepairLine(false, OrderState.Locked, null, null, UiText.Get);
+            return PortalText.RepairLine(false, OrderState.Locked, null, null, UiText.Pc.Get);
 
         List<string> missing = UpgradeTree.Missing(repair.Node, world.HasUpgrade);
         string needs = missing.Count > 0 ? NeedsName(library, day, missing[0]) : null;
-        return PortalText.RepairLine(true, OrderBook.StateOf(world, library, repair), AccountWindow.Amount(OrderBook.Price(world, library, repair)), needs, UiText.Get);
+        return PortalText.RepairLine(true, OrderBook.StateOf(world, library, repair), AccountWindow.Amount(OrderBook.Price(world, library, repair)), needs, UiText.Pc.Get);
     }
 
     /// <summary>A missing prerequisite by the portal it repairs ("02"), else by its name.</summary>

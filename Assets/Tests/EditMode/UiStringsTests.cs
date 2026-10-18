@@ -207,7 +207,7 @@ public class UiStringsTests
         // A key the code asks UiText for by a literal and the table lacks draws as the key itself (audit R4-023).
         // Keys built at run time (a prefix plus an id) are checked where they are made, not here.
         var keys = new HashSet<string>(TodaysUi().Get("strings").Items.Select(e => e.Get("key").Text));
-        var literal = new Regex(@"UiText\.(?:Get|Format)\(\s*""([^""]+)""\s*[,)]");
+        var literal = new Regex(@"UiText\.(?:Pc\.)?(?:Get|Format)\(\s*""([^""]+)""\s*[,)]");
         var missing = new List<string>();
         int found = 0;
         foreach (string file in Directory.GetFiles(ScriptsFolder(), "*.cs", SearchOption.AllDirectories))
@@ -228,5 +228,39 @@ public class UiStringsTests
         List<string> flavour = FlavourKeys(ui);
         foreach (ContentNode language in ui.Get("languages").Items)
             CollectionAssert.AreEquivalent(flavour, language.Get("entries").Items.Select(e => e.Get("key").Text).ToList(), language.Get("language").Text);
+    }
+
+    // The PC is always in English (Saleh 2026-10-18: "language in the pc shouldn't change"): its lookup reads the reading table only.
+
+    [Test]
+    public void English_WithACultureTable_ReadsTheReadingText()
+    {
+        UiStrings s = Strings(Culture);
+        Assert.AreEqual("Jour 3", s.Format("day", 3));
+        Assert.AreEqual("Day 3", s.English("day", 3));
+        Assert.AreEqual("OK", s.English("ok"));
+    }
+
+    [Test]
+    public void English_RightToLeftCulture_IsNeitherShapedNorGlossed()
+    {
+        UiStrings s = Strings(new[] { E("ok", "قبول") }, true);
+        Assert.AreEqual("OK", s.English("ok"));
+    }
+
+    [Test]
+    public void English_AMissingKey_IsTheKeyAndIsReported()
+    {
+        UiStrings s = Strings(Culture);
+        Assert.AreEqual("nope.key", s.English("nope.key"));
+        CollectionAssert.Contains(s.MissingKeys, "nope.key");
+    }
+
+    [Test]
+    public void English_RemembersNothingForTheLens()
+    {
+        UiStrings s = Strings(Culture);
+        s.English("ok");
+        Assert.AreEqual(0, s.Phrases.Count);
     }
 }

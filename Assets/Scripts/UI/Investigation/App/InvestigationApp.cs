@@ -204,7 +204,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     {
         _papers = papers;
         if (papers != null)
-            _counters = UiText.Format("app.counters", papers.Received, papers.Count, papers.Scanned);
+            _counters = UiText.Pc.Format("app.counters", papers.Received, papers.Count, papers.Scanned);
         ShowWho();
     }
 
@@ -213,9 +213,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
     {
         if (board == null)
             return;
-        board.SetIdleHint(_traveller == null ? UiText.Get("idle.waiting")
-                        : _counters == null ? UiText.Format("app.atDesk.name", _traveller)
-                        : UiText.Format("app.atDesk", _traveller, _counters));
+        board.SetIdleHint(_traveller == null ? UiText.Pc.Get("idle.waiting")
+                        : _counters == null ? UiText.Pc.Format("app.atDesk.name", _traveller)
+                        : UiText.Pc.Format("app.atDesk", _traveller, _counters));
     }
 
     /// <summary>Something new for the source (a transcript line, a logged deviation): its chip dotted unless a showing pane shows it; the icon dotted while the app is down.</summary>
@@ -250,7 +250,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         if (arrival.BadgeDocuments)
             Arrived(AppTab.Documents);
         if (arrival.Toast && toast != null)
-            toast.Show(UiText.Format("app.toast.scanned", paperName), config != null ? config.toastSeconds : 4f, () =>
+            toast.Show(UiText.Pc.Format("app.toast.scanned", paperName), config != null ? config.toastSeconds : 4f, () =>
             {
                 OpenWindow();
                 OpenBoard(paper);
@@ -657,15 +657,15 @@ public sealed partial class InvestigationApp : MonoBehaviour
                 if (_missingPapers == null || _missingPapers.State(i) != PaperState.NotHandedOver) // a paper not handed over is under "Not handed over", by its request (it tells nothing of what they carry)
                     items.Add(new ShelfItem(ShelfGroup.Traveller, documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
         if (_traveller != null && Hosts(AppTab.Transcript))
-            items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
+            items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Pc.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
         if (_traveller != null && Hosts(AppTab.Board) && Introduced(Feature.Scanner))
-            items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Get("app.tab.board"), LinkTarget.ToTab(AppTab.Board), true));
+            items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Pc.Get("app.tab.board"), LinkTarget.ToTab(AppTab.Board), true));
         if (Hosts(AppTab.Records) && Introduced(Feature.Records))
-            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.records"), LinkTarget.ToTab(AppTab.Records), true));
+            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Pc.Get("app.tab.records"), LinkTarget.ToTab(AppTab.Records), true));
         if (Hosts(AppTab.Rules) && Introduced(Feature.Rulebook))
-            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.rules"), LinkTarget.ToTab(AppTab.Rules), true));
+            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Pc.Get("app.tab.rules"), LinkTarget.ToTab(AppTab.Rules), true));
         if (Hosts(AppTab.Calendar) && Introduced(Feature.Calendar))
-            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.calendar"), LinkTarget.ToTab(AppTab.Calendar), true));
+            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Pc.Get("app.tab.calendar"), LinkTarget.ToTab(AppTab.Calendar), true));
         IAppView books = leftPane.View(AppTab.Reference);
         for (int i = 0; books != null && i < books.Chips.Count; i++)
             if (!(books is ReferenceView reference) || reference.OnShelf(i))
@@ -695,7 +695,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
                 items.Add(ShelfItem.MissingPaper(request.Id, request.Label, _missing.State(request.Id)));
         string today = Today;
         if (today != null && items.Exists(x => x.Target.Tab == AppTab.Calendar))
-            items.Add(ShelfItem.Today(UiText.Format("menubar.today", today)));
+            items.Add(ShelfItem.Today(UiText.Pc.Format("menubar.today", today)));
     }
 
     /// <summary>True when <paramref name="items"/> are the menus' rows already (ShelfItem.Same, in order).</summary>
@@ -721,9 +721,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
     private string SideOf(ShelfItem item)
     {
         if (SameDocument(leftPane, item.Target) && !leftPane.Blocked)
-            return UiText.Get("shelf.side.left");
+            return UiText.Pc.Get("shelf.side.left");
         if (_split && rightPane != null && SameDocument(rightPane, item.Target) && !rightPane.Blocked)
-            return UiText.Get("shelf.side.right");
+            return UiText.Pc.Get("shelf.side.right");
         return null;
     }
 

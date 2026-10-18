@@ -105,6 +105,57 @@ public static class UiText
         return shown;
     }
 
+    /// <summary>
+    /// The PC's words (Saleh 2026-10-18: "language in the pc shouldn't change
+    /// this will give scaning a porpose once the documents start chanign
+    /// languages"): every app, window, the taskbar, the Start menu, the icons,
+    /// Settings and the CRT's clock print in the reading language whatever
+    /// culture leads and from any day (CultureChoice.Surface), so a scanned
+    /// paper's copy reads in English on the PC while the papers on the desk
+    /// follow the culture. Colours, fonts and the wallpaper still follow
+    /// history (CultureThemeService); only the words stay English.
+    /// </summary>
+    public static class Pc
+    {
+        /// <summary>The reading language's string for a key.</summary>
+        public static string Get(string key) => Format(key);
+
+        /// <summary>The reading language's string for a key with its placeholders filled (UiStrings.English).</summary>
+        public static string Format(string key, params object[] args)
+        {
+            UiStrings strings = Strings();
+            return strings != null ? strings.English(key, args) : key;
+        }
+
+        /// <summary>A category's report word in English (ClueLabels.Key).</summary>
+        public static string Category(ClueCategory category) => Get(ClueLabels.Key(category));
+
+        /// <summary>A garment slot's word in English (Looks.SlotKey).</summary>
+        public static string Slot(LookSlot slot) => Get(Looks.SlotKey(slot));
+
+        /// <summary>A deviation's report line in English.</summary>
+        public static string Deviation(Discrepancy d) =>
+            d == null ? string.Empty : Format(d.ReportKey, Category(d.category), d.documentValue, d.ReportOther);
+
+        /// <summary>The wallet's word: the present culture's Future currency (a value of the world, as printed), else the neutral word in English.</summary>
+        public static string Currency(WalletForm form)
+        {
+            CultureThemeService service = CultureThemeService.Instance;
+            string fallback = Get(form == WalletForm.Label ? "wallet.credits" : form == WalletForm.Inline ? "wallet.creditsInline" : "wallet.creditsShort");
+            return service != null ? CultureChoice.Wallet(service.ActiveCultureId, service.FutureCurrency, fallback) : fallback;
+        }
+
+        /// <summary>A document's fixed English word as the PC prints it: as it is (the papers' own English; a scanned copy reads in English).</summary>
+        public static string DocumentWord(string english) => english;
+    }
+
+    /// <summary>Where a text is printed: the PC for one on the desktop's layer (the desktop canvas and everything under it), else the desk.</summary>
+    public static TextSurface SurfaceOf(Component text) =>
+        text != null && OfficeLayers.PcDesktopLayer >= 0 && text.gameObject.layer == OfficeLayers.PcDesktopLayer ? TextSurface.Pc : TextSurface.Desk;
+
+    /// <summary>The string for a key on a surface: the PC's in English (<see cref="Pc"/>), the desk's in the labels' language.</summary>
+    public static string Get(string key, TextSurface surface) => surface == TextSurface.Pc ? Pc.Get(key) : Get(key);
+
     /// <summary>A category's report word (ClueLabels.Key).</summary>
     public static string Category(ClueCategory category) => Get(ClueLabels.Key(category));
 
@@ -134,6 +185,27 @@ public static class UiText
         text.enableAutoSizing = true;
         text.fontSizeMax = size;
         text.fontSizeMin = size * library.CultureUi.labelMinScale;
+    }
+
+    /// <summary>
+    /// Sizes a one-line text that its plate grows around (a content size
+    /// fitter: auto-sizing never shrinks it) so it is at most
+    /// <paramref name="width"/> wide: <paramref name="size"/> when it fits,
+    /// else just small enough, never under CultureUiSettings.labelMinScale of
+    /// it (the 1018 language pass: a long desktop icon name reached past the
+    /// screen's edge). Without a content library it keeps <paramref name="size"/>.
+    /// </summary>
+    public static void FitWidth(TMP_Text text, float width, float size)
+    {
+        if (text == null || size <= 0f)
+            return;
+        text.enableAutoSizing = false;
+        text.fontSize = size;
+        ContentLibrarySO library = Library();
+        float needed = text.GetPreferredValues(text.text, float.PositiveInfinity, float.PositiveInfinity).x;
+        if (library == null || width <= 0f || needed <= width)
+            return;
+        text.fontSize = Mathf.Max(size * library.CultureUi.labelMinScale, size * width / needed);
     }
 
     /// <summary>The lookup in use (null when no content library is reachable).</summary>

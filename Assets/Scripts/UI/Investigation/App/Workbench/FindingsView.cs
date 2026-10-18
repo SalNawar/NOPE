@@ -53,23 +53,23 @@ public sealed class FindingsView : MonoBehaviour
     }
 
     /// <summary>A finding's title ("Visa class matches", "Breaks the rule: …").</summary>
-    public static string Title(Finding finding) => UiText.Format("finding.title." + finding.Kind, finding.Subject);
+    public static string Title(Finding finding) => UiText.Pc.Format("finding.title." + finding.Kind, finding.Subject);
 
     /// <summary>A finding's short line: the two values ("Premium against Standard"), one value found on both ("BDX-270 on both"), or the value a rule or the date was held against with where it is ("14 Mar 2150 (Departure Manifest)"); a proof ends "· evidence".</summary>
     public static string Detail(Finding finding)
     {
         string line;
         if (finding.Kind == FindingKind.PaperMissing)
-            return UiText.Get("finding.detail.missing");
+            return UiText.Pc.Get("finding.detail.missing");
         if (finding.Kind == FindingKind.NoRecord)
-            return UiText.Format("finding.detail.noRecord", finding.ValueA);
+            return UiText.Pc.Format("finding.detail.noRecord", finding.ValueA);
         if (finding.KeyA == EntryKeys.CalendarToday || EntryKeys.TryRule(finding.KeyA, out _))
-            line = UiText.Format("finding.detail.rule", finding.ValueB, Where(finding.TitleB));
+            line = UiText.Pc.Format("finding.detail.rule", finding.ValueB, Where(finding.TitleB));
         else if (string.Equals(finding.ValueA, finding.ValueB, StringComparison.OrdinalIgnoreCase))
-            line = UiText.Format("finding.detail.same", finding.ValueA);
+            line = UiText.Pc.Format("finding.detail.same", finding.ValueA);
         else
-            line = UiText.Format("finding.detail", finding.ValueA, finding.ValueB);
-        return finding.Proof ? UiText.Format("finding.evidence", line) : line;
+            line = UiText.Pc.Format("finding.detail", finding.ValueA, finding.ValueB);
+        return finding.Proof ? UiText.Pc.Format("finding.evidence", line) : line;
     }
 
     /// <summary>The detail a pick's label names: the part after its last " · " ("Leisure Departure Visa · Citizen ID": "Citizen ID"), else the label.</summary>

@@ -46,6 +46,8 @@ public sealed class DesktopIconView : MonoBehaviour, IPointerDownHandler, IPoint
     private Texture2D _placeholderTexture;
     private Sprite _placeholderSprite;
     private Vector2 _grab;
+    private TMP_Text _name;
+    private float _nameSize;
     private Vector2 _start;
     private bool _dragging;
 
@@ -60,9 +62,13 @@ public sealed class DesktopIconView : MonoBehaviour, IPointerDownHandler, IPoint
 
     private RectTransform Rect => (RectTransform)transform;
 
-    /// <summary>The glyph: the app's art when delivered (ArtSlots.DesktopIcon, redesign phase 27), else the placeholder drawn for its id.</summary>
+    /// <summary>The glyph: the app's art when delivered (ArtSlots.DesktopIcon, redesign phase 27), else the placeholder drawn for its id; the name follows the labels' language.</summary>
     private void Awake()
     {
+        _name = transform.Find(NamePath) is Transform found ? found.GetComponent<TMP_Text>() : null;
+        if (_name != null)
+            _nameSize = _name.fontSize;
+        CultureThemeService.LabelsChanged += FitName;
         if (glyph == null || glyph.sprite != null)
             return;
 
@@ -90,8 +96,25 @@ public sealed class DesktopIconView : MonoBehaviour, IPointerDownHandler, IPoint
         glyph.sprite = _placeholderSprite;
     }
 
+    /// <summary>The name in the labels' language as the scene starts.</summary>
+    private void Start() => FitName();
+
+    /// <summary>The name's text under its plate (the builder's).</summary>
+    private const string NamePath = "LabelPlate/Label";
+
+    /// <summary>The plate's padding either side of the name (the builder's layout group), kept inside the cell too.</summary>
+    private const float NamePadding = 24f;
+
+    /// <summary>The name on one line no wider than the icon's cell (sheet 02: "as wide as the name, at most the cell"): a longer one shrinks rather than its plate reaching past the cell, and past the desktop's edge for an icon at the edge (the 1018 language pass).</summary>
+    private void FitName()
+    {
+        if (_name != null)
+            UiText.FitWidth(_name, Rect.rect.width - NamePadding, _nameSize);
+    }
+
     private void OnDestroy()
     {
+        CultureThemeService.LabelsChanged -= FitName;
         if (_placeholderSprite != null)
             Destroy(_placeholderSprite);
         if (_placeholderTexture != null)

@@ -113,7 +113,7 @@ public sealed partial class InvestigationApp
             SetTarget(Other(TargetPane));
         if (!OpenOnTarget(target))
         {
-            Notice(UiText.Get("app.jump.gone"));
+            Notice(UiText.Pc.Get("app.jump.gone"));
             return;
         }
         if (EntryKeys.TryRef(e.Key, out EntryRef entry))

@@ -25,8 +25,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The status line's height under the page.</summary>
     private const float BrowserStatusHeight = 36f;
 
-    /// <summary>The Home and Go buttons' widths, and the site search box's (its field and Search).</summary>
-    private const float BrowserHomeWidth = 108f, BrowserGoWidth = 84f, BrowserSearchWidth = 440f;
+    /// <summary>The Home and Go buttons' widths, and the site search box's (its field and Search); Go has room for a culture's word (Greek's ΜΕΤΑΒΑΣΗ spilled at 84: the 1018 language pass).</summary>
+    private const float BrowserHomeWidth = 108f, BrowserGoWidth = 104f, BrowserSearchWidth = 440f;
 
     /// <summary>The page's scrollbar width.</summary>
     private const float BrowserScrollbarWidth = 16f;

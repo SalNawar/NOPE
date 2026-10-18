@@ -188,13 +188,13 @@ public sealed class MatchBoard : MonoBehaviour
     {
         if (rule == null)
             return;
-        PickSpecial(new Held { Key = EntryKeys.Rule(index), Title = UiText.Get("app.tab.rules"), Value = rule.Summary(), Rule = rule });
+        PickSpecial(new Held { Key = EntryKeys.Rule(index), Title = UiText.Pc.Get("app.tab.rules"), Value = rule.Summary(TextSurface.Pc), Rule = rule });
     }
 
     /// <summary>The calendar's today (<paramref name="todayText"/>, as the papers print dates) was clicked (CalendarView): as a rule is.</summary>
     public void PickToday(string todayText)
     {
-        PickSpecial(new Held { Key = EntryKeys.CalendarToday, Title = UiText.Get("app.tab.calendar"), Value = todayText ?? string.Empty, Today = true });
+        PickSpecial(new Held { Key = EntryKeys.CalendarToday, Title = UiText.Pc.Get("app.tab.calendar"), Value = todayText ?? string.Empty, Today = true });
     }
 
     /// <summary>A rule or the date clicked: judged against the value held, else held (see PickRule).</summary>
@@ -225,7 +225,7 @@ public sealed class MatchBoard : MonoBehaviour
         _special = special;
         _holdKey = special.Key;
         ClearLink();
-        ShowStatus(FindingLook.Info, special.Today ? UiText.Format("status.holdingToday", special.Value) : UiText.Format("status.holdingRule", special.Value), true);
+        ShowStatus(FindingLook.Info, special.Today ? UiText.Pc.Format("status.holdingToday", special.Value) : UiText.Pc.Format("status.holdingRule", special.Value), true);
         Changed?.Invoke();
     }
 
@@ -247,7 +247,7 @@ public sealed class MatchBoard : MonoBehaviour
             }
             _holdKey = a.Key;
             ClearLink();
-            ShowStatus(FindingLook.Info, UiText.Format("status.holding", a.Shown, a.Label), true);
+            ShowStatus(FindingLook.Info, UiText.Pc.Format("status.holding", a.Shown, a.Label), true);
             Changed?.Invoke();
             return;
         }
@@ -311,7 +311,7 @@ public sealed class MatchBoard : MonoBehaviour
                                   request.Label, null);
         if (!_log.Add(finding))
             return;
-        ShowStatus(FindingLook.Differ, UiText.Format("status.logged", FindingsView.Title(finding)));
+        ShowStatus(FindingLook.Differ, UiText.Pc.Format("status.logged", FindingsView.Title(finding)));
         if (findings != null)
             findings.Show(_log);
         Logged?.Invoke(finding);
@@ -329,11 +329,11 @@ public sealed class MatchBoard : MonoBehaviour
         if (string.IsNullOrWhiteSpace(query))
             return;
         Wire();
-        var finding = new Finding(FindingKind.NoRecord, NoRecordKey(query), string.Empty, UiText.Get("app.tab.records"), query.Trim(), string.Empty, string.Empty,
+        var finding = new Finding(FindingKind.NoRecord, NoRecordKey(query), string.Empty, UiText.Pc.Get("app.tab.records"), query.Trim(), string.Empty, string.Empty,
                                   query.Trim(), null, ClueCategory.CitizenId);
         if (!_log.Add(finding))
             return;
-        ShowStatus(FindingLook.Differ, UiText.Format("status.logged", FindingsView.Title(finding)));
+        ShowStatus(FindingLook.Differ, UiText.Pc.Format("status.logged", FindingsView.Title(finding)));
         if (findings != null)
             findings.Show(_log);
         Logged?.Invoke(finding);
@@ -350,7 +350,7 @@ public sealed class MatchBoard : MonoBehaviour
     private static bool IsTruth(CompareEvidence e) => e.kind == EvidenceKind.ReferenceEntry || e.kind == EvidenceKind.RecordField;
 
     /// <summary>What a held rule or the date is, in a note ("Today's date", "The rule").</summary>
-    private static string What(Held special) => UiText.Get(special.Today ? "finding.what.today" : "finding.what.rule");
+    private static string What(Held special) => UiText.Pc.Get(special.Today ? "finding.what.today" : "finding.what.rule");
 
     /// <summary>A result: the line between the two values, the status line (a note names <paramref name="whatA"/> and <paramref name="whatB"/>) and, for a logged kind, the findings, titled by <paramref name="subject"/> (a pair already logged is only shown again); <paramref name="proof"/> is the deviation the pair proved, or null.</summary>
     private void Record(FindingKind kind, string keyA, string titleA, string valueA, string keyB, string titleB, string valueB, string subject, string whatA,
@@ -359,14 +359,14 @@ public sealed class MatchBoard : MonoBehaviour
         var finding = new Finding(kind, keyA, keyB, titleA, valueA, titleB, valueB, subject, proof, category);
         FindingLook look = FindingRules.Look(kind);
         _holdKey = null;
-        Link(keyA, keyB, look, UiText.Get(FindingRules.LinkKey(kind)));
+        Link(keyA, keyB, look, UiText.Pc.Get(FindingRules.LinkKey(kind)));
         if (!FindingRules.IsLogged(kind))
-            ShowStatus(FindingLook.Info, UiText.Format("finding.note." + kind, whatA, whatB));
+            ShowStatus(FindingLook.Info, UiText.Pc.Format("finding.note." + kind, whatA, whatB));
         else if (!_log.Add(finding))
-            ShowStatus(FindingLook.Info, UiText.Get("status.already"));
+            ShowStatus(FindingLook.Info, UiText.Pc.Get("status.already"));
         else
         {
-            ShowStatus(look, UiText.Format(finding.Proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
+            ShowStatus(look, UiText.Pc.Format(finding.Proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
             if (findings != null)
                 findings.Show(_log);
             Logged?.Invoke(finding);
@@ -380,8 +380,8 @@ public sealed class MatchBoard : MonoBehaviour
         if (finding == null || app == null)
             return;
         app.OpenPair(Target(finding.KeyA), Target(finding.KeyB));
-        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), UiText.Get(FindingRules.LinkKey(finding.Kind)));
-        ShowStatus(FindingRules.Look(finding.Kind), UiText.Format("status.shown", FindingsView.Title(finding)));
+        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), UiText.Pc.Get(FindingRules.LinkKey(finding.Kind)));
+        ShowStatus(FindingRules.Look(finding.Kind), UiText.Pc.Format("status.shown", FindingsView.Title(finding)));
     }
 
     /// <summary>Where a value's key is read: its paper, record, book row or line (SmartLinks.ForKey), a rule's memo, the calendar.</summary>

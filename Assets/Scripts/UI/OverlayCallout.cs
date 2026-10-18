@@ -20,7 +20,7 @@ public sealed class OverlayCallout : MonoBehaviour
     /// <summary>The box's text.</summary>
     [SerializeField] private TMP_Text label;
 
-    /// <summary>True when the box stays at the screen's edge while its object is out of view (the speech bubble: the desk view tilts the traveller's head above the top); false hides it (the tooltips).</summary>
+    /// <summary>True when the box stays at the screen's edge while its object is out of view (the speech bubble, kept on screen as the camera moves; OfficeCallouts hides it while the reading view or the city shows); false hides it (the tooltips).</summary>
     [SerializeField] private bool keepOnScreen;
 
     /// <summary>The band at the overlay's top the box never covers (canvas reference px): the office case HUD's strips for the speech bubble; 0 for the tooltips.</summary>

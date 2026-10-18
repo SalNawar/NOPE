@@ -122,7 +122,7 @@ public sealed class CaseDocumentsPresenter
         DocumentTemplateSO template = doc != null ? doc.template : null;
         return new CaseDocument
         {
-            name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
+            name = doc != null ? doc.DisplayName : UiText.Pc.Get("document.untitled"),
             englishName = template != null ? template.displayName : null,
             fields = doc != null ? doc.fields : null,
             handOver = template != null ? doc.handOver : DocumentHandOver.OnRequest,
@@ -305,9 +305,9 @@ public sealed class CaseDocumentsPresenter
         foreach (DocumentField field in doc.fields ?? new List<DocumentField>())
         {
             bool shown = field != null && (hidden == null || fields.Count >= hidden.Count || !hidden[fields.Count]);
-            fields.Add(shown ? (UiText.DocumentWord(field.label), field.category == ClueCategory.Photo ? UiText.Get("compare.photoShown") : field.value) : (null, null));
+            fields.Add(shown ? (UiText.Pc.DocumentWord(field.label), field.category == ClueCategory.Photo ? UiText.Pc.Get("compare.photoShown") : field.value) : (null, null));
         }
-        foreach (IndexEntry entry in IndexEntries.Paper(index, doc.name, fields, UiText.Get("search.title.row")))
+        foreach (IndexEntry entry in IndexEntries.Paper(index, doc.name, fields, UiText.Pc.Get("search.title.row")))
             _index.Add(entry);
     }
 

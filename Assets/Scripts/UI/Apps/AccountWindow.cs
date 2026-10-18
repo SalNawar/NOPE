@@ -52,10 +52,10 @@ public sealed class AccountWindow : MonoBehaviour
         if (extract != null && extractForm != null)
         {
             FormData page = extractForm.Page(agency);
-            List<AccountRow> rows = Account.ExtractRows(source, UiText.Get, Amount);
+            List<AccountRow> rows = Account.ExtractRows(source, UiText.Pc.Get, Amount);
             page.Text = new Dictionary<string, string>
             {
-                { "query", UiText.Format("account.query", source.Profile.name, source.Profile.citizenId) },
+                { "query", UiText.Pc.Format("account.query", source.Profile.name, source.Profile.citizenId) },
                 { "note", Note(rows) }
             };
             page.Groups = Groups(rows);
@@ -67,11 +67,11 @@ public sealed class AccountWindow : MonoBehaviour
         {
             List<AccountDay> days = world != null ? world.accountDays : new List<AccountDay>();
             FormData page = statementForm.Page(agency);
-            page.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", days.ConvertAll(d => Account.StatementCells(d, UiText.Get)) } };
+            page.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", days.ConvertAll(d => Account.StatementCells(d, UiText.Pc.Get)) } };
             page.Text = new Dictionary<string, string>
             {
-                { "none", days.Count == 0 ? UiText.Get("account.statement.none") : string.Empty },
-                { "unit", UiText.Format("account.statement.unit", UiText.Currency(UiText.WalletForm.Short)) }
+                { "none", days.Count == 0 ? UiText.Pc.Get("account.statement.none") : string.Empty },
+                { "unit", UiText.Pc.Format("account.statement.unit", UiText.Pc.Currency(UiText.WalletForm.Short)) }
             };
             statement.Show(statementForm.form, page, _ => false);
             bottom = Stack(statement, bottom > 0f ? bottom + gap : 0f);
@@ -125,5 +125,5 @@ public sealed class AccountWindow : MonoBehaviour
 
     /// <summary>An amount of credits in the wallet's short word ("1,250 cr"); the Debt Relief ending's papers word theirs the same way.</summary>
     internal static string Amount(int value) =>
-        value.ToString("N0", CultureInfo.InvariantCulture) + " " + UiText.Currency(UiText.WalletForm.Short);
+        value.ToString("N0", CultureInfo.InvariantCulture) + " " + UiText.Pc.Currency(UiText.WalletForm.Short);
 }

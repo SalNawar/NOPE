@@ -99,9 +99,9 @@ public sealed class SearchResultsView : MonoBehaviour
 
         if (all.Count > 0)
         {
-            Chip(UiText.Get("search.all"), !only.HasValue, null);
+            Chip(UiText.Pc.Get("search.all"), !only.HasValue, null);
             foreach (ResultGroup group in all)
-                Chip(UiText.Format("search.sourceChip", TabName(group.Source), group.Total), only == group.Source, group.Source);
+                Chip(UiText.Pc.Format("search.sourceChip", TabName(group.Source), group.Total), only == group.Source, group.Source);
         }
 
         foreach (ResultGroup group in shown)
@@ -113,7 +113,7 @@ public sealed class SearchResultsView : MonoBehaviour
             if (group.More > 0 && !only.HasValue)
             {
                 Button more = Clone(moreTemplate.gameObject).GetComponent<Button>();
-                more.GetComponentInChildren<TMP_Text>(true).text = UiText.Format("search.more", group.Total, TabName(group.Source));
+                more.GetComponentInChildren<TMP_Text>(true).text = UiText.Pc.Format("search.more", group.Total, TabName(group.Source));
                 AppTab source = group.Source;
                 more.onClick.AddListener(() => Filtered?.Invoke(source));
             }
@@ -122,7 +122,7 @@ public sealed class SearchResultsView : MonoBehaviour
         if (emptyText != null)
         {
             emptyText.gameObject.SetActive(shown.Count == 0);
-            emptyText.text = chip && string.IsNullOrWhiteSpace(typed) ? UiText.Get("search.noneChip") : UiText.Format("search.none", (typed ?? string.Empty).Trim());
+            emptyText.text = chip && string.IsNullOrWhiteSpace(typed) ? UiText.Pc.Get("search.noneChip") : UiText.Pc.Format("search.none", (typed ?? string.Empty).Trim());
         }
         if (scroll != null)
             scroll.verticalNormalizedPosition = 1f;
@@ -269,5 +269,5 @@ public sealed class SearchResultsView : MonoBehaviour
     private static string Escape(string text) => string.IsNullOrEmpty(text) ? string.Empty : "<noparse>" + text + "</noparse>";
 
     /// <summary>A source's full name ("Reference books").</summary>
-    private static string TabName(AppTab source) => UiText.Get("app.tab." + source.ToString().ToLowerInvariant());
+    private static string TabName(AppTab source) => UiText.Pc.Get("app.tab." + source.ToString().ToLowerInvariant());
 }
