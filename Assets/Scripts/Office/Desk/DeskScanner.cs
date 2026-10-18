@@ -246,6 +246,27 @@ public sealed class DeskScanner : MonoBehaviour
             addOns.Fed();
     }
 
+    /// <summary>The Auto-Feed's tray was clicked (DeskController feeds the stack).</summary>
+    public event System.Action TrayClicked
+    {
+        add { if (addOns != null) addOns.TrayClicked += value; }
+        remove { if (addOns != null) addOns.TrayClicked -= value; }
+    }
+
+    /// <summary>The Analysis beacon was clicked (DeskController shows the flagged pair).</summary>
+    public event System.Action BeaconClicked
+    {
+        add { if (addOns != null) addOns.BeaconClicked += value; }
+        remove { if (addOns != null) addOns.BeaconClicked -= value; }
+    }
+
+    /// <summary>The tray took <paramref name="count"/> papers in one go (0: nothing left to scan): its whirr.</summary>
+    public void Stacked(int count)
+    {
+        if (addOns != null)
+            addOns.Stacked(count);
+    }
+
     /// <summary>An analysis pass ended, <paramref name="marked"/> when it marked a pair: the Analysis beacon pops.</summary>
     public void Flag(bool marked)
     {

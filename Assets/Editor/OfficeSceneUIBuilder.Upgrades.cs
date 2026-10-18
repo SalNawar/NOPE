@@ -371,6 +371,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "beaconPod", beacon != null ? beacon.transform.Find("Beacon/BeaconPod") : null);
         SetRef(so, "reflector", beacon != null ? beacon.transform.Find("Beacon/BeaconPod/Reflector") : null);
         SetRef(so, "beaconLamp", beacon != null ? beacon.transform.Find("Beacon/BeaconPod/BeaconLamp").GetComponent<Renderer>() : null);
+        SetRef(so, "trayClick", feeder != null ? PropClick(feeder.transform, "Click", feeder.transform.Find("Feeder"), 0.006f) : null);
+        SetRef(so, "beaconClick", beacon != null ? PropClick(beacon.transform, "Click", beacon.transform.Find("Beacon"), 0.006f) : null);
         SetRef(so, "sound", sound);
         so.ApplyModifiedProperties();
         if (feeder != null)

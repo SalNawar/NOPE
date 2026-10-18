@@ -170,6 +170,12 @@ public sealed class DeskPapers
     /// <summary>Each paper whose analysis pass has ended (the pass works once per document).</summary>
     private readonly bool[] _analysed;
 
+    /// <summary>Each paper scanned at least once this case (the Auto-Feed's stack skips it).</summary>
+    private readonly bool[] _scanned;
+
+    /// <summary>The papers in the order they were handed over (the Auto-Feed's stack goes through in it).</summary>
+    private readonly List<int> _handed = new List<int>();
+
     /// <summary>The running scan's duration.</summary>
     private float _running;
 
@@ -196,6 +202,7 @@ public sealed class DeskPapers
         _states = new PaperState[documents != null ? documents.Count : 0];
         _zones = new DeskZone[_states.Length];
         _analysed = new bool[_states.Length];
+        _scanned = new bool[_states.Length];
         ArrivalIndices = CaseDocuments.ArrivalIndices(documents);
         _scanSeconds = scanSeconds > MinScanSeconds ? scanSeconds : MinScanSeconds;
         _analysisSeconds = analysisSeconds > MinScanSeconds ? analysisSeconds : MinScanSeconds;
@@ -213,6 +220,9 @@ public sealed class DeskPapers
 
     /// <summary>True when paper <paramref name="i"/>'s analysis pass has ended (a re-scan of it is AlreadyAnalysed).</summary>
     public bool WasAnalysed(int i) => InRange(i) && _analysed[i];
+
+    /// <summary>True once paper <paramref name="i"/> has been scanned this case.</summary>
+    public bool WasScanned(int i) => InRange(i) && _scanned[i];
 
     /// <summary>The papers waiting to scan (the Auto-Feed's and those dropped on the busy scanner).</summary>
     public int QueuedCount => _queue.Count;
@@ -262,13 +272,14 @@ public sealed class DeskPapers
 
         _states[i] = PaperState.OnDesk;
         _zones[i] = DeskZone.Counter;
+        _handed.Add(i);
         return true;
     }
 
     /// <summary>
-    /// Queues a handed-over paper to scan itself (the Auto-Feed Scanner: the
-    /// controller enqueues each hand-over while the upgrade is owned); false
-    /// when it is not on the desk, is already queued, or is out of range.
+    /// Queues a handed-over paper to scan itself (the Auto-Feed Scanner's
+    /// stack, FeedStack); false when it is not on the desk, is already
+    /// queued, or is out of range.
     /// </summary>
     public bool Enqueue(int i)
     {
@@ -277,6 +288,23 @@ public sealed class DeskPapers
 
         _queue.Add(i);
         return true;
+    }
+
+    /// <summary>
+    /// The Auto-Feed tray takes the stack (Saleh 2026-10-18, demo 1018a note
+    /// 14: "feed a stack in one go"; the desk machines spec §10): every paper
+    /// handed over, on the desk and never scanned this case, not queued
+    /// yet, joins the feed in hand-over order, to scan itself one after
+    /// another (FeedNext). Returns the papers queued, in that order (none:
+    /// nothing left to scan).
+    /// </summary>
+    public List<int> FeedStack()
+    {
+        var fed = new List<int>();
+        foreach (int i in _handed)
+            if (!_scanned[i] && Enqueue(i))
+                fed.Add(i);
+        return fed;
     }
 
     /// <summary>
@@ -367,6 +395,7 @@ public sealed class DeskPapers
 
         int done = _scanning;
         _states[done] = PaperState.OnDesk;
+        _scanned[done] = true;
         if (Pass == ScanPass.Analysis)
             _analysed[done] = true;
         _scanning = -1;
