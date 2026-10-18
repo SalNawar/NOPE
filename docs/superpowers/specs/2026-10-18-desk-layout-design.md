@@ -54,7 +54,7 @@ The office binder builds the frame at load and places everything through `DeskFr
 | stampRack | 0.28, 0.24 | 0.32 x 0.12 | 0 | beside the counter, at the papers' top right |
 | intercom | 0.50, 0.37 | 0.12 x 0.08 | 0 | on the counter strip's right |
 | uvTorch | 0.18, -0.22 | 0.24 x 0.10 | -90 | in the tool pouch under the papers |
-| lensKit | -0.06, -0.19 | 0.20 x 0.15 | 0 | in the tool pouch, beside the torch |
+| lensKit | 0.10, -0.09 | 0.20 x 0.15 | 0 | above the torch, right of the rulebook (the integration's check: at -0.06, -0.19 its base lay 14 x 6 cm under the rulebook and its front ran off the reading view's bottom edge) |
 | detain | -0.51, 0.74 | 0.26 x 0.28 | 0 | beside the AVAILABLE sign |
 | crate | 1.04, -0.52 | 0.48 x 0.34 | 8 | off the mat's front right, delivery mornings only |
 | commsShelf | -1.35, 1.29 | 1.90 x 0.34 | | a 5 cm riser holding the phone, BABEL, the Rolodex and the protocol cards |

@@ -118,8 +118,8 @@ public sealed class DeskLayoutSettings
     /// <summary>The tool pouch under the papers, its UV torch's cradle (inside the reading view's bottom edge).</summary>
     public DeskBay uvTorch = new DeskBay(0.18f, -0.22f, 0.24f, 0.10f, -90f);
 
-    /// <summary>The tool pouch's lens stand, left of the torch (its magnifiers taken up over the papers).</summary>
-    public DeskBay lensKit = new DeskBay(-0.06f, -0.19f, 0.20f, 0.15f);
+    /// <summary>The lens stand, above the torch and right of the rulebook, clear of both and inside the reading view (its magnifiers taken up over the papers).</summary>
+    public DeskBay lensKit = new DeskBay(0.10f, -0.09f, 0.20f, 0.15f);
 
     /// <summary>The DETAIN button, beside the AVAILABLE sign (rare: one trip to the office view).</summary>
     public DeskBay detain = new DeskBay(-0.51f, 0.74f, 0.26f, 0.28f);
