@@ -158,18 +158,18 @@ public sealed class ScanLayerSwitch : MonoBehaviour
     private void DrawUv()
     {
         if (title != null)
-            title.text = UiText.Get("layers.uv.title");
+            title.text = UiText.Pc.Get("layers.uv.title");
         if (_provider.UvState(_document) != LayerState.Shown)
         {
-            Line(UiText.Get("layers.uv.unseen"), false, null);
+            Line(UiText.Pc.Get("layers.uv.unseen"), false, null);
             return;
         }
         int document = _document;
         foreach (UvMark mark in _provider.Uv(document))
         {
-            string where = mark.Field >= 0 && _fields != null && mark.Field < _fields.Count && _fields[mark.Field] != null ? UiText.DocumentWord(_fields[mark.Field].label) : UiText.Get("layers.uv.wholePaper");
+            string where = mark.Field >= 0 && _fields != null && mark.Field < _fields.Count && _fields[mark.Field] != null ? UiText.Pc.DocumentWord(_fields[mark.Field].label) : UiText.Pc.Get("layers.uv.wholePaper");
             bool missing = mark.Kind == UvMarkKind.Microprint && mark.Fault && string.IsNullOrEmpty(mark.Text);
-            string text = missing ? UiText.Format("layers.uv.MicroprintMissing", where) : UiText.Format("layers.uv." + mark.Kind, where, mark.Text);
+            string text = missing ? UiText.Pc.Format("layers.uv.MicroprintMissing", where) : UiText.Pc.Format("layers.uv." + mark.Kind, where, mark.Text);
             UvMark picked = mark;
             Line(text, mark.Fault, mark.Fault && mark.Field >= 0 ? () => Picked?.Invoke(document, picked.Field, picked.Text, ScanLayer.Uv) : (Action)null);
         }
@@ -179,12 +179,12 @@ public sealed class ScanLayerSwitch : MonoBehaviour
     private void DrawChip()
     {
         if (title != null)
-            title.text = UiText.Get("layers.chip.title");
+            title.text = UiText.Pc.Get("layers.chip.title");
         LayerState state = _provider.ChipState(_document);
         IReadOnlyList<DocumentField> chip = _provider.Chip(_document);
         if (state != LayerState.Shown || chip == null)
         {
-            Line(UiText.Get(state == LayerState.NotYet ? "layers.chip.unread" : "layers.chip.none"), false, null);
+            Line(UiText.Pc.Get(state == LayerState.NotYet ? "layers.chip.unread" : "layers.chip.none"), false, null);
             return;
         }
         int document = _document;
@@ -195,7 +195,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
                 int field = i;
                 string value = chip[i].value;
                 bool glows = differ.Contains(i);
-                Line(UiText.Format("layers.chip.line", UiText.DocumentWord(chip[i].label), value), glows, glows ? () => Picked?.Invoke(document, field, value, ScanLayer.Chip) : (Action)null);
+                Line(UiText.Pc.Format("layers.chip.line", UiText.Pc.DocumentWord(chip[i].label), value), glows, glows ? () => Picked?.Invoke(document, field, value, ScanLayer.Chip) : (Action)null);
             }
     }
 

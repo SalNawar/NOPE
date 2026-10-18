@@ -466,7 +466,7 @@ public sealed class OrdersWindow : MonoBehaviour
             actionButton.gameObject.SetActive(action != NodeAction.None);
             actionButton.interactable = enabled;
             if (_actionLabel != null && action != NodeAction.None)
-                _actionLabel.text = UiText.Get(ActionKey(action));
+                _actionLabel.text = UiText.Pc.Get(ActionKey(action));
             if (kit != null && action != NodeAction.None && actionButton.targetGraphic is Image face)
             {
                 string plate = ActionPlate(action);
@@ -496,7 +496,7 @@ public sealed class OrdersWindow : MonoBehaviour
     {
         int level = view != null ? view.Level : AppZoom.Normal;
         if (zoomText != null)
-            zoomText.text = UiText.Format("app.orders.zoom", level);
+            zoomText.text = UiText.Pc.Format("app.orders.zoom", level);
         if (zoomOutButton != null)
             zoomOutButton.interactable = view != null && view.CanStep(-1);
         if (zoomInButton != null)

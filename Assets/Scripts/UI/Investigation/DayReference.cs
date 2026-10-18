@@ -154,13 +154,13 @@ public sealed class DayReference
         foreach (TravelRuleSO rule in _rules ?? new List<TravelRuleSO>())
             if (rule != null)
             {
-                day.Add(IndexEntries.Rule(n, UiText.Format("search.title.rule", n + 1), rule.Summary()));
+                day.Add(IndexEntries.Rule(n, UiText.Pc.Format("search.title.rule", n + 1), rule.Summary(TextSurface.Pc)));
                 n++;
             }
         if (_facts != null && _books.Any(b => b != null))
             day.AddRange(IndexEntries.BookRows(_books.First(b => b != null).Books.Select(b => (b.category, b.displayName)).ToList(), _facts, CountryName,
-                                               UiText.Get("search.revised"), UiText.Get("search.title.row")));
-        day.AddRange(IndexEntries.Records(_registry, UiText.Get("app.row.record")));
+                                               UiText.Pc.Get("search.revised"), UiText.Pc.Get("search.title.row")));
+        day.AddRange(IndexEntries.Records(_registry, UiText.Pc.Get("app.row.record")));
         _index.SetDay(day);
     }
 

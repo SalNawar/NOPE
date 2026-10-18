@@ -53,25 +53,26 @@ public sealed class TravelRuleSO : ScriptableObject
     public bool Allows(NationSO claimNation, EraSO claimEra) =>
         !Directive.Closes(claimNation != null ? claimNation.id : null, claimEra != null ? claimEra.id : null);
 
-    /// <summary>Briefing line describing the restriction.</summary>
-    public string Summary()
+    /// <summary>Briefing line describing the restriction, its fixed words as <paramref name="surface"/> prints them (the PC's in English: UiText.Pc).</summary>
+    public string Summary(TextSurface surface = TextSurface.Desk)
     {
         if (!string.IsNullOrWhiteSpace(description))
             return description;
 
-        string e = era != null ? era.displayName : UiText.Get("rule.unknownPlace");
-        string n = nation != null ? nation.displayName : UiText.Get("rule.unknownPlace");
+        string Format(string key, params object[] args) => surface == TextSurface.Pc ? UiText.Pc.Format(key, args) : UiText.Format(key, args);
+        string e = era != null ? era.displayName : Format("rule.unknownPlace");
+        string n = nation != null ? nation.displayName : Format("rule.unknownPlace");
 
         switch (type)
         {
             case TravelRuleType.EraForbidden:
-                return UiText.Format("rule.eraForbidden", e);
+                return Format("rule.eraForbidden", e);
             case TravelRuleType.NationForbidden:
-                return UiText.Format("rule.nationForbidden", n);
+                return Format("rule.nationForbidden", n);
             case TravelRuleType.NationEraForbidden:
-                return UiText.Format("rule.nationEraForbidden", n, e);
+                return Format("rule.nationEraForbidden", n, e);
             default:
-                return UiText.Get("rule.generic");
+                return Format("rule.generic");
         }
     }
 }

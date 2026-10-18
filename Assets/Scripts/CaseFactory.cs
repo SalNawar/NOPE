@@ -1924,33 +1924,33 @@ public sealed class CaseFactory
                 continue;
 
             string origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.claimedNation, inst.claimedEra);
-            List<RecordGroup> fileGroups = CitizenFile.Groups(inst.file, inst.seenBefore, today, UiText.Get);
+            List<RecordGroup> fileGroups = CitizenFile.Groups(inst.file, inst.seenBefore, today, UiText.Pc.Get);
             if (inst.account != null)
             {
-                CitizenRecord account = AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get,
+                CitizenRecord account = AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Pc.Get,
                                                               inst.isLegendary && inst.legendarySource != null ? inst.legendarySource.recordNote : null,
                                                               inst.facts != null ? inst.facts.Issued : null, standing);
                 registry.Add(new CitizenRecord(account.FullName, account.Number, account.Groups.Concat(fileGroups)));
                 continue;
             }
 
-            string note = !inst.isLegendary ? UiText.Get("records.note.none")
+            string note = !inst.isLegendary ? UiText.Pc.Get("records.note.none")
                 : inst.legendarySource != null && !string.IsNullOrWhiteSpace(inst.legendarySource.recordNote) ? inst.legendarySource.recordNote
-                : UiText.Get("records.note.sealed");
+                : UiText.Pc.Get("records.note.sealed");
             DisplacementFile file = inst.displacement;
-            var rows = new List<RecordRow> { new RecordRow(UiText.Get("records.row.name"), inst.visitorGivenName, ClueCategory.Name) };
+            var rows = new List<RecordRow> { new RecordRow(UiText.Pc.Get("records.row.name"), inst.visitorGivenName, ClueCategory.Name) };
             if (file != null)
-                rows.Add(new RecordRow(UiText.Get("records.row.number"), file.Number, ClueCategory.CitizenId));
-            rows.Add(new RecordRow(UiText.Get("records.row.born"), inst.trueBirthDate, ClueCategory.BirthDate));
-            rows.Add(new RecordRow(UiText.Get("records.row.origin"), origin, ClueCategory.Destination));
+                rows.Add(new RecordRow(UiText.Pc.Get("records.row.number"), file.Number, ClueCategory.CitizenId));
+            rows.Add(new RecordRow(UiText.Pc.Get("records.row.born"), inst.trueBirthDate, ClueCategory.BirthDate));
+            rows.Add(new RecordRow(UiText.Pc.Get("records.row.origin"), origin, ClueCategory.Destination));
             if (file != null)
             {
-                rows.Add(new RecordRow(UiText.Get("records.row.incident"), file.Incident, ClueCategory.Incident));
-                rows.Add(new RecordRow(UiText.Get("records.row.found"), file.Found));
+                rows.Add(new RecordRow(UiText.Pc.Get("records.row.incident"), file.Incident, ClueCategory.Incident));
+                rows.Add(new RecordRow(UiText.Pc.Get("records.row.found"), file.Found));
             }
-            rows.Add(new RecordRow(UiText.Get("records.row.status"), UiText.Get("records.status.awaiting")));
-            rows.Add(new RecordRow(UiText.Get("records.row.note"), note));
-            registry.Add(new CitizenRecord(inst.visitorGivenName, file?.Number, new[] { new RecordGroup(UiText.Get("records.group.registry"), rows) }.Concat(fileGroups)));
+            rows.Add(new RecordRow(UiText.Pc.Get("records.row.status"), UiText.Pc.Get("records.status.awaiting")));
+            rows.Add(new RecordRow(UiText.Pc.Get("records.row.note"), note));
+            registry.Add(new CitizenRecord(inst.visitorGivenName, file?.Number, new[] { new RecordGroup(UiText.Pc.Get("records.group.registry"), rows) }.Concat(fileGroups)));
         }
 
         return registry;

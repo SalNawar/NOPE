@@ -95,7 +95,7 @@ public sealed class OfficeUIController : MonoBehaviour
             return;
 
         if (moneyText != null)
-            moneyText.text = UiText.Format("tray.money", UiText.Currency(UiText.WalletForm.Label), world.money);
+            moneyText.text = UiText.Pc.Format("tray.money", UiText.Pc.Currency(UiText.WalletForm.Label), world.money);
 
         if (dayText != null)
             dayText.text = TrayDate(world.day);
@@ -104,7 +104,7 @@ public sealed class OfficeUIController : MonoBehaviour
     }
 
     /// <summary>The desk CRT's date for <paramref name="day"/>: today in the agency's calendar, in capitals ("14 MAR 2150"), or the plain day when the library has no readable first date.</summary>
-    private static string CrtDate(int day) => Today(day) ?? UiText.Format("tray.day", day);
+    private static string CrtDate(int day) => Today(day) ?? UiText.Pc.Format("tray.day", day);
 
     /// <summary>Today (shift day <paramref name="day"/>) in the agency's calendar, in capitals ("14 MAR 2150"), or null when the library has no readable first date.</summary>
     private static string Today(int day)
@@ -118,7 +118,7 @@ public sealed class OfficeUIController : MonoBehaviour
     private static string TrayDate(int day)
     {
         string today = Today(day);
-        return today != null ? UiText.Format("tray.date", today, day) : UiText.Format("tray.day", day);
+        return today != null ? UiText.Pc.Format("tray.date", today, day) : UiText.Pc.Format("tray.day", day);
     }
 
     /// <summary>The date's button holds today on the app's workbench.</summary>

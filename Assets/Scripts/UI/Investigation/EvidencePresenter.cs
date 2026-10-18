@@ -99,7 +99,7 @@ public sealed class EvidencePresenter
         if (!_discrepancies.Add(proof))
         {
             if (_compare != null)
-                _compare.ShowAlreadyDocumented(UiText.Category(proof.category));
+                _compare.ShowAlreadyDocumented(UiText.Pc.Category(proof.category));
             return;
         }
 
@@ -107,7 +107,7 @@ public sealed class EvidencePresenter
         RefreshReport();
 
         if (_compare != null)
-            _compare.ShowDeviation(UiText.Deviation(proof));
+            _compare.ShowDeviation(UiText.Pc.Deviation(proof));
 
         _logged();
     }

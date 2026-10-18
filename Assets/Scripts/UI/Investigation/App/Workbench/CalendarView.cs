@@ -72,15 +72,15 @@ public sealed class CalendarView : AppView
         bool known = agency != null && AgencyCalendar.TryToday(agency.firstDate, day, out date);
         _today = known ? AgencyCalendar.Write(date) : null;
         CultureInfo en = CultureInfo.InvariantCulture;
-        Write(weekdayText, known ? UiText.Get("calendar.weekday." + (int)date.DayOfWeek) : string.Empty);
+        Write(weekdayText, known ? UiText.Pc.Get("calendar.weekday." + (int)date.DayOfWeek) : string.Empty);
         Write(dayText, known ? date.Day.ToString(en) : "?");
-        Write(monthText, known ? UiText.Format("calendar.monthYear", UiText.Get("calendar.month." + date.Month), date.Year) : UiText.Get("calendar.unknown"));
-        Write(shiftText, UiText.Format("calendar.shiftDay", day));
-        Write(todayText, _today ?? UiText.Get("calendar.unknown"));
+        Write(monthText, known ? UiText.Pc.Format("calendar.monthYear", UiText.Pc.Get("calendar.month." + date.Month), date.Year) : UiText.Pc.Get("calendar.unknown"));
+        Write(shiftText, UiText.Pc.Format("calendar.shiftDay", day));
+        Write(todayText, _today ?? UiText.Pc.Get("calendar.unknown"));
         if (todayButton != null)
         {
             todayButton.interactable = known;
-            AppRow.Mark(todayButton.gameObject, AppTab.Calendar, EntryKeys.CalendarToday, UiText.Get("calendar.todayTitle"), UiText.Get("calendar.today"),
+            AppRow.Mark(todayButton.gameObject, AppTab.Calendar, EntryKeys.CalendarToday, UiText.Pc.Get("calendar.todayTitle"), UiText.Pc.Get("calendar.today"),
                         _today ?? string.Empty, todayButton);
         }
 
@@ -90,7 +90,7 @@ public sealed class CalendarView : AppView
             if (weekTexts[i] == null)
                 continue;
             DateTime shown = date.AddDays(i - monday);
-            weekTexts[i].text = known ? UiText.Get("calendar.weekdayShort." + (int)shown.DayOfWeek) + "\n" + shown.Day.ToString(en) : string.Empty;
+            weekTexts[i].text = known ? UiText.Pc.Get("calendar.weekdayShort." + (int)shown.DayOfWeek) + "\n" + shown.Day.ToString(en) : string.Empty;
             weekTexts[i].fontStyle = i == monday ? FontStyles.Bold : FontStyles.Normal;
         }
         if (todayMark != null)

@@ -91,7 +91,7 @@ public sealed class AppRow : MonoBehaviour
     public Clip ToClip(bool wholeRow, string traveller)
     {
         if (wholeRow)
-            return Clip.Plain(UiText.Format("app.copyRow", Label, Value), Key, Title, traveller);
+            return Clip.Plain(UiText.Pc.Format("app.copyRow", Label, Value), Key, Title, traveller);
         return Foreign
             ? Clip.Untranslated(Value, Key, Title, traveller, _tongueId, _tongueName, _canonical)
             : Clip.Plain(Value, Key, Title, traveller);

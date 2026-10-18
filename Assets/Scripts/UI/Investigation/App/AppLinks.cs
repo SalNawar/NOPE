@@ -20,11 +20,11 @@ public static class AppLinks
         switch (link.Tab)
         {
             case AppTab.Reference:
-                return PickKeys.TrySeal(link.Key, out _) ? UiText.Get("app.link.seal") : UiText.Format("app.link.reference", UiText.Category(category));
+                return PickKeys.TrySeal(link.Key, out _) ? UiText.Pc.Get("app.link.seal") : UiText.Pc.Format("app.link.reference", UiText.Pc.Category(category));
             case AppTab.Records:
-                return UiText.Format("app.link.records", link.Query);
+                return UiText.Pc.Format("app.link.records", link.Query);
             case AppTab.Rules:
-                return UiText.Get("app.link.rules");
+                return UiText.Pc.Get("app.link.rules");
             default:
                 return null;
         }

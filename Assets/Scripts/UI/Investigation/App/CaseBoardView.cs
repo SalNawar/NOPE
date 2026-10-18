@@ -216,7 +216,7 @@ public sealed class CaseBoardView : AppView
 
         if (_model.Scanned.Count == 0)
         {
-            Line(UiText.Get(string.IsNullOrEmpty(_model.Traveller) ? "idle.waiting" : "board.noScan"));
+            Line(UiText.Pc.Get(string.IsNullOrEmpty(_model.Traveller) ? "idle.waiting" : "board.noScan"));
             return;
         }
 
@@ -225,32 +225,32 @@ public sealed class CaseBoardView : AppView
         {
             case LookupBy.Number:
             case LookupBy.Name:
-                GameObject found = Plate(plateMatchTemplate, UiText.Format("board.record.found", _model.Record.FullName,
-                                                                            string.IsNullOrWhiteSpace(_model.Record.Number) ? UiText.Get("board.record.noNumber") : _model.Record.Number));
+                GameObject found = Plate(plateMatchTemplate, UiText.Pc.Format("board.record.found", _model.Record.FullName,
+                                                                            string.IsNullOrWhiteSpace(_model.Record.Number) ? UiText.Pc.Get("board.record.noNumber") : _model.Record.Number));
                 if (found != null && found.TryGetComponent(out Button open))
                     open.onClick.AddListener(OpenRecord);
                 break;
             case LookupBy.NoRecord:
-                Plate(plateDifferTemplate, UiText.Format("board.record.none", _model.Query));
+                Plate(plateDifferTemplate, UiText.Pc.Format("board.record.none", _model.Query));
                 break;
             default:
-                Line(UiText.Get("board.record.nothing"));
+                Line(UiText.Pc.Get("board.record.nothing"));
                 break;
         }
         if (!string.IsNullOrWhiteSpace(_model.Flag))
             Plate(plateHoldTemplate, _model.Flag);
 
         // The rules check.
-        Section(UiText.Get("board.section.rules"));
+        Section(UiText.Pc.Get("board.section.rules"));
         if (_model.Rules.Count == 0)
-            Line(UiText.Get("board.rules.none"));
+            Line(UiText.Pc.Get("board.rules.none"));
         foreach (RuleCheckRow row in _model.Rules)
             RuleRow(row);
 
         // The cross-check table.
-        Section(UiText.Get("board.section.cross"));
+        Section(UiText.Pc.Get("board.section.cross"));
         if (_model.Cross.Count == 0)
-            Line(UiText.Get("board.cross.none"));
+            Line(UiText.Pc.Get("board.cross.none"));
         else
             Grid(pop);
 
@@ -262,7 +262,7 @@ public sealed class CaseBoardView : AppView
         {
             Section(group.Title);
             foreach (RecordRow row in group.Rows)
-                Line(UiText.Format("board.file.line", row.Label, row.Value));
+                Line(UiText.Pc.Format("board.file.line", row.Label, row.Value));
         }
     }
 
@@ -306,7 +306,7 @@ public sealed class CaseBoardView : AppView
             valid.gameObject.SetActive(!row.Failing);
         if (fail != null)
             fail.gameObject.SetActive(row.Failing);
-        SetText(row.Failing ? fail : valid, UiText.Get("board.chip." + row.Chip));
+        SetText(row.Failing ? fail : valid, UiText.Pc.Get("board.chip." + row.Chip));
         Button button = go.GetComponent<Button>();
         button.interactable = row.Failing;
         button.onClick.AddListener(() => RuleClicked(row));
@@ -317,12 +317,12 @@ public sealed class CaseBoardView : AppView
     {
         switch (row.Kind)
         {
-            case RuleCheckKind.Destination: return UiText.Get("board.rule.destination");
-            case RuleCheckKind.Paper: return UiText.Get("board.rule.paper");
+            case RuleCheckKind.Destination: return UiText.Pc.Get("board.rule.destination");
+            case RuleCheckKind.Paper: return UiText.Pc.Get("board.rule.paper");
             default:
                 BoardPaper paper = _model.Scanned.Find(p => p.Document == row.Document);
-                string label = paper != null && row.Field >= 0 && row.Field < paper.Fields.Count ? paper.Fields[row.Field].label : UiText.Category(row.Category);
-                return UiText.Format("board.rule.date", UiText.DocumentWord(label), row.Paper);
+                string label = paper != null && row.Field >= 0 && row.Field < paper.Fields.Count ? paper.Fields[row.Field].label : UiText.Pc.Category(row.Category);
+                return UiText.Pc.Format("board.rule.date", UiText.Pc.DocumentWord(label), row.Paper);
         }
     }
 
@@ -379,7 +379,7 @@ public sealed class CaseBoardView : AppView
             {
                 CrossCell first = row.Cells.First(x => x.Value.HasValue);
                 GameObject agree = Cell(line, cellTemplate != null ? cellTemplate.gameObject : null,
-                                        UiText.Format("board.cross.agree", first.Value.Value.Value, row.Cells.Count(x => x.Value.HasValue)));
+                                        UiText.Pc.Format("board.cross.agree", first.Value.Value.Value, row.Cells.Count(x => x.Value.HasValue)));
                 if (agree != null)
                 {
                     agree.GetComponent<Button>().interactable = false;
@@ -394,7 +394,7 @@ public sealed class CaseBoardView : AppView
                 if (!cell.Value.HasValue)
                     continue;
                 Button template = cell.Glows ? cellGlowTemplate : cellTemplate;
-                GameObject go = Cell(line, template != null ? template.gameObject : null, UiText.Format("board.cross.cell", _model.Columns[c].Title, cell.Value.Value.Value));
+                GameObject go = Cell(line, template != null ? template.gameObject : null, UiText.Pc.Format("board.cross.cell", _model.Columns[c].Title, cell.Value.Value.Value));
                 if (go == null)
                     continue;
                 Button button = go.GetComponent<Button>();
@@ -419,13 +419,13 @@ public sealed class CaseBoardView : AppView
     {
         if (_model.Overlays.Count < 2)
             return;
-        Section(UiText.Get("board.section.overlay"));
+        Section(UiText.Pc.Get("board.section.overlay"));
         bool laid = _overlayA >= 0 && _overlayB >= 0;
-        Line(laid ? UiText.Format("board.overlay.over", _model.Overlays[_overlayA].Title, _model.Overlays[_overlayB].Title) : UiText.Get("board.overlay.hint"));
+        Line(laid ? UiText.Pc.Format("board.overlay.over", _model.Overlays[_overlayA].Title, _model.Overlays[_overlayB].Title) : UiText.Pc.Get("board.overlay.hint"));
         GameObject sources = Clone(crossRowTemplate != null ? crossRowTemplate.gameObject : null);
         if (sources == null)
             return;
-        SetText(sources.transform.Find("Label"), UiText.Get("board.overlay.sources"));
+        SetText(sources.transform.Find("Label"), UiText.Pc.Get("board.overlay.sources"));
         var chips = (RectTransform)sources.transform.Find("Cells");
         for (int i = 0; i < _model.Overlays.Count; i++)
         {
@@ -451,11 +451,11 @@ public sealed class CaseBoardView : AppView
         }
         List<OverlayRow> rows = OverlayRows;
         if (rows.Count == 0)
-            Line(UiText.Get("board.overlay.nothing"));
+            Line(UiText.Pc.Get("board.overlay.nothing"));
         foreach (OverlayRow row in rows)
         {
             RectTransform line = Row();
-            Cell(line, cellHeadTemplate, UiText.DocumentWord(row.Label));
+            Cell(line, cellHeadTemplate, UiText.Pc.DocumentWord(row.Label));
             GameObject cell = Cell(line, row.Differs ? overlayShimmerTemplate : overlayCellTemplate, Shown(row.Category, row.A));
             if (cell == null)
                 continue;
@@ -473,7 +473,7 @@ public sealed class CaseBoardView : AppView
     }
 
     /// <summary>A value as the overlay prints it: a photo as "the photo" (its value is who it shows), anything else as it reads.</summary>
-    private static string Shown(ClueCategory category, string value) => category == ClueCategory.Photo ? UiText.Get("board.overlay.photo") : value;
+    private static string Shown(ClueCategory category, string value) => category == ClueCategory.Photo ? UiText.Pc.Get("board.overlay.photo") : value;
 
     /// <summary>The slider moved: the first source's values fade out as the second's fade in.</summary>
     private void Fade(float t)
@@ -508,13 +508,13 @@ public sealed class CaseBoardView : AppView
         Sounds.Play(SoundCues.InspectLink);
     }
 
-    /// <summary>A row's detail: the first source's word for it ("Date of Birth"), in the reading language (UiText.DocumentWord).</summary>
+    /// <summary>A row's detail: the first source's word for it ("Date of Birth"), in English, as the PC prints it (UiText.Pc.DocumentWord).</summary>
     private static string Detail(CrossRow row)
     {
         foreach (CrossCell cell in row.Cells)
             if (cell.Value.HasValue && !string.IsNullOrWhiteSpace(cell.Value.Value.Label))
-                return UiText.DocumentWord(cell.Value.Value.Label);
-        return UiText.Category(row.Category);
+                return UiText.Pc.DocumentWord(cell.Value.Value.Label);
+        return UiText.Pc.Category(row.Category);
     }
 
     /// <summary>A glowing cell clicked: it and its partner go through the one compare, as two clicked values do (the finding, any deviation proven, logged).</summary>

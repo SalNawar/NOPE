@@ -15,8 +15,8 @@ public static class EvidencePicks
     {
         DocumentField f = row.Field;
         return new ComparePick(PickKeys.Field(document, row.Index),
-            UiText.Format("document.compareLabel", documentName, UiText.DocumentWord(f.label)),
-            f.category == ClueCategory.Photo ? UiText.Get("compare.photoShown") : f.value,
+            UiText.Pc.Format("document.compareLabel", documentName, UiText.Pc.DocumentWord(f.label)),
+            f.category == ClueCategory.Photo ? UiText.Pc.Get("compare.photoShown") : f.value,
             CompareEvidence.FromDocumentField(f, document));
     }
 
@@ -24,22 +24,22 @@ public static class EvidencePicks
     public static ComparePick ForHidden(int document, DocumentRow row, string value, ScanLayer layer, string documentName)
     {
         DocumentField f = row.Field;
-        string shown = string.IsNullOrEmpty(value) ? UiText.Format("layers.uv.MicroprintMissing", UiText.DocumentWord(f.label)) : value;
+        string shown = string.IsNullOrEmpty(value) ? UiText.Pc.Format("layers.uv.MicroprintMissing", UiText.Pc.DocumentWord(f.label)) : value;
         return new ComparePick(PickKeys.Hidden(document, row.Index, layer),
-            UiText.Format("document.compareLabel", documentName, UiText.Get(layer == ScanLayer.Chip ? "citation.label.chip" : "citation.label.ghost")),
+            UiText.Pc.Format("document.compareLabel", documentName, UiText.Pc.Get(layer == ScanLayer.Chip ? "citation.label.chip" : "citation.label.ghost")),
             shown,
             CompareEvidence.ForHidden(f.category, value, document, true));
     }
 
     /// <summary>The traveller's face (the look menu; the document design spec, D8): "Traveller · FACE", shown as the person at the desk, its evidence who they are (Looks.IdentityKey), the truth a photo is held against.</summary>
     public static ComparePick ForFace(TravellerLook look) =>
-        new ComparePick(PickKeys.Face, UiText.Format("compare.travellerLabel", UiText.Get("compare.faceSlot")), UiText.Get("compare.faceShown"),
+        new ComparePick(PickKeys.Face, UiText.Pc.Format("compare.travellerLabel", UiText.Pc.Get("compare.faceSlot")), UiText.Pc.Get("compare.faceShown"),
                         CompareEvidence.ForPerson(Looks.IdentityKey(look)));
 
     /// <summary>A Seal Register row (the document design spec, D4): "Seal Register · Visa Office", the office's true seal as its value (Seals.Describe's words), a truth source for that office's papers.</summary>
     public static ComparePick ForSeal(ReferenceBookSO book, AgencyOffice office, string seal) =>
         new ComparePick(PickKeys.Seal(office.id),
-            UiText.Format("book.compareLabel", book != null ? book.displayName : UiText.Get("book.untitled"), UiText.DocumentWord(office.name)),
+            UiText.Pc.Format("book.compareLabel", book != null ? book.displayName : UiText.Pc.Get("book.untitled"), UiText.Pc.DocumentWord(office.name)),
             seal,
             CompareEvidence.ForSealRow(seal, office.id, office.name));
 
@@ -48,7 +48,7 @@ public static class EvidencePicks
     {
         tr = tr ?? CaseTranslation.None;
         return new ComparePick(PickKeys.Line(lineIndex),
-            UiText.Format("compare.travellerLabel", UiText.Category(line.Category)),
+            UiText.Pc.Format("compare.travellerLabel", UiText.Pc.Category(line.Category)),
             tr.Shown(line),
             CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell, tr.Understood(line)));
     }
@@ -56,19 +56,19 @@ public static class EvidencePicks
     /// <summary>A garment the player looked at (the wheel's Look menu): its slot as the label, its item as the shown value, its place's Culture value as the evidence.</summary>
     public static ComparePick ForGarment(int index, Garment garment) =>
         new ComparePick(PickKeys.Garment(index),
-            UiText.Format("compare.travellerLabel", UiText.Slot(garment.Slot)),
+            UiText.Pc.Format("compare.travellerLabel", UiText.Pc.Slot(garment.Slot)),
             garment.Label,
             CompareEvidence.ForAppearance(Looks.EvidenceCategory, garment.Value, garment.IsTell));
 
     /// <summary>A reference book's row: "Currency Ledger · Periclean Athens (Ancient)", a truth source.</summary>
     public static ComparePick ForBookRow(ReferenceBookSO book, FactRow fact) =>
         new ComparePick(PickKeys.BookRow(fact.Category, fact.NationId, fact.EraId),
-            UiText.Format("book.compareLabel", book != null ? book.displayName : UiText.Get("book.untitled"), fact.OriginLabel),
+            UiText.Pc.Format("book.compareLabel", book != null ? book.displayName : UiText.Pc.Get("book.untitled"), fact.OriginLabel),
             fact.Value,
             fact.ToEvidence());
 
     /// <summary>An evidence row of a Citizen Record: "Records · Born", keyed by the record (PickKeys.Record), a truth source for that person only (DiscrepancyLog.Prove).</summary>
     public static ComparePick ForRecord(CitizenRecord record, RecordRow row) =>
-        new ComparePick(PickKeys.Record(row.Category, record.Id), UiText.Format("records.compareLabel", row.Label), row.Value,
+        new ComparePick(PickKeys.Record(row.Category, record.Id), UiText.Pc.Format("records.compareLabel", row.Label), row.Value,
                         CompareEvidence.ForRecordField(row.Category, row.Value, record.FullName));
 }

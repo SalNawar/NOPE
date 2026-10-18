@@ -27,12 +27,12 @@ public sealed class ShortcutCard : MonoBehaviour
         if (_rows.Count > 0 || rowsRoot == null || rowTemplate == null)
             return;
         rowTemplate.gameObject.SetActive(false);
-        Add("", "<b>" + UiText.Get("keys.section.desk") + "</b>");
+        Add("", "<b>" + UiText.Pc.Get("keys.section.desk") + "</b>");
         foreach (ShortcutCardRow line in ControlRules.DeskCard)
-            Add(line.Keys, UiText.Get(line.TextKey));
-        Add("", "<b>" + UiText.Get("keys.section.pc") + "</b>");
+            Add(line.Keys, UiText.Pc.Get(line.TextKey));
+        Add("", "<b>" + UiText.Pc.Get("keys.section.pc") + "</b>");
         foreach (ShortcutCardRow line in ShortcutMap.Card)
-            Add(line.Keys, UiText.Get(line.TextKey));
+            Add(line.Keys, UiText.Pc.Get(line.TextKey));
     }
 
     /// <summary>One row: <paramref name="keys"/>, then <paramref name="text"/> (a section's heading has no keys).</summary>

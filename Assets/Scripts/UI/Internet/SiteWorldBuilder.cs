@@ -18,7 +18,7 @@ public static class SiteWorldBuilder
     private sealed class UiPageWords : IPageWords
     {
         /// <inheritdoc />
-        public string Get(string key, params object[] args) => UiText.Format(key, args);
+        public string Get(string key, params object[] args) => UiText.Pc.Format(key, args);
     }
 
     /// <summary>The one words instance.</summary>

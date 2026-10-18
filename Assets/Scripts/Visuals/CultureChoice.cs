@@ -14,7 +14,20 @@ public enum LabelLanguage
     EnglishBySetting,
 
     /// <summary>No installed font can draw the culture's labels.</summary>
-    EnglishNoFont
+    EnglishNoFont,
+
+    /// <summary>The PC: always the reading language, whatever leads (Saleh 2026-10-18: "language in the pc shouldn't change"; CultureChoice.Surface).</summary>
+    EnglishOnPc
+}
+
+/// <summary>Where a text is printed: the desk (its papers, the office's labels: they follow the culture rule) or the PC (every app, window, the taskbar, the Start menu, the icons, Settings, the CRT's clock: always the reading language).</summary>
+public enum TextSurface
+{
+    /// <summary>The desk and the office around it.</summary>
+    Desk,
+
+    /// <summary>The PC.</summary>
+    Pc
 }
 
 /// <summary>
@@ -40,6 +53,19 @@ public static class CultureChoice
             return LabelLanguage.EnglishNoFont;
         return LabelLanguage.Culture;
     }
+
+    /// <summary>
+    /// The language a surface prints in: the PC always the reading language
+    /// (EnglishOnPc), so a scanned paper's copy on the PC reads in English
+    /// and scanning is how a foreign paper is read cleanly (Saleh
+    /// 2026-10-18); the desk <paramref name="desk"/>, the culture rule's
+    /// (<see cref="Language"/>).
+    /// </summary>
+    public static LabelLanguage Surface(TextSurface surface, LabelLanguage desk) =>
+        surface == TextSurface.Pc ? LabelLanguage.EnglishOnPc : desk;
+
+    /// <summary>True when a language prints the culture's own labels.</summary>
+    public static bool ShowsCulture(LabelLanguage language) => language == LabelLanguage.Culture;
 
     /// <summary>The value Settings stores for "Follow history" (UiLanguagePreference); any other value, or none, reads as "Always English".</summary>
     public const string FollowHistoryChoice = "history";

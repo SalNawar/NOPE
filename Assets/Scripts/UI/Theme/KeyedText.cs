@@ -45,6 +45,6 @@ public sealed class KeyedText : MonoBehaviour
     {
         if (string.IsNullOrEmpty(key) || !TryGetComponent(out TMP_Text text))
             return;
-        text.text = template.Replace("{0}", UiText.Get(key));
+        text.text = template.Replace("{0}", UiText.Get(key, UiText.SurfaceOf(text))); // a word on the PC stays English (UiText.Pc)
     }
 }

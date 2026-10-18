@@ -150,13 +150,13 @@ public sealed class CompareController : MonoBehaviour
     /// never reads as a friendly green MATCH: the office strip names the
     /// deviation.
     /// </summary>
-    public void ShowDeviation(string summary) => WriteNote(UiText.Format("compare.deviationLogged", summary), mismatchColor);
+    public void ShowDeviation(string summary) => WriteNote(UiText.Pc.Format("compare.deviationLogged", summary), mismatchColor);
 
     /// <summary>
     /// Replaces the verdict when a pair proves a category that is already in
     /// the Deviation Report, so a second proof visibly adds nothing.
     /// </summary>
-    public void ShowAlreadyDocumented(string categoryLabel) => WriteNote(UiText.Format("compare.alreadyDocumented", categoryLabel), neutralColor);
+    public void ShowAlreadyDocumented(string categoryLabel) => WriteNote(UiText.Pc.Format("compare.alreadyDocumented", categoryLabel), neutralColor);
 
     /// <summary>Clears the picks, their highlights and the bars.</summary>
     public void Clear()
@@ -185,17 +185,17 @@ public sealed class CompareController : MonoBehaviour
 
         if (_pair.IsPaired && !_pair.Understood)
         {
-            WriteVerdict(UiText.Format("compare.pair", UiText.Get("compare.notUnderstood"), _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), neutralColor);
+            WriteVerdict(UiText.Pc.Format("compare.pair", UiText.Pc.Get("compare.notUnderstood"), _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), neutralColor);
         }
         else if (_pair.IsPaired)
         {
             bool match = _pair.Matches;
-            string verdict = UiText.Get(match ? "compare.match" : "compare.mismatch");
-            WriteVerdict(UiText.Format("compare.pair", verdict, _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), match ? matchColor : mismatchColor);
+            string verdict = UiText.Pc.Get(match ? "compare.match" : "compare.mismatch");
+            WriteVerdict(UiText.Pc.Format("compare.pair", verdict, _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), match ? matchColor : mismatchColor);
         }
         else if (active)
         {
-            WriteVerdict(UiText.Format("compare.pickAnother", _pair.A.Label, _pair.A.Shown), neutralColor);
+            WriteVerdict(UiText.Pc.Format("compare.pickAnother", _pair.A.Label, _pair.A.Shown), neutralColor);
         }
         else
         {

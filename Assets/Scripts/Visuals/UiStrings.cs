@@ -147,6 +147,22 @@ public sealed class UiStrings
         return key;
     }
 
+    /// <summary>
+    /// The reading language's string for a key with its placeholders filled,
+    /// whatever culture table applies (the PC: always in English, Saleh
+    /// 2026-10-18): neither shaped nor glossed, and never remembered for the
+    /// lens; a key with no reading text is the key, reported as missing.
+    /// </summary>
+    public string English(string key, params object[] args)
+    {
+        key = key ?? string.Empty;
+        if (_reading.TryGetValue(key, out UiStringEntry reading) && !string.IsNullOrEmpty(reading.text))
+            return Fill(reading.text, args);
+        if (_missingSet.Add(key))
+            _missing.Add(key);
+        return key;
+    }
+
     /// <summary>Remembers a culture label for the lens under its text as drawn (<paramref name="native"/>), once.</summary>
     private void Remember(string native, string logical, string english)
     {

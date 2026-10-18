@@ -118,7 +118,7 @@ public sealed class NotesWindow : MonoBehaviour
         AppClipboard clipboard = app != null ? app.Clipboard : null;
         Clip(clipboard != null && clipboard.IsCurrent(text)
             ? clipboard.Current.ToClipping()
-            : new Clipping { text = text, label = UiText.Get("notes.pasted") });
+            : new Clipping { text = text, label = UiText.Pc.Get("notes.pasted") });
     }
 
     /// <summary>The shown day's page (null outside a run).</summary>
@@ -174,7 +174,7 @@ public sealed class NotesWindow : MonoBehaviour
             int day = _dayNumbers[i];
             TMP_Text label = _days[i].GetComponentInChildren<TMP_Text>(true);
             if (label != null)
-                label.text = world != null && day == world.day ? UiText.Format("notes.today", day) : UiText.Format("notes.day", day);
+                label.text = world != null && day == world.day ? UiText.Pc.Format("notes.today", day) : UiText.Pc.Format("notes.day", day);
             AppRows.MarkSelected(_days[i], day == _day);
         }
     }
@@ -189,7 +189,7 @@ public sealed class NotesWindow : MonoBehaviour
 
         NotePage page = CurrentPage();
         if (pageTitle != null)
-            pageTitle.text = UiText.Format("notes.pageTitle", _day);
+            pageTitle.text = UiText.Pc.Format("notes.pageTitle", _day);
 
         if (page != null && clipRoot != null && clipTemplate != null)
             foreach (ClippingGroup group in Notes.Groups(page))
@@ -198,7 +198,7 @@ public sealed class NotesWindow : MonoBehaviour
                 {
                     TMP_Text heading = Instantiate(groupTemplate, clipRoot);
                     heading.gameObject.SetActive(true);
-                    heading.text = group.Traveller.Length > 0 ? group.Traveller : UiText.Get("notes.loose");
+                    heading.text = group.Traveller.Length > 0 ? group.Traveller : UiText.Pc.Get("notes.loose");
                     _drawn.Add(heading.gameObject);
                 }
                 foreach (int index in group.Indexes)
@@ -232,7 +232,7 @@ public sealed class NotesWindow : MonoBehaviour
     private void ShowCounter(NotePage page)
     {
         if (counterText != null)
-            counterText.text = UiText.Format("notes.counter", page != null ? page.text.Length : 0, MaxChars);
+            counterText.text = UiText.Pc.Format("notes.counter", page != null ? page.text.Length : 0, MaxChars);
     }
 
     /// <summary>The hint on an empty page, or the "page is full" line after a refused paste.</summary>
@@ -243,7 +243,7 @@ public sealed class NotesWindow : MonoBehaviour
         bool show = _full || Notes.IsEmpty(page);
         hintText.gameObject.SetActive(show);
         if (show)
-            hintText.text = _full ? UiText.Format("notes.full", MaxClippings) : UiText.Get("notes.hint");
+            hintText.text = _full ? UiText.Pc.Format("notes.full", MaxClippings) : UiText.Pc.Get("notes.hint");
     }
 
     private static void SetChild(Transform parent, string name, string text)
