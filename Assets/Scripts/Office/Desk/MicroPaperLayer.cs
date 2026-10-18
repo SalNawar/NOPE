@@ -116,7 +116,7 @@ public sealed class MicroPaperLayer : MonoBehaviour
         bool readable = MicroLens.Readable(shown, length);
         if (readable && _readableFrame != frame)
         {
-            _held = MicroLens.Held(_held, true, dt);
+            _held = MicroLens.Held(_readableFrame < frame - 1 ? 0f : _held, true, dt);
             _readableFrame = frame;
         }
         else if (!readable && _readableFrame < frame - 1)
