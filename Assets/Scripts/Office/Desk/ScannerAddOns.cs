@@ -11,11 +11,26 @@ using UnityEngine;
 /// scan runs with the tray fitted. An analysis pass that marks a pair pops
 /// the beacon's pod up (beacon_pop), lights its amber lamp and spins its
 /// mirror for a few seconds, then it sinks back; a pass that marks nothing
-/// pops it half way, unlit, and back. Built from the props' models by
-/// Build Office UI (tools/props/machines/upgrade_props_model.py).
+/// pops it half way, unlit, and back. Their functions (Saleh 2026-10-18, demo
+/// 1018a note 14: "every object the playyer unlocks should be useable"; the
+/// desk machines spec §10): a click on the tray feeds the stack in one go
+/// (DeskController.FeedStack), the guides' snap and the rollers' whirr, or
+/// only a dry whirr with nothing left to scan; a click on the beacon jumps
+/// to the pair the last analysis marked (DeskController.ShowFlagged): the
+/// pod pops lit again. Built from the props' models by Build Office UI
+/// (tools/props/machines/upgrade_props_model.py), each with its click box.
 /// </summary>
 public sealed class ScannerAddOns : MonoBehaviour
 {
+    /// <summary>The tray's and the beacon's click boxes (children of each object: hidden with it).</summary>
+    [SerializeField] private Clickable trayClick, beaconClick;
+
+    /// <summary>Raised when the tray is clicked (DeskScanner passes it on to the desk: feed the stack).</summary>
+    public event System.Action TrayClicked;
+
+    /// <summary>Raised when the beacon is clicked (DeskScanner passes it on to the desk: show the flagged pair).</summary>
+    public event System.Action BeaconClicked;
+
     /// <summary>The Auto-Feed tray's rollers (they turn about their local Z) and its feed lamp.</summary>
     [SerializeField] private Transform rollers;
 
@@ -43,7 +58,24 @@ public sealed class ScannerAddOns : MonoBehaviour
     private bool _scanning, _lit, _rested;
     private MaterialPropertyBlock _block;
 
-    private void Awake() => Rest();
+    private void Awake()
+    {
+        Rest();
+        if (trayClick != null)
+            trayClick.onClick.AddListener(() => TrayClicked?.Invoke());
+        if (beaconClick != null)
+            beaconClick.onClick.AddListener(() => BeaconClicked?.Invoke());
+    }
+
+    /// <summary>The tray took the stack: <paramref name="count"/> papers queued (the rollers whirr and the lamp blinks once per paper), or none (a short dry whirr).</summary>
+    public void Stacked(int count)
+    {
+        Rest();
+        if (rollers == null || !rollers.gameObject.activeInHierarchy)
+            return;
+        _feedFor = count > 0 ? 0.2f * count + 0.3f : 0.3f;
+        CueSounds.Play(SoundCues.AdfFeed, sound, count > 0 ? 1.05f : 0.75f);
+    }
 
     private void Rest()
     {

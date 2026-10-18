@@ -2040,6 +2040,26 @@
         "variant": "washed",
         "against": "the UV torch · the ghost under the name",
         "note": "Someone else's Work Permit, washed and printed over: under UV the first holder's name ghosts beneath the traveller's."
+      },
+      {
+        "id": "reprintedTicket",
+        "form": "TC-230",
+        "field": "CitizenId",
+        "lie": "ReprintedPaper",
+        "directive": "",
+        "variant": "reprinted",
+        "against": "the lens stand's loupe · the microprint along the foot",
+        "note": "Someone else's Entry Ticket, its print changed to the traveller's own true details: the microprint along its foot still repeats the first holder's Citizen ID."
+      },
+      {
+        "id": "reprintedPermit",
+        "form": "TC-520",
+        "field": "CitizenId",
+        "lie": "ReprintedPaper",
+        "directive": "",
+        "variant": "reprinted",
+        "against": "the lens stand's loupe · the microprint along the foot",
+        "note": "Someone else's Work Permit, reprinted with the traveller's own true details: its microprint still repeats the first holder's Citizen ID."
       }
     ],
     "hidden": {
@@ -2047,8 +2067,102 @@
         "TC-101",
         "TC-240"
       ],
-      "ghostChance": 0.5
-    }
+      "ghostChance": 0.5,
+      "microForms": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-520"
+      ]
+    },
+    "contacts": [
+      {
+        "id": "seals",
+        "name": "Ama Okoro",
+        "post": "Seal Registry, night desk",
+        "lies": [
+          "ForgedSeal"
+        ],
+        "tip": "A seal press walked out of our stores last week. Expect one of its seals on papers headed for {place}.",
+        "quiet": "Every press is back in its drawer. The seals should be clean today."
+      },
+      {
+        "id": "photos",
+        "name": "Teodor Vance",
+        "post": "Portrait Bureau, Hall B",
+        "lies": [
+          "SwappedPhoto"
+        ],
+        "tip": "Someone bought a face that isn't theirs. Look twice at whoever claims {place}.",
+        "quiet": "Nobody has been trading faces this week. Not that I've seen."
+      },
+      {
+        "id": "records",
+        "name": "Mira Castellane",
+        "post": "Citizen Accounts, records annex",
+        "lies": [
+          "DoctoredIdentity",
+          "PoorPosingAsRich",
+          "DebtorPosingAsTourist"
+        ],
+        "tip": "A doctored file is moving today. Hold the papers for {place} against the Citizen Account.",
+        "quiet": "The account books balance today. For once."
+      },
+      {
+        "id": "labour",
+        "name": "Joss Ferrante",
+        "post": "Labour Exchange, Debt Relief desk",
+        "lies": [
+          "ForgedContract"
+        ],
+        "tip": "A contract got sweetened on its way to your stamp. Read the wage on the one bound for {place}.",
+        "quiet": "Every contract I signed today is the contract I signed."
+      },
+      {
+        "id": "waivers",
+        "name": "Delphine Achterberg",
+        "post": "Waiver Office, counter 4",
+        "lies": [
+          "FakeWaiver",
+          "ForgedProof"
+        ],
+        "tip": "There's a number out there nobody registered. It's on the papers for {place}.",
+        "quiet": "No ghost numbers on my desk today."
+      },
+      {
+        "id": "returns",
+        "name": "Rahim Desai",
+        "post": "Displacement Registry, intake",
+        "lies": [
+          "FalseOrigin",
+          "FakeDisplaced"
+        ],
+        "tip": "Someone is going 'home' to {place} who was never from there.",
+        "quiet": "Every return I processed today checks out."
+      },
+      {
+        "id": "customs",
+        "name": "Nell Okonkwo-Price",
+        "post": "Customs Intelligence, the basement",
+        "lies": [
+          "Smuggling"
+        ],
+        "tip": "Somebody is carrying 2150 out to {place}. Ask them what they'll pay with.",
+        "quiet": "Nothing is leaving that shouldn't. Today."
+      },
+      {
+        "id": "machines",
+        "name": "Ivo Marchetti",
+        "post": "Bureau Engineering, chip room",
+        "lies": [
+          "ClonedChip",
+          "WashedPaper",
+          "ReprintedPaper"
+        ],
+        "tip": "A doctored blank is on its way to {place}. Put it under the light, through the reader and under the loupe.",
+        "quiet": "The chip room is quiet. No clones on the wire today."
+      }
+    ]
   },
   "eras": [
     {
@@ -10781,7 +10895,7 @@
       "queue": 16,
       "shiftStart": "13:00",
       "shiftEnd": "21:00",
-      "bulletin": "NEW: dress for the destination. Look at their clothes (the wheel's Look menu): an item from another time or place causes a panic. Check it against the Costume Guide on your shelf.",
+      "bulletin": "NEW: dress for the destination. Look at their clothes (the wheel's Look menu): an item from another time or place causes a panic. Check it against the Costume Guide on your shelf. WARNING: reprinted tickets are about. A genuine paper's microprint, along its foot, repeats the holder's Citizen ID: read it under the loupe and click it against the box.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -10806,7 +10920,8 @@
         "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal",
-        "WashedPaper"
+        "WashedPaper",
+        "ReprintedPaper"
       ],
       "kinds": [
         {
@@ -10954,7 +11069,8 @@
         "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal",
-        "WashedPaper"
+        "WashedPaper",
+        "ReprintedPaper"
       ],
       "kinds": [
         {
@@ -11096,7 +11212,8 @@
         "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal",
-        "WashedPaper"
+        "WashedPaper",
+        "ReprintedPaper"
       ],
       "kinds": [
         {
@@ -11282,7 +11399,8 @@
         "SwappedPhoto",
         "ForgedSeal",
         "WashedPaper",
-        "ClonedChip"
+        "ClonedChip",
+        "ReprintedPaper"
       ],
       "kinds": [
         {
@@ -11424,7 +11542,8 @@
         "SwappedPhoto",
         "ForgedSeal",
         "WashedPaper",
-        "ClonedChip"
+        "ClonedChip",
+        "ReprintedPaper"
       ],
       "kinds": [
         {
@@ -11584,7 +11703,8 @@
         "SwappedPhoto",
         "ForgedSeal",
         "WashedPaper",
-        "ClonedChip"
+        "ClonedChip",
+        "ReprintedPaper"
       ],
       "kinds": [
         {
@@ -11767,7 +11887,8 @@
         "SwappedPhoto",
         "ForgedSeal",
         "WashedPaper",
-        "ClonedChip"
+        "ClonedChip",
+        "ReprintedPaper"
       ],
       "kinds": [
         {
@@ -16476,6 +16597,11 @@
           "personality": "stickler",
           "lie": "ClonedChip",
           "text": "The chip? I've never had it read. I didn't know you could read it."
+        },
+        {
+          "personality": "stickler",
+          "lie": "ReprintedPaper",
+          "text": "The ticket's been through a few hands. All of them mine, of course."
         },
         {
           "personality": "anxious",
@@ -27091,6 +27217,18 @@
         "tier": "Flavour"
       },
       {
+        "key": "citation.rule.micro",
+        "text": "A paper's microprint must repeat its Citizen ID.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "citation.label.micro",
+        "text": "Its microprint",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "citation.rule.origin",
         "text": "The displaced return only to their own time: their papers and answers must match their origin.",
         "gloss": "None",
@@ -27419,6 +27557,12 @@
         "text": "{0} {1}: no route today",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "rolodex.card",
+        "text": "{0}, {1}:\n“{2}”",
+        "gloss": "None",
+        "tier": "Full"
       },
       {
         "key": "portals.date",
@@ -31701,6 +31845,14 @@
             "text": "لا يجوز غسل أي ورقة والطباعة فوقها."
           },
           {
+            "key": "citation.rule.micro",
+            "text": "يجب أن تكرر الطباعة الدقيقة للورقة رقم المواطن."
+          },
+          {
+            "key": "citation.label.micro",
+            "text": "طباعتها الدقيقة"
+          },
+          {
             "key": "citation.rule.origin",
             "text": "النازحون يعودون إلى زمنهم فقط: يجب أن تطابق أوراقهم وإجاباتهم أصلهم."
           },
@@ -32946,6 +33098,22 @@
           }
         ],
         "words": [
+          {
+            "native": "تكرر",
+            "english": "repeat"
+          },
+          {
+            "native": "الدقيقة",
+            "english": "fine / micro"
+          },
+          {
+            "native": "طباعتها",
+            "english": "its print"
+          },
+          {
+            "native": "للورقة",
+            "english": "of the paper"
+          },
           {
             "native": "اشتر",
             "english": "buy"
@@ -40229,6 +40397,14 @@
             "text": "Κανένα έγγραφο δεν επιτρέπεται να πλυθεί και να ξανατυπωθεί."
           },
           {
+            "key": "citation.rule.micro",
+            "text": "Το μικροτύπωμα ενός εγγράφου πρέπει να επαναλαμβάνει την ταυτότητα πολίτη του."
+          },
+          {
+            "key": "citation.label.micro",
+            "text": "Το μικροτύπωμά του"
+          },
+          {
             "key": "citation.rule.origin",
             "text": "Οι εκτοπισμένοι επιστρέφουν μόνο στη δική τους εποχή: τα έγγραφα και οι απαντήσεις τους πρέπει να ταιριάζουν με την προέλευσή τους."
           },
@@ -41474,6 +41650,14 @@
           }
         ],
         "words": [
+          {
+            "native": "επαναλαμβάνει",
+            "english": "repeat"
+          },
+          {
+            "native": "μικροτύπωμά",
+            "english": "microprint"
+          },
           {
             "native": "Αγορά",
             "english": "Buy"
@@ -48221,6 +48405,14 @@
             "text": "Nessun documento può essere lavato e ristampato."
           },
           {
+            "key": "citation.rule.micro",
+            "text": "La microstampa di un documento deve ripetere il suo ID cittadino."
+          },
+          {
+            "key": "citation.label.micro",
+            "text": "La sua microstampa"
+          },
+          {
             "key": "citation.rule.origin",
             "text": "Gli sfollati tornano solo al proprio tempo: documenti e risposte devono corrispondere alla loro origine."
           },
@@ -49466,6 +49658,10 @@
           }
         ],
         "words": [
+          {
+            "native": "ripetere",
+            "english": "repeat"
+          },
           {
             "native": "Compra",
             "english": "Buy"
@@ -56331,6 +56527,14 @@
           {
             "key": "citation.rule.uv",
             "text": "Kein Papier darf gewaschen und überdruckt werden."
+          },
+          {
+            "key": "citation.rule.micro",
+            "text": "Der Mikrodruck eines Papiers muss seine Bürger-ID wiederholen."
+          },
+          {
+            "key": "citation.label.micro",
+            "text": "Sein Mikrodruck"
           },
           {
             "key": "citation.rule.origin",
@@ -64677,6 +64881,14 @@
             "text": "任何证件不得洗去后重新印刷。"
           },
           {
+            "key": "citation.rule.micro",
+            "text": "证件的微缩印刷必须重复其公民编号。"
+          },
+          {
+            "key": "citation.label.micro",
+            "text": "其微缩印刷"
+          },
+          {
             "key": "citation.rule.origin",
             "text": "流离者只能返回自己的时代：其证件与回答必须与原籍一致。"
           },
@@ -65922,6 +66134,14 @@
           }
         ],
         "words": [
+          {
+            "native": "微缩印刷",
+            "english": "microprint"
+          },
+          {
+            "native": "重复",
+            "english": "repeat"
+          },
           {
             "native": "购买",
             "english": "buy"
@@ -72365,6 +72585,14 @@
             "text": "書類を洗浄して上から印字してはならない。"
           },
           {
+            "key": "citation.rule.micro",
+            "text": "書類のマイクロ印刷は市民IDを繰り返していなければならない。"
+          },
+          {
+            "key": "citation.label.micro",
+            "text": "そのマイクロ印刷"
+          },
+          {
             "key": "citation.rule.origin",
             "text": "漂流者は自分の時代にのみ帰還する: 書類と回答は出身と一致すること。"
           },
@@ -73610,6 +73838,10 @@
           }
         ],
         "words": [
+          {
+            "native": "繰り返して",
+            "english": "repeat"
+          },
           {
             "native": "買う",
             "english": "buy"
@@ -78475,7 +78707,7 @@
         "title": "THE TRANSLATION LENS",
         "named": "Translation Lens",
         "check": "Any word the office prints in the world's language: on the PC, the morning paper, a notice. Hover it and it flips into English.",
-        "against": "From today the language follows history: Settings no longer switches it. Orders sells the lens's Sentences and Objects.",
+        "against": "From today the language follows history: Settings no longer switches it. Orders sells the lens's Sentences and Objects. The lens stand's loupe magnifies: hold it over a paper's foot to read its microprint, which repeats the holder's Citizen ID.",
         "fault": "Clicking a button you cannot read: hover it first.",
         "point": "pc",
         "practice": {

@@ -12,7 +12,10 @@ public enum ScanLayer
     Uv,
 
     /// <summary>The chip's stored data, in the print's layout so differences line up.</summary>
-    Chip
+    Chip,
+
+    /// <summary>The microprint line along a paper's foot (the desk machines spec §10): the holder's Citizen ID, repeated too fine to read without the lens stand's magnifiers.</summary>
+    Micro
 }
 
 /// <summary>What a UV mark is (the desk-machine spec §5's hidden layer).</summary>

@@ -13,7 +13,7 @@ public class HiddenLayersTests
     private static DocumentField F(ClueCategory c, string value, string erased = "", string issuer = "") =>
         new DocumentField { category = c, value = value, label = c.ToString(), erased = erased, issuer = issuer };
 
-    private static HiddenContent Content(float ghost = 1f) => new HiddenContent { chipForms = new List<string> { "TC-101", "TC-240" }, ghostChance = ghost };
+    private static HiddenContent Content(float ghost = 1f) => new HiddenContent { chipForms = new List<string> { "TC-101", "TC-240" }, ghostChance = ghost, microForms = new List<string> { "TC-101", "TC-230" } };
 
     /// <summary>Counts the draws made on it (a fixed value, a fixed range pick).</summary>
     private sealed class Counting : IRandomSource
@@ -76,6 +76,38 @@ public class HiddenLayersTests
         CaseHidden plain = HiddenLayers.Build(new[] { new HiddenPaper("TC-101", Passport("NHA-777")) }, null, Content(0.1f), new Counting(0.2f));
         Assert.IsEmpty(plain.Faults(0), "a draw over the chance leaves no ghost");
         Assert.IsNotEmpty(ScanLayers.ChipDifferences(Passport("NHA-777"), plain.ChipOf(0)), "the chip shows it whatever the draw");
+    }
+
+    [Test]
+    public void AMicroprintedPaper_RepeatsItsIssuedCitizenId_AReprintTellAnother_OthersPrintNone()
+    {
+        var rng = new Counting();
+        CaseHidden hidden = HiddenLayers.Build(new[] { new HiddenPaper("TC-101", Passport("NHA-777")), new HiddenPaper("TC-230", Ticket()), new HiddenPaper("TC-240", Ticket()) },
+                                               new[] { new HiddenTell(1, ClueCategory.CitizenId, ScanLayer.Micro, "QRT-301") }, Content(0f), rng);
+        Assert.AreEqual((1, "NHA-777"), (hidden.MicroOf(0).Value.Field, hidden.MicroOf(0).Value.Value), "the value the office issued, under a forged box");
+        Assert.AreEqual((0, "QRT-301"), (hidden.MicroOf(1).Value.Field, hidden.MicroOf(1).Value.Value), "a reprinted ticket's microprint: another Citizen ID");
+        Assert.IsNull(hidden.MicroOf(2), "the Transponder Card prints no microprint");
+        Assert.IsNull(hidden.MicroOf(9));
+        Assert.AreEqual("TCB · TC-230 · QRT-301 · TCB · TC-230 · QRT-301 · ", hidden.MicroOf(1).Value.Printed("TC-230", 2));
+        Assert.IsNull(CaseHidden.None.MicroOf(0));
+    }
+
+    [Test]
+    public void PlanReprint_AMicroprintedPapersCitizenId_AFreshNumberNobodyHolds()
+    {
+        var canon = new List<FaultEntry>(Canon)
+        {
+            new FaultEntry { id = "reprintedTicket", form = "TC-230", field = "CitizenId", lie = "ReprintedPaper", variant = "reprinted", against = "loupe" },
+        };
+        var forms = new List<RecordForm> { new RecordForm("TC-101", Passport()), new RecordForm("TC-230", Ticket()) };
+        var taken = new HashSet<string> { "NHA-512" };
+        HiddenTell tell = HiddenLies.PlanReprint(canon, forms, Content(), taken, new SeededRandom(4)).Single();
+        Assert.AreEqual((1, ClueCategory.CitizenId, ScanLayer.Micro), (tell.Document, tell.Category, tell.Layer));
+        Assert.AreNotEqual("NHA-512", tell.Value);
+        Assert.IsTrue(taken.Contains(tell.Value));
+        var counting = new Counting();
+        CollectionAssert.IsEmpty(HiddenLies.PlanReprint(canon, new List<RecordForm> { new RecordForm("TC-240", Ticket()) }, Content(), taken, counting), "no microprinted paper: honest");
+        Assert.AreEqual(0, counting.Draws);
     }
 
     [Test]
@@ -161,8 +193,18 @@ public class HiddenLayersTests
         StringAssert.Contains("Day 12 lists ClonedChip", problems[2]);
         CollectionAssert.IsEmpty(HiddenLies.Problems(Canon, Content(), new[] { (8, (IEnumerable<LieKind>)new[] { LieKind.WashedPaper }) }, FirstDay));
 
-        var bad = new HiddenContent { chipForms = new List<string> { "TC-101", "", "TC-101" }, ghostChance = 1.5f };
-        Assert.AreEqual(3, bad.Problems().Count);
+        var bad = new HiddenContent { chipForms = new List<string> { "TC-101", "", "TC-101" }, ghostChance = 1.5f, microForms = new List<string> { "TC-230", "TC-230" } };
+        Assert.AreEqual(4, bad.Problems().Count);
+        var reprints = new List<FaultEntry>
+        {
+            new FaultEntry { id = "reprintedName", form = "TC-230", field = "Name", lie = "ReprintedPaper", variant = "r", against = "loupe" },
+            new FaultEntry { id = "reprintedCard", form = "TC-240", field = "CitizenId", lie = "ReprintedPaper", variant = "r", against = "loupe" },
+            new FaultEntry { id = "reprintedTicket", form = "TC-230", field = "CitizenId", lie = "ReprintedPaper", variant = "r", against = "loupe" },
+        };
+        List<string> reprintProblems = HiddenLies.Problems(reprints, Content(), new[] { (8, (IEnumerable<LieKind>)new[] { LieKind.ReprintedPaper }) }, k => k == Feature.Lens ? 9 : 0);
+        Assert.AreEqual(3, reprintProblems.Count, string.Join("\n", reprintProblems));
+        StringAssert.Contains("'reprintedCard'", reprintProblems[1]);
+        StringAssert.Contains("Day 8 lists ReprintedPaper", reprintProblems[2]);
         CollectionAssert.IsEmpty(Content(0.5f).Problems());
     }
 }

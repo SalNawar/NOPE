@@ -126,6 +126,9 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>True while the wheel is open.</summary>
     public bool IsOpen => catcher != null && catcher.activeSelf;
 
+    /// <summary>True while the wheel may open (BoothRules.WheelAllowed: a traveller at the desk to be asked); the Interview Protocols' card ring asks only then.</summary>
+    public bool CanOpen => _canOpen;
+
     /// <summary>Raised when the wheel opens or closes.</summary>
     public event Action OpenChanged;
 
@@ -470,6 +473,22 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             return;
 
         Speak(lines);
+    }
+
+    /// <summary>
+    /// The traveller says their last line of this case again in the bubble
+    /// (the BABEL rack's replay, the desk machines spec §10; DialogLines.LastBy),
+    /// after whatever they are saying, flipping into English again with the
+    /// region's Speech translator; the transcript does not grow. False, saying
+    /// nothing, when no traveller is at the desk or they have said nothing yet.
+    /// </summary>
+    public bool Replay()
+    {
+        DialogLine last = DialogLines.LastBy(_said, DialogSpeaker.Traveller);
+        if (!_canOpen || _speech == null || last == null)
+            return false;
+        Speak(new[] { last });
+        return true;
     }
 
     /// <summary>Queues <paramref name="lines"/> in the bubble (each flipping line counting as shown once its flip ends) and draws.</summary>

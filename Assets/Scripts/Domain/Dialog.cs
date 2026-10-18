@@ -125,6 +125,19 @@ public static class DialogChoiceKinds
     public static string IconName(DialogChoiceKind kind) => "wheel_" + kind.ToString().ToLowerInvariant();
 }
 
+/// <summary>Reading lines said (pure).</summary>
+public static class DialogLines
+{
+    /// <summary>The last of <paramref name="lines"/> <paramref name="speaker"/> said (null lines skipped), or null: the line the BABEL rack replays (the traveller's last; the desk machines spec §10).</summary>
+    public static DialogLine LastBy(IReadOnlyList<DialogLine> lines, DialogSpeaker speaker)
+    {
+        for (int i = (lines?.Count ?? 0) - 1; i >= 0; i--)
+            if (lines[i] != null && lines[i].Speaker == speaker)
+                return lines[i];
+        return null;
+    }
+}
+
 /// <summary>One transcript line. Immutable; an answer line also carries the fact it states, and a traveller's line the spans that stay English when it shows untranslated.</summary>
 public sealed class DialogLine
 {
@@ -394,6 +407,50 @@ public sealed class DialogRunner
         if (next != null)
             Enter(next);
 
+        return choice;
+    }
+
+    /// <summary>
+    /// The choices node <paramref name="nodeId"/> offers now (unlocked, its
+    /// one-shot choices not yet used), Back left out, in its order, as a
+    /// fresh list: the Interview Protocols' card ring reads the ask menu so
+    /// (ProtocolDeck). Empty for an unknown node.
+    /// </summary>
+    public IReadOnlyList<DialogChoice> Offered(string nodeId)
+    {
+        var offered = new List<DialogChoice>();
+        DialogNode node = _graph != null ? _graph.Node(nodeId) : null;
+        if (node != null)
+            foreach (DialogChoice c in node.Choices)
+                if (c != null && c.Kind != DialogChoiceKind.Back && Open(c))
+                    offered.Add(c);
+        return offered;
+    }
+
+    /// <summary>
+    /// Picks choice <paramref name="choiceId"/> of node <paramref name="nodeId"/>
+    /// wherever the dialog stands (the Interview Protocols' card ring asks a
+    /// question with the wheel shut, demo 1018a note 14): its lines are
+    /// appended and a one-shot choice is marked used, as Choose does, but the
+    /// current node stays (its Next is not entered). Returns the choice, or
+    /// null (changing nothing) when that node does not offer it now.
+    /// </summary>
+    public DialogChoice ChooseFrom(string nodeId, string choiceId)
+    {
+        DialogChoice choice = null;
+        foreach (DialogChoice c in Offered(nodeId))
+            if (c.Id == choiceId)
+            {
+                choice = c;
+                break;
+            }
+        if (choice == null)
+            return null;
+        foreach (DialogLine line in choice.Lines)
+            if (line != null)
+                _transcript.Add(line);
+        if (choice.OneShot)
+            _used.Add(choice.Id);
         return choice;
     }
 

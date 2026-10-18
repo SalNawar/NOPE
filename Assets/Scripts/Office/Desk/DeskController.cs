@@ -41,9 +41,10 @@ using UnityEngine;
 /// it be dragged and it is not sliding; papers not allowed take no raycasts
 /// at all (spec R38). The day's scanner upgrades (ScannerDay, from the
 /// day-start snapshot: BeginDay) change the scan (the PC redesign SC2-SC4):
-/// with the Auto-Feed a handed-over paper joins DeskPapers' queue and, once
-/// landed and not dragged, slides onto the scanner by itself, in hand-over
-/// order, one at a time (FeedScanner); with the Analysis a scan by hand
+/// with the Auto-Feed a click on its tray puts every paper not scanned yet in
+/// DeskPapers' queue (FeedStack) and each, once landed and not dragged,
+/// slides onto the scanner by itself, in hand-over order, one at a time
+/// (FeedScanner); with the Analysis a scan by hand
 /// takes the analysis pass (the longer scan), once per document
 /// (DeskPapers.Pass), and ScanFinished says which pass it was. No paper is
 /// left behind the scanner (ScannerClearance, the desk-first redesign, item
@@ -119,6 +120,9 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The day's scanner upgrades (BeginDay).</summary>
     private ScannerDay _scanners;
 
+    /// <summary>The pair the case's last analysis pass marked (FlagAnalysis), which the beacon's click shows; null before one.</summary>
+    private AnalysisMark? _flagged;
+
     /// <summary>The Auto-Feed's readiness rule, made once (no delegate per frame).</summary>
     private Func<int, bool> _landed;
 
@@ -183,10 +187,24 @@ public sealed class DeskController : MonoBehaviour
         if (config != null)
             ApplyStack();
         RefreshHint();
+        if (scanner != null)
+        {
+            scanner.TrayClicked += TrayClicked;
+            scanner.BeaconClicked += BeaconClicked;
+        }
     }
+
+    private void TrayClicked() => FeedStack();
+
+    private void BeaconClicked() => ShowFlagged();
 
     private void OnDestroy()
     {
+        if (scanner != null)
+        {
+            scanner.TrayClicked -= TrayClicked;
+            scanner.BeaconClicked -= BeaconClicked;
+        }
         if (stamps != null)
             stamps.Changed -= ShowCounter;
         if (deskView != null)
@@ -300,11 +318,67 @@ public sealed class DeskController : MonoBehaviour
         _scannerShadow = Mathf.Max(0f, shadow);
     }
 
-    /// <summary>An analysis pass ended (CaseDocumentsPresenter), <paramref name="marked"/> when it marked a pair: the Analysis beacon on the scanner pops.</summary>
-    public void FlagAnalysis(bool marked)
+    /// <summary>An analysis pass ended (CaseDocumentsPresenter) with the pair it marked (null: none): the Analysis beacon on the scanner pops, and its click shows that pair (ShowFlagged; a pass that marks nothing keeps the case's last pair).</summary>
+    public void FlagAnalysis(AnalysisMark? mark)
     {
+        if (mark.HasValue)
+            _flagged = mark;
         if (scanner != null)
-            scanner.Flag(marked);
+            scanner.Flag(mark.HasValue);
+    }
+
+    /// <summary>
+    /// The Auto-Feed tray clicked (Saleh 2026-10-18, demo 1018a note 14: "feed a
+    /// stack in one go"; the desk machines spec §10): every paper handed over
+    /// and not scanned yet this case feeds through the scanner by itself, one
+    /// after another in hand-over order (DeskPapers.FeedStack), each back
+    /// where it lay; the tray whirrs either way. Returns how many papers it
+    /// took (0: nothing left to scan). Nothing without the Auto-Feed Scanner
+    /// installed today.
+    /// </summary>
+    public int FeedStack()
+    {
+        if (_state == null || !_scanners.AutoFeed)
+            return 0;
+        int fed = _state.FeedStack().Count;
+        if (scanner != null)
+            scanner.Stacked(fed);
+        return fed;
+    }
+
+    /// <summary>
+    /// The Analysis beacon clicked (the desk machines spec §10: "click it to
+    /// jump to the flagged pair"): the two papers of the pair the case's last
+    /// analysis marked come to the top of the stack, each marked box tinted
+    /// (DeskConfigSO.analysisFlagTint, for the case, under a logged
+    /// difference's mark, which it never covers), and the beacon pops lit
+    /// again. Nothing is picked or logged: the clerk still compares the two.
+    /// False (the beacon pops unlit) before any pair is marked or with neither
+    /// paper on the desk.
+    /// </summary>
+    public bool ShowFlagged()
+    {
+        bool shown = false;
+        if (_state != null && _flagged.HasValue)
+        {
+            AnalysisMark m = _flagged.Value;
+            foreach ((int doc, int field) in new[] { (m.DocA, m.FieldA), (m.DocB, m.FieldB) })
+            {
+                DeskDocument paper = doc >= 0 && doc < _papers.Count ? _papers[doc] : null;
+                if (paper == null || !_state.CanDrag(doc))
+                    continue;
+                int slot = paper.SlotOfRow(field);
+                if (slot >= 0 && !paper.Marked(slot) && config != null)
+                    paper.SetMarked(slot, config.analysisFlagTint);
+                _stack.BringToFront(doc);
+                shown = true;
+            }
+            if (shown)
+                ApplyStack();
+        }
+        if (scanner != null)
+            scanner.Flag(shown);
+        return shown;
     }
 
     /// <summary>Starts a day with its scanner upgrades (<paramref name="scanners"/>: the day-start snapshot's, so a scanner bought tonight works tomorrow): nothing read or scanned yet (the scan note may show again on its days); the placeholder scanner shows the owned upgrades' parts.</summary>
@@ -328,6 +402,7 @@ public sealed class DeskController : MonoBehaviour
         _look = look;
         _art = art;
         _state = new DeskPapers(_documents, config.scanSeconds, config.analysisScanSeconds, _scanners);
+        _flagged = null;
         _papers.Clear();
         for (int i = 0; i < _state.Count; i++)
             _papers.Add(null);
@@ -347,16 +422,13 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>
     /// Hands paper <paramref name="i"/> over: a clone of the template appears at
     /// the hand-over point, small, on top of the stack, and slides to the next
-    /// spot on the counter (reused in turn); with the Auto-Feed Scanner it
-    /// joins the scan queue. Nothing happens unless DeskPapers agrees (a paper
-    /// is handed over once).
+    /// spot on the counter (reused in turn). Nothing happens unless DeskPapers
+    /// agrees (a paper is handed over once).
     /// </summary>
     public void HandOver(int i)
     {
         if (_state == null || !_state.HandOver(i))
             return;
-        if (_scanners.AutoFeed)
-            _state.Enqueue(i);
 
         DeskDocument paper = Instantiate(paperTemplate, paperRoot);
         paper.transform.SetPositionAndRotation(handOverPoint.position, Upright);
@@ -381,7 +453,7 @@ public sealed class DeskController : MonoBehaviour
         _stack.Add(i);
         ApplyStack();
         if (hardware != null)
-            hardware.PaperAdded(paper);
+            hardware.PaperAdded(paper, _documents[i] != null ? _documents[i].formNumber : null);
 
         Vector3 target = counter != null ? counter.Spot(_handedOver) : surface.transform.position;
         _handedOver++;
@@ -827,6 +899,9 @@ public sealed class DeskController : MonoBehaviour
         // The UV torch's cradle on the mat's corner (the desk machines spec §1): no paper lies over it either.
         if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
             (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(cradle), desk);
+        // The lens stand on its bay in the tool pouch (the desk machines spec §10, the desk layout spec): none over it either.
+        if (hardware != null && hardware.TryLensFootprint(out Vector3[] stand))
+            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(stand), desk);
         if (Mathf.Approximately(x, sheet.CentreX) && Mathf.Approximately(y, sheet.CentreY))
             return at;
         Vector3 moved = at + _viewRight * (x - sheet.CentreX) + _viewForward * (y - sheet.CentreY);

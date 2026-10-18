@@ -514,6 +514,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         ApplySlotTint(slot);
     }
 
+    /// <summary>True when box <paramref name="slot"/> carries a mark (SetMarked: a logged difference, the analysis's flag).</summary>
+    public bool Marked(int slot) => slot >= 0 && slot < _slots.Count && _slots[slot].MarkColour.a > 0f;
+
     /// <summary>A world point on the paper as a point on its page: from the page's top-left, y down, in the paper's metres (what Stamp takes).</summary>
     public Vector2 PagePoint(Vector3 world)
     {

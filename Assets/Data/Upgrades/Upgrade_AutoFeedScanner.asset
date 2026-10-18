@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: scanner_autofeed
   displayName: Auto-Feed Scanner
-  description: Papers handed over feed themselves into the scanner, in order, from
-    the next shift.
+  description: Click its tray and every paper not scanned yet feeds through the scanner
+    in one go, in order, from the next shift.
   cost: 200
   unlockEffect: {fileID: 0}
   venue: 0

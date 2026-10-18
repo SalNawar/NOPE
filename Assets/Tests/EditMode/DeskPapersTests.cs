@@ -447,6 +447,27 @@ public class DeskPapersTests
     }
 
     [Test]
+    public void FeedStack_QueuesEveryPaperNotScannedYet_InHandOverOrder()
+    {
+        DeskPapers p = Papers();
+        CollectionAssert.IsEmpty(p.FeedStack(), "nothing handed over: nothing to feed");
+        Assert.IsTrue(p.HandOver(2));
+        Assert.IsTrue(p.HandOver(0));
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(0, true), "paper 0 scanned by hand");
+        Assert.AreEqual(0, p.Tick(Scan));
+        Assert.IsTrue(p.WasScanned(0));
+        Assert.IsFalse(p.WasScanned(2));
+        Assert.IsTrue(p.HandOver(1));
+        CollectionAssert.AreEqual(new[] { 2, 1 }, p.FeedStack(), "the scanned paper is skipped; the rest in hand-over order");
+        CollectionAssert.IsEmpty(p.FeedStack(), "already queued");
+        Assert.AreEqual(2, p.FeedNext(null));
+        Assert.AreEqual(2, p.Tick(Scan));
+        Assert.AreEqual(1, p.FeedNext(null));
+        Assert.AreEqual(1, p.Tick(Scan));
+        CollectionAssert.IsEmpty(p.FeedStack(), "every paper scanned");
+    }
+
+    [Test]
     public void FeedNext_WaitsForAPaperTheControllerHoldsBack()
     {
         DeskPapers p = AllOnDesk();

@@ -292,6 +292,17 @@ public static class Seeds
     /// </summary>
     public static int ForHidden(int caseSeed) => Mix(caseSeed, HiddenSalt);
 
+    /// <summary>Salt for the day's Diplomatic Contacts ("CNTC"; the desk machines spec §10).</summary>
+    public const int ContactSalt = 0x434E5443;
+
+    /// <summary>
+    /// The day's Diplomatic Contacts stream (ContactCards.ForDay: which of
+    /// today's travellers a tip names, which tip leads the Rolodex), apart
+    /// from every traveller's and the day's other streams, so no traveller
+    /// moves with it.
+    /// </summary>
+    public static int ForContacts(int daySeed) => Mix(daySeed, ContactSalt);
+
     /// <summary>Salt for the day's returning travellers' slots ("RSLT").</summary>
     public const int ReturnSlotSalt = 0x52534C54;
 

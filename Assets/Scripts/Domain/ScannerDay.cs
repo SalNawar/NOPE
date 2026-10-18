@@ -19,7 +19,7 @@ public enum ScanPass
 /// day's start from the upgrades in force (Installs.InForce: the scanners
 /// share one install slot, so only the installed one counts, and the desk
 /// shows only its part). The Auto-Feed changes how a paper reaches the
-/// scanner (a handed-over paper scans itself: DeskPapers' queue); the Analysis
+/// scanner (a click on its tray feeds the stack: DeskPapers' queue); the Analysis
 /// changes what a scan by hand does (an analysis pass: PaperAnalysis), once per
 /// document (PassFor; Saleh 2026-09-29: "it only works once per document").
 /// Each is its own flag; with one installed at a time, at most one is set.
@@ -48,7 +48,7 @@ public readonly struct ScannerDay
     /// </summary>
     public bool Hidden { get; }
 
-    /// <summary>True when handed-over papers scan themselves, in hand-over order (SC3).</summary>
+    /// <summary>True when the Auto-Feed is installed: a click on its tray feeds every paper not scanned yet through the scanner, in hand-over order (SC3; DeskPapers.FeedStack).</summary>
     public bool AutoFeed { get; }
 
     /// <summary>True when a scan by hand takes the analysis pass and marks the first undocumented contradicting pair (SC4).</summary>

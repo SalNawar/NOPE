@@ -22,6 +22,12 @@ public class DialogRunnerTests
         Lines = new List<DialogLine> { Line(id + ".said") }
     };
 
+    private static DialogChoice Back(DialogChoice c)
+    {
+        c.Kind = DialogChoiceKind.Back;
+        return c;
+    }
+
     private static DialogGraph Graph()
     {
         var graph = new DialogGraph("a");
@@ -35,7 +41,7 @@ public class DialogRunnerTests
         {
             Id = "b",
             Lines = new List<DialogLine> { Line("b.enter") },
-            Choices = new List<DialogChoice> { Choice("back", "a") }
+            Choices = new List<DialogChoice> { Back(Choice("back", "a")) }
         });
         return graph;
     }
@@ -106,6 +112,43 @@ public class DialogRunnerTests
 
         CollectionAssert.AreEqual(before, Ids(r.Transcript));
         CollectionAssert.AreEqual(new[] { "go", "again", "lost" }, ChoiceIds(r));
+    }
+
+    [Test]
+    public void Offered_ListsAnyNodesOpenChoices_BackLeftOut()
+    {
+        DialogRunner r = Runner();
+        r.Choose("stay");
+        CollectionAssert.AreEqual(new[] { "go", "again", "lost" }, r.Offered("a").Select(c => c.Id).ToArray(), "a used one-shot choice is gone");
+        CollectionAssert.IsEmpty(r.Offered("b"), "b offers only its way back");
+        CollectionAssert.IsEmpty(r.Offered("nowhere"));
+    }
+
+    [Test]
+    public void ChooseFrom_PlaysAChoiceOfAnotherNode_AndStaysWhereItIs()
+    {
+        DialogRunner r = Runner();
+        r.Choose("go");
+        Assert.AreEqual("stay", r.ChooseFrom("a", "stay").Id);
+        CollectionAssert.AreEqual(new[] { "open.1", "open.2", "a.enter", "go.said", "b.enter", "stay.said" }, Ids(r.Transcript));
+        CollectionAssert.AreEqual(new[] { "back" }, ChoiceIds(r), "still in b");
+        Assert.IsNull(r.ChooseFrom("a", "stay"), "a used one-shot choice");
+        Assert.IsNull(r.ChooseFrom("b", "back"), "Back is never offered so");
+        Assert.IsNull(r.ChooseFrom("a", "missing"));
+        Assert.AreEqual(6, r.Transcript.Count, "nothing changed");
+        Assert.IsNotNull(r.ChooseFrom("a", "go"));
+        CollectionAssert.AreEqual(new[] { "back" }, ChoiceIds(r), "its Next is not entered");
+    }
+
+    [Test]
+    public void LastBy_FindsTheSpeakersLastLine()
+    {
+        var desk = new DialogLine("d", DialogSpeaker.Desk, "Papers?");
+        DialogLine first = Line("t1"), last = Line("t2");
+        Assert.AreSame(last, DialogLines.LastBy(new[] { first, desk, last, null, desk }, DialogSpeaker.Traveller));
+        Assert.AreSame(desk, DialogLines.LastBy(new[] { first, desk, last }, DialogSpeaker.Desk));
+        Assert.IsNull(DialogLines.LastBy(new[] { desk }, DialogSpeaker.Traveller));
+        Assert.IsNull(DialogLines.LastBy(null, DialogSpeaker.Traveller));
     }
 
     [Test]

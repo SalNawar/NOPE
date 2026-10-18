@@ -69,19 +69,22 @@ public static class PortalText
     {
         var lines = new List<string> { text("board.tooltip.title") };
         foreach (PortalRoute p in Routes(day))
-        {
-            string number = Number(p.Number);
-            bool maintenance = p.State == PortalState.UnderMaintenance;
-            if (p.Role == PortalRole.Returns)
-                lines.Add(Format(text(maintenance ? "board.tooltip.returnGateMaintenance" : "board.tooltip.returnGate"), number, p.Name));
-            else if (maintenance)
-                lines.Add(Format(text("board.tooltip.maintenance"), number, p.Name));
-            else if (!p.Place.HasValue)
-                lines.Add(Format(text("board.tooltip.noRoute"), number, p.Name));
-            else
-                lines.Add(Format(text(p.Closed ? "board.tooltip.closed" : "board.tooltip.route"), number, p.Name, placeName(p.Place.Value), eraName(p.Place.Value)));
-        }
+            lines.Add(TooltipLine(p, eraName, placeName, text));
         return lines;
+    }
+
+    /// <summary>One portal's line of the board's tooltip (TooltipLines), which the RING SERVICE panel's module also reads out when its breaker is clicked (the desk machines spec §10).</summary>
+    public static string TooltipLine(PortalRoute p, Func<PlaceRef, string> eraName, Func<PlaceRef, string> placeName, Func<string, string> text)
+    {
+        string number = Number(p.Number);
+        bool maintenance = p.State == PortalState.UnderMaintenance;
+        if (p.Role == PortalRole.Returns)
+            return Format(text(maintenance ? "board.tooltip.returnGateMaintenance" : "board.tooltip.returnGate"), number, p.Name);
+        if (maintenance)
+            return Format(text("board.tooltip.maintenance"), number, p.Name);
+        if (!p.Place.HasValue)
+            return Format(text("board.tooltip.noRoute"), number, p.Name);
+        return Format(text(p.Closed ? "board.tooltip.closed" : "board.tooltip.route"), number, p.Name, placeName(p.Place.Value), eraName(p.Place.Value));
     }
 
     /// <summary>

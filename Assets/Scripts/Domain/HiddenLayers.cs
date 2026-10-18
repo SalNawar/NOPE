@@ -48,10 +48,16 @@ public sealed class HiddenContent
     /// <summary>The chance a value a forger printed over the issued one (a record lie's box) leaves the ghost of the issued value under UV (0 to 1; one draw per such box on the case's hidden stream).</summary>
     public float ghostChance;
 
+    /// <summary>The forms whose paper prints a microprint line along its foot repeating the holder's Citizen ID (the desk machines spec §10), read under the lens stand's magnifiers.</summary>
+    public List<string> microForms = new List<string>();
+
     /// <summary>True when paper <paramref name="formNumber"/> carries a chip.</summary>
     public bool CarriesChip(string formNumber) => !string.IsNullOrEmpty(formNumber) && chipForms != null && chipForms.Contains(formNumber);
 
-    /// <summary>What Generate World and the validator refuse: a blank or repeated chip form, a ghost chance outside 0 to 1. Empty when sound.</summary>
+    /// <summary>True when paper <paramref name="formNumber"/> prints a microprint line.</summary>
+    public bool PrintsMicro(string formNumber) => !string.IsNullOrEmpty(formNumber) && microForms != null && microForms.Contains(formNumber);
+
+    /// <summary>What Generate World and the validator refuse: a blank or repeated chip or microprint form, a ghost chance outside 0 to 1. Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -65,6 +71,14 @@ public sealed class HiddenContent
         }
         if (ghostChance < 0f || ghostChance > 1f)
             problems.Add($"agency.hidden.ghostChance is {ghostChance}: a chance from 0 to 1.");
+        var micro = new HashSet<string>(StringComparer.Ordinal);
+        foreach (string form in microForms ?? new List<string>())
+        {
+            if (string.IsNullOrWhiteSpace(form))
+                problems.Add("agency.hidden.microForms lists a blank form.");
+            else if (!micro.Add(form))
+                problems.Add($"agency.hidden.microForms lists '{form}' twice.");
+        }
         return problems;
     }
 }
@@ -86,6 +100,29 @@ public readonly struct HiddenPaper
     public IReadOnlyList<DocumentField> Fields { get; }
 }
 
+/// <summary>A paper's microprint line (the desk machines spec §10): the box it repeats (the Citizen ID's index in the paper's fields) and what it repeats.</summary>
+public readonly struct MicroLine
+{
+    /// <summary>A line.</summary>
+    public MicroLine(int field, string value)
+    {
+        Field = field;
+        _value = value;
+    }
+
+    private readonly string _value;
+
+    /// <summary>The box it repeats: the Citizen ID's index in the paper's fields.</summary>
+    public int Field { get; }
+
+    /// <summary>The Citizen ID it repeats.</summary>
+    public string Value => _value ?? string.Empty;
+
+    /// <summary>The line as printed: the Bureau's mark, the form and the value, over and over (<paramref name="repeats"/> times, at least once).</summary>
+    public string Printed(string formNumber, int repeats) =>
+        string.Concat(Enumerable.Repeat("TCB · " + formNumber + " · " + Value + " · ", Math.Max(1, repeats)));
+}
+
 /// <summary>
 /// One case's hidden layers (the desk machines spec §1-3): per paper, the
 /// marks the UV torch shows and the record its chip holds. The scanned copy's
@@ -96,16 +133,21 @@ public sealed class CaseHidden
 {
     private readonly IReadOnlyList<UvMark>[] _marks;
     private readonly IReadOnlyList<DocumentField>[] _chips;
+    private readonly MicroLine?[] _micro;
 
     /// <summary>No paper, no layer (a case without papers).</summary>
     public static readonly CaseHidden None = new CaseHidden(Array.Empty<IReadOnlyList<UvMark>>(), Array.Empty<IReadOnlyList<DocumentField>>());
 
-    /// <summary>A case's layers: the marks and chip (null: none) of each paper, by index.</summary>
-    public CaseHidden(IReadOnlyList<UvMark>[] marks, IReadOnlyList<DocumentField>[] chips)
+    /// <summary>A case's layers: the marks, chip (null: none) and microprint line (null: none) of each paper, by index.</summary>
+    public CaseHidden(IReadOnlyList<UvMark>[] marks, IReadOnlyList<DocumentField>[] chips, MicroLine?[] micro = null)
     {
         _marks = marks ?? Array.Empty<IReadOnlyList<UvMark>>();
         _chips = chips ?? Array.Empty<IReadOnlyList<DocumentField>>();
+        _micro = micro ?? Array.Empty<MicroLine?>();
     }
+
+    /// <summary>Paper <paramref name="document"/>'s microprint line, or null when it prints none.</summary>
+    public MicroLine? MicroOf(int document) => document >= 0 && document < _micro.Length ? _micro[document] : null;
 
     /// <summary>How many papers it covers.</summary>
     public int Count => _marks.Length;
@@ -151,6 +193,7 @@ public static class HiddenLayers
         int n = papers?.Count ?? 0;
         var marks = new IReadOnlyList<UvMark>[n];
         var chips = new IReadOnlyList<DocumentField>[n];
+        var micro = new MicroLine?[n];
         for (int d = 0; d < n; d++)
         {
             HiddenPaper paper = papers[d];
@@ -170,6 +213,9 @@ public static class HiddenLayers
             }
             if (content != null && content.CarriesChip(paper.FormNumber))
                 chips[d] = paper.Fields.Select(Issued).ToList();
+            int id = IndexOf(paper.Fields, ClueCategory.CitizenId);
+            if (content != null && content.PrintsMicro(paper.FormNumber) && id >= 0)
+                micro[d] = new MicroLine(id, Issued(paper.Fields[id]).value);
             marks[d] = list;
         }
 
@@ -189,8 +235,10 @@ public static class HiddenLayers
                     chip[f].value = tell.Value;
                 chips[tell.Document] = chip;
             }
+            else if (tell.Layer == ScanLayer.Micro && micro[tell.Document].HasValue)
+                micro[tell.Document] = new MicroLine(micro[tell.Document].Value.Field, tell.Value);
         }
-        return new CaseHidden(marks, chips);
+        return new CaseHidden(marks, chips, micro);
     }
 
     /// <summary>The microprint an office prints in its seal (its id in capitals; "AGENCY" when the seal names none).</summary>
@@ -257,6 +305,32 @@ public static class HiddenLies
     }
 
     /// <summary>
+    /// A reprinted paper (the desk machines spec §10): the Citizen ID box
+    /// among <paramref name="forms"/> the canon's ReprintedPaper rows name
+    /// that a microprinted paper (<paramref name="content"/>) prints, one
+    /// Range draw when two or more; its microprint repeats a fresh Citizen ID
+    /// nobody holds today (RecordLies.FreshCitizenId, which joins
+    /// <paramref name="takenToday"/>). Empty, with no draw, when no carried
+    /// paper can show it.
+    /// </summary>
+    public static List<HiddenTell> PlanReprint(IReadOnlyList<FaultEntry> canon, IReadOnlyList<RecordForm> forms, HiddenContent content,
+                                               ISet<string> takenToday, IRandomSource rng)
+    {
+        List<(int document, ClueCategory category)> boxes = Boxes(canon, forms, LieKind.ReprintedPaper, f => content != null && content.PrintsMicro(f))
+            .Where(b => b.Item2 == ClueCategory.CitizenId).ToList();
+        var tells = new List<HiddenTell>();
+        if (boxes.Count == 0 || rng == null)
+            return tells;
+        (int document, ClueCategory category) box = boxes.Count == 1 ? boxes[0] : boxes[rng.Range(0, boxes.Count)];
+        string printed = PrintedOf(forms[box.document], box.category);
+        string value = RecordLies.FreshCitizenId(takenToday ?? new HashSet<string>(), rng);
+        if (string.IsNullOrEmpty(value) || Values.Match(value, printed))
+            return tells;
+        tells.Add(new HiddenTell(box.document, box.category, ScanLayer.Micro, value));
+        return tells;
+    }
+
+    /// <summary>
     /// A washed paper: the box among <paramref name="forms"/> the canon's
     /// WashedPaper rows name, one Range draw when two or more; its ghost the
     /// first holder's name, one draw among <paramref name="names"/> other
@@ -310,6 +384,8 @@ public static class HiddenLies
                 problems.Add($"agency.faults '{row.id}': a {lie} row names a Citizen ID or a name ('{row.field}' cannot be cloned or washed).");
             else if (lie == LieKind.ClonedChip && (content == null || !content.CarriesChip(row.form)))
                 problems.Add($"agency.faults '{row.id}': {row.form} carries no chip (agency.hidden.chipForms), so a cloned chip cannot show there.");
+            else if (lie == LieKind.ReprintedPaper && (c != ClueCategory.CitizenId || content == null || !content.PrintsMicro(row.form)))
+                problems.Add($"agency.faults '{row.id}': a reprinted paper's row names the Citizen ID of a form that prints a microprint line (agency.hidden.microForms).");
         }
         foreach ((int day, IEnumerable<LieKind> lies) in days ?? Array.Empty<(int, IEnumerable<LieKind>)>())
             foreach (LieKind lie in (lies ?? Array.Empty<LieKind>()).Where(LieKinds.IsHiddenLie))

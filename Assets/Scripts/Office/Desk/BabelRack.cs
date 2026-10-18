@@ -8,10 +8,17 @@ using UnityEngine;
 /// (Translation.UpgradeId). A cartridge delivered today drops into its bay
 /// with a clunk (cartridge_in) once the supply crate is open. While a
 /// traveller speaks a tongue its pack translates, that cartridge's lamp
-/// glows and the VU needle dances; a click on the rack plays its test
-/// chirp (translator_chirp): the needle sweeps to the red and back and the
-/// seated cartridges' lamps blink. Built by Build Office UI from
-/// BabelRack.fbx (tools/props/machines).
+/// glows and the VU needle dances. Its functions (Saleh 2026-10-18, demo
+/// 1018a note 14: "every object the playyer unlocks should be useable"; the
+/// desk machines spec §10): while a traveller whose tongue is foreign today
+/// is at the desk, the cartridge that covers their tongue keeps a steady
+/// pilot glow (none glows: no cartridge of the rack understands them, so
+/// their answers prove nothing); a click on the rack replays the traveller's
+/// last line in the bubble (TravellerWheel.Replay), flipping into English
+/// again where a cartridge covers it, with its chirp (translator_chirp) and
+/// the needle dancing; with no line to replay the click is the test chirp:
+/// the needle sweeps to the red and back and the seated cartridges' lamps
+/// blink. Built by Build Office UI from BabelRack.fbx (tools/props/machines).
 /// </summary>
 public sealed class BabelRack : MonoBehaviour
 {
@@ -33,7 +40,7 @@ public sealed class BabelRack : MonoBehaviour
     /// <summary>How long a translated line keeps a lamp lit (seconds), and how high a new cartridge starts over its bay (metres, model space).</summary>
     [SerializeField] private float speakSeconds = 1.8f, dropHeight = 0.07f;
 
-    private static readonly Color LampOn = new Color(0.24f, 1f, 0.53f), LampOff = new Color(0.05f, 0.16f, 0.09f);
+    private static readonly Color LampOn = new Color(0.24f, 1f, 0.53f), LampPilot = new Color(0.12f, 0.55f, 0.28f), LampOff = new Color(0.05f, 0.16f, 0.09f);
     private const float NeedleRest = 50f, NeedleRed = -50f;
 
     private Quaternion _needleRest;
@@ -45,6 +52,12 @@ public sealed class BabelRack : MonoBehaviour
     private float _test, _now;
     private MaterialPropertyBlock _block;
     private bool _rested;
+    private System.Func<bool> _replay;
+    private int _speaker = -1;
+    private float _replaying;
+
+    /// <summary>The bay whose cartridge covers the traveller at the desk (-1: none; the probes read it).</summary>
+    public int Speaker => _speaker;
 
     private void Awake()
     {
@@ -85,6 +98,7 @@ public sealed class BabelRack : MonoBehaviour
     public bool SetDay(IReadOnlyList<UpgradeObjects.Bay> bays, bool rackNew)
     {
         Rest();
+        _speaker = -1;
         bool any = false;
         for (int i = 0; i < cartridges.Length; i++)
         {
@@ -126,20 +140,42 @@ public sealed class BabelRack : MonoBehaviour
         _speak[bay] = speakSeconds;
     }
 
-    /// <summary>The test chirp (a click on the rack).</summary>
+    /// <summary>Wires the replay of the traveller's last line (DeskUpgrades: InvestigationUIController.ReplayLastLine).</summary>
+    public void Bind(System.Func<bool> replay) => _replay = replay;
+
+    /// <summary>The traveller at the desk speaks a tongue bay <paramref name="bay"/>'s pack covers (-1: none, or a tongue no seated cartridge covers): its pilot glows while they are at the desk.</summary>
+    public void SetSpeaker(int bay)
+    {
+        Rest();
+        _speaker = bay >= 0 && bay < cartridges.Length && _owned[bay] ? bay : -1;
+        for (int i = 0; i < cartridges.Length && i < lamps.Length; i++)
+            DeskProps.Tint(lamps[i], LampOf(i), _block);
+    }
+
+    /// <summary>A click on the rack: the traveller's last line again (its chirp and the needle's dance), else the test chirp: the needle sweeps to the red and back and the lamps blink.</summary>
     public void Test()
     {
+        if (_replay != null && _replay())
+        {
+            CueSounds.Play(SoundCues.TranslatorChirp, sound, 1.15f);
+            _replaying = speakSeconds; // the needle dances with the line (a translated line lights its cartridge: TongueTranslated)
+            return;
+        }
         CueSounds.Play(SoundCues.TranslatorChirp, sound);
         _test = 0.7f;
         DeskProps.Aim(ref _needle, 1f);
         _needle.Kick(4f);
     }
 
+    /// <summary>Lamp <paramref name="i"/>'s glow at rest: the traveller's cartridge's pilot, else off.</summary>
+    private Color LampOf(int i) => _owned[i] && i == _speaker ? LampPilot : LampOff;
+
     private void Update()
     {
         float dt = UiMotion.Delta(Time.unscaledDeltaTime);
         _now += dt;
-        bool speaking = false;
+        bool speaking = _replaying > 0f;
+        _replaying = Mathf.Max(0f, _replaying - dt);
         for (int i = 0; i < cartridges.Length; i++)
         {
             if (_dropIn[i] > 0f)
@@ -161,7 +197,7 @@ public sealed class BabelRack : MonoBehaviour
                 cartridges[i].localPosition = _seat[i] + Vector3.up * (dropHeight * _drop[i].Value);
             bool lit = _owned[i] && (_speak[i] > 0f || (_test > 0f && Mathf.Repeat(_test, 0.2f) > 0.1f));
             if (i < lamps.Length)
-                DeskProps.Tint(lamps[i], lit ? LampOn : LampOff, _block);
+                DeskProps.Tint(lamps[i], lit ? LampOn : LampOf(i), _block);
         }
         if (_test > 0f)
         {

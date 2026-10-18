@@ -28,6 +28,7 @@ public enum LayerState
 public sealed class DeskReadings
 {
     private readonly HashSet<int> _chips = new HashSet<int>();
+    private readonly HashSet<int> _micro = new HashSet<int>();
     private readonly HashSet<(int document, int mark)> _seen = new HashSet<(int, int)>();
 
     /// <summary>Raised when a chip is read or a mark is first seen, with the paper.</summary>
@@ -38,7 +39,20 @@ public sealed class DeskReadings
     {
         _chips.Clear();
         _seen.Clear();
+        _micro.Clear();
     }
+
+    /// <summary>A magnifier has shown paper <paramref name="document"/>'s microprint line long enough to read it (once; false when it was already read): from then on the line is picked in inspect mode (the desk machines spec §10).</summary>
+    public bool ReadMicro(int document)
+    {
+        if (document < 0 || !_micro.Add(document))
+            return false;
+        Changed?.Invoke(document);
+        return true;
+    }
+
+    /// <summary>True when paper <paramref name="document"/>'s microprint line has been read under a magnifier.</summary>
+    public bool MicroRead(int document) => _micro.Contains(document);
 
     /// <summary>The reader has read paper <paramref name="document"/>'s chip (once; false when it was already read).</summary>
     public bool ReadChip(int document)
@@ -315,4 +329,28 @@ public static class UvCone
 
     /// <summary>True when a mark lit for <paramref name="litSeconds"/> counts as seen.</summary>
     public static bool IsSeen(float litSeconds) => litSeconds >= SeenSeconds;
+
+    /// <summary>The steepest and the shallowest tilt a held torch takes below the level (degrees).</summary>
+    public const float MinTilt = 10f, MaxTilt = 80f;
+
+    /// <summary>
+    /// Where the held torch's cone lands (Saleh 2026-10-18, demo 1018a note 10:
+    /// "when you hold the UV the mouse should be on the base not the light"):
+    /// the pointer holds the torch by its grip, <paramref name="height"/>
+    /// metres over the desk at (<paramref name="gripX"/>, <paramref name="gripZ"/>),
+    /// its lens pointing away from the chair (<paramref name="awayX"/>,
+    /// <paramref name="awayZ"/>, any length) and <paramref name="tiltDegrees"/>
+    /// below the level (kept from MinTilt to MaxTilt), so the cone lands on the
+    /// desk ahead of the pointer, where the torch's axis meets it: height /
+    /// tan(tilt) ahead of the grip. With no away direction: under the grip.
+    /// </summary>
+    public static (float x, float z) Ahead(float gripX, float gripZ, float awayX, float awayZ, float height, float tiltDegrees)
+    {
+        float length = (float)Math.Sqrt(awayX * awayX + awayZ * awayZ);
+        if (length < 1e-6f)
+            return (gripX, gripZ);
+        float tilt = Math.Max(MinTilt, Math.Min(MaxTilt, tiltDegrees)) * (float)Math.PI / 180f;
+        float reach = Math.Max(0f, height) / (float)Math.Tan(tilt);
+        return (gripX + awayX / length * reach, gripZ + awayZ / length * reach);
+    }
 }

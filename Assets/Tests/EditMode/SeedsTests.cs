@@ -113,6 +113,17 @@ public class SeedsTests
         CollectionAssert.AreNotEqual(TenDraws(Seeds.ForStrandings(daySeed)), TenDraws(Seeds.ForStrandingFates(daySeed)));
     }
 
+    /// <summary>The desk machines spec §10: the Rolodex's tips draw on the day's own contacts stream, apart from every other stream.</summary>
+    [Test]
+    public void ContactStream_IsDeterministic_AndApartFromEveryOtherStream()
+    {
+        Assert.AreEqual(0x434E5443, Seeds.ContactSalt, "\"CNTC\"");
+        int daySeed = Seeds.Day(12345, 2);
+        Assert.AreEqual(Seeds.ForContacts(daySeed), Seeds.ForContacts(daySeed));
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "contacts"), Seeds.ForContacts(daySeed));
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(day => Seeds.ForContacts(Seeds.Day(12345, day))).ToList(), "each day its own tips");
+    }
+
     /// <summary>Audit R3-010 (phase 9): the day's event placements draw from their own salted stream, apart from the day's raw seed and every other stream.</summary>
     [Test]
     public void EventStream_IsDeterministic_AndApartFromEveryOtherStream()
@@ -127,7 +138,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ForgetSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt, Seeds.HallSlotSalt, Seeds.LoreSalt, Seeds.HiddenSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ForgetSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt, Seeds.HallSlotSalt, Seeds.LoreSalt, Seeds.HiddenSalt, Seeds.ContactSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -385,6 +396,8 @@ public class SeedsTests
             streams.Add(Seeds.ForStrandingFates(daySeed));
         if (except != "returnSlots")
             streams.Add(Seeds.ForReturnSlots(daySeed));
+        if (except != "contacts")
+            streams.Add(Seeds.ForContacts(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
         {
             streams.Add(caseSeed);

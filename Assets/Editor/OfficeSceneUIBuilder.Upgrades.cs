@@ -162,8 +162,33 @@ public static partial class OfficeSceneUIBuilder
         return click;
     }
 
+    /// <summary>A live text named <paramref name="name"/> on a prop's face (<paramref name="parent"/>'s local frame: centred at <paramref name="at"/>, <paramref name="size"/> metres, read from local -Z), in the kit font <paramref name="font"/>, auto-sized up to <paramref name="maxSize"/>, on the Gameplay sorting layer; empty until the game prints it.</summary>
+    private static TextMeshPro PropText(Transform parent, string name, Vector3 at, Vector2 size, string font, Color colour, float maxSize)
+    {
+        DestroyChildIfPresent(parent, name);
+        var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));
+        go.transform.SetParent(parent, false);
+        go.transform.localPosition = at;
+        go.transform.localRotation = Quaternion.identity;
+        var text = go.GetComponent<TextMeshPro>();
+        ((RectTransform)go.transform).sizeDelta = size;
+        var asset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(font);
+        if (asset != null)
+            text.font = asset;
+        text.enableAutoSizing = true;
+        text.fontSizeMin = maxSize * 0.15f;
+        text.fontSizeMax = maxSize;
+        text.alignment = TextAlignmentOptions.Center;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.color = colour;
+        text.margin = Vector4.zero;
+        text.sortingLayerID = GameplaySortingLayerId();
+        text.text = string.Empty;
+        return text;
+    }
+
     /// <summary>Office/DeskHardware/DeskUpgrades: the upgrades' objects (each inactive until DeskUpgrades.BeginDay shows it), wired with the config.</summary>
-    private static DeskUpgrades BuildDeskUpgrades(Transform hardwareRoot, DeskConfigSO config)
+    private static DeskUpgrades BuildDeskUpgrades(Transform hardwareRoot, DeskConfigSO config, OverlayCallout tooltip)
     {
         Transform root = EnsureChild(hardwareRoot, "DeskUpgrades");
         DeskUpgrades upgrades = GetOrAdd<DeskUpgrades>(root.gameObject);
@@ -175,6 +200,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "rolodex", BuildRolodex(root));
         SetRef(so, "ringPanel", BuildRingPanel(root));
         SetRef(so, "config", config);
+        SetRef(so, "tooltip", tooltip);
         so.ApplyModifiedProperties();
         foreach (Transform child in root)
             child.gameObject.SetActive(false);
@@ -238,8 +264,14 @@ public static partial class OfficeSceneUIBuilder
             return null;
         ProtocolRing ring = GetOrAdd<ProtocolRing>(host.gameObject);
         Transform r = m.Find("ProtocolStand/Ring");
+        // Each card's question, printed on its face below the header band (upgrade_props_model.py: the face centre (0, -0.0217, -0.0008), outward -Z, 0.085 x 0.055, the header the top 26 %).
+        var labels = new Object[4];
+        for (int i = 0; i < 4; i++)
+            labels[i] = PropText(r.Find("Card_" + i), "Label", new Vector3(0f, -0.0289f, -0.0009f), new Vector2(0.076f, 0.034f), UiKitFonts.Label, Hex("#2B1C24"), 0.12f);
         var so = new SerializedObject(ring);
         SetArray(so, "cards", Enumerable.Range(0, 4).Select(i => (Object)r.Find("Card_" + i)).ToArray());
+        SetArray(so, "labels", labels);
+        SetRef(so, "ring", r);
         SetRef(so, "click", PropClick(host, "Click", m.Find("ProtocolStand")));
         SetRef(so, "sound", host.GetComponent<AudioSource>());
         so.ApplyModifiedProperties();
@@ -270,15 +302,59 @@ public static partial class OfficeSceneUIBuilder
             return null;
         LensKit kit = GetOrAdd<LensKit>(host.gameObject);
         Transform s = m.Find("LensStand");
+        AudioSource sound = host.GetComponent<AudioSource>();
+        Transform loupe = s.Find("Loupe"), bar = s.Find("BarMagnifier");
+        // The bar's glass: its lens's centre (the part's pivot is its bottom centre).
+        DestroyChildIfPresent(bar, "BarGlass");
+        var barGlass = new GameObject("BarGlass").transform;
+        barGlass.SetParent(bar, false);
+        barGlass.localPosition = LocalBounds(bar, bar).center;
         var so = new SerializedObject(kit);
-        SetRef(so, "loupe", s.Find("Loupe"));
-        SetRef(so, "barMagnifier", s.Find("BarMagnifier"));
+        SetRef(so, "loupe", loupe);
+        SetRef(so, "barMagnifier", bar);
         SetRef(so, "fresnelArm", s.Find("FresnelArm"));
         SetRef(so, "armUpper", s.Find("FresnelArm/ArmUpper"));
-        SetRef(so, "click", PropClick(host, "Click", s));
-        SetRef(so, "sound", host.GetComponent<AudioSource>());
+        SetRef(so, "loupeLens", Magnifier(loupe, loupe.Find("LoupeGlass"), LensShape.Round, new Vector2(0.019f, 0.019f), 2.5f, true, sound));
+        SetRef(so, "barLens", Magnifier(bar, barGlass, LensShape.Rectangle, new Vector2(0.058f, 0.009f), 1.8f, true, sound));
+        SetRef(so, "fresnelLens", Magnifier(s.Find("FresnelArm/ArmUpper/FresnelSheet"), s.Find("FresnelArm/ArmUpper/FresnelSheet"), LensShape.Rectangle, new Vector2(0.073f, 0.053f), 1.4f, false, sound));
+        // The stand's click box (it folds the Fresnel's arm): the base alone, low, so the loupe's and the bar's grabs above it take their presses.
+        DestroyChildIfPresent(host, "Click");
+        Clickable click = EnsureClickBox(host, "Click");
+        Bounds stand = LocalBounds(s, host);
+        float baseHeight = Mathf.Min(stand.size.y, 0.012f);
+        click.transform.localPosition = new Vector3(stand.center.x, stand.min.y + baseHeight / 2f, stand.center.z);
+        click.transform.localRotation = Quaternion.identity;
+        click.GetComponent<BoxCollider>().size = new Vector3(stand.size.x + 0.02f, baseHeight, stand.size.z + 0.02f);
+        click.SetOutline(new[] { s.GetComponent<Renderer>() });
+        SetRef(so, "click", click);
+        SetRef(so, "sound", sound);
         so.ApplyModifiedProperties();
         return kit;
+    }
+
+    /// <summary>A lens stand part as a magnifier (DeskMagnifier on <paramref name="part"/>): its glass, shape, half size (in the glass's space), magnification, whether it is held, and for a held one its grab box (a click box over the part, which the part's presses reach).</summary>
+    private static DeskMagnifier Magnifier(Transform part, Transform glass, LensShape shape, Vector2 halfSize, float magnification, bool held, AudioSource sound)
+    {
+        DeskMagnifier lens = GetOrAdd<DeskMagnifier>(part.gameObject);
+        var so = new SerializedObject(lens);
+        SetRef(so, "glass", glass);
+        so.FindProperty("shape").enumValueIndex = (int)shape;
+        so.FindProperty("halfSize").vector2Value = halfSize;
+        so.FindProperty("magnification").floatValue = magnification;
+        so.FindProperty("held").boolValue = held;
+        SetRef(so, "sound", sound);
+        so.ApplyModifiedProperties();
+        DestroyChildIfPresent(part, "Grab");
+        if (held)
+        {
+            Clickable grab = EnsureClickBox(part, "Grab");
+            Bounds b = LocalBounds(part, part);
+            grab.transform.localPosition = b.center;
+            grab.transform.localRotation = Quaternion.identity;
+            grab.GetComponent<BoxCollider>().size = b.size + Vector3.one * 0.008f;
+            grab.SetOutline(part.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TMP_Text>() == null).ToArray());
+        }
+        return lens;
     }
 
     private static Rolodex BuildRolodex(Transform root)
@@ -339,6 +415,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "beaconPod", beacon != null ? beacon.transform.Find("Beacon/BeaconPod") : null);
         SetRef(so, "reflector", beacon != null ? beacon.transform.Find("Beacon/BeaconPod/Reflector") : null);
         SetRef(so, "beaconLamp", beacon != null ? beacon.transform.Find("Beacon/BeaconPod/BeaconLamp").GetComponent<Renderer>() : null);
+        SetRef(so, "trayClick", feeder != null ? PropClick(feeder.transform, "Click", feeder.transform.Find("Feeder"), 0.006f) : null);
+        SetRef(so, "beaconClick", beacon != null ? PropClick(beacon.transform, "Click", beacon.transform.Find("Beacon"), 0.006f) : null);
         SetRef(so, "sound", sound);
         so.ApplyModifiedProperties();
         if (feeder != null)

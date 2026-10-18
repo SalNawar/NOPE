@@ -26,10 +26,14 @@ public static class EvidencePicks
         DocumentField f = row.Field;
         string shown = string.IsNullOrEmpty(value) ? UiText.Format("layers.uv.MicroprintMissing", UiText.DocumentWord(f.label)) : value;
         return new ComparePick(PickKeys.Hidden(document, row.Index, layer),
-            UiText.Format("document.compareLabel", documentName, UiText.Get(layer == ScanLayer.Chip ? "citation.label.chip" : "citation.label.ghost")),
+            UiText.Format("document.compareLabel", documentName, UiText.Get(HiddenLabelKey(layer))),
             shown,
             CompareEvidence.ForHidden(f.category, value, document, true));
     }
+
+    /// <summary>The UI string key naming a machine's reading of <paramref name="layer"/> ("Its chip", "Its microprint", "Under UV light"): the compare's label and the citation's.</summary>
+    public static string HiddenLabelKey(ScanLayer layer) =>
+        layer == ScanLayer.Chip ? "citation.label.chip" : layer == ScanLayer.Micro ? "citation.label.micro" : "citation.label.ghost";
 
     /// <summary>The traveller's face (the look menu; the document design spec, D8): "Traveller · FACE", shown as the person at the desk, its evidence who they are (Looks.IdentityKey), the truth a photo is held against.</summary>
     public static ComparePick ForFace(TravellerLook look) =>
