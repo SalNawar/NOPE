@@ -40,12 +40,16 @@ public sealed class DeskPaperDepth : MonoBehaviour
     [SerializeField] private Texture2D bookletShade;
 
     private static readonly int ShadeMapId = Shader.PropertyToID("_ShadeMap");
-    private static readonly int FlexId = Shader.PropertyToID("_Flex");
+    private static readonly int FlexId = Shader.PropertyToID("_Flex"), Flex2Id = Shader.PropertyToID("_Flex2"), FlexSizeId = Shader.PropertyToID("_FlexSize");
 
-    /// <summary>The model's renderers (its face's and its body's), found once.</summary>
+    /// <summary>The model's renderers (its face's, its body's and its shadow's), found once.</summary>
     private Renderer[] _flexed;
     private MaterialPropertyBlock _flexBlock;
-    private Vector4 _flexShown;
+    private PaperBend _bendShown = PaperBend.Flat;
+
+    /// <summary>How far the contact shadow reaches beside the thing at most (metres: its held spread and lean): it sinks under a bend by the slope over this (PaperDepth.shader).</summary>
+    private float ShadowReach => _config != null ? Mathf.Max(_config.shadowHeldSpread + _config.shadowHeldOffset, _config.shadowSpread + _config.shadowOffset) : 0.05f;
+    private Vector2 _bendSize;
 
     /// <summary>How far under the bottom of the thing the shadow lies (metres): clear of it for the depth buffer.</summary>
     private const float ShadowGap = 0.00005f;
@@ -79,18 +83,18 @@ public sealed class DeskPaperDepth : MonoBehaviour
     }
 
     /// <summary>
-    /// Bends the model while it moves (PaperPhysics; Saleh 2026-10-17: "GIVE IT
-    /// PHYSICS"): its flexible parts (loose sheets, pages; DocumentCel's vertex
-    /// alpha) sag <paramref name="sag"/> metres at their edges across its travel
-    /// (<paramref name="dirX"/>, <paramref name="dirY"/>: a unit vector in the
-    /// face's plane). Flat again at 0.
+    /// Bends the model while it moves (PaperPhysics, PaperBend; Saleh's 1018a
+    /// playtest: "all documents are stiff"): its flexible parts (loose sheets,
+    /// pages; DocumentCel's vertex alpha) take <paramref name="bend"/> (its
+    /// bow along its travel, its twist and its ripple) over a face of
+    /// <paramref name="size"/> metres. Flat again with PaperBend.Flat.
     /// </summary>
-    public void SetFlex(float sag, float dirX, float dirY)
+    public void SetBend(PaperBend bend, Vector2 size)
     {
-        var flex = new Vector4(dirX, dirY, sag, 0f);
-        if (flex == _flexShown)
+        if (bend.Equals(_bendShown) && size == _bendSize)
             return;
-        _flexShown = flex;
+        _bendShown = bend;
+        _bendSize = size;
         if (_flexed == null)
         {
             var found = new List<Renderer>();
@@ -98,13 +102,17 @@ public sealed class DeskPaperDepth : MonoBehaviour
                 found.Add(faceRenderer);
             if (body != null && body.TryGetComponent(out Renderer bodyRenderer))
                 found.Add(bodyRenderer);
+            if (shadow != null && shadow.TryGetComponent(out Renderer shadowRenderer))
+                found.Add(shadowRenderer); // its contact shadow bends with it: the drooping face never dips through it
             _flexed = found.ToArray();
         }
         _flexBlock ??= new MaterialPropertyBlock();
         foreach (Renderer r in _flexed)
         {
             r.GetPropertyBlock(_flexBlock);
-            _flexBlock.SetVector(FlexId, flex);
+            _flexBlock.SetVector(FlexId, new Vector4(bend.DirX, bend.DirY, bend.Bow, bend.Lag));
+            _flexBlock.SetVector(Flex2Id, new Vector4(bend.Twist, bend.Flutter, bend.Phase, bend.Waves));
+            _flexBlock.SetVector(FlexSizeId, new Vector4(size.x, size.y, ShadowReach, 0f));
             r.SetPropertyBlock(_flexBlock);
         }
     }

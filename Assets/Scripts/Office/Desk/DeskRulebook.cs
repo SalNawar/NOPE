@@ -368,7 +368,7 @@ public sealed class DeskRulebook : MonoBehaviour
     private float _height, _restYaw;
     private Spring _hop;
 
-    /// <summary>The folder's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; the folder "can be nudged and slides with weight"): heavier than a paper (MotionKnobs.folderWeight), it swings less, slides to rest slower, and its loose sheets sag while it moves.</summary>
+    /// <summary>The folder's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; the folder "can be nudged and slides with weight"): heavier than a paper (MotionKnobs.folderWeight), it swings less and slides to rest slower; it never bends (Saleh's 1018a playtest: "the folder stays weighty").</summary>
     private PaperPhysics _physics;
 
     /// <summary>Each frame: the folder's swing, slide, spin and hop on top of where the desk puts it (the drag moves its root).</summary>
@@ -392,8 +392,6 @@ public sealed class DeskRulebook : MonoBehaviour
             _hop.Value = 0f; // it never sinks into what lies under it
             _hop.Velocity = Mathf.Max(0f, _hop.Velocity);
         }
-        if (depth != null)
-            depth.SetFlex(_physics.Sag, _physics.SagDirX, _physics.SagDirZ);
         if (_physics.Moving || spin != 0f || !_hop.AtRest)
             ShowMotion();
     }
