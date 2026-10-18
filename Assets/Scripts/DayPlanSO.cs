@@ -347,12 +347,13 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     public string UnlistedOf(NationSO nation, EraSO era) => FirstClosure(nation, era, true);
 
-    /// <summary>The first open-destinations list (<paramref name="list"/>) or the first ban for every kind that forbids the place: its line, or null.</summary>
+    /// <summary>The first open-destinations list (<paramref name="list"/>) or the first ban for every kind that forbids the place, as authored (the list before today's repairs open more: the portals' schedule decides which repaired routes it opens): its line, or null.</summary>
     private string FirstClosure(NationSO nation, EraSO era, bool list)
     {
         foreach (TravelRuleSO rule in ActiveTravelRules)
             if (rule != null && rule.IsClosure && (rule.type == TravelRuleType.OpenDestinations) == list
-                && (list || rule.kinds == null || rule.kinds.Length == 0) && !rule.Allows(nation, era))
+                && (list || rule.kinds == null || rule.kinds.Length == 0)
+                && rule.AuthoredDirective.Closes(nation != null ? nation.id : null, era != null ? era.id : null))
                 return rule.Summary();
         return null;
     }

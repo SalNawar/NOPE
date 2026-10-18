@@ -188,6 +188,60 @@ public class PortalScheduleTests
         Assert.AreEqual(PortalLook.Glow, Route(day, 2).Look, "02 is in service by itself and repaired: its repair opens its route too");
     }
 
+    // --- What a repair opens for travellers (Saleh 2026-10-18: "yes") ---
+
+    [Test]
+    public void RepairedRoutes_AreTheRepairedPortalsOpenRoutes_InPortalOrder()
+    {
+        PortalDay day = Listed("repair_portal_02", "repair_return_gate", "repair_portal_04", "repair_portal_05");
+        CollectionAssert.AreEqual(new[] { Babylon, Florence, Wessex }, day.RepairedRoutes,
+                                  "02, 04 and 05 are repaired; 01 runs by itself, the Return Gate runs no route");
+        CollectionAssert.IsEmpty(Listed().RepairedRoutes, "no repair: nothing opened");
+        Assert.IsTrue(Route(day, 4).Repaired);
+        Assert.IsFalse(Route(day, 1).Repaired, "01 has no repair");
+    }
+
+    [Test]
+    public void RepairedRoutes_LeaveOutABannedRoute()
+    {
+        var routes = new List<PortalRequest> { new PortalRequest(1, Athens), new PortalRequest(4, Thebes), new PortalRequest(5, Wessex) };
+        PortalDay day = PortalSchedule.Resolve(Hall(), 2, Owning("repair_portal_04", "repair_portal_05"), routes, ClosesThebes, ListsAthensAndThebes);
+        CollectionAssert.AreEqual(new[] { Wessex }, day.RepairedRoutes, "a ban naming 04's place keeps it closed for travellers too");
+    }
+
+    [Test]
+    public void Opening_AddsTheRepairedRoutesToTheOpenDestinations()
+    {
+        var list = new Directive(TravelRuleType.OpenDestinations, null, open: new[] { "greece:ancient" });
+        Assert.IsTrue(list.Closes("britain", "medieval"), "as authored, Wessex is closed");
+        Directive today = Directives.Opening(list, new[] { "britain:medieval", "greece:ancient" });
+        Assert.IsFalse(today.Closes("britain", "medieval"), "a repaired portal's route is open to travellers");
+        Assert.IsFalse(today.Closes("greece", "ancient"));
+        Assert.IsTrue(today.Closes("egypt", "ancient"), "every other place stays closed");
+        Assert.AreEqual(2, today.Open.Count, "a listed place is not added twice");
+    }
+
+    [Test]
+    public void Opening_LeavesEveryOtherRuleAsItIs()
+    {
+        var ban = new Directive(TravelRuleType.NationEraForbidden, null, "britain", "medieval");
+        Assert.IsTrue(Directives.Opening(ban, new[] { "britain:medieval" }).Closes("britain", "medieval"), "a repair never lifts a ban");
+        var list = new Directive(TravelRuleType.OpenDestinations, null, open: new[] { "greece:ancient" });
+        Assert.AreEqual(1, Directives.Opening(list, null).Open.Count);
+        Assert.AreEqual(1, Directives.Opening(list, new string[0]).Open.Count);
+    }
+
+    [Test]
+    public void OpenedLine_NamesTheRepairedRoutesAfterTheAuthoredLine()
+    {
+        const string authored = "OPEN TODAY: Periclean Athens only. Refuse any other destination.";
+        const string template = "Your repaired portals also run today: {0}.";
+        Assert.AreEqual(authored + " Your repaired portals also run today: Qing Shanghai, Tokugawa Edo.",
+                        Directives.OpenedLine(authored, new[] { "Qing Shanghai", "Tokugawa Edo" }, template));
+        Assert.AreEqual(authored, Directives.OpenedLine(authored, new string[0], template), "nothing opened: as authored");
+        Assert.AreEqual(authored, Directives.OpenedLine(authored, new[] { "Edo" }, null));
+    }
+
     [Test]
     public void Resolve_TheReturnsPortalHasNoRoute()
     {

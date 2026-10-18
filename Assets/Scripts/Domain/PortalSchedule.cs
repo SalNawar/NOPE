@@ -102,9 +102,13 @@ public readonly struct PortalRoute
     /// <summary>The upgrade id of its repair (blank: none).</summary>
     public readonly string Repair;
 
+    /// <summary>True when its repair is owned at the day's start: a repaired departure portal's open route is one of the day's open destinations (PortalDay.RepairedRoutes).</summary>
+    public readonly bool Repaired;
+
     /// <summary>A portal's day.</summary>
-    public PortalRoute(int number, string name, PortalRole role, PortalState state, PlaceRef? place, string closure, string repair)
+    public PortalRoute(int number, string name, PortalRole role, PortalState state, PlaceRef? place, string closure, string repair, bool repaired = false)
     {
+        Repaired = repaired;
         Number = number;
         Name = name ?? string.Empty;
         Role = role;
@@ -141,7 +145,22 @@ public sealed class PortalDay
     {
         Portals = portals ?? Array.Empty<PortalRoute>();
         Default = defaultPortal;
+        var repaired = new List<PlaceRef>();
+        foreach (PortalRoute p in Portals)
+            if (p.Repaired && p.Role == PortalRole.Departures && p.State == PortalState.InService && p.Place.HasValue && !p.Closed && !repaired.Contains(p.Place.Value))
+                repaired.Add(p.Place.Value);
+        RepairedRoutes = repaired;
     }
+
+    /// <summary>
+    /// The open routes of the repaired departure portals, in number order
+    /// (Saleh 2026-10-18, answering the demo 1018a fix: repairing a portal
+    /// also opens its destination for travellers): they join the day's open
+    /// destinations (Directives.Opening; the rulebook's line names them,
+    /// Directives.OpenedLine), so travellers may be bound there. A route a ban
+    /// closes is not one of them.
+    /// </summary>
+    public IReadOnlyList<PlaceRef> RepairedRoutes { get; }
 
     /// <summary>Every portal, in number order.</summary>
     public IReadOnlyList<PortalRoute> Portals { get; }
@@ -237,7 +256,7 @@ public static class PortalSchedule
                     break;
                 }
             }
-            routes.Add(new PortalRoute(p.number, p.name, p.role, inService ? PortalState.InService : PortalState.UnderMaintenance, place, closedBy, p.repair));
+            routes.Add(new PortalRoute(p.number, p.name, p.role, inService ? PortalState.InService : PortalState.UnderMaintenance, place, closedBy, p.repair, Repaired(p, repaired)));
         }
         return new PortalDay(routes, DefaultPortal(portals));
     }

@@ -276,6 +276,43 @@ public static class Directives
     public static string PlaceKey(string nationId, string eraId) => (nationId ?? string.Empty) + ":" + (eraId ?? string.Empty);
 
     /// <summary>
+    /// <paramref name="directive"/> with <paramref name="opened"/> (place keys:
+    /// the day's repaired portals' open routes, PortalDay.RepairedRoutes) among
+    /// its open destinations when it is an open-destinations rule (Saleh
+    /// 2026-10-18: repairing a portal also opens its destination for
+    /// travellers); any other directive, or none opened, as it is.
+    /// </summary>
+    public static Directive Opening(Directive directive, IReadOnlyCollection<string> opened)
+    {
+        if (directive.Type != TravelRuleType.OpenDestinations || opened == null || opened.Count == 0)
+            return directive;
+        var open = new List<string>(directive.Open);
+        foreach (string key in opened)
+            if (!string.IsNullOrEmpty(key) && !open.Contains(key))
+                open.Add(key);
+        if (open.Count == directive.Open.Count)
+            return directive;
+        return new Directive(directive.Type, directive.Kinds, directive.NationId, directive.EraId, directive.Transponder, open);
+    }
+
+    /// <summary>
+    /// An open-destinations rule's line as the rulebook prints it on a day
+    /// repairs open more routes: the authored line, then
+    /// <paramref name="template"/> ("Your repaired portals also run today:
+    /// {0}.") filled with <paramref name="names"/>, the opened places' names
+    /// joined by commas; the authored line alone when none is opened (or no
+    /// template).
+    /// </summary>
+    public static string OpenedLine(string authored, IReadOnlyList<string> names, string template)
+    {
+        if (names == null || names.Count == 0 || string.IsNullOrWhiteSpace(template))
+            return authored;
+        string list = string.Join(", ", names);
+        string extra = string.Format(System.Globalization.CultureInfo.InvariantCulture, template, list);
+        return string.IsNullOrWhiteSpace(authored) ? extra : authored.TrimEnd() + " " + extra;
+    }
+
+    /// <summary>
     /// The closure predicate, by ids (one home for TravelRuleSO.Allows and
     /// the content checks): an era closure forbids every destination of its
     /// era (<paramref name="ruleEraId"/>), a nation closure every one of its

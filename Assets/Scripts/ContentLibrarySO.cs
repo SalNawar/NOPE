@@ -199,6 +199,9 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// Directorate routes, CLOSED where a ban forbids them or, for a portal
     /// not repaired, where the open destinations leave them out), which the
     /// board, the rings, the Portals app and the departures read all day.
+    /// The repaired portals' open routes become today's openings
+    /// (DayOpenings): every open-destinations rule opens them too, for the
+    /// case generation, the verdicts and the rulebook (Saleh 2026-10-18).
     /// </summary>
     public TodaysWorld BuildToday(DayPlanSO plan, WorldState world)
     {
@@ -208,7 +211,9 @@ public sealed class ContentLibrarySO : ScriptableObject
         FillFacts(table, places, history);
         PresentPlace now = BuildPresent(history);
         global::Present.AddRow(table, now);
-        return new TodaysWorld(places, table, now, BuildPortalDay(plan, world));
+        PortalDay portals = BuildPortalDay(plan, world);
+        DayOpenings.Set(world != null ? world.day : 0, portals, p => GetProfile(p) != null ? GetProfile(p).displayName : p.ToString());
+        return new TodaysWorld(places, table, now, portals);
     }
 
     /// <summary>The day's portals (the portals spec v3 RT2, RT3): the agency's portals on <paramref name="world"/>'s day and owned repairs, over <paramref name="plan"/>'s Directorate routes and closures; none without a plan or portals.</summary>
