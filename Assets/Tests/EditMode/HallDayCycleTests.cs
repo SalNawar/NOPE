@@ -124,6 +124,57 @@ public class HallDayCycleTests
     }
 
     [Test]
+    public void TheNightStages_SwitchOnInTheirOrderAsItDarkens()
+    {
+        // Saleh's demo 1018a: "need more lights to activate as it gets darker". The evening at 16:30 is a half.
+        float[] stages = { 0.1f, 0.4f, 0.55f, 0.7f };
+        int Lit(float hour) { int n = 0; foreach (float at in stages) if (HallDayCycle.SwitchedOn(hour, at, 0, 0f, Defaults)) n++; return n; }
+        Assert.AreEqual(0, Lit(12f), "noon: none of them");
+        int last = 0;
+        for (float hour = 15f; hour <= 18.5f; hour += 0.1f)
+        {
+            int lit = Lit(hour);
+            Assert.GreaterOrEqual(lit, last, $"{hour:0.0}: once on, a stage stays on as the evening deepens");
+            last = lit;
+        }
+        Assert.AreEqual(stages.Length, Lit(18.5f), "night: all of them");
+        Assert.AreEqual(2, Lit(16.5f), "16:30 (evening 0.5): the stages at 0.1 and 0.4");
+    }
+
+    [Test]
+    public void ANightStage_StaggersItsLights_AndSwitchesOffInTheSameOrderAtDawn()
+    {
+        float onAt = 0.5f;
+        Assert.IsTrue(HallDayCycle.SwitchedOn(16.6f, onAt, 0, 6f, Defaults));
+        Assert.IsFalse(HallDayCycle.SwitchedOn(16.6f, onAt, 3, 6f, Defaults), "the fourth light comes on 18 minutes later");
+        Assert.IsTrue(HallDayCycle.SwitchedOn(17f, onAt, 3, 6f, Defaults));
+        Assert.IsTrue(HallDayCycle.SwitchedOn(12f, 0f, 0, 0f, Defaults), "a stage at 0 is always on");
+        Assert.IsFalse(HallDayCycle.SwitchedOn(23f, 1.5f, 0, 0f, Defaults), "a stage past 1 never comes");
+        Assert.IsFalse(HallDayCycle.SwitchedOn(7.2f, onAt, 0, 6f, Defaults), "after sunrise the first is off");
+        Assert.IsTrue(HallDayCycle.SwitchedOn(7.2f, onAt, 3, 6f, Defaults), "the fourth goes off 18 minutes later");
+    }
+
+    [Test]
+    public void TheWarmUps_StartDark_EndFull_AndAreFullAtOnceWithReducedMotion()
+    {
+        Assert.AreEqual(0f, HallDayCycle.WarmUp(-1f, 0.6f, false), "off");
+        Assert.Less(HallDayCycle.WarmUp(0.02f, 0.6f, false), 0.5f, "a dim blink first");
+        Assert.Less(HallDayCycle.WarmUp(0.2f, 0.6f, false), HallDayCycle.WarmUp(0.4f, 0.6f, false), "then easing up");
+        Assert.AreEqual(1f, HallDayCycle.WarmUp(0.6f, 0.6f, false));
+        Assert.AreEqual(1f, HallDayCycle.WarmUp(0.01f, 0.6f, true));
+
+        Assert.AreEqual(0f, HallDayCycle.Neon(-1f, false));
+        Assert.AreEqual(0f, HallDayCycle.Neon(0.08f, false), "the neon stutters off");
+        Assert.AreEqual(1f, HallDayCycle.Neon(HallDayCycle.NeonSeconds, false));
+        Assert.AreEqual(1f, HallDayCycle.Neon(0.08f, true));
+
+        Assert.AreEqual(0f, HallDayCycle.Surge(-1f, 1.2f, false));
+        Assert.AreEqual(HallDayCycle.SurgePeak, HallDayCycle.Surge(0.48f, 1.2f, false), Tolerance, "the portal surges past full");
+        Assert.AreEqual(1f, HallDayCycle.Surge(1.2f, 1.2f, false), Tolerance, "and settles");
+        Assert.AreEqual(1f, HallDayCycle.Surge(0.1f, 1.2f, true));
+    }
+
+    [Test]
     public void InvalidSettings_AreRepaired_SoTheCycleStillRuns()
     {
         var odd = new HallDayCycle.Settings(18f, 6f, -1f, 2f, 0f, -3f);

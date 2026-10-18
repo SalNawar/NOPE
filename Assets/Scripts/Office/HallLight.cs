@@ -68,10 +68,17 @@ public sealed class HallLight : MonoBehaviour
     /// <summary>A fixture's lit share this frame as the rig set it (its schedule level from `fixtureOffShare` to 1, times the strike flicker; 0 while the rig's lighting is off): the painted diffusers glow by it (HallMountedFixture, HallBakedLighting).</summary>
     internal float Lit;
 
+    /// <summary>True for a gallery lamp drawn among the art's layers (a fixture with a HallMountedFixture beside it): the night's hall-fixtures stage, after the ceiling's.</summary>
+    internal bool Mounted;
+
+    /// <summary>Its place among the lights of its night stage (by name), so they come on one after another (the rig sets it when it gathers its lights).</summary>
+    internal int StageIndex;
+
     /// <summary>Finds the light beside it (the rig calls it once when it gathers its lights).</summary>
     internal void Bind()
     {
         Light2D = GetComponent<Light2D>();
         Light3D = GetComponent<Light>();
+        Mounted = GetComponent<HallMountedFixture>() != null;
     }
 }

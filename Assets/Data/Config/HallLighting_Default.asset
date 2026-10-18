@@ -365,15 +365,27 @@ MonoBehaviour:
   shaftAngleAtSunset: 6
   shaftLowSunLength: 1
   fixtureColour: {r: 1, g: 0.79, b: 0.54, a: 1}
-  fixturesOnBelow: 0.6
+  fixturesOnBelow: 0.8
   fixtureFadeBand: 0.1
   fixtureStaggerMinutes: 4
   fixtureOffShare: 0
   fixtureFlicker: 1
   screenDayShare: 0.15
   signDayShare: 0.1
-  deskLampDayShare: 0.35
+  deskLampDayShare: 0
   deskScreenDayShare: 0.4
+  deskLampOnAt: 0.1
+  deskLampWarmSeconds: 0.6
+  galleryLampsOnAt: 0.4
+  galleryLampStaggerMinutes: 6
+  signsOnAt: 0.55
+  signStaggerMinutes: 3
+  portalNightAt: 0.7
+  portalNightStaggerMinutes: 2
+  portalNightSurgeSeconds: 1.2
+  cityWindowsFrom: 0.15
+  cityWindowsTo: 0.95
+  cityWindowsGain: 0.9
   portalOpenLight: {r: 0.35, g: 0.85, b: 1, a: 1}
   returnGateLight: {r: 1, g: 0.62, b: 0.25, a: 1}
   portalFadeSeconds: 0.8

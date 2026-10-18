@@ -96,18 +96,52 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>True: a fixture blinks for a moment as it strikes (never with reduced motion).</summary>
     public bool fixtureFlicker = true;
 
-    [Header("Always on: screens, signs, the desk lamp and the PC")]
+    [Header("Screens, signs, the desk lamp and the PC (the signs and the lamp switch on at their night stage)")]
     /// <summary>The share of their strength the hall's screens (the board, the vending machine, the small displays) give by day (their glow hardly reads in full daylight); full at night.</summary>
     [Range(0f, 1f)] public float screenDayShare = 0.15f;
 
-    /// <summary>The same for the lit signs (the department doors' panels, the alarm lamps).</summary>
+    /// <summary>The share of their strength the lit signs (the department doors' panels, the alarm lamps) give before their night stage (signsOnAt); full after it.</summary>
     [Range(0f, 1f)] public float signDayShare = 0.1f;
 
-    /// <summary>The same for the desk lamp (a 3D light on the preserved desk).</summary>
+    /// <summary>The share of its strength the desk lamp (a 3D light on the preserved desk) gives before its night stage (deskLampOnAt; 0: off by day); full after it.</summary>
     [Range(0f, 1f)] public float deskLampDayShare = 0.35f;
 
     /// <summary>The same for the PC screen's glow on the desk (a 3D light).</summary>
     [Range(0f, 1f)] public float deskScreenDayShare = 0.4f;
+
+    [Header("Night stages (Saleh 1018a: \"need more lights to activate as it gets darker\"; the evening: 0 by day, 1 at night)")]
+    /// <summary>The evening at which the desk lamp switches on (the first light of the night; before it, deskLampDayShare).</summary>
+    [Range(0f, 1f)] public float deskLampOnAt = 0.1f;
+
+    /// <summary>Seconds the desk lamp's filament takes to warm up (a dim blink, then easing up; at once with reduced motion).</summary>
+    [Range(0f, 3f)] public float deskLampWarmSeconds = 0.6f;
+
+    /// <summary>The evening at which the gallery's mounted lamps switch on, after the ceiling fixtures (fixturesOnBelow), one after another.</summary>
+    [Range(0f, 1f)] public float galleryLampsOnAt = 0.4f;
+
+    /// <summary>In-game minutes between one gallery lamp and the next.</summary>
+    [Range(0f, 30f)] public float galleryLampStaggerMinutes = 6f;
+
+    /// <summary>The evening at which the lit signs switch from their day share to full, each with a neon stutter.</summary>
+    [Range(0f, 1f)] public float signsOnAt = 0.55f;
+
+    /// <summary>In-game minutes between one sign and the next.</summary>
+    [Range(0f, 30f)] public float signStaggerMinutes = 3f;
+
+    /// <summary>The evening at which the open portals' vortexes surge to their night brightness (PortalVortexTuning.nightBoost), one ring after another by number.</summary>
+    [Range(0f, 1f)] public float portalNightAt = 0.7f;
+
+    /// <summary>In-game minutes between one portal's night surge and the next.</summary>
+    [Range(0f, 30f)] public float portalNightStaggerMinutes = 2f;
+
+    /// <summary>Seconds a portal's night surge takes (past full, then settling; at once with reduced motion).</summary>
+    [Range(0f, 5f)] public float portalNightSurgeSeconds = 1.2f;
+
+    /// <summary>The evening at which the city's first windows light, and the one at which the last does (each window between, at its own moment, with a blink; the hall windows' and the city view's living city).</summary>
+    [Range(0f, 1f)] public float cityWindowsFrom = 0.15f, cityWindowsTo = 0.95f;
+
+    /// <summary>How bright a lit city window is added over the painting.</summary>
+    [Range(0f, 2f)] public float cityWindowsGain = 0.9f;
 
     [Header("Portal rings (their state: AnimeHallPortalLink)")]
     /// <summary>The light an open departure portal throws around its ring.</summary>
