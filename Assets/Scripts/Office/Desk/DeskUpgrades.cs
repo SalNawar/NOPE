@@ -62,6 +62,30 @@ public sealed class DeskUpgrades : MonoBehaviour
 
     private InvestigationUIController _investigation;
 
+    /// <summary>The lens stand's footprint on the mat (the corners of everything drawn under it, its magnifiers at rest), so no paper is laid over it; false while it is not on the desk.</summary>
+    public bool TryLensFootprint(out Vector3[] corners)
+    {
+        corners = null;
+        if (lensKit == null || !lensKit.isActiveAndEnabled)
+            return false;
+        Bounds b = default;
+        bool any = false;
+        foreach (Renderer r in lensKit.GetComponentsInChildren<Renderer>(false))
+        {
+            if (!r.enabled || r.GetComponent<TMPro.TMP_Text>() != null || r.GetComponentInParent<DeskMagnifier>() is DeskMagnifier m && m.Magnifying)
+                continue;
+            if (any)
+                b.Encapsulate(r.bounds);
+            else
+                b = r.bounds;
+            any = true;
+        }
+        if (!any)
+            return false;
+        corners = new[] { new Vector3(b.min.x, b.min.y, b.min.z), new Vector3(b.max.x, b.min.y, b.min.z), new Vector3(b.min.x, b.min.y, b.max.z), new Vector3(b.max.x, b.min.y, b.max.z) };
+        return true;
+    }
+
     /// <summary>The objects on the desk today (the binder keeps them clear of the scanner; the probes read them).</summary>
     public IEnumerable<Component> Shown
     {
@@ -229,11 +253,20 @@ public sealed class DeskUpgrades : MonoBehaviour
         }
     }
 
-    /// <summary>The traveller left: the rack's pilot goes out.</summary>
+    /// <summary>The traveller left: the rack's pilot goes out, a held magnifier goes back to its stand.</summary>
     public void EndCase()
     {
         if (babelRack != null)
             babelRack.SetSpeaker(-1);
+        if (lensKit != null)
+            lensKit.Release();
+    }
+
+    /// <summary>Wires the objects that work with the desk machines' hub (DeskHardware, at its wake): the lens stand's magnifiers read the papers' microprint.</summary>
+    public void BindHardware(DeskHardware hardware)
+    {
+        if (lensKit != null)
+            lensKit.Bind(hardware);
     }
 
     /// <summary>A traveller went through portal <paramref name="portal"/>: the panel's lamp flashes.</summary>
@@ -278,14 +311,23 @@ public sealed class DeskUpgrades : MonoBehaviour
     /// yaw, at DeskConfigSO.upgradeScale; the laid roots are added to
     /// <paramref name="laid"/>.
     /// </summary>
-    public void Lay(CinemachineCamera office, float aspect, float deskTop, List<Transform> laid)
+    public void Lay(CinemachineCamera office, float aspect, float deskTop, Vector3 deskCentre, List<Transform> laid)
     {
         if (config == null || office == null)
             return;
+        if (lensKit != null)
+        {
+            // The lens stand lies on the mat, inside the reading view (as the UV torch's cradle), from the desk's centre.
+            Vector3 level = Vector3.ProjectOnPlane(office.transform.forward, Vector3.up);
+            level = level.sqrMagnitude > 1e-6f ? level.normalized : Vector3.forward;
+            Vector3 right = Vector3.Cross(Vector3.up, level);
+            Vector3 at = new Vector3(deskCentre.x, deskTop, deskCentre.z) + right * config.lensKitAt.x + level * config.lensKitAt.y;
+            lensKit.transform.SetPositionAndRotation(at, Quaternion.AngleAxis(config.lensKitYaw, Vector3.up) * Quaternion.LookRotation(level, Vector3.up));
+            Placed(lensKit, laid);
+        }
         LayOne(crate, office, aspect, deskTop, config.supplyCrateView, config.supplyCrateYaw, laid);
         LayOne(protocolRing, office, aspect, deskTop, config.protocolRingView, config.protocolRingYaw, laid);
         LayOne(babelRack, office, aspect, deskTop, config.babelRackView, config.babelRackYaw, laid);
-        LayOne(lensKit, office, aspect, deskTop, config.lensKitView, config.lensKitYaw, laid);
         LayOne(rolodex, office, aspect, deskTop, config.rolodexView, config.rolodexYaw, laid);
         LayOne(ringPanel, office, aspect, deskTop, config.ringPanelView, config.ringPanelYaw, laid);
         if (crate != null)
@@ -296,6 +338,12 @@ public sealed class DeskUpgrades : MonoBehaviour
     {
         if (prop == null || !DeskLay.Lay(prop.transform, office, aspect, deskTop, view, yaw))
             return;
+        Placed(prop, laid);
+    }
+
+    /// <summary>A laid object takes its size (DeskConfigSO.upgradeScale; one still waiting for the crate pops to it) and joins <paramref name="laid"/>.</summary>
+    private void Placed(Component prop, List<Transform> laid)
+    {
         Vector3 scale = Vector3.one * config.upgradeScale;
         int waiting = _appear.IndexOf(prop.transform);
         if (waiting >= 0)

@@ -46,6 +46,7 @@ public sealed class DeskHardware : MonoBehaviour
     private readonly Dictionary<(Texture, int, bool), Material> _marks = new Dictionary<(Texture, int, bool), Material>();
     private readonly Dictionary<TMP_FontAsset, Material> _texts = new Dictionary<TMP_FontAsset, Material>();
     private readonly List<UvPaperLayer> _layers = new List<UvPaperLayer>();
+    private readonly List<MicroPaperLayer> _micro = new List<MicroPaperLayer>();
     private bool _uvUsed, _chipUsed;
 
     /// <summary>What the machines have read of the current case.</summary>
@@ -108,6 +109,8 @@ public sealed class DeskHardware : MonoBehaviour
             uvTorch.Bind(this);
         if (chipReader != null)
             chipReader.Bind(this);
+        if (upgrades != null)
+            upgrades.BindHardware(this);
     }
 
     /// <summary>
@@ -136,6 +139,7 @@ public sealed class DeskHardware : MonoBehaviour
         Hidden = hidden ?? CaseHidden.None;
         Readings.Clear();
         _layers.Clear();
+        _micro.Clear();
         if (chipReader != null)
             chipReader.ResetCase();
         if (upgrades != null)
@@ -150,18 +154,39 @@ public sealed class DeskHardware : MonoBehaviour
         if (uvTorch != null)
             uvTorch.Release();
         _layers.Clear();
+        _micro.Clear();
         if (upgrades != null)
             upgrades.EndCase();
     }
 
-    /// <summary>A paper handed over at the desk: its UV layer (the case's marks for it).</summary>
-    public void PaperAdded(DeskDocument paper)
+    /// <summary>A paper handed over at the desk (form <paramref name="formNumber"/>): its UV layer (the case's marks for it) and, when its form prints one, its microprint line (the desk machines spec §10).</summary>
+    public void PaperAdded(DeskDocument paper, string formNumber)
     {
         if (paper == null)
             return;
         UvPaperLayer layer = paper.gameObject.AddComponent<UvPaperLayer>();
         layer.Build(paper, this, Hidden.Marks(paper.Index));
         _layers.Add(layer);
+        MicroLine? line = Hidden.MicroOf(paper.Index);
+        if (!line.HasValue)
+            return;
+        MicroPaperLayer micro = paper.gameObject.AddComponent<MicroPaperLayer>();
+        micro.Build(paper, this, line.Value, formNumber);
+        _micro.Add(micro);
+    }
+
+    /// <summary>A magnifier this frame (DeskMagnifier; the desk machines spec §10): every paper's microprint line counts how long it has been readable under it (MicroPaperLayer.Track); <paramref name="toLens"/> takes a desk point into the lens's frame (null, or <paramref name="on"/> false: nothing magnified).</summary>
+    public void TrackLens(Func<Vector3, Vector2> toLens, LensShape shape, float halfWidth, float halfHeight, bool on, float dt)
+    {
+        for (int i = _micro.Count - 1; i >= 0; i--)
+        {
+            if (_micro[i] == null)
+            {
+                _micro.RemoveAt(i);
+                continue;
+            }
+            _micro[i].Track(toLens ?? (p => new Vector2(1e6f, 1e6f)), shape, halfWidth, halfHeight, on && toLens != null, dt);
+        }
     }
 
     /// <summary>Inspect mode on or off.</summary>
@@ -245,7 +270,7 @@ public sealed class DeskHardware : MonoBehaviour
             laid.Add(uvTorch.transform);
         }
         if (upgrades != null)
-            upgrades.Lay(office, aspect, deskTop, laid);
+            upgrades.Lay(office, aspect, deskTop, deskCentre, laid);
         return laid;
     }
 
@@ -271,6 +296,13 @@ public sealed class DeskHardware : MonoBehaviour
             return false;
         corners = new[] { new Vector3(b.min.x, b.min.y, b.min.z), new Vector3(b.max.x, b.min.y, b.min.z), new Vector3(b.min.x, b.min.y, b.max.z), new Vector3(b.max.x, b.min.y, b.max.z) };
         return true;
+    }
+
+    /// <summary>The lens stand's footprint on the mat (DeskUpgrades.TryLensFootprint), so no paper is laid over it.</summary>
+    public bool TryLensFootprint(out Vector3[] corners)
+    {
+        corners = null;
+        return upgrades != null && upgrades.TryLensFootprint(out corners);
     }
 
     /// <summary>The UV torch's first-day note (the binder lays it over the torch).</summary>

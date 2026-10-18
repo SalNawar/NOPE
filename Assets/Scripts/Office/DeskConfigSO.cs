@@ -290,11 +290,11 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <inheritdoc cref="babelRackView"/>
     public float babelRackYaw = 6f;
 
-    /// <summary>Where the Translation Lens's stand stands (viewport at 16:9) and its turn: at the desk's front left, between the PC and the mat.</summary>
-    public Vector2 lensKitView = new Vector2(0.27f, 0.115f);
+    /// <summary>Where the Translation Lens's stand stands: from the desk's centre (the mat's), metres to the right and away from the chair in the office view's frame (uvTorchAt's way), and its turn (degrees). On the mat's left, inside the reading view, so its magnifiers are taken up wherever the papers are read (the desk machines spec §10; the LAY track may move it, inside the reading view); papers keep clear of it.</summary>
+    public Vector2 lensKitAt = new Vector2(-0.38f, 0.06f);
 
-    /// <inheritdoc cref="lensKitView"/>
-    public float lensKitYaw = 18f;
+    /// <inheritdoc cref="lensKitAt"/>
+    public float lensKitYaw = 10f;
 
     /// <summary>Where the Diplomatic Contacts' Rolodex stands (viewport at 16:9) and its turn: right of the chip reader.</summary>
     public Vector2 rolodexView = new Vector2(0.73f, 0.215f);

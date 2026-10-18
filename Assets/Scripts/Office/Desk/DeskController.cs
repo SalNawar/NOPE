@@ -456,7 +456,7 @@ public sealed class DeskController : MonoBehaviour
         _stack.Add(i);
         ApplyStack();
         if (hardware != null)
-            hardware.PaperAdded(paper);
+            hardware.PaperAdded(paper, _documents[i] != null ? _documents[i].formNumber : null);
 
         Vector3 target = counter != null ? counter.Spot(_handedOver) : surface.transform.position;
         _handedOver++;
@@ -940,6 +940,9 @@ public sealed class DeskController : MonoBehaviour
         // The UV torch's cradle on the mat's corner (the desk machines spec §1): no paper lies over it either.
         if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
             (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(cradle), desk);
+        // The lens stand on the mat's left (the desk machines spec §10): none over it either.
+        if (hardware != null && hardware.TryLensFootprint(out Vector3[] stand))
+            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(stand), desk);
         if (Mathf.Approximately(x, sheet.CentreX) && Mathf.Approximately(y, sheet.CentreY))
             return at;
         Vector3 moved = at + _viewRight * (x - sheet.CentreX) + _viewForward * (y - sheet.CentreY);
