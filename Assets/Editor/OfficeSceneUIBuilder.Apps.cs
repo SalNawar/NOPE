@@ -285,7 +285,7 @@ public static partial class OfficeSceneUIBuilder
         Transform column = Panel(win, "Column", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(column, Vector2.zero, Vector2.one, new Vector2(PcSize.L + 8f, PcSize.L), new Vector2(-(PcSize.L + 8f), -(config.titleBarHeight + PcSize.M)));
         VerticalLayoutGroup layout = GetOrAdd<VerticalLayoutGroup>(column.gameObject);
-        layout.spacing = 6f;
+        layout.spacing = 3f; // tight: every row, the locked language line and the note fit in the culture fonts' taller lines (CJK)
         layout.childAlignment = TextAnchor.UpperLeft;
         layout.childControlWidth = true;
         layout.childControlHeight = true;
@@ -363,7 +363,7 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text note = Text(column, "NoteText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
                              ThemeRoleId.WindowBody, "settings.note");
         Chrome(note, PcType.Caption, true);
-        note.margin = new Vector4(0f, PcSize.M, 0f, 0f);
+        note.margin = new Vector4(0f, PcSize.S / 2f, 0f, 0f);
         note.raycastTarget = false;
 
         // The shortcut card (F1; OfficeSceneUIBuilder.Keys), rebuilt fresh, so it keeps its place after the rebuilt windows.
