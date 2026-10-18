@@ -1170,6 +1170,18 @@ MonoBehaviour:
     text: "\u30AA\u30F3"
     gloss: 0
     tier: 0
+  - key: settings.machineCloseUps
+    text: "\u6A5F\u68B0\u306E\u30AF\u30ED\u30FC\u30BA\u30A2\u30C3\u30D7"
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOn
+    text: "\u30AA\u30F3"
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOff
+    text: "\u30AA\u30D5"
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\u30A2\u30A4\u30B3\u30F3\u3092\u958B\u304F\u64CD\u4F5C"
     gloss: 0
@@ -1358,7 +1370,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: "\u30B9\u30BF\u30F3\u30D7\u306E\u5F15\u304D\u51FA\u3057 (\u4E0A\u306E\u30BF\u30D6):
+    text: "\u30B9\u30BF\u30F3\u30D7\u30E9\u30C3\u30AF (\u30AB\u30A6\u30F3\u30BF\u30FC\u306E\u6A2A):
       \u30B9\u30BF\u30F3\u30D7\u3092\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u30C9\u30E9\u30C3\u30B0\u3057\u3066\u653E\u3059"
     gloss: 0
     tier: 0
@@ -2755,6 +2767,14 @@ MonoBehaviour:
     text: "\u66F8\u985E\u3092\u6D17\u6D44\u3057\u3066\u4E0A\u304B\u3089\u5370\u5B57\u3057\u3066\u306F\u306A\u3089\u306A\u3044\u3002"
     gloss: 0
     tier: 0
+  - key: citation.rule.micro
+    text: "\u66F8\u985E\u306E\u30DE\u30A4\u30AF\u30ED\u5370\u5237\u306F\u5E02\u6C11ID\u3092\u7E70\u308A\u8FD4\u3057\u3066\u3044\u306A\u3051\u308C\u3070\u306A\u3089\u306A\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.label.micro
+    text: "\u305D\u306E\u30DE\u30A4\u30AF\u30ED\u5370\u5237"
+    gloss: 0
+    tier: 0
   - key: citation.rule.origin
     text: "\u6F02\u6D41\u8005\u306F\u81EA\u5206\u306E\u6642\u4EE3\u306B\u306E\u307F\u5E30\u9084\u3059\u308B:
       \u66F8\u985E\u3068\u56DE\u7B54\u306F\u51FA\u8EAB\u3068\u4E00\u81F4\u3059\u308B\u3053\u3068\u3002"
@@ -4005,6 +4025,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u7E70\u308A\u8FD4\u3057\u3066"
+    english: repeat
   - native: "\u8CB7\u3046"
     english: buy
   - native: "\u58F2\u3063"
@@ -5891,3 +5913,11 @@ MonoBehaviour:
     english: understanding
   - native: "\u304D\u307E\u305B\u3093"
     english: cannot
+  - native: "\u30AF\u30ED\u30FC\u30BA\u30A2\u30C3\u30D7"
+    english: close-up
+  - native: "\u30E9\u30C3\u30AF"
+    english: rack
+  - native: "\u6A2A"
+    english: beside
+  - native: "\u3044\u306A\u3051\u308C\u3070\u306A\u3089\u306A\u3044"
+    english: must

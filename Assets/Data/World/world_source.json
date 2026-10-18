@@ -37681,6 +37681,30 @@
           {
             "native": "تفهمها",
             "english": "understand it"
+          },
+          {
+            "native": "لقطات",
+            "english": "shots"
+          },
+          {
+            "native": "قريبة",
+            "english": "close"
+          },
+          {
+            "native": "للآلات",
+            "english": "of the machines"
+          },
+          {
+            "native": "حامل",
+            "english": "rack"
+          },
+          {
+            "native": "بجانب",
+            "english": "beside"
+          },
+          {
+            "native": "الطباعة",
+            "english": "the printing"
           }
         ]
       },
@@ -41665,10 +41689,6 @@
           {
             "native": "επαναλαμβάνει",
             "english": "repeat"
-          },
-          {
-            "native": "μικροτύπωμά",
-            "english": "microprint"
           },
           {
             "native": "Αγορά",
@@ -45689,6 +45709,26 @@
           {
             "native": "κατάλαβες",
             "english": "you understood"
+          },
+          {
+            "native": "Κοντινά",
+            "english": "close"
+          },
+          {
+            "native": "πλάνα",
+            "english": "shots"
+          },
+          {
+            "native": "μηχανών",
+            "english": "of the machines"
+          },
+          {
+            "native": "θήκη",
+            "english": "case"
+          },
+          {
+            "native": "δίπλα",
+            "english": "beside"
           }
         ]
       },
@@ -53813,6 +53853,26 @@
           {
             "native": "capita",
             "english": "understood"
+          },
+          {
+            "native": "Primi",
+            "english": "close"
+          },
+          {
+            "native": "piani",
+            "english": "shots"
+          },
+          {
+            "native": "macchine",
+            "english": "machines"
+          },
+          {
+            "native": "portatimbri",
+            "english": "stamp rack"
+          },
+          {
+            "native": "accanto",
+            "english": "beside"
           }
         ]
       },
@@ -62165,6 +62225,22 @@
           {
             "native": "übersetzt",
             "english": "translated"
+          },
+          {
+            "native": "Maschinen",
+            "english": "machines"
+          },
+          {
+            "native": "Nahaufnahmen",
+            "english": "close-ups"
+          },
+          {
+            "native": "Stempelständer",
+            "english": "stamp rack"
+          },
+          {
+            "native": "neben",
+            "english": "beside"
           }
         ]
       },
@@ -69869,6 +69945,18 @@
           {
             "native": "没听懂",
             "english": "did not understand"
+          },
+          {
+            "native": "特写",
+            "english": "close-up"
+          },
+          {
+            "native": "架",
+            "english": "rack"
+          },
+          {
+            "native": "旁",
+            "english": "beside"
           }
         ]
       },
@@ -77625,6 +77713,22 @@
           {
             "native": "きません",
             "english": "cannot"
+          },
+          {
+            "native": "クローズアップ",
+            "english": "close-up"
+          },
+          {
+            "native": "ラック",
+            "english": "rack"
+          },
+          {
+            "native": "横",
+            "english": "beside"
+          },
+          {
+            "native": "いなければならない",
+            "english": "must"
           }
         ]
       }

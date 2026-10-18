@@ -1244,7 +1244,7 @@ MonoBehaviour:
   - key: settings.languageLocked
     text: "\u0645\u0642\u0641\u0644\u0629 \u0645\u0646\u0630 \u0627\u0644\u064A\u0648\u0645
       {0}: \u0627\u0644\u0645\u0643\u062A\u0628 \u064A\u0642\u0631\u0623 \u0644\u063A\u0629
-      \u0627\u0644\u0639\u0627\u0644\u0645 \u0627\u0644\u0622\u0646. \u0645\u0631\u0631
+      \u0627\u0644\u0639\u0627\u0644\u0645 \u0627\u0644\u0622\u0646.\n\u0645\u0631\u0631
       \u0627\u0644\u0645\u0624\u0634\u0631 \u0641\u0648\u0642 \u0643\u0644\u0645\u0629
       \u0644\u062A\u0631\u062C\u0645\u062A\u0647\u0627 (\u0639\u062F\u0633\u0629
       \u0627\u0644\u062A\u0631\u062C\u0645\u0629)."
@@ -1276,6 +1276,18 @@ MonoBehaviour:
     tier: 0
   - key: settings.cameraSwayOn
     text: "\u062A\u0634\u063A\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUps
+    text: "\u0644\u0642\u0637\u0627\u062A \u0642\u0631\u064A\u0628\u0629 \u0644\u0644\u0622\u0644\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOn
+    text: "\u062A\u0634\u063A\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOff
+    text: "\u0625\u064A\u0642\u0627\u0641"
     gloss: 0
     tier: 0
   - key: settings.desktop
@@ -1537,10 +1549,9 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: "\u062F\u0631\u062C \u0627\u0644\u0623\u062E\u062A\u0627\u0645 (\u0627\u0644\u0644\u0633\u0627\u0646
-      \u0641\u064A \u0627\u0644\u0623\u0639\u0644\u0649): \u0627\u0633\u062D\u0628
-      \u062E\u062A\u0645\u0627 \u0625\u0644\u0649 \u0627\u0644\u062C\u0648\u0627\u0632
-      \u0648\u0623\u0641\u0644\u062A\u0647"
+    text: "\u062D\u0627\u0645\u0644 \u0627\u0644\u0623\u062E\u062A\u0627\u0645 (\u0628\u062C\u0627\u0646\u0628
+      \u0627\u0644\u0637\u0627\u0648\u0644\u0629): \u0627\u0633\u062D\u0628 \u062E\u062A\u0645\u0627
+      \u0625\u0644\u0649 \u0627\u0644\u062C\u0648\u0627\u0632 \u0648\u0623\u0641\u0644\u062A\u0647"
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -3086,6 +3097,16 @@ MonoBehaviour:
       \u0648\u0631\u0642\u0629 \u0648\u0627\u0644\u0637\u0628\u0627\u0639\u0629 \u0641\u0648\u0642\u0647\u0627."
     gloss: 0
     tier: 0
+  - key: citation.rule.micro
+    text: "\u064A\u062C\u0628 \u0623\u0646 \u062A\u0643\u0631\u0631 \u0627\u0644\u0637\u0628\u0627\u0639\u0629
+      \u0627\u0644\u062F\u0642\u064A\u0642\u0629 \u0644\u0644\u0648\u0631\u0642\u0629
+      \u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0627\u0637\u0646."
+    gloss: 0
+    tier: 0
+  - key: citation.label.micro
+    text: "\u0637\u0628\u0627\u0639\u062A\u0647\u0627 \u0627\u0644\u062F\u0642\u064A\u0642\u0629"
+    gloss: 0
+    tier: 0
   - key: citation.rule.origin
     text: "\u0627\u0644\u0646\u0627\u0632\u062D\u0648\u0646 \u064A\u0639\u0648\u062F\u0648\u0646
       \u0625\u0644\u0649 \u0632\u0645\u0646\u0647\u0645 \u0641\u0642\u0637: \u064A\u062C\u0628
@@ -4459,6 +4480,14 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u062A\u0643\u0631\u0631"
+    english: repeat
+  - native: "\u0627\u0644\u062F\u0642\u064A\u0642\u0629"
+    english: fine / micro
+  - native: "\u0637\u0628\u0627\u0639\u062A\u0647\u0627"
+    english: its print
+  - native: "\u0644\u0644\u0648\u0631\u0642\u0629"
+    english: of the paper
   - native: "\u0627\u0634\u062A\u0631"
     english: buy
   - native: "\u0644\u0644\u0628\u064A\u0639"
@@ -6737,3 +6766,15 @@ MonoBehaviour:
     english: answer
   - native: "\u062A\u0641\u0647\u0645\u0647\u0627"
     english: understand it
+  - native: "\u0644\u0642\u0637\u0627\u062A"
+    english: shots
+  - native: "\u0642\u0631\u064A\u0628\u0629"
+    english: close
+  - native: "\u0644\u0644\u0622\u0644\u0627\u062A"
+    english: of the machines
+  - native: "\u062D\u0627\u0645\u0644"
+    english: rack
+  - native: "\u0628\u062C\u0627\u0646\u0628"
+    english: beside
+  - native: "\u0627\u0644\u0637\u0628\u0627\u0639\u0629"
+    english: the printing

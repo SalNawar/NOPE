@@ -13612,6 +13612,23 @@ MonoBehaviour:
         then:
           id: 
           text: 
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: ReprintedPaper
+        outcome: 0
+        line:
+          id: interview.voices.slips.stickler.4
+          text: The ticket's been through a few hands. All of them mine, of course.
+        then:
+          id: 
+          text: 
       - personality: anxious
         premade: 
         kinds: 
@@ -17862,11 +17879,105 @@ MonoBehaviour:
       against: "the UV torch \xB7 the ghost under the name"
       note: 'Someone else''s Work Permit, washed and printed over: under UV the first
         holder''s name ghosts beneath the traveller''s.'
+    - id: reprintedTicket
+      form: TC-230
+      field: CitizenId
+      lie: ReprintedPaper
+      directive: 
+      variant: reprinted
+      optional: 0
+      against: "the lens stand's loupe \xB7 the microprint along the foot"
+      note: 'Someone else''s Entry Ticket, its print changed to the traveller''s
+        own true details: the microprint along its foot still repeats the first holder''s
+        Citizen ID.'
+    - id: reprintedPermit
+      form: TC-520
+      field: CitizenId
+      lie: ReprintedPaper
+      directive: 
+      variant: reprinted
+      optional: 0
+      against: "the lens stand's loupe \xB7 the microprint along the foot"
+      note: 'Someone else''s Work Permit, reprinted with the traveller''s own true
+        details: its microprint still repeats the first holder''s Citizen ID.'
     hidden:
       chipForms:
       - TC-101
       - TC-240
       ghostChance: 0.5
+      microForms:
+      - TC-101
+      - TC-230
+      - TC-310
+      - TC-520
+    contacts:
+    - id: seals
+      name: Ama Okoro
+      post: Seal Registry, night desk
+      lies:
+      - ForgedSeal
+      tip: A seal press walked out of our stores last week. Expect one of its seals
+        on papers headed for {place}.
+      quiet: Every press is back in its drawer. The seals should be clean today.
+    - id: photos
+      name: Teodor Vance
+      post: Portrait Bureau, Hall B
+      lies:
+      - SwappedPhoto
+      tip: Someone bought a face that isn't theirs. Look twice at whoever claims
+        {place}.
+      quiet: Nobody has been trading faces this week. Not that I've seen.
+    - id: records
+      name: Mira Castellane
+      post: Citizen Accounts, records annex
+      lies:
+      - DoctoredIdentity
+      - PoorPosingAsRich
+      - DebtorPosingAsTourist
+      tip: A doctored file is moving today. Hold the papers for {place} against the
+        Citizen Account.
+      quiet: The account books balance today. For once.
+    - id: labour
+      name: Joss Ferrante
+      post: Labour Exchange, Debt Relief desk
+      lies:
+      - ForgedContract
+      tip: A contract got sweetened on its way to your stamp. Read the wage on the
+        one bound for {place}.
+      quiet: Every contract I signed today is the contract I signed.
+    - id: waivers
+      name: Delphine Achterberg
+      post: Waiver Office, counter 4
+      lies:
+      - FakeWaiver
+      - ForgedProof
+      tip: There's a number out there nobody registered. It's on the papers for {place}.
+      quiet: No ghost numbers on my desk today.
+    - id: returns
+      name: Rahim Desai
+      post: Displacement Registry, intake
+      lies:
+      - FalseOrigin
+      - FakeDisplaced
+      tip: Someone is going 'home' to {place} who was never from there.
+      quiet: Every return I processed today checks out.
+    - id: customs
+      name: Nell Okonkwo-Price
+      post: Customs Intelligence, the basement
+      lies:
+      - Smuggling
+      tip: Somebody is carrying 2150 out to {place}. Ask them what they'll pay with.
+      quiet: Nothing is leaving that shouldn't. Today.
+    - id: machines
+      name: Ivo Marchetti
+      post: Bureau Engineering, chip room
+      lies:
+      - ClonedChip
+      - WashedPaper
+      - ReprintedPaper
+      tip: A doctored blank is on its way to {place}. Put it under the light, through
+        the reader and under the loupe.
+      quiet: The chip room is quiet. No clones on the wire today.
   home:
     radioUpgrade: house_radio
     radio:
@@ -18073,7 +18184,7 @@ MonoBehaviour:
         categories: 0a000000
         form: 
         target: rulebook
-        text: 'Practice: two routes are open today (the board). Press {inspect},
+        text: 'Practice: the board shows the routes open today. Press {inspect},
           click the Destination, then today''s rule.'
     - id: seals
       feature: book:Seal
@@ -18097,7 +18208,8 @@ MonoBehaviour:
       title: THE SCANNER AND THE INVESTIGATION APP
       named: scanner
       check: 'Every paper''s details: drop a paper on the scanner and its copy opens
-        in the Investigation app, new on your PC today ({pc}).'
+        in the Investigation app, new on your PC today ({pc}). The copy''s labels
+        always read in English, whatever language the paper prints in.'
       against: 'The traveller''s record in the app: the Citizen Account, or the Displacement
         Registry for the displaced.'
       fault: A birth date on the Passport that the record does not have.
@@ -18200,12 +18312,15 @@ MonoBehaviour:
       feature: tool:lens
       title: THE TRANSLATION LENS
       named: Translation Lens
-      check: 'Any word the office prints in the world''s language: on the PC, the
-        morning paper, a notice. Hover it and it flips into English.'
-      against: 'From today the language follows history: Settings no longer switches
-        it. Orders sells the lens''s Sentences and Objects.'
-      fault: 'Clicking a button you cannot read: hover it first.'
-      point: pc
+      check: 'Any word your desk prints in the world''s language: a paper''s labels,
+        the rulebook, the morning paper, a notice. Hover it and it flips into English.'
+      against: 'From today the desk''s language follows history: Settings no longer
+        switches it. The PC stays in English: scan a paper to read its copy cleanly.
+        Orders sells the lens''s Sentences and Objects. The lens stand''s loupe magnifies:
+        hold it over a paper''s foot to read its microprint, which repeats the holder''s
+        Citizen ID.'
+      fault: 'Stamping a paper you cannot read: hover its words first, or scan it.'
+      point: rulebook
       practice:
         id: 
         action: 0
@@ -18371,18 +18486,13 @@ MonoBehaviour:
       form: 
       target: calendar
       text: 'Click the Passport''s Valid Until, then the calendar: is it still valid?'
-    - id: stamps
-      action: 5
-      categories: 
-      form: 
-      target: stamps
-      text: Press {stamps} (or the STAMPS tab) to open the brass stamp drawer.
     - id: stamp
       action: 6
       categories: 
       form: 
-      target: paper:TC-101
-      text: 'Drag a stamp onto the Passport and let go: APPROVED or DENIED.'
+      target: stamp_rack
+      text: 'Drag a stamp from the rack onto the Passport and let go: APPROVED or
+        DENIED.'
     - id: handback
       action: 7
       categories: 

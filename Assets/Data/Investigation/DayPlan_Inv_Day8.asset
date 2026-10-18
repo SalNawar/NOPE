@@ -17,9 +17,10 @@ MonoBehaviour:
   shiftStartMinute: 780
   shiftEndMinute: 1260
   bulletin: 'NEW: Debt Relief labourers. They carry a registered Work Permit, an
-    Economy transponder and a signed Stranding Waiver. And from today the office
-    reads the world''s language: the Bureau issues you a Translation Lens. Hover
-    a word to read it.'
+    Economy transponder and a signed Stranding Waiver. And from today the papers
+    on your desk read the world''s language: the Bureau issues you a Translation
+    Lens. Hover a word to read it. Your PC stays in English: scan a paper to read
+    its copy cleanly.'
   papers:
   - TC-101
   - TC-230

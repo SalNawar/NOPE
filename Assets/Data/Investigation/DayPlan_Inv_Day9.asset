@@ -18,7 +18,9 @@ MonoBehaviour:
   shiftEndMinute: 1260
   bulletin: 'NEW: dress for the destination. Look at their clothes (the wheel''s
     Look menu): an item from another time or place causes a panic. Check it against
-    the Costume Guide on your shelf.'
+    the Costume Guide on your shelf. WARNING: reprinted tickets are about. A genuine
+    paper''s microprint, along its foot, repeats the holder''s Citizen ID: read it
+    under the loupe and click it against the box.'
   papers:
   - TC-101
   - TC-230
@@ -72,7 +74,7 @@ MonoBehaviour:
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 010000000200000006000000070000000a000000090000000c000000
+  lieKinds: 010000000200000006000000070000000a000000090000000c0000000d000000
   violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: 1576e3e3a476a1f4d88296c1c2951433, type: 2}

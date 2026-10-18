@@ -1178,6 +1178,18 @@ MonoBehaviour:
     text: Attivata
     gloss: 0
     tier: 0
+  - key: settings.machineCloseUps
+    text: Primi piani delle macchine
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOn
+    text: Attivati
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOff
+    text: Disattivati
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: Le icone del desktop si aprono con
     gloss: 0
@@ -1373,8 +1385,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: 'Il cassetto dei timbri (la linguetta in alto): trascina un timbro sul
-      passaporto e rilascialo'
+    text: 'Il portatimbri (accanto al bancone): trascina un timbro sul passaporto
+      e rilascialo'
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -2772,6 +2784,14 @@ MonoBehaviour:
     text: "Nessun documento pu\xF2 essere lavato e ristampato."
     gloss: 0
     tier: 0
+  - key: citation.rule.micro
+    text: La microstampa di un documento deve ripetere il suo ID cittadino.
+    gloss: 0
+    tier: 0
+  - key: citation.label.micro
+    text: La sua microstampa
+    gloss: 0
+    tier: 0
   - key: citation.rule.origin
     text: 'Gli sfollati tornano solo al proprio tempo: documenti e risposte devono
       corrispondere alla loro origine.'
@@ -4039,6 +4059,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: ripetere
+    english: repeat
   - native: Compra
     english: Buy
   - native: vendita
@@ -6109,3 +6131,13 @@ MonoBehaviour:
     english: you have it
   - native: capita
     english: understood
+  - native: Primi
+    english: close
+  - native: piani
+    english: shots
+  - native: macchine
+    english: machines
+  - native: portatimbri
+    english: stamp rack
+  - native: accanto
+    english: beside

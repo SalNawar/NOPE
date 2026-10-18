@@ -1167,6 +1167,18 @@ MonoBehaviour:
     text: "\u5F00"
     gloss: 0
     tier: 0
+  - key: settings.machineCloseUps
+    text: "\u673A\u5668\u7279\u5199"
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOn
+    text: "\u5F00"
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOff
+    text: "\u5173"
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "\u684C\u9762\u56FE\u6807\u6253\u5F00\u65B9\u5F0F"
     gloss: 0
@@ -1349,7 +1361,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: "\u5370\u7AE0\u62BD\u5C49\uFF08\u9876\u90E8\u7684\u6807\u7B7E\uFF09\uFF1A\u5C06\u5370\u7AE0\u62D6\u5230\u62A4\u7167\u4E0A\u518D\u677E\u5F00"
+    text: "\u5370\u7AE0\u67B6\uFF08\u67DC\u53F0\u65C1\uFF09\uFF1A\u5C06\u5370\u7AE0\u62D6\u5230\u62A4\u7167\u4E0A\u518D\u677E\u5F00"
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -2733,6 +2745,14 @@ MonoBehaviour:
     text: "\u4EFB\u4F55\u8BC1\u4EF6\u4E0D\u5F97\u6D17\u53BB\u540E\u91CD\u65B0\u5370\u5237\u3002"
     gloss: 0
     tier: 0
+  - key: citation.rule.micro
+    text: "\u8BC1\u4EF6\u7684\u5FAE\u7F29\u5370\u5237\u5FC5\u987B\u91CD\u590D\u5176\u516C\u6C11\u7F16\u53F7\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.label.micro
+    text: "\u5176\u5FAE\u7F29\u5370\u5237"
+    gloss: 0
+    tier: 0
   - key: citation.rule.origin
     text: "\u6D41\u79BB\u8005\u53EA\u80FD\u8FD4\u56DE\u81EA\u5DF1\u7684\u65F6\u4EE3\uFF1A\u5176\u8BC1\u4EF6\u4E0E\u56DE\u7B54\u5FC5\u987B\u4E0E\u539F\u7C4D\u4E00\u81F4\u3002"
     gloss: 0
@@ -3980,6 +4000,10 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u5FAE\u7F29\u5370\u5237"
+    english: microprint
+  - native: "\u91CD\u590D"
+    english: repeat
   - native: "\u8D2D\u4E70"
     english: buy
   - native: "\u51FA"
@@ -5838,3 +5862,9 @@ MonoBehaviour:
     english: understood
   - native: "\u6CA1\u542C\u61C2"
     english: did not understand
+  - native: "\u7279\u5199"
+    english: close-up
+  - native: "\u67B6"
+    english: rack
+  - native: "\u65C1"
+    english: beside

@@ -1177,6 +1177,18 @@ MonoBehaviour:
     text: An
     gloss: 0
     tier: 0
+  - key: settings.machineCloseUps
+    text: Maschinen-Nahaufnahmen
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOn
+    text: An
+    gloss: 0
+    tier: 0
+  - key: settings.machineCloseUpsOff
+    text: Aus
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "Desktop-Symbole \xF6ffnen mit"
     gloss: 0
@@ -1374,8 +1386,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: 'Die Stempelschublade (der Reiter oben): ziehe einen Stempel auf den Pass
-      und lass los'
+    text: "Der Stempelst\xE4nder (neben dem Schalter): ziehe einen Stempel auf den
+      Pass und lass los"
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -2765,6 +2777,14 @@ MonoBehaviour:
     tier: 0
   - key: citation.rule.uv
     text: "Kein Papier darf gewaschen und \xFCberdruckt werden."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.micro
+    text: "Der Mikrodruck eines Papiers muss seine B\xFCrger-ID wiederholen."
+    gloss: 0
+    tier: 0
+  - key: citation.label.micro
+    text: Sein Mikrodruck
     gloss: 0
     tier: 0
   - key: citation.rule.origin
@@ -6219,3 +6239,11 @@ MonoBehaviour:
     english: OK
   - native: "\xFCbersetzt"
     english: translated
+  - native: Maschinen
+    english: machines
+  - native: Nahaufnahmen
+    english: close-ups
+  - native: "Stempelst\xE4nder"
+    english: stamp rack
+  - native: neben
+    english: beside

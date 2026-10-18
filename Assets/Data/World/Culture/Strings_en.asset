@@ -1210,10 +1210,15 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: settings.languageLocked
-    text: 'Locked from day {0}: the office reads the world''s language now. Hover
-      a word to translate it (the Translation Lens).'
+    text: 'Locked from day {0}: the papers and labels on your desk read the world''s
+      language now; hover a word to translate it (the Translation Lens). The PC always
+      reads English: scan a paper to read its copy cleanly.'
     gloss: 0
     tier: 1
+  - key: settings.languageDesk
+    text: For the papers and labels on your desk. The PC always reads English.
+    gloss: 0
+    tier: 0
   - key: settings.motion
     text: Motion
     gloss: 0
@@ -1244,6 +1249,18 @@ MonoBehaviour:
     tier: 1
   - key: settings.cameraSwayOn
     text: On
+    gloss: 0
+    tier: 1
+  - key: settings.machineCloseUps
+    text: Machine close-ups
+    gloss: 0
+    tier: 1
+  - key: settings.machineCloseUpsOn
+    text: On
+    gloss: 0
+    tier: 1
+  - key: settings.machineCloseUpsOff
+    text: Off
     gloss: 0
     tier: 1
   - key: settings.desktop
@@ -1440,8 +1457,8 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: keys.desk.stamps
-    text: 'The stamp drawer (the tab at the top): drag a stamp onto the passport
-      and let go'
+    text: 'The stamp rack (beside the counter): drag a stamp onto the passport and
+      let go'
     gloss: 0
     tier: 1
   - key: keys.desk.pc
@@ -2541,6 +2558,10 @@ MonoBehaviour:
     text: Travel restriction in effect.
     gloss: 0
     tier: 1
+  - key: rule.openRepaired
+    text: 'Your repaired portals also run today: {0}.'
+    gloss: 0
+    tier: 0
   - key: desk.scanHint
     text: Drag a paper onto the scanner to open it on the PC.
     gloss: 0
@@ -2959,6 +2980,14 @@ MonoBehaviour:
     text: No paper may be washed and printed over.
     gloss: 0
     tier: 1
+  - key: citation.rule.micro
+    text: A paper's microprint must repeat its Citizen ID.
+    gloss: 0
+    tier: 1
+  - key: citation.label.micro
+    text: Its microprint
+    gloss: 0
+    tier: 1
   - key: citation.rule.origin
     text: 'The displaced return only to their own time: their papers and answers
       must match their origin.'
@@ -3180,6 +3209,10 @@ MonoBehaviour:
     text: '{0} {1}: no route today'
     gloss: 0
     tier: 1
+  - key: rolodex.card
+    text: "{0}, {1}:\n\u201C{2}\u201D"
+    gloss: 0
+    tier: 0
   - key: portals.date
     text: Routes for {0}
     gloss: 0
