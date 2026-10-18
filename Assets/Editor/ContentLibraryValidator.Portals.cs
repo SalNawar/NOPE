@@ -23,7 +23,8 @@ public static partial class ContentLibraryValidator
                 problems.Add($"{plan.name}: a Directorate route names no place.");
             var world = new HashSet<PlaceRef>(lib.TodaysProfiles(plan).Select(p => new PlaceRef(p.nation.id, p.era.id)));
             problems.AddRange(PortalSchedule.DayProblems(plan.name, portals, plan.PortalRequests(), world.Contains,
-                                                         place => plan.ClosureOf(lib.GetNationById(place.NationId), lib.GetEraById(place.EraId)) != null));
+                                                         place => plan.ClosureOf(lib.GetNationById(place.NationId), lib.GetEraById(place.EraId)) != null
+                                                                  || plan.UnlistedOf(lib.GetNationById(place.NationId), lib.GetEraById(place.EraId)) != null));
         }
 
         foreach (string problem in problems)

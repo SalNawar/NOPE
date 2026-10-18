@@ -184,9 +184,11 @@ public static class PortalSchedule
     /// breakdown rule goes here (SM2).
     /// </summary>
     public static bool InService(PortalSpec portal, int day, Func<string, bool> repaired) =>
-        portal != null &&
-        ((portal.fromDay > 0 && day >= portal.fromDay) ||
-         (!string.IsNullOrWhiteSpace(portal.repair) && repaired != null && repaired(portal.repair)));
+        portal != null && ((portal.fromDay > 0 && day >= portal.fromDay) || Repaired(portal, repaired));
+
+    /// <summary>True when <paramref name="repaired"/> owns <paramref name="portal"/>'s repair (a portal without one is never repaired).</summary>
+    public static bool Repaired(PortalSpec portal, Func<string, bool> repaired) =>
+        portal != null && !string.IsNullOrWhiteSpace(portal.repair) && repaired != null && repaired(portal.repair);
 
     /// <summary>The default departures portal: the first departures portal (by number) in service from day 1 by itself; 0 when none.</summary>
     public static int DefaultPortal(IReadOnlyList<PortalSpec> portals) =>
@@ -201,11 +203,20 @@ public static class PortalSchedule
     /// not; a departure portal in service runs the first of
     /// <paramref name="requests"/> for it (today the Directorate's routes; the
     /// clerk's requests join here, SM1), marked CLOSED with the line
-    /// <paramref name="closure"/> gives for its place (null: open); a portal
-    /// under maintenance and the Returns portal run nothing. Pure, no draw.
+    /// <paramref name="closure"/> gives for its place (a ban naming it; null:
+    /// open); a portal under maintenance and the Returns portal run nothing.
+    /// <paramref name="unlisted"/> is the open-destinations list's line for a
+    /// place it leaves out (the desk-first ramp's OpenDestinations rule, "as
+    /// the Departure Board shows"; null: listed, or no list today): it closes
+    /// the route of a portal whose repair is not owned, never a repaired
+    /// portal's, whose repair opens its route (Saleh's demo 1018a: "top
+    /// portals are saying closed even though i unlocked everything"; the
+    /// list was written for the portals in service by themselves, so it left
+    /// every repaired portal's route CLOSED). Pure, no draw.
     /// </summary>
     public static PortalDay Resolve(IReadOnlyList<PortalSpec> portals, int day, Func<string, bool> repaired,
-                                    IReadOnlyList<PortalRequest> requests, Func<PlaceRef, string> closure)
+                                    IReadOnlyList<PortalRequest> requests, Func<PlaceRef, string> closure,
+                                    Func<PlaceRef, string> unlisted = null)
     {
         var routes = new List<PortalRoute>();
         foreach (PortalSpec p in (portals ?? Array.Empty<PortalSpec>()).Where(p => p != null).OrderBy(p => p.number))
@@ -221,6 +232,8 @@ public static class PortalSchedule
                         continue;
                     place = r.Place;
                     closedBy = closure?.Invoke(r.Place);
+                    if (closedBy == null && !Repaired(p, repaired))
+                        closedBy = unlisted?.Invoke(r.Place);
                     break;
                 }
             }

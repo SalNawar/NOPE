@@ -96,7 +96,8 @@ public enum TravelRuleType
     /// Board): a closure of every destination but the places it lists
     /// (TravelRuleSO.openPlaces, "country:era" keys). A traveller bound for
     /// any other place has a closed destination; the board shows a route it
-    /// does not list CLOSED, and the honest draw sends a traveller it applies
+    /// does not list CLOSED unless that portal's repair is owned (a repair
+    /// opens its route: PortalSchedule.Resolve), and the honest draw sends a traveller it applies
     /// to only to an open place (CaseFactory), so only its planned violator
     /// wants another.
     /// </summary>

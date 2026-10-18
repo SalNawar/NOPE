@@ -130,6 +130,64 @@ public class PortalScheduleTests
         Assert.IsNull(Route(Day(2, "repair_portal_02"), 1).Closure, "an open route has no line");
     }
 
+    /// <summary>Today's open destinations (the desk-first ramp's OpenDestinations rule, "as the Departure Board shows"): only Athens and Thebes.</summary>
+    private static string ListsAthensAndThebes(PlaceRef place) =>
+        place.Equals(Athens) || place.Equals(Thebes) ? null : "OPEN TODAY: Periclean Athens and New Kingdom Egypt.";
+
+    /// <summary>Day 2 under the open-destinations list, with portal 02 in service by itself (fromDay 2) and 04 and 05 by their repairs.</summary>
+    private static PortalDay Listed(params string[] repaired)
+    {
+        List<PortalSpec> hall = Hall();
+        hall[1].fromDay = 2;
+        var routes = new List<PortalRequest> { new PortalRequest(1, Athens), new PortalRequest(2, Babylon), new PortalRequest(4, Florence), new PortalRequest(5, Wessex) };
+        return PortalSchedule.Resolve(hall, 2, Owning(repaired), routes, ClosesThebes, ListsAthensAndThebes);
+    }
+
+    [Test]
+    public void Resolve_ARepairOpensItsRouteThoughTheOpenListLeavesItOut()
+    {
+        // Saleh's demo 1018a: "top portals are saying closed even though i unlocked everything and no vfx".
+        PortalDay day = Listed("repair_portal_04", "repair_portal_05");
+        foreach (int n in new[] { 4, 5 })
+        {
+            Assert.AreEqual(PortalState.InService, Route(day, n).State);
+            Assert.IsFalse(Route(day, n).Closed, $"portal {n}: its repair opens its route");
+            Assert.AreEqual(PortalLook.Glow, Route(day, n).Look, $"portal {n} glows");
+        }
+    }
+
+    [Test]
+    public void Resolve_AFirstDayPortalsRouteTheOpenListLeavesOutIsClosed()
+    {
+        PortalRoute two = Route(Listed(), 2);
+        Assert.AreEqual(PortalState.InService, two.State, "02 is in service by its first day");
+        Assert.IsTrue(two.Closed, "the list names the routes the board opens: a route of a portal in service by itself that it leaves out is CLOSED");
+        Assert.AreEqual(PortalLook.Empty, two.Look);
+        Assert.IsFalse(Route(Listed(), 1).Closed, "01's route is on the list");
+    }
+
+    [Test]
+    public void Resolve_ABanClosesARepairedPortalsRoute()
+    {
+        var routes = new List<PortalRequest> { new PortalRequest(1, Athens), new PortalRequest(4, Thebes) };
+        PortalRoute four = Route(PortalSchedule.Resolve(Hall(), 2, Owning("repair_portal_04"), routes, ClosesThebes, ListsAthensAndThebes), 4);
+        Assert.IsTrue(four.Closed, "a closure naming its place still closes a repaired portal's route");
+        Assert.AreEqual(Embargo, four.Closure);
+        Assert.AreEqual(PortalLook.Empty, four.Look);
+    }
+
+    [Test]
+    public void Resolve_EveryRepairOwnedEveryPortalShowsItsState()
+    {
+        // Every repair owned on the content's day shape: 01 and 02 on the list, 04 and 05 off it, no ban: all four glow, the Return Gate spirals.
+        PortalDay day = Listed("repair_portal_02", "repair_return_gate", "repair_portal_04", "repair_portal_05");
+        Assert.AreEqual(PortalLook.Glow, Route(day, 1).Look);
+        Assert.AreEqual(PortalLook.ReturnGate, Route(day, 3).Look);
+        Assert.AreEqual(PortalLook.Glow, Route(day, 4).Look);
+        Assert.AreEqual(PortalLook.Glow, Route(day, 5).Look);
+        Assert.AreEqual(PortalLook.Glow, Route(day, 2).Look, "02 is in service by itself and repaired: its repair opens its route too");
+    }
+
     [Test]
     public void Resolve_TheReturnsPortalHasNoRoute()
     {

@@ -196,7 +196,8 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// the present itself; and the day's portals (PortalSchedule.Resolve:
     /// the agency's portals, in service by their first day or a repair
     /// <paramref name="world"/> owns at the day's start, running the plan's
-    /// Directorate routes, CLOSED where a closure forbids them), which the
+    /// Directorate routes, CLOSED where a ban forbids them or, for a portal
+    /// not repaired, where the open destinations leave them out), which the
     /// board, the rings, the Portals app and the departures read all day.
     /// </summary>
     public TodaysWorld BuildToday(DayPlanSO plan, WorldState world)
@@ -217,7 +218,8 @@ public sealed class ContentLibrarySO : ScriptableObject
         if (plan == null || world == null || portals == null || portals.Count == 0)
             return PortalDay.None;
         return PortalSchedule.Resolve(portals, world.day, world.HasUpgrade, plan.PortalRequests(),
-                                      place => plan.ClosureOf(GetNationById(place.NationId), GetEraById(place.EraId)));
+                                      place => plan.ClosureOf(GetNationById(place.NationId), GetEraById(place.EraId)),
+                                      place => plan.UnlistedOf(GetNationById(place.NationId), GetEraById(place.EraId)));
     }
 
     /// <summary>
