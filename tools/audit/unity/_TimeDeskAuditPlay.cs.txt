@@ -806,15 +806,16 @@ public static class _TimeDeskAuditPlay
         if (o.Stamps != null && stampFirst)
         {
             // Papers, Please's controls (2026-10-06) with the art's 3D stamps (Saleh, same day), moved by the clerk (Saleh, later that day: "the
-            // stamp should be two stamps that I physically move ... I should be able to stamp anywhere on the document"): TAB slides the 3D stamp
-            // bar out over the desk, the passport goes to the desk, a stamp is dragged by its handle onto it anywhere and let go (the mark lands
+            // stamp should be two stamps that I physically move ... I should be able to stamp anywhere on the document"): TAB brings the reading
+            // view over the fixed stamp rack (the desk layout spec), the passport goes to the desk, a stamp is dragged by its handle onto it anywhere and let go (the mark lands
             // where it was pressed, "when I stamp it doesn't stamp where I'm pressing"; the other stamp is then refused), and the stamped passport
             // dropped on the slim counter hands the papers back. Before
             // the stamp, a paper dropped on the counter bounces back to the desk ("documents can only be returned after stamping").
-            if (!o.Stamps.BarOut)
+            var readingView = (DeskView)Field(o.Desk, "deskView");
+            if (!readingView.IsOn)
                 o.Controls.Press(ControlKey.Stamps);
-            yield return Seconds(0.4f);
-            Check(o.Stamps.BarOut, $"d{day} slot {slot}: TAB slides the stamp bar out");
+            yield return Seconds(0.6f);
+            Check(readingView.IsOn, $"d{day} slot {slot}: TAB brings the reading view over the stamp rack");
             DeskDocument passport = o.Paper((int)Field(o.Stamps, "_passport"));
             Check(passport != null, $"d{day} slot {slot}: the passport lies on the desk");
             if (passport != null)

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
@@ -214,36 +213,31 @@ public sealed class DeskHardware : MonoBehaviour
     public void Pick(int document, int field, string value, ScanLayer layer) => Picked?.Invoke(document, field, value, layer);
 
     /// <summary>
-    /// Lays the machines on the desk (the office binder, once the desk is
-    /// placed): each where the office view shows its viewport point at 16:9
-    /// (DeskConfigSO), turned by its yaw; returns the laid roots so the binder
-    /// keeps them clear of the scanner. The UV torch's cradle lies on the mat's
-    /// corner instead (DeskConfigSO.uvTorchAt, from <paramref name="deskCentre"/>),
-    /// inside the reading view. The upgrades' objects are laid with them
-    /// (DeskUpgrades.Lay).
+    /// Lays the machines on their bays (the office binder, once the desk is
+    /// placed; the desk layout spec, DeskLayoutSettings in <paramref name="frame"/>):
+    /// the chip reader under the scanner at the mat's right edge, its pad
+    /// inside the reading view (at chipReaderScale), the UV torch's cradle in
+    /// the tool pouch under the papers; the upgrades' objects with them
+    /// (DeskUpgrades.Lay). Returns the laid roots.
     /// </summary>
-    public List<Transform> Lay(CinemachineCamera office, float aspect, float deskTop, Vector3 deskCentre)
+    public List<Transform> Lay(DeskFrame frame)
     {
         var laid = new List<Transform>();
         if (config == null)
             return laid;
-        if (chipReader != null && DeskLay.Lay(chipReader.transform, office, aspect, deskTop, config.chipReaderView, config.chipReaderYaw))
+        DeskLayoutSettings layout = config.layout;
+        if (chipReader != null && frame.Place(chipReader.transform, layout.chipReader, layout.shelfHeight))
         {
-            chipReader.transform.localScale = Vector3.one * config.machineScale;
+            chipReader.transform.localScale = Vector3.one * layout.chipReaderScale;
             laid.Add(chipReader.transform);
         }
-        if (uvTorch != null && office != null)
+        if (uvTorch != null && frame.Place(uvTorch.transform, layout.uvTorch, layout.shelfHeight))
         {
-            Vector3 level = Vector3.ProjectOnPlane(office.transform.forward, Vector3.up);
-            level = level.sqrMagnitude > 1e-6f ? level.normalized : Vector3.forward;
-            Vector3 right = Vector3.Cross(Vector3.up, level);
-            Vector3 at = new Vector3(deskCentre.x, deskTop, deskCentre.z) + right * config.uvTorchAt.x + level * config.uvTorchAt.y;
-            uvTorch.transform.SetPositionAndRotation(at, Quaternion.AngleAxis(config.uvTorchYaw, Vector3.up) * Quaternion.LookRotation(level, Vector3.up));
             uvTorch.transform.localScale = Vector3.one * config.uvTorchScale;
             laid.Add(uvTorch.transform);
         }
         if (upgrades != null)
-            upgrades.Lay(office, aspect, deskTop, laid);
+            upgrades.Lay(frame, laid);
         return laid;
     }
 

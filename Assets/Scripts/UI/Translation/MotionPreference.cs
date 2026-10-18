@@ -5,7 +5,8 @@ using UnityEngine;
 /// by letter) or Reduced (a translation shows at once; the game feel's
 /// springs cut to a short fade or a snap: no squash, no shake), and the
 /// Motion intensity (0 to 100 %: how far every spring of the game feel
-/// moves, UiMotion), and the cameras' idle sway (off by default). Per-player preferences kept in PlayerPrefs, outside the
+/// moves, UiMotion), the cameras' idle sway (off by default) and the machine
+/// close-ups (on by default). Per-player preferences kept in PlayerPrefs, outside the
 /// run save (the UiLanguagePreference pattern); motion is read each time a
 /// traveller is presented, the intensity at each motion.
 /// </summary>
@@ -77,6 +78,30 @@ public static class MotionPreference
             PlayerPrefs.SetString(PlayerPrefKeys.For(SwayKey), value ? "on" : "off");
             PlayerPrefs.Save();
             _sway = value;
+            Changed?.Invoke();
+        }
+    }
+
+    /// <summary>The machine close-ups' PlayerPrefs key ("off", or absent/"on").</summary>
+    private const string CloseUpKey = "TimeDesk.MachineCloseUps";
+
+    /// <summary>The stored close-up choice once read (every change goes through <see cref="MachineCloseUps"/>'s setter).</summary>
+    private static bool? _closeUps;
+
+    /// <summary>
+    /// True when a machine in use is shown close (Saleh's 1018a playtest: "you
+    /// cant see what each machiene does the camera should be better"; his call
+    /// 2026-10-18: a Settings toggle, on by default; MachineCloseUp). Saved at
+    /// once when set; read from PlayerPrefs once, then cached.
+    /// </summary>
+    public static bool MachineCloseUps
+    {
+        get => _closeUps ??= PlayerPrefs.GetString(PlayerPrefKeys.For(CloseUpKey), "on") != "off";
+        set
+        {
+            PlayerPrefs.SetString(PlayerPrefKeys.For(CloseUpKey), value ? "on" : "off");
+            PlayerPrefs.Save();
+            _closeUps = value;
             Changed?.Invoke();
         }
     }

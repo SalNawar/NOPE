@@ -205,6 +205,7 @@ public static partial class OfficeSceneUIBuilder
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
         OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
+        CheckDeskPlan(deskConfig);
         DestroyChildIfPresent(officeCanvas.transform, "VerdictButtons"); // the prototype's RETURN and DETAIN plates (Saleh 2026-10-07: everything diegetic)
 
         // The verdict ribbon and the citation slip over the office (OfficeSceneUIBuilder.Kit, the UI kit's; Saleh 2026-10-07, after the 1007b
@@ -1443,5 +1444,14 @@ public static partial class OfficeSceneUIBuilder
         foreach (string guid in AssetDatabase.FindAssets($"t:{typeof(T).Name}"))
             return AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid));
         return null;
+    }
+
+    /// <summary>The desk's plan holds (the desk layout spec: every bay on the art desk's top, none overlapping; DeskArrangement.Problems): each problem is an error in the Console.</summary>
+    private static void CheckDeskPlan(DeskConfigSO config)
+    {
+        if (config == null)
+            return;
+        foreach (string problem in DeskArrangement.Problems(new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, DeskRect>>(config.layout.Bays()), config.layout.deskTop.Rect))
+            Debug.LogError($"[TimeDesk] The desk's plan: {problem} Move it in Desk_Default's layout (DeskLayoutSettings).", config);
     }
 }

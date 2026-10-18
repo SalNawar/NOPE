@@ -16,9 +16,9 @@ public class ControlRulesTests
         ControlState[] states =
         {
             Desk, new ControlState(travellerAtDesk: true, deskView: true), new ControlState(travellerAtDesk: true, inspecting: true),
-            new ControlState(travellerAtDesk: true, stampsOut: true), new ControlState(travellerAtDesk: true, wheelOpen: true),
+            new ControlState(travellerAtDesk: true, wheelOpen: true),
             new ControlState(travellerAtDesk: true, cityView: true), new ControlState(travellerAtDesk: true, dragging: true),
-            new ControlState(travellerAtDesk: true, valueHeld: true, inspecting: true, stampsOut: true, deskView: true),
+            new ControlState(travellerAtDesk: true, valueHeld: true, inspecting: true, deskView: true),
         };
         foreach (ControlState s in states)
         {
@@ -72,11 +72,11 @@ public class ControlRulesTests
     public void BackOut_PeelsOneModeAtATime_InnermostFirst()
     {
         var s = new ControlState(travellerAtDesk: true, dragging: true, wheelOpen: true, pcOpen: true, valueHeld: true, inspecting: true,
-                                 stampsOut: true, cityView: true, deskView: true);
+                                 cityView: true, deskView: true);
         BackOutStep[] order =
         {
             BackOutStep.CancelDrag, BackOutStep.CloseWheel, BackOutStep.ClosePc, BackOutStep.DropValue, BackOutStep.LeaveInspect,
-            BackOutStep.StowStamps, BackOutStep.LeaveCity, BackOutStep.LeaveDeskView, BackOutStep.None
+            BackOutStep.LeaveCity, BackOutStep.LeaveDeskView, BackOutStep.None
         };
         foreach (BackOutStep expected in order)
         {
@@ -114,7 +114,7 @@ public class ControlRulesTests
     private static ControlState Without(ControlState s, BackOutStep step) => new ControlState(
         pcOpen: s.PcOpen && step != BackOutStep.ClosePc, newsletter: s.Newsletter, travellerAtDesk: s.TravellerAtDesk,
         wheelOpen: s.WheelOpen && step != BackOutStep.CloseWheel, valueHeld: s.ValueHeld && step != BackOutStep.DropValue,
-        inspecting: s.Inspecting && step != BackOutStep.LeaveInspect, stampsOut: s.StampsOut && step != BackOutStep.StowStamps,
+        inspecting: s.Inspecting && step != BackOutStep.LeaveInspect,
         cityView: s.CityView && step != BackOutStep.LeaveCity, deskView: s.DeskView && step != BackOutStep.LeaveDeskView,
         dragging: s.Dragging && step != BackOutStep.CancelDrag);
 }

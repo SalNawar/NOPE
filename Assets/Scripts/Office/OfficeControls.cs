@@ -12,10 +12,10 @@ using UnityEngine.UI;
 /// office's keys and of the right mouse button, applying ControlRules. A
 /// right-click or Esc backs out of the innermost mode, one per press
 /// (BackOut: a drag, the wheel, the PC, the value held, inspect mode, the
-/// stamp bar, the city, the reading view), after the PC's own chain had its
+/// city, the reading view), after the PC's own chain had its
 /// turn (DesktopKeyboard runs first and stamps the frame it took the press:
 /// a menu, the card, the search, a field, a held value on the PC). SPACE
-/// toggles inspect mode, TAB the stamp bar, Q the PC (its grey tab on the
+/// toggles inspect mode, TAB the reading view over the stamp rack, Q the PC (its grey tab on the
 /// overlay's left edge does the same: TogglePc), A and D (or the arrows) look
 /// at the city and back, F1 shows the keys (the PC's shortcut card, whose
 /// desk section is ControlRules.DeskCard); each closes what is in its way
@@ -43,7 +43,7 @@ public sealed class OfficeControls : MonoBehaviour
     /// <summary>Inspect mode (and the value held on the workbench).</summary>
     [SerializeField] private DeskInspect inspect;
 
-    /// <summary>The stamp bar.</summary>
+    /// <summary>The stamp rack.</summary>
     [SerializeField] private DeskStampTray stamps;
 
     /// <summary>The reading view.</summary>
@@ -52,7 +52,7 @@ public sealed class OfficeControls : MonoBehaviour
     /// <summary>The city view.</summary>
     [SerializeField] private CityView cityView;
 
-    /// <summary>The documents (a drag a back-out cancels; a carried stamp is the stamp bar's).</summary>
+    /// <summary>The documents (a drag a back-out cancels; a carried stamp is the stamp rack's).</summary>
     [SerializeField] private DeskController desk;
 
     /// <summary>The PC's grey tab (on the overlay's left edge): a click switches to the PC and back.</summary>
@@ -82,7 +82,6 @@ public sealed class OfficeControls : MonoBehaviour
         wheelOpen: wheel != null && wheel.IsOpen,
         valueHeld: inspect != null && inspect.ValueHeld,
         inspecting: inspect != null && inspect.IsOn,
-        stampsOut: stamps != null && stamps.BarOut,
         cityView: cityView != null && cityView.IsOn,
         deskView: deskView != null && deskView.IsOn,
         dragging: (desk != null && desk.IsDragging) || (stamps != null && stamps.IsCarrying),
@@ -137,9 +136,6 @@ public sealed class OfficeControls : MonoBehaviour
             case BackOutStep.LeaveInspect:
                 inspect.SetOn(false);
                 break;
-            case BackOutStep.StowStamps:
-                stamps.Stow();
-                break;
             case BackOutStep.LeaveCity:
                 cityView.Return();
                 break;
@@ -186,7 +182,7 @@ public sealed class OfficeControls : MonoBehaviour
             case ControlAction.ToggleStamps:
                 ClearTheDesk();
                 if (stamps != null)
-                    stamps.ToggleBar();
+                    stamps.ToggleRack();
                 break;
             case ControlAction.OpenPc:
                 if (wheel != null)

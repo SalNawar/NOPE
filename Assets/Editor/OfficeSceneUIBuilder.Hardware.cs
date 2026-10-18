@@ -165,8 +165,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "approvedRelease", DaterSound("stamp_release"));
         SetRef(so, "deniedPress", DaterSound("stamp_press_deep"));
         SetRef(so, "deniedRelease", DaterSound("stamp_release_deep"));
-        SetRef(so, "drawerOpen", DaterSound("drawer_open"));
-        SetRef(so, "drawerClose", DaterSound("drawer_close"));
     }
 
     /// <summary>A dater's or the drawer's sound by its file name (a warning when it is missing: it is then silent there).</summary>
@@ -181,8 +179,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The DETAIN button (the desk machine spec §2; Saleh 2026-10-07:
     /// "everything diegetic"), rebuilt each run: Office/DetainButton (the
-    /// DetainButton; the office binder lays it on the desk where the office
-    /// view shows DeskConfigSO.detainView) with its Base (a dark steel plinth
+    /// DetainButton; the office binder lays it on its bay of the desk's plan,
+    /// DeskLayoutSettings.detain) with its Base (a dark steel plinth
     /// with a hazard-yellow rim and "DETAIN" on its front), its Button (a
     /// short stem and its Cap, a red mushroom; a click box on the Interactable
     /// layer) and its Cover (hinged at the back edge: a clear box over the

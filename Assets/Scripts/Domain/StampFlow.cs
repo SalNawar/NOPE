@@ -38,8 +38,9 @@ public enum StampPress
 /// <summary>
 /// The stamps, Papers, Please's way (Saleh 2026-10-06, "copy the controls of
 /// Papers, Please 1:1"; it replaces the desk-first redesign's pick-up and ink
-/// pad): the stamp bar slides out at the desk's right edge (its grey tab, or
-/// TAB) and back; it holds the APPROVED and the DENIED stamp. A stamp pressed
+/// pad): the APPROVED and the DENIED stamp stand in a fixed rack beside the
+/// counter (the desk layout spec §2, Saleh 2026-10-18: "go with plan v2"; no
+/// drawer slides in or out any more: it was in the way). A stamp pressed
 /// (dragged over a paper and let go, or clicked where it hangs: Saleh
 /// 2026-10-06, "the stamp should be two stamps that I physically move ... I
 /// should be able to stamp anywhere on the document") stamps whatever lies
@@ -54,13 +55,10 @@ public enum StampPress
 /// traveller at any time (Commit; deny is free; a denial or a detention
 /// with no logged evidence earns the one citation, and so does a detention of
 /// a traveller who broke no law: VerdictRules). A new case starts with no
-/// verdict, nothing handed back, the bar as it was. Pure; tested headless; DeskStampTray applies it.
+/// verdict and nothing handed back. Pure; tested headless; DeskStampTray applies it.
 /// </summary>
 public sealed class StampFlow
 {
-    /// <summary>True while the stamp bar is out.</summary>
-    public bool BarOut { get; private set; }
-
     /// <summary>The passport's verdict: the stamp of its one accepted press (None: not stamped yet).</summary>
     public DeskStamp Verdict { get; private set; }
 
@@ -76,33 +74,17 @@ public sealed class StampFlow
     /// <summary>True while a traveller stands at the desk with their case (BeginCase(true)): DETAIN can take them.</summary>
     public bool TravellerHere { get; private set; }
 
-    /// <summary>Slides the bar out, or back in (TAB, the grey tab); returns whether it is out now.</summary>
-    public bool ToggleBar()
-    {
-        BarOut = !BarOut;
-        return BarOut;
-    }
-
-    /// <summary>Slides the bar back in (false when it is in already): the back-out (right-click, Esc) or the desk taken away.</summary>
-    public bool StowBar()
-    {
-        if (!BarOut)
-            return false;
-        BarOut = false;
-        return true;
-    }
-
     /// <summary>
     /// Presses <paramref name="stamp"/> on what lies under it: nothing
     /// (<paramref name="onPaper"/> false) is Nothing; a paper that is not the
     /// passport is NotPassport; the passport with a verdict already is
     /// AlreadyStamped; else (<paramref name="onPassport"/>, anywhere on it)
-    /// the press is Stamped and sets the verdict. A press while the bar is
-    /// in, or of no stamp, is Nothing.
+    /// the press is Stamped and sets the verdict. A press of no stamp is
+    /// Nothing.
     /// </summary>
     public StampPress Press(DeskStamp stamp, bool onPaper, bool onPassport)
     {
-        if (!BarOut || stamp == DeskStamp.None || !onPaper)
+        if (stamp == DeskStamp.None || !onPaper)
             return StampPress.Nothing;
         if (!onPassport)
             return StampPress.NotPassport;
@@ -142,7 +124,7 @@ public sealed class StampFlow
         return allowed;
     }
 
-    /// <summary>A new traveller (<paramref name="travellerHere"/>), or none: no verdict, nothing handed back or committed (the bar stays as it is).</summary>
+    /// <summary>A new traveller (<paramref name="travellerHere"/>), or none: no verdict, nothing handed back or committed.</summary>
     public void BeginCase(bool travellerHere)
     {
         Verdict = DeskStamp.None;

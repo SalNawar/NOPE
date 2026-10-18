@@ -78,13 +78,13 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The rulebook on the desk (optional): laid beside the mat in the office view's frame (DeskConfigSO.rulebookAt).</summary>
     [SerializeField] private DeskRulebook rulebook;
 
-    /// <summary>The stamp bar (Papers, Please's with the art's 3D stamps, Saleh 2026-10-06; optional): its rack is laid where the reading view shows the desk's right.</summary>
+    /// <summary>The stamp rack (Papers, Please's stamps with the art's 3D daters, Saleh 2026-10-06; optional): laid on its bay beside the counter (DeskLayoutSettings.stampRack).</summary>
     [SerializeField] private DeskStampTray stampTray;
 
-    /// <summary>The DETAIN button (optional; the desk machine spec §2): laid on the desk where the office view shows DeskConfigSO.detainView.</summary>
+    /// <summary>The DETAIN button (optional; the desk machine spec §2): laid on its bay beside the AVAILABLE sign (DeskLayoutSettings.detain).</summary>
     [SerializeField] private DetainButton detainButton;
 
-    /// <summary>The desk machines (the desk machines spec §1): laid where the office view shows their places, clear of the scanner, their first-day notes over them.</summary>
+    /// <summary>The desk machines (the desk machines spec §1): laid on their bays (DeskLayoutSettings), their first-day notes over them.</summary>
     [SerializeField] private DeskHardware hardware;
 
     /// <summary>The counter (optional): laid along the desk's far edge in the office view's frame, once the desk view is posed.</summary>
@@ -217,9 +217,19 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The art's office Cinemachine camera when the office camera has a brain to blend it (the desk view needs both), else null.</summary>
     private CinemachineCamera _officeVcam;
 
-    /// <summary>The office Cinemachine camera's field of view and pose as the art set them (its 16:9 framing), and the aspect the lens was last fitted to (FitLens).</summary>
+    /// <summary>The office Cinemachine camera's field of view and pose at 16:9 (the art's, framed by the desk plan: ReadyCamera), and the aspect the lens was last fitted to (FitLens).</summary>
     private float _officeFov, _fittedAspect;
     private Quaternion _officeRotation;
+
+    /// <summary>The desk's frame (the mat's centre on the desk's top, the office view's level axes: ArrangeArt), every bay of the desk's plan placed in it; valid once _hasFrame.</summary>
+    private DeskFrame _frame;
+    private bool _hasFrame;
+
+    /// <summary>The art office's renderers (ArrangeArt): the decorations' parts and the materials the built furniture borrows.</summary>
+    private Renderer[] _artRenderers = Array.Empty<Renderer>();
+
+    /// <summary>The decorations the player moves (ArrangeArt, BindDecor), or null.</summary>
+    private DeskDecor _decor;
 
     private void Awake()
     {
@@ -272,6 +282,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             frame.DrawAfter(office);
 
         Vector3 viewer = office.transform.position;
+        ArrangeArt(art);
         BindPc(office);
         float deskTop = BindDesk(viewer);
         BindTraveller(viewer, deskTop);
@@ -279,6 +290,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         BindReadouts();
         BindAvailableSign();
         BindProps();
+        BindDecor();
         BindBoard();
         BindHall(art);
         Report();
@@ -323,6 +335,18 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 _officeVcam = office;
                 _officeFov = office.Lens.FieldOfView;
                 _officeRotation = office.transform.rotation;
+                if (config != null)
+                {
+                    // The office view's framing (the desk layout spec §4, Saleh's "Yes"): a wider lens, looking further down, so the whole desk shows; FitLens applies it.
+                    DeskLayoutSettings layout = config.layout;
+                    if (layout.officeFieldOfView > 0f)
+                        _officeFov = layout.officeFieldOfView;
+                    _officeRotation = Quaternion.AngleAxis(layout.officeExtraPitch, _officeRotation * Vector3.right) * _officeRotation;
+                    LensSettings lens = office.Lens;
+                    lens.FieldOfView = _officeFov;
+                    office.Lens = lens;
+                    office.transform.rotation = _officeRotation;
+                }
             }
         }
     }
@@ -335,8 +359,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// the screen's aspect changes, the office Cinemachine camera's field of
     /// view widens and the camera tilts down by LensFit.Fit (its top edge
     /// kept, down to DeskConfigSO.officeViewBottom); at 16:9 and wider the
-    /// lens and the pose are the art's. The desk view and DETAIN, laid from
-    /// the art's lens at bind, keep theirs.
+    /// lens and the pose are the desk plan's framing (DeskLayoutSettings:
+    /// the art's pose looking officeExtraPitch further down, officeFieldOfView).
     /// </summary>
     private void FitLens()
     {
@@ -433,12 +457,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 s.SetPositionAndRotation(new Vector3(spot.Bounds.center.x, spot.Bounds.min.y, spot.Bounds.center.z), Quaternion.identity);
                 scanner.Configure(new Vector2(spot.Bounds.size.x, spot.Bounds.size.z), new Vector3(0f, spot.Bounds.size.y + ScannerBedLift, 0f));
             }
-            else
+            else if (_hasFrame)
             {
-                // The gameplay's machine faces the chair (Track BR): its front (local -Z) toward the office camera, its lid hinged away, whatever yaw the anchor carries.
-                Vector3 at = new Vector3(spot.Position.x, top, spot.Position.z);
-                Vector3 away = Vector3.ProjectOnPlane(at - viewer, Vector3.up);
-                s.SetPositionAndRotation(at, away.sqrMagnitude > 1e-6f ? Quaternion.LookRotation(away.normalized, Vector3.up) : spot.Rotation);
+                // The gameplay's machine stands on its bay (the desk layout spec §2): its front (local -Z) toward the mat, the near end of its bed inside the reading view's right edge.
+                _frame.Place(s, config.layout.scanner, config.layout.shelfHeight);
             }
 
             if (scanner.TryGetComponent(out BoxCollider box))
@@ -455,12 +477,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             foreach (Vector3 corner in new[] { new Vector3(-half.x, 0f, -half.y), new Vector3(half.x, 0f, -half.y), new Vector3(-half.x, 0f, half.y), new Vector3(half.x, 0f, half.y) })
                 drop.Encapsulate(s.TransformPoint(corner));
             area = DeskRect.Union(deskRect, new DeskRect(drop.center.x, drop.center.z, drop.size.x, drop.size.z));
-
-            // The scanner's whole footprint on the desk (its drop area and its body's renderers, art or stand-in), for the props that must stand clear of it.
-            _scannerFootprint = drop;
-            foreach (Renderer r in artScanner ? spot.Transform.GetComponentsInChildren<Renderer>(false) : RenderersOf(scannerPlaceholder))
-                _scannerFootprint.Encapsulate(r.bounds);
-            _hasScannerFootprint = true;
 
             if (scanHint != null)
                 FaceCamera(scanHint, scanner.BedPoint + Vector3.up * HintHeight, viewer);
@@ -497,22 +513,29 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The counter lies along the desk's far edge in the office view's frame, ending where the desk view shows the desk (Papers, Please's zones).
         if (counter != null && _office != null)
             counter.Bind(_office.transform.forward);
-        // The 3D stamp bar hangs where the reading view shows the desk's right (Saleh 2026-10-06: "I want the 3D stamp").
-        if (stampTray != null && _office != null)
-            stampTray.Lay(_office.transform.forward);
-        // The DETAIN button stands on the desk where the office view shows DeskConfigSO.detainView at 16:9 (the same spot of the desk at every aspect).
-        if (detainButton != null && config != null && _officeVcam != null && detainButton.Lay(_officeVcam, LensFit.DesignAspect, top, config.detainView))
-            ClearOfScanner(detainButton.transform, deskRect);
-        // The desk machines stand where the office view shows their places at 16:9 (DeskConfigSO), clear of the scanner, each first-day note over its machine.
-        if (hardware != null && _officeVcam != null)
+        // Everything else stands on its bay (the desk layout spec, DeskLayoutSettings): the stamp rack beside the counter, DETAIN by the AVAILABLE sign, the machines and the upgrades' objects, each first-day note over its machine; the back shelves and the intercom are built there, and the machine close-up is readied.
+        if (_hasFrame)
         {
-            foreach (Transform laid in hardware.Lay(_officeVcam, LensFit.DesignAspect, top, deskCentre))
-                ClearOfScanner(laid, deskRect);
+            DeskLayoutSettings layout = config.layout;
+            if (stampTray != null)
+                stampTray.Lay(_frame, layout.stampRack);
+            if (detainButton != null)
+                _frame.Place(detainButton.transform, layout.detain, layout.shelfHeight);
+            Transform intercom = DeskFurniture.Build(transform, _frame, layout, MaterialNamed, OpenWheel);
+            if (guide != null)
+                guide.SetIntercom(intercom);
+        }
+        if (hardware != null && _hasFrame)
+        {
+            hardware.Lay(_frame);
             if (hardware.UvNote != null && hardware.Torch != null)
                 FaceCamera(hardware.UvNote, hardware.Torch.transform.position + Vector3.up * HintHeight, viewer);
             if (hardware.ChipNote != null && hardware.Reader != null)
                 FaceCamera(hardware.ChipNote, hardware.Reader.transform.position + Vector3.up * HintHeight, viewer);
         }
+        if (_hasFrame && _officeVcam != null)
+            gameObject.AddComponent<MachineCloseUp>().Init(_officeVcam, config.layout, _frame, this.desk, hardware,
+                                                            scanner != null && scanner.TryGetComponent(out Clickable scanned) ? scanned.Outline.ToArray() : null);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
@@ -748,6 +771,87 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     private ResolvedAnchor At(OfficeAnchorId id) => _anchors[id];
 
+    // -----------------------------
+    // The desk's plan
+    // -----------------------------
+
+    /// <summary>
+    /// The art's desk arranged to the desk's plan before anything is bound to
+    /// it (the desk layout spec; the art scene is never edited, its objects
+    /// are moved at run time): the desk's frame from the mat and the office
+    /// view, the art's phone onto the comms shelf (DeskLayoutSettings.phone)
+    /// and the art's small props into the decor zones (DeskDecor); the
+    /// anchors are resolved again when anything moved, so the props' click
+    /// boxes follow them.
+    /// </summary>
+    private void ArrangeArt(Scene art)
+    {
+        if (config == null || _office == null)
+            return;
+        ResolvedAnchor mat = At(OfficeAnchorId.DeskSurface);
+        Vector3 centre = mat.HasBounds ? new Vector3(mat.Bounds.center.x, mat.Bounds.max.y, mat.Bounds.center.z) : mat.Position;
+        _frame = new DeskFrame(centre, _office.transform.forward);
+        _hasFrame = true;
+        _artRenderers = art.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<Renderer>(true)).ToArray();
+
+        DeskLayoutSettings layout = config.layout;
+        bool moved = MoveArtProp(layout.phoneParts, layout.phone, layout.shelfHeight);
+        _decor = gameObject.AddComponent<DeskDecor>();
+        moved |= _decor.Arrange(_frame, layout, _artRenderers);
+        if (moved)
+            _anchors = OfficeAnchors.Resolve(art, contract);
+    }
+
+    /// <summary>Moves the art's prop made of the parts named "<paramref name="prefix"/>__…" (as one) onto <paramref name="bay"/>, its footprint's centre on the bay's, its base on the desk or the shelf; true when it was found.</summary>
+    private bool MoveArtProp(string prefix, DeskBay bay, float shelfHeight)
+    {
+        if (string.IsNullOrEmpty(prefix) || bay == null)
+            return false;
+        List<Transform> parts = _artRenderers.Where(r => r != null && r.name.StartsWith(prefix + "__", StringComparison.Ordinal)).Select(r => r.transform).Distinct().ToList();
+        if (parts.Count == 0)
+            return false;
+        Bounds b = parts[0].GetComponent<Renderer>().bounds;
+        foreach (Transform part in parts)
+            b.Encapsulate(part.GetComponent<Renderer>().bounds);
+        Vector3 to = _frame.Point(bay.at, bay.onShelf ? shelfHeight : 0f);
+        Vector3 by = new Vector3(to.x - b.center.x, to.y - b.min.y, to.z - b.center.z);
+        foreach (Transform part in parts)
+            if (!parts.Exists(other => other != part && part.IsChildOf(other)))
+                part.position += by;
+        return true;
+    }
+
+    /// <summary>The decorations made draggable once the props are bound: a prop's click box (its reaction) goes with its decoration (DeskDecor.MakeHandles).</summary>
+    private void BindDecor()
+    {
+        if (_decor == null)
+            return;
+        var boxes = new List<KeyValuePair<Transform, Collider>>();
+        foreach (PropBinding prop in props ?? Array.Empty<PropBinding>())
+            if (prop != null && prop.click != null && prop.click.gameObject.activeSelf && prop.click.TryGetComponent(out Collider box))
+                boxes.Add(new KeyValuePair<Transform, Collider>(At(prop.anchor).Transform, box));
+        _decor.MakeHandles(boxes);
+    }
+
+    /// <summary>The art office's material named <paramref name="name"/> (the built furniture's, DeskFurniture), else the mat's.</summary>
+    private Material MaterialNamed(string name)
+    {
+        foreach (Renderer r in _artRenderers)
+            if (r != null)
+                foreach (Material m in r.sharedMaterials)
+                    if (m != null && m.name == name)
+                        return m;
+        Transform mat = At(OfficeAnchorId.DeskSurface).Transform;
+        return mat != null && mat.TryGetComponent(out Renderer own) ? own.sharedMaterial : null;
+    }
+
+    /// <summary>The intercom's click: the questions open where the player is (the traveller wheel).</summary>
+    private void OpenWheel()
+    {
+        if (wheel != null)
+            wheel.Open();
+    }
+
     private TMP_Text TextOf(OfficeAnchorId id)
     {
         Transform t = At(id).Transform;
@@ -756,52 +860,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     private static Camera CameraOf(ResolvedAnchor anchor) =>
         anchor.Transform != null ? anchor.Transform.GetComponent<Camera>() : null;
-
-    /// <summary>The scanner's footprint (BindDesk: its drop area and its body's bounds), and whether there is one.</summary>
-    private Bounds _scannerFootprint;
-    private bool _hasScannerFootprint;
-
-    /// <summary>
-    /// Moves <paramref name="prop"/> (a prop laid by the office view's
-    /// viewport, the DETAIN button) out of the scanner's footprint, the
-    /// shortest way left, right or forward with a gap (ScannerClearance.ClearProp,
-    /// in the office view's level frame), kept over the desk: a viewport place
-    /// lands elsewhere at every aspect (16:9, 16:10, 21:9, 4:3), so it is
-    /// cleared after it is laid (Saleh's 1007d playtest: its base stood on the scanner).
-    /// </summary>
-    private void ClearOfScanner(Transform prop, DeskRect desk)
-    {
-        if (!_hasScannerFootprint || _office == null)
-            return;
-        Renderer[] parts = prop.GetComponentsInChildren<Renderer>(false);
-        if (parts.Length == 0)
-            return;
-        Bounds b = parts[0].bounds;
-        foreach (Renderer r in parts)
-            b.Encapsulate(r.bounds);
-        Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up);
-        if (level.sqrMagnitude < 1e-6f)
-            level = Vector3.forward;
-        level.Normalize();
-        Vector3 right = Vector3.Cross(Vector3.up, level);
-        DeskRect own = InFrame(b, right, level), scannerRect = InFrame(_scannerFootprint, right, level);
-        DeskRect deskInFrame = InFrame(new Bounds(new Vector3(desk.CentreX, 0f, desk.CentreY), new Vector3(desk.Width, 0f, desk.Height)), right, level);
-        (float x, float y) = ScannerClearance.ClearProp(own, scannerRect, deskInFrame);
-        prop.position += right * (x - own.CentreX) + level * (y - own.CentreY);
-    }
-
-    /// <summary>A world box's footprint on the desk in a level frame (x along <paramref name="right"/>, y along <paramref name="level"/>).</summary>
-    private static DeskRect InFrame(Bounds b, Vector3 right, Vector3 level)
-    {
-        float x0 = float.MaxValue, x1 = float.MinValue, y0 = float.MaxValue, y1 = float.MinValue;
-        for (int i = 0; i < 4; i++)
-        {
-            Vector3 c = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, 0f, (i & 2) == 0 ? b.min.z : b.max.z);
-            float x = Vector3.Dot(c, right), y = Vector3.Dot(c, level);
-            x0 = Mathf.Min(x0, x); x1 = Mathf.Max(x1, x); y0 = Mathf.Min(y0, y); y1 = Mathf.Max(y1, y);
-        }
-        return new DeskRect((x0 + x1) / 2f, (y0 + y1) / 2f, x1 - x0, y1 - y0);
-    }
 
     private static Renderer[] RenderersOf(GameObject go) =>
         go != null ? go.GetComponentsInChildren<Renderer>(false) : Array.Empty<Renderer>();

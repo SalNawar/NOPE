@@ -24565,6 +24565,24 @@
         "tier": "Flavour"
       },
       {
+        "key": "settings.machineCloseUps",
+        "text": "Machine close-ups",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.machineCloseUpsOn",
+        "text": "On",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.machineCloseUpsOff",
+        "text": "Off",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "settings.desktop",
         "text": "Desktop icons open with",
         "gloss": "None",
@@ -24836,7 +24854,7 @@
       },
       {
         "key": "keys.desk.stamps",
-        "text": "The stamp drawer (the tab at the top): drag a stamp onto the passport and let go",
+        "text": "The stamp rack (beside the counter): drag a stamp onto the passport and let go",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -30115,6 +30133,18 @@
             "text": "تشغيل"
           },
           {
+            "key": "settings.machineCloseUps",
+            "text": "لقطات قريبة للآلات"
+          },
+          {
+            "key": "settings.machineCloseUpsOn",
+            "text": "تشغيل"
+          },
+          {
+            "key": "settings.machineCloseUpsOff",
+            "text": "إيقاف"
+          },
+          {
             "key": "settings.desktop",
             "text": "فتح أيقونات سطح المكتب بواسطة"
           },
@@ -30296,7 +30326,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "درج الأختام (اللسان في الأعلى): اسحب ختما إلى الجواز وأفلته"
+            "text": "حامل الأختام (بجانب الطاولة): اسحب ختما إلى الجواز وأفلته"
           },
           {
             "key": "keys.desk.pc",
@@ -38631,6 +38661,18 @@
             "text": "Ενεργό"
           },
           {
+            "key": "settings.machineCloseUps",
+            "text": "Κοντινά πλάνα μηχανών"
+          },
+          {
+            "key": "settings.machineCloseUpsOn",
+            "text": "Ενεργά"
+          },
+          {
+            "key": "settings.machineCloseUpsOff",
+            "text": "Ανενεργά"
+          },
+          {
             "key": "settings.desktop",
             "text": "Τα εικονίδια ανοίγουν με"
           },
@@ -38812,7 +38854,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Το συρτάρι με τις στάμπες (η καρτέλα πάνω): σύρε μια στάμπα πάνω στο διαβατήριο και άφησέ την"
+            "text": "Η θήκη με τις στάμπες (δίπλα στον πάγκο): σύρε μια στάμπα πάνω στο διαβατήριο και άφησέ την"
           },
           {
             "key": "keys.desk.pc",
@@ -46611,6 +46653,18 @@
             "text": "Attivata"
           },
           {
+            "key": "settings.machineCloseUps",
+            "text": "Primi piani delle macchine"
+          },
+          {
+            "key": "settings.machineCloseUpsOn",
+            "text": "Attivati"
+          },
+          {
+            "key": "settings.machineCloseUpsOff",
+            "text": "Disattivati"
+          },
+          {
             "key": "settings.desktop",
             "text": "Le icone del desktop si aprono con"
           },
@@ -46792,7 +46846,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Il cassetto dei timbri (la linguetta in alto): trascina un timbro sul passaporto e rilascialo"
+            "text": "Il portatimbri (accanto al bancone): trascina un timbro sul passaporto e rilascialo"
           },
           {
             "key": "keys.desk.pc",
@@ -54711,6 +54765,18 @@
             "text": "An"
           },
           {
+            "key": "settings.machineCloseUps",
+            "text": "Maschinen-Nahaufnahmen"
+          },
+          {
+            "key": "settings.machineCloseUpsOn",
+            "text": "An"
+          },
+          {
+            "key": "settings.machineCloseUpsOff",
+            "text": "Aus"
+          },
+          {
             "key": "settings.desktop",
             "text": "Desktop-Symbole öffnen mit"
           },
@@ -54892,7 +54958,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "Die Stempelschublade (der Reiter oben): ziehe einen Stempel auf den Pass und lass los"
+            "text": "Der Stempelständer (neben dem Schalter): ziehe einen Stempel auf den Pass und lass los"
           },
           {
             "key": "keys.desk.pc",
@@ -63043,6 +63109,18 @@
             "text": "开"
           },
           {
+            "key": "settings.machineCloseUps",
+            "text": "机器特写"
+          },
+          {
+            "key": "settings.machineCloseUpsOn",
+            "text": "开"
+          },
+          {
+            "key": "settings.machineCloseUpsOff",
+            "text": "关"
+          },
+          {
             "key": "settings.desktop",
             "text": "桌面图标打开方式"
           },
@@ -63224,7 +63302,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "印章抽屉（顶部的标签）：将印章拖到护照上再松开"
+            "text": "印章架（柜台旁）：将印章拖到护照上再松开"
           },
           {
             "key": "keys.desk.pc",
@@ -70719,6 +70797,18 @@
             "text": "オン"
           },
           {
+            "key": "settings.machineCloseUps",
+            "text": "機械のクローズアップ"
+          },
+          {
+            "key": "settings.machineCloseUpsOn",
+            "text": "オン"
+          },
+          {
+            "key": "settings.machineCloseUpsOff",
+            "text": "オフ"
+          },
+          {
             "key": "settings.desktop",
             "text": "デスクトップアイコンを開く操作"
           },
@@ -70900,7 +70990,7 @@
           },
           {
             "key": "keys.desk.stamps",
-            "text": "スタンプの引き出し (上のタブ): スタンプをパスポートにドラッグして放す"
+            "text": "スタンプラック (カウンターの横): スタンプをパスポートにドラッグして放す"
           },
           {
             "key": "keys.desk.pc",
@@ -78588,20 +78678,12 @@
         "text": "Click the Passport's Valid Until, then the calendar: is it still valid?"
       },
       {
-        "id": "stamps",
-        "action": "StampsOut",
-        "categories": [],
-        "form": "",
-        "target": "stamps",
-        "text": "Press {stamps} (or the STAMPS tab) to open the brass stamp drawer."
-      },
-      {
         "id": "stamp",
         "action": "Stamp",
         "categories": [],
         "form": "",
-        "target": "paper:TC-101",
-        "text": "Drag a stamp onto the Passport and let go: APPROVED or DENIED."
+        "target": "stamp_rack",
+        "text": "Drag a stamp from the rack onto the Passport and let go: APPROVED or DENIED."
       },
       {
         "id": "handback",

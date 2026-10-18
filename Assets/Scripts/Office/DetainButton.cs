@@ -1,4 +1,3 @@
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,16 +68,6 @@ public sealed class DetainButton : MonoBehaviour
         if (buttonClick != null)
             buttonClick.onClick.AddListener(Press);
     }
-
-    /// <summary>
-    /// Lays the button (the office binder, once the desk is placed): on the
-    /// desk's plane (<paramref name="deskTop"/>) where the office view
-    /// (<paramref name="office"/>, drawn at <paramref name="aspect"/>) shows
-    /// <paramref name="viewport"/> (DeskConfigSO.detainView), facing the
-    /// chair along the view's level forward. False (it stays where it is)
-    /// without a camera or when that point misses the plane.
-    /// </summary>
-    public bool Lay(CinemachineCamera office, float aspect, float deskTop, Vector2 viewport) => DeskLay.Lay(transform, office, aspect, deskTop, viewport);
 
     /// <summary>The cover clicked: it flips up (or closes when up), a snap.</summary>
     public void ToggleCover()

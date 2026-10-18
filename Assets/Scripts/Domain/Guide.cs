@@ -24,7 +24,7 @@ public enum GuideAction
     /// <summary>A comparison is logged in the findings; a step may name the details it must be about (the finding's category).</summary>
     Compare = 4,
 
-    /// <summary>The stamp bar slides out (TAB or the grey tab).</summary>
+    /// <summary>Retired with the stamp drawer (the fixed stamp rack, the desk layout spec §2): nothing records it and no step may use it; kept so the later values keep their numbers.</summary>
     StampsOut = 5,
 
     /// <summary>The passport takes its verdict stamp.</summary>
@@ -270,7 +270,8 @@ public sealed class GuideContent
 /// Where a guide arrow may point: the AVAILABLE sign, the red inspect button,
 /// the grey stamp tab, the PC's grey tab, the rulebook, the calendar, the
 /// Seal Register (the rulebook's SEALS tab), the
-/// Departure Board, the scanner, the counter, the traveller, a paper by its
+/// Departure Board, the scanner, the counter, the traveller, the UV torch, the
+/// chip reader, the stamp rack, the intercom, a paper by its
 /// form ("paper:TC-230") or one field of it ("field:TC-230/CitizenId"). A
 /// paper not on the desk yet points at the rulebook (its PAPERS tab lists the
 /// papers to ask for). Pure.
@@ -278,7 +279,7 @@ public sealed class GuideContent
 public static class GuideTargets
 {
     /// <summary>The named targets.</summary>
-    public static readonly IReadOnlyList<string> Named = new[] { "sign", "inspect", "stamps", "pc", "rulebook", "seals", "calendar", "board", "scanner", "counter", "traveller", "uv_torch", "chip_reader" };
+    public static readonly IReadOnlyList<string> Named = new[] { "sign", "inspect", "stamps", "pc", "rulebook", "seals", "calendar", "board", "scanner", "counter", "traveller", "uv_torch", "chip_reader", "stamp_rack", "intercom" };
 
     /// <summary>The targets in words, for a problem's message.</summary>
     public static string Describe => string.Join(", ", Named) + ", paper:<form>, field:<form>/<ClueCategory>";
