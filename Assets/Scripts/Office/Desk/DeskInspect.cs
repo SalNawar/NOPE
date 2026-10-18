@@ -344,7 +344,8 @@ public sealed class DeskInspect : MonoBehaviour
         MoveOn();
         bool office = IsOn && (view == null || view.Current == OfficeView.OfficeFocus) && (city == null || !city.IsOn);
         string hold = office ? board.HoldKey : null;
-        (string a, string b, FindingLook look, string label) = board.Line;
+        (string a, string b, FindingLook look, _) = board.Line;
+        string label = board.DeskLabel;
         if (!office)
             a = b = null;
 

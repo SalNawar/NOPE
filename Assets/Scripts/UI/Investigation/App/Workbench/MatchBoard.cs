@@ -71,7 +71,7 @@ public sealed class MatchBoard : MonoBehaviour
     private readonly List<AppRow> _rows = new List<AppRow>();
     private Held _special;
     private CaseInstance _case;
-    private string _linkA, _linkB, _linkLabel, _holdKey;
+    private string _linkA, _linkB, _linkLabel, _linkKey, _holdKey;
     private FindingLook _linkLook;
     private string _clearA, _clearB;
     private bool _quiet;
@@ -106,6 +106,9 @@ public sealed class MatchBoard : MonoBehaviour
 
     /// <summary>The two keys of the line shown (null when none), its look and its label: the desk draws the same line between them where they lie (DeskInspect; the desk-first redesign, item 11).</summary>
     public (string a, string b, FindingLook look, string label) Line => (_linkA, _linkB, _linkLook, _linkLabel);
+
+    /// <summary>The line's label as the desk prints it (the culture's language; Line's label is the PC's, always English).</summary>
+    public string DeskLabel => _linkKey != null ? UiText.Get(_linkKey) : _linkLabel;
 
     /// <summary>The status line's Cancel (the keys' Holding region).</summary>
     public Button CancelButton => cancelButton;
@@ -359,7 +362,7 @@ public sealed class MatchBoard : MonoBehaviour
         var finding = new Finding(kind, keyA, keyB, titleA, valueA, titleB, valueB, subject, proof, category);
         FindingLook look = FindingRules.Look(kind);
         _holdKey = null;
-        Link(keyA, keyB, look, UiText.Pc.Get(FindingRules.LinkKey(kind)));
+        Link(keyA, keyB, look, FindingRules.LinkKey(kind));
         if (!FindingRules.IsLogged(kind))
             ShowStatus(FindingLook.Info, UiText.Pc.Format("finding.note." + kind, whatA, whatB));
         else if (!_log.Add(finding))
@@ -380,7 +383,7 @@ public sealed class MatchBoard : MonoBehaviour
         if (finding == null || app == null)
             return;
         app.OpenPair(Target(finding.KeyA), Target(finding.KeyB));
-        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), UiText.Pc.Get(FindingRules.LinkKey(finding.Kind)));
+        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), FindingRules.LinkKey(finding.Kind));
         ShowStatus(FindingRules.Look(finding.Kind), UiText.Pc.Format("status.shown", FindingsView.Title(finding)));
     }
 
@@ -394,13 +397,14 @@ public sealed class MatchBoard : MonoBehaviour
         return app.LinkFor(key);
     }
 
-    /// <summary>The line between two keys, redrawn each frame as their rows move.</summary>
-    private void Link(string keyA, string keyB, FindingLook look, string label)
+    /// <summary>The line between two keys, redrawn each frame as their rows move; its label the ui string <paramref name="labelKey"/> (the PC's in English, the desk's in the culture's language: DeskLabel).</summary>
+    private void Link(string keyA, string keyB, FindingLook look, string labelKey)
     {
         _linkA = keyA;
         _linkB = keyB;
         _linkLook = look;
-        _linkLabel = label;
+        _linkKey = labelKey;
+        _linkLabel = UiText.Pc.Get(labelKey);
         LineVersion++;
         DrawLine();
     }
