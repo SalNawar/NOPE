@@ -35,6 +35,7 @@ public sealed class MachineCloseUp : MonoBehaviour
     private readonly CloseUpTimeline _timeline = new CloseUpTimeline();
     private readonly Dictionary<string, Renderer[]> _machines = new Dictionary<string, Renderer[]>();
     private readonly HashSet<Clickable> _heard = new HashSet<Clickable>();
+    private readonly HashSet<Rolodex> _heardRolodex = new HashSet<Rolodex>();
     private CinemachineCamera _camera, _office;
     private DeskLayoutSettings _layout;
     private DeskFrame _frame;
@@ -116,7 +117,7 @@ public sealed class MachineCloseUp : MonoBehaviour
             Hide();
     }
 
-    /// <summary>The upgrades' objects on the desk now: a click on one shows it close (each heard once).</summary>
+    /// <summary>The upgrades' objects on the desk now: a click on one shows it close (each heard once; the Rolodex, clicked by its own handler, through its Clicked).</summary>
     private void HearUpgrades()
     {
         DeskUpgrades upgrades = _hardware != null ? _hardware.Upgrades : null;
@@ -133,6 +134,12 @@ public sealed class MachineCloseUp : MonoBehaviour
                 string id = shown.name;
                 _machines[id] = shown.GetComponentsInChildren<Renderer>(true);
                 click.onClick.AddListener(() => Show(id, _layout.closeUpHoldSeconds));
+            }
+            if (shown is Rolodex rolodex && _heardRolodex.Add(rolodex))
+            {
+                string id = shown.name;
+                _machines[id] = shown.GetComponentsInChildren<Renderer>(true);
+                rolodex.Clicked += () => Show(id, _layout.closeUpHoldSeconds);
             }
         }
     }

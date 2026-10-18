@@ -39,6 +39,9 @@ public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     private readonly List<ContactCard> _cards = new List<ContactCard>();
     private System.Action<string, Transform> _say;
 
+    /// <summary>Raised by a click on the drum (not a drag): the machine close-up shows it close, as a click on any upgrade's object does (it has no Clickable).</summary>
+    public event System.Action Clicked;
+
     /// <summary>The card facing the clerk (0: the gold card, the day's lead).</summary>
     private int Facing => cardCount > 0 ? (int)Mathf.Repeat(-Mathf.Round(_angle / cardDegrees), cardCount) : 0;
 
@@ -71,6 +74,7 @@ public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHan
             return;
         _settling = false;
         _speed += flickSpeed;
+        Clicked?.Invoke();
     }
 
     /// <inheritdoc/>
