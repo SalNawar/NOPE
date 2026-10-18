@@ -1561,6 +1561,8 @@ public static class _TimeDeskAuditPlay
             int before = o.Ui.EvidenceCount;
             if (t.Layer == ScanLayer.Chip)
                 hardware.Readings.ReadChip(t.Document);
+            else if (t.Layer == ScanLayer.Micro)
+                hardware.Readings.ReadMicro(t.Document); // a magnifier read its microprint line
             else
             {
                 IReadOnlyList<UvMark> marks = hardware.Hidden.Marks(t.Document);
