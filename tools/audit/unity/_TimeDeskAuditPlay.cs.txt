@@ -1334,8 +1334,9 @@ public static class _TimeDeskAuditPlay
         {
             List<string> rows = record.Groups.SelectMany(g => g.Rows).Select(r => r.Label).ToList();
             bool manifest = plan.Issues(Directives.Manifest), waiver = plan.Issues(Directives.Waiver), proof = Directives.Proofs.Any(plan.Issues);
-            Check(rows.Contains(UiText.Get("records.row.transponderClass")) == manifest && rows.Contains(UiText.Get("records.row.waiver")) == waiver &&
-                  rows.Contains(UiText.Get("records.row.proof")) == proof,
+            // The Citizen Account is on the PC: its rows read English (UiText.Pc) since UI's 074c086.
+            Check(rows.Contains(UiText.Pc.Get("records.row.transponderClass")) == manifest && rows.Contains(UiText.Pc.Get("records.row.waiver")) == waiver &&
+                  rows.Contains(UiText.Pc.Get("records.row.proof")) == proof,
                   $"d{day} slot {slot}: the Citizen Account lists only the issued forms on file (manifest {manifest}, waiver {waiver}, proof {proof}) [{string.Join(", ", rows)}]");
         }
 
@@ -1684,7 +1685,7 @@ public static class _TimeDeskAuditPlay
         yield return Frames(2);
         Finding found = o.App.Board.Log.Find(fieldKey, truthKey);
         var lines = (MatchLines)Field(o.App.Board, "lines");
-        string want = UiText.Get(FindingRules.LinkKey(expected));
+        string want = UiText.Pc.Get(FindingRules.LinkKey(expected)); // the workbench's line, on the PC: English
         string label = ((TMP_Text)Field(lines, "labelText")).text;
         string got = found != null ? found.Kind + (found.Proof ? ", evidence" : "") : "nothing logged";
         Report($"   d{day} slot {slot}: {what} on the workbench: {got}, line '{label}' (showing {lines.Showing}), evidence {before} -> {o.Ui.EvidenceCount}");
@@ -1708,7 +1709,7 @@ public static class _TimeDeskAuditPlay
             if (otherSeal != null && box != null)
             {
                 int count = o.App.Board.Log.Count;
-                string note = UiText.Get(FindingRules.LinkKey(FindingKind.OtherOffice));
+                string note = UiText.Pc.Get(FindingRules.LinkKey(FindingKind.OtherOffice));
                 box.Pick();
                 otherSeal.Pick();
                 yield return Frames(2);
