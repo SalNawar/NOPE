@@ -315,4 +315,28 @@ public static class UvCone
 
     /// <summary>True when a mark lit for <paramref name="litSeconds"/> counts as seen.</summary>
     public static bool IsSeen(float litSeconds) => litSeconds >= SeenSeconds;
+
+    /// <summary>The steepest and the shallowest tilt a held torch takes below the level (degrees).</summary>
+    public const float MinTilt = 10f, MaxTilt = 80f;
+
+    /// <summary>
+    /// Where the held torch's cone lands (Saleh 2026-10-18, demo 1018a note 10:
+    /// "when you hold the UV the mouse should be on the base not the light"):
+    /// the pointer holds the torch by its grip, <paramref name="height"/>
+    /// metres over the desk at (<paramref name="gripX"/>, <paramref name="gripZ"/>),
+    /// its lens pointing away from the chair (<paramref name="awayX"/>,
+    /// <paramref name="awayZ"/>, any length) and <paramref name="tiltDegrees"/>
+    /// below the level (kept from MinTilt to MaxTilt), so the cone lands on the
+    /// desk ahead of the pointer, where the torch's axis meets it: height /
+    /// tan(tilt) ahead of the grip. With no away direction: under the grip.
+    /// </summary>
+    public static (float x, float z) Ahead(float gripX, float gripZ, float awayX, float awayZ, float height, float tiltDegrees)
+    {
+        float length = (float)Math.Sqrt(awayX * awayX + awayZ * awayZ);
+        if (length < 1e-6f)
+            return (gripX, gripZ);
+        float tilt = Math.Max(MinTilt, Math.Min(MaxTilt, tiltDegrees)) * (float)Math.PI / 180f;
+        float reach = Math.Max(0f, height) / (float)Math.Tan(tilt);
+        return (gripX + awayX / length * reach, gripZ + awayZ / length * reach);
+    }
 }

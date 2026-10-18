@@ -113,6 +113,18 @@ public class DeskMachinesTests
     }
 
     [Test]
+    public void Cone_LandsAheadOfTheGrip_AlongTheTorch()
+    {
+        (float x, float z) = UvCone.Ahead(0.2f, 0.1f, 0f, 3f, 0.1f, 45f);
+        Assert.AreEqual(0.2f, x, 1e-5f, "straight ahead: no sideways drift");
+        Assert.AreEqual(0.2f, z, 1e-5f, "height / tan(45) = 0.1 ahead of the grip");
+        (x, _) = UvCone.Ahead(0f, 0f, 1f, 0f, 0.1f, 30f);
+        Assert.AreEqual(0.1f / (float)System.Math.Tan(System.Math.PI / 6), x, 1e-5f, "a shallower tilt reaches further");
+        Assert.AreEqual(UvCone.Ahead(0f, 0f, 1f, 0f, 0.1f, UvCone.MaxTilt), UvCone.Ahead(0f, 0f, 1f, 0f, 0.1f, 89.9f), "the tilt is kept under MaxTilt");
+        Assert.AreEqual((0.3f, -0.2f), UvCone.Ahead(0.3f, -0.2f, 0f, 0f, 0.1f, 45f), "no away direction: under the grip");
+    }
+
+    [Test]
     public void AMachinesFault_ProvesItsOwnPapersBox_NeverAnotherPaperOrAnHonestReading()
     {
         CompareEvidence print = CompareEvidence.FromDocumentField(F(ClueCategory.CitizenId, "NHA-512"), 0);

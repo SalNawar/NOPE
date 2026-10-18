@@ -256,8 +256,11 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The UV torch's cone on the desk: its radius in metres.</summary>
     [Min(0.01f)] public float uvConeRadius = 0.075f;
 
-    /// <summary>Where the held torch's lens rides from the lit spot (metres): how high over the desk, how far toward the chair and how far to the right (a right hand's hold, so the torch never hides what its cone shows).</summary>
-    [Min(0f)] public float uvHoldHeight = 0.12f, uvHoldBack = 0.04f, uvHoldSide = 0.14f;
+    /// <summary>How the held torch is held (Saleh 2026-10-18: "the mouse should be on the base not the light"): the pointer holds its grip this high over the desk (metres), its lens pointing away from the chair this many degrees below the level, so its cone lands ahead of the pointer (UvCone.Ahead: height / tan(tilt) ahead).</summary>
+    [Min(0f)] public float uvHoldHeight = 0.14f;
+
+    /// <inheritdoc cref="uvHoldHeight"/>
+    [Range(10f, 80f)] public float uvHoldTilt = 40f;
 
     /// <summary>The desk notes by each machine on its first day: UI string keys (world_source.json ui.strings).</summary>
     public string uvHintKey = "desk.uvHint", chipHintKey = "desk.chipHint";
