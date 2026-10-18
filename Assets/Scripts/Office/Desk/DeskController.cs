@@ -239,7 +239,7 @@ public sealed class DeskController : MonoBehaviour
     private void RulebookDragged(DeskDraggable drag, Vector3 point)
     {
         if (config != null)
-            rulebook.SetCarryFloor(CarryFloor(rulebook.transform.position, RulebookGrow()));
+            rulebook.SetCarryFloor(CarryFloor(rulebook.transform.position, RulebookGrow(), rulebook.Thickness));
     }
 
     /// <summary>
@@ -752,7 +752,7 @@ public sealed class DeskController : MonoBehaviour
         // Carried over a machine, it keeps over its casing (never through it).
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         if (paper != null)
-            paper.SetCarryFloor(CarryFloor(paper.transform.position, Grow(paper)));
+            paper.SetCarryFloor(CarryFloor(paper.transform.position, Grow(paper), paper.Thickness));
         if (_overCounter != (under == DeskZone.Counter))
         {
             _overCounter = under == DeskZone.Counter;
@@ -853,7 +853,7 @@ public sealed class DeskController : MonoBehaviour
         Vector3 from = paper.CarriedFrom;
         List<Vector3> path = where == MachineDock.Slot
             ? Points(DockPath.Into(Tuple(from), Tuple(mouth), slot.way.x, slot.way.z, half, inside, dock.Casing, Casings(), Grow(paper), config.dockClearance))
-            : Way(from, mouth, Grow(paper));
+            : Points(DockPath.OnTo(Tuple(from), Tuple(mouth), Casings(), Grow(paper), config.dockClearance));
         paper.Carry(path, dock.DockFacing(where), WaySeconds(from, path), () =>
         {
             void Out()
@@ -931,13 +931,13 @@ public sealed class DeskController : MonoBehaviour
         return _casings;
     }
 
-    /// <summary>How high over its place (metres) a thing dragged with its root at <paramref name="root"/> keeps, its edges reaching <paramref name="grow"/> from it: over each casing under it, its top and the clearance; 0 over none.</summary>
-    private float CarryFloor(Vector3 root, float grow)
+    /// <summary>How high over its place (metres: its face's lift) a thing <paramref name="thickness"/> thick dragged with its root at <paramref name="root"/> keeps, its edges reaching <paramref name="grow"/> from it: its bottom over each casing under it by the clearance; 0 over none.</summary>
+    private float CarryFloor(Vector3 root, float grow, float thickness)
     {
         float floor = 0f;
         foreach (MachineBox box in _casings)
             if (box.Over(root.x, root.z, grow))
-                floor = Mathf.Max(floor, box.Top + config.dockClearance - root.y);
+                floor = Mathf.Max(floor, box.Top + config.dockClearance + thickness - root.y);
         return floor;
     }
 
@@ -1232,7 +1232,7 @@ public sealed class DeskController : MonoBehaviour
         Dock(paper);
         scanner.HoldOpen(true);
         Vector3 from = paper.CarriedFrom;
-        List<Vector3> way = Way(from, scanner.DockPoint(MachineDock.Bed), Grow(paper));
+        List<Vector3> way = Points(DockPath.OnTo(Tuple(from), Tuple(scanner.DockPoint(MachineDock.Bed)), Casings(), Grow(paper), config.dockClearance));
         paper.Carry(way, scanner.DockFacing(MachineDock.Bed), WaySeconds(from, way), () =>
         {
             scanner.HoldOpen(false);
