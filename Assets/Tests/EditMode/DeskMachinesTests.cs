@@ -113,6 +113,22 @@ public class DeskMachinesTests
     }
 
     [Test]
+    public void AMicroprintLine_IsReadOnce_AndForgottenAtANewCase()
+    {
+        var readings = new DeskReadings();
+        var changed = new List<int>();
+        readings.Changed += changed.Add;
+        Assert.IsFalse(readings.MicroRead(1));
+        Assert.IsTrue(readings.ReadMicro(1));
+        Assert.IsFalse(readings.ReadMicro(1), "once");
+        Assert.IsFalse(readings.ReadMicro(-1));
+        Assert.IsTrue(readings.MicroRead(1));
+        CollectionAssert.AreEqual(new[] { 1 }, changed);
+        readings.Clear();
+        Assert.IsFalse(readings.MicroRead(1));
+    }
+
+    [Test]
     public void Cone_LandsAheadOfTheGrip_AlongTheTorch()
     {
         (float x, float z) = UvCone.Ahead(0.2f, 0.1f, 0f, 3f, 0.1f, 45f);

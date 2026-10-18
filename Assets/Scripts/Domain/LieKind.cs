@@ -52,7 +52,10 @@ public enum LieKind
     ClonedChip,
 
     /// <summary>L14, a washed paper (the desk machines spec §2-3): one of the traveller's papers was another person's, washed and printed over with the traveller's own true values, so under the UV torch the ghost of the first holder's name shows beneath theirs (a forgery only the torch shows).</summary>
-    WashedPaper
+    WashedPaper,
+
+    /// <summary>L15, a reprinted paper (the desk machines spec §10): one of the traveller's papers is a genuine paper of another citizen's, its print changed to the traveller's own true values, but its microprint, too fine to reprint, still repeats the first holder's Citizen ID (a forgery only the lens stand's magnifiers show).</summary>
+    ReprintedPaper
 }
 
 /// <summary>The lies' rules: which kinds of traveller each lie fits, and which lies are record lies. Pure.</summary>
@@ -83,6 +86,7 @@ public static class LieKinds
                 return true;
             case LieKind.ClonedChip:
             case LieKind.WashedPaper:
+            case LieKind.ReprintedPaper:
                 return kind != TravellerKind.Displaced;
             case LieKind.FalseOrigin:
             case LieKind.FakeDisplaced:
@@ -125,11 +129,12 @@ public static class LieKinds
     /// <summary>True for a visual lie (the document design spec, D4, D8): a forged seal, proven against the Seal Register, or someone else's photo, proven against the traveller at the desk; planned by their own makers (Seals.Forge, Looks.Stranger), never by RecordLies or Lies.Plan.</summary>
     public static bool IsVisualLie(LieKind lie) => lie == LieKind.ForgedSeal || lie == LieKind.SwappedPhoto;
 
-    /// <summary>True for a hidden lie (the desk machines spec §2-3): a cloned chip, shown only by the chip reader, or a washed paper, shown only under the UV torch; every value printed is true; planned by HiddenLies, never by RecordLies or Lies.Plan.</summary>
-    public static bool IsHiddenLie(LieKind lie) => lie == LieKind.ClonedChip || lie == LieKind.WashedPaper;
+    /// <summary>True for a hidden lie (the desk machines spec §2-3, §10): a cloned chip, shown only by the chip reader, a washed paper, shown only under the UV torch, or a reprinted paper, shown only by the lens stand's magnifiers; every value printed is true; planned by HiddenLies, never by RecordLies or Lies.Plan.</summary>
+    public static bool IsHiddenLie(LieKind lie) => lie == LieKind.ClonedChip || lie == LieKind.WashedPaper || lie == LieKind.ReprintedPaper;
 
-    /// <summary>The machine that shows a hidden lie (the Feature key the day ramp issues it under: Feature.ChipReader, Feature.UvTorch); null for every other lie.</summary>
-    public static string MachineOf(LieKind lie) => lie == LieKind.ClonedChip ? Feature.ChipReader : lie == LieKind.WashedPaper ? Feature.UvTorch : null;
+    /// <summary>The machine that shows a hidden lie (the Feature key the day ramp issues it under: Feature.ChipReader, Feature.UvTorch, Feature.Lens for the lens stand); null for every other lie.</summary>
+    public static string MachineOf(LieKind lie) =>
+        lie == LieKind.ClonedChip ? Feature.ChipReader : lie == LieKind.WashedPaper ? Feature.UvTorch : lie == LieKind.ReprintedPaper ? Feature.Lens : null;
 
     /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for a place lie, a visual lie or a hidden lie.</summary>
     public static bool IsRecordLie(LieKind lie) => !IsPlaceLie(lie) && !IsVisualLie(lie) && !IsHiddenLie(lie);

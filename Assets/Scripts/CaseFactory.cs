@@ -901,10 +901,9 @@ public sealed class CaseFactory
         {
             // A hidden lie (the desk machines spec §2-3): the box printed true, and what the machine reads there instead.
             HiddenTell tell = inst.hiddenTells[0];
-            bool chip = tell.Layer == ScanLayer.Chip;
-            Rule(Of(TravelRuleType.Procedure), chip ? "citation.rule.chip" : "citation.rule.uv");
+            Rule(Of(TravelRuleType.Procedure), tell.Layer == ScanLayer.Chip ? "citation.rule.chip" : tell.Layer == ScanLayer.Micro ? "citation.rule.micro" : "citation.rule.uv");
             AddBox(c, inst, d => inst.documents.IndexOf(d) == tell.Document, f => f.category == tell.Category);
-            Add(UiText.Get(chip ? "citation.label.chip" : "citation.label.ghost"), tell.Value);
+            Add(UiText.Get(EvidencePicks.HiddenLabelKey(tell.Layer)), tell.Value);
         }
         else if (inst.IsForger)
         {
@@ -1131,20 +1130,23 @@ public sealed class CaseFactory
     /// Plans a rolled hidden lie (the desk machines spec §2-3) on the case's
     /// hidden stream, from the published canon (agency.faults): a cloned chip
     /// (HiddenLies.PlanChip: another citizen's Citizen ID in a chipped paper's
-    /// chip) or a washed paper (HiddenLies.PlanWash: the ghost of its first
-    /// holder's name under UV). Nothing printed changes. Nothing to plan (no
-    /// canon row, no chipped paper, no other name) leaves the traveller
-    /// honest with a warning.
+    /// chip), a washed paper (HiddenLies.PlanWash: the ghost of its first
+    /// holder's name under UV) or a reprinted paper (HiddenLies.PlanReprint:
+    /// another citizen's Citizen ID in a paper's microprint). Nothing printed
+    /// changes. Nothing to plan (no canon row, no chipped or microprinted
+    /// paper, no other name) leaves the traveller honest with a warning.
     /// </summary>
     private void ForgeHidden(CaseInstance inst, LieKind kind, IRandomSource rng, int caseIndex1Based)
     {
         List<RecordForm> forms = ShownForms(inst);
         List<HiddenTell> tells = kind == LieKind.ClonedChip
             ? HiddenLies.PlanChip(_lib.Agency.faults, forms, _lib.Agency.hidden, _agencyNumbers, rng)
-            : HiddenLies.PlanWash(_lib.Agency.faults, forms, _citizenNames.All, rng);
+            : kind == LieKind.ReprintedPaper
+                ? HiddenLies.PlanReprint(_lib.Agency.faults, forms, _lib.Agency.hidden, _agencyNumbers, rng)
+                : HiddenLies.PlanWash(_lib.Agency.faults, forms, _citizenNames.All, rng);
         if (tells.Count == 0)
         {
-            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled {kind}, but no paper of theirs can carry it (the canon's rows, agency.hidden.chipForms, the names), so the traveller stays honest. Check agency.faults and agency.hidden.");
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled {kind}, but no paper of theirs can carry it (the canon's rows, agency.hidden.chipForms and microForms, the names), so the traveller stays honest. Check agency.faults and agency.hidden.");
             return;
         }
         inst.hiddenTells = tells;

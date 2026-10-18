@@ -83,7 +83,7 @@ public class LieKindsTests
         {
             bool place = lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced || lie == LieKind.Smuggling;
             bool visual = lie == LieKind.ForgedSeal || lie == LieKind.SwappedPhoto;
-            bool hidden = lie == LieKind.ClonedChip || lie == LieKind.WashedPaper;
+            bool hidden = lie == LieKind.ClonedChip || lie == LieKind.WashedPaper || lie == LieKind.ReprintedPaper;
             Assert.AreEqual(place, LieKinds.IsPlaceLie(lie), lie.ToString());
             Assert.AreEqual(visual, LieKinds.IsVisualLie(lie), lie.ToString());
             Assert.AreEqual(hidden, LieKinds.IsHiddenLie(lie), lie.ToString());
@@ -99,7 +99,10 @@ public class LieKindsTests
         {
             Assert.AreEqual(kind != TravellerKind.Displaced, LieKinds.AppliesTo(LieKind.ClonedChip, kind), kind.ToString());
             Assert.AreEqual(kind != TravellerKind.Displaced, LieKinds.AppliesTo(LieKind.WashedPaper, kind), kind.ToString());
+            Assert.AreEqual(kind != TravellerKind.Displaced, LieKinds.AppliesTo(LieKind.ReprintedPaper, kind), kind.ToString());
         }
+        Assert.IsTrue(Law.Breaks(LieKind.ReprintedPaper));
+        Assert.AreEqual(Feature.Lens, LieKinds.MachineOf(LieKind.ReprintedPaper), "the lens stand's magnifiers show it");
         Assert.AreEqual(Faults.Forged, Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.ClonedChip));
         Assert.IsTrue(Law.Breaks(LieKind.WashedPaper));
         Assert.AreEqual(Feature.ChipReader, LieKinds.MachineOf(LieKind.ClonedChip));

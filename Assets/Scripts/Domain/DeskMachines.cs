@@ -28,6 +28,7 @@ public enum LayerState
 public sealed class DeskReadings
 {
     private readonly HashSet<int> _chips = new HashSet<int>();
+    private readonly HashSet<int> _micro = new HashSet<int>();
     private readonly HashSet<(int document, int mark)> _seen = new HashSet<(int, int)>();
 
     /// <summary>Raised when a chip is read or a mark is first seen, with the paper.</summary>
@@ -38,7 +39,20 @@ public sealed class DeskReadings
     {
         _chips.Clear();
         _seen.Clear();
+        _micro.Clear();
     }
+
+    /// <summary>A magnifier has shown paper <paramref name="document"/>'s microprint line long enough to read it (once; false when it was already read): from then on the line is picked in inspect mode (the desk machines spec §10).</summary>
+    public bool ReadMicro(int document)
+    {
+        if (document < 0 || !_micro.Add(document))
+            return false;
+        Changed?.Invoke(document);
+        return true;
+    }
+
+    /// <summary>True when paper <paramref name="document"/>'s microprint line has been read under a magnifier.</summary>
+    public bool MicroRead(int document) => _micro.Contains(document);
 
     /// <summary>The reader has read paper <paramref name="document"/>'s chip (once; false when it was already read).</summary>
     public bool ReadChip(int document)
