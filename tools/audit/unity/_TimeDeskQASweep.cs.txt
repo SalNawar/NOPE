@@ -978,10 +978,11 @@ public static class _TimeDeskQASweep
         Rect r = ScreenBounds(cam, BoundsOf(detain.GetComponentsInChildren<Renderer>(false)));
         bool inside = r.xMin >= -1f && r.yMin >= -1f && r.xMax <= UnityEngine.Screen.width + 1f && r.yMax <= UnityEngine.Screen.height + 1f && r.width > 8f;
         Check(inside, $"{shotTag}: the DETAIN button lies on the desk, on the screen ({Fmt(r)})");
-        var binder = Office.One<OfficeSceneBinder>();
-        if (binder != null && (bool)Field(binder, "_hasScannerFootprint"))
+        var scanner = (DeskScanner)Field(o.Desk, "scanner");
+        Renderer[] scannerParts = scanner != null && scanner.gameObject.activeInHierarchy ? scanner.GetComponentsInChildren<Renderer>(false) : Array.Empty<Renderer>();
+        if (scannerParts.Length > 0)
         {
-            Bounds d = BoundsOf(detain.GetComponentsInChildren<Renderer>(false)), s = (Bounds)Field(binder, "_scannerFootprint");
+            Bounds d = BoundsOf(detain.GetComponentsInChildren<Renderer>(false)), s = BoundsOf(scannerParts);
             bool overlap = d.min.x < s.max.x && s.min.x < d.max.x && d.min.z < s.max.z && s.min.z < d.max.z;
             Check(!overlap, $"{shotTag}: the DETAIN button stands clear of the scanner's footprint (button {d.center} {d.size}, scanner {s.center} {s.size})");
         }
