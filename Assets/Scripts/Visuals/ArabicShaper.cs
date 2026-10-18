@@ -59,7 +59,8 @@ public static class ArabicShaper
     /// Logical Arabic text in visual order for left-to-right rendering: shaped
     /// letters, right-to-left runs reversed (brackets mirrored, spaces made
     /// no-break), runs in reverse order; digits and Latin keep their order.
-    /// Text with no Arabic letter comes back unchanged; null gives "".
+    /// Text with no Arabic letter comes back unchanged; null gives "". Each
+    /// line goes into visual order by itself, the lines keeping their order.
     /// </summary>
     public static string ToVisual(string logical) => ToVisual(logical, null);
 
@@ -71,6 +72,34 @@ public static class ArabicShaper
     /// character it shows (a lam-alef ligature: its lam's).
     /// </summary>
     public static string ToVisual(string logical, List<int> sources)
+    {
+        sources?.Clear();
+        if (string.IsNullOrEmpty(logical))
+            return string.Empty;
+        if (logical.IndexOf('\n') < 0)
+            return Line(logical, sources);
+
+        // Each line into visual order by itself, the lines kept in their order (TMP draws a break where it lies).
+        var sb = new StringBuilder(logical.Length);
+        List<int> part = sources != null ? new List<int>() : null;
+        for (int start = 0; ;)
+        {
+            int end = logical.IndexOf('\n', start);
+            sb.Append(Line(logical.Substring(start, (end < 0 ? logical.Length : end) - start), part));
+            if (sources != null)
+                foreach (int i in part)
+                    sources.Add(start + i);
+            if (end < 0)
+                break;
+            sb.Append('\n');
+            sources?.Add(end);
+            start = end + 1;
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>One line (no line break) into visual order; <paramref name="sources"/> (cleared first; null skips it) as ToVisual's.</summary>
+    private static string Line(string logical, List<int> sources)
     {
         sources?.Clear();
         if (string.IsNullOrEmpty(logical))
