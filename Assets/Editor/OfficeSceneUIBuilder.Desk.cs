@@ -682,7 +682,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInspect, "view", view);
         SetRef(soInspect, "city", cityView);
         soInspect.ApplyModifiedProperties();
-        WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(DeskStampTray.ToggleBar));
+        WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(DeskStampTray.ToggleRack));
         var soStamps = new SerializedObject(stampTray);
         SetRef(soStamps, "deskView", deskView);
         SetRef(soStamps, "surface", desk.GetComponent<DeskSurface>());
@@ -1355,6 +1355,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The STAMPS tab on the overlay's top edge beside the drawer, flush on the edge (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"; DeskStampTray.PlaceTab keeps it beside the drawer).</summary>
     private static readonly Vector2 StampTabSize = new Vector2(236f, 64f);
 
+    /// <summary>Where the STAMPS tab's left edge sits along the screen's top edge (viewport x): where the drawer's band was before the fixed rack.</summary>
+    private const float StampTabX = 0.66f;
+
     /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two daters' distance apart (DENIED left, APPROVED right), the label lip's reach past each, its gap in front of the daters' frames and its section (deep, tall). The lip lies low at the daters' feet, in front of them (toward the chair), its words on its top, so the whole green and red bodies with their wheels show over it (run 7's integration: the rail at the bodies' height hid them).</summary>
     private const float StampSpacing = 0.14f;
     private const float StampRailOverhang = 0.07f;
@@ -1475,12 +1478,12 @@ public static partial class OfficeSceneUIBuilder
     /// the stamp stuff, and the Tab shortcut"), its stamps the two daters (the
     /// desk machine spec §1), rebuilt each run. On the office overlay:
     /// StampBar (the DeskStampTray, an always-active full-screen host) with
-    /// the Tab on the top edge beside where the drawer comes in (placed there
-    /// at run time, DeskStampTray.PlaceTab; "STAMPS" beside the key, TAB; inactive
-    /// until the booth shows it), the hint's plate at the top right
+    /// the Tab on the top edge (StampTabX; "STAMPS" beside the key, TAB: the
+    /// reading view over the rack; inactive until the booth shows it, in the
+    /// office view only), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
-    /// In the office: StampRack (inactive until slid out; the office binder
-    /// lays it, its origin at the daters' feet): the heavy brass drawer when its
+    /// In the office: StampRack (the office binder lays it on its bay of the
+    /// desk's plan, its origin at the daters' feet): the heavy brass drawer when its
     /// art is in the project and complete (BuildBrassDrawer; PropArt.UseArt over
     /// PropArt.BrassDrawer), its daters standing in its cradles and the
     /// verdict words on its enamel plates; else (the fallback) a low lip in the
@@ -1492,7 +1495,7 @@ public static partial class OfficeSceneUIBuilder
     /// is drag-only), holding its body (DaterBody: the prop
     /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED).
     /// The tray gets the papers' style, the date's face,
-    /// Saleh's dater sounds and the drawer's (WireDaters). The old overlay bar, the 3D tray of
+    /// Saleh's dater sounds (WireDaters). The old overlay bar, the 3D tray of
     /// the desk-first redesign and the overlay's hand-back buttons are destroyed.
     /// </summary>
     private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
@@ -1506,7 +1509,7 @@ public static partial class OfficeSceneUIBuilder
 
         Button tab = MakeButton(host, "Tab", null, Vector2.zero, Vector2.one, StampGrey, ThemeRoleId.DiegeticDevice);
         var tabRect = (RectTransform)tab.transform;
-        tabRect.anchorMin = tabRect.anchorMax = new Vector2(config.stampBarView.x, 1f);
+        tabRect.anchorMin = tabRect.anchorMax = new Vector2(StampTabX, 1f);
         tabRect.pivot = new Vector2(0f, 1f);
         tabRect.anchoredPosition = Vector2.zero;
         tabRect.sizeDelta = StampTabSize;

@@ -6,35 +6,25 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// The stamp bar with the two daters (the desk machine spec §1-2; Saleh
+/// The stamp rack with the two daters (the desk machine spec §1-2; Saleh
 /// 2026-10-07: "the stamps need to be retro two-click stamps … one saying
 /// approved, one denied"; before it, 2026-10-06: Papers, Please's grey tab,
 /// TAB, and "two stamps that I physically move ... I should be able to stamp
-/// anywhere on the document"). A tab on the screen's top edge where the
-/// drawer comes in, beside it ("STAMPS" beside "TAB"; Saleh's 1016a
-/// playtest, 2026-10-17: "the ui for it should be the same area it spawns so
-/// not on the side"; PlaceTab), the TAB key (OfficeControls) and the desk's
-/// stamp prop open the bar over the desk and close it (ToggleBar); out, it
-/// brings the reading view. The bar is the heavy brass drawer (Track BR,
-/// Saleh 2026-10-08: "a heavy brass drawer that makes the sound a typewriter
-/// makes when the carriage returns"), deep since the 1016a playtest ("give it
-/// depth": a cast-brass box) and coming from the top ("can we have the drawer
-/// the other way around from top to bottom"): its labelled bar on the top
-/// edge, the daters hanging from it toward the papers, it slides down into
-/// view out of the screen's top edge with a slow start, an accelerating carry
-/// and a hard stop (DrawerSequence: the carry, the stiff Drawer spring's
-/// overshoot and settle, FeelDirector's small hit, SoundCues.DrawerOpen's
-/// ratchet carry), tethered there at every aspect (Tether: its far edge on
-/// the top edge as the reading camera shows it, recomputed every frame;
-/// Saleh: "tethered to the edge of the screen", as in Papers, Please), and
-/// its brass mechanism (BrassDrawer: a lever, a rack and pinion, a cradle
-/// per dater) stands the daters up from lying folded toward the papers, DENIED then
-/// APPROVED, each locking upright with a click; closing, they fold down first
-/// (a dater still away comes back first), then a shove seats the drawer
-/// (SoundCues.DrawerClose: the reverse rasp and the thud).
+/// anywhere on the document"). Since the desk plan (Saleh's 1018a playtest:
+/// "we need a better location for the stamp drawer it is in the way"; plan
+/// v2, the desk layout spec §2) the rack is fixed: the heavy brass drawer
+/// (Track BR) stands open on its bay beside the counter at the papers' top
+/// right (DeskLayoutSettings.stampRack, laid by the office binder: Lay), in
+/// the reading view and never over the papers; stamp, then a short drag up
+/// hands the papers back. Its brass mechanism (BrassDrawer: a lever, a rack
+/// and pinion, a cradle per dater) stands the daters up as a case begins,
+/// DENIED then APPROVED, each locking upright with a click, and folds them
+/// down as it ends (DrawerSequence's cradles; its slide is not used). The
+/// tab on the screen's top edge ("STAMPS" beside "TAB"), the TAB key
+/// (OfficeControls) and the desk's old stamp bring the reading view over the
+/// rack, or go back (ToggleRack); the tab shows in the office view only.
 /// A dater takes input once its cradle is locked. Without the drawer's art
-/// the built rack (a lip with end caps) moves the same way without the
-/// mechanism. The rack holds the DENIED dater
+/// the built rack (a lip with end caps) holds them upright all the time. The rack holds the DENIED dater
 /// (left) and the APPROVED dater (right), self-inking daters after Saleh's
 /// S-401 reference, built under a prop contract (a root with Body, Frame,
 /// Die, Wheels and Button: the art may replace the meshes): a glossy body,
@@ -64,33 +54,30 @@ using UnityEngine.UI;
 /// verdict (Saleh 2026-10-07: no extra step): APPROVED spins the portal up,
 /// DENIED sends the traveller back; the desk's DETAIN button commits the
 /// third verdict any time (Commit). A right-click or Esc
-/// drops a carried dater back into the rack, else slides the bar back
-/// (ControlRules.BackOut). The bar takes input while BoothRules.StampsLive
-/// and shows its tab while BoothRules.PropsLive. Reduced Motion cuts every
+/// drops a carried dater back into the rack (ControlRules.BackOut). The
+/// daters take input while BoothRules.StampsLive; the tab shows while
+/// BoothRules.PropsLive, in the office view. Reduced Motion cuts every
 /// stroke and drops the shake. Build Office UI builds the tab, the hint, the
 /// audio source, the rack and the daters; the office binder lays the rack.
 /// </summary>
 public sealed class DeskStampTray : MonoBehaviour
 {
-    /// <summary>The desk tuning (the daters' hover, the bar's place, travel and slide, the ink, a note's time).</summary>
+    /// <summary>The desk tuning (the daters' hover, the rack's scale, the ink, a note's time).</summary>
     [SerializeField] private DeskConfigSO config;
 
-    /// <summary>The reading view (optional): the bar slid out brings it, and the bar hangs where it shows the desk at DeskConfigSO.stampBarView.</summary>
+    /// <summary>The reading view (optional): TAB and the tab bring it over the rack (ToggleRack); the tab hides while it is on.</summary>
     [SerializeField] private DeskView deskView;
 
-    /// <summary>The desk plane (the bar's height and, without the reading view, its place; the daters are dragged over it).</summary>
+    /// <summary>The desk plane (the daters are dragged over it).</summary>
     [SerializeField] private DeskSurface surface;
 
-    /// <summary>The rack in the office (the brass drawer or the built lip, the two daters): hidden while all the way in.</summary>
+    /// <summary>The rack in the office (the brass drawer or the built lip, the two daters): always shown, on its bay.</summary>
     [SerializeField] private Transform rack;
 
     /// <summary>The brass drawer's mechanism on the rack (optional: the built rack has none; its daters stand all the time).</summary>
     [SerializeField] private BrassDrawer drawer;
 
-    /// <summary>The drawer's placeholder sounds (tools/audio/make_drawer_sfx.py) until the sound bank has SoundCues.DrawerOpen / DrawerClose: the opening's typewriter carriage-return carry and clunk, the closing's reverse rasp and thud.</summary>
-    [SerializeField] private AudioClip drawerOpen, drawerClose;
-
-    /// <summary>The tab on the screen's top edge beside the drawer ("STAMPS" beside its "TAB" key): a click slides the bar out or back.</summary>
+    /// <summary>The tab on the screen's top edge ("STAMPS" beside its "TAB" key): a click brings the reading view over the rack (ToggleRack).</summary>
     [SerializeField] private Button tab;
 
     /// <summary>The APPROVED dater's click box: its root (the prop contract's Body, Frame, Die, Wheels and Button are its children), with its DeskDraggable.</summary>
@@ -214,18 +201,12 @@ public sealed class DeskStampTray : MonoBehaviour
     private Handle _carried;
     private int _passport = -1;
     private bool _live;
+
+    /// <summary>The cradles' motion (DrawerSequence's lanes: up while a case is open; the drawer's slide is not used).</summary>
     private readonly DrawerSequence _drawer = new DrawerSequence();
-    private Vector3 _out, _in;
-    private bool _laid;
 
-    /// <summary>The office view's level forward the rack faces (Lay).</summary>
-    private Vector3 _forward = Vector3.forward;
-
-    /// <summary>The drawer's far and near edges, its top, its underside and its right side in the rack's space, unscaled (Lay: its box's measures): the far top edge meets the screen's top edge, the underside stands on the desk, the tab sits beyond the right side.</summary>
-    private float _farEdge, _nearEdge, _top, _underside, _right;
-
-    /// <summary>The gap between the drawer's right side and the STAMPS tab on the top edge (canvas units).</summary>
-    private const float TabGap = 12f;
+    /// <summary>True while BoothRules.PropsLive shows the tab (it then shows in the office view only).</summary>
+    private bool _tabShown;
     private string _noteKey;
     private float _noteUntil;
     private AudioClip _thunk;
@@ -241,11 +222,11 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>True while a traveller stands at the desk with their case, not yet committed (DETAIN can take them).</summary>
     public bool TravellerHere => _flow.TravellerHere && !_flow.Committed;
 
-    /// <summary>True while the bar is out.</summary>
-    public bool BarOut => _flow.BarOut;
-
     /// <summary>True while a dater is dragged over the desk (a right-click or Esc drops it back into the rack: CancelCarry).</summary>
     public bool IsCarrying => _carried != null;
+
+    /// <summary>The rack on the desk (the guide's "stamp_rack" target), or null.</summary>
+    public Transform Rack => rack;
 
     /// <summary>True while a dater strokes, shakes, goes back to the rack or rolls its wheels (the probes wait for it).</summary>
     public bool IsMoving
@@ -265,7 +246,7 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>Where the last press met a paper or the rulebook (straight under the dater's die; the probes read it).</summary>
     public Vector3 LastPressPoint { get; private set; }
 
-    /// <summary>Raised when the bar, the verdict or the case changes (the counter's label, the booth's rules, the DETAIN button).</summary>
+    /// <summary>Raised when the verdict or the case changes (the counter's label, the booth's rules, the DETAIN button).</summary>
     public event Action Changed;
 
     /// <summary>Raised when the case's verdict is committed (the hand-back APPROVED or DENIED, the DETAIN button DETAINED).</summary>
@@ -274,10 +255,10 @@ public sealed class DeskStampTray : MonoBehaviour
     private void Awake()
     {
         if (tab != null)
-            tab.onClick.AddListener(ToggleBar);
+            tab.onClick.AddListener(ToggleRack);
+        if (deskView != null)
+            deskView.Changed += ShowTab;
         _handles = new[] { MakeHandle(DeskStamp.Approved, approvedStamp, approvedDie), MakeHandle(DeskStamp.Denied, deniedStamp, deniedDie) };
-        if (rack != null)
-            rack.gameObject.SetActive(false);
         _thunk = CueSounds.Tone("StampThunk", 70f, 0.16f, 0.7f);
         Show();
     }
@@ -321,6 +302,8 @@ public sealed class DeskStampTray : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (deskView != null)
+            deskView.Changed -= ShowTab;
         if (_thunk != null)
             Destroy(_thunk);
         foreach (Handle handle in _handles)
@@ -334,33 +317,25 @@ public sealed class DeskStampTray : MonoBehaviour
     }
 
     /// <summary>
-    /// Lays the rack (the office binder, once the desk and the reading view
-    /// are placed): facing along the office view's level
-    /// <paramref name="levelForward"/>, at DeskConfigSO.stampDrawerScale, its
-    /// box standing on the desk; where it stands is the tether's (Tether).
+    /// Lays the rack on <paramref name="bay"/> of the desk's plan (the office
+    /// binder, once the desk is bound; DeskLayoutSettings.stampRack): at
+    /// DeskConfigSO.stampDrawerScale, facing the chair, its box standing on
+    /// the desk.
     /// </summary>
-    public void Lay(Vector3 levelForward)
+    public void Lay(DeskFrame frame, DeskBay bay)
     {
-        if (rack == null || surface == null || config == null)
+        if (rack == null || config == null || !frame.Place(rack, bay, 0f))
             return;
-        Vector3 forward = Vector3.ProjectOnPlane(levelForward, Vector3.up);
-        if (forward.sqrMagnitude < 1e-6f)
-            forward = Vector3.forward;
-        _forward = forward.normalized;
         rack.localScale = Vector3.one * config.stampDrawerScale;
-        rack.rotation = Quaternion.LookRotation(_forward, Vector3.up);
-        Measure();
-        _laid = true;
-        Tether();
-        rack.position = Vector3.LerpUnclamped(_in, _out, _drawer.Travel);
+        rack.position -= Vector3.up * Underside();
+        rack.gameObject.SetActive(true);
     }
 
-    /// <summary>The drawer's far edge (its greatest z), top, underside (its least y) and right side in the rack's space: the box's (the drawer's Tray part) or, for the built rack, every part's, from the meshes' own bounds (the mechanism at rest, upright).</summary>
-    private void Measure()
+    /// <summary>How far below the rack's origin its box reaches (metres, as laid): the drawer's Tray part or, for the built rack, every part, from the meshes' own bounds.</summary>
+    private float Underside()
     {
         Transform box = drawer != null ? drawer.transform.Find("Tray") : null;
-        _farEdge = _nearEdge = _top = _underside = _right = 0f;
-        bool any = false;
+        float underside = float.MaxValue;
         foreach (MeshFilter mesh in (box != null ? box : rack).GetComponentsInChildren<MeshFilter>(true))
         {
             if (mesh.sharedMesh == null || mesh.GetComponent<TMP_Text>() != null)
@@ -369,111 +344,10 @@ public sealed class DeskStampTray : MonoBehaviour
             for (int i = 0; i < 8; i++)
             {
                 Vector3 corner = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z);
-                Vector3 local = Vector3.Scale(rack.InverseTransformPoint(mesh.transform.TransformPoint(corner)), rack.localScale);
-                _farEdge = any ? Mathf.Max(_farEdge, local.z) : local.z;
-                _nearEdge = any ? Mathf.Min(_nearEdge, local.z) : local.z;
-                _top = any ? Mathf.Max(_top, local.y) : local.y;
-                _underside = any ? Mathf.Min(_underside, local.y) : local.y;
-                _right = any ? Mathf.Max(_right, local.x) : local.x;
-                any = true;
+                underside = Mathf.Min(underside, mesh.transform.TransformPoint(corner).y - rack.position.y);
             }
         }
-        float scale = Mathf.Max(1e-4f, config.stampDrawerScale);
-        _farEdge /= scale;
-        _nearEdge /= scale;
-        _top /= scale;
-        _underside /= scale;
-        _right /= scale;
-    }
-
-    /// <summary>
-    /// The drawer tethered to the screen's top edge (Saleh's 1016a playtest:
-    /// "tethered to the edge of the screen", as in Papers, Please; "the other
-    /// way around from top to bottom"), anchored in screen space from the
-    /// reading camera as it is now (its push-in included,
-    /// DeskView.TryLiveViewPoint) at every aspect: out, its box stands on the
-    /// desk with its far top edge (the labelled bar's) where the reading
-    /// view's ray through DeskConfigSO.stampBarView (x: the drawer's middle;
-    /// y: where its far edge meets the screen, 1 the top edge) passes; in,
-    /// stampBarTravel further from the chair, out of sight above that edge.
-    /// Without the reading view it stands at the desk's middle.
-    /// </summary>
-    private void Tether()
-    {
-        if (!_laid)
-            return;
-        float desk = surface.transform.position.y, scale = config.stampDrawerScale;
-        float edgeHeight = desk + (_top - _underside) * scale;
-        if (deskView != null && deskView.TryLiveViewPoint(config.stampBarView, edgeHeight, out Vector3 edge))
-            _out = edge - _forward * (_farEdge * scale) - Vector3.up * (_top * scale);
-        else
-            _out = surface.transform.position - Vector3.up * (_underside * scale);
-        _in = _out + _forward * config.stampBarTravel;
-    }
-
-    /// <summary>
-    /// The STAMPS tab on the screen's top edge just beside the open drawer's
-    /// right side (DeskView.TryLiveViewport of the box's right side's corners
-    /// out, the rightmost, TabGap past it), wherever the aspect puts it, so it
-    /// never covers the drawer; kept where the builder put it without the
-    /// reading view.
-    /// </summary>
-    private void PlaceTab()
-    {
-        if (tab == null || !_laid || deskView == null || !tab.gameObject.activeInHierarchy)
-            return;
-        float scale = config.stampDrawerScale;
-        Vector2 viewport = new Vector2(float.MinValue, 0f);
-        for (int i = 0; i < 4; i++)
-        {
-            Vector3 corner = _out + rack.rotation * (scale * new Vector3(_right, (i & 1) == 0 ? _top : _underside, (i & 2) == 0 ? _farEdge : _nearEdge));
-            if (deskView.TryLiveViewport(corner, out Vector2 seen) && seen.x > viewport.x)
-                viewport = seen;
-        }
-        if (viewport.x == float.MinValue)
-            return;
-        var rt = (RectTransform)tab.transform;
-        if (!Mathf.Approximately(rt.anchorMin.x, viewport.x))
-        {
-            rt.anchorMin = new Vector2(viewport.x, rt.anchorMin.y);
-            rt.anchorMax = new Vector2(viewport.x, rt.anchorMax.y);
-        }
-        if (!Mathf.Approximately(rt.anchoredPosition.x, TabGap))
-            rt.anchoredPosition = new Vector2(TabGap, rt.anchoredPosition.y);
-        PlaceHint();
-    }
-
-    /// <summary>The hint's plate top as built (canvas units below the top edge; PlaceHint never lifts it higher), NaN until read.</summary>
-    private float _plateTop = float.NaN;
-
-    /// <summary>
-    /// The hint's plate at the top right kept clear of the open drawer: where
-    /// the drawer reaches across under it (a narrow screen widens the drawer
-    /// against the canvas), the plate drops to TabGap below the drawer's
-    /// lowest point; else it stays where the builder put it.
-    /// </summary>
-    private void PlaceHint()
-    {
-        if (hint == null || !(hint.transform.parent is RectTransform plate) || plate.parent == null || hint.canvas == null)
-            return;
-        if (float.IsNaN(_plateTop))
-            _plateTop = -plate.anchoredPosition.y;
-        float scale = config.stampDrawerScale;
-        float left = float.MaxValue, right = float.MinValue, bottom = float.MaxValue;
-        for (int i = 0; i < 8; i++)
-        {
-            Vector3 local = new Vector3((i & 4) == 0 ? -_right : _right, (i & 1) == 0 ? _top : _underside, (i & 2) == 0 ? _farEdge : _nearEdge);
-            if (!deskView.TryLiveViewport(_out + rack.rotation * (scale * local), out Vector2 seen))
-                return;
-            left = Mathf.Min(left, seen.x);
-            right = Mathf.Max(right, seen.x);
-            bottom = Mathf.Min(bottom, seen.y);
-        }
-        Rect canvas = ((RectTransform)hint.canvas.rootCanvas.transform).rect;
-        float plateLeft = 1f - (plate.rect.width - plate.anchoredPosition.x) / canvas.width;
-        float top = plateLeft < right && left < 1f ? Mathf.Max(_plateTop, (1f - bottom) * canvas.height + TabGap) : _plateTop;
-        if (!Mathf.Approximately(-plate.anchoredPosition.y, top))
-            plate.anchoredPosition = new Vector2(plate.anchoredPosition.x, -top);
+        return underside == float.MaxValue ? 0f : underside;
     }
 
     /// <summary>
@@ -511,27 +385,17 @@ public sealed class DeskStampTray : MonoBehaviour
     public Texture2D Impression(bool approved) =>
         DaterImpressionArt.Paint(Word(approved), Ink(approved), _dateText, _byLine, daterFont, 1f, _day * 977 + _presses++);
 
-    /// <summary>The grey tab, TAB, the desk's stamp: opens the drawer (bringing the reading view) or closes it; nothing while the daters take no input.</summary>
-    public void ToggleBar()
+    /// <summary>The grey tab, TAB, the desk's old stamp: brings the reading view over the rack, or goes back to the office view (Papers, Please's TAB); nothing while the daters take no input.</summary>
+    public void ToggleRack()
     {
         Deselect();
-        if (!_live)
+        if (!_live || deskView == null)
             return;
         CancelCarry();
-        bool slidOut = _flow.ToggleBar();
-        if (slidOut && deskView != null)
+        if (deskView.IsOn)
+            deskView.Return();
+        else
             deskView.TiltIn();
-        Raise();
-    }
-
-    /// <summary>Slides the bar back (a right-click or Esc: ControlRules.BackOut), a carried dater dropped back into the rack first; false when it is in already.</summary>
-    public bool Stow()
-    {
-        CancelCarry();
-        if (!_flow.StowBar())
-            return false;
-        Raise();
-        return true;
     }
 
     /// <summary>Drops a carried dater back into the rack without a press (a right-click or Esc mid-drag: ControlRules.BackOut's CancelDrag); false when none is carried.</summary>
@@ -543,32 +407,32 @@ public sealed class DeskStampTray : MonoBehaviour
         return true;
     }
 
-    /// <summary>Lets the bar and its daters take input (<paramref name="live"/>: BoothRules.StampsLive; false slides the bar back) and shows the grey tab (<paramref name="shown"/>: BoothRules.PropsLive).</summary>
+    /// <summary>Lets the daters take input (<paramref name="live"/>: BoothRules.StampsLive; false drops a carried dater back) and shows the grey tab (<paramref name="shown"/>: BoothRules.PropsLive; in the office view only).</summary>
     public void SetLive(bool live, bool shown)
     {
         _live = live;
-        if (tab != null)
-        {
-            if (tab.gameObject.activeSelf != shown)
-                tab.gameObject.SetActive(shown);
-            tab.interactable = live;
-        }
+        _tabShown = shown;
         if (!live)
-            Stow();
+            CancelCarry();
+        ShowTab();
         Show();
     }
 
-    /// <summary>A new traveller (DeskController): <paramref name="passport"/> is the paper that takes the verdict (the first paper handed over; -1: none, nobody here). No verdict yet.</summary>
+    /// <summary>The grey tab: shown while BoothRules.PropsLive in the office view (the reading view shows the rack itself), clickable while the daters are live.</summary>
+    private void ShowTab()
+    {
+        if (tab == null)
+            return;
+        bool shown = _tabShown && (deskView == null || !deskView.IsOn);
+        if (tab.gameObject.activeSelf != shown)
+            tab.gameObject.SetActive(shown);
+        tab.interactable = _live;
+    }
+
     /// <summary>The paper that takes the verdict (-1: none, nobody here).</summary>
     public int Passport => _passport;
 
-    /// <summary>The point on the desk where the passport's stamp area goes as the drawer opens (DeskConfigSO.stampSpotView in the reading view, above the drawer; DeskController); false without the reading view.</summary>
-    public bool TryStampSpot(out Vector3 point)
-    {
-        point = default;
-        return surface != null && config != null && deskView != null && deskView.TryViewPoint(config.stampSpotView, surface.transform.position.y, out point);
-    }
-
+    /// <summary>A new traveller (DeskController): <paramref name="passport"/> is the paper that takes the verdict (the first paper handed over; -1: none, nobody here). No verdict yet; the daters stand up for it (or fold down with none).</summary>
     public void BeginCase(int passport)
     {
         _passport = passport;
@@ -584,7 +448,7 @@ public sealed class DeskStampTray : MonoBehaviour
     /// The papers handed back with the passport's verdict (a paper dropped on
     /// the counter once the passport is stamped: DeskController): that is the
     /// decision (Saleh 2026-10-07: "no lever, no extra commit step", Papers,
-    /// Please's way). The bar slides in, the view lifts to the hall and the
+    /// Please's way). The view lifts to the hall and the
     /// verdict is committed (Decided): an APPROVED passport spins the
     /// traveller's portal up (portal_through and a hit; the hall's ring
     /// flares as they leave through it), a DENIED one sends them back the way
@@ -595,7 +459,6 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_flow.HandBack())
             return false;
         CancelCarry();
-        _flow.StowBar();
         Sounds.Play(SoundCues.PaperSlide);
         if (deskView != null)
             deskView.Return();
@@ -615,7 +478,6 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_flow.Commit(verdict))
             return false;
         CancelCarry();
-        _flow.StowBar();
         Decided?.Invoke(verdict);
         return true;
     }
@@ -639,7 +501,7 @@ public sealed class DeskStampTray : MonoBehaviour
     private void Press(Handle handle)
     {
         Deselect();
-        if (!_live || !_flow.BarOut || handle.Click == null || handle.Stroke != Stroke.None)
+        if (!_live || handle.Click == null || handle.Stroke != Stroke.None)
         {
             Return(handle);
             return;
@@ -730,6 +592,7 @@ public sealed class DeskStampTray : MonoBehaviour
         EndStroke(handle);
         handle.Returning = false;
         _carried = handle;
+        Show();
     }
 
     /// <summary>A carried dater let go: it strokes there (down and straight up), then goes back to the rack.</summary>
@@ -738,14 +601,16 @@ public sealed class DeskStampTray : MonoBehaviour
         if (_carried == handle)
             _carried = null;
         Press(handle);
+        Show();
     }
 
-    /// <summary>A carried dater's drag cut short (a right-click or Esc, the bar stowed, the daters' input taken away): it goes back to the rack without a press.</summary>
+    /// <summary>A carried dater's drag cut short (a right-click or Esc, the daters' input taken away): it goes back to the rack without a press.</summary>
     private void PutBack(Handle handle)
     {
         if (_carried == handle)
             _carried = null;
         Return(handle);
+        Show();
     }
 
     /// <summary>The side button: the pad re-inked (full again) with a squish.</summary>
@@ -865,12 +730,11 @@ public sealed class DeskStampTray : MonoBehaviour
         return best;
     }
 
-    /// <summary>Moves the drawer, places its tab, moves each dater (the stroke, the shake, the way back, the wheels) and lets a note go once its time is up.</summary>
+    /// <summary>Moves the cradles, each dater (the stroke, the shake, the way back, the wheels) and lets a note go once its time is up.</summary>
     private void Update()
     {
         float dt = UiMotion.Delta(Time.unscaledDeltaTime);
-        MoveDrawer(dt);
-        PlaceTab();
+        MoveCradles(dt);
         foreach (Handle handle in _handles)
             Move(handle, dt);
         if (_noteKey != null && UiMotion.Now >= _noteUntil)
@@ -986,60 +850,32 @@ public sealed class DeskStampTray : MonoBehaviour
     }
 
     /// <summary>
-    /// The drawer this frame (DrawerSequence on MotionKnobs' drawer tunings; a
-    /// snap under Reduced Motion): its place between in and out (tethered to
-    /// the screen's top edge as the reading camera shows it now: Tether), the
-    /// mechanism's pose, and its moments: the opening's carry (DrawerOpen),
-    /// the stop's small hit, a click as each cradle locks or lands (a lock
-    /// lets its dater take input), the closing's shove (DrawerClose). The
-    /// cradles wait to fold while a dater is away from its place. The rack
-    /// shows unless the drawer is all the way in.
+    /// The cradles this frame (DrawerSequence's lanes on MotionKnobs' drawer
+    /// tunings; a snap under Reduced Motion): up while a case is open (the
+    /// passport known), DENIED then APPROVED, a click as each locks (a lock
+    /// lets its dater take input) or lands; down when it ends, a cradle
+    /// waiting while its dater is away from its place.
     /// </summary>
-    private void MoveDrawer(float dt)
+    private void MoveCradles(float dt)
     {
-        if (rack == null || (_drawer.Closed && !_flow.BarOut))
-        {
-            Tether(); // the tab follows the drawer's place even while it is in
+        bool open = _passport >= 0;
+        if (drawer == null || (_drawer.Closed && !open))
             return;
-        }
         bool away = false;
         foreach (Handle h in _handles)
             away |= h == _carried || h.Stroke != Stroke.None || h.Returning;
-        MotionKnobs knobs = UiMotion.Knobs;
-        DrawerEvents events = _drawer.Step(dt, _flow.BarOut, knobs, UiMotion.Amount.Still, away);
-        if (_laid)
-        {
-            Tether();
-            rack.position = Vector3.LerpUnclamped(_in, _out, _drawer.Travel);
-        }
-        if (drawer != null)
-            drawer.Pose(_drawer.Raise(DrawerSequence.Denied), _drawer.Raise(DrawerSequence.Approved));
-        if ((events & DrawerEvents.Carried) != 0)
-            PlayCue(SoundCues.DrawerOpen, drawerOpen);
-        if ((events & DrawerEvents.Stopped) != 0)
-            FeelDirector.Hit(knobs.drawerStopHit);
+        DrawerEvents events = _drawer.Step(dt, open, UiMotion.Knobs, UiMotion.Amount.Still, away);
+        drawer.Pose(_drawer.Raise(DrawerSequence.Denied), _drawer.Raise(DrawerSequence.Approved));
         if ((events & (DrawerEvents.LockedDenied | DrawerEvents.LockedApproved | DrawerEvents.FoldedDenied | DrawerEvents.FoldedApproved)) != 0)
         {
             // Each cradle's lock (and landing) clicks: the date wheels' ratchet click, pitched down for the heavier catch.
             CueSounds.Play(SoundCues.DaterWheelClick, sound, LockPitch);
             Show();
         }
-        if ((events & DrawerEvents.Shoved) != 0)
-            PlayCue(SoundCues.DrawerClose, drawerClose);
-        bool shown = !_drawer.Closed;
-        if (rack.gameObject.activeSelf != shown)
-            rack.gameObject.SetActive(shown);
     }
 
     /// <summary>The pitch of a cradle's lock click (the wheels' ratchet click, lower: a heavier catch).</summary>
     private const float LockPitch = 0.62f;
-
-    /// <summary>Plays <paramref name="cue"/> from the sound bank, else its placeholder <paramref name="placeholder"/> through the tray's source.</summary>
-    private void PlayCue(string cue, AudioClip placeholder)
-    {
-        if (!Sounds.Play(cue))
-            Play(placeholder, 1f);
-    }
 
     private void Play(AudioClip clip, float pitch)
     {
@@ -1063,12 +899,12 @@ public sealed class DeskStampTray : MonoBehaviour
         Changed?.Invoke();
     }
 
-    /// <summary>The daters' input (pressed and dragged while the bar is out and its cradle is locked upright) and the hint: a note while it lasts; else, out, to drag a dater onto the passport, or (stamped) to hand the papers back on the counter.</summary>
+    /// <summary>The daters' input (pressed and dragged while live and its cradle is locked upright; the built rack's daters stand all the time) and the hint: a note while it lasts; else, a dater carried, to let it go on the passport, or (stamped) to hand the papers back on the counter.</summary>
     private void Show()
     {
         foreach (Handle handle in _handles)
         {
-            bool usable = _live && _flow.BarOut && _drawer.Locked(handle.Lane);
+            bool usable = _live && (drawer == null || _drawer.Locked(handle.Lane));
             if (handle.Click != null)
                 handle.Click.Interactable = usable;
             if (handle.Drag != null && handle.Drag.enabled != usable)
@@ -1079,7 +915,7 @@ public sealed class DeskStampTray : MonoBehaviour
         if (hint == null)
             return;
         string key = _passport < 0 ? null
-            : _noteKey ?? (!_live ? null : _flow.CanHandBack ? "stamp.hint.handBack" : _flow.BarOut ? "stamp.hint.place" : null);
+            : _noteKey ?? (!_live ? null : _flow.CanHandBack ? "stamp.hint.handBack" : _carried != null ? "stamp.hint.place" : null);
         GameObject plate = hint.transform.parent != null ? hint.transform.parent.gameObject : hint.gameObject;
         if (plate.activeSelf != (key != null))
             plate.SetActive(key != null);

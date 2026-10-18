@@ -90,8 +90,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
     [Min(0f)] public float counterRowDepth = 0.05f;
 
-    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the inspect button and, at the top, the stamp drawer's band and its STAMPS tab, stampBarView): the spread lays them inside it (PaperSpread).</summary>
-    public Rect readingArea = new Rect(0.02f, 0.04f, 0.88f, 0.7f);
+    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the counter strip at the top, the paper machines' beds at the right, the tool pouch at the bottom and the inspect button; the desk layout spec §2): the spread lays them inside it (PaperSpread), off the stamp rack at its top right where it can (DeskController.Spread).</summary>
+    public Rect readingArea = new Rect(0.02f, 0.17f, 0.78f, 0.63f);
 
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
@@ -204,17 +204,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
     [Min(0.005f)] public float stampHover = 0.03f;
 
-    /// <summary>Where the stamp drawer stands out, tethered to the screen's top edge (Saleh's 1016a playtest: "tethered to the edge of the screen", "the other way around from top to bottom"; DeskStampTray.Tether): its middle at viewport x, its far top edge on the reading view's ray through viewport y (1: flush on the top edge), above the papers' reading area. The STAMPS tab sits on the top edge beside it.</summary>
-    public Vector2 stampBarView = new Vector2(0.66f, 1f);
-
-    /// <summary>How far the brass stamp drawer slides out (metres along the office view's level forward, toward the chair): in, it waits that far further from the chair, above the reading view's top edge (its motion's timing is MotionKnobs' drawer tunings).</summary>
-    [Min(0.1f)] public float stampBarTravel = 0.3f;
-
-    /// <summary>The stamp drawer's size against the model's (the drawer, its mechanism and its daters; Saleh's 1008a playtest: smaller).</summary>
+    /// <summary>The stamp rack's size against the model's (the brass drawer standing open as a fixed rack, its mechanism and its daters; the desk layout spec §2; where it stands is DeskLayoutSettings.stampRack).</summary>
     [Range(0.3f, 1f)] public float stampDrawerScale = 0.58f;
-
-    /// <summary>Where the passport's stamp area goes as the drawer opens (DeskController.PassportToStampSpot): the point of the desk the reading view shows there (viewport x, y), below the drawer at the top, so the whole passport lies clear of it and the daters drop a short way down onto it.</summary>
-    public Vector2 stampSpotView = new Vector2(0.6f, 0.58f);
 
     /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
     [Range(0f, 0.2f)] public float daterInkFade = 0.035f;
@@ -225,25 +216,7 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much one print's density may vary around the pad's.</summary>
     [Range(0f, 0.3f)] public float daterInkSpread = 0.08f;
 
-    /// <summary>Where the DETAIN button stands on the desk: the point of the desk's plane the office view shows there at 16:9 (viewport x, y; the same spot of the desk at every aspect). Off the mat, where no paper lands (Saleh's 1008a playtest: "detain button is on the inspection area"): on the free desk between the cash register and the AVAILABLE sign, clear of the drawer, the scanner and the inspect button.</summary>
-    public Vector2 detainView = new Vector2(0.405f, 0.21f);
-
-    [Header("Desk machines (the desk machines spec §1)")]
-    /// <summary>Where the chip reader stands on the desk: the point of the desk's plane the office view shows there at 16:9 (viewport x, y), and its turn from facing the chair (degrees). On the free desk between the AVAILABLE sign and the calculator, off the mat.</summary>
-    public Vector2 chipReaderView = new Vector2(0.62f, 0.19f);
-
-    /// <summary>The chip reader's turn from facing the chair (degrees; + turns its front toward the viewer's left).</summary>
-    public float chipReaderYaw = -12f;
-
-    /// <summary>Where the UV torch's cradle stands: from the desk's centre (the mat's), metres to the right and away from the chair in the office view's frame (rulebookAt's way). On the mat's front-right corner, inside the reading view, so the torch is taken up wherever the papers are read; papers keep clear of it.</summary>
-    public Vector2 uvTorchAt = new Vector2(0.36f, -0.16f);
-
-    /// <summary>The cradle's turn from facing the chair (degrees): -90 lays the torch across the view, its lens toward the mat.</summary>
-    public float uvTorchYaw = -90f;
-
-    /// <summary>The machines' size on the desk against their models' life size: the art office's desk props are drawn larger than life so they read from the chair, and the machines match them.</summary>
-    [Min(0.1f)] public float machineScale = 1.6f;
-
+    [Header("Desk machines (the desk machines spec §1; their places: DeskLayoutSettings)")]
     /// <summary>The UV torch's size against its model's life size (smaller than the other machines': it is held over the papers, close to the reading view).</summary>
     [Min(0.1f)] public float uvTorchScale = 1f;
 
@@ -266,47 +239,15 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The upgrades' objects' size against their models' life size (a little smaller than the machines': they share the desk's edges with the art's props).</summary>
     [Min(0.1f)] public float upgradeScale = 1.25f;
 
-    /// <summary>Where the supply crate stands on a delivery morning: the point of the desk's plane the office view shows there at 16:9 (viewport x, y), and its turn (degrees). On the mat, right of the rulebook: no paper lies there before the shift opens, and it opens itself then.</summary>
-    public Vector2 supplyCrateView = new Vector2(0.56f, 0.14f);
-
-    /// <inheritdoc cref="supplyCrateView"/>
-    public float supplyCrateYaw = 8f;
-
-    /// <summary>Where the Interview Protocols' card ring stands (viewport at 16:9) and its turn: on the free desk left of the mat.</summary>
-    public Vector2 protocolRingView = new Vector2(0.33f, 0.18f);
-
-    /// <inheritdoc cref="protocolRingView"/>
-    public float protocolRingYaw = 10f;
-
-    /// <summary>Where the BABEL rack of the Speech translators stands (viewport at 16:9) and its turn: behind the DETAIN button, between the cash register and the AVAILABLE sign, toward the traveller.</summary>
-    public Vector2 babelRackView = new Vector2(0.385f, 0.255f);
-
-    /// <inheritdoc cref="babelRackView"/>
-    public float babelRackYaw = 6f;
-
-    /// <summary>Where the Translation Lens's stand stands (viewport at 16:9) and its turn: at the desk's front left, between the PC and the mat.</summary>
-    public Vector2 lensKitView = new Vector2(0.27f, 0.115f);
-
-    /// <inheritdoc cref="lensKitView"/>
-    public float lensKitYaw = 18f;
-
-    /// <summary>Where the Diplomatic Contacts' Rolodex stands (viewport at 16:9) and its turn: right of the chip reader.</summary>
-    public Vector2 rolodexView = new Vector2(0.73f, 0.215f);
-
-    /// <inheritdoc cref="rolodexView"/>
-    public float rolodexYaw = -16f;
-
-    /// <summary>Where the RING SERVICE panel stands (viewport at 16:9) and its turn: at the desk's right, toward the portals.</summary>
-    public Vector2 ringPanelView = new Vector2(0.8f, 0.18f);
-
-    /// <inheritdoc cref="ringPanelView"/>
-    public float ringPanelYaw = -20f;
-
     /// <summary>How far below the office camera's forward (degrees, the art's pose) the desk still fills the view: on a screen narrower than 16:9 the office view widens toward the 16:9 width and tilts down, its top edge kept, no further than this (LensFit; past it the floor under the desk shows).</summary>
     [Range(0f, 89f)] public float officeViewBottom = 42f;
 
     /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;
+
+    [Header("The desk's plan (the desk layout spec): every bay, the office view's framing, the close-ups")]
+    /// <summary>Where every machine, upgrade's object, tool, shelf and decoration stands, in the desk's own frame, the office camera's framing and the machine close-ups (DeskLayoutSettings).</summary>
+    public DeskLayoutSettings layout = new DeskLayoutSettings();
 
     [Header("Desk view (piece 10)")]
     /// <summary>The camera tilted forward over the desk (a click on the mat): how far it moves from the art office's view (forward and up, metres), how much further it pitches than aiming at the mat's centre (degrees), and the blend's seconds (a cut under Reduced Motion).</summary>

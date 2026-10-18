@@ -228,7 +228,8 @@ public class GuideTests
         Assert.AreEqual(("field:TC-101/Expiry", "calendar"), GuideTargets.CompareEnds(Step("e", GuideAction.Compare, "calendar", ClueCategory.Expiry)));
         Assert.AreEqual(("field:TC-230/CitizenId", "field:TC-101/CitizenId"), GuideTargets.CompareEnds(Step("t", GuideAction.Compare, "field:TC-230/CitizenId", ClueCategory.CitizenId)));
         Assert.AreEqual(("field:TC-240/TransponderClass", "rulebook"), GuideTargets.CompareEnds(Step("c", GuideAction.Compare, "field:TC-240/TransponderClass", ClueCategory.AccountStatus, ClueCategory.TransponderClass)));
-        Assert.AreEqual(("stamps", "stamps"), GuideTargets.CompareEnds(Step("s", GuideAction.StampsOut, "stamps")));
+        Assert.AreEqual(("stamp_rack", "stamp_rack"), GuideTargets.CompareEnds(Step("s", GuideAction.Stamp, "stamp_rack")));
+        Assert.IsTrue(GuideTargets.IsKnown("stamp_rack") && GuideTargets.IsKnown("intercom"), "the fixed rack and the intercom (the desk layout spec)");
         // A held seal is held against its office's row in the rulebook's SEALS tab, never today's RULES (leftover 2026-10-08).
         Assert.AreEqual(("field:TC-101/Seal", "seals"), GuideTargets.CompareEnds(Step("seal", GuideAction.Compare, "field:TC-101/Seal", ClueCategory.Seal)));
         Assert.IsTrue(GuideTargets.IsKnown("seals"));

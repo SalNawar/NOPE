@@ -78,7 +78,7 @@ public static class _TimeDeskQASweep
 
     /// <summary>The per-player preferences the sweep starts without and restores: Settings' language and motion and the desktop's layout (DesktopPreferences' keys), each under its stored name (PlayerPrefKeys).</summary>
     private static IEnumerable<string> PrefNames() =>
-        new[] { "TimeDesk.UiLanguage", "TimeDesk.ReducedMotion", "TimeDesk.MotionIntensity", "TimeDesk.CameraSway" }
+        new[] { "TimeDesk.UiLanguage", "TimeDesk.ReducedMotion", "TimeDesk.MotionIntensity", "TimeDesk.CameraSway", "TimeDesk.MachineCloseUps", "TimeDesk.DeskDecor" }
             .Concat(typeof(DesktopPreferences).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(f => f.IsLiteral && f.FieldType == typeof(string)).Select(f => (string)f.GetRawConstantValue()).Where(v => v.StartsWith("TimeDesk.")))
             .Select(PlayerPrefKeys.For);
@@ -772,7 +772,7 @@ public static class _TimeDeskQASweep
         Check(hidden.All(g => g != null && g.alpha >= 0.99f && g.blocksRaycasts), $"{tag}: back at the desk the PC and STAMPS tabs and the inspect button show again [{Names(hidden)}]");
     }
 
-    /// <summary>The pull tabs: the PC tab (the PC opens, then closes), the stamps tab (the bar slides out, then in).</summary>
+    /// <summary>The pull tabs: the PC tab (the PC opens, then closes), the stamps tab (the reading view over the stamp rack, then back).</summary>
     private static IEnumerator PullTabs(Office o, string tag)
     {
         var pcTab = (Button)Field(o.Controls, "pcTab");
@@ -794,17 +794,19 @@ public static class _TimeDeskQASweep
             Check(o.View.Current == OfficeView.OfficeFocus, $"{tag}: the PC tab closes the PC ({o.View.Current})");
         }
         var stampTab = (Component)Field(o.Stamps, "tab");
-        Check(stampTab != null && stampTab.gameObject.activeInHierarchy, $"{tag}: the stamps tab is shown");
-        bool wasOut = o.Stamps.BarOut;
-        o.Stamps.ToggleBar();
+        Check(stampTab != null && stampTab.gameObject.activeInHierarchy, $"{tag}: the stamps tab is shown in the office view");
+        var readingView = (DeskView)Field(o.Desk, "deskView");
+        bool wasOn = readingView.IsOn;
+        o.Stamps.ToggleRack();
         yield return Seconds(0.8f);
-        Check(o.Stamps.BarOut != wasOut, $"{tag}: the stamps tab slides the bar ({wasOut} -> {o.Stamps.BarOut})");
-        yield return Shot("office", $"{tag}_stamp_bar_out");
-        yield return KitChecks("office", $"{tag} stamp bar out");
+        Check(readingView.IsOn != wasOn, $"{tag}: the stamps tab brings the reading view over the rack ({wasOn} -> {readingView.IsOn})");
+        Check(stampTab == null || stampTab.gameObject.activeInHierarchy == !readingView.IsOn, $"{tag}: the stamps tab shows in the office view only");
+        yield return Shot("office", $"{tag}_stamp_rack");
+        yield return KitChecks("office", $"{tag} stamp rack");
         RackLip(o, tag);
-        o.Stamps.ToggleBar();
+        o.Stamps.ToggleRack();
         yield return Seconds(0.8f);
-        Check(o.Stamps.BarOut == wasOut, $"{tag}: the stamps tab slides it back");
+        Check(readingView.IsOn == wasOn, $"{tag}: the stamps tab goes back");
     }
 
     // ---- The stamps: the decision ----
@@ -822,7 +824,7 @@ public static class _TimeDeskQASweep
     private static IEnumerator Decide(Office o, bool accept, string shotTag, PressAt at = PressAt.Anywhere)
     {
         int before = o.Game.Ledger.verdicts.Count;
-        if (!o.Stamps.BarOut)
+        if (!((DeskView)Field(o.Desk, "deskView")).IsOn)
             o.Controls.Press(ControlKey.Stamps);
         yield return Seconds(0.6f);
         DeskDocument passport = o.Paper((int)Field(o.Stamps, "_passport"));
@@ -919,10 +921,10 @@ public static class _TimeDeskQASweep
     }
 
     /// <summary>
-    /// With the rack out in the reading view (the orchestrator's check from
-    /// run 7's contact sheets): the passport's visa page lies under the daters
-    /// (its stamp area's middle within 1 cm of the dies' middle), and no part
-    /// of the rack covers any of its field boxes or its photo on the screen.
+    /// With the reading view over the fixed rack (the orchestrator's check
+    /// from run 7's contact sheets; the desk layout spec §2): the whole rack
+    /// shows on the screen, and no part of it covers any of the passport's
+    /// field boxes or its photo.
     /// </summary>
     private static IEnumerator RackClear(Office o, DeskDocument paper, string tag)
     {
@@ -954,19 +956,12 @@ public static class _TimeDeskQASweep
                 }
             }
         Check(view != null && view.IsOn && fields.Count > 0 && covered.Count == 0,
-              $"{tag}: with the rack out in the reading view it covers none of the passport's {fields.Count} field boxes and photo (reading view {view != null && view.IsOn}){List(covered)}");
-        if (paper.TryStampAreaOffset(out Vector3 offset) && o.Stamps.TryStampSpot(out Vector3 dies))
-        {
-            Vector3 area = paper.transform.position + offset;
-            float off = new Vector2(area.x - dies.x, area.z - dies.z).magnitude;
-            Check(off < 0.01f, $"{tag}: the passport's stamp area lies at the stamp spot above the drawer ({off * 1000f:0} mm from it)");
-        }
-        else
-        {
-            Check(false, $"{tag}: the passport has a stamp area and the rack is laid");
-        }
+              $"{tag}: in the reading view the rack covers none of the passport's {fields.Count} field boxes and photo (reading view {view != null && view.IsOn}){List(covered)}");
+        Rect whole = parts.Count > 0 ? parts.Select(p => p.rect).Aggregate((a, b) => Rect.MinMaxRect(Mathf.Min(a.xMin, b.xMin), Mathf.Min(a.yMin, b.yMin), Mathf.Max(a.xMax, b.xMax), Mathf.Max(a.yMax, b.yMax))) : default;
+        Check(parts.Count > 0 && whole.xMin >= -1f && whole.yMin >= -1f && whole.xMax <= UnityEngine.Screen.width + 1f && whole.yMax <= UnityEngine.Screen.height + 1f,
+              $"{tag}: the whole stamp rack shows in the reading view ({Fmt(whole)})");
         if (shots)
-            yield return Shot("office", $"{tag}_rack_out_reading");
+            yield return Shot("office", $"{tag}_rack_reading");
     }
 
     /// <summary>DETAIN (the third verdict, any time a traveller is here, stamped or not): the desk's covered button on the screen, its clear cover flipped up, the red button pressed, one detention.</summary>

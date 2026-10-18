@@ -125,7 +125,10 @@ public sealed class GuideDirector : MonoBehaviour
 
     /// <summary>The counter's DeskCounter, read once (OnEnable), so the arrow finds its strip without a lookup per frame.</summary>
     private DeskCounter _counter;
-    private bool _inspecting, _barOut, _stamped;
+    private bool _inspecting, _stamped;
+
+    /// <summary>The intercom the office binder builds on the desk ("intercom"; SetIntercom), or null.</summary>
+    private Transform _intercom;
 
     /// <summary>What the prompt shows: "step", "done", "moment", "practice" or "" (the probe and the audit read it).</summary>
     public string ShowingNow => _showing == Showing.None ? string.Empty : _showing.ToString().ToLowerInvariant();
@@ -184,6 +187,9 @@ public sealed class GuideDirector : MonoBehaviour
 
     /// <summary>The office camera the arrows are placed through (the office binder's).</summary>
     public void SetCamera(Camera office) => _camera = office;
+
+    /// <summary>The intercom the office binder built on the desk (DeskFurniture): the "intercom" target.</summary>
+    public void SetIntercom(Transform intercom) => _intercom = intercom;
 
     /// <summary>
     /// The shift starts (after the briefing; GameManager): the rulebook's
@@ -323,12 +329,9 @@ public sealed class GuideDirector : MonoBehaviour
 
     private void HandleStamps()
     {
-        bool barOut = stamps != null && stamps.BarOut, stamped = stamps != null && stamps.HasVerdict;
-        if (barOut && !_barOut)
-            Record(new GuideEvent(GuideAction.StampsOut));
+        bool stamped = stamps != null && stamps.HasVerdict;
         if (stamped && !_stamped)
             Record(new GuideEvent(GuideAction.Stamp));
-        _barOut = barOut;
         _stamped = stamped;
     }
 
@@ -494,6 +497,8 @@ public sealed class GuideDirector : MonoBehaviour
             "uv_torch" => desk != null && desk.Hardware != null && desk.Hardware.Torch != null ? desk.Hardware.Torch.transform : null,
             "chip_reader" => desk != null && desk.Hardware != null && desk.Hardware.Reader != null ? desk.Hardware.Reader.transform : null,
             "counter" => _counter != null ? _counter.Strip : counter,
+            "stamp_rack" => stamps != null ? stamps.Rack : null,
+            "intercom" => _intercom,
             _ => null
         };
         if (t != null)

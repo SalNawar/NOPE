@@ -641,19 +641,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         return new FaceRect(place.XMin * _scale, place.YMin * _scale, place.XMax * _scale, place.YMax * _scale);
     }
 
-    /// <summary>Where the middle of this paper's largest stamp area (StampSpots.Area: a passport's visa page, a form's footer box) lies from the paper's own position, in world space, at its full size on the desk (a paper still growing there counts at that size); false on a paper that prints no form.</summary>
-    public bool TryStampAreaOffset(out Vector3 offset)
-    {
-        offset = default;
-        if (_form == null || sheet == null)
-            return false;
-        Rect r = Local(StampSpots.Area(_form));
-        Vector3 now = sheet.TransformPoint(new Vector3(r.center.x, r.center.y, 0f)) - transform.position;
-        float grow = _sizeNow > 0f ? ZoneScale(DeskZone.Desk) / (_sizeNow * (1f + _squash.Value)) : 1f;
-        offset = now * grow;
-        return true;
-    }
-
     /// <summary>The verdict word a dater prints on this paper's form (FormStyleSO.approvedStamp, deniedStamp), in the reading language (UiText.DocumentWord).</summary>
     public string StampWord(bool approved) => UiText.DocumentWord(style == null ? (approved ? "APPROVED" : "DENIED") : approved ? style.approvedStamp : style.deniedStamp);
 

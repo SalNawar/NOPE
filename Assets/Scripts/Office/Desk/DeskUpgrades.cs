@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
@@ -211,28 +210,32 @@ public sealed class DeskUpgrades : MonoBehaviour
     }
 
     /// <summary>
-    /// Lays the objects on the desk (DeskHardware.Lay): each where the office
-    /// view shows its viewport point at 16:9 (DeskConfigSO), turned by its
-    /// yaw, at DeskConfigSO.upgradeScale; the laid roots are added to
+    /// Lays the objects on their bays (DeskHardware.Lay; the desk layout spec):
+    /// the crate off the mat at its front right, the lens stand in the tool
+    /// pouch under the papers, the protocol cards, the BABEL rack and the
+    /// Rolodex on the comms shelf, the RING SERVICE panel on the hall shelf
+    /// (DeskLayoutSettings, in <paramref name="frame"/>), each at
+    /// DeskConfigSO.upgradeScale; the laid roots are added to
     /// <paramref name="laid"/>.
     /// </summary>
-    public void Lay(CinemachineCamera office, float aspect, float deskTop, List<Transform> laid)
+    public void Lay(DeskFrame frame, List<Transform> laid)
     {
-        if (config == null || office == null)
+        if (config == null)
             return;
-        LayOne(crate, office, aspect, deskTop, config.supplyCrateView, config.supplyCrateYaw, laid);
-        LayOne(protocolRing, office, aspect, deskTop, config.protocolRingView, config.protocolRingYaw, laid);
-        LayOne(babelRack, office, aspect, deskTop, config.babelRackView, config.babelRackYaw, laid);
-        LayOne(lensKit, office, aspect, deskTop, config.lensKitView, config.lensKitYaw, laid);
-        LayOne(rolodex, office, aspect, deskTop, config.rolodexView, config.rolodexYaw, laid);
-        LayOne(ringPanel, office, aspect, deskTop, config.ringPanelView, config.ringPanelYaw, laid);
+        DeskLayoutSettings layout = config.layout;
+        LayOne(crate, frame, layout.crate, laid);
+        LayOne(protocolRing, frame, layout.protocolRing, laid);
+        LayOne(babelRack, frame, layout.babelRack, laid);
+        LayOne(lensKit, frame, layout.lensKit, laid);
+        LayOne(rolodex, frame, layout.rolodex, laid);
+        LayOne(ringPanel, frame, layout.ringPanel, laid);
         if (crate != null)
             crate.Laid();
     }
 
-    private void LayOne(Component prop, CinemachineCamera office, float aspect, float deskTop, Vector2 view, float yaw, List<Transform> laid)
+    private void LayOne(Component prop, DeskFrame frame, DeskBay bay, List<Transform> laid)
     {
-        if (prop == null || !DeskLay.Lay(prop.transform, office, aspect, deskTop, view, yaw))
+        if (prop == null || !frame.Place(prop.transform, bay, config.layout.shelfHeight))
             return;
         Vector3 scale = Vector3.one * config.upgradeScale;
         int waiting = _appear.IndexOf(prop.transform);

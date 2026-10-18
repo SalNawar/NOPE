@@ -150,6 +150,9 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>True while a document is being dragged (a right-click or Esc cancels the drag first: ControlRules).</summary>
     public bool IsDragging => _dragged >= 0;
 
+    /// <summary>True while the scanner reads a paper (the machine close-up holds on it: MachineCloseUp).</summary>
+    public bool Scanning => _state != null && _state.ScannerBusy;
+
     /// <summary>Raised when a scan finishes, with the paper's index and its pass (ScanPass: the analysis pass for a first scan by hand with the Analysis Scanner): its scanned copy reaches the PC (the Investigation app's Documents tab), which marks the papers after an analysis.</summary>
     public event Action<int, ScanPass> ScanFinished;
 
@@ -165,10 +168,7 @@ public sealed class DeskController : MonoBehaviour
         if (scanHint != null && config != null)
             scanHint.text = UiText.Get(config.scanHintKey);
         if (stamps != null)
-        {
             stamps.Changed += ShowCounter;
-            stamps.Changed += PassportUnderDaters;
-        }
         if (deskView != null)
             deskView.Changed += Focus;
         if (rulebook != null && config != null)
@@ -188,10 +188,7 @@ public sealed class DeskController : MonoBehaviour
     private void OnDestroy()
     {
         if (stamps != null)
-        {
             stamps.Changed -= ShowCounter;
-            stamps.Changed -= PassportUnderDaters;
-        }
         if (deskView != null)
             deskView.Changed -= Focus;
         if (rulebook != null && rulebook.Drag != null)
@@ -516,54 +513,11 @@ public sealed class DeskController : MonoBehaviour
         _stack.BringToFront(paper.Index);
         ApplyStack();
         paper.SetZone(DeskZone.Desk, false);
-        // The passport brought to the desk while the stamp drawer is out lands with its stamp area at the stamp spot, above the drawer (PassportUnderDaters).
-        Vector3 under = default;
-        bool underDaters = stamps != null && stamps.BarOut && paper.Index == stamps.Passport && TryUnderDaters(paper, out under);
-        spot = underDaters ? under : ClearOfBlockers(paper, spot);
+        spot = ClearOfBlockers(paper, spot);
         _restAt[paper.Index] = spot;
         Slide(paper, spot);
         Read(paper);
     }
-
-    /// <summary>
-    /// The passport ready to stamp, clear of the drawer (Saleh's 1008a
-    /// playtest: "the drawer is blocking the stamp area"). When the drawer
-    /// slides down out of the reading view's top edge, the passport lying on
-    /// the desk (not held, not sliding) slides so the middle of its stamp area
-    /// (DeskDocument.TryStampAreaCentre) lies at the stamp spot below the
-    /// drawer (DeskStampTray.TryStampSpot, DeskConfigSO.stampSpotView), and
-    /// comes to the top: the whole passport shows below the drawer, a short
-    /// drag from the daters.
-    /// </summary>
-    private void PassportUnderDaters()
-    {
-        bool barOut = stamps != null && stamps.BarOut;
-        bool slidOut = barOut && !_barWasOut;
-        _barWasOut = barOut;
-        if (!slidOut || _state == null)
-            return;
-        int index = stamps.Passport;
-        DeskDocument passport = index >= 0 && index < _papers.Count ? _papers[index] : null;
-        if (passport == null || _dragged == index || passport.IsSliding || _state.ZoneOf(index) != DeskZone.Desk || !TryUnderDaters(passport, out Vector3 target))
-            return;
-        _restAt[index] = target;
-        _stack.BringToFront(index);
-        ApplyStack();
-        Slide(passport, target);
-    }
-
-    /// <summary>Where <paramref name="paper"/> lies (its position on the desk) with the middle of its stamp area straight under the middle of the daters' dies, kept on the desk; false without a stamp area or a laid rack.</summary>
-    private bool TryUnderDaters(DeskDocument paper, out Vector3 target)
-    {
-        target = default;
-        if (stamps == null || surface == null || !stamps.TryStampSpot(out Vector3 dies) || !paper.TryStampAreaOffset(out Vector3 area))
-            return false;
-        target = surface.Clamp(new Vector3(dies.x - area.x, dies.y, dies.z - area.z));
-        return true;
-    }
-
-    /// <summary>Whether the dater rack was out at the last change (PassportUnderDaters acts as it slides out).</summary>
-    private bool _barWasOut;
 
     /// <summary>Where each paper sent to the desk by a click was laid (its spread's spot), while it slides there.</summary>
     private readonly Dictionary<int, Vector3> _restAt = new Dictionary<int, Vector3>();
@@ -571,12 +525,15 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>What covering the rulebook folder costs to the spread (a little more than a paper: its page is read beside the papers, but the reading view has no room to keep it clear of them all).</summary>
     private const float RulebookSpreadWeight = 1.5f;
 
+    /// <summary>What lying under the stamp rack costs to the spread (far more than a paper: the rack stands over the papers' top right in the reading view, the desk layout spec §2, and a paper under it hides under the daters).</summary>
+    private const float RackSpreadWeight = 4f;
+
     /// <summary>
     /// Where <paramref name="paper"/>, sent to the desk, lies (PaperSpread;
     /// Saleh's playtest 2026-10-07: "documents overlap"): inside the reading
     /// view's free area (DeskConfigSO.readingArea), covering as little as it can
     /// of the papers on the desk (their headers, photos and visa boxes least of
-    /// all) and the rulebook folder, nearest <paramref name="prefer"/>
+    /// all), the rulebook folder and the stamp rack, nearest <paramref name="prefer"/>
     /// (the reading spots' fan) among equal places; all in the papers' own frame
     /// on the desk (their sheets' right and top, as the reading view shows them).
     /// <paramref name="prefer"/> itself without the reading view.
@@ -600,6 +557,8 @@ public sealed class DeskController : MonoBehaviour
         }
         if (rulebook != null && rulebook.gameObject.activeInHierarchy && TryFootprint(rulebook.transform, out DeskRect folder))
             taken.Add(new SpreadTaken(folder, null, RulebookSpreadWeight));
+        if (stamps != null && stamps.Rack != null && stamps.Rack.gameObject.activeInHierarchy && TryFootprint(stamps.Rack, out DeskRect rack))
+            taken.Add(new SpreadTaken(rack, null, RackSpreadWeight));
         (float px, float py) = SpreadFrame(prefer);
         (float x, float y) = PaperSpread.Place(area, size.x, size.y, taken, px, py);
         LastSpread = $"area {area.CentreX:0.000},{area.CentreY:0.000} {area.Width:0.000}x{area.Height:0.000}; paper {size.x:0.000}x{size.y:0.000} at {x:0.000},{y:0.000}; taken {taken.Count}, cost {PaperSpread.Cost(new DeskRect(x, y, size.x, size.y), taken):0.0000}";

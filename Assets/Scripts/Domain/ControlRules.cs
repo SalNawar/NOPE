@@ -21,9 +21,6 @@ public readonly struct ControlState
     /// <summary>Inspect mode is on.</summary>
     public readonly bool Inspecting;
 
-    /// <summary>The stamp bar is out.</summary>
-    public readonly bool StampsOut;
-
     /// <summary>The view looks at the city.</summary>
     public readonly bool CityView;
 
@@ -38,7 +35,7 @@ public readonly struct ControlState
 
     /// <summary>A state; every flag defaults to false.</summary>
     public ControlState(bool pcOpen = false, bool newsletter = false, bool travellerAtDesk = false, bool wheelOpen = false, bool valueHeld = false,
-                        bool inspecting = false, bool stampsOut = false, bool cityView = false, bool deskView = false, bool dragging = false,
+                        bool inspecting = false, bool cityView = false, bool deskView = false, bool dragging = false,
                         bool textFieldFocused = false)
     {
         PcOpen = pcOpen;
@@ -47,7 +44,6 @@ public readonly struct ControlState
         WheelOpen = wheelOpen;
         ValueHeld = valueHeld;
         Inspecting = inspecting;
-        StampsOut = stampsOut;
         CityView = cityView;
         DeskView = deskView;
         Dragging = dragging;
@@ -61,7 +57,7 @@ public enum ControlKey
     /// <summary>SPACE: inspect mode on or off.</summary>
     Inspect,
 
-    /// <summary>TAB: the stamp bar out or back.</summary>
+    /// <summary>TAB: to the stamp rack (the reading view over it) and back up.</summary>
     Stamps,
 
     /// <summary>Q: to the PC and back.</summary>
@@ -86,7 +82,7 @@ public enum ControlAction
     /// <summary>Inspect mode on or off.</summary>
     ToggleInspect,
 
-    /// <summary>The stamp bar out or back.</summary>
+    /// <summary>The reading view over the stamp rack, or back up to the office (the desk layout spec §2: the rack is fixed beside the counter).</summary>
     ToggleStamps,
 
     /// <summary>Switch to the PC.</summary>
@@ -126,9 +122,6 @@ public enum BackOutStep
     /// <summary>Inspect mode ends.</summary>
     LeaveInspect,
 
-    /// <summary>The stamp bar slides back.</summary>
-    StowStamps,
-
     /// <summary>The view turns back from the city.</summary>
     LeaveCity,
 
@@ -144,9 +137,9 @@ public enum BackOutStep
 /// a button, a value in inspect mode); right-click and Esc always back out of
 /// the innermost mode, one per press, in one order everywhere (BackOut): a
 /// drag, the wheel, the PC (after its own chain: a menu, the card, the
-/// search, a held value...), the value held, inspect mode, the stamp bar, the
-/// city view, the reading view. The keys (Resolve): SPACE toggles inspect
-/// mode and TAB the stamp bar from every desk state (the PC keeps them for
+/// search, a held value...), the value held, inspect mode, the city view,
+/// the reading view. The keys (Resolve): SPACE toggles inspect mode and TAB
+/// the reading view over the stamp rack from every desk state (the PC keeps them for
 /// its own rows and regions), Q switches to the PC and back (not while a PC
 /// text field types it), A/D look at the city and back, F1 shows the keys.
 /// DeskCard is the F1 card's desk section, printed from the same constants
@@ -157,7 +150,7 @@ public static class ControlRules
     /// <summary>The inspect key as printed on the red button and the card.</summary>
     public const string InspectKey = "SPACE";
 
-    /// <summary>The stamp bar's key as printed on its grey tab and the card.</summary>
+    /// <summary>The stamp rack's key as printed on its grey tab and the card.</summary>
     public const string StampsKey = "TAB";
 
     /// <summary>The PC's key as printed on its grey tab and the card.</summary>
@@ -202,7 +195,7 @@ public static class ControlRules
         }
     }
 
-    /// <summary>The one thing a right-click or Esc backs out of in <paramref name="s"/>: the innermost mode first (a drag, the wheel, the PC, the held value, inspect mode, the stamp bar, the city, the reading view); nothing under a newsletter.</summary>
+    /// <summary>The one thing a right-click or Esc backs out of in <paramref name="s"/>: the innermost mode first (a drag, the wheel, the PC, the held value, inspect mode, the city, the reading view); nothing under a newsletter.</summary>
     public static BackOutStep BackOut(ControlState s)
     {
         if (s.Newsletter)
@@ -217,8 +210,6 @@ public static class ControlRules
             return BackOutStep.DropValue;
         if (s.Inspecting)
             return BackOutStep.LeaveInspect;
-        if (s.StampsOut)
-            return BackOutStep.StowStamps;
         if (s.CityView)
             return BackOutStep.LeaveCity;
         if (s.DeskView)
