@@ -102,6 +102,10 @@ def key(rgb: np.ndarray) -> np.ndarray:
     clear from 10 under it), pulled in by a pixel so no pink fringe survives."""
     level = background_level(rgb)
     alpha = np.clip((level - 10 - magenta(rgb)) / (0.4 * level - 10), 0, 1)
+    # A generated drawing's soft drop shadow is a darker magenta (still magenta in hue, red and blue well over green):
+    # it is background too, clear of the line art's anti-aliased rim.
+    hue = (np.minimum(rgb[..., 0], rgb[..., 2]) - rgb[..., 1]) / np.maximum(rgb.max(-1), 1)
+    alpha = np.where(ndimage.binary_erosion(hue > 0.55, iterations=2), 0, alpha)
     eroded = Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(3))
     alpha = np.asarray(eroded).astype(np.float32) / 255
     # Faint specks off the figure (the generator's blotchy background and soft shadows) are islands that never

@@ -20,8 +20,9 @@ Each coat then makes the frame over its own picture (make_pets.py), changing tha
 - a drawn cat coat takes its own Canva drawing of the frame where there is one (src/coats/frames/
   pet_cat_<coat>_<mood>_<frame>.png, made from the white frame alone with the coat's description, as its picture was:
   the tail frames, so a tabby's tail keeps its rings), moved onto its picture (the shift that lines up their still
-  bodies) and its colours matched to the picture's fur around the area (per channel, by quantiles); otherwise (a blink,
-  an ear) the white frame's fur takes the coat's colour for its tone, read off the picture's fur around the area;
+  bodies), its colours matched to the picture's (matched()), for the part whose silhouette changed; the fur seen in
+  both silhouettes (the body the tail uncovers) and any other frame (a blink, an ear) take the white frame's fur in
+  the coat's colour for its tone, read off the picture's fur around the area (recoloured());
 - the white cat is the white frame.
 
 The frames made are the ones the game plays: Assets/Art/UI/Resources/Home/pet_loops.json (each mood's loop and the
@@ -48,6 +49,7 @@ FRAMES = os.path.join(mp.SRC, "frames")
 LOOPS = os.path.join(mp.OUT, "pet_loops.json")
 DIFF = 60  # a channel this far from the picture is a changed pixel
 MIN_PATCH = int(1500 * mp.SCALE * mp.SCALE)  # changed patches smaller than this (after a grow) are the generator's noise
+MAX_HOLE = int(3000 * mp.SCALE * mp.SCALE)  # a hole in the changed area this small is part of it (a big one is the still body)
 GROW = round(6 * mp.SCALE)  # the grow that joins a changed part's pieces
 RIM = round(8 * mp.SCALE)  # the changed area's rim past the part
 FEATHER = 3 * mp.SCALE  # the changed area's soft edge (a gaussian's sigma)
@@ -66,8 +68,17 @@ def compose(kind, mood, frame):
     changed = ndimage.binary_opening(np.abs(src - g).max(-1) > DIFF, iterations=1)
     lab, n = ndimage.label(ndimage.binary_dilation(changed, iterations=GROW))
     sizes = ndimage.sum(np.ones_like(lab), lab, range(1, n + 1))
-    keep = np.isin(lab, 1 + np.flatnonzero(sizes > MIN_PATCH))
-    keep = ndimage.binary_fill_holes(ndimage.binary_dilation(keep, iterations=RIM))
+    big = 1 + np.flatnonzero(sizes > MIN_PATCH)
+    if kind == "cat" and (frame.startswith("tail") or frame == "ear") and len(big):
+        big = [1 + int(np.argmax(sizes))]  # a cat's tail or ear frame moves that part only: the rest is the generator's
+    if frame == "blink":  # a blink changes the face only: a patch mostly off the figure is the generator's (whiskers)
+        on_figure = ndimage.mean(mp.key(src), lab, big) if len(big) else []
+        big = [b for b, f in zip(big, on_figure) if f > 0.5]
+    keep = ndimage.binary_dilation(np.isin(lab, big), iterations=RIM)
+    holes, n = ndimage.label(ndimage.binary_fill_holes(keep) & ~keep)
+    if n:
+        hole_sizes = ndimage.sum(np.ones_like(holes), holes, range(1, n + 1))
+        keep |= np.isin(holes, 1 + np.flatnonzero(hole_sizes < MAX_HOLE))
     soft = ndimage.gaussian_filter(keep.astype(np.float32), FEATHER)[..., None]
     out = src * (1 - soft) + g * soft
     os.makedirs(FRAMES, exist_ok=True)
@@ -117,22 +128,26 @@ def aligned(drawing, picture, keep):
 
 
 def matched(rgb, rgb_alpha, picture, alpha, keep):
-    """The drawing's colours matched to the picture's around the changed area, channel by channel by quantiles (the
-    two drawings' tones agree; their stripes need not lie in the same places)."""
+    """The drawing's colours matched to the picture's: channel by channel by quantiles over the still fur around the
+    changed area (the two drawings' tones agree there; their stripes need not lie in the same places), then shifted
+    so the part where it is now (in the drawing, off the picture) has the mean colour of the part where it was (in
+    the picture, off the drawing), both the same tail, when there is enough of both."""
     ring = around(keep, alpha) & (rgb_alpha > 0.95)
     out = rgb.copy()
     q = np.linspace(0, 100, 101)
     for c in range(3):
-        src_q = np.percentile(rgb[..., c][ring], q)
-        dst_q = np.percentile(picture[..., c][ring], q)
-        out[..., c] = np.interp(rgb[..., c], src_q, dst_q)
-    return out
+        out[..., c] = np.interp(rgb[..., c], np.percentile(rgb[..., c][ring], q), np.percentile(picture[..., c][ring], q))
+    now = ndimage.binary_erosion(keep & (rgb_alpha > 0.95) & (alpha < 0.05), iterations=3)
+    was = ndimage.binary_erosion(keep & (alpha > 0.95) & (rgb_alpha < 0.05), iterations=3)
+    if now.sum() >= MIN_PATCH and was.sum() >= MIN_PATCH:
+        out = out + (picture[was].mean(0) - out[now].mean(0)) * keep[..., None]
+    return np.clip(out, 0, 255)
 
 
 def recoloured(white_frame, white_rest, picture, alpha, keep, eyes=True):
     """The white frame's fur in the coat's colours: each tone of the white fur takes the coat's median colour for that
-    tone around the changed area (its lines, eyes and inner ears as drawn; without eyes, a small pale island is fur
-    too, not an eye's highlight)."""
+    tone around the changed area (its ink lines, eyes and inner ears as drawn; without eyes, as in a blink, a small pale
+    island is fur too, not an eye's highlight)."""
     rest_fur, rest_lum = mp.fur(white_rest)
     sel = around(keep, alpha) & (rest_fur > 0.9)
     edges = np.linspace(0.4, 1.0, 25)
@@ -147,8 +162,15 @@ def recoloured(white_frame, white_rest, picture, alpha, keep, eyes=True):
             have.append(centres[i])
     table = np.array(table)
     frame_fur, frame_lum = mp.fur(white_frame) if eyes else mp.coat_mask(white_frame)
+    # The white art's grey fur strokes (a brow's, the hatching's: grey, darker than the fur, lighter than the ink) are
+    # the fur's too: they take the coat's shadow, darkened by their tone, as a coat drawing's strokes are coat-coloured.
+    f = white_frame / 255.0
+    sat = (f.max(-1) - f.min(-1)) / (f.max(-1) + 1e-6)
+    strokes = np.clip((frame_lum - 0.25) / 0.1, 0, 1) * np.clip((0.15 - sat) / 0.1, 0, 1) * (1 - frame_fur)
+    cover = np.maximum(frame_fur, strokes)[..., None]
     tone = np.stack([np.interp(frame_lum, have, table[:, c]) for c in range(3)], axis=-1)
-    return white_frame * (1 - frame_fur[..., None]) + tone * frame_fur[..., None]
+    tone *= np.clip(frame_lum / have[0], 0.5, 1.0)[..., None]
+    return white_frame * (1 - cover) + tone * cover
 
 
 def coat_frame(kind, coat, mood, frame, white, keep, soft, rig):
@@ -171,8 +193,17 @@ def coat_frame(kind, coat, mood, frame, white, keep, soft, rig):
             missed = keep & (mp.coat_mask(content)[0] > 0.5)
             m = ndimage.gaussian_filter(missed.astype(np.float32), 1.0)[..., None]
             content = content * (1 - m) + recoloured(content, white_rest, picture, alpha, keep, eyes=False) * m
+        # The drawing gives the figure's new outline (where the white frame's silhouette differs from the picture's:
+        # the tail where it now is and where it was); fur in both silhouettes (the body the tail uncovers, where the
+        # tail crosses itself) takes the coat's tones from the white frame, so neither a shadow of the drawing's own
+        # nor the old tail's outline lands on the still body.
+        moved = ndimage.binary_dilation(np.abs(white_alpha - mp.key(mp.load(mp.white_path(kind, mood)))) > 0.5, iterations=GROW)
+        d = ndimage.gaussian_filter(moved.astype(np.float32), FEATHER)
+        tone = recoloured(white_rgb, white_rest, picture, alpha, keep)
+        content = content * d[..., None] + tone * (1 - d[..., None])
+        content_alpha = content_alpha * d + white_alpha * (1 - d)
     else:
-        content, content_alpha = recoloured(white_rgb, white_rest, picture, alpha, keep), white_alpha
+        content, content_alpha = recoloured(white_rgb, white_rest, picture, alpha, keep, eyes=frame != "blink"), white_alpha
     s = soft[..., 0]
     return picture * (1 - soft) + content * soft, alpha * (1 - s) + content_alpha * s
 
