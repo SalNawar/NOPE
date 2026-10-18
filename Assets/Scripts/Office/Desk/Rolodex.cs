@@ -31,6 +31,14 @@ public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     /// <summary>How many cards the drum carries (the model's Card_00..23).</summary>
     [SerializeField] private int cardCount = 24;
 
+    /// <summary>
+    /// How near its card (degrees) and how slow (degrees a second) the drum
+    /// counts as come to rest: the spring's own rest test (1e-4) is finer than
+    /// a float holds at the drum's angle (150 and on), so it crept and never
+    /// read its card out.
+    /// </summary>
+    private const float RestDegrees = 0.05f, RestSpeed = 0.5f;
+
     private Quaternion _drumRest, _knobRest;
     private float _angle, _speed, _lastCard;
     private bool _dragging;
@@ -134,6 +142,8 @@ public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         }
         if (_settling && DeskProps.Step(ref _settle, dt, MotionFeel.Firm))
         {
+            if (!_settle.AtRest)
+                _settle.Settle(RestDegrees, RestSpeed);
             _angle = _settle.Value;
             Pose();
             if (_settle.AtRest)
