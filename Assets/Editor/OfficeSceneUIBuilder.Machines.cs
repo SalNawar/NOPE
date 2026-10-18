@@ -143,6 +143,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(reader);
         SetRef(so, "slotFlap", m.Find("Body/SlotFlap"));
         SetRef(so, "padCentre", m.Find("Body/PadCentre"));
+        SetRef(so, "cardSlot", m.Find("Body/CardSlot")); // a card slides into the slot at its height and angle (IPaperDock)
         SetRef(so, "ledPower", m.Find("Body/LED_Power").GetComponent<Renderer>());
         SetRef(so, "ledRead", m.Find("Body/LED_Read").GetComponent<Renderer>());
         SetRef(so, "ledFault", m.Find("Body/LED_Fault").GetComponent<Renderer>());

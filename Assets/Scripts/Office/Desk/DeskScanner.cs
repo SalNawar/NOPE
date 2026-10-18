@@ -16,9 +16,14 @@ using UnityEngine;
 /// (ScannerLid), shuts as the paper drops and the scan runs (the bright bar
 /// sweeping over the paper under the smoked glass, a cyan glow leaking from
 /// the lid's edges, the green readout counting, the xerox sound), opens
-/// again as the scan ends and shuts by itself once idle.
+/// again as the scan ends and shuts by itself once idle. A paper comes onto
+/// its bed over the casing and down from straight above, square to the bed
+/// (IPaperDock; Saleh's 1018a playtest: "it should move to the correct
+/// elevation and orintation"), the lid held open until it lies there;
+/// anything it cannot scan (the rulebook folder) it refuses: dashes on its
+/// readout and a buzz, and the thing goes back over the casing.
 /// </summary>
-public sealed class DeskScanner : MonoBehaviour
+public sealed class DeskScanner : MonoBehaviour, IPaperDock
 {
     /// <summary>The click box's height over the scanner's foot (metres): the binder sizes the box and the default bed sits halfway up it (audit R5-015).</summary>
     public const float BoxHeight = 0.12f;
@@ -62,13 +67,16 @@ public sealed class DeskScanner : MonoBehaviour
     /// <summary>Plays the lid's and the scan's placeholder sounds (optional).</summary>
     [SerializeField] private AudioSource sound;
 
+    /// <summary>How long the readout shows its dashes after a refusal (seconds).</summary>
+    [SerializeField] private float refuseSeconds = 0.9f;
+
     /// <summary>The placeholder sounds (the scanner art's make_scanner_sfx.py) until the sound bank has SoundCues.ScannerLidOpen, ScannerLidClose and ScannerScan: a hinge's swing up, the lid's clack, the xerox scan.</summary>
     [SerializeField] private AudioClip lidOpenSound, lidCloseSound, scanSound;
 
     private Spring _lid;
     private Quaternion _lidRest = Quaternion.identity;
     private bool _lidOpen, _near, _scanning, _rested;
-    private float _sinceScan = float.PositiveInfinity;
+    private float _sinceScan = float.PositiveInfinity, _refused;
     private int _count = -1;
     private Renderer[] _spill = System.Array.Empty<Renderer>();
     private MaterialPropertyBlock _block;
@@ -142,7 +150,7 @@ public sealed class DeskScanner : MonoBehaviour
         float dt = UiMotion.Delta(Time.unscaledDeltaTime);
         if (!float.IsPositiveInfinity(_sinceScan))
             _sinceScan += dt;
-        bool open = ScannerLid.Open(_scanning, _near, _sinceScan, knobs.scannerLidIdleSeconds);
+        bool open = ScannerLid.Open(_scanning, _near || _docking, _sinceScan, knobs.scannerLidIdleSeconds);
         if (open != _lidOpen)
         {
             _lidOpen = open;
@@ -158,7 +166,16 @@ public sealed class DeskScanner : MonoBehaviour
                 _lid.Step(dt, knobs.Get(knobs.scannerLidFeel), 1e-3f, 0.02f);
             lid.localRotation = Quaternion.AngleAxis(knobs.scannerLidAngle * _lid.Value, Vector3.right) * _lidRest;
         }
-        if (!_scanning && !_lidOpen && _count != 0)
+        if (_refused > 0f)
+        {
+            _refused = Mathf.Max(0f, _refused - dt);
+            if (_refused <= 0f)
+            {
+                _count = -1; // the count shows again
+                ShowCount(0);
+            }
+        }
+        else if (!_scanning && !_lidOpen && _count != 0)
             ShowCount(0);
         if (_scanning && _spill.Length > 0)
         {
@@ -228,6 +245,59 @@ public sealed class DeskScanner : MonoBehaviour
             return forward.sqrMagnitude > 1e-6f ? Quaternion.LookRotation(forward.normalized, Vector3.up) : Quaternion.identity;
         }
     }
+
+    /// <inheritdoc />
+    public DeskMachine Machine => DeskMachine.Scanner;
+
+    /// <inheritdoc />
+    public bool OnDesk => isActiveAndEnabled;
+
+    /// <summary>
+    /// Its casing: its parts' bounds (but the lid's, which stands up open at
+    /// the back while a paper comes in, and the scan's light), at least its
+    /// height with the lid shut (MachineHeight), raised by the shut lid's
+    /// thickness so a paper passes over the lid shut or open.
+    /// </summary>
+    public MachineBox Casing
+    {
+        get
+        {
+            var parts = new System.Collections.Generic.List<Renderer>();
+            foreach (Renderer r in GetComponentsInChildren<Renderer>(false))
+                if ((lid == null || !r.transform.IsChildOf(lid)) && (sweepBar == null || !r.transform.IsChildOf(sweepBar)) && (spill == null || !r.transform.IsChildOf(spill.transform)))
+                    parts.Add(r);
+            MachineBox box = MachineCasing.Measure(transform, parts, machineHeight);
+            return new MachineBox(box.CentreX, box.CentreZ, box.AxisX, box.AxisZ, box.HalfWidth, box.HalfDepth, box.Top + (lid != null ? LidAllowance : 0f));
+        }
+    }
+
+    /// <summary>The shut lid's thickness over the body (metres): a paper passing over the casing clears it.</summary>
+    private const float LidAllowance = 0.015f;
+
+    /// <inheritdoc />
+    public Vector3 DockPoint(MachineDock dock) => BedPoint;
+
+    /// <inheritdoc />
+    public Quaternion DockFacing(MachineDock dock) => BedFacing;
+
+    /// <inheritdoc />
+    public (Vector3 way, float depth) Slot => (BedFacing * Vector3.forward, 0f);
+
+    /// <inheritdoc />
+    public void Refuse()
+    {
+        _refused = refuseSeconds;
+        Sounds.Play(SoundCues.UiError);
+        _count = -1;
+        if (readout != null)
+            readout.SetText("---"); // a dead readout, no word: it reads in every language
+    }
+
+    /// <summary>Holds the lid open while a paper comes onto the bed (<paramref name="docking"/>; DeskController): the scan waits for it to lie there.</summary>
+    public void HoldOpen(bool docking) => _docking = docking;
+
+    /// <summary>True while a paper comes onto the bed (HoldOpen).</summary>
+    private bool _docking;
 
     /// <summary>Shows the stand-in's parts of the day's upgrades: the feeder tray with the Auto-Feed, the lamp with the Analysis (SC6).</summary>
     public void ShowUpgrades(ScannerDay day)

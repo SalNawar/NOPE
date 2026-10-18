@@ -368,7 +368,35 @@ public sealed class DeskRulebook : MonoBehaviour
     private float _height, _restYaw;
     private Spring _hop;
 
-    /// <summary>The folder's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; the folder "can be nudged and slides with weight"): heavier than a paper (MotionKnobs.folderWeight), it swings less, slides to rest slower, and its loose sheets sag while it moves.</summary>
+    /// <summary>The least height the dragged folder keeps over a machine's casing under it (SetCarryFloor), eased on the paper feel.</summary>
+    private Spring _floor;
+
+    /// <summary>The folder carried along a way (a machine refused it: back over the casing to where it was picked up).</summary>
+    private readonly DeskCarry _carry = new DeskCarry();
+
+    /// <summary>A dragged folder over a machine keeps at least <paramref name="height"/> metres over the desk (the casing's top and a clearance; 0 away from every machine): it never passes through a casing.</summary>
+    public void SetCarryFloor(float height)
+    {
+        _floor.Target = Mathf.Max(0f, height);
+        if (UiMotion.Amount.Still)
+            _floor.Snap(_floor.Target);
+    }
+
+    /// <summary>Where the folder's way starts from: its root, lifted by how far it hangs over its stack height (CarriedFrom, as a paper's).</summary>
+    public Vector3 CarriedFrom => transform.position + Vector3.up * Mathf.Max(0f, _floor.Value - _height);
+
+    /// <summary>A machine refused the folder (it scans and reads only the traveller's papers): it shakes its "no" and is carried along <paramref name="way"/> (DockPath: back over the casing) in <paramref name="seconds"/>.</summary>
+    public void Refused(IReadOnlyList<Vector3> way, float seconds, float swingSpeed)
+    {
+        float raised = Mathf.Max(0f, _floor.Value - _height);
+        transform.position += Vector3.up * raised;
+        _floor.Snap(0f);
+        _physics?.Nudge(swingSpeed);
+        _carry.Start(transform, way, transform.rotation, seconds, null);
+        ShowMotion();
+    }
+
+    /// <summary>The folder's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; the folder "can be nudged and slides with weight"): heavier than a paper (MotionKnobs.folderWeight), it swings less and slides to rest slower; it never bends (Saleh's 1018a playtest: "the folder stays weighty").</summary>
     private PaperPhysics _physics;
 
     /// <summary>Each frame: the folder's swing, slide, spin and hop on top of where the desk puts it (the drag moves its root).</summary>
@@ -392,9 +420,10 @@ public sealed class DeskRulebook : MonoBehaviour
             _hop.Value = 0f; // it never sinks into what lies under it
             _hop.Velocity = Mathf.Max(0f, _hop.Velocity);
         }
-        if (depth != null)
-            depth.SetFlex(_physics.Sag, _physics.SagDirX, _physics.SagDirZ);
-        if (_physics.Moving || spin != 0f || !_hop.AtRest)
+        bool floating = !_floor.AtRest;
+        _floor.Step(Time.unscaledDeltaTime, tuning, 1e-5f, 1e-4f);
+        _carry.Step(transform, Time.deltaTime);
+        if (_physics.Moving || spin != 0f || !_hop.AtRest || floating)
             ShowMotion();
     }
 
@@ -404,7 +433,7 @@ public sealed class DeskRulebook : MonoBehaviour
         if (booklet == null)
             return;
         float ox = _physics != null ? _physics.OffsetX : 0f, oz = _physics != null ? _physics.OffsetZ : 0f, yaw = _physics != null ? _physics.Yaw : 0f;
-        booklet.localPosition = new Vector3(ox, _height + _hop.Value, oz);
+        booklet.localPosition = new Vector3(ox, Mathf.Max(_height, _floor.Value) + _hop.Value, oz);
         booklet.localRotation = Quaternion.Euler(0f, _restYaw + yaw, 0f);
     }
 

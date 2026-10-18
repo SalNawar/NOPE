@@ -72,7 +72,34 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     public Vector2 SizeIn(DeskZone zone) => Size * ZoneScale(zone);
 
     /// <summary>The sheet's scale lying in <paramref name="zone"/> now: the desk's reading size only while the reading view is on (DeskPapers.ShownFullSize), else the counter's, its normal size.</summary>
-    private float ShownScale(DeskZone zone) => ZoneScale(DeskPapers.ShownFullSize(zone, _focused) ? DeskZone.Desk : DeskZone.Counter);
+    private float ShownScale(DeskZone zone) => ZoneScale(!_docked && DeskPapers.ShownFullSize(zone, _focused) ? DeskZone.Desk : DeskZone.Counter);
+
+    /// <summary>The paper goes into a machine (<paramref name="docked"/>: its bed, pad or slot) or comes back out: docked, it shows at its normal size (it must fit the slot), out again at its zone's.</summary>
+    public void SetDocked(bool docked)
+    {
+        if (_docked == docked)
+            return;
+        _docked = docked;
+        EaseTo(ShownScale(Zone));
+    }
+
+    /// <summary>The paper's size as it shows now (metres, width by height: its sheet's scale).</summary>
+    public Vector2 ShownSize => Size * _sizeNow;
+
+    /// <summary>The paper's size docked in a machine (metres: its normal size, width by height).</summary>
+    public Vector2 DockedSize => Size * ZoneScale(DeskZone.Counter);
+
+    /// <summary>A dragged paper over a machine keeps at least <paramref name="height"/> metres over its place (the casing's top and a clearance; 0 away from every machine): it never passes through a casing while carried.</summary>
+    public void SetCarryFloor(float height)
+    {
+        _carryFloor = Mathf.Max(0f, height);
+        if (_liftPlaced)
+            _lift.Target = Mathf.Max(_stackLift, _carryFloor);
+    }
+
+    /// <summary>The machine refused the paper: it shakes its "no" on its swing (PaperPhysics.Nudge, <paramref name="swingSpeed"/> degrees per second) before the desk carries it back.</summary>
+    public void Shake(float swingSpeed) => _physics.Nudge(swingSpeed);
+
 
     /// <summary>True while the reading view is on (SetFocused): a paper on the desk shows at its reading size only then.</summary>
     private bool _focused;
@@ -229,14 +256,14 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The sheet's own rotation (lying flat, its face up: the builder's), which the tilt turns in the paper's space.</summary>
     private Quaternion? _sheetRest;
 
-    private Vector3 _slideFrom;
-    private Vector3 _slideTo;
+    /// <summary>The paper carried along a way (a slide across the desk, or over a machine's casing into its dock and out: DockPath).</summary>
+    private readonly DeskCarry _carry = new DeskCarry();
 
-    /// <summary>The slide's turn: the paper's rotation where it started and where it ends (the same when the slide does not turn it).</summary>
-    private Quaternion _turnFrom = Quaternion.identity, _turnTo = Quaternion.identity;
-    private float _slideSeconds;
-    private float _slideElapsed;
-    private Action _slideDone;
+    /// <summary>The lift the stack gives the paper (SetLift), and the least lift a dragged paper keeps over a machine's casing under it (SetCarryFloor).</summary>
+    private float _stackLift, _carryFloor;
+
+    /// <summary>True while the paper lies docked in a machine (SetDocked): at its normal size, whatever the reading view.</summary>
+    private bool _docked;
 
     /// <summary>The paper's drag (the builder wires it): the desk reaches it without a GetComponent each time.</summary>
     public DeskDraggable Drag => drag;
@@ -247,8 +274,14 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The paper's size in metres, its look's (the document design spec, D1): the desk's paper height times the look's scale, by the look's aspect; the desk's paper before it binds.</summary>
     public Vector2 Size { get; private set; }
 
-    /// <summary>True while the paper slides (it takes no input then).</summary>
-    public bool IsSliding { get; private set; }
+    /// <summary>True while the paper slides or is carried into or out of a machine (it takes no input then).</summary>
+    public bool IsSliding => _carry.Running;
+
+    /// <summary>The paper's kind (its model: a sheet, a booklet, a card).</summary>
+    public PaperKind Kind => _kind;
+
+    /// <summary>Where the paper's way starts from: its root where it shows now, lifted by how far it is still held up over its place (a dropped paper is carried from where it hangs).</summary>
+    public Vector3 CarriedFrom => transform.position + Vector3.up * Mathf.Max(0f, _lift.Value - _lift.Target);
 
     /// <summary>The zone the paper is shown for (DeskController sets it as it lies and while it is dragged).</summary>
     public DeskZone Zone { get; private set; }
@@ -277,21 +310,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             _sizeNow = eased >= 1f ? _sizeTarget : Mathf.LerpUnclamped(_sizeFrom, _sizeTarget, UiMotion.Ease(eased, UiMotion.Knobs.deskMoveFeel, seconds));
             ShowSheetScale();
         }
-        if (!IsSliding)
-            return;
-
-        _slideElapsed += Time.deltaTime;
-        float t = _slideSeconds > 0f ? Mathf.Clamp01(_slideElapsed / _slideSeconds) : 1f;
-        float along = UiMotion.Ease(t, UiMotion.Knobs.deskMoveFeel, _slideSeconds);
-        transform.position = Vector3.LerpUnclamped(_slideFrom, _slideTo, along);
-        transform.rotation = t >= 1f ? _turnTo : Quaternion.SlerpUnclamped(_turnFrom, _turnTo, along);
-        if (t < 1f)
-            return;
-
-        IsSliding = false;
-        Action done = _slideDone;
-        _slideDone = null;
-        done?.Invoke();
+        _carry.Step(transform, Time.deltaTime);
     }
 
     /// <summary>The paper's printed meshes go with it (they were built for this paper alone).</summary>
@@ -736,6 +755,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// </summary>
     private void BuildDepth(List<(float x, float y)> outline, PaperKind kind)
     {
+        _kind = kind;
         if (depth == null || _config == null)
             return;
         depth.Wear(kind);
@@ -771,8 +791,87 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         sheet.localRotation = Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
     }
 
-    /// <summary>The paper's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"): its swing and sag while held, its slide, spin and hop when let go.</summary>
+    /// <summary>The paper's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; 1018a: "all documents are stiff"): its swing and bend while held, its slide, spin, hop and wobble when let go.</summary>
     private readonly PaperPhysics _physics = new PaperPhysics();
+
+    /// <summary>The paper's kind (its model: a sheet, a booklet, a card): how much it bends (MotionKnobs.sheetFlex, bookletFlex, cardFlex).</summary>
+    private PaperKind _kind;
+
+    /// <summary>The bend drawn now (PaperBend: flat at rest).</summary>
+    private PaperBend _bend = PaperBend.Flat;
+
+    /// <summary>The printed parts' rest poses on the sheet (each part, its place, its turn and its centre on the face, metres) while the paper bends; empty while it lies flat.</summary>
+    private readonly List<(Transform part, Vector3 position, Quaternion rotation, Vector2 centre)> _printRest = new List<(Transform, Vector3, Quaternion, Vector2)>();
+
+    /// <summary>How far the printed parts stand off the bent face while it bends (metres toward the viewer): a part's flat piece over a curve stays above it.</summary>
+    private const float BentPrintLift = 0.0003f;
+
+    /// <summary>The bend the physics gives the paper now: its bow along its travel (the trailing end lagging, MotionKnobs.paperBowLag), its corners' twist and its ripple, by its kind's flex.</summary>
+    private PaperBend BendNow(MotionKnobs knobs)
+    {
+        float flex = _kind == PaperKind.Booklet ? knobs.bookletFlex : _kind == PaperKind.Card ? knobs.cardFlex : knobs.sheetFlex;
+        if (flex <= 0f || (_physics.Bow == 0f && _physics.Twist == 0f && _physics.Flutter == 0f))
+            return PaperBend.Flat;
+        // the physics' frame is the paper's on the desk (x right, z away); the face's y runs up the page, away from the chair
+        return new PaperBend(_physics.BowDirX, _physics.BowDirZ, _physics.Bow * flex, knobs.paperBowLag, _physics.Twist * flex, _physics.Flutter * flex, _physics.FlutterPhase, knobs.paperFlutterWaves);
+    }
+
+    /// <summary>
+    /// Bends the paper (Saleh's 1018a playtest: "all documents are stiff"):
+    /// its model takes the bend in its shader (DeskPaperDepth.SetBend), and
+    /// each printed part (a text, the photo, the seal, a stamp, a highlight)
+    /// moves to the bent face under its centre, turned to its slope, a hair
+    /// above it; flat again, every part goes back exactly where it was printed.
+    /// True when the bend changed.
+    /// </summary>
+    private bool ShowBend(PaperBend bend)
+    {
+        if (bend.Equals(_bend))
+            return false;
+        _bend = bend;
+        if (depth != null)
+            depth.SetBend(bend, Size);
+        if (sheet == null)
+            return true;
+        Transform face = paperQuad != null ? paperQuad.transform : null;
+        if (bend.IsFlat)
+        {
+            RestorePrints();
+            return true;
+        }
+        if (_printRest.Count == 0 || _printRest.Count != sheet.childCount - (face != null && face.parent == sheet ? 1 : 0))
+        {
+            RestorePrints();
+            foreach (Transform part in sheet)
+                if (part != face)
+                    _printRest.Add((part, part.localPosition, part.localRotation, new Vector2(part.localPosition.x, part.localPosition.y)));
+        }
+        float w = Mathf.Max(Size.x, 1e-4f), h = Mathf.Max(Size.y, 1e-4f);
+        foreach ((Transform part, Vector3 position, Quaternion rotation, Vector2 centre) in _printRest)
+        {
+            if (part == null)
+                continue;
+            float x = centre.x * 2f / w, y = centre.y * 2f / h;
+            float drop = bend.Depth(x, y, w, h);
+            (float dx, float dy) = bend.Slope(x, y, w, h);
+            // the sheet's +z runs away from the viewer: a face sloping deeper to its right turns about its up
+            part.localPosition = position + new Vector3(0f, 0f, drop - BentPrintLift);
+            part.localRotation = Quaternion.Euler(Mathf.Atan(dy) * Mathf.Rad2Deg, -Mathf.Atan(dx) * Mathf.Rad2Deg, 0f) * rotation;
+        }
+        return true;
+    }
+
+    /// <summary>Every printed part back where it was printed (the paper lies flat).</summary>
+    private void RestorePrints()
+    {
+        foreach ((Transform part, Vector3 position, Quaternion rotation, Vector2 _) in _printRest)
+            if (part != null)
+            {
+                part.localPosition = position;
+                part.localRotation = rotation;
+            }
+        _printRest.Clear();
+    }
 
     /// <summary>The paper's own number for its look (its index and its form's number: the same paper lies the same way every time).</summary>
     private static int Seed(int index, string formNumber)
@@ -794,6 +893,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     {
         if (sheet == null)
             return;
+        _stackLift = height;
+        height = Mathf.Max(height, _carryFloor);
         if (!_liftPlaced || UiMotion.Amount.Still)
         {
             _liftPlaced = true;
@@ -844,8 +945,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         }
         if (hop > 0f)
             _lift.Kick(knobs.Get(knobs.paperFeel).KickFor(hop));
-        if (depth != null)
-            depth.SetFlex(_physics.Sag, _physics.SagDirX, _physics.SagDirZ);
+        bool bent = ShowBend(BendNow(knobs));
         if (dragged && dt > 0f && !amount.Still)
         {
             Vector3 travel = transform.InverseTransformDirection(position - _lastPosition) / dt;
@@ -857,7 +957,11 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             _tiltX.Target = _tiltZ.Target = 0f;
         _lastPosition = position;
         if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest && !_physics.Moving)
+        {
+            if (bent)
+                ShowFeel(); // flat again: down onto its place
             return;
+        }
         SpringTuning tuning = knobs.Get(knobs.paperFeel);
         _lift.Step(dt, tuning, knobs.settleValue * 0.01f, knobs.settleSpeed * 0.01f); // metres
         _tiltX.Step(dt, tuning, knobs.settleValue * 10f, knobs.settleSpeed * 10f); // degrees
@@ -882,6 +986,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         float lift = _settling ? Mathf.Max(_lift.Value, _lift.Target) : _lift.Value;
         float half = _sizeNow * (1f + _squash.Value) / 2f;
         lift += PaperLayers.TiltDrop(Size.x * half, Size.y * half, _tiltX.Value, _tiltZ.Value);
+        // a bend's drooping ends never pass through what lies under the paper (a held one has its drag's lift of room)
+        float room = drag != null && drag.IsDragging && _config != null ? _config.dragLift : 0f;
+        lift += Mathf.Max(0f, _bend.Lowest(Size.x, Size.y) - room);
         sheet.localPosition = new Vector3(_physics.OffsetX, lift, _physics.OffsetZ);
         _sheetRest ??= sheet.localRotation;
         sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f && _physics.Yaw == 0f
@@ -919,20 +1026,25 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             click.Interactable = clickable;
     }
 
-    /// <summary>Slides the paper to a world point in <paramref name="seconds"/> (on the desk's spring curve, MotionKnobs.deskMoveFeel: it lands with a little overshoot, exactly there at the end), then calls <paramref name="done"/>.</summary>
-    public void SlideTo(Vector3 target, float seconds, Action done) => SlideTo(target, transform.rotation, seconds, done);
-
-    /// <summary>As SlideTo, turning the paper on the same eased curve to lie at <paramref name="facing"/> (a level rotation: its sheet square to the scanner's bed, or upright toward the chair).</summary>
-    public void SlideTo(Vector3 target, Quaternion facing, float seconds, Action done)
+    /// <summary>
+    /// Carries the paper along <paramref name="way"/> (world points after
+    /// where it is: DockPath, over a machine's casing, onto its bed or pad,
+    /// into its slot and out) in <paramref name="seconds"/>, turning it to
+    /// lie at <paramref name="facing"/> (DeskCarry), then calls
+    /// <paramref name="done"/>. It starts from where it shows
+    /// (CarriedFrom): how far it still hangs over its place moves into its root.
+    /// </summary>
+    public void Carry(IReadOnlyList<Vector3> way, Quaternion facing, float seconds, Action done)
     {
-        _turnFrom = transform.rotation;
-        _turnTo = facing;
-        _slideFrom = transform.position;
-        _slideTo = target;
-        _slideSeconds = seconds;
-        _slideElapsed = 0f;
-        _slideDone = done;
-        IsSliding = true;
+        float raised = Mathf.Max(0f, _lift.Value - _lift.Target);
+        if (raised > 0f)
+        {
+            transform.position += Vector3.up * raised;
+            _lift.Snap(_lift.Target);
+            _settling = false;
+            ShowFeel();
+        }
+        _carry.Start(transform, way, facing, seconds, done);
     }
 
     // ---------------- Printing ----------------

@@ -103,22 +103,51 @@ public sealed class MotionKnobs
 
     /// <summary>
     /// The desk's physics feel (PaperPhysics; Saleh 2026-10-17: "KEEP IT TOP
-    /// DOWN BUT GIVE IT PHYSICS"): a held paper's swing against its travel
-    /// (degrees per metre per second, at most paperSwayMax) and its free
-    /// edges' sag (metres per metre per second, at most paperSagMax); let go,
-    /// its slide on into its place (its momentum over paperSlideSeconds, at
-    /// most paperSlideMax metres, stopped by friction), the turn its sideways
-    /// momentum leaves it (degrees per metre per second, at most
-    /// paperDropSpinMax) and its hop (metres high); its speed smoothed over
-    /// paperSpeedSmoothing seconds. The folder takes them divided by its weight.
+    /// DOWN BUT GIVE IT PHYSICS"; 1018a: "all documents are stiff"): a held
+    /// paper's swing against its travel (degrees per metre per second, at most
+    /// paperSwayMax); let go, its slide on into its place (its momentum over
+    /// paperSlideSeconds, at most paperSlideMax metres, stopped by friction),
+    /// the turn its sideways momentum leaves it (degrees per metre per second,
+    /// at most paperDropSpinMax) and its hop (metres high); its speed smoothed
+    /// over paperSpeedSmoothing seconds. The folder takes them divided by its weight.
     /// </summary>
-    public float paperSwayPerSpeed = 9f, paperSwayMax = 7f, paperSagPerSpeed = 0.01f, paperSagMax = 0.008f;
+    public float paperSwayPerSpeed = 16f, paperSwayMax = 12f;
 
     /// <inheritdoc cref="paperSwayPerSpeed"/>
     public float paperSlideSeconds = 0.16f, paperSlideMax = 0.04f, paperDropSpinPerSpeed = 6f, paperDropSpinMax = 5f, paperDropHop = 0.004f, paperSpeedSmoothing = 0.05f;
 
-    /// <summary>How heavy the rulebook folder moves against a paper (PaperPhysics.Weight): it swings and sags less and slides to rest slower.</summary>
+    /// <summary>How heavy the rulebook folder moves against a paper (PaperPhysics.Weight): it swings less and slides to rest slower; it never bends.</summary>
     public float folderWeight = 2.5f;
+
+    /// <summary>
+    /// A held paper's bend (PaperPhysics, PaperBend; Saleh's 1018a playtest:
+    /// "all documents are stiff"): its bow along its travel (metres at its
+    /// ends per metre per second, at most paperBowMax), the trailing end
+    /// drooping more than the leading one by paperBowLag (0 even, 1 the
+    /// leading end flat); its corners' twist as it swings (metres per degree
+    /// per second of its swing, at most paperTwistMax); the ripple on a fast
+    /// move (none below paperFlutterFrom metres per second, then
+    /// paperFlutterPerSpeed metres per metre per second, at most
+    /// paperFlutterMax, running paperFlutterHz times a second in
+    /// paperFlutterWaves half waves along it); and the kick its bow takes as
+    /// it lands (metres per second toward curling up: the wobble's start).
+    /// </summary>
+    public float paperBowPerSpeed = 0.022f, paperBowMax = 0.014f, paperBowLag = 0.5f;
+
+    /// <inheritdoc cref="paperBowPerSpeed"/>
+    public float paperTwistPerSwing = 0.00008f, paperTwistMax = 0.006f;
+
+    /// <inheritdoc cref="paperBowPerSpeed"/>
+    public float paperFlutterFrom = 0.5f, paperFlutterPerSpeed = 0.006f, paperFlutterMax = 0.005f, paperFlutterHz = 5f, paperFlutterWaves = 1.5f;
+
+    /// <inheritdoc cref="paperBowPerSpeed"/>
+    public float paperLandKick = 0.14f;
+
+    /// <summary>How much each kind of paper bends (PaperBend's share of the physics' bow, twist and ripple): a loose sheet, a passport's pages, a plastic card.</summary>
+    public float sheetFlex = 1f, bookletFlex = 0.55f, cardFlex = 0.12f;
+
+    /// <summary>The held paper's swing (its turn against its travel, loose: an overshoot, the corners lagging), its bend behind the hand (its bow, twist and ripple), and its bow's settle once let go (light damping: a soft wobble, its ends curling up, then drooping, then flat).</summary>
+    public SpringTuning paperSwing = SpringTuning.WithRatio(120f, 0.38f), paperBend = SpringTuning.WithRatio(90f, 0.42f), paperWobble = SpringTuning.WithRatio(220f, 0.22f);
 
     /// <summary>How far a stamp rises before its slam (the anticipation).</summary>
     public float stampLift = 0.025f;

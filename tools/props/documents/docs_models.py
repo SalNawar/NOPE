@@ -44,7 +44,8 @@ class Part:
     def __init__(self, name, width, depth):
         self.name, self.width, self.depth = name, width, depth
         self.faces = []  # (points [(x, y, h)], uvs [(u, v)], colours [(r, g, b, a)])
-        self.flex = 1.0  # the vertex colours' alpha: how much the part sags with the body's motion (DocumentCel's _Flex)
+        self.flex = 1.0  # the vertex colours' alpha: how much the part bends with the body's motion (DocumentCel's _Flex)
+        self.dice = None  # (across, up): cut into a grid so a bend (PaperBend.hlsl, per vertex) curves it smoothly
 
     def face(self, pts, uvs, cols):
         self.faces.append((pts, uvs, [(c[0], c[1], c[2], self.flex) for c in cols]))
@@ -318,9 +319,12 @@ def booklet():
     # pages, and its sides take the border's colour, so its edge is the cover's.
     corner = 0.0025
     outline = rounded_rect(-0.5, -0.5, 0.5, 0.5, (corner * MX,) * 4, seg=3)
-    top.flex = body.flex = 0.3  # the hard cover gives a little
+    # The whole booklet bends as one (Saleh's 1018a playtest: "real bend and flex on ... passport pages"): its
+    # cover and its pages together, so the pages never bend into the cover; how much is the game's knob
+    # (MotionKnobs.bookletFlex), and the grid lets it curve.
+    top.flex = body.flex = 1.0
+    top.dice = body.dice = (10, 12)
     slab(top, body, outline, cover_top, cover_bot, EDGE_SHEET, bevel=0.0, side_shade=0.72, side_art=True, ink=0.0008, scale=(0.14, 0.22))
-    top.flex = body.flex = 1.0  # the pages flex
     # The page blocks: two, each its page, curving down into the gutter at y 0 and stitched there.
     gutter = 0.07  # shares of the height the pages curve over toward the fold
     rows = 6
@@ -408,12 +412,13 @@ def sheet():
 def card():
     top = Part('CardTop', 1.0, 1.0)
     body = Part('CardBody', 1.0, 1.0)
-    top.flex = body.flex = 0.1
+    top.flex = body.flex = 1.0
+    top.dice = body.dice = (8, 5)
     # The card is about 0.21 x 0.12 m on the desk: a 7 mm corner, a 0.6 mm bevel.
     W, D = 0.21, 0.12
     outline = rounded_rect(-W / 2, -D / 2, W / 2, D / 2, (0.007,) * 4, seg=5)
     tmp_top, tmp_body = Part('t', W, D), Part('b', W, D)
-    tmp_top.flex = tmp_body.flex = 0.1  # plastic: barely gives
+    tmp_top.flex = tmp_body.flex = 1.0  # plastic barely gives: how much is the game's knob (MotionKnobs.cardFlex)
     slab(tmp_top, tmp_body, outline, 0.0, -0.0012, EDGE_SHEET, bevel=0.0006, bevel_shade=0.82, ink=0.0007)
     for src, dst in ((tmp_top, top), (tmp_body, body)):
         for pts, uvs, cs in src.faces:
@@ -448,6 +453,16 @@ def to_object(part, scale=(1.0, 1.0), unit=False, collection=None):
         for loop, uv, c in zip(f.loops, uvs, cs):
             loop[uv_layer].uv = uv
             loop[col_layer] = (min(c[0], 1.0), min(c[1], 1.0), min(c[2], 1.0), c[3])
+    if unit and part.dice:
+        # the grid's cuts: x across (Blender -x), y up the page (Blender +z); each cut splits every face it
+        # crosses, interpolating its UVs and colours, so the face's look is unchanged and a bend can curve it
+        nx, ny = part.dice
+        for k in range(1, nx):
+            c = -0.5 + k / nx
+            bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=(-c, 0, 0), plane_no=(1, 0, 0))
+        for k in range(1, ny):
+            c = -0.5 + k / ny
+            bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=(0, 0, c), plane_no=(0, 0, 1))
     bm.normal_update()
     bm.to_mesh(me)
     bm.free()

@@ -215,6 +215,9 @@ public sealed class DeskPapers
     /// <summary>True while a scan runs.</summary>
     public bool ScannerBusy => _scanning >= 0;
 
+    /// <summary>The paper on the scanner's bed (-1: none): the desk holds its scan while it is still on its way onto the bed.</summary>
+    public int Scanning => _scanning;
+
     /// <summary>The running scan's pass (ScannerDay.PassFor: the analysis pass for a paper dropped on the scanner with the Analysis Scanner, once per document); Plain while the scanner fed itself or is idle.</summary>
     public ScanPass Pass { get; private set; }
 

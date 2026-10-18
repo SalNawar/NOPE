@@ -167,10 +167,13 @@ public class DeskPapersTests
         }, Scan, 0.5f, new ScannerDay(false, true));
         for (int i = 0; i < p.Count; i++)
             Assert.IsTrue(p.HandOver(i));
+        Assert.AreEqual(-1, p.Scanning, "nothing on the bed yet");
         Assert.AreEqual(DropOutcome.Scanning, p.Drop(0, true));
+        Assert.AreEqual(0, p.Scanning, "the paper on the bed (the desk holds its scan until it lies there)");
         Assert.AreEqual(DropOutcome.Queued, p.Drop(2, true), "the scanner is busy: the paper waits its turn (no slide back)");
         Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true));
         Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true), "dropped again: still queued once");
+        Assert.AreEqual(0, p.Scanning, "the queue does not take the bed");
         Assert.AreEqual(2, p.QueuedCount);
         Assert.AreEqual(-1, p.FeedNext(null), "one at a time");
         Assert.AreEqual(0, p.Tick(0.5f), "the first paper's (analysis) scan finishes");
