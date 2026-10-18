@@ -1,6 +1,6 @@
 # Art request: the pet (for the ChatGPT art side)
 
-> **Delivered (run 7, 2026-10-07):** files 1-8 arrived as coats instead: `Home/pet_<kind>_<coat>_<look>.png`, five coats per kind (the Home pet spec PS11), made in Canva and recoloured by `tools/art/pets/make_pets.py`. `ArtSlots.PetSprite` still tries `Home/pet_<kind>_<look>` after the coat's file, so a coat-less file 1-8 would show for a coat without its own picture. Files 9-18 are still open.
+> **Delivered (run 7, 2026-10-07):** files 1-8 arrived as coats instead: `Home/pet_<kind>_<coat>_<look>.png`, five coats per kind (the Home pet spec PS11), made in Canva and installed by `tools/art/pets/make_pets.py` (the dogs' coats recoloured from the white dog; since 2026-10-18 each cat coat is its own Canva drawing). `ArtSlots.PetSprite` still tries `Home/pet_<kind>_<look>` after the coat's file, so a coat-less file 1-8 would show for a coat without its own picture. Files 9-18 are still open.
 
 *2026-10-05 · the Home pet spec (`docs/superpowers/specs/2026-10-05-home-pet-design.md`) · until these arrive the game draws a stand-in in code (`PetStandIn`), so each file switches on by itself the moment it is dropped in place (the art slots: `ArtSlots.PetSprite`, `PetCorner`, `PetToy`, `OrderIcon`, `OrderBranch`).*
 
