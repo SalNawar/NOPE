@@ -617,7 +617,7 @@ public static partial class OfficeSceneUIBuilder
         soScanner.ApplyModifiedProperties();
 
         // The desk machines (the desk machines spec §1): the chip reader and the UV torch.
-        DeskHardware hardware = BuildDeskHardware(office, config);
+        DeskHardware hardware = BuildDeskHardware(office, config, tooltip);
 
         // The documents land on the counter and come to the reading view by themselves (Papers, Please's zones).
         var soDesk = new SerializedObject(desk);

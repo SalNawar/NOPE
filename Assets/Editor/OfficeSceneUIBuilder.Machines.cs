@@ -34,14 +34,14 @@ public static partial class OfficeSceneUIBuilder
     /// wired on the DeskHardware with the config, the notes and the reveal's
     /// materials and textures. Returns it (the desk and the binder take it).
     /// </summary>
-    private static DeskHardware BuildDeskHardware(Transform office, DeskConfigSO config)
+    private static DeskHardware BuildDeskHardware(Transform office, DeskConfigSO config, OverlayCallout tooltip)
     {
         DestroyChildIfPresent(office, "DeskHardware");
         Transform root = EnsureChild(office, "DeskHardware");
         DeskHardware hardware = GetOrAdd<DeskHardware>(root.gameObject);
         ChipReader reader = BuildChipReader(root);
         UvTorch torch = BuildUvTorch(root);
-        DeskUpgrades upgrades = BuildDeskUpgrades(root, config);
+        DeskUpgrades upgrades = BuildDeskUpgrades(root, config, tooltip);
 
         TextMeshPro uvHint = FloatingNote(root, "UvHint", true);
         TextMeshPro chipHint = FloatingNote(root, "ChipHint", true);

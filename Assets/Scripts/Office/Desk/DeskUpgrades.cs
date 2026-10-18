@@ -32,6 +32,15 @@ public sealed class DeskUpgrades : MonoBehaviour
     /// <summary>The desk tuning (the objects' places).</summary>
     [SerializeField] private DeskConfigSO config;
 
+    /// <summary>The overlay's tooltip (shared with the desk props' reactions): an object reads out what it tells there (the RING SERVICE panel's ring, the Rolodex's card).</summary>
+    [SerializeField] private OverlayCallout tooltip;
+
+    /// <summary>How long a read-out stays (seconds), and how far over its point it hangs (canvas px).</summary>
+    [SerializeField] private float sayingSeconds = 6f;
+
+    /// <inheritdoc cref="sayingSeconds"/>
+    [SerializeField] private Vector2 sayingOffset = new Vector2(0f, 60f);
+
     private readonly List<Transform> _appear = new List<Transform>();
     private readonly List<Vector3> _appearScale = new List<Vector3>();
     private Spring _pop;
@@ -62,6 +71,19 @@ public sealed class DeskUpgrades : MonoBehaviour
                 if (c != null && c.gameObject.activeSelf)
                     yield return c;
         }
+    }
+
+    private void Awake()
+    {
+        if (ringPanel != null)
+            ringPanel.Bind(Say);
+    }
+
+    /// <summary>An object reads <paramref name="text"/> out over <paramref name="at"/> in the overlay's tooltip.</summary>
+    private void Say(string text, Transform at)
+    {
+        if (tooltip != null && !string.IsNullOrEmpty(text))
+            tooltip.Show(text, at != null ? at : transform, sayingOffset, sayingSeconds);
     }
 
     private void OnEnable()
@@ -122,8 +144,13 @@ public sealed class DeskUpgrades : MonoBehaviour
         }
         if (ringPanel != null)
         {
-            UpgradeObjects.Module[] modules = UpgradeObjects.Modules(portals != null ? portals.Portals : null, owns, today);
-            ringPanel.SetDay(modules);
+            IReadOnlyList<PortalRoute> routes = portals != null ? portals.Portals : null;
+            UpgradeObjects.Module[] modules = UpgradeObjects.Modules(routes, owns, today);
+            var lines = new string[UpgradeObjects.RingModules];
+            foreach (PortalRoute p in routes ?? new PortalRoute[0])
+                if (p.Number >= 1 && p.Number <= lines.Length)
+                    lines[p.Number - 1] = PortalText.TooltipLine(p, r => PortalsWindow.EraName(library, r), r => PortalsWindow.PlaceName(library, r), UiText.Get);
+            ringPanel.SetDay(modules, lines);
             Show(ringPanel, UpgradeObjects.PanelShown(modules), UpgradeObjects.PanelNew(modules));
         }
 

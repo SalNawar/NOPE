@@ -54,6 +54,23 @@ public class UpgradeObjectsTests
     }
 
     [Test]
+    public void EachLamp_ShowsItsRingsRouteToday()
+    {
+        var athens = new PlaceRef("greece", "ancient");
+        var portals = new List<PortalRoute>
+        {
+            new PortalRoute(1, "Front", PortalRole.Departures, PortalState.InService, athens, null, ""),
+            new PortalRoute(2, "Rear left", PortalRole.Departures, PortalState.InService, athens, "Border closed", "repair_portal_02"),
+            new PortalRoute(3, "Rear right", PortalRole.Returns, PortalState.InService, null, null, "repair_return_gate"),
+            new PortalRoute(4, "Upper left", PortalRole.Departures, PortalState.InService, null, null, "repair_portal_04"),
+            new PortalRoute(5, "Upper right", PortalRole.Departures, PortalState.UnderMaintenance, athens, null, "repair_portal_05"),
+        };
+        UpgradeObjects.Module[] m = UpgradeObjects.Modules(portals, _ => true, null);
+        CollectionAssert.AreEqual(new[] { RingLamp.Open, RingLamp.Closed, RingLamp.ReturnGate, RingLamp.NoRoute, RingLamp.Dark }, m.Select(x => x.Lamp).ToArray());
+        Assert.AreEqual(RingLamp.Dark, new UpgradeObjects.Module(false, true, false, RingLamp.Open).Lamp, "a ring out of service is dark whatever its route");
+    }
+
+    [Test]
     public void Panel_IsOnTheDeskOnceAnyRepairIsOwned_NewOnlyWithItsFirst()
     {
         var portals = new List<PortalRoute> { Ring(2, PortalState.InService, "repair_portal_02"), Ring(4, PortalState.InService, "repair_portal_04") };

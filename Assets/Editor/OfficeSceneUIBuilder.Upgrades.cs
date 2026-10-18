@@ -188,7 +188,7 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>Office/DeskHardware/DeskUpgrades: the upgrades' objects (each inactive until DeskUpgrades.BeginDay shows it), wired with the config.</summary>
-    private static DeskUpgrades BuildDeskUpgrades(Transform hardwareRoot, DeskConfigSO config)
+    private static DeskUpgrades BuildDeskUpgrades(Transform hardwareRoot, DeskConfigSO config, OverlayCallout tooltip)
     {
         Transform root = EnsureChild(hardwareRoot, "DeskUpgrades");
         DeskUpgrades upgrades = GetOrAdd<DeskUpgrades>(root.gameObject);
@@ -200,6 +200,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "rolodex", BuildRolodex(root));
         SetRef(so, "ringPanel", BuildRingPanel(root));
         SetRef(so, "config", config);
+        SetRef(so, "tooltip", tooltip);
         so.ApplyModifiedProperties();
         foreach (Transform child in root)
             child.gameObject.SetActive(false);
