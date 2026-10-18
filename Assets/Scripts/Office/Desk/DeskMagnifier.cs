@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// One of the lens stand's magnifiers (the desk machines spec §10; Saleh
@@ -50,6 +52,7 @@ public sealed class DeskMagnifier : MonoBehaviour, IPointerDownHandler, IPointer
     private Plane _hold;
     private Camera _view;
     private RenderTexture _texture;
+    private bool _rendererMatched;
     private GameObject _screen;
     private Material _screenMaterial;
 
@@ -174,6 +177,8 @@ public sealed class DeskMagnifier : MonoBehaviour, IPointerDownHandler, IPointer
     {
         if (_view == null)
             return;
+        if (!_rendererMatched)
+            _rendererMatched = MatchRenderer(_view, main);
         _view.cullingMask = main.cullingMask;
         _view.orthographic = main.orthographic;
         _view.nearClipPlane = distance + 0.004f;
@@ -195,6 +200,28 @@ public sealed class DeskMagnifier : MonoBehaviour, IPointerDownHandler, IPointer
             Vector3 parentScale = _screen.transform.parent != null ? _screen.transform.parent.lossyScale : Vector3.one;
             _screen.transform.localScale = new Vector3(2f * half.x / Mathf.Max(1e-5f, parentScale.x), 2f * half.y / Mathf.Max(1e-5f, parentScale.y), 1f);
         }
+    }
+
+    /// <summary>
+    /// The view draws with <paramref name="main"/>'s renderer (the office
+    /// camera's forward renderer): a camera made at run time takes the
+    /// pipeline's default, the 2D renderer, which draws nothing of the 3D
+    /// desk. False when <paramref name="main"/>'s renderer is not in the
+    /// pipeline's list (the default is kept).
+    /// </summary>
+    private static bool MatchRenderer(Camera view, Camera main)
+    {
+        if (!(GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset urp))
+            return true;
+        ScriptableRenderer wanted = main.GetUniversalAdditionalCameraData().scriptableRenderer;
+        for (int i = 0; i < urp.rendererDataList.Length; i++)
+        {
+            if (urp.GetRenderer(i) != wanted)
+                continue;
+            view.GetUniversalAdditionalCameraData().SetRenderer(i);
+            return true;
+        }
+        return false;
     }
 
     /// <summary>Shows the view on the glass (made the first time: its camera, its picture and the glass's screen) or hides it.</summary>
