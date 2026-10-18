@@ -1965,7 +1965,8 @@ public static class _TimeDeskQASweep
         var left = new List<string>();
         foreach (TMP_Text text in Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
         {
-            if (!text.isActiveAndEnabled || string.IsNullOrWhiteSpace(text.text))
+            // The PC is always English (Saleh 2026-10-18, track UI): its desktop's texts are left out.
+            if (!text.isActiveAndEnabled || string.IsNullOrWhiteSpace(text.text) || text.gameObject.layer == OfficeLayers.PcDesktopLayer)
                 continue;
             string shown = System.Text.RegularExpressions.Regex.Replace(text.text, "<[^<>]*>", string.Empty).Trim();
             if (english.TryGetValue(shown, out string key) && !left.Contains(key))
