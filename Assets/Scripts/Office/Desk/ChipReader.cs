@@ -6,24 +6,35 @@ using UnityEngine;
 /// <summary>
 /// The chip reader (the desk machines spec §1; Saleh 2026-10-17: "the chip
 /// reader should be an actual machine that reads the chip"): an 80s card
-/// terminal on the desk. A paper dropped on it (DeskController) is read: it
-/// slides onto the reader's pad with a clunk and the slot flap's flick, the
+/// terminal on the desk. A paper dropped on it (DeskController) is read once
+/// the desk has docked it (IPaperDock; Saleh's 1018a playtest: a card slides
+/// into the slot at the slot's height and angle, a passport comes down onto
+/// the RF pad; a paper with no chip is refused: it bounces back with the
+/// FAULT lamp's blink and the fault buzz, Refuse, and never passes through
+/// the casing): it goes in with a clunk and the slot flap's flick, the
 /// readout scrolls READING with its ticks and the amber READ lamp, then the
 /// result shows: CHIP OK with a two-tone beep and a green flash, NO CHIP, or
 /// MISMATCH with a low buzz, the red FAULT lamp and a small hit, then on its
 /// one-line readout MISMATCH and each differing line in turn ("CITIZEN ID
 /// QRT-301", ChipReaderCycle.Lines); the
-/// paper comes back out and the desk slides it home. The chip counts as
+/// paper comes back out and the desk carries it home, back out of the slot
+/// or up off the pad and over the casing. The chip counts as
 /// read (DeskReadings.ReadChip): the scanned copy's CHIP tab shows it. The
 /// result stays on the readout until the next read; in inspect mode a click
 /// on the readout picks its shown line (the first while MISMATCH shows)
 /// against the box (DeskHardware.Pick), otherwise it steps to the next line. Its parts are the ChipReader art's
 /// (Build Office UI binds them); the office binder lays it on the desk.
 /// </summary>
-public sealed class ChipReader : MonoBehaviour
+public sealed class ChipReader : MonoBehaviour, IPaperDock
 {
-    /// <summary>The slot's dust flap (it flicks in as a paper goes in), the pad's top centre (where a paper lies to be read).</summary>
-    [SerializeField] private Transform slotFlap, padCentre;
+    /// <summary>The slot's dust flap (it flicks in as a paper goes in), the pad's top centre (where a passport lies to be read), the slot's mouth (a card's centre as it starts in; it slides along the mouth's forward: the model's CardSlot).</summary>
+    [SerializeField] private Transform slotFlap, padCentre, cardSlot;
+
+    /// <summary>How deep the slot runs into the casing from its mouth (the model's metres; the reader's scale applies).</summary>
+    [SerializeField] private float slotDepth = 0.05f;
+
+    /// <summary>How long the FAULT lamp blinks when the reader refuses a paper (seconds; two blinks).</summary>
+    [SerializeField] private float refuseBlinkSeconds = 0.5f;
 
     /// <summary>The status lamps: POWER (green), READ (amber), FAULT (red).</summary>
     [SerializeField] private Renderer ledPower, ledRead, ledFault;
@@ -52,7 +63,7 @@ public sealed class ChipReader : MonoBehaviour
     private ChipOutcome _outcome;
     private IReadOnlyList<ChipLine> _lines = Array.Empty<ChipLine>();
     private int _line;
-    private float _lineAt, _flap, _okFlash;
+    private float _lineAt, _flap, _okFlash, _refused;
     private int _ticks;
     private string _shown;
     private MaterialPropertyBlock _block;
@@ -91,7 +102,7 @@ public sealed class ChipReader : MonoBehaviour
         return Mathf.Abs(local.x) <= dropSize.x / 2f && Mathf.Abs(local.z) <= dropSize.y / 2f;
     }
 
-    /// <summary>Reads <paramref name="paper"/> (its <paramref name="print"/>; its <paramref name="chip"/>, null: none): it slides onto the pad and the cycle runs; <paramref name="done"/> as it comes back out. False while busy.</summary>
+    /// <summary>Reads <paramref name="paper"/> (its <paramref name="print"/>; its <paramref name="chip"/>, null: none), docked in it by the desk (in the slot or on the pad): the cycle runs; <paramref name="done"/> as it comes back out. False while busy.</summary>
     public bool Read(DeskDocument paper, IReadOnlyList<DocumentField> print, IReadOnlyList<DocumentField> chip, Action done)
     {
         if (_cycle == null || paper == null || !_cycle.Begin(paper.Index, print, chip))
@@ -100,10 +111,6 @@ public sealed class ChipReader : MonoBehaviour
         _done = done;
         _hasResult = false;
         _ticks = 0;
-        DeskConfigSO c = _hardware != null ? _hardware.Config : null;
-        Vector3 pad = padCentre != null ? padCentre.position : transform.position + Vector3.up * 0.07f;
-        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
-        paper.SlideTo(pad, Quaternion.LookRotation(forward.sqrMagnitude > 1e-6f ? forward.normalized : Vector3.forward, Vector3.up), c != null ? c.chipInsertSeconds : 0.35f, null);
         _flap = 1f;
         CueSounds.Play(SoundCues.ChipInsert, sound);
         FeelDirector.Hit(0.15f);
@@ -144,6 +151,11 @@ public sealed class ChipReader : MonoBehaviour
         if (_okFlash > 0f)
         {
             _okFlash = Mathf.Max(0f, _okFlash - dt);
+            Lamps();
+        }
+        if (_refused > 0f)
+        {
+            _refused = Mathf.Max(0f, _refused - dt);
             Lamps();
         }
 
@@ -274,13 +286,55 @@ public sealed class ChipReader : MonoBehaviour
             readout.text = text;
     }
 
-    /// <summary>The lamps: POWER always lit; READ while reading; FAULT after a mismatch; POWER flashes on an OK.</summary>
+    /// <summary>The lamps: POWER always lit; READ while reading; FAULT after a mismatch, blinking on a refusal; POWER flashes on an OK.</summary>
     private void Lamps()
     {
         bool reading = _cycle != null && _cycle.Busy && !_hasResult;
         Lamp(ledPower, _okFlash > 0f ? lampOn * 1.8f : lampOn);
         Lamp(ledRead, reading ? lampOn : lampOff);
-        Lamp(ledFault, _hasResult && _outcome == ChipOutcome.Mismatch ? lampOn : lampOff);
+        // a refusal blinks the FAULT lamp twice (its "no"), over whatever it shows
+        bool blink = _refused > 0f && Mathf.Repeat(_refused / Mathf.Max(0.05f, refuseBlinkSeconds) * 2f, 1f) > 0.45f;
+        Lamp(ledFault, blink || (_refused <= 0f && _hasResult && _outcome == ChipOutcome.Mismatch) ? lampOn : lampOff);
+    }
+
+    /// <inheritdoc />
+    public DeskMachine Machine => DeskMachine.ChipReader;
+
+    /// <inheritdoc />
+    public bool OnDesk => _hardware != null && _hardware.ReaderToday && isActiveAndEnabled;
+
+    /// <inheritdoc />
+    public MachineBox Casing => MachineCasing.Measure(transform, GetComponentsInChildren<Renderer>(false));
+
+    /// <inheritdoc />
+    public Vector3 DockPoint(MachineDock dock)
+    {
+        if (dock == MachineDock.Slot && cardSlot != null)
+            return cardSlot.position;
+        return padCentre != null ? padCentre.position : transform.position + Vector3.up * 0.07f;
+    }
+
+    /// <inheritdoc />
+    public Quaternion DockFacing(MachineDock dock) => Quaternion.LookRotation(Slot.way, Vector3.up);
+
+    /// <inheritdoc />
+    public (Vector3 way, float depth) Slot
+    {
+        get
+        {
+            Transform mouth = cardSlot != null ? cardSlot : transform;
+            Vector3 way = Vector3.ProjectOnPlane(mouth.forward, Vector3.up);
+            way = way.sqrMagnitude > 1e-8f ? way.normalized : Vector3.forward;
+            return (way, cardSlot != null ? slotDepth * Mathf.Abs(transform.lossyScale.z) : 0f);
+        }
+    }
+
+    /// <inheritdoc />
+    public void Refuse()
+    {
+        _refused = refuseBlinkSeconds;
+        CueSounds.Play(SoundCues.ChipFault, sound);
+        Lamps();
     }
 
     private void Lamp(Renderer r, float glow)

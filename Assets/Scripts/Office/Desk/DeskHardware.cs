@@ -185,8 +185,15 @@ public sealed class DeskHardware : MonoBehaviour
         }
     }
 
-    /// <summary>True when a paper released at <paramref name="point"/> drops on the chip reader (on the desk today).</summary>
-    public bool OnReader(Vector3 point) => ReaderToday && chipReader != null && chipReader.isActiveAndEnabled && chipReader.Contains(point);
+    /// <summary>The chip reader as a dock for the desk's papers (IPaperDock: where a card or a passport goes into it, its casing, its "no"); null without its art.</summary>
+    public IPaperDock ReaderDock => chipReader;
+
+    /// <summary>True when the reader is busy with a paper (it refuses another).</summary>
+    public bool ReaderBusy => chipReader != null && chipReader.Busy;
+
+    /// <summary>True when paper <paramref name="document"/> of the case carries a chip (its form: HiddenContent.chipForms): the reader takes only those.</summary>
+    public bool CarriesChip(int document) => Hidden.HasChip(document);
+
 
     /// <summary>The chip reader reads <paramref name="paper"/> (its print, and its chip from the case's layers); <paramref name="done"/> runs as it comes back out. False when the reader is busy (the paper goes back).</summary>
     public bool Read(DeskDocument paper, IReadOnlyList<DocumentField> print, Action done)

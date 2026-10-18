@@ -172,6 +172,9 @@ public sealed class PaperPhysics
         return (spin, hop);
     }
 
+    /// <summary>A shake about the desk's up (degrees per second on its swing): a machine's "no" as it refuses the thing (it wobbles and settles on its swing's spring).</summary>
+    public void Nudge(float swingSpeed) => _yaw.Kick(swingSpeed);
+
     /// <summary>
     /// Where a body let go at speed (<paramref name="vx"/>, <paramref name="vz"/>)
     /// starts its slide from (metres from its place, behind it along its

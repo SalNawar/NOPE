@@ -146,6 +146,26 @@ public class PaperPhysicsTests
     }
 
     [Test]
+    public void ANudge_ShakesItsSwing_AndItSettlesBack()
+    {
+        var knobs = new MotionKnobs();
+        var body = new PaperPhysics();
+        body.Step(Dt, 0f, 0f, false, knobs, MotionAmount.Full);
+        body.Nudge(220f);
+        float most = 0f, least = 0f;
+        for (int i = 0; i < 600 && (i == 0 || body.Moving); i++)
+        {
+            body.Step(Dt, 0f, 0f, false, knobs, MotionAmount.Full);
+            most = System.Math.Max(most, body.Yaw);
+            least = System.Math.Min(least, body.Yaw);
+        }
+        Assert.Greater(most, 0.5f, "a machine's no: it shakes");
+        Assert.Less(least, 0f, "back and forth");
+        Assert.IsFalse(body.Moving);
+        Assert.AreEqual(0f, body.Yaw, "and lies square again");
+    }
+
+    [Test]
     public void UnderReducedMotion_NothingMoves()
     {
         var reduced = new MotionAmount(1f, true);

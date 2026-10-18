@@ -77,6 +77,27 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How high a dragged paper is lifted above the stack, in metres.</summary>
     [FormerlySerializedAs("heldPaperLift"), Min(0f)] public float dragLift = 0.02f;
 
+    /// <summary>
+    /// Papers and the machines (Saleh's 1018a playtest: "when you move a
+    /// document to a machine it should move to the correct elevation and
+    /// orintation"; IPaperDock, DockPath): how far over a machine's casing a
+    /// paper passes (metres: dragged over it, and on every way over it), how
+    /// fast it is carried into a machine's dock, out and back (metres a second;
+    /// never quicker than paperSlideSeconds), how much of a card's length goes
+    /// into a slot (the rest stays out of the mouth, to be taken back), and the
+    /// shake a refused paper or the folder gives (degrees a second on its swing).
+    /// </summary>
+    [Min(0f)] public float dockClearance = 0.02f;
+
+    /// <inheritdoc cref="dockClearance"/>
+    [Min(0.05f)] public float dockSpeed = 0.9f;
+
+    /// <inheritdoc cref="dockClearance"/>
+    [Range(0.1f, 1f)] public float slotInsertShare = 0.6f;
+
+    /// <inheritdoc cref="dockClearance"/>
+    [Min(0f)] public float refuseShake = 90f;
+
     [Header("The counter and the desk (Papers, Please's zones, Saleh 2026-10-06)")]
     /// <summary>The counter: the slim strip this deep (metres) at the desk's far edge along the office view, on the traveller's side (Saleh 2026-10-06: "reduce the size of the top counter line"; it was 0.14); a paper dropped there once the passport carries its verdict hands the papers back, before that it bounces back to the desk.</summary>
     [FormerlySerializedAs("handBackDepth"), Min(0.02f)] public float counterDepth = 0.05f;

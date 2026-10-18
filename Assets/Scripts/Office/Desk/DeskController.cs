@@ -176,6 +176,7 @@ public sealed class DeskController : MonoBehaviour
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan += RulebookLifted;
+            rulebook.Drag.Dragged += RulebookDragged;
             rulebook.Drag.DragEnded += RulebookDropped;
             rulebook.Drag.DragCancelled += RulebookLifted;
         }
@@ -197,6 +198,7 @@ public sealed class DeskController : MonoBehaviour
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan -= RulebookLifted;
+            rulebook.Drag.Dragged -= RulebookDragged;
             rulebook.Drag.DragEnded -= RulebookDropped;
             rulebook.Drag.DragCancelled -= RulebookLifted;
         }
@@ -224,13 +226,45 @@ public sealed class DeskController : MonoBehaviour
     private void RulebookLifted(DeskDraggable drag)
     {
         _rulebookDragged = drag.IsDragging;
+        if (_rulebookDragged)
+            MeasureCasings();
+        else
+            rulebook.SetCarryFloor(0f);
         _stack.BringToFront(RulebookId);
         if (config != null)
             ApplyStack();
     }
 
-    /// <summary>The rulebook dropped: it lies on top of the stack.</summary>
-    private void RulebookDropped(DeskDraggable drag, Vector3 released) => RulebookLifted(drag);
+    /// <summary>The dragged rulebook keeps over any machine's casing under it (CarryFloor).</summary>
+    private void RulebookDragged(DeskDraggable drag, Vector3 point)
+    {
+        if (config != null)
+            rulebook.SetCarryFloor(CarryFloor(rulebook.transform.position, RulebookGrow()));
+    }
+
+    /// <summary>
+    /// The rulebook dropped: it lies on top of the stack; dropped on a machine
+    /// (the scanner or the chip reader: neither takes it, MachineIntake), the
+    /// machine says no and the folder goes back over its casing to where it
+    /// was picked up (Saleh's 1018a playtest: "if is the wrong document it
+    /// shouldnt go through the machience").
+    /// </summary>
+    private void RulebookDropped(DeskDraggable drag, Vector3 released)
+    {
+        _rulebookDragged = false;
+        IPaperDock dock = DockAt(released);
+        if (config != null && dock != null && !MachineIntake.Accepts(dock.Machine, MachineFeed.Folder))
+        {
+            dock.Refuse();
+            Vector3 from = rulebook.CarriedFrom;
+            List<Vector3> way = Way(from, drag.PickUpPosition, RulebookGrow());
+            rulebook.Refused(way, WaySeconds(from, way), config.refuseShake);
+        }
+        RulebookLifted(drag);
+    }
+
+    /// <summary>Half the rulebook's diagonal on the desk (metres): how far its edges reach from its root.</summary>
+    private float RulebookGrow() => TryFootprint(rulebook.transform, out DeskRect folder) ? Mathf.Sqrt(folder.Width * folder.Width + folder.Height * folder.Height) / 2f : 0.2f;
 
     /// <summary>Advances a running scan (a finished paper slides back to where it was picked up) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner).</summary>
     private void Update()
@@ -244,6 +278,13 @@ public sealed class DeskController : MonoBehaviour
             return;
         }
 
+        // the scan waits, the lid open, until its paper lies on the bed
+        int onBed = _state.Scanning;
+        if (onBed >= 0 && onBed < _papers.Count && _papers[onBed] != null && _papers[onBed].IsSliding)
+        {
+            scanner.Sweep(-1f);
+            return;
+        }
         ScanPass pass = _state.Pass;
         int done = _state.Tick(Time.deltaTime);
         scanner.Sweep(_state.ScannerBusy ? _state.Progress : -1f);
@@ -251,6 +292,7 @@ public sealed class DeskController : MonoBehaviour
             return;
 
         DeskDocument paper = _papers[done];
+        Undock(paper);
         Slide(paper, ClearOfBlockers(paper, paper.Drag.PickUpPosition), Upright);
         scanner.Pulse();
         _scansToday++;
@@ -424,7 +466,7 @@ public sealed class DeskController : MonoBehaviour
             leaving.SetZone(DeskZone.Counter, false);
             if (ink != DeskStamp.None && stamps != null)
                 leaving.ShowVerdict(stamps.Impression(ink == DeskStamp.Approved));
-            leaving.SlideTo(handOverPoint.position, config.paperSlideSeconds, () => Destroy(leaving.gameObject));
+            leaving.Carry(Way(leaving.CarriedFrom, handOverPoint.position, Grow(leaving)), leaving.transform.rotation, config.paperSlideSeconds, () => Destroy(leaving.gameObject));
         }
 
         _papers.Clear();
@@ -697,6 +739,7 @@ public sealed class DeskController : MonoBehaviour
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = paper.Index;
+        MeasureCasings();
         ApplyStack();
     }
 
@@ -706,6 +749,10 @@ public sealed class DeskController : MonoBehaviour
         DeskZone under = ZoneAt(point);
         // The scanner's lid opens for a paper dragged near it (ScannerLid).
         scanner.SetNear(!_scanners.Hidden && scanner.Near(point));
+        // Carried over a machine, it keeps over its casing (never through it).
+        DeskDocument paper = drag.GetComponent<DeskDocument>();
+        if (paper != null)
+            paper.SetCarryFloor(CarryFloor(paper.transform.position, Grow(paper)));
         if (_overCounter != (under == DeskZone.Counter))
         {
             _overCounter = under == DeskZone.Counter;
@@ -723,11 +770,21 @@ public sealed class DeskController : MonoBehaviour
         ShowCounter();
         DeskZone zone = ZoneAt(released);
         bool verdict = stamps != null && stamps.HasVerdict;
+        // it settles to its place on top from where it hangs (the way it is carried starts there)
+        paper.SetCarryFloor(0f);
+        _stack.BringToFront(paper.Index);
+        ApplyStack();
 
-        // The chip reader (the desk machines spec §1): a paper dropped on it is read, then comes back to where it was picked up.
-        if (hardware != null && hardware.OnReader(released))
+        // A machine takes only its documents (MachineIntake; Saleh's 1018a playtest): the chip reader a chip card
+        // in its slot or a passport on its pad, the scanner any case paper on its bed; anything else bounces back.
+        IPaperDock dock = DockAt(released);
+        if (dock != null && dock.Machine == DeskMachine.ChipReader)
         {
-            ReadOnReader(paper, drag.PickUpPosition);
+            MachineDock where = MachineIntake.Dock(dock.Machine, FeedOf(paper));
+            if (where == MachineDock.Refused || hardware.ReaderBusy || _inReader.Count > 0)
+                RefuseAt(paper, dock, drag.PickUpPosition);
+            else
+                ReadOnReader(paper, dock, where, drag.PickUpPosition);
             return;
         }
 
@@ -747,7 +804,9 @@ public sealed class DeskController : MonoBehaviour
                 // Drop and go: it waits by the glass, clear of the scanner's body, and feeds through at its turn.
                 _waiting.Add(paper.Index);
                 paper.SetZone(_state.ZoneOf(paper.Index), false);
-                Slide(paper, ClearOfBlockers(paper, scanner.BedPoint));
+                Vector3 byTheGlass = scanner.BedPoint;
+                byTheGlass.y = surface.transform.position.y; // it waits on the desk, not at the glass's height
+                Slide(paper, ClearOfBlockers(paper, byTheGlass));
                 break;
             case DropOutcome.NotStamped:
                 if (stamps != null)
@@ -770,32 +829,185 @@ public sealed class DeskController : MonoBehaviour
                 break;
         }
 
-        _stack.BringToFront(paper.Index);
-        ApplyStack();
         RefreshHint();
     }
 
-    /// <summary>A paper dropped on the chip reader: it goes in and is read, inert meanwhile, and slides back to <paramref name="back"/> (where it was picked up) as the reader gives it back; a busy reader refuses it (it slides back at once).</summary>
-    private void ReadOnReader(DeskDocument paper, Vector3 back)
+    /// <summary>
+    /// A paper dropped on the chip reader that takes it (<paramref name="where"/>:
+    /// a card into the slot, a passport onto the pad): inert meanwhile, it is
+    /// carried over the casing and docked at the dock's height and angle
+    /// (DockPath), read (ChipReader's cycle), and carried back out (out of the
+    /// slot, or up off the pad) over the casing to <paramref name="back"/>
+    /// (where it was picked up).
+    /// </summary>
+    private void ReadOnReader(DeskDocument paper, IPaperDock dock, MachineDock where, Vector3 back)
     {
         int index = paper.Index;
         CaseDocument doc = index >= 0 && index < _documents.Count ? _documents[index] : null;
-        bool reading = doc != null && hardware.Read(paper, doc.fields, () =>
-        {
-            _inReader.Remove(index);
-            if (_papers.Contains(paper))
-                Slide(paper, ClearOfBlockers(paper, back), Upright);
-        });
-        if (!reading)
-        {
-            Sounds.Play(SoundCues.UiError);
-            Slide(paper, ClearOfBlockers(paper, back));
-            return;
-        }
         _inReader.Add(index);
+        Dock(paper);
         ApplyLive(paper);
-        _stack.BringToFront(index);
+        (Vector3 way, float depth) slot = dock.Slot;
+        float half = paper.DockedSize.y / 2f, inside = Mathf.Min(slot.depth, 2f * half * config.slotInsertShare);
+        Vector3 mouth = DockedRoot(paper, dock.DockPoint(where), where);
+        Vector3 from = paper.CarriedFrom;
+        List<Vector3> path = where == MachineDock.Slot
+            ? Points(DockPath.Into(Tuple(from), Tuple(mouth), slot.way.x, slot.way.z, half, inside, dock.Casing, Casings(), Grow(paper), config.dockClearance))
+            : Way(from, mouth, Grow(paper));
+        paper.Carry(path, dock.DockFacing(where), WaySeconds(from, path), () =>
+        {
+            void Out()
+            {
+                _inReader.Remove(index);
+                if (!_papers.Contains(paper))
+                    return;
+                Undock(paper);
+                Vector3 home = ClearOfBlockers(paper, back);
+                Vector3 at = paper.CarriedFrom;
+                List<Vector3> outWay = where == MachineDock.Slot
+                    ? Points(DockPath.OutOf(Tuple(mouth), slot.way.x, slot.way.z, half, inside, dock.Casing, Tuple(home), Casings(), Grow(paper), config.dockClearance))
+                    : Way(at, home, Grow(paper));
+                paper.Carry(outWay, Upright, WaySeconds(at, outWay), () => ApplyLive(paper));
+                ApplyLive(paper);
+            }
+            if (doc == null || !hardware.Read(paper, doc.fields, Out))
+                Out();
+        });
+    }
+
+    /// <summary>
+    /// A paper the machine under it will not take (MachineIntake: a paper
+    /// with no chip at the chip reader, or the reader busy with another):
+    /// the machine says no (IPaperDock.Refuse: the reader's FAULT lamp blinks
+    /// with its fault buzz), the paper shakes and goes back over the casing to
+    /// <paramref name="back"/> (where it was picked up), never through it.
+    /// </summary>
+    private void RefuseAt(DeskDocument paper, IPaperDock dock, Vector3 back)
+    {
+        dock.Refuse();
+        paper.Shake(config.refuseShake);
+        paper.SetZone(_state.ZoneOf(paper.Index), false);
+        Slide(paper, ClearOfBlockers(paper, back));
+        RefreshHint();
+    }
+
+    // ---------------- The machines' docks (Saleh's 1018a playtest: "the correct elevation and orintation") ----------------
+
+    /// <summary>The machines a paper can be fed to today (IPaperDock): the scanner, from its day; the chip reader, from its.</summary>
+    private IEnumerable<IPaperDock> Docks()
+    {
+        if (scanner != null && !_scanners.Hidden && scanner.OnDesk)
+            yield return scanner;
+        IPaperDock reader = hardware != null ? hardware.ReaderDock : null;
+        if (reader != null && reader.OnDesk)
+            yield return reader;
+    }
+
+    /// <summary>The machine a thing released at <paramref name="point"/> drops on (the chip reader first: it stands clear of the scanner), or null.</summary>
+    private IPaperDock DockAt(Vector3 point)
+    {
+        IPaperDock found = null;
+        foreach (IPaperDock dock in Docks())
+            if (dock.Contains(point) && (found == null || dock.Machine == DeskMachine.ChipReader))
+                found = dock;
+        return found;
+    }
+
+    /// <summary>The machines' casings today, measured at the start of a drag (the machines stand still while it runs) and for every way across the desk.</summary>
+    private readonly List<MachineBox> _casings = new List<MachineBox>();
+
+    /// <summary>Measures the machines' casings now (Docks).</summary>
+    private void MeasureCasings()
+    {
+        _casings.Clear();
+        foreach (IPaperDock dock in Docks())
+            _casings.Add(dock.Casing);
+    }
+
+    /// <summary>The casings, measured now.</summary>
+    private List<MachineBox> Casings()
+    {
+        MeasureCasings();
+        return _casings;
+    }
+
+    /// <summary>How high over its place (metres) a thing dragged with its root at <paramref name="root"/> keeps, its edges reaching <paramref name="grow"/> from it: over each casing under it, its top and the clearance; 0 over none.</summary>
+    private float CarryFloor(Vector3 root, float grow)
+    {
+        float floor = 0f;
+        foreach (MachineBox box in _casings)
+            if (box.Over(root.x, root.z, grow))
+                floor = Mathf.Max(floor, box.Top + config.dockClearance - root.y);
+        return floor;
+    }
+
+    /// <summary>Half <paramref name="paper"/>'s diagonal as it shows (metres): how far its corners reach from its root.</summary>
+    private static float Grow(DeskDocument paper) => paper.ShownSize.magnitude / 2f;
+
+    /// <summary>What <paramref name="paper"/> is to a machine (MachineIntake): a case paper, carrying a chip or not, a card or not.</summary>
+    private MachineFeed FeedOf(DeskDocument paper) =>
+        new MachineFeed(true, hardware != null && hardware.CarriesChip(paper.Index), paper.Kind == PaperKind.Card);
+
+    /// <summary>
+    /// Where <paramref name="paper"/>'s root lies docked at
+    /// <paramref name="point"/> (the bed's or the pad's top, or the slot's
+    /// mouth): its bottom on the bed or the pad, or its middle at the slot's
+    /// height (its face lies its thickness and a hair over its root while
+    /// docked: Dock).
+    /// </summary>
+    private static Vector3 DockedRoot(DeskDocument paper, Vector3 point, MachineDock where) =>
+        where == MachineDock.Slot ? point - Vector3.up * (paper.Thickness / 2f + DockGap) : point;
+
+    /// <summary>How far a docked paper's bottom lies over its bed (metres): clear of it for the depth buffer.</summary>
+    private const float DockGap = 0.0005f;
+
+    /// <summary>The papers docked in a machine (on the scanner's bed, in the chip reader): their lift is their own thickness over the dock, not the stack's.</summary>
+    private readonly HashSet<int> _docked = new HashSet<int>();
+
+    /// <summary>The paper goes into a machine: its lift becomes its thickness over the dock, at its normal size.</summary>
+    private void Dock(DeskDocument paper)
+    {
+        _docked.Add(paper.Index);
+        paper.SetDocked(true);
         ApplyStack();
+    }
+
+    /// <summary>The paper comes out of its machine: back to the stack's lift and its zone's size.</summary>
+    private void Undock(DeskDocument paper)
+    {
+        _docked.Remove(paper.Index);
+        paper.SetDocked(false);
+        _stack.BringToFront(paper.Index);
+        ApplyStack();
+    }
+
+    /// <summary>The way from <paramref name="from"/> to <paramref name="to"/> over every casing it comes over (DockPath.Over), as world points after the start.</summary>
+    private List<Vector3> Way(Vector3 from, Vector3 to, float grow) => Points(DockPath.Over(Tuple(from), Tuple(to), Casings(), grow, config.dockClearance));
+
+    /// <summary>A way's seconds: the desk's slide for a straight way, else its length at dockSpeed (never quicker than the slide).</summary>
+    private float WaySeconds(Vector3 from, List<Vector3> way)
+    {
+        if (way.Count <= 1)
+            return config.paperSlideSeconds;
+        float length = 0f;
+        Vector3 at = from;
+        foreach (Vector3 p in way)
+        {
+            length += Vector3.Distance(at, p);
+            at = p;
+        }
+        return DeskCarry.Seconds(length, config.dockSpeed, config.paperSlideSeconds);
+    }
+
+    private static (float x, float y, float z) Tuple(Vector3 v) => (v.x, v.y, v.z);
+
+    /// <summary>A way's points after its start, as world points.</summary>
+    private static List<Vector3> Points(List<(float x, float y, float z)> way)
+    {
+        var points = new List<Vector3>(Mathf.Max(0, way.Count - 1));
+        for (int i = 1; i < way.Count; i++)
+            points.Add(new Vector3(way[i].x, way[i].y, way[i].z));
+        return points;
     }
 
     /// <summary>
@@ -815,13 +1027,16 @@ public sealed class DeskController : MonoBehaviour
             _overCounter = false;
             ShowCounter();
         }
-        if (paper == null || _state == null || !_state.CanDrag(paper.Index))
+        if (paper == null)
+            return;
+        paper.SetCarryFloor(0f);
+        if (_state == null || !_state.CanDrag(paper.Index))
             return;
 
         paper.SetZone(_state.ZoneOf(paper.Index), false);
-        Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
         _stack.BringToFront(paper.Index);
         ApplyStack();
+        Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
     }
 
     /// <summary>The zone a point on the desk lies in: the counter's strip, else the desk.</summary>
@@ -868,10 +1083,21 @@ public sealed class DeskController : MonoBehaviour
         // The UV torch's cradle on the mat's corner (the desk machines spec §1): no paper lies over it either.
         if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
             (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(cradle), desk);
+        // Nor over the chip reader's casing (a paper lies beside it, never in it).
+        IPaperDock reader = hardware != null ? hardware.ReaderDock : null;
+        if (reader != null && reader.OnDesk)
+            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(Corners(reader.Casing, surface.transform.position.y)), desk);
         if (Mathf.Approximately(x, sheet.CentreX) && Mathf.Approximately(y, sheet.CentreY))
             return at;
         Vector3 moved = at + _viewRight * (x - sheet.CentreX) + _viewForward * (y - sheet.CentreY);
         return surface.Clamp(moved) + Vector3.up * (at.y - surface.transform.position.y);
+    }
+
+    /// <summary>The four corners of <paramref name="box"/>'s footprint at height <paramref name="y"/>.</summary>
+    private static Vector3[] Corners(MachineBox box, float y)
+    {
+        Vector3 c = new Vector3(box.CentreX, y, box.CentreZ), a = new Vector3(box.AxisX, 0f, box.AxisZ) * box.HalfWidth, b = new Vector3(-box.AxisZ, 0f, box.AxisX) * box.HalfDepth;
+        return new[] { c - a - b, c + a - b, c - a + b, c + a + b };
     }
 
     /// <summary>The rectangle enclosing <paramref name="corners"/> in the office view's frame on the desk (x right, y away from the camera, from the desk's centre).</summary>
@@ -893,10 +1119,12 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Slides a paper; it is inert while sliding, and its liveness is re-applied when it lands.</summary>
     private void Slide(DeskDocument paper, Vector3 target) => Slide(paper, target, paper.transform.rotation);
 
-    /// <summary>Slides a paper, turning it to lie at <paramref name="facing"/> on the way (eased with the slide).</summary>
+    /// <summary>Slides a paper, turning it to lie at <paramref name="facing"/> on the way (eased with the slide): from where it shows, over every machine's casing it comes over (DockPath.Over: never through one).</summary>
     private void Slide(DeskDocument paper, Vector3 target, Quaternion facing)
     {
-        paper.SlideTo(target, facing, config.paperSlideSeconds, () => ApplyLive(paper));
+        Vector3 from = paper.CarriedFrom;
+        List<Vector3> way = Way(from, target, Grow(paper));
+        paper.Carry(way, facing, WaySeconds(from, way), () => ApplyLive(paper));
         ApplyLive(paper);
     }
 
@@ -923,7 +1151,8 @@ public sealed class DeskController : MonoBehaviour
         float top = lifts.Length > 0 ? lifts[lifts.Length - 1] + PaperLayers.PartsDepth : PaperLayers.StackStep(config.paperStackStep);
         foreach (DeskDocument paper in _papers)
             if (paper != null)
-                paper.SetLift(paper.Index == _dragged ? top + paper.Thickness + config.dragLift : LiftOf(paper.Index, lifts));
+                paper.SetLift(_docked.Contains(paper.Index) ? paper.Thickness + DockGap
+                              : paper.Index == _dragged ? top + paper.Thickness + config.dragLift : LiftOf(paper.Index, lifts));
         if (rulebook != null)
             rulebook.SetLift(_rulebookDragged ? top + rulebook.Thickness + config.dragLift : LiftOf(RulebookId, lifts));
     }
@@ -999,7 +1228,17 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>A paper slides onto the bed and its scan starts: the relay click (scanner_start), the glowing bar crossing the glass as the scan runs (DeskScanner.Sweep); the done beep is DeskScanner.Pulse's.</summary>
     private void StartScan(DeskDocument paper)
     {
-        Slide(paper, scanner.BedPoint, scanner.BedFacing);
+        // over the casing and down onto the glass, square to the bed, the lid held open until it lies there (the scan waits: Update)
+        Dock(paper);
+        scanner.HoldOpen(true);
+        Vector3 from = paper.CarriedFrom;
+        List<Vector3> way = Way(from, scanner.DockPoint(MachineDock.Bed), Grow(paper));
+        paper.Carry(way, scanner.DockFacing(MachineDock.Bed), WaySeconds(from, way), () =>
+        {
+            scanner.HoldOpen(false);
+            ApplyLive(paper);
+        });
+        ApplyLive(paper);
         Sounds.Play(SoundCues.ScannerStart);
     }
 
