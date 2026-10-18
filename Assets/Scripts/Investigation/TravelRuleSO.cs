@@ -39,9 +39,12 @@ public sealed class TravelRuleSO : ScriptableObject
     /// <summary>True for a closure: it forbids destinations, and each active one gets a planned violator (CaseFactory.PlanViolators).</summary>
     public bool IsClosure => Directives.IsClosure(type);
 
-    /// <summary>The rule as the Domain predicates see it: its type, kinds and a closure's place by ids.</summary>
-    public Directive Directive => new Directive(type, kinds ?? System.Array.Empty<TravellerKind>(), nation != null ? nation.id : null, era != null ? era.id : null,
-                                                string.IsNullOrWhiteSpace(transponder) ? null : transponder, openPlaces);
+    /// <summary>The rule as authored: its type, kinds, a closure's place by ids and an open-destinations rule's places (the content checks and the portals' own schedule read this).</summary>
+    public Directive AuthoredDirective => new Directive(type, kinds ?? System.Array.Empty<TravellerKind>(), nation != null ? nation.id : null, era != null ? era.id : null,
+                                                        string.IsNullOrWhiteSpace(transponder) ? null : transponder, openPlaces);
+
+    /// <summary>The rule as the Domain predicates see it today: as authored, an open-destinations rule also opening the routes of today's repaired portals (DayOpenings, Directives.Opening; Saleh 2026-10-18).</summary>
+    public Directive Directive => Directives.Opening(AuthoredDirective, DayOpenings.Keys);
 
     /// <summary>True when the rule is read for a traveller of <paramref name="kind"/> (Directive.AppliesTo).</summary>
     public bool AppliesTo(TravellerKind kind) => Directive.AppliesTo(kind);
@@ -53,8 +56,28 @@ public sealed class TravelRuleSO : ScriptableObject
     public bool Allows(NationSO claimNation, EraSO claimEra) =>
         !Directive.Closes(claimNation != null ? claimNation.id : null, claimEra != null ? claimEra.id : null);
 
-    /// <summary>Briefing line describing the restriction, its fixed words as <paramref name="surface"/> prints them (the PC's in English: UiText.Pc).</summary>
+    /// <summary>
+    /// The rule's line today: as authored, an open-destinations rule naming
+    /// after it the destinations today's repaired portals also open
+    /// (DayOpenings, Directives.OpenedLine with the UI string
+    /// "rule.openRepaired"), so the rulebook, the Rules app, search and the
+    /// case board print what the verdicts read; its fixed words as
+    /// <paramref name="surface"/> prints them (the PC's in English: UiText.Pc).
+    /// </summary>
     public string Summary(TextSurface surface = TextSurface.Desk)
+    {
+        string line = AuthoredSummary(surface);
+        if (type != TravelRuleType.OpenDestinations || DayOpenings.Names.Count == 0)
+            return line;
+        var opened = new List<string>();
+        for (int i = 0; i < DayOpenings.Keys.Count; i++)
+            if (openPlaces == null || System.Array.IndexOf(openPlaces, DayOpenings.Keys[i]) < 0)
+                opened.Add(DayOpenings.Names[i]);
+        return Directives.OpenedLine(line, opened, opened.Count > 0 ? UiText.Get("rule.openRepaired", surface) : null);
+    }
+
+    /// <summary>The rule's line as authored (a past day's briefing: the Mail's archive), its fixed words as <paramref name="surface"/> prints them.</summary>
+    public string AuthoredSummary(TextSurface surface = TextSurface.Desk)
     {
         if (!string.IsNullOrWhiteSpace(description))
             return description;

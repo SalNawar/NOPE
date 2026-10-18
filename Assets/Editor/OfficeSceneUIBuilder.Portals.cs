@@ -66,7 +66,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The rows' largest and smallest type (TextMeshPro world sizes; they shrink to the display together).</summary>
     private const float BoardRowsMax = 2f, BoardRowsMin = 0.05f;
 
-    /// <summary>The rings' effects' material (unlit, premultiplied and brightened: they glow through the evening).</summary>
+    /// <summary>The rings' vortexes' material (TimeDesk/PortalGlow: the cel vortex, unlit and premultiplied, glowing through the evening).</summary>
     private static Material PortalGlowMaterial() => EnsureMaterial("PortalGlow", "TimeDesk/PortalGlow", null);
 
     /// <summary>
@@ -150,10 +150,11 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The rings' effects (VX1-VX6) under the Office root, rebuilt fresh: one
-    /// PortalEffect per DeskConfigSO.hallPortalLayers entry, in its order, each
-    /// a disabled SpriteRenderer in the PortalGlow material (the anime hall's
-    /// AnimeHallPortalLink places it, sorts it and shows its art).
+    /// The rings' vortexes (VX1-VX6, Saleh's demo 1018a) under the Office
+    /// root, rebuilt fresh: one PortalEffect per DeskConfigSO.hallPortalLayers
+    /// entry, in its order, each a disabled built-in quad in the PortalGlow
+    /// material (the anime hall's AnimeHallPortalLink places it on its ring's
+    /// opening, sorts it and opens it).
     /// </summary>
     private static PortalEffect[] BuildPortalEffects(Transform office, DeskConfigSO config)
     {
@@ -165,12 +166,17 @@ public static partial class OfficeSceneUIBuilder
         for (int i = 0; i < layers.Length; i++)
         {
             Transform t = EnsureChild(root, "PortalEffect_" + PortalText.Number(layers[i] != null ? layers[i].portal : i + 1));
-            SpriteRenderer glow = t.gameObject.AddComponent<SpriteRenderer>();
-            glow.sharedMaterial = material;
-            glow.enabled = false;
+            t.gameObject.AddComponent<MeshFilter>().sharedMesh = Resources.GetBuiltinResource<Mesh>("Quad.fbx");
+            MeshRenderer vortex = t.gameObject.AddComponent<MeshRenderer>();
+            vortex.sharedMaterial = material;
+            vortex.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            vortex.receiveShadows = false;
+            vortex.lightProbeUsage = UnityEngine.Rendering.LightProbeUsage.Off;
+            vortex.reflectionProbeUsage = UnityEngine.Rendering.ReflectionProbeUsage.Off;
+            vortex.enabled = false;
             effects[i] = t.gameObject.AddComponent<PortalEffect>();
             var so = new SerializedObject(effects[i]);
-            Wire(so, "glow", glow);
+            Wire(so, "vortex", vortex);
             so.ApplyModifiedProperties();
         }
         return effects;

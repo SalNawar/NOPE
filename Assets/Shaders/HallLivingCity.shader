@@ -29,6 +29,9 @@ Shader "NOPE/Hall Living City"
  TEXTURE2D(_MorningRain);TEXTURE2D(_NoonRain);TEXTURE2D(_EveningRain);TEXTURE2D(_NightRain);
  TEXTURE2D(_CityDepth);TEXTURE2D(_Atmosphere);
  float4 _StateWeights;
+ // The city's windows lighting as the hall darkens (HallLightingRig, a global: x 0 by day to 1 when every window is lit, y their brightness).
+ float4 _HallCityLights;
+ float CityHash(float2 p){p=frac(p*float2(127.1,311.7));p+=dot(p,p+34.5);return frac(p.x*p.y);}
  float _Region,_CityPan,_CityRain,_CityDepthStrength,_CitySeconds,_CityMotion,_AtmospherePace,_HeadlightSize,_CityView;
  struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
@@ -90,6 +93,15 @@ Shader "NOPE/Hall Living City"
   // Sparse warm building lights gently vary rather than flashing the whole image.
   half warm=step(rgb.b*1.5,rgb.r)*step(.22,rgb.r)*step(.1,Depth(uv));
   rgb+=warm*(w.z+w.w)*.018*(.5+.5*sin(floor(uv.x*390)+floor(uv.y*210)+t*.6));
+  // The windows switch on one by one as the hall darkens (Saleh's demo 1018a: "need more lights to activate as it gets
+  // darker"): the night painting's lit windows (warm, bright pixels), in cells each with its own moment along
+  // _HallCityLights.x, blinking as they catch; fainter where the night painting already shows them.
+  half3 lit=SAMPLE_TEXTURE2D(_NightClear,sampler_MorningClear,uv).rgb;
+  half window=step(lit.b*1.25,lit.r)*smoothstep(.38,.62,lit.r)*step(.1,Depth(uv));
+  float2 wcell=floor(uv*float2(240,120));float wh=CityHash(wcell);
+  float catchUp=_HallCityLights.x-wh*.97;
+  half on=step(0,catchUp)*lerp(step(.45,frac(t*6+wh*17)),1,step(.025,catchUp));
+  rgb+=window*on*_HallCityLights.y*half3(1,.8,.48)*lit*(1-.7*w.w);
   // Small moving headlight pairs follow three authored road segments.
   [unroll] for(int lane=0;lane<3;lane++)
   {

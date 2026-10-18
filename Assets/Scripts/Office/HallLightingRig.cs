@@ -11,9 +11,16 @@ using UnityEngine;
 /// the knobs' edit-mode hour without a clock), puts it on the solar day
 /// (HallDayCycle) and sets every HallLight under it: the global and sky
 /// lights' colour and intensity, the sun shafts' colour, strength, turn and length,
-/// the fixtures switching on at dusk one after another (a strike flicker
-/// unless reduced motion), the screens, signs and desk lights always on
-/// (fainter by day), and each portal ring's light following its state
+/// and the night's stages as the hall darkens (Saleh's demo 1018a: "need
+/// more lights to activate as it gets darker"; HallDayCycle.SwitchedOn at
+/// each stage's evening in the knobs, each light at its own moment): the
+/// desk lamp first (a filament's warm-up), the ceiling fixtures one after
+/// another (a strike flicker), the gallery's mounted lamps, the lit signs (a
+/// neon stutter), the open portals' night surge (<see cref="PortalNight"/>,
+/// read by AnimeHallPortalLink) and the city's windows lighting one by one
+/// (the global _HallCityLights the living city's shader reads); no
+/// flicker with reduced motion. The screens and the PC's glow stay on,
+/// fainter by day, and each portal ring's light follows its state
 /// (<see cref="SetPortal"/>, from AnimeHallPortalLink). Its Plane child (the
 /// Light2Ds, the pier shadows, the dust) follows the art's presentation, so
 /// the lights stay on the painted fixtures if the art pans. The dust's knobs
@@ -49,6 +56,9 @@ public sealed class HallLightingRig : MonoBehaviour
     private HallLight[] _lights = System.Array.Empty<HallLight>();
     private readonly bool[] _portalOpen = new bool[MaxPortal + 1];
     private readonly bool[] _portalReturns = new bool[MaxPortal + 1];
+    private readonly float[] _portalNightSince = { -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f, -1f };
+    private readonly float[] _portalNight = new float[MaxPortal + 1];
+    private static readonly int CityLightsId = Shader.PropertyToID("_HallCityLights");
     private float _clockMinute;
     private bool _hasClock;
     private bool _reduced;
@@ -95,6 +105,9 @@ public sealed class HallLightingRig : MonoBehaviour
         _hasClock = true;
     }
 
+    /// <summary>How far portal <paramref name="portal"/>'s night has come (0 by day; its surge past 1 once its night stage comes, then 1; 0 with the lighting off).</summary>
+    public float PortalNight(int portal) => portal >= 0 && portal <= MaxPortal ? _portalNight[portal] : 0f;
+
     /// <summary>Portal <paramref name="portal"/>'s ring state (AnimeHallPortalLink): open (its light on), and whether it is the Return Gate (its colour).</summary>
     public void SetPortal(int portal, bool open, bool returnGate)
     {
@@ -137,6 +150,8 @@ public sealed class HallLightingRig : MonoBehaviour
             Switch(on);
         if (!on)
         {
+            System.Array.Clear(_portalNight, 0, _portalNight.Length);
+            Shader.SetGlobalVector(CityLightsId, Vector4.zero);
             _firstFrame = false;
             return;
         }
@@ -152,8 +167,27 @@ public sealed class HallLightingRig : MonoBehaviour
             if (l != null)
                 Apply(l, hour, solar, evening, arc, cycle, dt);
 
+        for (int p = 1; p <= MaxPortal; p++)
+        {
+            bool night = HallDayCycle.SwitchedOn(hour, settings.portalNightAt, p - 1, settings.portalNightStaggerMinutes, cycle);
+            _portalNightSince[p] = Since(_portalNightSince[p], night, dt);
+            _portalNight[p] = HallDayCycle.Surge(_portalNightSince[p], settings.portalNightSurgeSeconds, _reduced);
+        }
+        float span = Mathf.Max(1e-3f, settings.cityWindowsTo - settings.cityWindowsFrom);
+        Shader.SetGlobalVector(CityLightsId, new Vector4(Mathf.Clamp01((evening - settings.cityWindowsFrom) / span), settings.cityWindowsGain, 0f, 0f));
+
         ApplyDust();
         _firstFrame = false;
+    }
+
+    /// <summary>A stage light's seconds since it switched on: negative while off, counting from 0 at its switch (or already past every warm-up on the first frame and in edit mode, so a hall opened at night does not blink).</summary>
+    private float Since(float since, bool on, float dt)
+    {
+        if (!on)
+            return -1f;
+        if (since < 0f)
+            return _firstFrame || !Application.isPlaying ? 999f : 0f;
+        return since + dt;
     }
 
     /// <summary>One light at this hour.</summary>
@@ -179,13 +213,10 @@ public sealed class HallLightingRig : MonoBehaviour
                 break;
 
             case HallLightKind.Fixture:
-                float level = HallDayCycle.FixtureLevel(hour, l.order, cycle);
-                if (level <= 0f)
-                    l.SinceOn = -1f;
-                else if (l.SinceOn < 0f)
-                    l.SinceOn = _firstFrame || !Application.isPlaying ? HallDayCycle.FlickerSeconds : 0f;
-                else
-                    l.SinceOn += dt;
+                float level = l.Mounted
+                    ? (HallDayCycle.SwitchedOn(hour, settings.galleryLampsOnAt, l.StageIndex, settings.galleryLampStaggerMinutes, cycle) ? 1f : 0f)
+                    : HallDayCycle.FixtureLevel(hour, l.order, cycle);
+                l.SinceOn = Since(l.SinceOn, level > 0f, dt);
                 float flicker = HallDayCycle.Flicker(l.SinceOn, _reduced || !settings.fixtureFlicker);
                 l.Lit = Mathf.Lerp(settings.fixtureOffShare, 1f, level) * flicker;
                 Set(l, l.intensity * l.Lit, settings.fixtureColour);
@@ -196,7 +227,8 @@ public sealed class HallLightingRig : MonoBehaviour
                 break;
 
             case HallLightKind.Sign:
-                Set(l, l.intensity * Mathf.Lerp(settings.signDayShare, 1f, evening));
+                l.SinceOn = Since(l.SinceOn, HallDayCycle.SwitchedOn(hour, settings.signsOnAt, l.StageIndex, settings.signStaggerMinutes, cycle), dt);
+                Set(l, l.intensity * Mathf.Lerp(settings.signDayShare, 1f, HallDayCycle.Neon(l.SinceOn, _reduced)));
                 break;
 
             case HallLightKind.Portal:
@@ -208,7 +240,8 @@ public sealed class HallLightingRig : MonoBehaviour
                 break;
 
             case HallLightKind.DeskLamp:
-                Set(l, l.intensity * Mathf.Lerp(settings.deskLampDayShare, 1f, evening));
+                l.SinceOn = Since(l.SinceOn, HallDayCycle.SwitchedOn(hour, settings.deskLampOnAt, 0, 0f, cycle), dt);
+                Set(l, l.intensity * Mathf.Lerp(settings.deskLampDayShare, 1f, HallDayCycle.WarmUp(l.SinceOn, settings.deskLampWarmSeconds, _reduced)));
                 break;
 
             case HallLightKind.DeskScreen:
@@ -320,6 +353,15 @@ public sealed class HallLightingRig : MonoBehaviour
         }
         foreach (HallLight l in _lights)
             l.Bind();
+        // Each night stage's lights in name order: their places in its switching order.
+        HallLight[] byName = _lights.Where(l => l != null).OrderBy(l => l.name, System.StringComparer.Ordinal).ToArray();
+        foreach (HallLightKind kind in new[] { HallLightKind.Fixture, HallLightKind.Sign })
+        {
+            int index = 0;
+            foreach (HallLight l in byName)
+                if (l.kind == kind && (kind != HallLightKind.Fixture || l.Mounted))
+                    l.StageIndex = index++;
+        }
     }
 }
 

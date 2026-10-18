@@ -329,18 +329,31 @@ public sealed class DayPlanSO : ScriptableObject
     }
 
     /// <summary>
-    /// The line of today's first closure that forbids <paramref name="nation"/>
-    /// in <paramref name="era"/> for every traveller (a portal's route it
-    /// forbids shows CLOSED; the portals spec v3 RT2), or null when none does.
-    /// A closure listing kinds (the Economy range limit) closes no portal: it
-    /// only turns some travellers away; the open destinations close every
-    /// route they do not list, whatever kinds they read (the routes are the
-    /// 2150 citizens').
+    /// The line of today's first ban that forbids <paramref name="nation"/>
+    /// in <paramref name="era"/> for every traveller (a closure naming the
+    /// place: a portal's route it forbids shows CLOSED, repaired or not; the
+    /// portals spec v3 RT2), or null when none does. A closure listing kinds
+    /// (the Economy range limit) closes no portal: it only turns some
+    /// travellers away. The open destinations are <see cref="UnlistedOf"/>.
     /// </summary>
-    public string ClosureOf(NationSO nation, EraSO era)
+    public string ClosureOf(NationSO nation, EraSO era) => FirstClosure(nation, era, false);
+
+    /// <summary>
+    /// The line of today's open-destinations list when it leaves out
+    /// <paramref name="nation"/> in <paramref name="era"/> (whatever kinds it
+    /// reads: the routes are the 2150 citizens'), or null when it lists the
+    /// place or no list stands. It closes the route of a portal whose repair
+    /// is not owned (PortalSchedule.Resolve).
+    /// </summary>
+    public string UnlistedOf(NationSO nation, EraSO era) => FirstClosure(nation, era, true);
+
+    /// <summary>The first open-destinations list (<paramref name="list"/>) or the first ban for every kind that forbids the place, as authored (the list before today's repairs open more: the portals' schedule decides which repaired routes it opens): its line, or null.</summary>
+    private string FirstClosure(NationSO nation, EraSO era, bool list)
     {
         foreach (TravelRuleSO rule in ActiveTravelRules)
-            if (rule != null && rule.IsClosure && (rule.kinds == null || rule.kinds.Length == 0 || rule.type == TravelRuleType.OpenDestinations) && !rule.Allows(nation, era))
+            if (rule != null && rule.IsClosure && (rule.type == TravelRuleType.OpenDestinations) == list
+                && (list || rule.kinds == null || rule.kinds.Length == 0)
+                && rule.AuthoredDirective.Closes(nation != null ? nation.id : null, era != null ? era.id : null))
                 return rule.Summary();
         return null;
     }

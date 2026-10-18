@@ -124,6 +124,87 @@ public static class HallDayCycle
         return 1f;
     }
 
+    /// <summary>
+    /// True when a light of a night stage (Saleh's demo 1018a: "need more
+    /// lights to activate as it gets darker") is switched on at
+    /// <paramref name="hour"/>: the hall's evening (<see cref="Evening"/>,
+    /// 0 by day to 1 at night) read <paramref name="staggerMinutes"/> times
+    /// its <paramref name="index"/> earlier has reached the stage's
+    /// <paramref name="onAtEvening"/>, so the lights of one stage come on one
+    /// after another as it darkens, and go off in the same order as it lightens.
+    /// A stage at 0 or less is always on; one above 1 never.
+    /// </summary>
+    public static bool SwitchedOn(float hour, float onAtEvening, int index, float staggerMinutes, in Settings s)
+    {
+        if (!(onAtEvening > 0f))
+            return true;
+        float stagger = Math.Max(0f, staggerMinutes) / 60f * Math.Max(0, index);
+        return Evening(hour - stagger, s) >= onAtEvening;
+    }
+
+    /// <summary>How long a lamp's warm-up blink lasts before it eases up (real seconds).</summary>
+    public const float WarmBlinkSeconds = 0.08f;
+
+    /// <summary>
+    /// A filament lamp's share <paramref name="secondsSinceOn"/> after it was
+    /// switched on (the desk lamp): a dim blink, then easing up to full over
+    /// <paramref name="warmSeconds"/>; 0 while off (a negative time), full
+    /// with <paramref name="reduced"/> motion or once warm.
+    /// </summary>
+    public static float WarmUp(float secondsSinceOn, float warmSeconds, bool reduced)
+    {
+        if (!(secondsSinceOn >= 0f))
+            return 0f;
+        if (reduced || secondsSinceOn >= warmSeconds)
+            return 1f;
+        if (secondsSinceOn < WarmBlinkSeconds)
+            return 0.35f;
+        float t = (secondsSinceOn - WarmBlinkSeconds) / Math.Max(1e-3f, warmSeconds - WarmBlinkSeconds);
+        return 0.2f + 0.8f * t * t * (3f - 2f * t);
+    }
+
+    /// <summary>How long a sign's neon stutter lasts (real seconds).</summary>
+    public const float NeonSeconds = 0.5f;
+
+    /// <summary>
+    /// A lit sign's share <paramref name="secondsSinceOn"/> after it was
+    /// switched on: a neon stutter (on, off, on, off, on) for
+    /// <see cref="NeonSeconds"/>, then steady; 0 while off (a negative time),
+    /// steady at once with <paramref name="reduced"/> motion.
+    /// </summary>
+    public static float Neon(float secondsSinceOn, bool reduced)
+    {
+        if (!(secondsSinceOn >= 0f))
+            return 0f;
+        if (reduced || secondsSinceOn >= NeonSeconds)
+            return 1f;
+        if (secondsSinceOn < 0.05f) return 0.8f;
+        if (secondsSinceOn < 0.12f) return 0f;
+        if (secondsSinceOn < 0.2f) return 0.9f;
+        if (secondsSinceOn < 0.32f) return 0.1f;
+        if (secondsSinceOn < 0.4f) return 1f;
+        return 0.3f;
+    }
+
+    /// <summary>The peak of a portal's night surge, over its night share.</summary>
+    public const float SurgePeak = 1.4f;
+
+    /// <summary>
+    /// A portal's night share <paramref name="secondsSinceOn"/> after its night
+    /// stage came (the vortex brightens): it surges to <see cref="SurgePeak"/>
+    /// over the first 40 % of <paramref name="surgeSeconds"/> and settles to 1;
+    /// 0 while off (a negative time), 1 at once with <paramref name="reduced"/> motion.
+    /// </summary>
+    public static float Surge(float secondsSinceOn, float surgeSeconds, bool reduced)
+    {
+        if (!(secondsSinceOn >= 0f))
+            return 0f;
+        if (reduced || surgeSeconds <= 0f || secondsSinceOn >= surgeSeconds)
+            return 1f;
+        float t = secondsSinceOn / surgeSeconds;
+        return t < 0.4f ? SurgePeak * t / 0.4f : SurgePeak - (SurgePeak - 1f) * (t - 0.4f) / 0.6f;
+    }
+
     /// <summary>The day's length and the twilight, repaired: a day of 0.5 to 23.5 hours (12 when sunrise and sunset coincide), a twilight no longer than the day or the night.</summary>
     private static void Day(in Settings s, out float length, out float twilight)
     {

@@ -47,4 +47,59 @@ MonoBehaviour:
   bubbleOffset: {x: 0, y: 290}
   reactionSeconds: 2.5
   readyCaptionKey: desk.readyCaption
+  hallPortalDrawing: 62 Approved deeper architecture
+  hallPortalLayers:
+  - portal: 1
+    bay: 38 Portal 01 front secure bay
+    ring: 39 Portal 01 front metal ring
+    glass: 53 Portal 01 front painted glass
+    opening: {x: 1096, y: 488, z: 49, w: 56}
+    fenceY: 478
+  - portal: 2
+    bay: 40 Portal 02 rear left secure bay
+    ring: 41 Portal 02 rear left metal ring
+    glass: 54 Portal 02 rear left painted glass
+    opening: {x: 968, y: 364, z: 25, w: 23}
+    fenceY: 364
+  - portal: 3
+    bay: 42 Portal 03 rear right secure bay
+    ring: 43 Portal 03 rear right metal ring
+    glass: 55 Portal 03 rear right painted glass
+    opening: {x: 1210, y: 363, z: 25, w: 23}
+    fenceY: 364
+  - portal: 4
+    bay: 44 Portal 04 upper left secure bay
+    ring: 45 Portal 04 upper left metal ring
+    glass: 56 Portal 04 upper left painted glass
+    opening: {x: 1762, y: 213, z: 16, w: 41}
+    fenceY: 203
+  - portal: 5
+    bay: 46 Portal 05 upper right secure bay
+    ring: 47 Portal 05 upper right metal ring
+    glass: 57 Portal 05 upper right painted glass
+    opening: {x: 2003, y: 213, z: 28, w: 50}
+    fenceY: 206
+  hallPortalVortex:
+    departureDeep: {r: 0.12, g: 0.2, b: 0.42, a: 1}
+    departureMid: {r: 0.16, g: 0.55, b: 0.82, a: 1}
+    departureLight: {r: 0.6, g: 0.93, b: 1, a: 1}
+    departureRim: {r: 0.92, g: 1, b: 1, a: 1}
+    returnDeep: {r: 0.42, g: 0.13, b: 0.12, a: 1}
+    returnMid: {r: 0.9, g: 0.45, b: 0.14, a: 1}
+    returnLight: {r: 1, g: 0.8, b: 0.42, a: 1}
+    returnRim: {r: 1, g: 0.96, b: 0.8, a: 1}
+    ink: {r: 0.169, g: 0.11, b: 0.141, a: 1}
+    departureArms: 3
+    returnArms: 2
+    twist: 1.6
+    spinDegrees: 40
+    sparkleDrift: 0.35
+    sparkleDensity: 0.45
+    ringGlow: 0.45
+    opacity: 0.94
+    glassOpacity: 0.72
+    brightness: 1.1
+    nightBoost: 0.35
+    irisSeconds: 0.7
+  hallPortalPulseSeconds: 0.8
   hallSlots: {fileID: 11400000, guid: a8e0ffd72519464393fd8049b9acb358, type: 2}

@@ -312,30 +312,21 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The share of the display's width and height the rows keep clear on each side (so they stay below the claim strip).</summary>
     [Range(0f, 0.45f)] public float hallBoardInset = 0.08f;
 
-    /// <summary>Each portal's art layers by their ids in the hall's AnimeHallPresentation (a renamed or renumbered layer is an edit here): the secure bay (its order less one is the effect's), the metal ring (tinted; its opaque rect places the effect) and the painted glass.</summary>
+    /// <summary>The hall drawing the rings are painted in (its id in the hall's AnimeHallPresentation): each ring's vortex sits on its opening, read in this drawing's canvas pixels (HallPortalLayers.opening); without it the vortex falls back on the ring layer's opaque rect.</summary>
+    public string hallPortalDrawing = "62 Approved deeper architecture";
+
+    /// <summary>Each portal's art layers by their ids in the hall's AnimeHallPresentation (a renamed or renumbered layer is an edit here) and its opening in the drawing (Saleh's demo 1018a: "the vfx for portals ... is not even alligned"): the opening and its fence's top rail are measured on the drawing, the bay, ring and glass layers are the fallback without it.</summary>
     public HallPortalLayers[] hallPortalLayers =
     {
-        new HallPortalLayers(1, "38 Portal 01 front secure bay", "39 Portal 01 front metal ring", "53 Portal 01 front painted glass"),
-        new HallPortalLayers(2, "40 Portal 02 rear left secure bay", "41 Portal 02 rear left metal ring", "54 Portal 02 rear left painted glass"),
-        new HallPortalLayers(3, "42 Portal 03 rear right secure bay", "43 Portal 03 rear right metal ring", "55 Portal 03 rear right painted glass"),
-        new HallPortalLayers(4, "44 Portal 04 upper left secure bay", "45 Portal 04 upper left metal ring", "56 Portal 04 upper left painted glass"),
-        new HallPortalLayers(5, "46 Portal 05 upper right secure bay", "47 Portal 05 upper right metal ring", "57 Portal 05 upper right painted glass"),
+        new HallPortalLayers(1, "38 Portal 01 front secure bay", "39 Portal 01 front metal ring", "53 Portal 01 front painted glass", new Vector4(1096f, 488f, 49f, 56f), 478f),
+        new HallPortalLayers(2, "40 Portal 02 rear left secure bay", "41 Portal 02 rear left metal ring", "54 Portal 02 rear left painted glass", new Vector4(968f, 364f, 25f, 23f), 364f),
+        new HallPortalLayers(3, "42 Portal 03 rear right secure bay", "43 Portal 03 rear right metal ring", "55 Portal 03 rear right painted glass", new Vector4(1210f, 363f, 25f, 23f), 364f),
+        new HallPortalLayers(4, "44 Portal 04 upper left secure bay", "45 Portal 04 upper left metal ring", "56 Portal 04 upper left painted glass", new Vector4(1762f, 213f, 16f, 41f), 203f),
+        new HallPortalLayers(5, "46 Portal 05 upper right secure bay", "47 Portal 05 upper right metal ring", "57 Portal 05 upper right painted glass", new Vector4(2003f, 213f, 28f, 50f), 206f),
     };
 
-    /// <summary>An open departure ring's glow (an unlit tint, brightened by the PortalGlow material: a pale cyan).</summary>
-    public Color hallPortalGlowTint = new Color(0.35f, 0.85f, 1f, 0.9f);
-
-    /// <summary>The Return Gate's spiral (an unlit tint, brightened by the PortalGlow material: an amber).</summary>
-    public Color hallReturnGateTint = new Color(1f, 0.6f, 0.15f, 0.95f);
-
-    /// <summary>The effect's diameter as a share of its ring's opaque width, so its edge hides under the frame.</summary>
-    [Range(0.1f, 1f)] public float hallPortalGlowSize = 0.85f;
-
-    /// <summary>How fast a glow turns (degrees a second; still with reduced motion).</summary>
-    public float hallPortalSpinDegrees = 12f;
-
-    /// <summary>A departure's flare: the effect's scale at its peak.</summary>
-    [Min(1f)] public float hallPortalPulseScale = 1.3f;
+    /// <summary>The vortex of an open departure ring (cyan) and of the Return Gate (amber), and how they move.</summary>
+    public PortalVortexTuning hallPortalVortex = new PortalVortexTuning();
 
     /// <summary>A departure's flare: seconds, up and down (with reduced motion: one step up, then down at its end).</summary>
     [Min(0.05f)] public float hallPortalPulseSeconds = 0.8f;
@@ -378,17 +369,69 @@ public sealed class HallPortalLayers
     /// <summary>The painted glass's layer (drawn over the effect; listed so a renamed layer is one edit here).</summary>
     public string glass;
 
+    /// <summary>The ring's opening in DeskConfigSO.hallPortalDrawing's canvas pixels (top-left origin): its centre (x, y) and radii (z across, w up), measured on the painting so the vortex sits exactly in the ring; a radius of 0 falls back on the ring layer's rect.</summary>
+    public Vector4 opening;
+
+    /// <summary>The canvas row of the bay's glass fence's top rail across the opening (the vortex shows through the glass below it); 0: no fence in front.</summary>
+    public float fenceY;
+
     /// <summary>An empty entry (for the serializer and the inspector).</summary>
     public HallPortalLayers()
     {
     }
 
-    /// <summary>A portal's layers.</summary>
-    public HallPortalLayers(int portal, string bay, string ring, string glass)
+    /// <summary>A portal's layers and its opening on the drawing.</summary>
+    public HallPortalLayers(int portal, string bay, string ring, string glass, Vector4 opening, float fenceY)
     {
         this.portal = portal;
         this.bay = bay;
         this.ring = ring;
         this.glass = glass;
+        this.opening = opening;
+        this.fenceY = fenceY;
     }
+}
+
+/// <summary>The portal rings' vortex (DeskConfigSO.hallPortalVortex; PortalEffect, the shader TimeDesk/PortalGlow): its two palettes, its swirl, sparkles and ring glow, its iris and its night (HallLightingRig.PortalNight).</summary>
+[System.Serializable]
+public sealed class PortalVortexTuning
+{
+    /// <summary>An open departure ring's tones, deep to light, and its rim and ring glow: cel cyans (the UI kit's slate under them).</summary>
+    public Color departureDeep = new Color(0.12f, 0.2f, 0.42f), departureMid = new Color(0.16f, 0.55f, 0.82f), departureLight = new Color(0.6f, 0.93f, 1f), departureRim = new Color(0.92f, 1f, 1f);
+
+    /// <summary>The Return Gate's tones and rim: cel ambers (the kit's oxblood under them).</summary>
+    public Color returnDeep = new Color(0.42f, 0.13f, 0.12f), returnMid = new Color(0.9f, 0.45f, 0.14f), returnLight = new Color(1f, 0.8f, 0.42f), returnRim = new Color(1f, 0.96f, 0.8f);
+
+    /// <summary>The ink line inside the rim (the kit's ink, #2B1C24).</summary>
+    public Color ink = new Color(0.169f, 0.11f, 0.141f);
+
+    /// <summary>How many swirl arms a departure ring has, and the Return Gate.</summary>
+    [Range(1, 8)] public int departureArms = 3, returnArms = 2;
+
+    /// <summary>How far the arms wind from the rim to the core (turns; the Return Gate's wind the other way, inward).</summary>
+    [Range(0f, 6f)] public float twist = 1.6f;
+
+    /// <summary>How fast the swirl turns (degrees a second; still with reduced motion).</summary>
+    public float spinDegrees = 40f;
+
+    /// <summary>How fast the sparkles drift to the core (rows a second; still with reduced motion).</summary>
+    [Range(0f, 3f)] public float sparkleDrift = 0.35f;
+
+    /// <summary>How many of the sparkle cells hold a star (0 to 1; the night adds up to half again).</summary>
+    [Range(0f, 1f)] public float sparkleDensity = 0.45f;
+
+    /// <summary>The ring glow's strength: the light tone added on the inner lip of the ring around the opening.</summary>
+    [Range(0f, 2f)] public float ringGlow = 0.45f;
+
+    /// <summary>The vortex's opacity over the wall seen through the ring, and through the bay's glass.</summary>
+    [Range(0f, 1f)] public float opacity = 0.94f, glassOpacity = 0.72f;
+
+    /// <summary>Brightness over the tones (unlit: it glows through the evening), and the night's extra share.</summary>
+    [Range(0.5f, 2f)] public float brightness = 1.1f;
+
+    /// <summary>How much brighter the vortex reads at full night (HallLightingRig.PortalNight).</summary>
+    [Range(0f, 1f)] public float nightBoost = 0.35f;
+
+    /// <summary>Seconds the iris takes to spring open (or shut) when a ring's state changes (at once with reduced motion).</summary>
+    [Min(0f)] public float irisSeconds = 0.7f;
 }

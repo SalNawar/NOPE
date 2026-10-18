@@ -119,7 +119,7 @@ public sealed class MailFeed : MonoBehaviour
         Announce();
     }
 
-    /// <summary>A day's directive lines (its day plan's travel rules).</summary>
+    /// <summary>A day's directive lines (its day plan's travel rules): today's as the rulebook prints them (with what today's repairs open, DayOpenings), another day's as authored.</summary>
     private static IReadOnlyList<string> RulesOf(ContentLibrarySO library, int day)
     {
         var lines = new List<string>();
@@ -127,7 +127,7 @@ public sealed class MailFeed : MonoBehaviour
         if (plan != null)
             foreach (TravelRuleSO rule in plan.ActiveTravelRules)
                 if (rule != null)
-                    lines.Add(rule.Summary(TextSurface.Pc));
+                    lines.Add(day == DayOpenings.Day ? rule.Summary(TextSurface.Pc) : rule.AuthoredSummary(TextSurface.Pc));
         return lines;
     }
 

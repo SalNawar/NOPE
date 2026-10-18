@@ -26611,6 +26611,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "rule.openRepaired",
+        "text": "Your repaired portals also run today: {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "desk.scanHint",
         "text": "Drag a paper onto the scanner to open it on the PC.",
         "gloss": "None",
@@ -78570,7 +78576,7 @@
           ],
           "form": "",
           "target": "rulebook",
-          "text": "Practice: two routes are open today (the board). Press {inspect}, click the Destination, then today's rule."
+          "text": "Practice: the board shows the routes open today. Press {inspect}, click the Destination, then today's rule."
         }
       },
       {

@@ -19,12 +19,6 @@ public static class ArtSlots
     /// <summary>The folder every by-name slot lives under (a Resources folder; the slot is the path below it).</summary>
     public const string AssetRoot = "Assets/Art/UI/Resources/";
 
-    /// <summary>The glow inside an open departure portal's ring (greyscale; the game tints it and draws it as an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
-    public const string PortalGlow = "Office/portal_glow";
-
-    /// <summary>The Return Gate's spiral inside its ring (greyscale; tinted amber, an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
-    public const string ReturnGateGlow = "Office/portal_return_glow";
-
     /// <summary>The photo frame on a desk paper's photo cell (the frame's grey stand-in without art).</summary>
     public const string PhotoFrame = "Forms/photo_frame";
 

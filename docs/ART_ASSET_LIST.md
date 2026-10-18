@@ -72,8 +72,8 @@ Drawn on the office overlay canvas (1920 × 1080 reference; it scales with the s
 | Speech bubble tail | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
 | Wheel choices and the "< Back" centre | on an ellipse around the traveller, 240 × 44 and 150 × 44 | the UI kit's `ui_button.png` (section 3) | code-drawn themed buttons | from the kit | 2 | code-drawn, later |
 | Desk tooltip | above a clicked prop (credits, day, stability, time), 360 × 60 | the UI kit's `tooltip.png` (section 3) | code-drawn yellow panel | from the kit | 2 | code-drawn, later |
-| Portal glow | inside an open departure portal's ring in the anime hall (the portals spec v3 VX1), about 150 px across at 1080p for the front ring; tinted pale cyan and drawn as a glow (unlit) by the game, slowly turning | `Assets/Art/UI/Resources/Office/portal_glow.png` | a code-drawn radial glow (`PortalGlowPlaceholder`) | 512 × 512, a soft swirl of light on transparent, greyscale, clear at the rim | 1 | missing |
-| Return Gate spiral | inside the Return Gate's ring (portal 03) while it is in service (VX5); tinted amber and drawn as a glow (unlit) | `Assets/Art/UI/Resources/Office/portal_return_glow.png` | a code-drawn inward spiral (`PortalGlowPlaceholder`) | the same format: an inward spiral | 1 | missing |
+| Portal glow | superseded (Saleh's demo 1018a): the game draws each ring's cel vortex (the shader `TimeDesk/PortalGlow`, `PortalEffect`), measured on the hall drawing; the slot is retired | - | - | - | - | retired |
+| Return Gate spiral | superseded (Saleh's demo 1018a): the Return Gate's amber vortex is the same shader's; the slot is retired | - | - | - | - | retired |
 
 - The wheel's icons are in section 8.
 - **Drawn by code, no art:** the fallback HUD (it shows only when the art office lacks a readout) and the floating hints.

@@ -292,6 +292,7 @@ public static class BalanceSimulation
     private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace, Shopper shopper, bool bribes, RunObserver observer = null)
     {
         DevToolsState.ResetAll();
+        DayOpenings.Clear();
         var r = new RunResult { Seed = seed };
         var policy = new PlayPolicy(style);
         WorldState world = DayCycle.NewWorld(run, lib, seed);
@@ -397,6 +398,7 @@ public static class BalanceSimulation
         r.TechnologyChanged = world.history.factEdits.Where(e => e != null && e.cause == EditCause.Carry && e.category == ClueCategory.Technology && e.eraId != "future")
             .Select(e => e.nationId + "/" + e.eraId).Distinct().Count();
         r.Fingerprint = JsonUtility.ToJson(world.history) + JsonUtility.ToJson(world.timeline) + world.money.ToString(Inv) + r.Ending;
+        DayOpenings.Clear();
         return r;
     }
 
