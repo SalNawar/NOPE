@@ -41,15 +41,17 @@ public sealed class DeskUpgrades : MonoBehaviour
     /// <summary>The supply crate (null without its art).</summary>
     public SupplyCrate Crate => crate;
 
-    /// <summary>The Interview Protocols' card ring (null without its art; the probes drive it).</summary>
-    public ProtocolRing ProtocolRing => protocolRing;
-
-    /// <summary>Wires the objects that work with the investigation (GameManager, once, before the first day): the card ring asks its questions.</summary>
+    /// <summary>Wires the objects that work with the investigation (GameManager, once, before the first day): the card ring asks its questions, the BABEL rack replays the traveller's last line and lights the cartridge that covers their tongue.</summary>
     public void Bind(InvestigationUIController investigation)
     {
+        _investigation = investigation;
         if (protocolRing != null)
             protocolRing.Bind(investigation);
+        if (babelRack != null)
+            babelRack.Bind(investigation != null ? investigation.ReplayLastLine : (System.Func<bool>)null);
     }
+
+    private InvestigationUIController _investigation;
 
     /// <summary>The objects on the desk today (the binder keeps them clear of the scanner; the probes read them).</summary>
     public IEnumerable<Component> Shown
@@ -177,11 +179,23 @@ public sealed class DeskUpgrades : MonoBehaviour
             crate.Open();
     }
 
-    /// <summary>A new traveller: the protocol ring's front card flicks over.</summary>
+    /// <summary>A new traveller: the protocol ring's front card flicks over; the BABEL rack's cartridge that covers their tongue (when it is foreign today) keeps its pilot lit.</summary>
     public void BeginCase()
     {
         if (protocolRing != null && protocolRing.gameObject.activeInHierarchy)
             protocolRing.FlickFront();
+        if (babelRack != null)
+        {
+            string tongue = _investigation != null ? _investigation.ForeignTongue : null;
+            babelRack.SetSpeaker(tongue != null && _bayOfTongue.TryGetValue(tongue, out int bay) ? bay : -1);
+        }
+    }
+
+    /// <summary>The traveller left: the rack's pilot goes out.</summary>
+    public void EndCase()
+    {
+        if (babelRack != null)
+            babelRack.SetSpeaker(-1);
     }
 
     /// <summary>A traveller went through portal <paramref name="portal"/>: the panel's lamp flashes.</summary>

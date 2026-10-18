@@ -141,6 +141,17 @@ public class DialogRunnerTests
     }
 
     [Test]
+    public void LastBy_FindsTheSpeakersLastLine()
+    {
+        var desk = new DialogLine("d", DialogSpeaker.Desk, "Papers?");
+        DialogLine first = Line("t1"), last = Line("t2");
+        Assert.AreSame(last, DialogLines.LastBy(new[] { first, desk, last, null, desk }, DialogSpeaker.Traveller));
+        Assert.AreSame(desk, DialogLines.LastBy(new[] { first, desk, last }, DialogSpeaker.Desk));
+        Assert.IsNull(DialogLines.LastBy(new[] { desk }, DialogSpeaker.Traveller));
+        Assert.IsNull(DialogLines.LastBy(null, DialogSpeaker.Traveller));
+    }
+
+    [Test]
     public void Choices_IsAFreshListEachTime()
     {
         DialogRunner r = Runner();

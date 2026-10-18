@@ -475,6 +475,22 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         Speak(lines);
     }
 
+    /// <summary>
+    /// The traveller says their last line of this case again in the bubble
+    /// (the BABEL rack's replay, the desk machines spec §10; DialogLines.LastBy),
+    /// after whatever they are saying, flipping into English again with the
+    /// region's Speech translator; the transcript does not grow. False, saying
+    /// nothing, when no traveller is at the desk or they have said nothing yet.
+    /// </summary>
+    public bool Replay()
+    {
+        DialogLine last = DialogLines.LastBy(_said, DialogSpeaker.Traveller);
+        if (!_canOpen || _speech == null || last == null)
+            return false;
+        Speak(new[] { last });
+        return true;
+    }
+
     /// <summary>Queues <paramref name="lines"/> in the bubble (each flipping line counting as shown once its flip ends) and draws.</summary>
     private void Speak(IReadOnlyList<DialogLine> lines)
     {

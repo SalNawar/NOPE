@@ -432,6 +432,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Counts the interview's changes (InterviewPresenter.Version; -2 between travellers): the card ring redraws when it moves.</summary>
     public int InterviewVersion => _currentCase != null && _interview != null ? _interview.Version : -2;
 
+    /// <summary>The tongue the traveller at the desk speaks when it is foreign today (null: English, or between travellers): the BABEL rack lights the cartridge that covers it.</summary>
+    public string ForeignTongue => _currentCase != null && _interview != null && _interview.Translation.Speech.Foreign ? _interview.Translation.TongueId : null;
+
+    /// <summary>The traveller at the desk says their last line again (the BABEL rack's replay, TravellerWheel.Replay); false when there is none.</summary>
+    public bool ReplayLastLine() => wheel != null && wheel.Replay();
+
     /// <summary>Asks question <paramref name="choiceId"/> from the desk's card ring (InterviewPresenter.Ask); false when nothing was asked.</summary>
     public bool AskProtocol(string choiceId) => _currentCase != null && _interview != null && _interview.Ask(choiceId);
 

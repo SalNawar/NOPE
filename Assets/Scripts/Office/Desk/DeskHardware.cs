@@ -150,6 +150,8 @@ public sealed class DeskHardware : MonoBehaviour
         if (uvTorch != null)
             uvTorch.Release();
         _layers.Clear();
+        if (upgrades != null)
+            upgrades.EndCase();
     }
 
     /// <summary>A paper handed over at the desk: its UV layer (the case's marks for it).</summary>

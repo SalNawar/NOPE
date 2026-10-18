@@ -125,6 +125,19 @@ public static class DialogChoiceKinds
     public static string IconName(DialogChoiceKind kind) => "wheel_" + kind.ToString().ToLowerInvariant();
 }
 
+/// <summary>Reading lines said (pure).</summary>
+public static class DialogLines
+{
+    /// <summary>The last of <paramref name="lines"/> <paramref name="speaker"/> said (null lines skipped), or null: the line the BABEL rack replays (the traveller's last; the desk machines spec §10).</summary>
+    public static DialogLine LastBy(IReadOnlyList<DialogLine> lines, DialogSpeaker speaker)
+    {
+        for (int i = (lines?.Count ?? 0) - 1; i >= 0; i--)
+            if (lines[i] != null && lines[i].Speaker == speaker)
+                return lines[i];
+        return null;
+    }
+}
+
 /// <summary>One transcript line. Immutable; an answer line also carries the fact it states, and a traveller's line the spans that stay English when it shows untranslated.</summary>
 public sealed class DialogLine
 {

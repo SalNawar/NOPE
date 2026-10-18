@@ -51,6 +51,9 @@ public sealed class SpeechTranslation
     /// <summary>True when the clerk understands a line: not foreign, not in the tongue (<paramref name="inTongue"/> false: the desk's) or translated (Saleh 2026-10-17: an answer not understood gives no finding).</summary>
     public bool Understood(bool inTongue) => !_foreign || !inTongue || _translated;
 
+    /// <summary>True when the traveller's tongue is foreign today (their lines show in its script unless translated): the BABEL rack lights the cartridge that covers it.</summary>
+    public bool Foreign => _foreign;
+
     /// <summary>A transcript line, settled: plain when understood; else untranslated but for its <paramref name="english"/> spans (its key words).</summary>
     public Reveal Line(bool inTongue, IReadOnlyList<(int start, int length)> english) =>
         Understood(inTongue) ? Reveal.Plain : Reveal.Untranslated(_text, english);
