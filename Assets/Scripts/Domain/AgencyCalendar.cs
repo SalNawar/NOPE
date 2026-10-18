@@ -62,6 +62,9 @@ public sealed class AgencyContent
     /// <summary>The hidden layers' content (agency.hidden; the desk machines spec §3): the forms that carry a chip and the ghost chance of a forged box (HiddenContent.Problems checks it).</summary>
     public HiddenContent hidden = new HiddenContent();
 
+    /// <summary>The Diplomatic Contacts on the Rolodex (agency.contacts; the desk machines spec §10): who tips the clerk off about which faults (ContactCards.Problems checks them).</summary>
+    public List<ContactEntry> contacts = new List<ContactEntry>();
+
     /// <summary>The printed names of the employers of <paramref name="eraId"/>, in authored order.</summary>
     public List<string> EmployersOf(string eraId) =>
         (employers ?? new List<Employer>()).Where(e => e != null && e.era == eraId).Select(e => e.name).ToList();
@@ -108,6 +111,7 @@ public sealed class AgencyContent
                 problems.Add($"agency.employers '{e.id}': '{e.name}' is {e.name.Length} characters; a form's box and a book row hold {FactTable.MaxValueLength}.");
         }
         problems.AddRange(hidden != null ? hidden.Problems() : new List<string> { "agency.hidden is missing: the chip forms and the ghost chance." });
+        problems.AddRange(ContactCards.Problems(contacts));
         return problems;
     }
 }

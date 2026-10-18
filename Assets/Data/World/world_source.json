@@ -2048,7 +2048,94 @@
         "TC-240"
       ],
       "ghostChance": 0.5
-    }
+    },
+    "contacts": [
+      {
+        "id": "seals",
+        "name": "Ama Okoro",
+        "post": "Seal Registry, night desk",
+        "lies": [
+          "ForgedSeal"
+        ],
+        "tip": "A seal press walked out of our stores last week. Expect one of its seals on papers headed for {place}.",
+        "quiet": "Every press is back in its drawer. The seals should be clean today."
+      },
+      {
+        "id": "photos",
+        "name": "Teodor Vance",
+        "post": "Portrait Bureau, Hall B",
+        "lies": [
+          "SwappedPhoto"
+        ],
+        "tip": "Someone bought a face that isn't theirs. Look twice at whoever claims {place}.",
+        "quiet": "Nobody has been trading faces this week. Not that I've seen."
+      },
+      {
+        "id": "records",
+        "name": "Mira Castellane",
+        "post": "Citizen Accounts, records annex",
+        "lies": [
+          "DoctoredIdentity",
+          "PoorPosingAsRich",
+          "DebtorPosingAsTourist"
+        ],
+        "tip": "A doctored file is moving today. Hold the papers for {place} against the Citizen Account.",
+        "quiet": "The account books balance today. For once."
+      },
+      {
+        "id": "labour",
+        "name": "Joss Ferrante",
+        "post": "Labour Exchange, Debt Relief desk",
+        "lies": [
+          "ForgedContract"
+        ],
+        "tip": "A contract got sweetened on its way to your stamp. Read the wage on the one bound for {place}.",
+        "quiet": "Every contract I signed today is the contract I signed."
+      },
+      {
+        "id": "waivers",
+        "name": "Delphine Achterberg",
+        "post": "Waiver Office, counter 4",
+        "lies": [
+          "FakeWaiver",
+          "ForgedProof"
+        ],
+        "tip": "There's a number out there nobody registered. It's on the papers for {place}.",
+        "quiet": "No ghost numbers on my desk today."
+      },
+      {
+        "id": "returns",
+        "name": "Rahim Desai",
+        "post": "Displacement Registry, intake",
+        "lies": [
+          "FalseOrigin",
+          "FakeDisplaced"
+        ],
+        "tip": "Someone is going 'home' to {place} who was never from there.",
+        "quiet": "Every return I processed today checks out."
+      },
+      {
+        "id": "customs",
+        "name": "Nell Okonkwo-Price",
+        "post": "Customs Intelligence, the basement",
+        "lies": [
+          "Smuggling"
+        ],
+        "tip": "Somebody is carrying 2150 out to {place}. Ask them what they'll pay with.",
+        "quiet": "Nothing is leaving that shouldn't. Today."
+      },
+      {
+        "id": "machines",
+        "name": "Ivo Marchetti",
+        "post": "Bureau Engineering, chip room",
+        "lies": [
+          "ClonedChip",
+          "WashedPaper"
+        ],
+        "tip": "A doctored blank is on its way to {place}. Put it under the light and through the reader.",
+        "quiet": "The chip room is quiet. No clones on the wire today."
+      }
+    ]
   },
   "eras": [
     {
@@ -27401,6 +27488,12 @@
         "text": "{0} {1}: no route today",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "rolodex.card",
+        "text": "{0}, {1}:\n“{2}”",
+        "gloss": "None",
+        "tier": "Full"
       },
       {
         "key": "portals.date",

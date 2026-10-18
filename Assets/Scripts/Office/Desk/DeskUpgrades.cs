@@ -77,6 +77,8 @@ public sealed class DeskUpgrades : MonoBehaviour
     {
         if (ringPanel != null)
             ringPanel.Bind(Say);
+        if (rolodex != null)
+            rolodex.Bind(Say);
     }
 
     /// <summary>An object reads <paramref name="text"/> out over <paramref name="at"/> in the overlay's tooltip.</summary>
@@ -99,12 +101,14 @@ public sealed class DeskUpgrades : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts a day (GameManager, with the day's world, its library and its
-    /// portals): each object while its upgrade is owned; the morning's
-    /// deliveries (Orders.DeliveredOn) in the crate, their objects waiting
-    /// for it to open.
+    /// Starts a day (GameManager, with the day's world, its library, its
+    /// portals, its travellers and its seed): each object while its upgrade
+    /// is owned; the morning's deliveries (Orders.DeliveredOn) in the crate,
+    /// their objects waiting for it to open; the Rolodex's cards, what each
+    /// contact hears of <paramref name="travellers"/> (ContactCards.ForDay on
+    /// the day's contacts stream, Seeds.ForContacts of <paramref name="daySeed"/>).
     /// </summary>
-    public void BeginDay(WorldState world, ContentLibrarySO library, PortalDay portals)
+    public void BeginDay(WorldState world, ContentLibrarySO library, PortalDay portals, IReadOnlyList<CaseInstance> travellers, int daySeed)
     {
         if (world == null || library == null)
             return;
@@ -117,7 +121,14 @@ public sealed class DeskUpgrades : MonoBehaviour
         if (protocolRing != null)
             Show(protocolRing, owns(ProtocolsId), today.Contains(ProtocolsId));
         if (rolodex != null)
+        {
             Show(rolodex, owns(ContactsId), today.Contains(ContactsId));
+            var leads = new List<ContactLead>();
+            foreach (CaseInstance c in travellers ?? new CaseInstance[0])
+                if (c != null)
+                    leads.Add(new ContactLead(c.lie, c.originLabel));
+            rolodex.SetDay(ContactCards.ForDay(library.Agency.contacts, leads, new SeededRandom(Seeds.ForContacts(daySeed))));
+        }
 
         TranslationSettings translation = library.Translation;
         List<TranslatorPack> packs = translation.rules != null ? translation.rules.packs : null;
