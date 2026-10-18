@@ -174,6 +174,14 @@ public static class ArtSlots
         return dot > slash ? rest.Substring(0, dot) : rest;
     }
 
+    /// <summary>
+    /// Whether a slot is one of the pet's pictures or frames (Home/pet_&lt;kind&gt;_..., <see cref="PetSprite"/>,
+    /// <see cref="PetFrame"/>; not the corner's backdrop): imported uncompressed and bilinear, without mipmaps
+    /// (Saleh 2026-10-18: "pet resolution pictures are bad"; a block-compressed fur mottles, and the 1024 px pictures
+    /// drawn at about 330 to 660 px stay sharpest sampled straight).
+    /// </summary>
+    public static bool IsPetPicture(string slot) => slot != null && slot.StartsWith("Home/pet_", StringComparison.Ordinal) && slot != PetCorner && slot != PetLoops;
+
     /// <summary>Whether a slot's art is drawn on the desk's 3D papers (a paper face, the photo frame, an ink mark), so it is imported with mipmaps; UI art is not.</summary>
     public static bool OnDeskPaper(string slot) => slot != null && slot.StartsWith("Forms/", StringComparison.Ordinal);
 

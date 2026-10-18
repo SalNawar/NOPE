@@ -11,7 +11,8 @@ using UnityEngine;
 /// frame, the ink marks) with mipmaps, UI art without, never sliced (the
 /// sliced faces are the UI kit's since run 7: UiKitImporter), always a 2D
 /// texture (a delivered file whose .meta holds only its fixed GUID, like the
-/// pet's coats, otherwise imports as a cube map), so a delivered file is
+/// pet's coats, otherwise imports as a cube map), the pet's pictures and frames
+/// uncompressed and bilinear (ArtSlots.IsPetPicture), so a delivered file is
 /// ready without touching its import settings.
 /// </summary>
 public sealed class ArtSlotImporter : AssetPostprocessor
@@ -34,6 +35,13 @@ public sealed class ArtSlotImporter : AssetPostprocessor
         // their large dark fields in play, so they take the high-quality compression (BC7 on PC).
         if (slot.StartsWith(ArtSlots.HallSlotsFolder, System.StringComparison.Ordinal))
             importer.textureCompression = TextureImporterCompression.CompressedHQ;
+        // The pet's pictures and frames (tools/art/pets, 1024 px): uncompressed, bilinear, no mipmaps, whatever a
+        // fresh .meta would default to (a block-compressed fur mottles; ArtSlots.IsPetPicture).
+        if (ArtSlots.IsPetPicture(slot))
+        {
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.filterMode = FilterMode.Bilinear;
+        }
 
         importer.spriteBorder = Vector4.zero;
     }

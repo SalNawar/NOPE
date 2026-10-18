@@ -1,26 +1,33 @@
-"""Pet coats (the Home pet spec PS11): keys the Canva pet art's magenta background and paints the white coat into five
-coats per animal, then installs them as the game's art slots (their animation frames: make_pet_frames.py).
+"""Pet coats (the Home pet spec PS11): keys the Canva pet art's magenta background and makes five coats per animal,
+then installs them as the game's art slots (their animation frames: make_pet_frames.py).
 
-The base art (src/pet_<kind>_<mood>.png, made in Canva for run 7) is a white-coated dog and cat in four moods each
-(idle, happy, sad, sick), drawn in the same pose so the game can swap them in place. Every coat is painted over the same
-pixels, so all coats and moods line up, and the line art, the eyes, the nose and the blanket stay as drawn.
+The base art (src/pet_<kind>_<mood>.png, made in Canva for run 7, exported at its native 1264 px) is a white-coated dog
+and cat in four moods each (idle, happy, sad, sick), drawn in the same pose so the game can swap them in place.
 
-v3 (Saleh 2026-10-17: "dog and cat coats are weird"): a coat is no longer a flat two-colour tint. The white fur's own
-cel shading (its luminance: the lit fur, its shadow, the hatching's deep tone and the sheen) is mapped through a
-four-tone ramp per coat (deep, shadow, base, highlight; shadows lean violet as the game's cel style does), and the
-markings come from the rigs' marks (tools/art/pets/pet_rigs.json): pale fur (a tan dog's cream muzzle,
-chest and paws, a charcoal dog's white blaze, a ginger cat's cream chin and chest) with a fur-ragged edge, a dog's
-inner ear, and tabby stripes for the ginger and cream cats (bands across the flank, the legs, the tail and the brow,
-their wobble from a seeded noise). A black cat's highlights lean blue (its sheen).
+Dogs: every coat is painted over the white picture's own pixels, so all coats and moods line up, and the line art, the
+eyes, the nose and the blanket stay as drawn. The white fur's own cel shading (its luminance: the lit fur, its shadow,
+the hatching's deep tone and the sheen) is mapped through a four-tone ramp per coat (deep, shadow, base, highlight;
+shadows lean violet as the game's cel style does), and the markings come from the rigs' marks
+(tools/art/pets/pet_rigs.json): pale fur (a tan dog's cream muzzle, chest and paws, a charcoal dog's white blaze) with a
+fur-ragged edge, and a dog's inner ear.
+
+Cats (Saleh 2026-10-18 on demo 1018a: "cat coat looks weird"): each coat but the white is its own Canva drawing, made
+from the white picture of its mood with the pose kept (src/coats/pet_cat_<coat>_<mood>.png: the ginger and the cream
+tabbies' stripes follow the body's form, the slate and the black are solid with their own cel shading), so the fur
+reads as drawn, not recoloured. The drawings line up with the white pictures (silhouettes within about a pixel), so
+every coat's animation frames are still laid over its picture (make_pet_frames.py). The white cat is the base picture.
+
+Crispness (Saleh 2026-10-18: "pet resolution pictures are bad"): the work is done at the sources' 1264 px and the
+result is resampled once to 1024 px (Lanczos on premultiplied colour, so no dark or pink fringe), the size the game
+imports (ArtSlotImporter).
 
 Output: Assets/Art/UI/Resources/Home/pet_<kind>_<coat>_<mood>.png (1024x1024, transparent; ArtSlots.PetSprite), each
-with a .meta whose GUID is fixed (derived from the file's name), so a regenerated
-file keeps its GUID. Unity fills in the importer's settings on import (ArtSlotImporter). The coats' ids must match
-world_source.json home.pet.kinds[].coats.
+with a .meta whose GUID is fixed (derived from the file's name), so a regenerated file keeps its GUID. Unity fills in the
+importer's settings on import (ArtSlotImporter). The coats' ids must match world_source.json home.pet.kinds[].coats.
 
 Needs numpy, Pillow and scipy.
 
-Usage: python tools/art/pets/make_pets.py [--sheet <contact sheet .png>] [--old <folder of the previous coats>]
+Usage: python tools/art/pets/make_pets.py [--only cat_ginger] [--sheet <contact sheet .png> [--old <folder of the previous coats>]]
 """
 import hashlib
 import json
@@ -34,18 +41,21 @@ from scipy import ndimage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "src")
+DRAWN = os.path.join(SRC, "coats")
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 OUT = os.path.join(REPO, "Assets", "Art", "UI", "Resources", "Home")
 RIGS = os.path.join(HERE, "pet_rigs.json")
 MOODS = ["idle", "happy", "sad", "sick"]
-SIZE = 1024
+SIZE = 1264  # the Canva sources' native size: everything is worked at it
+OUT_SIZE = 1024  # the installed pictures' size
+SCALE = SIZE / 1024  # the pixel sizes below were tuned at 1024 px
 LUMA = np.array([0.299, 0.587, 0.114], dtype=np.float32)
-MAX_HIGHLIGHT_PIXELS = 500  # at 1024x1024: eye highlights are under 300 px (a far leg's fur is ~2,600)
+MAX_HIGHLIGHT_PIXELS = int(500 * SCALE * SCALE)  # eye highlights are under 300 px at 1024 (a far leg's fur is ~2,600)
 HIGHLIGHT_RING_LUM = 0.36  # an eye highlight's ring (iris, pupil) is darker than this; a fur speck's is lighter
-STOPS = {"dog": [0.58, 0.78, 0.94, 0.985], "cat": [0.55, 0.73, 0.96, 0.995]}  # the white fur's tones: hatching, cel shadow, lit fur, sheen
+STOPS = {"dog": [0.58, 0.78, 0.94, 0.985]}  # the white fur's tones: hatching, cel shadow, lit fur, sheen
 
-# A coat: ramps of four colours (deep, shadow, base, highlight) at its kind's STOPS for the fur, the pale marks and the stripes
-# (with the stripes' strength), and the inner ear's colour. None: the art's own white, untouched (a white cat).
+# A dog coat: ramps of four colours (deep, shadow, base, highlight) at STOPS for the fur and the pale marks, and the
+# inner ear's colour. A cat coat: "drawn" (its own Canva drawing per mood, src/coats) or None (the white picture).
 COATS = {
     "dog": {
         "cream": dict(fur=[(150, 120, 112), (214, 186, 162), (246, 230, 198), (255, 248, 228)],
@@ -59,42 +69,70 @@ COATS = {
         "grey": dict(fur=[(70, 70, 92), (110, 114, 138), (158, 164, 178), (194, 200, 212)],
                      pale=[(140, 142, 160), (192, 194, 208), (228, 230, 234), (246, 248, 250)], inner=(194, 148, 150)),
     },
-    "cat": {
-        "white": None,
-        "ginger": dict(fur=[(118, 50, 46), (180, 86, 60), (232, 140, 66), (250, 180, 106)],
-                       pale=[(176, 136, 126), (226, 188, 164), (250, 228, 194), (255, 244, 224)],
-                       stripes=[(96, 38, 36), (148, 62, 42), (194, 94, 44), (214, 124, 66)], strength=0.8),
-        "slate": dict(fur=[(52, 54, 78), (88, 94, 120), (128, 138, 158), (166, 176, 196)],
-                      pale=[(96, 102, 126), (140, 148, 170), (180, 188, 204), (208, 214, 226)]),
-        "black": dict(fur=[(12, 10, 18), (30, 28, 42), (46, 44, 58), (80, 90, 122)]),
-        "cream": dict(fur=[(140, 104, 98), (196, 158, 136), (238, 210, 168), (252, 234, 204)],
-                      pale=[(180, 160, 158), (228, 212, 202), (252, 242, 226), (255, 252, 242)],
-                      stripes=[(150, 104, 84), (190, 142, 108), (218, 176, 132), (234, 200, 160)], strength=0.45),
-    },
+    "cat": {"white": None, "ginger": "drawn", "slate": "drawn", "black": "drawn", "cream": "drawn"},
 }
 
 
+def load(path: str) -> np.ndarray:
+    """A source picture as float RGB at SIZE (every Canva source is exported at it)."""
+    img = Image.open(path).convert("RGB")
+    if img.size != (SIZE, SIZE):
+        raise SystemExit(f"{path}: {img.size[0]}x{img.size[1]}, expected the Canva export's {SIZE}x{SIZE}")
+    return np.asarray(img).astype(np.float32)
+
+
+def magenta(rgb: np.ndarray) -> np.ndarray:
+    """How magenta each pixel is: red and blue over green (about 400 to 500 on the key, under 130 on any drawn colour)."""
+    return (rgb[..., 0] - rgb[..., 1]) + (rgb[..., 2] - rgb[..., 1])
+
+
+def background_level(rgb: np.ndarray) -> np.ndarray:
+    """The magenta background's own level under every pixel. A generated drawing's background is no flat (255, 0, 255):
+    it drifts from one drawing to the next (about 270 to 450) and shades across a drawing, so it is read from the
+    drawing's clearly-background pixels (very magenta for their brightness) and spread smoothly under the figure."""
+    m = magenta(rgb)
+    clear = (m > 200) & (m > 1.2 * rgb.max(-1))
+    weight = ndimage.gaussian_filter(clear.astype(np.float32), 40)
+    level = ndimage.gaussian_filter(np.where(clear, m, 0).astype(np.float32), 40) / np.maximum(weight, 1e-4)
+    return np.where(weight > 1e-3, level, np.median(m[clear]) if clear.any() else 440)
+
+
 def key(rgb: np.ndarray) -> np.ndarray:
-    """Alpha from the distance to the flat magenta background, pulled in by a pixel so no pink fringe survives."""
-    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
-    magenta = (r - g) + (b - g)  # high for magenta
-    alpha = np.clip((380 - magenta) / 140, 0, 1)
+    """Alpha from how close each pixel is to the background's own magenta (opaque at 60% of its level and under,
+    clear from 10 under it), pulled in by a pixel so no pink fringe survives."""
+    level = background_level(rgb)
+    alpha = np.clip((level - 10 - magenta(rgb)) / (0.4 * level - 10), 0, 1)
     eroded = Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(3))
-    return np.asarray(eroded).astype(np.float32) / 255
+    alpha = np.asarray(eroded).astype(np.float32) / 255
+    # Faint specks off the figure (the generator's blotchy background and soft shadows) are islands that never
+    # become half opaque: clear them. The figure and its whiskers are opaque somewhere.
+    lab, n = ndimage.label(alpha > 0)
+    if n:
+        peak = ndimage.maximum(alpha, lab, range(1, n + 1))
+        alpha = np.where(np.isin(lab, 1 + np.flatnonzero(peak < 0.5)), 0, alpha)
+    return alpha
 
 
 def despill(rgb: np.ndarray, alpha: np.ndarray) -> np.ndarray:
+    """Takes the background's magenta out of the figure's rim (within 3 px of the clear background): red and blue
+    down to green where both are over it. The figure's inside keeps its colours (its pinks and lavenders)."""
     out = rgb.copy()
-    edge = alpha > 0
+    rim = (alpha > 0) & ndimage.binary_dilation(alpha < 0.5, iterations=3)
     spill = np.minimum(out[..., 0], out[..., 2]) - out[..., 1]
-    fix = edge & (spill > 0)
+    fix = rim & (spill > 0)
     for c in (0, 2):
         out[..., c] = np.where(fix, out[..., c] - spill * 1.0, out[..., c])
     return np.clip(out, 0, 255)
 
 
+def keyed(rgb: np.ndarray):
+    """A source picture keyed off its magenta: (despilled RGB, alpha)."""
+    alpha = key(rgb)
+    return despill(rgb, alpha), alpha
+
+
 def coat_mask(rgb: np.ndarray):
-    """The coat: pale, unsaturated pixels (the white fur and its cool shading), soft-edged; and the luminance."""
+    """The white coat: pale, unsaturated pixels (the white fur and its cool shading), soft-edged; and the luminance."""
     f = rgb / 255.0
     mx, mn = f.max(axis=2), f.min(axis=2)
     lum = f @ LUMA
@@ -123,6 +161,12 @@ def fur_only(mask: np.ndarray, lum: np.ndarray) -> np.ndarray:
     return mask * keep
 
 
+def fur(rgb: np.ndarray):
+    """The white fur's coverage (eye highlights left out) and the luminance."""
+    mask, lum = coat_mask(rgb)
+    return fur_only(mask, lum), lum
+
+
 def ramp(lum: np.ndarray, colours, stops) -> np.ndarray:
     """The four-tone ramp: each luminance between the stops takes the blend of its two neighbours' colours."""
     c = np.array(colours, dtype=np.float32)
@@ -130,9 +174,9 @@ def ramp(lum: np.ndarray, colours, stops) -> np.ndarray:
 
 
 def noise(seed: int, sigma: float) -> np.ndarray:
-    """A smooth seeded noise field over the picture, about -1..1."""
+    """A smooth seeded noise field over the picture, about -1..1 (sigma in 1024 px units)."""
     rng = np.random.default_rng(seed)
-    n = ndimage.gaussian_filter(rng.standard_normal((SIZE, SIZE)).astype(np.float32), sigma)
+    n = ndimage.gaussian_filter(rng.standard_normal((SIZE, SIZE)).astype(np.float32), sigma * SCALE)
     return n / (n.std() + 1e-6) / 2.5
 
 
@@ -168,33 +212,11 @@ def marks_mask(rig, kind: str, seed: int) -> np.ndarray:
     return out
 
 
-def stripes_mask(rig, seed: int) -> np.ndarray:
-    """Tabby stripes: bands repeating along each zone's axis (its period), wobbling with a seeded noise, tapering into
-    points towards the zone's edge as a tabby's do."""
-    out = np.zeros((SIZE, SIZE), np.float32)
-    y, x = GRID
-    wobble = noise(seed + 2, 18.0)
-    for i, m in enumerate(z for z in rig["marks"] if z["type"] == "stripes"):
-        a = math.radians(m.get("angle", 0))
-        u = (x - m["center"][0]) * math.cos(a) + (y - m["center"][1]) * math.sin(a)
-        phase = 2 * math.pi * u / m["period"] + wobble * 2.2 + i * 1.7
-        band = np.cos(phase)
-        d = ellipse_distance(m)
-        width = 0.62 + 0.3 * d  # the band narrows (its threshold rises) towards the edge
-        out = np.maximum(out, smoothstep(width, width + 0.08, band) * (1 - smoothstep(0.7, 1.0, d)))
-    return out
-
-
-def paint(rgb: np.ndarray, rig, coat, seed: int, stops):
-    """The coat painted over the white fur; returns the picture and the fur mask."""
-    mask, lum = coat_mask(rgb)
-    mask = fur_only(mask, lum)
-    if coat is None:
-        return rgb, mask
+def paint(rgb: np.ndarray, rig, coat, seed: int) -> np.ndarray:
+    """A dog coat painted over the white fur."""
+    stops = STOPS["dog"]
+    mask, lum = fur(rgb)
     out = ramp(lum, coat["fur"], stops)
-    if "stripes" in coat:
-        s = stripes_mask(rig, seed) * coat["strength"]
-        out = out * (1 - s[..., None]) + ramp(lum, coat["stripes"], stops) * s[..., None]
     if "pale" in coat:
         p = marks_mask(rig, "pale", seed + 3)
         out = out * (1 - p[..., None]) + ramp(lum, coat["pale"], stops) * p[..., None]
@@ -212,15 +234,49 @@ def paint(rgb: np.ndarray, rig, coat, seed: int, stops):
         sat = (f.max(axis=2) - f.min(axis=2)) / (f.max(axis=2) + 1e-6)
         line = np.clip((0.70 - lum) / 0.25, 0, 1) * np.clip((0.35 - sat) / 0.15, 0, 1) * (1 - mask)
         out = out * (1 - line[..., None] * (1 - k))
-    return out, mask
+    return out
 
 
 def line_darkening(coat) -> float:
-    """How much a coat darkens the line art (1: not at all): a dark coat's shadow would swallow the ink."""
-    if coat is None:
-        return 1.0
+    """How much a dog coat darkens the line art (1: not at all): a dark coat's shadow would swallow the ink."""
     shadow_lum = float(np.array(coat["fur"][1], np.float32) @ LUMA) / 255
     return float(np.clip(shadow_lum / 0.45, 0.4, 1.0))
+
+
+def seed(kind: str, mood: str) -> int:
+    """The same ragged edges for every coat of a mood."""
+    return 1000 * (kind == "cat") + 10 * MOODS.index(mood)
+
+
+def white_path(kind: str, mood: str) -> str:
+    return os.path.join(SRC, f"pet_{kind}_{mood}.png")
+
+
+def drawn_path(coat: str, mood: str, frame: str = None) -> str:
+    """A cat coat's Canva drawing: its picture for a mood, or (with a frame) its drawing of that frame."""
+    if frame:
+        return os.path.join(DRAWN, "frames", f"pet_cat_{coat}_{mood}_{frame}.png")
+    return os.path.join(DRAWN, f"pet_cat_{coat}_{mood}.png")
+
+
+def is_drawn(kind: str, coat: str) -> bool:
+    """True for a coat made of its own drawings (the cats' but the white)."""
+    return COATS[kind][coat] == "drawn"
+
+
+def picture(kind: str, coat: str, mood: str, rigs):
+    """A coat's picture for a mood at SIZE: (RGB, alpha)."""
+    if kind == "cat":
+        return keyed(load(drawn_path(coat, mood) if is_drawn(kind, coat) else white_path(kind, mood)))
+    rgb, alpha = keyed(load(white_path(kind, mood)))
+    return paint(rgb, rigs[(kind, mood)], COATS[kind][coat], seed(kind, mood)), alpha
+
+
+def finish(rgb: np.ndarray, alpha: np.ndarray) -> Image.Image:
+    """The picture as installed: resampled once from SIZE to OUT_SIZE with Lanczos on premultiplied colour."""
+    rgba = np.dstack([np.clip(rgb, 0, 255), np.clip(alpha, 0, 1) * 255]).astype(np.uint8)
+    img = Image.fromarray(rgba, "RGBA").convert("RGBa").resize((OUT_SIZE, OUT_SIZE), Image.LANCZOS)
+    return img.convert("RGBA")
 
 
 def fixed_guid(name: str) -> str:
@@ -243,6 +299,11 @@ def save(img: Image.Image, name: str) -> None:
     write_meta(path)
 
 
+def load_rigs():
+    """The dogs' rigs by (kind, mood)."""
+    return {(r["kind"].lower(), r["mood"].lower()): r for r in json.load(open(RIGS, encoding="utf-8"))["rigs"]}
+
+
 def contact_sheet(path: str, rows, old_folder) -> None:
     """Old against new: one row per coat, its four moods before (when --old is given) and after, on the game's ink."""
     cell = 200
@@ -261,26 +322,20 @@ def contact_sheet(path: str, rows, old_folder) -> None:
 
 
 def main():
-    rigs = {(r["kind"].lower(), r["mood"].lower()): r for r in json.load(open(RIGS, encoding="utf-8"))["rigs"]}
+    rigs = load_rigs()
     only = sys.argv[sys.argv.index("--only") + 1] if "--only" in sys.argv else None
     rows = []
     for kind, coats in COATS.items():
-        for coat, colours in coats.items():
+        for coat in coats:
             if only and only != f"{kind}_{coat}":
                 continue
             imgs = []
-            for mi, mood in enumerate(MOODS):
-                rig = rigs[(kind, mood)]
-                src = np.asarray(Image.open(os.path.join(SRC, f"pet_{kind}_{mood}.png")).convert("RGB")).astype(np.float32)
-                alpha = key(src)
-                rgb = despill(src, alpha)
-                seed = 1000 * (kind == "cat") + 10 * mi  # the same stripes and ragged edges for every coat of a mood
-                painted, _ = paint(rgb, rig, colours, seed, STOPS[kind])
-                img = Image.fromarray(np.dstack([np.clip(painted, 0, 255), alpha * 255]).astype(np.uint8), "RGBA")
+            for mood in MOODS:
+                img = finish(*picture(kind, coat, mood, rigs))
                 save(img, f"pet_{kind}_{coat}_{mood}.png")
                 imgs.append((mood, img))
             rows.append((kind, coat, imgs))
-            print("painted", kind, coat, flush=True)
+            print("made", kind, coat, flush=True)
     if "--sheet" in sys.argv:
         old = sys.argv[sys.argv.index("--old") + 1] if "--old" in sys.argv else None
         contact_sheet(sys.argv[sys.argv.index("--sheet") + 1], rows, old)

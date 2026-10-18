@@ -162,6 +162,19 @@ public class ArtSlotsTests
     }
 
     [Test]
+    public void IsPetPicture_ThePetsPicturesAndFrames_NotTheCorner()
+    {
+        Assert.IsTrue(ArtSlots.IsPetPicture(ArtSlots.PetSprite(PetKind.Cat, "ginger", PetLook.Idle)[0]));
+        Assert.IsTrue(ArtSlots.IsPetPicture(ArtSlots.PetSprite(PetKind.Dog, "", PetLook.Sick)[0]), "the kind's own picture");
+        Assert.IsTrue(ArtSlots.IsPetPicture(ArtSlots.PetFrame(PetKind.Cat, "black", PetLook.Happy, "tail_b")));
+        Assert.IsTrue(ArtSlots.IsPetPicture(ArtSlots.SlotOf(ArtSlots.AssetRoot + "Home/pet_cat_cream_sad_tail_a.png")));
+        Assert.IsFalse(ArtSlots.IsPetPicture(ArtSlots.PetCorner), "the corner's backdrop");
+        Assert.IsFalse(ArtSlots.IsPetPicture(ArtSlots.PetLoops));
+        Assert.IsFalse(ArtSlots.IsPetPicture(ArtSlots.UpgradeIcon("pet_bed")));
+        Assert.IsFalse(ArtSlots.IsPetPicture(null));
+    }
+
+    [Test]
     public void OnDeskPaper_TheFormsFolder()
     {
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PhotoFrame));
