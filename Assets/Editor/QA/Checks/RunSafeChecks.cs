@@ -1,8 +1,3 @@
-// RUN-SAFE's gate checks, staged here because fix/a-run-safe was cut from
-// fix/p0-cuts, which does not carry QA-RIG's GateCheck registry yet.
-// INTEGRATION: once QA-RIG (#2) has merged, copy this file to
-// Assets/Editor/QA/Checks/RunSafeChecks.cs (owner RUN-SAFE), make its .meta
-// (make_meta.py) and compile; nothing else references it.
 using System.IO;
 using System.Linq;
 using System.Reflection;

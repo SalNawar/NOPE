@@ -3,7 +3,7 @@
   "owner": "RUN-SAFE",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "BUG-68a: with the cheat panel open, clicks and keys over the desk and the PC reach nothing behind it (0 game actions); closed, they work again. INTEGRATION copies this to tools/qa/scenarios/ once QA-RIG has merged." },
+    { "op": "note", "text": "BUG-68a: with the cheat panel open, clicks and keys over the desk and the PC reach nothing behind it (0 game actions); closed, they work again." },
     { "op": "title" },
     { "op": "newRun", "text": "Biscuit" },
     { "op": "waitOffice", "n": 1 },
