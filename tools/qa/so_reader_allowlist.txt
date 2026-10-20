@@ -13,3 +13,4 @@ MotionKnobs.stampSquash         # BUG-73b, STAMP
 MotionKnobs.inkBloomSeconds     # BUG-73b, STAMP
 MotionKnobs.stampFeel           # BUG-73b, STAMP
 MotionKnobs.drawerStopHit       # BUG-73b, STAMP: a drawer knob with no reader
+DeskConfigSO.crtClockSize      # BUG-20b, DOC-HANDLE: the CRT clock plate it sized is retired (UI-PC, BUG-20a); FIX_PLAN v1 assigns its deletion to DOC-HANDLE

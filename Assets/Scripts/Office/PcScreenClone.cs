@@ -5,8 +5,9 @@ using UnityEngine;
 /// desktop's layer into a render texture, and a planar-projection material
 /// (TimeDesk/PlanarScreen) puts it on the PC's glass, fitted at the desktop's
 /// 4:3 inside the glass (the glass's own UVs are not used, so any CRT works).
-/// While the screen is off, the glass shows the art's own material again (and
-/// the clock plate on its corner, CrtClock, hides; it shows with the desktop). The
+/// While the screen is off, the glass shows the art's own material again. The
+/// desktop's own taskbar clock is the PC's clock (BUG-20a: the CRT clock
+/// plate is retired, and never shown). The
 /// office binder hands it the glass renderer (the contract's PCScreen anchor)
 /// and the office camera: the clone camera draws right before it, whatever
 /// depth the art gave it, so the glass shows this frame's desktop.
@@ -22,7 +23,7 @@ public sealed class PcScreenClone : MonoBehaviour
     /// <summary>The desk tuning (the texture's size, the fill and the brightness).</summary>
     [SerializeField] private DeskConfigSO config;
 
-    /// <summary>The clock plate laid on the glass's corner (optional): shown while the glass shows the desktop.</summary>
+    /// <summary>Retired (BUG-20a: the CRT clock plate, "a massive box", is never shown). Kept only while DESK-PLAN's builder still wires it; INTEGRATION drops both.</summary>
     [SerializeField] private CrtClock clock;
 
     /// <summary>The desktop's aspect (the canvas is 1440 x 1080).</summary>
@@ -89,8 +90,6 @@ public sealed class PcScreenClone : MonoBehaviour
         _instance.SetVector(AxisVId, frame.AxisV);
         _instance.SetVector(RectId, new Vector4(Vector3.Dot(frame.LocalCentre, frame.AxisU), Vector3.Dot(frame.LocalCentre, frame.AxisV),
                                                 frame.Size.x * fitU * fill, frame.Size.y * fitV * fill));
-        if (clock != null)
-            clock.Place(frame, fitU * fill, fitV * fill);
         _instance.SetFloat(BrightnessId, config != null ? config.cloneBrightness : 1f);
 
         _glass = glass;
@@ -114,8 +113,6 @@ public sealed class PcScreenClone : MonoBehaviour
             cloneCamera.enabled = _on && _glass != null;
         if (_glass != null)
             _glass.sharedMaterials = _on ? _cloneMaterials : _artMaterials;
-        if (clock != null)
-            clock.SetShown(_on && _glass != null);
     }
 
     /// <summary>Gives the art its glass back and frees the texture and the material.</summary>

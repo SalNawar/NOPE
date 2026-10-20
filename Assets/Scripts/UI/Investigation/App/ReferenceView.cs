@@ -105,14 +105,25 @@ public sealed class ReferenceView : AppView, IAppItems
         _agency = agency;
         _day = day;
         Redraw();
+        if (!OnShelf(_selected))
+            Select(FirstOnShelf()); // the tab opens on a book the clerk has been given (BUG-47b), never on one not introduced yet
         RaiseChipsChanged();
+    }
+
+    /// <summary>The first book on today's shelf (OnShelf), or the first book while none is (a day before any book is introduced keeps the first, as built).</summary>
+    private int FirstOnShelf()
+    {
+        for (int i = 0; i < _books.Count; i++)
+            if (OnShelf(i))
+                return i;
+        return _books.Count > 0 ? 0 : -1;
     }
 
     /// <summary>True when book <paramref name="index"/> is on the workbench's shelf today: from the day its category's book is introduced (the desk-first redesign, item 3: Feature.Book; the Seal Register with the seal check, the Costume Guide with the dress rule).</summary>
     public bool OnShelf(int index) =>
         index >= 0 && index < _books.Count && _introductions.Has(_day, Feature.Book(_books[index].category));
 
-    /// <summary>The first time only: a page and a chip per reference book of the library, the eras' order and names, the first book chosen.</summary>
+    /// <summary>The first time only: a page and a chip per reference book of the library, the eras' order and names, the first book on today's shelf chosen.</summary>
     public void BuildBooks(ContentLibrarySO library)
     {
         if (_built || library == null || pageTemplate == null)
@@ -151,7 +162,7 @@ public sealed class ReferenceView : AppView, IAppItems
         if (claimedOnly != null)
             claimedOnly.onValueChanged.AddListener(_ => Redraw());
         Redraw();
-        Select(_pages.Count > 0 ? 0 : -1);
+        Select(_pages.Count > 0 ? FirstOnShelf() : -1);
     }
 
     /// <summary>A new case's claim (null ids for none): its row comes first, and "Claimed place only" turns on (AP8).</summary>

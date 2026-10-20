@@ -137,21 +137,38 @@ public sealed class FindingsView : MonoBehaviour
         }
     }
 
-    /// <summary>One plate: the match or the difference plate on, its headline (bold for a difference) and its short line.</summary>
+    /// <summary>A hint plate's tint over the theme's difference plate (the warn plate's pink turns amber).</summary>
+    private static readonly Color HintPlate = new Color(1f, 0.93f, 0.76f, 1f);
+
+    /// <summary>A hint's headline ink (amber-brown, over the theme's warn ink).</summary>
+    private const string HintInk = "<color=#8A5A12>";
+
+    /// <summary>
+    /// One plate: the match or the difference plate on, its headline (bold
+    /// for a proof) and its short line; a difference that proves nothing is
+    /// a hint (FindingShades, BUG-47b): the difference plate tinted amber, its
+    /// headline not bold, so only proofs look like proofs.
+    /// </summary>
     private static void Draw(Button row, Finding finding)
     {
         bool differ = FindingRules.IsDifference(finding.Kind);
+        bool hint = FindingShades.Of(finding.Kind, finding.Proof) == FindingShade.Hint;
         Transform match = row.transform.Find("Match"), difference = row.transform.Find("Differ");
         if (match != null)
             match.gameObject.SetActive(!differ);
         if (difference != null)
+        {
             difference.gameObject.SetActive(differ);
+            // The theme paints the plate's colour; the hint's amber is a multiplier on top, so a repaint keeps it.
+            if (difference.TryGetComponent(out Image face))
+                face.canvasRenderer.SetColor(hint ? HintPlate : Color.white);
+        }
         Transform plate = differ ? difference : match;
         if (plate == null)
             return;
         Transform title = plate.Find("Title"), detail = plate.Find("Detail");
         if (title != null)
-            title.GetComponent<TMP_Text>().text = differ ? "<b>" + Title(finding) + "</b>" : Title(finding);
+            title.GetComponent<TMP_Text>().text = !differ ? Title(finding) : hint ? HintInk + Title(finding) + "</color>" : "<b>" + Title(finding) + "</b>";
         if (detail != null)
             detail.GetComponent<TMP_Text>().text = Detail(finding);
     }

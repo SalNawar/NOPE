@@ -267,7 +267,8 @@ public static partial class OfficeSceneUIBuilder
     /// SettingsWindowController): Language (Follow history / Always English,
     /// and the lock's line under them, hidden until the Translation Lens's day),
     /// Motion (Full / Reduced, and the Motion intensity slider under them,
-    /// 0-100 %: the kit's sunk track and bone thumb), Desktop icons open with (Double click /
+    /// 0-100 %: the kit's sunk track and bone thumb; Camera sway Off / On;
+    /// Reduce flashing Off / On, FlashSettingRow), Desktop icons open with (Double click /
     /// Single click) and Reset icon positions (its icons wired by
     /// WireIconSettings), Investigation's Text size (a choice per zoom level,
     /// redesign phase 20; the step hints' pair is gone with the hints),
@@ -327,6 +328,19 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<LayoutElement>(swayLabel.gameObject).flexibleWidth = 1f;
         Button swayOff = SettingsChoice(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
         Button swayOn = SettingsChoice(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
+        // Reduce flashing (GAME_FEEL_BIBLE G3, gap 2), in the room the cut Machine close-ups row left: its word, then the Off / On pair.
+        Transform flashRow = SettingsRow(column, "ReduceFlashingRow");
+        TMP_Text flashLabel = Text(flashRow, "ReduceFlashingLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
+                                   ThemeRoleId.WindowBody, "settings.reduceFlashing");
+        Chrome(flashLabel, PcType.Body);
+        flashLabel.raycastTarget = false;
+        GetOrAdd<LayoutElement>(flashLabel.gameObject).flexibleWidth = 1f;
+        FlashSettingRow flash = GetOrAdd<FlashSettingRow>(flashRow.gameObject);
+        var soFlash = new SerializedObject(flash);
+        SetRef(soFlash, "offButton", SettingsChoice(flashRow, "ReduceFlashingOffButton", "settings.cameraSwayOff"));
+        SetRef(soFlash, "onButton", SettingsChoice(flashRow, "ReduceFlashingOnButton", "settings.cameraSwayOn"));
+        SetRef(soFlash, "kit", _kit);
+        soFlash.ApplyModifiedProperties();
 
         SettingsHeading(column, "DesktopLabel", "settings.desktop");
         Transform icons = SettingsRow(column, "IconOpenRow");

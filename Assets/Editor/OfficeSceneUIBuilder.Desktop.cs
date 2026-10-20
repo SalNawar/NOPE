@@ -271,19 +271,23 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The Start menu (DK8), rebuilt each run above the dock: an entry per app
-    /// in the default order, each a persistent call to DesktopApps.OpenApp
-    /// with its id (which closes the menu), labelled as phase 25 labels Mail,
-    /// Citizen Account and Notes (the Mail feed writes its unread count into
-    /// the Mail entry, returned in <paramref name="mailLabel"/>), the other
-    /// apps by their desktop label and Settings by its Start-menu one; then
-    /// Arrange icons, Turn off screen and Quit game, each 40 units tall in a
-    /// vertical layout. Returns the menu.
+    /// The Start menu (DK8; BUG-21a), rebuilt each run above the dock: an entry
+    /// per app in the default order, each with the app's pictogram tile (its
+    /// desktop icon's) before its name and a persistent call to
+    /// DesktopApps.OpenApp with its id (which closes the menu), labelled as
+    /// phase 25 labels Mail, Citizen Account and Notes (the Mail feed writes
+    /// its unread count into the Mail entry, returned in
+    /// <paramref name="mailLabel"/>), the other apps by their desktop label
+    /// and Settings by its Start-menu one; then Arrange icons and Quit game,
+    /// each a row tall in a vertical layout (DesktopShell fits the menu to the
+    /// entries a day shows). "Turn off screen" is retired (BUG-50a: it was a
+    /// way out of the PC; the bezel's power button is the screen's switch), so
+    /// <paramref name="screenOff"/> is null. Returns the menu.
     /// </summary>
     private static Transform BuildStartMenu(Transform root, DesktopApps apps, out TMP_Text mailLabel, out Button arrange, out Button screenOff, out Button quit)
     {
         DesktopConfigSO config = EnsureDesktopConfig();
-        int count = config.iconOrder.Length + 3;
+        int count = config.iconOrder.Length + 2;
         float height = count * StartMenuEntryHeight + (count - 1) * StartMenuSpacing + 2f * VLayoutPadding;
 
         DestroyChildIfPresent(root, "StartMenu");
@@ -294,18 +298,38 @@ public static partial class OfficeSceneUIBuilder
         foreach (string id in config.iconOrder)
         {
             Button entry = MenuEntry(startMenu, "App_" + id, StartMenuLabelKey(id), StartMenuEntryHeight);
+            StartMenuIcon(entry, id);
             WirePersistentString(entry, "m_OnClick", apps, nameof(DesktopApps.OpenApp), id);
             if (id == DesktopAppIds.Mail)
                 mailLabel = entry.transform.Find("Label").GetComponent<TMP_Text>();
         }
         arrange = MenuEntry(startMenu, "ArrangeEntry", "desktop.arrange", StartMenuEntryHeight);
-        screenOff = MenuEntry(startMenu, "ScreenOffEntry", "startmenu.screenOff", StartMenuEntryHeight);
+        screenOff = null;
         quit = MakeButton(startMenu, "QuitEntry", null, Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f), ThemeRoleId.QuitEntry, "startmenu.quit");
         SetLayoutHeight(quit, StartMenuEntryHeight);
         ButtonLabel(quit, PcType.Body, TextAlignmentOptions.MidlineLeft, PcSize.L + 4f);
         startMenu.gameObject.SetActive(false);
         return startMenu;
     }
+
+    /// <summary>A Start menu app entry's icon (BUG-21a: "the Start menu has icons"): the app's pictogram tile from the kit at the row's left, the label moved past it; nothing without the kit or a tile.</summary>
+    private static void StartMenuIcon(Button entry, string id)
+    {
+        if (_kit == null || !AppTiles.TryGetValue(id, out string tile) || _kit.Get(tile, KitState.Rest) == null)
+            return;
+        Transform icon = Panel(entry.transform, "Icon", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(PcSize.L + StartMenuIconSize / 2f, 0f),
+                               new Vector2(StartMenuIconSize, StartMenuIconSize), Color.white);
+        Image image = icon.GetComponent<Image>();
+        image.sprite = _kit.Get(tile, KitState.Rest);
+        image.preserveAspect = true;
+        image.raycastTarget = false;
+        SceneUiKit.Tag(image, ThemeRoleId.DesktopIcon, ThemePart.Kit);
+        TMP_Text label = entry.transform.Find("Label").GetComponent<TMP_Text>();
+        label.margin = new Vector4(PcSize.L + StartMenuIconSize + PcSize.M, label.margin.y, label.margin.z, label.margin.w);
+    }
+
+    /// <summary>A Start menu entry's icon (desktop units): a row's height less its margin.</summary>
+    private const float StartMenuIconSize = 34f;
 
     /// <summary>A menu entry (C8): a MenuEntry-role row of <paramref name="height"/> whose keyed label sits at Body size, left-aligned.</summary>
     private static Button MenuEntry(Transform menu, string name, string labelKey, float height)

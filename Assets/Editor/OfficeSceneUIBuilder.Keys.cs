@@ -112,6 +112,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "notes", notes);
         Wire(so, "orders", orders);
         Wire(so, "card", card);
+        Wire(so, "apps", root.GetComponent<DesktopApps>()); // Esc with nothing left to close brings Settings forward (BUG-50a, R3/R4)
         so.ApplyModifiedProperties();
 
         if (menu != null)

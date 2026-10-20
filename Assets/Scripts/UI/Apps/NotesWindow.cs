@@ -84,11 +84,18 @@ public sealed class NotesWindow : MonoBehaviour
         }
     }
 
-    /// <summary>Opens on today's page.</summary>
+    /// <summary>The run's day when the window last opened on today's page (-1: never).</summary>
+    private int _openedOn = -1;
+
+    /// <summary>Opens on today's page on a new day; a restore the same day keeps the page the clerk was on (BUG-58a, CODE-160).</summary>
     private void OnEnable()
     {
         WorldState world = World;
-        ShowDay(world != null ? world.day : 1);
+        int today = world != null ? world.day : 1;
+        if (today == _openedOn)
+            return;
+        _openedOn = today;
+        ShowDay(today);
     }
 
     /// <summary>Shows a day's page (created when missing).</summary>

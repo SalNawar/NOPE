@@ -41,10 +41,10 @@ public static class OrderBook
                               Price(world, lib, upgrade));
     }
 
-    /// <summary>Orders <paramref name="upgrade"/> when it is an Orders node that can be ordered: the price leaves the wallet now and the order joins the log, arriving at the start of tomorrow's shift. True when placed.</summary>
+    /// <summary>Orders <paramref name="upgrade"/> when it is an Orders node that can be ordered on a day orders are open (Orders.CanOrder; BUG-28d: an order on the last day would be charged and never arrive): the price leaves the wallet now and the order joins the log, arriving at the start of tomorrow's shift. True when placed.</summary>
     public static bool Order(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade)
     {
-        if (world == null || upgrade == null || upgrade.venue != UpgradeVenue.Orders)
+        if (world == null || upgrade == null || upgrade.venue != UpgradeVenue.Orders || !Orders.CanOrder(world.day))
             return false;
 
         int price = Price(world, lib, upgrade);
@@ -72,7 +72,7 @@ public static class OrderBook
         return true;
     }
 
-    /// <summary>Cancels the pending order for <paramref name="item"/> and refunds it (P0-A seam; owner UI-PC, consumed by RUN-SAFE). The P0 stub: OrderBook's own cancel path (Cancel). True when cancelled.</summary>
+    /// <summary>Cancels the pending order for <paramref name="item"/> and refunds it (UI-PC's seam for RUN-SAFE's cheat grant, BUG-28c): OrderBook's own same-day cancel and refund (Cancel), since a pending order is always today's (an order arrives at the start of the next shift). True when cancelled.</summary>
     public static bool CancelPendingFor(WorldState world, UpgradeSO item) => Cancel(world, item);
 
     /// <summary>The upgrades in force today: every owned one without an install slot, and each slot's installed one (Installs.InForce; what ScannerDay reads at the day's start).</summary>

@@ -135,7 +135,9 @@ public static partial class OfficeSceneUIBuilder
     /// always-active host with the PcFrame; its Root (inactive until opened)
     /// holds the full-screen exit catcher (a click outside the frame closes
     /// it and goes on to what it lands on: the traveller, the intercom, the
-    /// desk), the bezel (placeholder art; clicks on it do nothing), the Glass the
+    /// desk), the bezel (placeholder art; a click on it leaves the PC, with a
+    /// "Back to desk" hint: BUG-50a, Saleh's R3/R4 "to leave the PC, press Q
+    /// or click the bezel"), the Glass the
     /// frame camera draws into (4:3; the catcher and the bezel let clicks
     /// through there), the red close X, the power button and LED, and the
     /// brand plate, in the neutral theme's DiegeticDevice ink. Returns the power LED and button through out parameters.
@@ -160,6 +162,9 @@ public static partial class OfficeSceneUIBuilder
         Image bezel = frame.GetComponent<Image>();
         bezel.sprite = EnsureOfficeShape("pc_frame", (int)FrameSize.x / FrameArtDivisor, (int)FrameSize.y / FrameArtDivisor, Center, FramePixel);
         bezel.type = Image.Type.Simple;
+        ClickCatcher leave = frame.gameObject.AddComponent<ClickCatcher>();
+        WirePersistentVoid(leave, "onClick", view, nameof(OfficeViewController.FocusOffice));
+        BuildHoverHint(leave, "taskbar.desk", null, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f));
 
         Transform glass = Panel(frame, "Glass", Vector2.zero, Vector2.zero, Vector2.zero, FrameGlass.size, null);
         var glassRect = (RectTransform)glass;

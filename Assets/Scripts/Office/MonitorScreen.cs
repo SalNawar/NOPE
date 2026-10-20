@@ -60,9 +60,6 @@ public sealed class MonitorScreen : MonoBehaviour
     /// <summary>Turns the screen on or off (the power buttons' persistent call); a held screen stays on.</summary>
     public void TogglePower() => _screen.Toggle();
 
-    /// <summary>Turns the screen off (Start > Turn off screen); a held screen stays on.</summary>
-    public void TurnOff() => _screen.TurnOff();
-
     /// <summary>Turns a dark screen on when the reason's wake rule is on.</summary>
     public void Wake(WakeReason reason) => _screen.Wake(reason);
 
@@ -97,10 +94,11 @@ public sealed class MonitorScreen : MonoBehaviour
         PowerChanged?.Invoke();
     }
 
-    /// <summary>Shows or hides the desktop in the frame and on the office PC, and tints the LED.</summary>
+    /// <summary>Shows or hides the desktop in the frame and on the office PC, tints the LED, and tells the frame whether it may open (PcFrame.CanOpen: F1 never opens a dark frame).</summary>
     private void Apply()
     {
         bool on = _screen.IsOn;
+        PcFrame.ScreenPowered(on);
         if (desktopCanvas != null)
             desktopCanvas.enabled = on;
         if (clone != null)

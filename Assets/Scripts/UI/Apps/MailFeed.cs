@@ -13,7 +13,9 @@ using UnityEngine;
 /// only its link),
 /// a notice for each citation slip once it is acknowledged this shift, the
 /// Orders app's delivery notice for each day something arrived (the order
-/// log, WorldState.orders), and the authored mail. It rebuilds the list (Mailbox.ForDays) when the day
+/// log, WorldState.orders), and the authored mail; the inbox keeps none of
+/// the automatic copies (MailDigest, BUG-50a: the paper is not mailed, and
+/// only today's directive memo stays). It rebuilds the list (Mailbox.ForDays) when the day
 /// changes and when a slip is acknowledged; opening a message marks it read
 /// in WorldState.mailRead, the only saved state. The unread count shows on
 /// the Start menu's Mail entry and in the Mail window's title (retitled
@@ -102,7 +104,7 @@ public sealed class MailFeed : MonoBehaviour
         }
 
         ContentLibrarySO library = RunManager.Instance.Library;
-        _items = Mailbox.ForDays(new MailSources
+        _items = MailDigest.Of(Mailbox.ForDays(new MailSources
         {
             Today = world.day,
             Rules = day => RulesOf(library, day),
@@ -115,7 +117,7 @@ public sealed class MailFeed : MonoBehaviour
             Strandings = world.history != null ? world.history.strandingLog : null,
             StrandingReport = r => StrandingFates.Report(r, library != null ? library.Agency.strandingReport : null,
                                                          library != null ? StrandingFates.Of(library.Agency.strandingFates, r.fate)?.status : null, AccountMaker.Credits)
-        });
+        }), world.day);
         Announce();
     }
 

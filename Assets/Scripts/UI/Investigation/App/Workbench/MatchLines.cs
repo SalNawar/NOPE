@@ -13,9 +13,12 @@ using UnityEngine.UI;
 /// on a document's field labels; wave 5 A3), else at the curve's middle.
 /// While a value is held the
 /// line runs dashed, in the holding colour, from the held box to the
-/// pointer. It follows the boxes every frame (a page scrolled, a pane
-/// resized) and hides while either box is out of its pane's view. Draws
-/// nothing by itself: MatchBoard says what to draw. Never a raycast target.
+/// pointer, only while the desktop takes input (BUG-58a: no line chasing
+/// the office's mouse across the desk CRT's clone). It follows the boxes (a
+/// page scrolled, a pane resized) and hides while either box is out of its
+/// pane's view, redrawing only when what it draws moved (BUG-65j: nothing
+/// is rebuilt or allocated on a frame where nothing changed). Draws nothing
+/// by itself: MatchBoard says what to draw. Never a raycast target.
 /// </summary>
 [RequireComponent(typeof(CanvasRenderer))]
 public sealed class MatchLines : MaskableGraphic
@@ -46,6 +49,9 @@ public sealed class MatchLines : MaskableGraphic
     /// <summary>The held value and the dashed line to the pointer.</summary>
     [SerializeField] private Color holdColour = new Color(0.122f, 0.424f, 0.624f, 1f);
 
+    /// <summary>A hint's colour (BUG-47b: a difference that proves nothing is amber and dashed, never the proof's red).</summary>
+    [SerializeField] private Color hintColour = new Color(0.78f, 0.53f, 0.12f, 1f);
+
     /// <summary>True: a note's line (nothing logged) is dashed, as the PC draws it; false (the desk's line over the office, Saleh 2026-10-06): every result's line is solid, so a dashed line only ever means a value held, following the pointer.</summary>
     [SerializeField] private bool dashNotes = true;
 
@@ -68,8 +74,23 @@ public sealed class MatchLines : MaskableGraphic
     private RectTransform _a;
     private RectTransform _b;
     private FindingLook _look;
+
+    /// <summary>True when the line's difference is only a hint (FindingShades).</summary>
+    private bool _hint;
     private bool _holding;
     private bool _drawn;
+
+    /// <summary>The desktop's raycaster (on only while the desktop takes input): the held value's line follows the pointer only then.</summary>
+    private GraphicRaycaster _input;
+
+    /// <summary>What was last drawn (the boxes' rects, the pointer, their visibility), so a frame where none moved redraws nothing.</summary>
+    private Rect _drawnA, _drawnB;
+    private Vector2 _drawnPointer;
+    private int _drawnShape = -1;
+
+    /// <summary>The label's widest word, measured once per label (and gutter) change.</summary>
+    private float _widest;
+    private bool _widestKnown;
 
     /// <summary>True while a line or a held value is drawn.</summary>
     public bool Showing => _drawn;
@@ -84,25 +105,34 @@ public sealed class MatchLines : MaskableGraphic
         SetVerticesDirty();
     }
 
-    /// <summary>Joins the boxes <paramref name="a"/> and <paramref name="b"/> with a line of <paramref name="look"/> labelled <paramref name="label"/>.</summary>
-    public void ShowLink(RectTransform a, RectTransform b, FindingLook look, string label)
+    /// <summary>Joins the boxes <paramref name="a"/> and <paramref name="b"/> with a line of <paramref name="look"/> labelled <paramref name="label"/>; a <paramref name="hint"/> (a difference that proves nothing) is amber and dashed.</summary>
+    public void ShowLink(RectTransform a, RectTransform b, FindingLook look, string label, bool hint = false)
     {
+        string text = label ?? string.Empty;
+        bool same = _a == a && _b == b && _look == look && _hint == hint && !_holding && (labelText == null || labelText.text == text);
         _a = a;
         _b = b;
         _look = look;
+        _hint = hint;
         _holding = false;
-        if (labelText != null)
-            labelText.text = label ?? string.Empty;
-        Refresh();
+        if (labelText != null && labelText.text != text)
+        {
+            labelText.text = text;
+            _widestKnown = false;
+        }
+        if (!same)
+            Refresh();
     }
 
     /// <summary>Draws the held box <paramref name="held"/> (null: held somewhere off the PC, nothing to draw) and the dashed line from it to the pointer.</summary>
     public void ShowHold(RectTransform held)
     {
+        bool same = _holding && _a == held;
         _a = held;
         _b = null;
         _holding = true;
-        Refresh();
+        if (!same)
+            Refresh();
     }
 
     /// <summary>Draws nothing.</summary>
@@ -120,11 +150,27 @@ public sealed class MatchLines : MaskableGraphic
         raycastTarget = false;
     }
 
-    /// <summary>The boxes move with their pages: redrawn every frame while something shows.</summary>
+    /// <summary>The boxes move with their pages: redrawn on a frame where a box, the pointer (while holding) or their visibility changed.</summary>
     private void LateUpdate()
     {
-        if (_a != null || _drawn)
+        if ((_a != null || _drawn) && Moved())
             Refresh();
+    }
+
+    /// <summary>True when what the line is drawn from changed since it was last drawn (and remembers it).</summary>
+    private bool Moved()
+    {
+        bool va = Visible(_a), vb = !_holding && Visible(_b);
+        Vector2 pointer = default;
+        bool pointed = _holding && va && TryPointer(out pointer);
+        int shape = (_holding ? 1 : 0) | (va ? 2 : 0) | (vb ? 4 : 0) | (pointed ? 8 : 0);
+        Rect ra = va ? Local(_a) : default, rb = vb ? Local(_b) : default;
+        bool moved = shape != _drawnShape || ra != _drawnA || rb != _drawnB || (pointed && pointer != _drawnPointer);
+        _drawnShape = shape;
+        _drawnA = ra;
+        _drawnB = rb;
+        _drawnPointer = pointer;
+        return moved;
     }
 
     /// <summary>Redraws the mesh and places the label.</summary>
@@ -144,7 +190,14 @@ public sealed class MatchLines : MaskableGraphic
         if (plate.TryGetComponent(out ContentSizeFitter fit))
             fit.horizontalFit = gutter ? ContentSizeFitter.FitMode.Unconstrained : ContentSizeFitter.FitMode.PreferredSize;
         if (gutter)
-            plate.sizeDelta = new Vector2(Mathf.Max(gutterLabelWidth, WidestWord() + 14f), plate.sizeDelta.y);
+        {
+            if (!_widestKnown)
+            {
+                _widest = WidestWord();
+                _widestKnown = true;
+            }
+            plate.sizeDelta = new Vector2(Mathf.Max(gutterLabelWidth, _widest + 14f), plate.sizeDelta.y);
+        }
         plate.anchoredPosition = gutter ? GutterPoint(rectTransform.rect, plate.rect.height) : _points[Samples / 2];
     }
 
@@ -204,7 +257,7 @@ public sealed class MatchLines : MaskableGraphic
         Color colour = Colour(_look);
         Vector2 p = Anchor(ra, rb.center.x), q = Anchor(rb, ra.center.x);
         Curve(p, q);
-        Stroke(vh, colour, dashNotes && _look == FindingLook.Info);
+        Stroke(vh, colour, (dashNotes && _look == FindingLook.Info) || IsHint);
         Box(vh, ra, colour);
         Box(vh, rb, colour);
         Dot(vh, p, colour);
@@ -213,7 +266,10 @@ public sealed class MatchLines : MaskableGraphic
     }
 
     /// <summary>The colour of a result.</summary>
-    private Color Colour(FindingLook look) => look == FindingLook.Match ? matchColour : look == FindingLook.Differ ? differColour : infoColour;
+    private Color Colour(FindingLook look) => look == FindingLook.Match ? matchColour : look == FindingLook.Differ ? (_hint ? hintColour : differColour) : infoColour;
+
+    /// <summary>True while the line shows a hint (a difference that proves nothing).</summary>
+    private bool IsHint => _hint && _look == FindingLook.Differ;
 
     /// <summary>True when the box is on screen: alive, shown, and its centre inside the view its page scrolls in.</summary>
     private bool Visible(RectTransform box)
@@ -249,6 +305,10 @@ public sealed class MatchLines : MaskableGraphic
         Mouse mouse = Mouse.current;
         if (mouse == null || canvas == null)
             return false;
+        if (_input == null)
+            _input = canvas.rootCanvas.GetComponent<GraphicRaycaster>();
+        if (_input == null || !_input.enabled)
+            return false; // the desktop takes no input: the PC is closed, and the office's mouse is not the PC's
         Camera cam = canvas.rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.rootCanvas.worldCamera;
         return RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, mouse.position.ReadValue(), cam, out local);
     }

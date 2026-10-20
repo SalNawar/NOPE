@@ -74,12 +74,16 @@ public sealed class MailWindow : MonoBehaviour
             feed.Changed -= Redraw;
     }
 
-    /// <summary>Opens a message: shows it as a memo and marks it read.</summary>
+    /// <summary>Opens a message: shows it as a memo and marks it read; drawn once (BUG-65j: marking an unread one read raises the feed's Changed, which redraws, so it is not drawn again here).</summary>
     public void Open(string id)
     {
         _openId = id;
-        if (feed != null)
-            feed.MarkRead(id); // raises Changed, which redraws
+        if (feed != null && !feed.IsRead(id))
+        {
+            feed.MarkRead(id);
+            if (feed.IsRead(id))
+                return;
+        }
         Redraw();
     }
 

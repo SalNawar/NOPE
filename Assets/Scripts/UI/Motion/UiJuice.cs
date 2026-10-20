@@ -21,7 +21,9 @@ using UnityEngine.UI;
 /// travel. The face's reach past the rest rect is capped by its room
 /// (ControlRoom: the kit's border inset, never into a sibling's rest rect).
 /// Each moment plays its cue (ui_hover, ui_press, ui_release, ui_toggle,
-/// ui_error: Sounds). Stepped by UiMotion only while it moves; the face's
+/// ui_error: Sounds), except a press on the PC's desktop, whose one click is
+/// the desktop's mouse click (DesktopWindowManager; BUG-21c: one press, one
+/// sound): there only the hover and a refusal's error sound. Stepped by UiMotion only while it moves; the face's
 /// parts are moved by deltas, so a layout that moves them meanwhile keeps
 /// its say. Reduced Motion keeps the face still; the Motion intensity scales it.
 /// </summary>
@@ -46,6 +48,9 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private bool _posed;
     private bool _chosen;
 
+    /// <summary>True for a control on the PC's desktop (its layer): its press, release and toggle are the desktop's one mouse click.</summary>
+    private bool _onPc;
+
     /// <summary>
     /// Marks <paramref name="control"/> as the chosen side of a choice (a view
     /// whose chosen option takes no clicks: the Title's adoption cards, a
@@ -64,7 +69,8 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         juice.Begin();
         juice._motion.Confirm(UiMotion.Knobs, UiMotion.Amount);
-        Sounds.Play(SoundCues.UiToggle);
+        if (!juice._onPc)
+            Sounds.Play(SoundCues.UiToggle);
     }
 
     /// <summary>True while the control takes clicks (no Selectable: always).</summary>
@@ -99,6 +105,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         _motion.SetPull(pull.x, pull.y);
         Transform face = transform.Find(UiKitSO.FaceName);
         _face = face != null ? face.GetComponent<Graphic>() : null;
+        _onPc = UiText.SurfaceOf(this) == TextSurface.Pc;
     }
 
     /// <summary>The pointer came over it: the lift and the hover cue (a live control only).</summary>
@@ -125,7 +132,8 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         Begin();
         _motion.Press(UiMotion.Knobs, UiMotion.Amount);
-        Sounds.Play(SoundCues.UiPress);
+        if (!_onPc)
+            Sounds.Play(SoundCues.UiPress);
     }
 
     /// <summary>Let go: the spring back and the release cue.</summary>
@@ -135,7 +143,8 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         Begin();
         _motion.Release(UiMotion.Knobs, UiMotion.Amount);
-        Sounds.Play(SoundCues.UiRelease);
+        if (!_onPc)
+            Sounds.Play(SoundCues.UiRelease);
     }
 
     /// <summary>A left click: the pop (a toggle's cue on a toggle), or on a disabled control the "no" shake and the error cue.</summary>
@@ -173,7 +182,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if (Live)
         {
             _motion.Confirm(UiMotion.Knobs, UiMotion.Amount);
-            if (_control is Toggle)
+            if (_control is Toggle && !_onPc)
                 Sounds.Play(SoundCues.UiToggle);
         }
         else if (!_chosen)

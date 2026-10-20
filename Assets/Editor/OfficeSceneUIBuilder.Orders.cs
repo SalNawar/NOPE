@@ -6,10 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// The office builder's Orders app (Saleh 2026-09-29: the upgrade tree moves
 /// to the PC; the portals spec v3 OR3, OR9, §6.2): the Orders window, opening
-/// maximised, with the wallet line at the top, the tree's canvas on the left
+/// maximised, with the wallet line and the zoom bar (− the level +, on an
+/// opaque plate at the tree's right end: UI-25) at the top, the tree's canvas on the left
 /// (a TreeScrollRect both ways over a sidebar-toned plate: it scrolls, pans
-/// and zooms; a vertical scrollbar at its right; the zoom bar, − the level +,
-/// on an opaque plate over its top-right corner; holding the inactive
+/// and zooms; a vertical scrollbar at its right; holding the inactive
 /// templates OrdersWindow clones: a band head with its glyph and name, a node
 /// card in the input-field role with its glyph, name, state line, state badge
 /// and selection frame, and a link segment dim and lit), and on the right the
@@ -44,8 +44,10 @@ public static partial class OfficeSceneUIBuilder
         Object.DestroyImmediate(win.Find("Body").gameObject);
         float top = config.titleBarHeight + DocGap;
 
+        // The header row: the wallet line, and the zoom bar at the tree's right end (UI-25: never over the tree's first band head).
+        float treeRight = config.ordersDetailWidth + 2f * DocMargin;
         TMP_Text wallet = Text(win, "WalletText", "", PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, style: FontStyles.Bold);
-        PlaceRect(wallet.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(PcSize.L, -(top + OrdersHeader)), new Vector2(-PcSize.L, -top));
+        PlaceRect(wallet.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(PcSize.L, -(top + OrdersHeader)), new Vector2(-(treeRight + OrdersZoomWidth + PcSize.L), -top));
         Chrome(wallet, PcType.Caption, true);
 
         // The tree: a scroll both ways over a plate.
@@ -67,7 +69,7 @@ public static partial class OfficeSceneUIBuilder
         Scrollbar bar = BuildScrollbar(area, DocScrollbar, Color.white, ThemeRoleId.InputField, new Color(0.13f, 0.34f, 0.86f, 1f), ThemeRoleId.TitleBar);
         scroll.verticalScrollbar = bar;
         scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
-        BuildOrdersZoom(area, out Button zoomOut, out TMP_Text zoomLevel, out Button zoomIn);
+        BuildOrdersZoom(win, treeRight, top + (OrdersHeader - OrdersZoomHeight) / 2f, out Button zoomOut, out TMP_Text zoomLevel, out Button zoomIn);
 
         RectTransform band = BuildOrdersBand(content, config);
         Button node = BuildOrdersNode(content, config);
@@ -133,12 +135,15 @@ public static partial class OfficeSceneUIBuilder
         return chrome;
     }
 
-    /// <summary>The tree's zoom bar over its top-right corner, inside the viewport: an opaque plate in the sidebar's role with the − button, the level ("100 %", written by OrdersWindow) and the + button.</summary>
-    private static void BuildOrdersZoom(Transform area, out Button zoomOut, out TMP_Text level, out Button zoomIn)
+    /// <summary>The zoom bar's width: its two buttons and the level between them.</summary>
+    private const float OrdersZoomWidth = 2f * OrdersZoomButton + OrdersZoomLevel + 4f * DocGap;
+
+    /// <summary>The tree's zoom bar in the window's header row (UI-25: it sat over the tree's first band head), its right end <paramref name="right"/> from the window's right and its top <paramref name="top"/> below the window's top: an opaque plate in the sidebar's role with the − button, the level ("100 %", written by OrdersWindow) and the + button.</summary>
+    private static void BuildOrdersZoom(Transform win, float right, float top, out Button zoomOut, out TMP_Text level, out Button zoomIn)
     {
-        float width = 2f * OrdersZoomButton + OrdersZoomLevel + 4f * DocGap, right = 12f + DocScrollbar + DocGap;
-        Transform bar = Panel(area, "ZoomBar", Vector2.one, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.85f, 0.87f, 0.9f, 1f), ThemeRoleId.Sidebar);
-        PlaceRect(bar, Vector2.one, Vector2.one, new Vector2(-(right + width), -(12f + OrdersZoomHeight)), new Vector2(-right, -12f));
+        float width = OrdersZoomWidth;
+        Transform bar = Panel(win, "ZoomBar", Vector2.one, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.85f, 0.87f, 0.9f, 1f), ThemeRoleId.Sidebar);
+        PlaceRect(bar, Vector2.one, Vector2.one, new Vector2(-(right + width), -(top + OrdersZoomHeight)), new Vector2(-right, -top));
         float inner = OrdersZoomHeight - 2f * DocGap;
         zoomOut = MakeButton(bar, "ZoomOut", null, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), null, ThemeRoleId.Button, "app.orders.zoomOut");
         PlaceRect(zoomOut.transform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(DocGap, -inner / 2f), new Vector2(DocGap + OrdersZoomButton, inner / 2f));

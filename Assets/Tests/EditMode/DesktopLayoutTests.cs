@@ -244,4 +244,50 @@ public class DesktopLayoutTests
     {
         Assert.AreEqual(label, IconBadge.Label(count));
     }
+
+    // --- The taskbar's window buttons (BUG-21a, UI-16, UI-30): labelled, shrinking together, then a chevron ---
+
+    [Test]
+    public void Taskbar_FewWindows_TakeTheirPreferredWidth()
+    {
+        TaskbarFit fit = TaskbarStrip.Fit(3, 1200f, 220f, 120f, 4f, 48f);
+        Assert.AreEqual(3, fit.Shown);
+        Assert.AreEqual(220f, fit.Width, 1e-4f);
+        Assert.IsFalse(fit.Chevron);
+        Assert.AreEqual(0, fit.Hidden(3));
+    }
+
+    [Test]
+    public void Taskbar_MoreWindows_ShrinkTogether_DownToTheLeast()
+    {
+        TaskbarFit fit = TaskbarStrip.Fit(8, 1000f, 220f, 120f, 4f, 48f);
+        Assert.AreEqual(8, fit.Shown);
+        Assert.AreEqual((1000f - 7f * 4f) / 8f, fit.Width, 1e-4f);
+        Assert.GreaterOrEqual(fit.Width, 120f);
+        Assert.IsFalse(fit.Chevron);
+    }
+
+    [Test]
+    public void Taskbar_PastTheLeast_TheRestGoBehindTheChevron_NothingCut()
+    {
+        const float room = 700f, least = 120f, spacing = 4f, chevron = 48f;
+        TaskbarFit fit = TaskbarStrip.Fit(8, room, 220f, least, spacing, chevron);
+        Assert.IsTrue(fit.Chevron);
+        Assert.AreEqual(5, fit.Shown, "(700 - 48 - 4 + 4) / 124 = 5 buttons beside the chevron");
+        Assert.AreEqual(3, fit.Hidden(8));
+        Assert.GreaterOrEqual(fit.Width, least, "no button narrower than its least: titles are never cut to a letter");
+        float used = fit.Shown * fit.Width + (fit.Shown - 1) * spacing + spacing + chevron;
+        Assert.LessOrEqual(used, room + 1e-3f, "the buttons and the chevron fit the strip: nothing over the tray");
+    }
+
+    [Test]
+    public void Taskbar_NoRoomOrNoWindows()
+    {
+        Assert.AreEqual(0, TaskbarStrip.Fit(0, 500f, 220f, 120f, 4f, 48f).Shown);
+        Assert.IsFalse(TaskbarStrip.Fit(0, 500f, 220f, 120f, 4f, 48f).Chevron);
+        TaskbarFit squeezed = TaskbarStrip.Fit(4, 60f, 220f, 120f, 4f, 48f);
+        Assert.AreEqual(0, squeezed.Shown);
+        Assert.IsTrue(squeezed.Chevron, "every window is behind the chevron");
+        Assert.AreEqual(4, squeezed.Hidden(4));
+    }
 }

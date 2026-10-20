@@ -12,8 +12,8 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The least a taskbar window button shrinks to (desktop units) when many windows are open: eight fit beside the tray.</summary>
-    private const float TaskbarButtonLeast = 30f;
+    /// <summary>A taskbar window button's glyph (desktop units), at its left beside the title.</summary>
+    private const float TaskbarGlyph = 30f;
 
     /// <summary>The desktop's knobs, created by the builder when missing (a designer's edits are kept).</summary>
     private const string DesktopConfigPath = "Assets/Data/Config/Desktop_Default.asset";
@@ -56,19 +56,23 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The window manager on the desktop canvas (WN1-WN3, DK8): the taskbar's
-    /// strip of window buttons between "&lt; Desk" and the tray (a template
-    /// shrinking from the widest to the narrowest button knob as windows
-    /// open) and the desktop's raycaster (the shell, the context menu and the
-    /// empty desktop are wired with the icons: BuildDesktopShell); every
-    /// window's chrome gets the manager, its title text and the title size
-    /// (the office view defers its Escape to the keyboard poller's stamp:
-    /// BuildDesktopKeys). Idempotent.
+    /// strip of window buttons between Start and the tray (a template, the
+    /// app's glyph beside its title, shrinking from the button knob to its
+    /// least as windows open, then a chevron the rest wait behind: BUG-21a,
+    /// TaskbarStrip) and the desktop's raycaster (the shell, the context menu
+    /// and the empty desktop are wired with the icons: BuildDesktopShell);
+    /// every window's chrome gets the manager, its title text and the title
+    /// size (the office view defers its Escape to the keyboard poller's
+    /// stamp: BuildDesktopKeys). It also retires the taskbar's Back to desk
+    /// button the root still builds (BUG-50a: only Q and the bezel leave the
+    /// PC; INTEGRATION drops the root's lines and this sweep). Idempotent.
     /// </summary>
     private static DesktopWindowManager BuildWindowManager(Canvas canvas)
     {
         DesktopConfigSO config = EnsureDesktopConfig();
         Transform root = canvas.transform;
         DesktopWindowManager manager = GetOrAdd<DesktopWindowManager>(root.gameObject);
+        DestroyChildIfPresent(root.Find("Taskbar"), "DeskButton");
 
         // The window buttons lie left of the tray in their shared row (BuildTaskbar), taking the room the tray's words leave.
         Transform trayRow = root.Find("Taskbar/TrayRow");
@@ -88,17 +92,22 @@ public static partial class OfficeSceneUIBuilder
         row.childForceExpandWidth = false;
         row.childForceExpandHeight = true;
 
-        // A window's button (the PC UX redesign IA12, C7): the app's glyph on a Tab plate, the title only when the window has no glyph, an accent bar under the focused one, the title in a hover hint above it.
+        // A window's button (the PC UX redesign IA12, C7; BUG-21a): the app's glyph on a Tab plate at its left, the title beside it (cut with an
+        // ellipsis, never mid-letter), an accent bar under the focused one, the title in a hover hint above it.
         Button template = MakeButton(strip, "WindowButtonTemplate", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.Tab);
         LayoutElement size = GetOrAdd<LayoutElement>(template.gameObject);
-        size.minWidth = TaskbarButtonLeast;
+        size.minWidth = config.taskbarButtonLeast;
         size.preferredWidth = config.taskbarButtonWidth;
         size.flexibleWidth = 0f;
         TMP_Text label = template.transform.Find("Label").GetComponent<TMP_Text>();
         Chrome(label, PcType.Caption);
-        label.margin = new Vector4(PcSize.M, 0f, PcSize.M, 0f);
+        label.alignment = TextAlignmentOptions.MidlineLeft;
+        label.textWrappingMode = TextWrappingModes.NoWrap;
+        label.overflowMode = TextOverflowModes.Ellipsis;
+        label.margin = new Vector4(PcSize.M + TaskbarGlyph + PcSize.S, 0f, PcSize.M, 0f);
         label.raycastTarget = false;
-        Transform glyph = Panel(template.transform, "Glyph", Center, Center, new Vector2(0f, 2f), new Vector2(30f, 30f), Color.white);
+        Transform glyph = Panel(template.transform, "Glyph", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(PcSize.M + TaskbarGlyph / 2f, 2f),
+                                new Vector2(TaskbarGlyph, TaskbarGlyph), Color.white);
         Image glyphImage = glyph.GetComponent<Image>();
         glyphImage.raycastTarget = false;
         glyphImage.preserveAspect = true;
@@ -110,11 +119,24 @@ public static partial class OfficeSceneUIBuilder
         BuildHoverHint(template, null, string.Empty, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
         template.gameObject.SetActive(false);
 
+        // The chevron at the strip's end: the windows that do not fit wait behind it, and its label counts them ("» 3").
+        Button overflow = MakeButton(strip, "OverflowButton", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.Tab, "taskbar.more");
+        LayoutElement overflowSize = GetOrAdd<LayoutElement>(overflow.gameObject);
+        overflowSize.minWidth = config.taskbarChevronWidth;
+        overflowSize.preferredWidth = config.taskbarChevronWidth;
+        overflowSize.flexibleWidth = 0f;
+        TMP_Text more = overflow.transform.Find("Label").GetComponent<TMP_Text>();
+        Chrome(more, PcType.Caption);
+        more.raycastTarget = false;
+        BuildHoverHint(overflow, "taskbar.moreHint", null, new Vector2(0.5f, 1f), new Vector2(1f, 0f));
+        overflow.gameObject.SetActive(false);
+
         var so = new SerializedObject(manager);
         SetRef(so, "config", config);
         SetRef(so, "raycaster", canvas.GetComponent<GraphicRaycaster>());
         SetRef(so, "taskbarButtons", strip);
         SetRef(so, "taskbarButtonTemplate", template);
+        SetRef(so, "overflowButton", overflow);
         Transform iconLayer = root.Find("DesktopIcons");
         SetRef(so, "icons", iconLayer != null ? iconLayer.GetComponent<DesktopIcons>() : null);
         so.ApplyModifiedProperties();

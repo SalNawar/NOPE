@@ -146,6 +146,9 @@ public sealed class CaseBoardView : AppView
     private int _overlayA = -1, _overlayB = -1;
     private float _fade = 0.5f;
 
+    /// <summary>Where the board's content rests (read once, before any slide moved it: CODE-112, BUG-58a: an interrupted slide never becomes the new rest).</summary>
+    private Vector2 _contentHome;
+
     /// <summary>Raised when a MISSING row is clicked: the paper's request id, to flag missing (the Papers menu's flag; the façade's FlagMissing).</summary>
     public event Action<string> FlagRequested;
 
@@ -157,12 +160,21 @@ public sealed class CaseBoardView : AppView
 
     private void Awake()
     {
+        if (content != null)
+            _contentHome = content.anchoredPosition;
         foreach (Component t in new Component[] { lineTemplate, ruleRowTemplate, gridRowTemplate, crossRowTemplate, cellTemplate, cellGlowTemplate, cellPickTemplate, fadeTemplate })
             if (t != null)
                 t.gameObject.SetActive(false);
         foreach (GameObject t in new[] { sectionTemplate, plateMatchTemplate, plateDifferTemplate, plateHoldTemplate, cellHeadTemplate, overlayCellTemplate, overlayShimmerTemplate })
             if (t != null)
                 t.SetActive(false);
+    }
+
+    /// <summary>Hidden mid-slide (the pane closed or switched): the board goes back to its rest, so it never stays shifted.</summary>
+    private void OnDisable()
+    {
+        if (content != null)
+            content.anchoredPosition = _contentHome;
     }
 
     /// <summary>Draws <paramref name="model"/> (null: nobody at the desk); a new scan slides the board in and pops its cells.</summary>
@@ -173,7 +185,7 @@ public sealed class CaseBoardView : AppView
         _scansShown = _model.Scanned.Count;
         Draw(newScan && isActiveAndEnabled);
         if (newScan && isActiveAndEnabled && content != null)
-            StartCoroutine(BoardMotion.SlideIn(content, new Vector2(slideDistance, 0f), slideSeconds));
+            StartCoroutine(BoardMotion.SlideIn(content, _contentHome, new Vector2(slideDistance, 0f), slideSeconds));
     }
 
     /// <summary>The case ended: the board forgets its scans and its overlay.</summary>
@@ -610,12 +622,11 @@ public sealed class CaseBoardView : AppView
 /// </summary>
 public static class BoardMotion
 {
-    /// <summary>Slides <paramref name="target"/> in from <paramref name="offset"/> to where it is, over <paramref name="seconds"/>.</summary>
-    public static IEnumerator SlideIn(RectTransform target, Vector2 offset, float seconds)
+    /// <summary>Slides <paramref name="target"/> in from <paramref name="offset"/> to its rest, <paramref name="home"/>, over <paramref name="seconds"/>.</summary>
+    public static IEnumerator SlideIn(RectTransform target, Vector2 home, Vector2 offset, float seconds)
     {
         if (target == null)
             yield break;
-        Vector2 home = target.anchoredPosition;
         for (float t = 0f; t < seconds && target != null; t += Time.unscaledDeltaTime)
         {
             target.anchoredPosition = home + offset * (1f - UiMotion.Ease(t / seconds, MotionFeel.Heavy, seconds));

@@ -73,6 +73,9 @@ public sealed class MatchBoard : MonoBehaviour
     private CaseInstance _case;
     private string _linkA, _linkB, _linkLabel, _linkKey, _holdKey;
     private FindingLook _linkLook;
+
+    /// <summary>True when the line's difference is only a hint (BUG-47b: amber and dashed; FindingShades), not a proof.</summary>
+    private bool _linkHint;
     private string _clearA, _clearB;
     private bool _quiet;
     private string _hint = string.Empty;
@@ -336,7 +339,7 @@ public sealed class MatchBoard : MonoBehaviour
                                   query.Trim(), null, ClueCategory.CitizenId);
         if (!_log.Add(finding))
             return;
-        ShowStatus(FindingLook.Differ, UiText.Pc.Format("status.logged", FindingsView.Title(finding)));
+        ShowStatus(FindingLook.Info, UiText.Pc.Format("status.logged", FindingsView.Title(finding))); // a hint, never a proof (BUG-47b)
         if (findings != null)
             findings.Show(_log);
         Logged?.Invoke(finding);
@@ -361,15 +364,16 @@ public sealed class MatchBoard : MonoBehaviour
     {
         var finding = new Finding(kind, keyA, keyB, titleA, valueA, titleB, valueB, subject, proof, category);
         FindingLook look = FindingRules.Look(kind);
+        bool hint = FindingShades.Of(kind, finding.Proof) == FindingShade.Hint;
         _holdKey = null;
-        Link(keyA, keyB, look, FindingRules.LinkKey(kind));
+        Link(keyA, keyB, look, FindingRules.LinkKey(kind), hint);
         if (!FindingRules.IsLogged(kind))
             ShowStatus(FindingLook.Info, UiText.Pc.Format("finding.note." + kind, whatA, whatB));
         else if (!_log.Add(finding))
             ShowStatus(FindingLook.Info, UiText.Pc.Get("status.already"));
         else
         {
-            ShowStatus(look, UiText.Pc.Format(finding.Proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
+            ShowStatus(hint ? FindingLook.Info : look, UiText.Pc.Format(finding.Proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
             if (findings != null)
                 findings.Show(_log);
             Logged?.Invoke(finding);
@@ -383,8 +387,9 @@ public sealed class MatchBoard : MonoBehaviour
         if (finding == null || app == null)
             return;
         app.OpenPair(Target(finding.KeyA), Target(finding.KeyB));
-        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), FindingRules.LinkKey(finding.Kind));
-        ShowStatus(FindingRules.Look(finding.Kind), UiText.Pc.Format("status.shown", FindingsView.Title(finding)));
+        bool hint = FindingShades.Of(finding.Kind, finding.Proof) == FindingShade.Hint;
+        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), FindingRules.LinkKey(finding.Kind), hint);
+        ShowStatus(hint ? FindingLook.Info : FindingRules.Look(finding.Kind), UiText.Pc.Format("status.shown", FindingsView.Title(finding)));
     }
 
     /// <summary>Where a value's key is read: its paper, record, book row or line (SmartLinks.ForKey), a rule's memo, the calendar.</summary>
@@ -398,11 +403,12 @@ public sealed class MatchBoard : MonoBehaviour
     }
 
     /// <summary>The line between two keys, redrawn each frame as their rows move; its label the ui string <paramref name="labelKey"/> (the PC's in English, the desk's in the culture's language: DeskLabel).</summary>
-    private void Link(string keyA, string keyB, FindingLook look, string labelKey)
+    private void Link(string keyA, string keyB, FindingLook look, string labelKey, bool hint = false)
     {
         _linkA = keyA;
         _linkB = keyB;
         _linkLook = look;
+        _linkHint = hint;
         _linkKey = labelKey;
         _linkLabel = UiText.Pc.Get(labelKey);
         LineVersion++;
@@ -436,7 +442,7 @@ public sealed class MatchBoard : MonoBehaviour
     private void LateUpdate()
     {
         if (_clearA != null && compare != null && compare.Paired && compare.SideA.Key == _clearA && compare.SideB.Key == _clearB)
-            Quietly(compare.Clear);
+            Quietly(compare.Release);
         _clearA = _clearB = null;
         DrawLine();
     }
@@ -447,13 +453,23 @@ public sealed class MatchBoard : MonoBehaviour
         if (lines == null)
             return;
         if (_holdKey != null)
-            lines.ShowHold(Row(_holdKey));
+            lines.ShowHold(Row(_holdKey, ref _foundA));
         else if (_linkA != null)
-            lines.ShowLink(Row(_linkA), Row(_linkB), _linkLook, _linkLabel);
+            lines.ShowLink(Row(_linkA, ref _foundA), Row(_linkB, ref _foundB), _linkLook, _linkLabel, _linkHint);
     }
 
-    /// <summary>The box of the row with <paramref name="key"/> in a showing pane, or null.</summary>
-    private RectTransform Row(string key) => app != null ? app.FindRow(key, _rows) : null;
+    /// <summary>The rows last found for the line's two keys (BUG-65j: found again only when one went, was hidden or now shows another key, not twice every frame).</summary>
+    private AppRow _foundA, _foundB;
+
+    /// <summary>The box of the row with <paramref name="key"/> in a showing pane, or null; <paramref name="found"/> keeps it while it still shows that key.</summary>
+    private RectTransform Row(string key, ref AppRow found)
+    {
+        if (found != null && found.isActiveAndEnabled && found.Key == key && app != null && app.IsShowing)
+            return (RectTransform)found.transform;
+        RectTransform box = app != null ? app.FindRow(key, _rows) : null;
+        found = box != null ? box.GetComponent<AppRow>() : null;
+        return box;
+    }
 
     /// <summary>Runs a compare change without hearing it back.</summary>
     private void Quietly(Action change)

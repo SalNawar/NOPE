@@ -18,8 +18,8 @@ using UnityEngine;
 public sealed class DesktopConfigSO : ScriptableObject
 {
     [Header("The bars under the icon area (desktop units)")]
-    /// <summary>The taskbar's height at the bottom of the desktop.</summary>
-    [Min(1f)] public float taskbarHeight = 60f;
+    /// <summary>The taskbar's height at the bottom of the desktop (72 u: the tray clock's time over its date, BUG-20a).</summary>
+    [Min(1f)] public float taskbarHeight = 72f;
 
     /// <summary>The gap between the taskbar and the Start menu above it.</summary>
     [Min(0f)] public float startMenuGap = 4f;
@@ -31,9 +31,15 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>A window's title size (26 u: 13.5 px at 720p).</summary>
     [Min(1f)] public float titleFontSize = 26f;
 
-    [Header("Taskbar buttons (one per open window: the app's glyph, its name in a hover hint)")]
-    /// <summary>A window button's width (the glyph and its focus bar; the PC UX redesign IA12).</summary>
-    [Min(1f)] public float taskbarButtonWidth = 56f;
+    [Header("Taskbar buttons (one per open window: the app's glyph beside its name; BUG-21a)")]
+    /// <summary>A window button's width when the strip has room (the glyph, the name and the focus bar).</summary>
+    [Min(1f)] public float taskbarButtonWidth = 220f;
+
+    /// <summary>The least a window button shrinks to as windows open (the glyph and a few letters of the name); past it the rest wait behind the chevron (TaskbarStrip).</summary>
+    [Min(1f)] public float taskbarButtonLeast = 120f;
+
+    /// <summary>The chevron's width at the strip's end (the windows that do not fit wait behind it).</summary>
+    [Min(1f)] public float taskbarChevronWidth = 64f;
 
     [Header("Desktop icons (the PC redesign DK2-DK5; desktop units)")]
     /// <summary>An icon's cell: the glyph over its label.</summary>
@@ -160,8 +166,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The keyboard focus ring's width (the FocusRing role's outline).</summary>
     [Min(1f)] public float focusRingWidth = 3f;
 
-    /// <summary>The shortcut card's size (F1).</summary>
-    public Vector2 shortcutCardSize = new Vector2(960f, 860f);
+    /// <summary>The shortcut card's size (F1): tall enough that its rows show to the last (UI-16), under the desktop's height less the taskbar.</summary>
+    public Vector2 shortcutCardSize = new Vector2(960f, 980f);
 
     [Header("Search (redesign phase 19; the PC spec's SE1)")]
     /// <summary>How long typing pauses before the results update, in seconds.</summary>

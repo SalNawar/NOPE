@@ -27,7 +27,14 @@ using UnityEngine.UI;
 /// out that a node's smallest text reads under DesktopConfigSO.ordersTextFloor).
 /// It opens maximised and redraws when the day, the wallet, the order log, the
 /// owned upgrades or the installs change; each node's parts are found once,
-/// when the tree is laid out, so a redraw looks nothing up.
+/// when the tree is laid out, so a redraw looks nothing up. The tree is laid
+/// out once (not on every show), so a minimised and restored window keeps its
+/// scroll, zoom and selection (BUG-58a). Ordering is one click (UI-25): the
+/// pointer over a card shows it in the detail card, and a click on a card
+/// that can be ordered orders it; any action acts once per input, so a
+/// double-click never orders and then cancels (ActionDebounce). Ordering is
+/// refused, the button greyed with its reason, on a day Orders.CanOrder says
+/// no (BUG-28d: an order on the last day would never arrive).
 /// </summary>
 public sealed class OrdersWindow : MonoBehaviour
 {
@@ -102,6 +109,9 @@ public sealed class OrdersWindow : MonoBehaviour
         public Image Badge;
         public CanvasGroup Group;
         public GameObject Selected;
+
+        /// <summary>True when the upgrade has its own icon art (it is kept: the band's kit tile is only the fallback, CODE-158).</summary>
+        public bool HasArt;
     }
 
     private readonly List<GameObject> _built = new List<GameObject>();
@@ -112,6 +122,12 @@ public sealed class OrdersWindow : MonoBehaviour
     private readonly Dictionary<string, string> _detailText = new Dictionary<string, string>();
     private TMP_Text _actionLabel;
     private TreeLayout _layout;
+
+    /// <summary>The library the tree was laid out from (laid out again only for another one).</summary>
+    private ContentLibrarySO _builtFrom;
+
+    /// <summary>One action per input (a double-click, an Enter seen twice).</summary>
+    private ActionDebounce _debounce;
     private string _selected;
     private int _signature;
 
@@ -124,6 +140,7 @@ public sealed class OrdersWindow : MonoBehaviour
 
     private void Awake()
     {
+        _debounce = new ActionDebounce(config != null ? config.doubleClickSeconds : 0.4f);
         foreach (Component template in new Component[] { bandTemplate, nodeTemplate, linkTemplate, linkLitTemplate })
             if (template != null)
                 template.gameObject.SetActive(false);
@@ -152,9 +169,11 @@ public sealed class OrdersWindow : MonoBehaviour
             window.ToggleMaximise();
     }
 
+    /// <summary>Shown: laid out the first time (and for another library), redrawn every time; a restored window keeps its view.</summary>
     private void OnEnable()
     {
-        Build();
+        if (_builtFrom == null || _builtFrom != Library)
+            Build();
         Redraw();
     }
 
@@ -193,7 +212,7 @@ public sealed class OrdersWindow : MonoBehaviour
             view.Step(direction);
     }
 
-    /// <summary>Enter (DesktopKeyboard) and the action button: the selected node's action.</summary>
+    /// <summary>Enter (DesktopKeyboard) and the action button: the selected node's action, once per input (a second request within the double-click time does nothing).</summary>
     public void Act()
     {
         WorldState world = World;
@@ -202,7 +221,10 @@ public sealed class OrdersWindow : MonoBehaviour
         if (world == null || upgrade == null)
             return;
 
-        switch (ActionOf(world, lib, upgrade, out _))
+        NodeAction action = ActionOf(world, lib, upgrade, out bool enabled);
+        if (!enabled || action == NodeAction.None || !_debounce.TryAct(Time.unscaledTime))
+            return;
+        switch (action)
         {
             case NodeAction.Order:
                 OrderBook.Order(world, lib, upgrade);
@@ -222,23 +244,37 @@ public sealed class OrdersWindow : MonoBehaviour
         Redraw();
     }
 
-    /// <summary>Selects a node (a click on its card, or the arrows): the detail card shows it.</summary>
+    /// <summary>Selects a node (the pointer over its card, or the arrows): the detail card shows it.</summary>
     public void Select(string upgradeId)
     {
+        if (_selected == upgradeId)
+            return;
         _selected = upgradeId;
         Redraw();
+    }
+
+    /// <summary>A click on a card (one-click ordering, UI-25): it is selected, and ordered when it can be ordered now; otherwise the detail card's button holds its action.</summary>
+    private void ClickCard(string upgradeId)
+    {
+        Select(upgradeId);
+        WorldState world = World;
+        ContentLibrarySO lib = Library;
+        UpgradeSO upgrade = lib != null ? lib.GetUpgradeById(upgradeId) : null;
+        if (world != null && upgrade != null && ActionOf(world, lib, upgrade, out bool enabled) == NodeAction.Order && enabled)
+            Act();
     }
 
     /// <summary>What a node's button does in its state.</summary>
     private enum NodeAction { None, Order, Cancel, Install, CancelInstall, Keep }
 
-    /// <summary>The node's action and whether it can run now (an Order the wallet cannot cover, or a locked node, shows disabled).</summary>
+    /// <summary>The node's action and whether it can run now (an Order the wallet cannot cover, a locked node, or any order on a day orders are closed, shows disabled).</summary>
     private static NodeAction ActionOf(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, out bool enabled)
     {
         enabled = true;
         switch (OrderBook.StateOf(world, lib, upgrade))
         {
             case OrderState.Orderable:
+                enabled = Orders.CanOrder(world.day);
                 return NodeAction.Order;
             case OrderState.TooDear:
             case OrderState.Locked:
@@ -290,6 +326,7 @@ public sealed class OrdersWindow : MonoBehaviour
         _links.Clear();
 
         ContentLibrarySO lib = Library;
+        _builtFrom = lib;
         if (lib == null || config == null || treeContent == null)
             return;
 
@@ -342,7 +379,10 @@ public sealed class OrdersWindow : MonoBehaviour
             if (art != null)
                 ShowUntinted(card.transform.Find("Glyph"));
             string id = c.Id;
-            card.onClick.AddListener(() => Select(id));
+            card.onClick.AddListener(() => ClickCard(id));
+            if (!card.TryGetComponent(out OrderCardHover hover))
+                hover = card.gameObject.AddComponent<OrderCardHover>();
+            hover.Entered = () => Select(id);
             card.gameObject.SetActive(true);
             Transform selected = card.transform.Find("Selected");
             _nodes[id] = new NodeView
@@ -354,7 +394,8 @@ public sealed class OrdersWindow : MonoBehaviour
                 State = Child<TMP_Text>(card.transform, "State"),
                 Badge = Child<Image>(card.transform, "Badge"),
                 Group = card.GetComponent<CanvasGroup>(),
-                Selected = selected != null ? selected.gameObject : null
+                Selected = selected != null ? selected.gameObject : null,
+                HasArt = art != null
             };
             _built.Add(card.gameObject);
         }
@@ -418,7 +459,7 @@ public sealed class OrdersWindow : MonoBehaviour
             {
                 kit.Show(node.Face, UiKitNames.UpgradeCard(state));
                 // Sheet 03: the card's pictogram tile is its band's, the locked tile while locked.
-                Sprite tile = kit.Get(UiKitNames.UpgradeTile(node.Branch, state));
+                Sprite tile = node.HasArt ? null : kit.Get(UiKitNames.UpgradeTile(node.Branch, state));
                 if (node.Glyph != null && tile != null)
                 {
                     node.Glyph.sprite = tile;

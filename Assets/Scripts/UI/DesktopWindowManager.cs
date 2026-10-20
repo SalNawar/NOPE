@@ -12,11 +12,18 @@ using UnityEngine.UI;
 /// shows while it is open and not minimised, the visible ones take the
 /// stack's z-order as their sibling order on the window layer, and the
 /// taskbar has one button per open window in open order: the app's desktop
-/// glyph (DesktopIcons.GlyphOf; a window no icon opens shows its title
-/// instead), its title in a hover hint, the focused window's with an accent
-/// bar under it, a minimised one's faded (the PC UX redesign IA12: no title
-/// is ever cut); a click minimises the focused window, else restores and
-/// focuses it. While the desktop takes input (its
+/// glyph (DesktopIcons.GlyphOf) beside its title (BUG-21a: labelled), its
+/// title in a hover hint, the focused window's with an accent bar under it,
+/// a minimised one's faded; they shrink together as windows open, never
+/// under their least, and past that the rest wait behind a chevron at the
+/// strip's end whose click brings the next of them forward (TaskbarStrip;
+/// the focused window's button always shows): no title is ever cut to a
+/// letter and nothing runs over the tray. A click minimises the focused
+/// window, else restores and focuses it. While the desktop takes input, the
+/// EventSystem sends no navigation events (BUG-58a: no automatic navigation
+/// over the desktop's many Selectables, and Enter acts once, through the
+/// desktop's own keys, never also as a Submit on the last button clicked).
+/// While the desktop takes input (its
 /// raycaster is on: BoothRules.DesktopInteractive), a press anywhere on the
 /// desktop closes the context menu and the Start menu when it lands outside
 /// them, focuses the window under the pointer (its own raycast through the
@@ -58,6 +65,9 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// <summary>A minimised window's button tint (flat, faded).</summary>
     [SerializeField] private Color minimisedTint = new Color(1f, 1f, 1f, 0.55f);
 
+    /// <summary>The chevron at the strip's end (the windows that do not fit wait behind it; its label counts them); optional: without it every button shows, shrunk to fit.</summary>
+    [SerializeField] private Button overflowButton;
+
     private readonly WindowStack _stack = new WindowStack();
 
     /// <summary>Each window put under the stack, by its id, and each id by its window.</summary>
@@ -72,6 +82,12 @@ public sealed class DesktopWindowManager : MonoBehaviour
 
     /// <summary>Numbers the windows' ids.</summary>
     private int _registered;
+
+    /// <summary>The windows behind the chevron, in taskbar order (reused).</summary>
+    private readonly List<string> _hidden = new List<string>();
+
+    /// <summary>True while this manager has the EventSystem's navigation events off (it gives back only what it took).</summary>
+    private bool _navigationOff;
 
     /// <summary>One taskbar button: its glyph, its label (a window without a glyph), its hover hint's text and its focus bar.</summary>
     private struct TaskbarButton
@@ -104,11 +120,20 @@ public sealed class DesktopWindowManager : MonoBehaviour
         _press = new PointerEventData(EventSystem.current);
         if (taskbarButtonTemplate != null)
             taskbarButtonTemplate.gameObject.SetActive(false);
+        if (overflowButton != null)
+        {
+            overflowButton.onClick.AddListener(BringHiddenForward);
+            overflowButton.gameObject.SetActive(false);
+        }
         if (config == null)
             Debug.LogWarning("[DesktopWindowManager] No DesktopConfigSO wired: maximise fills the whole desktop and title bars take no double-click. Run Tools > TimeDesk > Build Office UI.", this);
     }
 
-    private void OnDestroy() => _stack.Changed -= Apply;
+    private void OnDestroy()
+    {
+        _stack.Changed -= Apply;
+        Navigation(true);
+    }
 
     /// <summary>Shows the window (a minimised one restores), raised and focused.</summary>
     public void Open(DesktopWindow window)
@@ -277,6 +302,70 @@ public sealed class DesktopWindowManager : MonoBehaviour
         for (int i = 0; i < order.Count; i++)
             if (_windows.TryGetValue(order[i], out DesktopWindow window) && window != null)
                 ShowButton(order[i], window);
+        FitButtons(order);
+    }
+
+    /// <summary>
+    /// The buttons share the strip (TaskbarStrip.Fit): each as wide as the fit
+    /// says; those that do not fit wait behind the chevron, except the focused
+    /// window's, which takes the last shown place.
+    /// </summary>
+    private void FitButtons(IReadOnlyList<string> order)
+    {
+        _hidden.Clear();
+        float least = config != null ? config.taskbarButtonLeast : 120f;
+        float preferred = config != null ? Mathf.Max(config.taskbarButtonWidth, least) : least;
+        float chevron = config != null ? config.taskbarChevronWidth : 48f;
+        HorizontalLayoutGroup row = taskbarButtons.GetComponent<HorizontalLayoutGroup>();
+        float spacing = row != null ? row.spacing : 0f;
+        float room = taskbarButtons.rect.width - (row != null ? row.padding.horizontal : 0);
+        int count = _buttons.Count;
+        TaskbarFit fit = overflowButton != null && room > 0f
+            ? TaskbarStrip.Fit(count, room, preferred, least, spacing, chevron)
+            : new TaskbarFit(count, preferred, false);
+
+        // The focused window's button always shows: past the fit, it takes the last shown place.
+        int focusedAt = -1;
+        for (int i = 0; i < order.Count; i++)
+            if (order[i] == _stack.Focused)
+                focusedAt = i;
+        int plain = focusedAt >= fit.Shown && fit.Shown > 0 ? fit.Shown - 1 : fit.Shown;
+
+        int shown = 0;
+        for (int i = 0; i < order.Count; i++)
+        {
+            if (!_buttons.TryGetValue(order[i], out TaskbarButton button) || button.Button == null)
+                continue;
+            bool show = shown < plain || (i == focusedAt && fit.Shown > 0);
+            if (show)
+                shown++;
+            else
+                _hidden.Add(order[i]);
+            if (button.Button.gameObject.activeSelf != show)
+                button.Button.gameObject.SetActive(show);
+            if (show && button.Button.TryGetComponent(out LayoutElement size))
+            {
+                size.minWidth = Mathf.Min(fit.Width, least);
+                size.preferredWidth = fit.Width;
+            }
+        }
+
+        if (overflowButton == null)
+            return;
+        bool chevronShown = _hidden.Count > 0;
+        if (overflowButton.gameObject.activeSelf != chevronShown)
+            overflowButton.gameObject.SetActive(chevronShown);
+        overflowButton.transform.SetAsLastSibling();
+        TMP_Text waiting = overflowButton.GetComponentInChildren<TMP_Text>(true);
+        if (chevronShown && waiting != null)
+            waiting.text = UiText.Pc.Format("taskbar.more", _hidden.Count);
+    }
+
+    /// <summary>The chevron: the first window waiting behind it comes forward (restored and focused, so its button shows); each click brings the next.</summary>
+    private void BringHiddenForward()
+    {
+        if (_hidden.Count > 0)
+            _stack.Open(_hidden[0]);
     }
 
     /// <summary>Removes the buttons of closed (or destroyed) windows.</summary>
@@ -319,9 +408,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
                 button.Glyph.gameObject.SetActive(sprite != null);
             }
             if (button.Label != null)
-                button.Label.gameObject.SetActive(sprite == null);
-            if (sprite == null && clone.TryGetComponent(out LayoutElement size))
-                size.preferredWidth = -1f;
+                button.Label.gameObject.SetActive(true); // every button names its window (BUG-21a), beside its glyph
             _buttons.Add(id, button);
         }
 
@@ -338,12 +425,14 @@ public sealed class DesktopWindowManager : MonoBehaviour
         button.Button.colors = colours;
     }
 
-    /// <summary>Polls the press while the desktop takes input.</summary>
+    /// <summary>Polls the press while the desktop takes input (the EventSystem's navigation events off meanwhile).</summary>
     private void Update()
     {
+        bool live = raycaster != null && raycaster.isActiveAndEnabled;
+        Navigation(!live);
         if (InputGate.Blocked)
             return;
-        if (raycaster == null || !raycaster.isActiveAndEnabled)
+        if (!live)
             return;
 
         Mouse mouse = Mouse.current;
@@ -383,6 +472,24 @@ public sealed class DesktopWindowManager : MonoBehaviour
                 _stack.ClearFocus();
                 return;
             }
+    }
+
+    /// <summary>The EventSystem's navigation events on (<paramref name="on"/>), or off while the desktop takes input; it gives back only what it took.</summary>
+    private void Navigation(bool on)
+    {
+        EventSystem events = EventSystem.current;
+        if (events == null)
+            return;
+        if (on && _navigationOff)
+        {
+            events.sendNavigationEvents = true;
+            _navigationOff = false;
+        }
+        else if (!on && !_navigationOff && events.sendNavigationEvents)
+        {
+            events.sendNavigationEvents = false;
+            _navigationOff = true;
+        }
     }
 
     /// <summary>The top graphic under a screen point on the desktop canvas (through its event camera), or null.</summary>
