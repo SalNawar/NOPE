@@ -1,6 +1,6 @@
 # UI-PC: a clean desktop with a real taskbar clock
 
-Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG). Two commits: `60fe324` (the track) and the fix round below (the review of `60fe324`).
+Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase) and the fix round below (the review of `60fe324`).
 
 **Sources:**
 - FIX_PLAN.md §3 "UI-PC" and FIX_PLAN_v2.md "UI-PC: delta" (v2 wins);
@@ -352,8 +352,8 @@ The house runner is green either way.
 | Check | Result |
 |---|---|
 | `compile_check_any.py E:\unity\NOPE-gpt` | 0 errors (Assembly-CSharp, Assembly-CSharp-Editor, TimeDeskEditMode) |
-| House runner (`NOPE-tools\runner`) | passed 3745, failed 0. That is 3710 on main + 35 new: 30 in `PcDesktopRulesTests` and 5 in `DesktopLayoutTests`. |
-| `tools/qa/editor_runner` (QA_PROJECT set) | passed 68, failed 1, 16 NeedsEditor skipped. The one failure is `SoFieldReadersTests.Project_EveryUnreadSOField_IsOnTheCleanupAllowlist` on `DeskConfigSO.crtClockSize`, which the `so_reader_allowlist.txt` fragment closes at merge. |
+| House runner (`NOPE-tools\runner`) | passed 3774, failed 0, on main `4290bd6`. That is 3739 on main + 35 new: 30 in `PcDesktopRulesTests` and 5 in `DesktopLayoutTests`. |
+| `tools/qa/editor_runner` (QA_PROJECT set) | passed 80, failed 1, 36 NeedsEditor skipped (RUN-SAFE's tests included). The one failure is `SoFieldReadersTests.Project_EveryUnreadSOField_IsOnTheCleanupAllowlist` on `DeskConfigSO.crtClockSize`, which the `so_reader_allowlist.txt` fragment closes at merge. |
 
 **New EditMode tests, 35 in all:**
 - `PcDesktopRulesTests` (30):
