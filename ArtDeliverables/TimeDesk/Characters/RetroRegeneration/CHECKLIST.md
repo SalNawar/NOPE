@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 423. Full regeneration is NOT complete.
+Saved: 447. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -427,3 +427,27 @@ Saved: 423. Full regeneration is NOT complete.
 | hair_m_egypt_ancient3 | visually reviewed; registration pending |
 | facialhair_m_egypt_ancient3 | visually reviewed; registration pending |
 | headwear_m_egypt_ancient3 | visually reviewed; registration pending |
+| outfit_f_egypt_ancient3 | visually reviewed; registration pending |
+| outfit_f_egypt_ancient3__explaining_b | visually reviewed; registration pending |
+| outfit_f_egypt_ancient3__thinking_c | visually reviewed; registration pending |
+| outfit_f_egypt_ancient3__objecting_a | visually reviewed; registration pending |
+| hair_f_egypt_ancient3 | visually reviewed; registration pending |
+| headwear_f_egypt_ancient3 | visually reviewed; registration pending |
+| outfit_m_egypt_medieval2 | visually reviewed; registration pending |
+| outfit_m_egypt_medieval2__explaining_b | visually reviewed; registration pending |
+| outfit_m_egypt_medieval2__thinking_c | visually reviewed; registration pending |
+| outfit_m_egypt_medieval2__objecting_a | visually reviewed; registration pending |
+| hair_m_egypt_medieval2 | visually reviewed; registration pending |
+| facialhair_m_egypt_medieval2 | visually reviewed; registration pending |
+| headwear_m_egypt_medieval2 | visually reviewed; registration pending |
+| outfit_f_egypt_medieval2 | visually reviewed; registration pending |
+| outfit_f_egypt_medieval2__explaining_c | visually reviewed; registration pending |
+| outfit_f_egypt_medieval2__thinking_a | visually reviewed; registration pending |
+| outfit_f_egypt_medieval2__objecting_b | visually reviewed; registration pending |
+| hair_f_egypt_medieval2 | visually reviewed; registration pending |
+| headwear_f_egypt_medieval2 | visually reviewed; registration pending |
+| outfit_m_iraq_ancient | visually reviewed; registration pending |
+| outfit_m_iraq_ancient__explaining_c | visually reviewed; registration pending |
+| outfit_m_iraq_ancient__thinking_a | visually reviewed; registration pending |
+| outfit_m_iraq_ancient__objecting_b | visually reviewed; registration pending |
+| hair_m_iraq_ancient | visually reviewed; registration pending |

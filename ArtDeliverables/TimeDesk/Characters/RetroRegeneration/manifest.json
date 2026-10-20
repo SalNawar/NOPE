@@ -9054,6 +9054,729 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "chiton and mantle",
+      "details": "",
+      "flags": {
+        "label": "chiton and mantle"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_ancient3",
+      "prompt": "Create a production historical wardrobe source, 1024x1536. Use the supplied female fitting figure EXACTLY: same canvas, silhouette, head size and position, feet positions, camera and neutral arms-down pose. Dress her in a Ptolemaic Alexandria woman's chiton and mantle c45 BCE: opaque ankle-length warm ivory linen chiton with restrained ochre woven border, muted terracotta mantle draped over left shoulder and across torso, narrow cloth belt, worn brown leather sandals. Ordinary practical historical clothing, no royal ornaments or modern clothing. Preserve exposed head, neck, arms, hands and feet as flat solid magenta #FF00FF fitting-guide regions, no hair, no jewelry or headwear. Flat pure green #00FF00 background. Costume rendered in late1980s hand-inked anime with tactile woven fabric grain, subtle pigment variation, clean readable folds and modest cel shadows, not glossy vector art. Even frontal illumination, no floor or cast shadow, no text. Keep scalp at y164 and soles approximately y1440 exactly as reference; do not resize/repose figure. Clothing is the only finished asset.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fd10a8f5-4aee-4c02-9899-70e847286818.png",
+      "path": "Raw/outfit_f_egypt_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e292ec29f6633ccb4236dda35b09f8219be1b231904d61ec1cd6c9665aeae830",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient3__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "chiton and mantle",
+      "details": "",
+      "flags": {
+        "label": "chiton and mantle"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_egypt_ancient3",
+      "prompt": "Production costume pose variation, 1024x1536. FIRST reference is exact costume identity: ivory chiton, terracotta left-shoulder mantle, ochre belt and hem borders, brown sandals, same woven texture and 1980s anime ink/cel rendering. SECOND reference sets exact pose and registration: both palms open in asymmetrical low explanation. Copy its head, body proportions, feet and arm/hand coordinates precisely; scalp y164 soles1440. Change ONLY arms and physically necessary mantle folds; retain all costume details and matching length. Exposed fitting figure remains solid magenta #FF00FF, bald, no jewelry. Flat pure green #00FF00 background, even front light, no floor shadow, no text. Preserve full canvas and scale; no zoom, no crop. Opaque fully clothed historical female wardrobe source, not a finished skin portrait.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3a70f506-5ac2-44fc-9691-c0543e5adc3b.png",
+      "path": "Raw/outfit_f_egypt_ancient3__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "53b881a4123d65949db956361f344b66640506ad50cdc4471b3b038afe5e3698",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient3__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "chiton and mantle",
+      "details": "",
+      "flags": {
+        "label": "chiton and mantle"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_egypt_ancient3",
+      "prompt": "Production historical costume pose variation, 1024x1536. FIRST reference is exact costume identity: ivory chiton, terracotta left-shoulder mantle, ochre belt and hem borders, brown sandals, same woven texture and late1980s anime ink/cel rendering. SECOND reference sets exact pose and registration: hands gently linked low at waist in thoughtful waiting, copy exact arms and hands. Copy its head/body/feet coordinates precisely; scalp y164 soles1440. Change only arms and physically necessary mantle folds, retain all costume details and matching length. Exposed fitting figure remains flat solid magenta #FF00FF, bald, no jewelry. Flat pure green #00FF00 background, even front light, no floor shadow, no text. Preserve full canvas and scale; no zoom/crop. Opaque fully clothed historical female wardrobe source.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a9e37f28-27e9-44ed-9ffa-d5ba1095b327.png",
+      "path": "Raw/outfit_f_egypt_ancient3__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4b6cca5a60cc00cce9f0485516ad16079c9fa617a7bfedab75b12a16eb3e7f2a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient3__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "chiton and mantle",
+      "details": "",
+      "flags": {
+        "label": "chiton and mantle"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_egypt_ancient3",
+      "prompt": "Production historical costume pose variation, 1024x1536. FIRST reference is exact costume identity: ivory chiton, terracotta left-shoulder mantle, ochre belt and hem borders, brown sandals, same woven texture and late1980s anime ink/cel rendering. SECOND reference sets exact pose and registration: anatomical RIGHT hand (viewer LEFT) raised palm-forward beside shoulder, other arm down; copy its arm and hand coordinates precisely. Copy head/body/feet coordinates precisely; scalp y164 soles1440. Change only arms and physically necessary mantle folds, retain all costume details and matching length. Exposed fitting figure flat solid magenta #FF00FF, bald, no jewelry. Flat pure green #00FF00 background, even front light, no floor shadow, no text. Preserve full canvas and scale; no zoom/crop. Opaque fully clothed historical female wardrobe source.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7ef43a81-a6f7-4b05-aed3-bd7b0b237212.png",
+      "path": "Raw/outfit_f_egypt_ancient3__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1ea903a4c4fc8f4d8a2431fe08d9fb209c7c21221ec00f756f20aef4b70bb63f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "melon-rib bun",
+      "details": "",
+      "flags": {
+        "label": "melon-rib bun"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_ancient3",
+      "prompt": "Create historical HAIR layer source on supplied fitting figure, exact 1024x1536 canvas, same face/head/body registration and neutral pose. Ptolemaic Alexandria woman c45 BCE: dark brown melon-rib hairstyle, distinct rounded narrow swept-back ridges parted centrally and gathered in compact low bun behind head, small bun edges visible beside nape. Natural modest practical style, no royal ornament, no headband. Late1980s anime ink, delicate irregular hair strands with restrained matte cel shading and pigment texture. Hair is only finished colored asset. All skin and entire clothed guide body solid flat magenta #FF00FF; use featureless magenta long-sleeved ankle dress as guide coverage, do not add garment detail. Green #00FF00 background. Preserve reference head exactly at x512 scalp164 chin324 and same feet1440. No enlarged portrait or inset, no writing, no shadow on background. Match head and ears exactly, hair naturally adds small volume outside scalp.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2a6197a7-a219-4d13-94fd-45c04d617ac2.png",
+      "path": "Raw/hair_f_egypt_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ff3f3b8fab0b7d31a81440bf7c270657f51d02f29eae6486807c41b0730ec3b8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_egypt_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "country": "egypt",
+      "era": "ancient3",
+      "label": "diadem band",
+      "details": "",
+      "flags": {
+        "label": "diadem band",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_egypt_ancient3",
+      "prompt": "Historical modular HEADWEAR source, exact 1024x1536. On supplied female fitting reference draw only a Ptolemaic Alexandria simple diadem BAND: narrow ivory woven textile ribbon encircling head just above forehead, restrained small ochre edge stripe, knotted at back with two short ends visible beside nape. This is a simple cloth hairbinding, NOT metal crown, no gems, no points, no royal ornament. No hair. Late1980s hand-inked anime with subtle woven pigment texture. Preserve identical face/head position and size, head scalp164 chin324 x512; body pose and feet unchanged. All guide figure including plain ankle dress solid #FF00FF magenta, only ribbon finished in color. Flat #00FF00 green background. No text, no floor, even light, no cast shadows, no zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f475dc8b-d189-43a0-9530-f85a0c9a1ecd.png",
+      "path": "Raw/headwear_f_egypt_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "79316f4e85d18a1beed6af79b2067eeefb8ca0e7bea40bd06411be684a72f4b1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "Ayyubid qaba coat",
+      "details": "",
+      "flags": {
+        "label": "Ayyubid qaba coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_medieval2",
+      "prompt": "Production historical wardrobe source 1024x1536. Dress supplied male fitting figure in Ayyubid Cairo c1187 civilian qaba coat: practical calf-length cross-fastening long-sleeved wool coat in dusty indigo, narrow woven ochre cuff bands, muted rust cloth waist sash, plain cream under tunic and loose brown trousers visible below coat, worn simple leather ankle shoes. Ordinary settled merchant or clerk, not royal or soldier. No weapons, headwear, hair, beard, jewelry, bags. Same exact figure pose, proportions, head and feet coordinates as reference (scalp239 chin400 soles1421). Arms relaxed away from sides, empty hands down. Exposed face neck hands flat magenta #FF00FF. Flat pure green #00FF00 background. Late1980s textured hand-inked anime, subtle woven fibers, pigment variation and readable restrained cel folds. Opaque costume. Even front light, no ground shadow, no text, no zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3c79750e-effa-41c4-9066-b8f5e18ccb36.png",
+      "path": "Raw/outfit_m_egypt_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ebbbcc206cac1671a118615b2b2907e1dd3dcc4bbedb7900ed066716a6c641d5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval2__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "Ayyubid qaba coat",
+      "details": "",
+      "flags": {
+        "label": "Ayyubid qaba coat"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_egypt_medieval2",
+      "prompt": "EDIT FIRST IMAGE ONLY by dressing its unchanged mannequin in the costume shown in second image. Exact 1024x1536. Do not redraw or reposition any magenta exposed region: head and hands must stay pixel-aligned to first image. Coat sleeves must follow first image arms. Second image supplies ONLY clothing: indigo Ayyubid qaba, ochre cuffs, rust sash, cream under-tunic, brown trousers and shoes with worn woven texture, late1980s anime hand ink. First image remains authoritative for hand shapes and wrist locations; do not widen arms. Preserve first background pure green, exposed figure magenta. Full canvas same scale, no text or ground shadows. All clothing detail preserved from second.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-99e0f31b-069e-4600-862d-8e164cdc2db8.png",
+      "path": "Raw/outfit_m_egypt_medieval2__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "49df37d32e63bf4756bd0fbd419ef126e8bf63df6220449d9f845ad886b6354b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval2__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "Ayyubid qaba coat",
+      "details": "",
+      "flags": {
+        "label": "Ayyubid qaba coat"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_egypt_medieval2",
+      "prompt": "EDIT FIRST IMAGE ONLY by dressing its unchanged mannequin in costume shown in second image. Exact1024x1536. First image is authoritative pose: hands linked low at waist. Do not redraw or reposition magenta exposed head or hands; remain pixel aligned with first. Sleeves naturally follow first image arms. Second image supplies ONLY clothing: indigo Ayyubid qaba with ochre cuffs, rust sash, cream undertunic, brown trousers, leather shoes, same worn woven texture and late1980s anime hand ink. Keep every costume detail, seam, color and length. Same torso/legs/head/feet registration. Green #00FF00 background, exposed figure solid magenta #FF00FF, no hair or accessories, even front light, no ground shadows/text/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-44e75a92-fe4b-431d-bd78-30c7694b784c.png",
+      "path": "Raw/outfit_m_egypt_medieval2__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "db5e9265460e9ad7b63df08d594ce53439925ba5180b1568a75b5f75b082a766",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval2__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "Ayyubid qaba coat",
+      "details": "",
+      "flags": {
+        "label": "Ayyubid qaba coat"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_egypt_medieval2",
+      "prompt": "EDIT FIRST IMAGE ONLY by dressing its unchanged mannequin in costume shown in second image. Exact1024x1536. First image authoritative pose: RIGHT hand (viewer LEFT) raised palm forward by shoulder, other hand down. Do not reposition exposed head or hands, keep pixel aligned first image. Sleeves follow first image arms. Second image supplies ONLY clothing: indigo Ayyubid qaba, ochre cuffs, rust sash, cream undertunic, brown trousers, leather shoes, identical worn woven texture and late1980s anime ink. Keep every costume detail and length. Same torso/legs/head/feet registration. Green #00FF00 background, exposed figure magenta #FF00FF, no hair or accessories, even front light, no ground shadows/text/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9ae8e1d3-13aa-4278-94be-7d0526f6e701.png",
+      "path": "Raw/outfit_m_egypt_medieval2__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6a0408a4fab55a9ce00a9adaca52e3029cc7bd7139bb019084da975c05044d95",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "cropped hair",
+      "details": "",
+      "flags": {
+        "label": "cropped hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_medieval2",
+      "prompt": "Historical HAIR source only. Exact1024x1536 supplied male fitting guide unchanged. Add short cropped dark brown slightly wavy hair for ordinary Ayyubid Cairo man c1187, practical irregular close cut, modest receding temple corners, not fashionable fade or quiff. No beard, no hat, no jewelry. Late1980s hand-ink anime with matte fine hair strand texture. Only hair has finished color. Guide face/hands and plain full-body long-sleeved tunic/trousers stay solid magenta #FF00FF. Preserve all reference face/head landmarks exactly, scalp239 chin400, same shoulders arms feet1421, hair naturally small volume beyond scalp. Pure green #00FF00 background, even light, no cast shadow/text/insets/zoom.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ea905a1c-6373-431e-bca6-52f6d07e58ab.png",
+      "path": "Raw/hair_m_egypt_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9fad9ef55a808c1a4c0bedf1d18fb088c5f70ac2a53f7b0538ba1b2e07f6f224",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_egypt_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "full dark beard",
+      "details": "",
+      "flags": {
+        "label": "full dark beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_egypt_medieval2",
+      "prompt": "Historical FACIAL HAIR source only. Exact1024x1536 supplied male fitting guide unchanged. Add full dark brown beard and modest connected moustache for Ayyubid Cairo man c1187: softly rounded natural beard extending several centimeters below chin, subtle wavy clumps and stray strands, not modern sharply sculpted barber edges. Mouth readable. No scalp hair, hat, ornaments. Late1980s hand-ink anime, matte pigment/fine strand texture. Only beard/moustache finished color. Guide skin/body including plain covered tunic/trousers solid magenta #FF00FF, unchanged pose. Preserve reference face/head landmarks precisely, scalp239 chin400, feet1421. Pure green #00FF00 background, no text/inset/zoom/floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9fb4e6f1-d600-4f5c-b610-9ec041f262e8.png",
+      "path": "Raw/facialhair_m_egypt_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "36216cfc81b8a3ee2137b1591340700b93b937122f4f8d868ece349321a05b42",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_egypt_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "sharbush",
+      "details": "",
+      "flags": {
+        "label": "sharbush",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_egypt_medieval2",
+      "prompt": "Historical HEADWEAR source only,1024x1536. Supplied male fitting guide remains unchanged. Add Ayyubid sharbush cap c1187: firm ochre-brown cloth/leather cap with dark brown fur edging rising to a modest triangular front, small plain aged-brass triangular forehead plaque. Rounded cap behind upright front, no giant fantasy spikes, no gems, not a European crown or turban. Fits existing skull, ears exposed, no scalp hair/beard. Late1980s anime ink with matte fur and woven pigment texture. All guide face/body plain clothing solid magenta #FF00FF; only cap rendered finished color. Exact same face/head/scalp239 chin400 shoulders hands feet1421 as reference, no recenter/zoom. Pure green #00FF00 background, no shadow/text. Source for shape: https://www.mamlukacademy.com/post/headwears-in-the-mamluk-sultanate-1250-1517-ce (stiff triangular-front fur-trimmed sharbush); no text in image.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5585793e-1697-4cd1-8755-70f6e4e287db.png",
+      "path": "Raw/headwear_m_egypt_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3b678ec681aa9272b6b9b7365ee01a8ce267e6fa06b110dfd6363898a83b583f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "embroidered tiraz robe",
+      "details": "",
+      "flags": {
+        "label": "embroidered tiraz robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_medieval2",
+      "prompt": "Dress supplied unchanged female fitting guide in Ayyubid Cairo c1187 embroidered tiraz robe, production wardrobe source1024x1536. Loose opaque ankle-length long-sleeved robe of muted plum linen with narrow geometric ochre embroidered tiraz-style bands around upper arms, cuffs and neckline, simple tan woven belt, cream underdress glimpsed at hem, practical brown leather slippers. Ordinary adult woman's historical dress, modest natural folds, no exposed cleavage, no fantasy embellishment. Late1980s hand-inked anime with subtle linen weave/pigment texture and restrained cel shadows. Preserve exact guide head/scalp164 chin324, arm/hand positions, feet1440 and proportions. Skin flat magenta #FF00FF, no hair/headwear/jewelry/weapons. Background pure green #00FF00. Even frontal light no ground shadows, no text or lettering in embroidered bands, no zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7e1cdb54-f130-4777-bd28-dcc7ac46bd66.png",
+      "path": "Raw/outfit_f_egypt_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dbb43b5dfe1dfd36f75eaa019b3c8006274105d57dc5c15ded56824408aa72f7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "embroidered tiraz robe",
+      "details": "",
+      "flags": {
+        "label": "embroidered tiraz robe"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_egypt_medieval2",
+      "prompt": "EDIT FIRST IMAGE by dressing its unchanged fitting mannequin in exact costume of SECOND image. First controls exact pose, exposed head/hand shapes and all registration: left hand at upper chest, right down. Second controls costume only: muted plum long Ayyubid tiraz robe, ochre geometric upper-arm/cuff/neck bands, tan sash, cream underhem, brown slippers, same linen weave and late1980s textured anime ink. Keep hands pixel aligned to guide, sleeves bend naturally. Preserve scalp164 chin324 soles1440 same framing and garment lengths. All exposed skin flat magenta #FF00FF and background pure green #00FF00. No accessories/hair, no cast ground shadow/text/zoom.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-78887ea0-3fee-44a9-857e-42f05ef6293d.png",
+      "path": "Raw/outfit_f_egypt_medieval2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b82cf9b29e36cfa0fbe10455ff4f8d91d05e93588aa69200b322bccad0e7957e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "embroidered tiraz robe",
+      "details": "",
+      "flags": {
+        "label": "embroidered tiraz robe"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_egypt_medieval2",
+      "prompt": "EDIT FIRST IMAGE by dressing unchanged fitting mannequin in exact costume of SECOND image. First controls exact pose and registration: RIGHT hand cups chin, left down. Preserve first head and hand contours pixel-aligned; hand overlaps lower face as shown. Second costume only: muted plum ankle-length Ayyubid tiraz robe, ochre geometric arm/cuff/neck bands, tan sash, cream underhem, brown slippers, identical linen texture and late1980s anime hand ink. Sleeves bend naturally along guide arms. Scalp164 chin324 soles1440 same framing. Exposed skin flat magenta #FF00FF; pure green #00FF00 background. No hair/accessories, no cast floor shadow, no text/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c2a7603c-d0a5-4968-abaf-5770b76d9df3.png",
+      "path": "Raw/outfit_f_egypt_medieval2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e48c111b3b7e94a51908532b0d1c00ede9cfbdf8a05c3aadff0f78e70d9951a8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "embroidered tiraz robe",
+      "details": "",
+      "flags": {
+        "label": "embroidered tiraz robe"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_egypt_medieval2",
+      "prompt": "EDIT FIRST IMAGE by dressing unchanged fitting mannequin in exact costume of SECOND image. First controls exact pose and registration: BOTH palms forward at lower chest, elbows near torso. Preserve head and hands contours pixel aligned first image. Second costume only: muted plum ankle-length Ayyubid tiraz robe, ochre geometric upper-arm/cuff/neck bands, tan sash, cream underhem, brown slippers, identical linen texture and late1980s anime hand ink. Sleeves bend naturally along guide arms. Scalp164 chin324 soles1440 same framing. Exposed skin flat magenta #FF00FF; pure green #00FF00 background. No hair/accessories, no cast floor shadow, no text/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4a4f1ae6-2ca4-447d-bde0-482422acf290.png",
+      "path": "Raw/outfit_f_egypt_medieval2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a0fa189306c2f16a104ba7aca4dbefd66f7f236b866779e1c3e57c8e65e55b58",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "long plaits",
+      "details": "",
+      "flags": {
+        "label": "long plaits"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_medieval2",
+      "prompt": "Edit this fully clothed adult historical wardrobe fitting illustration. Keep the same full length framing, neutral pose, head size and location, clothing coverage. Add two practical dark brown braids with center-parted hair swept back, ends reaching below ribcage, simple thread ties. Ayyubid Cairo historical hair asset, late1980s anime ink, subtle matte hair texture. For production separation recolor the entire opaque long sleeved ankle length robe and shoes to featureless solid magenta #FF00FF matching mannequin face and hands. Only hair retains natural finished color. Keep face guide and full clothing coverage; no anatomical details. Background pure green #00FF00,1024x1536, no text/shadows/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e198ca19-e5bc-4817-8138-0b28a98707b1.png",
+      "path": "Raw/hair_f_egypt_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "03b1b180a8d3080ba869317e6241b0c39036afe3bbb3bc76a0e8b89a0eb457af",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_egypt_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "country": "egypt",
+      "era": "medieval2",
+      "label": "qina' scarf",
+      "details": "",
+      "flags": {
+        "label": "qina' scarf",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_egypt_medieval2",
+      "prompt": "Edit supplied fully clothed adult historical fitting illustration into HEADSCARF source. Add plain ivory linen qina headscarf for Ayyubid Cairo woman c1187: modest lightweight cloth covering scalp and neck, loosely draped around shoulders, face fully open and visible, fine muted blue woven edge, simple natural folds. No jewelry, no visible hair. Preserve exact original head/face/body scale and pose; no zoom/crop. Recolor all existing opaque long-sleeved floor-length robe, belt, shoes and guide skin to flat magenta #FF00FF for separation, only scarf naturally colored. Late1980s hand-ink anime subtle cloth grain, restrained cel shadows. Flat green #00FF00 background,1024x1536, no text or floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8c17625b-7fff-4def-ad65-1c2ebeb11195.png",
+      "path": "Raw/headwear_f_egypt_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f5e53b8cb1fb59b3b920e8c22f04e088d8f851bf99e2c5f381068060b1166075",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed wool wrap",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length wrap of heavy dyed wool (madder red, blue or yellow) wound round the body and thrown over the left shoulder, leaving the right shoulder and arm bare. Every edge has a thick rolled fringe or tufted border, and a wide cloth belt holds it at the waist. Plain leather sandals.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_m_iraq_ancient.",
+      "flags": {
+        "label": "fringed wool wrap"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_iraq_ancient",
+      "prompt": "Production OUTFIT source,1024x1536. Dress supplied male fitting guide without changing its pose/proportions/head/feet registration. Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length wrap of heavy dyed wool (madder red, blue or yellow) wound round the body and thrown over the left shoulder, leaving the right shoulder and arm bare. Every edge has a thick rolled fringe or tufted border, and a wide cloth belt holds it at the waist. Plain leather sandals.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_m_iraq_ancient.\nChoose rich muted madder red wool with ochre thick rolled fringe, plain woven ochre waist belt, brown leather sandals. Only costume rendered; omit hair, beard, headwear and accessories because separate layers provide those. Exposed fitting guide solid magenta #FF00FF (not natural skin). Scalp239 chin400 soles1421 same canvas. Textured late1980s anime hand ink with wool fibers and pigment, restrained cel folds. Pure green #00FF00 background. Arms neutral down matching guide exactly. No text/insets/cast ground shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-09eb35a0-aa6d-43b8-8fa2-e6d7836768a1.png",
+      "path": "Raw/outfit_m_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "45e60bb3011ac596e33a2242fcf23a0e9a1bf1b9a805879c242d2bd059fe2d9d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_ancient__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed wool wrap",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length wrap of heavy dyed wool (madder red, blue or yellow) wound round the body and thrown over the left shoulder, leaving the right shoulder and arm bare. Every edge has a thick rolled fringe or tufted border, and a wide cloth belt holds it at the waist. Plain leather sandals.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_m_iraq_ancient.",
+      "flags": {
+        "label": "fringed wool wrap"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_iraq_ancient",
+      "prompt": "EDIT FIRST IMAGE fitting figure by dressing it in exact costume from SECOND reference: Old Babylonian madder-red wool wrap with thick ochre rolled/fringed borders, wide ochre cloth belt, brown sandals. First reference authoritative pose: left hand near upper chest, right down. Preserve first exposed head/hands/arms contours and positions exactly, scalp239 chin400 soles1421. Second supplies same costume construction, length, wool texture, folds and late1980s anime ink, change only physically needed folds at raised arm. All exposed guide regions flat magenta #FF00FF with NO chest anatomical lines. Green #00FF00 background. No beard/hair/accessories, no shadow/text/inset/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0588f6f3-55e7-4f21-9e1d-2205d4cda860.png",
+      "path": "Raw/outfit_m_iraq_ancient__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b073daba8dd5d33b61aeefb717433aab93b13b027fb80501a7762ca20183d8b9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_ancient__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed wool wrap",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length wrap of heavy dyed wool (madder red, blue or yellow) wound round the body and thrown over the left shoulder, leaving the right shoulder and arm bare. Every edge has a thick rolled fringe or tufted border, and a wide cloth belt holds it at the waist. Plain leather sandals.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_m_iraq_ancient.",
+      "flags": {
+        "label": "fringed wool wrap"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_iraq_ancient",
+      "prompt": "EDIT FIRST IMAGE fitting figure by dressing it in exact costume from SECOND reference: Old Babylonian madder-red wool wrap with thick ochre rolled/fringed borders, wide ochre cloth belt, brown sandals. First authoritative pose: right hand under chin, left down. Preserve first exposed head/hands/arms contours and positions exactly, scalp239 chin400 soles1421. Second supplies identical costume construction, length, wool texture, folds and late1980s anime ink; only folds at moving arm change. All exposed guide flat magenta #FF00FF, no chest anatomical lines. Pure green #00FF00 background. No beard/hair/accessories, no floor shadow/text/inset/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-afce226e-8223-4f1b-8399-91e236c84a8a.png",
+      "path": "Raw/outfit_m_iraq_ancient__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fc97ceb4df9dee0099f96097a5581790e9e949936cf9b7eec68cd1756fb2a9f8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_ancient__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed wool wrap",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length wrap of heavy dyed wool (madder red, blue or yellow) wound round the body and thrown over the left shoulder, leaving the right shoulder and arm bare. Every edge has a thick rolled fringe or tufted border, and a wide cloth belt holds it at the waist. Plain leather sandals.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_m_iraq_ancient.",
+      "flags": {
+        "label": "fringed wool wrap"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_iraq_ancient",
+      "prompt": "EDIT FIRST IMAGE fitting figure by dressing it in exact costume from SECOND reference: Old Babylonian madder-red wool wrap with thick ochre rolled/fringed borders, wide ochre cloth belt, brown sandals. First authoritative pose: both palms forward at lower chest, elbows close to torso. Preserve exposed head/hands/arms contours and positions exactly, scalp239 chin400 soles1421. Second supplies identical costume construction, length, wool texture and late1980s anime ink; only folds at moving arms change. All exposed guide flat magenta #FF00FF, no chest anatomical lines. Pure green #00FF00 background. No beard/hair/accessories, no floor shadow/text/inset/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1095a2b2-dafd-43a0-b6e7-061eb4745b0b.png",
+      "path": "Raw/outfit_m_iraq_ancient__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b98bba5d42ddbb216575700ece66ca3b8ec0fd3452d230a6c6214ce4be8cd4d5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "low chignon",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Long hair drawn back into a low, rounded chignon (bun) at the nape\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw hair_m_iraq_ancient.",
+      "flags": {
+        "label": "low chignon"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_iraq_ancient",
+      "prompt": "Historical HAIR source only1024x1536. Add dark brown long hair swept back into low rounded chignon at nape on unchanged supplied male fitting figure. Babylon c1760BCE, not modern topknot or short haircut. Hair smooth with subtle wavy strands, compact bun edges visible at neck sides, ears readable. No facial hair because separate layer, no headwear. Textured late1980s hand-ink anime matte pigment. Preserve exact head/face/shoulders/pose/feet registration; scalp239 chin400 soles1421. All guide skin and plain full coverage tunic/trousers solid magenta #FF00FF, only hair finished color. Pure green #00FF00 background, no text/floor shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-48954155-682e-4027-b96e-707880c4029d.png",
+      "path": "Raw/hair_m_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "927b14ee1bcbebcbccfa6909145f1df48fc9b0bcb83d40d987edcec84adb28b4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
