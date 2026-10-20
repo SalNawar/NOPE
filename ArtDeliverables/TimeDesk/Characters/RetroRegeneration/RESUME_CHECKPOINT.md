@@ -1,10 +1,10 @@
-# Resume checkpoint: 20 October 2026
+# Resume checkpoint: 21 October 2026
 
-User resumed generation. 721 / 1156 raw sources saved; 435 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 746 / 1156 raw sources saved; 410 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: facialhair_m_china_medieval. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_m_china_industrial__thinking_b. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -41,3 +41,5 @@ Occlusion review: 1720 female futa overlaps necklace region and thinking hand; a
 18 sources since cb50411: Padua male biretta; complete Padua female wardrobe; complete Han Luoyang male wardrobe; Han female outfit and three poses. All 714 PNG dimensions/hashes/prompts audited. Han female shoe positions and baseline remain off the mannequin despite four revision attempts; these are NOT approved runtime layers. All poses inherit that base consistently. Padua female lace collar must remain beneath overlapping hands. Han cap fit over the topknot needs assembled review. Last pushed remains 3875d81; approval for exact 0883141 remains pending. Hair_f_china_ancient generation in progress; do not count until saved. No old art removed.
 
 Seven further sources saved: Han female hair and corrected smaller jade bi pendant; Song male robe and three poses and topknot. All 721 source dimensions/hashes/prompts verified. Jade pendant requires neckline and hand overlap review; cap must fit over topknot. Current generation is facialhair_m_china_medieval. Last pushed remains 3875d81 and exact 0883141 approval remains pending. No runtime acceptance claimed.
+
+25 sources since 2b7c22e: remaining Song male beard/cap/belt; complete Song female set; complete Ming male/female sets; Qing male neutral and explaining_a. All 746 PNG dimensions/hashes/prompts audited. Song/Ming male hats corrected for colored temple hair, Song belt corrected to remove robe contamination, Song crescent comb corrected to tuck teeth into bun. Discard residual magenta guide lines/wisps during extraction. Song beard has fine sparse strands needing keying review. Song belt and Ming sitao sash must remain beneath hands. Song and Ming female shoe baselines slightly lower than guide; registration acceptance still pending. Ming female baotou overlaps hair; retain separate hairpins correctly. Qing purse remains at same hip location in neutral/explaining. Last pushed remains 3875d81; explicit 0883141 approval still pending. No runtime integration or old-art removal. Continue Qing thinking_b.

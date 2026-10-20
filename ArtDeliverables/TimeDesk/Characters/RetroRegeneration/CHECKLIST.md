@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 721. Full regeneration is NOT complete.
+Saved: 746. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -725,3 +725,28 @@ Saved: 721. Full regeneration is NOT complete.
 | outfit_m_china_medieval__thinking_c | visually reviewed; registration pending |
 | outfit_m_china_medieval__objecting_a | visually reviewed; registration pending |
 | hair_m_china_medieval | visually reviewed; registration pending |
+| facialhair_m_china_medieval | visually reviewed; registration pending |
+| headwear_m_china_medieval | visually reviewed; registration pending |
+| accessory_m_china_medieval | visually reviewed; registration pending |
+| outfit_f_china_medieval | visually reviewed; registration pending |
+| outfit_f_china_medieval__explaining_c | visually reviewed; registration pending |
+| outfit_f_china_medieval__thinking_a | visually reviewed; registration pending |
+| outfit_f_china_medieval__objecting_b | visually reviewed; registration pending |
+| hair_f_china_medieval | visually reviewed; registration pending |
+| headwear_f_china_medieval | visually reviewed; registration pending |
+| outfit_m_china_earlymodern | visually reviewed; registration pending |
+| outfit_m_china_earlymodern__explaining_c | visually reviewed; registration pending |
+| outfit_m_china_earlymodern__thinking_a | visually reviewed; registration pending |
+| outfit_m_china_earlymodern__objecting_b | visually reviewed; registration pending |
+| hair_m_china_earlymodern | visually reviewed; registration pending |
+| facialhair_m_china_earlymodern | visually reviewed; registration pending |
+| headwear_m_china_earlymodern | visually reviewed; registration pending |
+| accessory_m_china_earlymodern | visually reviewed; registration pending |
+| outfit_f_china_earlymodern | visually reviewed; registration pending |
+| outfit_f_china_earlymodern__explaining_a | visually reviewed; registration pending |
+| outfit_f_china_earlymodern__thinking_b | visually reviewed; registration pending |
+| outfit_f_china_earlymodern__objecting_c | visually reviewed; registration pending |
+| hair_f_china_earlymodern | visually reviewed; registration pending |
+| headwear_f_china_earlymodern | visually reviewed; registration pending |
+| outfit_m_china_industrial | visually reviewed; registration pending |
+| outfit_m_china_industrial__explaining_a | visually reviewed; registration pending |
