@@ -33,6 +33,51 @@
       "op": "waitTraveller"
     },
     {
+      "op": "track",
+      "name": "guide_arrow",
+      "target": "OfficeOverlayCanvas/GuidePrompt/Arrow"
+    },
+    {
+      "op": "track",
+      "name": "car0",
+      "target": "Exterior flying vehicle 0"
+    },
+    {
+      "op": "track",
+      "name": "car1",
+      "target": "Exterior flying vehicle 1"
+    },
+    {
+      "op": "track",
+      "name": "car2",
+      "target": "Exterior flying vehicle 2"
+    },
+    {
+      "op": "track",
+      "name": "car3",
+      "target": "Exterior flying vehicle 3"
+    },
+    {
+      "op": "track",
+      "name": "car4",
+      "target": "Exterior flying vehicle 4"
+    },
+    {
+      "op": "track",
+      "name": "car5",
+      "target": "Exterior flying vehicle 5"
+    },
+    {
+      "op": "track",
+      "name": "car6",
+      "target": "Exterior flying vehicle 6"
+    },
+    {
+      "op": "track",
+      "name": "car7",
+      "target": "Exterior flying vehicle 7"
+    },
+    {
       "op": "cheat",
       "name": "Extra",
       "text": "Hall FX: dust"

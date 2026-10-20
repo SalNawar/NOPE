@@ -33,6 +33,11 @@
       "op": "waitTraveller"
     },
     {
+      "op": "track",
+      "name": "guide_arrow",
+      "target": "OfficeOverlayCanvas/GuidePrompt/Arrow"
+    },
+    {
       "op": "res",
       "w": 1920,
       "h": 1080

@@ -33,6 +33,11 @@
       "op": "waitTraveller"
     },
     {
+      "op": "track",
+      "name": "guide_arrow",
+      "target": "OfficeOverlayCanvas/GuidePrompt/Arrow"
+    },
+    {
       "op": "cheat",
       "name": "Extra",
       "text": "Hall FX: dust"
