@@ -181,13 +181,16 @@ Shader "TimeDesk/PortalGlow"
             col = lerp(col, _Rim.rgb, shock);
 
             // The rim: along the hole's painted edge (the mask's edge depth: an ink line, then a hard bright band at
-            // the edge), and along the iris's own edge while it springs open inside the hole.
+            // the edge), and along the iris's own edge only while it springs open inside the hole: it fades out
+            // as the iris reaches the hole's reach (_Life.x 0.85 to 1), so a full-open vortex has no second ink
+            // line or rim band that does not follow the painted edge (an arch's corners past 0.9 of its reach).
             float depth = m.a;
             float dw = max(fwidth(depth), 1e-3);
+            float springing = 1.0 - smoothstep(0.85, 1.0, iris);
             col = lerp(col, _Ink.rgb, Band(depth, 0.33, 0.1, dw));
             col = lerp(col, _Rim.rgb, Cel(depth, 0.2, dw));
-            col = lerp(col, _Ink.rgb, Band(rr, 0.88, 0.02, pixel / edge));
-            col = lerp(col, _Rim.rgb, 1.0 - Cel(rr, 0.9, pixel / edge));
+            col = lerp(col, _Ink.rgb, springing * Band(rr, 0.88, 0.02, pixel / edge));
+            col = lerp(col, _Rim.rgb, springing * (1.0 - Cel(rr, 0.9, pixel / edge)));
 
             float bright = _Glow.z * (1.0 + _Glow.w * night + 0.5 * flare) * (1.0 + _Glow.x * heart);
             float fill = inside * m.r * (1.0 - m.g) * lerp(1.0, _Shape.y, m.b) * _Shape.z;

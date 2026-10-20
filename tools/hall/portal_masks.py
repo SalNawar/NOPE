@@ -11,12 +11,16 @@ the hole the ring's metal encloses:
      grey of the ring's metal;
   2. the hole is the convex hull of the open components that meet the ring's seed
      ellipse (the hole of a ring or an arch is convex: the hull fills the bars, rails
-     and clutter that cross it). An arch (rings 4, 5) has no lower half: its hole ends
-     at the bay fence's top rail;
+     and clutter that cross it). An arch (rings 4, 5) has no painted lower half: as on
+     the full rings, its hole goes on below the bay fence's top rail, through the bay's
+     glass pane under the arch, down to the fence's lower rail (the audit's VIS-2 and
+     portal_report.txt measured the painted hole so: centre about canvas y 219);
   3. what stands in front of the hole (the occluders) is the straight structure across
      it: rows or columns of the hole that are mostly not open (the fence rails, the
-     mullion bar; an arch has rails only). Dark things that do not span the hole (a
-     pipe on the wall behind) are behind it, so the vortex covers them;
+     mullion bar). On an arch the columns are counted below the top rail only (the
+     fence's posts in front of the glass), and its brass (rails, posts, the balls on
+     them) is the fence too. Dark things that do not span the hole (a pipe on the wall
+     behind, above an arch's rail) are behind it, so the vortex covers them;
   4. below the fence rail the hole is seen through the bay's glass.
 
 Writes Assets/Data/Config/HallPortalMasks.png, an atlas of one crop per ring at SCALE
@@ -60,8 +64,8 @@ RINGS = [
     (1, 1096, 488, 49, 56, 478, False),
     (2, 968, 364, 25, 23, 364, False),
     (3, 1210, 363, 25, 23, 364, False),
-    (4, 1763, 190, 16, 13, 203, True),
-    (5, 2004, 188, 25, 20, 206, True),
+    (4, 1765, 219, 22, 50, 203, True),
+    (5, 2004, 219, 34, 52, 206, True),
 ]
 
 
@@ -79,15 +83,22 @@ def luma(rgb):
     return rgb @ np.array([0.299, 0.587, 0.114], np.float32)
 
 
+def brass_of(rgb):
+    """Brass: warm and saturated (the fence's rails, posts and balls)."""
+    hi, lo = rgb.max(-1), rgb.min(-1)
+    sat = (hi - lo) / np.maximum(hi, 1e-3)
+    warm = rgb[..., 0] - rgb[..., 2]
+    return (warm > 0.12) & (sat >= 0.35)
+
+
 def open_of(rgb):
     """The wall and glass seen through a hole: bright, or the warm unsaturated wall in shade; never brass."""
     L = luma(rgb)
     hi, lo = rgb.max(-1), rgb.min(-1)
     sat = (hi - lo) / np.maximum(hi, 1e-3)
     warm = rgb[..., 0] - rgb[..., 2]
-    brass = (warm > 0.12) & (sat >= 0.35)
     wall = (warm > 0.04) & (sat < 0.35) & (L > 0.42)
-    return ((L > OPEN_LUMA) | wall) & ~brass
+    return ((L > OPEN_LUMA) | wall) & ~brass_of(rgb)
 
 
 def hole_of(O, n, cx, cy, rx, ry, fence, arch):
@@ -96,13 +107,9 @@ def hole_of(O, n, cx, cy, rx, ry, fence, arch):
     x0, y0 = max(0, cx - m), max(0, cy - m)
     x1, y1 = min(O.shape[1], cx + m), min(O.shape[0], cy + m)
     crop = O[y0:y1, x0:x1].copy()
-    if arch:
-        crop[max(0, fence - y0):, :] = False
     labels, count = nd.label(crop)
     yy, xx = np.mgrid[y0:y1, x0:x1]
     seed = ((xx - cx) / (rx * 0.75)) ** 2 + ((yy - cy) / (ry * 0.75)) ** 2 <= 1.0
-    if arch:
-        seed &= yy < fence
     keep = np.zeros_like(crop)
     for k in np.unique(labels[seed & crop]):
         if k == 0:
@@ -160,10 +167,19 @@ def main():
         sy = np.clip(np.floor(cys).astype(int), 0, H - 1)
         dark = ~O[sy, sx]
         hole = R > 0.5
+        glass = cys > fence
         rows = np.array([(dark[i] & hole[i]).sum() / max(1, hole[i].sum()) for i in range(R.shape[0])])
-        cols = np.array([(dark[:, j] & hole[:, j]).sum() / max(1, hole[:, j].sum()) for j in range(R.shape[1])])
-        across = (rows[:, None] >= SPAN) | ((cols[None, :] >= BAR_SPAN) & (not arch))
-        G = (dark & across & hole).astype(np.float32)
+        if arch:
+            # An arch's bars are the fence's posts, in front of the glass below its rail; above the rail, dark
+            # things on the wall behind (a pipe) are behind the hole. Brass inside the hole is the fence too.
+            below = hole & glass
+            cols = np.array([(dark[:, j] & below[:, j]).sum() / max(1, below[:, j].sum()) for j in range(R.shape[1])])
+            across = (rows[:, None] >= SPAN) | ((cols[None, :] >= BAR_SPAN) & glass)
+            G = ((dark & across & hole) | (brass_of(rgb[sy, sx]) & hole)).astype(np.float32)
+        else:
+            cols = np.array([(dark[:, j] & hole[:, j]).sum() / max(1, hole[:, j].sum()) for j in range(R.shape[1])])
+            across = (rows[:, None] >= SPAN) | (cols[None, :] >= BAR_SPAN)
+            G = (dark & across & hole).astype(np.float32)
         G = nd.binary_dilation(G > 0, iterations=1).astype(np.float32) * (R > 0)  # keep the bars' antialiased edges painted
         B = (cys > fence).astype(np.float32) * (R > 0)
         A = np.clip(nd.distance_transform_edt(R > 0.5) / (EDGE_PX * SCALE), 0, 1).astype(np.float32)

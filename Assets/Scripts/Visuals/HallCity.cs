@@ -117,8 +117,6 @@ public static class HallCity
                 (1f * w.x + 1f * w.y + 0.55f * w.z + 0.43f * w.w) / total);
     }
 
-    private static float Frac(float v) => v - (float)Math.Floor(v);
-
     private static float Clamp01(float v) => v < 0f ? 0f : v > 1f ? 1f : v;
 
     private static float Clamp(float v, float lo, float hi) => v < lo ? lo : v > hi ? hi : v;

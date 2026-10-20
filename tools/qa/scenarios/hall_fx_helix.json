@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "HALL-FX BUG-54/56e: the Helix monitor 10 s before and after a wrong call (one glitch, then calm within 2 s), then just past the warning value (firedAtStability + stabilityCriticalMargin) and back. Pass: seqtools flicker on every sequence; the warning state shows (region_luma on the monitor: warmer, steady) and goes."
+      "text": "HALL-FX BUG-54/56e: the Helix monitor 10 s before and after a wrong call (one glitch, then calm within 2 s), then just past the warning value (firedAtStability + stabilityCriticalMargin) and back; then the PC tray's strip river (BUG-54's tray/HUD river, OfficeSceneUIBuilder.BuildTrayRiver: 'TimelineStrip') through a drop, and the Home HUD's river ('StabilitySlot') after the shift. Pass: seqtools flicker on every sequence; the warning state shows (region_luma --track desk_river: warmer, steady) and goes; the tray strip glitches once and is calm 2 s after the drop (region_luma --track tray_river --from 4.5 --max-range 6); the Home river is steady (region_luma --track home_river --from 1 --max-range 6). LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end): its shimmer is LIGHT's to measure (BUG-13 split, #11)."
     },
     {
       "op": "title"
@@ -31,6 +31,16 @@
     },
     {
       "op": "waitTraveller"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
+    },
+    {
+      "op": "track",
+      "name": "desk_river",
+      "target": "DeskRiver"
     },
     {
       "op": "hour",
@@ -106,8 +116,107 @@
       "f": 90
     },
     {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "track",
+      "name": "tray_river",
+      "target": "TimelineStrip"
+    },
+    {
+      "op": "recStart",
+      "name": "helix_tray_drop"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "mark",
+      "name": "drop"
+    },
+    {
+      "op": "cheat",
+      "name": "AddStability",
+      "f": -2.5
+    },
+    {
+      "op": "wait",
+      "f": 8
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "helix_tray"
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "track",
+      "name": "home_river",
+      "target": "StabilitySlot"
+    },
+    {
+      "op": "record",
+      "name": "helix_home",
+      "f": 10
+    },
+    {
+      "op": "still",
+      "name": "helix_home"
+    },
+    {
       "op": "hour",
       "f": -1
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
     },
     {
       "op": "probe",

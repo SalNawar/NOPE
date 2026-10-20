@@ -1,7 +1,7 @@
 // HALL-FX's QA rig ops (QA-RIG §4 "Tracks' own ops"). QaRunner is not on fix/p0-cuts, the branch HALL-FX was cut
 // from, so this file waits here as text: after QA-RIG merges, move it to Assets/Tests/PlayMode/HALL-FX/HallFxRig.cs
-// (with a .meta), then docs/pending/HALL-FX/hall_fx_portals.json to tools/qa/scenarios/ (its ops must be registered
-// first, or QA-RIG's scenario test fails on the unknown names).
+// (with a .meta), then docs/pending/HALL-FX/hall_fx_portals.json and hall_fx_dusk.json to tools/qa/scenarios/ (their
+// ops must be registered first, or QA-RIG's scenario test fails on the unknown names).
 #if UNITY_EDITOR || TIMEDESK_QA
 using System.Collections;
 using System.Globalization;
@@ -10,13 +10,17 @@ using System.Text;
 using UnityEngine;
 
 /// <summary>
-/// HALL-FX's ops for QA-RIG scenarios (BUG-26a: "the circular probe is replaced by the effect-on vs effect-off
+/// HALL-FX's ops for QA-RIG scenarios. BUG-26a ("the circular probe is replaced by the effect-on vs effect-off
 /// diff"): <c>hallPortals</c> (n 0 hides every ring's vortex, 1 shows them again: their GameObjects, so nothing
 /// the game drives is touched), and <c>hallPortalsShot</c> (name = the hour tag, e.g. "12"): a still with the
-/// vortexes on and one with them off into shots/portals/h&lt;tag&gt;_&lt;height&gt;_on|off.png, and each effect's
-/// screen quad appended to qa_report.txt in the run folder, the layout the audit's portals.py reads
-/// (R7\AUDIT\VIS\scripts\portals.py &lt;run folder&gt; &lt;out&gt;: the painted hole's ellipse on the off frame against the
-/// vortex's, and the effect's pixels outside the hole).
+/// vortexes on and one with them off into shots/portals/h&lt;tag&gt;_&lt;width&gt;x&lt;height&gt;_on|off.png (the width
+/// too: A1 and A3 are both 1080 tall), and each effect's screen quad appended to qa_report.txt in the run folder,
+/// which tools/hall/portal_check.py reads (the painted hole registered on the off frame against the vortex, and
+/// the effect's pixels outside the hole). BUG-13 on a running clock: <c>hallClock</c> (f = an hour of the day)
+/// moves today's shift clock forward to that hour (ShiftClock.Spend: it never runs backwards, and closing time
+/// still closes) and adds two columns to every captured frame from then on, hallHour (the hour the hall shows)
+/// and cityLit (_HallCityLights.x, the city's lit share), so a dusk sequence shows its windows lighting while the
+/// clock runs; it forces no hour (the scenario clears any with "hour" -1 first).
 /// </summary>
 public static class HallFxRig
 {
@@ -25,11 +29,26 @@ public static class HallFxRig
     {
         QaRunner.RegisterOp("hallPortals", (runner, step) => Show(step.n != 0));
         QaRunner.RegisterOp("hallPortalsShot", Shot);
+        QaRunner.RegisterOp("hallClock", Clock);
+    }
+
+    private static IEnumerator Clock(QaRunner runner, QaStep step)
+    {
+        ShiftClockDriver driver = Object.FindAnyObjectByType<ShiftClockDriver>();
+        if (driver == null || driver.Clock == null || !driver.Clock.IsStarted)
+            throw new System.InvalidOperationException("hallClock: no running shift clock (press the AVAILABLE sign first).");
+        float minutes = step.f * 60f - driver.MinuteOfDay;
+        if (minutes > 0f)
+            driver.Spend(minutes);
+        HallLightingRig lights = Object.FindAnyObjectByType<HallLightingRig>();
+        runner.Recorder.Column("hallHour", () => lights != null ? lights.Hour.ToString("0.000", CultureInfo.InvariantCulture) : "-");
+        runner.Recorder.Column("cityLit", () => Shader.GetGlobalVector("_HallCityLights").x.ToString("0.0000", CultureInfo.InvariantCulture));
+        yield return QaGame.Frames(5);
     }
 
     private static IEnumerator Show(bool on)
     {
-        foreach (PortalEffect e in Object.FindObjectsByType<PortalEffect>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID))
+        foreach (PortalEffect e in Object.FindObjectsByType<PortalEffect>(FindObjectsInactive.Include))
             e.gameObject.SetActive(on);
         yield return QaGame.Frames(3);
     }
@@ -42,7 +61,7 @@ public static class HallFxRig
         int hour = Mathf.RoundToInt(float.Parse(tag, CultureInfo.InvariantCulture));
         var report = new StringBuilder($"== portals at {hour} {Screen.width}x{Screen.height}\n");
         Camera camera = Camera.main;
-        foreach (PortalEffect e in Object.FindObjectsByType<PortalEffect>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID))
+        foreach (PortalEffect e in Object.FindObjectsByType<PortalEffect>(FindObjectsInactive.Include))
         {
             Transform t = e.transform;
             Vector3 a = camera.WorldToScreenPoint(t.TransformPoint(new Vector3(-0.5f, -0.5f, 0f)));
@@ -52,10 +71,10 @@ public static class HallFxRig
                                 e.name, e.Showing, e.Night, c.x, c.y, Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
         }
         File.AppendAllText(Path.Combine(runner.OutDir, "qa_report.txt"), report.ToString());
-        runner.Recorder.Still(Path.Combine(dir, $"h{hour:00}_{Screen.height}_on.png"));
+        runner.Recorder.Still(Path.Combine(dir, $"h{hour:00}_{Screen.width}x{Screen.height}_on.png"));
         yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the on still");
         yield return Show(false);
-        runner.Recorder.Still(Path.Combine(dir, $"h{hour:00}_{Screen.height}_off.png"));
+        runner.Recorder.Still(Path.Combine(dir, $"h{hour:00}_{Screen.width}x{Screen.height}_off.png"));
         yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the off still");
         yield return Show(true);
     }

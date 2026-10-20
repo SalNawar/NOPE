@@ -14,6 +14,17 @@ Branch `fix/a-hall-fx`, cut from `fix/p0-cuts` (5aecb60). Phase A merge #4. Sour
 
 Everything else below that is a design choice is marked **proposal (ours)**.
 
+## The verifier's findings, and where each is fixed
+| # | Finding | Fix (section) |
+|---|---|---|
+| 1 | BUG-67: the invite beats ran out behind the morning briefing | The beats start on the first frame the sign can be pressed (`InvitePulse.Since`, `AvailableSignLink.Pressable`); 2 new tests; `hall_fx_sign.json` re-timed (BUG-67; RESULT 8; decision 10) |
+| 2 | BUG-26a: rings 4/5 openings disagreed with the audit's painted holes | Arches' holes go on through the glass pane to the lower rail; refitted (centres now at canvas y 218 and 214); the pass's hole definition is stated and measured by the new `portal_check.py` (BUG-26a; RESULT 10; decision 3) |
+| 3 | BUG-13: the city scenario never ran a clock | New `hall_fx_dusk.json` on the running shift clock across dusk at A1 and A2 (`hallClock` rig op, `dusk_check.py`); step 5 text corrected (RESULT 5) |
+| 4 | BUG-13: dust and crowd fades not covered | Dust split to LIGHT (split register); HALL-FX runs hide it ("Hall FX: dust"); crowd fades judged by the flicker rule (BUG-13; RESULT 5; decision 11) |
+| 5 | PortalGlow drew the iris rim at full open | Faded out as the iris opens (BUG-26a; RESULT 10; decision 12) |
+| 6 | Inexact Unity recipes | Every region is a tracked object (`region_luma --track`); new `hall_fx_crossfade.json`; tray strip and Home HUD Helix captures in `hall_fx_helix.json`; decisions renumbered (RESULT 6-9) |
+| 7 | Dead `HallCity.Frac`; stale binder comment | `Frac` deleted; the binder's comment is on the cleanup list (DESK-PLAN) |
+
 ## What changed, per BUG id
 
 ### BUG-13 City windows strobe, headlights twinkle, daylight cars at night (HALL-FX's whole cluster)
@@ -25,7 +36,11 @@ Everything else below that is a design choice is marked **proposal (ours)**.
 - **Clouds, the airship and the bus cross from off one edge to off the other** in the hall window too. Before, `Fly` kept the raw `frac` in the hall, and the second cloud wrapped with a plain `frac`, so they popped in view.
 - **The flying traffic sprites** (`HallCityTraffic.shader`) take four rotated-grid samples over each pixel's footprint (sub-pixel smoothing for the unmipped art), and fade their outermost screen pixel (the margin), so their quad's edge never crawls.
 - **The traffic is tinted by the hour (CODE-69).** Each car's colour is `HallCity.HourLight` of the hall lights' hour: the same four-state light the city painting is lit by, and the light CityView already gave its own traffic. It also fades at its lane's ends (`HallCity.LaneEndFade`, 6% of the lane), so the lane's wrap never pops it.
-- **Files:** `Assets/Shaders/HallLivingCity.shader`, `HallCityTraffic.shader`, `Assets/Scripts/Office/HallCityExterior.cs`, new `Assets/Scripts/Visuals/HallCity.cs`.
+- **The dust motes are LIGHT's (split, filed to LIGHT at #11).** BUG-13 also lists "flyers and dust shimmer" (VIS-9: motes 1-2 px across, worse at night). The flyers are fixed here (above). The dust lives in `HallLightingRig`'s ParticleSystems (`dust`, `ApplyDust`), which LIGHT owns, so HALL-FX leaves it: see the split register under For INTEGRATION.
+  - HALL-FX's flicker sequences run with the dust hidden, through a new dev cheat, "Hall FX: dust" (`Assets/Scripts/DevTools/HallFxCheats.cs`, DevCheats.Register; it disables the dust's particle renderers under every `HallLightingRig` and touches nothing the rig drives). So HALL-FX's gate never waves the dust through, and the dust never fails HALL-FX's gate; LIGHT measures it with the dust shown.
+  - `HallWhiteCrowds`' fades need no mask: each group fades in over 4 s once per 80 s cycle and holds 38 s (`Fade`), so a pixel crosses at most one fade in and one fade out in 10 s, which the flicker rule ("more than twice") already allows.
+- **Dead code:** `HallCity.Frac` (private, no caller) is deleted.
+- **Files:** `Assets/Shaders/HallLivingCity.shader`, `HallCityTraffic.shader`, `Assets/Scripts/Office/HallCityExterior.cs`, new `Assets/Scripts/Visuals/HallCity.cs`, new `Assets/Scripts/DevTools/HallFxCheats.cs` (the dust cheat, QA only).
 
 ### BUG-54 Helix River monitor strobes (and BUG-56e, the warning state)
 - **One readable glitch on a drop, then calm.** The glitch used to grow with the warning band and with the day's losses. The day's-loss part never decayed (the "gain per correct call is 0" root cause), so after one mistake the glass tore at 10 Hz all shift. Now any fall of the hidden stability starts one burst: `glitchWild` x (1 - u)^2 over `glitchSeconds` 0.2 s (bible J4: "1 burst of 200 ms per drop"), then 0.
@@ -55,10 +70,15 @@ Everything else below that is a design choice is marked **proposal (ours)**.
   - `agitationGlitch` is removed. `glitchWild` now means the burst's peak.
 
 ### BUG-67 The AVAILABLE sign pulses forever
-- From the moment the sign starts wanting its first press, it pulses `InvitePulse.Cycles` beats (`DeskConfigSO.readyInviteSeconds` 1.6 s each), then holds lit and steady. Each beat is a cosine dip from the lit ink toward the paused ink and back, so the pulse starts and ends lit with no jump. The component stops running when it settles. Under Reduced Motion it is lit and steady at once.
+- From the first frame the sign can be pressed, it pulses `InvitePulse.Cycles` beats (`DeskConfigSO.readyInviteSeconds` 1.6 s each), then holds lit and steady. Each beat is a cosine dip from the lit ink toward the paused ink and back, so the pulse starts and ends lit with no jump. The component stops running when it settles. Under Reduced Motion it is lit and steady at once.
+- **The beats wait for the briefing (verifier finding 1).** The binder adds and configures the link at office load, while the morning briefing ("The Temporal Times") still covers the office. The first version started the beats there, so all 4.8 s of them ran out behind the briefing and the player never saw them. Now:
+  - `InvitePulse.Since` is the start rule: NaN while the sign does not invite; the first moment it invites **and can be pressed**; held from then on, and cleared when the first press (or closing) ends the invitation.
+  - `AvailableSignLink` never starts the beats at `Configure` or `Apply`. Its `Update` polls `Pressable` each frame until they start: the gameplay layer's `BoothCoordinator.Phase` is not `Newsletter`. GameManager sets `Newsletter` before it shows the briefing and `NoTraveller` in `BeginShift` (Start Shift), the same call that makes the sign's `Clickable` interactable. With no briefing panel, `BeginShift` runs at once, so the beats start on the first frame. The sign holds lit and steady while it waits.
+  - Reading `BoothCoordinator.Phase` is read-only use of DESK-PLAN's public property; no other track's file changed. The binder's call is unchanged.
 - **Proposal (ours):** 3 cycles (FIX_PLAN: "2-3"). It is a constant in `InvitePulse`, because `DeskConfigSO` is DOC-HANDLE's: see the knob request below.
 - BELL-SIGN (Phase B, lease after #4) adds the sign's pause state (D20).
 - **Files:** `Assets/Scripts/Office/AvailableSignLink.cs`, new `Assets/Scripts/Visuals/InvitePulse.cs`.
+- **The scenario is re-timed.** `hall_fx_sign.json` forces the hour before Start Shift, so `sign_invite` starts on the frame after the briefing closes and holds all 3 beats (6 s). It tracks the sign's click box (`ReadySign`) as its region, records 3 s under the briefing (`sign_steady_briefing`), and names the steady sequences `sign_steady_*`: the flicker gate reads those, not the invitation, whose 3 beats are motion meant to be seen.
 
 ### BUG-71 The hall slot crossfade shows the painting through
 - **Unscaled time.** It was scaled time, so a hit-stop froze it.
@@ -69,11 +89,11 @@ Everything else below that is a design choice is marked **proposal (ours)**.
 - **Per-ring painted-aperture masks, generated from the painting, not a colour test at run time.** `tools/hall/portal_masks.py` reads the hall drawing (`HallWarmStone.png`, the layer "62 Approved deeper architecture", read only) and writes one RGBA crop per ring into `Assets/Data/Config/HallPortalMasks.png` (linear, no mips, uncompressed). How it finds each hole:
   - the wall and glass seen through it are bright, or the warm unsaturated wall in an arch's shade, never brass or the ring's cool grey;
   - the hole is the convex hull of those pixels' components that meet the ring's seed ellipse;
-  - an arch's hole (rings 4 and 5) ends at the bay fence's top rail.
+  - an arch's hole (rings 4 and 5) goes on below the bay fence's top rail, through the glass pane under the arch, down to the fence's lower rail, as a full ring's goes on behind its glass (verifier finding 2: the first version ended it at the top rail, a third of the painted height and 27-31 canvas px too high).
 
   The four channels:
   - **R, the hole:** antialiased.
-  - **G, what stands in front:** rows across the hole that are mostly not open (the fence rails), and on the full rings columns that are (the mullion bar). Dark things that do not span the hole, such as a pipe on the wall behind ring 5, are behind it, so the vortex covers them.
+  - **G, what stands in front:** rows across the hole that are mostly not open (the fence rails), and columns that are (the mullion bar; on an arch, counted below the top rail only: the fence's posts in front of the glass). On an arch, the fence's brass (rails, posts, the ball on ring 5's post) is in front too. Dark things that do not span the hole, such as a pipe on the wall behind ring 5 above its rail, are behind it, so the vortex covers them.
   - **B, behind the glass:** the part below the fence rail.
   - **A, the edge depth:** 6 canvas px deep, for the rim.
 - **The openings come from mask fits.** Each ring's opening in `HallPortals.asset` is the R channel's moment fit: centre, and radii of twice the standard deviations. Its `reach` is the farthest hole pixel in opening radii, so the iris uncovers it all. The old hand measures were 9% too tall on ring 1 and far off on rings 4 and 5. The tool's overlays were checked by eye, ring by ring.
@@ -83,8 +103,10 @@ Everything else below that is a design choice is marked **proposal (ours)**.
   | 1 | (1094.2, 486.6), 53.3 x 47.9 | (1096, 488), 49 x 56 |
   | 2 | (969.4, 365.2), 23.3 x 18.9 | (968, 364), 25 x 23 |
   | 3 | (1210.4, 366.5), 23.4 x 20.9 | (1210, 363), 25 x 23 |
-  | 4 | (1764.7, 192.5), 17.8 x 12.3 | (1762, 213), 16 x 41 |
-  | 5 | (2004.9, 187.9), 25.7 x 21.1 | (2003, 213), 28 x 50 |
+  | 4 | (1766.3, 217.7), 22.1 x 38.3 | (1762, 213), 16 x 41 |
+  | 5 | (2004.6, 214.2), 34.6 x 46.2 | (2003, 213), 28 x 50 |
+
+  Rings 4 and 5 now sit where the audit measured their painted holes (VIS-2, `portal_report.txt` at 1080 day: centres about canvas y 219-220, 6-7 screen px below the old 213): their centres' y are within 1.2 and 5.8 canvas px of it. Their heights stay under the audit's figure, because the audit's ray rule counts more than the aperture: see "The probe" below.
 - **One portal source (BUG-73d).** The new `HallPortalsSO` (`Assets/Scripts/Office/HallPortalsSO.cs`, `Assets/Data/Config/HallPortals.asset`) holds:
   - the drawing, its canvas, the masks;
   - each ring's layers, opening, reach and mask crops;
@@ -102,14 +124,17 @@ Everything else below that is a design choice is marked **proposal (ours)**.
 - **A layered cel vortex.**
   - A slow back layer (one more arm, turning the other way, dim) under the front layer's two hard tones.
   - The ink line and the bright rim follow the painted edge (the mask's A channel).
+  - The iris's own ink line and rim band (at 0.88 and past 0.9 of the iris) show only while the iris springs open: they fade out as `_Life.x` goes from 0.85 to 1 (verifier finding 5). Before, they drew on every frame, so a full-open arch had bright rim patches in its lower corners at the fence rail (reach about 1.2), and ring 1 a second ink line just inside the painted rim. Shader-only: checked by eye at RESULT step 10.
   - Every hard edge is antialiased on its unwrapped coordinate: the arms' bands use the periodic distance, so there is no seam where the angle wraps, and the AA width is analytic, not `fwidth(frac())`.
   - The sparkles are antialiased and fade out when the opening is under about 20 px on screen (they shimmered on the rear rings).
 - **BUG-64c.** `PortalEffect` reads Reduced Motion live every frame. Before, it was cached at Show and at each flare. Turning it on stills an open vortex at once and finishes its iris.
 - **The probe.** The circular config-against-config check is replaced by:
   - a data test: `HallPortalsTests` re-fits the PNG's pixels in C#;
-  - an effect-on vs effect-off capture: `HallFxRig`'s `hallPortalsShot`, read by the audit's `portals.py`; see RESULT.
+  - an effect-on vs effect-off capture: `HallFxRig`'s `hallPortalsShot`, read by the new `tools/hall/portal_check.py`; see RESULT step 10.
+- **Which hole the pass measures (decision 3, revised).** The pass compares the vortex with the **painted aperture**: the ring's mask laid on the off frame where the painting really is (the ring's crop of the drawing registered by cross-correlation, never trusting the game's own placement). It does not use the audit's `portals.py` ray rule as the pass, because that rule's "painted hole" ends at the first run of 3 px under luma 105, which counts lit metal as hole: a ring's inner lower lip, seen from above, and the arches' shaded lower panel. Run offline on the painting itself from the fitted openings, the aperture's height is this share of the ray rule's: ring 1 0.96, ring 2 0.84, ring 3 0.91, ring 4 0.89, ring 5 0.91 (and ring 5's width 0.90). So the FIX_PLAN numbers (centre within 2 px, axes within 3 %) applied to the ray rule would fail rings 2-5 whatever the masks, and would pass only a vortex painted over metal, which BUG-26a forbids. `portal_check.py` prints the ray rule beside each ring as a reference column. **Proposal (ours); a director call may overrule it** (then step 10 says which).
+- **`HallFxRig`'s shots** are now named `h<hour>_<width>x<height>_on|off.png`: A1 (1920x1080) and A3 (2560x1080) are both 1080 tall, so the old `h<hour>_<height>` names overwrote A1's with A3's.
 - `PortalVortex.TextureQuad` and `FenceV` are deleted (no caller). `PortalVortex.MaskMap` is new.
-- **Files:** `Assets/Art/Office/Gameplay/Shaders/PortalGlow.shader`, `Assets/Scripts/Office/PortalEffect.cs`, `AnimeHallPortalLink.cs`, `Assets/Scripts/Visuals/PortalVortex.cs`, `Assets/Editor/OfficeSceneUIBuilder.Portals.cs`, new `HallPortalsSO.cs`, `HallPortals.asset`, `HallPortalMasks.png`, `tools/hall/portal_masks.py`.
+- **Files:** `Assets/Art/Office/Gameplay/Shaders/PortalGlow.shader`, `Assets/Scripts/Office/PortalEffect.cs`, `AnimeHallPortalLink.cs`, `Assets/Scripts/Visuals/PortalVortex.cs`, `Assets/Editor/OfficeSceneUIBuilder.Portals.cs`, new `HallPortalsSO.cs`, `HallPortals.asset`, `HallPortalMasks.png`, `tools/hall/portal_masks.py`, `tools/hall/portal_check.py`.
 
 ### BUG-65l HallCityExterior's per-frame property writes
 - The clock (`_CitySeconds`, `_CityMotion`) and the fade band are now globals: one `Shader.SetGlobalFloat` each a frame, instead of a property-block write on every living-city renderer.
@@ -140,7 +165,7 @@ Everything else below that is a design choice is marked **proposal (ours)**.
 
 ## Tests
 
-The baseline (fix/p0-cuts) was passed 3710, failed 0, with compile_check at 0 errors and 161 warnings. After this branch it is **passed 3723, failed 0** and **0 errors** in every project.
+The baseline (fix/p0-cuts) was passed 3710, failed 0, with compile_check at 0 errors and 161 warnings. After this branch it is **passed 3725, failed 0** and **0 errors** in every project (3723 before the verifier fixes, plus the 2 new `InvitePulseTests`).
 
 | Test | Covers |
 |---|---|
@@ -153,26 +178,32 @@ The baseline (fix/p0-cuts) was passed 3710, failed 0, with compile_check at 0 er
 | `HelixRiverTests.TheWarning_ShowsSteadilyNearTheDestructionPoint_AndCanBeHeld` | Not at the old 70% band; on at the critical line; eased; hysteresis; held |
 | `HelixRiverTests.NoDetail_OutrunsHalfAPixelAFrame_OnAnyDisplay` | The speed cap for the clock and the motes |
 | `HelixRiverTests` (5 changed) | No flicker any more; agitation speeds only the motes; Reduced Motion: no glitch, warning kept |
-| `InvitePulseTests` (2) | 3 beats, starts and ends lit, then steady lit; steady under Reduced Motion (BUG-67) |
+| `InvitePulseTests` (4) | 3 beats, starts and ends lit, then steady lit; steady under Reduced Motion (BUG-67) |
+| `InvitePulseTests.TheBeats_StartWhenTheSignCanBePressed_NotBehindTheBriefing` | A 30 fps run, frame by frame as the link polls it: under the briefing (0-20 s) the beats wait and the sign holds lit; they start on the first frame it can be pressed; all 3 dips come after Start Shift, the first half a beat in; then steady (verifier finding 1) |
+| `InvitePulseTests.TheInvitation_HoldsOnceStarted_AndRestartsOnlyAfterItStopsInviting` | `InvitePulse.Since`: held once started (a briefing up again never restarts it), cleared by the first press or closing |
 | `SlotCrossfadeTests.ThePainting_NeverShowsThrough_WhereBothFacesCover` | Either draw order; each face moves one way (BUG-71) |
 | `HallPortalsTests` (4) | The asset's openings match a C# re-fit of the mask PNG (a data test, not a self-comparison); holes lie inside their crops and the quad; occluders and glass lie on the hole; crops apart; the atlas wired, linear, without mips |
 | `PortalVortexTests.MaskMap_PutsTheQuadOnItsRingsCropOfTheAtlas` | The quad's uv to the atlas, at the centre and both corners. `TextureQuad` and `FenceV` tests are deleted with the code |
 | `Assets/Editor/SeamTests/HallFxSeamTests.SetWarning_IsRuntimeStateOnly` (NeedsEditor) | The seam holds the warning without touching serialized state |
 
 **Waiting for QA-RIG (#2; not on this branch's base):**
-- `docs/pending/HALL-FX/HallFxChecks.cs.txt` holds the DemoGate checks: `hallfx.city.flicker`, `hallfx.helix.flicker`, `hallfx.sign.flicker`, `hallfx.bp.city.flicker`, `hallfx.bp.helix.flicker` and the static `hallfx.portals.source`. It goes to `Assets/Editor/QA/Checks/HallFxChecks.cs`.
-- `docs/pending/HALL-FX/HallFxRig.cs.txt` holds the ops `hallPortals` and `hallPortalsShot`. It goes to `Assets/Tests/PlayMode/HALL-FX/HallFxRig.cs`.
-- `docs/pending/HALL-FX/hall_fx_portals.json` goes to `tools/qa/scenarios/` after the rig is in.
-- The scenarios `tools/qa/scenarios/hall_fx_city.json`, `hall_fx_helix.json` and `hall_fx_sign.json` use only QA-RIG's built-in ops, so they are on this branch.
-- **Tool:** `tools/hall/region_luma.py` measures a region's luma range in a sequence, and compares two sequences: the sign's ±3, the crossfade's ±5% and the traffic tint.
+- `docs/pending/HALL-FX/HallFxChecks.cs.txt` holds the DemoGate checks: `hallfx.city.flicker`, `hallfx.dusk.flicker`, `hallfx.helix.flicker`, `hallfx.sign.flicker` (the `sign_steady_*` sequences), `hallfx.crossfade.flicker`, `hallfx.bp.city.flicker`, `hallfx.bp.dusk.flicker`, `hallfx.bp.helix.flicker` and the static `hallfx.portals.source`. It goes to `Assets/Editor/QA/Checks/HallFxChecks.cs`.
+- `docs/pending/HALL-FX/HallFxRig.cs.txt` holds the ops `hallPortals`, `hallPortalsShot` and `hallClock` (moves the running shift clock forward to an hour and adds the `hallHour` and `cityLit` columns to every captured frame). It goes to `Assets/Tests/PlayMode/HALL-FX/HallFxRig.cs`.
+- `docs/pending/HALL-FX/hall_fx_portals.json` and `hall_fx_dusk.json` go to `tools/qa/scenarios/` after the rig is in.
+- The scenarios `tools/qa/scenarios/hall_fx_city.json`, `hall_fx_helix.json`, `hall_fx_sign.json` and `hall_fx_crossfade.json` use only QA-RIG's built-in ops (and registered cheats through `cheat` `Extra`), so they are on this branch. Every HALL-FX scenario hides LIGHT's dust for its run ("Hall FX: dust") and shows it again at the end.
+- **Tools** (all offline, Python, reading QA-RIG run folders; self-tested on synthetic sequences in the scratchpad):
+  - `tools/hall/region_luma.py`: a region's luma over a sequence. The region is a fixed `--roi` in screen fractions, or `--track NAME[,NAME]`, the rects the scenario tracked (frames.tsv), so no recipe needs a hand-drawn box. Modes: steady range (`--max-range`), `--dips N` (the sign's invitation), `--monotonic` (the crossfade), `--compare` (the traffic tint; `--stat p90` reads a car's lit body, not the sky in its rect).
+  - `tools/hall/portal_check.py`: the portal pass (step 10).
+  - `tools/hall/dusk_check.py`: the dusk sequences ran on a running clock with the lit share rising (step 5).
 
 ## RESULT
 
 | Step | Status |
 |---|---|
 | compile_check_any | **0 errors**; 158 warnings (the baseline's 161, less the deleted `HallCityAuthoring`'s 3) |
-| Offline runner | **passed 3723, failed 0** |
-| Portal mask overlays, by eye | done (ring by ring, at 6x: holes, rails and bar, glass) |
+| Offline runner | **passed 3725, failed 0** |
+| Portal mask overlays, by eye | done (ring by ring, at 6x: holes, rails and bar, glass); rings 4 and 5 redone with the glass pane, the posts and the brass |
+| `portal_check.py`, `region_luma.py`, `dusk_check.py` | self-tested offline on synthetic run folders: a ring's effect misplaced by 4 px fails (72 halo px), the others pass; a crossfade with a dip fails `--monotonic`; a 3-beat pulse passes `--dips 3`. `dusk_check.py` is not exercised until a dusk run exists |
 | Everything below | **deferred: Unity** |
 
 Run them in one batch in the NOPE-feat-clock editor (job runner), then the built QA player. The capture vocabulary is FIX_PLAN §0.
@@ -191,42 +222,55 @@ Run them in one batch in the NOPE-feat-clock editor (job runner), then the built
    - no `[AnimeHallPortalLink] ... carry no HallPortalsSO` after step 2;
    - no shader errors.
 5. **deferred: Unity [BP] — city and hall flicker** (BUG-13).
-   - Run `tools/qa/scenarios/hall_fx_city.json` (`QaJobs.Scenario`). It records the office and the city view at H1, H2, H3, 17:00 (forced, so frozen) and H5, at A1 and A2, and at H2 and H5 at A3 and A4. The 8 flying cars are tracked as the expected-motion mask.
-   - Then run the same file on the built QA player: `python tools/qa/run_player.py tools/qa/scenarios/hall_fx_city.json`.
-   - **Pass:** `seqtools flicker` on every sequence: zero pixels toggling more than twice in 10 s outside the cars, on the player.
+   - **Frozen clock:** run `tools/qa/scenarios/hall_fx_city.json` (`QaJobs.Scenario`). Every hour in it is forced (the cheat's `DevToolsState.ForcedHour`): 9 (H1), 12 (H2), 16.75 (H3), 17 and 22 (H5), for the office and the city view at A1 and A2, and at H2 and H5 at A3 and A4. A forced hour freezes the lit share, so these show that nothing toggles while the clock holds.
+   - **Running clock (the BUG-13 symptom: windows fading in while recorded):** install `HallFxRig` and `docs/pending/HALL-FX/hall_fx_dusk.json` (see Tests), then run it. It clears any forced hour, moves the shift clock to 16:10 (`hallClock`) and lets it run at its own pace (1 game minute a second) through dusk: `dusk_office_a1` (about 16:10-16:20), `dusk_office_a2`, `dusk_city_a2`, `dusk_city_a1` (about 16:47-16:57), all before closing time. Worked out offline, the lit share rises from about 0.05 to 0.23 in the first and from 0.78 to 0.93 in the last.
+     - `python tools/hall/dusk_check.py <run folder>` → PASS: in every `dusk_*` sequence the hour never runs back and the lit share (`cityLit`) rises by at least 0.05, so windows faded in during the capture.
+   - Then run both files on the built QA player: `python tools/qa/run_player.py tools/qa/scenarios/hall_fx_city.json`, and the same for `hall_fx_dusk.json`.
+   - **Pass:** `seqtools flicker` on every sequence of both: zero pixels toggling more than twice in 10 s outside the expected-motion mask, on the player. On the running clock each window crosses its 0.4 s fade once, so it toggles at most once.
+   - **What is masked, and what is judged:**
+     - the 8 flying cars are tracked (`car0` to `car7`): the mask;
+     - LIGHT's dust is hidden for every HALL-FX run (cheat "Hall FX: dust"): LIGHT measures it with the dust shown (split register below), so this gate neither fails on it nor waves it through;
+     - `HallWhiteCrowds`' fades are not masked: a group fades in over 4 s once per 80 s and holds 38 s, so a pixel crosses at most one fade in and one fade out in 10 s, which the rule allows. A crowd pixel toggling more than twice is a fail.
    - Watch the GIFs at full size (`seqtools gif`).
-   - **Headlights:** the luma variance of a headlight along its path is ≤10%. Track one headlight by eye on `city_a1_h5` with `region_luma --roi` on a short path box.
+   - **Headlights:** the luma variance of a headlight along its path is ≤10%. The city's headlights are drawn by the shader, with no object to track: judge them by eye on `city_a1_h5` and `dusk_city_a1` at full size (no twinkle on any lane).
 6. **deferred: Unity — traffic tint (CODE-69).**
-   - `region_luma --compare <run>/seq/city_a1_h5 <run>/seq/city_a1_h2 --roi <a car's lane box> --max-ratio 0.5` → PASS.
+   - `python tools/hall/region_luma.py --compare <run>/seq/city_a1_h5 <run>/seq/city_a1_h2 --track car0,car1,car2,car3,car4,car5,car6,car7 --stat p90 --max-ratio 0.5` → PASS (from `hall_fx_city`; each car's own rect, the mean over the cars on screen).
    - The car's hue lies within the hall's night tint, and no car is brighter than the brightest lit window at H5. Check both on the `city_a1_h5` still by eye.
 7. **deferred: Unity [BP] — the Helix monitor** (BUG-54, 56e).
-   - Run `tools/qa/scenarios/hall_fx_helix.json`: before a drop, after a drop, the warning, the warning off. Then run it on the player.
+   - Run `tools/qa/scenarios/hall_fx_helix.json`. It records the desk monitor (tracked `desk_river`: the `DeskRiver` quad) before a drop, after a drop, in the warning and with the warning off. Then it records the PC's tray strip river (tracked `tray_river`: `TimelineStrip`; the PC is opened with Q) through a drop. After the shift, it records the Home HUD's river (tracked `home_river`: Home's `StabilitySlot`). Then run it on the player.
    - **Pass:**
      - flicker on every sequence (the audit measured 3,268 px changing more than 100 times in 10 s);
-     - in `helix_after_drop`, one glitch, then calm within 2 s: `region_luma --roi <the monitor> --from 2 --max-range 6`;
-     - `helix_warning` shows the red banks and the warm glass, and is steady (`region_luma` range ≤6 from 1 s);
-     - `helix_warning_off` is back to green;
+     - `helix_after_drop`: one glitch, then calm within 2 s: `region_luma <run>/seq/helix_after_drop --track desk_river --from 2 --max-range 6`;
+     - `helix_warning` shows the red banks and the warm glass, and is steady: `region_luma <run>/seq/helix_warning --track desk_river --from 1 --max-range 6`;
+     - `helix_warning_off` is back to green (by eye on its still);
+     - `helix_tray_drop` (the drop comes at 2 s): calm 2 s after it, `region_luma <run>/seq/helix_tray_drop --track tray_river --from 4.5 --max-range 6`;
+     - `helix_home`: steady, `region_luma <run>/seq/helix_home --track home_river --from 1 --max-range 6`;
      - the cheat line "just past the config warning value and back" (FIX_PLAN_v2) is the 62.5 and 66 steps, with firedAt 60 and critical 3.
-   - Watch the GIF at full size.
+   - Watch the GIFs at full size.
 8. **deferred: Unity — the AVAILABLE sign** (BUG-67).
-   - Run `tools/qa/scenarios/hall_fx_sign.json`.
+   - Run `tools/qa/scenarios/hall_fx_sign.json`. The hour is forced before Start Shift, so `sign_invite` starts on the frame after the briefing closes.
    - **Pass:**
-     - `sign_invite` shows about 3 dips;
-     - `sign_idle` has a luma range ≤6 (±3) over the sign: `region_luma <run>/seq/sign_idle --roi <the NEXT sign> --max-range 6`;
-     - `sign_mid_case` is steady too;
-     - flicker passes.
+     - `region_luma <run>/seq/sign_invite --track sign --dips 3` → PASS: exactly 3 dips, the first about 0.8 s in, so none ran out behind the briefing;
+     - `region_luma <run>/seq/sign_steady_idle --track sign --max-range 6` → PASS (±3);
+     - `region_luma <run>/seq/sign_steady_mid_case --track sign --max-range 6` → PASS;
+     - flicker passes on the `sign_steady_*` sequences (`hallfx.sign.flicker`; the invitation's beats are meant to be seen).
+   - `sign` is the tracked `ReadySign` click box, which the binder lays over the art's NEXT sign.
 9. **deferred: Unity — the hall slot crossfade** (BUG-71).
-   - Turn the cheat "Hall: tier" (or "culture") to force a slot change while recording 3 s (`recStart` / `cheat` / `recStop` in a scratch scenario, or by hand in the editor).
-   - **Pass:** over a region both faces cover, the luma moves monotonically from the old art to the new (no dip toward the painting), within ±5% of the straight blend: `region_luma` per-frame values.
-   - Repeat with a hit-stop (a citation) during the fade: it still completes, on unscaled time.
+   - Run `tools/qa/scenarios/hall_fx_crossfade.json`. The cheat "Hall: culture" (`cheat` `Extra`) steps the culture to neutral, then to the first nation (the flags take their art). The scenario then records `crossfade_art_to_art` over the next step (art to art: both faces cover). Finally it records `crossfade_hitstop` over the step after, with "Feel: citation" fired on top (a hit-stop during the fade).
+   - **Pass:**
+     - `region_luma <run>/seq/crossfade_art_to_art --track flag --monotonic` → PASS: the left flag's luma goes from the old art's level to the new one's and never turns back by more than 5 % of that span (no dip toward the painting). Run it with `--track board` (the departure-board frame) too, where its art changes;
+     - `region_luma <run>/seq/crossfade_hitstop --track flag --monotonic` → PASS, and it reaches the new level inside the 2.5 s (unscaled time: the hit-stop never freezes it);
+     - flicker passes (`hallfx.crossfade.flicker`).
+   - If the culture step changes no flag on this seed (a nation with no flag art), the still pair `crossfade_before` / `crossfade_after` shows it: then add one more `Hall: culture` step before `recStart`.
 10. **deferred: Unity — portals** (BUG-26a).
-    - Install `HallFxRig` and `hall_fx_portals.json` (above), then run it.
-    - Then `python R7/AUDIT/VIS/scripts/portals.py <run folder> <out>`.
+    - Install `HallFxRig` and `hall_fx_portals.json` (see Tests), then run it. Its shots are `shots/portals/h<hour>_<w>x<h>_on|off.png`.
+    - Then `python tools/hall/portal_check.py <run folder>` (writes `<run>/portal_check/portal_check.txt` and overlays).
+    - **The hole it measures:** the ring's painted aperture (its mask), laid where the painting really is on the off frame. The ring's crop of the drawing is registered by cross-correlation (`match` in the report; under 0.6, look by eye), so the game's own placement is never taken on trust. The audit's `portals.py` ray rule is printed as a reference column and is not the pass: it counts lit metal and the arches' lower panel as hole (see BUG-26a and decision 3).
     - **Pass, per ring, at A1, A3 and A4 (scaled):**
-      - the vortex's centre is within ≤2 px of the painted hole's;
-      - the axes are within ±3%;
-      - 0 halo pixels: effect pixels outside the painted hole. LIGHT's bloom at #11 adds glow around the ring; this count is taken before LIGHT's Volume exists.
-    - Make 3x crops at H2 and H5 as GIFs from `portals_<a>_h12/h22`, reviewed by eye.
+      - the vortex's centre is within ≤2 px of the hole's;
+      - the axes (2 standard deviations) are within ±3 %;
+      - 0 halo pixels: effect pixels outside the aperture grown by 2 px. LIGHT's bloom at #11 adds glow around the ring; this count is taken before LIGHT's Volume exists.
+    - Make 3x crops at H2 and H5 as GIFs from `portals_<a>_h12/h22`, reviewed by eye. With the iris fully open there is no ink line or bright band inside the painted rim (ring 1), and no bright patch in an arch's lower corners at the fence rail (rings 4, 5): the iris's own rim shows only while it springs open.
     - **Reduced Motion live (64c):** open the Settings window mid-swirl and turn Reduced Motion on. The swirl and sparkles stop that frame, and an opening iris finishes at once.
 11. **deferred: Unity [BP] — allocations** (BUG-65l). QA-RIG's `perf_day12` run with the per-call-site GC log on the player. **Pass:** 0 B/frame from `HallCityExterior.Apply` and `HelixRiverMonitor.Update`.
 12. **deferred: Unity — Saleh's notes 5, 13, 14 and 23** against his shots 6, 11 and 12, before and after, from steps 5 and 7.
@@ -235,10 +279,10 @@ Run them in one batch in the NOPE-feat-clock editor (job runner), then the built
 ## For INTEGRATION
 
 ### FEATURES.md (fold into the merge commit)
-- **Line 31 (AVAILABLE sign):** "...the caption invites the press with a gentle pulse between the two inks (`readyInviteSeconds` 1.6 s a beat; steady under Reduced Motion..." becomes "...the caption invites the press: from the moment it starts inviting it pulses between the two inks for three beats (`readyInviteSeconds` 1.6 s each; `InvitePulse`, tested: `InvitePulseTests`), then holds lit and steady (BUG-67); lit and steady at once under Reduced Motion...".
+- **Line 31 (AVAILABLE sign):** "...the caption invites the press with a gentle pulse between the two inks (`readyInviteSeconds` 1.6 s a beat; steady under Reduced Motion..." becomes "...the caption invites the press: lit and steady while the morning briefing covers the office, then from Start Shift (the first frame it can be pressed) it pulses between the two inks for three beats (`readyInviteSeconds` 1.6 s each; `InvitePulse`, tested: `InvitePulseTests`), then holds lit and steady (BUG-67); lit and steady at once under Reduced Motion...".
 - **Line 36 (portal rings):** replace the placement and look sentences with this.
 
-  > Each vortex fills exactly the hole its ring's metal encloses, from the ring's painted-aperture mask (`HallPortalsSO`, `Assets/Data/Config/HallPortals.asset`, the one source of the rings: the drawing, each ring's layers, its opening fitted to its mask, its reach, the masks `HallPortalMasks.png` made from the painting by `tools/hall/portal_masks.py`; tested: `HallPortalsTests`, `PortalVortexTests`): the fence rails and the mullion in front keep their painted pixels, the part below the fence rail shows through the glass (`glassOpacity` 0.72), and nothing is drawn on the metal (the glow around the ring is the bloom on the core). The vortex is a layered cel swirl: a slow, dim back layer turning against the front's two hard tones, a light core with a white-hot heart, an ink line and a hard rim along the painted edge, and antialiased sparkles that fade out on a ring under about 20 px on screen.
+  > Each vortex fills exactly the hole its ring's metal encloses, from the ring's painted-aperture mask (`HallPortalsSO`, `Assets/Data/Config/HallPortals.asset`, the one source of the rings: the drawing, each ring's layers, its opening fitted to its mask, its reach, the masks `HallPortalMasks.png` made from the painting by `tools/hall/portal_masks.py`; tested: `HallPortalsTests`, `PortalVortexTests`): the fence rails, the mullion and an arch's fence posts in front keep their painted pixels, the part below the fence rail (an arch's glass pane too) shows through the glass (`glassOpacity` 0.72), and nothing is drawn on the metal (the glow around the ring is the bloom on the core). The vortex is a layered cel swirl: a slow, dim back layer turning against the front's two hard tones, a light core with a white-hot heart, an ink line and a hard rim along the painted edge (the iris's own rim only while it springs open), and antialiased sparkles that fade out on a ring under about 20 px on screen.
 
   Also:
   - "the motion preference is read when it is shown and at each flare, never per frame" becomes "the motion preference is read live (BUG-64c)";
@@ -265,6 +309,13 @@ Run them in one batch in the NOPE-feat-clock editor (job runner), then the built
 | `CityView.cs`: the `RainId` write (`_exterior.rain`) | CAM | The shader has no rain; then HALL-FX deletes `HallCityExterior.rain` |
 | `HallCityCrowdVariationsAuthoring.cs`, `HallLightingPreviewWindow.cs` (`city.rain`), `HallDeepRoomAuthoring.cs:212`, `HallFloorShadowGeometry.cs:37`, `AnimeHallLightingHooks.cs:463-470` (ring coordinates) | Unowned Terminal Art tools: the orchestrator assigns them | They read `rain`, or hold their own ring coordinates. They should read `HallPortals.asset`'s openings, or be retired as stale installers (CODE-136) |
 | `docs/SCENE_CONTRACT_GAMEPLAY.md:178-180`, `docs/ART_ASSET_LIST.md:58,75` | INTEGRATION | They name `DeskConfigSO.hallPortalLayers` and the old glow placement |
+| `OfficeSceneBinder.cs:184`, the `portalEffects` field's comment: "one per DeskConfigSO.hallPortalLayers entry, in its order" | DESK-PLAN | Stale: the effects are one per `HallPortalsSO` ring (`HallPortals.asset`), in its order |
+
+### Split register (parts of HALL-FX's bugs that belong to another track)
+| Part | To | Why, and what HALL-FX leaves for it |
+|---|---|---|
+| BUG-13 "dust shimmer" (VIS-9: dust motes 1-2 px across, worse at night) | LIGHT (#11) | The dust is `HallLightingRig`'s ParticleSystems (`dust`, `ApplyDust`, the dust knobs in `HallLighting_Default.asset`), LIGHT's files. LIGHT's fix must keep each mote at least about 2 px across or fade it below that, and pass its own flicker gate with the dust shown, on `hall_fx_city.json` and `hall_fx_dusk.json` with the "Hall FX: dust" steps removed (or toggled to shown). HALL-FX's gate runs with the dust hidden |
+| BUG-26b, the portal glow lighting its surroundings | LIGHT (#11) | As before: the bloom on the vortex's core (FIX_PLAN) |
 
 ### Knob request (DOC-HANDLE, `DeskConfigSO`)
 - `readyInviteCycles` (int, 3): would replace the `InvitePulse.Cycles` constant. BELL-SIGN (Phase B) may take it with the sign.
@@ -288,10 +339,13 @@ New HALL-FX files PORTALS will read: `HallPortalsSO.cs`, `HallPortals.asset`, `H
 ## Decisions (ours, for the adversarial reviewer)
 1. **The warning line is the critical band, not the warning band** (see 56e). The values are CONTENT's to retune.
 2. **3 invite cycles**, held in a constant until DOC-HANDLE adds the knob.
-3. **Arches end at the fence rail.** An arch (rings 4 and 5) has no painted lower half, so its hole ends at the fence's top rail; the full rings continue behind the glass. The vortex's swirl centres on the hole's centroid.
-4. **Occluders are what spans the hole** (rails, the mullion). Dark details on the wall behind (the pipe in ring 5) are covered by the vortex, as they are behind the opening.
+3. **The hole is the painted aperture, and an arch's goes on behind the glass (revised after the verifier's finding 2).** An arch (rings 4 and 5) has no painted lower half. Its hole is the arch above the bay fence's top rail plus the glass pane under it, down to the fence's lower rail, as a full ring's hole goes on behind its glass. The vortex's swirl centres on the hole's centroid. The portal pass measures the vortex against this aperture, registered on the off frame (`portal_check.py`), not against the audit's ray rule, which counts lit metal and the arches' shaded lower panel as hole (BUG-26a, "Which hole the pass measures"). A director call may overrule this; step 10 then names the hole definition the pass uses.
+4. **Occluders are what spans the hole** (rails, the mullion; on an arch, the fence's posts below its top rail and its brass). Dark details on the wall behind (the pipe in ring 5, above its rail) are covered by the vortex, as they are behind the opening.
 5. **The speed cap slows the whole river** on a small display, rather than dropping detail. The desk monitor runs at about half speed: calmer, which J4 asks for. The tray keeps its speed and loses its rungs, which fade out when they are packed under 2 px apart.
 6. **The crossfade does not depend on draw order.** The two faces share a sorting order: rather than impose one (the crowds sit at 61, the next order up), the two-phase schedule is correct either way.
 7. **`HallCityExterior.rain` stays as an inert field** until its four readers outside HALL-FX drop it. Deleting it would break CAM's file and three unowned tools.
-9. **`CityTraffic.mat` is untouched.** FIX_PLAN lists it under HALL-FX, but it lives in `Assets/Art/Office/AnimeHallLayers/Completion/City/`, which is art-side (v1 §0 rule 2). The traffic fix is all in the shader and `HallCityExterior`, so the material needs no change.
 8. **`HallCity.WindowHash` and `WindowLevel` are the shader's rules in C#,** called by the tests only. The windows are drawn per pixel by `NOPE/Hall Living City`, which no EditMode test can run. They are its reference implementation, and the shader's comments name them, so a change to one shows in the other's review. Every other new public member has a game caller.
+9. **`CityTraffic.mat` is untouched.** FIX_PLAN lists it under HALL-FX, but it lives in `Assets/Art/Office/AnimeHallLayers/Completion/City/`, which is art-side (v1 §0 rule 2). The traffic fix is all in the shader and `HallCityExterior`, so the material needs no change.
+10. **The invitation starts when the booth leaves its Newsletter phase** (verifier finding 1). The sign's `Clickable.Interactable` would be the exact signal, but the link cannot reach it: GameManager (FLOW) and the binder (DESK-PLAN) hold it privately, and the binder's call is theirs. `BoothCoordinator.Phase` is public, read-only to us, and GameManager sets it to `NoTraveller` in the same `BeginShift` call that makes the sign interactable. The link polls it once a frame only until the beats start. If BELL-SIGN (Phase B, which takes the sign) adds a "pressable" signal, `Pressable` should read that instead.
+11. **HALL-FX's flicker runs hide LIGHT's dust** (verifier finding 4), through a dev cheat ("Hall FX: dust"), rather than masking it. The motes are 1-2 px and spread over the hall, so a tracked mask would cover most of the hall and wave HALL-FX's own pixels through. LIGHT owns the dust and measures it with the dust shown (split register).
+12. **The iris's own rim fades out over the last 15 % of its opening** (`_Life.x` 0.85 to 1, verifier finding 5), so a full-open vortex keeps only the rim along the painted edge.

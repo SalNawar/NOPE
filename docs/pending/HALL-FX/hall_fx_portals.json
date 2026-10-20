@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "HALL-FX BUG-26a: per ring, the vortex's ellipse against the painted hole's (effect on vs off, R7 AUDIT VIS scripts/portals.py on the run folder): centre within 2 px and axes within 3 % at A1, A3 and A4, and no effect pixel outside the hole; 10 s sequences per aspect and hour for the 3x crops by eye. Needs HallFxRig's ops."
+      "text": "HALL-FX BUG-26a: per ring, the vortex against the painted hole (effect on vs off; tools/hall/portal_check.py on the run folder registers the ring's painted crop on the off frame and lays its aperture mask there): centre within 2 px, axes within 3 % at A1, A3 and A4 and 0 effect pixels outside the hole; 10 s sequences per aspect and hour for the 3x crops by eye. Needs HallFxRig's ops."
     },
     {
       "op": "title"

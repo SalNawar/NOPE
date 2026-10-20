@@ -2,7 +2,8 @@
 // fix/p0-cuts, the branch HALL-FX was cut from, so this file waits here as text. INTEGRATION (or HALL-FX after
 // QA-RIG has merged) moves it to Assets/Editor/QA/Checks/HallFxChecks.cs, adds its .meta
 // (E:\unity\NOPE-tools\scripts\make_meta.py) and compiles. The scenarios it reads are
-// tools/qa/scenarios/hall_fx_city.json, hall_fx_helix.json and hall_fx_sign.json (on this branch).
+// tools/qa/scenarios/hall_fx_city.json, hall_fx_helix.json, hall_fx_sign.json and hall_fx_crossfade.json (on this
+// branch) and hall_fx_dusk.json (docs/pending/HALL-FX/, installed with HallFxRig: it needs the hallClock op).
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,8 @@ using UnityEngine;
 /// <summary>
 /// HALL-FX's gate checks (BUG-13, 26a, 54, 56e, 67, 71; FIX_PLAN §3 HALL-FX, "Harness [BP]: the flicker
 /// sequences as standing gates"). Play and built player: every sequence of the track's scenarios passes
-/// seqtools flicker (no pixel toggling more than twice in 10 s outside the tracked cars). Static: the hall's
+/// seqtools flicker (no pixel toggling more than twice in 10 s outside the tracked cars), except the AVAILABLE
+/// sign's 3 invitation beats, which are meant to be seen. Static: the hall's
 /// one portal source is whole (five rings with fitted openings inside the effect's quad, the mask atlas wired
 /// and imported as linear data without mips).
 /// </summary>
@@ -24,13 +26,25 @@ public static class HallFxChecks
     [GateCheck("hallfx.helix.flicker", "HALL-FX", GateKind.Play)]
     public static GateResult HelixFlicker() => GateResults.Require("hallfx.helix.flicker", "HALL-FX", "hall_fx_helix.seq.*.flicker");
 
-    /// <summary>The AVAILABLE sign after its invitation, and mid-case, passes flicker (the editor run).</summary>
+    /// <summary>The city and the office on a running clock through dusk (windows fading in while it records) pass flicker (the editor run).</summary>
+    [GateCheck("hallfx.dusk.flicker", "HALL-FX", GateKind.Play)]
+    public static GateResult DuskFlicker() => GateResults.Require("hallfx.dusk.flicker", "HALL-FX", "hall_fx_dusk.seq.*.flicker");
+
+    /// <summary>The AVAILABLE sign under the briefing, after its invitation and mid-case passes flicker (the editor run; the invitation's own 3 beats, sign_invite, are motion meant to be seen and are judged by region_luma --dips 3).</summary>
     [GateCheck("hallfx.sign.flicker", "HALL-FX", GateKind.Play)]
-    public static GateResult SignFlicker() => GateResults.Require("hallfx.sign.flicker", "HALL-FX", "hall_fx_sign.seq.sign_*.flicker");
+    public static GateResult SignFlicker() => GateResults.Require("hallfx.sign.flicker", "HALL-FX", "hall_fx_sign.seq.sign_steady_*.flicker");
+
+    /// <summary>The hall slot crossfade, art to art and under a hit-stop, passes flicker (the editor run; its monotonic blend is region_luma --monotonic).</summary>
+    [GateCheck("hallfx.crossfade.flicker", "HALL-FX", GateKind.Play)]
+    public static GateResult CrossfadeFlicker() => GateResults.Require("hallfx.crossfade.flicker", "HALL-FX", "hall_fx_crossfade.seq.*.flicker");
 
     /// <summary>[BP] The same city sequences on the built QA player (the editor renders differently: BUG-53).</summary>
     [GateCheck("hallfx.bp.city.flicker", "HALL-FX", GateKind.BuiltPlayer)]
     public static GateResult CityFlickerPlayer() => GateResults.Require("hallfx.bp.city.flicker", "HALL-FX", "bp.hall_fx_city.seq.*.flicker", true);
+
+    /// <summary>[BP] The dusk sequences on the built QA player.</summary>
+    [GateCheck("hallfx.bp.dusk.flicker", "HALL-FX", GateKind.BuiltPlayer)]
+    public static GateResult DuskFlickerPlayer() => GateResults.Require("hallfx.bp.dusk.flicker", "HALL-FX", "bp.hall_fx_dusk.seq.*.flicker", true);
 
     /// <summary>[BP] The same Helix sequences on the built QA player.</summary>
     [GateCheck("hallfx.bp.helix.flicker", "HALL-FX", GateKind.BuiltPlayer)]

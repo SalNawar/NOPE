@@ -74,38 +74,38 @@ MonoBehaviour:
     bay: 44 Portal 04 upper left secure bay
     ring: 45 Portal 04 upper left metal ring
     glass: 56 Portal 04 upper left painted glass
-    opening: {x: 1764.67, y: 192.46, z: 17.75, w: 12.31}
-    reach: 1.2265
+    opening: {x: 1766.30, y: 217.74, z: 22.12, w: 38.28}
+    reach: 1.1630
     maskCanvas:
       serializedVersion: 2
-      x: 1743
+      x: 1741
       y: 174
-      width: 43
-      height: 33
+      width: 53
+      height: 83
     maskRect:
       serializedVersion: 2
       x: 0.4345703125
-      y: 0.73828125
-      width: 0.083984375
-      height: 0.2578125
+      y: 0.34765625
+      width: 0.103515625
+      height: 0.6484375
   - portal: 5
     bay: 46 Portal 05 upper right secure bay
     ring: 47 Portal 05 upper right metal ring
     glass: 57 Portal 05 upper right painted glass
-    opening: {x: 2004.87, y: 187.95, z: 25.70, w: 21.05}
-    reach: 1.2257
+    opening: {x: 2004.64, y: 214.16, z: 34.62, w: 46.22}
+    reach: 1.1681
     maskCanvas:
       serializedVersion: 2
-      x: 1977
+      x: 1966
       y: 161
-      width: 58
-      height: 49
+      width: 79
+      height: 100
     maskRect:
       serializedVersion: 2
-      x: 0.5205078125
-      y: 0.61328125
-      width: 0.11328125
-      height: 0.3828125
+      x: 0.5400390625
+      y: 0.21484375
+      width: 0.154296875
+      height: 0.78125
   vortex:
     departureDeep: {r: 0.12, g: 0.2, b: 0.42, a: 1}
     departureMid: {r: 0.16, g: 0.55, b: 0.82, a: 1}
