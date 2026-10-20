@@ -1,0 +1,33 @@
+{
+  "name": "flow_transitions",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "BUG-32a / BUG-72: the last traveller's payoff before the report; the day's end, Go Home and Sleep recorded for 'cuts' (no single-frame full-screen change) and 'frozen' (no still run over 0.25 s); the closing bell on an early finish" },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "startShift" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "wait", "f": 1 },
+    { "op": "cheat", "name": "EndShift" },
+    { "op": "recStart", "name": "dayend" },
+    { "op": "cheat", "name": "DecideCorrectly" },
+    { "op": "flowPayoff", "f": 30 },
+    { "op": "wait", "f": 1 },
+    { "op": "recStop" },
+    { "op": "still", "name": "report" },
+    { "op": "recStart", "name": "gohome" },
+    { "op": "button", "target": "DayFlowUIController.goHomeButton" },
+    { "op": "waitScene", "name": "HomeScene", "f": 120 },
+    { "op": "wait", "f": 2 },
+    { "op": "recStop" },
+    { "op": "recStart", "name": "sleep" },
+    { "op": "call", "target": "RunManager.Sleep" },
+    { "op": "waitOffice", "n": 2, "f": 240 },
+    { "op": "wait", "f": 2 },
+    { "op": "recStop" }
+  ]
+}

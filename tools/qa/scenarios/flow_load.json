@@ -1,0 +1,25 @@
+{
+  "name": "flow_load",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "BUG-31a [BP]: title -> office and home -> office as timing sequences (hitches) and as captures ('frozen': no frame held over 0.25 s; 'cuts'); five runs give the median load time" },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "recStart", "name": "title_office" },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1, "f": 120 },
+    { "op": "wait", "f": 1 },
+    { "op": "recStop" },
+    { "op": "startShift" },
+    { "op": "cheat", "name": "EndShift" },
+    { "op": "waitActive", "target": "DayFlowUIController.resultsPanel", "f": 60 },
+    { "op": "button", "target": "DayFlowUIController.goHomeButton" },
+    { "op": "waitScene", "name": "HomeScene", "f": 120 },
+    { "op": "recStart", "name": "home_office" },
+    { "op": "call", "target": "RunManager.Sleep" },
+    { "op": "waitOffice", "n": 2, "f": 120 },
+    { "op": "wait", "f": 1 },
+    { "op": "recStop" }
+  ]
+}

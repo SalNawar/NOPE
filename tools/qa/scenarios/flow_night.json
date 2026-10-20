@@ -1,0 +1,31 @@
+{
+  "name": "flow_night",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "BUG-72: day 12's night shift (16:00-24:00) runs to closing with a traveller at the desk, and the clock reads 24:00; restarted, End Shift before closing raises Closed once, so the closing bell rings on an early finish (listen on the run's audio capture)" },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "jumpDay", "n": 12 },
+    { "op": "waitOffice", "n": 12 },
+    { "op": "startShift" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "flowClosed", "name": "midnight", "text": "24:00", "f": 600 },
+    { "op": "still", "name": "night_close" },
+    { "op": "cheat", "name": "DecideCorrectly" },
+    { "op": "waitActive", "target": "DayFlowUIController.resultsPanel", "f": 60 },
+    { "op": "cheat", "name": "RestartShift" },
+    { "op": "waitOffice", "n": 12 },
+    { "op": "startShift" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "wait", "f": 2 },
+    { "op": "recStart", "name": "early" },
+    { "op": "flowEarlyFinish", "name": "early" },
+    { "op": "wait", "f": 3 },
+    { "op": "recStop" }
+  ]
+}
