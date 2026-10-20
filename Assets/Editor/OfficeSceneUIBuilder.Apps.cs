@@ -68,7 +68,10 @@ public static partial class OfficeSceneUIBuilder
     /// sender under it) on the left; on the right the message's link over the
     /// memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive
     /// memo's link opens <paramref name="investigation"/> on today's rules.
-    /// Rebuilt fresh.
+    /// Rebuilt fresh. <paramref name="apps"/> and <paramref name="browser"/>
+    /// are no longer wired (the paper is not mailed, BUG-50a: no message
+    /// links to the News site); the root still passes them, and INTEGRATION
+    /// drops both arguments with the root's cleanup list.
     /// </summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
                                                  InvestigationApp investigation)
@@ -104,8 +107,6 @@ public static partial class OfficeSceneUIBuilder
         MailWindow component = win.gameObject.AddComponent<MailWindow>();
         var so = new SerializedObject(component);
         SetRef(so, "feed", feed);
-        SetRef(so, "apps", apps);
-        SetRef(so, "browser", browser);
         Wire(so, "investigation", investigation);
         SetRef(so, "listRoot", list);
         SetRef(so, "rowTemplate", row);
@@ -295,8 +296,8 @@ public static partial class OfficeSceneUIBuilder
 
         SettingsHeading(column, "LanguageLabel", "settings.language");
         Transform language = SettingsRow(column, "LanguageRow");
-        Button follow = SettingsChoice(language, "FollowHistoryButton", "settings.followHistory");
-        Button english = SettingsChoice(language, "AlwaysEnglishButton", "settings.alwaysEnglish");
+        Button follow = SettingsSwitch(language, "FollowHistoryButton", "settings.followHistory");
+        Button english = SettingsSwitch(language, "AlwaysEnglishButton", "settings.alwaysEnglish");
         TMP_Text languageLock = Text(column, "LanguageLockText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
                                      ThemeRoleId.WindowBody, null);
         Chrome(languageLock, PcType.Caption, true);
@@ -305,8 +306,8 @@ public static partial class OfficeSceneUIBuilder
 
         SettingsHeading(column, "MotionLabel", "settings.motion");
         Transform motion = SettingsRow(column, "MotionRow");
-        Button full = SettingsChoice(motion, "FullMotionButton", "settings.motionFull");
-        Button reduced = SettingsChoice(motion, "ReducedMotionButton", "settings.motionReduced");
+        Button full = SettingsSwitch(motion, "FullMotionButton", "settings.motionFull");
+        Button reduced = SettingsSwitch(motion, "ReducedMotionButton", "settings.motionReduced");
         Transform intensityRow = SettingsRow(column, "MotionIntensityRow");
         TMP_Text intensityLabel = Text(intensityRow, "MotionIntensityLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
                                        ThemeRoleId.WindowBody, "settings.motionIntensity");
@@ -326,8 +327,8 @@ public static partial class OfficeSceneUIBuilder
         Chrome(swayLabel, PcType.Body);
         swayLabel.raycastTarget = false;
         GetOrAdd<LayoutElement>(swayLabel.gameObject).flexibleWidth = 1f;
-        Button swayOff = SettingsChoice(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
-        Button swayOn = SettingsChoice(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
+        Button swayOff = SettingsSwitch(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
+        Button swayOn = SettingsSwitch(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
         // Reduce flashing (GAME_FEEL_BIBLE G3, gap 2), in the room the cut Machine close-ups row left: its word, then the Off / On pair.
         Transform flashRow = SettingsRow(column, "ReduceFlashingRow");
         TMP_Text flashLabel = Text(flashRow, "ReduceFlashingLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
@@ -337,15 +338,15 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<LayoutElement>(flashLabel.gameObject).flexibleWidth = 1f;
         FlashSettingRow flash = GetOrAdd<FlashSettingRow>(flashRow.gameObject);
         var soFlash = new SerializedObject(flash);
-        SetRef(soFlash, "offButton", SettingsChoice(flashRow, "ReduceFlashingOffButton", "settings.cameraSwayOff"));
-        SetRef(soFlash, "onButton", SettingsChoice(flashRow, "ReduceFlashingOnButton", "settings.cameraSwayOn"));
+        SetRef(soFlash, "offButton", SettingsSwitch(flashRow, "ReduceFlashingOffButton", "settings.cameraSwayOff"));
+        SetRef(soFlash, "onButton", SettingsSwitch(flashRow, "ReduceFlashingOnButton", "settings.cameraSwayOn"));
         SetRef(soFlash, "kit", _kit);
         soFlash.ApplyModifiedProperties();
 
         SettingsHeading(column, "DesktopLabel", "settings.desktop");
         Transform icons = SettingsRow(column, "IconOpenRow");
-        Button iconDouble = SettingsChoice(icons, "IconDoubleClickButton", "settings.iconDouble");
-        Button iconSingle = SettingsChoice(icons, "IconSingleClickButton", "settings.iconSingle");
+        Button iconDouble = SettingsSwitch(icons, "IconDoubleClickButton", "settings.iconDouble");
+        Button iconSingle = SettingsSwitch(icons, "IconSingleClickButton", "settings.iconSingle");
         Button resetIcons = SettingsChoice(SettingsRow(column, "ResetIconsRow"), "ResetIconsButton", "settings.resetIcons");
 
         SettingsHeading(column, "InvestigationLabel", "settings.investigation");
@@ -353,7 +354,7 @@ public static partial class OfficeSceneUIBuilder
         var textSizes = new List<Object>();
         foreach (int level in config.zoomLevels)
         {
-            Button size = SettingsChoice(sizes, "TextSizeButton_" + level, null);
+            Button size = SettingsSwitch(sizes, "TextSizeButton_" + level, null);
             TMP_Text sizeLabel = size.transform.Find("Label").GetComponent<TMP_Text>();
             sizeLabel.text = UiText.Format("settings.textSize", level);
             SceneUiKit.Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
@@ -455,6 +456,14 @@ public static partial class OfficeSceneUIBuilder
             slider.transition = Selectable.Transition.None;
         }
         return slider;
+    }
+
+    /// <summary>A Settings switch (one of a choice: a pair, the text sizes): a choice button marked PcSwitch, so its press plays the toggle (F3: "ui_toggle on each switch").</summary>
+    private static Button SettingsSwitch(Transform row, string name, string key)
+    {
+        Button choice = SettingsChoice(row, name, key);
+        GetOrAdd<PcSwitch>(choice.gameObject);
+        return choice;
     }
 
     /// <summary>A choice in a Settings row: a Button-role plate with its keyed label at Body size.</summary>

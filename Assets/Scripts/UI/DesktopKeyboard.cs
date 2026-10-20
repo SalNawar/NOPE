@@ -17,7 +17,11 @@ using UnityEngine.UI;
 /// nothing left to close brings the Settings app to the front (a right-click
 /// with nothing to close does nothing: PcBackOut; Saleh's R3/R4: Esc opens
 /// Settings, only Q and the bezel leave the PC); it stamps every back-out
-/// press, so the office's back-out (OfficeControls) never closes the PC; F1 (and the app's Keys button) shows or hides the shortcut card; the
+/// press, so the office's back-out (OfficeControls) never closes the PC.
+/// With the PC open and its screen off (the desktop takes no input) it
+/// still takes the back-out: Esc turns the screen on and brings Settings
+/// forward, a right-click does nothing (PcBackOut.ScreenOff; R3/R4: "Esc
+/// opens the same Settings window everywhere"). F1 (and the app's Keys button) shows or hides the shortcut card; the
 /// icons take the arrows and Enter while no window has the focus; Ctrl+V
 /// with Notes focused adds the clip as a clipping; with Orders focused the
 /// arrows walk its tree, Enter acts on the selected node and Ctrl+=, Ctrl+-
@@ -76,6 +80,12 @@ public sealed class DesktopKeyboard : MonoBehaviour
     /// <summary>The desktop's apps (Esc with nothing left to close opens Settings); on the same canvas, found there when not wired.</summary>
     [SerializeField] private DesktopApps apps;
 
+    /// <summary>The PC frame (is the PC open while its screen is off?); found in the scene when not wired.</summary>
+    [SerializeField] private PcFrame frame;
+
+    /// <summary>The PC's screen (Esc turns it on when it is off); the desktop canvas's parent's, found there when not wired.</summary>
+    [SerializeField] private MonitorScreen screen;
+
     private DesktopWindow _notesWindow;
 
     /// <summary>A text field that saw the Escape the desktop took for something else: it gets its focus back after the EventSystem ran.</summary>
@@ -99,6 +109,10 @@ public sealed class DesktopKeyboard : MonoBehaviour
             _notesWindow = notes.GetComponent<DesktopWindow>();
         if (apps == null)
             apps = GetComponent<DesktopApps>(); // a scene built before the field: the apps share the canvas
+        if (frame == null)
+            frame = FindFirstObjectByType<PcFrame>(FindObjectsInactive.Include); // a scene built before the fields
+        if (screen == null)
+            screen = GetComponentInParent<MonitorScreen>();
     }
 
     /// <summary>F1 and the app's Keys button: shows the shortcut card, or hides it.</summary>
@@ -116,7 +130,10 @@ public sealed class DesktopKeyboard : MonoBehaviour
     private void Update()
     {
         if (raycaster == null || !raycaster.isActiveAndEnabled)
+        {
+            BackOutScreenOff();
             return;
+        }
 
         Mouse mouse = Mouse.current;
         if (mouse != null && app != null && (mouse.leftButton.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame))
@@ -147,6 +164,24 @@ public sealed class DesktopKeyboard : MonoBehaviour
             if (apps != null)
                 apps.OpenApp(DesktopAppIds.Settings);
         }
+    }
+
+    /// <summary>The PC open with its screen off: the back-out is still the PC's (stamped, so the office's never closes it); Esc turns the screen on and brings Settings forward, a right-click does nothing (PcBackOut.ScreenOff).</summary>
+    private void BackOutScreenOff()
+    {
+        if (frame == null || !frame.IsOpen || screen == null || screen.IsOn || InputGate.Blocked)
+            return;
+        Keyboard keyboard = Keyboard.current;
+        Mouse mouse = Mouse.current;
+        bool esc = keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
+        if (!esc && (mouse == null || !mouse.rightButton.wasPressedThisFrame))
+            return;
+        EscapeTakenFrame = Time.frameCount;
+        if (PcBackOut.ScreenOff(esc) != PcBackOutStep.WakeAndOpenSettings)
+            return;
+        screen.PowerOn();
+        if (apps != null)
+            apps.OpenApp(DesktopAppIds.Settings);
     }
 
     /// <summary>A field that saw an Escape taken for something else gets its focus back (after TMP's own cancel left it).</summary>

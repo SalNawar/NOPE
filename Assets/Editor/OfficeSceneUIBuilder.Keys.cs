@@ -113,6 +113,8 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "orders", orders);
         Wire(so, "card", card);
         Wire(so, "apps", root.GetComponent<DesktopApps>()); // Esc with nothing left to close brings Settings forward (BUG-50a, R3/R4)
+        Wire(so, "frame", Object.FindFirstObjectByType<PcFrame>(FindObjectsInactive.Include)); // with the PC open and its screen off, Esc still brings Settings
+        Wire(so, "screen", canvas.GetComponentInParent<MonitorScreen>());
         so.ApplyModifiedProperties();
 
         if (menu != null)

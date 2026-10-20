@@ -121,8 +121,12 @@ public static partial class OfficeSceneUIBuilder
             entry.FindPropertyRelative("id").stringValue = id;
             entry.FindPropertyRelative("window").objectReferenceValue = window;
         }
-        SetRef(soApps, "shell", GetOrAdd<DesktopShell>(root.gameObject));
+        DesktopShell shell = GetOrAdd<DesktopShell>(root.gameObject);
+        SetRef(soApps, "shell", shell);
         soApps.ApplyModifiedProperties();
+        var soShell = new SerializedObject(shell);
+        SetRef(soShell, "config", config); // the quit warning's time
+        soShell.ApplyModifiedProperties();
 
         // The icon layer: the icon area, a transparent catcher (a press deselects, a right-click opens the menu).
         DestroyChildIfPresent(root, "DesktopIcons");
@@ -280,7 +284,8 @@ public static partial class OfficeSceneUIBuilder
     /// <paramref name="mailLabel"/>), the other apps by their desktop label
     /// and Settings by its Start-menu one; then Arrange icons and Quit game,
     /// each a row tall in a vertical layout (DesktopShell fits the menu to the
-    /// entries a day shows). "Turn off screen" is retired (BUG-50a: it was a
+    /// entries a day shows); Quit game carries its hidden mid-shift Warning
+    /// label (BUG-35c). "Turn off screen" is retired (BUG-50a: it was a
     /// way out of the PC; the bezel's power button is the screen's switch), so
     /// <paramref name="screenOff"/> is null. Returns the menu.
     /// </summary>
@@ -307,7 +312,14 @@ public static partial class OfficeSceneUIBuilder
         screenOff = null;
         quit = MakeButton(startMenu, "QuitEntry", null, Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f), ThemeRoleId.QuitEntry, "startmenu.quit");
         SetLayoutHeight(quit, StartMenuEntryHeight);
-        ButtonLabel(quit, PcType.Body, TextAlignmentOptions.MidlineLeft, PcSize.L + 4f);
+        TMP_Text quitLabel = ButtonLabel(quit, PcType.Body, TextAlignmentOptions.MidlineLeft, PcSize.L + 4f);
+        // Mid-shift, the entry shows its warning in place of its label (BUG-35c; DesktopShell): its own keyed label, so a theme refresh re-applies each to its own text.
+        TMP_Text warning = Text(quit.transform, "Warning", null, PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, quitLabel.color,
+                                ThemeRoleId.QuitEntry, "startmenu.quitForfeit", FontStyles.Bold, ThemeTextKind.Button);
+        FitNoSmaller(warning, PcType.Body);
+        warning.margin = quitLabel.margin;
+        warning.raycastTarget = false;
+        warning.gameObject.SetActive(false);
         startMenu.gameObject.SetActive(false);
         return startMenu;
     }

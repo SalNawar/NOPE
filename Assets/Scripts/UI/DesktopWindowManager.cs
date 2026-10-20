@@ -358,7 +358,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
         overflowButton.transform.SetAsLastSibling();
         TMP_Text waiting = overflowButton.GetComponentInChildren<TMP_Text>(true);
         if (chevronShown && waiting != null)
-            waiting.text = UiText.Pc.Format("taskbar.more", _hidden.Count);
+            waiting.text = TaskbarStrip.ChevronLabel(_hidden.Count); // a glyph and a count: no key, so a theme refresh never writes a template over it
     }
 
     /// <summary>The chevron: the first window waiting behind it comes forward (restored and focused, so its button shows); each click brings the next.</summary>
@@ -441,14 +441,15 @@ public sealed class DesktopWindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// A press on the desktop at a screen point: outside the context menu or
-    /// the Start menu it closes that menu; in a window it focuses that window;
-    /// on the empty desktop it leaves nothing focused.
+    /// A press on the desktop at a screen point: it plays the press's one
+    /// sound (a switch's toggle, else the mouse click: PcPressCue); outside
+    /// the context menu or the Start menu it closes that menu; in a window it
+    /// focuses that window; on the empty desktop it leaves nothing focused.
     /// </summary>
     private void Press(Vector2 screen)
     {
-        Sounds.Play(SoundCues.MouseClick);
         GameObject top = TopHit(screen);
+        Sounds.Play(PcPressCue.For(IsSwitch(top))); // one press, one sound: a switch's toggle, else the mouse click (BUG-21c, F3)
         Pressed?.Invoke(top);
         if (contextMenu != null && contextMenu.IsOpen && !contextMenu.IsPart(top))
             contextMenu.Close();
@@ -493,6 +494,13 @@ public sealed class DesktopWindowManager : MonoBehaviour
     }
 
     /// <summary>The top graphic under a screen point on the desktop canvas (through its event camera), or null.</summary>
+    /// <summary>True when <paramref name="hit"/> is part of a switch (a Toggle, or a control marked PcSwitch): its press plays the toggle.</summary>
+    private static bool IsSwitch(GameObject hit)
+    {
+        Selectable control = hit != null ? hit.GetComponentInParent<Selectable>() : null;
+        return control != null && (control is Toggle || control.TryGetComponent(out PcSwitch _));
+    }
+
     private GameObject TopHit(Vector2 screen)
     {
         _press.position = screen;

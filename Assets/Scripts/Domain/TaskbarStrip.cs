@@ -60,6 +60,9 @@ public static class TaskbarStrip
         return new TaskbarFit(shown, width, true);
     }
 
+    /// <summary>The chevron's label: the overflow glyph and how many windows wait behind it ("» 3"; empty for none). A glyph and a number, so it has no words to translate and no string key a theme refresh would write over it.</summary>
+    public static string ChevronLabel(int hidden) => hidden > 0 ? "» " + hidden : string.Empty;
+
     /// <summary>The width each of <paramref name="n"/> buttons gets sharing <paramref name="room"/>.</summary>
     private static float WidthFor(int n, float room, float spacing) => (room - (n - 1) * spacing) / n;
 }

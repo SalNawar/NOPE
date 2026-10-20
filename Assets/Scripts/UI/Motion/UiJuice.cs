@@ -21,9 +21,10 @@ using UnityEngine.UI;
 /// travel. The face's reach past the rest rect is capped by its room
 /// (ControlRoom: the kit's border inset, never into a sibling's rest rect).
 /// Each moment plays its cue (ui_hover, ui_press, ui_release, ui_toggle,
-/// ui_error: Sounds), except a press on the PC's desktop, whose one click is
-/// the desktop's mouse click (DesktopWindowManager; BUG-21c: one press, one
-/// sound): there only the hover and a refusal's error sound. Stepped by UiMotion only while it moves; the face's
+/// ui_error: Sounds), except a press on the PC's desktop, whose one sound is
+/// the desktop's (DesktopWindowManager, PcPressCue; BUG-21c: one press, one
+/// sound: the mouse click, or a Settings switch's toggle, F3): there only the
+/// hover and a refusal's error sound. Stepped by UiMotion only while it moves; the face's
 /// parts are moved by deltas, so a layout that moves them meanwhile keeps
 /// its say. Reduced Motion keeps the face still; the Motion intensity scales it.
 /// </summary>

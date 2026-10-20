@@ -11,7 +11,10 @@ using UnityEngine.UI;
 /// traveller wheel") shows without Open. It lives on the desktop, not in the app, so
 /// it shows while the app is closed or minimised too. It slides up in on a
 /// spring with the ui_popup cue and slides back down as it goes (UiAppear,
-/// the game feel; it takes no clicks while it goes).
+/// the game feel; it takes no clicks while it goes). A toast whose time ran
+/// out while it could not be seen (the app minimised: its status line is
+/// hidden with it) is gone on the frame the app shows again, never shown
+/// stale (CODE-154); what arrived stays marked by the Papers dot.
 /// </summary>
 public sealed class AppToast : MonoBehaviour
 {
@@ -24,6 +27,11 @@ public sealed class AppToast : MonoBehaviour
     private Action _open;
     private float _until;
     private bool _wired;
+
+    /// <summary>The frame it was last shown again (enabled), so an expired toast goes before it is drawn.</summary>
+    private int _enabledFrame = -1;
+
+    private void OnEnable() => _enabledFrame = Time.frameCount;
 
     /// <summary>Shows <paramref name="line"/> for <paramref name="seconds"/> (unscaled); Open runs <paramref name="open"/> (null: a hint, no Open).</summary>
     public void Show(string line, float seconds, Action open)
@@ -54,8 +62,15 @@ public sealed class AppToast : MonoBehaviour
 
     private void Update()
     {
-        if (Time.unscaledTime >= _until && !UiAppear.IsClosing(gameObject))
-            Hide();
+        if (Time.unscaledTime < _until || UiAppear.IsClosing(gameObject))
+            return;
+        if (Time.frameCount == _enabledFrame)
+        {
+            _open = null;
+            gameObject.SetActive(false); // it ran out unseen: gone before this frame draws, no stale flash
+            return;
+        }
+        Hide();
     }
 
     /// <summary>Wires Open once (the toast is shown before it ever ran).</summary>

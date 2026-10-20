@@ -119,8 +119,9 @@ public static partial class OfficeSceneUIBuilder
         BuildHoverHint(template, null, string.Empty, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
         template.gameObject.SetActive(false);
 
-        // The chevron at the strip's end: the windows that do not fit wait behind it, and its label counts them ("» 3").
-        Button overflow = MakeButton(strip, "OverflowButton", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.Tab, "taskbar.more");
+        // The chevron at the strip's end: the windows that do not fit wait behind it, and its label counts them ("» 3", TaskbarStrip.ChevronLabel: a glyph
+        // and a number, with no label key, so a theme refresh never writes a template over the count).
+        Button overflow = MakeButton(strip, "OverflowButton", TaskbarStrip.ChevronLabel(1), Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.Tab);
         LayoutElement overflowSize = GetOrAdd<LayoutElement>(overflow.gameObject);
         overflowSize.minWidth = config.taskbarChevronWidth;
         overflowSize.preferredWidth = config.taskbarChevronWidth;

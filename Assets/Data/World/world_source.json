@@ -22404,39 +22404,9 @@
       },
       {
         "key": "taskbar.start",
-        "text": "Start",
+        "text": "Menu",
         "gloss": "None",
         "tier": "Flavour"
-      },
-      {
-        "key": "taskbar.more",
-        "text": "» {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "taskbar.moreHint",
-        "text": "More windows",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "startmenu.quitForfeit",
-        "text": "Quit? Today's shift is forfeit. Click again",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.orders.closed",
-        "text": "Orders are closed today: nothing would arrive",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "settings.reduceFlashing",
-        "text": "Reduce flashing",
-        "gloss": "None",
-        "tier": "Full"
       },
       {
         "key": "startmenu.settings",
@@ -22956,19 +22926,19 @@
       },
       {
         "key": "app.side.left",
-        "text": "Left page",
+        "text": "Left",
         "gloss": "None",
         "tier": "Flavour"
       },
       {
         "key": "app.side.right",
-        "text": "Right page",
+        "text": "Right",
         "gloss": "None",
         "tier": "Flavour"
       },
       {
         "key": "app.pane.shelfHere",
-        "text": "Links open here",
+        "text": "Opens here",
         "gloss": "None",
         "tier": "Flavour"
       },

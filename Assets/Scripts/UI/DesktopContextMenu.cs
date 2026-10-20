@@ -115,8 +115,10 @@ public sealed class DesktopContextMenu : MonoBehaviour
         if (!(menu.parent is RectTransform parent) || anchor == null)
             return;
 
-        // Top-left at the target's right edge, half way down (the same canvas: world to the parent's space), moved back inside the desktop.
-        Vector2 at = parent.InverseTransformPoint(anchor.TransformPoint(new Vector3(anchor.rect.xMax, anchor.rect.center.y, 0f)));
+        // Top-left at the target's right edge, half way down (the same canvas: world to the parent's space), moved back inside the desktop;
+        // the empty desktop's menu (Shift+F10 with no icon selected) at the icon area's top left, not past its right edge (CODE-156).
+        Vector3 corner = target == Target.Desktop ? new Vector3(anchor.rect.xMin, anchor.rect.yMax, 0f) : new Vector3(anchor.rect.xMax, anchor.rect.center.y, 0f);
+        Vector2 at = parent.InverseTransformPoint(anchor.TransformPoint(corner));
         Rect bounds = parent.rect;
         Vector2 size = menu.rect.size;
         float x = Mathf.Clamp(at.x, bounds.xMin, bounds.xMax - size.x);

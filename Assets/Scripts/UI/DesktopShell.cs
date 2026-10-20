@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -11,14 +10,17 @@ using UnityEngine.UI;
 /// only today's apps and fits them: it grows up from the taskbar to its
 /// entries' height (BUG-21a: no blank slab on days 1-4). Quit game during a
 /// shift first warns on the entry that the day is forfeit, and quits on a
-/// second press (QuitGuard, BUG-35c). An entry closes the menu. The desktop's
+/// second press within the config's time (QuitGuard, BUG-35c): the entry
+/// shows its own keyed Warning label in place of its label, so a theme
+/// refresh (which re-applies every keyed label) never writes one over the
+/// other. An entry closes the menu. The desktop's
 /// window manager closes the menu on a press outside it and on Escape. Wire
 /// from the editor builder. All fields are optional / null-safe.
 /// </summary>
 public sealed class DesktopShell : MonoBehaviour
 {
-    /// <summary>How long the quit warning stands for its confirming press (seconds).</summary>
-    private const float QuitWarningSeconds = 4f;
+    /// <summary>The quit entry's warning label's name (built under the entry, keyed startmenu.quitForfeit, hidden).</summary>
+    private const string QuitWarningName = "Warning";
 
     /// <summary>The name prefix of a Start menu entry that opens an app ("App_" + its id; Build Office UI names them so).</summary>
     private const string AppEntryPrefix = "App_";
@@ -39,16 +41,19 @@ public sealed class DesktopShell : MonoBehaviour
     [FormerlySerializedAs("powerButton")]
     [SerializeField] private Button quitButton;
 
+    /// <summary>The desktop's knobs (the quit warning's time; a scene built before the field: the knob's own default).</summary>
+    [SerializeField] private DesktopConfigSO config;
+
     /// <summary>Retired (BUG-50a: "Turn off screen" was a sixth way out of the PC; the bezel's power button stays the screen's switch): the menu no longer has the entry, and one in a scene built before is hidden. Kept only while the root builder (QA-RIG's file) still wires it; INTEGRATION drops both.</summary>
     [SerializeField] private Button screenOffButton;
 
     /// <summary>Retired with <see cref="screenOffButton"/> (the monitor it darkened); INTEGRATION drops both.</summary>
     [SerializeField] private MonitorScreen monitorScreen;
 
-    private readonly QuitGuard _quit = new QuitGuard(QuitWarningSeconds);
+    private QuitGuard _quit;
 
-    /// <summary>The quit entry's label (its warning is written there).</summary>
-    private TMP_Text _quitLabel;
+    /// <summary>The quit entry's label ("Quit game") and its warning label, one shown at a time.</summary>
+    private GameObject _quitLabel, _quitWarning;
 
     /// <summary>True while the quit entry reads its warning.</summary>
     private bool _quitWarned;
@@ -58,6 +63,14 @@ public sealed class DesktopShell : MonoBehaviour
 
     /// <summary>True while the Start menu is open.</summary>
     public bool StartMenuOpen => startMenu != null && startMenu.activeSelf;
+
+    private void Awake()
+    {
+        DesktopConfigSO knobs = config != null ? config : ScriptableObject.CreateInstance<DesktopConfigSO>();
+        _quit = new QuitGuard(knobs.quitWarningSeconds);
+        if (knobs != config)
+            Destroy(knobs);
+    }
 
     private void Start()
     {
@@ -73,7 +86,11 @@ public sealed class DesktopShell : MonoBehaviour
         if (quitButton != null)
         {
             quitButton.onClick.AddListener(PressQuit);
-            _quitLabel = quitButton.GetComponentInChildren<TMP_Text>(true);
+            Transform label = quitButton.transform.Find("Label"), warning = quitButton.transform.Find(QuitWarningName);
+            _quitLabel = label != null ? label.gameObject : null;
+            _quitWarning = warning != null ? warning.gameObject : null;
+            if (_quitWarning != null)
+                _quitWarning.SetActive(false);
         }
     }
 
@@ -148,12 +165,15 @@ public sealed class DesktopShell : MonoBehaviour
         Sounds.Play(SoundCues.UiError);
     }
 
-    /// <summary>The quit entry reads its warning, or Quit game again.</summary>
+    /// <summary>The quit entry shows its warning label, or its Quit game label again (each keeps its own key; without a built warning the label stays).</summary>
     private void ShowQuitWarning(bool warn)
     {
         _quitWarned = warn;
+        if (_quitWarning == null)
+            return;
+        _quitWarning.SetActive(warn);
         if (_quitLabel != null)
-            _quitLabel.text = UiText.Pc.Get(warn ? "startmenu.quitForfeit" : "startmenu.quit");
+            _quitLabel.SetActive(!warn);
     }
 
     /// <summary>Drops a standing quit warning.</summary>

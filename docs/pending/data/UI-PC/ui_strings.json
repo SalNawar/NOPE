@@ -1,0 +1,28 @@
+{
+  "track": "UI-PC",
+  "target": "Assets/Data/World/world_source.json, section ui.strings (the reading table); CONTENT owns the file in Phase A, INTEGRATION applies this in UI-PC's merge commit, then runs Generate World and the validators before Build Office UI",
+  "add": {
+    "after": "taskbar.start",
+    "rows": [
+      { "key": "taskbar.moreHint", "text": "More windows", "gloss": "None", "tier": "Full" },
+      { "key": "startmenu.quitForfeit", "text": "Quit? Today's shift is forfeit. Click again", "gloss": "None", "tier": "Full" },
+      { "key": "app.orders.closed", "text": "Orders are closed today: nothing would arrive", "gloss": "None", "tier": "Full" },
+      { "key": "settings.reduceFlashing", "text": "Reduce flashing", "gloss": "None", "tier": "Full" }
+    ],
+    "why": "Full tier: English in every culture, the PC is always English (D7). Each is a builder label key (ThemeTag), checked by Build Office UI's CheckLabelKeysAndRoles: the chevron's hint (BUG-21a), Quit game's mid-shift warning label (BUG-35c), Orders' closed note (BUG-28d), Settings' Reduce flashing row (G3)."
+  },
+  "change": [
+    { "key": "taskbar.start", "from": "Menu", "text": "Start", "why": "BUG-21a: Start reads Start. English only; the culture tables' translations are never shown on the PC (D7)." },
+    { "key": "app.side.left", "from": "Left", "text": "Left page", "why": "BUG-50a (UI-24): no dev labels on the Investigation panes." },
+    { "key": "app.side.right", "from": "Right", "text": "Right page", "why": "BUG-50a (UI-24)." },
+    { "key": "app.pane.shelfHere", "from": "Opens here", "text": "Links open here", "why": "BUG-50a (UI-24)." },
+    { "key": "keys.escape", "from": "Right-click or Esc: close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Menu or cancel a drag. With none of those, back to the desk", "text": "Right-click or Esc: close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Start menu or cancel a drag. With none of those, Esc opens Settings. Q or a click on the bezel leaves the PC", "why": "R3/R4 (2026-10-20): Esc opens Settings, only Q and the bezel leave the PC; the F1 card printed the old way out." }
+  ],
+  "remove": {
+    "keys": ["mail.from.times", "mail.subject.times", "mail.body.times", "mail.body.timesArchived", "mail.link.news", "startmenu.screenOff"],
+    "why": "No reader any more: the paper is not mailed (MailDigest, BUG-50a; Mail's Times rendering and its News link are gone), and Start's Turn off screen is retired (BUG-50a). Flavour tier: remove each from the reading table and from all 6 culture tables (UiStringsTests.EveryCultureLanguage_TranslatesExactlyTheFlavourLabels)."
+  },
+  "dependent": [
+    { "key": "keys.desk.back", "text": "Back out: a drag, the wheel, a held value, inspect mode, the stamp bar, the city, the reading view", "why": "Apply together with DOC-HANDLE's ControlRules change (the back-out no longer closes the PC); until then the desk card's list is still true of the code." }
+  ]
+}

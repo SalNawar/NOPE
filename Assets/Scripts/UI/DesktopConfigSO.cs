@@ -12,7 +12,8 @@ using UnityEngine;
 /// (re-run it after changing one); DesktopWindowManager and DesktopIcons read
 /// the double-click, DesktopIcons the icon knobs, InvestigationApp the
 /// toast's time and the panes' widths, AppPane the tabs' widths and the
-/// history's length and SearchBox the search knobs, at runtime.
+/// history's length, SearchBox the search knobs, PcFrame the power move and
+/// the flash budget (FlashPolicy) and DesktopShell the quit warning, at runtime.
 /// </summary>
 [CreateAssetMenu(fileName = "Desktop_Default", menuName = "TimeDesk/Office/Desktop Config")]
 public sealed class DesktopConfigSO : ScriptableObject
@@ -175,6 +176,39 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The hits a source's group shows before "Show all n".</summary>
     [Min(1)] public int searchPerGroup = 5;
+
+    [Header("The PC frame's power move (GAME_FEEL_BIBLE F1, BUG-32c; CrtPower)")]
+    /// <summary>The power-on: the picture grows from a line to full height (F1: 150 ms OutCubic), in seconds.</summary>
+    [Min(0f)] public float crtOpenSeconds = 0.15f;
+
+    /// <summary>The collapse: the picture squeezes to a line, then a dot (F1: 120 ms), in seconds.</summary>
+    [Min(0f)] public float crtCloseSeconds = 0.12f;
+
+    /// <summary>The Reduced Motion fade that replaces both moves (120 ms), in seconds.</summary>
+    [Min(0f)] public float crtFadeSeconds = 0.12f;
+
+    /// <summary>The line's height as a share of the picture's (2 %).</summary>
+    [Range(0.001f, 1f)] public float crtLineHeight = 0.02f;
+
+    /// <summary>How long the glass stays dark under the degauss hum before the picture starts (F1: "the CRT's degauss hum begins 80 ms before the picture"), in seconds.</summary>
+    [Min(0f)] public float crtHumLeadSeconds = 0.08f;
+
+    /// <summary>How many frames the phosphor dot glows on after the collapse (F1: "a phosphor afterglow of 2 frames on close").</summary>
+    [Min(0)] public int crtAfterglowFrames = 2;
+
+    [Header("Flashes (GAME_FEEL_BIBLE G3; FlashPolicy, every flash's one budget)")]
+    /// <summary>The most flashes drawn in any one second anywhere on screen (G3: 3).</summary>
+    [Min(1)] public int flashesPerSecond = 3;
+
+    /// <summary>How long a flash is held as a static tint with Reduce flashing (G3: 200 ms), in seconds.</summary>
+    [Min(0f)] public float flashTintSeconds = 0.2f;
+
+    [Header("The Start menu")]
+    /// <summary>How long Quit game's mid-shift warning ("Today's shift is forfeit") waits for its confirming press (BUG-35c; QuitGuard), in seconds.</summary>
+    [Min(0f)] public float quitWarningSeconds = 4f;
+
+    /// <summary>The PC frame's power move with these knobs (PcFrame).</summary>
+    public CrtPower PowerMove() => new CrtPower(crtOpenSeconds, crtCloseSeconds, crtFadeSeconds, crtLineHeight, crtHumLeadSeconds, crtAfterglowFrames);
 
     /// <summary>The icon band's grid in an icon area of <paramref name="width"/> x <paramref name="height"/> desktop units (IconGrid.InColumns with the icon knobs): DesktopIcons lays the icons out in it and the builder puts the waiting strip right of it.</summary>
     public IconGrid IconBand(float width, float height) =>

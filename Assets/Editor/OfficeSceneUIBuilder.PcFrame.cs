@@ -132,15 +132,17 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The PC frame on the office overlay canvas, rebuilt each run: an
-    /// always-active host with the PcFrame; its Root (inactive until opened)
-    /// holds the full-screen exit catcher (a click outside the frame closes
-    /// it and goes on to what it lands on: the traveller, the intercom, the
-    /// desk), the bezel (placeholder art; a click on it leaves the PC, with a
-    /// "Back to desk" hint: BUG-50a, Saleh's R3/R4 "to leave the PC, press Q
-    /// or click the bezel"), the Glass the
-    /// frame camera draws into (4:3; the catcher and the bezel let clicks
-    /// through there), the red close X, the power button and LED, and the
-    /// brand plate, in the neutral theme's DiegeticDevice ink. Returns the power LED and button through out parameters.
+    /// always-active host with the PcFrame (wired to the desktop config: its
+    /// power move and flash knobs); its Root (inactive until opened) holds the
+    /// full-screen room catcher (a click on the room beside the frame is taken
+    /// and does nothing: Saleh's R3/R4, 2026-10-20, "To leave the PC, press Q
+    /// or click the bezel", which overrides the 2026-09-30 click-outside
+    /// pass-through), the bezel (placeholder art; a click on it leaves the
+    /// PC, with a "Back to desk" hint: BUG-50a), the Glass the frame camera
+    /// draws into (4:3; the catcher and the bezel let clicks through there),
+    /// the red close X (on the bezel: it leaves as the bezel does), the power
+    /// button and LED, and the brand plate, in the neutral theme's
+    /// DiegeticDevice ink. Returns the power LED and button through out parameters.
     /// </summary>
     private static PcFrame BuildPcFrame(Transform overlay, Camera frameCamera, OfficeViewController view, ContentLibrarySO library, out Image powerLed, out Button powerButton)
     {
@@ -148,12 +150,8 @@ public static partial class OfficeSceneUIBuilder
         Transform host = Panel(overlay, "PcFrame", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         Transform root = Panel(host, "Root", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
 
-        Transform catcher = Panel(root, "ExitCatcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
-        ClickCatcher exit = catcher.gameObject.AddComponent<ClickCatcher>();
-        WirePersistentVoid(exit, "onClick", view, nameof(OfficeViewController.FocusOffice));
-        var soExit = new SerializedObject(exit);
-        soExit.FindProperty("passThrough").boolValue = true;
-        soExit.ApplyModifiedProperties();
+        // The room beside the frame: its transparent plate takes a click there, which does nothing (only Q and the bezel leave the PC, R3/R4).
+        Transform catcher = Panel(root, "RoomCatcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
 
         Transform frame = Panel(root, "Frame", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), Vector2.zero, FrameSize, Color.white, ThemeRoleId.DiegeticDevice);
         var frameRect = (RectTransform)frame;
@@ -214,6 +212,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "root", root.gameObject);
         SetRef(so, "glass", glassRect);
         SetRef(so, "frameCamera", frameCamera);
+        SetRef(so, "config", EnsureDesktopConfig());
         so.ApplyModifiedProperties();
 
         root.gameObject.SetActive(false);

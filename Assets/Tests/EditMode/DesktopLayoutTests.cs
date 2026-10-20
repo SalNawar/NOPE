@@ -290,4 +290,12 @@ public class DesktopLayoutTests
         Assert.IsTrue(squeezed.Chevron, "every window is behind the chevron");
         Assert.AreEqual(4, squeezed.Hidden(4));
     }
+
+    [Test]
+    public void Taskbar_TheChevronCountsTheWaitingWindows_InNoLanguage()
+    {
+        Assert.AreEqual("» 3", TaskbarStrip.ChevronLabel(3), "a glyph and a count: no word to translate, nothing a theme refresh writes over");
+        Assert.AreEqual("» 12", TaskbarStrip.ChevronLabel(12));
+        Assert.AreEqual(string.Empty, TaskbarStrip.ChevronLabel(0), "no chevron, no label");
+    }
 }

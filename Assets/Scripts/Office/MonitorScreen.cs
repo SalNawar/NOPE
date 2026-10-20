@@ -60,6 +60,13 @@ public sealed class MonitorScreen : MonoBehaviour
     /// <summary>Turns the screen on or off (the power buttons' persistent call); a held screen stays on.</summary>
     public void TogglePower() => _screen.Toggle();
 
+    /// <summary>Turns a dark screen on (Esc on the PC with its screen off: Settings shows on it); an on screen stays on.</summary>
+    public void PowerOn()
+    {
+        if (!_screen.IsOn)
+            _screen.Toggle();
+    }
+
     /// <summary>Turns a dark screen on when the reason's wake rule is on.</summary>
     public void Wake(WakeReason reason) => _screen.Wake(reason);
 

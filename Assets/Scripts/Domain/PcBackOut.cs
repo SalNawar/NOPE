@@ -8,7 +8,10 @@ public enum PcBackOutStep
     OpenSettings,
 
     /// <summary>A right-click with nothing left to close: the press is taken and does nothing (it never leaves the PC: only Q and the bezel do).</summary>
-    Swallow
+    Swallow,
+
+    /// <summary>Esc on the PC with its screen off (no desktop to back out of): the screen comes on and the Settings app comes to the front (R3/R4: "Esc opens the same Settings window everywhere").</summary>
+    WakeAndOpenSettings
 }
 
 /// <summary>
@@ -18,8 +21,10 @@ public enum PcBackOutStep
 /// first, one step per press; when it has nothing left to close, Esc brings
 /// the Settings app to the front and a right-click does nothing. Either way
 /// the desktop takes the press, so the office's back-out never closes the PC
-/// (OfficeControls skips a press the desktop stamped). Pure; DesktopKeyboard
-/// applies it.
+/// (OfficeControls skips a press the desktop stamped). With the PC's screen
+/// off there is no desktop to take the press, so the PC still takes it: Esc
+/// turns the screen on and brings Settings forward, a right-click does
+/// nothing (<see cref="ScreenOff"/>). Pure; DesktopKeyboard applies it.
 /// </summary>
 public static class PcBackOut
 {
@@ -30,4 +35,7 @@ public static class PcBackOut
             return PcBackOutStep.Chain;
         return fromKey ? PcBackOutStep.OpenSettings : PcBackOutStep.Swallow;
     }
+
+    /// <summary>What a back-out does on the PC while its screen is off; <paramref name="fromKey"/> is true for Esc, false for a right-click.</summary>
+    public static PcBackOutStep ScreenOff(bool fromKey) => fromKey ? PcBackOutStep.WakeAndOpenSettings : PcBackOutStep.Swallow;
 }

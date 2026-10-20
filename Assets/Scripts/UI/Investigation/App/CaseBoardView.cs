@@ -177,10 +177,15 @@ public sealed class CaseBoardView : AppView
             content.anchoredPosition = _contentHome;
     }
 
-    /// <summary>Draws <paramref name="model"/> (null: nobody at the desk); a new scan slides the board in and pops its cells.</summary>
+    /// <summary>Draws <paramref name="model"/> (null: nobody at the desk); a new scan slides the board in and pops its cells; a chosen overlay pair stays the same two sources, found again by their titles (CODE-157: a new scan shifts their places).</summary>
     public void Show(CaseBoardModel model)
     {
+        (string, int) keyA = OverlayPick.Key(_model.Overlays, _overlayA), keyB = OverlayPick.Key(_model.Overlays, _overlayB);
         _model = model ?? new CaseBoardModel();
+        _overlayA = OverlayPick.Find(_model.Overlays, keyA);
+        _overlayB = OverlayPick.Find(_model.Overlays, keyB);
+        if (_overlayB >= 0 && _overlayA < 0)
+            _overlayB = -1; // a pair without its first source is no pair
         bool newScan = _model.Scanned.Count > _scansShown;
         _scansShown = _model.Scanned.Count;
         Draw(newScan && isActiveAndEnabled);

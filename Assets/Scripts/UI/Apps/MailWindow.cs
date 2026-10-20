@@ -17,12 +17,6 @@ public sealed class MailWindow : MonoBehaviour
     /// <summary>The inbox's sources and read flags.</summary>
     [SerializeField] private MailFeed feed;
 
-    /// <summary>The desktop's apps (the News link opens "internet").</summary>
-    [SerializeField] private DesktopApps apps;
-
-    /// <summary>The Internet app's browser (the News link goes to the message's issue on the News site).</summary>
-    [SerializeField] private BrowserWindow browser;
-
     /// <summary>The Investigation app: the Rules link opens it on its Rules tab (the link shows only while the app is on the PC: InvestigationApp.OnPc).</summary>
     [SerializeField] private InvestigationApp investigation;
 
@@ -150,7 +144,7 @@ public sealed class MailWindow : MonoBehaviour
         if (selectText != null)
             selectText.gameObject.SetActive(m == null);
         if (linkButton != null)
-            linkButton.gameObject.SetActive(m != null && m.Link != MailLink.None && (m.Link != MailLink.Rules || investigation == null || investigation.OnPc));
+            linkButton.gameObject.SetActive(m != null && m.Link == MailLink.Rules && (investigation == null || investigation.OnPc));
         if (m == null)
             return;
 
@@ -176,11 +170,11 @@ public sealed class MailWindow : MonoBehaviour
         {
             TMP_Text label = linkButton.GetComponentInChildren<TMP_Text>(true);
             if (label != null)
-                label.text = UiText.Pc.Get(m.Link == MailLink.Rules ? "mail.link.rules" : "mail.link.news");
+                label.text = UiText.Pc.Get("mail.link.rules");
         }
     }
 
-    /// <summary>Follows the open message's link: the Rules (the Investigation app's Rules tab), or the News site's issue of the message's day (the Internet app).</summary>
+    /// <summary>Follows the open message's link: the Rules (the Investigation app's Rules tab). The paper is not mailed (MailDigest, BUG-50a), so no message links to the News site.</summary>
     private void FollowLink()
     {
         MailItem open = null;
@@ -193,26 +187,7 @@ public sealed class MailWindow : MonoBehaviour
 
         if (open.Link == MailLink.Rules && investigation != null)
             investigation.ShowTab(AppTab.Rules);
-        else if (open.Link == MailLink.News && apps != null)
-        {
-            apps.OpenApp("internet");
-            SiteSpec news = NewsSite();
-            if (browser != null && news != null)
-                browser.Go(NewsPages.IssueAddress(news, open.Day));
-        }
     }
-
-    /// <summary>The News site (the first site of the News kind), or null.</summary>
-    private static SiteSpec NewsSite()
-    {
-        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
-        if (library != null)
-            foreach (SiteSpec site in library.Pc.sites)
-                if (site != null && site.kind == SiteKind.News)
-                    return site;
-        return null;
-    }
-
 }
 
 /// <summary>The app windows' list rows (the inbox, the day list).</summary>
@@ -230,12 +205,11 @@ public static class AppRows
 /// <summary>The Mail app's wording of a message by kind (UI strings): sender, subject, date, reference and body.</summary>
 public static class MailText
 {
-    /// <summary>The sender: the Customs Directorate (memo), the Times, the Timeline Integrity Office (citation), Temporal Customs Supply (a delivery), Transponder Liability (a failure report) or the authored sender.</summary>
+    /// <summary>The sender: the Customs Directorate (memo), the Timeline Integrity Office (citation), Temporal Customs Supply (a delivery), Transponder Liability (a failure report) or the authored sender.</summary>
     public static string From(MailItem m) =>
         m.Kind == MailKind.Authored ? m.From
         : UiText.Pc.Get(m.Kind switch
         {
-            MailKind.TimesIssue => "mail.from.times",
             MailKind.CitationNotice => "mail.from.integrity",
             MailKind.Delivery => "mail.from.supply",
             MailKind.StrandingReport => "mail.from.liability",
@@ -247,7 +221,6 @@ public static class MailText
         m.Kind switch
         {
             MailKind.DirectiveMemo => UiText.Pc.Get("mail.subject.memo"),
-            MailKind.TimesIssue => UiText.Pc.Format("mail.subject.times", m.Day),
             MailKind.CitationNotice => UiText.Pc.Format("mail.subject.citation", m.Slot),
             MailKind.Delivery => UiText.Pc.Get("mail.subject.delivery"),
             MailKind.StrandingReport => UiText.Pc.Format("mail.subject.stranding", m.Subject),
@@ -265,19 +238,18 @@ public static class MailText
     /// <summary>The directive memo's reference for <paramref name="day"/> ("D-3"): Mail's copy and the Investigation app's Rules tab print the same.</summary>
     public static string DirectiveRef(int day) => "D-" + day;
 
-    /// <summary>The memo's reference: D-3 (directives), TT-3 (the Times), C-3-2 (a citation), DL-3 (a delivery), TF-3-1 (a failure report: its day and its place in the run's log), M-welcome (authored).</summary>
+    /// <summary>The memo's reference: D-3 (directives), C-3-2 (a citation), DL-3 (a delivery), TF-3-1 (a failure report: its day and its place in the run's log), M-welcome (authored).</summary>
     public static string Ref(MailItem m) =>
         m.Kind switch
         {
             MailKind.DirectiveMemo => DirectiveRef(m.Day),
-            MailKind.TimesIssue => "TT-" + m.Day,
             MailKind.CitationNotice => "C-" + m.Day + "-" + m.Slot,
             MailKind.Delivery => "DL-" + m.Day,
             MailKind.StrandingReport => "TF-" + m.Day + "-" + m.Slot,
             _ => "M-" + m.Id.Substring(Mailbox.AuthoredPrefix.Length)
         };
 
-    /// <summary>The body: the directives as a list, the paper's lines and where the edition is (today's on the News site, an earlier one in its archive), the slip's copy, what was delivered as a list, a failure report's lines, or the authored paragraphs.</summary>
+    /// <summary>The body: the directives as a list, the slip's copy, what was delivered as a list, a failure report's lines, or the authored paragraphs.</summary>
     public static string Body(MailItem m)
     {
         var sb = new StringBuilder();
@@ -288,14 +260,6 @@ public static class MailText
                     sb.Append(UiText.Pc.Get("mail.body.noDirectives"));
                 foreach (string line in m.Body)
                     sb.AppendLine(UiText.Pc.Format("list.bullet", line));
-                break;
-            case MailKind.TimesIssue:
-                foreach (string line in m.Body)
-                    sb.AppendLine(UiText.Pc.Format("list.bullet", line));
-                if (m.Body.Count > 0)
-                    sb.AppendLine();
-                bool today = m.IssueOnHand && RunManager.HasInstance && RunManager.Instance.World.day == m.Day;
-                sb.Append(UiText.Pc.Get(today ? "mail.body.times" : "mail.body.timesArchived"));
                 break;
             case MailKind.Delivery:
                 sb.AppendLine(UiText.Pc.Get("mail.body.delivery"));
