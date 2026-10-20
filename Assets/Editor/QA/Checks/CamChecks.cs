@@ -22,8 +22,15 @@ using UnityEngine;
 /// framing at A1-A4 in both poses, per
 /// home; the controls' fade over a move; no view change while holding, call
 /// by call; the city's parallax and its full-screen fill; the shake table's
-/// rows; no chrome over a held thing or the reading view's work; DESK-PLAN's
-/// homes at A3 and A4.
+/// rows; no chrome over a held thing or the reading view's work, and the two
+/// overlay plates CAM measured over it, each under its owner (CONTENT's guide
+/// plate, STAMP's stamp hint); the cap heights measured at CAM's pose;
+/// DESK-PLAN's homes at A3 and A4. Built player [BP] (with the demo gate, as
+/// QA-RIG's qa.bp.*): no per-frame allocation over the reading toggle and the
+/// city look, and that run's camera moves tagged. tools/qa/test_cam_gates.py
+/// checks offline that every line CAM's scenarios write that CAM measures
+/// (its ops' lines and the built-in ops' CAM lines: gc, cameraCheck, the
+/// run's camera) sits under one of these checks, under the line's owner.
 /// </summary>
 public static class CamChecks
 {
@@ -146,9 +153,14 @@ public static class CamChecks
                              ok ? "the hall art covers the 21:9 width" : "the 21:9 office view is wider than the hall art, or 16:9 is not the plan's lens");
     }
 
-    /// <summary>Every camera move of the CAM runs is tagged with its cause, and every impulse stays under its cap (G9; the QA camera logger).</summary>
+    /// <summary>
+    /// Every camera move of every CAM run is tagged with its cause, and every
+    /// impulse stays under its cap (G9; the QA camera logger): each run's own
+    /// camera line and each cameraCheck's, in cam_views, cam_chrome, cam_desk
+    /// and cam_gc (the editor runs; the [BP] run's is cam.bp.camera).
+    /// </summary>
     [GateCheck("cam.play.tags", Owner, GateKind.Play)]
-    public static GateResult Tags() => GateResults.Require("cam.play.tags", Owner, "cam_views.camera*");
+    public static GateResult Tags() => GateResults.Require("cam.play.tags", Owner, "cam_*.camera*");
 
     /// <summary>The scripted day 12 (drops, scans, chip reads, the intercom): the drop tilt at most once per paper landing, never while holding (v2's CAM pass at #6).</summary>
     [GateCheck("cam.play.tilts", Owner, GateKind.Play)]
@@ -185,11 +197,57 @@ public static class CamChecks
     [GateCheck("cam.play.shakes", Owner, GateKind.Play)]
     public static GateResult Shakes() => GateResults.Require("cam.play.shakes", Owner, "cam_views.shake.*");
 
-    /// <summary>No chrome is drawn over a held thing or over the reading view's framed work, at A1-A4 (BUG-59).</summary>
+    /// <summary>
+    /// No chrome of CAM's (the pull tabs, the Back control, "◀ City") is drawn
+    /// over a held thing or over the reading view's framed work, at A1-A4
+    /// (BUG-59), with both halves seen in each leg (a held thing, the reading
+    /// view at rest), and every overlay plate a leg shows was drawn and
+    /// measured (a plate never drawn is a red "not measured" line here). The
+    /// plates' own verdicts are their owners' checks below, so this one goes
+    /// green on CAM's work while they are red.
+    /// </summary>
     [GateCheck("cam.play.chrome", Owner, GateKind.Play)]
     public static GateResult Chrome() => GateResults.Require("cam.play.chrome", Owner, "cam_chrome.chrome.*");
+
+    /// <summary>
+    /// CONTENT's guide prompt plate (day 1) covers neither a held thing nor the
+    /// reading view's framed work (BUG-59; measured by CAM's camchrome: CAM.md's
+    /// hand-off, the plate over the intercom's top). Red until CONTENT moves it
+    /// (#17): INTEGRATION carries it on the known-red list until then.
+    /// </summary>
+    [GateCheck("cam.play.guidePlate", "CONTENT", GateKind.Play)]
+    public static GateResult GuidePlate() => GateResults.Require("cam.play.guidePlate", "CONTENT", "cam_chrome.plate.*.guide");
+
+    /// <summary>
+    /// STAMP's stamp hint plate covers neither a held thing nor the reading
+    /// view's framed work (BUG-59; measured by CAM's camchrome in each day-12
+    /// leg: CAM.md's hand-off, the plate over the rack). Red until STAMP moves
+    /// it (#7): INTEGRATION carries it on the known-red list until then.
+    /// </summary>
+    [GateCheck("cam.play.stampHint", "STAMP", GateKind.Play)]
+    public static GateResult StampHintPlate() => GateResults.Require("cam.play.stampHint", "STAMP", "cam_chrome.plate.*.stamphint");
+
+    /// <summary>The cap heights of the desk's printed text were measured at CAM's reading pose, A1 and A2, days 1 and 12 (the desk plan's §6 smoke; a report: the pass on the heights is DOC-LOOK's at #9; red only when nothing could be measured).</summary>
+    [GateCheck("cam.play.capreport", Owner, GateKind.Play)]
+    public static GateResult CapReport() => GateResults.Require("cam.play.capreport", Owner, "cam_views.capreport.*");
 
     /// <summary>DESK-PLAN's homes at A3 and A4 (FIX_PLAN v1: "DESK-PLAN at A3 and A4 (deferred to here)"): every kept object ≥90% seen and its centre click reaching it; the intercom opening the wheel from the reading view with no camera move.</summary>
     [GateCheck("cam.play.deskplan", Owner, GateKind.Play)]
     public static GateResult DeskPlanWide() => GateResults.Require("cam.play.deskplan", Owner, "cam_desk.*");
+
+    /// <summary>
+    /// [BP] No per-frame allocation from DeskView, CameraFeel or CityView: the
+    /// reading toggle and the city look cycled under cam_gc's gc window on the
+    /// QA player, 0 B a frame (BUG-65e, 73e; FIX_PLAN's "0 B/frame from ...
+    /// DeskView [BP]"; recipe 10, run_player.py). The editor run's own gc line
+    /// counts the editor's allocations and is no verdict. With the demo gate,
+    /// as QA-RIG's qa.bp.* ([BP] gates run on the scratch build, not at each
+    /// merge).
+    /// </summary>
+    [GateCheck("cam.bp.gc", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
+    public static GateResult BuiltPlayerGc() => GateResults.Require("cam.bp.gc", Owner, "bp.cam_gc.gc.*", true);
+
+    /// <summary>[BP] The cam_gc run on the QA player tagged every camera move (its run's camera line; the editor runs' are cam.play.tags).</summary>
+    [GateCheck("cam.bp.camera", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
+    public static GateResult BuiltPlayerCamera() => GateResults.Require("cam.bp.camera", Owner, "bp.cam_*.camera*", true);
 }
