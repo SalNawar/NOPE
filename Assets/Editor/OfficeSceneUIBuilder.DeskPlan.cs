@@ -1,13 +1,5 @@
 using System.Collections.Generic;
-using System.IO;
-using TMPro;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 /// <summary>
 /// The office builder's desk plan gate (CheckDeskPlan).
@@ -15,12 +7,22 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The desk's plan holds (the desk layout spec: every bay on the art desk's top, none overlapping; DeskArrangement.Problems): each problem is an error in the Console.</summary>
+    /// <summary>
+    /// The desk home map holds (DeskLayoutSettings.Problems: every id one
+    /// home on the art desk's top, none on the paper mat, over another home
+    /// or the fixed art, every slide-in clean, every shown object seen by the
+    /// office camera; BUG-4a, BUG-7a): each problem is an error in the
+    /// Console, and any stops the build (it never saves a scene over a broken
+    /// plan).
+    /// </summary>
     private static void CheckDeskPlan(DeskConfigSO config)
     {
         if (config == null)
             return;
-        foreach (string problem in DeskArrangement.Problems(new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, DeskRect>>(config.layout.Bays()), config.layout.deskTop.Rect))
-            Debug.LogError($"[TimeDesk] The desk's plan: {problem} Move it in Desk_Default's layout (DeskLayoutSettings).", config);
+        List<string> problems = config.layout.Problems();
+        foreach (string problem in problems)
+            Debug.LogError($"[TimeDesk] The desk's plan: {problem} Move it in Desk_Default's layout (DeskLayoutSettings.homes).", config);
+        if (problems.Count > 0)
+            throw new System.InvalidOperationException($"[TimeDesk] Build Office UI stopped: the desk's plan has {problems.Count} problem(s) (see the Console).");
     }
 }

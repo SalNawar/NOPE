@@ -123,7 +123,7 @@ public sealed class RingPanel : MonoBehaviour
         float home = i < _lamp.Length && _lamp[i] != RingLamp.Dark ? 1f : -1f;
         _breaker[i].Snap(-home);
         DeskProps.Aim(ref _breaker[i], home);
-        _breaker[i].Kick(home * 2f);
+        _breaker[i].Kick(home * 2f, UiMotion.Amount);
         if (i < _blink.Length)
             _blink[i] = 0.45f;
         if (_say != null && i < _lines.Length && !string.IsNullOrEmpty(_lines[i]))

@@ -11,10 +11,15 @@ using UnityEngine;
 /// scanner's two upgrades sit on the scanner: ScannerAddOns). GameManager
 /// starts each day with the world (BeginDay): each object stands on the desk
 /// while its upgrade is owned; one delivered this morning appears when the
-/// supply crate is opened (a click on it, or the shift opening). Each is
-/// laid on its bay of the desk's plan (DeskLayoutSettings, Lay, through
-/// DeskHardware.Lay). Built by Build Office UI under DeskHardware
-/// from the props' models (tools/props/machines).
+/// supply crate is opened (a click on it, or the shift opening), and so do
+/// the scanner's add-ons delivered that morning (BUG-60a: one arrival path,
+/// nothing shows before the crate opens). The crate never brings what
+/// already stood on the desk (DeskDeliveries.ToUnpack: BUG-28c/28d). Each
+/// object is laid on its home of the desk home map (DeskLayoutSettings,
+/// Lay, through DeskHardware.Lay), shrunk to fit it when it is bigger, and
+/// tracked there (DeskLayout: its obstacle follows whether it shows). Built
+/// by Build Office UI under DeskHardware from the props' models
+/// (tools/props/machines).
 /// </summary>
 public sealed class DeskUpgrades : MonoBehaviour
 {
@@ -26,6 +31,9 @@ public sealed class DeskUpgrades : MonoBehaviour
     [SerializeField] private BabelRack babelRack;
     [SerializeField] private Rolodex rolodex;
     [SerializeField] private RingPanel ringPanel;
+
+    /// <summary>The scanner's add-ons (the Auto-Feed tray, the Analysis beacon; optional): one delivered this morning waits for the crate too.</summary>
+    [SerializeField] private ScannerAddOns scannerAddOns;
 
     /// <summary>The desk tuning (the objects' places).</summary>
     [SerializeField] private DeskConfigSO config;
@@ -44,6 +52,9 @@ public sealed class DeskUpgrades : MonoBehaviour
     private Spring _pop;
     private bool _popping;
     private readonly Dictionary<string, int> _bayOfTongue = new Dictionary<string, int>();
+
+    /// <summary>The upgrades whose objects stood on the desk at the last day's start (null before the first): the crate never brings one of them again.</summary>
+    private HashSet<string> _onDesk;
 
     /// <summary>The supply crate (null without its art).</summary>
     public SupplyCrate Crate => crate;
@@ -98,10 +109,21 @@ public sealed class DeskUpgrades : MonoBehaviour
         if (world == null || library == null)
             return;
         System.Func<string, bool> owns = world.HasUpgrade;
-        List<string> delivered = Orders.DeliveredOn(world.orders, world.day);
+        List<string> delivered = DeskDeliveries.ToUnpack(Orders.DeliveredOn(world.orders, world.day), _onDesk);
         var today = new HashSet<string>(delivered);
+        _onDesk = new HashSet<string>();
+        foreach (UpgradeSO u in library.Upgrades)
+            if (u != null && owns(u.id))
+                _onDesk.Add(u.id);
         _appear.Clear();
         _appearScale.Clear();
+        if (scannerAddOns != null)
+        {
+            if (today.Contains(ScannerDay.AutoFeedUpgradeId))
+                Wait(scannerAddOns.Tray);
+            if (today.Contains(ScannerDay.AnalysisUpgradeId))
+                Wait(scannerAddOns.Beacon);
+        }
 
         if (protocolRing != null)
             Show(protocolRing, owns(ProtocolsId), today.Contains(ProtocolsId));
@@ -161,17 +183,25 @@ public sealed class DeskUpgrades : MonoBehaviour
         {
             Unpacked();
         }
+        DeskLayout.RefreshObstacles();
     }
 
     /// <summary>Shows <paramref name="prop"/> when <paramref name="owned"/>; one new this morning waits, shrunk, for the crate.</summary>
     private void Show(Component prop, bool owned, bool newToday)
     {
         prop.gameObject.SetActive(owned);
-        if (!owned || !newToday || crate == null)
+        if (owned && newToday)
+            Wait(prop.transform);
+    }
+
+    /// <summary><paramref name="part"/> came this morning: it waits, shrunk, for the crate to open (with no crate, it simply shows).</summary>
+    private void Wait(Transform part)
+    {
+        if (part == null || crate == null || _appear.Contains(part))
             return;
-        _appear.Add(prop.transform);
-        _appearScale.Add(prop.transform.localScale);
-        prop.transform.localScale = Vector3.zero;
+        _appear.Add(part);
+        _appearScale.Add(part.localScale);
+        part.localScale = Vector3.zero;
     }
 
     /// <summary>The crate opened: this morning's objects pop onto the desk and the new cartridges drop in.</summary>
@@ -183,7 +213,7 @@ public sealed class DeskUpgrades : MonoBehaviour
             return;
         _pop = Spring.At(0f);
         DeskProps.Aim(ref _pop, 1f);
-        _pop.Kick(3f);
+        _pop.Kick(3f, UiMotion.Amount);
         _popping = true;
         Sounds.Play(SoundCues.UiPopup);
     }
@@ -241,42 +271,49 @@ public sealed class DeskUpgrades : MonoBehaviour
             _popping = false;
             _appear.Clear();
             _appearScale.Clear();
+            DeskLayout.RefreshObstacles();
         }
     }
 
     /// <summary>
-    /// Lays the objects on their bays (DeskHardware.Lay; the desk layout spec):
-    /// the crate off the mat at its front right, the protocol cards, the BABEL rack and the
-    /// Rolodex on the comms shelf, the RING SERVICE panel on the hall shelf
-    /// (DeskLayoutSettings, in <paramref name="frame"/>), each at
-    /// DeskConfigSO.upgradeScale; the laid roots are added to
-    /// <paramref name="laid"/>.
+    /// Lays the objects on their homes (DeskHardware.Lay; the desk home map,
+    /// DeskLayoutSettings in <paramref name="frame"/>): the crate on its
+    /// delivery spot right of the rail, the protocol cards and the Rolodex on
+    /// the counter's row left of DETAIN, the BABEL rack on the BABEL tuner's
+    /// home left of the mat (BABEL-TUNER swaps the tuner in there), the RING
+    /// SERVICE panel on the switchboard's home at the booth's right end, each
+    /// at DeskConfigSO.upgradeScale, shrunk to fit its home when bigger, and
+    /// tracked there; the laid roots are added to <paramref name="laid"/>.
     /// </summary>
     public void Lay(DeskFrame frame, List<Transform> laid)
     {
         if (config == null)
             return;
-        DeskLayoutSettings layout = config.layout;
-        LayOne(crate, frame, layout.crate, laid);
-        LayOne(protocolRing, frame, layout.protocolRing, laid);
-        LayOne(babelRack, frame, layout.babelRack, laid);
-        LayOne(rolodex, frame, layout.rolodex, laid);
-        LayOne(ringPanel, frame, layout.ringPanel, laid);
+        LayOne(crate, frame, DeskHomeMap.Crate, laid);
+        LayOne(protocolRing, frame, DeskHomeMap.ProtocolRing, laid);
+        LayOne(babelRack, frame, DeskHomeMap.BabelTuner, laid);
+        LayOne(rolodex, frame, DeskHomeMap.Rolodex, laid);
+        LayOne(ringPanel, frame, DeskHomeMap.Switchboard, laid);
         if (crate != null)
             crate.Laid();
     }
 
-    private void LayOne(Component prop, DeskFrame frame, DeskBay bay, List<Transform> laid)
+    private void LayOne(Component prop, DeskFrame frame, string homeId, List<Transform> laid)
     {
-        if (prop == null || !frame.Place(prop.transform, bay, config.layout.shelfHeight))
+        DeskHome home = config.layout.HomeOf(homeId);
+        if (prop == null || home == null || !frame.Place(prop.transform, new DeskBay(home), 0f))
             return;
-        Placed(prop, laid);
+        Vector3 was = prop.transform.localScale;
+        prop.transform.localScale = Vector3.one * config.upgradeScale; // measured at its size (one waiting for the crate keeps its zero)
+        float fit = DeskLayout.FitScale(prop.transform, home, frame);
+        prop.transform.localScale = was;
+        Placed(prop, Vector3.one * config.upgradeScale * fit, laid);
+        DeskLayout.Track(homeId, prop.transform);
     }
 
-    /// <summary>A laid object takes its size (DeskConfigSO.upgradeScale; one still waiting for the crate pops to it) and joins <paramref name="laid"/>.</summary>
-    private void Placed(Component prop, List<Transform> laid)
+    /// <summary>A laid object takes its <paramref name="scale"/> (one still waiting for the crate pops to it) and joins <paramref name="laid"/>.</summary>
+    private void Placed(Component prop, Vector3 scale, List<Transform> laid)
     {
-        Vector3 scale = Vector3.one * config.upgradeScale;
         int waiting = _appear.IndexOf(prop.transform);
         if (waiting >= 0)
             _appearScale[waiting] = scale; // still waiting for the crate: it pops to this scale

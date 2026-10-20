@@ -34,7 +34,7 @@ public static partial class OfficeSceneUIBuilder
     internal const string DeskConfigPath = "Assets/Data/Config/Desk_Default.asset";
 
     /// <summary>The office scene contract, created by the builder when missing (the art side's anchors and a designer's edits are kept).</summary>
-    private const string OfficeContractPath = "Assets/Data/Config/OfficeSceneContract.asset";
+    internal const string OfficeContractPath = "Assets/Data/Config/OfficeSceneContract.asset";
 
     /// <summary>Where the desk reactions live (created by the builder when missing; a designer's edits are kept).</summary>
     private const string DeskReactionFolder = "Assets/Data/Config/DeskReactions";
@@ -373,15 +373,16 @@ public static partial class OfficeSceneUIBuilder
 
         // The old stamp is cut (P0-C): a scene built before keeps no click box for it.
         DestroyChildIfPresent(propsRoot, "Stamp");
-        // The art's phone (the Intercom anchor): a squash only; the wheel opens from the desk intercom alone (P0-C).
+        // The art's phone (the Intercom anchor), moved onto the intercom's home by the binder, is the intercom (the desk home map): its squash here, its wheel call added at bind (OfficeSceneBinder.BindIntercom), none stored.
         Prop("Intercom", OfficeAnchorId.Intercom, EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), null, null);
         Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Pulse, "tooltip.credits", 0.08f), OfficeAnchorId.ReadoutCredits, null);
         Prop("StabilityMonitor", OfficeAnchorId.StabilityMonitor, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), null, null);
         Prop("Calendar", OfficeAnchorId.Calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "tooltip.day"), OfficeAnchorId.ReadoutDay, null);
         Prop("Clock", OfficeAnchorId.Clock, EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "tooltip.value"), OfficeAnchorId.ReadoutClock, null);
-        Prop("Calculator", OfficeAnchorId.Calculator, EnsureDeskReaction("Reaction_Calculator", ReactionKind.Squash, ""), null, "calculator");
-        Prop("PenPot", OfficeAnchorId.PenPot, EnsureDeskReaction("Reaction_PenPot", ReactionKind.Wobble, ""), null, "pen_pot");
-        Prop("Stapler", OfficeAnchorId.Stapler, EnsureDeskReaction("Reaction_Stapler", ReactionKind.Squash, ""), null, "stapler");
+        // The calculator, the pen pot and the stapler are cut (Saleh 2026-10-20, the desk home map): a scene built before keeps no click box for them.
+        DestroyChildIfPresent(propsRoot, "Calculator");
+        DestroyChildIfPresent(propsRoot, "PenPot");
+        DestroyChildIfPresent(propsRoot, "Stapler");
         ClearPersistentCalls(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick");
         WirePersistentVoid(propsRoot.Find("Calendar").GetComponent<Clickable>(), "onClick", inspect, nameof(DeskInspect.CalendarClicked));
         clicks.AddRange(rulebook.Clicks);
@@ -444,6 +445,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "hud", caseHud);
         SetRef(so, "deskView", deskView);
         SetRef(so, "cityView", cityView);
+        SetRef(so, "game", game);
         so.ApplyModifiedProperties();
 
         // The one input model: the office's keys, the right-click back-out and the PC's grey tab (Papers, Please's controls).

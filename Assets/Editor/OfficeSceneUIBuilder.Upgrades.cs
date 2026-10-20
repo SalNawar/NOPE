@@ -194,6 +194,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "babelRack", BuildBabelRack(root));
         SetRef(so, "rolodex", BuildRolodex(root));
         SetRef(so, "ringPanel", BuildRingPanel(root));
+        SetRef(so, "scannerAddOns", Object.FindFirstObjectByType<ScannerAddOns>(FindObjectsInactive.Include)); // built with the scanner (BuildDesk, before the hardware)
         SetRef(so, "config", config);
         SetRef(so, "tooltip", tooltip);
         so.ApplyModifiedProperties();
