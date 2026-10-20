@@ -1,0 +1,87 @@
+{
+  "name": "hall_fx_sign",
+  "owner": "HALL-FX",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "HALL-FX BUG-67: the AVAILABLE sign holds lit and steady while the morning briefing covers the office, then from Start Shift (the first frame it can be pressed) pulses InvitePulse.Cycles beats (1.6 s each, 4.8 s), then holds lit. sign_invite starts on the frame after the briefing closes and runs 6 s: 3 dips, the first about 0.8 s in. Pass: 3 dips in sign_invite; sign_steady_idle and sign_steady_mid_case steady (region_luma --track sign --max-range 6) and flicker. The sign's region is the tracked ReadySign click box (QA-RIG track). LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end): its shimmer is LIGHT's to measure (BUG-13 split, #11)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "track",
+      "name": "sign",
+      "target": "ReadySign"
+    },
+    {
+      "op": "record",
+      "name": "sign_steady_briefing",
+      "f": 3
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "record",
+      "name": "sign_invite",
+      "f": 6
+    },
+    {
+      "op": "record",
+      "name": "sign_steady_idle",
+      "f": 10
+    },
+    {
+      "op": "still",
+      "name": "sign_steady_idle"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "record",
+      "name": "sign_steady_mid_case",
+      "f": 10
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}

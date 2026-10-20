@@ -2,9 +2,9 @@ using NUnit.Framework;
 
 /// <summary>
 /// The portal rings' vortex (Saleh's demo 1018a, PortalVortex): the effect's
-/// quad sits on its opening in the drawing's local space and texture, the
-/// glass fence's row maps across the quad, and the iris, flare and swirl
-/// behave (one step, or still, with reduced motion).
+/// quad sits on its opening in the drawing's local space, maps onto its ring's
+/// crop of the mask atlas, and the iris, flare and swirl behave (one step, or
+/// still, with reduced motion).
 /// </summary>
 public class PortalVortexTests
 {
@@ -32,22 +32,27 @@ public class PortalVortexTests
     }
 
     [Test]
-    public void TextureQuad_CoversTheSamePixels()
+    public void MaskMap_PutsTheQuadOnItsRingsCropOfTheAtlas()
     {
-        PortalVortex.Box t = PortalVortex.TextureQuad(1096f, 488f, 48f, 55f, W, H);
-        Assert.AreEqual(1096f / W, t.CentreX, 1e-5f);
-        Assert.AreEqual(1f - 488f / H, t.CentreY, 1e-5f);
-        Assert.AreEqual(2f * PortalVortex.Margin * 48f / W, t.W, 1e-5f);
-        Assert.AreEqual(2f * PortalVortex.Margin * 55f / H, t.H, 1e-5f);
-    }
+        // An opening at canvas (100, 50), radii 20 x 10; its crop is canvas (70, 30) 60 x 40, at atlas (0.25, 0.5) 0.5 x 0.25.
+        var crop = new PortalVortex.Box(70f, 30f, 60f, 40f);
+        var atlas = new PortalVortex.Box(0.25f, 0.5f, 0.5f, 0.25f);
+        PortalVortex.Box map = PortalVortex.MaskMap(100f, 50f, 20f, 10f, crop, atlas);
 
-    [Test]
-    public void FenceV_MapsTheRailsRowAcrossTheQuad()
-    {
-        Assert.AreEqual(0.5f, PortalVortex.FenceV(364f, 22f, 364f), 1e-5f, "a rail through the centre halves the quad");
-        Assert.Greater(PortalVortex.FenceV(488f, 55f, 478f), 0.5f, "a rail above the centre is above the middle");
-        Assert.AreEqual(0f, PortalVortex.FenceV(488f, 55f, 0f), "no fence");
-        Assert.AreEqual(1f, PortalVortex.FenceV(488f, 55f, 10f), "a rail above the quad: all of it behind the glass");
+        // A canvas point's place in the atlas: its share across the crop, y flipped (canvas rows run down, the atlas's v up).
+        System.Func<float, float, (float u, float v)> atlasOf = (x, y) =>
+            (atlas.X + atlas.W * (x - crop.X) / crop.W, atlas.Y + atlas.H * (1f - (y - crop.Y) / crop.H));
+        System.Func<float, float, (float u, float v)> mapped = (u, v) => (u * map.W + map.X, v * map.H + map.Y);
+
+        var centre = atlasOf(100f, 50f);
+        Assert.AreEqual(centre.u, mapped(0.5f, 0.5f).u, 1e-5f, "the quad's middle is the opening's centre");
+        Assert.AreEqual(centre.v, mapped(0.5f, 0.5f).v, 1e-5f);
+        var topLeft = atlasOf(100f - PortalVortex.Margin * 20f, 50f - PortalVortex.Margin * 10f);
+        Assert.AreEqual(topLeft.u, mapped(0f, 1f).u, 1e-5f, "the quad's top-left corner is Margin radii up and left");
+        Assert.AreEqual(topLeft.v, mapped(0f, 1f).v, 1e-5f);
+        var bottomRight = atlasOf(100f + PortalVortex.Margin * 20f, 50f + PortalVortex.Margin * 10f);
+        Assert.AreEqual(bottomRight.u, mapped(1f, 0f).u, 1e-5f);
+        Assert.AreEqual(bottomRight.v, mapped(1f, 0f).v, 1e-5f);
     }
 
     [Test]

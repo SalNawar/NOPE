@@ -54,18 +54,31 @@ public sealed class HelixRiverKnobs
     public float driftWild = 0.5f;
 
     /// <summary>
-    /// The CRT's glitch (band shifts, chroma split) grows from nothing at the
-    /// warning line (GameConfigSO.stabilityWarningMargin above the firing line)
-    /// to this much at the firing line; the screen flickers in the critical
-    /// band (StabilityRules.Band).
+    /// The CRT's glitch on a drop of stability (HALL-FX, BUG-54: "one readable
+    /// glitch on a stability drop, then it settles"): one burst this strong
+    /// (band shifts that kink once and slide back, a chroma split for its first
+    /// frames), fading out over <see cref="glitchSeconds"/>; then the glass is
+    /// calm again, whatever the day's losses.
     /// </summary>
     public float glitchWild = 1f;
 
-    /// <summary>A drop of this many points today (the shift's stability change) makes the river fully agitated: faster motes and a little glitch, on top of the damage.</summary>
-    public float agitationFullDrop = 7.5f;
+    /// <summary>How long a drop's glitch burst lasts (seconds; the feel bible's J4: 200 ms).</summary>
+    public float glitchSeconds = 0.2f;
 
-    /// <summary>The glitch a fully agitated day adds.</summary>
-    public float agitationGlitch = 0.25f;
+    /// <summary>How long the warning state takes to come on or go off (seconds to close about two thirds of the way): calm, never a strobe.</summary>
+    public float warningSettleSeconds = 0.8f;
+
+    /// <summary>How far (points) the shown stability must climb back above the warning line before the warning goes off, so it never flickers on the line.</summary>
+    public float warningHysteresis = 0.5f;
+
+    /// <summary>The fastest any of the river's details may cross the display (screen pixels a frame at <see cref="captureFps"/>): faster, a thin line hops pixels and strobes (BUG-54); a small display slows the river until it holds.</summary>
+    public float maxPixelsPerFrame = 0.5f;
+
+    /// <summary>The frame rate the speed cap is measured at (the QA captures' 30 fps; a faster game only moves less a frame).</summary>
+    public float captureFps = 30f;
+
+    /// <summary>A drop of this many points today (the shift's stability change) makes the river fully agitated: faster motes, on top of the damage.</summary>
+    public float agitationFullDrop = 7.5f;
 
     /// <summary>The share of extra mote speed a fully agitated day adds.</summary>
     public float agitationFlow = 0.4f;
@@ -77,7 +90,7 @@ public sealed class HelixRiverKnobs
     public float reducedMotionSpeed = 0.1f;
 }
 
-/// <summary>What the river reads each frame (the hidden stability, today's change, the firing and warning lines, the player's motion choice).</summary>
+/// <summary>What the river reads each frame (the hidden stability, today's change, the firing and warning lines, the player's motion choice, the display's size and a held warning).</summary>
 public readonly struct HelixRiverInput
 {
     /// <summary>Timeline stability now (0 to 100; never shown).</summary>
@@ -86,10 +99,10 @@ public readonly struct HelixRiverInput
     /// <summary>The firing line (GameConfigSO.firedAtStability): the river is collapsing at or under it.</summary>
     public readonly float FiredAt;
 
-    /// <summary>The warning margin above the firing line (GameConfigSO.stabilityWarningMargin): the CRT starts glitching there.</summary>
+    /// <summary>The warning margin above the firing line (GameConfigSO.stabilityWarningMargin): the river's state is Breaching under it (HallSlotPick reads the tier).</summary>
     public readonly float WarningMargin;
 
-    /// <summary>The critical margin above the firing line (GameConfigSO.stabilityCriticalMargin): the screen flickers there.</summary>
+    /// <summary>The critical margin above the firing line (GameConfigSO.stabilityCriticalMargin): the warning state shows under it, near the destruction point (D12).</summary>
     public readonly float CriticalMargin;
 
     /// <summary>Stability's change today (the shift ledger's total; negative is a loss).</summary>
@@ -98,8 +111,15 @@ public readonly struct HelixRiverInput
     /// <summary>True when the player chose Reduced Motion.</summary>
     public readonly bool ReducedMotion;
 
+    /// <summary>How many of the river's reference pixels one screen pixel of the display covers (its glass's reference height over its height on screen); 0 or less when unknown (no speed cap).</summary>
+    public readonly float ScreenScale;
+
+    /// <summary>True while a caller holds the warning on (HelixRiverMonitor.SetWarning), whatever the stability.</summary>
+    public readonly bool WarningHeld;
+
     /// <summary>A frame's reading.</summary>
-    public HelixRiverInput(float stability, float firedAt, float warningMargin, float criticalMargin, float todayChange, bool reducedMotion)
+    public HelixRiverInput(float stability, float firedAt, float warningMargin, float criticalMargin, float todayChange, bool reducedMotion,
+                           float screenScale = 0f, bool warningHeld = false)
     {
         Stability = stability;
         FiredAt = firedAt;
@@ -107,6 +127,8 @@ public readonly struct HelixRiverInput
         CriticalMargin = criticalMargin;
         TodayChange = todayChange;
         ReducedMotion = reducedMotion;
+        ScreenScale = screenScale;
+        WarningHeld = warningHeld;
     }
 }
 
@@ -119,10 +141,10 @@ public enum StabilityTier
     /// <summary>Oxbows pinch off (the calm under HelixRiverKnobs.oxbowsFrom), above the warning line.</summary>
     Strained,
 
-    /// <summary>From the warning line (GameConfigSO.stabilityWarningMargin above the firing line): the CRT glitches.</summary>
+    /// <summary>From the warning line (GameConfigSO.stabilityWarningMargin above the firing line).</summary>
     Breaching,
 
-    /// <summary>The critical band (GameConfigSO.stabilityCriticalMargin above the firing line, or under it): the screen flickers.</summary>
+    /// <summary>The critical band (GameConfigSO.stabilityCriticalMargin above the firing line, or under it): the monitor shows its warning state.</summary>
     Collapsing
 }
 
@@ -132,7 +154,7 @@ public struct HelixRiverFrame
     /// <summary>The shown calm: 1 steady, 0 at the firing line (smoothed; never a number on screen).</summary>
     public float Calm;
 
-    /// <summary>The river's clock (seconds; slowed or frozen under Reduced Motion).</summary>
+    /// <summary>The river's clock (seconds; slowed on a small display so no detail outruns the speed cap, slowed or frozen under Reduced Motion).</summary>
     public float Time;
 
     /// <summary>The centre line's meander (reference px).</summary>
@@ -159,8 +181,11 @@ public struct HelixRiverFrame
     /// <summary>How many loose fibres fray the leading end (fractional).</summary>
     public float Fray;
 
-    /// <summary>The motes' speed downstream (reference px a second).</summary>
+    /// <summary>The motes' speed downstream (reference px a second, before the speed cap).</summary>
     public float Flow;
+
+    /// <summary>How far the motes have ridden downstream (reference px): their speed capped and integrated, so a change of speed never jumps them.</summary>
+    public float MoteTravel;
 
     /// <summary>How far the motes stray from their strand (reference px).</summary>
     public float Stray;
@@ -168,11 +193,14 @@ public struct HelixRiverFrame
     /// <summary>How much the amber strand has reddened (0 to 1).</summary>
     public float Drift;
 
-    /// <summary>The CRT's glitch (0 to 1).</summary>
+    /// <summary>The CRT's glitch (0 to 1): one burst on a drop of stability, back to 0 within HelixRiverKnobs.glitchSeconds; never under Reduced Motion.</summary>
     public float Glitch;
 
-    /// <summary>The CRT's flicker (0 or 1; never under Reduced Motion).</summary>
-    public float Flicker;
+    /// <summary>Which glitch burst this is (counts the drops): the shader slips the same bands for a whole burst, so it kinks once.</summary>
+    public float GlitchSeed;
+
+    /// <summary>The warning state (0 off to 1 on, eased; HALL-FX, BUG-56e): near the destruction point, or while a caller holds it.</summary>
+    public float Warning;
 
     /// <summary>A citation's pulse along the river: its head's place (0 at the source, 1 past the leading end), or -1 when none runs.</summary>
     public float Pulse;
@@ -187,9 +215,13 @@ public struct HelixRiverFrame
 /// with time but you dont really see a value for"): maps the hidden
 /// stability, today's change and citations to the river's look, smoothly.
 /// As stability falls towards the firing line the centre line meanders, the
-/// helix widens past its banks, rungs snap and mutate red, oxbows pinch off,
-/// the leading end unzips and frays, and from the warning line the CRT
-/// glitches (flickering in the critical band). A citation sends a red pulse
+/// helix widens past its banks, rungs snap and mutate red, oxbows pinch off
+/// and the leading end unzips and frays. Calm, readable motion (HALL-FX,
+/// BUG-54): a drop of stability glitches the CRT once, then it settles; in the
+/// critical band, near the destruction point, the monitor eases into a steady
+/// warning state (BUG-56e; D12: "you are fired if you destroy the timeline");
+/// and no detail crosses the display faster than half a pixel a frame (the
+/// river's clock slows on a small display). A citation sends a red pulse
 /// downstream. The shown calm follows stability with a time constant, so a
 /// change never pops; the first frame starts where stability stands. Pure,
 /// so every rule is tested headless (HelixRiverTests); the drawing is the
@@ -200,12 +232,24 @@ public sealed class HelixRiver
     /// <summary>The river's reference screen height (px): every length in the knobs is in these pixels.</summary>
     public const float ScreenHeight = 380f;
 
+    /// <summary>The fastest detail on the river's clock (reference px a second, in HelixRiver.shader): the current streaks (up to 80), the rungs and the twist (70.4). The speed cap slows the clock by it.</summary>
+    public const float FastestOnClock = 80f;
+
+    /// <summary>The least fall of the hidden stability that counts as a drop (points; it is kept in hundredths).</summary>
+    private const float DropEpsilon = 0.005f;
+
     private readonly HelixRiverKnobs _knobs;
     private bool _started;
     private float _shownStability;
     private float _shownAgitation;
+    private float _lastStability;
     private float _time;
+    private float _moteTravel;
     private float _pulseAge = float.PositiveInfinity;
+    private float _glitchAge = float.PositiveInfinity;
+    private int _glitches;
+    private bool _warned;
+    private float _warning;
 
     /// <summary>A river on <paramref name="knobs"/> (null: the defaults).</summary>
     public HelixRiver(HelixRiverKnobs knobs) => _knobs = knobs ?? new HelixRiverKnobs();
@@ -223,7 +267,8 @@ public sealed class HelixRiver
         float dt = Math.Max(0f, Finite(deltaSeconds));
         float stability = Finite(input.Stability);
         float agitation = Clamp01(-Finite(input.TodayChange) / Math.Max(0.0001f, _knobs.agitationFullDrop));
-        if (!_started)
+        bool first = !_started;
+        if (first)
         {
             _shownStability = stability;
             _shownAgitation = agitation;
@@ -234,19 +279,40 @@ public sealed class HelixRiver
             float follow = _knobs.settleSeconds > 0f ? 1f - (float)Math.Exp(-dt / _knobs.settleSeconds) : 1f;
             _shownStability += (stability - _shownStability) * follow;
             _shownAgitation += (agitation - _shownAgitation) * follow;
+            // A drop of the hidden stability starts one glitch burst (a new drop restarts it).
+            if (stability < _lastStability - DropEpsilon)
+            {
+                _glitchAge = 0f;
+                _glitches++;
+            }
         }
-
-        _time += dt * (input.ReducedMotion ? Math.Max(0f, _knobs.reducedMotionSpeed) : 1f);
-        if (!float.IsPositiveInfinity(_pulseAge))
-            _pulseAge += dt;
+        _lastStability = stability;
 
         HelixRiverFrame frame = Shape(Calm(_shownStability, input.FiredAt), _knobs);
-        frame.Time = _time;
-        float warningLine = input.FiredAt + Math.Max(0f, input.WarningMargin);
-        float warned = warningLine > input.FiredAt ? Clamp01((warningLine - _shownStability) / (warningLine - input.FiredAt)) : (_shownStability <= input.FiredAt ? 1f : 0f);
-        frame.Glitch = Clamp01(warned * _knobs.glitchWild + _shownAgitation * _knobs.agitationGlitch);
         frame.Flow *= 1f + _shownAgitation * _knobs.agitationFlow;
-        frame.Flicker = !input.ReducedMotion && StabilityRules.Band(_shownStability, input.FiredAt, input.WarningMargin, input.CriticalMargin) == StabilityBand.Critical ? 1f : 0f;
+
+        // The clock: slowed so no detail outruns the speed cap on this display, and by Reduced Motion.
+        float motion = input.ReducedMotion ? Math.Max(0f, _knobs.reducedMotionSpeed) : 1f;
+        float cap = SpeedCap(input.ScreenScale, _knobs);
+        _time += dt * motion * Math.Min(1f, cap / FastestOnClock);
+        _moteTravel += dt * motion * Math.Min(frame.Flow, cap);
+        frame.Time = _time;
+        frame.MoteTravel = _moteTravel;
+
+        if (!float.IsPositiveInfinity(_pulseAge))
+            _pulseAge += dt;
+        if (!float.IsPositiveInfinity(_glitchAge))
+            _glitchAge += dt;
+        float burst = _knobs.glitchSeconds > 0f ? _glitchAge / _knobs.glitchSeconds : float.PositiveInfinity;
+        frame.Glitch = !input.ReducedMotion && burst < 1f ? Clamp01(_knobs.glitchWild * (1f - burst) * (1f - burst)) : 0f;
+        frame.GlitchSeed = _glitches;
+
+        // The warning: in the critical band (near the destruction point), off only once the shown stability climbs back past it, or held.
+        float line = input.FiredAt + Math.Max(0f, input.CriticalMargin);
+        _warned = _warned ? _shownStability <= line + Math.Max(0f, _knobs.warningHysteresis) : _shownStability <= line;
+        float target = _warned || input.WarningHeld ? 1f : 0f;
+        _warning = first || _knobs.warningSettleSeconds <= 0f ? target : _warning + (target - _warning) * (1f - (float)Math.Exp(-dt / _knobs.warningSettleSeconds));
+        frame.Warning = _warning;
 
         float pulse = _knobs.pulseSeconds > 0f ? _pulseAge / _knobs.pulseSeconds : float.PositiveInfinity;
         bool pulsing = pulse < 1f;
@@ -257,6 +323,19 @@ public sealed class HelixRiver
 
     /// <summary>The calm of <paramref name="stability"/>: 0 at or under the firing line, 1 at or above HelixRiverKnobs.steadyAt, linear between.</summary>
     public float Calm(float stability, float firedAt) => CalmOf(stability, firedAt, _knobs);
+
+    /// <summary>
+    /// The fastest a detail may cross a display of <paramref name="screenScale"/>
+    /// reference px per screen px (reference px a second): the knobs' pixels a
+    /// frame at their capture rate; unbounded when the display's size is unknown.
+    /// </summary>
+    public static float SpeedCap(float screenScale, HelixRiverKnobs knobs)
+    {
+        knobs = knobs ?? new HelixRiverKnobs();
+        if (!(screenScale > 0f) || float.IsInfinity(screenScale))
+            return float.PositiveInfinity;
+        return Math.Max(0f, knobs.maxPixelsPerFrame) * Math.Max(1f, knobs.captureFps) * screenScale;
+    }
 
     /// <summary>The calm of <paramref name="stability"/> on <paramref name="knobs"/> (null: the defaults): 0 at or under the firing line, 1 at or above HelixRiverKnobs.steadyAt, linear between.</summary>
     public static float CalmOf(float stability, float firedAt, HelixRiverKnobs knobs)
@@ -270,8 +349,8 @@ public sealed class HelixRiver
     /// <summary>
     /// The river's state in words, for the systems that pick art by it (the
     /// hall's slots, HallSlotPick; never shown to the player): Collapsing in
-    /// the critical band (where the river flickers), Breaching from the
-    /// warning line (where its glitch starts), Strained once the calm falls
+    /// the critical band (where the monitor shows its warning), Breaching from
+    /// the warning line, Strained once the calm falls
     /// under HelixRiverKnobs.oxbowsFrom (where oxbows pinch off), else Steady.
     /// The river's own thresholds, so the hall and the river always agree.
     /// </summary>

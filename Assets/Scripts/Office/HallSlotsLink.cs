@@ -21,7 +21,9 @@ using UnityEngine;
 /// special of the day plans' rules, the famous travellers let through of the
 /// verdict flags) whenever an input changes, applies the dev overrides
 /// (HallSlotsDev), and when the state changes picks each slot's variant
-/// (HallSlotPick) and crossfades to its art, Resources
+/// (HallSlotPick) and crossfades to its art on unscaled time, the outgoing
+/// face opaque while the incoming one comes in (SlotCrossfade: the painting
+/// never shows through, HALL-FX BUG-71), Resources
 /// Hall/Slots/&lt;slot&gt;/&lt;file&gt; (ArtSlots.HallSlot; Reduced Motion cuts). A
 /// picked variant without art keeps the painting as it is; only while the
 /// cheat turns HallSlotsDev.ShowAllStandIns on do the editor and development
@@ -155,7 +157,7 @@ public sealed class HallSlotsLink : MonoBehaviour
         if (_painting == null)
             return;
         ReadState();
-        float dt = Time.deltaTime;
+        float dt = Time.unscaledDeltaTime;
         // The painting's lighting values as the art wrote them this frame (only those it holds: the material's own stand for the rest).
         _painting.GetPropertyBlock(_read);
         _write.Clear();
@@ -180,8 +182,8 @@ public sealed class HallSlotsLink : MonoBehaviour
             if (s.Fade < 1f)
             {
                 s.Fade = _settings.crossfadeSeconds > 0f ? Mathf.Min(1f, s.Fade + dt / _settings.crossfadeSeconds) : 1f;
-                SetAlpha(s.Back, s.Fade);
-                SetAlpha(s.Front, 1f - s.Fade);
+                SetAlpha(s.Back, SlotCrossfade.Incoming(s.Fade));
+                SetAlpha(s.Front, SlotCrossfade.Outgoing(s.Fade));
                 if (s.Fade >= 1f)
                 {
                     Show(s.Front, null, null);

@@ -36,8 +36,12 @@ MonoBehaviour:
     strayWild: 30
     driftWild: 0.5
     glitchWild: 1
+    glitchSeconds: 0.2
+    warningSettleSeconds: 0.8
+    warningHysteresis: 0.5
+    maxPixelsPerFrame: 0.5
+    captureFps: 30
     agitationFullDrop: 7.5
-    agitationGlitch: 0.25
     agitationFlow: 0.4
     pulseSeconds: 1.2
     reducedMotionSpeed: 0.1

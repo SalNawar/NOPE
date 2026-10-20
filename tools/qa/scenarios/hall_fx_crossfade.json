@@ -1,0 +1,144 @@
+{
+  "name": "hall_fx_crossfade",
+  "owner": "HALL-FX",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "HALL-FX BUG-71: the hall slot crossfade never shows the painting through. The cheat 'Hall: culture' steps the run's culture to neutral, then to the content's first nation (the flags take their art), then to the second: an art-to-art fade (crossfadeSeconds 0.6) recorded over the left flag (tracked: 'Hall slot 13-flag-left-cloth') and the board frame. The second fade runs with a citation's hit-stop on top ('Feel: citation'): it still completes on unscaled time. Pass: region_luma --track flag --monotonic on both sequences (no dip toward the painting), and flicker. LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end): its shimmer is LIGHT's to measure (BUG-13 split, #11)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "track",
+      "name": "flag",
+      "target": "Hall slot 13-flag-left-cloth"
+    },
+    {
+      "op": "track",
+      "name": "board",
+      "target": "Hall slot 15-departure-board-frame"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall: culture"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall: culture"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "crossfade_before"
+    },
+    {
+      "op": "recStart",
+      "name": "crossfade_art_to_art"
+    },
+    {
+      "op": "wait",
+      "f": 0.5
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall: culture"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "crossfade_after"
+    },
+    {
+      "op": "recStart",
+      "name": "crossfade_hitstop"
+    },
+    {
+      "op": "wait",
+      "f": 0.5
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall: culture"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Feel: citation"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall: the run's"
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}
