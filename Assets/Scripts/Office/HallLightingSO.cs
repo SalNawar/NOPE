@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// The anime hall's lights and dust (docs/HALL_LIGHTING.md), every knob read
@@ -96,21 +97,18 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>True: a fixture blinks for a moment as it strikes (never with reduced motion).</summary>
     public bool fixtureFlicker = true;
 
-    [Header("Screens, signs, the desk lamp and the PC (the signs and the lamp switch on at their night stage)")]
+    [Header("Screens, signs and the PC (the signs switch on at their night stage)")]
     /// <summary>The share of their strength the hall's screens (the board, the vending machine, the small displays) give by day (their glow hardly reads in full daylight); full at night.</summary>
     [Range(0f, 1f)] public float screenDayShare = 0.15f;
 
     /// <summary>The share of their strength the lit signs (the department doors' panels, the alarm lamps) give before their night stage (signsOnAt); full after it.</summary>
     [Range(0f, 1f)] public float signDayShare = 0.1f;
 
-    /// <summary>The share of its strength the desk lamp (a 3D light on the preserved desk) gives before its night stage (deskLampOnAt; 0: off by day); full after it.</summary>
-    [Range(0f, 1f)] public float deskLampDayShare = 0.35f;
-
     /// <summary>The same for the PC screen's glow on the desk (a 3D light).</summary>
     [Range(0f, 1f)] public float deskScreenDayShare = 0.4f;
 
     [Header("Night stages (Saleh 1018a: \"need more lights to activate as it gets darker\"; the evening: 0 by day, 1 at night)")]
-    /// <summary>The evening at which the desk lamp switches on (the first light of the night; before it, deskLampDayShare).</summary>
+    /// <summary>The evening at which the desk's work lamp switches on (the first light of the night; off before it): the afternoon dip (DeskLighting.LampOnHour), read by DeskLightLevel.</summary>
     [Range(0f, 1f)] public float deskLampOnAt = 0.1f;
 
     /// <summary>Seconds the desk lamp's filament takes to warm up (a dim blink, then easing up; at once with reduced motion).</summary>
@@ -153,11 +151,38 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>Seconds a ring's light takes to come on or go off when its state changes (at once with reduced motion).</summary>
     [Range(0f, 5f)] public float portalFadeSeconds = 0.8f;
 
-    [Header("The traveller (unlit art, tinted into the hall's light)")]
-    /// <summary>Multiplies the traveller's tint (DeskConfigSO.travellerTint) along the solar day, so the figure sits in the hall's light; kept light enough that the face reads.</summary>
-    public Gradient travellerShade = Gradient(
-        (0f, new Color(0.62f, 0.66f, 0.82f)), (0.25f, new Color(0.95f, 0.84f, 0.82f)), (0.32f, Color.white), (0.68f, Color.white),
-        (0.75f, new Color(1f, 0.86f, 0.78f)), (0.82f, new Color(0.72f, 0.70f, 0.86f)), (1f, new Color(0.62f, 0.66f, 0.82f)));
+    [Header("The desk: one light for papers, props, rack, traveller and photo (DeskLighting, DeskLightLevel)")]
+    /// <summary>NOPE/Desk Anime's key light energy at the full day (the old noon daylight's: 0.7 times its warm white), which the desk light's level scales.</summary>
+    [Range(0.1f, 2f)] public float deskKeyAtDay = 0.68f;
+
+    /// <summary>The room's light on the desk at night as a share of the full day's, without the lamp (the floor plus the lamp keeps the mat readable: DeskLighting.ReadableNightLevel).</summary>
+    [Range(0f, 1f)] public float deskNightFloor = 0.35f;
+
+    /// <summary>The room's colour on the desk at night (white by day).</summary>
+    public Color deskNightTint = new Color(0.78f, 0.84f, 1f);
+
+    /// <summary>What the work lamp adds to the desk's level, warm and full, at the pool's centre.</summary>
+    [Range(0f, 1f)] public float deskLampLevel = 0.25f;
+
+    /// <summary>The work lamp's colour (a warm filament).</summary>
+    public Color deskLampColour = new Color(1f, 0.82f, 0.6f);
+
+    /// <summary>The lamp pool's radius on the desk (metres), centred on the mat; its share falls off to nothing at the edge.</summary>
+    [Range(0.1f, 1.5f)] public float deskLampRadius = 0.45f;
+
+    [Header("The hall at night (NOPE/Hall Deep Layout, through HallBakedLighting)")]
+    /// <summary>The painted hall's tint at full night, away from the lamp pools.</summary>
+    public Color hallNightTint = new Color(0.2f, 0.27f, 0.43f);
+
+    /// <summary>How strongly a lit fixture's pool lights the floor and the wall around it (the fixture's colour times its lit share).</summary>
+    [Range(0f, 2f)] public float hallPoolStrength = 0.35f;
+
+    /// <summary>The lit ceiling diffusers' glow (1: as painted; above 1 they glow past white, which the finish's bloom picks up).</summary>
+    [Range(0f, 4f)] public float hallEmissionGain = 2.5f;
+
+    [Header("The finish (one global Volume: tonemapping, a light grade, bloom, vignette)")]
+    /// <summary>The office's post-processing profile (Assets/Settings/OfficeFinishProfile.asset), put on a global Volume at play with the office camera's post-processing on (null: none).</summary>
+    public VolumeProfile finishProfile;
 
     [Header("Dust (slow motes, seen in the light)")]
     /// <summary>The most motes alive at once (per emitter).</summary>
@@ -191,6 +216,11 @@ public sealed class HallLightingSO : ScriptableObject
 
     /// <summary>The day-night cycle's knobs for HallDayCycle (fixture threshold, band and stagger included).</summary>
     public HallDayCycle.Settings Cycle => new HallDayCycle.Settings(sunriseHour, sunsetHour, twilightHours, fixturesOnBelow, fixtureFadeBand, fixtureStaggerMinutes);
+
+    /// <summary>The desk light's knobs for DeskLighting.</summary>
+    public DeskLighting.Knobs DeskKnobs => new DeskLighting.Knobs(deskNightFloor, Rgb(deskNightTint), deskLampLevel, Rgb(deskLampColour), deskLampOnAt);
+
+    private static Rgba Rgb(Color c) => new Rgba(c.r, c.g, c.b, c.a);
 
     private static Gradient Gradient(params (float t, Color c)[] keys)
     {

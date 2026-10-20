@@ -7,9 +7,11 @@ using UnityEngine;
 /// <see cref="ShiftClockDriver.Live"/>. With the hall's lights
 /// (HallLightingRig, docs/HALL_LIGHTING.md) it hands them the clock's minute,
 /// so their day-night cycle shows the shift's hour, and gives the art side's
-/// <see cref="AnimeHallPresentation.SetTime"/> (its daylight, which lights
-/// the preserved 3D desk) the cycle's evening, and the traveller's figure the
-/// cycle's shade over DeskConfigSO.travellerTint. Without them (or with them
+/// <see cref="AnimeHallPresentation.SetTime"/> (its ambient; its daylight is
+/// HallBakedLighting's) the cycle's evening, and the traveller's figure the
+/// desk's one light (DeskLightLevel.Light, BUG-14c: the same uniform light the
+/// passport photo takes through DeskLight(), so the photo check is fair at
+/// every hour) over DeskConfigSO.travellerTint. Without them (or with them
 /// switched off) the evening follows the old office's crowd curve
 /// (<see cref="CrowdPaletteBlend"/>: morning until DeskConfigSO's hall start,
 /// full evening from its full point, eased between) on the clock's hour as it
@@ -67,7 +69,7 @@ public sealed class AnimeHallShiftLink : MonoBehaviour
         if (lit)
             _lights.SetClock(shift.MinuteOfDay);
         float blend = lit ? _lights.Evening : CrowdPaletteBlend.Evening(shift.StandardProgress01, _config.hallEveningStartsAt, _config.hallEveningFullAt);
-        Color shade = lit ? _lights.TravellerShade : Color.white;
+        Color shade = lit && DeskLightLevel.Live != null ? DeskLightLevel.Live.Light : Color.white;
 
         if (_traveller != null && shade != _shade)
         {

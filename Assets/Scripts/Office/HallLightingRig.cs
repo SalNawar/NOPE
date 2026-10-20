@@ -1,15 +1,20 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// The anime hall's lights and dust, driven through a full day-night cycle
 /// (docs/HALL_LIGHTING.md). It sits on the hall's HallLighting root (Tools >
 /// TimeDesk > Add Anime Hall Hooks) with the HallBackdrop that draws the
 /// painted layers through the URP 2D Renderer, so the Light2Ds light them.
-/// Each frame it reads the hour (a preview hour from its HallLightingSO, the
-/// shift clock's through <see cref="SetClock"/> from AnimeHallShiftLink, or
-/// the knobs' edit-mode hour without a clock), puts it on the solar day
-/// (HallDayCycle) and sets every HallLight under it: the global and sky
+/// Each frame it reads the hour (HallDayCycle.ShownHour: the cheat's forced
+/// hour, a preview hour from its HallLightingSO, the shift clock's through
+/// <see cref="SetClock"/> from AnimeHallShiftLink, in play before the clock
+/// exists today's opening hour (BUG-25c: never a noon frame on load), else the
+/// knobs' edit-mode hour), publishes its knobs as the one shared cycle
+/// (HallDayCycle.Publish, BUG-25b), puts the hour on the solar day and sets
+/// every HallLight under it: the global and sky
 /// lights' colour and intensity, the sun shafts' colour, strength, turn and length,
 /// and the night's stages as the hall darkens (Saleh's demo 1018a: "need
 /// more lights to activate as it gets darker"; HallDayCycle.SwitchedOn at
@@ -23,7 +28,12 @@ using UnityEngine;
 /// fainter by day, and each portal ring's light follows its state
 /// (<see cref="SetPortal"/>, from AnimeHallPortalLink). Its Plane child (the
 /// Light2Ds, the pier shadows, the dust) follows the art's presentation, so
-/// the lights stay on the painted fixtures if the art pans. The dust's knobs
+/// the lights stay on the painted fixtures if the art pans. The desk's 3D
+/// lights cast no real-time shadows (BUG-14b), and the art's desk lamp spot
+/// (aimed behind the AVAILABLE sign) stays dark: in play the rig makes the
+/// desk's one light (DeskLightLevel: the work lamp's pool on the mat) and the
+/// office finish (a global Volume with the knobs' profile, the office camera's
+/// post-processing on, BUG-51). The dust's knobs
 /// are applied each frame too; with reduced motion the dust is off (or thinned
 /// by the knob). It gathers its lights (its own and the mounted lamps drawn
 /// among the art's layers) once when enabled in play (every frame in edit
@@ -51,8 +61,6 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>The highest portal number the rig keeps a state for.</summary>
     private const int MaxPortal = 8;
 
-    private HallBakedLighting _baked;
-    private bool _bakedLooked;
     private HallLight[] _lights = System.Array.Empty<HallLight>();
     private readonly bool[] _portalOpen = new bool[MaxPortal + 1];
     private readonly bool[] _portalReturns = new bool[MaxPortal + 1];
@@ -65,42 +73,29 @@ public sealed class HallLightingRig : MonoBehaviour
     private bool _lightsOn = true;
     private bool _dustPlaying = true;
     private bool _firstFrame = true;
+    private float? _openingMinute;
+    private bool _openingLooked;
+    private GameObject _made;
 
     /// <summary>The knobs (null when unassigned).</summary>
     public HallLightingSO Settings => settings;
 
-    /// <summary>The hour the hall shows now: the cheat menu's forced hour (DevToolsState.ForcedHour), else the preview hour, else the shift clock's, else the edit-mode hour.</summary>
+    /// <summary>The hour the hall shows now (HallDayCycle.ShownHour): the cheat menu's forced hour (DevToolsState.ForcedHour), else the preview hour, else the shift clock's, else in play today's opening hour, else the edit-mode hour.</summary>
     public float Hour => settings == null ? 12f
-        : DevToolsState.ForcedHour.HasValue ? DevToolsState.ForcedHour.Value
-        : settings.previewHourOn ? settings.previewHour
-        : _hasClock ? HallDayCycle.Hour(_clockMinute)
-        : settings.editModeHour;
+        : HallDayCycle.ShownHour(DevToolsState.ForcedHour, settings.previewHourOn, settings.previewHour,
+                                 _hasClock ? _clockMinute : (float?)null, Application.isPlaying ? OpeningMinute() : null, settings.editModeHour);
 
     /// <summary>The art presentation's evening for <see cref="Hour"/> (0 by day, 1 at night; AnimeHallShiftLink hands it to SetTime).</summary>
     public float Evening => settings != null ? HallDayCycle.Evening(Hour, settings.Cycle) : 0f;
 
-    /// <summary>What the traveller's tint is multiplied by at <see cref="Hour"/>: the baked hall's shade (HallBakedLighting on this object, looked up once per enable) when it is on, else the knobs' gradient (white without knobs).</summary>
-    public Color TravellerShade
-    {
-        get
-        {
-            if (!_bakedLooked)
-            {
-                _baked = GetComponent<HallBakedLighting>();
-                _bakedLooked = true;
-            }
-            if (_baked != null && _baked.isActiveAndEnabled)
-                return _baked.TravellerShade;
-            return settings != null ? settings.travellerShade.Evaluate(HallDayCycle.SolarPosition(Hour, settings.Cycle)) : Color.white;
-        }
-    }
-
     /// <summary>The layer a gameplay drawing among the painted layers must be on to draw with them (the portal rings' effects); -1 when the 2D pass is off (they draw with the office camera).</summary>
     public int ArtLayer => backdrop != null && backdrop.Active ? backdrop.Layer : -1;
 
-    /// <summary>The shift clock's minute of the day (AnimeHallShiftLink, each change).</summary>
+    /// <summary>The shift clock's minute of the day (AnimeHallShiftLink, each change); the clock's first minute counts as a first frame, so a lamp already on at that hour does not strike.</summary>
     public void SetClock(float minuteOfDay)
     {
+        if (!_hasClock)
+            _firstFrame = true;
         _clockMinute = minuteOfDay;
         _hasClock = true;
     }
@@ -119,11 +114,13 @@ public sealed class HallLightingRig : MonoBehaviour
 
     private void OnEnable()
     {
-        _bakedLooked = false;
+        _openingLooked = false;
         Gather();
         _reduced = MotionPreference.Reduced;
         MotionPreference.Changed += OnMotionChanged;
         _firstFrame = true;
+        if (Application.isPlaying)
+            MakeDeskLightAndFinish();
     }
 
     private void OnDisable()
@@ -131,6 +128,9 @@ public sealed class HallLightingRig : MonoBehaviour
         MotionPreference.Changed -= OnMotionChanged;
         if (backdrop != null)
             backdrop.SetOn(false, 1f);
+        if (_made != null)
+            Destroy(_made);
+        _made = null;
     }
 
     private void OnMotionChanged() => _reduced = MotionPreference.Reduced;
@@ -143,6 +143,7 @@ public sealed class HallLightingRig : MonoBehaviour
             return;
 
         FollowArt();
+        HallDayCycle.Publish(settings.Cycle);
         bool on = settings.lightingOn;
         if (backdrop != null)
             backdrop.SetOn(on, settings.backdropResolution);
@@ -240,13 +241,73 @@ public sealed class HallLightingRig : MonoBehaviour
                 break;
 
             case HallLightKind.DeskLamp:
-                l.SinceOn = Since(l.SinceOn, HallDayCycle.SwitchedOn(hour, settings.deskLampOnAt, 0, 0f, cycle), dt);
-                Set(l, l.intensity * Mathf.Lerp(settings.deskLampDayShare, 1f, HallDayCycle.WarmUp(l.SinceOn, settings.deskLampWarmSeconds, _reduced)));
+                // In play the work lamp's light is the desk's one light (DeskLightLevel's pool on the mat): this spot,
+                // aimed behind the sign, stays dark. In edit mode it is left as the art authored it.
+                if (!Application.isPlaying)
+                    break;
+                NoShadows(l);
+                Set(l, 0f);
                 break;
 
             case HallLightKind.DeskScreen:
+                NoShadows(l);
                 Set(l, l.intensity * Mathf.Lerp(settings.deskScreenDayShare, 1f, evening));
                 break;
+        }
+    }
+
+    /// <summary>No real-time shadow from a desk light inside the cubicle (BUG-14b); in play only, so the art scene keeps its authored value if it is saved from the editor.</summary>
+    private static void NoShadows(HallLight l)
+    {
+        if (Application.isPlaying && l.Light3D != null && l.Light3D.shadows != LightShadows.None)
+            l.Light3D.shadows = LightShadows.None;
+    }
+
+    /// <summary>Today's opening minute (the day plan's shift, else the standard day), looked up once per enable; null without a run.</summary>
+    private float? OpeningMinute()
+    {
+        if (_openingLooked)
+            return _openingMinute;
+        _openingLooked = true;
+        _openingMinute = null;
+        RunManager run = RunManager.Instance;
+        if (run == null || run.World == null || run.Config == null)
+            return null;
+        GameConfigSO config = run.Config.gameConfig;
+        DayPlanSO plan = run.GetCurrentDayPlan();
+        _openingMinute = (plan != null ? plan.Shift(config) : GameConfigSO.Standard(config)).StartMinute;
+        return _openingMinute;
+    }
+
+    /// <summary>
+    /// In play: the desk's one light (DeskLightLevel, its lamp pool on the
+    /// mat: the art's DeskSurface anchor) and the office finish (a global
+    /// Volume with the knobs' profile; the office camera's post-processing on),
+    /// made at run time under the rig and never saved. They live here, not in
+    /// the gameplay layer's builder, because the builder's root has no
+    /// registration seam LIGHT may use (docs/pending/LIGHT.md).
+    /// </summary>
+    private void MakeDeskLightAndFinish()
+    {
+        if (settings == null || _made != null)
+            return;
+        _made = new GameObject("Desk light and office finish (made at runtime)") { hideFlags = HideFlags.DontSave };
+        _made.transform.SetParent(transform, false);
+
+        OfficeSceneContractSO contract = OfficeScenes.Contract;
+        ResolvedAnchor mat = OfficeAnchors.Resolve(gameObject.scene, contract != null ? contract.Spec(OfficeAnchorId.DeskSurface) : null, OfficeAnchorId.DeskSurface);
+        Vector3 centre = mat.HasBounds ? new Vector3(mat.Bounds.center.x, mat.Bounds.max.y, mat.Bounds.center.z) : mat.Position;
+        _made.AddComponent<AudioSource>().playOnAwake = false;
+        _made.AddComponent<DeskLightLevel>().Configure(this, centre);
+
+        if (settings.finishProfile != null)
+        {
+            Volume finish = _made.AddComponent<Volume>();
+            finish.isGlobal = true;
+            finish.sharedProfile = settings.finishProfile;
+            Camera office = backdrop != null ? backdrop.Source : null;
+            if (office != null)
+                office.GetUniversalAdditionalCameraData().renderPostProcessing = true;
         }
     }
 

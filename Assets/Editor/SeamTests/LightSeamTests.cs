@@ -6,12 +6,14 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// LIGHT's P0-A shader seams: DeskAnime.shader's _PaintedHighlight and
-/// _InkRim (STAMP sets them; declared in Properties and in the
-/// UnityPerMaterial buffer, default 0, read by nothing yet) and
-/// Shaders/Include/DeskLight.hlsl (the global tint and level, and DeskLight()
-/// returning 1). The text tests read the source; the "NeedsEditor" tests read
-/// the imported shader and include, and run only inside Unity.
+/// LIGHT's shader seams: DeskAnime.shader's _PaintedHighlight and _InkRim
+/// (STAMP sets them; declared in Properties and in the UnityPerMaterial
+/// buffer, default 0 = off, read by the forward pass) and
+/// Shaders/Include/DeskLight.hlsl (the desk's one light: the global tint,
+/// level, key and lamp pool, DeskLight() falling back to 1 while nothing
+/// publishes), which DeskAnime includes; DeskAnime samples no SSAO (BUG-16b).
+/// The text tests read the source; the "NeedsEditor" tests read the imported
+/// shader and include, and run only inside Unity.
 /// </summary>
 public class LightSeamTests
 {
@@ -31,16 +33,39 @@ public class LightSeamTests
         {
             StringAssert.IsMatch(name + @"\(""[^""]*"",\s*Range\(0,\s*1\)\)\s*=\s*0\b", properties, $"{name} in Properties, default 0");
             StringAssert.IsMatch(@"\b" + name + @"\b", buffer, $"{name} in UnityPerMaterial");
+            StringAssert.IsMatch(@"\*\s*" + name + @"\b|\b" + name + @"\s*\*", ForwardPass(source), $"{name} is read by the forward pass");
         }
     }
 
     [Test]
-    public void DeskLight_DeclaresTheGlobals_AndTheStubReturnsOne()
+    public void DeskAnime_TakesTheDeskLight_AndNoSsao()
+    {
+        string source = File.ReadAllText(FromRoot(DeskAnime));
+        string forward = ForwardPass(source);
+        StringAssert.Contains("#include \"Assets/Shaders/Include/DeskLight.hlsl\"", forward);
+        StringAssert.Contains("DeskLightAt(i.positionWS)", forward, "the energy comes from the desk light at the point (the lamp's pool)");
+        StringAssert.DoesNotContain("_SCREEN_SPACE_OCCLUSION", source, "no SSAO keyword (BUG-16b)");
+        StringAssert.DoesNotContain("GetScreenSpaceAmbientOcclusion", source);
+    }
+
+    [Test]
+    public void DeskLight_DeclaresTheGlobals_AndFallsBackToOne_WhileNothingPublishes()
     {
         string source = File.ReadAllText(FromRoot(DeskLight));
-        StringAssert.Contains("float4 _DeskLightTint;", source);
-        StringAssert.Contains("float _DeskLightLevel;", source);
-        StringAssert.IsMatch(@"half3 DeskLight\(\)\s*\{\s*return half3\(1, 1, 1\);\s*\}", source);
+        foreach (string global in new[] { "float4 _DeskLightTint;", "float _DeskLightLevel;", "float _DeskLightKey;", "float4 _DeskLampPool;", "float _DeskLampShare;" })
+            StringAssert.Contains(global, source);
+        StringAssert.Contains("return saturate(_DeskLightTint.a);", source, "published only while the tint's alpha is set");
+        StringAssert.IsMatch(@"half3 DeskLight\(\)\s*\{\s*return lerp\(half3\(1, 1, 1\), _DeskLightTint\.rgb \* _DeskLightLevel, DeskLightPublished\(\)\);\s*\}", source);
+        StringAssert.Contains("half3 DeskLightAt(float3 positionWS)", source);
+    }
+
+    /// <summary>The DeskAnimeForward pass's text (from its name to the next pass).</summary>
+    private static string ForwardPass(string source)
+    {
+        int start = source.IndexOf("Name \"DeskAnimeForward\"", System.StringComparison.Ordinal);
+        int end = source.IndexOf("Name \"ShadowCaster\"", System.StringComparison.Ordinal);
+        Assert.That(start >= 0 && end > start, "the forward pass");
+        return source.Substring(start, end - start);
     }
 
     [Test, Category("NeedsEditor")]

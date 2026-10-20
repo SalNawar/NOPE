@@ -372,7 +372,6 @@ MonoBehaviour:
   fixtureFlicker: 1
   screenDayShare: 0.15
   signDayShare: 0.1
-  deskLampDayShare: 0
   deskScreenDayShare: 0.4
   deskLampOnAt: 0.1
   deskLampWarmSeconds: 0.6
@@ -389,36 +388,16 @@ MonoBehaviour:
   portalOpenLight: {r: 0.35, g: 0.85, b: 1, a: 1}
   returnGateLight: {r: 1, g: 0.62, b: 0.25, a: 1}
   portalFadeSeconds: 0.8
-  travellerShade:
-    serializedVersion: 2
-    key0: {r: 0.62, g: 0.66, b: 0.82, a: 1}
-    key1: {r: 0.95, g: 0.84, b: 0.82, a: 1}
-    key2: {r: 1, g: 1, b: 1, a: 0}
-    key3: {r: 1, g: 1, b: 1, a: 0}
-    key4: {r: 1, g: 0.86, b: 0.78, a: 0}
-    key5: {r: 0.72, g: 0.7, b: 0.86, a: 0}
-    key6: {r: 0.62, g: 0.66, b: 0.82, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 16384
-    ctime2: 20971
-    ctime3: 44564
-    ctime4: 49151
-    ctime5: 53739
-    ctime6: 65535
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 7
-    m_NumAlphaKeys: 2
+  deskKeyAtDay: 0.68
+  deskNightFloor: 0.35
+  deskNightTint: {r: 0.78, g: 0.84, b: 1, a: 1}
+  deskLampLevel: 0.25
+  deskLampColour: {r: 1, g: 0.82, b: 0.6, a: 1}
+  deskLampRadius: 0.45
+  hallNightTint: {r: 0.2, g: 0.27, b: 0.43, a: 1}
+  hallPoolStrength: 0.35
+  hallEmissionGain: 2.5
+  finishProfile: {fileID: 11400000, guid: c45f30e5373be0448bdf5f98f7ab85f9, type: 2}
   dustMaxParticles: 40
   dustRate: 3
   dustLifetime: {x: 9, y: 16}

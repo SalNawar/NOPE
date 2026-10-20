@@ -92,7 +92,8 @@ public class ShiftHoursTests
         Assert.AreEqual(1f, HallBakedCycle.Weights(HallDayCycle.Hour(23.5f * 60f)).w, Tolerance, "23:30 is full night");
         Assert.AreEqual(1f, HallBakedCycle.Weights(HallDayCycle.Hour(21f * 60f)).w, Tolerance, "day 8 closes at night");
         Assert.AreEqual(1f, HallBakedCycle.Weights(HallDayCycle.Hour(13f * 60f)).y + HallBakedCycle.Weights(HallDayCycle.Hour(13f * 60f)).z, Tolerance, "day 8 opens between noon and evening");
-        Assert.AreEqual(1f, HallBakedCycle.Weights(HallDayCycle.Hour(16.5f * 60f)).z, Tolerance, "day 12 opens at 16:00, in the evening by 16:30");
+        HallBakedCycle.Weights4 dusk = HallBakedCycle.Weights(HallDayCycle.Hour(16.5f * 60f));
+        Assert.AreEqual(1f, dusk.z + dusk.w, Tolerance, "day 12 opens at 16:00, in the evening by 16:30 (the sunset: half evening, half night)");
         Assert.AreEqual(1f, HallDayCycle.Evening(HallDayCycle.Hour(1440f), Lights), Tolerance);
         Assert.AreEqual(1f, HallDayCycle.Evening(HallDayCycle.Hour(21f * 60f), Lights), Tolerance);
         Assert.AreEqual(0f, HallDayCycle.Evening(HallDayCycle.Hour(13f * 60f), Lights), Tolerance);

@@ -186,8 +186,56 @@ public class HallDayCycleTests
     }
 
     [Test]
-    public void DuskHour_IsTheCheatMenusDusk()
+    public void DuskHour_IsTheSharedCyclesSunset_WhereTheEveningIsHalf()
     {
-        Assert.AreEqual(18.5f, HallDayCycle.DuskHour);
+        HallDayCycle.Settings before = HallDayCycle.Active;
+        try
+        {
+            HallDayCycle.Publish(Defaults);
+            Assert.AreEqual(16.5f, HallDayCycle.DuskHour, 1e-3f, "the default knobs' dusk is the 16:30 sunset (the stub's 18:30 was full night)");
+            Assert.AreEqual(0.5f, HallDayCycle.Evening(HallDayCycle.DuskHour, Defaults), 1e-3f);
+            HallDayCycle.Publish(new HallDayCycle.Settings(6f, 19f, 2f, 0.6f, 0.1f, 4f));
+            Assert.AreEqual(19f, HallDayCycle.DuskHour, 1e-3f, "moving the sunset in the knobs moves the cheat's Dusk");
+        }
+        finally
+        {
+            HallDayCycle.Publish(before);
+        }
+    }
+
+    [Test]
+    public void HourAtEvening_IsTheDusksInverse()
+    {
+        Assert.AreEqual(15.75f, HallDayCycle.HourAtEvening(0f, Defaults), 1e-3f, "the dusk starts half a twilight before sunset");
+        Assert.AreEqual(16.5f, HallDayCycle.HourAtEvening(0.5f, Defaults), 1e-3f);
+        Assert.AreEqual(17.25f, HallDayCycle.HourAtEvening(1f, Defaults), 1e-3f, "night falls half a twilight after it");
+        for (float e = 0.05f; e < 1f; e += 0.05f)
+            Assert.AreEqual(e, HallDayCycle.Evening(HallDayCycle.HourAtEvening(e, Defaults), Defaults), 1e-3f, $"evening {e:0.00}");
+        Assert.AreEqual(17.25f, HallDayCycle.HourAtEvening(5f, Defaults), 1e-3f, "clamped");
+    }
+
+    [Test]
+    public void TheShownHour_IsNeverNoonBeforeTheClockExists()
+    {
+        // BUG-25c: a 16:00 shift's office load showed a noon hall for a frame (the edit-mode hour before the clock).
+        Assert.AreEqual(16f, HallDayCycle.ShownHour(null, false, 22f, null, 960f, 12f), Tolerance, "today's opening before the clock");
+        Assert.AreEqual(16.5f, HallDayCycle.ShownHour(null, false, 22f, 990f, 960f, 12f), Tolerance, "the clock once it runs");
+        Assert.AreEqual(22f, HallDayCycle.ShownHour(null, true, 22f, 990f, 960f, 12f), Tolerance, "the preview over the clock");
+        Assert.AreEqual(18.5f, HallDayCycle.ShownHour(18.5f, true, 22f, 990f, 960f, 12f), Tolerance, "the cheat's forced hour over all");
+        Assert.AreEqual(12f, HallDayCycle.ShownHour(null, false, 22f, null, null, 12f), Tolerance, "edit mode without a run: the knob's hour");
+    }
+
+    [Test]
+    public void OneCycle_GivesTheHallLampsWindowsAndCalendarTheSameHour()
+    {
+        // The painting's night share (HallBakedCycle), the lamps' and city windows' switching (SwitchedOn of the evening)
+        // and the calendar ink (AnimeHallShiftLink reads Evening) all read the evening of the same hour on the same knobs.
+        for (float h = 0f; h < 24f; h += 1f / 12f)
+        {
+            float evening = HallDayCycle.Evening(h, Defaults);
+            Assert.AreEqual(evening, HallBakedCycle.Weights(h, Defaults).w, 1e-5f, $"{h:0.00}: the painting");
+            foreach (float stage in new[] { 0.1f, 0.4f, 0.55f, 0.7f })
+                Assert.AreEqual(evening >= stage, HallDayCycle.SwitchedOn(h, stage, 0, 0f, Defaults), $"{h:0.00}: the stage at {stage}");
+        }
     }
 }
