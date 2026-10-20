@@ -14285,6 +14285,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient2__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "Doric peplos",
+      "details": "",
+      "flags": {
+        "label": "Doric peplos"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_greece_ancient2",
+      "prompt": "Edit FIRST costume arms only matching SECOND poseguide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Same brickred woolDoric peplos shoulderpins foldedover top ochre geometrichem belt brownsandals. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f6ed752c-75f6-4714-b5ca-3ba156ddd300.png",
+      "path": "Raw/outfit_f_greece_ancient2__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0924e800b12c8303673a6b1c1b04f47ef46674c2a37fce47969295287a648a37",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient2__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "Doric peplos",
+      "details": "",
+      "flags": {
+        "label": "Doric peplos"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_greece_ancient2",
+      "prompt": "Edit FIRST costume arms only matching SECOND poseguide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Same brickred woolDoric peplos shoulderpins foldedover top ochre geometrichem belt brownsandals. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ca085542-0334-4101-9c87-04d60ed96ced.png",
+      "path": "Raw/outfit_f_greece_ancient2__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cefc31abdec534c5eee6a9fee375bbba329a08b3efdccc06d1f12565515d7f2a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient2__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "Doric peplos",
+      "details": "",
+      "flags": {
+        "label": "Doric peplos"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_greece_ancient2",
+      "prompt": "Edit FIRST costume arms only matching SECOND poseguide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Same brickred woolDoric peplos shoulderpins foldedover top ochre geometrichem belt brownsandals. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-57f57fbc-d9b9-4f04-82b9-e8792bac896c.png",
+      "path": "Raw/outfit_f_greece_ancient2__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0b6261a98fa92795de5b90244b9b7958f07f1fa368f744eb9eaba880be8b4e26",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_greece_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "braided crown of hair",
+      "details": "",
+      "flags": {
+        "label": "braided crown of hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_greece_ancient2",
+      "prompt": "Modular hair female Macedonian Pella336BCE, brief braided crown of hair. Darkbrown loosewaves sweptback from face into compact braided coil around back/crown, small loosecurl near eachtemple. No metalcrown/jewelry/headband. Preserve reference facehead scalp164chin324. ReplaceALLcostume/shoes with fullyclothed plain magenta longshirttrouserssocks, onlyhaircolored. Puregreen#00FF00 background support#FF00FF.1024x1536 center512feet1440. Textured handinked late80s anime strands pigmentgrain.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3901307c-6b3a-4070-a3ab-61c2a9e28bd5.png",
+      "path": "Raw/hair_f_greece_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "75ae767d8430fcc3e843d9a5e2a3f447e747faf87fbd133215b11ef6e07ca9cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_greece_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "oak-leaf diadem",
+      "details": "",
+      "flags": {
+        "label": "oak-leaf diadem",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_greece_ancient2",
+      "prompt": "Modular accessory female Macedonian Pella336BCE, repository label oak-leaf diadem. Delicate narrow bronze-gold wreath of small distinct lobed oakleaves, sits around upper hairline of attached braidedhair, modest thin ornament no tall crownspikes/gems. Recolor hair fullymagenta preservingcontour, allfacebodyfullyclothedsupportmagenta#FF00FF. Onlyoakleafornamentcolored. Keep headchin324 scalp164 exactposition,1024x1536 center512feet1440 greenbackground#00FF00. Textured late80s handinkedanime softlyagedmetal. No otherjewelry/text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e6191629-68c8-4ba2-ad50-245c55fc7ff1.png",
+      "path": "Raw/accessory_f_greece_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2ae7f85cc46a469e0b10a6e2eae2b78fa8533c183f76d5851d7cfa57d9ed2ccf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "toga and tunica",
+      "details": "Subject: man of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Knee-length white wool tunica with two narrow deep wine-red vertical stripes (angusticlavus, associated with the equestrian business class), under a long, ample, plain off-white wool toga. The toga is draped the late-Republican way: over the left shoulder, round the back, under the right arm and back up across the front to the left shoulder, forming a firm diagonal band across the chest. Its distinctive rounded (curved) lower edge hangs to the ankles and dips lower at the sides. The right-hand clavus stripe shows at the right side of the chest. Closed black leather calcei ankle boots with laced straps, not sandals.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_m_italy_ancient.",
+      "flags": {
+        "label": "toga and tunica"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_ancient",
+      "prompt": "Subject: man of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Knee-length white wool tunica with two narrow deep wine-red vertical stripes (angusticlavus, associated with the equestrian business class), under a long, ample, plain off-white wool toga. The toga is draped the late-Republican way: over the left shoulder, round the back, under the right arm and back up across the front to the left shoulder, forming a firm diagonal band across the chest. Its distinctive rounded (curved) lower edge hangs to the ankles and dips lower at the sides. The right-hand clavus stripe shows at the right side of the chest. Closed black leather calcei ankle boots with laced straps, not sandals.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_m_italy_ancient.\nDress exactattached calibrationfigure, both arms relaxed free/outsidecloth. No hairbeardhatjewelryprops. Headhands exposedskin puremagenta#FF00FF backgroundsolidgreen#00FF00.1024x1536 scalp239chin400soles1421center512. Textured late80s handinked anime with thick woolgrain/offwhitefabric paintedcelshading, ordinarycitizen notglossy statue. Only narrow wine stripes on tunic, toga plain. CORRECTION: previous draft head was 50px too HIGH. FIRST reference is exact correct body registration; SECOND reference costume only. Use FIRST scalp239 chin400 head/body dimensions and feet1421 unchanged, fit same toga from SECOND. Stripe much narrower business-class clavus, not broadsenatorial band.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2f85fbda-58b0-4eed-9c35-cb95257b8e49.png",
+      "path": "Raw/outfit_m_italy_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bc03f7244b6995fe5c12cc8233528041465fb5535f5b4f716e1912677f369bd8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "toga and tunica",
+      "details": "Subject: man of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Knee-length white wool tunica with two narrow deep wine-red vertical stripes (angusticlavus, associated with the equestrian business class), under a long, ample, plain off-white wool toga. The toga is draped the late-Republican way: over the left shoulder, round the back, under the right arm and back up across the front to the left shoulder, forming a firm diagonal band across the chest. Its distinctive rounded (curved) lower edge hangs to the ankles and dips lower at the sides. The right-hand clavus stripe shows at the right side of the chest. Closed black leather calcei ankle boots with laced straps, not sandals.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_m_italy_ancient.",
+      "flags": {
+        "label": "toga and tunica"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_italy_ancient",
+      "prompt": "Edit FIRST costume arms only matching SECOND poseguide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Same plainoffwhite wool Republican toga diagonal chestband and curvedanklelength edge, underlyingtunic narrowwine stripe, closedblackcalcei. Botharms freeofcloth. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d4ad4c14-d8f4-454a-a266-af7a4c756b2c.png",
+      "path": "Raw/outfit_m_italy_ancient__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dd6eb3114f4ca7ae06dc08234fb7bda843d4081521e997f5448264b61bf95b85",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "toga and tunica",
+      "details": "Subject: man of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Knee-length white wool tunica with two narrow deep wine-red vertical stripes (angusticlavus, associated with the equestrian business class), under a long, ample, plain off-white wool toga. The toga is draped the late-Republican way: over the left shoulder, round the back, under the right arm and back up across the front to the left shoulder, forming a firm diagonal band across the chest. Its distinctive rounded (curved) lower edge hangs to the ankles and dips lower at the sides. The right-hand clavus stripe shows at the right side of the chest. Closed black leather calcei ankle boots with laced straps, not sandals.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_m_italy_ancient.",
+      "flags": {
+        "label": "toga and tunica"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_italy_ancient",
+      "prompt": "Edit FIRST costume arms only matching SECOND poseguide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Same plainoffwhite wool Republican toga diagonal chestband and curvedanklelength edge, underlyingtunic narrowwine stripe, closedblackcalcei. Botharms freeofcloth. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-94d393da-859e-4025-ac6d-48470c308aa0.png",
+      "path": "Raw/outfit_m_italy_ancient__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "920c8b7119cd4aeb22b4a660b67796cf60f0627a8a84b641f90b961113c01620",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "toga and tunica",
+      "details": "Subject: man of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Knee-length white wool tunica with two narrow deep wine-red vertical stripes (angusticlavus, associated with the equestrian business class), under a long, ample, plain off-white wool toga. The toga is draped the late-Republican way: over the left shoulder, round the back, under the right arm and back up across the front to the left shoulder, forming a firm diagonal band across the chest. Its distinctive rounded (curved) lower edge hangs to the ankles and dips lower at the sides. The right-hand clavus stripe shows at the right side of the chest. Closed black leather calcei ankle boots with laced straps, not sandals.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_m_italy_ancient.",
+      "flags": {
+        "label": "toga and tunica"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_italy_ancient",
+      "prompt": "Edit FIRST costume arms only matching SECOND poseguide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Same plainoffwhite wool Republican toga diagonal chestband and curvedanklelength edge, underlyingtunic narrowwine stripe, closedblackcalcei. Botharms freeofcloth. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4b501c60-98cb-4470-8969-b58f6c69fe8a.png",
+      "path": "Raw/outfit_m_italy_ancient__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "964d3971bd053f98d7bc9ef10be9c7529cf021f2a194499590a3113988743a29",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "Caesar crop",
+      "details": "Subject: man of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Late-Republican short crop, cut close and combed forward onto the brow (Caesar style)\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw hair_m_italy_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Caesar crop",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_ancient",
+      "prompt": "Subject: man of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Late-Republican short crop, cut close and combed forward onto the brow (Caesar style)\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw hair_m_italy_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nDarkbrown close cropped hair combedforward shortfringe atbrow, modestrecedingtemples. Keepreference headfixed scalp239chin400. Replace ALL costume andboots with flatmagenta fullyclothed longshirttrouserssocks. Onlyhaircolored. No beardhatjewelry.1024x1536 center512feet1421,green#00FF00support#FF00FF. Textured late80s handinked anime naturalordinaryhair, no glossyspikes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2c979d10-1059-432b-9e69-40c1d8be34e8.png",
+      "path": "Raw/hair_m_italy_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad539580222cff359f4488f3aee90400ab7a80d5011ecf18b15ffd1e8761aa47",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "stola and palla",
+      "details": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: A long-sleeved tunica with a sleeveless, floor-length stola over it on narrow shoulder straps (the dress of a respectable married woman). A large plain rectangular palla (mantle) with no patterned border is draped over the left shoulder and around the body. Ochre, dusty coral, slate blue or blue wool.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_f_italy_ancient.",
+      "flags": {
+        "label": "stola and palla"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_ancient",
+      "prompt": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: A long-sleeved tunica with a sleeveless, floor-length stola over it on narrow shoulder straps (the dress of a respectable married woman). A large plain rectangular palla (mantle) with no patterned border is draped over the left shoulder and around the body. Ochre, dusty coral, slate blue or blue wool.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_f_italy_ancient.\nChoose slateblue floorlength stola narrowstraps over cream longsleeved tunica, muted ochre plainrectangularpalla drapedleftshoulder acrossbody withbotharms free. Plain brown leatherclosedshoes peekingunderhem. No hairhatjewelryaccessories. Exactattachedcalibrationfigure scalp164chin324feet1440center5121024x1536. Exposedheadhandsskinpuremagenta#FF00FF background#00FF00. Textured late80s inkedcelanime wool/linen grain, naturaldrapery, mutedpigment. Keep figureposition unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ad6c6e00-6050-43a5-8682-6588fb7bd0b7.png",
+      "path": "Raw/outfit_f_italy_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4a445878b1bad1b96fa3cf132c730e3950ed876371611ed03322663db1c43c0c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "stola and palla",
+      "details": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: A long-sleeved tunica with a sleeveless, floor-length stola over it on narrow shoulder straps (the dress of a respectable married woman). A large plain rectangular palla (mantle) with no patterned border is draped over the left shoulder and around the body. Ochre, dusty coral, slate blue or blue wool.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_f_italy_ancient.",
+      "flags": {
+        "label": "stola and palla"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_italy_ancient",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Same slateblue narrowstrapstola creamlongsleevedtunica ochreplainpalla leftshoulder, brownclosedshoes. Cloth folds follow arms naturally, no sleeve omissions. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-141ffc08-fc99-47e8-9b74-4d82cd35d509.png",
+      "path": "Raw/outfit_f_italy_ancient__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "efd24cbe941136d9d9ce4e41df59796851a25c8b3e40f523df30b7d770109bd5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "stola and palla",
+      "details": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: A long-sleeved tunica with a sleeveless, floor-length stola over it on narrow shoulder straps (the dress of a respectable married woman). A large plain rectangular palla (mantle) with no patterned border is draped over the left shoulder and around the body. Ochre, dusty coral, slate blue or blue wool.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_f_italy_ancient.",
+      "flags": {
+        "label": "stola and palla"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_italy_ancient",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Same slateblue narrowstrapstola creamlongsleevedtunica ochreplainpalla leftshoulder, brownclosedshoes. Cloth folds follow arms naturally, no sleeve omissions. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-34592872-398f-4449-b1a5-465d986a47e1.png",
+      "path": "Raw/outfit_f_italy_ancient__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eba9e6364b484416e2daa6a5a8d3e7df67b79096d652f069e8491f41a5f19d94",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "stola and palla",
+      "details": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: A long-sleeved tunica with a sleeveless, floor-length stola over it on narrow shoulder straps (the dress of a respectable married woman). A large plain rectangular palla (mantle) with no patterned border is draped over the left shoulder and around the body. Ochre, dusty coral, slate blue or blue wool.\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw outfit_f_italy_ancient.",
+      "flags": {
+        "label": "stola and palla"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_italy_ancient",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Same slateblue narrowstrapstola creamlongsleevedtunica ochreplainpalla leftshoulder, brownclosedshoes. Cloth folds follow arms naturally, no sleeve omissions. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d58aab89-cbf5-4c4a-b2e1-b3176e8ef379.png",
+      "path": "Raw/outfit_f_italy_ancient__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3613c6f6b9034948a406766b4ada0709095e817949d9222c2d7875d94d0bce5f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "nodus roll",
+      "details": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Nodus hairstyle: a raised roll of hair pushed up and pinned above the forehead, the sides waved back, the rest braided into a small bun at the nape\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw hair_f_italy_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "nodus roll",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_ancient",
+      "prompt": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Nodus hairstyle: a raised roll of hair pushed up and pinned above the forehead, the sides waved back, the rest braided into a small bun at the nape\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw hair_f_italy_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nDarkbrown nodus raised central foreheadroll, sides waved back into small braidednapebun. Modest ordinary civilian, not toweringimperialcurls. Preservehead scalp164chin324. ReplaceALLcostume/shoes flatmagenta fullyclothed longshirttrouserssocks; onlyhaircolored. No jewelryhat.1024x1536 center512feet1440 green#00FF00 support#FF00FF. Handinked late80s texturedanime naturalhairstrands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a68acdc3-ed62-4eae-a59f-0484a5f9aaf2.png",
+      "path": "Raw/hair_f_italy_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9fb33555ef376589cd16fbeb1828d011364ecd63dd3e42b150447d714919beb3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_italy_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "country": "italy",
+      "era": "ancient",
+      "label": "pearl monile",
+      "details": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Monile: a short necklace of large pearls on gold links, worn high on the chest\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw accessory_f_italy_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pearl monile"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_italy_ancient",
+      "prompt": "Subject: woman of Republican Rome; Rome in the last years of the Republic, as Caesar rose to power, c. 50 BCE.\nDraw: Monile: a short necklace of large pearls on gold links, worn high on the chest\nAvoid: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)\nOutput one full-canvas raw accessory_f_italy_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nShort necklace cream largepearls eachseparated by delicate goldlinks atupperchest, naturalasymmetry restrainedluster. Onlynecklacecolored. ReplaceALLcostume/shoes flatmagenta fullyclothed longshirttrouserssocks, baldmagentaheadhandssupport#FF00FF. Keephead scalp164chin324 bodyposefeet1440center512.1024x1536 solidgreen#00FF00. No hairhatotherjewelrytext. Late80s handinked anime pigmentgrain.\nCorrection: redraw the pearl necklace in hand-inked 1980s anime style with thin dark contours and two-tone ivory cel shading, subtle pigment grain. No photorealistic glossy 3D beads. Keep necklace dimensions, links, figure and background unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9a866da7-1535-466d-9023-29a1c2811ca7.png",
+      "path": "Raw/accessory_f_italy_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d2ee2f6e7b36ba1757932af06046906ee6e917f5fb1b860192819fbb19580ca5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "red lucco gown",
+      "details": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Ankle-length lucco, the Florentine citizen's gown, in deep red (rosato or cremisi) wool. It is closed high at the neck with a small standing collar, falls in straight organ-pipe pleats, is fur-lined, has wide open sleeves and is belted with a narrow leather belt, with a leather merchant's purse (scarsella) hanging from it at the hip. A dark doublet and hose are worn beneath, with soft black shoes.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_m_italy_medieval.",
+      "flags": {
+        "label": "red lucco gown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_medieval",
+      "prompt": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Ankle-length lucco, the Florentine citizen's gown, in deep red (rosato or cremisi) wool. It is closed high at the neck with a small standing collar, falls in straight organ-pipe pleats, is fur-lined, has wide open sleeves and is belted with a narrow leather belt, with a leather merchant's purse (scarsella) hanging from it at the hip. A dark doublet and hose are worn beneath, with soft black shoes.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_m_italy_medieval.\nDress the reference male mannequin in this costume. Keep bald head and exposed hands flat magenta #FF00FF, green #00FF00 background. No hair, beard or headwear. Full figure 1024x1536, scalp239 chin400 soles1421 center512. Neutral arms down slightly away from sides. Deep crimson worn wool lucco, organ pipe pleats, dark fur sleeve lining, narrow leather belt and small scarsella hip purse, dark hose, black soft shoes. Late1980s hand-inked anime with tactile wool pigment grain and subtle wear, restrained cel shading, no glossy 3D rendering. Preserve reference body head and feet positions.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f90aff5f-4bb7-4048-bdcd-51e3eaedfb00.png",
+      "path": "Raw/outfit_m_italy_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "60446847f8260fbfe6115f42654a564acbf38af8c088c15e93be5823b47a68cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "red lucco gown",
+      "details": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Ankle-length lucco, the Florentine citizen's gown, in deep red (rosato or cremisi) wool. It is closed high at the neck with a small standing collar, falls in straight organ-pipe pleats, is fur-lined, has wide open sleeves and is belted with a narrow leather belt, with a leather merchant's purse (scarsella) hanging from it at the hip. A dark doublet and hose are worn beneath, with soft black shoes.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_m_italy_medieval.",
+      "flags": {
+        "label": "red lucco gown"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_italy_medieval",
+      "prompt": "Edit FIRST costume arms and sleeves only to match SECOND pose guide: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Keep exactly the same crimson wool lucco with fur lining, dark doublet sleeves, belt and hip purse, hose and black shoes. Preserve head, torso, lower gown, feet and scale. Sleeves fold naturally with gesture; no detached hands. Hand-inked 1980s anime, textured wool and cel shadows. 1024x1536, scalp239 chin400 soles1421 center512. Exposed head/hands magenta #FF00FF, background green #00FF00. No hair hats added accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b9335a69-220e-40e7-9fb2-b3dbf464942c.png",
+      "path": "Raw/outfit_m_italy_medieval__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cc016b919959296557a532c4c69135e3702ff5954bfed308e811cc524d6860e7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "red lucco gown",
+      "details": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Ankle-length lucco, the Florentine citizen's gown, in deep red (rosato or cremisi) wool. It is closed high at the neck with a small standing collar, falls in straight organ-pipe pleats, is fur-lined, has wide open sleeves and is belted with a narrow leather belt, with a leather merchant's purse (scarsella) hanging from it at the hip. A dark doublet and hose are worn beneath, with soft black shoes.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_m_italy_medieval.",
+      "flags": {
+        "label": "red lucco gown"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_italy_medieval",
+      "prompt": "Edit FIRST costume arms and sleeves only to match SECOND pose guide: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Keep exactly the same crimson wool lucco with fur lining, dark doublet sleeves, belt and hip purse, hose and black shoes. Preserve head, torso, lower gown, feet and scale. Sleeves fold naturally with gesture; no detached hands. Hand-inked 1980s anime, textured wool and cel shadows. 1024x1536, scalp239 chin400 soles1421 center512. Exposed head/hands magenta #FF00FF, background green #00FF00. No hair hats added accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7690b951-5428-4751-9e38-5a17ea6d9b92.png",
+      "path": "Raw/outfit_m_italy_medieval__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2d4985049543f01652f73b025ee1f02a906d1eeff789ca4241cbe012ce39dc4a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "red lucco gown",
+      "details": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Ankle-length lucco, the Florentine citizen's gown, in deep red (rosato or cremisi) wool. It is closed high at the neck with a small standing collar, falls in straight organ-pipe pleats, is fur-lined, has wide open sleeves and is belted with a narrow leather belt, with a leather merchant's purse (scarsella) hanging from it at the hip. A dark doublet and hose are worn beneath, with soft black shoes.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_m_italy_medieval.",
+      "flags": {
+        "label": "red lucco gown"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_italy_medieval",
+      "prompt": "Edit FIRST costume arms and sleeves only to match SECOND pose guide: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Keep exactly the same crimson wool lucco with fur lining, dark doublet sleeves, belt and hip purse, hose and black shoes. Preserve head, torso, lower gown, feet and scale. Sleeves fold naturally with gesture; no detached hands. Hand-inked 1980s anime, textured wool and cel shadows. 1024x1536, scalp239 chin400 soles1421 center512. Exposed head/hands magenta #FF00FF, background green #00FF00. No hair hats added accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-00423371-eac6-468a-b727-0f2b5207c54b.png",
+      "path": "Raw/outfit_m_italy_medieval__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6b0c7b83f4e2efee3bfe9d48dfa7220c0eef7274818b75028bd744b586a6708e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "rounded short crop",
+      "details": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Early-15th-century Florentine crop: short, rounded, cut above the ears\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw hair_m_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "rounded short crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_medieval",
+      "prompt": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Early-15th-century Florentine crop: short, rounded, cut above the ears\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw hair_m_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hair colored: dark chestnut rounded short Florentine crop above ears, short uneven fringe, subtle hand-inked strands and cel shading. Replace ALL gown and footwear with opaque flat magenta long shirt trousers socks; exposed head hands also magenta #FF00FF. Preserve reference head shape and body position, scalp239 chin400 soles1421 center512,1024x1536 green #00FF00. No hat beard jewelry or costume remnants. Late1980s textured anime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-67fca872-17d6-428e-a77c-bba3bc954b6c.png",
+      "path": "Raw/hair_m_italy_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ee2bf1b6b60b7ffaf0bab6b317d165c54d80633abd065c0fdb8bab63ecb29a67",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_italy_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "mazzocchio hat",
+      "details": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Cappuccio a mazzocchio: a padded ring sitting on top of the head like a hat, with draped cloth (foggia) falling to one side and a long band (becchetto) hanging over one shoulder, in red or black. Hair shows below the ring, and it does not enclose the neck like a hood.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw headwear_m_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "mazzocchio hat",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_italy_medieval",
+      "prompt": "Subject: man of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Cappuccio a mazzocchio: a padded ring sitting on top of the head like a hat, with draped cloth (foggia) falling to one side and a long band (becchetto) hanging over one shoulder, in red or black. Hair shows below the ring, and it does not enclose the neck like a hood.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw headwear_m_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hat colored: charcoal black wool padded-ring mazzocchio with draped foggia to viewer-left and long flat becchetto over viewer-left shoulder ending on upper chest. Leave neck exposed, no enclosing hood. Reference hair becomes flat magenta but retain its silhouette beneath hat for fit; all support clothing face hands feet magenta #FF00FF. Preserve head/feet/pose. 1024x1536 green #00FF00. Late1980s inked textured anime, wool grain, cel shading. No other accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ee7e49da-ebb4-4314-ad14-eaa0d66ff177.png",
+      "path": "Raw/headwear_m_italy_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "929f110866a4ae851389ec0df330444836f0f4b8595eeb9a0bf797d54a3075f8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "gamurra and giornea",
+      "details": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Fitted gamurra gown in plain silk with long, close sleeves, under a giornea: an open-sided, sleeveless overgown of crimson or bottle-green silk velvet with the Italian pomegranate pattern, falling from the shoulders to the floor with a short train, edged with fur or brocade at the neck. No trailing sleeves.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_f_italy_medieval.",
+      "flags": {
+        "label": "gamurra and giornea"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_medieval",
+      "prompt": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Fitted gamurra gown in plain silk with long, close sleeves, under a giornea: an open-sided, sleeveless overgown of crimson or bottle-green silk velvet with the Italian pomegranate pattern, falling from the shoulders to the floor with a short train, edged with fur or brocade at the neck. No trailing sleeves.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_f_italy_medieval.\nDress reference female mannequin. Plain muted copper silk gamurra with close long sleeves; bottle-green velvet open-sided sleeveless giornea with restrained gold pomegranate pattern, small brocade neckline edging, short train; brown closed shoes visible at hem. Historical civilian costume only, no hair jewelry headwear. Bald head exposed hands #FF00FF magenta. 1024x1536 green #00FF00. Keep scalp164 chin324 soles1440 center512 and neutral arms away from sides, same figure. Tactile painted fabric, late1980s inked anime, subtle pigment grain and cel shading, no photoreal gloss.\nCorrect the overgown construction: giornea has a continuous unbroken green patterned front panel falling freely from shoulders to hem, open down BOTH SIDES showing copper gamurra at sides and sleeves. It is NOT an open-front coat or vest. No fitted waist on green overgown. Shorten train to a modest short pool just behind feet. Keep head arms feet exact positions and all other palette/style.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-470b9934-cf9e-428d-9468-34b9d0cadc94.png",
+      "path": "Raw/outfit_f_italy_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f6f55c07aadc59ff30e8f8b33a8a6582ac395937767510ae3d9e351a17403814",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "gamurra and giornea",
+      "details": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Fitted gamurra gown in plain silk with long, close sleeves, under a giornea: an open-sided, sleeveless overgown of crimson or bottle-green silk velvet with the Italian pomegranate pattern, falling from the shoulders to the floor with a short train, edged with fur or brocade at the neck. No trailing sleeves.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_f_italy_medieval.",
+      "flags": {
+        "label": "gamurra and giornea"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_italy_medieval",
+      "prompt": "Edit FIRST costume arms and sleeves only to match SECOND pose guide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Same copper silk close sleeves, green gold pomegranate patterned giornea continuous front panel open at sides, same brown shoes. Preserve head, torso, lower gown, feet and scale. Sleeves fold naturally with gesture, no detached hands. Hand-inked 1980s anime, textured fabric cel shadows. 1024x1536 scalp164 chin324 soles1440 center512. Exposed head/hands magenta #FF00FF background green #00FF00. No hair hats jewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e94927e1-8607-4c7c-b50d-3a763c72f5fd.png",
+      "path": "Raw/outfit_f_italy_medieval__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ae7c088ccc4d0a76b7107f2990df89518405b491214288ed00f9cb36852ded3f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "gamurra and giornea",
+      "details": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Fitted gamurra gown in plain silk with long, close sleeves, under a giornea: an open-sided, sleeveless overgown of crimson or bottle-green silk velvet with the Italian pomegranate pattern, falling from the shoulders to the floor with a short train, edged with fur or brocade at the neck. No trailing sleeves.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_f_italy_medieval.",
+      "flags": {
+        "label": "gamurra and giornea"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_italy_medieval",
+      "prompt": "Edit FIRST costume arms and sleeves only to match SECOND pose guide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Same copper silk close sleeves, green gold pomegranate patterned giornea continuous front panel open at sides, same brown shoes. Preserve head, torso, lower gown, feet and scale. Sleeves fold naturally with gesture, no detached hands. Hand-inked 1980s anime, textured fabric cel shadows. 1024x1536 scalp164 chin324 soles1440 center512. Exposed head/hands magenta #FF00FF background green #00FF00. No hair hats jewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-69dd4303-af45-47ca-993a-52748be1ea6e.png",
+      "path": "Raw/outfit_f_italy_medieval__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2139792b1353e49004e67c54b04a46fe4d4741a43738a26cab1ea9be0a02547a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
