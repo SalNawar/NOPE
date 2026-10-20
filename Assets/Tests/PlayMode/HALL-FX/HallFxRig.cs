@@ -19,7 +19,10 @@ using UnityEngine;
 /// clock runs; it forces no hour (the scenario clears any with "hour" -1 first). BUG-71: <c>hallHitStop</c> is the game's
 /// hit-stop alone (MotionKnobs.hitStopScale for hitStopSeconds of real time, as FeelDirector.HitStop does, then the
 /// time scale back), without the citation punch's camera shake, which is FEEDBACK's and CAM's and would fail
-/// hall_fx_crossfade's flicker check on their motion, not on the crossfade's.
+/// hall_fx_crossfade's flicker check on their motion, not on the crossfade's. BUG-26a: <c>hallPortalsOpen</c> opens every
+/// ring's vortex (PortalEffect.Show, the departure look, on the asset's tuning) and waits for the irises, so the portal
+/// shots measure all five rings: on a day's plan most rings are shut (day 1 opens one), and an effect's placement and
+/// mask do not depend on which day opens it.
 /// </summary>
 public static class HallFxRig
 {
@@ -38,6 +41,7 @@ public static class HallFxRig
         QaRunner.RegisterOp("hallPortalsShot", Shot);
         QaRunner.RegisterOp("hallClock", Clock);
         QaRunner.RegisterOp("hallHitStop", (runner, step) => HitStop());
+        QaRunner.RegisterOp("hallPortalsOpen", (runner, step) => OpenAll());
     }
 
     private static IEnumerator Clock(QaRunner runner, QaStep step)
@@ -52,6 +56,14 @@ public static class HallFxRig
         runner.Recorder.Column("hallHour", () => lights != null ? lights.Hour.ToString("0.000", CultureInfo.InvariantCulture) : "-");
         runner.Recorder.Column("cityLit", () => Shader.GetGlobalVector("_HallCityLights").x.ToString("0.0000", CultureInfo.InvariantCulture));
         yield return QaGame.Frames(5);
+    }
+
+    private static IEnumerator OpenAll()
+    {
+        foreach (PortalEffect e in Object.FindObjectsByType<PortalEffect>(FindObjectsInactive.Include))
+            if (e.Portals != null)
+                e.Show(true, false, e.Portals.vortex, e.Portals.pulseSeconds);
+        yield return new WaitForSecondsRealtime(2f);
     }
 
     private static IEnumerator HitStop()

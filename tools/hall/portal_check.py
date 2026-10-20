@@ -220,6 +220,11 @@ def main():
             bx0, by0 = max(0, int(math.floor(min(qx0, rx0)))), max(0, int(math.floor(min(qy0, ry0))))
             bx1 = min(W, int(math.ceil(max(qx1, rx0 + kw * rsx))))
             by1 = min(H, int(math.ceil(max(qy1, ry0 + kh * rsy))))
+            if bx1 <= bx0 or by1 <= by0:
+                # The registration put the ring's crop outside the frame (a ring at the screen's edge): nothing to measure.
+                lines.append(f'   portal {n}: its painted crop registered outside the frame (match {match:.2f}, crop at {rx0:.1f},{ry0:.1f}): FAIL, look by eye')
+                ok = False
+                continue
             py, px = np.mgrid[by0:by1, bx0:bx1]
             X = kx + (px + 0.5 - rx0) / rsx
             Y = ky + (py + 0.5 - ry0) / rsy

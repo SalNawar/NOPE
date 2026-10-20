@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "HALL-FX BUG-26a: per ring, the vortex against the painted hole (effect on vs off; tools/hall/portal_check.py on the run folder registers the ring's painted crop on the off frame and lays its aperture mask there): centre within 2 px, axes within 3 % at A1, A3 and A4 and 0 effect pixels outside the hole; 10 s sequences per aspect and hour for the 3x crops by eye. Needs HallFxRig's ops."
+      "text": "HALL-FX BUG-26a: per ring, the vortex against the painted hole (effect on vs off; tools/hall/portal_check.py on the run folder registers the ring's painted crop on the off frame and lays its aperture mask there): centre within 2 px, axes within 3 % at A1, A3 and A4 and 0 effect pixels outside the hole; 10 s sequences per aspect and hour for the 3x crops by eye. Needs HallFxRig's ops. The shots are taken before the AVAILABLE sign is pressed (no traveller stands in front of ring 1), with the tutorial skipped (its hint plate covered ring 1) and every ring opened (hallPortalsOpen: day 1 opens ring 1 only)."
     },
     {
       "op": "title"
@@ -27,10 +27,12 @@
       "op": "startShift"
     },
     {
-      "op": "sign"
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
     },
     {
-      "op": "waitTraveller"
+      "op": "hallPortalsOpen"
     },
     {
       "op": "track",

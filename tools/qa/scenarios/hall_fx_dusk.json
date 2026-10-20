@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "HALL-FX BUG-13 on a running clock: the shift clock (no forced hour) is moved to 16:10 (HallFxRig's hallClock) and runs at its own pace (1 game minute a second) through dusk, so the city's lit share rises in every sequence (the frames.tsv columns hallHour and cityLit record it) and windows fade in during the recording (HallCity.FadeSeconds 0.4 s at the clock's pace). Four 10 s sequences, all before closing time: office at A1 (about 16:10-16:20), office at A2, city at A2, city at A1 (about 16:47-16:57). Pass: seqtools flicker on every sequence (each window crosses its fade once: at most 2 toggles; the 8 cars tracked), cityLit rising in each (dusk_check in docs/pending/HALL-FX.md RESULT step 5). LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end): its shimmer is LIGHT's to measure (BUG-13 split, #11)."
+      "text": "HALL-FX BUG-13 on a running clock: the shift clock (no forced hour) is moved to 16:10 (HallFxRig's hallClock) and runs at its own pace (1 game minute a second) through dusk, so the city's lit share rises in every sequence (the frames.tsv columns hallHour and cityLit record it) and windows fade in during the recording (HallCity.FadeSeconds 0.4 s at the clock's pace). The clock is moved 4 s after the traveller arrives, once the speech bubble has typed its greeting (it re-centres its text with each letter, FEEDBACK's), and dusk_city_a1 starts 1 s after the switch back to 1920 x 1080 (its first frames re-laid the view out). Four 10 s sequences, all before closing time: office at A1 (about 16:10-16:20), office at A2, city at A2, city at A1 (about 16:47-16:57). Pass: seqtools flicker on every sequence (each window crosses its fade once: at most 2 toggles; the 8 cars tracked), cityLit rising in each (dusk_check in docs/pending/HALL-FX.md RESULT step 5). LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end): its shimmer is LIGHT's to measure (BUG-13 split, #11)."
     },
     {
       "op": "title"
@@ -123,6 +123,10 @@
       "target": "Traffic Exterior flying vehicle 7"
     },
     {
+      "op": "wait",
+      "f": 4
+    },
+    {
       "op": "hour",
       "f": -1
     },
@@ -162,6 +166,10 @@
       "op": "res",
       "w": 1920,
       "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
     },
     {
       "op": "record",
