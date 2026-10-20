@@ -1,0 +1,10 @@
+{
+  "name": "selftest",
+  "owner": "QA-RIG",
+  "seed": 0,
+  "steps": [
+    { "op": "note", "text": "P0-B harness self-test: every P-* path through the real event system on an empty scene, 1 px" },
+    { "op": "wait", "n": 10 },
+    { "op": "selftest" }
+  ]
+}

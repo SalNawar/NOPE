@@ -1,0 +1,143 @@
+{
+  "name": "day_jumps",
+  "owner": "RUN-SAFE",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "Days by each cheat path (Restart, Jump, Skip) from the golden seed: each day's office reached, a still and the probes"
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "d1_restart"
+    },
+    {
+      "op": "probe",
+      "name": "d1_restart"
+    },
+    {
+      "op": "jumpDay",
+      "n": 5
+    },
+    {
+      "op": "waitOffice",
+      "n": 5
+    },
+    {
+      "op": "still",
+      "name": "d5_jump"
+    },
+    {
+      "op": "probe",
+      "name": "d5_jump"
+    },
+    {
+      "op": "jumpDay",
+      "n": 7
+    },
+    {
+      "op": "waitOffice",
+      "n": 7
+    },
+    {
+      "op": "still",
+      "name": "d7_jump"
+    },
+    {
+      "op": "probe",
+      "name": "d7_jump"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 7
+    },
+    {
+      "op": "probe",
+      "name": "d7_restart"
+    },
+    {
+      "op": "cheat",
+      "name": "SkipDay"
+    },
+    {
+      "op": "waitOffice",
+      "n": 8,
+      "f": 180
+    },
+    {
+      "op": "still",
+      "name": "d8_skip"
+    },
+    {
+      "op": "probe",
+      "name": "d8_skip"
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "still",
+      "name": "d12_jump"
+    },
+    {
+      "op": "probe",
+      "name": "d12_jump"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "probe",
+      "name": "d12_restart"
+    },
+    {
+      "op": "jumpDay",
+      "n": 15
+    },
+    {
+      "op": "waitOffice",
+      "n": 15
+    },
+    {
+      "op": "still",
+      "name": "d15_jump"
+    },
+    {
+      "op": "probe",
+      "name": "d15_jump"
+    }
+  ]
+}

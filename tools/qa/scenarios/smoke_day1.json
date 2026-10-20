@@ -1,0 +1,26 @@
+{
+  "name": "smoke_day1",
+  "owner": "QA-RIG",
+  "seed": 12345,
+  "steps": [
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "still", "name": "d1_briefing" },
+    { "op": "probe", "name": "briefing" },
+    { "op": "startShift" },
+    { "op": "recStart", "name": "handover" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "wait", "f": 1.5 },
+    { "op": "recStop" },
+    { "op": "still", "name": "d1_desk" },
+    { "op": "probe", "name": "desk" },
+    { "op": "cheat", "name": "DecideCorrectly" },
+    { "op": "wait", "f": 3 },
+    { "op": "hour", "f": 12 },
+    { "op": "record", "name": "office_h2_idle", "f": 10 },
+    { "op": "probe", "name": "end" }
+  ]
+}

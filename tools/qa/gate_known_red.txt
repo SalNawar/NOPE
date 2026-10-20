@@ -1,0 +1,13 @@
+# DemoGate's known-red list (P0-B QA-RIG; DemoGate.ParseKnownRed). A check id (or id pattern with '*') that is red
+# because an open BUG part a later track owns is not fixed yet. The merge gate lists these without refusing, so it
+# refuses only on regressions; the demo gate refuses them like any red check.
+# Format: <check id>  # BUG part, OWNER (merge #): why
+# INTEGRATION keeps it: an entry goes when its owner's merge turns the check green (the gate report lists entries
+# that now pass under "Known-red entries that now pass"), and a new one comes only with Saleh's or the plan's owner.
+# The entries below are expected red at the QA-RIG merge; the first Unity run confirms or drops each (deferred).
+
+qa.play.flicker         # BUG-13 / BUG-26a / BUG-54, HALL-FX (#4): the city windows, portals and Helix monitor strobe
+qa.bp.flicker           # BUG-13 / BUG-26a / BUG-54, HALL-FX (#4): the same, on the built player
+qa.play.camera          # BUG-17 / G9, CAM (#6) and DOC-HANDLE (#8): no camera move is tagged with its cause until CAM tags the view keys and DOC-HANDLE the D1 drop tilt
+qa.play.liberationSans  # BUG-3 / BUG-37, TEXT-LANG (#12): labels still fall back to LiberationSans
+qa.scenes.liberationSans  # BUG-3 / BUG-37, TEXT-LANG (#12): texts set in LiberationSans in the shipped scenes
