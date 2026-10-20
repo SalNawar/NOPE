@@ -18,17 +18,18 @@ using UnityEngine.UI;
 /// keyboard (clicks, the wheel, keys and chords as Input System events,
 /// never a handler called directly) and asserts what the player would see.
 /// <list type="bullet">
-/// <item><c>uipc.esc</c>: Esc on the PC brings Settings to the front and the PC stays open (R3/R4).</item>
-/// <item><c>uipc.escdark</c>: with the screen turned off by the frame's power button, Esc turns it on and brings Settings forward, a right-click does nothing, and the PC stays open (R3/R4).</item>
-/// <item><c>uipc.room</c>: a click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</item>
-/// <item><c>uipc.bezel</c>: a click on the bezel leaves the PC (R3/R4: "press Q or click the bezel").</item>
-/// <item><c>uipc.tray</c>: the tray clock reads the shift clock's time over today's date, the CRT clock plate is gone, no credits in the tray (BUG-20a, 21a).</item>
-/// <item><c>uipc.windows</c>: every app opened from the Start menu, and the F1 card (at least 8 windows); the taskbar names each open window by a button or counts it behind the chevron, nothing over the tray, and the chevron brings each waiting window forward in turn (BUG-21a).</item>
-/// <item><c>uipc.order</c>: a double-click on an orderable Orders card places exactly one order, charged once (BUG-58a, UI-25).</item>
-/// <item><c>uipc.enter</c>: Enter on the chosen card acts once per press, and two quick presses act once (BUG-58a, CODE-117).</item>
-/// <item><c>uipc.zoom</c>: Ctrl+= twice zooms the Orders tree to 150 %.</item>
-/// <item><c>uipc.restore</c>: Orders scrolled by the wheel, minimised by its title bar's button and restored by its taskbar button keeps its scroll, its chosen card and its zoom (BUG-58a, CODE-114).</item>
-/// <item><c>uipc.balance</c>: with the Citizen Account open and scrolled, money arriving redraws it in place, and the Account, Orders and the office's credits readout show the same balance (BUG-58a, CODE-121).</item>
+/// <item><c>uipcEsc</c>: Esc on the PC brings Settings to the front and the PC stays open (R3/R4).</item>
+/// <item><c>uipcEscDark</c>: with the screen turned off by the frame's power button, Esc turns it on and brings Settings forward, a right-click does nothing, and the PC stays open (R3/R4).</item>
+/// <item><c>uipcRoom</c>: a click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</item>
+/// <item><c>uipcBezel</c>: a click on the bezel leaves the PC (R3/R4: "press Q or click the bezel").</item>
+/// <item><c>uipcPowerOn</c>: a right-click and Esc a few frames after Q, while the picture still powers on (the desktop's clicks wait for it): the PC stays open and Esc brings Settings forward, with full motion and with Reduced Motion (R3/R4: "Esc = Settings everywhere").</item>
+/// <item><c>uipcTray</c>: the tray clock reads the shift clock's time over today's date, the CRT clock plate is gone, no credits in the tray (BUG-20a, 21a).</item>
+/// <item><c>uipcWindows</c>: every app opened from the Start menu, and the F1 card (at least 8 windows); the taskbar names each open window by a button or counts it behind the chevron, nothing over the tray, and the chevron brings each waiting window forward in turn (BUG-21a).</item>
+/// <item><c>uipcOrder</c>: a double-click on an orderable Orders card places exactly one order, charged once (BUG-58a, UI-25).</item>
+/// <item><c>uipcEnter</c>: Enter on the chosen card acts once per press, and two quick presses act once (BUG-58a, CODE-117).</item>
+/// <item><c>uipcZoom</c>: Ctrl+= twice zooms the Orders tree to 150 %.</item>
+/// <item><c>uipcRestore</c>: Orders scrolled by the wheel, minimised by its title bar's button and restored by its taskbar button keeps its scroll, its chosen card and its zoom (BUG-58a, CODE-114).</item>
+/// <item><c>uipcBalance</c>: with the Citizen Account open and scrolled, money arriving redraws it in place, and the Account, Orders and the office's credits readout show the same balance (BUG-58a, CODE-121).</item>
 /// </list>
 /// Compiled only in the editor and QA player builds.
 /// </summary>
@@ -42,17 +43,18 @@ public static class UiPcRigOps
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Register()
     {
-        QaRunner.RegisterOp("uipc.esc", Esc);
-        QaRunner.RegisterOp("uipc.escdark", EscDark);
-        QaRunner.RegisterOp("uipc.room", Room);
-        QaRunner.RegisterOp("uipc.bezel", Bezel);
-        QaRunner.RegisterOp("uipc.windows", Windows);
-        QaRunner.RegisterOp("uipc.order", Order);
-        QaRunner.RegisterOp("uipc.enter", Enter);
-        QaRunner.RegisterOp("uipc.zoom", Zoom);
-        QaRunner.RegisterOp("uipc.restore", Restore);
-        QaRunner.RegisterOp("uipc.balance", Balance);
-        QaRunner.RegisterOp("uipc.tray", Tray);
+        QaRunner.RegisterOp("uipcEsc", Esc);
+        QaRunner.RegisterOp("uipcEscDark", EscDark);
+        QaRunner.RegisterOp("uipcRoom", Room);
+        QaRunner.RegisterOp("uipcBezel", Bezel);
+        QaRunner.RegisterOp("uipcPowerOn", PowerOn);
+        QaRunner.RegisterOp("uipcWindows", Windows);
+        QaRunner.RegisterOp("uipcOrder", Order);
+        QaRunner.RegisterOp("uipcEnter", Enter);
+        QaRunner.RegisterOp("uipcZoom", Zoom);
+        QaRunner.RegisterOp("uipcRestore", Restore);
+        QaRunner.RegisterOp("uipcBalance", Balance);
+        QaRunner.RegisterOp("uipcTray", Tray);
     }
 
     // -----------------------------
@@ -101,6 +103,67 @@ public static class UiPcRigOps
         runner.Assert("escdark", Owner, dark && afterRight && lit && front && open,
             $"power button: screen {(dark ? "off" : "still on")}; right-click: {(afterRight ? "nothing" : "changed something")}; Esc: screen {(lit ? "on" : "off")}, settings {(front ? "in front" : "not shown")}, pc {(open ? "open" : "closed")}",
             "with the screen off, Esc still opens Settings (and turns the screen on) and nothing but Q and the bezel leaves the PC (R3/R4)");
+    }
+
+    /// <summary>
+    /// The back-out during the power-on, with full motion, then with Reduced
+    /// Motion (the player's choice, set for the step and put back after: a
+    /// setting, not the input under test). Each time: Q leaves the PC and the
+    /// close is waited out, then Q opens it, and 2 frames later a right-click
+    /// over the glass and then Esc arrive while the picture still moves
+    /// (PcFrame.PictureMoving, about 300 ms: the desktop's clicks wait for the
+    /// whole picture, its keys and back-out never do). The PC must stay open
+    /// and Settings come forward (asserts <c>poweron.full</c> and
+    /// <c>poweron.reduced</c>; the review of fix round 2: the keys were gated on
+    /// the raycaster the power-on holds off, so the office's back-out closed
+    /// the PC).
+    /// </summary>
+    private static IEnumerator PowerOn(QaRunner runner, QaStep step)
+    {
+        OfficeViewController view = QaGame.Find<OfficeViewController>();
+        PcFrame frame = QaGame.Find<PcFrame>();
+        DesktopWindow settings = Window<SettingsWindowController>();
+        var glass = frame != null ? (RectTransform)typeof(PcFrame).GetField("glass", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(frame) : null;
+        if (view == null || settings == null || glass == null || !PcOpen(view))
+        {
+            runner.Assert("poweron.full", Owner, false, "no open PC frame or Settings", "run it with the PC open in the office");
+            yield break;
+        }
+        var g = new Vector3[4];
+        glass.GetWorldCorners(g);
+        yield return runner.Input.MoveTo((g[0] + g[2]) / 2f, 4); // over the glass's middle (the overlay canvas's world space is the screen)
+
+        bool chosen = MotionPreference.Reduced;
+        foreach (bool reduced in new[] { false, true })
+        {
+            MotionPreference.Reduced = reduced;
+            string id = reduced ? "poweron.reduced" : "poweron.full";
+            yield return runner.Input.Tap(Key.Q); // leave the PC (Q is one of its two ways out)
+            yield return QaGame.Until(() => !PcOpen(view) && !PcFrame.PictureMoving, 3f, "the PC frame to close");
+            if (settings.IsOpen)
+                settings.Close(); // Settings must come forward by this Esc, not stay from an earlier step
+            yield return runner.Input.Tap(Key.Q, 1); // open it: Tap returns on the frame after the one that took the press
+
+            InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position }.WithButton(MouseButton.Right));
+            yield return null; // the game takes the right-click this frame, 2 frames after the Q
+            bool rightEarly = PcFrame.PictureMoving;
+            InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position });
+            yield return null;
+            bool afterRight = PcOpen(view);
+
+            InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState(Key.Escape));
+            yield return null; // the game takes the Esc this frame, 4 frames after the Q
+            bool escEarly = PcFrame.PictureMoving;
+            InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState());
+            yield return QaGame.Until(() => !PcFrame.PictureMoving, 3f, "the PC's picture to be whole");
+            yield return QaGame.Frames(2);
+
+            bool open = PcOpen(view), front = settings.IsOpen && !settings.IsMinimised;
+            runner.Assert(id, Owner, rightEarly && escEarly && afterRight && open && front,
+                $"right-click {(rightEarly ? "during" : "after")} the power-on: pc {(afterRight ? "stayed open" : "closed")}; Esc {(escEarly ? "during" : "after")} it: pc {(open ? "open" : "closed")}, settings {(front ? "in front" : "not shown")}",
+                "the keys and the back-out are the PC's from the press frame, so Esc opens Settings and nothing but Q and the bezel leaves (R3/R4); both presses must land while the picture moves");
+        }
+        MotionPreference.Reduced = chosen;
     }
 
     /// <summary>A click on the room right of the frame: the PC stays open.</summary>
@@ -276,7 +339,7 @@ public static class UiPcRigOps
             "a double-click on an orderable card places exactly one order (one-click ordering; never order-then-cancel)");
     }
 
-    /// <summary>On the card ordered by uipc.order, after the double-click time (uipc.order's last click is about 17 frames back, inside it at an uncapped frame rate): Enter cancels it once (refunded once), Enter again after the double-click time orders it once, and two quick Enters act once.</summary>
+    /// <summary>On the card ordered by uipcOrder, after the double-click time (uipcOrder's last click is about 17 frames back, inside it at an uncapped frame rate): Enter cancels it once (refunded once), Enter again after the double-click time orders it once, and two quick Enters act once.</summary>
     private static IEnumerator Enter(QaRunner runner, QaStep step)
     {
         WorldState world = RunManager.HasInstance ? RunManager.Instance.World : null;
@@ -285,12 +348,12 @@ public static class UiPcRigOps
         UpgradeSO upgrade = lib != null && orders != null && orders.Chosen != null ? lib.GetUpgradeById(orders.Chosen) : null;
         if (world == null || upgrade == null || Orders.Pending(world.orders, upgrade.id) == null)
         {
-            runner.Assert("enter", Owner, false, "no ordered card chosen", "run uipc.order first");
+            runner.Assert("enter", Owner, false, "no ordered card chosen", "run uipcOrder first");
             yield break;
         }
         float wait = orders.Window.Manager.DoubleClickSeconds + 0.15f;
         int money0 = world.money, price = OrderBook.Price(world, lib, upgrade);
-        yield return new WaitForSecondsRealtime(wait); // clear of uipc.order's clicks, so each Enter below is measured on its own
+        yield return new WaitForSecondsRealtime(wait); // clear of uipcOrder's clicks, so each Enter below is measured on its own
         yield return runner.Input.Tap(Key.Enter);
         yield return QaGame.Frames(3);
         bool cancelled = Orders.Pending(world.orders, upgrade.id) == null && world.money == money0 + price;
@@ -319,7 +382,7 @@ public static class UiPcRigOps
         TreeScrollRect view = orders != null ? orders.GetComponentInChildren<TreeScrollRect>(true) : null;
         if (view == null)
         {
-            runner.Assert("zoom", Owner, false, "no Orders tree", "open Orders first (uipc.order)");
+            runner.Assert("zoom", Owner, false, "no Orders tree", "open Orders first (uipcOrder)");
             yield break;
         }
         yield return Chord(runner, Key.LeftCtrl, Key.Equals);
@@ -339,7 +402,7 @@ public static class UiPcRigOps
         Transform minimise = window != null ? FindDeep(window.transform, "MinBtn") : null;
         if (window == null || view == null || strip == null || minimise == null || !window.IsOpen)
         {
-            runner.Assert("restore", Owner, false, "no open Orders window", "open Orders first (uipc.order)");
+            runner.Assert("restore", Owner, false, "no open Orders window", "open Orders first (uipcOrder)");
             yield break;
         }
         Vector2? over = QaGame.ScreenPoint(view.gameObject);

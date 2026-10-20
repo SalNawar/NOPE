@@ -339,6 +339,93 @@ public class PcDesktopRulesTests
         Assert.AreEqual(0, odd.AfterglowFrames);
     }
 
+    // --- A reversed move (Q or the bezel during the power-on, a click on the PC during the collapse): it picks up where the glass is, never a pop (F1) ---
+
+    [Test]
+    public void Crt_QDuringThePowerOn_ClosesFromWhereTheGlassIs()
+    {
+        CrtPower crt = Crt();
+        for (float t = 0f; t < crt.Seconds(true, false); t += 0.005f)
+        {
+            CrtFrame now = crt.At(t, true, false);
+            float from = crt.Resume(now, false, false, out bool leaving);
+            Assert.AreEqual(!now.Picture, leaving, "no picture yet: nothing to collapse, so the frame fades out from its alpha (at " + t + ")");
+            AssertSameGlass(now, leaving ? crt.Leaving(from) : crt.At(from, false, false), "closing from the power-on at " + t);
+        }
+        float whole = crt.Resume(crt.At(crt.Seconds(true, false), true, false), false, false, out bool fromWhole);
+        Assert.IsFalse(fromWhole);
+        Assert.AreEqual(0f, whole, 1e-4f, "from the whole picture: the whole collapse");
+    }
+
+    [Test]
+    public void Crt_APressDuringTheCollapse_OpensFromWhereTheGlassIs()
+    {
+        CrtPower crt = Crt();
+        for (float t = 0f; t < crt.Seconds(false, false) * 0.66f; t += 0.004f)
+        {
+            CrtFrame now = crt.At(t, false, false);
+            float from = crt.Resume(now, true, false, out bool leaving);
+            Assert.IsFalse(leaving, "opening never fades out");
+            AssertSameGlass(now, crt.At(from, true, false), "the power-on from the collapse's line at " + t);
+            Assert.IsTrue(crt.HumStarted(from, false), "the picture is on the glass: the hum answers the press at once");
+        }
+
+        CrtFrame dot = crt.At(crt.Seconds(false, false) * 0.9f, false, false);
+        CrtFrame line = crt.At(crt.Resume(dot, true, false, out _), true, false);
+        Assert.AreEqual((1f, 1f, 0f, true), (line.X, line.Bezel, line.Veil, line.Picture), "the dot opens from the power-on's full-width line");
+        Assert.AreEqual(0.02f, line.Y, 1e-4f);
+        Assert.LessOrEqual(line.Y - dot.Y, 0.02f, "the change stays inside a line of the glass");
+
+        CrtFrame afterglow = crt.At(crt.Seconds(false, false), false, false);
+        float lit = crt.Resume(afterglow, true, false, out _);
+        CrtFrame power = crt.At(lit, true, false);
+        Assert.AreEqual(1f, power.Bezel, "the whole frame stays whole");
+        Assert.IsTrue(crt.PictureStarted(lit, true, false), "the dark glass powers on at once, with its line");
+        Assert.AreEqual((1f, 0.02f), (power.X, power.Y), "the line, as a fresh power-on's");
+        Assert.IsTrue(crt.HumStarted(lit, false));
+
+        for (float t = 0.005f; t < crt.LeaveSeconds; t += 0.005f) // from t = 0 the frame is still whole: the afterglow's case above
+        {
+            CrtFrame now = crt.Leaving(t);
+            CrtFrame back = crt.At(crt.Resume(now, true, false, out _), true, false);
+            if (now.Bezel >= CrtPower.FrameFirstStep)
+                AssertSameGlass(now, back, "the frame fades back in from its alpha at " + t);
+            else
+                Assert.AreEqual(CrtPower.FrameFirstStep, back.Bezel, 1e-4f, "fainter than the first step: the press frame's answer, never fainter");
+        }
+    }
+
+    [Test]
+    public void Crt_ReducedMotion_AReversedFadeTurnsBackFromWhereItIs()
+    {
+        CrtPower crt = Crt();
+        float fade = crt.Seconds(true, true);
+        foreach (bool opening in new[] { true, false })
+            for (float t = 0f; t < fade; t += 0.005f)
+            {
+                CrtFrame now = crt.At(t, opening, true);
+                CrtFrame back = crt.At(crt.Resume(now, !opening, true, out bool leaving), !opening, true);
+                Assert.IsFalse(leaving, "Reduced Motion's close ends with its own fade");
+                if (!opening && now.Bezel < CrtPower.FrameFirstStep)
+                    Assert.AreEqual(CrtPower.FrameFirstStep, back.Bezel, 1e-4f, "fainter than the first step: the press frame's answer");
+                else
+                    AssertSameGlass(now, back, (opening ? "closing from the fade in" : "opening from the fade out") + " at " + t);
+            }
+    }
+
+    /// <summary>The glass shows the same: the frame's alpha, the dark glass, the picture the eye sees, and its line when drawn.</summary>
+    private static void AssertSameGlass(CrtFrame expected, CrtFrame actual, string at)
+    {
+        Assert.AreEqual(expected.Bezel, actual.Bezel, 1e-3f, "the frame's alpha, " + at);
+        Assert.AreEqual(expected.Veil, actual.Veil, 1e-3f, "the dark glass, " + at);
+        Assert.AreEqual(Seen(expected), Seen(actual), 1e-3f, "the picture seen, " + at);
+        if (expected.Picture && actual.Picture)
+        {
+            Assert.AreEqual(expected.X, actual.X, 1e-3f, "the line's width, " + at);
+            Assert.AreEqual(expected.Y, actual.Y, 1e-3f, "the line's height, " + at);
+        }
+    }
+
     // --- A scanned page's fit and the pane's text zoom (CODE-111): the zoom is never cancelled, and a page wider than its pane scrolls sideways instead of being cut ---
 
     [Test]
@@ -398,7 +485,8 @@ public class PcDesktopRulesTests
         Assert.IsTrue(gate.TryAct(OrderInput.Key, 1.7f));
         Assert.IsTrue(gate.TryAct(OrderInput.Card, 1.71f));
         Assert.IsTrue(gate.TryAct(OrderInput.Card, 1.72f), "a card click acts only on an orderable card, so its double-click cannot undo it (OrdersWindow)");
-        Assert.AreEqual(0.4f, gate.Seconds, 1e-6f);
+        Assert.IsFalse(gate.TryAct(OrderInput.Button, 1.39f), "the button's own clock still runs from its action at 1 s");
+        Assert.IsTrue(gate.TryAct(OrderInput.Button, 1.41f), "past its double-click time the button acts again");
     }
 
     // --- The back-out with the screen off (R3/R4: "Esc opens the same Settings window everywhere") ---

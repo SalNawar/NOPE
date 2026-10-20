@@ -12,7 +12,10 @@ using UnityEngine.UI;
 /// off while the PC frame's picture powers on or collapses
 /// (PcFrame.PictureMoving): the frame camera is the desktop's event camera,
 /// and during the CRT line its projection is squeezed, so a click then
-/// would land on a part of the desktop the player cannot see.
+/// would land on a part of the desktop the player cannot see. Only clicks
+/// wait: the keys and the back-out follow <see cref="IsInteractive"/> from
+/// the press frame (DesktopKeyboard; R3/R4: an Esc then still opens
+/// Settings, never leaves the PC).
 /// </summary>
 public sealed class MonitorScreen : MonoBehaviour
 {
@@ -79,7 +82,7 @@ public sealed class MonitorScreen : MonoBehaviour
     /// <summary>Holds the screen on (a pending citation slip) or releases it.</summary>
     public void SetHeld(bool held) => _screen.SetHeld(held);
 
-    /// <summary>True while the desktop takes input (BoothRules.DesktopInteractive: the frame open, the screen on, no newsletter): the player is looking at the PC.</summary>
+    /// <summary>True while the desktop takes input (BoothRules.DesktopInteractive: the frame open, the screen on, no newsletter): the player is looking at the PC. From the press frame: the keys and the back-out read it (DesktopKeyboard), while the desktop's clicks also wait for the picture (the raycaster, PcFrame.PictureMoving).</summary>
     public bool IsInteractive { get; private set; }
 
     /// <summary>

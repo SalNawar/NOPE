@@ -27,9 +27,6 @@ public sealed class OrderInputs
 {
     private readonly ActionDebounce _button, _key;
 
-    /// <summary>How long after an input's action the same input is refused (seconds; the desktop's double-click time).</summary>
-    public float Seconds => _button.Seconds;
-
     /// <summary>Inputs refused within <paramref name="seconds"/> of their own last action.</summary>
     public OrderInputs(float seconds)
     {

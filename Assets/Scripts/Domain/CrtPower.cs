@@ -45,8 +45,9 @@ public readonly struct CrtFrame
 /// (<see cref="Leaving"/>). Reduced Motion: no squeeze; a fade in two
 /// halves, the frame and its dark glass over the room, then the dark glass
 /// off the picture (and back on closing), so the picture, drawn by its own
-/// camera, is never cut in or out where the eye can see it. Pure; PcFrame
-/// draws it.
+/// camera, is never cut in or out where the eye can see it. A move reversed
+/// while under way picks up where the glass is (<see cref="Resume"/>). Pure;
+/// PcFrame draws it.
 /// </summary>
 public sealed class CrtPower
 {
@@ -119,6 +120,48 @@ public sealed class CrtPower
     /// <summary>The frame fading out <paramref name="elapsed"/> seconds after the afterglow (full motion): the bezel and its dark glass over the room, gone at <see cref="LeaveSeconds"/>.</summary>
     public CrtFrame Leaving(float elapsed) => new CrtFrame(0f, 0f, 1f - Progress(elapsed, _frame), 1f, false);
 
+    /// <summary>
+    /// Where a move that reverses one under way picks up (F1's "no frame-0 UI
+    /// pop" on a reversed move: Q or a bezel click during the power-on, a
+    /// click on the PC during the collapse, the afterglow or the frame's fade
+    /// out): the time into the new move (opening when
+    /// <paramref name="opening"/>) whose frame is <paramref name="now"/>, the
+    /// one on the glass, so neither the frame nor the picture jumps. Closing
+    /// with no picture on the glass yet, there is nothing to collapse:
+    /// <paramref name="leaving"/> is true and the time is into the frame's
+    /// fade out (<see cref="Leaving"/>). Three moments have no twin on the
+    /// other move and pick up at its nearest: a whole frame on a dark glass
+    /// (the afterglow) powers on at once from the line, with the hum; the
+    /// collapse's dot opens from the power-on's full-width line (a change
+    /// inside a line of the glass); a frame fainter than
+    /// <see cref="FrameFirstStep"/> opens from that step, the press frame's.
+    /// </summary>
+    public float Resume(CrtFrame now, bool opening, bool reduced, out bool leaving)
+    {
+        leaving = false;
+        if (reduced)
+        {
+            // How far towards the open frame the glass is, on the new move's own curve (Fade).
+            float u = now.Picture
+                ? 0.5f + (1f - Clamp01(now.Veil)) / 2f
+                : (opening ? Share(now.Bezel - FrameFirstStep, 1f - FrameFirstStep) : Clamp01(now.Bezel)) / 2f;
+            return _fade * (opening ? u : 1f - u);
+        }
+        float picture = PictureAt(false);
+        if (opening)
+        {
+            if (!now.Picture)
+                return now.Bezel >= 1f ? Math.Max(_frame, picture - _lead) : _frame * Share(now.Bezel - FrameFirstStep, 1f - FrameFirstStep);
+            return now.X < 1f ? picture : picture + _open * InverseOutCubic(Share(now.Y - _line, 1f - _line));
+        }
+        if (!now.Picture)
+        {
+            leaving = true;
+            return _frame * Clamp01(1f - now.Bezel);
+        }
+        return _close * SqueezeShare * InverseOutCubic(Share(1f - now.Y, 1f - _line));
+    }
+
     /// <summary>The phosphor dot's glow <paramref name="frame"/> frames after the collapse ended (0 from <see cref="AfterglowFrames"/> on).</summary>
     public float Afterglow(int frame) =>
         frame < 0 || frame >= AfterglowFrames ? 0f : (AfterglowFrames - frame) / (float)(AfterglowFrames + 1);
@@ -141,11 +184,17 @@ public sealed class CrtPower
     /// <summary>How far through a move of <paramref name="length"/> seconds (0..1; a zero-length move is at its end).</summary>
     private static float Progress(float elapsed, float length) => length <= 0f ? 1f : Clamp01(elapsed / length);
 
+    /// <summary><paramref name="part"/> as a share of <paramref name="whole"/> (0..1; all of a zero whole).</summary>
+    private static float Share(float part, float whole) => whole <= 0f ? 1f : Clamp01(part / whole);
+
     private static float OutCubic(float t)
     {
         float u = 1f - Clamp01(t);
         return 1f - u * u * u;
     }
+
+    /// <summary>The t (0..1) at which <see cref="OutCubic"/> reaches <paramref name="v"/>.</summary>
+    private static float InverseOutCubic(float v) => 1f - (float)Math.Pow(1f - Clamp01(v), 1.0 / 3.0);
 
     private static float Clamp01(float v) => Math.Max(0f, Math.Min(1f, v));
 }

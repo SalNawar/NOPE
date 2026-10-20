@@ -33,8 +33,12 @@ using UnityEngine.UI;
 /// With Reduced Motion nothing moves: the frame and its dark glass fade in
 /// over the room, then the dark glass fades off the picture (and the reverse
 /// on closing), so the picture, drawn by its own camera, never cuts in or
-/// out. The bezel, its X and its power button, and the keys, take input from
-/// the press frame; the desktop takes clicks once the picture is whole
+/// out. A move reversed while under way (Q or the bezel during the power-on,
+/// a click on the PC during the collapse, the afterglow or the fade out)
+/// picks up where the glass is (CrtPower.Resume), so it never pops. The
+/// bezel, its X and its power button, and the keys (DesktopKeyboard reads
+/// MonitorScreen.IsInteractive, not the raycaster), take input from the
+/// press frame; the desktop takes clicks once the picture is whole
 /// (<see cref="PictureMoving"/>: MonitorScreen holds the desktop's raycaster
 /// off while the picture moves, so a click is never mapped through the
 /// squeezed projection onto a part of the desktop the player cannot see).
@@ -78,7 +82,10 @@ public sealed class PcFrame : MonoBehaviour
     /// <summary>The power move (CrtPower, from the config).</summary>
     private CrtPower _power;
 
-    /// <summary>The frame's alpha (the Reduced Motion fade), on its root.</summary>
+    /// <summary>The power move's frame last drawn: a move reversed under way picks up from it (CrtPower.Resume).</summary>
+    private CrtFrame _drawn;
+
+    /// <summary>The frame's alpha (its fades) and whether it takes clicks (not while it closes), on its root.</summary>
     private CanvasGroup _fade;
 
     /// <summary>The dark glass over the picture (the warm-up, the Reduced Motion fade), the power-on glow over it, and the afterglow dot on top.</summary>
@@ -163,21 +170,32 @@ public sealed class PcFrame : MonoBehaviour
             frameCamera.depth = office.depth + 1f;
     }
 
-    /// <summary>Opens the frame (it fades in, the hum leads the picture, the picture powers on) or closes it (the picture collapses, glows out, then the frame fades out).</summary>
+    /// <summary>
+    /// Opens the frame (it fades in, the hum leads the picture, the picture
+    /// powers on) or closes it (the picture collapses, glows out, then the
+    /// frame fades out). Reversed while a move is under way, the new move
+    /// picks up where the glass is (CrtPower.Resume: F1's "no frame-0 UI
+    /// pop"); closing before any picture showed, the frame only fades out.
+    /// </summary>
     public void SetOpen(bool open)
     {
         if (open == _open)
             return;
+        bool reversing = _moving || _afterglow >= 0 || _leaving;
         _open = open;
+        if (_fade != null)
+            _fade.blocksRaycasts = open; // closing, the fading frame (its room catcher, X and power button) takes no click: the first click after Q reaches the room
         if (!open && root != null)
             Sounds.Play(SoundCues.PcOff); // the collapse; opening, the hum plays when it is due (Step)
-        _moving = true;
-        _glowed = false;
+        bool leaving = false;
+        float from = reversing ? _power.Resume(_drawn, open, MotionPreference.Reduced, out leaving) : 0f;
+        _moving = !leaving;
+        _glowed = reversing && _drawn.Picture; // a picture still on the glass powers back on without a second glow
         _hummed = false;
-        _leaving = false;
+        _leaving = leaving;
         _afterglow = -1;
         Show(_dot, 0f);
-        _movedAt = Time.unscaledTime;
+        _movedAt = Time.unscaledTime - from;
         SetMoving(true);
         if (open && root != null)
             root.SetActive(true);
@@ -239,6 +257,7 @@ public sealed class PcFrame : MonoBehaviour
     /// <summary>The frame's alpha, the dark glass, the picture's camera and its squeeze, as <paramref name="frame"/> says.</summary>
     private void Draw(CrtFrame frame)
     {
+        _drawn = frame;
         if (_fade != null)
             _fade.alpha = frame.Bezel;
         Show(_veil, frame.Veil);

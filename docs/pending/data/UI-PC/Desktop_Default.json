@@ -7,8 +7,8 @@
   ],
   "new_fields_left_to_code_defaults": [
     "taskbarButtonLeast", "taskbarChevronWidth",
-    "crtOpenSeconds", "crtCloseSeconds", "crtFadeSeconds", "crtLineHeight", "crtHumLeadSeconds", "crtAfterglowFrames",
+    "crtOpenSeconds", "crtCloseSeconds", "crtFadeSeconds", "crtLineHeight", "crtHumLeadSeconds", "crtAfterglowFrames", "crtFrameSeconds",
     "flashesPerSecond", "flashTintSeconds", "quitWarningSeconds"
   ],
-  "note": "The new fields need no edit: Unity loads a field the asset lacks at its code default and writes it on the asset's next save."
+  "note": "The new fields need no edit: Unity loads a field the asset lacks at its code default and writes it on the asset's next save. The same goes for the changed window sizes (mailWindowSize, accountWindowSize, notesWindowSize, settingsWindowSize, shortcutCardSize): the asset holds none of them, so their new code defaults apply."
 }

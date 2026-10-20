@@ -2,12 +2,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 /// <summary>
 /// The desktop's one keyboard poller (the PC redesign KB1-KB3, section 3.4,
-/// 3.5; on the desktop canvas). While the desktop takes input (its raycaster
-/// is on: the frame open, the screen on; BoothRules.DesktopInteractive) it
+/// 3.5; on the desktop canvas). While the desktop takes input
+/// (MonitorScreen.IsInteractive: the frame open, the screen on;
+/// BoothRules.DesktopInteractive), from the press frame on, also while the
+/// frame's picture still powers on and the desktop's raycaster is held off
+/// (PcFrame.PictureMoving: clicks wait for the whole picture, the keys and
+/// the back-out never do; Saleh's R3/R4, "Esc = Settings everywhere"), it
 /// reads the Input System's keyboard, turns each key pressed this frame into
 /// a chord and resolves it through the one table, ShortcutMap, in the
 /// desktop's context (the focused window, a text field, an open menu, the
@@ -50,9 +53,6 @@ public sealed class DesktopKeyboard : MonoBehaviour
         (Key.Escape, ShortcutKey.Escape), (Key.F10, ShortcutKey.F10), (Key.ContextMenu, ShortcutKey.Menu),
     };
 
-    /// <summary>The desktop canvas's raycaster (on only while the desktop takes input).</summary>
-    [SerializeField] private GraphicRaycaster raycaster;
-
     /// <summary>The window stack (the focused window, the drag Escape cancels).</summary>
     [SerializeField] private DesktopWindowManager manager;
 
@@ -83,7 +83,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
     /// <summary>The PC frame (is the PC open while its screen is off?); found in the scene when not wired.</summary>
     [SerializeField] private PcFrame frame;
 
-    /// <summary>The PC's screen (Esc turns it on when it is off); the desktop canvas's parent's, found there when not wired.</summary>
+    /// <summary>The PC's screen (does the desktop take input? Esc turns it on when it is off); the desktop canvas's parent's, found there when not wired.</summary>
     [SerializeField] private MonitorScreen screen;
 
     private DesktopWindow _notesWindow;
@@ -126,10 +126,10 @@ public sealed class DesktopKeyboard : MonoBehaviour
             card.Open();
     }
 
-    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input.</summary>
+    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input, from the press frame (never gated on the raycaster, which the picture's power-on holds off: an Esc or a right-click then must still be the PC's, never the office's way out).</summary>
     private void Update()
     {
-        if (raycaster == null || !raycaster.isActiveAndEnabled)
+        if (screen == null || !screen.IsInteractive)
         {
             BackOutScreenOff();
             return;

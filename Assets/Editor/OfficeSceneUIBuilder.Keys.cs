@@ -103,7 +103,6 @@ public static partial class OfficeSceneUIBuilder
 
         DesktopKeyboard keyboard = GetOrAdd<DesktopKeyboard>(root.gameObject);
         var so = new SerializedObject(keyboard);
-        Wire(so, "raycaster", canvas.GetComponent<GraphicRaycaster>());
         Wire(so, "manager", root.GetComponent<DesktopWindowManager>());
         Wire(so, "icons", icons);
         Wire(so, "shell", root.GetComponent<DesktopShell>());
@@ -114,7 +113,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "card", card);
         Wire(so, "apps", root.GetComponent<DesktopApps>()); // Esc with nothing left to close brings Settings forward (BUG-50a, R3/R4)
         Wire(so, "frame", Object.FindFirstObjectByType<PcFrame>(FindObjectsInactive.Include)); // with the PC open and its screen off, Esc still brings Settings
-        Wire(so, "screen", canvas.GetComponentInParent<MonitorScreen>());
+        Wire(so, "screen", canvas.GetComponentInParent<MonitorScreen>()); // the keys take input while it does (from the press frame); with it off, Esc turns it on
         so.ApplyModifiedProperties();
 
         if (menu != null)

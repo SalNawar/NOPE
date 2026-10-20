@@ -10,7 +10,8 @@ using UnityEngine.Experimental.Rendering;
 /// FIX_PLAN's 25 MB (BUG-65i). Play, on the PC session
 /// (tools/qa/scenarios/ui_pc_session.json, its ops in UiPcRigOps; FIX_PLAN's
 /// "the PC session script as a standing gate"): Esc brings Settings forward
-/// (also with the screen off), a click on the room stays and the bezel
+/// (also with the screen off, and during the power-on, when a right-click
+/// does not leave either), a click on the room stays and the bezel
 /// leaves the PC (BUG-50a, R3/R4), the tray clock (BUG-20a, 21a), 8+ windows
 /// on the taskbar with the chevron (BUG-21a), one order per double-click,
 /// one action per Enter, the 150 % zoom, Orders' state across minimise and
@@ -99,6 +100,10 @@ public static class UiPcChecks
     /// <summary>The balance is the same in the Account, Orders and the office's readout, and the Account follows it live in place (BUG-58a).</summary>
     [GateCheck("uipc.balance", Owner, GateKind.Play)]
     public static GateResult Balance() => GateResults.Require("uipc.balance", Owner, "ui_pc_session.balance");
+
+    /// <summary>A right-click and Esc during the power-on (full motion and Reduced Motion): the PC stays open and Settings comes forward (R3/R4: the keys and the back-out are the PC's from the press frame).</summary>
+    [GateCheck("uipc.poweron", Owner, GateKind.Play)]
+    public static GateResult PowerOn() => GateResults.Require("uipc.poweron", Owner, "ui_pc_session.poweron.*");
 
     /// <summary>A click on the bezel leaves the PC (R3/R4).</summary>
     [GateCheck("uipc.bezel", Owner, GateKind.Play)]
