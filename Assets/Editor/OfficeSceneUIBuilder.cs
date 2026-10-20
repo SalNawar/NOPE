@@ -65,6 +65,11 @@ using UnityEngine.UI;
 /// P0-A carve (docs/pending/CARVE.md): Text and MakeButton are in .Text.cs,
 /// the taskbar and window controls in .Taskbar.cs, CheckDeskPlan in
 /// .DeskPlan.cs. Owner: QA-RIG.
+/// P0-B QA-RIG (BUG-30): each build first sweeps out the objects the builder
+/// retired (QaSceneScan.Retired: Office/GateLever, the rejected lever whose
+/// script was deleted), and ends with the scene integrity gate: a missing
+/// script or a renderer with a null or error (magenta) material in the layer
+/// is logged as an error (QaRigChecks gates the shipped scenes the same way).
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
@@ -134,6 +139,7 @@ public static partial class OfficeSceneUIBuilder
         Scene scene = File.Exists(GameplayScenePath)
             ? EditorSceneManager.OpenScene(GameplayScenePath, OpenSceneMode.Single)
             : EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        SweepRetired(scene);
 
         _kit = UiKitAssets.Ensure();
         KitDone.Clear();
@@ -395,6 +401,7 @@ public static partial class OfficeSceneUIBuilder
         CheckLabelKeysAndRoles(library, canvas, officeCanvas);
         CheckContrast(library, canvas, officeCanvas);
         CheckInvestigationWiring(invest);
+        CheckSceneIntegrity(scene);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
@@ -599,6 +606,44 @@ public static partial class OfficeSceneUIBuilder
         if (role.HasValue && go.TryGetComponent(out Image themed))
             SceneUiKit.Tag(themed, role.Value, ThemePart.Fill);
         return go.transform;
+    }
+
+    /// <summary>
+    /// Destroys the objects this builder no longer builds (QaSceneScan.Retired,
+    /// by hierarchy path), which a fill-the-gaps rebuild would otherwise keep
+    /// forever (BUG-30: Office/GateLever, a missing script and a magenta block
+    /// with a live click box). Logs each one removed.
+    /// </summary>
+    private static void SweepRetired(Scene scene)
+    {
+        foreach (string path in QaSceneScan.Retired)
+        {
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                string prefix = root.name + "/";
+                Transform gone = path.StartsWith(prefix, System.StringComparison.Ordinal) ? root.transform.Find(path.Substring(prefix.Length)) : null;
+                if (gone == null)
+                    continue;
+                Object.DestroyImmediate(gone.gameObject);
+                Debug.Log($"[TimeDesk] Removed {path}: the builder no longer builds it (retired).");
+            }
+        }
+    }
+
+    /// <summary>
+    /// The scene integrity gate on the built layer (BUG-30): a GameObject with
+    /// a missing script, a renderer with a null or error material, or a
+    /// retired object still present is an error naming it.
+    /// </summary>
+    private static void CheckSceneIntegrity(Scene scene)
+    {
+        QaSceneScan.Findings f = QaSceneScan.Scan(scene);
+        foreach (string where in f.MissingScripts)
+            Debug.LogError($"[TimeDesk] Missing script on {where}: remove the component or the object (BUG-30).");
+        foreach (string where in f.BrokenMaterials)
+            Debug.LogError($"[TimeDesk] Null or error (magenta) material on {where} (BUG-30).");
+        foreach (string where in f.RetiredPresent)
+            Debug.LogError($"[TimeDesk] Retired object still in the scene: {where} (QaSceneScan.Retired).");
     }
 
     /// <summary>

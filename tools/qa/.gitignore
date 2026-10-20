@@ -1,0 +1,4 @@
+editor_runner/bin/
+editor_runner/obj/
+__pycache__/
+*.pyc

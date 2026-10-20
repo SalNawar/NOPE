@@ -1,0 +1,116 @@
+{
+  "name": "perf_day12",
+  "owner": "QA-RIG",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "BUG-65a: GC per call site (editor profiler) and per frame on day 12 with every item, idle then while dragging; frame times at call-next"
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "mark",
+      "name": "gcsites.start"
+    },
+    {
+      "op": "wait",
+      "n": 150
+    },
+    {
+      "op": "drag",
+      "name": "desk_sweep",
+      "path": "Wobble",
+      "x": 0.45,
+      "y": 0.3,
+      "x2": 0.6,
+      "y2": 0.35
+    },
+    {
+      "op": "drag",
+      "name": "desk_sweep_fast",
+      "path": "Fast",
+      "x": 0.6,
+      "y": 0.35,
+      "x2": 0.4,
+      "y2": 0.3
+    },
+    {
+      "op": "mark",
+      "name": "gcsites.stop"
+    },
+    {
+      "op": "gc",
+      "name": "steady",
+      "f": 5,
+      "n": 0
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "realtime",
+      "n": 1
+    },
+    {
+      "op": "recStart",
+      "name": "callnext"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "realtime",
+      "n": 0
+    }
+  ]
+}

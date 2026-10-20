@@ -1,0 +1,811 @@
+{
+  "name": "day_sequence",
+  "owner": "QA-RIG",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "Days 1 to 15 played in sequence (auto-decided shifts, closing time, Home, Sleep): each day's office reached by the night before it"
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d1_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d1_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d1_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 2,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d2_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d2_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d2_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 3,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d3_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d3_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d3_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 4,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d4_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d4_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d4_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 5,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d5_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d5_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d5_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 6,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d6_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d6_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d6_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 7,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d7_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d7_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d7_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 8,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d8_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d8_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d8_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 9,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d9_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d9_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d9_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 10,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d10_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d10_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d10_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 11,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d11_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d11_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d11_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d12_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d12_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d12_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 13,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d13_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d13_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d13_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 14,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d14_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d14_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d14_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 15,
+      "f": 240
+    },
+    {
+      "op": "probe",
+      "name": "d15_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AutoDecide",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 20
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d15_report"
+    }
+  ]
+}

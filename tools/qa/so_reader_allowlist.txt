@@ -1,0 +1,15 @@
+# SO fields nothing reads (BUG-73a, the SO-field-reader check: qa.so.readers, SoFieldReadersTests).
+# Each line: Class.field  # BUG part, the owner who deletes (or starts reading) it.
+# A field listed here does not fail the merge gate; the demo gate fails while any listed field is still unread
+# (qa.so.cleanup). A new dead field that is not listed fails both. INTEGRATION keeps this list: it drops a line when its
+# owner's merge deletes the field, and adds one only for a field it assigns to a later owner.
+# Measured on fix/p0-carve (f347060) by the scanner: 41 SO classes and 139 serializable types they hold, 1,495 fields.
+
+SoundBankSO.mixer               # BUG-73 (sound), FEEDBACK: written by SoundBankImporter, read by nothing (the groups are read)
+MotionKnobs.stampLift           # BUG-73b, STAMP: a stamp knob with no reader
+MotionKnobs.stampRiseSeconds    # BUG-73b, STAMP
+MotionKnobs.stampSlamSeconds    # BUG-73b, STAMP
+MotionKnobs.stampSquash         # BUG-73b, STAMP
+MotionKnobs.inkBloomSeconds     # BUG-73b, STAMP
+MotionKnobs.stampFeel           # BUG-73b, STAMP
+MotionKnobs.drawerStopHit       # BUG-73b, STAMP: a drawer knob with no reader
