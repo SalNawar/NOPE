@@ -7,7 +7,8 @@ using NUnit.Framework;
 /// the office finish's exposure, Neutral tonemapping and contrast, the mat's
 /// corners clear luma 55 with a margin and the pool's centre reaches 60) and
 /// the lamp reads as a pool (a luma step and a hue that fall off from its
-/// centre); the lamp switches on at the afternoon dip, visibly, and only then
+/// centre); the lamp switches on at the sunset (before the plan's afternoon dip,
+/// H3), visibly, and only then
 /// adds its warm share; the colour follows the room by day and the lamp at night.
 /// </summary>
 public class DeskLightingTests
@@ -188,7 +189,7 @@ public class DeskLightingTests
         Assert.That(dip, Is.InRange(15.75f, 16.75f), "within the dusk, by the plan's afternoon dip (H3, 16:45)");
         Assert.AreEqual(16.5f, dip, 1f / 60f, "the sunset, with the shipped knob: a quarter of an hour before H3 (a flagged deviation)");
         Assert.AreEqual(Knobs.LampOnAtEvening, HallDayCycle.Evening(dip, Cycle), 1e-3f, "where the hall's evening reaches the lamp's knob");
-        Assert.IsFalse(DeskLighting.LampOn(dip - 1f / 60f, Cycle, Knobs), "off a minute before the dip");
+        Assert.IsFalse(DeskLighting.LampOn(dip - 1f / 60f, Cycle, Knobs), "off a minute before the switch-on");
         Assert.IsTrue(DeskLighting.LampOn(dip + 1f / 60f, Cycle, Knobs), "on a minute after it");
         for (float hour = 9f; hour < dip - 1f / 60f; hour += 1f / 60f)
             Assert.IsFalse(DeskLighting.LampOn(hour, Cycle, Knobs), $"{hour:0.00}: never earlier");

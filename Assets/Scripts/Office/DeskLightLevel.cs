@@ -12,7 +12,8 @@ using UnityEngine;
 /// its share away from the pool), writing them only when they change. The
 /// level never passes 1 (DeskLighting caps the lamp at the room's deficit),
 /// so <see cref="Light"/> never clamps on a sprite's vertex colour. The lamp switches
-/// on at the afternoon dip (the hall's evening reaches the lamp's knob) with a
+/// on in the dusk, when the hall's evening reaches the lamp's knob (the sunset,
+/// 16:30, with the shipped knob: before the plan's afternoon dip H3), with a
 /// click and a filament's warm-up (at once with reduced motion; a lamp already
 /// on when the office opens is simply on). <see cref="Light"/> is the uniform
 /// light (DeskLight()'s value) as a sprite tint: the traveller's figure takes
@@ -94,7 +95,7 @@ public sealed class DeskLightLevel : MonoBehaviour
             _since = -1f;
         else if (_since < 0f)
         {
-            // Already on as the office opens: simply on. Switched on at the dip: the click and the warm-up.
+            // Already on as the office opens: simply on. Switched on in the dusk: the click and the warm-up.
             _since = _first ? 999f : 0f;
             if (!_first)
                 CueSounds.Play(SoundCues.RelayClack, _click);

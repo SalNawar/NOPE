@@ -48,7 +48,7 @@ public static class DeskLighting
     /// </summary>
     public const float PoolContrastLuma = 8f;
 
-    /// <summary>The least luma the pool's centre gains as the lamp switches on at the dip, after the finish (FIX_PLAN LIGHT: "a visible lamp switch-on event at the dip"). Proposal (ours).</summary>
+    /// <summary>The least luma the pool's centre gains as the lamp switches on (LampOnHour), after the finish (FIX_PLAN LIGHT: "a visible lamp switch-on event at the dip"). Proposal (ours).</summary>
     public const float SwitchOnLuma = 5f;
 
     /// <summary>
