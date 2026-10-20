@@ -13,9 +13,11 @@ using UnityEngine.UI;
 /// their screen positions), so the test measures the real pointer events, not
 /// the rig's own numbers.
 /// </summary>
-public sealed class QaDragProbe : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IDragHandler, IPointerUpHandler
+public sealed class QaDragProbe : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    /// <summary>True once the pointer entered (a hover was delivered).</summary>
+    private bool _inside;
+
+    /// <summary>True once the pointer entered (a hover was delivered), or when it was already over the target as recording began.</summary>
     public bool Hovered { get; private set; }
 
     /// <summary>Where the press was delivered (screen pixels).</summary>
@@ -27,16 +29,19 @@ public sealed class QaDragProbe : MonoBehaviour, IPointerEnterHandler, IPointerD
     /// <summary>Drag events delivered.</summary>
     public int Drags { get; private set; }
 
-    /// <summary>Forgets everything recorded.</summary>
+    /// <summary>Forgets everything recorded; a pointer still over the target (its enter delivered earlier, no exit since) stays a hover.</summary>
     public void Clear()
     {
-        Hovered = false;
+        Hovered = _inside;
         Down = Up = null;
         Drags = 0;
     }
 
     /// <summary>Records the hover.</summary>
-    public void OnPointerEnter(PointerEventData eventData) => Hovered = true;
+    public void OnPointerEnter(PointerEventData eventData) => Hovered = _inside = true;
+
+    /// <summary>Records that the pointer left (the next path's hover must be a new enter).</summary>
+    public void OnPointerExit(PointerEventData eventData) => _inside = false;
 
     /// <summary>Records the press position.</summary>
     public void OnPointerDown(PointerEventData eventData) => Down = eventData.position;
