@@ -15793,6 +15793,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "dress and black scialle",
+      "details": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Mid-1890s dress in dark wool: a fitted bodice with a high collar, puffed leg-of-mutton sleeves and a smooth, bell-shaped, floor-length skirt. A large black silk scialle (shawl) with a long knotted fringe is draped over the shoulders and crossed at the chest.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_f_italy_industrial.",
+      "flags": {
+        "label": "dress and black scialle"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_industrial",
+      "prompt": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Mid-1890s dress in dark wool: a fitted bodice with a high collar, puffed leg-of-mutton sleeves and a smooth, bell-shaped, floor-length skirt. A large black silk scialle (shawl) with a long knotted fringe is draped over the shoulders and crossed at the chest.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_f_italy_industrial.\nDress reference mannequin dark aubergine wool 1895 highcollar dress fittedbodice leg-of-mutton sleeves smooth bellshape floorlengthskirt, black silk scialle with long knottedfringe crossed at chest and drapedshoulders; both arms free. Brownclosedleatherboots visiblehem. No hairhatjewelry. Exact scalp164chin324soles1440center512neutralpose,1024x1536magentaheadhands#FF00FFgreenbackground#00FF00. Late1980s handinked anime tactilewool silkgrain celshading, ordinary civilian wornfabric.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2cfc187f-d3ff-4591-8831-853b8576da06.png",
+      "path": "Raw/outfit_f_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7da934807356acf3167a8dc5e2da3709ebac8167c870d1f573c221bbbfe636dc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_industrial__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "dress and black scialle",
+      "details": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Mid-1890s dress in dark wool: a fitted bodice with a high collar, puffed leg-of-mutton sleeves and a smooth, bell-shaped, floor-length skirt. A large black silk scialle (shawl) with a long knotted fringe is draped over the shoulders and crossed at the chest.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_f_italy_industrial.",
+      "flags": {
+        "label": "dress and black scialle"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_italy_industrial",
+      "prompt": "Edit FIRST costume arms sleeves and shawl localfolds matching SECONDguide: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Same darkaubergine highcollar1895dress legofmuttonsleeves black fringed silk scialle crosschest brownboots. Shawl folds naturally and hands in front offringe whereoverlap. Preserve headtorso skirtfeet and scale.1024x1536 scalp164chin324soles1440center512 exposedheadhands#FF00FF background#00FF00. Late1980s handinked anime texturedfabric celshadows. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5d3d1e10-0ef9-4069-8896-f7e3e97996f6.png",
+      "path": "Raw/outfit_f_italy_industrial__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7b1b598140469fa285fc285017806545adc2785bfd1f1d5b5e471b584151955e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_industrial__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "dress and black scialle",
+      "details": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Mid-1890s dress in dark wool: a fitted bodice with a high collar, puffed leg-of-mutton sleeves and a smooth, bell-shaped, floor-length skirt. A large black silk scialle (shawl) with a long knotted fringe is draped over the shoulders and crossed at the chest.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_f_italy_industrial.",
+      "flags": {
+        "label": "dress and black scialle"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_italy_industrial",
+      "prompt": "Edit FIRST costume arms sleeves and shawl localfolds matching SECONDguide: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Same darkaubergine highcollar1895dress legofmuttonsleeves black fringed silk scialle crosschest brownboots. Shawl folds naturally and hands in front offringe whereoverlap. Preserve headtorso skirtfeet and scale.1024x1536 scalp164chin324soles1440center512 exposedheadhands#FF00FF background#00FF00. Late1980s handinked anime texturedfabric celshadows. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-857ab941-142f-44f8-b9ee-af516eb2eceb.png",
+      "path": "Raw/outfit_f_italy_industrial__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ebcacd7a6776dad550dab2e2e3da05fac867f10c9b241d1f394d05f4b0ce437c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_industrial__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "dress and black scialle",
+      "details": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Mid-1890s dress in dark wool: a fitted bodice with a high collar, puffed leg-of-mutton sleeves and a smooth, bell-shaped, floor-length skirt. A large black silk scialle (shawl) with a long knotted fringe is draped over the shoulders and crossed at the chest.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_f_italy_industrial.",
+      "flags": {
+        "label": "dress and black scialle"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_italy_industrial",
+      "prompt": "Edit FIRST costume arms sleeves and shawl localfolds matching SECONDguide: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Same darkaubergine highcollar1895dress legofmuttonsleeves black fringed silk scialle crosschest brownboots. Shawl folds naturally and hands in front offringe whereoverlap. Preserve headtorso skirtfeet and scale.1024x1536 scalp164chin324soles1440center512 exposedheadhands#FF00FF background#00FF00. Late1980s handinked anime texturedfabric celshadows. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b27788d5-9bf7-4423-b6a2-4eddfefa365b.png",
+      "path": "Raw/outfit_f_italy_industrial__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1479dd6a9e851e289a1cb432535d3222ed4139aa31f2828263c7485ad8737577",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "high curled chignon",
+      "details": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Swept up into a high chignon with a soft curled fringe\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw hair_f_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "high curled chignon"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_industrial",
+      "prompt": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Swept up into a high chignon with a soft curled fringe\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw hair_f_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hair colored medium warmbrown swept highchignon coiled atopbackhead with soft short curledfringe. No hatjewelrypins. ReplaceALLdressshawlshoes with opaque plainmagenta longshirttrouserssocks facehands#FF00FF. Exact reference scalp164chin324soles1440center512 1024x1536 green#00FF00. Inked late1980sanime delicate strands pigmentgrain celshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6400f9be-c024-49bf-829e-0deb5d34fabe.png",
+      "path": "Raw/hair_f_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fba829053204373932d3a7a5b1cb87f5c3ff499739aa73bd4f237d61fabef49c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "coral beads",
+      "details": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Multi-strand red coral bead necklace worn over the high collar\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw accessory_f_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "coral beads",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_italy_industrial",
+      "prompt": "Subject: woman of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Multi-strand red coral bead necklace worn over the high collar\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw accessory_f_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly necklace colored: three strands small irregular redcoral beads worn snugly over highcollar baseofneck upperchest, fromy340to405. No pendant or otherjewelry. Replace entire dress shawl boots with opaque magenta highnecklongshirt fulltrousers socks facehands#FF00FF. Baldhead. Preserveheadscalp164chin324soles1440center512 1024x1536green#00FF00. Handinkedlate1980s anime subtlegrain outlinedcoralbeads celshading no3D.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1293cd12-0fde-4bc2-92ac-2aa3d044ed81.png",
+      "path": "Raw/accessory_f_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ff75a21af5ed869191b4dff627ba96c5f9f0f1cc4ae06f521a6d2cb11cebd9c2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "slim mohair suit",
+      "details": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Slim, sharply tailored single-breasted suit in charcoal or midnight mohair-wool, with a short jacket, narrow lapels and narrow cropped trousers. Worn with a crisp white shirt and thin dark tie (or a fine-knit black turtleneck, the 'dolcevita') and polished slip-on loafers.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_m_italy_modern.",
+      "flags": {
+        "label": "slim mohair suit"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_modern",
+      "prompt": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Slim, sharply tailored single-breasted suit in charcoal or midnight mohair-wool, with a short jacket, narrow lapels and narrow cropped trousers. Worn with a crisp white shirt and thin dark tie (or a fine-knit black turtleneck, the 'dolcevita') and polished slip-on loafers.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_m_italy_modern.\nDress reference male mannequin in charcoal mohairwool slim1960singlebreastedsuit shortjacket narrowlapels croppednarrowtrousers crispwhiteshirt thinblacktie blackleathersliponloafers black socks. No pinstripes hat hair beard jewelry props. Preserve body width/headfeet andneutralarms slightlyaway. scalp239chin400soles1421center5121024x1536 magenta exposedheadhands#FF00FF green#00FF00. Handinkedlate1980s anime tactilepaintedcloth pigmentgrain celshading ordinary civilian.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7ae9093b-8092-4fd6-980a-228a88dab423.png",
+      "path": "Raw/outfit_m_italy_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "de52951471e672a829475f66c6ccce66ff438fd0b4f6e76025747cedfe428158",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_modern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "slim mohair suit",
+      "details": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Slim, sharply tailored single-breasted suit in charcoal or midnight mohair-wool, with a short jacket, narrow lapels and narrow cropped trousers. Worn with a crisp white shirt and thin dark tie (or a fine-knit black turtleneck, the 'dolcevita') and polished slip-on loafers.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_m_italy_modern.",
+      "flags": {
+        "label": "slim mohair suit"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_italy_modern",
+      "prompt": "Edit FIRST costume arms sleeves only matching SECONDposeguide: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Same charcoal1960suit whiteshirt narrowblacktie croppedtrousers blacksocks blackloafers. Preserve head torso legsfeet scale. Natural jacket sleevefolds.1024x1536 scalp239chin400soles1421center512 magentaheadhands#FF00FF green#00FF00background. Handinked1980sanime texturedmohair celshading. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-16adfad1-9a0e-46fd-9e88-41c215e59dd6.png",
+      "path": "Raw/outfit_m_italy_modern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4ac9dbc5b430a787c318826c005f5aa0d46bcae6449d8583723f34345b792613",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_modern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "slim mohair suit",
+      "details": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Slim, sharply tailored single-breasted suit in charcoal or midnight mohair-wool, with a short jacket, narrow lapels and narrow cropped trousers. Worn with a crisp white shirt and thin dark tie (or a fine-knit black turtleneck, the 'dolcevita') and polished slip-on loafers.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_m_italy_modern.",
+      "flags": {
+        "label": "slim mohair suit"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_italy_modern",
+      "prompt": "Edit FIRST costume arms sleeves only matching SECONDposeguide: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Same charcoal1960suit whiteshirt narrowblacktie croppedtrousers blacksocks blackloafers. Preserve head torso legsfeet scale. Natural jacket sleevefolds.1024x1536 scalp239chin400soles1421center512 magentaheadhands#FF00FF green#00FF00background. Handinked1980sanime texturedmohair celshading. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-28970ee9-4e33-4165-a0e3-b104ef0c73ad.png",
+      "path": "Raw/outfit_m_italy_modern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "01a43ebef5801a5c77f8f9c612dbfbcdaf4b41b9606ffe2e3dee229a59bf1518",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_modern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "slim mohair suit",
+      "details": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Slim, sharply tailored single-breasted suit in charcoal or midnight mohair-wool, with a short jacket, narrow lapels and narrow cropped trousers. Worn with a crisp white shirt and thin dark tie (or a fine-knit black turtleneck, the 'dolcevita') and polished slip-on loafers.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_m_italy_modern.",
+      "flags": {
+        "label": "slim mohair suit"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_italy_modern",
+      "prompt": "Edit FIRST costume arms sleeves only matching SECONDposeguide: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Same charcoal1960suit whiteshirt narrowblacktie croppedtrousers blacksocks blackloafers. Preserve head torso legsfeet scale. Natural jacket sleevefolds.1024x1536 scalp239chin400soles1421center512 magentaheadhands#FF00FF green#00FF00background. Handinked1980sanime texturedmohair celshading. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-dc084326-61aa-4c25-bf10-3c456bfba070.png",
+      "path": "Raw/outfit_m_italy_modern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a7a8e7299b2a5b91022085fbd4c5f4089f9c502734e0321fe8e03a64b0017bda",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "slicked-back hair",
+      "details": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Short, neatly slicked back with pomade\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw hair_m_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "slicked-back hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_modern",
+      "prompt": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Short, neatly slicked back with pomade\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw hair_m_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hair colored nearblack brown short slicked straightback with pomade modest receding temples, restrained shine defined inkstrands. No beardhatjewelry. Replace entire suitshoes with opaque plainmagenta longshirt trousers socks facehands#FF00FF. Same exacthead scalp239chin400feet1421center512 1024x1536 solidgreen#00FF00. Texturedlate1980sanime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-436d50e0-6bc0-41aa-b963-401ea4cd5c3d.png",
+      "path": "Raw/hair_m_italy_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8c07bc5c7e56a7d3cfddbc8b7f133a907aac477930621c8137faa8e847a61738",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_italy_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "dark shades",
+      "details": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Dark sunglasses with solid black lenses and heavy black frames\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw accessory_m_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "dark shades",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_italy_modern",
+      "prompt": "Subject: man of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Dark sunglasses with solid black lenses and heavy black frames\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw accessory_m_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly sunglasses colored heavyblack1960frames opaque blacklenses subtle celhighlight no transparency no logo. Fit exact nose eyes of reference. Replace all suit shoes with plainopaque magenta longshirttrouserssocks baldhead facehands#FF00FF. Preservehead239chin400feet1421center5121024x1536green#00FF00. Late1980s inkedanime, no hairhatbeard.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-275adc21-371d-4d8a-88b0-6a1c7eb16297.png",
+      "path": "Raw/accessory_m_italy_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "573eabe15e767680968887471a52a138e9fa93f6a13a3855e3120bf3c2b4b394",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "print sheath dress",
+      "details": "Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Fitted knee-length sleeveless sheath dress with a narrow waist in a bold, swirling kaleidoscopic silk print (burnt orange, ochre, teal-blue and black) in the 1960s Florentine style, with pointed low-heeled pumps.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_f_italy_modern.",
+      "flags": {
+        "label": "print sheath dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_modern",
+      "prompt": "FIRST image is absolute registration guide. Dress FIRST figure with exact costume from SECOND: same orange ochre teal black swirl sleeveless knee sheath and lowheel black pumps. Keep FIRST head, legs, feet placement exactly. Ground baseline y1440, scalp164 chin324 center512 1024x1536. Do not copy SECOND elongated legs. Exposed allskin eyes magenta#FF00FF green#00FF00background. Inked1980s texturedanime. No hairhatjewelry.\nReview note: repeated foot-registration correction did not fully remove the approximately 18px low shoe baseline; raw candidate only, must reject or regenerate during contract registration if outside tolerance.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-78785cd9-9d46-4474-ad1e-b178d853132e.png",
+      "path": "Raw/outfit_f_italy_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5a50ebf3040e37d72af948b92b4a05f6ed44659ba33f06f47726f3f7ce214dcc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_modern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "print sheath dress",
+      "details": "Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Fitted knee-length sleeveless sheath dress with a narrow waist in a bold, swirling kaleidoscopic silk print (burnt orange, ochre, teal-blue and black) in the 1960s Florentine style, with pointed low-heeled pumps.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_f_italy_modern.",
+      "flags": {
+        "label": "print sheath dress"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_italy_modern",
+      "prompt": "Edit FIRST image arms only matching SECOND poseguide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Same sleeveless orangeochretealblack swirlingprint knee-length sheath, same blacklowheelpumps. Preserve head torso dresslegsfeet and scale. Exact reference face, no prettifying. Exposedskin all magenta#FF00FF green#00FF00background1024x1536. Late1980s handinked anime textilegraincelshadows. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aff4941f-bb29-4a2b-aafc-89973b631756.png",
+      "path": "Raw/outfit_f_italy_modern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "edf224344d4dd04a05281a685b999be45ef330c487d897b46c84712e876685d4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_modern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "print sheath dress",
+      "details": "Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Fitted knee-length sleeveless sheath dress with a narrow waist in a bold, swirling kaleidoscopic silk print (burnt orange, ochre, teal-blue and black) in the 1960s Florentine style, with pointed low-heeled pumps.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_f_italy_modern.",
+      "flags": {
+        "label": "print sheath dress"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_italy_modern",
+      "prompt": "Edit FIRST image arms only matching SECOND poseguide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Same sleeveless orangeochretealblack swirlingprint knee-length sheath, same blacklowheelpumps. Preserve head torso dresslegsfeet and scale. Exact reference face, no prettifying. Exposedskin all magenta#FF00FF green#00FF00background1024x1536. Late1980s handinked anime textilegraincelshadows. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-279b5085-653c-4d4f-9db7-71ad7fbbd1b2.png",
+      "path": "Raw/outfit_f_italy_modern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a21cc5ada08a00f81f985dfcd44881246ef47348e78eccfbb255e340df100ba",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_modern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "print sheath dress",
+      "details": "Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Fitted knee-length sleeveless sheath dress with a narrow waist in a bold, swirling kaleidoscopic silk print (burnt orange, ochre, teal-blue and black) in the 1960s Florentine style, with pointed low-heeled pumps.\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw outfit_f_italy_modern.",
+      "flags": {
+        "label": "print sheath dress"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_italy_modern",
+      "prompt": "Edit FIRST image arms only matching SECOND pose guide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Same sleeveless orange ochre teal black swirling print knee-length sheath, same black low heel pumps. Preserve head torso dress legs feet and scale. Exact reference face, no prettifying. Exposed skin all magenta #FF00FF, green #00FF00 background 1024x1536. Late 1980s hand inked anime textile grain cel shadows. No hair hat jewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d7567a97-f943-4f9a-b94e-a728418310b5.png",
+      "path": "Raw/outfit_f_italy_modern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c61b047c6e98fb9e9a833b82d02dd5389343d6efcf6d709a7ab4132f7e5c2dec",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "bouffant",
+      "details": "Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Short, voluminous backcombed bouffant, left uncovered\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw hair_f_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "bouffant"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_modern",
+      "prompt": "Create modular HAIR ONLY layer based on exact reference head and neutral body placement. Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Short, voluminous backcombed bouffant, left uncovered\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw hair_f_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Short voluminous backcombed dark chestnut bouffant with soft swept fringe, 1960 Rome. Replace ALL colorful costume and shoes with featureless opaque magenta long sleeve shirt, straight full-length trousers and socks. Face hands also magenta. Green #00FF00 background. Only hair is colored. Do not change reference face, head size, head position, body pose or foot positions. Full canvas 1024x1536. Late 1980s inked anime with hand painted pigment texture and restrained cel shading. No jewelry, no hat, no modern glamour face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fcdd4280-6dd6-49ca-a677-a2aee61df368.png",
+      "path": "Raw/hair_f_italy_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8296b5fcfb5709fd86228056d5c4905def155724a398960e14fbf555d63cb22f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_italy_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "country": "italy",
+      "era": "modern",
+      "label": "cat-eye shades",
+      "details": "Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Cat-eye sunglasses with dark lenses\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw accessory_f_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "cat-eye shades",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_italy_modern",
+      "prompt": "Modular accessory layer. Add 1960 Italian cat eye sunglasses, elegant upswept black frames with opaque dark lenses, precisely fitting eyes of reference face. Subject: woman of Dolce Vita Rome; Rome during the economic miracle, the year of 'La Dolce Vita', 1960.\nDraw: Cat-eye sunglasses with dark lenses\nAvoid: Fascist-era black shirt, fasces or any 1920s-40s regime insignia; military or carabinieri uniforms; mafia or gangster caricature (pinstripes, fedora, violin case); pizza-chef, gondolier striped shirt and straw boater stereotypes; Vespa or other held or ridden props; priest's collar or clerical dress (sacred); headscarf knotted under the chin (now Britain modern's tell); woven crossbody bag or fisherman's cap (reads 1970s Greece); orange-padded headphones or lapel badge (reads Japan 1980)\nOutput one full-canvas raw accessory_f_italy_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. ONLY sunglasses colored. Keep bald magenta head, same face head size and position. Replace dress shoes and ALL costume with opaque flat magenta long sleeve shirt, straight full length trousers and socks. Magenta hands face. Green #00FF00 background 1024x1536. Same neutral body position. Late 1980s hand inked anime restrained cel shading, subtle pigment grain. No hair, no other jewelry or accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1e800b01-674a-4899-aeea-bdec88cc8508.png",
+      "path": "Raw/accessory_f_italy_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aa3307d7aa7220201c47a5480535dbc89c1d3489223ef3585998c1c24b4f5cf4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "short exomis tunic",
+      "details": "",
+      "flags": {
+        "label": "short exomis tunic"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_ancient2",
+      "prompt": "Historical modular costume source, Hellenistic Syracuse Sicily c230BCE ordinary male artisan. Use exact reference mannequin proportions, neutral arms, head and feet placement. Dress him in a short coarse woven undyed warm flax EXOMIS tunic ending just above knees, fastened ONLY on wearer's LEFT shoulder (viewer right), leaving wearer's right shoulder free, narrow plain brown cord belt, worn brown leather strap sandals. Practical slightly weathered handwoven wool, restrained faded rust edge detail. No armor weapons jewelry hair beard hat tools or props. Exposed skin including face all flat magenta #FF00FF; tunic opaque fully covering groin and torso below diagonal neckline. Green #00FF00 flat background 1024x1536. Bald scalp y239 chin400 soles1421 center512 exactly reference. Late 1980s hand inked anime, confident imperfect linework, subtle painted textile pigment grain and cel shadows, not glossy or plastic. Empty hands. Preserve ordinary reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f8ce9b56-a79d-4d4a-9da1-b45b8a44896e.png",
+      "path": "Raw/outfit_m_italy_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b83585a954e257f7bb76388e85a47442b96cfe3662071d0d11bb8a9cb5cef349",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "short exomis tunic",
+      "details": "",
+      "flags": {
+        "label": "short exomis tunic"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_italy_ancient2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Keep exact male head face torso tunic hem legs feet scale and position. Same warm flax coarse woven short exomis fastened left shoulder, rust border cord belt leather sandals. Natural folds from arm movement only. Flat magenta #FF00FF exposed skin, green #00FF00 background. 1024x1536. Late 1980s inked anime handpainted cloth pigment grain and cel shading. No hair beard hat jewelry props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-41a7bb06-54e5-46cd-84ce-06071fef6dce.png",
+      "path": "Raw/outfit_m_italy_ancient2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4871dd460cdbd3b68e32f358aa13d4cdc9bdff82597fcce19c8c4c573eca2b84",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "short exomis tunic",
+      "details": "",
+      "flags": {
+        "label": "short exomis tunic"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_italy_ancient2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Keep exact male head face torso tunic hem legs feet scale and position. Same warm flax coarse woven short exomis fastened left shoulder, rust border cord belt leather sandals. Natural folds from arm movement only. Flat magenta #FF00FF exposed skin, green #00FF00 background. 1024x1536. Late 1980s inked anime handpainted cloth pigment grain and cel shading. No hair beard hat jewelry props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7b46dd9f-3ae9-4427-aea3-75d715c56acc.png",
+      "path": "Raw/outfit_m_italy_ancient2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e56772b433aab14006a65e474d4529c19e9b4b9abf68ebfab8933b094503594c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_ancient2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "short exomis tunic",
+      "details": "",
+      "flags": {
+        "label": "short exomis tunic"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_italy_ancient2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Keep exact male head face torso tunic hem legs feet scale and position. Same warm flax coarse woven short exomis fastened left shoulder, rust border cord belt leather sandals. Natural folds from arm movement only. Flat magenta #FF00FF exposed skin, green #00FF00 background. 1024x1536. Late 1980s inked anime handpainted cloth pigment grain and cel shading. No hair beard hat jewelry props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-28ef877e-15d9-44d9-8f58-2979e15be858.png",
+      "path": "Raw/outfit_m_italy_ancient2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "86ca96f1ffe3da24159a9c13f5fd20b188e0c4e09fbc0792b19fbf8a5e507654",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "wind-blown curls",
+      "details": "",
+      "flags": {
+        "label": "wind-blown curls"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_ancient2",
+      "prompt": "Historical modular HAIR ONLY source. Hellenistic Syracuse male wind-blown curls: uneven tousled short grey and charcoal curls, slightly receding temples, practical mature artisan hair, not glamour styled. Fit exact reference head without altering face/head location/scale. Replace ALL costume and sandals with plain opaque magenta long sleeve shirt, full length straight trousers and socks, flat magenta face hands. ONLY hair colored, no beard hat jewelry. Keep reference neutral pose and feet. Flat green #00FF00 background 1024x1536. Late 1980s inked anime with subtle pigment texture restrained cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c82e4cee-c473-42c0-912b-12ca4099e87a.png",
+      "path": "Raw/hair_m_italy_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "514c539db29ff10605385e94d5a0c0b0c784dcb269ce12653b8e3b5852ce7621",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_italy_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "full grey beard",
+      "details": "",
+      "flags": {
+        "label": "full grey beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_italy_ancient2",
+      "prompt": "Historical modular FACIAL HAIR ONLY layer on exact reference head. Full grey beard for Syracuse male artisan c230BCE, naturally irregular curly grey beard covering cheeks jaw and chin, rounded end to upper chest y460, grey moustache connected, mouth unobscured. Not sculpted glamour beard. Keep exact face eyes nose and bald head size/location. No scalp hair hat jewelry. Replace ALL costume/sandals with flat opaque magenta long sleeve shirt, full length straight trousers socks. Face hands magenta. Only beard colored. Exact neutral pose and feet. Green #00FF00 background 1024x1536. Late 1980s hand inked anime pigment texture restrained cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-41ac12b5-fec5-4268-ae50-7c442e1a320c.png",
+      "path": "Raw/facialhair_m_italy_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2eb22a2691a5f4d7b76dd64bbb8fa81d66738c2f380ca820b0af8c68fcbdb4e0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_italy_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "pilos cap",
+      "details": "",
+      "flags": {
+        "label": "pilos cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_italy_ancient2",
+      "prompt": "Historical modular HAT ONLY source: Hellenistic Syracuse c230 BCE male artisan pilos cap, simple unadorned warm brown felt conical brimless cap with softly rounded peak, not metal helmet, no horns no badges no brim. Fits exact bald reference head, face/eyes/ears unchanged. Only cap colored. Replace ALL costume and sandals with flat opaque magenta long sleeve shirt full length trousers socks. Flat magenta face hands. No hair beard jewelry tools. Keep neutral pose scale coordinates. Green #00FF00 background 1024x1536. Late 1980s hand inked anime subtle felt pigment grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c1c3ae1-7182-400c-b2e0-3405c4ef611d.png",
+      "path": "Raw/headwear_m_italy_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bcbe7d31cfcacb72fc1eb3139da2e1c378dbf39e999e106a913da1522eb5a1a8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
