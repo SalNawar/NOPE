@@ -20,7 +20,15 @@ using UnityEngine;
 /// </summary>
 public static class HallFxRig
 {
+    /// <summary>
+    /// Registers the ops before the first scene of a play run (the editor and the QA player) and, in the editor,
+    /// also at every domain load, so the edit-mode scenario check (QaEditorGateTests.EveryScenario_Reads_WithKnownOps)
+    /// knows them without a play run. Registering twice just replaces the same bodies.
+    /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+#if UNITY_EDITOR
+    [UnityEditor.InitializeOnLoadMethod]
+#endif
     private static void Register()
     {
         QaRunner.RegisterOp("hallPortals", (runner, step) => Show(step.n != 0));
