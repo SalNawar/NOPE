@@ -12,8 +12,9 @@ using UnityEngine;
 /// starts each day with the world (BeginDay): each object stands on the desk
 /// while its upgrade is owned; one delivered this morning appears when the
 /// supply crate is opened (a click on it, or the shift opening), and so do
-/// the scanner's add-ons delivered that morning (BUG-60a: one arrival path,
-/// nothing shows before the crate opens). The crate never brings what
+/// the scanner's add-ons and a RING SERVICE sticker delivered that morning
+/// to a panel already on the desk (DeskDeliveries.StickersToWait) (BUG-60a:
+/// one arrival path, nothing shows before the crate opens). The crate never brings what
 /// already stood on the desk (DeskDeliveries.ToUnpack: BUG-28c/28d). Each
 /// object is laid on its home of the desk home map (DeskLayoutSettings,
 /// Lay, through DeskHardware.Lay), shrunk to fit it when it is bigger, and
@@ -163,6 +164,8 @@ public sealed class DeskUpgrades : MonoBehaviour
                     lines[p.Number - 1] = PortalText.TooltipLine(p, r => PortalsWindow.EraName(library, r), r => PortalsWindow.PlaceName(library, r), UiText.Get);
             ringPanel.SetDay(modules, lines);
             Show(ringPanel, UpgradeObjects.PanelShown(modules), UpgradeObjects.PanelNew(modules));
+            foreach (int i in DeskDeliveries.StickersToWait(modules))
+                Wait(ringPanel.Sticker(i)); // a repair for a panel already on the desk: its sticker waits for the crate too (BUG-60a)
         }
 
         if (crate != null)

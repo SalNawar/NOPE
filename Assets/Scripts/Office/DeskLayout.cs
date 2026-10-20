@@ -146,9 +146,13 @@ public sealed class DeskLayoutSettings
         return home != null ? new DeskBay(home) : null;
     }
 
-    /// <summary>What is wrong with the plan (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight); empty when it holds.</summary>
-    public List<string> Problems() =>
-        DeskArrangement.HomeProblems(homes, fixedArt, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), minVisible);
+    /// <summary>What is wrong with the plan (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
+    public List<string> Problems()
+    {
+        List<string> problems = DeskArrangement.HomeProblems(homes, fixedArt, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), minVisible);
+        problems.AddRange(DeskArrangement.ClickBoxProblems(homes, fixedArt, DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox));
+        return problems;
+    }
 }
 
 /// <summary>
@@ -324,6 +328,17 @@ public static class DeskLayout
         if (string.IsNullOrEmpty(id) || target == null)
             return;
         Objects[id] = target;
+    }
+
+    /// <summary>The home id of the tracked object <paramref name="t"/> stands under (itself or a part of it: one desk object's click boxes), or null (the QA rig's click-box check, BUG-4a).</summary>
+    public static string HomeIdOf(Transform t)
+    {
+        if (t == null)
+            return null;
+        foreach (KeyValuePair<string, Transform> tracked in Objects)
+            if (tracked.Value != null && t.IsChildOf(tracked.Value))
+                return tracked.Key;
+        return null;
     }
 
     /// <summary>

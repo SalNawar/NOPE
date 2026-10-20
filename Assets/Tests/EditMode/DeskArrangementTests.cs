@@ -7,7 +7,8 @@ using NUnit.Framework;
 /// The desk's plan (the desk layout spec; the desk home map Saleh approved on
 /// 2026-10-20): yaw-aware footprints, the home map's gate (one home per id,
 /// none on the mat, apart, clear of the fixed art, clean slide sweeps, seen
-/// from the office camera), the approved map itself, a decoration starting
+/// from the office camera, every two shown objects' click boxes apart; the
+/// real boxes judged by ClickBoxClashes: BUG-4a), the approved map itself, a decoration starting
 /// in the decor zone and resting where it is let go off the mat (nudged a few
 /// centimetres at most), and the saved places.
 /// </summary>
@@ -153,6 +154,83 @@ public class DeskArrangementTests
         List<string> problems = DeskArrangement.HomeProblems(DeskHomeMap.Approved(), DeskHomeMap.FixedArt(), DeskHomeMap.Mat, DeskHomeMap.DeskTop,
                                                              DeskHomeMap.SlideReach, DeskHomeMap.OfficeEye, 0.9f);
         CollectionAssert.IsEmpty(problems, string.Join("\n", problems));
+    }
+
+    [Test]
+    public void TheApprovedMap_KeepsEveryTwoShownObjectsClickBoxesApart()
+    {
+        List<string> problems = DeskArrangement.ClickBoxProblems(DeskHomeMap.Approved(), DeskHomeMap.FixedArt(), DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox);
+        CollectionAssert.IsEmpty(problems, string.Join("\n", problems));
+    }
+
+    [Test]
+    public void ClickBoxProblems_GrowBuiltBoxesByThePad_NotTheArts()
+    {
+        // Two built objects 1.5 cm apart: their 1 cm pads overlap.
+        var built = new[]
+        {
+            new DeskHome("a", 0f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Always),
+            new DeskHome("b", 0.115f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.WhenOwned),
+        };
+        StringAssert.Contains("'a' and 'b' overlap", string.Join("\n", DeskArrangement.ClickBoxProblems(built, null, 0.01f, null)));
+        // A built object 1.5 cm from the fixed art (the art's box is its bounds, no pad): apart.
+        var nearArt = new[] { new DeskHome("a", 0f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Always) };
+        var art = new[] { new DeskHome("pc", 0.115f, 0f, 0.10f, 0.10f, 0f, 0.6f, HomeShow.Always) };
+        CollectionAssert.IsEmpty(DeskArrangement.ClickBoxProblems(nearArt, art, 0.01f, null));
+        // ... but 0.5 cm from it: the built box reaches into the art's.
+        var touching = new[] { new DeskHome("a", 0f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Always) };
+        var close = new[] { new DeskHome("pc", 0.105f, 0f, 0.10f, 0.10f, 0f, 0.6f, HomeShow.Always) };
+        StringAssert.Contains("'a' and 'pc' overlap", string.Join("\n", DeskArrangement.ClickBoxProblems(touching, close, 0.01f, null)));
+        // A moved art object (artParts) keeps the art's bounds, and a home that shows nothing has no box.
+        var moved = new[]
+        {
+            new DeskHome("phone", 0f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Always, HomeSlide.None, "Clean_Phone"),
+            new DeskHome("mouse", 0.115f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Always, HomeSlide.None, "Clean_Mouse"),
+            new DeskHome("bell", -0.115f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Reserved),
+        };
+        CollectionAssert.IsEmpty(DeskArrangement.ClickBoxProblems(moved, null, 0.01f, null));
+        // A shown object that takes no click (the deal tray's plate) has no box to keep apart.
+        CollectionAssert.IsEmpty(DeskArrangement.ClickBoxProblems(touching, close, 0.01f, new[] { "a" }));
+    }
+
+    [Test]
+    public void ClickBoxProblems_LeaveFootprintOverlapsToHomeProblems()
+    {
+        var overlapping = new[]
+        {
+            new DeskHome("a", 0f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Always),
+            new DeskHome("b", 0.05f, 0f, 0.10f, 0.10f, 0f, 0.1f, HomeShow.Always),
+        };
+        CollectionAssert.IsEmpty(DeskArrangement.ClickBoxProblems(overlapping, null, 0.01f, null), "one line per fault: HomeProblems names it");
+        StringAssert.Contains("'a' and 'b' overlap", string.Join("\n", DeskArrangement.HomeProblems(overlapping, null, new DeskRect(0f, -5f, 1f, 1f), new DeskRect(0f, 0f, 4f, 4f), 0.06f, (0f, -3f, 1f), 0f)));
+    }
+
+    [Test]
+    public void ClickBoxClashes_NameEveryPairOfDifferentObjectsDeeperThanTheTolerance()
+    {
+        var names = new[] { "Rolodex/Click", "Intercom", "RingPanel/Breaker1Click", "RingPanel/Breaker2Click", "Lamp" };
+        var owners = new[] { "rolodex", "intercom", "switchboard", "switchboard", null };
+        float Depth(int i, int j)
+        {
+            if (i == 0 && j == 1)
+                return 0.012f; // the Rolodex's box 12 mm into the intercom's
+            if (i == 2 && j == 3)
+                return 0.02f; // two breakers of one panel: never counted
+            if (i == 1 && j == 4)
+                return 0.004f; // within the tolerance
+            return 0f;
+        }
+        List<string> clashes = DeskArrangement.ClickBoxClashes(names, owners, Depth, 0.005f);
+        Assert.AreEqual(1, clashes.Count, string.Join("\n", clashes));
+        StringAssert.Contains("'Rolodex/Click' and 'Intercom' overlap by 12 mm", clashes[0]);
+    }
+
+    [Test]
+    public void ClickBoxClashes_ABoxWithNoOwner_IsItsOwnObject()
+    {
+        List<string> clashes = DeskArrangement.ClickBoxClashes(new[] { "Lamp", "Till" }, new string[] { null, null }, (i, j) => 0.03f, 0.005f);
+        Assert.AreEqual(1, clashes.Count);
+        CollectionAssert.IsEmpty(DeskArrangement.ClickBoxClashes(null, null, (i, j) => 1f, 0.005f));
     }
 
     [Test]

@@ -12,7 +12,9 @@ using System.Text;
 /// fixed art, slide in without reaching any of them, and stand where the
 /// office camera sees them (HomeProblems, the builder's gate, which fails the
 /// build; SightBlocked, VisibleShare: a line-of-sight check over the boxes'
-/// heights). A decoration starts in the decor zone, clear of the others
+/// heights), with every two shown objects' click boxes apart
+/// (ClickBoxProblems; ClickBoxClashes judges the real boxes in the QA rig:
+/// BUG-4a). A decoration starts in the decor zone, clear of the others
 /// (TrySettle), and the player may let it go on any free spot off the mat:
 /// it rests where it was let go, nudged a few centimetres at most, or goes
 /// back (TrySettleFree). Where the player put each decoration is saved as
@@ -152,6 +154,68 @@ public static class DeskArrangement
                 problems.Add($"The office camera sees {share * 100f:0}% of '{home.id}' (under {minVisible * 100f:0}%).");
         }
         return problems;
+    }
+
+    /// <summary>
+    /// Where two shown objects' click boxes would overlap (one line each;
+    /// empty when none do; BUG-4a: "fails the build on ... overlapping click
+    /// boxes"): each shown home's box is its footprint grown by
+    /// <paramref name="pad"/> on every side (the builder's box hugs the mesh
+    /// fitted to the home, plus its pad), except an art object the plan moves
+    /// (DeskHome.artParts: its box is the art's bounds, fitted to the home)
+    /// and the <paramref name="fixedArt"/> (the art's bounds); a home in
+    /// <paramref name="noClickBox"/> has none. Pairs whose footprints already
+    /// overlap are HomeProblems' and left out here.
+    /// </summary>
+    public static List<string> ClickBoxProblems(IReadOnlyList<DeskHome> homes, IReadOnlyList<DeskHome> fixedArt, float pad, IReadOnlyCollection<string> noClickBox)
+    {
+        var problems = new List<string>();
+        var boxes = new List<(DeskHome home, DeskRect box)>();
+        var unclicked = new HashSet<string>(noClickBox ?? Array.Empty<string>());
+        foreach (DeskHome home in homes ?? Array.Empty<DeskHome>())
+            if (home != null && home.Shown && !unclicked.Contains(home.id))
+            {
+                DeskRect f = home.Footprint;
+                float grow = string.IsNullOrEmpty(home.artParts) ? 2f * pad : 0f;
+                boxes.Add((home, new DeskRect(f.CentreX, f.CentreY, f.Width + grow, f.Height + grow)));
+            }
+        int shown = boxes.Count;
+        foreach (DeskHome art in fixedArt ?? Array.Empty<DeskHome>())
+            if (art != null)
+                boxes.Add((art, art.Footprint));
+        for (int i = 0; i < shown; i++)
+            for (int j = i + 1; j < boxes.Count; j++)
+                if (Overlap(boxes[i].box, boxes[j].box) && !Overlap(boxes[i].home.Footprint, boxes[j].home.Footprint))
+                    problems.Add($"The click boxes of '{boxes[i].home.id}' and '{boxes[j].home.id}' overlap ({pad * 100f:0.#} cm pad).");
+        return problems;
+    }
+
+    /// <summary>
+    /// The real click boxes that clash (the QA rig's deskclickboxes op, BUG-4a;
+    /// one line each, empty when none do): every pair of
+    /// <paramref name="names"/> whose <paramref name="owners"/> differ (one
+    /// desk object's own boxes, such as the RING SERVICE breakers, never
+    /// count against each other; a null owner is the box's own) and whose
+    /// boxes go into each other deeper than <paramref name="tolerance"/>
+    /// metres (<paramref name="depth"/>: the penetration depth, 0 when apart).
+    /// </summary>
+    public static List<string> ClickBoxClashes(IReadOnlyList<string> names, IReadOnlyList<string> owners, Func<int, int, float> depth, float tolerance)
+    {
+        var clashes = new List<string>();
+        int n = names != null ? names.Count : 0;
+        if (depth == null)
+            return clashes;
+        for (int i = 0; i < n; i++)
+            for (int j = i + 1; j < n; j++)
+            {
+                string a = owners != null && i < owners.Count ? owners[i] : null, b = owners != null && j < owners.Count ? owners[j] : null;
+                if (a != null && a == b)
+                    continue;
+                float d = depth(i, j);
+                if (d > tolerance)
+                    clashes.Add($"'{names[i]}' and '{names[j]}' overlap by {d * 1000f:0} mm.");
+            }
+        return clashes;
     }
 
     /// <summary>

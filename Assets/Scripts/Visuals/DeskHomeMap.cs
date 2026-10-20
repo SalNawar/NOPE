@@ -150,6 +150,12 @@ public static class DeskHomeMap
     /// <summary>How far a machine slides in (metres; the Game Feel Bible's C6: "≤6 cm").</summary>
     public const float SlideReach = 0.06f;
 
+    /// <summary>How far a built object's click box reaches past its mesh on every side (metres; the builder's PropClick): the plan keeps every two shown objects' boxes apart with it (DeskArrangement.ClickBoxProblems, BUG-4a).</summary>
+    public const float ClickPad = 0.01f;
+
+    /// <summary>The shown homes whose object takes no click (the deal tray's plate, the art's mouse): no click box to keep apart.</summary>
+    public static readonly string[] NoClickBox = { DealTray, Mouse };
+
     /// <summary>A's machine rail in the order of use, front (by the chair) to back (by the counter and its deal tray).</summary>
     public static readonly string[] Rail = { ChipReader, Scanner, StampRack };
 
@@ -173,10 +179,10 @@ public static class DeskHomeMap
         new DeskHome(DealTray, 0f, 0.545f, 0.44f, 0.06f, 0f, 0.01f, HomeShow.Always),
         new DeskHome(Detain, -0.51f, 0.74f, 0.26f, 0.28f, 0f, 0.09f, HomeShow.Always),
         new DeskHome(Bell, 0.43f, 0.67f, 0.14f, 0.14f, 0f, 0.08f, HomeShow.Reserved),
-        new DeskHome(Rolodex, -0.91f, 0.60f, 0.18f, 0.18f, 0f, 0.17f, HomeShow.WhenOwned),
+        new DeskHome(Rolodex, -0.91f, 0.595f, 0.16f, 0.16f, 0f, 0.17f, HomeShow.WhenOwned), // 16 cm: its click box (+1 cm) clears the intercom's and the till's by 5 mm
         new DeskHome(Glasses, -0.73f, 0.575f, 0.14f, 0.09f, 0f, 0.03f, HomeShow.Reserved),
         new DeskHome(ProtocolRing, -0.74f, 0.74f, 0.12f, 0.12f, 0f, 0.21f, HomeShow.WhenOwned),
-        // Left of the mat, beside the PC: ask and look up.
+        // Left of the mat, beside the PC: ask and look up. The intercom is the art's phone moved here, which waits for Saleh's OK (he said "cut the phone"; docs/pending/DESK-PLAN.md, open call 1).
         new DeskHome(Intercom, -0.88f, 0.40f, 0.24f, 0.20f, 0f, 0.12f, HomeShow.Always, HomeSlide.None, "Clean_Phone"),
         new DeskHome(BabelTuner, -0.90f, 0.12f, 0.18f, 0.20f, 0f, 0.15f, HomeShow.WhenOwned, HomeSlide.Right),
         new DeskHome(RulebookPocket, -0.88f, -0.12f, 0.24f, 0.26f, 0f, 0.03f, HomeShow.Reserved),

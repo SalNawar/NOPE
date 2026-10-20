@@ -146,7 +146,7 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>A click box named <paramref name="name"/> over everything drawn under <paramref name="cover"/> (grown by <paramref name="pad"/> metres), outlining it.</summary>
-    private static Clickable PropClick(Transform host, string name, Transform cover, float pad = 0.01f)
+    private static Clickable PropClick(Transform host, string name, Transform cover, float pad = DeskHomeMap.ClickPad)
     {
         DestroyChildIfPresent(host, name);
         Clickable click = EnsureClickBox(host, name);
