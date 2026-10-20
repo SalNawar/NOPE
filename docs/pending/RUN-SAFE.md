@@ -175,6 +175,8 @@ TDD: every test was red first (a compile error on the missing API), then green.
 
 ## FEATURES and CHEATS (for INTEGRATION)
 
+**Folded** into `docs/FEATURES.md` and `docs/CHEATS.md` by INTEGRATION on integrate/a (2026-10-20), as written below; the More tab's "the badge alone while a run is cheated" became "no OnGUI runs; the CHEATS ON badge is uGUI".
+
 **`docs/FEATURES.md`, the Title line (line 9), the "+ SaveSystem persistence" clause.** Replace "New Run deletes all three" with:
 
 > nothing in the slot is ever deleted: New Run sets the old run's files aside (`nope_save.replaced-<time>.json`, ...) and saves day 1's morning at once; a load sets an unreadable save, or one from before the save format, aside (`nope_save.unreadable-<time>.json`, `nope_save.old-format-<time>.json`) and a run recovered from the backup keeps the damaged save aside (tested: `SaveSafetyTests`, `SaveSystemTests`); every morning is saved and kept as the day's morning snapshot (`nope_morning.json`); a save is flushed to the disk; a failed write, a file set aside and a recovered run show a notice strip for 9 s (`SaveNotice`, `save.notice.*`) and a later good save clears a failed write; Continue reads the save from disk again.
