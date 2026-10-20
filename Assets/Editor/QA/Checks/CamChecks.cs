@@ -3,19 +3,25 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// CAM's gate checks (BUG-17a, 1b, 7b, 32b, 41, 42, 55c, 59, 64b, 69, 73e;
 /// FIX_PLAN_v2's CAM delta; docs/pending/CAM.md). Static: no close-up code
 /// path is left in the game's scripts (D6: no machine close-ups; the camera
 /// logger proves none happens); the reading pose solves at the four aspects
-/// for the live desk config, every framed point (the big mat, the side homes'
-/// inner strips, the deal tray) inside the margins and the bottom row on the
-/// desk; the office pose's lens at 21:9 no wider than the hall art. Play
-/// (read from the QA rig's runs of tools/qa/scenarios/cam_views.json,
-/// QaJobs.Scenario): every camera move tagged (the logger); the framing at
-/// A1-A4 in both poses; the controls' fade over a move; no view change
-/// while holding; the city's parallax and its full-screen fill.
+/// for the live desk config, every framed point (the big mat, the stamp rack
+/// and the intercom whole, the other side homes' inner strips, the deal
+/// tray) inside the margins under the overlay's top band and the bottom row
+/// on the desk; the overlay's top chrome (the case HUD's strips, the Back
+/// control) stays inside that band; the office pose's lens at 21:9 no wider
+/// than the hall art. Play (read from the QA rig's runs of CAM's scenarios,
+/// QaJobs.Scenario): every camera move tagged (the logger) and the drop tilt
+/// at most once per paper landing; the framing at A1-A4 in both poses, per
+/// home; the controls' fade over a move; no view change while holding, call
+/// by call; the city's parallax and its full-screen fill; the shake table's
+/// rows; no chrome over a held thing or the reading view's work; DESK-PLAN's
+/// homes at A3 and A4.
 /// </summary>
 public static class CamChecks
 {
@@ -26,6 +32,9 @@ public static class CamChecks
 
     /// <summary>An identifier naming a close-up (MachineCloseUp, CloseUpPolicy, closeUpDistance...) in code, comments and strings left out.</summary>
     private static readonly Regex CloseUp = new Regex(@"\b\w*[Cc]lose_?[Uu]p\w*\b", RegexOptions.Compiled);
+
+    /// <summary>The least gap (reference px) between the overlay's top chrome and the first framed desk point.</summary>
+    private const float BandGap = 8f;
 
     /// <summary>No game script names a close-up in code (D6, BUG-17a: "A grep check finds 0 close-up code paths").</summary>
     [GateCheck("cam.closeups.none", Owner)]
@@ -56,8 +65,10 @@ public static class CamChecks
     /// <summary>
     /// The reading pose solves at every aspect for the live desk config (the
     /// approved home map's mat and homes, DeskConfigSO.deskView), with every
-    /// framed point inside the screen's margins and the screen's bottom row
-    /// on the desk's top (BUG-1b, 7b, 41).
+    /// framed point inside the screen's margins under the overlay's top band
+    /// (DeskViewPose.TopMargin) and the screen's bottom row on the desk's top
+    /// (BUG-1b, 7b, 41); measured: the distance and how big papers show
+    /// against the old reading view (DeskViewPose.PaperShare).
     /// </summary>
     [GateCheck("cam.lens.reading", Owner)]
     public static GateResult ReadingPose()
@@ -74,7 +85,8 @@ public static class CamChecks
         var measured = new List<string>();
         foreach ((string name, float aspect) in Aspects)
         {
-            if (!LensFit.Reading(targets, pitch, t.fieldOfView, aspect, t.topMargin, t.bottomMargin, t.sideMargin, front, out ReadingPose pose))
+            float top = DeskViewPose.TopMargin(t, aspect);
+            if (!LensFit.Reading(targets, pitch, t.fieldOfView, aspect, top, t.bottomMargin, t.sideMargin, front, out ReadingPose pose))
             {
                 problems.Add($"{name}: no pose");
                 continue;
@@ -82,15 +94,37 @@ public static class CamChecks
             int outside = 0;
             foreach ((float x, float y, float z) p in targets)
                 if (!LensFit.Project(pose, pitch, t.fieldOfView, aspect, p, out (float x, float y) ndc) ||
-                    ndc.y > 1f - t.topMargin + 1e-3f || ndc.y < -(1f - t.bottomMargin) - 1e-3f || System.Math.Abs(ndc.x) > 1f - t.sideMargin + 1e-3f)
+                    ndc.y > 1f - top + 1e-3f || ndc.y < -(1f - t.bottomMargin) - 1e-3f || System.Math.Abs(ndc.x) > 1f - t.sideMargin + 1e-3f)
                     outside++;
             if (outside > 0)
                 problems.Add($"{name}: {outside}/{targets.Count} framed points outside the margins");
             if (pose.BottomRowY < front - 1e-3f)
                 problems.Add($"{name}: the bottom row meets the desk at {pose.BottomRowY:0.000} m, past its front edge {front:0.000}");
-            measured.Add($"{name} {pose.Distance:0.00} m");
+            measured.Add($"{name} {pose.Distance:0.00} m, papers {DeskViewPose.PaperShare(pose.Distance, t.fieldOfView):P0}");
         }
         return GateResult.Of("cam.lens.reading", Owner, problems.Count == 0, string.Join(", ", measured), string.Join("; ", problems));
+    }
+
+    /// <summary>
+    /// The overlay's top chrome (the case HUD's compare and verdict strips,
+    /// the desk view's "▲ Back" control) ends at least a gap above the
+    /// reading view's top band (DeskViewTuning.topBand), and the band is read
+    /// against the overlay's own reference resolution, so no chrome stands
+    /// over a framed desk point (BUG-59).
+    /// </summary>
+    [GateCheck("cam.chrome.band", Owner)]
+    public static GateResult ChromeBand()
+    {
+        DeskConfigSO config = AssetDatabase.LoadAssetAtPath<DeskConfigSO>(OfficeSceneUIBuilder.DeskConfigPath);
+        if (config == null)
+            return GateResult.Fail("cam.chrome.band", Owner, "no config", $"No DeskConfigSO at {OfficeSceneUIBuilder.DeskConfigPath}.");
+        float chrome = OfficeSceneUIBuilder.TopChromeBottom, band = config.deskView.topBand;
+        Vector2 reference = OfficeSceneUIBuilder.OverlayReference;
+        bool sameReference = reference.x == DeskViewPose.ReferenceWidth && reference.y == DeskViewPose.ReferenceHeight;
+        bool ok = chrome + BandGap <= band && sameReference;
+        return GateResult.Of("cam.chrome.band", Owner, ok, $"top chrome ends at {chrome:0} px, the reading view's band at {band:0} px (reference {reference.x:0}x{reference.y:0})",
+                             ok ? "every framed desk point lies under the overlay's top chrome" :
+                                  sameReference ? $"the band must reach {chrome + BandGap:0} px (DeskViewTuning.topBand)" : "DeskViewPose's reference resolution is not the overlay's");
     }
 
     /// <summary>The office pose at 21:9 shows no more width than the hall art covers, and at 16:9 is the plan's lens (BUG-41).</summary>
@@ -114,19 +148,35 @@ public static class CamChecks
     [GateCheck("cam.play.tags", Owner, GateKind.Play)]
     public static GateResult Tags() => GateResults.Require("cam.play.tags", Owner, "cam_views.camera*");
 
-    /// <summary>Both poses frame what they must at A1-A4 (≥98% of the framed points on screen; the reading view's bottom row on the desk).</summary>
+    /// <summary>The scripted day 12 (drops, scans, chip reads, the intercom): the drop tilt at most once per paper landing, never while holding (v2's CAM pass at #6).</summary>
+    [GateCheck("cam.play.tilts", Owner, GateKind.Play)]
+    public static GateResult Tilts() => GateResults.Require("cam.play.tilts", Owner, "cam_views.tilts.*");
+
+    /// <summary>Both poses frame what they must at A1-A4, home by home (the reading view: the mat and the deal tray whole, the stamp rack and the intercom 100%, at least 8 x 8 cm of the other in-use side homes; the office view: every shown home ≥98%; the reading view's bottom row on the desk).</summary>
     [GateCheck("cam.play.framing", Owner, GateKind.Play)]
     public static GateResult Framing() => GateResults.Require("cam.play.framing", Owner, "cam_views.frame.*");
 
-    /// <summary>The controls of a view appear only over the last third of the move into it (BUG-32b).</summary>
+    /// <summary>The controls of a view appear only over the last third of the move into it, and at once when motion is still (BUG-32b, 64b).</summary>
     [GateCheck("cam.play.fade", Owner, GateKind.Play)]
     public static GateResult ControlFade() => GateResults.Require("cam.play.fade", Owner, "cam_views.fade.*");
 
-    /// <summary>No view changes while something is held (BUG-55c).</summary>
+    /// <summary>No view changes while something is held, each view change refused on its own (BUG-55c).</summary>
     [GateCheck("cam.play.hold", Owner, GateKind.Play)]
     public static GateResult Hold() => GateResults.Require("cam.play.hold", Owner, "cam_views.hold.*");
 
-    /// <summary>The city fills the screen and its parallax moves at most 1 px at 1080p a frame (BUG-42, BUG-69).</summary>
+    /// <summary>The city fills the screen, its parallax moves at most 1 px at 1080p a 30 fps frame, a click and Q return (BUG-42, BUG-69, v2's city exits).</summary>
     [GateCheck("cam.play.city", Owner, GateKind.Play)]
     public static GateResult City() => GateResults.Require("cam.play.city", Owner, "cam_views.city.*");
+
+    /// <summary>Each shake moment draws its own row of the shake table and nothing else shakes; no shake when motion is still; the papers move no more than the cap (GAME_FEEL_BIBLE §1.3).</summary>
+    [GateCheck("cam.play.shakes", Owner, GateKind.Play)]
+    public static GateResult Shakes() => GateResults.Require("cam.play.shakes", Owner, "cam_views.shake.*");
+
+    /// <summary>No chrome is drawn over a held thing or over the reading view's framed work, at A1-A4 (BUG-59).</summary>
+    [GateCheck("cam.play.chrome", Owner, GateKind.Play)]
+    public static GateResult Chrome() => GateResults.Require("cam.play.chrome", Owner, "cam_chrome.chrome.*");
+
+    /// <summary>DESK-PLAN's homes at A3 and A4 (FIX_PLAN v1: "DESK-PLAN at A3 and A4 (deferred to here)"): every kept object ≥90% seen and its centre click reaching it; the intercom opening the wheel from the reading view with no camera move.</summary>
+    [GateCheck("cam.play.deskplan", Owner, GateKind.Play)]
+    public static GateResult DeskPlanWide() => GateResults.Require("cam.play.deskplan", Owner, "cam_desk.*");
 }

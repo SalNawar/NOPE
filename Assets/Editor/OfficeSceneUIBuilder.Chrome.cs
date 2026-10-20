@@ -16,8 +16,8 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The gap (reference px) between the tutorial's prompt plate and the desk view's "▲ Back" control under it.</summary>
-    private const float DeskViewBackGap = 12f;
+    /// <summary>The desk view's "▲ Back" control's inset from the overlay's right edge (reference px); its top is the case HUD's strips' (TopStripTop).</summary>
+    private const float DeskViewBackInset = 24f;
 
     /// <summary>The city view's edge buttons (reference px) and their height on the screen (a share from the bottom: above the corkboards' calendar and clock).</summary>
     private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
@@ -30,32 +30,42 @@ public static partial class OfficeSceneUIBuilder
     private const float PcTabHeight = 0.4f;
 
     /// <summary>
+    /// The bottom of the office overlay's top band of chrome (reference px
+    /// from the top): the case HUD's compare and verdict strips (top centre)
+    /// and the desk view's "▲ Back" control (top right), all from
+    /// TopStripTop. The reading view keeps every framed desk point under
+    /// DeskViewTuning.topBand, which cam.chrome.band holds below this.
+    /// </summary>
+    internal static float TopChromeBottom => TopStripTop + Mathf.Max(CompareStripSize.y, Mathf.Max(VerdictStripSize.y, DeskViewBackSize.y));
+
+    /// <summary>The overlay's reference resolution (the canvas scaler's; DeskViewPose's top band is read against it).</summary>
+    internal static Vector2 OverlayReference => ReferenceResolution;
+
+    /// <summary>
     /// The desk view's "▲ Back" control (the readability fix: a visible way
     /// out of the desk view) under the office overlay canvas, rebuilt each run:
-    /// a small button at the top left (the art pass, 2026-10-07: off the
-    /// traveller's face in the closer counter framing), under the case HUD's
-    /// strips and under the tutorial's prompt plate (GuidePlateAt,
-    /// GuidePlateSize: both show in the reading view on day 1), in the
+    /// a small button at the top right, in the overlay's top band beside the
+    /// case HUD's strips (TopChromeBottom), where the reading view frames no
+    /// desk (DeskViewTuning.topBand: BUG-59, no chrome over the work; it sat
+    /// at the top left under the tutorial's plate, over the intercom), in the
     /// "&lt; Desk" button's role, its label keyed (deskView.back); a hover hint
-    /// beside it, on its right (deskView.backHint: the other ways back), in the
-    /// tooltip's role, shown by HoverHint (beside, not under: the speech bubble
-    /// waits right under the Back control in the desk view). Inactive:
-    /// DeskView shows it while tilted (BoothRules.DeskViewBackLive). Returns
-    /// its button.
+    /// beside it, on its left (deskView.backHint: the other ways back), in the
+    /// tooltip's role, shown by HoverHint. Inactive: DeskView shows it while
+    /// tilted (BoothRules.DeskViewBackLive). Returns its button.
     /// </summary>
     private static Button BuildDeskViewBack(Transform overlay)
     {
         DestroyChildIfPresent(overlay, "DeskViewBack");
         Button back = MakeButton(overlay, "DeskViewBack", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton, "deskView.back");
         var rt = (RectTransform)back.transform;
-        rt.anchorMin = new Vector2(0f, 1f);
-        rt.anchorMax = new Vector2(0f, 1f);
-        rt.pivot = new Vector2(0f, 1f);
-        rt.anchoredPosition = new Vector2(24f, Mathf.Min(-CaseHudClearance, GuidePlateAt.y - GuidePlateSize.y - DeskViewBackGap));
+        rt.anchorMin = new Vector2(1f, 1f);
+        rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(1f, 1f);
+        rt.anchoredPosition = new Vector2(-DeskViewBackInset, -TopStripTop);
         rt.sizeDelta = DeskViewBackSize;
 
-        Transform hint = Panel(back.transform, "Hint", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
-        ((RectTransform)hint).pivot = new Vector2(0f, 0.5f);
+        Transform hint = Panel(back.transform, "Hint", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(-8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
+        ((RectTransform)hint).pivot = new Vector2(1f, 0.5f);
         hint.GetComponent<Image>().raycastTarget = false;
         TMP_Text hintText = Text(hint, "Label", null, 18, TextAlignmentOptions.Center, new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.95f), Ink,
                                  ThemeRoleId.Tooltip, "deskView.backHint", FontStyles.Normal, ThemeTextKind.Body, true);
@@ -80,7 +90,8 @@ public static partial class OfficeSceneUIBuilder
     /// the switch live), last on the overlay so it stays on top of the open PC
     /// frame; and the office's callouts (OfficeCallouts on the Office root:
     /// the speech bubble and the board's tooltip, hidden in the reading view
-    /// and the city view). Returns the controls.
+    /// and the city view); and the view's city view, so Q leaves the city as
+    /// it leaves the PC. Returns the controls.
     /// </summary>
     private static OfficeControls BuildControls(Transform overlay, OfficeViewController view, BoothCoordinator booth, TravellerWheel wheel, DeskInspect inspect,
                                                 DeskStampTray stamps, DeskView deskView, CityView cityView, DeskController desk, DeskConfigSO config)
@@ -99,6 +110,11 @@ public static partial class OfficeSceneUIBuilder
         label.fontSize = 22f;
         tab.gameObject.SetActive(false);
         tab.transform.SetAsLastSibling();
+
+        // Q in the city view leaves it, as it leaves the PC (OfficeViewController.FocusMonitor).
+        var soView = new SerializedObject(view);
+        SetRef(soView, "cityView", cityView);
+        soView.ApplyModifiedProperties();
 
         OfficeControls controls = GetOrAdd<OfficeControls>(view.gameObject);
         var so = new SerializedObject(controls);

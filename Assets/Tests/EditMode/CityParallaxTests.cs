@@ -1,31 +1,106 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 
 /// <summary>
-/// The city view's parallax speed limit (BUG-69; GAME_FEEL_BIBLE H1): the
-/// pan follows its target by at most one pixel at 1080p a frame on its
-/// nearest layer, at any screen size.
+/// The city view's parallax speed limit (BUG-69; GAME_FEEL_BIBLE H1 and
+/// check 7): the pan follows its target on a spring whose nearest layer never
+/// moves more than one pixel at 1080p a frame of the QA recorder's 30 fps,
+/// at any screen size; it takes the same seconds at any frame rate, eases
+/// into its target instead of stopping dead, and the reveal's sweep is kept
+/// small enough to ease within the limit.
 /// </summary>
 public class CityParallaxTests
 {
+    private const float Span = 0.86f, Width = 2786f, Depth = 1.25f;
+
+    private static float PxPerShare => Width / Span * Depth;
+
     [Test]
-    public void MaxStep_IsOnePixelAt1080p_OnTheNearestLayer()
+    public void MaxSpeed_IsOnePixelA30FpsFrame_OnTheNearestLayer_AtAnyScreenSize()
     {
-        const float span = 0.86f, width = 3000f, depth = 1.25f;
-        float step = CityParallax.MaxStep(span, width, 1080f, depth);
-        Assert.AreEqual(1f, step / span * width * depth, 1e-4f, "one pixel on the traffic, panning 1.25x the painting");
-        float small = CityParallax.MaxStep(span, width * 720f / 1080f, 720f, depth);
-        Assert.AreEqual(step, small, 1e-7f, "the same pixel at 1080p on a 720p screen");
-        Assert.AreEqual(CityParallax.MaxStep(span, width, 1080f, 1f), CityParallax.MaxStep(span, width, 1080f, 0.5f), "a layer never pans less than the painting");
-        Assert.AreEqual(0f, CityParallax.MaxStep(0f, width, 1080f, depth));
-        Assert.AreEqual(0f, CityParallax.MaxStep(span, 0f, 1080f, depth));
+        float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
+        Assert.AreEqual(30f, speed * PxPerShare, 1e-3f, "30 px a second on the traffic: 1 px a frame at 30 fps");
+        Assert.AreEqual(speed, CityParallax.MaxSpeed(Span, Width * 720f / 1080f, 720f, Depth), 1e-7f, "the same pixels at 1080p on a 720p screen");
+        Assert.AreEqual(CityParallax.MaxSpeed(Span, Width, 1080f, 1f), CityParallax.MaxSpeed(Span, Width, 1080f, 0.5f), "a layer never pans less than the painting");
+        Assert.AreEqual(0f, CityParallax.MaxSpeed(0f, Width, 1080f, Depth));
+        Assert.AreEqual(0f, CityParallax.MaxSpeed(Span, 0f, 1080f, Depth));
     }
 
     [Test]
-    public void Step_FollowsByAtMostTheStep_AndLandsExactly()
+    public void SweepShare_EasesWithinTheLimit_SoItNeverCrawls()
     {
-        Assert.AreEqual(0.01f, CityParallax.Step(0f, 0.5f, 0.01f), 1e-7f);
-        Assert.AreEqual(-0.01f, CityParallax.Step(0f, -0.5f, 0.01f), 1e-7f);
-        Assert.AreEqual(0.005f, CityParallax.Step(0f, 0.005f, 0.01f), "lands on a near target");
-        Assert.AreEqual(0.3f, CityParallax.Step(0.3f, 0.9f, 0f), "no step holds it");
+        float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
+        float sweep = CityParallax.SweepShare(0.05f, 1.8f, speed);
+        Assert.Less(sweep, 0.05f, "the knob's 0.05 would outrun 30 px a second over 1.8 s");
+        Assert.AreEqual(CityParallax.SweepHeadroom * speed, 1.5f * sweep / 1.8f, 1e-6f, "the smoothstep's steepest slope at 80% of the limit");
+        Assert.AreEqual(0.001f, CityParallax.SweepShare(0.001f, 1.8f, speed), "a small sweep is kept as it is");
+        Assert.AreEqual(0f, CityParallax.SweepShare(0.05f, 0f, speed));
+    }
+
+    /// <summary>Plays the reveal (the sweep easing to 0 over 1.8 s) at <paramref name="fps"/>: the worst move in pixels at 1080p per 30 fps frame, the seconds until it settles, and its frames' steps.</summary>
+    private static (float worst, float settled, List<float> steps) Reveal(float fps)
+    {
+        float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
+        float sweep = CityParallax.SweepShare(0.05f, 1.8f, speed);
+        float dt = 1f / fps, shown = sweep, velocity = 0f, worst = 0f, settled = -1f;
+        var steps = new List<float>();
+        for (float t = dt; t < 8f; t += dt)
+        {
+            float u = System.Math.Min(1f, t / 1.8f);
+            float target = sweep * (1f - u * u * (3f - 2f * u));
+            float next = CityParallax.Follow(shown, ref velocity, target, speed, dt);
+            float px = System.Math.Abs(next - shown) * PxPerShare;
+            steps.Add(px);
+            worst = System.Math.Max(worst, px * fps / 30f);
+            if (settled < 0f && target == 0f && System.Math.Abs(next) * PxPerShare < 0.01f)
+                settled = t;
+            shown = next;
+        }
+        return (worst, settled, steps);
+    }
+
+    [Test]
+    public void Follow_KeepsUnderOnePixelA30FpsFrame_AndTakesTheSameSecondsAtAnyFrameRate()
+    {
+        (float worst30, float settled30, _) = Reveal(30f);
+        (float worst60, float settled60, _) = Reveal(60f);
+        (float worst144, float settled144, _) = Reveal(144f);
+        Assert.LessOrEqual(worst30, 1f + 1e-4f);
+        Assert.LessOrEqual(worst60, 1f + 1e-4f);
+        Assert.LessOrEqual(worst144, 1f + 1e-4f);
+        Assert.Greater(settled30, 1.8f, "it settles after the sweep's 1.8 s");
+        Assert.Less(settled30, 4f, "not a 3 to 7 s crawl at the limit");
+        Assert.AreEqual(settled30, settled60, 0.5f, "the same seconds at 30 and 60 fps");
+        Assert.AreEqual(settled30, settled144, 0.5f, "and at 144 fps");
+    }
+
+    [Test]
+    public void Follow_EasesIntoItsTarget_NothingStoppingDead()
+    {
+        (_, float settled, List<float> steps) = Reveal(60f);
+        int last = (int)(settled * 60f) - 2;
+        Assert.Greater(last, 10);
+        for (int i = last - 8; i < last; i++)
+            Assert.LessOrEqual(steps[i + 1], steps[i] + 1e-4f, $"the steps shrink into the stop (frame {i})");
+        Assert.Less(steps[last], 0.05f, "the last steps are a fraction of a pixel");
+    }
+
+    [Test]
+    public void Follow_APointerJumpEdgeToEdge_NeverOutrunsTheLimit_AndLandsOnTheTarget()
+    {
+        float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
+        foreach (float fps in new[] { 20f, 30f, 60f })
+        {
+            float dt = 1f / fps, shown = -0.02f, velocity = 0f;
+            for (int i = 0; i < fps * 12f; i++)
+            {
+                float next = CityParallax.Follow(shown, ref velocity, 0.02f, speed, dt);
+                Assert.LessOrEqual(System.Math.Abs(next - shown) * PxPerShare, 1f + 1e-4f, $"at most 1 px a frame at {fps} fps (a slow frame too)");
+                shown = next;
+            }
+            Assert.AreEqual(0.02f, shown, 1e-6f, $"lands on the target at {fps} fps");
+        }
+        float held = 0f;
+        Assert.AreEqual(0.3f, CityParallax.Follow(0.3f, ref held, 0.9f, 0f, 1f / 60f), "no limit holds it");
     }
 }

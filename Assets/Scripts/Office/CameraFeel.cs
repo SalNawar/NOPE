@@ -10,26 +10,26 @@ using UnityEngine;
 /// breathingFrequency) only while the player turned the camera sway on, and
 /// both listen for impulses (a CinemachineImpulseListener each).
 /// <para>
-/// Shake draws the game feel's shake table (CameraShakeTable,
-/// GAME_FEEL_BIBLE §1.3; CAM owns every shake cell): the caller's force picks
-/// the row, and the row sets the size (at most its cap in pixels at 1080p,
-/// with headroom), the length and the direction (a stamp bumps down, a
-/// breach rumbles), on unscaled time so a hit-stop never freezes it; each
-/// shake is tagged for the QA camera logger as an impulse with its cap.
+/// A shake is a moment of the game feel's shake table (CameraShakeTable,
+/// GAME_FEEL_BIBLE §1.3; CAM owns every shake cell), and nothing else shakes:
+/// the row sets the size (its cap in pixels at 1080p less headroom, at the
+/// depth of the nearest paper corner, so the papers never move more than the
+/// cap), the length and the direction (a stamp bumps down, a breach
+/// rumbles), on unscaled time so a hit-stop never freezes it; each shake is
+/// tagged for the QA camera logger as an impulse with its cap. The calls
+/// that predate the table are read by their knobs (CameraShakeTable.TryLegacy).
 /// </para>
 /// <para>
 /// As the reading view comes in, its lens pushes in softly to the solved
 /// reading pose (DeskView.ReadingFov: it starts readingPushIn wider and
 /// narrows on the Heavy spring), tagged with the view's cause while it moves.
-/// The Motion intensity scales every amplitude, live; Reduced Motion turns
-/// the breathing, the impulses and the push-in off, live.
+/// The Motion intensity scales every amplitude, live; Reduced Motion and no
+/// intensity (MotionAmount.Still) turn the breathing, the impulses and the
+/// push-in off, live.
 /// </para>
 /// </summary>
 public sealed class CameraFeel : MonoBehaviour, IMotionTick
 {
-    /// <summary>A shake's force for a camera move of one metre: the impulse's Bump and Rumble shapes peak at about their velocity (calibrated by the CAM recipe's impulse caps; QaCameraMoves measures).</summary>
-    private const float ShapePeak = 1f;
-
     /// <summary>How long each re-tag of a moving push-in covers (unscaled seconds): it is renewed before it runs out while the spring moves.</summary>
     private const float PushTagSeconds = 0.25f;
 
@@ -59,30 +59,64 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
     }
 
     /// <summary>
-    /// A camera shake asked for with <paramref name="force"/> over
-    /// <paramref name="seconds"/> (a rumble when <paramref name="rumble"/>):
-    /// the shake table's row the force picks against the MotionKnobs shake
-    /// knobs (CameraShakeTable.Pick) is drawn, its length, direction and size
-    /// (its cap less headroom, at the live camera's lens), scaled by the
-    /// Motion intensity and tagged as an impulse for the QA camera logger;
-    /// none under Reduced Motion or without the office's cameras.
+    /// A shake asked for the way the callers that predate the shake table do
+    /// (a force over seconds, a rumble when <paramref name="rumble"/>, built
+    /// from MotionKnobs): the table moment its knobs name is drawn
+    /// (CameraShakeTable.TryLegacy: the stamp, the DETAIN press, the CITED
+    /// slam, the breach); any other call does not shake (§1.3's "Everything
+    /// else: 0": the approval's hand-back, the chip reader, the citation's
+    /// shake at the verdict).
     /// </summary>
     public static void Shake(float force, float seconds, bool rumble)
     {
+        MotionKnobs k = UiMotion.Knobs;
+        var knobs = new CameraShakeKnobs(k.shakeStamp, k.shakeStampSeconds, k.shakeBreach, k.shakeBreachSeconds, k.detainHit, k.citedHit);
+        if (CameraShakeTable.TryLegacy(force, seconds, rumble, knobs, out CameraShakeMoment moment))
+            Shake(moment);
+    }
+
+    /// <summary>
+    /// The shake table's <paramref name="moment"/>: its row's length,
+    /// direction and size (its cap less headroom, at the live camera's lens
+    /// and the depth of the nearest paper corner), scaled by the Motion
+    /// intensity and tagged as an impulse with its cap for the QA camera
+    /// logger; none when motion is still (Reduced Motion or no intensity) or
+    /// without the office's cameras.
+    /// </summary>
+    public static void Shake(CameraShakeMoment moment)
+    {
         MotionAmount amount = UiMotion.Amount;
-        if (_current == null || _current._source == null || amount.Still || force <= 0f)
+        if (_current == null || _current._source == null || amount.Still)
             return;
-        MotionKnobs knobs = UiMotion.Knobs;
-        CameraShakeRow row = CameraShakeTable.Pick(force, rumble, knobs.shakeStamp, knobs.shakeCitation, knobs.shakeBreach);
+        CameraShakeRow row = CameraShakeTable.Row(moment);
         Camera live = Camera.main;
         float fov = live != null ? live.fieldOfView : _current._office != null ? _current._office.Lens.FieldOfView : 60f;
-        float metres = CameraShakeTable.Metres(row.CapPx * CameraShakeTable.Headroom * amount.Share, fov) / ShapePeak;
+        float velocity = CameraShakeTable.Velocity(row, amount.Share, fov, WorkDepth(live));
         CinemachineImpulseDefinition definition = _current._source.ImpulseDefinition;
         definition.ImpulseShape = row.Rumble ? CinemachineImpulseDefinition.ImpulseShapes.Rumble : CinemachineImpulseDefinition.ImpulseShapes.Bump;
         definition.ImpulseDuration = Mathf.Max(0.01f, row.Seconds);
         CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
         QaSignals.TagCamera(CameraMoveCause.Impulse, row.Seconds, row.CapPx);
-        _current._source.GenerateImpulseWithVelocity(new Vector3(row.X, row.Y, 0f) * metres);
+        _current._source.GenerateImpulseWithVelocity(new Vector3(row.X, row.Y, 0f) * velocity);
+    }
+
+    /// <summary>How far ahead of <paramref name="live"/> the nearest corner of the paper mat lies (where the eye is: the papers), at most the QA logger's reference depth; the reference depth without a bound desk or camera.</summary>
+    private static float WorkDepth(Camera live)
+    {
+        if (live == null || !DeskLayout.Bound)
+            return CameraShakeTable.ReferenceDepth;
+        DeskFrame frame = DeskLayout.Frame;
+        DeskRect mat = DeskLayout.Mat.Rect;
+        Transform t = live.transform;
+        float nearest = CameraShakeTable.ReferenceDepth;
+        for (int corner = 0; corner < 4; corner++)
+        {
+            (float x, float y) = mat.PointAt(corner % 2, corner / 2);
+            float depth = Vector3.Dot(frame.Point(new Vector2(x, y)) - t.position, t.forward);
+            if (depth > 0.01f)
+                nearest = Mathf.Min(nearest, depth);
+        }
+        return nearest;
     }
 
     private void Bind(DeskView view, CinemachineCamera office, CinemachineCamera desk)
@@ -174,7 +208,7 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
         }
     }
 
-    /// <summary>The reading view turned on (a paper dropped, a view key) or off: the push-in springs in to the reading pose, or back out, tagged with the view's cause while it moves.</summary>
+    /// <summary>The reading view turned on (a paper dropped, a view key) or off: the push-in springs in to the reading pose, or back out, tagged with the view's cause while it moves (a move whose cause the view does not know stays untagged, so the logger shows it).</summary>
     private void HandleViewChanged()
     {
         MotionKnobs knobs = UiMotion.Knobs;
@@ -198,9 +232,10 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
             return false;
         MotionKnobs knobs = UiMotion.Knobs;
         bool moving = _push.Step(dt, knobs.Get(knobs.cameraFeel), 1e-3f, 1e-2f);
-        if (moving && Time.unscaledTime >= _taggedUntil - 0.05f)
+        CameraMoveCause cause = _view != null ? _view.LastCause : CameraMoveCause.ViewKey;
+        if (moving && cause != CameraMoveCause.Untagged && Time.unscaledTime >= _taggedUntil - 0.05f)
         {
-            QaSignals.TagCamera(_view != null ? _view.LastCause : CameraMoveCause.ViewKey, PushTagSeconds);
+            QaSignals.TagCamera(cause, PushTagSeconds);
             _taggedUntil = Time.unscaledTime + PushTagSeconds;
         }
         Apply();
