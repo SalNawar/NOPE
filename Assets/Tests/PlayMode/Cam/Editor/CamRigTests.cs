@@ -1,19 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
+using UnityEngine;
 
 /// <summary>
 /// CAM's rig verdicts that need no Unity (CamOps; docs/pending/CAM.md,
-/// rounds 4 and 5): a private collection is counted whatever its type (a
+/// rounds 4 to 6): a private collection is counted whatever its type (a
 /// HashSet is no non-generic ICollection, so the chip read's "came back out"
-/// wait never saw the reader's set); and a chrome leg's whole report, from
-/// what its camchrome steps show (ShownBy) and what its watch counted
-/// (LegLines): a plate the leg showed that was never drawn is CAM's red
-/// line, never silence, a drawn plate is judged under its owner outside
-/// CAM's chrome gate, and a half of the leg that was never seen (nothing
-/// held, the reading view never at rest) fails CAM's line. Pure; in CAM's
-/// own Editor folder (Assembly-CSharp-Editor, the editor runner's).
+/// wait never saw the reader's set), and a chip read counts only once its
+/// paper is out (ChipReadOf); a chrome leg's whole report, from what its
+/// camchrome steps show (ShownBy) and what its watch counted (LegLines): a
+/// plate the leg showed that was never drawn is CAM's red line, never
+/// silence, a drawn plate is judged under its owner outside CAM's chrome
+/// gate, and a half of the leg that was never seen (nothing held, the
+/// reading view never at rest) or a control not found fails CAM's line; and
+/// how the watch places a held thing that is no Component (HeldMember: a
+/// dragged decoration by its Root). Pure (types and values only, no Unity
+/// object made); in CAM's own Editor folder (Assembly-CSharp-Editor, the
+/// editor runner's).
 /// </summary>
 public class CamRigTests
 {
@@ -125,7 +131,102 @@ public class CamRigTests
 
         CamOps.ChromeTally noTab = Clean();
         noTab.Missing = "StampBar/Tab";
-        StringAssert.Contains("not found: StampBar/Tab", Line(CamOps.LegLines("a1", day12, noTab, null), "chrome.a1").Measured);
+        CamOps.ChromeLine missing = Line(CamOps.LegLines("a1", day12, noTab, null), "chrome.a1");
+        Assert.IsFalse(missing.Pass, "a renamed or unbuilt control is never watched: no gate may go green by its absence");
+        StringAssert.Contains("not found: StampBar/Tab", missing.Measured);
+        StringAssert.Contains("StampBar/Tab not found", missing.Detail);
+        CamOps.ChromeTally noTabDay1 = Clean(holding: 0);
+        noTabDay1.Missing = "PcTab, CityLook";
+        Assert.IsFalse(Line(CamOps.LegLines("a1_d1", Shows((1, "guide, reading")), noTabDay1, null), "chrome.a1_d1").Pass, "on day 1 too");
+    }
+
+    [Test]
+    public void LegLines_AHoldTheWatchCouldNotPlace_IsNamed_NotBlamedOnTheDrag()
+    {
+        HashSet<string> day12 = Shows((1, "held, reading"));
+        CamOps.ChromeTally unplaced = Clean(holding: 0);
+        unplaced.UnplacedFrames = 40;
+        unplaced.Unplaced = "Item";
+        CamOps.ChromeLine line = Line(CamOps.LegLines("a1", day12, unplaced, null), "chrome.a1");
+        Assert.IsFalse(line.Pass, "the held half went unmeasured");
+        StringAssert.Contains("held on 40 frames (Item)", line.Detail);
+        StringAssert.Contains("could not place it on screen", line.Detail);
+        StringAssert.DoesNotContain("held nothing", line.Detail, "the drag held something: blaming a blocked press names the wrong cause");
+        StringAssert.Contains("0 holding, 40 held but not placed (Item)", line.Measured);
+
+        CamOps.ChromeTally some = Clean(holding: 25);
+        some.UnplacedFrames = 3;
+        some.Unplaced = "Item";
+        CamOps.ChromeLine placedMostly = Line(CamOps.LegLines("a1", day12, some, null), "chrome.a1");
+        Assert.IsTrue(placedMostly.Pass, "the held half was measured on 25 frames");
+        StringAssert.Contains("25 holding, 3 held but not placed (Item)", placedMostly.Measured);
+    }
+
+    [Test]
+    public void HeldMember_PlacesADraggedDecoration_ByItsRoot_AndAComponentByItself()
+    {
+        // The day-12 chrome legs drag a decoration: DeskDecor registers its plain Item (no Component) with HoldRegistry.Desk.
+        Type item = typeof(DeskDecor).GetNestedType("Item", BindingFlags.NonPublic);
+        Assert.IsNotNull(item, "DeskDecor's hold");
+        Assert.IsTrue(typeof(IHoldable).IsAssignableFrom(item));
+        MemberInfo root = CamOps.HeldMember(item);
+        Assert.IsNotNull(root, "a dragged decoration must be placed on screen, or cam_chrome's held half is never measured");
+        Assert.AreEqual("Root", root.Name, "its Root carries its parts, not its Owner (the DeskDecor component that holds every decoration)");
+
+        Assert.IsNull(CamOps.HeldMember(typeof(Rolodex)), "a Component is placed by itself");
+        Assert.AreEqual("Root", CamOps.HeldMember(typeof(OwnerFirst)).Name, "a Transform before another Component");
+        Assert.AreEqual("Body", CamOps.HeldMember(typeof(ByProperty)).Name, "a GameObject property");
+        Assert.AreEqual("Owner", CamOps.HeldMember(typeof(OnlyAComponent)).Name, "else another Component");
+        Assert.IsNull(CamOps.HeldMember(typeof(NothingToPlace)), "nothing to read: the leg names the hold it could not place");
+    }
+
+    [Test]
+    public void ChipReadOf_CountsAReadOnlyOnceItsPaperIsOut_AndAStuckReadEndsTheReads()
+    {
+        Assert.AreEqual(CamOps.ChipRead.Refused, CamOps.ChipReadOf(false, false), "no chip: it bounces back, the next paper is tried");
+        Assert.AreEqual(CamOps.ChipRead.Refused, CamOps.ChipReadOf(false, true));
+        Assert.AreEqual(CamOps.ChipRead.Stuck, CamOps.ChipReadOf(true, false), "a read whose paper never came out is no read (play.<name> red: reads < f)");
+        Assert.AreEqual(CamOps.ChipRead.Read, CamOps.ChipReadOf(true, true));
+    }
+
+    private sealed class OwnerFirst : IHoldable
+    {
+        public DeskDecor Owner = null;
+        public string Id = null;
+        public Transform Root = null;
+
+        public void CancelHold()
+        {
+        }
+    }
+
+    private sealed class ByProperty : IHoldable
+    {
+        public Rolodex Owner { get; set; }
+
+        public GameObject Body { get; set; }
+
+        public void CancelHold()
+        {
+        }
+    }
+
+    private sealed class OnlyAComponent : IHoldable
+    {
+        public Rolodex Owner = null;
+
+        public void CancelHold()
+        {
+        }
+    }
+
+    private sealed class NothingToPlace : IHoldable
+    {
+        public int Id = 0;
+
+        public void CancelHold()
+        {
+        }
     }
 
     /// <summary>What a leg shows after its camchrome steps (n, target), gathered as the op gathers it.</summary>

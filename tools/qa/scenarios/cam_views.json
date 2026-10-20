@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "CAM: every resize is the rig's own (camres). Both fixed poses frame what they must at A1, A2, 16:10, A3, A4 on days 1 and 12, home by home (camframe), with the cap height at the reading pose reported for DOC-LOOK (camcap); the controls fade in over the last third of a move, at once when motion is still (camfade: full motion, Reduced Motion, a Motion intensity of 0); no view change while something is held, each refused on its own, from the office, the reading view and the city (camhold); the city's sweep and pointer parallax at most 1 px a 30 fps frame, the look landing within 2 s of an edge-to-edge pointer move, no bars, a click and Q return, F1 opens the PC with its keys card (camparallax, A1 and A4); each shake moment draws its own row and nothing else shakes, none when motion is still (camshake); the scripted day 12 (every counter paper dropped, every other one from the office view; the Auto-Feed tray clicked and its stack scanned; 10 scans and 5 chip reads, each finished; the intercom's wheel opened and a ring question answered; the Rolodex's right-click the one gap) with every landing with the view off tilting in once in its frame, none without a landing, and nothing turning while holding, counted from the views' own turns (camplay, camtilts); every camera move tagged (the run's camera assertion and each cameraCheck)."
+      "text": "CAM: every resize is the rig's own (camres). Both fixed poses frame what they must at A1, A2, 16:10, A3, A4 on days 1 and 12, home by home (camframe), with the cap height at the reading pose reported for DOC-LOOK at A1 and A2 on day 12, once the scripted day has laid its papers on the desk (camcap: day 1's handed papers wait on the counter, so a day-1 leg would measure nothing); the controls fade in over the last third of a move, at once when motion is still (camfade: full motion, Reduced Motion, a Motion intensity of 0); no view change while something is held, each refused on its own, from the office, the reading view and the city (camhold); the city's sweep and pointer parallax at most 1 px a 30 fps frame, the look landing within 2 s of an edge-to-edge pointer move, no bars, a click and Q return, F1 opens the PC with its keys card (camparallax, A1 and A4); each shake moment draws its own row and nothing else shakes, none when motion is still (camshake); the scripted day 12 (every counter paper dropped, every other one from the office view; the Auto-Feed tray clicked and its stack scanned; 10 scans and 5 chip reads, each finished; the intercom's wheel opened and a ring question answered; the Rolodex's right-click the one gap) with every landing with the view off tilting in once in its frame, none without a landing, and nothing turning while holding, counted from the views' own turns (camplay, camtilts); every camera move tagged (the run's camera assertion and each cameraCheck)."
     },
     {
       "op": "title"
@@ -66,10 +66,6 @@
       "name": "a1_d1_reading"
     },
     {
-      "op": "camcap",
-      "name": "a1_d1"
-    },
-    {
       "op": "call",
       "target": "DeskView.Return"
     },
@@ -109,10 +105,6 @@
     {
       "op": "camframe",
       "name": "a2_d1_reading"
-    },
-    {
-      "op": "camcap",
-      "name": "a2_d1"
     },
     {
       "op": "call",

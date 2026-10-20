@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -54,7 +55,9 @@ using UnityEngine.UI;
 /// shown chrome (the pull tabs, the Back control, "◀ City") is drawn over a
 /// held thing or over the reading view's framed work
 /// (<c>chrome.&lt;name&gt;</c>, BUG-59; red when a half the leg shows was
-/// never seen), and each overlay plate CAM measured over the work that was
+/// never seen, a held thing found by its Root when it is no Component, or
+/// when one of CAM's controls was not found), and each overlay plate CAM
+/// measured over the work that was
 /// drawn gets its own line under its owner (<c>plate.&lt;name&gt;.guide</c>,
 /// CONTENT; <c>.stamphint</c>, STAMP); a plate the leg showed that was never
 /// drawn gets a red "not measured" line under CAM
@@ -80,7 +83,9 @@ using UnityEngine.UI;
 /// <item><c>camcap</c> (name): in the reading view, the cap height in pixels
 /// at 1080p of the text printed on the desk's papers; a report of the margin
 /// to DOC-LOOK's floor (<c>capreport.&lt;name&gt;</c>; the pass is DOC-LOOK's at
-/// #9).</item>
+/// #9); red "not measured" with no paper on the desk, so cam_views runs it
+/// only after camplay has laid the day's papers there (a handed paper waits
+/// on the counter).</item>
 /// <item><c>camcycle</c> (n = cycles, 2 when 0): in the background, the
 /// reading toggle and the city look and back, for a <c>gc</c> window.</item>
 /// </list>
@@ -623,7 +628,8 @@ public static class CamOps
         public readonly List<Watched> Controls = new List<Watched>();
         public readonly List<string> Violations = new List<string>();
         public readonly HashSet<string> Shows = new HashSet<string>();
-        public int Frames, HoldingFrames, ReadingFrames, Over;
+        public int Frames, HoldingFrames, UnplacedFrames, ReadingFrames, Over;
+        public string Unplaced;
         public bool Running;
     }
 
@@ -692,8 +698,14 @@ public static class CamOps
         /// <summary>Frames watched.</summary>
         public int Frames;
 
-        /// <summary>Frames with something held (HoldRegistry.Desk).</summary>
+        /// <summary>Frames with something held (HoldRegistry.Desk) that the watch placed on screen (<see cref="HeldMember"/>).</summary>
         public int HoldingFrames;
+
+        /// <summary>Frames with something held that the watch could not place on screen (no Transform or GameObject to read, or off the screen).</summary>
+        public int UnplacedFrames;
+
+        /// <summary>The type of the first held thing the watch could not place (null: none).</summary>
+        public string Unplaced;
 
         /// <summary>Frames with the reading view on and at rest.</summary>
         public int ReadingFrames;
@@ -701,7 +713,7 @@ public static class CamOps
         /// <summary>Frames with CAM's own chrome over the held thing or the framed work.</summary>
         public int Over;
 
-        /// <summary>CAM's controls not found when the watch began, comma-separated (empty: none).</summary>
+        /// <summary>CAM's controls not found when the watch began, comma-separated (empty: none): each makes the leg's line red.</summary>
         public string Missing;
 
         /// <summary>The screen the leg ran at ("1920x1080").</summary>
@@ -773,10 +785,12 @@ public static class CamOps
     /// <list type="bullet">
     /// <item><c>chrome.&lt;leg&gt;</c>, CAM's: no tab, Back control or city tab
     /// drawn over a held thing or the reading view's framed work, at least one
-    /// frame watched, and each half the leg shows seen: a held thing on at
-    /// least one frame (<see cref="ShowsHeld"/>), the reading view at rest on
-    /// at least one (<see cref="ShowsReading"/>), so neither half passes
-    /// untested.</item>
+    /// frame watched, every one of CAM's controls found (a renamed or unbuilt
+    /// control is never watched, so it cannot pass by absence), and each half
+    /// the leg shows seen: a held thing placed on screen on at least one frame
+    /// (<see cref="ShowsHeld"/>; a hold the watch could not place is named as
+    /// such, not blamed on the drag), the reading view at rest on at least one
+    /// (<see cref="ShowsReading"/>), so neither half passes untested.</item>
     /// <item><c>plate.&lt;leg&gt;.&lt;key&gt;</c>, the plate's owner's, for each
     /// plate drawn in the leg: red while it covered the work.</item>
     /// <item><c>chrome.&lt;leg&gt;.&lt;key&gt;</c>, CAM's red "not measured"
@@ -792,14 +806,19 @@ public static class CamOps
         var unseen = new List<string>();
         if (tally.Frames == 0)
             unseen.Add("no frame was watched");
+        if (!string.IsNullOrEmpty(tally.Missing))
+            unseen.Add($"CAM's control(s) {tally.Missing} not found when the watch began (renamed, or not built: Build Office UI), so 'no chrome over the work' went untested for them");
         if (shows.Contains(ShowsHeld) && tally.HoldingFrames == 0)
-            unseen.Add("the leg's drag held nothing on any frame (a blocked press, or the decoration not draggable at this aspect), so 'no chrome over the held thing' went untested");
+            unseen.Add(tally.UnplacedFrames > 0
+                ? $"something was held on {tally.UnplacedFrames} frames ({tally.Unplaced}) but the watch could not place it on screen (no Transform or GameObject to read on it, or off the screen), so 'no chrome over the held thing' went untested"
+                : "the leg's drag held nothing on any frame (a blocked press, or the decoration not draggable at this aspect), so 'no chrome over the held thing' went untested");
         if (shows.Contains(ShowsReading) && tally.ReadingFrames == 0)
             unseen.Add("the reading view never came to rest, so 'no chrome over its framed work' went untested");
         string drawn = string.Join(", ", plates.Select(p => $"{PathOf(p.Key)} shown {p.Shown} frames"));
         string why = string.Join("; ", unseen.Concat(tally.Violations ?? Array.Empty<string>()));
+        string unplaced = tally.UnplacedFrames > 0 ? $", {tally.UnplacedFrames} held but not placed ({tally.Unplaced})" : "";
         lines.Add(new ChromeLine($"chrome.{leg}", Owner, tally.Over == 0 && unseen.Count == 0,
-                                 $"{tally.Frames} frames watched ({tally.HoldingFrames} holding, {tally.ReadingFrames} in the reading view), {tally.Over} with chrome over the work, {tally.ScreenSize}" +
+                                 $"{tally.Frames} frames watched ({tally.HoldingFrames} holding{unplaced}, {tally.ReadingFrames} in the reading view), {tally.Over} with chrome over the work, {tally.ScreenSize}" +
                                  (string.IsNullOrEmpty(tally.Missing) ? "" : $"; not found: {tally.Missing}") + (drawn.Length > 0 ? $"; plates: {drawn}" : ""),
                                  why.Length > 0 ? why : "no tab, Back control or city tab drawn over a held thing or the reading view's framed work (BUG-59)"));
         foreach ((string path, string key, string owner) in Plates)
@@ -873,6 +892,8 @@ public static class CamOps
         {
             Frames = done.Frames,
             HoldingFrames = done.HoldingFrames,
+            UnplacedFrames = done.UnplacedFrames,
+            Unplaced = done.Unplaced,
             ReadingFrames = done.ReadingFrames,
             Over = done.Over,
             Missing = string.Join(", ", ChromeNames.Where(c => done.Controls.All(w => w.Path != c))),
@@ -916,6 +937,48 @@ public static class CamOps
 
     private static float AlphaOf(GameObject go, CanvasGroup group) => go == null || !go.activeInHierarchy ? 0f : group != null ? group.alpha : 1f;
 
+    /// <summary>The member that places each holdable type on screen (<see cref="HeldMember"/>), read once per type.</summary>
+    private static readonly Dictionary<Type, MemberInfo> HeldMembers = new Dictionary<Type, MemberInfo>();
+
+    /// <summary>
+    /// How the chrome watch finds a held thing that is no Component on screen,
+    /// by its type (pure): its first instance field or property of a Transform
+    /// or GameObject (a dragged decoration registers DeskDecor's plain Item,
+    /// whose Root carries its parts), else its first of another Component (a
+    /// Transform comes first: an owner component is the holder, not the held
+    /// thing). Null for a Component (it is placed by itself: the Rolodex) and
+    /// for a type with no such member (the leg then names the hold it could
+    /// not place, <see cref="LegLines"/>).
+    /// </summary>
+    public static MemberInfo HeldMember(Type holdable)
+    {
+        if (holdable == null || typeof(Component).IsAssignableFrom(holdable) || typeof(GameObject).IsAssignableFrom(holdable))
+            return null;
+        const BindingFlags Instance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        var members = new List<(MemberInfo member, Type type)>();
+        for (Type t = holdable; t != null && t != typeof(object); t = t.BaseType)
+        {
+            // An auto-property's backing field is read through the property itself.
+            members.AddRange(t.GetFields(Instance | BindingFlags.DeclaredOnly).Where(f => !f.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
+                              .Select(f => ((MemberInfo)f, f.FieldType)));
+            members.AddRange(t.GetProperties(Instance | BindingFlags.DeclaredOnly).Where(p => p.CanRead && p.GetIndexParameters().Length == 0).Select(p => ((MemberInfo)p, p.PropertyType)));
+        }
+        bool Places(Type type) => typeof(Transform).IsAssignableFrom(type) || typeof(GameObject).IsAssignableFrom(type);
+        return members.FirstOrDefault(m => Places(m.type)).member ?? members.FirstOrDefault(m => typeof(Component).IsAssignableFrom(m.type)).member;
+    }
+
+    /// <summary>The object of the held thing <paramref name="held"/> the watch measures on screen: a Component's own, else the one its <see cref="HeldMember"/> holds now (null when none).</summary>
+    private static GameObject HeldObject(IHoldable held)
+    {
+        if (held is Component component)
+            return component != null ? component.gameObject : null;
+        Type type = held.GetType();
+        if (!HeldMembers.TryGetValue(type, out MemberInfo member))
+            HeldMembers[type] = member = HeldMember(type);
+        object value = member is FieldInfo f ? f.GetValue(held) : member is PropertyInfo p ? p.GetValue(held) : null;
+        return value is GameObject go ? go : value is Component c && c != null ? c.gameObject : null;
+    }
+
     /// <summary>Each frame's end: every shown chrome control's and plate's screen rect against the held thing's and, in the reading view, the framed work's.</summary>
     private static IEnumerator Watch(ChromeWatch watch)
     {
@@ -928,10 +991,19 @@ public static class CamOps
             watch.Frames++;
             Camera cam = Camera.main;
             var work = new List<(string what, Rect rect)>();
-            if (HoldRegistry.Desk.Current is Component held && QaGame.ScreenRect(held.gameObject) is Rect heldRect)
+            if (HoldRegistry.Desk.Current is IHoldable holding)
             {
-                watch.HoldingFrames++;
-                work.Add(("the held " + held.name, heldRect));
+                // A dragged decoration registers DeskDecor's plain Item, no Component: placed by its Root (HeldMember).
+                if (HeldObject(holding) is GameObject held && QaGame.ScreenRect(held) is Rect heldRect)
+                {
+                    watch.HoldingFrames++;
+                    work.Add(("the held " + held.name, heldRect));
+                }
+                else
+                {
+                    watch.UnplacedFrames++;
+                    watch.Unplaced = watch.Unplaced ?? holding.GetType().Name;
+                }
             }
             DeskView view = QaGame.Find<DeskView>();
             // The reading view's framed work, once its tilt has come to rest (mid-blend the camera frames a wider view).
@@ -1206,6 +1278,28 @@ public static class CamOps
         return n;
     }
 
+    /// <summary>How one of camplay's chip read attempts ends (<see cref="ChipReadOf"/>).</summary>
+    public enum ChipRead
+    {
+        /// <summary>The reader never began (a paper with no chip): it bounces back, the next paper is tried.</summary>
+        Refused,
+
+        /// <summary>The reader began but its paper never came back out: not a read, and the reads end (while the reader holds a paper DeskController refuses every next one, <c>_inReader</c>).</summary>
+        Stuck,
+
+        /// <summary>The reader finished and its paper is out again: one read.</summary>
+        Read,
+    }
+
+    /// <summary>
+    /// A chip read attempt's end (pure): <paramref name="began"/> (the reader
+    /// went busy) and <paramref name="cameOut"/> (it finished and its paper
+    /// left the reader's set). A read counts only once its paper is out, so a
+    /// read that never comes out is no read and ends the reads (play.&lt;name&gt;
+    /// red: reads &lt; f), and the note and the counts agree.
+    /// </summary>
+    public static ChipRead ChipReadOf(bool began, bool cameOut) => !began ? ChipRead.Refused : cameOut ? ChipRead.Read : ChipRead.Stuck;
+
     /// <summary>The traveller wheel's ring pills that take a click now (its RadialLayoutGroup's children; "&lt; Back" in the centre slot is not one).</summary>
     private static List<Button> RingPills(TravellerWheel wheel)
     {
@@ -1397,19 +1491,19 @@ public static class CamOps
                     break;
                 }
                 yield return DragAt(input, from.Value, to.Value);
-                bool began = false;
+                bool began = false, back = false;
                 yield return Wait(() => reader.Busy, 4f, ok => began = ok);
-                if (!began)
+                if (began)
+                    yield return Wait(() => !reader.Busy && CountOf(desk, "_inReader") == 0, 12f, ok => back = ok);
+                ChipRead read = ChipReadOf(began, back);
+                if (read == ChipRead.Refused)
                 {
                     refused++;
                     yield return new WaitForSecondsRealtime(1f); // it bounces back to where it was picked up
                     continue;
                 }
-                bool back = false;
-                yield return Wait(() => !reader.Busy && CountOf(desk, "_inReader") == 0, 12f, ok => back = ok);
-                if (!back)
+                if (read == ChipRead.Stuck)
                 {
-                    // A read counts only once its paper is out again; while the reader holds one, DeskController refuses every next paper, so the reads end here (play.<name> red: reads < f).
                     notes.Add($"chip read {reads + 1} never came back out (paper {paper.Index} still in the reader after 12 s)");
                     break;
                 }
