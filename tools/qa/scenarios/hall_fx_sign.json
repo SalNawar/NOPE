@@ -1,0 +1,67 @@
+{
+  "name": "hall_fx_sign",
+  "owner": "HALL-FX",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "HALL-FX BUG-67: the AVAILABLE sign before its first press pulses InvitePulse.Cycles beats (1.6 s each), then holds lit. Pass: the 10 s idle sequence after the pulse passes flicker, and the sign region luma stays within +-3 (region_luma)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "record",
+      "name": "sign_invite",
+      "f": 6
+    },
+    {
+      "op": "record",
+      "name": "sign_idle",
+      "f": 10
+    },
+    {
+      "op": "still",
+      "name": "sign_idle"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "record",
+      "name": "sign_mid_case",
+      "f": 10
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}

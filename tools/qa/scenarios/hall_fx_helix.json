@@ -1,0 +1,117 @@
+{
+  "name": "hall_fx_helix",
+  "owner": "HALL-FX",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "HALL-FX BUG-54/56e: the Helix monitor 10 s before and after a wrong call (one glitch, then calm within 2 s), then just past the warning value (firedAtStability + stabilityCriticalMargin) and back. Pass: seqtools flicker on every sequence; the warning state shows (region_luma on the monitor: warmer, steady) and goes."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "cheat",
+      "name": "SetStability",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "record",
+      "name": "helix_before",
+      "f": 10
+    },
+    {
+      "op": "mark",
+      "name": "drop"
+    },
+    {
+      "op": "cheat",
+      "name": "AddStability",
+      "f": -2.5
+    },
+    {
+      "op": "record",
+      "name": "helix_after_drop",
+      "f": 10
+    },
+    {
+      "op": "cheat",
+      "name": "SetStability",
+      "f": 62.5
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "record",
+      "name": "helix_warning",
+      "f": 10
+    },
+    {
+      "op": "still",
+      "name": "helix_warning"
+    },
+    {
+      "op": "cheat",
+      "name": "SetStability",
+      "f": 66
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "record",
+      "name": "helix_warning_off",
+      "f": 10
+    },
+    {
+      "op": "still",
+      "name": "helix_warning_off"
+    },
+    {
+      "op": "cheat",
+      "name": "SetStability",
+      "f": 90
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}

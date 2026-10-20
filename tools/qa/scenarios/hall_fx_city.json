@@ -1,0 +1,585 @@
+{
+  "name": "hall_fx_city",
+  "owner": "HALL-FX",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "HALL-FX BUG-13/26a/67/71 flicker: 10 s sequences of the office and the city view at H1, H2, H3, 17:00 (forced, so frozen) and H5 at A1 and A2, and at H2 and H5 at A3 and A4. Pass: seqtools flicker on every sequence (no pixel toggling more than twice in 10 s outside the cars), plus the traffic tint (region_luma, see docs/pending/HALL-FX.md)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "track",
+      "name": "car0",
+      "target": "Exterior flying vehicle 0"
+    },
+    {
+      "op": "track",
+      "name": "car1",
+      "target": "Exterior flying vehicle 1"
+    },
+    {
+      "op": "track",
+      "name": "car2",
+      "target": "Exterior flying vehicle 2"
+    },
+    {
+      "op": "track",
+      "name": "car3",
+      "target": "Exterior flying vehicle 3"
+    },
+    {
+      "op": "track",
+      "name": "car4",
+      "target": "Exterior flying vehicle 4"
+    },
+    {
+      "op": "track",
+      "name": "car5",
+      "target": "Exterior flying vehicle 5"
+    },
+    {
+      "op": "track",
+      "name": "car6",
+      "target": "Exterior flying vehicle 6"
+    },
+    {
+      "op": "track",
+      "name": "car7",
+      "target": "Exterior flying vehicle 7"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "hour",
+      "f": 9
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a1_h1",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a1_h1",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a1_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a1_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 16.75
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a1_h3",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a1_h3",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 17
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a1_1700",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a1_1700",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 22
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a1_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a1_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "hour",
+      "f": 9
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a2_h1",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a2_h1",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a2_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a2_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 16.75
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a2_h3",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a2_h3",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 17
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a2_1700",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a2_1700",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 22
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a2_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a2_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a3_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a3_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 22
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a3_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a3_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a4_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a4_h2",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 22
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "office_a4_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "record",
+      "name": "city_a4_h5",
+      "f": 10
+    },
+    {
+      "op": "key",
+      "key": "D"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}
