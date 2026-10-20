@@ -10501,6 +10501,768 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "zaboun and striped aba",
+      "details": "Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length zaboun robe of striped cotton-silk (cream with narrow crimson stripes), wrapped across the chest and belted, with a long brass pen case (qalamdan) tucked upright into the belt. Over it is an 'aba: a wide, square-shouldered cloak of camel-hair wool with arm slits, woven in broad vertical stripes of dark brown and cream, falling open at the front to mid-calf.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_m_iraq_earlymodern.",
+      "flags": {
+        "label": "zaboun and striped aba"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_iraq_earlymodern",
+      "prompt": "Dress supplied fitting mannequin in historical costume. Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length zaboun robe of striped cotton-silk (cream with narrow crimson stripes), wrapped across the chest and belted, with a long brass pen case (qalamdan) tucked upright into the belt. Over it is an 'aba: a wide, square-shouldered cloak of camel-hair wool with arm slits, woven in broad vertical stripes of dark brown and cream, falling open at the front to mid-calf.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_m_iraq_earlymodern.\nExact original body pose and head hands feet positions; male scalp239 chin400 soles1421 x512. Long sleeves of cream/crimson striped zaboun visible through slits of broad brown/cream striped aba. Practical brown leather shoes. Cloth visibly woven, worn but maintained. Empty magenta hands, head neck solidmagenta#FF00FF. No hair beard headwear jewelry. The brass pen case is writing equipment, not weapon. Late1980s handinked anime, fine pigment texture and cel shading, no smooth digital gloss.1024x1536 puregreen#00FF00 background without floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0729daf5-2cd8-46eb-b28f-6dde7f47980e.png",
+      "path": "Raw/outfit_m_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "407201760bc63bd784dcb933a4a229c47b98d1d5bbcf252db932955261eaeb4f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_earlymodern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "zaboun and striped aba",
+      "details": "Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length zaboun robe of striped cotton-silk (cream with narrow crimson stripes), wrapped across the chest and belted, with a long brass pen case (qalamdan) tucked upright into the belt. Over it is an 'aba: a wide, square-shouldered cloak of camel-hair wool with arm slits, woven in broad vertical stripes of dark brown and cream, falling open at the front to mid-calf.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_m_iraq_earlymodern.",
+      "flags": {
+        "label": "zaboun and striped aba"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_iraq_earlymodern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Preserve first head and hand contours exactly. Same cream/crimson finely striped wrap zaboun, brown/cream broadstriped wool aba with arm slits, woven belt, brass pen case and brownshoes. Natural sleeves emerge through cloak slits and follow arms. Head x512 scalp239 chin400 soles1421 unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c0428e5b-82db-4d1f-bc6d-22034ee6598e.png",
+      "path": "Raw/outfit_m_iraq_earlymodern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f77575167d0203eeafe8451e4f02603a789ebc1020e84add1cb376dd09cde158",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_earlymodern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "zaboun and striped aba",
+      "details": "Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length zaboun robe of striped cotton-silk (cream with narrow crimson stripes), wrapped across the chest and belted, with a long brass pen case (qalamdan) tucked upright into the belt. Over it is an 'aba: a wide, square-shouldered cloak of camel-hair wool with arm slits, woven in broad vertical stripes of dark brown and cream, falling open at the front to mid-calf.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_m_iraq_earlymodern.",
+      "flags": {
+        "label": "zaboun and striped aba"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_iraq_earlymodern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Preserve first head and hand contours exactly. Same cream/crimson finely striped wrap zaboun, brown/cream broadstriped wool aba with arm slits, woven belt, brass pen case and brownshoes. Natural sleeves emerge through cloak slits and follow arms. Head x512 scalp239 chin400 soles1421 unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d55f65a4-c7b2-4407-b4b5-9a0da8ba94bb.png",
+      "path": "Raw/outfit_m_iraq_earlymodern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c1f0fa5a9d132c079acdb04a5f9a264f2b1056ae97fecfcf6a08ed9dbcea74c8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_earlymodern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "zaboun and striped aba",
+      "details": "Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length zaboun robe of striped cotton-silk (cream with narrow crimson stripes), wrapped across the chest and belted, with a long brass pen case (qalamdan) tucked upright into the belt. Over it is an 'aba: a wide, square-shouldered cloak of camel-hair wool with arm slits, woven in broad vertical stripes of dark brown and cream, falling open at the front to mid-calf.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_m_iraq_earlymodern.",
+      "flags": {
+        "label": "zaboun and striped aba"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_iraq_earlymodern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Preserve first head and hand contours exactly. Same cream/crimson finely striped wrap zaboun, brown/cream broadstriped wool aba with arm slits, woven belt, brass pen case and brownshoes. Natural sleeves emerge through cloak slits and follow arms. Head x512 scalp239 chin400 soles1421 unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-89c8d5d2-051f-4a0e-bccd-b87ca055fcc2.png",
+      "path": "Raw/outfit_m_iraq_earlymodern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1b8e4e8f268dbbb7907d2aac427d80d4018da064020b58b6fad0e7ec72c37d54",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "short crop",
+      "details": "Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Short-cropped\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw hair_m_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_iraq_earlymodern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HAIR ONLY extraction source. Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Short-cropped\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw hair_m_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt pen case and skin become SOLID FLAT MAGENTA #FF00FF. Only cropped darkbrown hair natural colored, subtly uneven handtrimmed small waves close to scalp, no modern fade or styled fringe. Preserve original face scale and position scalp239 chin400 x512 and handsfeet unchanged. No beard headwear. Late1980s fine inked anime hair pigment highlights.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-dbbaf15b-948f-4d33-a881-4c6d8d3a71f6.png",
+      "path": "Raw/hair_m_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4b4b383b79a10fef513cdec0ea500669ec6c196c18927977219843cbf8135567",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "full beard",
+      "details": "Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Full beard with a moustache\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw facialhair_m_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "full beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_iraq_earlymodern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into FACIALHAIR ONLY extraction source. Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Full beard with a moustache\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw facialhair_m_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt pen case and skin become SOLID FLAT MAGENTA #FF00FF. Only full darkbrown beard and moustache retain natural color. Broad softly squared beard with slightly uneven curled ends down upper neck, moustache modest and mouth visible. Preserve face scale position scalp239 chin400 x512, body handsfeetunchanged. Bald scalp noheadwear. Late1980s fine inked anime matte painted hairtexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-80f4b984-301a-412f-8a4e-618d0fdd76dc.png",
+      "path": "Raw/facialhair_m_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3dcc79475a06855d47215d80af5004969c61f5e6afe660cf480bb87fb1161e82",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "checked turban",
+      "details": "Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Loosely wound turban of clearly coloured, patterned cloth (cream with bold red-brown checks), with a fringed end tucked in at the side. It is never plain white and never shows a red crown.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw headwear_m_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "checked turban",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_iraq_earlymodern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HEADWEAR ONLY extraction source. Subject: man of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Loosely wound turban of clearly coloured, patterned cloth (cream with bold red-brown checks), with a fringed end tucked in at the side. It is never plain white and never shows a red crown.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw headwear_m_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt pen case and skin become SOLID FLAT MAGENTA #FF00FF. Only the cream/red-brown checked woven turban naturallycolored, fringedtail tucked to side. Preserve original face scale position scalp239 chin400 x512, body handsfeetunchanged. No hair beard. Fine1980s handinked anime matte wool/cloth pigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d48f311c-211e-4a86-a402-906cce8f378b.png",
+      "path": "Raw/headwear_m_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b13835de803a4c6035729e5f266242f8a43607525a19d821e19fd8ea49bcf810",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "striped dress and aba",
+      "details": "Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length, long-sleeved dress of striped silk-cotton (indigo and dusty coral) held by a silver-link belt, over trousers. A dark, sleeveless 'aba cloak is worn open over the shoulders.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_f_iraq_earlymodern.",
+      "flags": {
+        "label": "striped dress and aba"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_iraq_earlymodern",
+      "prompt": "Dress supplied fitting mannequin in historical costume. Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length, long-sleeved dress of striped silk-cotton (indigo and dusty coral) held by a silver-link belt, over trousers. A dark, sleeveless 'aba cloak is worn open over the shoulders.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_f_iraq_earlymodern.\nPreserve exact original body pose and head hands feet positions; female scalp164 chin324 soles1440 x512. Indigo/dusty coral narrow vertical stripes, modest practical loose dress with long sleeves, silver linked belt, dark charcoalbrown sleeveless wool aba open front over shoulders, cream trousers just visible at ankle, plain brown flat slippers. Slight fabric wear, ordinary traveller not glamorous. Exposed head neck hands solidmagenta#FF00FF. No hair headwear jewelry. Late1980s handinked anime, fine pigment texture and cel shading, no smooth digital gloss.1024x1536 puregreen#00FF00 background without floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c61ae9d2-1023-462d-9146-6099b88197fe.png",
+      "path": "Raw/outfit_f_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9ca8b1f47ba233ce7b66a7d2adeee9aeea55d7355763cbf6c8a95866140f59d8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_earlymodern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "striped dress and aba",
+      "details": "Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length, long-sleeved dress of striped silk-cotton (indigo and dusty coral) held by a silver-link belt, over trousers. A dark, sleeveless 'aba cloak is worn open over the shoulders.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_f_iraq_earlymodern.",
+      "flags": {
+        "label": "striped dress and aba"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_iraq_earlymodern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Preserve first head and hand contours exactly. Same indigo/coral finely striped dress with gathered long sleeves, charcoalbrown open sleeveless aba, silverlinked belt, cream trousers and brownslippers. Natural sleevefolds follow arms, cloak hangs behind arms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-25530c6c-9295-4950-98ea-7957120a8dd5.png",
+      "path": "Raw/outfit_f_iraq_earlymodern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "54c1c485a28d287cd83589b8a55bacf2568f19295f811a1fc91b092e4d761fef",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_earlymodern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "striped dress and aba",
+      "details": "Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length, long-sleeved dress of striped silk-cotton (indigo and dusty coral) held by a silver-link belt, over trousers. A dark, sleeveless 'aba cloak is worn open over the shoulders.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_f_iraq_earlymodern.",
+      "flags": {
+        "label": "striped dress and aba"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_iraq_earlymodern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Preserve first head and hand contours exactly. Same indigo/coral finely striped dress with gathered long sleeves, charcoalbrown open sleeveless aba, silverlinked belt, cream trousers and brownslippers. Natural sleevefolds follow arms, cloak hangs behind arms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aff1c37a-1a94-48bb-a379-1c6755cadfdb.png",
+      "path": "Raw/outfit_f_iraq_earlymodern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "179607814c5a22b0008f40d3dd33c53b33dab37c87532dbc572249cb4b04352d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_earlymodern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "striped dress and aba",
+      "details": "Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Ankle-length, long-sleeved dress of striped silk-cotton (indigo and dusty coral) held by a silver-link belt, over trousers. A dark, sleeveless 'aba cloak is worn open over the shoulders.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw outfit_f_iraq_earlymodern.",
+      "flags": {
+        "label": "striped dress and aba"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_iraq_earlymodern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Preserve first head and hand contours exactly. Same indigo/coral finely striped dress with gathered long sleeves, charcoalbrown open sleeveless aba, silverlinked belt, cream trousers and brownslippers. Natural sleevefolds follow arms, cloak hangs behind arms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.\nCorrection: Correct FIRST image only at feet: put BOTH feet completely inside the same closed-toe brown leather flat slippers shown in SECOND image. No magenta toes showing, shoes cover all toes and instep. Keep magenta ankles above shoe opening. Preserve everything else of FIRST exactly: two palms forward objecting pose, head, body, clothes, green background,1024x1536 framing. Shoes must match SECOND, with both soles at y1440. No other changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-53462549-692a-4765-8899-819b9fecc705.png",
+      "path": "Raw/outfit_f_iraq_earlymodern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5bd97d1beaba1facb59024fe6549633dd3d57bd7a60a28c87649fed2f2f41b54",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "pinned braids",
+      "details": "Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Long hair in two braids pinned up close to the head\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw hair_f_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pinned braids"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_iraq_earlymodern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HAIR ONLY extraction source. Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Long hair in two braids pinned up close to the head\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw hair_f_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt and skin become SOLID FLAT MAGENTA #FF00FF. Only darkbrown hair colored: centerpart, two long braids wound flat around back of head, compact pinned arrangement close to skull, not tall crown. Preserve face scale/position scalp164 chin324 x512 handsfeet unchanged. No jewelry or headwear. Late1980s fine inked anime hair, subtlepigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bafdb5c7-557a-4e7e-be3f-a50eb6e4dc33.png",
+      "path": "Raw/hair_f_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "64f92ff13a6b3747709cba3522ed5a76977826875e151079e05d4224c65f3544",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "futa shawl",
+      "details": "Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Black crepe head-shawl (futa) wrapped over the hair and round the neck, bound at the brow by a narrow black 'asaba band. The face is uncovered.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw headwear_f_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "futa shawl",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_iraq_earlymodern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HEADWEAR ONLY extraction source. Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Black crepe head-shawl (futa) wrapped over the hair and round the neck, bound at the brow by a narrow black 'asaba band. The face is uncovered.\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw headwear_f_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt and skin become SOLID FLAT MAGENTA #FF00FF. Only requested black crepe headshawl and narrow black browband naturallycolored. Matte charcoal highlights, small rippled crepe fabric texture, wrapped neck, sides close to head neck, little shoulder overlap and no arms covered. Entire face remains uncovered. Preserve face scale/position scalp164 chin324 x512 handsfeet unchanged. No visiblehair jewelry. Late1980s fine inked anime pigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-06a9a9f5-b27e-4802-99af-3726ef6f1235.png",
+      "path": "Raw/headwear_f_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1d122befd5b0f47797634a4d53d3ac3acb9cc943ec3297c1a944ed06a189e036",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_iraq_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "country": "iraq",
+      "era": "earlymodern",
+      "label": "qilada necklace",
+      "details": "Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Gold qilada necklace hung with a row of plain gold discs with raised rims (no face, letters or marks) and teardrop pendants\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw accessory_f_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "qilada necklace"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_iraq_earlymodern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into ACCESSORY ONLY extraction source. Subject: woman of Ottoman Baghdad; Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers).\nDraw: Gold qilada necklace hung with a row of plain gold discs with raised rims (no face, letters or marks) and teardrop pendants\nAvoid: Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern); fez or tarboush; the Safavid Qizilbash red-staved taj (a sectarian and military emblem); janissary or other Ottoman military dress; face veils that hide the face; khanjar daggers or any weapons; Persian royal court dress; crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)\nOutput one full-canvas raw accessory_f_iraq_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt and skin become SOLID FLAT MAGENTA #FF00FF. Only requested gold necklace naturallycolored, modest single row discs alternating teardrops, plain unmarked raisedrims, hangs from neck onto upperchest ending above y460, realisticsmall jewellery scale not breastplate. Preserve face scale position and handsfeet unchanged. No hair headwear otherjewellery. Late1980s fine inked anime brushedmetal pigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9ec56d6b-8bab-4cd6-9957-8eb3519ee1e5.png",
+      "path": "Raw/accessory_f_iraq_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "349486382dc5b416436386eb890913eb2196b6d0bf5657b7f9f725f98803d53b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "zaboun and camel aba",
+      "details": "Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length zaboun robe of white cotton with thin blue-black stripes, crossed over at the chest and girdled with a folded patterned shawl, with a slim brass scribe's pen case (dawat) tucked upright into the front of it. Over it is an 'aba: a wide, sleeveless, open-fronted cloak of fine wool in dark camel-brown, with a band of gold-thread embroidery round the neck and down the front edges.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_m_iraq_industrial.",
+      "flags": {
+        "label": "zaboun and camel aba"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_iraq_industrial",
+      "prompt": "Dress supplied fitting mannequin in historical costume. Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length zaboun robe of white cotton with thin blue-black stripes, crossed over at the chest and girdled with a folded patterned shawl, with a slim brass scribe's pen case (dawat) tucked upright into the front of it. Over it is an 'aba: a wide, sleeveless, open-fronted cloak of fine wool in dark camel-brown, with a band of gold-thread embroidery round the neck and down the front edges.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_m_iraq_industrial.\nPreserve exact original body pose head hands feet; male scalp239 chin400 soles1421 x512. White robe fine blueblack stripes, folded patterned faded rust shawl waistgirdle, slim brass writingpen case (not weapon), plain dark camelbrown aba with restrained goldthread edge. Brown closedtoe leather shoes. Ordinary working traveller, cloth worn but maintained. Exposed head neck hands solidmagenta#FF00FF. No hair beard headwear jewelry. Late1980s handinked anime fine pigment fabrictexture and cel shading.1024x1536 puregreen#00FF00 background without floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-12bcc157-0384-479e-adcb-80a06d6b620f.png",
+      "path": "Raw/outfit_m_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "03d5bf314b0bad7b7fdf4c233a64dbcc32b8b95a799b497a8e7703f53e0b9b9a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_industrial__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "zaboun and camel aba",
+      "details": "Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length zaboun robe of white cotton with thin blue-black stripes, crossed over at the chest and girdled with a folded patterned shawl, with a slim brass scribe's pen case (dawat) tucked upright into the front of it. Over it is an 'aba: a wide, sleeveless, open-fronted cloak of fine wool in dark camel-brown, with a band of gold-thread embroidery round the neck and down the front edges.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_m_iraq_industrial.",
+      "flags": {
+        "label": "zaboun and camel aba"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_iraq_industrial",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Preserve first head and hand contours exactly. Same white/fine blueblack striped zaboun, dark camelbrown open sleeveless aba goldedge, rustpatterned shawl belt brasspen case brown closedtoe shoes. Natural sleevesfollowarms, cloak behindarms. Male scalp239 chin400 soles1421 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-505d2ac7-92e3-4765-8b99-0c64e8587073.png",
+      "path": "Raw/outfit_m_iraq_industrial__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2dd037e314510ca0e18ce869b03126b77f9ee1867b30f70b31eeb368ffefdfd6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_industrial__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "zaboun and camel aba",
+      "details": "Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length zaboun robe of white cotton with thin blue-black stripes, crossed over at the chest and girdled with a folded patterned shawl, with a slim brass scribe's pen case (dawat) tucked upright into the front of it. Over it is an 'aba: a wide, sleeveless, open-fronted cloak of fine wool in dark camel-brown, with a band of gold-thread embroidery round the neck and down the front edges.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_m_iraq_industrial.",
+      "flags": {
+        "label": "zaboun and camel aba"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_iraq_industrial",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Preserve first head and hand contours exactly. Same white/fine blueblack striped zaboun, dark camelbrown open sleeveless aba goldedge, rustpatterned shawl belt brasspen case brown closedtoe shoes. Natural sleevesfollowarms, cloak behindarms. Male scalp239 chin400 soles1421 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-11f01890-6893-4197-9550-ca6fadf6e898.png",
+      "path": "Raw/outfit_m_iraq_industrial__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "456ec48971263c3718162662158bc13d5075974b85fb6f674d9f2464589d45da",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_industrial__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "zaboun and camel aba",
+      "details": "Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length zaboun robe of white cotton with thin blue-black stripes, crossed over at the chest and girdled with a folded patterned shawl, with a slim brass scribe's pen case (dawat) tucked upright into the front of it. Over it is an 'aba: a wide, sleeveless, open-fronted cloak of fine wool in dark camel-brown, with a band of gold-thread embroidery round the neck and down the front edges.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_m_iraq_industrial.",
+      "flags": {
+        "label": "zaboun and camel aba"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_iraq_industrial",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Preserve first head and hand contours exactly. Same white/fine blueblack striped zaboun, dark camelbrown open sleeveless aba goldedge, rustpatterned shawl belt brasspen case brown closedtoe shoes. Natural sleevesfollowarms, cloak behindarms. Male scalp239 chin400 soles1421 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d77f0ff9-5a6d-4919-92a9-96d78953db66.png",
+      "path": "Raw/outfit_m_iraq_industrial__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "10601b7a24902eb69af19eb084cca28d2e092572008bd91f941387366a69a7c9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "close crop",
+      "details": "Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Short and close-cropped\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw hair_m_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "close crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_iraq_industrial",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HAIR ONLY extraction source. Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Short and close-cropped\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw hair_m_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt pen case and skin become SOLID FLAT MAGENTA #FF00FF. Only short closecropped blackbrown hair colored, subtle receding temple corners, fine tight natural curls, not fashionablestyled fringe. Preserve face scale position scalp239 chin400 x512 and handsfeet unchanged. No beard headwear. Late1980s fine inked anime mattehair pigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2125b319-c4d0-41e0-939b-3ef54287b992.png",
+      "path": "Raw/hair_m_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "844afb0d1e83fea7d78cfb2c8969b876923273573bcbb32a62a05ce9c2b7622c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "moustache, short beard",
+      "details": "Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy moustache with a short trimmed beard\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw facialhair_m_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "moustache, short beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_iraq_industrial",
+      "prompt": "Edit supplied fullyclothed fittingfigure into FACIALHAIR ONLY extraction source. Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy moustache with a short trimmed beard\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw facialhair_m_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt pen case and skin become SOLID FLAT MAGENTA #FF00FF. Only heavy darkbrown moustache with broad downward tips and short closelytrimmed beard naturalcolored. Mouth visible, beard stays close to jaw not long. Preserve face scale position scalp239 chin400 x512 body handsfeet unchanged. Bald scalp noheadwear. Late1980s fine inked anime matte paintedhairtexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5a85785d-2302-4b84-afb5-269ac3cb9320.png",
+      "path": "Raw/facialhair_m_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3b3bbcc74b94bd850f183cba7c17bc3e80a8f64228225144d6ae03d27d1685eb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "chfiyya",
+      "details": "Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Chfiyya (Iraqi keffiyeh): a square headcloth of plain white cotton, folded into a triangle and draped over the head to the shoulders, held in place by a doubled black camel-hair 'igal cord ring. The face is fully visible.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw headwear_m_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "chfiyya",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_iraq_industrial",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HEADWEAR ONLY extraction source. Subject: man of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Chfiyya (Iraqi keffiyeh): a square headcloth of plain white cotton, folded into a triangle and draped over the head to the shoulders, held in place by a doubled black camel-hair 'igal cord ring. The face is fully visible.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw headwear_m_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt pen case and skin become SOLID FLAT MAGENTA #FF00FF. Only plain ivory-white cotton triangular headcloth with DOUBLE black camelhair cord ring colored. Coarse cotton matte texture, sides drape to shoulders but clear of arms, face entirely visible, no patterned checks. Preserve face scale position scalp239 chin400 x512 and handsfeet unchanged. No hair beard jewellery. Late1980s fine inked anime clothpigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23ecfd6e-dc90-4fc2-b66f-48073a76cbde.png",
+      "path": "Raw/headwear_m_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a01e35adaeca8e60accd798b35a343d36ad27da8bb05d2323cbfb20703668eae",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "brocade dress and abaya",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length, long-sleeved dress of brocaded silk (gold on crimson or bottle green) with a silver-plaque belt. Over everything is a black silk 'abaya, hanging from the shoulders to the ankles and falling open at the front to show the dress.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_f_iraq_industrial.",
+      "flags": {
+        "label": "brocade dress and abaya"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_iraq_industrial",
+      "prompt": "Dress supplied fitting mannequin in historical costume. Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length, long-sleeved dress of brocaded silk (gold on crimson or bottle green) with a silver-plaque belt. Over everything is a black silk 'abaya, hanging from the shoulders to the ankles and falling open at the front to show the dress.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_f_iraq_industrial.\nPreserve exact original body pose head hands feet; female scalp164 chin324 soles1440 x512. Bottle green dress subdued gold woven floralbrocade, modest loose long sleeves, silverplaquebelt, black silk open abaya hangs shoulders to ankles, restrained wornsilk sheen not glossy plastic. Plain darkbrown closedtoe flatshoes. Exposed head neck hands solidmagenta#FF00FF. No hair headwear jewelry. Late1980s handinked anime fine pigment fabrictexture and cel shading.1024x1536 puregreen#00FF00 background without floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5ac4b3fb-a431-4b64-85d9-a6b0c021a48d.png",
+      "path": "Raw/outfit_f_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "30fe38133e44aeb752b44e2c47e3b13de3d532e50818b272a5301e9395ef6d9b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_industrial__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "brocade dress and abaya",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length, long-sleeved dress of brocaded silk (gold on crimson or bottle green) with a silver-plaque belt. Over everything is a black silk 'abaya, hanging from the shoulders to the ankles and falling open at the front to show the dress.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_f_iraq_industrial.",
+      "flags": {
+        "label": "brocade dress and abaya"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_iraq_industrial",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Preserve first head and hand contours exactly. Same bottle-green goldfloralbrocade dress and long sleeves, black open abaya with goldedge, large silverplaquebelt, brown closedtoe flats cover all toes. Natural sleevesfollowarms, cloak behindarms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0b66a9ad-95bc-44de-a5d8-f411a9fcd417.png",
+      "path": "Raw/outfit_f_iraq_industrial__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9cf99e4a04103752ebaf5ae85d64d6af38290be0cb1d075ca6563bc5586c056a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_industrial__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "brocade dress and abaya",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length, long-sleeved dress of brocaded silk (gold on crimson or bottle green) with a silver-plaque belt. Over everything is a black silk 'abaya, hanging from the shoulders to the ankles and falling open at the front to show the dress.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_f_iraq_industrial.",
+      "flags": {
+        "label": "brocade dress and abaya"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_iraq_industrial",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Preserve first head and hand contours exactly. Same bottle-green goldfloralbrocade dress and long sleeves, black open abaya with goldedge, large silverplaquebelt, brown closedtoe flats cover all toes. Natural sleevesfollowarms, cloak behindarms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bf25338d-fe05-4ecb-9aa5-732baf4b6796.png",
+      "path": "Raw/outfit_f_iraq_industrial__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "339ad575ff4d434af5a0f5a342835174a23e53ee53ffca9508c6b7b59a099664",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_industrial__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "brocade dress and abaya",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Ankle-length, long-sleeved dress of brocaded silk (gold on crimson or bottle green) with a silver-plaque belt. Over everything is a black silk 'abaya, hanging from the shoulders to the ankles and falling open at the front to show the dress.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw outfit_f_iraq_industrial.",
+      "flags": {
+        "label": "brocade dress and abaya"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_iraq_industrial",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Preserve first head and hand contours exactly. Same bottle-green goldfloralbrocade dress and long sleeves, black open abaya with goldedge, large silverplaquebelt, brown closedtoe flats cover all toes. Natural sleevesfollowarms, cloak behindarms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8f85f22e-4fac-47c8-9984-23b52b9d69f3.png",
+      "path": "Raw/outfit_f_iraq_industrial__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ef9ddfe22656959f3a4e1ae1bdef631e6eee7092777278a156515c8cf604f14e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

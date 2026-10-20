@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 471. Full regeneration is NOT complete.
+Saved: 496. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -475,3 +475,28 @@ Saved: 471. Full regeneration is NOT complete.
 | hair_f_iraq_medieval | visually reviewed; registration pending |
 | headwear_f_iraq_medieval | visually reviewed; registration pending |
 | accessory_f_iraq_medieval | visually reviewed; registration pending |
+| outfit_m_iraq_earlymodern | visually reviewed; registration pending |
+| outfit_m_iraq_earlymodern__explaining_b | visually reviewed; registration pending |
+| outfit_m_iraq_earlymodern__thinking_c | visually reviewed; registration pending |
+| outfit_m_iraq_earlymodern__objecting_a | visually reviewed; registration pending |
+| hair_m_iraq_earlymodern | visually reviewed; registration pending |
+| facialhair_m_iraq_earlymodern | visually reviewed; registration pending |
+| headwear_m_iraq_earlymodern | visually reviewed; registration pending |
+| outfit_f_iraq_earlymodern | visually reviewed; registration pending |
+| outfit_f_iraq_earlymodern__explaining_c | visually reviewed; registration pending |
+| outfit_f_iraq_earlymodern__thinking_a | visually reviewed; registration pending |
+| outfit_f_iraq_earlymodern__objecting_b | visually reviewed; registration pending |
+| hair_f_iraq_earlymodern | visually reviewed; registration pending |
+| headwear_f_iraq_earlymodern | visually reviewed; registration pending |
+| accessory_f_iraq_earlymodern | visually reviewed; registration pending |
+| outfit_m_iraq_industrial | visually reviewed; registration pending |
+| outfit_m_iraq_industrial__explaining_c | visually reviewed; registration pending |
+| outfit_m_iraq_industrial__thinking_a | visually reviewed; registration pending |
+| outfit_m_iraq_industrial__objecting_b | visually reviewed; registration pending |
+| hair_m_iraq_industrial | visually reviewed; registration pending |
+| facialhair_m_iraq_industrial | visually reviewed; registration pending |
+| headwear_m_iraq_industrial | visually reviewed; registration pending |
+| outfit_f_iraq_industrial | visually reviewed; registration pending |
+| outfit_f_iraq_industrial__explaining_a | visually reviewed; registration pending |
+| outfit_f_iraq_industrial__thinking_b | visually reviewed; registration pending |
+| outfit_f_iraq_industrial__objecting_c | visually reviewed; registration pending |
