@@ -1,10 +1,11 @@
 # DOC-LOOK (Phase A #9): readable papers that look and open like paper
 
-Branch `fix/a-doc-look`, cut from `origin/main` 9b8ab5f (P0: CARVE + CUTS + QA-RIG). Code only: nothing here was run in Unity. Everything that needs Unity is a recipe under **RESULT** below.
+Branch `fix/a-doc-look`, cut from `origin/main` 9b8ab5f (P0: CARVE + CUTS + QA-RIG) and rebased onto 4290bd6 (RUN-SAFE landed; no shared files). Code only: nothing here was run in Unity. Everything that needs Unity is a recipe under **RESULT** below.
 
-Two commits:
-- 8c2239d, the first submission.
+The commits:
+- The first submission (8c2239d before the rebase).
 - The resubmission, which answers the review of 8c2239d. Its nine points are listed under "Review of 8c2239d" with what changed for each.
+- This note.
 
 Sources: FIX_PLAN §3 DOC-LOOK, FIX_PLAN_v2 §3 "DOC-LOOK: delta" (D3 and D15 decided; v2 wins), BUGLIST, DECISIONS_1019a (D3, D15, "keep a big mat size", DESK APPROVED), GAME_FEEL_BIBLE rows A1-A6 and A9, QA-RIG §4 and §8.
 
@@ -211,7 +212,7 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
   - `Subdivide` runs once per print. It makes at most 24 x 24 cells for a page-sized fill, usually 24 x 1 for a rule.
   - Pooling and pre-building are DOC-HANDLE's; measure on its call-next recipe.
 
-## Tests (offline: compile 0 errors; runner `passed 3741, failed 0`)
+## Tests (offline: compile 0 errors; runner `passed 3770, failed 0` on 4290bd6)
 
 | Test | Covers | Fails without the fix because |
 |---|---|---|
@@ -243,7 +244,7 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
 8. **The folder's pocket fold** (A4) is DESK-HOMES' (Phase B).
 
 ## FEATURES (for INTEGRATION)
-Line numbers as of 9b8ab5f:
+Line numbers as of 4290bd6 (the same as at 9b8ab5f):
 - **16 (pet pictures):** "imported uncompressed and bilinear without mipmaps" → "imported uncompressed, with mipmaps and trilinear (`ArtSlots.Mipmapped`/`Trilinear`, BUG-29; tested: `ArtSlotsTests`)".
 - **42 (paper bend):**
   - "a card `cardFlex` 0.12" → "a card never bends (`PaperBend.FlexOf`, Saleh's D3; tested: `DocLookTests.FlexOf_ACardNeverBends_WhateverTheKnobs`)".
@@ -261,7 +262,7 @@ Line numbers as of 9b8ab5f:
 
 **Offline:**
 - compile_check: 0 errors (Assembly-CSharp-Editor, TimeDeskEditMode).
-- runner: `passed 3741, failed 0`.
+- runner: `passed 3770, failed 0` (after the rebase onto 4290bd6; 3741 before it).
 - QA python tests: 35 OK.
 
 **deferred: Unity.** Run these in the NOPE-feat-clock editor through its job runner, in the order given.
