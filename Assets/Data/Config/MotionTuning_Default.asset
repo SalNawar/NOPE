@@ -88,3 +88,4 @@ MonoBehaviour:
   breathingNoise: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
   transitSeconds: 0.25
   payoffWaitSeconds: 8
+  shutterSeconds: 1.2

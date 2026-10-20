@@ -1,0 +1,23 @@
+{
+  "name": "flow_shutter",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "BUG-31a / J5: a scene change through SceneTransit (the path RunManager's loads take once RUN-SAFE routes them): the booth's shutter comes down, the scene and the office's gameplay layer load behind it, the light moves through the slats meanwhile, the shutter goes up. Analyse seq/office_title and seq/title_office with seqtools frozen (<= 0.25 s) and cuts (none)" },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "wait", "f": 1 },
+    { "op": "recStart", "name": "office_title" },
+    { "op": "flowTransit", "name": "TitleScene", "f": 60 },
+    { "op": "wait", "f": 0.5 },
+    { "op": "recStop" },
+    { "op": "still", "name": "title_after" },
+    { "op": "recStart", "name": "title_office" },
+    { "op": "flowTransit", "name": "office", "f": 120 },
+    { "op": "wait", "f": 0.5 },
+    { "op": "recStop" },
+    { "op": "still", "name": "office_after" }
+  ]
+}

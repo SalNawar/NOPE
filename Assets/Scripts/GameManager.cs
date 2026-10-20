@@ -98,6 +98,9 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>True once today's closing was handled (closing time, End Shift, CloseNow, or the day's end): it is handled once.</summary>
     private bool _closingHandled;
 
+    /// <summary>The booth's roll shutter (the bible's G3 and G4): up as the shift opens, down after the last payoff, before the report.</summary>
+    private BoothShutter _shutter;
+
     /// <summary>Gameplay tuning, pulled from RunConfig (null-safe).</summary>
     private GameConfigSO _gameConfig;
 
@@ -201,6 +204,9 @@ public sealed partial class GameManager : MonoBehaviour
 
         // The game feel's director (hit-stop, camera impulses, the shift's bells, the hall's ambience).
         FeelDirector.Attach(this, shiftClock);
+
+        // The booth's roll shutter, shut until the shift opens.
+        _shutter = BoothShutter.Attach(this);
 
         // A waiver signed from the desk's pad costs shift time (the endings and strandings spec §7.3, Q15 = A).
         if (investigationUI != null)
@@ -456,7 +462,8 @@ public sealed partial class GameManager : MonoBehaviour
     /// Waits until the last traveller's reaction and walk-off have played
     /// (DeskAvailability.IsDeparting; at most MotionTuningSO.payoffWaitSeconds
     /// of real time: ShiftEnd.PayoffDone), then ends their linger and bubble,
-    /// so neither sits over the report, frees their art and runs
+    /// so neither sits over the report, frees their art, rolls the booth's
+    /// shutter down (the bible's G4; at once without one) and runs
     /// <paramref name="then"/> (BUG-32a: the report wiped the payoff).
     /// </summary>
     private IEnumerator AfterThePayoff(System.Action then)
@@ -472,7 +479,10 @@ public sealed partial class GameManager : MonoBehaviour
             travellerView.EndLinger();
         EndReaction();
         _characterArt?.Retain(null);
-        then();
+        if (_shutter != null)
+            _shutter.Close(then);
+        else
+            then();
     }
 
     /// <summary>The payoff's longest wait without a MotionTuningSO (its default).</summary>

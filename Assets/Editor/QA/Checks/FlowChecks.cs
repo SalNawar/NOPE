@@ -6,10 +6,12 @@ using System.Text.RegularExpressions;
 
 /// <summary>
 /// FLOW's gate checks (docs/pending/FLOW.md). Static: the player does not run
-/// in the background (BUG-34a: the focus lost pauses), and MotionTuning_Default
-/// holds the live knobs only (BUG-73c). Play (FLOW's recipes,
+/// in the background (BUG-34a: the focus lost pauses), MotionTuning_Default
+/// holds the live knobs only (BUG-73c), and the desk clock has no tooltip
+/// copying its readout (BUG-70b). Play (FLOW's recipes,
 /// tools/qa/scenarios/flow_*.json, FlowOps): Esc reaches Settings with the
-/// clock held, in the office, Home and Title (BUG-34b); the focus lost holds
+/// clock held, in the office, Home and Title, and Esc in the PC keeps it open
+/// (BUG-34b, R3); the focus lost holds
 /// the clock and the audio (BUG-34a); the last traveller's payoff before the
 /// report and no single-frame cut at the day's end, Go Home and Sleep
 /// (BUG-32a); an ending is the evening edition with Title and Quit (BUG-56a);
@@ -44,9 +46,31 @@ public static class FlowChecks
         return GateResult.Of("flow.motionTuning.live", Owner, stale.Count == 0, $"{stale.Count} stale knob(s)", string.Join(", ", stale));
     }
 
+    /// <summary>
+    /// The desk clock shows no tooltip that copies its readout (BUG-70b: the
+    /// copy is taken on the click and goes stale as the minute moves on;
+    /// BUGLIST's fix, "drop the clock tooltip (it duplicates the readout)"):
+    /// Reaction_Clock's tooltipKey is blank, or the clock has no reaction asset.
+    /// </summary>
+    [GateCheck("flow.clock.tooltip", Owner)]
+    public static GateResult ClockTooltip()
+    {
+        string path = Path.Combine(GateResults.ProjectRoot, "Assets", "Data", "Config", "DeskReactions", "Reaction_Clock.asset");
+        if (!File.Exists(path))
+            return GateResult.Of("flow.clock.tooltip", Owner, true, "no Reaction_Clock.asset: the clock has no tooltip", path);
+        Match m = Regex.Match(File.ReadAllText(path), @"^\s*tooltipKey:[ \t]*(.*?)\s*$", RegexOptions.Multiline);
+        string key = m.Success ? m.Groups[1].Value.Trim('\'', '"') : string.Empty;
+        return GateResult.Of("flow.clock.tooltip", Owner, key.Length == 0, key.Length == 0 ? "the clock has no tooltip" : $"tooltipKey: {key}",
+            "BUG-70b: Reaction_Clock.asset's tooltipKey must be blank (DESK-PLAN: the asset and OfficeSceneUIBuilder.Desk.cs's EnsureDeskReaction argument)");
+    }
+
     /// <summary>Esc in the office opens the PC's Settings, and the clock holds while it shows.</summary>
     [GateCheck("flow.esc.office", Owner, GateKind.Play)]
     public static GateResult EscOffice() => GateResults.Require("flow.esc.office", Owner, "flow_pause.settings.office");
+
+    /// <summary>Esc with the PC open (Settings in front) keeps the PC open and Settings showing: only Q or the bezel leave the PC (R3).</summary>
+    [GateCheck("flow.esc.pc", Owner, GateKind.Play)]
+    public static GateResult EscPc() => GateResults.Require("flow.esc.pc", Owner, "flow_pause.settings.pcEsc");
 
     /// <summary>Esc at Home opens Settings (red until Home has a Settings window: HOME, then HOME-3D's tablet).</summary>
     [GateCheck("flow.esc.home", Owner, GateKind.Play)]
@@ -67,6 +91,10 @@ public static class FlowChecks
     /// <summary>No single-frame full-screen change at the day's end, Go Home and Sleep (seqtools cuts on flow_transitions' sequences).</summary>
     [GateCheck("flow.transitions.cuts", Owner, GateKind.Play)]
     public static GateResult TransitionCuts() => GateResults.Require("flow.transitions.cuts", Owner, "flow_transitions.seq.*.cuts");
+
+    /// <summary>A scene change through SceneTransit brings the booth's shutter down, loads behind it and lifts it (flow_shutter; its frozen and cuts analyses by seqtools).</summary>
+    [GateCheck("flow.transit.shutter", Owner, GateKind.Play)]
+    public static GateResult SceneChangeShutter() => GateResults.Require("flow.transit.shutter", Owner, "flow_shutter.transit.*");
 
     /// <summary>An ending is the evening edition, with Title and Quit, after the report.</summary>
     [GateCheck("flow.endings", Owner, GateKind.Play)]

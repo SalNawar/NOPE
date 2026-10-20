@@ -1,6 +1,7 @@
 #if UNITY_EDITOR || TIMEDESK_QA
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// FLOW's QA rig ops (docs/pending/FLOW.md; QA-RIG's recipe: "Esc in the
@@ -24,6 +25,13 @@ using UnityEngine;
 /// <item><c>flowEarlyFinish</c> (name): End Shift before closing time (the
 /// cheat menu's) raises the clock's Closed once, so the closing bell
 /// (FeelDirector) rings on an early finish: <c>bell.&lt;name&gt;</c>.</item>
+/// <item><c>flowTransit</c> (name: a scene, or <c>office</c> for the art office
+/// RunConfig names; f timeout): loads the scene through
+/// SceneTransit.Load, as RunManager's loads will once RUN-SAFE routes them
+/// (BUG-31a, the bible's J5): the booth's shutter is seen down, the scene
+/// (and the office's gameplay layer) loads behind it, and the shutter is up
+/// and off again: <c>transit.&lt;name&gt;</c>. Record it (recStart/recStop)
+/// for seqtools' frozen and cuts analyses.</item>
 /// </list>
 /// </summary>
 public static class FlowOps
@@ -36,22 +44,29 @@ public static class FlowOps
     private static void RegisterInEditor() => Register();
 #endif
 
+    /// <summary>
+    /// Registers FLOW's ops, each once (the editor without a domain reload
+    /// keeps the rig's table). Each is a literal <c>QaRunner.RegisterOp("name"</c>
+    /// call: tools/qa/test_seqlib.py reads the known ops from those calls, so a
+    /// recipe's op is checked against what the rig really has.
+    /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Register()
     {
-        TryRegister("flowSettings", Settings);
-        TryRegister("flowFocus", Focus);
-        TryRegister("flowPayoff", Payoff);
-        TryRegister("flowEdition", Edition);
-        TryRegister("flowClosed", Closed);
-        TryRegister("flowEarlyFinish", EarlyFinish);
-    }
-
-    /// <summary>Registers an op once (the editor without a domain reload keeps the rig's table).</summary>
-    private static void TryRegister(string name, System.Func<QaRunner, QaStep, IEnumerator> body)
-    {
-        if (!QaRunner.IsKnownOp(name))
-            QaRunner.RegisterOp(name, body);
+        if (!QaRunner.IsKnownOp("flowSettings"))
+            QaRunner.RegisterOp("flowSettings", Settings);
+        if (!QaRunner.IsKnownOp("flowFocus"))
+            QaRunner.RegisterOp("flowFocus", Focus);
+        if (!QaRunner.IsKnownOp("flowPayoff"))
+            QaRunner.RegisterOp("flowPayoff", Payoff);
+        if (!QaRunner.IsKnownOp("flowEdition"))
+            QaRunner.RegisterOp("flowEdition", Edition);
+        if (!QaRunner.IsKnownOp("flowClosed"))
+            QaRunner.RegisterOp("flowClosed", Closed);
+        if (!QaRunner.IsKnownOp("flowEarlyFinish"))
+            QaRunner.RegisterOp("flowEarlyFinish", EarlyFinish);
+        if (!QaRunner.IsKnownOp("flowTransit"))
+            QaRunner.RegisterOp("flowTransit", SceneChange);
     }
 
     /// <summary>The shift clock's minute now (NaN without a shift).</summary>
@@ -140,6 +155,34 @@ public static class FlowOps
         runner.Assert($"closed.{step.name}", Owner, closed && reads,
             $"closed {closed}, the clock reads {shows}" + (string.IsNullOrEmpty(step.text) ? string.Empty : $" (expected {step.text})"),
             "BUG-72: the shift closes at its closing time, and the night shift's midnight reads 24:00");
+    }
+
+    private static IEnumerator SceneChange(QaRunner runner, QaStep step)
+    {
+        string scene = step.name == "office" ? OfficeScenes.ArtSceneName : step.name;
+        SceneTransit.Load(scene);
+        bool down = false;
+        float end = Time.realtimeSinceStartup + (step.f > 0f ? step.f : 60f);
+        while (Time.realtimeSinceStartup < end && SceneTransit.Loading)
+        {
+            down |= ShutterShown();
+            yield return null;
+        }
+        float raised = Time.realtimeSinceStartup + 2f;
+        while (Time.realtimeSinceStartup < raised && ShutterShown())
+            yield return null;
+        Scene loaded = SceneManager.GetSceneByName(scene);
+        bool there = loaded.IsValid() && loaded.isLoaded, up = !ShutterShown();
+        runner.Assert($"transit.{step.name}", Owner, down && there && up && !SceneTransit.Loading,
+            $"shutter seen down {down}, '{scene}' loaded {there}, shutter up and off {up}, still loading {SceneTransit.Loading}",
+            "BUG-31a / J5: a scene change brings the booth's shutter down, loads behind it and lifts it once the scenes have settled");
+    }
+
+    /// <summary>True while the scene change's shutter (TransitShutter) is shown.</summary>
+    private static bool ShutterShown()
+    {
+        TransitShutter veil = QaGame.Find<TransitShutter>();
+        return veil != null && veil.gameObject.activeInHierarchy;
     }
 
     private static IEnumerator EarlyFinish(QaRunner runner, QaStep step)

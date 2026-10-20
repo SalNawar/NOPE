@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -105,6 +108,75 @@ public class FlowSeamTests
             UnityEngine.Object.DestroyImmediate(arabic);
             UnityEngine.Object.DestroyImmediate(denied);
         }
+    }
+
+    [Test, Category("NeedsEditor")]
+    public void DaterImpressionArt_TheVerdictNotTheInk_ChoosesTheWordARubberCannotPrintFallsBackTo()
+    {
+        // A tinted ink with the verdict passed prints that verdict's English word; an ink that is neither verdict's is refused, never read as DENIED.
+        var tint = new Color32(60, 140, 200, 255);
+        Texture2D tinted = DaterImpressionArt.Paint("ΕΓΚΡΙΘΗΚΕ", true, tint, "", "", null, 1f, 7, false);
+        Texture2D approved = DaterImpressionArt.Paint("APPROVED", true, DaterImpressionArt.ApprovedInk, "", "", null, 1f, 7, false);
+        try
+        {
+            Color32[] a = tinted.GetPixels32(), b = approved.GetPixels32();
+            Assert.AreEqual(b.Length, a.Length);
+            for (int i = 0; i < a.Length; i++)
+                Assert.AreEqual(b[i].a, a[i].a, $"pixel {i}: the tinted approval prints APPROVED's outline");
+            Assert.Throws<ArgumentException>(() => DaterImpressionArt.Paint("APPROVED", tint, "", "", null, 1f, 7, false));
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(tinted);
+            UnityEngine.Object.DestroyImmediate(approved);
+        }
+    }
+
+    [Test, Category("NeedsEditor")]
+    public void DaterImpressionArt_TheSecondPrintOfTheSameTexts_ReusesItsLayers_AndANewDateReusesTheWord()
+    {
+        // BUG-31a: a print's clean layers are painted once per texts, and the word's outline (the costly layer) once per word.
+        IDictionary layers = PrivateCache("Cache"), words = PrivateCache("Words");
+        layers.Clear();
+        words.Clear();
+        var made = new List<Texture2D>();
+        try
+        {
+            made.Add(DaterImpressionArt.Paint("APPROVED", true, DaterImpressionArt.ApprovedInk, "20 OCT 2150", "BY: 7", null, 1f, 1));
+            Assert.AreEqual(1, layers.Count);
+            Assert.AreEqual(1, words.Count);
+            object first = Single(layers);
+            made.Add(DaterImpressionArt.Paint("APPROVED", true, DaterImpressionArt.ApprovedInk, "20 OCT 2150", "BY: 7", null, 0.6f, 2));
+            Assert.AreEqual(1, layers.Count, "the same texts: no repaint");
+            Assert.AreSame(first, Single(layers));
+            object word = Single(words);
+            made.Add(DaterImpressionArt.Paint("APPROVED", true, DaterImpressionArt.ApprovedInk, "21 OCT 2150", "BY: 7", null, 1f, 3));
+            Assert.AreEqual(2, layers.Count, "a new date paints its own layers");
+            Assert.AreEqual(1, words.Count, "the word is not painted again");
+            Assert.AreSame(word, Single(words));
+        }
+        finally
+        {
+            foreach (Texture2D t in made)
+                UnityEngine.Object.DestroyImmediate(t);
+        }
+    }
+
+    /// <summary>DaterImpressionArt's private static cache <paramref name="name"/> (the tests read it; nothing else does).</summary>
+    private static IDictionary PrivateCache(string name)
+    {
+        FieldInfo field = typeof(DaterImpressionArt).GetField(name, BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(field, name);
+        return (IDictionary)field.GetValue(null);
+    }
+
+    /// <summary>The only value of <paramref name="cache"/>.</summary>
+    private static object Single(IDictionary cache)
+    {
+        Assert.AreEqual(1, cache.Count);
+        foreach (DictionaryEntry entry in cache)
+            return entry.Value;
+        return null;
     }
 
     /// <summary>What a call does, as text: the exception it throws (type and message), or "" when it returns.</summary>

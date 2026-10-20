@@ -46,6 +46,17 @@ public class FlowPlayTests : QaPlayTest
         AssertRun(Finish());
     }
 
+    /// <summary>A scene change through SceneTransit (office to Title, Title to office): the booth's shutter comes down, the scenes load behind it and it goes up; recorded for the frozen and cuts analyses (BUG-31a, the bible's J5).</summary>
+    [UnityTest, Explicit, Category("QaPlay")]
+    public IEnumerator Shutter_ASceneChangeLoadsBehindTheShutter()
+    {
+        Assert.IsTrue(Prepare("flow_shutter.json"));
+        yield return new EnterPlayMode();
+        yield return Play();
+        yield return new ExitPlayMode();
+        AssertRun(Finish());
+    }
+
     /// <summary>A verdict that ends the run closes the shift; the report, then the evening edition with Title and Quit (BUG-56a, BUG-28b).</summary>
     [UnityTest, Explicit, Category("QaPlay")]
     public IEnumerator Endings_TheReportThenTheEveningEdition()

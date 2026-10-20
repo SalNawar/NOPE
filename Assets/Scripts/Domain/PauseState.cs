@@ -7,7 +7,14 @@ public enum PauseScope
     /// <summary>The shift clock only (with slot arming and countdowns that read it): audio, input and animation keep running (the booth closed with the AVAILABLE sign, a citation slip).</summary>
     Clock,
 
-    /// <summary>The clock, audio and input (Settings open, the window's focus lost).</summary>
+    /// <summary>
+    /// The clock and the audio (Settings open, the window's focus lost). It
+    /// blocks no input itself: Settings in the office is the PC's window, and the
+    /// open PC already takes the office's input from the desk (BoothCoordinator);
+    /// the focus lost delivers no input and cancels the desk's hold
+    /// (HoldRegistry.OnFocusLost); a Settings window outside the PC (HOME's) is
+    /// modal itself.
+    /// </summary>
     Full
 }
 
@@ -16,7 +23,7 @@ public enum PauseScope
 /// FLOW delta: "no pause card"; BELL-SIGN P2's scoped requirement). Each
 /// source asks for a scope (Request) and lets go of it (Release). The shift
 /// clock runs only while no source holds it (<see cref="ClockHeld"/>);
-/// audio and input stop while a Full source holds (<see cref="FullHeld"/>).
+/// the audio stops too while a Full source holds (<see cref="FullHeld"/>).
 /// One source's release never restarts a clock another source holds, in any
 /// order. Pure; the game uses <see cref="Shared"/> (ShiftClockDriver reads
 /// the clock; PauseMenu holds Settings and the focus and pauses the audio;
@@ -43,7 +50,7 @@ public sealed class PauseState
     /// <summary>True while any source holds the shift clock (every scope does).</summary>
     public bool ClockHeld => _sources.Count > 0;
 
-    /// <summary>True while a Full source holds (audio and input stop too).</summary>
+    /// <summary>True while a Full source holds (the audio stops too: PauseMenu).</summary>
     public bool FullHeld
     {
         get

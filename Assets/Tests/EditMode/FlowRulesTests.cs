@@ -137,6 +137,31 @@ public class FlowRulesTests
         Assert.Throws<System.ArgumentNullException>(() => chain.Register("x", 0, null));
     }
 
+    [Test]
+    public void EscapeChain_EscNeverLeavesAMode_ItOpensSettings_RightClickStillBacksOut()
+    {
+        // R3: "Esc opens the same Settings window everywhere ... To leave the PC, press Q or click the bezel"; D20: Esc opens Settings.
+        var modes = new[]
+        {
+            new ControlState(pcOpen: true),
+            new ControlState(wheelOpen: true),
+            new ControlState(valueHeld: true),
+            new ControlState(inspecting: true),
+            new ControlState(cityView: true),
+            new ControlState(deskView: true),
+            new ControlState(pcOpen: true, inspecting: true, deskView: true),
+        };
+        foreach (ControlState s in modes)
+        {
+            Assert.IsTrue(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: false), $"{ControlRules.BackOut(s)}: Esc keeps the mode, Settings opens");
+            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: true), "a right-click still backs out");
+            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: true, rightClick: false), "the PC's own chain took the press (a menu, a field)");
+        }
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, dragging: true), false, false), "a drag is a hold: the back-out cancels it first");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(), false, false), "nothing to leave");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, newsletter: true), false, false), "under a newsletter nothing backs out");
+    }
+
     // --- ShiftEnd (BUG-28b: never abandon a decided slot; BUG-32a: payoff first; BUG-56a: the ending at the day's end) ---
 
     [Test]
@@ -165,6 +190,54 @@ public class FlowRulesTests
         Assert.IsFalse(ShiftEnd.EndsTheRun(null));
     }
 
+    // --- ShutterRoll (the bible's G3/G4: the booth shutter's 1.2 s roll; J5/BUG-31a: the veil's light never stops) ---
+
+    [Test]
+    public void ShutterRoll_UpEasesOut_DownEasesIn_OverTheBiblesLength()
+    {
+        Assert.AreEqual(1.2f, ShutterRoll.DefaultSeconds, 1e-6f, "G3/G4: 1.2 s");
+        float s = ShutterRoll.DefaultSeconds;
+        Assert.AreEqual(0f, ShutterRoll.At(0f, true, 0f, s), 1e-6f);
+        Assert.AreEqual(1f, ShutterRoll.At(0f, true, s, s), 1e-6f);
+        Assert.AreEqual(1f, ShutterRoll.At(1f, false, 0f, s), 1e-6f);
+        Assert.AreEqual(0f, ShutterRoll.At(1f, false, s, s), 1e-6f);
+        Assert.Greater(ShutterRoll.At(0f, true, s / 2f, s), 0.85f, "OutCubic: up fast, then settles (0.875 at half time)");
+        Assert.Less(ShutterRoll.At(1f, false, s / 2f, s), 0.9f, "InCubic: down slow at first");
+        Assert.Greater(ShutterRoll.At(1f, false, s / 2f, s), 0.85f, "InCubic: 0.875 still open at half time, then gathers speed into the clang");
+        float last = 0f;
+        for (int i = 1; i <= 36; i++)
+        {
+            float open = ShutterRoll.At(0f, true, i * s / 36f, s);
+            Assert.GreaterOrEqual(open, last, "never goes back");
+            last = open;
+        }
+        Assert.AreEqual(0.5f + 0.5f * 0.875f, ShutterRoll.At(0.5f, true, s / 2f, s), 1e-5f, "a roll from part-way covers the rest");
+        Assert.AreEqual(1f, ShutterRoll.At(0f, true, 0f, 0f), "no length: the end at once");
+        Assert.IsTrue(ShutterRoll.Done(s, s));
+        Assert.IsFalse(ShutterRoll.Done(s / 2f, s));
+        Assert.IsTrue(ShutterRoll.Done(0f, 0f));
+    }
+
+    [Test]
+    public void ShutterRoll_TheVeilsLightMovesEveryFrame_AndWraps()
+    {
+        // The [BP] pass "no frame repeated without motion > 0.25 s": at 30 fps every frame moves the light on, Reduced Motion too.
+        foreach (bool reduced in new[] { false, true })
+        {
+            float phase = 0f;
+            for (int frame = 0; frame < 300; frame++)
+            {
+                float next = ShutterRoll.Sweep(phase, 1f / 30f, reduced);
+                Assert.That(next, Is.InRange(0f, 1f));
+                float moved = next >= phase ? next - phase : next + 1f - phase;
+                Assert.Greater(moved, 0.01f, $"frame {frame}: the light moved (reduced {reduced})");
+                phase = next;
+            }
+        }
+        Assert.AreEqual(0.25f, ShutterRoll.Sweep(0.9f, 0.35f / ShutterRoll.SweepPerSecond, false), 1e-4f, "wraps past a screen height");
+        Assert.AreEqual(0.5f, ShutterRoll.Sweep(0.5f, -1f, false), 1e-6f, "no time: stays");
+    }
+
     // --- DaterRubber (BUG-38b: every impression carries its verdict word) ---
 
     [Test]
@@ -189,5 +262,62 @@ public class FlowRulesTests
         System.Func<char, bool> latin = c => c >= 'A' && c <= 'Z';
         Assert.AreEqual(expected, DaterRubber.Word(word, approved, latin));
         Assert.AreEqual(approved ? DaterRubber.Approved : DaterRubber.Denied, DaterRubber.Word("x", approved, null), "no font: the English word");
+    }
+
+    // --- DaterWordOutline (BUG-31a: each pixel measures only the letters that reach it, and prints the same word) ---
+
+    /// <summary>The dater impression's word row (DaterImpressionArt's size, row, stroke and tracking).</summary>
+    private const int DaterWidth = 480, DaterHeight = 216;
+    private const float WordTop = 0.05f, WordBottom = 0.53f, Line = 0.034f, Tracking = 0.09f;
+
+    [TestCase("APPROVED")]
+    [TestCase("DENIED")]
+    [TestCase("ADEINOPRV")]
+    [TestCase("VAVAV")]
+    [TestCase("IOIDI")]
+    [TestCase("NO DEAN")]
+    [TestCase("i")]
+    public void DaterWordOutline_MeasuringOnlyTheLettersThatReach_PaintsExactlyWhatMeasuringEveryLetterPaints(string word)
+    {
+        foreach ((int w, int h) in new[] { (DaterWidth, DaterHeight), (160, 72), (97, 211) })
+        {
+            float[] fast = DaterWordOutline.Cover(word, w, h, WordTop, WordBottom, Line, Tracking);
+            float[] every = DaterWordOutline.Cover(word, w, h, WordTop, WordBottom, Line, Tracking, float.PositiveInfinity);
+            Assert.AreEqual(every.Length, fast.Length);
+            int inked = 0;
+            for (int i = 0; i < every.Length; i++)
+            {
+                if (every[i] != fast[i])
+                    Assert.Fail($"{word} at {w}x{h}: pixel ({i % w}, {i / w}) is {fast[i]} measuring the reaching letters, {every[i]} measuring them all");
+                if (every[i] > 0f)
+                    inked++;
+            }
+            Assert.Greater(inked, w * h / 200, $"{word} at {w}x{h}: the outline is inked");
+        }
+    }
+
+    [Test]
+    public void DaterWordOutline_TheReachCoversEveryLettersFarthestSerif()
+    {
+        // The reach's claim: past it, a letter is farther from a pixel than the stroke inks, so skipping it changes nothing.
+        foreach (char c in "ADEINOPRV")
+            for (float y = -0.2f; y <= 1.2f; y += 0.01f)
+            {
+                float outside = DaterLetters.Width(c) + DaterWordOutline.DefaultReach;
+                Assert.Greater(DaterLetters.Distance(c, outside, y), Line + 0.5f / 50f, $"{c} right of its box at y {y}");
+                Assert.Greater(DaterLetters.Distance(c, -DaterWordOutline.DefaultReach, y), Line + 0.5f / 50f, $"{c} left of its box at y {y}");
+            }
+    }
+
+    [Test]
+    public void DaterWordOutline_AWordWithALetterItDoesNotDraw_IsNotDrawn_AndInksNothing()
+    {
+        Assert.IsTrue(DaterWordOutline.Drawn("APPROVED"));
+        Assert.IsTrue(DaterWordOutline.Drawn("denied"), "any case");
+        Assert.IsFalse(DaterWordOutline.Drawn("ADMITTED"), "M and T are the font's");
+        Assert.IsFalse(DaterWordOutline.Drawn("ΕΓΚΡΙΘΗΚΕ"));
+        Assert.IsFalse(DaterWordOutline.Drawn("   "));
+        Assert.IsFalse(DaterWordOutline.Drawn(null));
+        Assert.IsTrue(System.Array.TrueForAll(DaterWordOutline.Cover("ADMITTED", 64, 32, WordTop, WordBottom, Line, Tracking), c => c == 0f));
     }
 }

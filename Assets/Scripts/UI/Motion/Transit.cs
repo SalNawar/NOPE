@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 /// <summary>
 /// The screen transitions (owner FLOW; BUG-32a, the bible's J5: "one shared
@@ -72,15 +71,18 @@ public static class Transit
 }
 
 /// <summary>
-/// The scene change with its transition (owner FLOW; RUN-SAFE's RunManager
-/// loads every scene through it; BUG-31a, BUG-32a, the bible's J5): the screen
-/// fades through black (<see cref="Transit.Seconds"/>), the scene loads
-/// asynchronously behind the black, and the black lifts once every loaded
-/// scene (the office's gameplay layer comes on top of the art office) has
-/// loaded and run its first frames, so a load never shows a frozen frame of
-/// the scene being left nor a half-built one. Clicks are blocked while the
-/// black is up. Outside play mode, or for a scene that cannot load, it is
-/// SceneManager.LoadScene (its own error for a missing scene).
+/// The scene change with its transition (owner FLOW; BUG-31a, BUG-32a, the
+/// bible's J5): the booth's roll shutter comes down over the screen
+/// (TransitShutter, in <see cref="Transit.Seconds"/>), the scene loads
+/// asynchronously behind it (the office's gameplay layer too: OfficeScenes),
+/// and the shutter goes up once every loaded scene has loaded and run its
+/// first frames, so a load never shows a frozen frame of the scene being
+/// left nor a half-built one; while it is down the light moves through its
+/// slats, so no frame is held without motion. Clicks are blocked while it is
+/// down. Outside play mode, or for a scene that cannot load, it is
+/// SceneManager.LoadScene (its own error for a missing scene). RUN-SAFE routes
+/// RunManager's loads through it (until then they are SceneManager.LoadScene
+/// and show none of this).
 /// </summary>
 public static class SceneTransit
 {
@@ -102,9 +104,9 @@ public static class SceneTransit
 /// <summary>
 /// Plays Transit's transitions and SceneTransit's loads: a hidden persistent
 /// object (made on first use in play mode) with one coroutine per target, and
-/// the black veil of a scene change (an overlay canvas over everything, off
-/// while unused). Real time (UiMotion.Delta: the capture's step while one
-/// records), so hit-stop never stretches a transition.
+/// the veil of a scene change (TransitShutter, an overlay canvas over
+/// everything, off while unused). Real time (UiMotion.Delta: the capture's
+/// step while one records), so hit-stop never stretches a transition.
 /// </summary>
 public sealed class TransitRunner : MonoBehaviour
 {
@@ -122,8 +124,8 @@ public sealed class TransitRunner : MonoBehaviour
     /// <summary>Each target's running transition (a new one of the same target replaces it).</summary>
     private readonly Dictionary<UnityEngine.Object, Coroutine> _running = new Dictionary<UnityEngine.Object, Coroutine>();
 
-    /// <summary>The scene change's black veil (made on the first load).</summary>
-    private CanvasGroup _veil;
+    /// <summary>The scene change's veil, the drawn booth shutter (made on the first load).</summary>
+    private TransitShutter _veil;
 
     /// <summary>The scene being loaded (null when none).</summary>
     private string _loading;
@@ -185,14 +187,13 @@ public sealed class TransitRunner : MonoBehaviour
         done?.Invoke();
     }
 
-    /// <summary>The scene change: the veil fades in, the scene loads behind it, every scene settles, the veil fades out.</summary>
+    /// <summary>The scene change: the shutter comes down, the scene loads behind it, every scene settles, the shutter goes up.</summary>
     private IEnumerator LoadRoutine(string scene)
     {
-        CanvasGroup veil = Veil();
-        veil.gameObject.SetActive(true);
-        veil.blocksRaycasts = true;
+        if (_veil == null)
+            _veil = TransitShutter.Build(transform, VeilOrder);
         float seconds = Transit.Seconds;
-        yield return FadeVeil(veil, 1f, seconds);
+        yield return _veil.Lower(seconds);
 
         AsyncOperation load = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
         if (load == null)
@@ -211,22 +212,7 @@ public sealed class TransitRunner : MonoBehaviour
             yield return null;
 
         _loading = null;
-        yield return FadeVeil(veil, 0f, seconds);
-        veil.blocksRaycasts = false;
-        veil.gameObject.SetActive(false);
-    }
-
-    /// <summary>Fades the veil to <paramref name="alpha"/> over <paramref name="seconds"/> of real time, eased.</summary>
-    private static IEnumerator FadeVeil(CanvasGroup veil, float alpha, float seconds)
-    {
-        float from = veil.alpha, elapsed = 0f;
-        while (elapsed < seconds)
-        {
-            yield return null;
-            elapsed += UiMotion.Delta(Time.unscaledDeltaTime);
-            veil.alpha = Mathf.LerpUnclamped(from, alpha, TransitCurve.At(elapsed, seconds));
-        }
-        veil.alpha = alpha;
+        yield return _veil.Raise(seconds);
     }
 
     /// <summary>True while a loaded scene has not finished loading (the office's gameplay layer after the art office).</summary>
@@ -236,31 +222,6 @@ public sealed class TransitRunner : MonoBehaviour
             if (!SceneManager.GetSceneAt(i).isLoaded)
                 return true;
         return false;
-    }
-
-    /// <summary>The black veil (an overlay canvas over everything that blocks clicks while up), made once.</summary>
-    private CanvasGroup Veil()
-    {
-        if (_veil != null)
-            return _veil;
-        var root = new GameObject("TransitVeil", typeof(RectTransform), typeof(Canvas), typeof(CanvasGroup), typeof(GraphicRaycaster));
-        root.transform.SetParent(transform, false);
-        var canvas = root.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = VeilOrder;
-        var black = new GameObject("Black", typeof(RectTransform), typeof(Image));
-        black.transform.SetParent(root.transform, false);
-        var rect = (RectTransform)black.transform;
-        rect.anchorMin = Vector2.zero;
-        rect.anchorMax = Vector2.one;
-        rect.offsetMin = Vector2.zero;
-        rect.offsetMax = Vector2.zero;
-        black.GetComponent<Image>().color = Color.black;
-        _veil = root.GetComponent<CanvasGroup>();
-        _veil.alpha = 0f;
-        _veil.blocksRaycasts = false;
-        root.SetActive(false);
-        return _veil;
     }
 
     /// <summary>Forgets the runner when play starts (the editor without a domain reload keeps statics).</summary>
