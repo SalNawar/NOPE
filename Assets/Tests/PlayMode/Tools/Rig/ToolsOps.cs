@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -24,12 +25,17 @@ using UnityEngine;
 /// <item><c>toolsLens</c>: sweeps the pointer from (x, y) to (x2, y2) over f
 /// seconds and back; every frame, every text the Translation Lens shows
 /// translated must be drawn, not the PC's, and under the pointer (0 phantom
-/// translations, BUG-52).</item>
+/// translations, BUG-52); the lens's candidate set is logged
+/// (lens_candidates_*.txt) and holds no PC text, swept with the PC open too
+/// (text "pc": D7, the set excludes the PC entirely); text "reach" asks that
+/// a D7 surface (the newspaper, a document) was translated at all.</item>
 /// <item><c>toolsRevert</c>: hovers the target's centre (or (x, y)) until a
 /// word there is translated, moves the pointer to (x2, y2) in one frame and
 /// times the flip back (≤ TranslationLens.RevertSeconds).</item>
-/// <item><c>toolsMicro</c>: the scan view's microprint text, measured as
-/// drawn (MicroprintView.CapPx ≥ ScanMicroprint.MinCapPx, BUG-2b; @#13).</item>
+/// <item><c>toolsMicro</c>: the scan view's microprint text: the game's
+/// measure (MicroprintView.CapPx ≥ ScanMicroprint.MinCapPx) and, independent
+/// of it, the line's ink in a screenshot, ≥ the same cap and across the
+/// line's width (BUG-2b; @#13).</item>
 /// </list>
 /// </summary>
 public static class ToolsOps
@@ -253,15 +259,29 @@ public static class ToolsOps
             wrong.Count == 0 ? "BUG-4b: every press lands on the target" : "pressed instead: " + string.Join(", ", wrong.Distinct()));
     }
 
-    /// <summary>Sweeps (x, y) → (x2, y2) → (x, y) over f seconds (default 3; screen fractions); every frame every translated text must be drawn, not the PC's, and under the pointer (within 24 px of its rect).</summary>
+    /// <summary>
+    /// Sweeps (x, y) → (x2, y2) → (x, y) over f seconds (default 3; screen
+    /// fractions). Every frame: every translated text must be drawn, not the
+    /// PC's, and under the pointer (within 24 px of its rect); and the lens's
+    /// candidate set (TranslationLensPresenter.Candidates, every text it was
+    /// allowed to read there) is logged and must hold no PC text. With text
+    /// "pc" the PC is open and the sweep runs over its windows: the pointer
+    /// must have been over the PC's desktop (its layer the top UI hit) on
+    /// some frame, else the 0 proves nothing. With text "reach" the sweep is
+    /// over a surface that shows the world's language (the newspaper, a
+    /// document): something must have been translated on it.
+    /// </summary>
     private static IEnumerator Lens(QaRunner runner, QaStep s)
     {
         TranslationLensPresenter lens = TranslationLensPresenter.Instance;
         if (lens == null)
             throw new InvalidOperationException("No Translation Lens presenter.");
         var shown = new List<TMP_Text>();
-        int frames = 0, translated = 0, pc = 0, phantom = 0;
+        var candidates = new List<TMP_Text>();
+        int frames = 0, translated = 0, pc = 0, phantom = 0, candidateFrames = 0, pcCandidates = 0, overPc = 0;
         var names = new HashSet<string>();
+        var pcNames = new HashSet<string>();
+        var log = new Dictionary<string, int>();
         float seconds = s.f > 0f ? s.f : 3f, begin = Time.unscaledTime, end = begin + seconds;
         Vector2 a = new Vector2(s.x * Screen.width, s.y * Screen.height), b = new Vector2(s.x2 * Screen.width, s.y2 * Screen.height);
         while (Time.unscaledTime < end)
@@ -270,6 +290,21 @@ public static class ToolsOps
             runner.Input.Set(Vector2.Lerp(a, b, 1f - Mathf.Abs(2f * phase - 1f)), false);
             yield return null;
             frames++;
+            GameObject top = QaGame.TopAt(runner.Input.Position);
+            if (top != null && UiText.SurfaceOf(top.transform) == TextSurface.Pc)
+                overPc++;
+            lens.Candidates(candidates);
+            foreach (TMP_Text t in candidates)
+            {
+                candidateFrames++;
+                string where = (UiText.SurfaceOf(t) == TextSurface.Pc ? "PC   " : "desk ") + QaGame.Where(t.gameObject);
+                log[where] = log.TryGetValue(where, out int seen) ? seen + 1 : 1;
+                if (UiText.SurfaceOf(t) == TextSurface.Pc)
+                {
+                    pcCandidates++;
+                    pcNames.Add("candidate " + QaGame.Where(t.gameObject));
+                }
+            }
             lens.Translated(shown);
             foreach (TMP_Text t in shown)
             {
@@ -277,7 +312,7 @@ public static class ToolsOps
                 if (UiText.SurfaceOf(t) == TextSurface.Pc)
                 {
                     pc++;
-                    names.Add("PC " + QaGame.Where(t.gameObject));
+                    pcNames.Add("translated " + QaGame.Where(t.gameObject));
                     continue;
                 }
                 Rect? rect = QaGame.ScreenRect(t.gameObject);
@@ -292,9 +327,22 @@ public static class ToolsOps
             }
         }
         string name = Name(s, "lens");
+        // The candidate log: every text the lens was allowed to read during the sweep, its surface and its frames.
+        string logFile = $"lens_candidates_{QaRunner.Safe(name)}.txt";
+        File.WriteAllText(Path.Combine(runner.OutDir, logFile),
+            $"# tools.lens.{name}: the Translation Lens's candidate set, {frames} frames, {candidateFrames} candidate text-frames; surface, text, frames\n"
+            + string.Concat(log.OrderBy(e => e.Key, StringComparer.Ordinal).Select(e => $"{e.Key}\t{e.Value}\n")));
         runner.Assert($"tools.lens.{name}.phantoms", Owner, phantom == 0, $"{frames} frames, {translated} translated text-frames, {phantom} not under the pointer or not drawn",
             phantom == 0 ? "BUG-52: the log of translated texts is within the visible ones" : string.Join("; ", names));
-        runner.Assert($"tools.lens.{name}.pc", Owner, pc == 0, $"{pc} PC text-frames translated", "FIX_PLAN_v2 TOOLS: 0 PC texts in the candidate log (D7)");
+        runner.Assert($"tools.lens.{name}.pc", Owner, pc == 0 && pcCandidates == 0,
+            $"{pcCandidates} PC text-frames in the candidate log ({logFile}: {candidateFrames} candidate text-frames, {log.Count} texts), {pc} translated; pointer over the PC {overPc} frames",
+            pcNames.Count == 0 ? "FIX_PLAN_v2 TOOLS: 0 PC texts in the candidate log (D7)" : string.Join("; ", pcNames));
+        if (s.text == "pc")
+            runner.Assert($"tools.lens.{name}.overPc", Owner, overPc > 0, $"pointer over the PC's desktop {overPc}/{frames} frames",
+                "the PC open and under the sweep, so tools.lens.*.pc tests the candidate set's PC exclusion (open it with key Q first)");
+        if (s.text == "reach")
+            runner.Assert($"tools.lens.{name}.reach", Owner, translated > 0, $"{translated} translated text-frames, {log.Count} candidate texts",
+                "D7 surfaces (the newspaper, the documents): the hover reaches their world-language words (a UI text needs a raycast-target graphic in its panel)");
     }
 
     private static Rect Grown(Rect r, float by) => Rect.MinMaxRect(r.xMin - by, r.yMin - by, r.xMax + by, r.yMax + by);
@@ -336,7 +384,20 @@ public static class ToolsOps
             $"back in {F(seconds)} s", $"BUG-52: revert ≤{F(TranslationLens.RevertSeconds)} s after leaving (one frame's slack)");
     }
 
-    /// <summary>The scan view's microprint text (target): its capitals as drawn reach ScanMicroprint.MinCapPx; with text "credited", the paper (n) also reads as read (DeskReadings.MicroRead).</summary>
+    /// <summary>
+    /// The scan view's microprint text (target), measured twice. The game's
+    /// own measure (MicroprintView.CapPx, which the credit uses) and an
+    /// independent one from the pixels (BUG-53: no self-referential probe): a
+    /// screenshot's ink inside the text's screen rect, the rows that differ
+    /// from the rect's border colour, whose height is the line's capitals
+    /// (the microprint is capitals, digits and separators, no descender).
+    /// Both must reach ScanMicroprint.MinCapPx, and the ink must span most of
+    /// the line's laid-out width, so a clipped, off-screen or covered line
+    /// fails here even if CapPx passed it. With text "credited", the paper (n)
+    /// must also read as read (DeskReadings.MicroRead); with text
+    /// "uncredited" it must not (the step before the layer is opened; the
+    /// size checks are skipped there).
+    /// </summary>
     private static IEnumerator Micro(QaRunner runner, QaStep s)
     {
         yield return null;
@@ -345,14 +406,131 @@ public static class ToolsOps
             throw new InvalidOperationException($"{s.target} has no text.");
         float cap = MicroprintView.CapPx(text);
         string name = Name(s, "micro");
-        runner.Assert($"tools.micro.{name}.cap", Owner, cap >= ScanMicroprint.MinCapPx, $"cap {F(cap)} px at {Screen.width}x{Screen.height} ('{text.text}')",
-            $"BUG-2b: the microprint's capitals ≥{F(ScanMicroprint.MinCapPx)} px in the scan view at A2");
-        if (s.text == "credited")
+        if (s.text != "uncredited")
+        {
+            yield return new WaitForEndOfFrame();
+            Ink ink = MeasureInk(text);
+            runner.Assert($"tools.micro.{name}.cap", Owner, cap >= ScanMicroprint.MinCapPx, $"cap {F(cap)} px at {Screen.width}x{Screen.height} ('{text.text}')",
+                $"BUG-2b: the microprint's capitals ≥{F(ScanMicroprint.MinCapPx)} px in the scan view at A2 (MicroprintView.CapPx: 0 when clipped, off screen or covered)");
+            runner.Assert($"tools.micro.{name}.pixels", Owner, ink.Rows >= ScanMicroprint.MinCapPx && ink.WidthShare >= MinInkWidth,
+                $"ink {ink.Rows} px tall, {F(ink.WidthShare * 100f)}% of the line's width, in the {ink.Rect.width:0}x{ink.Rect.height:0} px rect at {ink.Rect.x:0},{ink.Rect.y:0}",
+                $"BUG-2b, independent of CapPx: the screenshot's ink is ≥{F(ScanMicroprint.MinCapPx)} px tall and spans ≥{F(MinInkWidth * 100f)}% of the line (a clipped, covered or off-screen line fails); the still is also read by eye");
+        }
+        if (s.text == "credited" || s.text == "uncredited")
         {
             DeskHardware hardware = QaGame.Find<DeskHardware>();
             bool read = hardware != null && hardware.Readings.MicroRead(s.n);
-            runner.Assert($"tools.micro.{name}.credited", Owner, read, $"paper {s.n} read: {read}", "BUG-2b: the read is credited once the layer rendered the line");
+            bool want = s.text == "credited";
+            runner.Assert($"tools.micro.{name}.{s.text}", Owner, read == want, $"paper {s.n} read: {read}",
+                want ? "BUG-2b: the read is credited once the layer rendered the line" : "BUG-2b: no credit before the hidden layer is opened and drawn");
         }
+    }
+
+    /// <summary>The share of the line's laid-out width (its glyphs' screen span) the ink must cover.</summary>
+    private const float MinInkWidth = 0.8f;
+
+    /// <summary>A pixel is ink when its colour differs from the border's by this much (summed RGB, 0..3).</summary>
+    private const float InkContrast = 0.3f;
+
+    /// <summary>What a screenshot shows of a text: its screen rect (screenshot pixels), the height of its ink (screen pixels), and how much of its glyphs' width the ink covers.</summary>
+    private struct Ink
+    {
+        public Rect Rect;
+        public int Rows;
+        public float WidthShare;
+    }
+
+    /// <summary>
+    /// The text's ink in a screenshot taken now (call after WaitForEndOfFrame):
+    /// inside its RectTransform's screen rect, a pixel is ink when it differs
+    /// from the rect's median border colour by InkContrast; Rows is the span
+    /// from the first to the last row with two ink pixels or more, WidthShare
+    /// the ink's column span over the glyphs' laid-out span.
+    /// </summary>
+    private static Ink MeasureInk(TMP_Text text)
+    {
+        var ink = new Ink();
+        Rect? found = QaGame.ScreenRect(text.gameObject);
+        if (found == null)
+            return ink;
+        Texture2D shot = ScreenCapture.CaptureScreenshotAsTexture();
+        try
+        {
+            float sx = shot.width / (float)Screen.width, sy = shot.height / (float)Screen.height;
+            Rect r = found.Value;
+            int x0 = Mathf.Clamp(Mathf.FloorToInt(r.xMin * sx), 0, shot.width - 1), x1 = Mathf.Clamp(Mathf.CeilToInt(r.xMax * sx), 0, shot.width - 1);
+            int y0 = Mathf.Clamp(Mathf.FloorToInt(r.yMin * sy), 0, shot.height - 1), y1 = Mathf.Clamp(Mathf.CeilToInt(r.yMax * sy), 0, shot.height - 1);
+            ink.Rect = Rect.MinMaxRect(x0, y0, x1, y1);
+            if (x1 - x0 < 2 || y1 - y0 < 2)
+                return ink;
+            int w = x1 - x0 + 1, h = y1 - y0 + 1;
+            Color[] px = shot.GetPixels(x0, y0, w, h);
+            var border = new List<Color>();
+            for (int x = 0; x < w; x++)
+            {
+                border.Add(px[x]);
+                border.Add(px[(h - 1) * w + x]);
+            }
+            for (int y = 0; y < h; y++)
+            {
+                border.Add(px[y * w]);
+                border.Add(px[y * w + w - 1]);
+            }
+            var bg = new Color(Median(border.Select(c => c.r)), Median(border.Select(c => c.g)), Median(border.Select(c => c.b)));
+            int firstRow = -1, lastRow = -1, firstCol = int.MaxValue, lastCol = -1;
+            for (int y = 0; y < h; y++)
+            {
+                int count = 0;
+                for (int x = 0; x < w; x++)
+                {
+                    Color c = px[y * w + x];
+                    if (Mathf.Abs(c.r - bg.r) + Mathf.Abs(c.g - bg.g) + Mathf.Abs(c.b - bg.b) < InkContrast)
+                        continue;
+                    count++;
+                    firstCol = Mathf.Min(firstCol, x);
+                    lastCol = Mathf.Max(lastCol, x);
+                }
+                if (count < 2)
+                    continue;
+                if (firstRow < 0)
+                    firstRow = y;
+                lastRow = y;
+            }
+            ink.Rows = firstRow < 0 ? 0 : Mathf.RoundToInt((lastRow - firstRow + 1) / sy);
+            float span = GlyphSpan(text) * sx;
+            ink.WidthShare = lastCol < 0 || span <= 0f ? 0f : (lastCol - firstCol + 1) / span;
+        }
+        finally
+        {
+            UnityEngine.Object.Destroy(shot);
+        }
+        return ink;
+    }
+
+    private static float Median(IEnumerable<float> values)
+    {
+        float[] v = values.OrderBy(x => x).ToArray();
+        return v.Length == 0 ? 0f : v[v.Length / 2];
+    }
+
+    /// <summary>The screen width (pixels) from the first visible glyph's left edge to the last one's right edge, as laid out.</summary>
+    private static float GlyphSpan(TMP_Text text)
+    {
+        Canvas canvas = text.canvas;
+        Camera cam = canvas != null && canvas.rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.rootCanvas.worldCamera : null;
+        float min = float.MaxValue, max = float.MinValue;
+        TMP_TextInfo info = text.textInfo;
+        for (int i = 0; info != null && i < info.characterCount; i++)
+        {
+            TMP_CharacterInfo c = info.characterInfo[i];
+            if (!c.isVisible)
+                continue;
+            float a = RectTransformUtility.WorldToScreenPoint(cam, text.transform.TransformPoint(c.bottomLeft)).x;
+            float b = RectTransformUtility.WorldToScreenPoint(cam, text.transform.TransformPoint(c.topRight)).x;
+            min = Mathf.Min(min, a, b);
+            max = Mathf.Max(max, a, b);
+        }
+        return max > min ? max - min : 0f;
     }
 }
 #endif

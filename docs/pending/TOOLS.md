@@ -14,6 +14,15 @@ Everything else that is a design choice is marked **proposal (ours)** below.
 
 ---
 
+## 0. Review fixes (resubmission 1)
+
+| # | Finding | Fix |
+|---|---|---|
+| 1 | `UvTorch.Body` and `UvTorch.PoolShown` had no caller (HOUSE_RULES: every new public member has a real caller); Body's doc said "QA reads it", untrue since cff25e5 moved `toolsTorch` to the real mesh vertices | Both deleted, with the doc comment. The private `_poolShown` and the body capsule fields stay: `ShowPool` and `UvTorchHold.Hold` use them |
+| 2 | `tools_lens` swept only with the PC closed, where PC texts are already dropped by the drawn/canvas filter, so `tools.lens.*.pc` = 0 could not prove the `onPc` exclusion in `Eligible` (D7) | New seam `TranslationLensPresenter.Candidates` (the last hover's candidate set). `toolsLens` writes the candidate log (`lens_candidates_<name>.txt`, every text with its surface and frames) and `tools.lens.*.pc` now fails on any PC text in it, as the plan's pass line says ("0 PC texts in the candidate log"). `tools_lens` ends with the PC open (`key Q`) and two sweeps over it (text "pc"), which also assert `tools.lens.<name>.overPc`: the pointer was over the PC's desktop, so the 0 is not vacuous. With the `onPc` term removed from `Eligible`, those PC texts would be candidates and the check goes red |
+| 3 | `toolsMicro` measured with `MicroprintView.CapPx`, the function the credit uses (self-referential, BUG-53); `CapPx` ignored clipping, off-screen and covering windows | `toolsMicro` adds `tools.micro.<name>.pixels`, independent of `CapPx`: a screenshot's ink inside the text's screen rect (pixels that differ from the rect's median border colour), ≥12 px tall and across ≥80 % of the line's laid-out width. `CapPx` now returns 0 when any visible glyph is off the screen, outside a `RectMask2D`/`Mask` of its parents, or under a visible graphic of another window or panel. The recipe also checks the credit is absent before the layer is opened (`a2_before.uncredited`) and takes a still for the by-eye read |
+| 4 | The hover reads only the top raycast hit's object: a world-language UI text whose panel has no raycast-target graphic can no longer be translated | Named in §1 BUG-52 as a known limit, with the reason no rect fallback was added. `tools_lens` sweeps the newspaper (before the shift) and the documents and asserts `tools.lens.newspaper.reach` and `tools.lens.documents.reach`. The seam table asks D7 surface owners for a raycast-target panel |
+
 ## 1. Changes per BUG id
 
 ### BUG-2b: microprint read in the scan view, credited only when it rendered legibly (FIX_PLAN_v2: TOOLS content and rule, UI-PC render at #13)
@@ -24,7 +33,12 @@ Everything else that is a design choice is marked **proposal (ours)** below.
 - **`Domain/MicroLens.cs`, rewritten.** `MicroLens.Readable(layerOpen, renderedCapPx)`: a read counts only when the player has the paper's hidden layer open **and** the line rendered with capitals ≥12 px, measured from the drawn glyphs. The geometric lens maths (`Shown`, `Held`, `ReadLength`, the old `Readable`) is gone with the magnifiers. 1019a credited a line drawn 0.024 px tall because a lens shape covered it.
 - **`Office/Desk/MicroprintView.cs` (new, TOOLS).** The seam UI-PC's scan view calls at #13:
   - `Print(TMP_Text, MicroLine, form)` writes the line on one line at `ScanMicroprint.FontSize`, auto-size off, measuring where the text is drawn (its canvas camera).
-  - `CapPx(TMP_Text)` measures the capitals as last drawn: the tallest capital or digit glyph of the laid-out text, carried to the screen through its transform and camera; 0 when the text, its canvas or its camera is off.
+  - `CapPx(TMP_Text)` measures the capitals as last drawn: the tallest capital or digit glyph of the laid-out text, carried to the screen through its transform and camera. It returns 0 when the player cannot see the whole line:
+    - the text, its canvas or its camera is off, or the camera draws into a texture;
+    - any visible glyph lies partly off the screen (the camera's viewport);
+    - any visible glyph lies partly outside a clip of its parents (an enabled `RectMask2D`, or a `Mask` that masks: a scroll view's viewport);
+    - a visible graphic of another window or panel is the top UI hit at any glyph's centre (a covering window; an invisible raycast catcher, alpha under 0.05, hides nothing).
+  - It raycasts once per glyph, so UI-PC calls it until the read is credited, not every frame after.
   - UI-PC's call at #13: `if (MicroLens.Readable(layer == ScanLayer.Uv, MicroprintView.CapPx(row))) readings.ReadMicro(document);` on the frame after `Print`.
 - **`Office/Desk/MicroPaperLayer.cs`.** The desk line still prints as a hairline (too fine to read at the desk, by design). When the scan view credits the read (`DeskReadings.Changed`), the desk line answers: its tick pops (inspect_link) and the line becomes clickable in inspect mode, as before. `Track` is now an empty shim; see the cleanup list.
 
@@ -55,6 +69,8 @@ Everything else that is a design choice is marked **proposal (ours)** below.
   - `RevertSeconds = 0.2` and `RevertSpeed(duration)`: a flip back always lands within 0.2 s (the plan's pass line; a constant here because `TranslationLensSettings` is TEXT-LANG's).
 - **`UI/Translation/TranslationLensPresenter.cs`:**
   - **No full scan.** Only the texts of the object under the pointer are looked at: its window or top panel, else the desk object its physics hit belongs to. The 5 s rescan of every TMP text in the scenes is gone; the label order is refreshed when the strings or the scene change, and texts that are gone are pruned.
+  - **Known limit of that scope (review item 4).** A UI text is reached only through the object the `GraphicRaycaster` hits. Before, any visible UI text under the pointer was checked by its rect. Now a UI text in the world's language whose panel has no raycast-target graphic under it can no longer be translated. The speech bubble's panel image and the morning paper's page (`BriefingPanel`, built with a raycast-target `Image`) are raycast targets, and the desk's documents are reached through their physics hit. No rect fallback was added: it would bring back a scan of every canvas's texts and the phantom risk under covering windows. Instead the scope is checked in Unity: `tools_lens` sweeps the newspaper and the documents and asserts `tools.lens.newspaper.reach` and `tools.lens.documents.reach` (something translated). A new D7 surface built without a raycast target fails there; the fix is a raycast-target graphic on its panel, in the owner's builder.
+  - **Candidate log (review item 2).** `Candidates(list)`: the texts the last hover was allowed to read (the object's texts that passed `Eligible`, with or without a known label). The hover now walks all of the object's texts to log them (it no longer stops at the hovered word; the rect and character tests still stop there). TOOLS' `toolsLens` writes it per step to `lens_candidates_<name>.txt` and asserts no PC text in it.
   - **Every candidate passes `Candidate`.** The PC's texts are excluded by `UiText.SurfaceOf` (the PCDesktop layer). A UI text counts only when its canvas is enabled and is an overlay or is drawn by an enabled camera, and its inherited alpha is above 0; a desk word only when its renderer and the hit's camera are on.
   - **Never stale.** While anything is translated, the hover is re-checked every frame, even with the pointer still, so a word whose object moves away flips back (CODE-163). With nothing translated and the pointer still, nothing runs and nothing is allocated.
   - **Within a frame.** The hover runs before the animation, so the hovered word changes on the same frame (C4: "within 1 frame").
@@ -123,7 +139,7 @@ C1 (scanner) is TOOLS' only for the microprint (≥12 px cap: content and rule h
   - `Assets/Scripts/Office/Desk/MicroprintView.cs`;
   - `Assets/Tests/EditMode/UvTorchHoldTests.cs`;
   - `Assets/Editor/QA/Checks/ToolsChecks.cs`;
-  - `Assets/Tests/PlayMode/Tools/Rig/ToolsOps.cs` (the QA ops `toolsTorch`, `toolsClicks`, `toolsLens`, `toolsRevert`, `toolsMicro`);
+  - `Assets/Tests/PlayMode/Tools/Rig/ToolsOps.cs` (the QA ops `toolsTorch`, `toolsClicks`, `toolsLens` with its candidate log, `toolsRevert`, `toolsMicro` with its pixel measure);
   - `tools/qa/scenarios/tools_torch.json`, `tools_clicks.json`, `tools_lens.json`, `tools_microprint.json`;
   - all `.meta` files.
 - **Untouched owned files:**
@@ -143,6 +159,8 @@ C1 (scanner) is TOOLS' only for the microprint (≥12 px cap: content and rule h
 | Offline runner (TimeDeskEditMode) | passed 3710, failed 0 | passed 3722, failed 0 |
 | `tools/qa/editor_runner` (QA_PROJECT set) | - | passed 69, failed 0, 16 NeedsEditor skipped |
 | `python -m unittest discover -s tools/qa` | - | 35 OK; the scenario test reads the four TOOLS scenarios and their registered ops |
+
+Resubmission 1 (§0): the same four checks, the same numbers (0 errors; passed 3722, failed 0; passed 69, failed 0, 16 skipped; 35 OK). No EditMode test was added: the changes live in Assembly-CSharp (`MicroprintView`, the presenter, `UvTorch`) and in the QA ops, which the EditMode assembly cannot reference. Their pass lines are recipes 4 and 6 of the RESULT section, including a mutation check for the PC exclusion and a clip check for `CapPx`.
 
 **New and changed EditMode tests:**
 - **`UvTorchHoldTests` (7, new):**
@@ -179,7 +197,7 @@ TDD note: the Domain tests and the APIs were written together in this session. `
 
 **FEATURES.md (rewrite these lines; line numbers as of 9b8ab5f):**
 - **51 (the desk machines), the UV torch sentence.** Append: "the hold is chosen for the camera so the torch's body never covers the lit patch (`UvTorchHold.Hold`: the built tilt straight ahead unless the camera would see the body over it, then the nearest tilt and turn that shows ≥97 % of it; tested: `UvTorchHoldTests`); the cone lands on the desk plane (`DeskSurface`), and the pool and the reveal show only while it is on the desk area; the grip trails the pointer by at most 8 mm and follows it every frame; the resting torch tips 10° up on hover; its switch clicks 1 mm down; the revealed marks fluoresce in over 120 ms; while held it is the desk's hold (`HoldRegistry`); its click box is its own meshes' size (`tools.torch.clickBox`)".
-- **51, the microprint sentence (written by CUTS: "printed but cannot be read until #17").** Becomes: "the scanner's hidden-layer view prints the line at a size whose capitals reach 12 px where it is drawn (`ScanMicroprint`, `MicroprintView.Print`), and a read is credited only when the layer is open and the line rendered at ≥12 px, measured from the drawn glyphs (`MicroLens.Readable`, `MicroprintView.CapPx`; tested: `MicroLensTests`); the desk line's tick pops when the scan view credits it; the view that draws it is UI-PC's (#13)".
+- **51, the microprint sentence (written by CUTS: "printed but cannot be read until #17").** Becomes: "the scanner's hidden-layer view prints the line at a size whose capitals reach 12 px where it is drawn (`ScanMicroprint`, `MicroprintView.Print`), and a read is credited only when the layer is open and the line rendered at ≥12 px, measured from the drawn glyphs, the whole line on screen, unclipped and uncovered (`MicroLens.Readable`, `MicroprintView.CapPx`; tested: `MicroLensTests`); the desk line's tick pops when the scan view credits it; the view that draws it is UI-PC's (#13)".
 - **156 (the Translation Lens).**
   - Replace "nothing runs while the pointer rests" with: "only the texts of the object under the pointer are read, and only those the player can see: never the PC's (D7) and never a text on a canvas no camera draws or faded out (`TranslationLens.Candidate`; tested: `TranslationLensTests`); while anything is translated the hover is checked every frame, so a word whose object moves away flips back; every flip back lands within 0.2 s (`TranslationLens.RevertSeconds`); a right-to-left label keeps its order while its words flip, and a whole right-to-left label reads as its English sentence once landed (`LensPhrase.Compose`, `WholeFrame`; tested: `LensTextTests`); nothing runs while the pointer rests and nothing is translated".
   - Also drop "the PC's chrome and windows" from the list of places it reads.
@@ -197,7 +215,9 @@ TDD note: the Domain tests and the APIs were written together in this session. `
 |---|---|---|---|
 | `HoldRegistry`/`IHoldable` | consumes | DOC-HANDLE (#8) | the torch registers; Cancel and focus loss are DOC-HANDLE's to call |
 | `DeskSurface.Clamp`, its plane | consumes | DOC-HANDLE / DESK-PLAN | read only |
-| `MicroprintView.Print/CapPx`, `ScanMicroprint`, `MicroLens.Readable` | provides | UI-PC (#13) | the scan view's microprint row and its credit |
+| `MicroprintView.Print/CapPx`, `ScanMicroprint`, `MicroLens.Readable` | provides | UI-PC (#13) | the scan view's microprint row and its credit. `CapPx` is 0 for a clipped, off-screen or covered line, so UI-PC needs no visibility test of its own; it must call `CapPx` on the frame after `Print`, and until credited (not every frame after: it raycasts per glyph) |
+| `TranslationLensPresenter.Candidates` | provides | QA (TOOLS' op), GLASSES | the candidate set of the last hover |
+| raycast-target panel under every D7 UI text | asks | TEXT-LANG, HOME, GLASSES | the lens reaches a UI text only through its panel's raycast hit (§1 BUG-52, known limit) |
 | `TranslationLens.Candidate`, `RevertSeconds`, `LensPhrase.WholeFrame`, `TranslationLensPresenter.Translated` and the `TranslationLens.Hover` marker | provides | GLASSES (Phase B lease) | the engine GLASSES reuses |
 | **Request** to TEXT-LANG (#12) | asks | TEXT-LANG | a `DisplayText` per-flip layout (the visual slot of each cell worked out once per line), so a right-to-left speech flip never reorders per letter. TextFlip would then write per step without re-running bidi |
 
@@ -231,12 +251,16 @@ Everything below runs in the NOPE-p5 editor lane by job, after INTEGRATION's reb
      - the camera assertion is clean.
 3. **Clicks (BUG-4b).** Scenario `tools_clicks`: day 12 at A1, then A2.
    - **Pass:** `tools.clicks.chipReader` 10/10 and `chipReader_a2` 10/10 on the chip reader; `tools.clicks.uvTorch` 10/10 on the torch.
-4. **Translation lens (BUG-52).** Scenario `tools_lens`: day 8 at A2, the PC closed, sweeps over the left two thirds and over the desk.
+4. **Translation lens (BUG-52).** Scenario `tools_lens`: day 8 at A2. The morning paper is swept before the shift (`newspaper`, text "reach"). Then, the PC closed, sweeps over the left two thirds, the desk and the handed-over documents (`documents`, text "reach"). Last, `key Q` opens the PC and two sweeps cross it (`pc_open`, `pc_open_windows`, text "pc"), then Escape.
+   - Retarget the `newspaper` sweep to the paper's columns, the `documents` sweep to a handed-over paper and the `pc_open*` sweeps to the windows the PC shows, if the run's screens place them elsewhere.
    - Retarget `toolsRevert` to a foreign word found in the run (the rulebook folder's cover label is the default).
    - For the Arabic answer: open the wheel through the intercom on an Arabic speaker's case (`cheat ForceAppearance` with an Arabic tongue), ask a question, and add a `toolsLens` step over the bubble.
    - **Pass:**
      - `tools.lens.*.phantoms` 0: every translated text drawn and under the pointer;
-     - `tools.lens.*.pc` 0;
+     - `tools.lens.*.pc` 0: no PC text in any step's candidate log (`lens_candidates_<name>.txt` in the run folder; attach the `pc_open` ones to RESULT.md), none translated;
+     - `tools.lens.pc_open.overPc` and `tools.lens.pc_open_windows.overPc` pass (the pointer was over the PC's desktop, so the 0 above tests D7's exclusion);
+     - `tools.lens.newspaper.reach` and `tools.lens.documents.reach` pass: the hover reaches the D7 surfaces (known red until TEXT-LANG (#12) prints them in the world's language; if red after that, the surface's panel lacks a raycast target);
+     - mutation check, once: in a scratch change, pass `false` for `onPc` in `TranslationLensPresenter.Eligible`, run `tools_lens`: `tools.lens.pc_open*.pc` must go red (PC texts in the candidate log); revert it;
      - `tools.lens.rulebook.revert` ≤0.2 s;
      - `seqtools flicker seq/lens_sweep` passes on the speech and paper text;
      - the `TranslationLens.Hover` marker ≤0.5 ms per move in the profiler (`QaJobs.GcSites` window), with 0 B per idle frame.
@@ -246,9 +270,11 @@ Everything below runs in the NOPE-p5 editor lane by job, after INTEGRATION's reb
 6. **Scanner microprint (BUG-2b) [deferred to #13].** Scenario `tools_microprint` once UI-PC's scan view prints the row with `MicroprintView.Print`.
    - Retarget `MicroprintRow` to UI-PC's object, at A2, on a microprint paper (a planted ReprintedPaper after #17).
    - **Pass:**
-     - `tools.micro.a2.cap` ≥12 px;
-     - `tools.micro.a2.credited` true only after the UV layer was opened and drawn (run the step before opening the layer as well: it must be false there);
-     - the microprint is read correctly by eye from the still.
+     - `tools.micro.a2.cap` ≥12 px (the game's measure, `MicroprintView.CapPx`);
+     - `tools.micro.a2.pixels`: the screenshot's ink ≥12 px tall across ≥80 % of the line (independent of `CapPx`); record both numbers, they should agree within 2 px;
+     - `tools.micro.a2_before.uncredited` (no credit on the normal layer) and `tools.micro.a2.credited` (credited after the UV layer drew the line);
+     - clip check, once: scroll or drag the scan view so the line is half outside its viewport or under another window, then run `toolsMicro`: `cap` is 0 and `pixels` fails;
+     - the microprint is read correctly by eye from `stills/microprint_a2_*.png`.
 7. **Feel cards C3 (and C1's microprint line).** `R7\FIX\FEEL\C3.md` from the `torch_*` sequences, at 1× and 0.25×, plus one Reduced Motion run (Settings' Reduced Motion on, `tools_torch` again).
    - **Expected:**
      - checks 1, 2, 4, 7, 8, 9, 10, 11 and 12 yes (press-frame lift, ≤8 mm lag, 10° hover tip, 120 ms fluoresce, 2-frame spot lag, cues);

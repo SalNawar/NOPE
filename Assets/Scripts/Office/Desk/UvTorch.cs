@@ -86,20 +86,6 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     /// <summary>The spot the cone lights on the desk (while held): ahead of the grip, with the cone's soft lag.</summary>
     public Vector3 Aim => _lit;
 
-    /// <summary>True while the cone's pool is drawn (the torch held and lit, its spot on the desk).</summary>
-    public bool PoolShown => _poolShown;
-
-    /// <summary>The torch's body as a capsule in world space while held (its tail cap and lens ends, its radius), as the hold measured it from the torch's own meshes; QA reads it.</summary>
-    public (Vector3 tail, Vector3 lens, float radius) Body
-    {
-        get
-        {
-            Vector3 forward = torch != null ? -torch.forward : Vector3.forward;
-            Vector3 grip = torch != null ? torch.position : transform.position;
-            return (grip - forward * _tailLength, grip + forward * _lensLength, _bodyRadius);
-        }
-    }
-
     /// <summary>Wires it to its machines' hub (DeskHardware).</summary>
     public void Bind(DeskHardware hardware)
     {

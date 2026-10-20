@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-2b (FIX_PLAN_v2 TOOLS: scanner microprint, deferred to #13): at A2, on a planted ReprintedPaper case (re-enabled at #17; until then any paper that prints a microprint line), scan the paper, open the scan view's UV layer (UI-PC's ScanLayerSwitch prints the line with MicroprintView.Print), then measure. Pass: tools.micro.*.cap >=12 px (MicroprintView.CapPx, measured from the drawn glyphs) and tools.micro.*.credited (DeskReadings.MicroRead) only after the layer rendered. Retarget 'MicroprintRow' to the object UI-PC names at #13; 'n' is the paper's index in the case."
+      "text": "TOOLS BUG-2b (FIX_PLAN_v2 TOOLS: scanner microprint, deferred to #13): at A2, on a planted ReprintedPaper case (re-enabled at #17; until then any paper that prints a microprint line), scan the paper and open its copy (normal layer): the read must not be credited yet (uncredited). Then open the scan view's UV layer (UI-PC's ScanLayerSwitch prints the line with MicroprintView.Print) and measure. Pass: tools.micro.a2.cap >=12 px (MicroprintView.CapPx, 0 when clipped, off screen or covered), tools.micro.a2.pixels (independent: the screenshot's ink >=12 px tall across >=80% of the line), tools.micro.a2_before.uncredited and tools.micro.a2.credited (DeskReadings.MicroRead), and the still read by eye. Retarget 'MicroprintRow' to the object UI-PC names at #13; 'n' is the paper's index in the case."
     },
     {
       "op": "title"
@@ -46,7 +46,18 @@
     },
     {
       "op": "note",
-      "text": "UI-PC #13: drag the paper onto the scanner, open its copy on the PC, click the UV tab (ScanLayerSwitch.Select(ScanLayer.Uv))."
+      "text": "UI-PC #13: drag the paper onto the scanner and open its copy on the PC (normal layer)."
+    },
+    {
+      "op": "toolsMicro",
+      "name": "a2_before",
+      "target": "MicroprintRow",
+      "text": "uncredited",
+      "n": 0
+    },
+    {
+      "op": "note",
+      "text": "UI-PC #13: click the UV tab (ScanLayerSwitch.Select(ScanLayer.Uv))."
     },
     {
       "op": "toolsMicro",
@@ -54,6 +65,10 @@
       "target": "MicroprintRow",
       "text": "credited",
       "n": 0
+    },
+    {
+      "op": "still",
+      "name": "microprint_a2"
     }
   ]
 }

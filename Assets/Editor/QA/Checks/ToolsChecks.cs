@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 /// Play: the recipes of docs/pending/TOOLS.md, measured by TOOLS' scenario
 /// ops (ToolsOps): the torch's reveal unoccluded and its pool on the desk
 /// (BUG-2c), the chip reader's clicks (BUG-4b), the Translation Lens's
-/// phantoms, PC texts and revert (BUG-52), and the scan view's microprint
+/// phantoms, PC candidates (the PC open too), reach and revert (BUG-52), and the scan view's microprint
 /// (BUG-2b; measurable once UI-PC's scan view draws it, FIX_PLAN_v2 #13).
 /// </summary>
 public static class ToolsChecks
@@ -83,11 +83,11 @@ public static class ToolsChecks
     [GateCheck("tools.clicks", Owner, GateKind.Play)]
     public static GateResult Clicks() => GateResults.Require("tools.clicks", Owner, "tools_clicks.tools.clicks.*");
 
-    /// <summary>BUG-52: day 8 with the PC closed, hovering papers and an answer: 0 phantom translations, 0 PC texts, revert ≤0.2 s (tools_lens.json).</summary>
+    /// <summary>BUG-52: day 8, the morning paper, then the PC closed (papers, documents, an answer), then the PC open over its windows: 0 phantom translations, 0 PC texts in the candidate log (D7, with the PC under the pointer), the newspaper and the documents reached, revert ≤0.2 s (tools_lens.json).</summary>
     [GateCheck("tools.lens", Owner, GateKind.Play)]
     public static GateResult Lens() => GateResults.Require("tools.lens", Owner, "tools_lens.tools.lens.*");
 
-    /// <summary>BUG-2b: the scan view's microprint at A2 has capitals ≥12 px and is credited once drawn (tools_microprint.json; known red until UI-PC's scan view draws it, FIX_PLAN_v2 #13).</summary>
+    /// <summary>BUG-2b: the scan view's microprint at A2 has capitals ≥12 px, by the game's measure and by the screenshot's ink, and is credited only once drawn (tools_microprint.json; known red until UI-PC's scan view draws it, FIX_PLAN_v2 #13).</summary>
     [GateCheck("tools.micro", Owner, GateKind.Play)]
     public static GateResult Micro() => GateResults.Require("tools.micro", Owner, "tools_microprint.tools.micro.*");
 }

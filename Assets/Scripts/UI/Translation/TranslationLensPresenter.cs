@@ -33,7 +33,12 @@ using UnityEngine.SceneManagement;
 /// a text on a canvas no camera draws (1019a read the closed PC's desktop
 /// words through its disabled frame camera), never a faded one; and only the
 /// texts of the object under the pointer (its window or panel, its desk
-/// object) are looked at, never every text of the scenes. While anything is
+/// object) are looked at, never every text of the scenes. A UI text is
+/// reached only through that object: the window or top panel the
+/// GraphicRaycaster hits, so its panel needs a raycast-target graphic under
+/// the text (the morning paper's page and the speech bubble's panel have
+/// one); a text drawn over no raycast target is not read (docs/pending/TOOLS.md
+/// names it; tools_lens checks the newspaper and the documents). While anything is
 /// translated the hover is checked every frame, the pointer still or not, so
 /// a word whose object moves away flips back; a flip back always lands within
 /// TranslationLens.RevertSeconds. Nothing runs while the pointer rests and
@@ -105,6 +110,7 @@ public sealed class TranslationLensPresenter : MonoBehaviour
     }
 
     private readonly List<TMP_Text> _rootTexts = new List<TMP_Text>();
+    private readonly List<TMP_Text> _candidates = new List<TMP_Text>();
     private readonly List<TMP_Text> _gone = new List<TMP_Text>();
     private readonly Dictionary<TMP_Text, TextState> _states = new Dictionary<TMP_Text, TextState>();
     private readonly List<TextState> _active = new List<TextState>();
@@ -182,6 +188,23 @@ public sealed class TranslationLensPresenter : MonoBehaviour
                 into.Add(state.Text);
     }
 
+    /// <summary>
+    /// The candidate set of the last hover, into <paramref name="into"/>
+    /// (cleared first): every text the lens was allowed to read there, the
+    /// object under the pointer's texts that passed Eligible
+    /// (TranslationLens.Candidate), whether or not they hold a known label.
+    /// TOOLS' QA op logs it to prove the set excludes the PC entirely
+    /// (FIX_PLAN_v2 TOOLS: "0 PC texts in the candidate log"), the PC open
+    /// and under the pointer.
+    /// </summary>
+    public void Candidates(List<TMP_Text> into)
+    {
+        into.Clear();
+        foreach (TMP_Text text in _candidates)
+            if (text != null)
+                into.Add(text);
+    }
+
     /// <summary>True when any label of the text, or any word of one, is turned towards English (not merely flipping back).</summary>
     private static bool TurnedToEnglish(TextState state)
     {
@@ -211,7 +234,10 @@ public sealed class TranslationLensPresenter : MonoBehaviour
             _lastPosition = pointer.Value;
             _reach = CurrentReach;
             if (_reach == LensReach.None || strings == null || strings.Phrases.Count == 0)
+            {
+                _candidates.Clear();
                 Release(now);
+            }
             else
             {
                 if (_stale || strings.Phrases.Count != _phraseCount)
@@ -313,6 +339,7 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         Transform deskRoot = topRoot == null && _deskHit != null ? ObjectRoot(_deskHit) : null;
         Transform root = topRoot != null ? topRoot : deskRoot;
         _rootTexts.Clear();
+        _candidates.Clear();
         if (root != null)
             root.GetComponentsInChildren(false, _rootTexts);
 
@@ -324,6 +351,9 @@ public sealed class TranslationLensPresenter : MonoBehaviour
             // Only the object's own texts (a window open over a panel is an object of its own), and only those the player can see.
             if (ObjectRoot(text.transform) != root || !Eligible(text))
                 continue;
+            _candidates.Add(text);
+            if (hovered != null)
+                continue; // the word is found; the rest of the object's texts are only logged as candidates
             Camera cam = text is TextMeshPro ? _deskCamera : CameraOf(text);
             // A printed paper word may overflow its box (it shrinks to fit only so far): a desk word is found by its letters alone.
             if (!(text is TextMeshPro) && !RectTransformUtility.RectangleContainsScreenPoint(text.rectTransform, position, cam))
@@ -346,8 +376,6 @@ public sealed class TranslationLensPresenter : MonoBehaviour
                 hoveredWord = segment >= 0 ? occurrence.Phrase.WordRank(segment) : -1;
                 break;
             }
-            if (hovered != null)
-                break;
         }
 
         _objectPhrases.Clear();
