@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,20 +19,26 @@ using UnityEngine.UI;
 /// the bezel"); a click on the room beside the frame is taken and does
 /// nothing.
 /// The picture powers on as a CRT does (BUG-32c, GAME_FEEL_BIBLE F1;
-/// CrtPower, with DesktopConfigSO's knobs): the press frame shows the frame
-/// with its glass dark while the degauss hum (pc_on) begins, then the
-/// picture grows from a bright full-width line to full height, with a
-/// one-frame glow on the glass (through FlashPolicy, G3); closing, it
-/// squeezes to a line and a dot, the dot glows on for two frames (the
-/// phosphor afterglow), and only then does the frame hide. The line is drawn
-/// by squeezing the frame camera's projection inside the glass's full
+/// CrtPower, with DesktopConfigSO's knobs): from the press frame the frame
+/// and its dark glass fade in (never whole in one frame: it is 63-77 % of
+/// the screen, F1's "no frame-0 UI pop"), the degauss hum (pc_on) begins 80
+/// ms before the picture, then the picture grows from a bright full-width
+/// line to full height, with a one-frame glow on the glass (through
+/// FlashPolicy, G3); closing, it squeezes to a line and a dot, the glass is
+/// dark as the picture goes, the dot glows on for two frames (the phosphor
+/// afterglow), then the frame fades out and only then hides. The line is
+/// drawn by squeezing the frame camera's projection inside the glass's full
 /// viewport (the camera's black clear is the dark tube around it), never by
 /// shrinking the viewport, which would only draw the whole desktop smaller.
 /// With Reduced Motion nothing moves: the frame and its dark glass fade in
 /// over the room, then the dark glass fades off the picture (and the reverse
 /// on closing), so the picture, drawn by its own camera, never cuts in or
-/// out. Its input follows the view at once: only the picture moves. The
-/// bezel grows to the screen's height on screens taller than 16:9 (BUG-58b,
+/// out. The bezel, its X and its power button, and the keys, take input from
+/// the press frame; the desktop takes clicks once the picture is whole
+/// (<see cref="PictureMoving"/>: MonitorScreen holds the desktop's raycaster
+/// off while the picture moves, so a click is never mapped through the
+/// squeezed projection onto a part of the desktop the player cannot see).
+/// The bezel grows to the screen's height on screens taller than 16:9 (BUG-58b,
 /// CODE-161: at 5:4 and 4:3 the fixed frame left the PC's text at about 12
 /// px), never past <see cref="MaxWidthShare"/> of the width, so the room
 /// stays in view; it never shrinks under its designed size.
@@ -86,6 +93,12 @@ public sealed class PcFrame : MonoBehaviour
     /// <summary>True once this opening's glow was asked for.</summary>
     private bool _glowed;
 
+    /// <summary>True once this opening's degauss hum was played.</summary>
+    private bool _hummed;
+
+    /// <summary>True while the frame fades out after the afterglow.</summary>
+    private bool _leaving;
+
     /// <summary>The afterglow's frame after a collapse (-1: none).</summary>
     private int _afterglow = -1;
 
@@ -103,6 +116,21 @@ public sealed class PcFrame : MonoBehaviour
 
     /// <summary>The screen's power (MonitorScreen, each time it changes): F1 opens the frame only while it is on.</summary>
     public static void ScreenPowered(bool on) => _screenOn = on;
+
+    /// <summary>True from the press frame until the picture is whole (opening), and from the close until the frame is gone: the desktop takes no clicks meanwhile (MonitorScreen; DesktopWindowManager keeps the EventSystem's navigation off too).</summary>
+    public static bool PictureMoving { get; private set; }
+
+    /// <summary>Raised when <see cref="PictureMoving"/> changes.</summary>
+    public static event Action PictureMovingChanged;
+
+    /// <summary>Sets <see cref="PictureMoving"/> and tells its listeners when it changed.</summary>
+    private static void SetMoving(bool moving)
+    {
+        if (PictureMoving == moving)
+            return;
+        PictureMoving = moving;
+        PictureMovingChanged?.Invoke();
+    }
 
     /// <summary>The frame starts closed; the knobs are read once.</summary>
     private void Awake()
@@ -125,6 +153,9 @@ public sealed class PcFrame : MonoBehaviour
         Finish();
     }
 
+    /// <summary>A frame destroyed mid-move (a scene unload) leaves the desktop's input to the next one.</summary>
+    private void OnDestroy() => SetMoving(false);
+
     /// <summary>Orders the frame camera right after <paramref name="office"/> (the art office's camera), so the desktop draws over the office in the glass and nothing draws over it.</summary>
     public void DrawAfter(Camera office)
     {
@@ -132,19 +163,22 @@ public sealed class PcFrame : MonoBehaviour
             frameCamera.depth = office.depth + 1f;
     }
 
-    /// <summary>Opens the frame (the hum, then the picture powers on) or closes it (the picture collapses, glows out, then the frame goes).</summary>
+    /// <summary>Opens the frame (it fades in, the hum leads the picture, the picture powers on) or closes it (the picture collapses, glows out, then the frame fades out).</summary>
     public void SetOpen(bool open)
     {
         if (open == _open)
             return;
         _open = open;
-        if (root != null)
-            Sounds.Play(open ? SoundCues.PcOn : SoundCues.PcOff); // the CRT's degauss hum, or its collapse
+        if (!open && root != null)
+            Sounds.Play(SoundCues.PcOff); // the collapse; opening, the hum plays when it is due (Step)
         _moving = true;
         _glowed = false;
+        _hummed = false;
+        _leaving = false;
         _afterglow = -1;
         Show(_dot, 0f);
         _movedAt = Time.unscaledTime;
+        SetMoving(true);
         if (open && root != null)
             root.SetActive(true);
         Step();
@@ -157,7 +191,7 @@ public sealed class PcFrame : MonoBehaviour
             Step();
     }
 
-    /// <summary>The picture's power move now (CrtPower), the glow, the afterglow, and the end of a collapse.</summary>
+    /// <summary>The picture's power move now (CrtPower), the hum, the glow, the afterglow, the frame's fade out, and the end of a move.</summary>
     private void Step()
     {
         FitBezel();
@@ -166,15 +200,20 @@ public sealed class PcFrame : MonoBehaviour
             Afterglow();
             return;
         }
+        if (_leaving)
+        {
+            Leave();
+            return;
+        }
         bool reduced = MotionPreference.Reduced;
         float elapsed = Time.unscaledTime - _movedAt;
+        if (_open && _moving && !_hummed && root != null && _power.HumStarted(elapsed, reduced))
+        {
+            _hummed = true;
+            Sounds.Play(SoundCues.PcOn); // the CRT's degauss hum, 80 ms before the picture (F1)
+        }
         CrtFrame frame = _moving ? _power.At(elapsed, _open, reduced) : new CrtFrame(1f, 1f, 1f, 0f, true);
-        if (_fade != null)
-            _fade.alpha = frame.Bezel;
-        Show(_veil, frame.Veil);
-        if (frameCamera != null && frameCamera.enabled != frame.Picture)
-            frameCamera.enabled = frame.Picture;
-        Fit(frame.X, frame.Y);
+        Draw(frame);
         if (_open && !_glowed && _power.PictureStarted(elapsed, true, reduced))
         {
             _glowed = true;
@@ -185,14 +224,31 @@ public sealed class PcFrame : MonoBehaviour
             return;
         _moving = false;
         if (_open)
+        {
             Fit(1f, 1f);
-        else if (!reduced && _power.AfterglowFrames > 0)
+            SetMoving(false); // the picture is whole: the desktop takes clicks
+        }
+        else if (reduced)
+            Finish();
+        else if (_power.AfterglowFrames > 0)
             Afterglow();
         else
-            Finish();
+            StartLeaving();
     }
 
-    /// <summary>One frame of the phosphor afterglow (the picture is gone; the dot glows out), then the frame's end.</summary>
+    /// <summary>The frame's alpha, the dark glass, the picture's camera and its squeeze, as <paramref name="frame"/> says.</summary>
+    private void Draw(CrtFrame frame)
+    {
+        if (_fade != null)
+            _fade.alpha = frame.Bezel;
+        Show(_veil, frame.Veil);
+        if (frameCamera != null && frameCamera.enabled != frame.Picture)
+            frameCamera.enabled = frame.Picture;
+        if (frame.Picture)
+            Fit(frame.X, frame.Y);
+    }
+
+    /// <summary>One frame of the phosphor afterglow on the dark glass (the picture is gone; the dot glows out), then the frame's fade out.</summary>
     private void Afterglow()
     {
         if (_afterglow < 0)
@@ -200,7 +256,9 @@ public sealed class PcFrame : MonoBehaviour
         float level = _power.Afterglow(_afterglow++);
         if (level <= 0f)
         {
-            Finish();
+            _afterglow = -1;
+            Show(_dot, 0f);
+            StartLeaving();
             return;
         }
         if (frameCamera != null && frameCamera.enabled)
@@ -208,10 +266,32 @@ public sealed class PcFrame : MonoBehaviour
         Show(_dot, level);
     }
 
-    /// <summary>A closed frame's end state: its overlay hidden, its camera off, the glass parts hidden.</summary>
+    /// <summary>Starts the frame's fade out (full motion, after the afterglow).</summary>
+    private void StartLeaving()
+    {
+        _leaving = true;
+        _movedAt = Time.unscaledTime;
+        Leave();
+    }
+
+    /// <summary>One frame of the frame's fade out over the room (CrtPower.Leaving), then its end.</summary>
+    private void Leave()
+    {
+        float elapsed = Time.unscaledTime - _movedAt;
+        if (elapsed >= _power.LeaveSeconds)
+        {
+            Finish();
+            return;
+        }
+        Draw(_power.Leaving(elapsed));
+    }
+
+    /// <summary>A closed frame's end state: its overlay hidden, its camera off, the glass parts hidden; the desktop's input is the screen's again.</summary>
     private void Finish()
     {
         _afterglow = -1;
+        _leaving = false;
+        SetMoving(false);
         if (root != null)
             root.SetActive(false);
         if (frameCamera != null)

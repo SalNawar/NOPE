@@ -276,7 +276,7 @@ public static class UiPcRigOps
             "a double-click on an orderable card places exactly one order (one-click ordering; never order-then-cancel)");
     }
 
-    /// <summary>On the card ordered by uipc.order: Enter cancels it once (refunded once), Enter again after the double-click time orders it once, and two quick Enters act once.</summary>
+    /// <summary>On the card ordered by uipc.order, after the double-click time (uipc.order's last click is about 17 frames back, inside it at an uncapped frame rate): Enter cancels it once (refunded once), Enter again after the double-click time orders it once, and two quick Enters act once.</summary>
     private static IEnumerator Enter(QaRunner runner, QaStep step)
     {
         WorldState world = RunManager.HasInstance ? RunManager.Instance.World : null;
@@ -290,6 +290,7 @@ public static class UiPcRigOps
         }
         float wait = orders.Window.Manager.DoubleClickSeconds + 0.15f;
         int money0 = world.money, price = OrderBook.Price(world, lib, upgrade);
+        yield return new WaitForSecondsRealtime(wait); // clear of uipc.order's clicks, so each Enter below is measured on its own
         yield return runner.Input.Tap(Key.Enter);
         yield return QaGame.Frames(3);
         bool cancelled = Orders.Pending(world.orders, upgrade.id) == null && world.money == money0 + price;
@@ -365,7 +366,7 @@ public static class UiPcRigOps
             "an app keeps its state across minimise and restore");
     }
 
-    /// <summary>Opens the Citizen Account from Start, scrolls it with the wheel, then money arrives (the AddMoney cheat): the Account redraws in place and the Account, Orders and the office's credits readout show the same balance.</summary>
+    /// <summary>Opens the Citizen Account from Start, scrolls it with the wheel, then money arrives (the AddMoney cheat): the Account redraws in place and the Account, Orders and the office's credits readout show the same balance. No credits readout bound (neither the art's nor the fallback HUD's) fails: the plan compares all three.</summary>
     private static IEnumerator Balance(QaRunner runner, QaStep step)
     {
         WorldState world = RunManager.HasInstance ? RunManager.Instance.World : null;
@@ -402,9 +403,9 @@ public static class UiPcRigOps
         bool inOrders = wallet != null && wallet.text == OrderLines.Wallet(world);
         OfficeReadouts readouts = QaGame.Find<OfficeReadouts>();
         TMP_Text credits = readouts != null ? (TMP_Text)QaGame.Field(readouts, "_creditsText") : null;
-        bool inHud = credits == null || credits.text == money.ToString(CultureInfo.InvariantCulture);
+        bool inHud = credits != null && credits.text == money.ToString(CultureInfo.InvariantCulture);
         runner.Assert("balance", Owner, kept && inAccount && inOrders && inHud,
-            $"money {money}: Account {(inAccount ? "shows it" : "stale")} (scroll {before} -> {after}), Orders '{(wallet != null ? wallet.text : "none")}', office credits '{(credits != null ? credits.text : "no readout")}'",
+            $"money {money}: Account {(inAccount ? "shows it" : "stale")} (scroll {before} -> {after}), Orders '{(wallet != null ? wallet.text : "none")}', office credits '{(credits != null ? credits.text : "no readout bound: OfficeReadouts has no credits text (the art's ReadoutCredits anchor nor the fallback HUD's)")}'",
             "the wallet is the same everywhere and the Account follows it live without losing its place (BUG-58a, CODE-121)");
     }
 

@@ -88,17 +88,17 @@ public sealed class DesktopConfigSO : ScriptableObject
     [Min(1)] public int browserHistory = 30;
 
     [Header("App windows (redesign phase 25; restored sizes, desktop units)")]
-    /// <summary>The Mail window's size.</summary>
-    public Vector2 mailWindowSize = new Vector2(1060f, 780f);
+    /// <summary>The Mail window's size: the reading apps' one size (Mail, the Citizen Account, Notes: BUG-50a, UI-24 "window sizes are inconsistent"); the work apps, Investigation and Orders, open maximised.</summary>
+    public Vector2 mailWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Citizen Account window's size: wide enough for the Statement's landscape page (982 u across, so its cells print at 13 px at 720p).</summary>
-    public Vector2 accountWindowSize = new Vector2(1020f, 800f);
+    /// <summary>The Citizen Account window's size: the reading apps' one size, wide enough for the Statement's landscape page (1022 u across, so its cells print at 13 px or more at 720p).</summary>
+    public Vector2 accountWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Notes window's size.</summary>
-    public Vector2 notesWindowSize = new Vector2(960f, 800f);
+    /// <summary>The Notes window's size: the reading apps' one size.</summary>
+    public Vector2 notesWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Settings window's size (1010 u tall, the desktop's height above the taskbar: every row fits (sized when it still had the Machine close-ups row, cut by P0-C), the locked language line's three lines and the note's three, in the culture fonts too).</summary>
-    public Vector2 settingsWindowSize = new Vector2(800f, 1010f);
+    /// <summary>The Settings window's size (1000 u tall: the desktop's 1080 less the 72 u taskbar and a margin; every row fits, the Reduce flashing row in the place of the Machine close-ups row that P0-C cut, the locked language line's three lines and the note's three, in the culture fonts too).</summary>
+    public Vector2 settingsWindowSize = new Vector2(800f, 1000f);
 
     /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
     public Vector2 portalsWindowSize = new Vector2(880f, 600f);
@@ -184,8 +184,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The collapse: the picture squeezes to a line, then a dot (F1: 120 ms), in seconds.</summary>
     [Min(0f)] public float crtCloseSeconds = 0.12f;
 
-    /// <summary>The Reduced Motion fade that replaces both moves (120 ms), in seconds.</summary>
-    [Min(0f)] public float crtFadeSeconds = 0.12f;
+    /// <summary>The Reduced Motion fade that replaces both moves, in seconds (300 ms: two halves of 150 ms, the frame over the room, then the picture under its glass; each half takes at least 4 frames of the 30 fps capture, so no step is a cut).</summary>
+    [Min(0f)] public float crtFadeSeconds = 0.3f;
 
     /// <summary>The line's height as a share of the picture's (2 %).</summary>
     [Range(0.001f, 1f)] public float crtLineHeight = 0.02f;
@@ -195,6 +195,9 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>How many frames the phosphor dot glows on after the collapse (F1: "a phosphor afterglow of 2 frames on close").</summary>
     [Min(0)] public int crtAfterglowFrames = 2;
+
+    /// <summary>The frame's own fade in on opening and out after the afterglow, in seconds (F1: "no frame-0 UI pop"; 150 ms: the frame is 63-77 % of the screen, and each step of the 30 fps capture stays under seqtools' cut). The picture comes on once the frame is whole and the hum has led it by crtHumLeadSeconds.</summary>
+    [Min(0f)] public float crtFrameSeconds = 0.15f;
 
     [Header("Flashes (GAME_FEEL_BIBLE G3; FlashPolicy, every flash's one budget)")]
     /// <summary>The most flashes drawn in any one second anywhere on screen (G3: 3).</summary>
@@ -208,7 +211,7 @@ public sealed class DesktopConfigSO : ScriptableObject
     [Min(0f)] public float quitWarningSeconds = 4f;
 
     /// <summary>The PC frame's power move with these knobs (PcFrame).</summary>
-    public CrtPower PowerMove() => new CrtPower(crtOpenSeconds, crtCloseSeconds, crtFadeSeconds, crtLineHeight, crtHumLeadSeconds, crtAfterglowFrames);
+    public CrtPower PowerMove() => new CrtPower(crtOpenSeconds, crtCloseSeconds, crtFadeSeconds, crtLineHeight, crtHumLeadSeconds, crtAfterglowFrames, crtFrameSeconds);
 
     /// <summary>The icon band's grid in an icon area of <paramref name="width"/> x <paramref name="height"/> desktop units (IconGrid.InColumns with the icon knobs): DesktopIcons lays the icons out in it and the builder puts the waiting strip right of it.</summary>
     public IconGrid IconBand(float width, float height) =>

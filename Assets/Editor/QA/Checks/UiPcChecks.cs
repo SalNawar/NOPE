@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 /// <summary>
 /// UI-PC's gate checks (docs/pending/UI-PC.md, the RESULT recipes). Static:
-/// the UI kit is compressed with its mips (BUG-65i). Play, on the PC session
+/// the UI kit is compressed with its mips, and its textures as imported fit
+/// FIX_PLAN's 25 MB (BUG-65i). Play, on the PC session
 /// (tools/qa/scenarios/ui_pc_session.json, its ops in UiPcRigOps; FIX_PLAN's
 /// "the PC session script as a standing gate"): Esc brings Settings forward
 /// (also with the screen off), a click on the room stays and the bezel
@@ -35,6 +38,38 @@ public static class UiPcChecks
         }
         return GateResult.Of("uipc.kit.compressed", Owner, guids.Length > 0 && wrong.Count == 0, $"{guids.Length - wrong.Count}/{guids.Length} kit textures BC7 with mips",
             wrong.Count == 0 ? "reimport the kit after UiKitImporter changes (its version bumps it)" : string.Join(", ", wrong.Take(10)));
+    }
+
+    /// <summary>FIX_PLAN's pass line for the UI kit's texture memory (BUG-65i: "from ~92 MB to <= 25 MB"), in bytes (decimal MB, the stricter reading).</summary>
+    private const long KitBudgetBytes = 25L * 1000L * 1000L;
+
+    /// <summary>
+    /// The UI kit's texture memory as imported (BUG-65i): every kit texture's
+    /// GPU size, each mip in its imported format (GraphicsFormatUtility), at
+    /// most 25 MB with the mips kept. From the 272 PNGs' sizes this is about
+    /// 23.2 MB in BC7 (92.1 MB as RGBA32 with mips: the audit's ~92 MB). The
+    /// memory profile in play (recipe 1) confirms it in the running game.
+    /// </summary>
+    [GateCheck("uipc.kit.memory", Owner)]
+    public static GateResult KitMemory()
+    {
+        long bytes = 0;
+        var largest = new List<(long size, string path)>();
+        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { UiKitImporter.Folder.TrimEnd('/') });
+        foreach (string path in guids.Select(AssetDatabase.GUIDToAssetPath))
+        {
+            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if (texture == null)
+                continue;
+            long size = 0;
+            for (int mip = 0; mip < texture.mipmapCount; mip++)
+                size += GraphicsFormatUtility.ComputeMipmapSize(Mathf.Max(1, texture.width >> mip), Mathf.Max(1, texture.height >> mip), texture.graphicsFormat);
+            bytes += size;
+            largest.Add((size, path));
+        }
+        string top = string.Join(", ", largest.OrderByDescending(t => t.size).Take(5).Select(t => $"{System.IO.Path.GetFileName(t.path)} {t.size / 1e6:0.00} MB"));
+        return GateResult.Of("uipc.kit.memory", Owner, guids.Length > 0 && bytes <= KitBudgetBytes, $"{bytes / 1e6:0.0} MB in {guids.Length} kit textures (budget {KitBudgetBytes / 1e6:0} MB)",
+            bytes <= KitBudgetBytes ? "the largest: " + top : "over budget; the largest: " + top + ". Reimport the kit (UiKitImporter v2), then atlas or drop mip 0 of the largest panels");
     }
 
     /// <summary>Esc on the PC brings Settings to the front and the PC stays open (R3/R4).</summary>

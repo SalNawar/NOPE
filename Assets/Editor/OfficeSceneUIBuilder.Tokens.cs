@@ -5,8 +5,9 @@ using UnityEngine.UI;
 /// <summary>
 /// The PC's design tokens (the PC UX redesign's §3 and §4,
 /// docs/superpowers/specs/2026-09-30-pc-ux-redesign.md): the type scale in
-/// desktop units (1 u = 0.778 px at 1080p, 0.519 px at 720p; the smallest,
-/// Caption, is the 720p floor of 12 px for a label), the 8-unit spacing grid,
+/// desktop units (1 u = 0.778 px at 1080p, 0.519 px at 720p; BUG-58b,
+/// CODE-161: the body is sized for A2, 16 px at 720p, the legibility pass
+/// line; the smallest, Caption, is 14.5 px there), the 8-unit spacing grid,
 /// and the helpers every PC builder sizes its chrome text with, so no chrome
 /// label is drawn under the floor or cut. Colours stay the theme's (a role on
 /// every graphic, coloured by the leading culture's seeds). Part of
@@ -17,17 +18,29 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The type scale (desktop units).</summary>
     private static class PcType
     {
-        /// <summary>Meta lines, counters, hints, placeholders, the tray: the floor (12.5 px at 720p).</summary>
-        public const int Caption = 24;
+        /// <summary>
+        /// True: the legible scale (BUG-58b, CODE-161: "PC body text is sized
+        /// for A2 and A4": the smallest body text is 16 px at 720p, FIX_PLAN's
+        /// legibility pass line). False: the scale it replaced (Caption 24,
+        /// Body 26, Title 28, Heading 34), the one-line revert if the TMP
+        /// overflow scan of UI-PC's recipe 5 finds a truncation the layouts
+        /// cannot take (then rebuild Office UI). The rows keep their heights:
+        /// a Body line (31 u, about 38 u with its line spacing) fits the
+        /// 44 u control and the 48 u row.
+        /// </summary>
+        public const bool Legible = true;
 
-        /// <summary>Navigator entries and items, list rows, buttons, menu entries, the checklist.</summary>
-        public const int Body = 26;
+        /// <summary>Meta lines, counters, hints, placeholders, the tray: the floor (28 u: 14.5 px at 720p).</summary>
+        public const int Caption = Legible ? 28 : 24;
+
+        /// <summary>Navigator entries and items, list rows, buttons, menu entries, the checklist, the body of every app (31 u: 16.1 px at 720p).</summary>
+        public const int Body = Legible ? 31 : 26;
 
         /// <summary>Pane titles and section headings (bold).</summary>
-        public const int Title = 28;
+        public const int Title = Legible ? 33 : 28;
 
         /// <summary>A window's page heading (bold).</summary>
-        public const int Heading = 34;
+        public const int Heading = Legible ? 38 : 34;
 
         /// <summary>The idle line on the office PC's clone.</summary>
         public const int Display = 64;

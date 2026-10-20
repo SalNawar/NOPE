@@ -8,14 +8,18 @@ using UnityEngine.UI;
 /// onto the office PC's glass), its power (PcScreen: the display and the
 /// desktop's input go dark on both, the PC keeps running) and the frame's LED.
 /// BoothCoordinator gates the desktop's input (SetInteractive) and holds the
-/// screen on while a citation slip waits.
+/// screen on while a citation slip waits. The desktop's raycaster is also
+/// off while the PC frame's picture powers on or collapses
+/// (PcFrame.PictureMoving): the frame camera is the desktop's event camera,
+/// and during the CRT line its projection is squeezed, so a click then
+/// would land on a part of the desktop the player cannot see.
 /// </summary>
 public sealed class MonitorScreen : MonoBehaviour
 {
     /// <summary>The World Space desktop canvas (on the desktop's own layer, drawn by the frame and clone cameras).</summary>
     [SerializeField] private Canvas desktopCanvas;
 
-    /// <summary>The desktop canvas's raycaster (off unless the desktop may take input).</summary>
+    /// <summary>The desktop canvas's raycaster (off unless the desktop may take input and the frame's picture is still).</summary>
     [SerializeField] private GraphicRaycaster desktopRaycaster;
 
     /// <summary>The frame's power LED, tinted with the power state.</summary>
@@ -48,6 +52,7 @@ public sealed class MonitorScreen : MonoBehaviour
         }
 
         _screen.Changed += HandleChanged;
+        PcFrame.PictureMovingChanged += ApplyRaycaster;
         Apply();
         SetInteractive(false);
     }
@@ -55,6 +60,7 @@ public sealed class MonitorScreen : MonoBehaviour
     private void OnDestroy()
     {
         _screen.Changed -= HandleChanged;
+        PcFrame.PictureMovingChanged -= ApplyRaycaster;
     }
 
     /// <summary>Turns the screen on or off (the power buttons' persistent call); a held screen stays on.</summary>
@@ -84,8 +90,7 @@ public sealed class MonitorScreen : MonoBehaviour
     public void SetInteractive(bool on)
     {
         IsInteractive = on;
-        if (desktopRaycaster != null)
-            desktopRaycaster.enabled = on;
+        ApplyRaycaster();
         if (on || desktopCanvas == null)
             return;
 
@@ -93,6 +98,13 @@ public sealed class MonitorScreen : MonoBehaviour
         GameObject selected = events != null ? events.currentSelectedGameObject : null;
         if (selected != null && selected.transform.IsChildOf(desktopCanvas.transform))
             events.SetSelectedGameObject(null);
+    }
+
+    /// <summary>The desktop's raycaster: on while the desktop takes input and the frame's picture is still (whole, or the frame closed).</summary>
+    private void ApplyRaycaster()
+    {
+        if (desktopRaycaster != null)
+            desktopRaycaster.enabled = IsInteractive && !PcFrame.PictureMoving;
     }
 
     private void HandleChanged()

@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The Notes app (the PC spec's NT1, §2.14): a list of days on the left
-/// (today first) and the chosen day's page on the right: CLIPPINGS, pasted
+/// (today first; while no earlier day has a page, the column's own empty
+/// state says where they will show: BUG-50a, UI-24) and the chosen day's
+/// page on the right: CLIPPINGS, pasted
 /// clips as cards (the text, where it came from, X to remove) grouped under
 /// each traveller's name (Notes.Groups), and NOTES, one multi-line field of
 /// at most DesktopConfigSO.notesMaxChars characters with its counter. An
@@ -27,6 +29,9 @@ public sealed class NotesWindow : MonoBehaviour
 
     /// <summary>A day button template (inactive).</summary>
     [SerializeField] private Button dayTemplate;
+
+    /// <summary>The day list's empty state under today's row, shown while today is the only day (null in a scene built before it).</summary>
+    [SerializeField] private TMP_Text daysHint;
 
     /// <summary>The page's heading ("NOTES · DAY 3").</summary>
     [SerializeField] private TMP_Text pageTitle;
@@ -161,6 +166,8 @@ public sealed class NotesWindow : MonoBehaviour
         if (!_dayNumbers.Contains(_day) && _day >= 1)
             _dayNumbers.Add(_day);
         _dayNumbers.Sort((a, b) => b.CompareTo(a));
+        if (daysHint != null && daysHint.gameObject.activeSelf != _dayNumbers.Count <= 1)
+            daysHint.gameObject.SetActive(_dayNumbers.Count <= 1);
 
         if (dayListRoot == null || dayTemplate == null)
             return;

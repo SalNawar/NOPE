@@ -1,6 +1,6 @@
 # UI-PC: a clean desktop with a real taskbar clock
 
-Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase) and the fix round below (the review of `60fe324`).
+Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase), fix round 1 (`d6fd65b`, `3996e95`: the review of `60fe324`) and fix round 2 (the review of `d6fd65b`, below).
 
 **Sources:**
 - FIX_PLAN.md §3 "UI-PC" and FIX_PLAN_v2.md "UI-PC: delta" (v2 wins);
@@ -24,10 +24,25 @@ Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then re
 | 4 | **Labels written over by the theme.** The chevron was keyed `taskbar.more`, so each theme refresh wrote `» {0}` over the count. The Quit entry's warning was written into its keyed label. | **The chevron** has no label key. Its label is `TaskbarStrip.ChevronLabel(n)`, a glyph and a number, with nothing to translate (tested). **Quit game** has a second, hidden label, `Warning`, keyed `startmenu.quitForfeit` (built by `.Desktop.cs`). DesktopShell swaps which label shows, so a refresh re-applies each label to its own text. |
 | 5 | **GAME_FEEL rows.** F1's degauss lead and afterglow were missing. F3's ui_toggle was suppressed with no statement of the conflict. F4 was never mentioned. | **F1:** pc_on starts on the press frame. The glass stays dark for `crtHumLeadSeconds` (80 ms), then the line grows. On closing, the dot glows out over `crtAfterglowFrames` (2 frames). Both are tested. **F3:** a press on a Settings switch plays `ui_toggle` instead of the mouse click (`PcPressCue`; switches carry `PcSwitch`). That gives one press one sound, and the switch's sound is the toggle, so the conflict is resolved, not traded. **F4:** see **GAME_FEEL rows** (deferred to PORTALS, with the reason). |
 | 6 | **BUG-50 placeholder art.** No art request or fallback was filed. | See **Art request (GPT mailbox)**, with a fallback per item. |
-| 7 | **Owned pass criteria unmet.** | Stated under **Open: the track is not done** and **Needs a ruling**. Three items are closed in this round: CODE-157 (the overlay pair is kept by key, tested), CODE-156's Shift+F10 anchoring and pinned-row refocus, and CODE-154's stale toast. |
+| 7 | **Owned pass criteria unmet.** | Stated under **Open** and **Needs a ruling**. Three items are closed in this round: CODE-157 (the overlay pair is kept by key, tested), CODE-156's Shift+F10 anchoring and pinned-row refocus, and CODE-154's stale toast. |
 | 8 | **The standing harness.** | `ui_pc_session.json` now plays the plan's whole session by player input (Input System events, never a handler called directly): `uipc.windows`, `uipc.enter`, `uipc.zoom`, `uipc.balance`, `uipc.room`, `uipc.escdark`, plus the earlier five. `uipc.windows` opens 8+ windows from Start and walks the chevron. `uipc.restore` scrolls with the wheel, minimises with the title bar's button and restores with the taskbar button. The `uipc.order` hint now says `cheat AddMoney`. Each op has a gate check in `UiPcChecks`. |
 | 9 | **Tests.** The tests covered only pure rules, and they were not seen red first. | The rules behind the integration paths are now pure and tested: the screen-off back-out, the press cue, `OrderPick` (what the detail card shows versus what the action acts on), the chevron label, `OverlayPick`, and the CRT and flash knobs. All 15 new tests were written first and seen red (CS0722, CS0246 and CS0103: the types did not exist) before the code. The Unity-side wiring is the harness's (item 8). |
 | 10 | **Minor.** CrtPower's, FlashBudget's and QuitGuard's numbers were constants. Mail kept a dead Times path. Hover-select moved the Orders action. | **Knobs:** DesktopConfigSO now holds `crtOpenSeconds`, `crtCloseSeconds`, `crtFadeSeconds`, `crtLineHeight`, `crtHumLeadSeconds`, `crtAfterglowFrames`, `flashesPerSecond`, `flashTintSeconds` and `quitWarningSeconds`. PcFrame and DesktopShell read them; `FlashPolicy.Configure` takes the flash pair. **Mail:** the dead Times path is gone from UI-PC's files: MailFeed's News source, Mail's Times wording and its News link. Mailbox.cs still builds the item (it is unlisted, so it is on the cleanup list). **Orders:** the pointer over a card only previews it. Only a click or the arrows choose the card that the action and Enter act on (`OrderPick`). The action button shows only while the detail card shows the chosen card. |
+
+## Fix round 2: the review of d6fd65b
+
+| # | Review item | Resolution |
+|---|---|---|
+| 1 | **Not done by the track's own admission:** BUG-58b (16 px at A2), BUG-65i (25 MB), BUG-50a's empty states and default sizes (Citizen Account, Notes), CODE-111. | All four are now built in code. What is left of each is the Unity measurement (FIX_PLAN rule 5, items 3-6), listed under **Open: what stands between the track and done**. **58b:** the PC type scale is the legible one (Body 31 u = 16.1 px at 720p; `PcType.Legible`, a one-line revert). **65i:** the old ~31 MB estimate was wrong (it counted the mips twice). From the 272 PNG headers the kit is 92.1 MB as RGBA32 with mips (the audit's ~92 MB) and **23.2 MB in BC7 with mips**, under 25 MB with no atlas. The new static gate `uipc.kit.memory` measures it as imported. **50a:** the Citizen Account's pages sit on the form style's dark backing (no blank margin), Notes' Days column has its own empty state, and the reading apps share one restored size. **CODE-111:** `PageFit` keeps the pane's text zoom on scanned pages, and a page wider than its pane scrolls sideways instead of being cut (tested). |
+| 2 | **Rulings still open** (Transit, the 9 px CRT clause, Desktop_Default.asset's owner, the inert room). | Unchanged: they are asks under **Needs a ruling**, not decisions. Until they are ruled, the BUG-20 and BUG-32c pass lines are not met as written. Item 4 now also names what ClickCatcher becomes under each answer (fix round 2, item 6). |
+| 3 | **`uipc.enter` likely red:** its first Enter came ~17 frames after `uipc.order`'s last click, inside OrdersWindow's shared debounce at an uncapped frame rate. | The op now waits `DoubleClickSeconds + 0.15 s` before its first Enter, as its later steps do. The shared clock behind it is gone too (item 8), so a card click no longer refuses the next Enter at all. |
+| 4 | **F1 frame-0 pop:** the bezel (63 % of the screen at A1, more at A3/A4) showed whole on the press frame and hid in one frame after the afterglow, so `seqtools cuts` would flag pc_open's frame 0 and pc_close's last frame. | **The frame fades in and out** (`crtFrameSeconds` 150 ms). On the press frame it shows at `CrtPower.FrameFirstStep` (0.2), and each 30 fps capture step is ≤0.18 of the frame's alpha. The test measures every captured step against a cut's 0.25. The picture's camera stays off until the frame is whole. Turned on under a half-faded glass, its black clear would have cut in. **The hum** (`pc_on`) now plays `crtHumLeadSeconds` (80 ms) before the picture, so it starts 70 ms after the press. **Closing:** the glass is dark as the picture goes (it showed the room through the hole for the afterglow). The dot glows out over it, then the frame fades out over 150 ms and only then hides. **Reduced Motion:** the fade is 300 ms (two 150 ms halves, so each half is ≥4 capture frames), and the frame's last closing step is ≤0.22. |
+| 5 | **`uipc.balance` vacuous** when OfficeReadouts' credits text is unbound. | The HUD comparison now fails with "no readout bound" when there is no credits text. The plan compares Account, Orders and the HUD, so a missing readout is red, not skipped. |
+| 6 | **ClickCatcher's pass-through is unreachable**, and its doc still says a click on the room closes the PC. ClickCatcher.cs is unlisted. | Filed under **Requests** for the orchestrator to assign: drop `passThrough` and `PassOn`, and correct the class doc. If Saleh rules (Needs a ruling, item 4) that a click on the room should reach the room, then reuse it instead: RoomCatcher gets a ClickCatcher with `passThrough` and no `onClick`. |
+| 7 | **Misplaced doc comment** in DesktopWindowManager (`TopHit`'s summary sat above `IsSwitch`). | Moved back onto `TopHit`. Each member has its own summary. |
+| 8 | **Squeezed projection and the event camera:** a click during the power-on mapped through the 2 % line projection. | **Mitigated:** `PcFrame.PictureMoving` is true from the press until the picture is whole, and from the close until the frame is gone. MonitorScreen holds the desktop's raycaster off meanwhile, and DesktopWindowManager keeps the EventSystem's navigation off. The bezel, its X and power button, and the keys stay live from the press frame. A click on the desktop lands on nothing while the player cannot see it, never on a hidden element. |
+| 9 | **Feel: one shared debounce** silently refused any Enter or button press within 0.4 s of a card click that ordered. | **`OrderInputs`** (Domain, tested). Each input has its own clock. The button's double-click acts once, and so do two quick Enters, but a card click never refuses the Enter or the button that follow it. A card click needs no clock: it acts only on an orderable card, so its second click finds the card ordered and does nothing. **A refused press plays `ui_error`**, so it is never silent. |
+| 10 | **Merge dependency:** the fragments must land in UI-PC's merge commit, before Build Office UI. | Unchanged, and the order is restated under **Data fragments**. There is now one more Full key (`notes.daysNone`, Notes' empty Days column), so until the fragments land **five** builder labels draw raw keys. |
 
 ## Saleh's decided behaviour, as built
 
@@ -106,7 +121,9 @@ UiJuice plays no `ui_press`, `ui_release` or `ui_toggle` for a control on the PC
 - **Investigation.**
   - The pane tags are reworded "Left page" / "Right page" / "Links open here" (UI-24; value changes in the fragment). They read the old words until INTEGRATION applies it.
   - The Reference tab opens on a book that is on today's shelf (BUG-47b).
-- **Not done in code (visual work for the Unity pass):** Citizen Account's empty third, Notes' empty columns, and the per-app default window sizes and empty states. See **Open**.
+- **Citizen Account (UI-24: "a third of the window is an empty blue-edged margin").** The Record Extract is a 520 u portrait page, and the Statement below it is a landscape page across the window. On the window's own colour, the room beside the portrait page read as blank paper. The pages now sit on the form style's dark backing (`DiegeticBacking`), as the Documents tab lays its scanned pages, so the margin reads as a document viewer's surround. The wheel also scrolls over it now: the scroll has a graphic there.
+- **Notes (UI-24: "two empty columns").** The Days column shows its own empty state under today's row while no earlier day has a page: "Pages from earlier days show here." (`notes.daysNone`, a Full key in the fragment; `NotesWindow.daysHint`). The Clippings area already had its hint.
+- **Default sizes (UI-24: "window sizes are inconsistent").** The reading apps (Mail, the Citizen Account, Notes) share one restored size, 1060 × 800 u. The work apps (Investigation, Orders) open maximised. Portals stays 880 × 600 (its spec). Settings is 1000 u tall, which fits above the 72 u taskbar. The sizes are DesktopConfigSO code defaults: Desktop_Default.asset holds none of them, so no fragment is needed.
 
 ### BUG-58a: app state
 - **Wallet signal.** `WalletEvents.Changed` has its first listener: the Citizen Account redraws on every wallet write while it shows, and keeps its scroll. OrderBook's order and cancel raise it. Orders redraws on its signature. The tray has no wallet any more (CODE-121).
@@ -132,20 +149,27 @@ UiJuice plays no `ui_press`, `ui_release` or `ui_toggle` for a control on the PC
   - CODE-160 for the Browser (NEWS-WEB replaces it) and Portals (PORTALS replaces it).
 
 ### BUG-58b: PC legibility
-The bezel grows to the screen's height on screens taller than 16:9 (`PcFrame.FitBezel`): up to 80 % of the width, never under its designed size. At A4 and A3 the PC's text is about 16-24 % larger.
-
-**Not met: the ≥16 px target at A2.** See **Open**.
+- **The type scale is the legible one** (`OfficeSceneUIBuilder.Tokens.cs`, `PcType.Legible = true`):
+  - Caption 24 → 28 u (14.5 px at 720p);
+  - Body 26 → 31 u (16.1 px at 720p: FIX_PLAN's "smallest body text ≥16 px" at A2);
+  - Title 28 → 33 u, Heading 34 → 38 u, to keep the hierarchy.
+- **The rows keep their heights.** A Body line (31 u, about 38 u with its line spacing) fits the 44 u control and the 48 u row.
+- **The token is the PC's one scale, so the change reaches its other readers too:** TEXT-LANG's `.Kit.cs` floor for kit-fitted text on the desktop (`PcType.Caption`), and the root's generic window body and input field (`PcType.Body`). That is intended: they are PC text.
+- **The revert is one line.** If recipe 5's TMP overflow scan finds a truncation the layouts cannot take, set `PcType.Legible = false` and rebuild Office UI. That restores the old scale exactly.
+- **The bezel** grows to the screen's height on screens taller than 16:9 (`PcFrame.FitBezel`): up to 80 % of the width, never under its designed size. At A4 and A3 the PC's text is about 16-24 % larger again.
+- **Not in the scale:** the window title bars (DesktopConfigSO `titleFontSize` 26, an asset value), the forms' own type (a document's design, D2) and the Orders tree's node text (its zoom levels and `ordersTextFloor`). The 16 px pass line is about body text. Recipe 10 records the smallest of each.
 
 ### BUG-32c: PC open and close (GAME_FEEL_BIBLE F1)
 The picture powers on as a CRT (`CrtPower`, with DesktopConfigSO's knobs):
 - **Open.**
-  - On the press frame, the frame shows with its glass dark while `pc_on` (the degauss hum) starts.
-  - After `crtHumLeadSeconds` (80 ms), the picture grows from a bright full-width line (2 %) to full height over 150 ms OutCubic.
+  - From the press frame, the frame and its dark glass fade in over `crtFrameSeconds` (150 ms). It starts at 0.2 alpha (`CrtPower.FrameFirstStep`), so the press is answered at once and no frame is a cut (F1: "no frame-0 UI pop").
+  - `pc_on` (the degauss hum) plays `crtHumLeadSeconds` (80 ms) before the picture.
+  - Once the frame is whole, the picture grows from a bright full-width line (2 %) to full height over 150 ms OutCubic. Its camera is off until then.
   - At the line's start, a one-frame glow plays on the glass through `FlashPolicy`.
-- **Close.** The picture squeezes to a line, then a dot, over 120 ms. The dot glows out over 2 frames (the phosphor afterglow), and only then does the frame hide.
+- **Close.** The picture squeezes to a line, then a dot, over 120 ms, and the glass is dark as it goes. The dot glows out over 2 frames (the phosphor afterglow). Then the frame fades out over 150 ms, and only then hides.
 - **How the line is drawn.** The frame camera keeps the glass's whole viewport, and its projection is scaled about the centre. The black clear is the tube around the line.
-- **Reduced Motion.** The two-half fade (fix round, item 3). Nothing moves, and the picture never cuts.
-- **Input** follows the view on the press frame.
+- **Reduced Motion.** The two-half fade (fix round 1, item 3), now 300 ms (`crtFadeSeconds`: two halves of 150 ms). Nothing moves, and neither the frame nor the picture cuts.
+- **Input.** The bezel, its X, its power button and the keys take input from the press frame. The desktop takes clicks once the picture is whole (`PcFrame.PictureMoving`; fix round 2, item 8).
 - **Not consumed: Transit** (see **Needs a ruling**, item 2).
 
 ### BUG-35c: the mid-shift quit warning
@@ -173,9 +197,14 @@ Closing the menu drops the warning. Outside a shift, one press quits. The label'
   - `CanOrder` is CONTENT's (still the P0 stub, true), so this is measured fully at CONTENT's merge.
 
 ### BUG-65i: UI kit memory
-UiKitImporter compresses the kit: CompressedHQ, BC7 on Standalone, mips kept. Its `GetVersion` is 2, so the kit reimports, and INTEGRATION commits the changed kit `.meta` files with the rebuild.
-
-**Not met yet:** see **Open**.
+- **UiKitImporter compresses the kit:** CompressedHQ, BC7 on Standalone, mips kept. Its `GetVersion` is 2, so the kit reimports, and INTEGRATION commits the changed kit `.meta` files with the rebuild.
+- **The budget is met by the compression alone.** From the 272 PNG headers (width × height, every mip level, 4×4 blocks):
+  - RGBA32 with mips: 92.1 MB (the audit's ~92 MB);
+  - BC7 with mips: **23.2 MB**, under FIX_PLAN's 25 MB.
+  - One sprite is not a multiple of 4 and stays uncompressed (0.1 MB).
+  - The previous estimate (~31 MB) counted the mips twice.
+- **No SpriteAtlas.** The plan's approach line names one, but the pass line is the memory, and an atlas adds padding without saving memory. Batching is not a pass line. The deviation is stated here for the reviewer.
+- **Static gate `uipc.kit.memory`:** it loads every kit texture as imported and sums each mip's GPU size in its imported format (`GraphicsFormatUtility.ComputeMipmapSize`). It must be ≤25 MB (decimal, the stricter reading), and it names the five largest. The memory profile in play (recipe 1) confirms it in the running game.
 
 ### BUG-65j: change-driven redraws
 - **MatchLines** redraws only when a box, the pointer (while holding) or a visibility changes.
@@ -198,7 +227,7 @@ DesktopWindowManager's `InputGate.Blocked` check (inserted by the carve) is kept
 
 | Row | Status |
 |---|---|
-| **F1** | **Built:** opens on the press frame; Q and the bezel leave; Esc = Settings (also with the screen off); the power-on line (150 ms OutCubic) and the collapse to a dot (120 ms); the degauss hum 80 ms before the picture; the 1-frame glow local to the glass; the 2-frame afterglow; no frame-0 pop. **Others' cells:** the camera's Heavy push is CAM's. `pc_on` and `pc_off` exist; a dedicated degauss take is a FEEDBACK sound-bank request. |
+| **F1** | **Built:** opens on the press frame (the frame's first fade step); Q and the bezel leave; Esc = Settings (also with the screen off); the power-on line (150 ms OutCubic) and the collapse to a dot (120 ms); the degauss hum 80 ms before the picture; the 1-frame glow local to the glass; the 2-frame afterglow on a dark glass; no frame-0 pop and no last-frame pop (the frame fades in and out, every 30 fps step under a cut's, tested). **Others' cells:** the camera's Heavy push is CAM's. `pc_on` and `pc_off` exist; a dedicated degauss take is a FEEDBACK sound-bank request. |
 | **F2** | **Built:** one click, one action and one sound (BUG-21c, BUG-58). The window scale and the hover lift are main's, unchanged. |
 | **F3** | **Built:** Esc on the press frame cancels a hold first, else opens Settings; `ui_toggle` on each switch; Settings has Reduce flashing. **Others' cells:** "the clock pauses" with Settings open is FLOW's pause (34). Volume and the other settings rows are BUG-62's. |
 | **F4** | **Deferred to PORTALS (Phase B, B12).** Its cells (a countdown matching the domain ±1 s, the rolling cost per row, the red flash at the grace's end, `pc_notify` on a new waiter) all read the switchboard, calibration and waiting-list domain from Saleh's 2026-10-20 Portals design. None of it exists in Phase A. PortalsWindow is leased to PORTALS after UI-PC merges (LEASES). Phase A's part is UI-PC's: the read-only schedule window keeps the kit window and redraws on show. |
@@ -227,14 +256,14 @@ UI-PC edits no file it does not own (FIX_PLAN v1 rule 1). The data this track ne
 
 | Fragment | Target | What |
 |---|---|---|
-| `ui_strings.json` | `world_source.json` → `ui.strings` (CONTENT's) | **Add** 4 `Full` rows after `taskbar.start`: `taskbar.moreHint`, `startmenu.quitForfeit`, `app.orders.closed`, `settings.reduceFlashing`. **Change** 5 English values: `taskbar.start` (Start), `app.side.left` / `app.side.right` / `app.pane.shelfHere` (UI-24), and `keys.escape` (the F1 card's Esc line, R3/R4). **Remove** 6 keys that no longer have a reader, from the reading table and all 6 culture tables: `mail.from.times`, `mail.subject.times`, `mail.body.times`, `mail.body.timesArchived`, `mail.link.news`, `startmenu.screenOff`. One **dependent** change, `keys.desk.back`, goes in with DOC-HANDLE's ControlRules change. The rows are entries of an existing list, so ContentSheetMap is unchanged. TEXT-LANG's branch also edits `ui.strings` next to `taskbar.start`: keep both sides' rows. |
-| `Desktop_Default.json` | `Assets/Data/Config/Desktop_Default.asset` (listed under no track) | `taskbarHeight` 60 → 72, and `taskbarButtonWidth` 56 → 220. The new DesktopConfigSO fields need no edit: Unity loads them at their code defaults. |
+| `ui_strings.json` | `world_source.json` → `ui.strings` (CONTENT's) | **Add** 5 `Full` rows after `taskbar.start`: `taskbar.moreHint`, `startmenu.quitForfeit`, `app.orders.closed`, `settings.reduceFlashing`, `notes.daysNone`. **Change** 5 English values: `taskbar.start` (Start), `app.side.left` / `app.side.right` / `app.pane.shelfHere` (UI-24), and `keys.escape` (the F1 card's Esc line, R3/R4). **Remove** 6 keys that no longer have a reader, from the reading table and all 6 culture tables: `mail.from.times`, `mail.subject.times`, `mail.body.times`, `mail.body.timesArchived`, `mail.link.news`, `startmenu.screenOff`. One **dependent** change, `keys.desk.back`, goes in with DOC-HANDLE's ControlRules change. The rows are entries of an existing list, so ContentSheetMap is unchanged. TEXT-LANG's branch also edits `ui.strings` next to `taskbar.start`: keep both sides' rows. |
+| `Desktop_Default.json` | `Assets/Data/Config/Desktop_Default.asset` (listed under no track) | `taskbarHeight` 60 → 72, and `taskbarButtonWidth` 56 → 220. The new DesktopConfigSO fields (`crtFrameSeconds` among them) and the changed window sizes need no edit: the asset holds none of them, so Unity loads them at their code defaults. |
 | `so_reader_allowlist.txt` | `tools/qa/so_reader_allowlist.txt` (INTEGRATION-kept) | One line, `DeskConfigSO.crtClockSize`: the retired plate's knob, which DOC-HANDLE deletes (BUG-20b). |
 
 **Until the fragments land, on this branch alone:**
 - Start reads "Menu", and the pane tags read the old words.
 - The taskbar is 60 u and its buttons 56 u.
-- The Quit warning, the Orders closed note and the Reduce flashing label draw their keys, and Build Office UI logs CheckLabelKeysAndRoles errors for those 4 keys.
+- The Quit warning, the Orders closed note, the Reduce flashing label and Notes' Days empty state draw their keys, and Build Office UI logs CheckLabelKeysAndRoles errors for those keys (5 with `taskbar.moreHint`).
 - `tools/qa/editor_runner` fails one test, `SoFieldReadersTests.Project_EveryUnreadSOField_IsOnTheCleanupAllowlist`, on `DeskConfigSO.crtClockSize`.
 
 The house runner is green either way.
@@ -248,6 +277,7 @@ The house runner is green either way.
   - `FindingShades`: the proof and hint colours.
   - `FlashPolicy` (with `Configure`): for every flash's owner.
   - `MonitorScreen.PowerOn`.
+  - `PcFrame.PictureMoving` (and `PictureMovingChanged`): true while the frame's picture moves. MonitorScreen and DesktopWindowManager read it; any later owner of desktop input should too.
 - **Consumed:**
   - `Orders.CanOrder` (CONTENT);
   - `InputGate` (RUN-SAFE);
@@ -271,6 +301,7 @@ The house runner is green either way.
   - then delete `CrtClock.cs`, `BuildCrtClock`, `CrtClock_Plate.mat`, DesktopShell's two retired fields, `PcScreenClone.clock` and `OfficeUIController.crtDateText`;
   - drop BuildWindowManager's DeskButton sweep;
   - drop the root's `apps` and `browser` arguments to `BuildMailWindow`, then its two parameters.
+- **ClickCatcher.cs (unlisted; the orchestrator assigns it):** the PC frame no longer uses `passThrough`, and the only other ClickCatcher (`.Desk.cs`'s viewCatcher) never sets it, so `PassOn` is unreachable. Its class doc still says a click on the room beside the frame closes it, which R3/R4 overrode. If Saleh confirms the inert room (Needs a ruling, item 4), drop `passThrough` and `PassOn` and correct the doc. If he wants a click there to reach the room, keep both: RoomCatcher then gets a ClickCatcher with `passThrough` and no `onClick` (a UI-PC builder change).
 - **Mailbox.cs (unlisted Domain file; the orchestrator assigns it):** `Mailbox.ForDays` still builds a `TimesIssue` item that MailDigest always drops. Stop building it, then drop `MailKind.TimesIssue`, `MailLink.News` and `MailSources.News`, with MailboxTests' Times cases. That makes MailDigest's TimesIssue branch dead, so delete it too.
 - **NEWS-WEB (MailFeed's next holder, LEASES):** the Times mail and Mail's News link are gone (BUG-50a: the paper is not mailed). If the merged Internet wants a link from Mail, it comes back as NEWS-WEB's own message kind.
 - **FEEDBACK:** a dedicated `pc_degauss` take for F1's hum (pc_on plays now), and a `pc_warn` cue for the quit warning (it reuses `ui_error`).
@@ -288,16 +319,21 @@ The house runner is green either way.
    - F1 specifies the device's own effect, and the Reduced Motion fade above covers the no-motion case.
    - **Ask:** accept the PC frame as its own transition, with FLOW's screen changes staying FLOW's.
 3. **Desktop_Default.asset's owner.** UI-PC owns `DesktopConfigSO.cs`, and DOC-HANDLE and CONTENT each own their SO and its asset as a pair (rule 2). **Ask:** assign the asset to UI-PC (it is a fragment today).
-4. **The room beside the frame (Saleh).** R3/R4 makes a click on the room do nothing, so the room is visible but inert while the PC is open. **Ask:** confirm this, or say if a click there should pass through to the room without leaving.
+4. **The room beside the frame (Saleh).** R3/R4 makes a click on the room do nothing, so the room is visible but inert while the PC is open. **Ask:** confirm this, or say if a click there should pass through to the room without leaving. The answer also decides ClickCatcher's pass-through (see **Requests**).
 
-## Open: the track is not done (owned pass criteria still unmet)
+Until items 1 and 2 are ruled, the BUG-20 and BUG-32c pass lines are **not met as written**.
+
+## Open: what stands between the track and done
+
+**Every owned pass criterion is now built in code.** The track is still **not done** under FIX_PLAN rule 5: no recipe has run in Unity (items 3-6), and two pass lines wait on rulings. Each line below names what closes it.
 
 | Item | State | What closes it |
 |---|---|---|
-| **BUG-58b, legibility ≥16 px at A2** | Not met. `PcType.Caption` 24 and `Body` 26 are 12.5 and 13.5 px at 720p (1 u = 0.519 px). 16 px needs Body ≥31 u. | Raising the scale reflows every PC layout, so it needs the A2 captures and the TMP overflow scan. Unity-pass proposal: Caption 28, Body 31, Title 33. Keep it only if recipe 5's overflow scan stays at 0, and revert per app otherwise. |
-| **BUG-65i, UI kit ≤25 MB** | BC7 with mips is in. It is unmeasured, and there is no SpriteAtlas. Estimate: BC7 is 1 byte/px against RGBA32's 4, and mips add a third, so ~92 MB becomes ~31 MB. That would still miss 25 MB. | Measure (recipe 1). If it is over, the Unity pass atlases the kit (a SpriteAtlas is an asset made in Unity) or drops the mips on the largest panels that never minify. |
-| **BUG-50a, per-app empty states and default sizes** (Citizen Account's empty third, Notes' empty columns) | Not done. They are layout and size choices that need the A1/A2 captures, and the sizes live in the asset (a fragment). | The Unity pass: captures of each app on days 1, 5 and 12, then the size values as a `Desktop_Default.json` fragment update and the empty-state layout in `.Apps.cs`. |
-| **CODE-111** (text zoom on scanned pages) | Deferred. | The layout change with the captures open (horizontal scroll in the page's scroll). |
+| **BUG-58b, legibility ≥16 px at A2** | Built: Body 31 u = 16.1 px at 720p (`PcType.Legible`). Unmeasured, and the larger type may overflow fixed chrome labels. | Recipe 10's measurement, and recipe 5's TMP overflow scan at 0. On a truncation the layouts cannot take: `PcType.Legible = false`, rebuild, and file the per-app fix. |
+| **BUG-65i, UI kit ≤25 MB** | Built: BC7 with mips, computed 23.2 MB from the PNG headers. Gate `uipc.kit.memory` added. | `uipc.kit.memory` green after the reimport, and the play memory profile (recipe 1) at ≤25 MB. |
+| **BUG-50a, empty states and default sizes** | Built: the Account's backing, Notes' Days empty state, one size for the reading apps. | Recipe 17's captures on days 1, 5 and 12 at A1 and A2, beside the kit sheet, judged by the adversarial reviewer. |
+| **CODE-111** (text zoom on scanned pages) | Built: `PageFit` (tested) in `FitToWidth`; a page wider than its pane scrolls sideways. | Recipe 16. |
+| **BUG-20, BUG-32c pass lines as written** | Wait on rulings 1 and 2. | The rulings (**Needs a ruling**). |
 | **BUG-2b** (microprint in the scan view) | Waits on TOOLS #10. | Recipe 13. |
 | **F4** (Portals countdown and waiting list) | PORTALS' (Phase B). | PORTALS' spec. |
 
@@ -325,7 +361,7 @@ The house runner is green either way.
 - **Line 91 (windows):** as line 78 (no culture colours).
 - **Line 15 (Orders):**
   - The pointer over a card previews it in the detail card. A click chooses a card, and orders it when it can be ordered (tested: `PcDesktopRulesTests` OrderPick).
-  - The action and Enter act on the chosen card only, once per input within the double-click time.
+  - The action and Enter act on the chosen card only. Each acts once within the double-click time, on its own clock: a card click never refuses the Enter or the button after it. A refused press plays the error cue (`OrderInputs`, tested: `PcDesktopRulesTests`).
   - The zoom bar sits in the header row.
   - The tree keeps its scroll, zoom and chosen card across minimise and restore.
   - On a day `Orders.CanOrder` is false, ordering is refused and greyed, and the header says "Orders are closed today: nothing would arrive".
@@ -336,8 +372,9 @@ The house runner is green either way.
   - The case board's overlay keeps the chosen pair across a new scan (`OverlayPick`, tested).
   - A scan toast that ran out while the app was minimised does not show on restore.
 - **New, the PC frame:**
-  - The press frame shows the frame with a dark glass while the CRT hums. After 80 ms, the picture grows from a line (150 ms). It closes to a line and a dot (120 ms), and the dot glows out over 2 frames.
-  - With Reduced Motion, the frame and its dark glass fade in, then the picture fades up (`CrtPower`, tested).
+  - From the press frame, the frame and its dark glass fade in (150 ms). The CRT hums 80 ms before the picture, then the picture grows from a line (150 ms). It closes to a line and a dot (120 ms) on a dark glass, the dot glows out over 2 frames, and the frame fades out (150 ms). No step of the frame is a cut (`CrtPower`, tested).
+  - With Reduced Motion, the frame and its dark glass fade in, then the picture fades up, 300 ms in all (`CrtPower`, tested).
+  - The desktop takes clicks once the picture is whole. The bezel and the keys work from the press frame.
   - The knobs are DesktopConfigSO's.
   - On screens taller than 16:9 the bezel grows to the screen's height.
   - F1 at the desk does nothing while the screen is off (`PcFrame.CanOpen`, tested: UiPcSeamTests).
@@ -345,24 +382,31 @@ The house runner is green either way.
   - Reduce flashing Off / On.
   - Every flash goes through `FlashPolicy`: at most `flashesPerSecond` (3) a second, a static tint with Reduce flashing (tested: `PcDesktopRulesTests`).
   - A press on a Settings switch plays the toggle cue, any other PC press the mouse click, one sound per press (`PcPressCue`, tested).
-- **UI kit:** compressed BC7 with mips (UiKitImporter v2; `uipc.kit.compressed`).
+- **UI kit:** compressed BC7 with mips, about 23 MB (UiKitImporter v2; `uipc.kit.compressed`, `uipc.kit.memory`).
+- **PC type:** the PC's type scale is sized for 720p: body text 31 u (16 px at 720p), captions 28 u, titles 33 u, headings 38 u.
+- **Windows:** Mail, the Citizen Account and Notes open at one size (1060 × 800). Investigation and Orders open maximised. Settings fits above the taskbar.
+- **Citizen Account:** its pages sit on the dark document backing.
+- **Notes:** while today is the only day, the Days column says "Pages from earlier days show here."
+- **Investigation, scanned pages:** Ctrl+= and Settings' Text size grow a scanned page as they grow other text. A page wider than its pane scrolls sideways from its left edge and is never cut (`PageFit`, tested: `PcDesktopRulesTests`).
 
 ## Tests
 
 | Check | Result |
 |---|---|
 | `compile_check_any.py E:\unity\NOPE-gpt` | 0 errors (Assembly-CSharp, Assembly-CSharp-Editor, TimeDeskEditMode) |
-| House runner (`NOPE-tools\runner`) | passed 3774, failed 0, on main `4290bd6`. That is 3739 on main + 35 new: 30 in `PcDesktopRulesTests` and 5 in `DesktopLayoutTests`. |
+| House runner (`NOPE-tools\runner`) | passed 3781, failed 0, on main `4290bd6`. That is 3739 on main + 42 new: 37 in `PcDesktopRulesTests` and 5 in `DesktopLayoutTests`. |
 | `tools/qa/editor_runner` (QA_PROJECT set) | passed 80, failed 1, 36 NeedsEditor skipped (RUN-SAFE's tests included). The one failure is `SoFieldReadersTests.Project_EveryUnreadSOField_IsOnTheCleanupAllowlist` on `DeskConfigSO.crtClockSize`, which the `so_reader_allowlist.txt` fragment closes at merge. |
 
-**New EditMode tests, 35 in all:**
-- `PcDesktopRulesTests` (30):
+**New EditMode tests, 42 in all:**
+- `PcDesktopRulesTests` (37):
   - the back-out (3) and the screen-off back-out (2);
   - the debounce (3);
   - the quit guard (3);
   - the inbox digest (2);
   - the flash budget and its knobs (3);
-  - the CRT power move: the lead, the line, the collapse, the afterglow, the Reduced Motion fade with no cut, and the knobs (4);
+  - the CRT power move: the frame's fade in from its first step, the hum 80 ms ahead of the picture (also when the frame is quicker than the lead), the line, the collapse on a dark glass, the afterglow, the frame's fade out, every 30 fps capture step under a cut's, the Reduced Motion fade with no cut, and the knobs (6);
+  - `PageFit` (CODE-111): the fit at 100 %, the zoom kept, sideways scrolling under the floor (3);
+  - `OrderInputs`: a card click never blocks the button or Enter, and each input acts once per double-click time (2);
   - the press cue (1);
   - `OrderPick` (2);
   - `OverlayPick` (2);
@@ -370,12 +414,12 @@ The house runner is green either way.
   - the tray date and midnight (1).
 - `DesktopLayoutTests` (5): the taskbar overflow (4) and the chevron label (1).
 
-**TDD:** the 15 tests added or rewritten in this round were written before their code and seen red: the flash knobs, CrtPower's new shape, the screen-off back-out, the press cue, OrderPick, OverlayPick and the chevron label. They failed to compile with CS0722, CS0246 and CS0103, because the types and members did not exist. The 20 earlier tests from 60fe324 were written with their rules, not first.
+**TDD:** the 15 tests added or rewritten in fix round 1 were written before their code and seen red: the flash knobs, CrtPower's new shape, the screen-off back-out, the press cue, OrderPick, OverlayPick and the chevron label. They failed to compile with CS0722, CS0246 and CS0103, because the types and members did not exist. In fix round 2, the 11 CRT, PageFit and OrderInputs tests were written first and seen red (CS1729, CS0117 and CS1061: no 7-argument CrtPower, no `FrameFirstStep`, `HumStarted`, `Leaving` or `LeaveSeconds`, no `PageFit` or `OrderInputs`). The 20 earlier tests from 60fe324 were written with their rules, not first.
 
 **Play (in Unity, deferred):** `tools/qa/scenarios/ui_pc_session.json`, with its ops in `Assets/Tests/PlayMode/UiPc/Rig/UiPcRigOps.cs`:
 - `uipc.tray`, `uipc.room`, `uipc.esc`, `uipc.escdark`, `uipc.windows`, `uipc.order`, `uipc.enter`, `uipc.zoom`, `uipc.restore`, `uipc.balance`, `uipc.bezel`.
 - Every press, key, chord and wheel notch is an Input System event on the rig's virtual devices. The one exception is `uipc.balance`'s money, which arrives by the AddMoney cheat (the "money arrives" event itself, not a UI path).
-- Gate checks in `Assets/Editor/QA/Checks/UiPcChecks.cs`: `uipc.kit.compressed` (static), and `uipc.esc`, `.escdark`, `.room`, `.bezel`, `.tray`, `.windows`, `.order`, `.enter`, `.zoom`, `.restore`, `.balance`, `.transitions` (play).
+- Gate checks in `Assets/Editor/QA/Checks/UiPcChecks.cs`: `uipc.kit.compressed` and `uipc.kit.memory` (static), and `uipc.esc`, `.escdark`, `.room`, `.bezel`, `.tray`, `.windows`, `.order`, `.enter`, `.zoom`, `.restore`, `.balance`, `.transitions` (play).
 
 ## RESULT
 
@@ -390,24 +434,28 @@ The house runner is green either way.
 
 | # | Recipe | Pass line |
 |---|---|---|
-| 1 | **Kit.** `QaJobs.Gate` (static checks), then the Memory Profiler in play (office, PC open) | `uipc.kit.compressed` green. UI kit textures total ≤25 MB, down from ~92 MB. A 10 s PC `record` with `seqtools flicker` shows no new shimmer. |
-| 2 | **PC session.** `Library/QA/job_scenario.txt` = `tools/qa/scenarios/ui_pc_session.json`, job `QaJobs.Scenario` | `harness.txt` ok (CAM's camera known red allowed). All eleven `ui_pc_session.<op>` assertions pass: `tray`, `room`, `esc`, `escdark`, `windows`, `order`, `enter`, `zoom`, `restore`, `balance`, `bezel`. `presses` passes. |
-| 3 | **Open and close (BUG-32c, F1).** `python tools/qa/seqtools.py cuts Library/QA/runs/<run>/seq/pc_open --result-dir Library/QA/results`, the same for `pc_close`, and `frozen` on both. Then set Settings ▸ Reduced Motion and repeat the session's open and close with `record`. | No single-frame full-screen jump (`ui_pc_session.seq.pc_*.cuts`, so `uipc.transitions` is green). **pc_open:** frame 0 shows the bezel with a dark glass. The frames from about 80 ms show a thin bright full-width line growing to the whole picture by about 230 ms. No frame shows the whole desktop shrunk inside a strip. **pc_close:** a line, then a dot, then 2 frames of a fading dot, then the room. `flash` on pc_open ≤3 flashes/s. **Reduced Motion:** no squeeze. The bezel and the dark glass fade in over the room, then the picture fades up from black. Closing is the reverse. `cuts` finds no jump inside the glass. |
+| 1 | **Kit.** `QaJobs.Gate` (static checks), then the Memory Profiler in play (office, PC open) | `uipc.kit.compressed` and `uipc.kit.memory` green (about 23.2 MB as imported). The profile's UI kit textures total ≤25 MB, down from ~92 MB. A 10 s PC `record` with `seqtools flicker` shows no new shimmer. |
+| 2 | **PC session.** `Library/QA/job_scenario.txt` = `tools/qa/scenarios/ui_pc_session.json`, job `QaJobs.Scenario` | `harness.txt` ok (CAM's camera known red allowed). All eleven `ui_pc_session.<op>` assertions pass: `tray`, `room`, `esc`, `escdark`, `windows`, `order`, `enter`, `zoom`, `restore`, `balance`, `bezel`. `presses` passes. `balance` names the office's credits text; "no readout bound" is a fail to fix in the binder's wiring, not a pass. |
+| 3 | **Open and close (BUG-32c, F1).** `python tools/qa/seqtools.py cuts Library/QA/runs/<run>/seq/pc_open --result-dir Library/QA/results`, the same for `pc_close`, and `frozen` on both. Then set Settings ▸ Reduced Motion and repeat the session's open and close with `record`. Run the open at A1 and at A4 (the frame is largest there). | No single-frame full-screen jump (`ui_pc_session.seq.pc_*.cuts`, so `uipc.transitions` is green). **pc_open:** frame 0 shows the bezel and its dark glass faint (about 0.2) over the room. It is whole by about 150 ms, with the hum (`pc_on` in `events.tsv`) about 70 ms after the press. From about 150 ms a thin bright full-width line grows to the whole picture by about 300 ms. No frame shows the whole desktop shrunk inside a strip, and the glass never shows the room through it. **pc_close:** a line, then a dot on a dark glass, then 2 frames of a fading dot, then the frame fading out over the room for about 150 ms. `flash` on pc_open ≤3 flashes/s. **Reduced Motion:** no squeeze. The bezel and the dark glass fade in over the room (150 ms), then the picture fades up from black (150 ms). Closing is the reverse. `cuts` finds no jump. |
 | 4 | **Single exit (UI-26)** in day 5's office: Esc ×3 with the Start menu open, then with nothing open; a right-click on the empty desktop; a window's X; a click on the room right of the frame; the power button, then Esc and a right-click with the screen off; the bezel's red X; a click on the bezel band; Q | Only Q and the bezel (band or X) leave. Esc closes the menu, then brings Settings forward, and with the screen off it turns the screen on and brings Settings. A right-click, a window's X and a click on the room never leave. The power button darkens the screen and the frame stays. There is no Back to desk and no Turn off screen. |
 | 5 | **Taskbar (BUG-20a, 21a).** Stills of the PC on days 1, 5 and 12 (`jumpDay`) at A1 1920×1080 and A2 1280×720, beside `docs/ui-kit/sheet02-pc.png`; the session's `d5_windows` still. Hover and click the clock on day 1 and day 5. | No box clock on the desk CRT. The tray clock is time over date, within 1 minute of the art office's clock. Start reads Start. The Start menu has icons and no blank slab on day 1. `d5_windows` shows labelled buttons plus "» N" and nothing over the tray (`uipc.windows`). The clock is not clickable on day 1 and holds today on day 5. 0 truncations in the TMP overflow scan, 0 LiberationSans (`probe`). |
 | 6 | **One press, one sound (BUG-21c, F3).** FEEDBACK's audio events (`events.tsv`, channel `audio`) over the session's clicks, plus five clicks on Settings' switches | Each press on the PC has exactly one press cue: `ui_toggle` on a Settings switch, `mouse_click` anywhere else. A refused (disabled) control adds `ui_error`. Hover cues are allowed. |
 | 7 | **Orders on the last day (BUG-28d)**, after CONTENT lands `CanOrder`: `jumpDay 15`, open Orders, click an orderable card | The Order action is greyed, the header reads "Orders are closed today: nothing would arrive", and nothing is charged. |
 | 8 | **Orders preview (UI-25)**: choose card A by a click, move the pointer across cards B and C to the action button, click it | The detail card follows the pointer over B and C and shows A again over the button. The click acts on A. |
 | 9 | **Proofs and hints (BUG-47b)** on a seed with a "Data differs" pair that proves nothing and a proved deviation (day 5 golden seed; use `cheat ForceAppearance` if needed) | The hint's line is dashed amber, its column plate amber and not bold, and its status line is the note plate. The proof is red and bold. On day 1 the Reference tab shows an introduced book. |
-| 10 | **Legibility (BUG-58b)** at A2 1280×720, A3 1440×1080 and A4 1280×1024: stills of Mail, Investigation (Documents, Records), Orders, Settings and Notes | A3/A4: the bezel fills the height, with the room visible to its right. Smallest body text: measure TMP rect × canvas scale and record it. The ≥16 px target at A2 needs the type-scale proposal (**Open**): try it and keep it only if recipe 5's overflow scan stays at 0. |
+| 10 | **Legibility (BUG-58b)** at A2 1280×720, A3 1440×1080 and A4 1280×1024: stills of Mail, Investigation (Documents, Records), Orders, Settings and Notes | A3/A4: the bezel fills the height, with the room visible to its right. **Smallest body text ≥16 px at A2** (TMP font size × canvas scale; Body 31 u is 16.1 px at 720p). Record the title bars, the forms and the Orders tree's smallest separately. Recipe 5's overflow scan stays at 0 with the legible scale; otherwise set `PcType.Legible = false`, rebuild, and list the overflowing labels. The adversarial reviewer reads a Mail body and an Investigation row aloud from the A2 still. |
 | 11 | **Quit warning (BUG-35c).** Mid-shift, Start ▸ Quit game once, wait 5 s, then click it twice; then close and reopen the theme (a culture change) while the warning shows | The first click shows the Warning label (and `ui_error`). It reverts after 4 s. Two clicks quit (play mode ends). A theme refresh while the warning shows keeps the warning's words. Before Start Shift, one click quits. |
 | 12 | **Reduce flashing.** Settings ▸ Reduce flashing On, then close and reopen the PC with `record` | The power-on shows a soft tint for about 200 ms, not a flash. `seqtools flash` stays ≤3/s with no full-field flash. |
 | 13 | **Microprint (BUG-2b)**, after TOOLS #10 lands: the scanner's hidden-layer view of a ReprintedPaper (days 9-15, `cheat ForceAppearance`) at A2 | Microprint cap ≥12 px at 720p, read by eye from the still. Blocked until TOOLS provides the content. |
 | 14 | **Chevron label (21a).** With 9 windows open (`uipc.windows`), switch the culture theme (Settings ▸ language, or a history jump that changes the leading culture) | The chevron still reads "» N" with the right count, never `» {0}`. |
 | 15 | **Stale toast (CODE-154).** Scan a paper with the Investigation app minimised, wait past `toastSeconds`, restore the app with `record` | No frame of the restored app shows the toast. |
+| 16 | **Text zoom on scanned pages (CODE-111).** Day 5, a traveller's passport scanned, Investigation in two panes (the passport left). Stills at Text size 100, 125 and 150 % (Ctrl+= and Settings), and with the findings column open (the narrowest pane) | The passport's words are larger at each step: their TMP size × scale grows by the zoom's ratio (±2 %). No edge of the page is cut by the pane: past the pane's width, a drag moves it sideways from its left edge, and every box is reachable. At 100 % the page fits its pane as before. |
+| 17 | **Apps' empty states and sizes (BUG-50a).** Stills of the Citizen Account, Notes and Mail, each from Start, on days 1, 5 and 12 at A1 and A2, beside `docs/ui-kit/sheet02-pc.png` | Mail, the Account and Notes open at the same size. The Account's portrait page sits on the dark backing (no blank paper margin), and the wheel scrolls over the backing. Notes' Days column shows "Pages from earlier days show here." on day 1 and hides it once an earlier day has a page. The reviewer finds no blank slab in any app. |
 
 **Known risks for the Unity pass:**
 1. **The tray's two lines in 72 u.** The kit Readout's 0.5 share is capped at 26. If the lines crowd, ask TEXT-LANG for a stacked-tray case.
-2. **The squeezed projection and the event camera.** The frame camera is the desktop canvas's event camera. During the 150-230 ms power-on, raycasts map through the squeezed projection, so a click there lands off target. The projection is reset at the end of the move. Recipe 2's `presses` check catches a blocked press.
+2. **A click during the power move.** The desktop takes no click while the picture moves: about 300 ms on opening, about 350 ms on closing (`PcFrame.PictureMoving`). A press sent in that time is dropped, never mis-aimed. Recipe 2's `presses` check flags a press the rig sent then. The session's ops wait the move out, and any later op must too.
 3. **The amber hint plate.** It is a CanvasRenderer multiplier on the theme's warn plate. Check it reads amber in every culture theme.
 4. **The Quit entry's Warning label** sits on the same row as its label and is sized FitNoSmaller(Body). Check it fits the menu's width at A2.
+5. **The legible type scale** may overflow fixed-width chrome labels (Settings' rows, the navigator, the taskbar's tray). Recipe 5's overflow scan decides, and `PcType.Legible` is the revert.
+6. **A scanned page's sideways scroll** has no horizontal scrollbar: it moves by drag, and from its left edge on each zoom step. Check in recipe 16 that a drag on the page does not pick a box.

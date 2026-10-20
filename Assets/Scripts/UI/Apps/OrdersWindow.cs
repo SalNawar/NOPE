@@ -35,8 +35,11 @@ using UnityEngine.UI;
 /// card the action button and Enter act on, so the pointer passing over
 /// other cards on its way to the button never changes what it does (the
 /// button shows only while the detail card shows the chosen card:
-/// OrderPick); any action acts once per input, so a double-click never
-/// orders and then cancels (ActionDebounce). Ordering is refused, the
+/// OrderPick); each input acts once per double-click time on its own clock
+/// (OrderInputs), so a double-click on the button never orders and then
+/// cancels and two quick Enters act once, while a card click never refuses
+/// the Enter or the button press that follows it; a refused press plays the
+/// error cue, so it is never silent. Ordering is refused, the
 /// button greyed and the header's closed note shown (its own keyed label),
 /// on a day Orders.CanOrder says no (BUG-28d: an order on the last day
 /// would never arrive).
@@ -134,8 +137,8 @@ public sealed class OrdersWindow : MonoBehaviour
     /// <summary>The library the tree was laid out from (laid out again only for another one).</summary>
     private ContentLibrarySO _builtFrom;
 
-    /// <summary>One action per input (a double-click, an Enter seen twice).</summary>
-    private ActionDebounce _debounce;
+    /// <summary>One action per input, each on its own clock (a double-click on the button, two quick Enters).</summary>
+    private OrderInputs _inputs;
     /// <summary>The card the detail card shows (under the pointer) and the one the action acts on (chosen).</summary>
     private readonly OrderPick _pick = new OrderPick();
     private int _signature;
@@ -152,13 +155,13 @@ public sealed class OrdersWindow : MonoBehaviour
 
     private void Awake()
     {
-        _debounce = new ActionDebounce(config != null ? config.doubleClickSeconds : 0.4f);
+        _inputs = new OrderInputs(config != null ? config.doubleClickSeconds : 0.4f);
         foreach (Component template in new Component[] { bandTemplate, nodeTemplate, linkTemplate, linkLitTemplate })
             if (template != null)
                 template.gameObject.SetActive(false);
         if (actionButton != null)
         {
-            actionButton.onClick.AddListener(Act);
+            actionButton.onClick.AddListener(() => Act(OrderInput.Button));
             _actionLabel = actionButton.GetComponentInChildren<TMP_Text>(true);
         }
         if (zoomOutButton != null)
@@ -224,8 +227,11 @@ public sealed class OrdersWindow : MonoBehaviour
             view.Step(direction);
     }
 
-    /// <summary>Enter (DesktopKeyboard) and the action button: the chosen node's action, once per input (a second request within the double-click time does nothing).</summary>
-    public void Act()
+    /// <summary>Enter (DesktopKeyboard): the chosen node's action, once per press (a second Enter within the double-click time does nothing but the error cue).</summary>
+    public void Act() => Act(OrderInput.Key);
+
+    /// <summary>The chosen node's action by <paramref name="input"/> (Enter, the button, or a click on an orderable card), once per input within its double-click time (OrderInputs); a refused press plays the error cue.</summary>
+    private void Act(OrderInput input)
     {
         WorldState world = World;
         ContentLibrarySO lib = Library;
@@ -234,8 +240,13 @@ public sealed class OrdersWindow : MonoBehaviour
             return;
 
         NodeAction action = ActionOf(world, lib, upgrade, out bool enabled);
-        if (!enabled || action == NodeAction.None || !_debounce.TryAct(Time.unscaledTime))
+        if (!enabled || action == NodeAction.None)
             return;
+        if (!_inputs.TryAct(input, Time.unscaledTime))
+        {
+            Sounds.Play(SoundCues.UiError); // the second press of a double: refused, never silently
+            return;
+        }
         switch (action)
         {
             case NodeAction.Order:
@@ -285,7 +296,7 @@ public sealed class OrdersWindow : MonoBehaviour
         ContentLibrarySO lib = Library;
         UpgradeSO upgrade = lib != null ? lib.GetUpgradeById(upgradeId) : null;
         if (world != null && upgrade != null && ActionOf(world, lib, upgrade, out bool enabled) == NodeAction.Order && enabled)
-            Act();
+            Act(OrderInput.Card);
     }
 
     /// <summary>What a node's button does in its state.</summary>

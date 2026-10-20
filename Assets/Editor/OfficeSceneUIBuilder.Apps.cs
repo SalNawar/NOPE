@@ -142,7 +142,11 @@ public static partial class OfficeSceneUIBuilder
     /// the Record Extract (a FormView at the PC page width, Form_RecordExtract)
     /// and the Statement (a FormView across the scroll, Form_Statement's
     /// landscape page, so its eight columns keep their type sizes), both
-    /// centred. AccountWindow fills and stacks them. Rebuilt fresh.
+    /// centred on the form style's dark backing (DiegeticBacking, as the
+    /// Documents tab lays its scanned pages: BUG-50a, UI-24 "a third of the
+    /// window is an empty blue-edged margin"; the room beside the portrait
+    /// page is the viewer's backing, not blank paper, and the wheel scrolls
+    /// over it too). AccountWindow fills and stacks them. Rebuilt fresh.
     /// </summary>
     private static DesktopWindow BuildAccountWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -153,6 +157,10 @@ public static partial class OfficeSceneUIBuilder
 
         ScrollRect scroll = BuildScrollArea(win, "Sheet", out RectTransform viewport);
         PlaceRect(scroll.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(config.titleBarHeight + DocGap)));
+        FormStyleSO style = EnsureFormStyle();
+        Image backing = GetOrAdd<Image>(scroll.gameObject);
+        backing.color = style.backing;
+        SceneUiKit.Tag(backing, ThemeRoleId.DiegeticBacking, ThemePart.Fill);
         var content = (RectTransform)Panel(viewport, "Content", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
         content.pivot = new Vector2(0.5f, 1f);
         scroll.content = content;
@@ -179,11 +187,13 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
-    /// The Notes window: "Days" (a scrolling list) on the left; on the right
-    /// the page's heading, "Clippings" with Paste clipping and the cards' list
-    /// (the empty page's hint over it), and "Notes" with its counter and the
-    /// typed notes' field; every label at the PC's scale (the PC UX redesign
-    /// §4). Rebuilt fresh.
+    /// The Notes window: "Days" (a scrolling list) on the left, with its own
+    /// empty state under today's row while no earlier day has a page
+    /// (BUG-50a, UI-24 "Notes: two empty columns"); on the right the page's
+    /// heading, "Clippings" with Paste clipping and the cards' list (the empty
+    /// page's hint over it), and "Notes" with its counter and the typed notes'
+    /// field; every label at the PC's scale (the PC UX redesign §4). Rebuilt
+    /// fresh.
     /// </summary>
     private static DesktopWindow BuildNotesWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -198,6 +208,11 @@ public static partial class OfficeSceneUIBuilder
         RectTransform days = BuildScrollList(win, "Days", Vector2.zero, new Vector2(0f, 1f), 4f);
         PlaceRect(days.parent.parent, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.L, PcSize.L), new Vector2(PcSize.L + NotesDaysWidth, -(top + 48f)));
         Button day = BuildListRow(days, "DayTemplate");
+        TMP_Text daysHint = Text(win, "DaysHint", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, new Vector2(0f, 1f), Ink,
+                                 ThemeRoleId.InputField, "notes.daysNone", FontStyles.Italic);
+        PlaceRect(daysHint.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.L + PcSize.M, PcSize.L), new Vector2(PcSize.L + NotesDaysWidth - PcSize.M, -(top + 48f + PcSize.Row + PcSize.M)));
+        Chrome(daysHint, PcType.Caption, true);
+        daysHint.raycastTarget = false;
 
         TMP_Text title = Text(win, "PageTitle", "", PcType.Title, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
                               ThemeRoleId.WindowBody, style: FontStyles.Bold);
@@ -240,6 +255,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "config", config);
         SetRef(so, "dayListRoot", days);
         SetRef(so, "dayTemplate", day);
+        SetRef(so, "daysHint", daysHint);
         SetRef(so, "pageTitle", title);
         SetRef(so, "clipRoot", clips);
         SetRef(so, "groupTemplate", group);

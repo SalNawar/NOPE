@@ -7,7 +7,8 @@ using NUnit.Framework;
 /// back-out (Esc brings Settings forward, a right-click never leaves the PC),
 /// one action per input (the Order debounce), the mid-shift quit warning,
 /// the inbox without its automatic copies, the flash budget (G3), the CRT's
-/// power-on line, and the tray clock's date (24:00 is the shift clock's own).
+/// power-on line, a scanned page's fit under the text zoom (CODE-111), Orders'
+/// inputs, and the tray clock's date (24:00 is the shift clock's own).
 /// </summary>
 public class PcDesktopRulesTests
 {
@@ -166,32 +167,55 @@ public class PcDesktopRulesTests
 
     // --- The CRT's power-on line and collapse (BUG-32c, F1); its knobs are the caller's (DesktopConfigSO) ---
 
-    /// <summary>F1's numbers: 150 ms on, 120 ms off, a 120 ms fade, a 2 % line, the hum 80 ms ahead, 2 frames of afterglow.</summary>
-    private static CrtPower Crt() => new CrtPower(0.15f, 0.12f, 0.12f, 0.02f, 0.08f, 2);
+    /// <summary>F1's numbers: 150 ms on, 120 ms off, a 300 ms Reduced Motion fade, a 2 % line, the hum 80 ms ahead, 2 frames of afterglow, the frame's own 150 ms fade.</summary>
+    private static CrtPower Crt() => new CrtPower(0.15f, 0.12f, 0.3f, 0.02f, 0.08f, 2, 0.15f);
+
+    /// <summary>The QA rig's capture step (30 fps), the step seqtools' cuts compares.</summary>
+    private const float CaptureStep = 1f / 30f;
+
+    /// <summary>The most the frame (63-77 % of the screen at A1 to A4) may change its alpha in one captured frame and stay under seqtools' cut (40 luma over 60 % of the pixels) against a room up to 160 luma away.</summary>
+    private const float CutStep = 0.25f;
 
     [Test]
-    public void Crt_Opening_TheHumLeads_TheGlassStaysDark_ThenALineGrowsToTheFullPicture()
+    public void Crt_Opening_TheFrameFadesIn_TheHumLeadsThePictureBy80ms_ThenALineGrowsToTheFullPicture()
     {
         CrtPower crt = Crt();
         CrtFrame f0 = crt.At(0f, true, false);
-        Assert.AreEqual(1f, f0.Veil, "frame 0: the dark glass while the degauss hum begins (F1: 80 ms before the picture)");
-        Assert.IsTrue(f0.Picture);
-        Assert.AreEqual(1f, f0.Bezel, "the frame itself is there on the press frame (input follows at once)");
-        Assert.AreEqual(1f, crt.At(0.079f, true, false).Veil, "still dark just before the lead ends");
-        Assert.IsFalse(crt.PictureStarted(0.079f, true, false));
-        CrtFrame line = crt.At(0.08f, true, false);
-        Assert.AreEqual(0f, line.Veil, "the picture starts after the lead");
-        Assert.IsTrue(crt.PictureStarted(0.08f, true, false));
+        Assert.AreEqual(CrtPower.FrameFirstStep, f0.Bezel, 1e-6f, "the press frame answers, but the frame is not there whole (F1: no frame-0 UI pop)");
+        Assert.Greater(f0.Bezel, 0f);
+        Assert.AreEqual(1f, f0.Veil, "the glass is dark while the frame comes");
+        Assert.IsFalse(f0.Picture, "no picture under a glass that is not yet opaque: its camera's black clear would cut in");
+        Assert.AreEqual(1f, crt.At(0.15f - 0.001f, true, false).Veil, "still dark just before the picture");
+        Assert.IsFalse(crt.PictureStarted(0.149f, true, false));
+        Assert.IsFalse(crt.HumStarted(0.069f, false), "the hum waits until 80 ms before the picture");
+        Assert.IsTrue(crt.HumStarted(0.0701f, false), "F1: the degauss hum begins 80 ms before the picture");
+        CrtFrame line = crt.At(0.15f, true, false);
+        Assert.IsTrue(crt.PictureStarted(0.15f, true, false));
+        Assert.AreEqual((1f, 0f, true), (line.Bezel, line.Veil, line.Picture), "the picture comes on as the dark glass clears: the tube's black is the glass's black");
         Assert.AreEqual(1f, line.X);
-        Assert.AreEqual(0.02f, line.Y, 1e-5f, "it starts as a full-width line, not the full picture (no frame-0 pop)");
-        Assert.Greater(crt.At(0.08f + 0.075f, true, false).Y, 0.5f, "OutCubic: most of the height early");
-        CrtFrame end = crt.At(0.23f, true, false);
+        Assert.AreEqual(0.02f, line.Y, 1e-5f, "a full-width line, not the full picture");
+        Assert.Greater(crt.At(0.15f + 0.075f, true, false).Y, 0.5f, "OutCubic: most of the height early");
+        CrtFrame end = crt.At(0.3f, true, false);
         Assert.AreEqual((1f, 1f, 0f), (end.X, end.Y, end.Veil));
-        Assert.AreEqual(0.23f, crt.Seconds(true, false), 1e-6f, "the lead and the 150 ms power-on");
+        Assert.AreEqual(0.3f, crt.Seconds(true, false), 1e-6f, "the frame's fade, then the 150 ms power-on");
     }
 
     [Test]
-    public void Crt_Closing_SqueezesToALineThenADot_ThenTwoFramesOfAfterglow()
+    public void Crt_TheHumIsAlways80msAheadOfThePicture_EvenWhenTheFrameIsQuickerThanTheLead()
+    {
+        var quick = new CrtPower(0.15f, 0.12f, 0.3f, 0.02f, 0.08f, 2, 0.05f);
+        Assert.IsTrue(quick.HumStarted(0f, false), "the lead is the longer: the hum starts on the press frame");
+        Assert.IsFalse(quick.PictureStarted(0.079f, true, false));
+        Assert.IsTrue(quick.PictureStarted(0.08f, true, false));
+        Assert.AreEqual(1f, quick.At(0.06f, true, false).Bezel, "the frame is whole; the glass waits dark for the lead");
+        Assert.AreEqual(1f, quick.At(0.06f, true, false).Veil);
+        CrtPower reduced = Crt();
+        Assert.IsTrue(reduced.HumStarted(0.15f - 0.08f, true), "Reduced Motion: 80 ms before the picture comes on at the fade's half");
+        Assert.IsFalse(reduced.HumStarted(0.069f, true));
+    }
+
+    [Test]
+    public void Crt_Closing_SqueezesToALineThenADot_TwoFramesOfAfterglowOnADarkGlass_ThenTheFrameFadesOut()
     {
         CrtPower crt = Crt();
         CrtFrame start = crt.At(0f, false, false);
@@ -203,11 +227,55 @@ public class PcDesktopRulesTests
         Assert.AreEqual(0f, end.X, 1e-5f);
         Assert.AreEqual(0f, end.Y, 1e-5f);
         Assert.IsFalse(end.Picture, "the picture is gone at the end");
+        Assert.AreEqual(1f, end.Veil, "the glass is dark when its camera goes off (never the room through the hole)");
+        Assert.AreEqual(1f, end.Bezel);
         Assert.AreEqual(0.12f, crt.Seconds(false, false), 1e-6f);
         Assert.Greater(crt.Afterglow(0), crt.Afterglow(1), "the phosphor dot fades");
         Assert.Greater(crt.Afterglow(1), 0f);
         Assert.AreEqual(0f, crt.Afterglow(2), "F1: an afterglow of 2 frames");
         Assert.AreEqual(2, crt.AfterglowFrames);
+
+        Assert.AreEqual(0.15f, crt.LeaveSeconds, 1e-6f, "then the frame fades out (F1: no last-frame pop)");
+        CrtFrame leave0 = crt.Leaving(0f);
+        Assert.AreEqual((1f, 1f, false), (leave0.Bezel, leave0.Veil, leave0.Picture));
+        Assert.AreEqual(0.5f, crt.Leaving(0.075f).Bezel, 1e-5f);
+        Assert.AreEqual(0f, crt.Leaving(0.15f).Bezel);
+    }
+
+    [Test]
+    public void Crt_EveryCapturedFrame_StepsTheFrameLessThanACut()
+    {
+        CrtPower crt = Crt();
+        foreach (bool reduced in new[] { false, true })
+        {
+            float last = 0f; // the frame is hidden before the press
+            for (float t = 0f; t <= crt.Seconds(true, reduced) + CaptureStep; t += CaptureStep)
+            {
+                float bezel = crt.At(t, true, reduced).Bezel;
+                Assert.LessOrEqual(bezel - last, CutStep, (reduced ? "RM" : "full") + " opening at " + t);
+                last = bezel;
+            }
+            Assert.AreEqual(1f, last, "open: the frame is whole");
+        }
+
+        float shown = 1f;
+        for (float t = 0f; t < crt.LeaveSeconds; t += CaptureStep)
+        {
+            float bezel = crt.Leaving(t).Bezel;
+            Assert.LessOrEqual(shown - bezel, CutStep, "leaving at " + t);
+            shown = bezel;
+        }
+        Assert.LessOrEqual(shown, CutStep, "the last frame drawn before the frame hides is nearly gone");
+
+        shown = 1f;
+        float fade = crt.Seconds(false, true);
+        for (float t = 0f; t < fade; t += CaptureStep)
+        {
+            float bezel = crt.At(t, false, true).Bezel;
+            Assert.LessOrEqual(shown - bezel, CutStep, "RM closing at " + t);
+            shown = bezel;
+        }
+        Assert.LessOrEqual(shown, CutStep, "RM: the last frame drawn before the frame hides is nearly gone");
     }
 
     [Test]
@@ -215,11 +283,11 @@ public class PcDesktopRulesTests
     {
         CrtPower crt = Crt();
         float fade = crt.Seconds(true, true);
-        Assert.AreEqual(0.12f, fade, 1e-6f);
+        Assert.AreEqual(0.3f, fade, 1e-6f);
         Assert.AreEqual(fade, crt.Seconds(false, true), 1e-6f);
 
         CrtFrame open0 = crt.At(0f, true, true);
-        Assert.AreEqual(0f, open0.Bezel, "frame 0: nothing yet, the room shows");
+        Assert.AreEqual(CrtPower.FrameFirstStep, open0.Bezel, 1e-6f, "the press frame answers with the frame's first step");
         Assert.IsFalse(open0.Picture, "the picture never shows before the dark glass covers it");
         Assert.IsFalse(crt.At(fade / 2f - 0.001f, true, true).Picture);
         CrtFrame half = crt.At(fade / 2f, true, true);
@@ -238,7 +306,7 @@ public class PcDesktopRulesTests
         foreach (bool opening in new[] { true, false })
         {
             float last = Seen(crt.At(0f, opening, true)), lastFrame = crt.At(0f, opening, true).Bezel;
-            for (float t = 0.005f; t <= fade + 1e-4f; t += 0.005f)
+            for (float t = 0.005f; t < fade; t += 0.005f)
             {
                 CrtFrame f = crt.At(t, opening, true);
                 Assert.AreEqual((1f, 1f), (f.X, f.Y), "no motion at " + t);
@@ -256,16 +324,81 @@ public class PcDesktopRulesTests
     [Test]
     public void Crt_TheKnobsAreTheCallers()
     {
-        var slow = new CrtPower(0.3f, 0.2f, 0.4f, 0.05f, 0f, 0);
-        Assert.AreEqual(0.3f, slow.Seconds(true, false), 1e-6f, "no lead");
+        var slow = new CrtPower(0.3f, 0.2f, 0.4f, 0.05f, 0f, 0, 0f);
+        Assert.AreEqual(0.3f, slow.Seconds(true, false), 1e-6f, "no lead, no frame fade");
         Assert.AreEqual(0.05f, slow.At(0f, true, false).Y, 1e-6f, "its own line height, at once");
         Assert.AreEqual(0f, slow.At(0f, true, false).Veil);
+        Assert.AreEqual(1f, slow.At(0f, true, false).Bezel, "no frame fade: the frame is whole at once");
         Assert.AreEqual(0.4f, slow.Seconds(false, true), 1e-6f);
         Assert.AreEqual(0f, slow.Afterglow(0), "no afterglow frames");
-        var odd = new CrtPower(-1f, -1f, -1f, 2f, -1f, -3);
+        Assert.AreEqual(0f, slow.LeaveSeconds);
+        Assert.AreEqual(0f, slow.Leaving(0f).Bezel, "no frame fade: gone at once");
+        var odd = new CrtPower(-1f, -1f, -1f, 2f, -1f, -3, -1f);
         Assert.AreEqual(0f, odd.Seconds(true, false));
         Assert.AreEqual((1f, 1f), (odd.At(0f, true, false).X, odd.At(0f, true, false).Y), "a zero-length move is at its end");
         Assert.AreEqual(0, odd.AfterglowFrames);
+    }
+
+    // --- A scanned page's fit and the pane's text zoom (CODE-111): the zoom is never cancelled, and a page wider than its pane scrolls sideways instead of being cut ---
+
+    [Test]
+    public void PageFit_AtOneHundredPercent_FitsThePaneWidth()
+    {
+        PageFitResult fit = PageFit.Of(600f, 900f, 1f, 600f, 0.75f, 1.5f);
+        Assert.AreEqual(1f, fit.Scale, 1e-5f);
+        Assert.AreEqual(600f, fit.Width, 1e-3f);
+        Assert.AreEqual(900f, fit.Height, 1e-3f);
+        Assert.IsFalse(fit.Sideways);
+        PageFitResult wide = PageFit.Of(840f, 900f, 1f, 600f, 0.75f, 1.5f);
+        Assert.AreEqual(1.4f, wide.Scale, 1e-5f, "a wide pane shows the page larger");
+        Assert.IsFalse(wide.Sideways);
+    }
+
+    [Test]
+    public void PageFit_TheTextZoomIsNotCancelled_ThePageScrollsSideways()
+    {
+        // The pane zoom lays its content out at the pane's width over the zoom (PaneZoom), so the page's parent is 400 wide at 150 %.
+        PageFitResult zoomed = PageFit.Of(400f, 600f, 1.5f, 600f, 0.75f, 1.5f);
+        Assert.AreEqual(1f, zoomed.Scale, 1e-5f, "the fit is the pane's own width (600), not its zoomed layout width (400)");
+        Assert.AreEqual(1.5f, zoomed.Scale * 1.5f, 1e-5f, "on screen the page is 150 % of its 100 % size (CODE-111: the two scales used to cancel)");
+        Assert.AreEqual(400f, zoomed.Width, 1e-3f, "the page's box fills its parent, never past it (no cut edge)");
+        Assert.IsTrue(zoomed.Sideways, "the page is wider than its box: it scrolls sideways");
+    }
+
+    [Test]
+    public void PageFit_UnderTheFloor_ThePageScrollsSideways_NeverCut()
+    {
+        PageFitResult narrow = PageFit.Of(300f, 600f, 1f, 600f, 0.75f, 1.5f);
+        Assert.AreEqual(0.75f, narrow.Scale, 1e-5f, "the floor holds");
+        Assert.AreEqual(400f, narrow.Width, 1e-3f, "the box is the parent's width at that scale");
+        Assert.IsTrue(narrow.Sideways);
+        PageFitResult none = PageFit.Of(0f, 0f, 0f, 0f, 0f, 0f);
+        Assert.Greater(none.Scale, 0f, "never a zero scale");
+    }
+
+    // --- Orders' inputs (BUG-58a; the review of the fix round: a card click that ordered refused the next Enter) ---
+
+    [Test]
+    public void OrderInputs_ACardClick_NeverBlocksTheButtonOrEnter()
+    {
+        var gate = new OrderInputs(0.4f);
+        Assert.IsTrue(gate.TryAct(OrderInput.Card, 10f), "a click on an orderable card orders");
+        Assert.IsTrue(gate.TryAct(OrderInput.Key, 10.1f), "Enter right after it is the clerk's own second act");
+        Assert.IsTrue(gate.TryAct(OrderInput.Button, 10.2f), "so is the button");
+    }
+
+    [Test]
+    public void OrderInputs_EachInputActsOncePerDoubleClickTime()
+    {
+        var gate = new OrderInputs(0.4f);
+        Assert.IsTrue(gate.TryAct(OrderInput.Button, 1f));
+        Assert.IsFalse(gate.TryAct(OrderInput.Button, 1.2f), "a double-click on the button acts once (order, never then cancel)");
+        Assert.IsTrue(gate.TryAct(OrderInput.Key, 1.2f), "another input is its own");
+        Assert.IsFalse(gate.TryAct(OrderInput.Key, 1.3f), "two quick Enters act once");
+        Assert.IsTrue(gate.TryAct(OrderInput.Key, 1.7f));
+        Assert.IsTrue(gate.TryAct(OrderInput.Card, 1.71f));
+        Assert.IsTrue(gate.TryAct(OrderInput.Card, 1.72f), "a card click acts only on an orderable card, so its double-click cannot undo it (OrdersWindow)");
+        Assert.AreEqual(0.4f, gate.Seconds, 1e-6f);
     }
 
     // --- The back-out with the screen off (R3/R4: "Esc opens the same Settings window everywhere") ---

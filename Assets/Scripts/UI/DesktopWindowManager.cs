@@ -425,11 +425,11 @@ public sealed class DesktopWindowManager : MonoBehaviour
         button.Button.colors = colours;
     }
 
-    /// <summary>Polls the press while the desktop takes input (the EventSystem's navigation events off meanwhile).</summary>
+    /// <summary>Polls the press while the desktop takes input (the EventSystem's navigation events off meanwhile, and while the PC frame's picture moves, when the raycaster is held off: PcFrame.PictureMoving).</summary>
     private void Update()
     {
         bool live = raycaster != null && raycaster.isActiveAndEnabled;
-        Navigation(!live);
+        Navigation(!live && !PcFrame.PictureMoving);
         if (InputGate.Blocked)
             return;
         if (!live)
@@ -493,7 +493,6 @@ public sealed class DesktopWindowManager : MonoBehaviour
         }
     }
 
-    /// <summary>The top graphic under a screen point on the desktop canvas (through its event camera), or null.</summary>
     /// <summary>True when <paramref name="hit"/> is part of a switch (a Toggle, or a control marked PcSwitch): its press plays the toggle.</summary>
     private static bool IsSwitch(GameObject hit)
     {
@@ -501,6 +500,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
         return control != null && (control is Toggle || control.TryGetComponent(out PcSwitch _));
     }
 
+    /// <summary>The top graphic under a screen point on the desktop canvas (through its event camera), or null.</summary>
     private GameObject TopHit(Vector2 screen)
     {
         _press.position = screen;

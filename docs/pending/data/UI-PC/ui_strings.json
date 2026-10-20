@@ -7,9 +7,10 @@
       { "key": "taskbar.moreHint", "text": "More windows", "gloss": "None", "tier": "Full" },
       { "key": "startmenu.quitForfeit", "text": "Quit? Today's shift is forfeit. Click again", "gloss": "None", "tier": "Full" },
       { "key": "app.orders.closed", "text": "Orders are closed today: nothing would arrive", "gloss": "None", "tier": "Full" },
-      { "key": "settings.reduceFlashing", "text": "Reduce flashing", "gloss": "None", "tier": "Full" }
+      { "key": "settings.reduceFlashing", "text": "Reduce flashing", "gloss": "None", "tier": "Full" },
+      { "key": "notes.daysNone", "text": "Pages from earlier days show here.", "gloss": "None", "tier": "Full" }
     ],
-    "why": "Full tier: English in every culture, the PC is always English (D7). Each is a builder label key (ThemeTag), checked by Build Office UI's CheckLabelKeysAndRoles: the chevron's hint (BUG-21a), Quit game's mid-shift warning label (BUG-35c), Orders' closed note (BUG-28d), Settings' Reduce flashing row (G3)."
+    "why": "Full tier: English in every culture, the PC is always English (D7). Each is a builder label key (ThemeTag), checked by Build Office UI's CheckLabelKeysAndRoles: the chevron's hint (BUG-21a), Quit game's mid-shift warning label (BUG-35c), Orders' closed note (BUG-28d), Settings' Reduce flashing row (G3), Notes' Days column empty state (BUG-50a, UI-24: 'Notes: two empty columns')."
   },
   "change": [
     { "key": "taskbar.start", "from": "Menu", "text": "Start", "why": "BUG-21a: Start reads Start. English only; the culture tables' translations are never shown on the PC (D7)." },
