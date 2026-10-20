@@ -46,7 +46,7 @@ public class FlowPlayTests : QaPlayTest
         AssertRun(Finish());
     }
 
-    /// <summary>A scene change through SceneTransit (office to Title, Title to office): the booth's shutter comes down, the scenes load behind it and it goes up; recorded for the frozen and cuts analyses (BUG-31a, the bible's J5).</summary>
+    /// <summary>A scene change through SceneTransit (office to Title, Title to office): the booth's shutter comes down, the scenes load behind it and it goes up; recorded for the frozen and cuts analyses (BUG-31a, the bible's J5). Then the queue in play: loads asked for while the shutter comes down and while it rises load next, the last asked for winning (FLOW round 5).</summary>
     [UnityTest, Explicit, Category("QaPlay")]
     public IEnumerator Shutter_ASceneChangeLoadsBehindTheShutter()
     {
@@ -57,7 +57,7 @@ public class FlowPlayTests : QaPlayTest
         AssertRun(Finish());
     }
 
-    /// <summary>A Skip day from the office mid-shift lands exactly as a skip of the same day from the briefing, and the skipped day is closed once (FLOW round 4: the office left behind the shutter closed it a second time on the landing morning).</summary>
+    /// <summary>A Skip day from the office mid-shift lands exactly as a skip of the same day from the briefing, and the skipped day is closed once (FLOW round 4: the office left behind the shutter closed it a second time on the landing morning); a second Skip day under the shutter lands as one after it lifted (FLOW round 5: it closed the replaced office's ledger again on the landing day).</summary>
     [UnityTest, Explicit, Category("QaPlay")]
     public IEnumerator Skip_MidShiftLandsAsASkipFromTheBriefing()
     {

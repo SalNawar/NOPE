@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,6 +35,19 @@ using UnityEngine.SceneManagement;
 /// (and the office's gameplay layer) loads behind it, and the shutter is up
 /// and off again: <c>transit.&lt;name&gt;</c>. Record it (recStart/recStop)
 /// for seqtools' frozen and cuts analyses.</item>
+/// <item><c>flowQueue</c> (name; text: three scenes, comma-separated, each a
+/// scene's name or <c>office</c>; f timeout, default 120 s): TransitRunner's
+/// queue in play (FLOW round 5). It loads the first scene through
+/// SceneTransit.Load, asks for the second a frame later while the shutter
+/// comes down, and for the third as soon as the shutter starts up over the
+/// second, then waits for the change to end:
+/// <c>transit.queue.&lt;name&gt;</c>, true when both asks came at those
+/// moments, the first scene never loaded (the second replaced it before any
+/// load), the shutter came all the way down again after the second scene's
+/// rise, the third scene is the one loaded, SceneTransit.Changing ended
+/// false with the veil off, and the transit marks came in start/rise/up order
+/// (the first's start, the second's start, rise and up, then the third's
+/// start, rise and up).</item>
 /// <item><c>flowLoadClock</c> (name): starts the real-time load watch
 /// (FlowLoadWatch) before the step that starts a scene change (newRun, a Go
 /// Home button, RunManager.Sleep). Record nothing during the load: the
@@ -54,13 +68,15 @@ using UnityEngine.SceneManagement;
 /// RunManager's world already shows the new day, so <c>waitOffice</c> alone
 /// passes on the old office. QA-RIG's own waits take the same condition at
 /// INTEGRATION (docs/pending/FLOW.md, section 4).</item>
-/// <item><c>flowRunState</c> (name; text: an earlier record's name): records
-/// the run as it stands (RunManager's world: day, phase, money,
-/// clerkDebtPaid, the statement's rows; and the save file). With
-/// <c>text</c>, asserts <c>same.&lt;name&gt;</c>: all of them match that record,
-/// the saves compared without what presenting a traveller may legitimately
-/// mark (a premade met, a returning traveller come back, the desk guide's
-/// progress).</item>
+/// <item><c>flowRunState</c> (name; text: an earlier record's name; n 1:
+/// without the back issues too): records the run as it stands (RunManager's
+/// world: day, phase, money, clerkDebtPaid, the statement's rows; and the
+/// save file). With <c>text</c>, asserts <c>same.&lt;name&gt;</c>: all of them
+/// match that record, the saves compared without what presenting a traveller
+/// may legitimately mark (a premade met, a returning traveller come back, the
+/// desk guide's progress) and, with n 1, without the News site's back issues
+/// (each office records its morning paper as it opens: a day a second skip
+/// passed over under the shutter never had its office open).</item>
 /// <item><c>flowWatchDayEnds</c> (name): starts counting the day ends the
 /// offices handle (GameManager's "Entering HandleDayCompleted" lines).</item>
 /// <item><c>flowDayEnds</c> (name; n the count expected; text the days
@@ -101,6 +117,8 @@ public static class FlowOps
             QaRunner.RegisterOp("flowEarlyFinish", EarlyFinish);
         if (!QaRunner.IsKnownOp("flowTransit"))
             QaRunner.RegisterOp("flowTransit", SceneChange);
+        if (!QaRunner.IsKnownOp("flowQueue"))
+            QaRunner.RegisterOp("flowQueue", Queue);
         if (!QaRunner.IsKnownOp("flowLoadClock"))
             QaRunner.RegisterOp("flowLoadClock", LoadClock);
         if (!QaRunner.IsKnownOp("flowLoadTime"))
@@ -123,7 +141,7 @@ public static class FlowOps
         yield return QaGame.Until(() => !SceneTransit.Changing, step.f > 0f ? step.f : 120f, "the scene change's shutter to be off");
     }
 
-    /// <summary>What flowRunState records: the run's world as it stands and its save file.</summary>
+    /// <summary>What flowRunState records: the run's world as it stands and its save file (as read; masked when compared).</summary>
     private sealed class RunRecord
     {
         public int Day;
@@ -159,20 +177,22 @@ public static class FlowOps
             Money = world != null ? world.money : 0,
             DebtPaid = world != null ? world.clerkDebtPaid : 0,
             StatementRows = world != null && world.accountDays != null ? world.accountDays.Count : 0,
-            Save = File.Exists(SaveSystem.SavePath) ? Comparable(File.ReadAllText(SaveSystem.SavePath)) : null,
+            Save = File.Exists(SaveSystem.SavePath) ? File.ReadAllText(SaveSystem.SavePath) : null,
         };
         string name = string.IsNullOrEmpty(step.name) ? "state" : step.name;
         States[name] = now;
         if (string.IsNullOrEmpty(step.text))
             yield break;
 
+        bool papers = step.n == 1;
         bool known = States.TryGetValue(step.text, out RunRecord then);
+        string mine = Comparable(now.Save, papers), theirs = known ? Comparable(then.Save, papers) : null;
         bool fields = known && now.Day == then.Day && now.Phase == then.Phase && now.Money == then.Money && now.DebtPaid == then.DebtPaid && now.StatementRows == then.StatementRows;
-        bool saves = known && now.Save != null && then.Save != null && now.Save == then.Save;
+        bool saves = known && mine != null && theirs != null && mine == theirs;
         runner.Assert($"same.{name}", Owner, known && fields && saves && world != null,
-            known ? $"{name}: {now}; {step.text}: {then}; saves {(saves ? "match" : "differ")}" : $"no record named '{step.text}'",
-            "Round 4, S2: a Skip day from the office mid-shift lands as a skip of the same day from the briefing (the day closed once: no second strandings, instalment, statement row, Home phase or overwritten morning save)"
-                + (known && !saves ? "; " + FirstDifference(then.Save, now.Save) : string.Empty));
+            known ? $"{name}: {now}; {step.text}: {then}; saves {(saves ? "match" : "differ")}{(papers ? " (back issues aside)" : string.Empty)}" : $"no record named '{step.text}'",
+            "Rounds 4 and 5: a day is closed once; a Skip day from the office mid-shift lands as a skip of the same day from the briefing, and a second Skip day under the shutter as one after it lifted (no second strandings, instalment, dialog outcomes, statement row, Home phase or overwritten morning save)"
+                + (known && !saves ? "; " + FirstDifference(theirs, mine) : string.Empty));
     }
 
     /// <summary>
@@ -180,10 +200,15 @@ public static class FlowOps
     /// legitimately mark (DayCycle.Present: a once-per-run premade met, a
     /// returning traveller come back; the desk guide's progress through the
     /// shift), so a run that played part of a shift compares with one that
-    /// never opened it. Null for a file that does not read as a save.
+    /// never opened it; with <paramref name="withoutPapers"/>, without the
+    /// News site's back issues too (GameManager records each morning paper as
+    /// its office opens, so a day passed over under the shutter has none).
+    /// Null for a missing file or one that does not read as a save.
     /// </summary>
-    private static string Comparable(string json)
+    private static string Comparable(string json, bool withoutPapers)
     {
+        if (json == null)
+            return null;
         SaveCopy copy;
         try
         {
@@ -205,6 +230,8 @@ public static class FlowOps
                 if (r != null)
                     r.returned = false;
         w.guide = new GuideState();
+        if (withoutPapers)
+            w.newsArchive = new List<NewsIssue>();
         return copy.version + "|" + JsonUtility.ToJson(w);
     }
 
@@ -435,6 +462,91 @@ public static class FlowOps
     {
         TransitShutter veil = QaGame.Find<TransitShutter>();
         return veil != null && veil.gameObject.activeInHierarchy;
+    }
+
+    /// <summary>How far down the shutter is (0 up out of view, 1 covering the screen), or -1 without one.</summary>
+    private static float ShutterCover()
+    {
+        TransitShutter veil = QaGame.Find<TransitShutter>();
+        return veil != null ? (float)QaGame.Field(veil, "_cover") : -1f;
+    }
+
+    private static IEnumerator Queue(QaRunner runner, QaStep step)
+    {
+        string id = $"transit.queue.{(string.IsNullOrEmpty(step.name) ? "queue" : step.name)}";
+        string[] scenes = (step.text ?? string.Empty).Split(',').Select(s => s.Trim()).Select(s => s == "office" ? OfficeScenes.ArtSceneName : s).ToArray();
+        if (scenes.Length != 3 || scenes.Any(string.IsNullOrEmpty))
+        {
+            runner.Assert(id, Owner, false, $"text '{step.text}'", "flowQueue needs three scenes in text: the first, the one asked for while the shutter comes down, the one asked for while it rises");
+            yield break;
+        }
+        yield return QaGame.Until(() => !SceneTransit.Changing, 60f, "no scene change before the queue's first load");
+
+        var marks = new List<string>();
+        void Mark(string channel, string name)
+        {
+            if (channel == TransitRunner.TransitSignal)
+                marks.Add(name);
+        }
+        int Count(string kind) => marks.Count(m => m.StartsWith(kind + ":"));
+        QaSignals.Raised += Mark;
+        // The first scene must never load (the second replaces it before any load): judged only when it is not loaded already.
+        bool firstAtStart = Loaded(scenes[0]), firstLoaded = false, downAgain = false, lowering, rising;
+        float cover;
+        try
+        {
+            SceneTransit.Load(scenes[0]);
+            yield return null;
+            // The second ask, while the shutter comes down: only the first start marked, the shutter shown and not yet down.
+            cover = ShutterCover();
+            lowering = ShutterShown() && cover >= 0f && cover < 1f && marks.Count == 1;
+            SceneTransit.Load(scenes[1]);
+
+            float end = Time.realtimeSinceStartup + (step.f > 0f ? step.f : 120f);
+            while (Time.realtimeSinceStartup < end && Count("rise") == 0)
+            {
+                firstLoaded |= Loaded(scenes[0]);
+                yield return null;
+            }
+            // The third ask, while the shutter rises over the second scene: no up mark yet, the shutter still shown.
+            rising = Count("rise") == 1 && Count("up") == 0 && ShutterShown();
+            SceneTransit.Load(scenes[2]);
+
+            while (Time.realtimeSinceStartup < end && SceneTransit.Changing)
+            {
+                // Between the second scene's up and the third's rise, the shutter must cover the screen again.
+                if (Count("up") == 1 && Count("rise") == 1)
+                    downAgain |= ShutterShown() && ShutterCover() >= 0.999f;
+                yield return null;
+            }
+            yield return QaGame.Frames(2);
+        }
+        finally
+        {
+            QaSignals.Raised -= Mark;
+        }
+
+        var expected = new List<string>
+        {
+            "start:" + scenes[0], "start:" + scenes[1], "rise:" + scenes[1], "up:" + scenes[1],
+            "start:" + scenes[2], "rise:" + scenes[2], "up:" + scenes[2],
+        };
+        bool ordered = marks.SequenceEqual(expected);
+        bool there = Loaded(scenes[2]);
+        bool settled = !SceneTransit.Changing && !SceneTransit.Loading, off = !ShutterShown();
+        bool skipped = firstAtStart || !firstLoaded;
+        runner.Assert(id, Owner, lowering && rising && skipped && downAgain && ordered && there && settled && off,
+            $"'{scenes[1]}' asked for while the shutter came down {lowering} (cover {cover:0.00}), '{scenes[0]}' never loaded {skipped}{(firstAtStart ? " (loaded before: not judged)" : string.Empty)}; "
+                + $"'{scenes[2]}' asked for while it rose {rising}, the shutter down again {downAgain}; '{scenes[2]}' loaded {there}; "
+                + $"change over {settled}, veil off {off}; marks [{string.Join(", ", marks)}]{(ordered ? string.Empty : $" (expected [{string.Join(", ", expected)}])")}",
+            "Round 5, S4: TransitRunner's queue in play: a load asked for while the shutter comes down replaces the scene before any load, one asked for while it rises brings it down again, and the last scene asked for is the one loaded");
+    }
+
+    /// <summary>True while the scene named <paramref name="scene"/> is loaded.</summary>
+    private static bool Loaded(string scene)
+    {
+        Scene s = SceneManager.GetSceneByName(scene);
+        return s.IsValid() && s.isLoaded;
     }
 
     private static IEnumerator EarlyFinish(QaRunner runner, QaStep step)

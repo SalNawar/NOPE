@@ -94,7 +94,7 @@ public static class FlowChecks
     [GateCheck("flow.transitions.cuts", Owner, GateKind.Play)]
     public static GateResult TransitionCuts() => GateResults.Require("flow.transitions.cuts", Owner, "flow_transitions.seq.*.cuts");
 
-    /// <summary>A scene change through SceneTransit brings the booth's shutter down, loads behind it and lifts it (flow_shutter; its frozen and cuts analyses by seqtools).</summary>
+    /// <summary>A scene change through SceneTransit brings the booth's shutter down, loads behind it and lifts it, and a load asked for during a change (while the shutter comes down, while it rises) loads next, the last asked for winning (flow_shutter's transit.* and transit.queue.*; its frozen and cuts analyses by seqtools).</summary>
     [GateCheck("flow.transit.shutter", Owner, GateKind.Play)]
     public static GateResult SceneChangeShutter() => GateResults.Require("flow.transit.shutter", Owner, "flow_shutter.transit.*");
 
@@ -113,9 +113,12 @@ public static class FlowChecks
     /// <summary>
     /// A Skip day from the office mid-shift lands as a skip of the same day
     /// from the briefing (the same day, phase, money, debt paid, statement
-    /// rows and save), and the skipped day is closed once: the office the
-    /// cheat's route left behind the shutter handles no day's end of its own
-    /// (flow_skip; FLOW round 4).
+    /// rows and save, apart from what presenting a traveller marks), and the
+    /// skipped day is closed once: the office the cheat's route left behind
+    /// the shutter handles no day's end of its own (flow_skip; FLOW round 4).
+    /// A second Skip day under the shutter lands as one after it lifted: the
+    /// office being replaced is no longer the live shift, so its ledger is
+    /// never closed again on the landing day (FLOW round 5).
     /// </summary>
     [GateCheck("flow.skip.midshift", Owner, GateKind.Play)]
     public static GateResult SkipMidShift()

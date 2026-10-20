@@ -87,10 +87,28 @@ public static class Transit
 /// still holds the screen for that frame: the QA rig's real-time load watch
 /// (FlowLoadWatch, flow_load) measures the worst frame of each load against
 /// 250 ms, from the transit events marked here (QaSignals "transit":
-/// start, rise, up).
+/// start, rise, up). The scenes a change replaces stay alive behind the
+/// shutter, so it says so as each load is asked for (<see cref="Asked"/>):
+/// the office being replaced then stops being the cheat menu's live shift.
 /// </summary>
 public static class SceneTransit
 {
+    /// <summary>
+    /// Raised as a load is asked for in play, before anything loads: a load
+    /// that starts a scene change and one queued behind another alike. Every
+    /// scene loaded now is to be replaced, though it stays alive behind the
+    /// shutter for the lowering and the load. GameManager answers it: the
+    /// office being replaced stops being GameManager.Current at once, so a
+    /// second day-changing cheat under the shutter (RunManager's routes take
+    /// the live shift from Current) closes the landing day as from its
+    /// briefing, never the replaced office's day again on the landing world
+    /// (FLOW round 5).
+    /// </summary>
+    public static event Action Asked;
+
+    /// <summary>True while a load asked for during the scene change waits to follow it: the scene loading now is to be replaced as well (an office starting then never becomes GameManager.Current).</summary>
+    public static bool NextWaiting => TransitRunner.SceneQueued;
+
     /// <summary>True from the frame a Load starts lowering the shutter until the new scene has settled (Esc opens nothing meanwhile: PauseMenu). It clears before the shutter rises; <see cref="Changing"/> holds until the shutter is off.</summary>
     public static bool Loading => TransitRunner.SceneLoading;
 
@@ -105,7 +123,7 @@ public static class SceneTransit
     /// </summary>
     public static bool Changing => TransitRunner.SceneChanging;
 
-    /// <summary>Loads <paramref name="scene"/> (by name, replacing every loaded scene) behind the booth's roll shutter (TransitShutter). A Load while another scene change runs is never dropped: it loads next behind the same shutter, and the latest request wins (RunManager has already moved its world for it).</summary>
+    /// <summary>Loads <paramref name="scene"/> (by name, replacing every loaded scene) behind the booth's roll shutter (TransitShutter), raising <see cref="Asked"/> first. A Load while another scene change runs is never dropped: it loads next behind the same shutter, and the latest request wins (RunManager has already moved its world for it).</summary>
     public static void Load(string scene)
     {
         if (!Application.isPlaying || !Application.CanStreamedLevelBeLoaded(scene))
@@ -113,8 +131,13 @@ public static class SceneTransit
             SceneManager.LoadScene(scene);
             return;
         }
+        Asked?.Invoke();
         TransitRunner.LoadScene(scene);
     }
+
+    /// <summary>Forgets the listeners when play starts (the editor without a domain reload keeps statics).</summary>
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics() => Asked = null;
 }
 
 /// <summary>
@@ -163,6 +186,9 @@ public sealed class TransitRunner : MonoBehaviour
 
     /// <summary>True while a scene change runs, until the shutter is off (SceneTransit.Changing).</summary>
     public static bool SceneChanging => _runner != null && _runner._scenes.Changing;
+
+    /// <summary>True while a load asked for during the scene change waits to follow it (SceneTransit.NextWaiting).</summary>
+    public static bool SceneQueued => _runner != null && _runner._scenes.Queued != null;
 
     /// <summary>Plays a transition of <paramref name="seconds"/> on <paramref name="target"/> (null: a plain wait), applying the eased share each frame, then <paramref name="done"/>.</summary>
     public static void Play(UnityEngine.Object target, float seconds, Action<float> apply, Action done)

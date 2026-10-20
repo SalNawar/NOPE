@@ -166,7 +166,14 @@ public sealed partial class GameManager : MonoBehaviour
             Debug.LogError("GameManager missing references (orchestrator/contentLibrary/officeUI).");
             return;
         }
-        Current = this;
+
+        // The office a scene change is replacing is never the cheat menu's live shift (FLOW round 5): not one that starts
+        // while a newer load waits to follow its own, and not this one once a load is asked for (LeaveCurrent).
+        if (SceneTransit.NextWaiting)
+            Debug.Log("[GameManager] This office starts while a newer scene change waits to replace it: it is not the live shift (GameManager.Current).");
+        else
+            Current = this;
+        SceneTransit.Asked += LeaveCurrent;
 
         // Acquire the run (creates RunManager + loads save/new run on first scene).
         bool runExisted = RunManager.HasInstance;
@@ -370,6 +377,7 @@ public sealed partial class GameManager : MonoBehaviour
     {
         if (Current == this)
             Current = null;
+        SceneTransit.Asked -= LeaveCurrent;
         // A citation slip still up as the office goes (a cheat's jump, quitting to the title) holds no clock in the next scene.
         PauseState.Shared.Release(PauseState.Citation);
         if (shiftClock != null)
@@ -385,6 +393,25 @@ public sealed partial class GameManager : MonoBehaviour
         orchestrator.OnCaseSlotStarted -= HandleCaseSlotStarted;
         orchestrator.OnCaseSlotEnded -= HandleCaseSlotEnded;
         orchestrator.OnDayCompleted -= HandleDayCompleted;
+    }
+
+    /// <summary>
+    /// A scene change was asked for (SceneTransit.Asked): this office is being
+    /// replaced, though it stays alive behind the shutter until the new scene
+    /// activates, so it stops being the cheat menu's live shift
+    /// (GameManager.Current) at once. RunManager's routes take the live shift
+    /// from Current, so a second skip or jump under the shutter closes the
+    /// run's landing day on an empty ledger, as from its briefing, and never
+    /// closes this office's day again on the landing world (FLOW round 5: a
+    /// Skip day, then another before the shutter lifted, re-applied the first
+    /// day's strandings, instalment, dialog outcomes and statement row).
+    /// </summary>
+    private void LeaveCurrent()
+    {
+        if (Current != this)
+            return;
+        Current = null;
+        Debug.Log($"[GameManager] A scene change replaces day {DayNumber}'s office: it is no longer the live shift (GameManager.Current).");
     }
 
     /// <summary>
