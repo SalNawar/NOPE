@@ -32,16 +32,16 @@ public static class HallFxChecks
     [GateCheck("hallfx.crossfade.flicker", "HALL-FX", GateKind.Play)]
     public static GateResult CrossfadeFlicker() => GateResults.Require("hallfx.crossfade.flicker", "HALL-FX", "hall_fx_crossfade.seq.*.flicker");
 
-    /// <summary>[BP] The same city sequences on the built QA player (the editor renders differently: BUG-53).</summary>
-    [GateCheck("hallfx.bp.city.flicker", "HALL-FX", GateKind.BuiltPlayer)]
+    /// <summary>[BP] The same city sequences on the built QA player (the editor renders differently: BUG-53). Demo only, as every QA-RIG built-player check: the QA player opens a window, so it runs before a demo, when Saleh is away.</summary>
+    [GateCheck("hallfx.bp.city.flicker", "HALL-FX", GateKind.BuiltPlayer, DemoOnly = true)]
     public static GateResult CityFlickerPlayer() => GateResults.Require("hallfx.bp.city.flicker", "HALL-FX", "bp.hall_fx_city.seq.*.flicker", true);
 
     /// <summary>[BP] The dusk sequences on the built QA player.</summary>
-    [GateCheck("hallfx.bp.dusk.flicker", "HALL-FX", GateKind.BuiltPlayer)]
+    [GateCheck("hallfx.bp.dusk.flicker", "HALL-FX", GateKind.BuiltPlayer, DemoOnly = true)]
     public static GateResult DuskFlickerPlayer() => GateResults.Require("hallfx.bp.dusk.flicker", "HALL-FX", "bp.hall_fx_dusk.seq.*.flicker", true);
 
     /// <summary>[BP] The same Helix sequences on the built QA player.</summary>
-    [GateCheck("hallfx.bp.helix.flicker", "HALL-FX", GateKind.BuiltPlayer)]
+    [GateCheck("hallfx.bp.helix.flicker", "HALL-FX", GateKind.BuiltPlayer, DemoOnly = true)]
     public static GateResult HelixFlickerPlayer() => GateResults.Require("hallfx.bp.helix.flicker", "HALL-FX", "bp.hall_fx_helix.seq.*.flicker", true);
 
     /// <summary>The hall's one portal source (HallPortals.asset) is whole and its masks import as data.</summary>
