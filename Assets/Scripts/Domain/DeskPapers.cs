@@ -105,13 +105,13 @@ public enum DropOutcome
     Queued
 }
 
-/// <summary>The desk's two zones (Papers, Please's, Saleh 2026-10-06): where a document lies decides its size.</summary>
+/// <summary>The desk's two zones (Papers, Please's, Saleh 2026-10-06): where a document lies decides its size, one world size per zone whatever the view (DeskZones.SheetScale; Saleh's D1).</summary>
 public enum DeskZone
 {
-    /// <summary>The counter: the strip on the traveller's side, where papers arrive and go back; a document there is small.</summary>
+    /// <summary>The counter: the strip on the traveller's side, where papers arrive and go back; a document there is small (DeskConfigSO.counterScale).</summary>
     Counter,
 
-    /// <summary>The desk: the reading area; a document there is full size.</summary>
+    /// <summary>The desk: the reading area; a document there is full size (its reading size), in the office view and the reading view alike.</summary>
     Desk
 }
 
@@ -251,18 +251,6 @@ public sealed class DeskPapers
             return n;
         }
     }
-
-    /// <summary>
-    /// True when a document lying in <paramref name="zone"/> shows at its full
-    /// reading size: only on the desk while the reading view is on
-    /// (<paramref name="readingView"/>); anywhere else it keeps its normal
-    /// size, the counter's (Saleh's 1016a playtest, 2026-10-17: "documents
-    /// should stay their size, if we are zooming then it should be only when
-    /// you are focused on the table and should return to normal size when you
-    /// drop them"). A grab never changes it: a carried paper keeps the size it
-    /// had (DeskController), the view's change and the drop decide.
-    /// </summary>
-    public static bool ShownFullSize(DeskZone zone, bool readingView) => zone == DeskZone.Desk && readingView;
 
     /// <summary>The zone paper <paramref name="i"/> lies in (the counter until it is dropped on the desk; the counter out of range).</summary>
     public DeskZone ZoneOf(int i) => InRange(i) ? _zones[i] : DeskZone.Counter;
@@ -447,25 +435,43 @@ public enum PaperClickAction
     /// <summary>Nothing (in inspect mode, a click off every value).</summary>
     None,
 
-    /// <summary>A document on the counter goes to the desk, full size, to be read (as if dragged there).</summary>
-    Read,
-
-    /// <summary>A document on the desk comes to the top of the pile.</summary>
+    /// <summary>The document comes to the top of the pile, and nothing else (no move, no change of size, no tilt: Saleh's D1 and R6).</summary>
     Front,
 
     /// <summary>In inspect mode, the value under the pointer is picked for comparison.</summary>
     Pick
 }
 
+/// <summary>
+/// A paper's one world size per zone (DOC-HANDLE, BUG-1; Saleh 2026-10-20,
+/// D1: "we are doing the camera tilt no need to enlarge the documents when
+/// you click them": papers never change size because of the view). A paper
+/// has two sizes, the counter's (small) and the desk's (its reading size), in
+/// world units, whatever the view: the reading view's tilt only moves the
+/// camera. The size changes at most once per crossing, under the cursor, as a
+/// held paper's pointer crosses the counter's edge (Papers, Please), the held
+/// point staying under the cursor (GrabRatio); a drop, a click and the tilt
+/// never change it. Docked in a machine it shows at its docked size
+/// (DockFit) until it is clear of it again.
+/// </summary>
+public static class PaperSizes
+{
+    /// <summary>The sheet's world scale lying in (or held over) <paramref name="zone"/>: <paramref name="counterScale"/> on the counter, <paramref name="deskScale"/> on the desk. Nothing else (no view, no click) enters it.</summary>
+    public static float SheetScale(DeskZone zone, float counterScale, float deskScale) => zone == DeskZone.Desk ? deskScale : counterScale;
+
+    /// <summary>How much a held paper's grab offset (the held point's distance from its centre) grows when its scale goes from <paramref name="from"/> to <paramref name="to"/>: by the same ratio, so the held point stays under the cursor (1 for a scale of 0).</summary>
+    public static float GrabRatio(float from, float to) => from > 0f && to > 0f ? to / from : 1f;
+}
+
 /// <summary>How a left-click on a document routes (the one input model: only left-clicks act; a right-click backs out, ControlRules).</summary>
 public static class PaperClicks
 {
-    /// <summary>In inspect mode (<paramref name="inspecting"/>) a click on a value (<paramref name="onRow"/>) picks it and a click off every value does nothing (outside inspect mode clicks never compare); otherwise a document on the counter goes to the desk to be read and one on the desk comes to the top.</summary>
-    public static PaperClickAction Decide(bool inspecting, bool onRow, DeskZone zone)
+    /// <summary>In inspect mode (<paramref name="inspecting"/>) a click on a value (<paramref name="onRow"/>) picks it and a click off every value does nothing (outside inspect mode clicks never compare); otherwise the document comes to the top of the pile wherever it lies and nothing else happens (Saleh 2026-10-20, D1: "no need to enlarge the documents when you click them"; R6: "clicking a desk paper brings it to the top of the stack"): a paper goes to the desk only by a drag.</summary>
+    public static PaperClickAction Decide(bool inspecting, bool onRow)
     {
         if (inspecting)
             return onRow ? PaperClickAction.Pick : PaperClickAction.None;
-        return zone == DeskZone.Counter ? PaperClickAction.Read : PaperClickAction.Front;
+        return PaperClickAction.Front;
     }
 }
 

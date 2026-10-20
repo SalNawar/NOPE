@@ -300,13 +300,38 @@ public class DeskPapersTests
         Assert.AreEqual(DeskZone.Counter, p.ZoneOf(-1), "out of range");
     }
 
+    // Replaces "APaper_ShowsFullSize_OnlyOnTheDesk_InTheReadingView", which pinned BUG-1's regrow under the reading view (Saleh's D1 reverses it).
     [Test]
-    public void APaper_ShowsFullSize_OnlyOnTheDesk_InTheReadingView()
+    public void APaper_HasOneWorldSizePerZone_WhateverTheView()
     {
-        Assert.IsTrue(DeskPapers.ShownFullSize(DeskZone.Desk, true), "on the desk, the reading view on: read at full size");
-        Assert.IsFalse(DeskPapers.ShownFullSize(DeskZone.Desk, false), "on the desk in the office view: its normal size (Saleh's 1016a playtest)");
-        Assert.IsFalse(DeskPapers.ShownFullSize(DeskZone.Counter, true), "on the counter: its normal size, whatever the view");
-        Assert.IsFalse(DeskPapers.ShownFullSize(DeskZone.Counter, false), "on the counter in the office view: its normal size");
+        const float counter = 0.6f, desk = 1.56f;
+        Assert.AreEqual(counter, PaperSizes.SheetScale(DeskZone.Counter, counter, desk), "small on the counter");
+        Assert.AreEqual(desk, PaperSizes.SheetScale(DeskZone.Desk, counter, desk), "its reading size on the desk, in the office view and the reading view alike");
+        // The rule takes no view, click or drop at all (its signature): the zone alone sizes a paper, so the reading view's tilt never regrows it.
+        Assert.AreEqual(3, typeof(PaperSizes).GetMethod(nameof(PaperSizes.SheetScale)).GetParameters().Length);
+    }
+
+    [Test]
+    public void APapersSize_ChangesOnlyAtTheCountersEdge_UnderTheCursor()
+    {
+        const float counter = 0.6f, desk = 1.5f;
+        // A held paper carried across the desk and back over the counter: its scale follows only the zone it is held over.
+        DeskZone[] heldOver = { DeskZone.Counter, DeskZone.Counter, DeskZone.Desk, DeskZone.Desk, DeskZone.Desk, DeskZone.Counter };
+        int changes = 0;
+        float scale = PaperSizes.SheetScale(heldOver[0], counter, desk);
+        for (int i = 1; i < heldOver.Length; i++)
+        {
+            float next = PaperSizes.SheetScale(heldOver[i], counter, desk);
+            if (next != scale)
+                changes++;
+            Assert.AreEqual(heldOver[i] != heldOver[i - 1], next != scale, "a size change only where it crosses the counter's edge");
+            scale = next;
+        }
+        Assert.AreEqual(2, changes, "once per crossing");
+        // The held point stays under the cursor: the grab offset grows with the size.
+        Assert.AreEqual(desk / counter, PaperSizes.GrabRatio(counter, desk), 1e-6f);
+        Assert.AreEqual(1f, PaperSizes.GrabRatio(desk, desk), "no change, no move");
+        Assert.AreEqual(1f, PaperSizes.GrabRatio(0f, desk), "a scale of 0 never divides");
     }
 
     [Test]
@@ -350,17 +375,14 @@ public class DeskPapersTests
         Assert.IsFalse(p.CanDrag(0));
     }
 
-    // Only left-clicks act; outside inspect mode clicks never compare (Saleh 2026-10-06).
-    [TestCase(false, false, DeskZone.Counter, PaperClickAction.Read)]
-    [TestCase(false, true, DeskZone.Counter, PaperClickAction.Read)]
-    [TestCase(false, false, DeskZone.Desk, PaperClickAction.Front)]
-    [TestCase(false, true, DeskZone.Desk, PaperClickAction.Front)]
-    [TestCase(true, true, DeskZone.Desk, PaperClickAction.Pick)]
-    [TestCase(true, true, DeskZone.Counter, PaperClickAction.Pick)]
-    [TestCase(true, false, DeskZone.Desk, PaperClickAction.None)]
-    [TestCase(true, false, DeskZone.Counter, PaperClickAction.None)]
-    public void PaperClicks_DecisionTable(bool inspecting, bool onRow, DeskZone zone, PaperClickAction expected) =>
-        Assert.AreEqual(expected, PaperClicks.Decide(inspecting, onRow, zone));
+    // Only left-clicks act; outside inspect mode clicks never compare (Saleh 2026-10-06). A click brings a paper to the top and
+    // nothing else, wherever it lies (Saleh 2026-10-20, D1 and R6: no click-to-read, no enlarge; the counter's "Read" is gone).
+    [TestCase(false, false, PaperClickAction.Front)]
+    [TestCase(false, true, PaperClickAction.Front)]
+    [TestCase(true, true, PaperClickAction.Pick)]
+    [TestCase(true, false, PaperClickAction.None)]
+    public void PaperClicks_DecisionTable(bool inspecting, bool onRow, PaperClickAction expected) =>
+        Assert.AreEqual(expected, PaperClicks.Decide(inspecting, onRow));
 
     // -----------------------------
     // DeskHints

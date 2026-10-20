@@ -1,21 +1,15 @@
 using NUnit.Framework;
 
 /// <summary>
-/// Papers never end up hidden behind the scanner (the desk-first redesign,
-/// item 4): the blocked area is the scanner's footprint and the shadow its
-/// body casts away from the camera; a paper reaching into it moves the
-/// shortest way out to the left, right or front, kept on the desk, never
-/// further back; the eject spot is in front of the scanner, else beside it.
+/// The area the scanner hides papers in (the desk-first redesign, item 4): its
+/// footprint and the shadow its body casts away from the camera. The push out
+/// of it is DropResolver's now (DOC-HANDLE, BUG-6: one joint solve over every
+/// keep-out; the old Clear, ClearProp and Eject tests went with them, see
+/// DropResolverTests).
 /// </summary>
 public class ScannerClearanceTests
 {
     private const float Eps = 1e-4f;
-
-    // The desk's clamp area: 2 m wide, 1 m deep (y away from the camera), centred on the origin.
-    private static readonly DeskRect Desk = new DeskRect(0f, 0f, 2f, 1f);
-
-    // The scanner on the desk's right, 0.4 x 0.3.
-    private static readonly DeskRect Scanner = new DeskRect(0.6f, 0f, 0.4f, 0.3f);
 
     [Test]
     public void Shadow_IsTheBodysHeightOverTheElevationsTangent_Capped()
@@ -27,90 +21,16 @@ public class ScannerClearanceTests
     }
 
     [Test]
-    public void APaperClearOfTheScanner_StaysWhereItIs()
+    public void TheBlockedArea_IsTheFootprintAndTheShadowBehindIt()
     {
-        var paper = new DeskRect(-0.3f, 0f, 0.26f, 0.34f);
-        Assert.AreEqual((-0.3f, 0f), ScannerClearance.Clear(paper, Scanner, 0.2f, Desk));
-    }
-
-    [Test]
-    public void APaperInTheShadowBehindTheScanner_IsMovedOut_NeverFurtherBack()
-    {
-        // Behind the scanner (y beyond its far edge 0.15), inside the 0.2 shadow.
-        var paper = new DeskRect(0.6f, 0.3f, 0.26f, 0.2f);
-        (float x, float y) = ScannerClearance.Clear(paper, Scanner, 0.2f, Desk);
-        Assert.IsFalse(ScannerClearance.Overlaps(new DeskRect(x, y, 0.26f, 0.2f), ScannerClearance.Blocked(Scanner, 0.2f)));
-        Assert.LessOrEqual(y, 0.3f + Eps, "never pushed further back");
-        Assert.AreEqual(0.6f - 0.2f - ScannerClearance.Gap - 0.13f, x, Eps, "the left is the shortest way out on this desk");
-    }
-
-    [Test]
-    public void APaperHalfOnTheScannersFront_GoesToTheFront()
-    {
-        var paper = new DeskRect(0.6f, -0.2f, 0.26f, 0.2f);
-        (float x, float y) = ScannerClearance.Clear(paper, Scanner, 0.2f, Desk);
-        Assert.AreEqual(0.6f, x, Eps);
-        Assert.AreEqual(-0.15f - ScannerClearance.Gap - 0.1f, y, Eps);
-    }
-
-    [Test]
-    public void TheMove_KeepsThePaperOnTheDesk()
-    {
-        // The scanner at the desk's right edge: the right is off the desk, so the paper goes left or front.
-        var edge = new DeskRect(0.8f, 0f, 0.4f, 0.3f);
-        var paper = new DeskRect(0.9f, 0.05f, 0.26f, 0.2f);
-        (float x, float y) = ScannerClearance.Clear(paper, edge, 0.1f, Desk);
-        Assert.IsTrue(Desk.Contains(x, y));
-        Assert.IsFalse(ScannerClearance.Overlaps(new DeskRect(x, y, 0.26f, 0.2f), ScannerClearance.Blocked(edge, 0.1f)));
-    }
-
-    [Test]
-    public void TheEjectSpot_IsInFrontOfTheScanner_ElseBesideIt()
-    {
-        (float x, float y) = ScannerClearance.Eject(0.26f, 0.2f, Scanner, Desk);
-        Assert.AreEqual(0.6f, x, Eps);
-        Assert.AreEqual(-0.15f - ScannerClearance.Gap - 0.1f, y, Eps);
-
-        // A scanner at the desk's near edge: no room in front, so it ejects to its left.
-        var near = new DeskRect(0.6f, -0.35f, 0.4f, 0.3f);
-        (x, y) = ScannerClearance.Eject(0.26f, 0.2f, near, Desk);
-        Assert.IsFalse(ScannerClearance.Overlaps(new DeskRect(x, y, 0.26f, 0.2f), near));
-        Assert.Less(x, 0.4f);
-    }
-
-    /// <summary>
-    /// The DETAIN button never stands on the scanner (Saleh's 1007d playtest):
-    /// it is laid by the office view's viewport, so at 16:9, 16:10, 21:9 and
-    /// 4:3 it lands at different places on the desk; wherever that is, over
-    /// the scanner's footprint (today's stand-in and a bigger new model) or
-    /// beside it, ClearProp leaves it clear of the footprint by at least the
-    /// gap, its centre on the desk, and a prop already clear does not move.
-    /// </summary>
-    [Test]
-    public void AProp_AtEveryAspectsPlace_IsLeftClearOfTheScannersFootprint()
-    {
-        var footprints = new[] { Scanner, new DeskRect(0.62f, 0.02f, 0.5f, 0.42f) };
-        // Where a viewport point lands across the desk at each aspect: the wider the screen, the further right the same viewport x.
-        float[] aspects = { 16f / 9f, 16f / 10f, 21f / 9f, 4f / 3f };
-        foreach (DeskRect scanner in footprints)
-            foreach (float aspect in aspects)
-                for (int ix = 0; ix <= 10; ix++)
-                    for (int iy = 0; iy <= 6; iy++)
-                    {
-                        float x = (ix / 10f - 0.5f) * 0.9f * aspect / (16f / 9f);
-                        float y = (iy / 6f - 0.5f) * 0.8f;
-                        var prop = new DeskRect(x, y, 0.12f, 0.1f);
-                        (float cx, float cy) = ScannerClearance.ClearProp(prop, scanner, Desk);
-                        var placed = new DeskRect(cx, cy, prop.Width, prop.Height);
-                        Assert.IsFalse(ScannerClearance.Overlaps(placed, scanner), $"aspect {aspect:0.00}: a prop at ({x:0.00},{y:0.00}) ends at ({cx:0.00},{cy:0.00}), on the scanner");
-                        bool apart = System.Math.Abs(cx - scanner.CentreX) * 2f >= scanner.Width + prop.Width + 2f * ScannerClearance.Gap - Eps
-                                     || System.Math.Abs(cy - scanner.CentreY) * 2f >= scanner.Height + prop.Height + 2f * ScannerClearance.Gap - Eps
-                                     || !ScannerClearance.Overlaps(prop, scanner);
-                        Assert.IsTrue(apart, $"aspect {aspect:0.00}: a moved prop keeps the gap from the scanner");
-                        Assert.IsTrue(cx >= Desk.CentreX - Desk.Width / 2f - Eps && cx <= Desk.CentreX + Desk.Width / 2f + Eps && cy >= Desk.CentreY - Desk.Height / 2f - Eps && cy <= Desk.CentreY + Desk.Height / 2f + Eps,
-                                      "the prop stays on the desk");
-                        if (!ScannerClearance.Overlaps(prop, scanner))
-                            Assert.AreEqual((x, y), (cx, cy), "a prop clear of the scanner stays where it was laid");
-                    }
+        DeskRect blocked = ScannerClearance.Blocked(new DeskRect(0.6f, 0f, 0.4f, 0.3f), 0.2f);
+        Assert.AreEqual(0.6f, blocked.CentreX, Eps);
+        Assert.AreEqual(0.4f, blocked.Width, Eps);
+        Assert.AreEqual(-0.15f, blocked.CentreY - blocked.Height / 2f, Eps, "its front edge is the scanner's");
+        Assert.AreEqual(0.35f, blocked.CentreY + blocked.Height / 2f, Eps, "it reaches the shadow's depth behind it");
+        Assert.AreEqual(0.3f, ScannerClearance.Blocked(new DeskRect(0f, 0f, 0.4f, 0.3f), -1f).Height, Eps, "no shadow: the footprint");
+        var paper = new DeskRect(0.6f, 0.3f, 0.26f, 0.2f); // behind the scanner, in its shadow
+        (float x, float y) = DropResolver.Rest(paper, new DeskRect(0f, 0f, 2f, 1f), new System.Collections.Generic.List<DeskRect> { blocked });
+        Assert.AreEqual(0f, DropResolver.Overlap(new DeskRect(x, y, 0.26f, 0.2f), new System.Collections.Generic.List<DeskRect> { blocked }), "a paper dropped there rests clear of it");
     }
 }

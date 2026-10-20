@@ -7,7 +7,9 @@ using NUnit.Framework;
 /// orintation - if is the wrong document it shouldnt go through the
 /// machience"): each machine takes only its documents (MachineIntake), and a
 /// paper's way to, into, out of or past a machine never passes through its
-/// casing (DockPath).
+/// casing (DockPath). DOC-HANDLE (BUG-24): a passport fits the chip reader's
+/// pad (DockFit); the dock state is each paper's, reset with the case, and no
+/// queue takes a paper out of a machine (MachineOccupancy).
 /// </summary>
 public class MachineDocksTests
 {
@@ -101,6 +103,58 @@ public class MachineDocksTests
         Assert.AreEqual(inside, back[0], "out the way it went in");
         Assert.AreEqual(front, back[1]);
         Assert.AreEqual((0.5f, 0f, 0.3f), back[back.Count - 1]);
+    }
+
+    [Test]
+    public void APassport_IsSizedToFitThePad()
+    {
+        // The pad 0.12 wide and 0.092 deep; a portrait passport 0.144 by 0.218 at scale 1, its normal docked scale 0.6.
+        float s = DockFit.Scale(0.144f, 0.218f, 0.12f, 0.092f, 0.6f, 0.08f);
+        Assert.LessOrEqual(0.218f * s, 0.092f * 1.08f + 1e-6f, "no deeper than the pad (and its overhang)");
+        Assert.LessOrEqual(0.144f * s, 0.12f * 1.08f + 1e-6f, "no wider");
+        Assert.Less(s, 0.6f, "smaller than its normal docked size: it would overhang the casing");
+        Assert.AreEqual(0.3f, DockFit.Scale(0.1f, 0.1f, 0.5f, 0.5f, 0.3f, 0f), 1e-6f, "a paper that fits keeps its normal docked size");
+        Assert.AreEqual(0.6f, DockFit.Scale(0.144f, 0.218f, 0f, 0.092f, 0.6f, 0.08f), "a pad of no size changes nothing");
+    }
+
+    [Test]
+    public void TheDockState_IsEachPapers_AndResetsWithTheCase()
+    {
+        var docks = new MachineOccupancy();
+        Assert.IsTrue(docks.Dock(0, DeskMachine.ChipReader));
+        Assert.IsTrue(docks.IsDocked(0));
+        Assert.IsTrue(docks.IsIn(0, DeskMachine.ChipReader));
+        Assert.IsFalse(docks.IsDocked(1), "paper 1 is not paper 0");
+        Assert.IsFalse(docks.Dock(1, DeskMachine.ChipReader), "the reader holds one paper at a time");
+        Assert.IsTrue(docks.Dock(1, DeskMachine.Scanner));
+        Assert.IsFalse(docks.Dock(0, DeskMachine.Scanner), "a paper lies in one machine");
+        Assert.IsTrue(docks.Busy(DeskMachine.Scanner));
+        Assert.IsTrue(docks.Leave(1));
+        Assert.IsFalse(docks.Busy(DeskMachine.Scanner));
+        Assert.IsFalse(docks.Leave(1), "it already left");
+
+        docks.Clear(); // the case ended mid-read
+        Assert.IsFalse(docks.IsDocked(0), "the next case's paper 0 is not taken for docked (it lay at desk height and clipped)");
+        Assert.IsFalse(docks.Busy(DeskMachine.ChipReader));
+    }
+
+    [Test]
+    public void NoQueue_TakesAPaperOutOfAMachine()
+    {
+        var docs = new[]
+        {
+            new CaseDocument { name = "Passport", handOver = DocumentHandOver.OnArrival },
+            new CaseDocument { name = "Permit", handOver = DocumentHandOver.OnArrival },
+        };
+        var papers = new DeskPapers(docs, 0.5f, 0.5f, new ScannerDay(true, false));
+        papers.HandOver(0);
+        papers.HandOver(1);
+        var docks = new MachineOccupancy();
+        docks.Dock(0, DeskMachine.ChipReader); // the passport lies on the reader's pad, mid-read
+        Assert.AreEqual(2, papers.FeedStack().Count, "the Auto-Feed takes the stack");
+        int fed = papers.FeedNext(docks.FreeToFeed);
+        Assert.AreEqual(1, fed, "it skips the paper in the reader and feeds the next");
+        Assert.IsTrue(papers.IsQueued(0), "the passport keeps its place in the feed");
     }
 
     [Test]

@@ -6,50 +6,61 @@ using UnityEngine;
 /// <summary>
 /// One case's papers on the desk, Papers, Please's way (Saleh 2026-10-06:
 /// "copy the controls of Papers, Please 1:1"): papers handed over slide from
-/// the traveller's side onto the counter (DeskCounter: a row of spots), small;
-/// left-press and drag moves a document (DeskDraggable), the only way to move
-/// it, in either view; on the counter it is small, on the desk full size
-/// (DeskDocument.SetZone), but a paper keeps its size: a grab and a carry
-/// never change it, and it shows at full size only on the desk while the
-/// reading view is on, easing back to its normal size (the counter's) when
-/// the view returns (DeskPapers.ShownFullSize; Saleh's 1016a playtest:
-/// "documents should stay their size, if we are zooming then it should be
-/// only when you are focused on the table"): the slim counter only lights
-/// while the pointer is over it (DeskCounter.Show's hover). Every paper lies
-/// upright toward the chair (DeskView.LevelForward); dropped on the scanner
-/// it eases square onto its bed (DeskScanner.BedFacing) and, scanned, back
-/// upright as it slides off (Saleh's 1016a playtest: "documents have weird
-/// orientation when you scan them"). A document dropped on the desk brings the reading view by itself
-/// (DeskView.TiltIn). Each drop is decided through DeskPapers: it stays in
-/// the zone it was dropped in, it scans on the scanner, it slides back to
-/// where it was picked up (a busy scanner; or a paper from the desk dropped
-/// on the counter before the passport carries its verdict, with the note
-/// "Stamp the passport first": documents can only be returned after
-/// stamping), or (any paper dropped on the counter once the passport carries
-/// its verdict) the papers are handed back (DeskStampTray.HandBack: the case
-/// is decided). A
-/// left-click on a document routes through PaperClicks: on the counter it
-/// goes to the desk to be read (as if dragged there), on the desk it comes to
-/// the top; in inspect mode (SetInspecting) a click on a value picks it for
-/// comparison (FieldPicked) and nothing else does. A right-click or Esc
-/// mid-drag cancels the drag (CancelDrag, ControlRules: the paper slides back
-/// to where it was picked up). Papers stack by height (each place in the
-/// stack lifts a sheet one step, a dragged paper above them all; the
-/// rulebook takes a place in the stack too, so nothing lies at the desk's
-/// own height and nothing prints through what lies on it). A document
-/// takes input only while BoothCoordinator allows the papers, DeskPapers lets
-/// it be dragged and it is not sliding; papers not allowed take no raycasts
-/// at all (spec R38). The day's scanner upgrades (ScannerDay, from the
-/// day-start snapshot: BeginDay) change the scan (the PC redesign SC2-SC4):
-/// with the Auto-Feed a click on its tray puts every paper not scanned yet in
-/// DeskPapers' queue (FeedStack) and each, once landed and not dragged,
-/// slides onto the scanner by itself, in hand-over order, one at a time
-/// (FeedScanner); with the Analysis a scan by hand
-/// takes the analysis pass (the longer scan), once per document
-/// (DeskPapers.Pass), and ScanFinished says which pass it was. No paper is
-/// left behind the scanner (ScannerClearance, the desk-first redesign, item
-/// 4). The placeholder scanner shows its tray and lamp for the owned upgrades
-/// (SC6). At the decision every paper goes back to the traveller.
+/// the traveller's side onto the counter (DeskCounter: a row of spots), small,
+/// one after another, each landing with a slap (the staged hand-over,
+/// BUG-49b: DeskConfigSO.handOverSeconds, DeskEvents.DocumentLanded on the
+/// landing frame for FEEDBACK's sound; one paper bound per frame at most, from
+/// a pool of clones made between cases, BUG-65g); left-press and drag moves a
+/// document (DeskDraggable), the only way to move it, in either view. A paper
+/// has one world size per zone, whatever the view (DOC-HANDLE, BUG-1; Saleh
+/// 2026-10-20, D1: "we are doing the camera tilt no need to enlarge the
+/// documents when you click them"; PaperSizes): small on the counter, its
+/// reading size on the desk; a held paper changes size only as its pointer
+/// crosses the counter's edge, under the cursor (a desk paper keeps its desk
+/// size over the counter until the passport carries its verdict: it could
+/// not stay there). A drop never changes its size, and it rests exactly where
+/// it was released (DropResolver, BUG-6: its footprint at its final size,
+/// kept wholly inside what the reading view shows and clear of every
+/// obstacle in DeskObstacles and of the area the scanner hides, in one joint
+/// solve: the least move, never one push after another). A document dropped
+/// on the desk brings the reading view by itself (DeskView.TiltIn, the one
+/// camera move a drop makes: Saleh's D1); a click on a paper only brings it
+/// to the top of the stack (R6: no move, no size, no tilt). Each drop is
+/// decided through DeskPapers: it stays in the zone it was dropped in, it
+/// scans on the scanner (the dock under its footprint's centre, not the
+/// pointer), it waits by the busy scanner (drop and go), it is refused (a
+/// machine that does not take it, or a paper from the desk dropped on the
+/// counter before the passport carries its verdict, with the note "Stamp the
+/// passport first"): a refusal shakes in place and rests just clear of what
+/// refused it, never flying back; or (any paper dropped on the counter once
+/// the passport carries its verdict) the papers are handed back
+/// (DeskStampTray.HandBack: the case is decided). Every paper lies upright
+/// toward the chair (DeskView.LevelForward); dropped on the scanner it eases
+/// square onto its bed (DeskScanner.BedFacing), a passport on the chip
+/// reader's pad lies upright to the player sized to fit the pad (DockFit), and
+/// each keeps its docked size until it is clear of the machine again; the dock
+/// state is the case's (MachineOccupancy: cleared when a case begins and
+/// ends) and no queue takes a paper out of a machine (BUG-24). In inspect mode
+/// (SetInspecting) a click on a value picks it for comparison (FieldPicked)
+/// and nothing else does. A right-click, Esc or a view key mid-drag cancels the
+/// drag (the hold registry, ControlRules: the paper slides back to where it
+/// was picked up). Papers stack by height (each place in the stack lifts a
+/// sheet one step, the top one a little more so the order reads at a glance,
+/// BUG-40b; a reorder shows in the same frame and raises DeskEvents.
+/// StackChanged with each paper's rank for DOC-LOOK's contact shadow; the
+/// rulebook takes a place in the stack too). A held paper or the held folder
+/// is drawn above every prop (HeldOnTop). A document takes input only while
+/// BoothCoordinator allows the papers, DeskPapers lets it be dragged and it is
+/// not sliding; papers not allowed take no raycasts at all (spec R38). The
+/// day's scanner upgrades (ScannerDay, from the day-start snapshot: BeginDay)
+/// change the scan (the PC redesign SC2-SC4): with the Auto-Feed a click on
+/// its tray puts every paper not scanned yet in DeskPapers' queue (FeedStack)
+/// and each, once landed and not dragged nor in a machine, slides onto the
+/// scanner by itself, in hand-over order, one at a time (FeedScanner); with
+/// the Analysis a scan by hand takes the analysis pass (the longer scan), once
+/// per document (DeskPapers.Pass), and ScanFinished says which pass it was. The
+/// placeholder scanner shows its tray and lamp for the owned upgrades (SC6). At
+/// the decision every paper goes back to the traveller (DeskEvents.CaseEnded).
 /// </summary>
 public sealed class DeskController : MonoBehaviour
 {
@@ -71,13 +82,13 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The day-1 note on the scanner tray (its text comes from the config).</summary>
     [SerializeField] private TMP_Text scanHint;
 
-    /// <summary>The desk tuning (scan time, slide time, the stack's heights, the zones' sizes, the photo's tint, the note).</summary>
+    /// <summary>The desk tuning (scan time, slide and hand-over times, the stack's heights, the zones' sizes, the photo's tint, the note).</summary>
     [SerializeField] private DeskConfigSO config;
 
     /// <summary>The counter (optional: without it every paper lies on the desk and none is handed back by a drop).</summary>
     [SerializeField] private DeskCounter counter;
 
-    /// <summary>The reading view (optional): a document dropped on the desk tilts into it, and a document sent to the desk by a click lands where it shows.</summary>
+    /// <summary>The reading view (optional): a document dropped on the desk tilts into it, and a resting paper lies wholly inside what it shows.</summary>
     [SerializeField] private DeskView deskView;
 
     /// <summary>The stamps (optional): the passport's verdict, and the hand-back when the stamped passport is dropped on the counter.</summary>
@@ -92,8 +103,8 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The desk machines (null when none are wired).</summary>
     public DeskHardware Hardware => hardware;
 
-    /// <summary>The papers in the chip reader (inert until it gives them back).</summary>
-    private readonly HashSet<int> _inReader = new HashSet<int>();
+    /// <summary>Which machine holds which paper this case (the scanner's bed, the chip reader): cleared when a case begins and ends (BUG-24).</summary>
+    private readonly MachineOccupancy _docks = new MachineOccupancy();
 
     /// <summary>The rulebook's place in the stack (papers are 0 and up).</summary>
     private const int RulebookId = -1;
@@ -127,7 +138,17 @@ public sealed class DeskController : MonoBehaviour
     private Func<int, bool> _landed;
 
     /// <summary>The papers dropped on the busy scanner, waiting by the glass (drop and go): once scanned they go back to where they were picked up, not to where they waited.</summary>
-    private readonly System.Collections.Generic.HashSet<int> _waiting = new System.Collections.Generic.HashSet<int>();
+    private readonly HashSet<int> _waiting = new HashSet<int>();
+
+    /// <summary>The arrival papers still to be handed over (one per hand-over beat: HandOverNext), and when the next may come (Time.time).</summary>
+    private readonly Queue<int> _arrivals = new Queue<int>();
+    private float _nextHandOverAt;
+
+    /// <summary>Clones of the paper template made ready between cases (one per frame), bound when a paper is handed over.</summary>
+    private readonly List<DeskDocument> _spare = new List<DeskDocument>();
+
+    /// <summary>Each paper's last rank in the stack (DeskEvents.StackChanged raises only on a change).</summary>
+    private readonly Dictionary<int, int> _ranks = new Dictionary<int, int>();
 
     /// <summary>The paper being dragged, or -1.</summary>
     private int _dragged = -1;
@@ -135,17 +156,19 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>True while the dragged paper's pointer is over the counter (its strip lights).</summary>
     private bool _overCounter;
 
-    /// <summary>The office view's level right and forward on the desk (SetScannerView): the frame ScannerClearance works in.</summary>
+    /// <summary>The office view's level right and forward on the desk (SetScannerView): the frame every rest is judged in (DropResolver).</summary>
     private Vector3 _viewRight = Vector3.right, _viewForward = Vector3.forward;
 
     /// <summary>How deep behind the scanner its body hides a paper from the office camera, in metres (SetScannerView).</summary>
     private float _scannerShadow;
 
-    /// <summary>The reading spots across the reading view (viewport x), each next paper sent to the desk by a click taking the next: right of the rulebook folder's page, which fills the view's left.</summary>
-    private static readonly float[] ReadingSpots = { 0.62f, 0.78f, 0.7f };
+    /// <summary>The obstacles' ids this desk registers (DeskObstacles): the scanner, the chip reader, the UV torch's cradle (until TOOLS registers its own).</summary>
+    private const string ScannerObstacle = "desk.scanner", ReaderObstacle = "desk.chipReader", TorchObstacle = "desk.uvTorchCradle";
 
-    /// <summary>The reading spots' height on the screen in the reading view (viewport y).</summary>
-    private const float ReadingSpotY = 0.42f;
+    /// <summary>Reused buffers: the registry's footprints (world), the keep-outs in the view's frame, a paper's four corners.</summary>
+    private readonly List<DeskRect> _footprints = new List<DeskRect>();
+    private readonly List<DeskRect> _keepOut = new List<DeskRect>();
+    private readonly Vector3[] _corners = new Vector3[4];
 
     /// <summary>True when the desk and all its parts are wired; otherwise documents reach the PC when handed over (InvestigationUIController).</summary>
     public bool IsReachable =>
@@ -160,7 +183,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Raised when a value of a document is picked in inspect mode: the paper's index, the field's row and where it lights up.</summary>
     public event Action<int, DocumentRow, ICompareHighlight> FieldPicked;
 
-    /// <summary>Raised when a document lands on the desk, full size, to be read (dragged there or sent by a click), with its index (the steps checklist's "read").</summary>
+    /// <summary>Raised when a document is dropped on the desk to be read, with its index (the steps checklist's "read").</summary>
     public event Action<int> PaperExamined;
 
     private void Awake()
@@ -170,10 +193,11 @@ public sealed class DeskController : MonoBehaviour
             scanHint.text = UiText.Get(config.scanHintKey);
         if (stamps != null)
             stamps.Changed += ShowCounter;
-        if (deskView != null)
-            deskView.Changed += Focus;
         if (rulebook != null && config != null)
+        {
             rulebook.ShowDepth(config);
+            rulebook.UseConfig(config);
+        }
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan += RulebookLifted;
@@ -205,8 +229,6 @@ public sealed class DeskController : MonoBehaviour
         }
         if (stamps != null)
             stamps.Changed -= ShowCounter;
-        if (deskView != null)
-            deskView.Changed -= Focus;
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan -= RulebookLifted;
@@ -214,14 +236,9 @@ public sealed class DeskController : MonoBehaviour
             rulebook.Drag.DragEnded -= RulebookDropped;
             rulebook.Drag.DragCancelled -= RulebookLifted;
         }
-    }
-
-    /// <summary>The reading view turned on or off: every paper on the desk eases to its reading size or back to its normal size (a carried one keeps its size).</summary>
-    private void Focus()
-    {
-        foreach (DeskDocument paper in _papers)
-            if (paper != null)
-                paper.SetFocused(deskView.IsOn);
+        DeskObstacles.Desk.Unregister(ScannerObstacle);
+        DeskObstacles.Desk.Unregister(ReaderObstacle);
+        DeskObstacles.Desk.Unregister(TorchObstacle);
     }
 
     /// <summary>A paper's rotation lying upright toward the chair: its top away from it, along the office view's level forward.</summary>
@@ -232,45 +249,58 @@ public sealed class DeskController : MonoBehaviour
     {
         _stack.Clear();
         _stack.Add(RulebookId);
+        _ranks.Clear();
     }
 
-    /// <summary>The rulebook's drag begins (lifted above the stack) or is cut short (back on top of it).</summary>
+    /// <summary>The rulebook's drag begins (lifted above the stack, drawn above every prop) or is cut short (back on top of it).</summary>
     private void RulebookLifted(DeskDraggable drag)
     {
         _rulebookDragged = drag.IsDragging;
         if (_rulebookDragged)
-            MeasureCasings();
+            MeasureMachines();
         else
-            rulebook.SetCarryFloor(0f);
+            rulebook.ShowHeld(null, 1f);
         _stack.BringToFront(RulebookId);
         if (config != null)
             ApplyStack();
     }
 
-    /// <summary>The dragged rulebook keeps over any machine's casing under it (CarryFloor).</summary>
+    /// <summary>The dragged rulebook is drawn above every prop (HeldOnTop), as a held paper is.</summary>
     private void RulebookDragged(DeskDraggable drag, Vector3 point)
     {
         if (config != null)
-            rulebook.SetCarryFloor(CarryFloor(rulebook.transform.position, RulebookGrow(), rulebook.Thickness));
+            rulebook.ShowHeld(drag.DragCamera, HeldRatio(drag.DragCamera, rulebook.transform.position.y));
     }
 
     /// <summary>
-    /// The rulebook dropped: it lies on top of the stack; dropped on a machine
-    /// (the scanner or the chip reader: neither takes it, MachineIntake), the
-    /// machine says no and the folder goes back over its casing to where it
-    /// was picked up (Saleh's 1018a playtest: "if is the wrong document it
-    /// shouldnt go through the machience").
+    /// The rulebook dropped: it lies on top of the stack, where it was
+    /// released (DropResolver: wholly in view, clear of every obstacle);
+    /// dropped on a machine (the scanner or the chip reader: neither takes it,
+    /// MachineIntake) the machine says no, the folder shakes in place and
+    /// lies just clear of it (Saleh's 1018a playtest: "if is the wrong
+    /// document it shouldnt go through the machience"); dropped on the counter
+    /// it shakes its "no" (DeskRulebook) and lies just off it (BUG-6b: never a
+    /// teleport back to where it was picked up).
     /// </summary>
     private void RulebookDropped(DeskDraggable drag, Vector3 released)
     {
         _rulebookDragged = false;
-        IPaperDock dock = DockAt(released);
-        if (config != null && dock != null && !MachineIntake.Accepts(dock.Machine, MachineFeed.Folder))
+        rulebook.ShowHeld(null, 1f);
+        if (config != null && surface != null && TryFootprint(rulebook.transform, out DeskRect folder))
         {
-            dock.Refuse();
-            Vector3 from = rulebook.CarriedFrom;
-            List<Vector3> way = Way(from, drag.PickUpPosition, RulebookGrow());
-            rulebook.Refused(way, WaySeconds(from, way), config.refuseShake);
+            Vector3 at = rulebook.transform.position;
+            IPaperDock dock = DockAt(at);
+            bool refused = dock != null && !MachineIntake.Accepts(dock.Machine, MachineFeed.Folder);
+            Vector3 rest = RestOf(folder, at, counter != null && counter.Contains(released));
+            List<Vector3> way = (rest - at).sqrMagnitude > 1e-8f ? Way(at, rest, RulebookGrow()) : null;
+            float seconds = way != null ? WaySeconds(at, way) : 0f;
+            if (refused)
+            {
+                dock.Refuse();
+                rulebook.Refused(way, seconds);
+            }
+            else
+                rulebook.RestAt(way, seconds);
         }
         RulebookLifted(drag);
     }
@@ -278,9 +308,11 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Half the rulebook's diagonal on the desk (metres): how far its edges reach from its root.</summary>
     private float RulebookGrow() => TryFootprint(rulebook.transform, out DeskRect folder) ? Mathf.Sqrt(folder.Width * folder.Width + folder.Height * folder.Height) / 2f : 0.2f;
 
-    /// <summary>Advances a running scan (a finished paper slides back to where it was picked up) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner).</summary>
+    /// <summary>Makes a spare paper ready (between hand-overs), hands the next arrival over on its beat, then advances a running scan (a finished paper slides back to where it was picked up, keeping its docked size until clear of the scanner) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner).</summary>
     private void Update()
     {
+        if (!HandOverNext())
+            PrepareSpare();
         if (_state == null)
             return;
         if (!_state.ScannerBusy)
@@ -304,8 +336,7 @@ public sealed class DeskController : MonoBehaviour
             return;
 
         DeskDocument paper = _papers[done];
-        Undock(paper);
-        Slide(paper, ClearOfBlockers(paper, paper.Drag.PickUpPosition), Upright);
+        CarryOut(paper, Rest(paper, paper.Drag.PickUpPosition, false));
         scanner.Pulse();
         _scansToday++;
         RefreshHint();
@@ -314,10 +345,11 @@ public sealed class DeskController : MonoBehaviour
 
     /// <summary>
     /// The feed: while the scanner is idle, the next queued paper that lies
-    /// still on the desk slides onto the bed and scans (DeskPapers.FeedNext:
-    /// queue order, one at a time): a paper the Auto-Feed Scanner (SC3) took
-    /// in goes back to where it lay, one dropped on the busy scanner (drop and
-    /// go, the scanner app spec §1) back to where it was picked up.
+    /// still on the desk, in no machine, slides onto the bed and scans
+    /// (DeskPapers.FeedNext: queue order, one at a time): a paper the Auto-Feed
+    /// Scanner (SC3) took in goes back to where it lay, one dropped on the busy
+    /// scanner (drop and go, the scanner app spec §1) back to where it was
+    /// picked up.
     /// </summary>
     private void FeedScanner()
     {
@@ -332,20 +364,20 @@ public sealed class DeskController : MonoBehaviour
             if (_scanners.AutoFeed && scanner != null)
                 scanner.Fed(); // the Auto-Feed tray's rollers take it in
         }
-        StartScan(_papers[next]);
         _stack.BringToFront(next);
-        ApplyStack();
+        StartScan(_papers[next]);
     }
 
-    /// <summary>True when paper <paramref name="i"/> lies still on the desk: handed over, landed and not being dragged.</summary>
-    private bool Landed(int i) => _papers[i] != null && !_papers[i].IsSliding && _dragged != i;
+    /// <summary>True when paper <paramref name="i"/> lies still on the desk: handed over, landed, not being dragged and in no machine (a queue never takes a paper from the chip reader: BUG-24).</summary>
+    private bool Landed(int i) => _papers[i] != null && !_papers[i].IsSliding && _dragged != i && _docks.FreeToFeed(i);
 
     /// <summary>
     /// The office view the scanner hides papers from (the office binder, from
     /// the art office's camera): its level forward on the desk and the depth
     /// behind the scanner its body hides (ScannerClearance.Shadow). From then
-    /// on no paper is left in the scanner's blocked area (the desk-first
-    /// redesign, item 4).
+    /// on no paper rests in the scanner's blocked area (the desk-first
+    /// redesign, item 4), and the chip reader lays a passport upright to the
+    /// player.
     /// </summary>
     public void SetScannerView(Vector3 levelForward, float shadow)
     {
@@ -355,6 +387,8 @@ public sealed class DeskController : MonoBehaviour
         _viewForward = levelForward.normalized;
         _viewRight = Vector3.Cross(Vector3.up, _viewForward);
         _scannerShadow = Mathf.Max(0f, shadow);
+        if (hardware != null && hardware.Reader != null)
+            hardware.Reader.FaceThePlayer(_viewForward);
     }
 
     /// <summary>An analysis pass ended (CaseDocumentsPresenter) with the pair it marked (null: none): the Analysis beacon on the scanner pops, and its click shows that pair (ShowFlagged; a pass that marks nothing keeps the case's last pair).</summary>
@@ -432,7 +466,7 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>Starts a case's papers, each printing its form (<paramref name="forms"/>, by paper; a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the counter; the first of them is the passport (the stamps' verdict is its).</summary>
+    /// <summary>Starts a case's papers, each printing its form (<paramref name="forms"/>, by paper; a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the counter one after another (HandOverNext); the first of them is the passport (the stamps' verdict is its). No paper is in any machine.</summary>
     public void BeginCase(IReadOnlyList<CaseDocument> docs, IReadOnlyList<DocumentForm> forms, TravellerLook look, CharacterArt art)
     {
         Sounds.Play(SoundCues.CallNext);
@@ -446,37 +480,74 @@ public sealed class DeskController : MonoBehaviour
         for (int i = 0; i < _state.Count; i++)
             _papers.Add(null);
         ResetStack();
+        _docks.Clear();
         _handedOver = 0;
         _dragged = -1;
 
         int passport = _state.ArrivalIndices.Count > 0 ? _state.ArrivalIndices[0] : -1;
+        _arrivals.Clear();
         foreach (int i in _state.ArrivalIndices)
-            HandOver(i);
+            _arrivals.Enqueue(i);
+        _nextHandOverAt = Time.time;
         if (stamps != null)
             stamps.BeginCase(passport);
         ShowCounter();
         RefreshHint();
     }
 
+    /// <summary>Hands paper <paramref name="i"/> over now (a paper the desk asked for); nothing unless DeskPapers agrees (a paper is handed over once).</summary>
+    public void HandOver(int i) => HandOverNow(i);
+
+    /// <summary>The next arrival paper is handed over on its beat (one per frame at most, DeskConfigSO.handOverStagger apart); true when one was.</summary>
+    private bool HandOverNext()
+    {
+        if (_arrivals.Count == 0 || Time.time < _nextHandOverAt)
+            return false;
+        HandOverNow(_arrivals.Dequeue());
+        _nextHandOverAt = Time.time + (config != null ? config.handOverStagger : 0f);
+        return true;
+    }
+
+    /// <summary>Makes one clone of the paper template ready while fewer than DeskConfigSO.paperPool wait (one per frame, never on a hand-over's frame): call-next binds a ready paper instead of building one (BUG-65g).</summary>
+    private void PrepareSpare()
+    {
+        if (config == null || paperTemplate == null || paperRoot == null || _spare.Count >= config.paperPool)
+            return;
+        DeskDocument spare = Instantiate(paperTemplate, paperRoot);
+        spare.gameObject.SetActive(false);
+        _spare.Add(spare);
+    }
+
+    /// <summary>A clone of the paper template: a ready one, else a new one.</summary>
+    private DeskDocument TakeSpare()
+    {
+        if (_spare.Count == 0)
+            return Instantiate(paperTemplate, paperRoot);
+        DeskDocument paper = _spare[_spare.Count - 1];
+        _spare.RemoveAt(_spare.Count - 1);
+        return paper;
+    }
+
     /// <summary>
-    /// Hands paper <paramref name="i"/> over: a clone of the template appears at
-    /// the hand-over point, small, on top of the stack, and slides to the next
-    /// spot on the counter (reused in turn). Nothing happens unless DeskPapers
-    /// agrees (a paper is handed over once).
+    /// Hands paper <paramref name="i"/> over: a ready clone of the template
+    /// appears at the hand-over point, small, on top of the stack, and slides
+    /// to the next spot on the counter (reused in turn) in
+    /// DeskConfigSO.handOverSeconds, landing with a slap (DeskDocument.Land,
+    /// DeskEvents.DocumentLanded on that frame). Nothing happens unless
+    /// DeskPapers agrees (a paper is handed over once).
     /// </summary>
-    public void HandOver(int i)
+    private void HandOverNow(int i)
     {
         if (_state == null || !_state.HandOver(i))
             return;
 
-        DeskDocument paper = Instantiate(paperTemplate, paperRoot);
+        DeskDocument paper = TakeSpare();
         paper.transform.SetPositionAndRotation(handOverPoint.position, Upright);
         paper.gameObject.SetActive(true);
         paper.Bind(i, _documents[i], i < _forms.Count ? _forms[i] : null, config);
         DocumentForm form = i < _forms.Count ? _forms[i] : null;
         bool photo = _documents[i] != null && (_documents[i].showsPhoto || (form != null && ArtLayout.ShowsPhoto(form.Spec, form.Data)));
         paper.ShowPhoto(photo ? _look : null, _art, config.travellerTint);
-        paper.SetFocused(deskView != null && deskView.IsOn);
         paper.SetZone(DeskZone.Counter, true);
         paper.SetInspecting(_inspecting);
 
@@ -496,7 +567,15 @@ public sealed class DeskController : MonoBehaviour
 
         Vector3 target = counter != null ? counter.Spot(_handedOver) : surface.transform.position;
         _handedOver++;
-        Slide(paper, ClearOfBlockers(paper, target));
+        target = Rest(paper, target, false);
+        Vector3 from = paper.CarriedFrom;
+        paper.Carry(Way(from, target, Grow(paper)), paper.transform.rotation, config.handOverSeconds, () =>
+        {
+            ApplyLive(paper);
+            paper.Land();
+            DeskEvents.RaiseDocumentLanded(paper);
+        });
+        ApplyLive(paper);
         RefreshHint();
     }
 
@@ -511,16 +590,21 @@ public sealed class DeskController : MonoBehaviour
         SendBack(stamped || decision == DeskStamp.Detained ? DeskStamp.None : decision);
     }
 
-    /// <summary>Every paper on the desk goes back to the traveller (the state's papers all returned), inked with <paramref name="ink"/> (None: no ink), inert, sliding to the hand-over point, then destroyed.</summary>
+    /// <summary>Every paper on the desk goes back to the traveller (the state's papers all returned; no paper is left in a machine, the scanner's lid lets go), inked with <paramref name="ink"/> (None: no ink), inert, sliding to the hand-over point, then destroyed; DeskEvents.CaseEnded says so.</summary>
     private void SendBack(DeskStamp ink)
     {
+        _arrivals.Clear();
         _state.ReturnAll();
         _waiting.Clear();
-        _inReader.Clear();
+        _docks.Clear();
         if (hardware != null)
             hardware.EndCase();
         if (scanner != null)
+        {
             scanner.Sweep(-1f);
+            scanner.HoldOpen(false);
+            scanner.SetNear(false);
+        }
         foreach (DeskDocument paper in _papers)
         {
             if (paper == null)
@@ -540,6 +624,7 @@ public sealed class DeskController : MonoBehaviour
         _dragged = -1;
         ShowCounter();
         RefreshHint();
+        DeskEvents.RaiseCaseEnded();
     }
 
     /// <summary>Allows the papers on the desk input or not (BoothCoordinator: BoothRules.PapersLive); remembered for papers handed over later. Papers not allowed take no raycasts (spec R38); a drag running when they lose it is cut short (DeskDraggable: the paper slides back).</summary>
@@ -562,7 +647,7 @@ public sealed class DeskController : MonoBehaviour
                 paper.SetInspecting(inspecting);
     }
 
-    /// <summary>A right-click or Esc mid-drag (ControlRules.BackOut): the drag is cancelled and the paper slides back to where it was picked up; false when nothing is dragged.</summary>
+    /// <summary>A right-click or Esc mid-drag (ControlRules.BackOut, when the hold registry holds nothing else): the drag is cancelled and the paper slides back to where it was picked up; false when nothing is dragged.</summary>
     public bool CancelDrag()
     {
         if (_dragged < 0 || _dragged >= _papers.Count || _papers[_dragged] == null)
@@ -587,19 +672,16 @@ public sealed class DeskController : MonoBehaviour
             paper.SetMarked(paper.SlotOfRow(rowIndex), colour);
     }
 
-    /// <summary>A left-click on a document (PaperClicks): in inspect mode a value is picked; otherwise a document on the counter goes to the desk to be read, one on the desk comes to the top.</summary>
+    /// <summary>A left-click on a document (PaperClicks): in inspect mode a value is picked; otherwise the document comes to the top of the stack, in that frame, and nothing else (Saleh's D1 and R6: no move, no size, no tilt).</summary>
     private void HandlePaperClicked(DeskDocument paper, int slot)
     {
         if (_state == null || !_state.CanDrag(paper.Index))
             return;
 
-        switch (PaperClicks.Decide(_inspecting, slot >= 0 && slot < paper.SlotCount, _state.ZoneOf(paper.Index)))
+        switch (PaperClicks.Decide(_inspecting, slot >= 0 && slot < paper.SlotCount))
         {
             case PaperClickAction.Pick:
                 FieldPicked?.Invoke(paper.Index, paper.FieldAt(slot), paper.SlotHighlight(slot));
-                break;
-            case PaperClickAction.Read:
-                ToDesk(paper);
                 break;
             case PaperClickAction.Front:
                 _stack.BringToFront(paper.Index);
@@ -608,151 +690,7 @@ public sealed class DeskController : MonoBehaviour
         }
     }
 
-    /// <summary>A document on the counter clicked: it slides to the next reading spot (where the reading view shows the desk, else the desk's centre), full size, comes to the top and is read (as if dragged there).</summary>
-    private void ToDesk(DeskDocument paper)
-    {
-        if (_state.Drop(paper.Index, false, DeskZone.Desk) != DropOutcome.Stays)
-            return;
-        int onDesk = 0;
-        foreach (DeskDocument other in _papers)
-            if (other != null && other != paper && _state.ZoneOf(other.Index) == DeskZone.Desk)
-                onDesk++;
-        Vector3 spot = surface.transform.position;
-        if (deskView != null && deskView.TryViewPoint(new Vector2(ReadingSpots[onDesk % ReadingSpots.Length], ReadingSpotY), surface.transform.position.y, out Vector3 shown))
-            spot = surface.Clamp(shown);
-        spot = Spread(paper, spot);
-        _stack.BringToFront(paper.Index);
-        ApplyStack();
-        paper.SetZone(DeskZone.Desk, false);
-        spot = ClearOfBlockers(paper, spot);
-        _restAt[paper.Index] = spot;
-        Slide(paper, spot);
-        Read(paper);
-    }
-
-    /// <summary>Where each paper sent to the desk by a click was laid (its spread's spot), while it slides there.</summary>
-    private readonly Dictionary<int, Vector3> _restAt = new Dictionary<int, Vector3>();
-
-    /// <summary>What covering the rulebook folder costs to the spread (a little more than a paper: its page is read beside the papers, but the reading view has no room to keep it clear of them all).</summary>
-    private const float RulebookSpreadWeight = 1.5f;
-
-    /// <summary>What lying under the stamp rack costs to the spread (far more than a paper: the rack stands over the papers' top right in the reading view, the desk layout spec §2, and a paper under it hides under the daters).</summary>
-    private const float RackSpreadWeight = 4f;
-
-    /// <summary>
-    /// Where <paramref name="paper"/>, sent to the desk, lies (PaperSpread;
-    /// Saleh's playtest 2026-10-07: "documents overlap"): inside the reading
-    /// view's free area (DeskConfigSO.readingArea), covering as little as it can
-    /// of the papers on the desk (their headers, photos and visa boxes least of
-    /// all), the rulebook folder and the stamp rack, nearest <paramref name="prefer"/>
-    /// (the reading spots' fan) among equal places; all in the papers' own frame
-    /// on the desk (their sheets' right and top, as the reading view shows them).
-    /// <paramref name="prefer"/> itself without the reading view.
-    /// </summary>
-    private Vector3 Spread(DeskDocument paper, Vector3 prefer)
-    {
-        if (surface == null || deskView == null || paper.Sheet == null)
-            return prefer;
-        _spreadRight = Vector3.ProjectOnPlane(paper.Sheet.right, Vector3.up).normalized;
-        _spreadTop = Vector3.ProjectOnPlane(paper.Sheet.up, Vector3.up).normalized;
-        if (_spreadRight == Vector3.zero || _spreadTop == Vector3.zero || !TryReadingArea(out DeskRect area))
-            return prefer;
-        Vector2 size = paper.SizeIn(DeskZone.Desk);
-        var taken = new List<SpreadTaken>();
-        foreach (DeskDocument other in _papers)
-        {
-            if (other == null || other == paper || _state == null || _state.ZoneOf(other.Index) != DeskZone.Desk)
-                continue;
-            Vector3 at = other.IsSliding && _restAt.TryGetValue(other.Index, out Vector3 rest) ? rest : other.transform.position;
-            taken.Add(Taken(other, at, 1f));
-        }
-        if (rulebook != null && rulebook.gameObject.activeInHierarchy && TryFootprint(rulebook.transform, out DeskRect folder))
-            taken.Add(new SpreadTaken(folder, null, RulebookSpreadWeight));
-        if (stamps != null && stamps.Rack != null && stamps.Rack.gameObject.activeInHierarchy && TryFootprint(stamps.Rack, out DeskRect rack))
-            taken.Add(new SpreadTaken(rack, null, RackSpreadWeight));
-        (float px, float py) = SpreadFrame(prefer);
-        (float x, float y) = PaperSpread.Place(area, size.x, size.y, taken, px, py);
-        LastSpread = $"area {area.CentreX:0.000},{area.CentreY:0.000} {area.Width:0.000}x{area.Height:0.000}; paper {size.x:0.000}x{size.y:0.000} at {x:0.000},{y:0.000}; taken {taken.Count}, cost {PaperSpread.Cost(new DeskRect(x, y, size.x, size.y), taken):0.0000}";
-        return surface.Clamp(surface.transform.position + _spreadRight * x + _spreadTop * y);
-    }
-
-    /// <summary>The last spread's numbers (the probes report them).</summary>
-    public string LastSpread { get; private set; }
-
-    /// <summary>The spread's frame on the desk: the papers' right and top, level.</summary>
-    private Vector3 _spreadRight = Vector3.right, _spreadTop = Vector3.forward;
-
-    /// <summary>A world point in the spread's frame (metres from the desk's centre).</summary>
-    private (float x, float y) SpreadFrame(Vector3 world)
-    {
-        Vector3 d = world - surface.transform.position;
-        return (Vector3.Dot(d, _spreadRight), Vector3.Dot(d, _spreadTop));
-    }
-
-    /// <summary>A paper lying at <paramref name="at"/> as the spread sees it: its footprint at its zone's size, its header, photo and visa box, covering it costing <paramref name="weight"/>.</summary>
-    private SpreadTaken Taken(DeskDocument paper, Vector3 at, float weight)
-    {
-        Vector2 size = paper.SizeIn(paper.Zone);
-        (float x, float y) = SpreadFrame(at);
-        var shares = new List<(float, float, float, float)>();
-        foreach (Rect r in paper.KeyShares)
-            shares.Add((r.x, r.y, r.width, r.height));
-        return new SpreadTaken(new DeskRect(x, y, size.x, size.y), PaperSpread.Keys(x, y, size.x, size.y, shares), weight);
-    }
-
-    /// <summary>The footprint on the desk (the spread's frame) of everything drawn under <paramref name="root"/>.</summary>
-    private bool TryFootprint(Transform root, out DeskRect footprint)
-    {
-        footprint = default;
-        bool any = false;
-        Bounds all = default;
-        foreach (Renderer r in root.GetComponentsInChildren<Renderer>(false))
-        {
-            if (!r.enabled)
-                continue;
-            if (!any)
-                all = r.bounds;
-            else
-                all.Encapsulate(r.bounds);
-            any = true;
-        }
-        if (!any)
-            return false;
-        Vector3 min = all.min, max = all.max;
-        float l = float.MaxValue, rr = float.MinValue, n = float.MaxValue, f = float.MinValue;
-        foreach (Vector3 c in new[] { new Vector3(min.x, 0f, min.z), new Vector3(max.x, 0f, min.z), new Vector3(min.x, 0f, max.z), new Vector3(max.x, 0f, max.z) })
-        {
-            (float x, float y) = SpreadFrame(new Vector3(c.x, surface.transform.position.y, c.z));
-            l = Mathf.Min(l, x);
-            rr = Mathf.Max(rr, x);
-            n = Mathf.Min(n, y);
-            f = Mathf.Max(f, y);
-        }
-        footprint = new DeskRect((l + rr) / 2f, (n + f) / 2f, rr - l, f - n);
-        return true;
-    }
-
-    /// <summary>The reading view's free area on the desk (DeskConfigSO.readingArea's viewport corners on the desk plane, in the spread's frame: the largest rectangle inside them); false without the reading view.</summary>
-    private bool TryReadingArea(out DeskRect area)
-    {
-        area = default;
-        Rect v = config.readingArea;
-        float h = surface.transform.position.y;
-        if (!deskView.TryViewPoint(new Vector2(v.xMin, v.yMin), h, out Vector3 bl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMin), h, out Vector3 br)
-            || !deskView.TryViewPoint(new Vector2(v.xMin, v.yMax), h, out Vector3 tl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMax), h, out Vector3 tr))
-            return false;
-        (float blx, float bly) = SpreadFrame(bl);
-        (float brx, float bry) = SpreadFrame(br);
-        (float tlx, float tly) = SpreadFrame(tl);
-        (float trx, float tr_y) = SpreadFrame(tr);
-        float left = Mathf.Max(blx, tlx), right = Mathf.Min(brx, trx), near = Mathf.Max(bly, bry), far = Mathf.Min(tly, tr_y);
-        if (right <= left || far <= near)
-            return false;
-        area = new DeskRect((left + right) / 2f, (near + far) / 2f, right - left, far - near);
-        return true;
-    }
-
-    /// <summary>A document landed on the desk, full size: it counts as read (the day-1 note goes; the steps' "read"), and the reading view comes (DeskView.TiltIn: only while the desk takes input).</summary>
+    /// <summary>A document dropped on the desk: it counts as read (the day-1 note goes; the steps' "read"), and the reading view comes (DeskView.TiltIn, Saleh's D1: the one camera move a drop makes; none when it is already on).</summary>
     private void Read(DeskDocument paper)
     {
         _readsToday++;
@@ -762,25 +700,37 @@ public sealed class DeskController : MonoBehaviour
             deskView.TiltIn();
     }
 
-    /// <summary>A drag begins: the dragged paper lifts above the stack.</summary>
+    /// <summary>A drag begins: the dragged paper lifts above the stack (and is drawn above every prop: DeskDocument, HeldOnTop).</summary>
     private void HandleDragBegan(DeskDraggable drag)
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = paper.Index;
-        MeasureCasings();
+        MeasureMachines();
         ApplyStack();
     }
 
-    /// <summary>The dragged paper follows the pointer, keeping its size (the drop and the view decide it: DeskPapers.ShownFullSize); over the counter the counter's strip lights.</summary>
+    /// <summary>
+    /// The dragged paper follows the pointer. Its size changes only as the
+    /// pointer crosses the counter's edge, under the cursor (PaperSizes): it
+    /// takes the counter's size over the counter when it could lie there (a
+    /// counter paper, or any paper once the passport carries its verdict: a
+    /// drop there hands the papers back), else it keeps its desk size (a drop
+    /// there is refused). Over the counter the counter's strip lights; near the
+    /// scanner its lid opens.
+    /// </summary>
     private void HandleDragged(DeskDraggable drag, Vector3 point)
     {
         DeskZone under = ZoneAt(point);
         // The scanner's lid opens for a paper dragged near it (ScannerLid).
         scanner.SetNear(!_scanners.Hidden && scanner.Near(point));
-        // Carried over a machine, it keeps over its casing (never through it).
         DeskDocument paper = drag.GetComponent<DeskDocument>();
-        if (paper != null)
-            paper.SetCarryFloor(CarryFloor(paper.transform.position, Grow(paper), paper.Thickness));
+        if (paper != null && _state != null)
+        {
+            bool canLie = under == DeskZone.Desk || _state.ZoneOf(paper.Index) == DeskZone.Counter || (stamps != null && stamps.HasVerdict);
+            DeskZone sized = canLie ? under : DeskZone.Desk;
+            if (paper.Zone != sized)
+                paper.SetZone(sized, false);
+        }
         if (_overCounter != (under == DeskZone.Counter))
         {
             _overCounter = under == DeskZone.Counter;
@@ -788,92 +738,106 @@ public sealed class DeskController : MonoBehaviour
         }
     }
 
-    /// <summary>DeskPapers decides the drop: the paper slides to the bed (scanning) or back to its pick-up point in the zone it lay in (refused; or bounced off the counter before the verdict, with the note "Stamp the passport first"), the papers are handed back (any paper on the counter once the passport carries its verdict), or it stays in the zone it was dropped in (the desk: it is read and the reading view comes); it goes on top either way.</summary>
+    /// <summary>
+    /// DeskPapers decides the drop. The dock is the one under the paper's
+    /// footprint's centre (not the pointer: BUG-6): the chip reader reads a
+    /// paper it takes; the scanner scans it (or, busy, it waits beside it).
+    /// Refused (a machine that does not take it, or before the verdict a desk
+    /// paper on the counter, with the note "Stamp the passport first"), it
+    /// shakes in place and rests just clear of what refused it. Any paper on
+    /// the counter once the passport carries its verdict hands the papers back.
+    /// Otherwise it stays where it was released, in the zone it was dropped in
+    /// (DropResolver: moved only if part of it would lie out of view or under
+    /// a prop); on the desk it is read and the reading view comes. It goes on
+    /// top either way, its lift settling there.
+    /// </summary>
     private void HandleDragEnded(DeskDraggable drag, Vector3 released)
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
+        int index = paper.Index;
         _dragged = -1;
         _overCounter = false;
         scanner.SetNear(false);
         ShowCounter();
         DeskZone zone = ZoneAt(released);
         bool verdict = stamps != null && stamps.HasVerdict;
-        // it settles to its place on top from where it hangs (the way it is carried starts there)
-        paper.SetCarryFloor(0f);
-        _stack.BringToFront(paper.Index);
-        ApplyStack();
+        _stack.BringToFront(index);
+        Vector3 at = paper.transform.position;
 
         // A machine takes only its documents (MachineIntake; Saleh's 1018a playtest): the chip reader a chip card
-        // in its slot or a passport on its pad, the scanner any case paper on its bed; anything else bounces back.
-        IPaperDock dock = DockAt(released);
+        // in its slot or a passport on its pad, the scanner any case paper on its bed; anything else is refused.
+        IPaperDock dock = DockAt(at);
         if (dock != null && dock.Machine == DeskMachine.ChipReader)
         {
             MachineDock where = MachineIntake.Dock(dock.Machine, FeedOf(paper));
-            if (where == MachineDock.Refused || hardware.ReaderBusy || _inReader.Count > 0)
-                RefuseAt(paper, dock, drag.PickUpPosition);
+            if (where == MachineDock.Refused || hardware.ReaderBusy || _docks.Busy(DeskMachine.ChipReader))
+                RefuseAt(paper, dock, at);
             else
                 ReadOnReader(paper, dock, where, drag.PickUpPosition);
+            ApplyStack(index);
             return;
         }
 
-        DropOutcome outcome = _state.Drop(paper.Index, OnScanner(released), zone, verdict);
+        DropOutcome outcome = _state.Drop(index, dock != null && OnScanner(at), zone, verdict);
         if (outcome != DropOutcome.Queued)
-            _waiting.Remove(paper.Index);
+            _waiting.Remove(index);
         switch (outcome)
         {
             case DropOutcome.HandsBack:
+                ApplyStack(index);
                 stamps.HandBack();
                 return;
             case DropOutcome.Scanning:
-                paper.SetZone(_state.ZoneOf(paper.Index), false);
+                paper.SetZone(_state.ZoneOf(index), false);
                 StartScan(paper);
                 break;
             case DropOutcome.Queued:
-                // Drop and go: it waits by the glass, clear of the scanner's body, and feeds through at its turn.
-                _waiting.Add(paper.Index);
-                paper.SetZone(_state.ZoneOf(paper.Index), false);
-                Vector3 byTheGlass = scanner.BedPoint;
-                byTheGlass.y = surface.transform.position.y; // it waits on the desk, not at the glass's height
-                Slide(paper, ClearOfBlockers(paper, byTheGlass));
+                // Drop and go: it waits beside the busy scanner and feeds through at its turn.
+                _waiting.Add(index);
+                paper.SetZone(_state.ZoneOf(index), false);
+                MoveTo(paper, Rest(paper, at, false));
                 break;
             case DropOutcome.NotStamped:
                 if (stamps != null)
                     stamps.Note("stamp.refused.handBackFirst");
-                paper.SetZone(_state.ZoneOf(paper.Index), false);
-                Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
+                paper.SetZone(_state.ZoneOf(index), false);
+                paper.Shake();
+                MoveTo(paper, Rest(paper, at, true));
                 break;
             case DropOutcome.Refused:
-                paper.SetZone(_state.ZoneOf(paper.Index), false);
-                Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
+                paper.SetZone(_state.ZoneOf(index), false);
+                paper.Shake();
+                MoveTo(paper, Rest(paper, at, false));
                 break;
             default:
-                zone = _state.ZoneOf(paper.Index);
+                zone = _state.ZoneOf(index);
                 paper.SetZone(zone, false);
-                Vector3 clear = ClearOfBlockers(paper, paper.transform.position);
-                if ((clear - paper.transform.position).sqrMagnitude > 1e-8f)
-                    Slide(paper, clear);
+                MoveTo(paper, Rest(paper, at, false));
                 if (zone == DeskZone.Desk)
                     Read(paper);
                 break;
         }
-
+        ApplyStack(index);
         RefreshHint();
     }
 
     /// <summary>
     /// A paper dropped on the chip reader that takes it (<paramref name="where"/>:
-    /// a card into the slot, a passport onto the pad): inert meanwhile, it is
-    /// carried over the casing and docked at the dock's height and angle
-    /// (DockPath), read (ChipReader's cycle), and carried back out (out of the
-    /// slot, or up off the pad) over the casing to <paramref name="back"/>
-    /// (where it was picked up).
+    /// a card into the slot, a passport onto the pad): inert meanwhile and the
+    /// reader's (MachineOccupancy), it shrinks to its docked size (a passport
+    /// to fit the pad: DockFit) as it is carried over the casing and docked at
+    /// the dock's height and angle (DockPath; upright to the player on the
+    /// pad), read (ChipReader's cycle), and carried back out (out of the slot,
+    /// or up off the pad) over the casing to where it rests near
+    /// <paramref name="back"/> (where it was picked up), keeping its docked
+    /// size until it is clear (BUG-24).
     /// </summary>
     private void ReadOnReader(DeskDocument paper, IPaperDock dock, MachineDock where, Vector3 back)
     {
         int index = paper.Index;
         CaseDocument doc = index >= 0 && index < _documents.Count ? _documents[index] : null;
-        _inReader.Add(index);
-        Dock(paper);
+        _docks.Dock(index, DeskMachine.ChipReader);
+        paper.SetDocked(true, DockScale(paper, where));
         ApplyLive(paper);
         (Vector3 way, float depth) slot = dock.Slot;
         float half = paper.DockedSize.y / 2f, inside = Mathf.Min(slot.depth, 2f * half * config.slotInsertShare);
@@ -886,36 +850,44 @@ public sealed class DeskController : MonoBehaviour
         {
             void Out()
             {
-                _inReader.Remove(index);
                 if (!_papers.Contains(paper))
                     return;
-                Undock(paper);
-                Vector3 home = ClearOfBlockers(paper, back);
+                Vector3 home = Rest(paper, back, false);
                 Vector3 at = paper.CarriedFrom;
                 List<Vector3> outWay = where == MachineDock.Slot
                     ? Points(DockPath.OutOf(Tuple(mouth), slot.way.x, slot.way.z, half, inside, dock.Casing, Tuple(home), Casings(), Grow(paper), config.dockClearance))
                     : Way(at, home, Grow(paper));
-                paper.Carry(outWay, Upright, WaySeconds(at, outWay), () => ApplyLive(paper));
+                paper.Carry(outWay, Upright, WaySeconds(at, outWay), () => Undock(paper), () => _docks.Leave(index));
                 ApplyLive(paper);
             }
             if (doc == null || !hardware.Read(paper, doc.fields, Out))
                 Out();
-        });
+        }, () => _docks.Leave(index));
+    }
+
+    /// <summary>The scale <paramref name="paper"/> lies at docked <paramref name="where"/>: its counter size, a passport on the chip reader's pad no wider or deeper than the pad (DockFit, DeskConfigSO.padOverhang).</summary>
+    private float DockScale(DeskDocument paper, MachineDock where)
+    {
+        if (where != MachineDock.Pad || hardware == null || hardware.Reader == null)
+            return paper.DockScale;
+        Vector2 pad = hardware.Reader.PadExtents(_viewRight, _viewForward);
+        return DockFit.Scale(paper.Size.x, paper.Size.y, pad.x, pad.y, paper.DockScale, config.padOverhang);
     }
 
     /// <summary>
     /// A paper the machine under it will not take (MachineIntake: a paper
     /// with no chip at the chip reader, or the reader busy with another):
     /// the machine says no (IPaperDock.Refuse: the reader's FAULT lamp blinks
-    /// with its fault buzz), the paper shakes and goes back over the casing to
-    /// <paramref name="back"/> (where it was picked up), never through it.
+    /// with its fault buzz), the paper shakes in place and rests just clear of
+    /// the machine (DropResolver, the machine among the obstacles), never
+    /// flying back and never through the casing.
     /// </summary>
-    private void RefuseAt(DeskDocument paper, IPaperDock dock, Vector3 back)
+    private void RefuseAt(DeskDocument paper, IPaperDock dock, Vector3 at)
     {
         dock.Refuse();
-        paper.Shake(config.refuseShake);
+        paper.Shake();
         paper.SetZone(_state.ZoneOf(paper.Index), false);
-        Slide(paper, ClearOfBlockers(paper, back));
+        MoveTo(paper, Rest(paper, at, false));
         RefreshHint();
     }
 
@@ -931,42 +903,84 @@ public sealed class DeskController : MonoBehaviour
             yield return reader;
     }
 
-    /// <summary>The machine a thing released at <paramref name="point"/> drops on (the chip reader first: it stands clear of the scanner), or null.</summary>
-    private IPaperDock DockAt(Vector3 point)
+    /// <summary>The machine a thing whose footprint is centred at <paramref name="centre"/> drops on (the chip reader first: it stands clear of the scanner), or null: the footprint's centre decides, not the pointer (DropResolver.DockOf's rule).</summary>
+    private IPaperDock DockAt(Vector3 centre)
     {
         IPaperDock found = null;
         foreach (IPaperDock dock in Docks())
-            if (dock.Contains(point) && (found == null || dock.Machine == DeskMachine.ChipReader))
+            if (dock.Contains(centre) && (found == null || dock.Machine == DeskMachine.ChipReader))
                 found = dock;
         return found;
     }
 
-    /// <summary>The machines' casings today, measured at the start of a drag (the machines stand still while it runs) and for every way across the desk.</summary>
+    /// <summary>The machines' casings today, measured for every way across the desk.</summary>
     private readonly List<MachineBox> _casings = new List<MachineBox>();
 
-    /// <summary>Measures the machines' casings now (Docks).</summary>
-    private void MeasureCasings()
+    /// <summary>
+    /// Measures the machines now (Docks): their casings for the ways over them,
+    /// and their footprints in the desk's obstacle registry (DeskObstacles:
+    /// the scanner as high as its open lid's sweep, the chip reader; the UV
+    /// torch's cradle until TOOLS registers its own): what a resting paper
+    /// keeps clear of and a held one is drawn above.
+    /// </summary>
+    private void MeasureMachines()
     {
         _casings.Clear();
+        float desk = surface != null ? surface.transform.position.y : 0f;
+        bool scannerOn = false, readerOn = false;
         foreach (IPaperDock dock in Docks())
-            _casings.Add(dock.Casing);
+        {
+            MachineBox box = dock.Casing;
+            _casings.Add(box);
+            if (dock.Machine == DeskMachine.Scanner)
+            {
+                scannerOn = true;
+                DeskObstacles.Desk.Register(ScannerObstacle, WorldFootprint(Corners(box, desk)), scanner.LidSweepTop - desk);
+            }
+            else
+            {
+                readerOn = true;
+                DeskObstacles.Desk.Register(ReaderObstacle, WorldFootprint(Corners(box, desk)), box.Top - desk);
+            }
+        }
+        if (!scannerOn)
+            DeskObstacles.Desk.Unregister(ScannerObstacle);
+        if (!readerOn)
+            DeskObstacles.Desk.Unregister(ReaderObstacle);
+        if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
+            DeskObstacles.Desk.Register(TorchObstacle, WorldFootprint(cradle), 0f);
+        else
+            DeskObstacles.Desk.Unregister(TorchObstacle);
     }
 
     /// <summary>The casings, measured now.</summary>
     private List<MachineBox> Casings()
     {
-        MeasureCasings();
+        MeasureMachines();
         return _casings;
     }
 
-    /// <summary>How high over its place (metres: its face's lift) a thing <paramref name="thickness"/> thick dragged with its root at <paramref name="root"/> keeps, its edges reaching <paramref name="grow"/> from it: its bottom over each casing under it by the clearance; 0 over none.</summary>
-    private float CarryFloor(Vector3 root, float grow, float thickness)
+    /// <summary>The world x, z bounds of <paramref name="corners"/> (DeskObstacles' frame).</summary>
+    private static DeskRect WorldFootprint(IEnumerable<Vector3> corners)
     {
-        float floor = 0f;
-        foreach (MachineBox box in _casings)
-            if (box.Over(root.x, root.z, grow))
-                floor = Mathf.Max(floor, box.Top + config.dockClearance + thickness - root.y);
-        return floor;
+        float minX = float.MaxValue, minZ = float.MaxValue, maxX = float.MinValue, maxZ = float.MinValue;
+        foreach (Vector3 c in corners)
+        {
+            minX = Mathf.Min(minX, c.x);
+            maxX = Mathf.Max(maxX, c.x);
+            minZ = Mathf.Min(minZ, c.z);
+            maxZ = Mathf.Max(maxZ, c.z);
+        }
+        return new DeskRect((minX + maxX) / 2f, (minZ + maxZ) / 2f, maxX - minX, maxZ - minZ);
+    }
+
+    /// <summary>The held ratio for a thing on the desk at height <paramref name="deskY"/> seen through <paramref name="eye"/> (HeldOnTop.Ratio: in front of every registered obstacle, at least DeskConfigSO.heldClearance high).</summary>
+    private float HeldRatio(Camera eye, float deskY)
+    {
+        if (eye == null || config == null)
+            return 1f;
+        float clear = Mathf.Max(DeskObstacles.Desk.MaxHeight, config.heldClearance);
+        return HeldOnTop.Ratio(eye.transform.position.y - deskY, clear, config.heldLeastRatio);
     }
 
     /// <summary>Half <paramref name="paper"/>'s diagonal as it shows (metres): how far its corners reach from its root.</summary>
@@ -981,7 +995,7 @@ public sealed class DeskController : MonoBehaviour
     /// <paramref name="point"/> (the bed's or the pad's top, or the slot's
     /// mouth): its bottom on the bed or the pad, or its middle at the slot's
     /// height (its face lies its thickness and a hair over its root while
-    /// docked: Dock).
+    /// docked: ApplyStack).
     /// </summary>
     private static Vector3 DockedRoot(DeskDocument paper, Vector3 point, MachineDock where) =>
         where == MachineDock.Slot ? point - Vector3.up * (paper.Thickness / 2f + DockGap) : point;
@@ -989,24 +1003,24 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>How far a docked paper's bottom lies over its bed (metres): clear of it for the depth buffer.</summary>
     private const float DockGap = 0.0005f;
 
-    /// <summary>The papers docked in a machine (on the scanner's bed, in the chip reader): their lift is their own thickness over the dock, not the stack's.</summary>
-    private readonly HashSet<int> _docked = new HashSet<int>();
-
-    /// <summary>The paper goes into a machine: its lift becomes its thickness over the dock, at its normal size.</summary>
-    private void Dock(DeskDocument paper)
-    {
-        _docked.Add(paper.Index);
-        paper.SetDocked(true);
-        ApplyStack();
-    }
-
-    /// <summary>The paper comes out of its machine: back to the stack's lift and its zone's size.</summary>
+    /// <summary>The paper is clear of its machine again (its carry out has landed): it leaves the machine's hold, eases back to its zone's size, comes to the top of the stack and takes input.</summary>
     private void Undock(DeskDocument paper)
     {
-        _docked.Remove(paper.Index);
+        _docks.Leave(paper.Index);
         paper.SetDocked(false);
         _stack.BringToFront(paper.Index);
         ApplyStack();
+        ApplyLive(paper);
+    }
+
+    /// <summary>A scanned paper comes off the bed to <paramref name="rest"/>, upright, over the casing, keeping its docked size until it lands clear of the scanner (Undock).</summary>
+    private void CarryOut(DeskDocument paper, Vector3 rest)
+    {
+        int index = paper.Index;
+        Vector3 from = paper.CarriedFrom;
+        List<Vector3> way = Way(from, rest, Grow(paper));
+        paper.Carry(way, Upright, WaySeconds(from, way), () => Undock(paper), () => _docks.Leave(index));
+        ApplyLive(paper);
     }
 
     /// <summary>The way from <paramref name="from"/> to <paramref name="to"/> over every casing it comes over (DockPath.Over), as world points after the start.</summary>
@@ -1039,11 +1053,12 @@ public sealed class DeskController : MonoBehaviour
     }
 
     /// <summary>
-    /// A drag cut short (cancelled by a right-click or Esc, or the paper
-    /// disabled mid-drag: its input taken away, or the case torn down, so no
-    /// release comes): a paper still on the desk slides back to where it was
-    /// picked up, in the zone it lay in, on top, as a refused drop does; a
-    /// paper already given back is left to the teardown.
+    /// A drag cut short (cancelled by a right-click, Esc or a view key, the
+    /// focus lost, or the paper disabled mid-drag: its input taken away, or the
+    /// case torn down, so no release comes): a paper still on the desk takes
+    /// its zone's size again and slides back to where it was picked up, on
+    /// top; a paper already given back is left to the teardown. Nothing is
+    /// committed (no hand-back, no scan).
     /// </summary>
     private void HandleDragCancelled(DeskDraggable drag)
     {
@@ -1055,16 +1070,13 @@ public sealed class DeskController : MonoBehaviour
             _overCounter = false;
             ShowCounter();
         }
-        if (paper == null)
-            return;
-        paper.SetCarryFloor(0f);
-        if (_state == null || !_state.CanDrag(paper.Index))
+        if (paper == null || _state == null || !_state.CanDrag(paper.Index))
             return;
 
         paper.SetZone(_state.ZoneOf(paper.Index), false);
         _stack.BringToFront(paper.Index);
-        ApplyStack();
-        Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
+        MoveTo(paper, Rest(paper, drag.PickUpPosition, false));
+        ApplyStack(paper.Index);
     }
 
     /// <summary>The zone a point on the desk lies in: the counter's strip, else the desk.</summary>
@@ -1077,48 +1089,102 @@ public sealed class DeskController : MonoBehaviour
             counter.Show(_papers.Count > 0, stamps != null && stamps.HasVerdict, _overCounter);
     }
 
-    /// <summary>The corners of a paper lying with its root at <paramref name="at"/> (every paper lies as the template does: the new paper's sheet gives the offsets; its size is its look's at its zone's scale).</summary>
-    private Vector3[] Footprint(DeskDocument paper, Vector3 at)
+    /// <summary>
+    /// Where <paramref name="paper"/>, about to lie with its root at
+    /// <paramref name="at"/> at its zone's size, rests (DropResolver.Rest, in
+    /// the office view's frame on the desk): <paramref name="at"/> itself
+    /// unless part of it would lie outside what the reading view shows (a
+    /// desk paper) or the desk, over a registered obstacle (DeskObstacles), in
+    /// the area the scanner hides from the camera, or (<paramref name="offCounter"/>:
+    /// a desk paper refused there) on the counter; then the least move clear
+    /// of all of them at once.
+    /// </summary>
+    private Vector3 Rest(DeskDocument paper, Vector3 at, bool offCounter)
     {
-        Vector2 size = paper.Size;
-        Transform sheet = paper.Sheet;
-        Vector3 root = paper.transform.position;
+        if (surface == null)
+            return at;
+        paper.RestCorners(new Vector3(at.x, surface.transform.position.y, at.z), _corners);
+        Vector3 rest = RestOf(InViewFrame(_corners), at, offCounter, paper.Zone == DeskZone.Desk);
+        return new Vector3(rest.x, at.y, rest.z);
+    }
+
+    /// <summary>Where a thing whose footprint is <paramref name="footprint"/> (the view's frame) with its root at <paramref name="at"/> rests (DropResolver.Rest, as Rest; the rulebook folder too): kept in what the reading view shows (a thing on the desk), clear of every obstacle, the scanner's hidden area and, <paramref name="offCounter"/>, the counter.</summary>
+    private Vector3 RestOf(DeskRect footprint, Vector3 at, bool offCounter, bool inView = true)
+    {
+        MeasureMachines();
+        DeskObstacles.Desk.Footprints(_footprints);
+        _keepOut.Clear();
+        foreach (DeskRect f in _footprints)
+            _keepOut.Add(InViewFrame(WorldCorners(f, surface.transform.position.y)));
+        if (scanner != null && !_scanners.Hidden && scanner.OnDesk)
+            _keepOut.Add(ScannerClearance.Blocked(InViewFrame(scanner.Corners()), _scannerShadow));
+        if (offCounter && counter != null && counter.TryNearEdge(out float near))
+            _keepOut.Add(new DeskRect(0f, near + CounterKeepOut / 2f, CounterKeepOut, CounterKeepOut));
+        DeskRect area = RestArea(footprint, inView);
+        (float x, float y) = DropResolver.Rest(footprint, area, _keepOut);
+        if (Mathf.Approximately(x, footprint.CentreX) && Mathf.Approximately(y, footprint.CentreY))
+            return at;
+        return at + _viewRight * (x - footprint.CentreX) + _viewForward * (y - footprint.CentreY);
+    }
+
+    /// <summary>How large the counter's keep-out is (metres, every way past its near edge): far more than the desk.</summary>
+    private const float CounterKeepOut = 100f;
+
+    /// <summary>The area a resting thing (its <paramref name="footprint"/>, the view's frame) lies wholly inside: the desk's, its centre anywhere a drag may take it (DeskSurface's clamp area, grown by its size), and on the desk (<paramref name="inView"/>) what the reading view shows (DeskConfigSO.restViewport: BUG-6, the whole paper stays in view; the desk's alone without the reading view, or where they do not meet).</summary>
+    private DeskRect RestArea(DeskRect footprint, bool inView)
+    {
+        DeskRect clamp = InViewFrame(surface.Corners());
+        var desk = new DeskRect(clamp.CentreX, clamp.CentreY, clamp.Width + footprint.Width, clamp.Height + footprint.Height);
+        if (!inView || deskView == null)
+            return desk;
+        Rect v = config.restViewport;
+        float h = surface.transform.position.y;
+        if (!deskView.TryViewPoint(new Vector2(v.xMin, v.yMin), h, out Vector3 bl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMin), h, out Vector3 br)
+            || !deskView.TryViewPoint(new Vector2(v.xMin, v.yMax), h, out Vector3 tl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMax), h, out Vector3 tr))
+            return desk;
+        DeskRect a = InViewFrame(new[] { bl }), b = InViewFrame(new[] { br }), c = InViewFrame(new[] { tl }), d = InViewFrame(new[] { tr });
+        float left = Mathf.Max(Mathf.Max(a.CentreX, c.CentreX), desk.CentreX - desk.Width / 2f);
+        float right = Mathf.Min(Mathf.Min(b.CentreX, d.CentreX), desk.CentreX + desk.Width / 2f);
+        float nearEdge = Mathf.Max(Mathf.Max(a.CentreY, b.CentreY), desk.CentreY - desk.Height / 2f);
+        float farEdge = Mathf.Min(Mathf.Min(c.CentreY, d.CentreY), desk.CentreY + desk.Height / 2f);
+        if (right <= left || farEdge <= nearEdge)
+            return desk;
+        return new DeskRect((left + right) / 2f, (nearEdge + farEdge) / 2f, right - left, farEdge - nearEdge);
+    }
+
+    /// <summary>The four corners of a world x, z footprint at height <paramref name="y"/>.</summary>
+    private static Vector3[] WorldCorners(DeskRect footprint, float y)
+    {
+        float hx = footprint.Width / 2f, hz = footprint.Height / 2f;
         return new[]
         {
-            at + sheet.TransformPoint(new Vector3(-size.x / 2f, -size.y / 2f, 0f)) - root,
-            at + sheet.TransformPoint(new Vector3(size.x / 2f, -size.y / 2f, 0f)) - root,
-            at + sheet.TransformPoint(new Vector3(-size.x / 2f, size.y / 2f, 0f)) - root,
-            at + sheet.TransformPoint(new Vector3(size.x / 2f, size.y / 2f, 0f)) - root,
+            new Vector3(footprint.CentreX - hx, y, footprint.CentreY - hz), new Vector3(footprint.CentreX + hx, y, footprint.CentreY - hz),
+            new Vector3(footprint.CentreX - hx, y, footprint.CentreY + hz), new Vector3(footprint.CentreX + hx, y, footprint.CentreY + hz),
         };
     }
 
-    /// <summary>
-    /// Where <paramref name="paper"/>, about to lie with its root at
-    /// <paramref name="at"/>, lies instead so the scanner does not hide it
-    /// (ScannerClearance.Clear, in the office view's frame on the desk: its
-    /// footprint and the shadow its body casts away from the camera) while it
-    /// is on the desk; it moves the shortest way out to the left, right or
-    /// front, or to the eject spot. <paramref name="at"/> itself when nothing
-    /// is in the way.
-    /// </summary>
-    private Vector3 ClearOfBlockers(DeskDocument paper, Vector3 at)
+    /// <summary>The footprint on the desk (the view's frame) of everything drawn under <paramref name="root"/>.</summary>
+    private bool TryFootprint(Transform root, out DeskRect footprint)
     {
-        if (surface == null || scanner == null || !scanner.gameObject.activeInHierarchy)
-            return at;
-        DeskRect desk = InViewFrame(surface.Corners());
-        DeskRect sheet = InViewFrame(Footprint(paper, at));
-        (float x, float y) = ScannerClearance.Clear(sheet, InViewFrame(scanner.Corners()), _scannerShadow, desk);
-        // The UV torch's cradle on the mat's corner (the desk machines spec §1): no paper lies over it either.
-        if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
-            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(cradle), desk);
-        // Nor over the chip reader's casing (a paper lies beside it, never in it).
-        IPaperDock reader = hardware != null ? hardware.ReaderDock : null;
-        if (reader != null && reader.OnDesk)
-            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(Corners(reader.Casing, surface.transform.position.y)), desk);
-        if (Mathf.Approximately(x, sheet.CentreX) && Mathf.Approximately(y, sheet.CentreY))
-            return at;
-        Vector3 moved = at + _viewRight * (x - sheet.CentreX) + _viewForward * (y - sheet.CentreY);
-        return surface.Clamp(moved) + Vector3.up * (at.y - surface.transform.position.y);
+        footprint = default;
+        bool any = false;
+        Bounds all = default;
+        foreach (Renderer r in root.GetComponentsInChildren<Renderer>(false))
+        {
+            if (!r.enabled)
+                continue;
+            if (!any)
+                all = r.bounds;
+            else
+                all.Encapsulate(r.bounds);
+            any = true;
+        }
+        if (!any)
+            return false;
+        Vector3 min = all.min, max = all.max;
+        float y = surface.transform.position.y;
+        footprint = InViewFrame(new[] { new Vector3(min.x, y, min.z), new Vector3(max.x, y, min.z), new Vector3(min.x, y, max.z), new Vector3(max.x, y, max.z) });
+        return true;
     }
 
     /// <summary>The four corners of <paramref name="box"/>'s footprint at height <paramref name="y"/>.</summary>
@@ -1144,10 +1210,16 @@ public sealed class DeskController : MonoBehaviour
         return new DeskRect((minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY);
     }
 
-    /// <summary>Slides a paper; it is inert while sliding, and its liveness is re-applied when it lands.</summary>
-    private void Slide(DeskDocument paper, Vector3 target) => Slide(paper, target, paper.transform.rotation);
+    /// <summary>A dropped paper goes to <paramref name="rest"/> (DropResolver): nowhere when it already lies there (it rests exactly where it was released); else the short way, over any casing.</summary>
+    private void MoveTo(DeskDocument paper, Vector3 rest)
+    {
+        if ((rest - paper.transform.position).sqrMagnitude > 1e-8f)
+            Slide(paper, rest, paper.transform.rotation);
+        else
+            ApplyLive(paper);
+    }
 
-    /// <summary>Slides a paper, turning it to lie at <paramref name="facing"/> on the way (eased with the slide): from where it shows, over every machine's casing it comes over (DockPath.Over: never through one).</summary>
+    /// <summary>Slides a paper, turning it to lie at <paramref name="facing"/> on the way (eased with the slide): from where it shows, over every machine's casing it comes over (DockPath.Over: never through one); it is inert while sliding and its liveness is re-applied when it lands.</summary>
     private void Slide(DeskDocument paper, Vector3 target, Quaternion facing)
     {
         Vector3 from = paper.CarriedFrom;
@@ -1156,10 +1228,10 @@ public sealed class DeskController : MonoBehaviour
         ApplyLive(paper);
     }
 
-    /// <summary>A paper on the desk takes input while the papers are allowed, DeskPapers lets it be dragged and it is not sliding, and is in the raycast while the papers are allowed.</summary>
+    /// <summary>A paper on the desk takes input while the papers are allowed, DeskPapers lets it be dragged, it is not sliding and it is in no machine, and is in the raycast while the papers are allowed.</summary>
     private void ApplyLive(DeskDocument paper)
     {
-        bool live = _live && !paper.IsSliding && _state != null && _state.CanDrag(paper.Index) && !_inReader.Contains(paper.Index);
+        bool live = _live && !paper.IsSliding && _state != null && _state.CanDrag(paper.Index) && !_docks.IsDocked(paper.Index);
         paper.SetLive(live, live, _live);
     }
 
@@ -1167,20 +1239,42 @@ public sealed class DeskController : MonoBehaviour
     /// Stack heights (PaperLayers.Lifts): each paper and the rulebook lifted
     /// by its place in the stack and the thickness of all under it, the
     /// lowest clear of the desk top (Saleh's 1007d playtest: papers clipped
-    /// into the table); the dragged paper or rulebook lifted above the whole stack.
+    /// into the table), the top one DeskConfigSO.topLift higher (BUG-40b: the
+    /// order reads at a glance); the dragged paper or rulebook lifted above
+    /// the whole stack (the pick-up pop); a docked paper its own thickness over
+    /// its dock. A reorder shows in the same frame (every resting paper's lift
+    /// is set at once); only <paramref name="settling"/> (a paper just let go)
+    /// and the dragged paper ease on their springs. Each paper whose rank
+    /// changed raises DeskEvents.StackChanged (DOC-LOOK's contact shadow).
     /// </summary>
-    private void ApplyStack()
+    private void ApplyStack(int settling = int.MinValue)
     {
         // One stacking rule (PaperLayers): each one's bottom lies over every part of the one under it, so the paper on top hides all of each paper under it.
         _stackThickness.Clear();
         for (int i = 0; i < _stack.Count; i++)
             _stackThickness.Add(Thickness(_stack[i]));
         float[] lifts = PaperLayers.Lifts(_stackThickness, config.paperStackStep);
+        if (lifts.Length > 0)
+            lifts[lifts.Length - 1] += config.topLift;
         float top = lifts.Length > 0 ? lifts[lifts.Length - 1] + PaperLayers.PartsDepth : PaperLayers.StackStep(config.paperStackStep);
         foreach (DeskDocument paper in _papers)
-            if (paper != null)
-                paper.SetLift(_docked.Contains(paper.Index) ? paper.Thickness + DockGap
-                              : paper.Index == _dragged ? top + paper.Thickness + config.dragLift : LiftOf(paper.Index, lifts));
+        {
+            if (paper == null)
+                continue;
+            int index = paper.Index;
+            if (paper.IsDocked)
+                paper.SetLift(paper.Thickness + DockGap);
+            else if (index == _dragged)
+                paper.SetLift(top + paper.Thickness + config.dragLift);
+            else
+                paper.SetLift(LiftOf(index, lifts), index != settling);
+            int rank = _stack.IndexOf(index);
+            if (!_ranks.TryGetValue(index, out int was) || was != rank)
+            {
+                _ranks[index] = rank;
+                DeskEvents.RaiseStackChanged(paper, rank);
+            }
+        }
         if (rulebook != null)
             rulebook.SetLift(_rulebookDragged ? top + rulebook.Thickness + config.dragLift : LiftOf(RulebookId, lifts));
     }
@@ -1253,11 +1347,13 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Shows' reused hit buffer (more colliders than the desk ever stacks on one line of sight).</summary>
     private static readonly RaycastHit[] ShowsHits = new RaycastHit[64];
 
-    /// <summary>A paper slides onto the bed and its scan starts: the relay click (scanner_start), the glowing bar crossing the glass as the scan runs (DeskScanner.Sweep); the done beep is DeskScanner.Pulse's.</summary>
+    /// <summary>A paper slides onto the bed and its scan starts: it is the scanner's (MachineOccupancy) at its docked size, the lid held open until it lies there (cut short: the lid lets go), the relay click (scanner_start), the glowing bar crossing the glass as the scan runs (DeskScanner.Sweep); the done beep is DeskScanner.Pulse's.</summary>
     private void StartScan(DeskDocument paper)
     {
         // over the casing and down onto the glass, square to the bed, the lid held open until it lies there (the scan waits: Update)
-        Dock(paper);
+        _docks.Dock(paper.Index, DeskMachine.Scanner);
+        paper.SetDocked(true, paper.DockScale);
+        ApplyStack();
         scanner.HoldOpen(true);
         Vector3 from = paper.CarriedFrom;
         List<Vector3> way = Points(DockPath.OnTo(Tuple(from), Tuple(scanner.DockPoint(MachineDock.Bed)), Casings(), Grow(paper), config.dockClearance));
@@ -1265,7 +1361,7 @@ public sealed class DeskController : MonoBehaviour
         {
             scanner.HoldOpen(false);
             ApplyLive(paper);
-        });
+        }, () => scanner.HoldOpen(false));
         ApplyLive(paper);
         Sounds.Play(SoundCues.ScannerStart);
     }

@@ -27,7 +27,7 @@ public readonly struct ControlState
     /// <summary>The view is tilted over the desk (the reading view).</summary>
     public readonly bool DeskView;
 
-    /// <summary>A document or a stamp is being dragged.</summary>
+    /// <summary>Something is held: a document, the rulebook or a stamp being dragged, or any other hold (HoldRegistry.IsHolding).</summary>
     public readonly bool Dragging;
 
     /// <summary>A text field on the PC has the keyboard (the PC key is typed there).</summary>
@@ -98,7 +98,10 @@ public enum ControlAction
     LeaveCity,
 
     /// <summary>Show the keys: the PC with its shortcut card.</summary>
-    ShowKeys
+    ShowKeys,
+
+    /// <summary>Let go of what is held (HoldRegistry.Cancel: back where it was picked up, nothing committed) and do nothing else: a view key pressed while holding (BUG-55).</summary>
+    CancelHold
 }
 
 /// <summary>What one right-click or Esc backs out of (ControlRules.BackOut). Not serialized.</summary>
@@ -142,6 +145,10 @@ public enum BackOutStep
 /// the reading view over the stamp rack from every desk state (the PC keeps them for
 /// its own rows and regions), Q switches to the PC and back (not while a PC
 /// text field types it), A/D look at the city and back, F1 shows the keys.
+/// While something is held (BUG-55: a paper, the folder, a dater, a tool), a
+/// key that changes the view (TAB, Q, A, D, F1) first lets go of it and does
+/// nothing else, as a right-click or Esc does: no view ever changes under a
+/// held thing, and nothing held is committed by a key.
 /// DeskCard is the F1 card's desk section, printed from the same constants
 /// as the tabs' hints. Pure; tested headless; OfficeControls applies it.
 /// </summary>
@@ -176,11 +183,13 @@ public static class ControlRules
         new ShortcutCardRow(CityKey + ", " + CityBackKey, "keys.desk.city"),
     };
 
-    /// <summary>What <paramref name="key"/> does in <paramref name="s"/>: nothing under a newsletter; on the PC only Q (back to the desk, unless a text field types it); at the desk SPACE and TAB with a traveller there, Q to the PC, A/D the city, F1 the keys.</summary>
+    /// <summary>What <paramref name="key"/> does in <paramref name="s"/>: nothing under a newsletter; while something is held, a view key (TAB, Q, A, D, F1) lets go of it (CancelHold) and SPACE does as ever; on the PC only Q (back to the desk, unless a text field types it); at the desk SPACE and TAB with a traveller there, Q to the PC, A/D the city, F1 the keys.</summary>
     public static ControlAction Resolve(ControlKey key, ControlState s)
     {
         if (s.Newsletter)
             return ControlAction.None;
+        if (s.Dragging && ChangesView(key))
+            return ControlAction.CancelHold;
         if (s.PcOpen)
             return key == ControlKey.Pc && !s.TextFieldFocused ? ControlAction.ClosePc : ControlAction.None;
         switch (key)
@@ -194,6 +203,9 @@ public static class ControlRules
             default: return ControlAction.None;
         }
     }
+
+    /// <summary>True for a key that changes the view (TAB, Q, A, D, F1): pressed while holding, it lets go first (BUG-55).</summary>
+    public static bool ChangesView(ControlKey key) => key != ControlKey.Inspect;
 
     /// <summary>The one thing a right-click or Esc backs out of in <paramref name="s"/>: the innermost mode first (a drag, the wheel, the PC, the held value, inspect mode, the city, the reading view); nothing under a newsletter.</summary>
     public static BackOutStep BackOut(ControlState s)

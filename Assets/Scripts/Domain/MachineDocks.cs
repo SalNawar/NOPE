@@ -84,6 +84,84 @@ public static class MachineIntake
 }
 
 /// <summary>
+/// How big a paper shows docked in a machine (DOC-HANDLE, BUG-24: the
+/// passport was wider than the chip reader's pad and overhung the casing): its
+/// normal docked scale, made smaller where its footprint would not fit the
+/// pad. The paper lies upright to the player on the pad (its width along the
+/// view's right, its height along the view's forward); the pad's extents are
+/// given in that frame. Pure.
+/// </summary>
+public static class DockFit
+{
+    /// <summary>
+    /// The scale a paper <paramref name="width"/> by <paramref name="height"/>
+    /// (metres at scale 1) lies at on a pad <paramref name="padWidth"/> by
+    /// <paramref name="padDepth"/> (metres, in the paper's upright frame):
+    /// <paramref name="most"/> (its normal docked scale) when it fits, else
+    /// the largest scale that keeps it within the pad grown by
+    /// <paramref name="overhang"/> (a share: a passport overhangs a real pad a
+    /// little); <paramref name="most"/> for a pad or paper of no size.
+    /// </summary>
+    public static float Scale(float width, float height, float padWidth, float padDepth, float most, float overhang)
+    {
+        if (width <= 0f || height <= 0f || padWidth <= 0f || padDepth <= 0f || most <= 0f)
+            return most;
+        float grow = 1f + Math.Max(0f, overhang);
+        float fit = Math.Min(padWidth * grow / width, padDepth * grow / height);
+        return Math.Min(most, fit);
+    }
+}
+
+/// <summary>
+/// Which machine holds which of the case's papers (DOC-HANDLE, BUG-24): the
+/// dock state belongs to the paper and lives only as long as its case (the
+/// desk clears it when a case begins and ends, so a new case's paper with the
+/// same index is never taken for docked). A docked paper is the machine's: no
+/// queue takes it from there (the scanner's Auto-Feed skips a paper in the
+/// chip reader, <see cref="FreeToFeed"/>), and a machine holds one paper at a
+/// time. Pure.
+/// </summary>
+public sealed class MachineOccupancy
+{
+    private readonly Dictionary<int, DeskMachine> _in = new Dictionary<int, DeskMachine>();
+
+    /// <summary>Paper <paramref name="paper"/> goes into <paramref name="machine"/>; false (nothing changes) while that machine holds another paper or the paper is in another machine.</summary>
+    public bool Dock(int paper, DeskMachine machine)
+    {
+        if (_in.TryGetValue(paper, out DeskMachine at))
+            return at == machine;
+        if (Busy(machine))
+            return false;
+        _in[paper] = machine;
+        return true;
+    }
+
+    /// <summary>Paper <paramref name="paper"/> is clear of its machine again; false when it was in none.</summary>
+    public bool Leave(int paper) => _in.Remove(paper);
+
+    /// <summary>True while paper <paramref name="paper"/> lies in a machine.</summary>
+    public bool IsDocked(int paper) => _in.ContainsKey(paper);
+
+    /// <summary>True while paper <paramref name="paper"/> lies in <paramref name="machine"/>.</summary>
+    public bool IsIn(int paper, DeskMachine machine) => _in.TryGetValue(paper, out DeskMachine at) && at == machine;
+
+    /// <summary>True while <paramref name="machine"/> holds a paper.</summary>
+    public bool Busy(DeskMachine machine)
+    {
+        foreach (DeskMachine at in _in.Values)
+            if (at == machine)
+                return true;
+        return false;
+    }
+
+    /// <summary>True when a queue may take paper <paramref name="paper"/> (it lies in no machine).</summary>
+    public bool FreeToFeed(int paper) => !_in.ContainsKey(paper);
+
+    /// <summary>The case ended (or began): no paper is in any machine.</summary>
+    public void Clear() => _in.Clear();
+}
+
+/// <summary>
 /// A desk machine's casing as a moving paper sees it: a box standing on the
 /// desk, its footprint a rectangle centred at (<see cref="CentreX"/>,
 /// <see cref="CentreZ"/>) turned so its width runs along

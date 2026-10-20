@@ -6,11 +6,15 @@ public interface IHoldable
 }
 
 /// <summary>
-/// The desk's one current hold (P0-A seam; owner DOC-HANDLE): what the player
-/// holds now, if anything. A new hold replaces the one before it (cancelling
-/// it), <see cref="Cancel"/> lets go, and losing the focus
-/// (<see cref="OnFocusLost"/>) cancels the hold. The P0 stub tracks a hold;
-/// nothing registers one yet (today's behaviour).
+/// The desk's one current hold (owner DOC-HANDLE, BUG-55): what the player
+/// holds now, if anything. Every desk drag holds through it (DeskDraggable:
+/// the papers, the rulebook folder, the daters); other holdables (the torch,
+/// decor, the Rolodex) Begin and End their own holds. A new hold replaces the
+/// one before it (cancelling it), <see cref="Cancel"/> lets go (a right-click,
+/// Esc or a view key while holding: ControlRules, OfficeControls), and losing
+/// the focus (<see cref="OnFocusLost"/>: Alt+Tab, OfficeControls) cancels the
+/// hold without committing it. <see cref="IsHolding"/> is what CAM (no view
+/// change while holding) and DOC-LOOK (no hover while holding) read.
 /// </summary>
 public sealed class HoldRegistry
 {
