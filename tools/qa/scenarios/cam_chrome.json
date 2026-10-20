@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "CAM BUG-59: at A1 on day 1 and at A1-A4 on day 12, no shown chrome (the PC and STAMPS pull tabs, the Back control, the city tab) is drawn over a held decoration while it is dragged slowly across the mat, or over the reading view's framed work while it is on (camchrome watches every frame and writes each control's alpha into the sequence's rows). The overlay's plates CAM measured over the work are watched too, each its own line under its owner: the guide's prompt plate (CONTENT; it shows on day 1) and the stamp hint plate (STAMP; camchrome n = 2 shows it as the counter's bounce does, in each leg's reading view): expected red until they move. Paper drags join at DOC-HANDLE (#8), when papers register their hold."
+      "text": "CAM BUG-59: at A1 on day 1 and at A1-A4 on day 12, no shown chrome (the PC and STAMPS pull tabs, the Back control, the city tab) is drawn over a held decoration while it is dragged slowly across the mat, or over the reading view's framed work while it is on (camchrome watches every frame and writes each control's alpha into the sequence's rows). The overlay's plates CAM measured over the work are watched too, each its own line under its owner: the guide's prompt plate (CONTENT; it shows on day 1) and the stamp hint plate (STAMP; camchrome n = 2 shows it as the counter's bounce does, in each leg's reading view): expected red until they move. A plate the leg shows (n = 2, or the guide named by the day-1 leg's n = 1 target) that is drawn 0 frames gives a red 'not measured' line under CAM, never silence, so the gate cannot go green by absence. Paper drags join at DOC-HANDLE (#8), when papers register their hold."
     },
     {
       "op": "title"
@@ -44,7 +44,8 @@
     {
       "op": "camchrome",
       "n": 1,
-      "name": "a1_d1"
+      "name": "a1_d1",
+      "target": "guide"
     },
     {
       "op": "recStart",

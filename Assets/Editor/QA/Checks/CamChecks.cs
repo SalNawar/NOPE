@@ -17,7 +17,9 @@ using UnityEngine;
 /// control) stays inside that band; the office pose's lens at 21:9 no wider
 /// than the hall art. Play (read from the QA rig's runs of CAM's scenarios,
 /// QaJobs.Scenario): every camera move tagged (the logger) and the drop tilt
-/// at most once per paper landing; the framing at A1-A4 in both poses, per
+/// at most once per paper landing; the scripted day 12 run whole (every
+/// drop, the Auto-Feed, every scan and chip read, a ring question); the
+/// framing at A1-A4 in both poses, per
 /// home; the controls' fade over a move; no view change while holding, call
 /// by call; the city's parallax and its full-screen fill; the shake table's
 /// rows; no chrome over a held thing or the reading view's work; DESK-PLAN's
@@ -151,6 +153,17 @@ public static class CamChecks
     /// <summary>The scripted day 12 (drops, scans, chip reads, the intercom): the drop tilt at most once per paper landing, never while holding (v2's CAM pass at #6).</summary>
     [GateCheck("cam.play.tilts", Owner, GateKind.Play)]
     public static GateResult Tilts() => GateResults.Require("cam.play.tilts", Owner, "cam_views.tilts.*");
+
+    /// <summary>
+    /// The scripted day 12 ran whole (camplay, v2's CAM pass at #6): every
+    /// counter paper dropped, the Auto-Feed tray clicked and its stack scanned,
+    /// n of n scans and f of f chip reads finished, the intercom's wheel opened
+    /// and a ring question answered. Without it the tilt count could pass on a
+    /// day that ran only partly (the Rolodex's right-click is the one gap:
+    /// QaInput has no right button).
+    /// </summary>
+    [GateCheck("cam.play.day12", Owner, GateKind.Play)]
+    public static GateResult Day12() => GateResults.Require("cam.play.day12", Owner, "cam_views.play.*");
 
     /// <summary>Both poses frame what they must at A1-A4, home by home (the reading view: the mat and the deal tray whole, the stamp rack and the intercom 100%, at least 8 x 8 cm of the other in-use side homes; the office view: every shown home ≥98%; the reading view's bottom row on the desk).</summary>
     [GateCheck("cam.play.framing", Owner, GateKind.Play)]
