@@ -297,3 +297,50 @@ public static class ShutBox
         return ((low + high) / 2f, high - low);
     }
 }
+
+/// <summary>
+/// A cover's board bowing on its swing (the passport's front, the folder's
+/// board: PaperCover.Bow) and a flat mark printed on it (the passport's
+/// emblem, the folder's seal) riding that bow, as a paper's prints ride its
+/// bend (DOC-LOOK re-verify, wave 2 point 8: shutting, the board rose up to
+/// 0.25 mm under the seal and 0.8 mm under the emblem, more than their 0.05
+/// and 0.1 mm gaps, so it came up through them). Pure, so the ride's
+/// arithmetic is tested headless (DocLookTests.CoverBow_*); PaperCover.Ride
+/// only puts its numbers on the mark's transform.
+/// </summary>
+public static class CoverBow
+{
+    /// <summary>A cover sheet's bow as DocumentCel draws it (PaperCover.Bow's _Flex) and its marks ride it: its travel points at the hinge, away from the free edge (<paramref name="freeX"/>, <paramref name="freeY"/>, in the sheet's own plane), and its full lag keeps the hinge end flat and curls the free edge twice <paramref name="bow"/> metres (along the sheet's own +z: positive away from its front).</summary>
+    public static PaperBend Of(float freeX, float freeY, float bow) => new PaperBend(-freeX, -freeY, bow, 1f, 0f, 0f, 0f, 0f);
+
+    /// <summary>
+    /// Where a flat mark printed on a cover's sheet lies on the sheet's
+    /// <paramref name="bend"/> (Of). The mark is centred at
+    /// (<paramref name="markX"/>, <paramref name="markY"/>) on the flat sheet,
+    /// <paramref name="halfWidth"/> by <paramref name="halfHeight"/> metres
+    /// each way; the sheet is centred at (<paramref name="sheetX"/>,
+    /// <paramref name="sheetY"/>) and <paramref name="sheetWidth"/> by
+    /// <paramref name="sheetHeight"/> metres (its scale, the sign ignored),
+    /// all in the space the two share (the hinge's). Returns how far to move
+    /// the mark from its rest along that space's z (<c>depth</c>, metres: the
+    /// face's depth under the mark's centre less how far the curl rises past
+    /// the mark, PaperBend.Bulge, so the bowing board never comes up through
+    /// it) and the turn that lays it on the face's slope there, in degrees as
+    /// Unity's Euler angles take them (<c>pitch</c> about its x, <c>yaw</c>
+    /// about its y: the sheet's +z runs away from the viewer, so a face
+    /// sloping deeper up the page tips the mark's top away, and a face
+    /// sloping deeper to the right turns the mark's right edge away). Flat,
+    /// all three are 0 and the mark lies at rest.
+    /// </summary>
+    public static (float depth, float pitch, float yaw) Ride(float markX, float markY, float halfWidth, float halfHeight,
+                                                             float sheetX, float sheetY, float sheetWidth, float sheetHeight, PaperBend bend)
+    {
+        float w = Math.Max(Math.Abs(sheetWidth), 1e-4f), h = Math.Max(Math.Abs(sheetHeight), 1e-4f);
+        float x = (markX - sheetX) * 2f / w, y = (markY - sheetY) * 2f / h;
+        float drop = bend.Depth(x, y, w, h);
+        (float dx, float dy) = bend.Slope(x, y, w, h);
+        float bulge = bend.Bulge(x, y, halfWidth, halfHeight, w, h);
+        const double degrees = 180.0 / Math.PI;
+        return (drop - bulge, (float)(Math.Atan(dy) * degrees), (float)(-Math.Atan(dx) * degrees));
+    }
+}

@@ -7,6 +7,7 @@ The commits:
 - The resubmission, which answers the review of 8c2239d. Its nine points are listed under "Review of 8c2239d" with what changed for each.
 - A note on the rebase.
 - The wave-2 fixes: they answer the re-verify (`reverify:DOC-LOOK:1`, WAVE2_OPEN.md) and record the orchestrator's three decisions of 2026-10-20. See "Wave 2" below.
+- The fixes for the re-verify of 460c564 (the wave-2 close). See "Re-verify of 460c564" below.
 
 Sources: FIX_PLAN §3 DOC-LOOK, FIX_PLAN_v2 §3 "DOC-LOOK: delta" (D3 and D15 decided; v2 wins), BUGLIST, DECISIONS_1019a (D3, D15, "keep a big mat size", DESK APPROVED), GAME_FEEL_BIBLE rows A1-A6 and A9, QA-RIG §4 and §8.
 
@@ -101,7 +102,7 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 | 4 | Ownership of `FormArt.cs` and the allowlist line | Approved (decision 1). See Ownership. |
 | 5 | **S3: a shut passport and a shut folder kept full-size boxes**, so their hidden halves took hover, click, press-to-open and drag over bare counter or desk | **Fixed.** See "The shut boxes" below. |
 | 6 | The cover's bow flipped sign in one frame on a turn back (a 6 mm pop), and it did not trail the rebound | **Fixed.** `BookletFlip.Flex` now eases (see "The bow" below). |
-| 7 | `ArtLayout.CutWords` missed the premades' names; single-token values relied on a height check | **Fixed.** See "The words" below. |
+| 7 | `ArtLayout.CutWords` missed the premades' names; single-token values relied on a height check | **Fixed**, within the limit stated there (the re-verify of 460c564, point 2). See "The words" below. |
 | 8 | The cover's emblem and the folder's seal are flat quads. The shutting board's bow rose under them by more than their 0.05 and 0.1 mm gaps (the model: up to 0.25 mm under the seal, 0.8 mm under the emblem; the reviewer estimated 0.25 and 0.37) | **Fixed.** See "The marks" below. |
 
 **The shut boxes (S3).**
@@ -114,7 +115,7 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
   - `DocLookTests.ShutBox_KeepsOnlyTheSideOfTheSpineThatShows` (pure).
   - The rig op `coverHits` (`DocLookOps`) uses the event system's own raycast at the middle of each half of every booklet and of the folder. A shut booklet's visa page and a shut folder's left board must meet nothing of theirs, and the shown half must meet them. Open, both halves must meet them.
   - `doclook_print` runs `coverHits` three times: `shut` at the start, `folder_reshut` after the folder is shut again, and `open` once both lie open.
-  - The demo gate reads it: `doclook.play.coverHits`. A merge run of `doclook_print` covers it (recipe R7b).
+  - The merge gate reads it: `doclook.play.coverHits`, a Play check at merge level (it was demo only until the re-verify of 460c564). Every merge from this one on needs `doclook_print` results taken at HEAD on a clean tree (recipe R7b).
 - **A side effect on the rig:** the rig's `click` op aims at a target's collider centre, so clicks on a shut passport now land on its cover.
 
 **The bow (6).**
@@ -136,20 +137,50 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
   - A returning traveller keeps a drawn name.
   - The premades' longest word today is "Michelangelo" (12), shorter than the drawn "Giovanfrancesco" (15), so nothing new fails today. The gap is closed for future content.
 - **(b) Single-token values.** `ArtLayout.Problems` now also fails a value whose probe has a word wider than its place at the least size, even when its broken lines would fit the place's height.
-  - A single-token value (an ID such as "KTR-418", "DP-0417" or "SW-0417") is its own probe's one word, as long as the longest, so the check covers them.
+  - It measures the **probe's** words, not the field's own. `DocumentForm.Problems` always passes `FormLayout.Probe` values, cut from "Middle Egyptian, hieroglyphs and a reed brush" to each field's longest length. So the check covers a field's real words only where they are no longer than its probe's. The limit is stated in full below.
   - `CutWords` and `Problems` share one test (`ArtLayout.Breaks`).
-  - Test: `FormLayoutTests.Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit`.
-- **The limit, stated.** A long number inside a longer value (the "9,999,999" of "9,999,999 cr") is measured only through the probe's words, which are shorter. A credits value whose number alone outgrew its place at the least size would be cut. Today the only art fields that print credits are TC-310's Debt and TC-520's Day Wage. Their places are about 100 px wide at A1, and the 12 characters need under 20 px at the least size. FORMS-REDESIGN sizes every place for its longest value whole.
+  - Test: `FormLayoutTests.Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit`. It hands `FormLayout.Check` a raw 30-character token, which production never does, so it proves the check itself, not the probe the check is fed.
+- **The limit, stated in full** (re-verify of 460c564, point 2). What the validator measures whole on the 8 art forms, and what it does not:
+
+| Values | Measured by | Whole? |
+|---|---|---|
+| Names (Name fields, and Signature fields since the re-verify) and origins (Destination fields) | `CutWords`: the content's 12 longest words per field | Yes |
+| 7-character IDs (a Citizen ID or a Displacement No.: "ZZZ-999", "DP-9999") and transponder classes (7) | the probe "Middlee": one word of 7 | Yes (the value face is monospaced) |
+| Transponders (26 characters, words up to 9), employers (25, words up to 9), waiver numbers (7, probed at a book row's 28) | probe words of 9, 9 and 11 | Yes |
+| Statuses ("STANDARD", "ELIGIBLE": one word of 8; TC-101's Travel Class) | the probe "Middle E": words of 6 | **No** |
+| Incident numbers ("R-0928-99": one word of 9; TC-610, TC-630) | "Middle Eg": words of 6 | **No** |
+| Credits ("9,999,999 cr": 12 characters, its number a word of 9; TC-310's Debt, TC-520's Day Wage) | "Middle Egypt": words of 6 | **No** |
+| Facts (28 characters, words of up to 13 and 14: TC-230's Currency Carried and Declared Effects; TC-620's Coin of Home, Native Tongue and Effects Carried) | "Middle Egyptian, hieroglyphs": words of up to 11 | **No** |
+| Dates ("28 Sep 2150"), birth dates ("28 Jan 9999 BCE") and terms ("720 days"): words of 4 | probe words of 6, 8 and 6 | Over-measured: a word line on them can be a false alarm from the probe alone |
+
+- **Nothing is cut today.** From FORMS-REDESIGN's place widths, every word in a **No** row fits its place at the least size: Travel Class is 33 px wide at A1 against about 12 px for its 8 characters; Incident is 61 and 95 px against 44 px even at today's full size; the credits places are about 100 px against under 20 px; the facts' places are 73 to 90 px against about 23 px for 14 characters. No check proves it, offline or in the validator: only these figures do.
+- **Who closes it.** FORMS-REDESIGN re-lays every place, so its hand-off (section 7) asks it to measure each field's real widest word. Doing it here needs `FieldLengths`' widest values (Domain, not DOC-LOOK's file) and the facts' words.
+- **Signature fields** (closed in code by the re-verify): `ContentWords` now gives them the names, since a holder signs with their given name (`CaseFactory`; "Giovanfrancesco" is 15). So `CutWords` measures them whole. It is validator code, so R1 checks it, not the offline runner.
 
 **The marks (8).**
-- `PaperCover.Ride` (shared by the folder) lays the passport's emblem and the folder's seal on their sheet's bow, as a paper's prints ride its bend:
+- The passport's emblem and the folder's seal ride their sheet's bow, as a paper's prints ride its bend:
   - on the face under the mark's centre;
   - turned to the face's slope;
   - lifted by `PaperBend.Bulge` (how far the curl rises past the mark).
 - Shutting, the board never comes up through them. Flat, they lie at rest.
-- `PaperCover.BowOf` gives one `PaperBend` for both the shader's `_Flex` and the ride.
+- **The arithmetic is pure** (since the re-verify of 460c564, point 1). `CoverBow.Ride` (`PassportCovers.cs`, TimeDesk.Visuals) takes the mark's rest place and half size, the sheet's place and scale, and the bend. It returns the mark's move along z and its two Euler angles. `PaperCover.Ride` (shared by the folder) only puts those on the mark's transform.
+- `CoverBow.Of` gives one `PaperBend` for both the shader's `_Flex` (`PaperCover.Bow`) and the ride. It was `PaperCover.BowOf`.
 - The folder's seal is now a serialized reference (`FolderCover.seal`), which the builder sets. **It needs the R2 rebuild.** Until then the field is empty and the seal stays flat, as before.
-- Test: `DocLookTests.CoverMarks_RideTheShuttingBow_ClearOfTheBoard`. It checks two things for the folder's and the passport's geometry: the board's rise under the mark is more than the old gap, and the lifted mark lies over the board everywhere under it.
+- **Tests** (`DocLookTests.CoverBow_*`, on the folder's and the passport's geometry as built):
+  - `CoverBow_Ride_UnderTheBow_EveryMarkClearsItsBoardByItsRestGap`. Unridden, the shutting board rises past the mark's gap. Ridden, the mark is turned as Unity's `Euler(pitch, yaw, 0)` turns it, at flex -1, -0.5, 0.5 and 1, centred, a quarter of the way toward the free edge, toward the hinge, and askew. It stays at least its rest gap (0.05 or 0.1 mm) over the board at every point of a 9 by 9 grid.
+  - `CoverBow_Ride_Flat_TheMarkLiesAtRest_AndTheBowCurlsOnlyTheFreeEdge`: flat, an off-centre mark gets 0, 0 and 0; the bow keeps the hinge end flat and curls the free edge twice the bow.
+  - `CoverBow_Ride_AMarkOffCentre_TakesTheSlopeAndDepthOfTheFaceUnderIt`: an off-centre seal turns to the slope under its own centre, one way or the other by its side; an off-centre emblem tips about its x.
+  - **They fail without the fix.** Seven mutations of `CoverBow` were run on the offline runner and reverted, and each failed two of the three tests: no ride, no bulge, the yaw's sign flipped, the pitch's sign flipped, no angles, the sheet's place ignored, and the bow's travel turned toward the free edge.
+- **What no offline test checks:** that `PaperCover.Ride` puts `CoverBow.Ride`'s numbers on the mark's `localPosition.z` and `localRotation`, and that the builder lays the hinges, sheets and marks as the tests model them. Only R7 checks that wiring, by eye.
+
+## Re-verify of 460c564: what changed
+
+| # | Finding | Change |
+|---|---|---|
+| 1 | `CoverMarks_RideTheShuttingBow_ClearOfTheBoard` tested only `PaperBend`'s maths, never `PaperCover.Ride`, so it passed with the ride deleted | **Fixed (path a).** The ride's arithmetic moved into a pure Visuals helper, `CoverBow.Ride`, with `CoverBow.Of` (was `PaperCover.BowOf`). Three tests replace the old one, and each of seven mutations of `CoverBow` fails them. See "The marks (8)" above. |
+| 2 | The new word check measures the probe's words, so the docs claimed more than the code | **Path a, and one gap closed in code.** The full limit is the table under "The words (7)" above. The lines that over-claimed are corrected: BUG-9 below, R1, the FEATURES line, `ArtLayout.Problems`' and `ContentWords`' comments, and FORMS-REDESIGN.md (section 1; its section 7 now asks for each field's real widest word). Signature fields now get the names in `CutWords`. |
+| 3 | Stale lines: "Needs a decision", "awaiting approval", and R4's x2.1 and x3.8 | Fixed (BUG-9 below, R4). |
+| 4 | `doclook.play.coverHits` was demo only, so the merge gate never checked the S3 fix | **Fixed.** `DemoOnly` is dropped: the check is merge level, so the merge gate needs R7b's results taken at HEAD. |
 
 ## Ownership
 
@@ -169,7 +200,7 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
 ## Changes by BUG id
 
 ### BUG-9: text too small; the fit shrank the important values (note 25)
-**The floor is not met; see "Needs a decision" above.** What this branch does:
+**The floor is not met; see "Decided by the orchestrator" above (decision 2) and its "Background".** What this branch does:
 - **Bigger text on every art document.** Each of the 8 art templates (`DocTemplate_TC101/230/240/310/520/610/620/630.asset`) now has:
   - `printLabels: 1`: the paper always shows its clean face and prints every label and caption, in the art's ink, in English or the culture's language. Before, the small baked labels showed whenever English was read.
   - `labelGrowth: 1.3` and `valueGrowth: 1.5`: as large as the art's places allow (see the deviations above).
@@ -182,11 +213,11 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
   - A word still too wide is cut and ends with a full stop ("KONSTANTI."), so no word ever breaks across two lines.
   - A word that holds a rich-text tag is never cut (the guide's sheets).
   - The rulebook's rows are only cut, never shrunk, because `LayRows` sets their size again afterwards.
-- **Data is never cut** (resubmission):
+- **No value is cut by the fit, and the validator proves it for names and origins** (resubmission; the rest is the limit below):
   - `TmpFormText.ArtFit` picks the largest size at which the text fits its place **and** its widest word fits the place's width.
-  - `ArtLayout.CutWords` (in the validator) proves that the content's longest name words (every place's lists and every premade's name) and origin words fit at the least size. Together they mean `Unbreak` never cuts a value on an art document.
-  - Other fields (dates, IDs, numbers) keep the probe check (`ArtLayout.Problems`). Since wave 2 it also fails a probe word wider than its place at the least size, so a single-token value such as an ID is never cut. The one limit is stated under "Wave 2", point 7.
-- **The 0.85 floor (deviation awaiting approval).** `TextFit.Floor` = 0.85 marks a text fitted below it as shrunk (`TextFit.Shrunk`). The least size stays `TextFit.Least` 0.5 of the art's own size (`ArtLayout.FitFloorOf` = 0.5 / growth).
+  - `ArtLayout.CutWords` (in the validator) proves that the content's longest name words (every place's lists and every premade's name, on Name and Signature fields) and origin words fit at the least size. Together they mean `Unbreak` never cuts a name or an origin on an art document.
+  - Other fields keep the probe check (`ArtLayout.Problems`). Since wave 2 it also fails a probe word wider than its place at the least size. That covers a 7-character ID whole, but not a status, an incident number, a credits figure or a fact's word, whose probe words are shorter than their own. The full limit is the table under "Wave 2", point 7. Nothing is cut today, but for those fields no check proves it.
+- **The 0.85 floor (a deviation, approved as the interim by decision 2).** `TextFit.Floor` = 0.85 marks a text fitted below it as shrunk (`TextFit.Shrunk`). The least size stays `TextFit.Least` 0.5 of the art's own size (`ArtLayout.FitFloorOf` = 0.5 / growth).
 - **The rulebook paginates before it shrinks** (`DeskRulebook.RowTextFloor` 0.6 → 1). Only a rule alone on its sheet shrinks: it stops at `TextFit.Floor` first and goes down to `RowTextLeast` only as a last resort.
 - **The validator measures in the art's value face.** `ContentLibraryValidator.Forms` measures an art form in `FormStyleSO.artValueFont`, not LiberationSans.
 - **The cap-height gate.**
@@ -300,7 +331,7 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
   - `Subdivide` runs once per print. It makes at most 24 x 24 cells for a page-sized fill, usually 24 x 1 for a rule.
   - Pooling and pre-building are DOC-HANDLE's; measure on its call-next recipe.
 
-## Tests (offline: compile 0 errors; runner `passed 3775, failed 0` on 4290bd6, after wave 2)
+## Tests (offline: compile 0 errors; runner `passed 3777, failed 0` on 4290bd6, after the re-verify of 460c564)
 
 | Test | Covers | Fails without the fix because |
 |---|---|---|
@@ -321,9 +352,9 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
 | `DocLookTests.ShutBox_KeepsOnlyTheSideOfTheSpineThatShows` | wave 2, S3: a shut booklet's and folder's box keeps the shown side | `ShutBox` is new; the boxes were whole |
 | `DocLookTests.BookletFlip_Flex_NeverJumps_WhenTheCoverTurnsBack` | wave 2, point 6: no bow step over `FlexRate` x dt at 60 and 120 fps, five turn-back points, both ways | the old bow flipped 2 (6 mm) in one frame at 90 degrees |
 | `DocLookTests.BookletFlip_Flex_TrailsTheSwingAndItsRebound_AndNoneUnderReducedMotion` | wave 2, point 6: the bow trails the rebound; flat under Reduced Motion and on arrival | the old bow kept the opening's sign through the rebound |
-| `DocLookTests.CoverMarks_RideTheShuttingBow_ClearOfTheBoard` | wave 2, point 8 | the board rose up to 0.25 mm (seal) and 0.8 mm (emblem) under the marks, over 0.05 and 0.1 mm gaps |
+| `DocLookTests.CoverBow_Ride_UnderTheBow_EveryMarkClearsItsBoardByItsRestGap`, `CoverBow_Ride_Flat_*`, `CoverBow_Ride_AMarkOffCentre_*` | wave 2, point 8; the re-verify of 460c564, point 1 (they replace `CoverMarks_RideTheShuttingBow_ClearOfTheBoard`, which tested only `PaperBend`) | unridden, the board rose up to 0.25 mm (seal) and 0.8 mm (emblem) under marks 0.05 and 0.1 mm over it; each of seven mutations of `CoverBow` fails two of the three |
 | `FormLayoutTests.Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit` | wave 2, point 7b | the height check passed a broken single-token value |
-| rig `coverHits` in `doclook_print` (gate `doclook.play.coverHits`, demo) | wave 2, S3, in the game | needs Unity (R7b) |
+| rig `coverHits` in `doclook_print` (gate `doclook.play.coverHits`, merge level) | wave 2, S3, in the game | needs Unity (R7b) |
 
 `python -m unittest discover -s tools/qa -p "test_*.py"`: 35 OK (the edited `doclook_print.json` still parses, with its three `coverHits` steps).
 
@@ -349,18 +380,18 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
   - Add: "the contact shadow darkens with stack rank (`PaperDepth.RankStrength`, once DOC-HANDLE raises `DeskEvents.StackChanged`)".
 - **63 (NEW badge):** "A red NEW badge over the rulebook's GUIDE tab" → "A red NEW sticker on the rulebook's GUIDE tab".
 - **194 (hover):** rewrite: "Hover: a paper, the rulebook folder and its tabs lift (Papers, Please-style; `IHoverLift`, `InteractionFeedbackSO.paperHoverLift`) with the hand cursor; a prop gets a 2 px rim round its silhouette on the office camera only (`HoverHull` stencil mask + screen-space push, `outlinePixels`); nothing hovers while something is held (Saleh's D15, BUG-10a); the traveller's hit zone gets the hand cursor only; desktop UI as before".
-- **New line (document text):** "Documents drawn on their art print every label over the clean face in the art's ink and grow their text as far as the art's places allow (`FormArt.printLabels`, `labelGrowth` 1.3, `valueGrowth` 1.5; a label over its value is re-laid as a band at the cell's top); no word ever breaks across lines and no value word is ever cut (the fit keeps every word inside its place, and the validator proves the content's names, premades' included, and origins fit, `ArtLayout.CutWords`, and every other value's probe words, `ArtLayout.Problems`); an Arabic text is laid line by line (`TmpFormText.Unbreak`, `TextFit`); the rulebook paginates before it shrinks and its lines sit on the ruled lines (`RuledLines`); the cap-height gate (`doclook.forms.capModel`, merge level; `doclook_cap`) holds data to ≥10 px cap at 1080p and ≥7 px at 720p, labels ≥6 px at 720p, and is red until FORMS-REDESIGN redesigns the 8 art forms (the orchestrator's decision of 2026-10-20) (tested: `DocLookTests`, `FormLayoutTests.Growth_*`, `CutWords_*`, `Problems_*`)".
+- **New line (document text):** "Documents drawn on their art print every label over the clean face in the art's ink and grow their text as far as the art's places allow (`FormArt.printLabels`, `labelGrowth` 1.3, `valueGrowth` 1.5; a label over its value is re-laid as a band at the cell's top); no word ever breaks across lines (the fit keeps every word inside its place; a word that still does not fit is cut with a full stop); the validator proves no name (premades' included, on name and signature fields) or origin is ever cut (`ArtLayout.CutWords`) and checks every other value's probe words (`ArtLayout.Problems`; a probe's words can be shorter than a status's, an incident number's, a credits figure's or a fact's own); an Arabic text is laid line by line (`TmpFormText.Unbreak`, `TextFit`); the rulebook paginates before it shrinks and its lines sit on the ruled lines (`RuledLines`); the cap-height gate (`doclook.forms.capModel`, merge level; `doclook_cap`) holds data to ≥10 px cap at 1080p and ≥7 px at 720p, labels ≥6 px at 720p, and is red until FORMS-REDESIGN redesigns the 8 art forms (the orchestrator's decision of 2026-10-20) (tested: `DocLookTests`, `FormLayoutTests.Growth_*`, `CutWords_*`, `Problems_*`)".
 - **New line (import):** "Every texture under `Assets/Art/Office/` (never `AnimeHallLayers/`) imports with mipmaps, trilinear and BC7 (`OfficeArtImporter`; tested: `ArtSlotsTests.OfficeImports_*`; gate `doclook.import.office`)".
 
 ## RESULT
 
 **Offline:**
 - compile_check: 0 errors (Assembly-CSharp-Editor, TimeDeskEditMode).
-- runner: `passed 3775, failed 0` after wave 2 (3770 after the rebase onto 4290bd6; 3741 before it).
+- runner: `passed 3777, failed 0` after the re-verify of 460c564 (3775 after wave 2; 3770 after the rebase onto 4290bd6; 3741 before it).
 - QA python tests: 35 OK.
 
 **deferred: Unity.** Run these in the NOPE-feat-clock editor through its job runner, in the order given.
-- R1-R4 and R7b are this merge's gate. R4 is **expected red** on `doclook.forms.capModel`, on INTEGRATION's known-red line (decision 2).
+- R1-R4 and R7b are this merge's gate (R7b through `doclook.play.coverHits`, at merge level). R4 is **expected red** on `doclook.forms.capModel`, on INTEGRATION's known-red line (decision 2).
 - The pixel pass lines (R5 and on) are measured at the final paper size and framing, so they count after DESK-PLAN (#5), CAM (#6) and DOC-HANDLE (#8) have merged (FIX_PLAN merge order: DOC-LOOK is #9).
 
 - **R1 Import, validator and EditMode.**
@@ -370,7 +401,8 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - Run the EditMode suite.
   - **Pass:**
     - 0 compile errors.
-    - The validator reports no `would cut it` problem (`ArtLayout.CutWords`) and no new form-fit problem. Wave 2's word check (`ArtLayout.Problems`: "has a word ... wider than its place") is new: a line from it is a real cut of a single-token value, so its place is re-laid (FORMS-REDESIGN) or the line is listed with the decision.
+    - The validator reports no `would cut it` problem (`ArtLayout.CutWords`) and no new form-fit problem. `CutWords` now also measures Signature fields' names: TC-310's Signature place is about 53 px wide at A1, and "GIOVANFRANCESCO" needs about 23 px at the least size, so no line is expected.
+    - Wave 2's word check (`ArtLayout.Problems`: "has a word ... wider than its place") is new, and it measures the probe's words. Before acting on a line from it, measure the field's real widest word (the table under "Wave 2", point 7): a line on a date or a term can be a false alarm from the probe alone. A real cut is re-laid (FORMS-REDESIGN) or listed with the decision.
     - Every test passes except the known `UnitySkills ... SceneSummarize_CountsObjectsCorrectly`.
     - `QaEditorGateTests.EveryScenario_Reads_WithKnownOps` passes with `doclook_cap`, `doclook_print` and `doclook_hover` (the `capHeight` op is registered).
   - The console shows no "multiple of 4" compression warning for a texture that matters. If one does, the importer gets a rule row for it: keep it uncompressed.
@@ -399,14 +431,14 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - `qa.so.readers` is ok with the `cardFlex` allowlist line.
     - There is no other new red.
   - **Expected red: `doclook.forms.capModel`.**
-    - Its line lists each form's data at A1/A2, its labels at A2 and the growth still needed. The table at the top predicts them: passport about 4.8/3.2 px, x2.1; TC-310 about 2.6/1.7 px, x3.8.
+    - Its line lists each form's data at A1/A2, its labels at A2 and the growth still needed. The table at the top predicts them: passport about 4.8/3.2 px, x2.2; TC-310 about 2.6/1.7 px, x4.1 (`CapHeight.Needed` takes the larger of the A1 and A2 ratios: 7/3.2 and 7/1.7).
     - INTEGRATION's known-red line (decision 2, quoted above) lets the merge through on it.
     - Copy the line into NOTES_RECHECK for note 25.
 - **R7b Shut boxes** (wave 2, S3; run it right after R2, it does not depend on the final framing).
   - Steps: `QaJobs.Scenario` with `doclook_print`.
   - **Pass:** `doclook_print.coverHits.shut`, `.folder_reshut` and `.open` are all ok. Each line reads "N probes, 0 wrong".
   - Also by hand on the shut passport and the shut folder: hover, click and drag on the empty hidden half do nothing (no lift, no hand cursor, no pick-up), and the shown half works.
-  - The demo gate's `doclook.play.coverHits` reads these results.
+  - The merge gate's `doclook.play.coverHits` reads these results. They must be taken at HEAD on a clean tree, so run R7b again after any later commit.
 - **R5 Cap height** (BUG-9, note 25).
   - Steps: write `doclook_cap` to `Library/QA/job_scenario.txt` and run `QaJobs.Scenario`.
   - **Pass (after the decision):**

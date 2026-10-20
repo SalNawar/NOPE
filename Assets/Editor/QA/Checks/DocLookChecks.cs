@@ -14,11 +14,14 @@ using UnityEngine;
 /// BUG-9's floors (doclook.forms.capModel: 10 px data at A1, 7 px at A2,
 /// labels 6 px at A2), at merge level so the merge gate shows the shortfall
 /// (it is red until the papers read: Saleh's call on the mat, the reading
-/// view and the floors, docs/pending/DOC-LOOK.md). Demo only: the measured
-/// cap height on screen (doclook.play.capHeight, the doclook_cap scenario's
-/// capHeight op), and the pointer on a shut passport's and the shut folder's
-/// hidden halves (doclook.play.coverHits, the doclook_print scenario's
-/// coverHits op: they take no hover, click or drag).
+/// view and the floors, docs/pending/DOC-LOOK.md). Played, at merge level:
+/// the pointer on a shut passport's and the shut folder's hidden halves
+/// (doclook.play.coverHits, the doclook_print scenario's coverHits op: they
+/// take no hover, click or drag; it needs no later track's framing, so every
+/// merge from DOC-LOOK's on needs its results taken at HEAD). Demo only: the
+/// measured cap height on screen (doclook.play.capHeight, the doclook_cap
+/// scenario's capHeight op), which counts only at the final paper size and
+/// framing.
 /// </summary>
 public static class DocLookChecks
 {
@@ -91,8 +94,8 @@ public static class DocLookChecks
     [GateCheck("doclook.play.capHeight", Owner, GateKind.Play, DemoOnly = true)]
     public static GateResult PlayCapHeight() => GateResults.Require("doclook.play.capHeight", Owner, "doclook_cap.capHeight.*");
 
-    /// <summary>The hidden half of a shut passport and of the shut folder takes no pointer, the shown half does, and both halves do once open (the doclook_print scenario's coverHits op; DOC-LOOK review, S3).</summary>
-    [GateCheck("doclook.play.coverHits", Owner, GateKind.Play, DemoOnly = true)]
+    /// <summary>The hidden half of a shut passport and of the shut folder takes no pointer, the shown half does, and both halves do once open (the doclook_print scenario's coverHits op; DOC-LOOK review, S3). Merge level: the fix depends on no later track, so a merge gate needs these results taken at HEAD (recipe R7b).</summary>
+    [GateCheck("doclook.play.coverHits", Owner, GateKind.Play)]
     public static GateResult PlayCoverHits() => GateResults.Require("doclook.play.coverHits", Owner, "doclook_print.coverHits.*");
 
     /// <summary>Every texture of the office's art (ArtSlots.OfficeImports: never the art side's hall layers) imports with mipmaps, trilinear and the high-quality compression (OfficeArtImporter; BUG-63).</summary>

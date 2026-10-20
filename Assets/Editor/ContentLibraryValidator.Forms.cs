@@ -108,7 +108,7 @@ public static partial class ContentLibraryValidator
     /// <summary>How many of a category's longest words (by letters) CutWords measures in each field.</summary>
     private const int CutWordsPerField = 12;
 
-    /// <summary>The content's longest words each of <paramref name="template"/>'s fields prints (ArtLayout.CutWords), in capitals as a printed form sets them: a Name field's every given name a traveller can carry (every place's lists, the 2150 citizens' among them, and every premade's own name, CaseFactory's two sources; a returning traveller keeps the name drawn from them), a Destination field's every place's origin label; none for the other fields (FormLayout.Check measures their probe values, whose words stand in for theirs: ArtLayout.Problems).</summary>
+    /// <summary>The content's longest words each of <paramref name="template"/>'s fields prints (ArtLayout.CutWords), in capitals as a printed form sets them: a Name field's and a Signature field's (a holder signs with their given name, CaseFactory) every given name a traveller can carry (every place's lists, the 2150 citizens' among them, and every premade's own name, CaseFactory's two sources; a returning traveller keeps the name drawn from them), a Destination field's every place's origin label; none for the other fields. Those keep only FormLayout.Check's probe (ArtLayout.Problems' word check), whose words stand in for theirs only where they are as long: a status (8 characters), an incident number (9), a credits figure (9) and a fact's word (up to 14) are longer than their probes' longest words (6, 6, 6 and 11), so they are not measured whole (docs/pending/DOC-LOOK.md, "The words").</summary>
     private static IReadOnlyList<IReadOnlyList<string>> ContentWords(ContentLibrarySO lib, DocumentTemplateSO template)
     {
         List<string> Longest(IEnumerable<string> texts) => texts.Where(t => !string.IsNullOrWhiteSpace(t)).SelectMany(TextFit.Words).Select(ArtLayout.Capitals)
@@ -118,7 +118,7 @@ public static partial class ContentLibraryValidator
         List<string> origins = Longest(lib.Profiles.Where(p => p != null).Select(p => p.OriginLabel));
         var words = new List<IReadOnlyList<string>>();
         foreach (DocumentFieldSpec spec in template.fieldSpecs ?? new DocumentFieldSpec[0])
-            words.Add(spec == null ? null : spec.category == ClueCategory.Name ? names : spec.category == ClueCategory.Destination ? origins : null);
+            words.Add(spec == null ? null : spec.category == ClueCategory.Name || spec.category == ClueCategory.Signature ? names : spec.category == ClueCategory.Destination ? origins : null);
         return words;
     }
 }

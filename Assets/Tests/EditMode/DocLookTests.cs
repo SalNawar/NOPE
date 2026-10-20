@@ -6,10 +6,10 @@ using NUnit.Framework;
 /// <summary>
 /// DOC-LOOK's pure rules (FIX_PLAN DOC-LOOK, BUG-9, 10c, 11b, 12a, 14c, 40c;
 /// Saleh's D3 and D15): no word breaks across lines, a ruled page's lines,
-/// the cap height on screen, the passport's cover (its swing, its bow and
-/// the box a shut booklet or folder keeps), a card that never bends, print
-/// that rides the curl and the sheet's lifted corner, and the contact shadow
-/// by stack rank.
+/// the cap height on screen, the passport's cover (its swing, its bow, the
+/// box a shut booklet or folder keeps and the marks that ride the bow), a
+/// card that never bends, print that rides the curl and the sheet's lifted
+/// corner, and the contact shadow by stack rank.
 /// </summary>
 public class DocLookTests
 {
@@ -357,31 +357,121 @@ public class DocLookTests
         Assert.AreEqual(0f, ShutBox.Keep(0f, 0.2f, 0.5f, false).size, Eps);
     }
 
-    [Test]
-    public void CoverMarks_RideTheShuttingBow_ClearOfTheBoard()
+    // ---------------- CoverBow (wave 2, point 8: the cover's marks ride its bow) ----------------
+
+    /// <summary>
+    /// The two covers' sheets and marks, in their hinge's space as the builder
+    /// lays them: the folder's board (0.12 by 0.25 m, centred half a board
+    /// right of the hinge, its free edge to its right, a 1 mm bow, its seal
+    /// 0.05 mm over it) and the passport's front (0.088 by 0.0625 m, the data
+    /// page, centred half a page under the spine, its free edge at its foot,
+    /// a 1.5 mm bow, its emblem 0.1 mm over it); each mark a square 0.42 of
+    /// its sheet's width.
+    /// </summary>
+    private static readonly (string name, float w, float h, float sheetX, float sheetY, float freeX, float freeY, float bow, float gap)[] CoverSheets =
     {
-        // the folder's board (its seal 0.05 mm over it, a 1 mm bow, its free edge to its right) and the passport's front
-        // (its emblem 0.1 mm over it, a 1.5 mm bow, its free edge at its foot): each mark a centred square 0.42 of the sheet's width
-        foreach ((float w, float h, float dirX, float dirY, float bow, float gap) in new[]
-                 {
-                     (0.12f, 0.25f, -1f, 0f, 0.001f, 0.00005f),
-                     (0.088f, 0.0625f, 0f, 1f, 0.0015f, 0.0001f)
-                 })
+        ("the folder's seal", 0.12f, 0.25f, 0.06f, 0.01f, 1f, 0f, 0.001f, 0.00005f),
+        ("the passport's emblem", 0.088f, 0.0625f, 0f, -0.03125f, 0f, -1f, 0.0015f, 0.0001f)
+    };
+
+    /// <summary>
+    /// The least gap (metres, toward the viewer: -z) between a mark laid by
+    /// CoverBow.Ride on a bent cover sheet and the sheet's face under it, over
+    /// a 9 by 9 grid of the mark (its corners and edges included). The flat
+    /// face lies at z 0 and the mark rests <paramref name="gap"/> over it; the
+    /// ride moves the mark by its depth and turns it as Unity's
+    /// Quaternion.Euler(pitch, yaw, 0) does (the pitch about x, then the yaw
+    /// about y), and each point of the turned mark is set against the face
+    /// where that point now lies.
+    /// </summary>
+    private static float LeastGap(float markX, float markY, float half, float gap, float sheetX, float sheetY, float w, float h, PaperBend bend)
+    {
+        (float depth, float pitch, float yaw) = CoverBow.Ride(markX, markY, half, half, sheetX, sheetY, w, h, bend);
+        double a = pitch * Math.PI / 180.0, b = yaw * Math.PI / 180.0;
+        float least = float.MaxValue;
+        for (int i = -4; i <= 4; i++)
+            for (int j = -4; j <= 4; j++)
+            {
+                double ox = half * i / 4.0, oy = half * j / 4.0;
+                double ry = oy * Math.Cos(a), rz = oy * Math.Sin(a); // the pitch tips the mark's +y toward +z
+                double rx = ox * Math.Cos(b) + rz * Math.Sin(b);
+                double z = -ox * Math.Sin(b) + rz * Math.Cos(b); // the yaw turns its +x toward -z
+                float face = bend.Depth((markX + (float)rx - sheetX) * 2f / w, (markY + (float)ry - sheetY) * 2f / h, w, h);
+                least = Math.Min(least, face - (-gap + depth + (float)z));
+            }
+        return least;
+    }
+
+    [Test]
+    public void CoverBow_Ride_UnderTheBow_EveryMarkClearsItsBoardByItsRestGap()
+    {
+        foreach (var c in CoverSheets)
         {
-            var shutting = new PaperBend(dirX, dirY, -bow, 1f, 0f, 0f, 0f, 0f); // shutting, the free edge curls toward the mark
-            float half = 0.42f * w / 2f, rise = 0f;
+            float half = 0.42f * c.w / 2f;
+            // shutting, the free edge curls toward the viewer, up through a mark left lying at rest
+            PaperBend shutting = CoverBow.Of(c.freeX, c.freeY, -c.bow);
+            float rise = 0f;
             for (int i = -4; i <= 4; i++)
                 for (int j = -4; j <= 4; j++)
-                    rise = Math.Max(rise, -shutting.Depth(half * i / 4f * 2f / w, half * j / 4f * 2f / h, w, h));
-            Assert.Greater(rise, gap, $"a {w} m sheet: the board rises past the mark's old gap (it came up through it)");
-            float bulge = shutting.Bulge(0f, 0f, half, half, w, h);
-            for (int i = -4; i <= 4; i++)
-                for (int j = -4; j <= 4; j++)
+                    rise = Math.Max(rise, -shutting.Depth(half * i / 4f * 2f / c.w, half * j / 4f * 2f / c.h, c.w, c.h));
+            Assert.Greater(rise, c.gap, $"{c.name}: unridden, the shutting board comes up past the mark's gap");
+
+            // the mark centred as built, moved a quarter of the way toward the free edge and toward the hinge, and askew
+            float alongX = 0.25f * c.w / 2f * c.freeX, alongY = 0.25f * c.h / 2f * c.freeY;
+            foreach ((float ox, float oy) in new[] { (0f, 0f), (alongX, alongY), (-alongX, -alongY), (0.1f * c.w, 0.1f * c.h) })
+                foreach (float flex in new[] { -1f, -0.5f, 0.5f, 1f })
                 {
-                    float x = half * i / 4f * 2f / w, y = half * j / 4f * 2f / h;
-                    Assert.LessOrEqual(shutting.Depth(0f, 0f, w, h) - bulge, shutting.Depth(x, y, w, h) + 1e-7f, "the mark, lifted by its bulge, lies over the board everywhere under it");
+                    float least = LeastGap(c.sheetX + ox, c.sheetY + oy, half, c.gap, c.sheetX, c.sheetY, c.w, c.h, CoverBow.Of(c.freeX, c.freeY, c.bow * flex));
+                    Assert.GreaterOrEqual(least, c.gap - 1e-7f, $"{c.name} moved x {ox * 1000f:0.0} mm, y {oy * 1000f:0.0} mm off centre, at flex {flex}: the ridden mark stays its rest gap over the board everywhere under it");
                 }
         }
+    }
+
+    [Test]
+    public void CoverBow_Ride_Flat_TheMarkLiesAtRest_AndTheBowCurlsOnlyTheFreeEdge()
+    {
+        foreach (PaperBend flat in new[] { PaperBend.Flat, CoverBow.Of(1f, 0f, 0f), CoverBow.Of(0f, -1f, 0f) })
+        {
+            (float depth, float pitch, float yaw) = CoverBow.Ride(0.075f, 0.02f, 0.0252f, 0.0252f, 0.06f, 0.01f, 0.12f, 0.25f, flat);
+            Assert.AreEqual(0f, depth, 0f, "flat, an off-centre mark stays at rest");
+            Assert.AreEqual(0f, pitch, 0f);
+            Assert.AreEqual(0f, yaw, 0f);
+        }
+        // the one bow the shader draws (PaperCover.Bow) and the marks ride: the hinge end flat, the free edge curled twice the bow
+        PaperBend folder = CoverBow.Of(1f, 0f, 0.001f);
+        Assert.AreEqual(0f, folder.Depth(-1f, 0.3f, 0.12f, 0.25f), 1e-7f, "the folder board's hinge (its left) stays flat");
+        Assert.AreEqual(0.002f, folder.Depth(1f, 0.3f, 0.12f, 0.25f), 1e-7f, "its free edge (its right) curls 2 mm");
+        PaperBend passport = CoverBow.Of(0f, -1f, 0.0015f);
+        Assert.AreEqual(0f, passport.Depth(0.4f, 1f, 0.088f, 0.0625f), 1e-7f, "the passport front's spine (its top) stays flat");
+        Assert.AreEqual(0.003f, passport.Depth(0.4f, -1f, 0.088f, 0.0625f), 1e-7f, "its free edge (its foot) curls 3 mm");
+    }
+
+    [Test]
+    public void CoverBow_Ride_AMarkOffCentre_TakesTheSlopeAndDepthOfTheFaceUnderIt()
+    {
+        // the folder's seal 15 mm from its board's centre toward the free edge, then toward the hinge, the board shutting at its full bow
+        float w = 0.12f, h = 0.25f, half = 0.0252f;
+        PaperBend shutting = CoverBow.Of(1f, 0f, -0.001f);
+        foreach ((float x, string way) in new[] { (0.25f, "toward the free edge"), (-0.25f, "toward the hinge") })
+        {
+            (float depth, float pitch, float yaw) = CoverBow.Ride(0.06f + x * w / 2f, 0.01f, half, half, 0.06f, 0.01f, w, h, shutting);
+            (float dx, float dy) = shutting.Slope(x, 0f, w, h);
+            Assert.AreEqual(0f, dy, 1e-9f);
+            Assert.AreEqual(0f, pitch, 1e-6f, way + ": the bow runs across the board, so the seal does not tip up the page");
+            Assert.AreEqual(-Math.Atan(dx) * 180.0 / Math.PI, yaw, 1e-4, way + ": turned to the face's slope under the seal's own centre (flat under the board's)");
+            Assert.Greater(Math.Abs(yaw), 0.25f, way + ": turned, not flat");
+            Assert.AreEqual(shutting.Depth(x, 0f, w, h) - shutting.Bulge(x, 0f, half, half, w, h), depth, 1e-9f, way + ": on the face under its centre, lifted by how far the curl rises past it");
+        }
+        Assert.Greater(CoverBow.Ride(0.075f, 0.01f, half, half, 0.06f, 0.01f, w, h, shutting).yaw, 0f, "toward the free edge the curl rises toward the viewer: the seal's edge on that side comes toward the viewer with it");
+        Assert.Less(CoverBow.Ride(0.045f, 0.01f, half, half, 0.06f, 0.01f, w, h, shutting).yaw, 0f, "toward the hinge the bow's hump lies on the hinge's side of the seal: it turns the other way");
+
+        // the passport's emblem 7.8 mm toward its foot (the free edge): the bow runs up the page, so it tips about its x
+        PaperBend passport = CoverBow.Of(0f, -1f, -0.0015f);
+        var (_, tip, turn) = CoverBow.Ride(0f, -0.03125f - 0.0078125f, 0.0185f, 0.0185f, 0f, -0.03125f, 0.088f, 0.0625f, passport);
+        var (_, up) = passport.Slope(0f, -0.25f, 0.088f, 0.0625f);
+        Assert.AreEqual(Math.Atan(up) * 180.0 / Math.PI, tip, 1e-4, "tipped to the slope up the page");
+        Assert.Greater(tip, 1f, "its top tips away as its foot comes toward the viewer with the curling edge (about 1.9 degrees)");
+        Assert.AreEqual(0f, turn, 1e-6f);
     }
 
     // ---------------- PaperBend (D3, BUG-12a) ----------------

@@ -150,7 +150,7 @@ public sealed class FolderCover : MonoBehaviour
             PaperCover.Bow(front, _block, Vector2.right, bow);
             PaperCover.Bow(back, _block, Vector2.left, -bow);
             if (front != null)
-                PaperCover.Ride(seal, _sealRest, _sealHalf, front.transform, PaperCover.BowOf(Vector2.right, bow));
+                PaperCover.Ride(seal, _sealRest, _sealHalf, front.transform, Vector2.right, bow);
         }
         if (coverClick != null && coverClick.TryGetComponent(out Collider box))
             box.enabled = !shut;

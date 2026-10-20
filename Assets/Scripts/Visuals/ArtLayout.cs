@@ -226,8 +226,13 @@ public static class ArtLayout
     /// its aspect, a value that does not fit its place at FitFloor of its
     /// size (measured wrapped at its place's width), and a value with a word
     /// wider than its place there (the paper never breaks a word, so it would
-    /// cut it: a single-token value such as a Citizen ID is its own probe's
-    /// one word, as long as the longest). Empty when the art fits.
+    /// cut it). The words are the probe's, FormLayout.Probe's cut from real
+    /// words, so they stand in for a field's own only as far as they are as
+    /// long: a 7-character value (a Citizen ID) is one probe word as long as
+    /// the longest, but a value of 8 to 12 characters is probed by words of 6
+    /// at most and a 28-character one by words of 11 (CutWords measures the
+    /// names and origins whole; DOC-LOOK.md, "The words"). Empty when the art
+    /// fits.
     /// </summary>
     public static List<string> Problems(FormSpec spec, FormData probe, ITextMeasure measure)
     {
