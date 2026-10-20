@@ -5,28 +5,52 @@ Branch `fix/a-doc-look`, cut from `origin/main` 9b8ab5f (P0: CARVE + CUTS + QA-R
 The commits:
 - The first submission (8c2239d before the rebase).
 - The resubmission, which answers the review of 8c2239d. Its nine points are listed under "Review of 8c2239d" with what changed for each.
-- This note.
+- A note on the rebase.
+- The wave-2 fixes: they answer the re-verify (`reverify:DOC-LOOK:1`, WAVE2_OPEN.md) and record the orchestrator's three decisions of 2026-10-20. See "Wave 2" below.
 
 Sources: FIX_PLAN §3 DOC-LOOK, FIX_PLAN_v2 §3 "DOC-LOOK: delta" (D3 and D15 decided; v2 wins), BUGLIST, DECISIONS_1019a (D3, D15, "keep a big mat size", DESK APPROVED), GAME_FEEL_BIBLE rows A1-A6 and A9, QA-RIG §4 and §8.
 
 `docs/FEATURES.md` is **not** edited here. INTEGRATION folds this file in. The lines to rewrite are listed under "FEATURES (for INTEGRATION)".
 
-## Needs a decision before this merges (BUG-9, note 25)
+## Decided by the orchestrator (2026-10-20)
 
-**The data floor cannot be met by DOC-LOOK at the decided mat, and the merge gate now says so.** `doclook.forms.capModel` runs at merge level (it was demo-only). It is **red**, so the merge gate refuses this branch until one of the calls below is made. This is the honest state of BUG-9. It is not a regression.
+These calls answer the re-verify's two blocking points (WAVE2_OPEN.md DOC-LOOK 3 and 4) and its new S3 bug (5). They are quoted here as given.
 
-**The numbers.** These come from the gate's own model, mirrored in a script: the smallest data and label on each art form at its desk size, with today's re-layout (labels x1.3, values x1.5).
+1. **Ownership approved.** DOC-LOOK may edit `FormArt.cs` (`printLabels`, `labelGrowth`, `valueGrowth`, `Worded`) and add the one `cardFlex` line to `tools/qa/so_reader_allowlist.txt`.
+2. **BUG-9 interim approved.**
+   - Keep the 0.5 fit floor and labels x1.3 until a new track, **FORMS-REDESIGN**, redesigns the 8 art forms with larger places, so the data reaches the 10/7 px floor at the big mat's reading view.
+   - `doclook.forms.capModel` stays red at merge level. INTEGRATION adds the known-red line at merge, with this decision.
+   - DOC-LOOK writes `docs/pending/FORMS-REDESIGN.md` as the hand-off: per form, the growth still needed, which fields to merge, drop or move to keep every cross-checked value whole, and the art changes needed.
+   - "Legibility is a quality bar, not optional: the redesign is required before any demo."
+3. **Fix the new S3 bug:** a shut passport and a shut folder must not keep full-size colliders (the hidden half must not catch clicks or drags). Test it. Done (see "Wave 2", point 5).
+
+**The known-red line for INTEGRATION** (`tools/qa/gate_known_red.txt`, INTEGRATION's file; this branch does not add it):
+`doclook.forms.capModel  # BUG-9 note 25, DOC-LOOK (#9): data under the 10/7 px floor at the big mat until FORMS-REDESIGN redesigns the 8 art forms; orchestrator's decision 2026-10-20 (fit floor 0.5 and labels x1.3 approved as the interim; the redesign is required before any demo)`
+
+**The hand-off:** `docs/pending/FORMS-REDESIGN.md`. It covers:
+- the floor in pixels;
+- each field's growth, its longest value and the width that value needs;
+- why today's art cannot reach the floor, plus a model of the least desk size per form (x1.0 to x1.7);
+- the art changes;
+- per form, what to move and pair;
+- the fields that could be dropped only by Saleh's call;
+- the multi-line place the code needs;
+- the tracks it must agree with.
+
+### Background: why DOC-LOOK could not reach the floor (kept for the record)
+
+**The numbers.** These come from the gate's own model, mirrored in a script: the smallest data and label on each art form at its desk size, with today's re-layout (labels x1.3, values x1.5). The growth is the gate's (`CapHeight.Needed`: the larger of 10 px over the A1 figure and 7 px over the A2 one). The first submission's table used the A1 floor alone.
 
 | Form | At the big mat's view (0.67, the decision) | At Q5 A (about 0.9) | At today's view (1.0) | Growth still needed at the big mat |
 |---|---|---|---|---|
-| TC-101 passport | data 4.8 / 3.2 px, labels 1.6 px at A2 | 6.4 / 4.3 | 7.1 / 4.8 | x2.1 |
-| TC-230 | 5.8 / 3.9, labels 3.4 | 7.8 / 5.2 | 8.7 / 5.8 | x1.7 |
-| TC-240 | 5.6 / 3.7, labels 2.8 | 7.6 / 5.0 | 8.4 / 5.6 | x1.8 |
-| TC-310 | 2.6 / 1.7, labels 1.6 | 3.5 / 2.3 | 3.9 / 2.6 | x3.8 |
-| TC-520 | 5.5 / 3.6, labels 2.9 | 7.3 / 4.9 | 8.2 / 5.4 | x1.8 |
-| TC-610 | 4.3 / 2.9, labels 2.8 | 5.8 / 3.9 | 6.5 / 4.3 | x2.3 |
-| TC-620 | 5.3 / 3.5, labels 2.5 | 7.1 / 4.7 | 7.9 / 5.2 | x1.9 |
-| TC-630 | 5.2 / 3.5, labels 2.7 | 7.0 / 4.6 | 7.7 / 5.2 | x1.9 |
+| TC-101 passport | data 4.8 / 3.2 px, labels 1.6 px at A2 | 6.4 / 4.3 | 7.1 / 4.8 | x2.2 |
+| TC-230 | 5.8 / 3.9, labels 3.4 | 7.8 / 5.2 | 8.7 / 5.8 | x1.8 |
+| TC-240 | 5.6 / 3.7, labels 2.8 | 7.6 / 5.0 | 8.4 / 5.6 | x1.9 |
+| TC-310 | 2.6 / 1.7, labels 1.6 | 3.5 / 2.3 | 3.9 / 2.6 | x4.1 |
+| TC-520 | 5.5 / 3.6, labels 2.9 | 7.3 / 4.9 | 8.2 / 5.4 | x1.9 |
+| TC-610 | 4.3 / 2.9, labels 2.8 | 5.8 / 3.9 | 6.5 / 4.3 | x2.4 |
+| TC-620 | 5.3 / 3.5, labels 2.5 | 7.1 / 4.7 | 7.9 / 5.2 | x2.0 |
+| TC-630 | 5.2 / 3.5, labels 2.7 | 7.0 / 4.6 | 7.7 / 5.2 | x2.0 |
 
 Floors: data 10 px cap at A1 and 7 px at A2, labels 6 px at A2. Each cell shows data at A1 / A2. R4 prints the gate's exact figures.
 
@@ -45,13 +69,15 @@ Floors: data 10 px cap at A1 and 7 px at A2, labels 6 px at A2. Each cell shows 
 3. **Lower floors.** For example, data 6 px and labels 3 px at A1. Note 25 ("tiny font") then stays open.
 4. **A reading aid**, such as a hold-to-read pose. This conflicts with D1 ("no need to enlarge the documents when you click them").
 
-DOC-LOOK recommends **1 + 2**. Whatever is decided, the gate line changes with it. If Saleh defers, INTEGRATION may add this known-red line, with his call quoted, so the other DOC-LOOK fixes can land:
-`doclook.forms.capModel  # BUG-9 note 25, DOC-LOOK (#9): data under the 10/7 px floor at the big mat; Saleh's call <date>`.
-This branch does not add the line, because `gate_known_red.txt` is INTEGRATION's and a new entry needs Saleh or the plan's owner.
+DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDESIGN track (decision 2 above). FORMS-REDESIGN.md's model adds larger papers on the mat where the art alone cannot reach the floor, agreed with DESK-PLAN and CAM.
 
-**Two more deviations that need explicit approval** (they are not self-approved any more):
-- **The fit floor stays at 0.5 of the art's size; the plan asks for 0.85.** FIX_PLAN says "the fit floor rises from 0.5 to 0.85 ... wrap or abbreviate instead of shrinking". Each value place on the art holds one line. At 0.85 of the grown size, the passport's DESTINATION box holds about 10 characters, so 43-character origins would be cut ("abbreviated"). That is data loss on a field the player cross-checks. With a 0.85 floor, the validator (`ArtLayout.Problems`) would refuse the content. `TextFit.Floor` = 0.85 only labels a text fitted below it as "shrunk" for the gate. The fix is call 2 (larger places), not a higher floor. **Approve the 0.5 floor until the forms are redesigned, or choose cutting.**
-- **Labels grow x1.3; the plan asks for 2-3x.** A re-laid label band takes its height from the value under it. At x2 the values would shrink. The same redesign (call 2) fixes it.
+**The two deviations, approved as the interim by decision 2:**
+- **The fit floor stays at 0.5 of the art's size; the plan asks for 0.85.**
+  - FIX_PLAN says "the fit floor rises from 0.5 to 0.85 ... wrap or abbreviate instead of shrinking".
+  - Each value place on the art holds one line. At 0.85 of the grown size, the passport's DESTINATION box holds about 10 characters, so 43-character origins would be cut ("abbreviated"). That is data loss on a field the player cross-checks.
+  - With a 0.85 floor, the validator (`ArtLayout.Problems`) would refuse the content. `TextFit.Floor` = 0.85 only labels a text fitted below it as "shrunk" for the gate.
+  - FORMS-REDESIGN raises it once each place holds its longest value whole.
+- **Labels grow x1.3; the plan asks for 2-3x.** A re-laid label band takes its height from the value under it, so at x2 the values would shrink. FORMS-REDESIGN's art draws the label bands at their floor.
 
 ## Review of 8c2239d: what changed (resubmission)
 
@@ -67,6 +93,64 @@ This branch does not add the line, because `gate_known_red.txt` is INTEGRATION's
 | 8 | `Stamp` did not flatten the model's shader bend | `Stamp` calls `ShowBend(PaperBend.Flat)` (the model, the prints, the fills and lines), then `RestorePrints()`. |
 | 9 | Ownership of `FormArt.cs` and `so_reader_allowlist.txt` | Not changed here. They still need the orchestrator's (or INTEGRATION's) confirmation. See Ownership. |
 
+## Wave 2: the re-verify of e0e3e8e, and what changed
+
+| # (WAVE2_OPEN.md) | Finding | Change |
+|---|---|---|
+| 3 | BUG-9 blocked on a decision | Decided (decision 2). The decision and the known-red line are above; the hand-off is `docs/pending/FORMS-REDESIGN.md`. |
+| 4 | Ownership of `FormArt.cs` and the allowlist line | Approved (decision 1). See Ownership. |
+| 5 | **S3: a shut passport and a shut folder kept full-size boxes**, so their hidden halves took hover, click, press-to-open and drag over bare counter or desk | **Fixed.** See "The shut boxes" below. |
+| 6 | The cover's bow flipped sign in one frame on a turn back (a 6 mm pop), and it did not trail the rebound | **Fixed.** `BookletFlip.Flex` now eases (see "The bow" below). |
+| 7 | `ArtLayout.CutWords` missed the premades' names; single-token values relied on a height check | **Fixed.** See "The words" below. |
+| 8 | The cover's emblem and the folder's seal are flat quads. The shutting board's bow rose under them by more than their 0.05 and 0.1 mm gaps (the model: up to 0.25 mm under the seal, 0.8 mm under the emblem; the reviewer estimated 0.25 and 0.37) | **Fixed.** See "The marks" below. |
+
+**The shut boxes (S3).**
+- **The passport.** `DeskDocument.ShowShut` cuts the sheet's `BoxCollider` (the click's, the hover's and DeskDraggable's proxy) to the data page under the spine while the booklet shows shut or swings (`ShutBox.Keep`, pure). It puts the box back to the whole sheet once the cover lies open.
+- **Print parts on the visa page.** Every printed part's own collider over the spine (a seen UV tick, for example) is turned off while shut. Only the boxes it turned off come back on.
+- **Each print is judged where it lies.** Each renderer and box is judged by its own place, not its layer root's. A layer's marks on the data page (UvPaperLayer, MicroPaperLayer, whose roots sit at the sheet's centre) no longer hide with the visa page.
+- **The folder.** `DeskRulebook.ShowShut` cuts the folder's own card box (its click, its hover and the drag's proxy) at the spine to the board's side while shut (`ShowCardBox`). The spine and the face's right edge are measured into the box's space through the folder's face, so the cut follows the art. It puts the box back as built once the folder opens.
+- **The rest of the folder** was already right: the left tabs hide while shut, the cover page's click box is off while shut, and the pages lie under the face.
+- **Tests:**
+  - `DocLookTests.ShutBox_KeepsOnlyTheSideOfTheSpineThatShows` (pure).
+  - The rig op `coverHits` (`DocLookOps`) uses the event system's own raycast at the middle of each half of every booklet and of the folder. A shut booklet's visa page and a shut folder's left board must meet nothing of theirs, and the shown half must meet them. Open, both halves must meet them.
+  - `doclook_print` runs `coverHits` three times: `shut` at the start, `folder_reshut` after the folder is shut again, and `open` once both lie open.
+  - The demo gate reads it: `doclook.play.coverHits`. A merge run of `doclook_print` covers it (recipe R7b).
+- **A side effect on the rig:** the rig's `click` op aims at a target's collider centre, so clicks on a shut passport now land on its cover.
+
+**The bow (6).**
+- **What changed.** `BookletFlip.Flex` is now a state that `Tick` moves toward a target:
+  - the target is the sine of the cover's angle times its angular speed over `FullBowSpeed` (a whole swing's mean, at most all of it);
+  - its sign follows the way the cover turns, so the free edge trails the swing and the rebound off the desk alike;
+  - it changes by at most `FlexRate` (30 a second). A full turn from one way's bow to the other takes at least 67 ms, and at 60 fps the passport's edge moves at most 1.5 mm a frame.
+- **At rest.** It settles flat after the cover rests (`Tick` keeps returning true while it settles, so FolderCover redraws the bow to flat).
+- **Reset.** `Shut()` and a Reduced Motion jump reset it to flat.
+- **The numbers.** The modelled peak is about 0.89 of the most (2.7 mm on the passport, 1.8 mm on the folder). The opening's rebound bows the other way by about 0.12.
+- **Tests:**
+  - `DocLookTests.BookletFlip_Flex_NeverJumps_WhenTheCoverTurnsBack`: at 60 and 120 fps, five turn-back points, both ways; the turn back alone keeps the bow; no step over `FlexRate` x dt; flat at rest.
+  - `DocLookTests.BookletFlip_Flex_TrailsTheSwingAndItsRebound_AndNoneUnderReducedMotion`.
+  - The existing `BookletFlip_Flex_TheFreeEdgeTrailsTheSwing_FlatAtRest` still passes.
+
+**The words (7).**
+- **(a) Name sources.** `ContentWords` (the validator) now adds every premade's own name (`ContentLibrarySO.Legendaries`' `displayName`) to the Name fields' words, beside every place's lists.
+  - The 2150 citizens' names are already in those lists.
+  - A returning traveller keeps a drawn name.
+  - The premades' longest word today is "Michelangelo" (12), shorter than the drawn "Giovanfrancesco" (15), so nothing new fails today. The gap is closed for future content.
+- **(b) Single-token values.** `ArtLayout.Problems` now also fails a value whose probe has a word wider than its place at the least size, even when its broken lines would fit the place's height.
+  - A single-token value (an ID such as "KTR-418", "DP-0417" or "SW-0417") is its own probe's one word, as long as the longest, so the check covers them.
+  - `CutWords` and `Problems` share one test (`ArtLayout.Breaks`).
+  - Test: `FormLayoutTests.Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit`.
+- **The limit, stated.** A long number inside a longer value (the "9,999,999" of "9,999,999 cr") is measured only through the probe's words, which are shorter. A credits value whose number alone outgrew its place at the least size would be cut. Today the only art fields that print credits are TC-310's Debt and TC-520's Day Wage. Their places are about 100 px wide at A1, and the 12 characters need under 20 px at the least size. FORMS-REDESIGN sizes every place for its longest value whole.
+
+**The marks (8).**
+- `PaperCover.Ride` (shared by the folder) lays the passport's emblem and the folder's seal on their sheet's bow, as a paper's prints ride its bend:
+  - on the face under the mark's centre;
+  - turned to the face's slope;
+  - lifted by `PaperBend.Bulge` (how far the curl rises past the mark).
+- Shutting, the board never comes up through them. Flat, they lie at rest.
+- `PaperCover.BowOf` gives one `PaperBend` for both the shader's `_Flex` and the ride.
+- The folder's seal is now a serialized reference (`FolderCover.seal`), which the builder sets. **It needs the R2 rebuild.** Until then the field is empty and the seal stays flat, as before.
+- Test: `DocLookTests.CoverMarks_RideTheShuttingBow_ClearOfTheBoard`. It checks two things for the folder's and the passport's geometry: the board's rise under the mark is more than the old gap, and the lifted mark lies over the board everywhere under it.
+
 ## Ownership
 
 Every file is DOC-LOOK's by FIX_PLAN §3 "Owns", FIX_PLAN_v2 §3 delta (D3: the passport **and the folder** open and close), CARVE.md (`.DeskPaper.cs`, `DeskDocument.Render.cs`, `DeskRulebook.cs`) or QA-RIG §2 (`Checks/DocLookChecks.cs`, `Tests/PlayMode/DocLook/**`, `tools/qa/scenarios/doclook_*.json`). Notes for the verifier:
@@ -75,8 +159,9 @@ Every file is DOC-LOOK's by FIX_PLAN §3 "Owns", FIX_PLAN_v2 §3 delta (D3: the 
 |---|---|
 | `Assets/Editor/OfficeArtImporter.cs` (new) | Named in FIX_PLAN §3 DOC-LOOK "Owns" ("a new `Assets/Editor/OfficeArtImporter.cs`") and in §0 rule 2 as the only writer of `Assets/Art/Office/**` import settings. |
 | `Assets/Scripts/Office/Desk/FolderCover.cs` (new) | D3's folder open and close, assigned to DOC-LOOK in Phase A (v2 decision table). It is built by `.DeskPaper.cs` and driven by `DeskRulebook.cs`, both DOC-LOOK's. |
-| `Assets/Scripts/Visuals/FormArt.cs` | **Needs the orchestrator's confirmation.** It is not on any track's list. It is the serialized art-form type that the DocTemplate assets (DOC-LOOK's) hold, read only by `ArtLayout` (DOC-LOOK's) and the two `Worded` callers. Three fields are added (`printLabels`, `labelGrowth`, `valueGrowth`), and `Worded` changes. |
-| `tools/qa/so_reader_allowlist.txt` (one line) | **Needs INTEGRATION's confirmation.** INTEGRATION keeps this list. Cards are now rigid by rule (`PaperBend.FlexOf`, D3), so `MotionKnobs.cardFlex` has no reader left and `qa.so.readers` would refuse the merge. The line names BUG-11b / D3 and its owner, DOC-HANDLE, who deletes the knob with its 11a work; the line goes with it. |
+| `Assets/Scripts/Visuals/FormArt.cs` | **Approved** (orchestrator, 2026-10-20, decision 1). It is the serialized art-form type that the DocTemplate assets (DOC-LOOK's) hold, read only by `ArtLayout` (DOC-LOOK's) and the two `Worded` callers. Three fields are added (`printLabels`, `labelGrowth`, `valueGrowth`), and `Worded` changes. |
+| `tools/qa/so_reader_allowlist.txt` (one line) | **Approved** (orchestrator, 2026-10-20, decision 1). Cards are now rigid by rule (`PaperBend.FlexOf`, D3), so `MotionKnobs.cardFlex` has no reader left and `qa.so.readers` would refuse the merge. The line names BUG-11b / D3 and its owner, DOC-HANDLE, who deletes the knob with its 11a work; the line goes with it. |
+| `docs/pending/FORMS-REDESIGN.md` (new) | The hand-off the orchestrator asked for (decision 2). |
 | `DeskDocument.Render.cs` declares `IPointerDownHandler` | The partial is DOC-LOOK's. If DOC-HANDLE (#8) adds an `OnPointerDown` to the logic partial for the press-frame pick-up, the two are a compile clash at the rebase: merge the bodies (`cover.Press()` plus DOC-HANDLE's). |
 
 Not committed: `NOPE-feat-clock.sln` (IDE churn).
@@ -99,8 +184,8 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
   - The rulebook's rows are only cut, never shrunk, because `LayRows` sets their size again afterwards.
 - **Data is never cut** (resubmission):
   - `TmpFormText.ArtFit` picks the largest size at which the text fits its place **and** its widest word fits the place's width.
-  - `ArtLayout.CutWords` (in the validator) proves that the content's longest name and origin words fit at the least size. Together they mean `Unbreak` never cuts a value on an art document.
-  - Other fields (dates, IDs, numbers) keep the existing probe check (`ArtLayout.Problems`).
+  - `ArtLayout.CutWords` (in the validator) proves that the content's longest name words (every place's lists and every premade's name) and origin words fit at the least size. Together they mean `Unbreak` never cuts a value on an art document.
+  - Other fields (dates, IDs, numbers) keep the probe check (`ArtLayout.Problems`). Since wave 2 it also fails a probe word wider than its place at the least size, so a single-token value such as an ID is never cut. The one limit is stated under "Wave 2", point 7.
 - **The 0.85 floor (deviation awaiting approval).** `TextFit.Floor` = 0.85 marks a text fitted below it as shrunk (`TextFit.Shrunk`). The least size stays `TextFit.Least` 0.5 of the art's own size (`ArtLayout.FitFloorOf` = 0.5 / growth).
 - **The rulebook paginates before it shrinks** (`DeskRulebook.RowTextFloor` 0.6 → 1). Only a rule alone on its sheet shrinks: it stops at `TextFit.Floor` first and goes down to `RowTextLeast` only as a last resort.
 - **The validator measures in the art's value face.** `ContentLibraryValidator.Forms` measures an art form in `FormStyleSO.artValueFont`, not LiberationSans.
@@ -144,7 +229,9 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
   - While it is shut:
     - the visa page is cut from the model (`DocumentCel._Clip`, now a line `a x + b y > c`; `DeskPaperDepth.ClipAbove`);
     - the prints above the spine are hidden;
-    - the contact shadow lies under the data page only (`DeskDocument.ShowShut`).
+    - the contact shadow lies under the data page only (`DeskDocument.ShowShut`);
+    - **the visa page takes no pointer** (wave 2, S3): the sheet's box covers the data page only, and printed parts' boxes over the spine are off (`ShutBox`).
+  - The emblem rides the cover's bow (`PaperCover.Ride`), and the bow eases on a turn back (`BookletFlip.FlexRate`).
   - The builder adds `Sheet/Cover/Hinge/{Front, Emblem, Back}` to the paper template (`BuildPassportCover`).
 - **The folder opens and closes** (resubmission; D3, GAME_FEEL A3 "T2 open"). `FolderCover` (new) is the folder's front board, hinged on its spine (51.1% across the art, between the rivets). It carries the board's outside (manila with the Bureau's seal) and, back to back, its inside: the left half of the folder's art, its cover page.
   - **It arrives shut each day** (`DeskRulebook.Show`, the day's rules). Shut:
@@ -152,6 +239,7 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
     - the left board is cut from the model (`DeskPaperDepth.ClipLeftOf`);
     - the contact shadow lies under the right sheet only;
     - the pages lie 4 mm under the face (out of sight and out of the raycast), so a click on the shut folder meets its own box;
+    - **its own box covers the board's side only** (wave 2, S3: `DeskRulebook.ShowCardBox`), so the cut left board takes no hover, click or drag;
     - the cover's words and the tabs over the left board (RULES, PAPERS) hide. GUIDE, with its NEW badge, and SEALS stay.
   - **It opens** on a click on the shut folder, on a tab (opening at that tab), on any page turn and when the guide opens a sheet.
   - **It shuts** on a click on its open cover page (`FolderCoverClick`, a click box over the left board just above the folder's own).
@@ -159,7 +247,7 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
   - Inspect's row and seal bounds report "closed" while it is shut.
   - The swing is `BookletFlip`, with a 2 mm edge bow (a heavy board, A3 ≤3 mm) and the `rulebook_page` cue.
   - Pocket fold and put-away stay Phase B (DESK-HOMES, B3).
-  - The builder adds `Booklet/Cover/Hinge/{Front, Seal, Back}`, `Booklet/FolderCoverClick` and the materials `Rulebook_CoverOutside`, `Rulebook_CoverInside` and `Rulebook_CoverSeal`.
+  - The builder adds `Booklet/Cover/Hinge/{Front, Seal, Back}`, `Booklet/FolderCoverClick` and the materials `Rulebook_CoverOutside`, `Rulebook_CoverInside` and `Rulebook_CoverSeal`. It also sets `FolderCover.seal` (wave 2: the seal rides the board's bow).
 - **Cards are rigid** (`PaperBend.FlexOf`: a card gets 0 whatever the knobs say). They keep their contact shadow.
 - **"The folder never bends" is retired.** A page turn flicks the folder's loose sheets: a 3 mm bow and a 1.5 mm twist that ease flat over 0.35 s, none under Reduced Motion (`DeskPaperDepth.Flick`; GAME_FEEL A3). **The printed rows ride the flick** (resubmission: `DeskPaperDepth.Bent`, `DeskRulebook.RidePrints`), so no row sinks under a rising corner or leaves its ruled line.
 
@@ -212,7 +300,7 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
   - `Subdivide` runs once per print. It makes at most 24 x 24 cells for a page-sized fill, usually 24 x 1 for a rule.
   - Pooling and pre-building are DOC-HANDLE's; measure on its call-next recipe.
 
-## Tests (offline: compile 0 errors; runner `passed 3770, failed 0` on 4290bd6)
+## Tests (offline: compile 0 errors; runner `passed 3775, failed 0` on 4290bd6, after wave 2)
 
 | Test | Covers | Fails without the fix because |
 |---|---|---|
@@ -230,11 +318,17 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
 | `FormLayoutTests.PrintLabels_*`, `Growth_*` (4), `FitFloorOf_*`, `CapHeight_Smallest_*` | BUG-9 re-layout | before, labels printed only when translated and sizes did not grow |
 | `FormLayoutTests.CutWords_*` | review 7: a content word wider than its place at the least size is a problem; a short one is not; no art, no problem | new |
 | `ArtSlotsTests.Mipmapped_AndTrilinear_*`, `OfficeImports_*` | BUG-29, 63; the AnimeHallLayers early return | new |
+| `DocLookTests.ShutBox_KeepsOnlyTheSideOfTheSpineThatShows` | wave 2, S3: a shut booklet's and folder's box keeps the shown side | `ShutBox` is new; the boxes were whole |
+| `DocLookTests.BookletFlip_Flex_NeverJumps_WhenTheCoverTurnsBack` | wave 2, point 6: no bow step over `FlexRate` x dt at 60 and 120 fps, five turn-back points, both ways | the old bow flipped 2 (6 mm) in one frame at 90 degrees |
+| `DocLookTests.BookletFlip_Flex_TrailsTheSwingAndItsRebound_AndNoneUnderReducedMotion` | wave 2, point 6: the bow trails the rebound; flat under Reduced Motion and on arrival | the old bow kept the opening's sign through the rebound |
+| `DocLookTests.CoverMarks_RideTheShuttingBow_ClearOfTheBoard` | wave 2, point 8 | the board rose up to 0.25 mm (seal) and 0.8 mm (emblem) under the marks, over 0.05 and 0.1 mm gaps |
+| `FormLayoutTests.Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit` | wave 2, point 7b | the height check passed a broken single-token value |
+| rig `coverHits` in `doclook_print` (gate `doclook.play.coverHits`, demo) | wave 2, S3, in the game | needs Unity (R7b) |
 
-`python -m unittest discover -s tools/qa -p "test_*.py"`: 35 OK (the edited `doclook_print.json` still parses).
+`python -m unittest discover -s tools/qa -p "test_*.py"`: 35 OK (the edited `doclook_print.json` still parses, with its three `coverHits` steps).
 
 ## Open (not in this commit)
-1. **BUG-9's floor:** Saleh's call (see the top). Until then `doclook.forms.capModel` is red.
+1. **BUG-9's floor:** decided (decision 2). FORMS-REDESIGN does the redesign (`docs/pending/FORMS-REDESIGN.md`). Until it lands, `doclook.forms.capModel` stays red on INTEGRATION's known-red line, and **no demo** ships.
 2. **The hover IoU op** (QA-RIG §8 "hover IoU ≥0.9, its op"). No ID-mask op is written. The hover is judged from the `doclook_hover` sequences by eye (recipe R8). Papers no longer get an outline (D15), so the IoU applies to the props' rim only.
 3. **The line-mask diff** for "0 frames where a rule line disappears". The rig has no line-mask tool, so recipe R7 uses `flicker --static` plus a frame sheet.
 4. **Labels re-baked into the face art.** Not needed for the current art: the clean faces plus `printLabels` print every label in TMP in the art's ink (the plan's fallback, made the default). A redesign (call 2) would re-bake.
@@ -250,23 +344,23 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
   - "a card `cardFlex` 0.12" → "a card never bends (`PaperBend.FlexOf`, Saleh's D3; tested: `DocLookTests.FlexOf_ACardNeverBends_WhateverTheKnobs`)".
   - "and never bends" (the folder) → "and a page turn flicks its loose sheets, its printed rows riding the bend (`DeskPaperDepth.Flick`, `DeskRulebook.RidePrints`)".
   - Add: "the printed fills and lines bend with the face vertex by vertex, cut into cells of at most 1/24 of the page so they never sink under it, and every other printed part rides it lifted clear of the curl and the sheet's lifted corner (BUG-12a; tested: `DocLookTests.PrintCells_*`, `Bulge_*`, `SheetRelief_*`)".
-  - Add: "a passport arrives shut; its cover swings open on the press of a click, when picked up or laid on the desk, and shuts as it comes back to the counter, with a 15° lift, an OutBack swing that rebounds off the desk and a 3 mm page bow (`PaperCover`, `BookletFlip`; tested: `DocLookTests.BookletFlip_*`)".
-  - Add: "the rulebook folder arrives shut each day; a click on it or a tab opens it and a click on its cover page shuts it (`FolderCover`, Saleh's D3)".
+  - Add: "a passport arrives shut; its cover swings open on the press of a click, when picked up or laid on the desk, and shuts as it comes back to the counter, with a 15° lift, an OutBack swing that rebounds off the desk and a page bow of up to 3 mm that trails the swing and its rebound and eases through flat on a turn back (`PaperCover`, `BookletFlip`; tested: `DocLookTests.BookletFlip_*`); its emblem rides the bow; shut, only its data page takes the pointer (`ShutBox`; tested: `DocLookTests.ShutBox_*`, rig `coverHits`)".
+  - Add: "the rulebook folder arrives shut each day; a click on it or a tab opens it and a click on its cover page shuts it; shut, only the board's side takes the pointer (`FolderCover`, `DeskRulebook.ShowCardBox`, Saleh's D3)".
   - Add: "the contact shadow darkens with stack rank (`PaperDepth.RankStrength`, once DOC-HANDLE raises `DeskEvents.StackChanged`)".
 - **63 (NEW badge):** "A red NEW badge over the rulebook's GUIDE tab" → "A red NEW sticker on the rulebook's GUIDE tab".
 - **194 (hover):** rewrite: "Hover: a paper, the rulebook folder and its tabs lift (Papers, Please-style; `IHoverLift`, `InteractionFeedbackSO.paperHoverLift`) with the hand cursor; a prop gets a 2 px rim round its silhouette on the office camera only (`HoverHull` stencil mask + screen-space push, `outlinePixels`); nothing hovers while something is held (Saleh's D15, BUG-10a); the traveller's hit zone gets the hand cursor only; desktop UI as before".
-- **New line (document text):** "Documents drawn on their art print every label over the clean face in the art's ink and grow their text as far as the art's places allow (`FormArt.printLabels`, `labelGrowth` 1.3, `valueGrowth` 1.5; a label over its value is re-laid as a band at the cell's top); no word ever breaks across lines and no value word is ever cut (the fit keeps every word inside its place, and the validator proves the content's names and origins fit, `ArtLayout.CutWords`); an Arabic text is laid line by line (`TmpFormText.Unbreak`, `TextFit`); the rulebook paginates before it shrinks and its lines sit on the ruled lines (`RuledLines`); the cap-height gate (`doclook.forms.capModel`, merge level; `doclook_cap`) holds data to ≥10 px cap at 1080p and ≥7 px at 720p, labels ≥6 px at 720p, and is red until Saleh's call on the mat and the forms (tested: `DocLookTests`, `FormLayoutTests.Growth_*`, `CutWords_*`)".
+- **New line (document text):** "Documents drawn on their art print every label over the clean face in the art's ink and grow their text as far as the art's places allow (`FormArt.printLabels`, `labelGrowth` 1.3, `valueGrowth` 1.5; a label over its value is re-laid as a band at the cell's top); no word ever breaks across lines and no value word is ever cut (the fit keeps every word inside its place, and the validator proves the content's names, premades' included, and origins fit, `ArtLayout.CutWords`, and every other value's probe words, `ArtLayout.Problems`); an Arabic text is laid line by line (`TmpFormText.Unbreak`, `TextFit`); the rulebook paginates before it shrinks and its lines sit on the ruled lines (`RuledLines`); the cap-height gate (`doclook.forms.capModel`, merge level; `doclook_cap`) holds data to ≥10 px cap at 1080p and ≥7 px at 720p, labels ≥6 px at 720p, and is red until FORMS-REDESIGN redesigns the 8 art forms (the orchestrator's decision of 2026-10-20) (tested: `DocLookTests`, `FormLayoutTests.Growth_*`, `CutWords_*`, `Problems_*`)".
 - **New line (import):** "Every texture under `Assets/Art/Office/` (never `AnimeHallLayers/`) imports with mipmaps, trilinear and BC7 (`OfficeArtImporter`; tested: `ArtSlotsTests.OfficeImports_*`; gate `doclook.import.office`)".
 
 ## RESULT
 
 **Offline:**
 - compile_check: 0 errors (Assembly-CSharp-Editor, TimeDeskEditMode).
-- runner: `passed 3770, failed 0` (after the rebase onto 4290bd6; 3741 before it).
+- runner: `passed 3775, failed 0` after wave 2 (3770 after the rebase onto 4290bd6; 3741 before it).
 - QA python tests: 35 OK.
 
 **deferred: Unity.** Run these in the NOPE-feat-clock editor through its job runner, in the order given.
-- R1-R4 are this merge's gate. R4 is **expected red** on `doclook.forms.capModel` until Saleh's call.
+- R1-R4 and R7b are this merge's gate. R4 is **expected red** on `doclook.forms.capModel`, on INTEGRATION's known-red line (decision 2).
 - The pixel pass lines (R5 and on) are measured at the final paper size and framing, so they count after DESK-PLAN (#5), CAM (#6) and DOC-HANDLE (#8) have merged (FIX_PLAN merge order: DOC-LOOK is #9).
 
 - **R1 Import, validator and EditMode.**
@@ -276,7 +370,7 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - Run the EditMode suite.
   - **Pass:**
     - 0 compile errors.
-    - The validator reports no `would cut it` problem (`ArtLayout.CutWords`) and no new form-fit problem.
+    - The validator reports no `would cut it` problem (`ArtLayout.CutWords`) and no new form-fit problem. Wave 2's word check (`ArtLayout.Problems`: "has a word ... wider than its place") is new: a line from it is a real cut of a single-token value, so its place is re-laid (FORMS-REDESIGN) or the line is listed with the decision.
     - Every test passes except the known `UnitySkills ... SceneSummarize_CountsObjectsCorrectly`.
     - `QaEditorGateTests.EveryScenario_Reads_WithKnownOps` passes with `doclook_cap`, `doclook_print` and `doclook_hover` (the `capHeight` op is registered).
   - The console shows no "multiple of 4" compression warning for a texture that matters. If one does, the importer gets a rule row for it: keep it uncompressed.
@@ -287,7 +381,7 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - `PaperTemplate/Sheet/Paper` wears `Paper_ExamineCel`;
     - the Rulebook's `TabPlate1-4` and `Tab1-4/Text` sit lower (plate y −0.0026, on the board);
     - `GuideBadge` moves onto the GUIDE tab;
-    - `Rulebook/Booklet/Cover/Hinge/{Front, Seal, Back}` (with `FolderCover`) and `Rulebook/Booklet/FolderCoverClick` are new, and `DeskRulebook.folderCover` is set;
+    - `Rulebook/Booklet/Cover/Hinge/{Front, Seal, Back}` (with `FolderCover`, its `seal` set to the Seal quad) and `Rulebook/Booklet/FolderCoverClick` are new, and `DeskRulebook.folderCover` is set;
     - the materials `Rulebook_CoverOutside`, `Rulebook_CoverInside` and `Rulebook_CoverSeal` are new.
   - The art scene `OfficeScene.unity` is byte-unchanged. Commit `OfficeGameplay.unity` and the three new materials.
 - **R3 Importer scope** (FIX_PLAN "Importer scope", plus the review's risks).
@@ -306,8 +400,13 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - There is no other new red.
   - **Expected red: `doclook.forms.capModel`.**
     - Its line lists each form's data at A1/A2, its labels at A2 and the growth still needed. The table at the top predicts them: passport about 4.8/3.2 px, x2.1; TC-310 about 2.6/1.7 px, x3.8.
-    - The merge gate refuses on it until Saleh's call, or a known-red line that INTEGRATION adds with his call quoted.
+    - INTEGRATION's known-red line (decision 2, quoted above) lets the merge through on it.
     - Copy the line into NOTES_RECHECK for note 25.
+- **R7b Shut boxes** (wave 2, S3; run it right after R2, it does not depend on the final framing).
+  - Steps: `QaJobs.Scenario` with `doclook_print`.
+  - **Pass:** `doclook_print.coverHits.shut`, `.folder_reshut` and `.open` are all ok. Each line reads "N probes, 0 wrong".
+  - Also by hand on the shut passport and the shut folder: hover, click and drag on the empty hidden half do nothing (no lift, no hand cursor, no pick-up), and the shown half works.
+  - The demo gate's `doclook.play.coverHits` reads these results.
 - **R5 Cap height** (BUG-9, note 25).
   - Steps: write `doclook_cap` to `Library/QA/job_scenario.txt` and run `QaJobs.Scenario`.
   - **Pass (after the decision):**
@@ -338,6 +437,8 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - `folder_open` swings the board over to the left with a small rebound and no frame through the desk, and the rows appear when it lies open;
     - `folder_close` swings it back over the rows;
     - `passport_press_open`: the cover lifts on the press frame (±1 frame of the press in `drags.tsv`/the sequence), swings open with a visible page bow and rebounds without passing under the desk, and stays open on the counter until the drag;
+    - the cover's emblem and the folder's seal stay on their boards through every swing: no edge cut by the bowing board (wave 2, point 8);
+    - the page bow eases through flat on a turn back (put the passport back on the counter within 200 ms of a pick-up): no one-frame pop (wave 2, point 6);
     - the reviewer, comparing against a Papers, Please clip with `seqtools side`, answers "does it read as paper?" yes.
 - **R8 Hover** (BUG-10a, D15).
   - Steps: `QaJobs.Scenario` with `doclook_hover`. Make GIFs and sheets of `hover_a1`, `hover_a2` and `hover_held`.
@@ -356,4 +457,4 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
   - Steps: DOC-HANDLE's stack-order stills (3 papers in 10 random orders at A2).
   - **Pass:** the reviewer names the top paper correctly 10/10.
 - **R12 Photo include** (BUG-14c). In the frame debugger, DocumentCel binds `_DeskLightTint` and `_DeskLightLevel`. The match itself is measured at LIGHT's merge.
-- **R13 Notes re-check.** Saleh's notes 25 (tiny font), 7, 8, 9 and 3 go in NOTES_RECHECK with R5-R8 evidence. Note 25 stays open until the BUG-9 decision.
+- **R13 Notes re-check.** Saleh's notes 25 (tiny font), 7, 8, 9 and 3 go in NOTES_RECHECK with R5-R8 evidence. Note 25 stays open until FORMS-REDESIGN lands (decision 2).
