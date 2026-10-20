@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 496. Full regeneration is NOT complete.
+Saved: 521. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -500,3 +500,28 @@ Saved: 496. Full regeneration is NOT complete.
 | outfit_f_iraq_industrial__explaining_a | visually reviewed; registration pending |
 | outfit_f_iraq_industrial__thinking_b | visually reviewed; registration pending |
 | outfit_f_iraq_industrial__objecting_c | visually reviewed; registration pending |
+| hair_f_iraq_industrial | visually reviewed; registration pending |
+| headwear_f_iraq_industrial | visually reviewed; registration pending |
+| accessory_f_iraq_industrial | visually reviewed; registration pending |
+| accessory_f_iraq_industrial__explaining_a | visually reviewed; registration pending |
+| accessory_f_iraq_industrial__thinking_b | visually reviewed; registration pending |
+| accessory_f_iraq_industrial__objecting_c | visually reviewed; registration pending |
+| outfit_m_iraq_modern | visually reviewed; registration pending |
+| outfit_m_iraq_modern__explaining_a | visually reviewed; registration pending |
+| outfit_m_iraq_modern__thinking_b | visually reviewed; registration pending |
+| outfit_m_iraq_modern__objecting_c | visually reviewed; registration pending |
+| hair_m_iraq_modern | visually reviewed; registration pending |
+| facialhair_m_iraq_modern | visually reviewed; registration pending |
+| headwear_m_iraq_modern | visually reviewed; registration pending |
+| accessory_m_iraq_modern | visually reviewed; registration pending |
+| outfit_f_iraq_modern | visually reviewed; registration pending |
+| outfit_f_iraq_modern__explaining_b | visually reviewed; registration pending |
+| outfit_f_iraq_modern__thinking_c | visually reviewed; registration pending |
+| outfit_f_iraq_modern__objecting_a | visually reviewed; registration pending |
+| hair_f_iraq_modern | visually reviewed; registration pending |
+| headwear_f_iraq_modern | visually reviewed; registration pending |
+| accessory_f_iraq_modern | visually reviewed; registration pending |
+| outfit_m_greece_ancient | visually reviewed; registration pending |
+| outfit_m_greece_ancient__explaining_b | visually reviewed; registration pending |
+| outfit_m_greece_ancient__thinking_c | visually reviewed; registration pending |
+| outfit_m_greece_ancient__objecting_a | visually reviewed; registration pending |

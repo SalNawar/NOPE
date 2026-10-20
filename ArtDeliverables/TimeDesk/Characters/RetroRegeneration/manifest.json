@@ -11263,6 +11263,762 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "long braids",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Long hair in two braids falling down the back, hidden from the front\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw hair_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "long braids"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_iraq_industrial",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HAIR ONLY extraction source. Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Long hair in two braids falling down the back, hidden from the front\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw hair_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt and skin become SOLID FLAT MAGENTA #FF00FF. Only darkbrown hair colored: centerpart combed close to skull and gathered into two long braids entirely behind back, unseen from front. Frontview shows scalp haircap and little hair behind ears only, no braids over shoulders. Preserve face scale position scalp164 chin324 x512 body handsfeet unchanged. Noheadwear jewellery. Late1980s fine inked anime matte hairpigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-91b7dbf4-f2e1-43c3-adf5-d53cf97e912b.png",
+      "path": "Raw/hair_f_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b4ed1a808e700c921010e118027cac4ab5d0d0db6f90bfc30306922c0ffdba18",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "abaya veil",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: The top of the black silk 'abaya drawn over a black head-kerchief (futa), from the crown down both sides of the head and neck to the shoulders. The face is uncovered.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw headwear_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "abaya veil",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_iraq_industrial",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HEADWEAR ONLY extraction source. Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: The top of the black silk 'abaya drawn over a black head-kerchief (futa), from the crown down both sides of the head and neck to the shoulders. The face is uncovered.\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw headwear_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt and skin become SOLID FLAT MAGENTA #FF00FF. Only requested black silk abaya hood over black fitted kerchief colored. Plain black no goldtrim, sides drape neck to shoulders, all face and chin uncovered, little armoverlap. Match blacksilk texture of source costume. Preserve face scale position scalp164 chin324 x512 and handsfeetunchanged. No hair jewellery. Late1980s fine inked anime clothpigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7fd54e71-e5bb-4237-8607-c1b3cae3f129.png",
+      "path": "Raw/headwear_f_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b80e6e0f8153e562e067a91a6545d0808380e41cfe53cf7db9235811faf22c40",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_iraq_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "filigree bangles",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "filigree bangles"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_iraq_industrial",
+      "prompt": "Edit supplied fullyclothed fittingfigure into ACCESSORY ONLY extraction source. Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL existing clothes shoes belt and skin become SOLID FLAT MAGENTA #FF00FF. Only two stacked heavy gold filigree bangles on EACH wrist naturallycolored, delicate pierced geometric metal, not huge bracers, wrists exactly at originalposition. Preserve face scale body handsfeet unchanged. No hair headwear necklace belt jewelry. Late1980s fine inked anime mattegold pigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4c79327a-68c8-4752-87c9-e5faf4512998.png",
+      "path": "Raw/accessory_f_iraq_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "38a3785d2be96847b17bbd117a46806ccbf569ffba04c78d8fb9e4cc08505ad8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_iraq_industrial__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "filigree bangles",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "filigree bangles"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "accessory_f_iraq_industrial",
+      "prompt": "Edit FIRST fullyclothed costume fittingfigure into ACCESSORY ONLY extraction source. Preserve FIRST pose precisely, especially wrists and fingers. Recolor ALL clothes skin shoes belt solid flat magenta#FF00FF. Add exactly TWO gold piercedfiligree bangles around EACH wrist matching SECOND image jewelry design. Only bangles naturalcolored. FIRST pose RIGHT elbow open, right palm up at lower chest, left arm relaxed. Ensure raised wrist bangles rotate correctly with forearm and remain snug. No necklace/hair/headwear or other coloreditems.1024x1536 puregreen#00FF00 background.1980s textured handinked anime goldmetal.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-15798df1-cd5b-481b-8f2b-4ad1532d4127.png",
+      "path": "Raw/accessory_f_iraq_industrial__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1622cb9f2d5f0d5d6fcacaec878c5d848ca53f0ff2484ab4b6e7a132594f170c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_iraq_industrial__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "filigree bangles",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "filigree bangles"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "accessory_f_iraq_industrial",
+      "prompt": "Edit FIRST fullyclothed costume fittingfigure into ACCESSORY ONLY extraction source. Preserve FIRST pose precisely, especially wrists and fingers. Recolor ALL clothes skin shoes belt solid flat magenta#FF00FF. Add exactly TWO gold piercedfiligree bangles around EACH wrist matching SECOND image jewelry design. Only bangles naturalcolored. FIRST pose LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Ensure raised wrist bangles rotate correctly with forearm and remain snug. No necklace/hair/headwear or other coloreditems.1024x1536 puregreen#00FF00 background.1980s textured handinked anime goldmetal.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a23a26af-856e-4194-8639-b2a7aed3209c.png",
+      "path": "Raw/accessory_f_iraq_industrial__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "10bff38dd70e8dc5b2888006c578453180ca7d1957fa1cdf51f688fe19e75b26",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_iraq_industrial__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "country": "iraq",
+      "era": "industrial",
+      "label": "filigree bangles",
+      "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "filigree bangles"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "accessory_f_iraq_industrial",
+      "prompt": "Edit FIRST fullyclothed costume fittingfigure into ACCESSORY ONLY extraction source. Preserve FIRST pose precisely, especially wrists and fingers. Recolor ALL clothes skin shoes belt solid flat magenta#FF00FF. Add exactly TWO gold piercedfiligree bangles around EACH wrist matching SECOND image jewelry design. Only bangles naturalcolored. FIRST pose RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Ensure raised wrist bangles rotate correctly with forearm and remain snug. No necklace/hair/headwear or other coloreditems.1024x1536 puregreen#00FF00 background.1980s textured handinked anime goldmetal.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b14480c1-f7a9-4a78-90ec-ca4c0c730d23.png",
+      "path": "Raw/accessory_f_iraq_industrial__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "afbeec48eceec96e21d98ad297034976321e2edccb60d88a1eed65cd70bf8e2e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "light wool suit",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Light-grey or tan wool two-piece suit with wide lapels, white shirt, dark tie and polished shoes.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_m_iraq_modern.",
+      "flags": {
+        "label": "light wool suit"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_iraq_modern",
+      "prompt": "Dress supplied fitting mannequin in historical 1956 Baghdad civilian costume. Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Light-grey or tan wool two-piece suit with wide lapels, white shirt, dark tie and polished shoes.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_m_iraq_modern.\nPreserve exact original pose head hands feet; male scalp239 chin400 soles1421 x512. Light tan textured wool suit, broad lapels, slightly loose period1950s straight trousers high waist, white shirt darkbrown plain tie, polished darkbrown closedtoe laceup shoes. Ordinary working man with practical worn suit, not fashion model. Exposed head neck hands solidmagenta#FF00FF. No hair beard headwear jewelry. Late1980s handinked anime fine pigment fabrictexture and cel shading.1024x1536 puregreen#00FF00 background without floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4c650825-913d-4cd3-8646-25bd8078f562.png",
+      "path": "Raw/outfit_m_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cdcd92e2fb3d0bc636a5bb5eaf89a891964aff3b49c416eefc15f6538b75e4f7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_modern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "light wool suit",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Light-grey or tan wool two-piece suit with wide lapels, white shirt, dark tie and polished shoes.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_m_iraq_modern.",
+      "flags": {
+        "label": "light wool suit"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_iraq_modern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Preserve first head and hand contours exactly. Same light tan 1956 broadlapel wool suit, white shirt darkbrown tie, cuffedstraight trousers polished brown laceup shoes. Natural jacketfolds followarms. Male scalp239 chin400 soles1421 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-58215901-d735-4b80-9a7b-3701efb5b503.png",
+      "path": "Raw/outfit_m_iraq_modern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "140d55e842c874e4363f20453678c4433109e7a46a9c2d92c203565c213401b6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_modern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "light wool suit",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Light-grey or tan wool two-piece suit with wide lapels, white shirt, dark tie and polished shoes.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_m_iraq_modern.",
+      "flags": {
+        "label": "light wool suit"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_iraq_modern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Preserve first head and hand contours exactly. Same light tan 1956 broadlapel wool suit, white shirt darkbrown tie, cuffedstraight trousers polished brown laceup shoes. Natural jacketfolds followarms. Male scalp239 chin400 soles1421 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a4114092-a2ef-43dc-b444-d139140858c4.png",
+      "path": "Raw/outfit_m_iraq_modern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3366a7ee03a6742ec7451bfb548885ad5b9ff5692bc6f6b867d8e230d61ff7ba",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_modern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "light wool suit",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Light-grey or tan wool two-piece suit with wide lapels, white shirt, dark tie and polished shoes.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_m_iraq_modern.",
+      "flags": {
+        "label": "light wool suit"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_iraq_modern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Preserve first head and hand contours exactly. Same light tan 1956 broadlapel wool suit, white shirt darkbrown tie, cuffedstraight trousers polished brown laceup shoes. Natural jacketfolds followarms. Male scalp239 chin400 soles1421 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-63b8d4c5-2627-42b0-9f5a-025c53ec329d.png",
+      "path": "Raw/outfit_m_iraq_modern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f63ffe593f367a16280c5e5045911365ed60a35a41355947dd4a7063dc50799c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "side-parted short hair",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Short, neatly combed and side-parted, lying close to the head\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw hair_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "side-parted short hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_iraq_modern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HAIR ONLY extraction source. Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Short, neatly combed and side-parted, lying close to the head\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw hair_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL clothes shirt tie shoes and skin become SOLID FLAT MAGENTA #FF00FF. Only short darkbrown neatly sideparted hair colored, combed close to scalp, slight recession and natural unevenhairline, no tall quiff. Preserve face scale position scalp239 chin400 x512 body handsfeet unchanged. No beard headwear jewelry. Late1980s fine inked anime matte painted hairtexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0081cabd-bf2a-4f6d-aa45-d9fd3412d7aa.png",
+      "path": "Raw/hair_m_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0a234c66298a8e2e7f2d5f22355fb05ebae63423b971e5ddc86a5d68d4e16f9d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "trimmed moustache",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Neatly trimmed moustache\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw facialhair_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "trimmed moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_iraq_modern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into MOUSTACHE ONLY extraction source. Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Neatly trimmed moustache\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw facialhair_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL clothes shirt tie shoes and skin become SOLID FLAT MAGENTA #FF00FF. Only neatly trimmed darkbrown moustache naturalcolored, modest mediumwidth taperedends no curlinghandlebars, mouthvisible. Preserve face scale position scalp239 chin400 x512 handsfeetunchanged. Baldscalp no beard headwear. Late1980s fine inked anime hairtexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-72a484ff-216a-40c7-b39f-04aaa869d849.png",
+      "path": "Raw/facialhair_m_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e21780e4e448a896933ec5cc55e84035c24dcdd29206555057f2fc08e8cbeb50",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "sidara",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Sidara (al-Faisaliyya): a soft black felt or velvet civilian cap that folds flat; it is boat-shaped, with a raised point at front and back and a lengthwise crease along the crown, worn straight on the head with no badge\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw headwear_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "sidara",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_iraq_modern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HEADWEAR ONLY extraction source. Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Sidara (al-Faisaliyya): a soft black felt or velvet civilian cap that folds flat; it is boat-shaped, with a raised point at front and back and a lengthwise crease along the crown, worn straight on the head with no badge\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw headwear_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL clothes shirt tie shoes and skin become SOLID FLAT MAGENTA #FF00FF. Only requested blackfelt sidara colored. Distinct narrow fore-aft boat shape, pointedfront at center aboveforehead, crown lengthwise crease, not round skullcap fez or beret, no badge emblems or tassel. Preserve face scale position scalp239 chin400 x512 handsfeetunchanged. No hair beard jewellery. Late1980s fine inked anime velvet/felt pigmenttexture.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e92c92b9-ccb8-44ca-b84d-0a83edca3a4f.png",
+      "path": "Raw/headwear_m_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ca77994fbef642d72899a8b58aeba46b062a3715442a2ce8a5f6ff1aa6dcb57f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "horn-rimmed glasses",
+      "details": "Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Thick black horn-rimmed glasses with clear lenses\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw accessory_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "horn-rimmed glasses"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_iraq_modern",
+      "prompt": "Edit supplied fullyclothed fittingfigure into GLASSES ONLY extraction source. Subject: man of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Thick black horn-rimmed glasses with clear lenses\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw accessory_m_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nALL clothes shirt tie shoes and skin become SOLID FLAT MAGENTA #FF00FF. Only thick black hornrim spectacles colored. Clear lenses show unchanged magenta face and eyes through them, no tint opaquefill or reflections obscuringeyes. Modestly rounded rectangular1950s frames. Preserve face scale position scalp239 chin400 x512 handsfeetunchanged. No hair beard headwear otherjewelry. Late1980s fine inked anime restrained painted framehighlights.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-15ae10a9-7fbf-43b8-8ee5-4d4d6c5bc3db.png",
+      "path": "Raw/accessory_m_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eaf73e711c4a1e8b628c2821b067afa5269d7f23daf5ed8ae3ef06b5183bcf27",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "1950s dress and abaya",
+      "details": "Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Tailored 1950s dress (fitted bodice, belted waist, full mid-calf skirt) in ruby red, sapphire blue or amber, with a black silk 'abaya hanging from the shoulders and falling open at the front to the ankles so the dress shows; low-heeled pumps.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_f_iraq_modern.",
+      "flags": {
+        "label": "1950s dress and abaya"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_iraq_modern",
+      "prompt": "Dress supplied fitting mannequin in historical1956Baghdad costume. Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Tailored 1950s dress (fitted bodice, belted waist, full mid-calf skirt) in ruby red, sapphire blue or amber, with a black silk 'abaya hanging from the shoulders and falling open at the front to the ankles so the dress shows; low-heeled pumps.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_f_iraq_modern.\nPreserve exact original pose head hands feet; female scalp164 chin324 soles1440 x512. Ruby red practical1950s dress with small collar long fitted sleeves belt full midcalfskirt, softly worn cottonsilk. Black plain silk abaya shoulderstoankles openfront. Plain brown lowheeled closedtoe pumps. Modest ordinary traveller not fashionmodel, no glamourjewels. Exposed head neck hands lowerlegs solidmagenta#FF00FF. No hair headwear jewelry. Late1980s handinked anime fine pigment fabrictexture and cel shading.1024x1536 puregreen#00FF00 background without floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f38aae70-c82e-4774-bceb-a1e9111f9f20.png",
+      "path": "Raw/outfit_f_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2647f46b67c21db624ac72ad8ba3629ac3b0881d8869d4cefdb75133371068cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_modern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "1950s dress and abaya",
+      "details": "Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Tailored 1950s dress (fitted bodice, belted waist, full mid-calf skirt) in ruby red, sapphire blue or amber, with a black silk 'abaya hanging from the shoulders and falling open at the front to the ankles so the dress shows; low-heeled pumps.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_f_iraq_modern.",
+      "flags": {
+        "label": "1950s dress and abaya"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_iraq_modern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Preserve first head and hand contours exactly. Same ruby red 1950s collared long sleeve belted midcalf dress, black plain silk open abaya, brown lowheel closedtoe pumps cover alltoes. Natural sleevesfollowarms, cloak behindarms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-121314a1-36e3-4b41-b7cb-8278b8eb74e1.png",
+      "path": "Raw/outfit_f_iraq_modern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8650d0624757f8318d35bc9b37a8bd2579dacf223b08f11d18179899978e5dd0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_modern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "1950s dress and abaya",
+      "details": "Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Tailored 1950s dress (fitted bodice, belted waist, full mid-calf skirt) in ruby red, sapphire blue or amber, with a black silk 'abaya hanging from the shoulders and falling open at the front to the ankles so the dress shows; low-heeled pumps.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_f_iraq_modern.",
+      "flags": {
+        "label": "1950s dress and abaya"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_iraq_modern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Preserve first head and hand contours exactly. Same ruby red 1950s collared long sleeve belted midcalf dress, black plain silk open abaya, brown lowheel closedtoe pumps cover alltoes. Natural sleevesfollowarms, cloak behindarms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4e28b151-23dd-421a-a3d6-9c60fbd9a361.png",
+      "path": "Raw/outfit_f_iraq_modern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b06d51762f9c93bba5d0ad210601ac3ea02fa671634f4f1555b80800200a9c07",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_modern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "1950s dress and abaya",
+      "details": "Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Tailored 1950s dress (fitted bodice, belted waist, full mid-calf skirt) in ruby red, sapphire blue or amber, with a black silk 'abaya hanging from the shoulders and falling open at the front to the ankles so the dress shows; low-heeled pumps.\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw outfit_f_iraq_modern.",
+      "flags": {
+        "label": "1950s dress and abaya"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_iraq_modern",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Preserve first head and hand contours exactly. Same ruby red 1950s collared long sleeve belted midcalf dress, black plain silk open abaya, brown lowheel closedtoe pumps cover alltoes. Natural sleevesfollowarms, cloak behindarms. Female scalp164 chin324 soles1440 x512unchanged. Solidmagenta exposedfigure puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or cast shadows.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ada4a5a1-749e-4bd8-a118-b6620f66a197.png",
+      "path": "Raw/outfit_f_iraq_modern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "51c9d0990ecdb00ec45f3d2a7379bec2f8bc7a2fd4a00860d768f9c371faaaf6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "permed curls",
+      "details": "Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Short, softly permed curls, side-parted, with the front curls framing the forehead\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw hair_f_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "permed curls"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_iraq_modern",
+      "prompt": "Create separate hair layer on this exact reference fitting figure. Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Short, softly permed curls, side-parted, with the front curls framing the forehead\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw hair_f_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nRecolor ALL existing clothing, shoes, face and hands flat #FF00FF magenta. Only HAIR colored: dark brown softly permed short side-parted 1950s curls framing forehead. No headwear or jewelry. Keep full canvas 1024x1536, pure green #00FF00 background, head scalp anchor y164 chin324, sole1440, centered512. Exact reference pose and size. Late1980s hand-inked anime, fine pigment texture and restrained cel highlights, not shiny 3D. No text, no shadows on background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6bdc15f7-be70-4f37-b77f-34a2fa2bd18c.png",
+      "path": "Raw/hair_f_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bb24430d57fb527772bd74985ca67f9451a083e000e3b10ae2b262252caad077",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "abaya over the head",
+      "details": "Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: The top of the black 'abaya drawn over the head, its edge resting on the crown and the cloth falling to the shoulders, leaving the face and front hair visible\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw headwear_f_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "abaya over the head"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_iraq_modern",
+      "prompt": "Create separate head covering layer on this exact reference figure. Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: The top of the black 'abaya drawn over the head, its edge resting on the crown and the cloth falling to the shoulders, leaving the face and front hair visible\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw headwear_f_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly the black silk abaya TOP over crown and shoulders colored with restrained charcoal folds. Front face completely open; no hair, no jewelry. Recolor ALL rest of clothing/shoes/face/hands opaque flat magenta #FF00FF. Keep exact figure position head/chin and hands from reference, 1024x1536, pure green #00FF00 backdrop. Female chin324 scalp164 soles1440. Late1980s textured handinked anime, fine fabric grain. Head shawl ends at shoulders/upper chest, does not hang over elbows or arms. No text or background shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1a6a4146-0d4a-460f-b8bb-a81a4cad864e.png",
+      "path": "Raw/headwear_f_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cb00450dfbe2d5696e341115861e03802b8289960015f68e7d2e59703a20c22b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_iraq_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "country": "iraq",
+      "era": "modern",
+      "label": "gold coin pendant",
+      "details": "Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Gold coin pendant: a single large plain gold disc with a raised rim (a gold lira, drawn with no face, letters or marks), about as wide as three fingers, on its own short gold chain at the base of the throat\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw accessory_f_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "gold coin pendant",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_iraq_modern",
+      "prompt": "Separate jewelry layer, use reference only for exact figure registration. Subject: woman of Kingdom of Iraq; Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up.\nDraw: Gold coin pendant: a single large plain gold disc with a raised rim (a gold lira, drawn with no face, letters or marks), about as wide as three fingers, on its own short gold chain at the base of the throat\nAvoid: military berets, garrison-cap insignia or any badge on the sidara; Ba'ath-era imagery, flags, national eagles; fez or tarboush (Ottoman and Egypt); keffiyeh with agal (reserved for Iraq-industrial); Gulf-style white thobe and ghutra; face veils; pearl strand (Britain modern's 'twinset and pearls'); a likeness of King Faisal, Zaha Hadid or any real person\nOutput one full-canvas raw accessory_f_iraq_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOne small plain gold coin pendant on short delicate chain at base throat, disc about three fingers wide, NOT huge medallion. All figure and ALL clothes/footwear pure flat magenta #FF00FF, ONLY necklace colored gold. No hair/headwear. Opaque magenta long sleeve shirt and trousers. Pure green #00FF00 background, 1024x1536, head chin324 scalp164 soles1440 centered512 exact reference stance. Fine hand inked late80s anime textured gold, restrained highlights, no text, no symbols, no cast shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a888ffe6-07da-401b-9901-f13e0334db43.png",
+      "path": "Raw/accessory_f_iraq_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ec24496070179e9bbea2d63215b0628b6b7517f6a9eb0b914030480ab1a40bfd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "chiton and himation",
+      "details": "Draw: Short, knee-length wool chiton in undyed cream or saffron, under a large rectangular himation (wool mantle) in a colour such as madder red, blue-grey or saffron. The himation wraps round the body and is thrown over the left shoulder, leaving the right arm and shoulder free (the chiton covers the chest). Its hem has a woven meander (Greek key) border in dark red or black. Simple strapped leather sandals or bare feet.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "chiton and himation"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_greece_ancient",
+      "prompt": "Dress the exact reference calibration figure in a historical outfit layer. Draw: Short, knee-length wool chiton in undyed cream or saffron, under a large rectangular himation (wool mantle) in a colour such as madder red, blue-grey or saffron. The himation wraps round the body and is thrown over the left shoulder, leaving the right arm and shoulder free (the chiton covers the chest). Its hem has a woven meander (Greek key) border in dark red or black. Simple strapped leather sandals or bare feet.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)\nUse saffron knee-length chiton, weathered blue-grey rectangular wool himation over LEFT shoulder leaving RIGHT arm free, thin dark red meander woven hem, worn brown strapped sandals. Layer ONLY costume. No hair/beard/headwear/accessories: generated separately. Exposed face/hands/legs exactly flat magenta #FF00FF. Pure green #00FF00 background. Preserve head hands feet proportions and positions exactly; male scalp239 chin400 soles1421 center512. Full canvas1024x1536. Late1980s textured hand-inked anime, visible wool grain, restrained cel shading, ordinary worn civilian clothing, not polished model fashion. No text or background shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7a457b3c-7999-44ff-a31e-1cd07c6a8152.png",
+      "path": "Raw/outfit_m_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fdefa411c2756e437c585f71de761d9a0808ca760d2530b5f70aabfc1f5e9c45",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "chiton and himation",
+      "details": "Draw: Short, knee-length wool chiton in undyed cream or saffron, under a large rectangular himation (wool mantle) in a colour such as madder red, blue-grey or saffron. The himation wraps round the body and is thrown over the left shoulder, leaving the right arm and shoulder free (the chiton covers the chest). Its hem has a woven meander (Greek key) border in dark red or black. Simple strapped leather sandals or bare feet.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "chiton and himation"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_greece_ancient",
+      "prompt": "Edit FIRST image only above the waist: put both elbows bent, palms open at asymmetrical low heights as SECOND pose guide. Keep ALL pixels from waist down visually identical to FIRST, especially tunic hem, bare lower legs and brown sandals. Do not shorten legs or lift feet: same sole baseline as FIRST. Keep first head same position and size. Change only arms and nearby mantle folds to follow explaining gesture. Retain saffron chiton, bluegrey wool himation with darkred Greek-key hem, textured late80s handinked anime. Exposed figure solidmagenta, backgroundpuregreen.1024x1536. No other changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0408aa7c-a87b-460c-b660-b0ee3610cdb5.png",
+      "path": "Raw/outfit_m_greece_ancient__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c048bb7190d32f15e2479d091e495c9ab1028a23b64e7a133c2d8028294a2c58",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "chiton and himation",
+      "details": "Draw: Short, knee-length wool chiton in undyed cream or saffron, under a large rectangular himation (wool mantle) in a colour such as madder red, blue-grey or saffron. The himation wraps round the body and is thrown over the left shoulder, leaving the right arm and shoulder free (the chiton covers the chest). Its hem has a woven meander (Greek key) border in dark red or black. Simple strapped leather sandals or bare feet.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "chiton and himation"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_greece_ancient",
+      "prompt": "Edit FIRST costume image only upper body: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance, precisely match SECOND guide hand position. Keep FIRST head, hips, legs and sandals at exact original positions; sole baseline1421, scalp239 chin400. Same saffron knee-length chiton, bluegrey rectangular wool himation over left shoulder, darkred meander hem. Adjust only cloth near arms naturally no sewn sleeves. 1024x1536, puregreenbackground and solidmagenta exposed figure. No hair beard jewelry, no text. Same handinked textured late80s anime, visible wool pigmentgrain.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2140e871-125d-4cf2-b805-d9110d078f29.png",
+      "path": "Raw/outfit_m_greece_ancient__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "983bbe445097bae2b29a22289ce0a9fa25cdda9c3581217aec5502c883af8924",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "chiton and himation",
+      "details": "Draw: Short, knee-length wool chiton in undyed cream or saffron, under a large rectangular himation (wool mantle) in a colour such as madder red, blue-grey or saffron. The himation wraps round the body and is thrown over the left shoulder, leaving the right arm and shoulder free (the chiton covers the chest). Its hem has a woven meander (Greek key) border in dark red or black. Simple strapped leather sandals or bare feet.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "chiton and himation"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_greece_ancient",
+      "prompt": "Edit FIRST costume image: change only RIGHT arm to raised open palm forward near shoulder, fingers up, calm please-wait gesture, exactly as SECOND pose guide. Left arm remains down. Keep FIRST head and entire lower body unchanged, exact original head chin400 scalp239 and soles1421, centered512. Same saffron chiton, bluegrey rectangular wool himation over left shoulder, darkred Greek-key hem and brown sandals. No hair beard jewelry. Flat magenta exposed face/arms/legs, puregreen background.1024x1536. Same textured late80s handinked anime wool grain. Do not move feet or rescale figure.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-37c4aced-414d-4a36-9c43-9ff66ad955da.png",
+      "path": "Raw/outfit_m_greece_ancient__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6c672c38f190903afcb93bc7d6c1412504d9e3030f574e88d034ba0c71043a76",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

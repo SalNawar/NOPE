@@ -4490,6 +4490,63 @@
     "base_key": "accessory_f_iraq_industrial"
   },
   {
+    "name": "accessory_f_iraq_industrial__explaining_a",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "accessory",
+    "place": "Ottoman Iraq (Baghdad Vilayet)",
+    "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+    "country": "iraq",
+    "era": "industrial",
+    "label": "filigree bangles",
+    "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+    "flags": {
+      "label": "filigree bangles"
+    },
+    "pose": "explaining_a",
+    "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+    "base_key": "accessory_f_iraq_industrial"
+  },
+  {
+    "name": "accessory_f_iraq_industrial__thinking_b",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "accessory",
+    "place": "Ottoman Iraq (Baghdad Vilayet)",
+    "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+    "country": "iraq",
+    "era": "industrial",
+    "label": "filigree bangles",
+    "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+    "flags": {
+      "label": "filigree bangles"
+    },
+    "pose": "thinking_b",
+    "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+    "base_key": "accessory_f_iraq_industrial"
+  },
+  {
+    "name": "accessory_f_iraq_industrial__objecting_c",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "accessory",
+    "place": "Ottoman Iraq (Baghdad Vilayet)",
+    "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+    "country": "iraq",
+    "era": "industrial",
+    "label": "filigree bangles",
+    "details": "Subject: woman of Ottoman Iraq (Baghdad Vilayet); Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869).\nDraw: Heavy gold filigree bangles stacked on both wrists\nAvoid: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)\nOutput one full-canvas raw accessory_f_iraq_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+    "flags": {
+      "label": "filigree bangles"
+    },
+    "pose": "objecting_c",
+    "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+    "base_key": "accessory_f_iraq_industrial"
+  },
+  {
     "name": "outfit_m_iraq_modern",
     "family": "wardrobe",
     "status": "pending",
