@@ -190,6 +190,15 @@ public sealed class SeqRecorder : MonoBehaviour
         while (true)
         {
             yield return eof;
+            // A run stopped from outside (QaJobs.Reset, play mode left by hand) resumes here once more while the editor
+            // leaves play mode (isPlaying is still true then; the editor's will-change flag is not), when ScreenCapture can no
+            // longer be called: the recording ends with the run.
+            if (!Application.isPlaying)
+                yield break;
+#if UNITY_EDITOR
+            if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+                yield break;
+#endif
             // The real time since the previous frame ended (Time's own clocks follow captureFramerate, this one does not).
             double now = Time.realtimeSinceStartupAsDouble;
             float dtMs = _lastFrameEnd < 0 ? Time.unscaledDeltaTime * 1000f : (float)((now - _lastFrameEnd) * 1000.0);
