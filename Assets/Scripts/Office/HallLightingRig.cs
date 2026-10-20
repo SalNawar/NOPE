@@ -74,7 +74,6 @@ public sealed class HallLightingRig : MonoBehaviour
     private bool _dustPlaying = true;
     private bool _firstFrame = true;
     private float? _openingMinute;
-    private bool _openingLooked;
     private GameObject _made;
 
     /// <summary>The knobs (null when unassigned).</summary>
@@ -114,7 +113,7 @@ public sealed class HallLightingRig : MonoBehaviour
 
     private void OnEnable()
     {
-        _openingLooked = false;
+        _openingMinute = null;
         Gather();
         _reduced = MotionPreference.Reduced;
         MotionPreference.Changed += OnMotionChanged;
@@ -263,13 +262,11 @@ public sealed class HallLightingRig : MonoBehaviour
             l.Light3D.shadows = LightShadows.None;
     }
 
-    /// <summary>Today's opening minute (the day plan's shift, else the standard day), looked up once per enable; null without a run.</summary>
+    /// <summary>Today's opening minute (the day plan's shift, else the standard day), looked up until the run is ready and then kept for this enable; null while there is no run (asked again next frame).</summary>
     private float? OpeningMinute()
     {
-        if (_openingLooked)
+        if (_openingMinute.HasValue)
             return _openingMinute;
-        _openingLooked = true;
-        _openingMinute = null;
         RunManager run = RunManager.Instance;
         if (run == null || run.World == null || run.Config == null)
             return null;
@@ -297,8 +294,14 @@ public sealed class HallLightingRig : MonoBehaviour
         OfficeSceneContractSO contract = OfficeScenes.Contract;
         ResolvedAnchor mat = OfficeAnchors.Resolve(gameObject.scene, contract != null ? contract.Spec(OfficeAnchorId.DeskSurface) : null, OfficeAnchorId.DeskSurface);
         Vector3 centre = mat.HasBounds ? new Vector3(mat.Bounds.center.x, mat.Bounds.max.y, mat.Bounds.center.z) : mat.Position;
-        _made.AddComponent<AudioSource>().playOnAwake = false;
-        _made.AddComponent<DeskLightLevel>().Configure(this, centre);
+        Vector2 size = mat.HasBounds ? new Vector2(mat.Bounds.size.x, mat.Bounds.size.z) : Vector2.zero;
+        // The lamp's click (its placeholder plays through this source) goes through the desk's mixer group, so the SFX volume governs it.
+        AudioSource click = _made.AddComponent<AudioSource>();
+        click.playOnAwake = false;
+        SoundBankSO bank = Sounds.Bank;
+        if (bank != null)
+            click.outputAudioMixerGroup = bank.Group(SoundBus.Desk);
+        _made.AddComponent<DeskLightLevel>().Configure(this, centre, size);
 
         if (settings.finishProfile != null)
         {
@@ -307,7 +310,13 @@ public sealed class HallLightingRig : MonoBehaviour
             finish.sharedProfile = settings.finishProfile;
             Camera office = backdrop != null ? backdrop.Source : null;
             if (office != null)
-                office.GetUniversalAdditionalCameraData().renderPostProcessing = true;
+            {
+                UniversalAdditionalCameraData data = office.GetUniversalAdditionalCameraData();
+                data.renderPostProcessing = true;
+                // The camera must see the Volume's layer, or the finish never applies (its mask is the scene's to set).
+                if ((data.volumeLayerMask.value & (1 << _made.layer)) == 0)
+                    data.volumeLayerMask |= 1 << _made.layer;
+            }
         }
     }
 

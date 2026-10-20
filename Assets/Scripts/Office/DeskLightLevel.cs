@@ -15,6 +15,9 @@ using UnityEngine;
 /// uniform light for the traveller (AnimeHallShiftLink) that DeskLight() gives
 /// the passport photo, so the photo check is fair at every hour. Made at run
 /// time by the rig; while it is off, the globals fall back to today's look.
+/// When it is bound it checks the knobs against the real mat once: at full
+/// night the mat's corners (the farthest from the pool) must reach
+/// DeskLighting.ReadableNightLuminance (luma 55), else it warns once.
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class DeskLightLevel : MonoBehaviour
@@ -42,13 +45,20 @@ public sealed class DeskLightLevel : MonoBehaviour
     private Vector4 _tint = new Vector4(-1f, -1f, -1f, -1f), _pool;
     private float _level = -1f, _key = -1f, _share = -1f;
 
-    /// <summary>Binds the hall's rig (its hour and knobs) and the lamp pool's centre on the mat (world).</summary>
-    public void Configure(HallLightingRig rig, Vector3 poolCentre)
+    /// <summary>Binds the hall's rig (its hour and knobs), the lamp pool's centre on the mat (world) and the mat's size (metres; zero when the art gives none), and checks the knobs against that mat.</summary>
+    public void Configure(HallLightingRig rig, Vector3 poolCentre, Vector2 matSize)
     {
         _rig = rig;
         _poolCentre = poolCentre;
         _click = GetComponent<AudioSource>();
         _first = true;
+        HallLightingSO settings = rig != null ? rig.Settings : null;
+        if (settings == null || matSize.x <= 0f || matSize.y <= 0f)
+            return;
+        DeskLighting.Light night = DeskLighting.FullNight(settings.DeskKnobs);
+        float corner = DeskLighting.DarkestOnMat(night, settings.deskLampRadius, matSize.x, matSize.y);
+        if (corner < DeskLighting.ReadableNightLuminance)
+            Debug.LogWarning($"[DeskLightLevel] At night the mat's corners read at about luma {DeskLighting.LumaAt(corner):0} (below {DeskLighting.ReadableMatLuma:0}) on this {matSize.x:0.00} x {matSize.y:0.00} m mat: raise deskNightFloor, deskLampLevel or deskLampRadius in {settings.name}.", this);
     }
 
     private void OnEnable() => Live = this;

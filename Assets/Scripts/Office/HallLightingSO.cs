@@ -32,13 +32,13 @@ public sealed class HallLightingSO : ScriptableObject
 
     [Header("The day (HallDayCycle)")]
     /// <summary>The hour the sun rises (the daylight half up).</summary>
-    [Range(0f, 24f)] public float sunriseHour = 7f;
+    [Range(0f, 24f)] public float sunriseHour = HallDayCycle.Defaults.SunriseHour;
 
     /// <summary>The hour the sun sets (the daylight half down). 16:30 puts the dusk in the shift's last hour (it closes at 17:00).</summary>
-    [Range(0f, 24f)] public float sunsetHour = 16.5f;
+    [Range(0f, 24f)] public float sunsetHour = HallDayCycle.Defaults.SunsetHour;
 
     /// <summary>How long dawn and dusk each last (hours), centred on sunrise and sunset.</summary>
-    [Range(0.1f, 6f)] public float twilightHours = 1.5f;
+    [Range(0.1f, 6f)] public float twilightHours = HallDayCycle.Defaults.TwilightHours;
 
     [Header("Global light (the whole hall, multiplied over the art)")]
     /// <summary>The hall's overall light colour along the solar day (x: solar position).</summary>
@@ -83,13 +83,13 @@ public sealed class HallLightingSO : ScriptableObject
     public Color fixtureColour = new Color(1f, 0.90f, 0.74f);
 
     /// <summary>The daylight below which a fixture starts to switch on (HallDayCycle.FixtureLevel).</summary>
-    [Range(0f, 1f)] public float fixturesOnBelow = 0.6f;
+    [Range(0f, 1f)] public float fixturesOnBelow = HallDayCycle.Defaults.FixturesOnBelow;
 
     /// <summary>How much further the daylight falls while a fixture comes fully on.</summary>
-    [Range(0.01f, 0.5f)] public float fixtureFadeBand = 0.1f;
+    [Range(0.01f, 0.5f)] public float fixtureFadeBand = HallDayCycle.Defaults.FixtureFadeBand;
 
     /// <summary>In-game minutes between one fixture switching and the next (their HallLight order).</summary>
-    [Range(0f, 30f)] public float fixtureStaggerMinutes = 4f;
+    [Range(0f, 30f)] public float fixtureStaggerMinutes = HallDayCycle.Defaults.FixtureStaggerMinutes;
 
     /// <summary>The share of its strength a fixture gives while off (0: dark by day).</summary>
     [Range(0f, 1f)] public float fixtureOffShare = 0f;
@@ -155,20 +155,20 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>NOPE/Desk Anime's key light energy at the full day (the old noon daylight's: 0.7 times its warm white), which the desk light's level scales.</summary>
     [Range(0.1f, 2f)] public float deskKeyAtDay = 0.68f;
 
-    /// <summary>The room's light on the desk at night as a share of the full day's, without the lamp (the floor plus the lamp keeps the mat readable: DeskLighting.ReadableNightLevel).</summary>
-    [Range(0f, 1f)] public float deskNightFloor = 0.35f;
+    /// <summary>The room's light on the desk at night as a share of the full day's, without the lamp (with the lamp's pool it keeps the whole mat readable: DeskLighting.ReadableNightLuminance at its corners).</summary>
+    [Range(0f, 1f)] public float deskNightFloor = 0.5f;
 
     /// <summary>The room's colour on the desk at night (white by day).</summary>
     public Color deskNightTint = new Color(0.78f, 0.84f, 1f);
 
     /// <summary>What the work lamp adds to the desk's level, warm and full, at the pool's centre.</summary>
-    [Range(0f, 1f)] public float deskLampLevel = 0.25f;
+    [Range(0f, 1f)] public float deskLampLevel = 0.38f;
 
     /// <summary>The work lamp's colour (a warm filament).</summary>
     public Color deskLampColour = new Color(1f, 0.82f, 0.6f);
 
-    /// <summary>The lamp pool's radius on the desk (metres), centred on the mat; its share falls off to nothing at the edge.</summary>
-    [Range(0.1f, 1.5f)] public float deskLampRadius = 0.45f;
+    /// <summary>The lamp pool's radius on the desk (metres), centred on the mat; its share is full out to a quarter of it and falls off to nothing at the edge (1.5: the 1.45 x 1.02 m mat's corners keep about half the lamp).</summary>
+    [Range(0.1f, 2f)] public float deskLampRadius = 1.5f;
 
     [Header("The hall at night (NOPE/Hall Deep Layout, through HallBakedLighting)")]
     /// <summary>The painted hall's tint at full night, away from the lamp pools.</summary>

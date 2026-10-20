@@ -186,21 +186,21 @@ public class HallDayCycleTests
     }
 
     [Test]
-    public void DuskHour_IsTheSharedCyclesSunset_WhereTheEveningIsHalf()
+    public void DuskHour_IsTheCheatMenusDusk()
     {
-        HallDayCycle.Settings before = HallDayCycle.Active;
-        try
-        {
-            HallDayCycle.Publish(Defaults);
-            Assert.AreEqual(16.5f, HallDayCycle.DuskHour, 1e-3f, "the default knobs' dusk is the 16:30 sunset (the stub's 18:30 was full night)");
-            Assert.AreEqual(0.5f, HallDayCycle.Evening(HallDayCycle.DuskHour, Defaults), 1e-3f);
-            HallDayCycle.Publish(new HallDayCycle.Settings(6f, 19f, 2f, 0.6f, 0.1f, 4f));
-            Assert.AreEqual(19f, HallDayCycle.DuskHour, 1e-3f, "moving the sunset in the knobs moves the cheat's Dusk");
-        }
-        finally
-        {
-            HallDayCycle.Publish(before);
-        }
+        Assert.AreEqual(18.5f, HallDayCycle.DuskHour);
+    }
+
+    [Test]
+    public void TheDefaults_AreTheCyclesOneSource()
+    {
+        // HallLightingSO's field defaults and the cycle before a rig publishes read HallDayCycle.Defaults (no copy by hand).
+        Assert.AreEqual(7f, HallDayCycle.Defaults.SunriseHour);
+        Assert.AreEqual(16.5f, HallDayCycle.Defaults.SunsetHour);
+        Assert.AreEqual(1.5f, HallDayCycle.Defaults.TwilightHours);
+        Assert.AreEqual(0.6f, HallDayCycle.Defaults.FixturesOnBelow);
+        Assert.AreEqual(0.1f, HallDayCycle.Defaults.FixtureFadeBand);
+        Assert.AreEqual(4f, HallDayCycle.Defaults.FixtureStaggerMinutes);
     }
 
     [Test]

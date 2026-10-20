@@ -389,11 +389,11 @@ MonoBehaviour:
   returnGateLight: {r: 1, g: 0.62, b: 0.25, a: 1}
   portalFadeSeconds: 0.8
   deskKeyAtDay: 0.68
-  deskNightFloor: 0.35
+  deskNightFloor: 0.5
   deskNightTint: {r: 0.78, g: 0.84, b: 1, a: 1}
-  deskLampLevel: 0.25
+  deskLampLevel: 0.38
   deskLampColour: {r: 1, g: 0.82, b: 0.6, a: 1}
-  deskLampRadius: 0.45
+  deskLampRadius: 1.5
   hallNightTint: {r: 0.2, g: 0.27, b: 0.43, a: 1}
   hallPoolStrength: 0.35
   hallEmissionGain: 2.5

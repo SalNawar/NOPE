@@ -4,12 +4,17 @@ using UnityEngine;
 /// The painted hall's light from the one day cycle (docs/HALL_LIGHTING.md;
 /// BUG-25): each painted layer (NOPE/Hall Deep Layout) gets the four states'
 /// weights (HallBakedCycle, read off the rig's HallDayCycle knobs, so the
-/// painting is night exactly when the lamps are), the floor shadows' ray, every
-/// scheduled fixture's lit share with its wall glow and floor pool (the night's
-/// real light pools) and the night knobs (tint, pool strength, diffuser glow);
-/// and the art's daylight (the hall's 3D sun) is posed and coloured for the
-/// hour without real-time shadows (BUG-14b: no sun shadow inside the cubicle).
-/// The layers' property blocks are written only when a value changed (BUG-65h:
+/// painting is night exactly when the lamps are) and the floor shadows' ray
+/// in its property block; every scheduled fixture's lit share with its wall
+/// glow and floor pool (the night's real light pools) and the night knobs
+/// (tint, pool colour and strength, diffuser glow) are shader globals
+/// (_Hall*), so anything drawn with the Deep Layout material (the hall
+/// slots' sprites, HallSlotsLink) takes the same night as the painting
+/// without copying them; and the art's daylight (the hall's 3D sun) is posed
+/// and coloured for the hour without real-time shadows (BUG-14b: no sun
+/// shadow inside the cubicle). Nothing gates on the layers' material: the
+/// art's own material reference went with the four-state shader (BUG-73h).
+/// The blocks and globals are written only when a value changed (BUG-65h:
 /// the 58 blocks were rewritten every frame); the daylight is written every
 /// frame, after the art presentation's own write (DefaultExecutionOrder 200 and
 /// LateUpdate: the presentation writes in Update), so the art's second clock
@@ -22,8 +27,6 @@ public sealed class HallBakedLighting : MonoBehaviour
     [SerializeField] HallLightingRig rig;
     /// <summary>The painted hall whose layers get the state weights.</summary>
     [SerializeField] AnimeHallPresentation art;
-    /// <summary>The layers' lighting material (NOPE/Hall Deep Layout); nothing is applied without it.</summary>
-    [SerializeField] Material material;
 
     /// <summary>The most fixtures the painted layers take (the shader's arrays).</summary>
     private const int MaxFixtures = 16;
@@ -46,28 +49,26 @@ public sealed class HallBakedLighting : MonoBehaviour
     Color writtenNight, writtenPool;
     float writtenStrength = -1f, writtenGain = -1f;
 
-    static readonly int FixtureLevelsId = Shader.PropertyToID("_FixtureLevels");
-    static readonly int FixtureCountId = Shader.PropertyToID("_ScheduledFixtureCount");
-    static readonly int FixtureCentersId = Shader.PropertyToID("_FixtureCenters");
-    static readonly int FixturePoolsId = Shader.PropertyToID("_FixturePools");
+    // Globals (HallDeepLayout.shader declares them outside its Properties, so no material value hides them).
+    static readonly int FixtureLevelsId = Shader.PropertyToID("_HallFixtureLevels");
+    static readonly int FixtureCountId = Shader.PropertyToID("_HallFixtureCount");
+    static readonly int FixtureCentersId = Shader.PropertyToID("_HallFixtureCenters");
+    static readonly int FixturePoolsId = Shader.PropertyToID("_HallFixturePools");
+    static readonly int NightTintId = Shader.PropertyToID("_HallNightTint");
+    static readonly int PoolColourId = Shader.PropertyToID("_HallPoolColour");
+    static readonly int PoolStrengthId = Shader.PropertyToID("_HallPoolStrength");
+    static readonly int EmissionGainId = Shader.PropertyToID("_HallEmissionGain");
+    // Per layer (the painting's block, which HallSlotsLink copies onto the slots).
     static readonly int StateWeightsId = Shader.PropertyToID("_StateWeights");
     static readonly int ShadowRayId = Shader.PropertyToID("_HallShadowRay");
     static readonly int LightingAmountId = Shader.PropertyToID("_LightingAmount");
     static readonly int CloudMotionId = Shader.PropertyToID("_CloudMotion");
     static readonly int PaletteAmountId = Shader.PropertyToID("_PaletteAmount");
-    static readonly int NightTintId = Shader.PropertyToID("_NightTint");
-    static readonly int PoolColourId = Shader.PropertyToID("_PoolColour");
-    static readonly int PoolStrengthId = Shader.PropertyToID("_PoolStrength");
-    static readonly int EmissionGainId = Shader.PropertyToID("_EmissionGain");
 
     /// <summary>A ceiling fixture's wall glow radii (uv; the four-state bake's).</summary>
     static readonly Vector2 CeilingGlow = new Vector2(.075f, .17f);
     /// <summary>A gallery lamp's wall glow radii (uv).</summary>
     static readonly Vector2 MountedGlow = new Vector2(.045f, .20f);
-
-    /// <summary>Wires the rig, the hall and the material, then applies (the art's authoring).</summary>
-    public void Configure(HallLightingRig lights, AnimeHallPresentation presentation, Material drawing)
-    { rig = lights; art = presentation; material = drawing; shapesKnown = false; fixtures = null; Apply(); }
 
     void OnEnable() { shapesKnown = false; fixtures = null; writtenAmount = -1f; }
 
@@ -81,10 +82,10 @@ public sealed class HallBakedLighting : MonoBehaviour
 
     static Color Blend(HallBakedCycle.Weights4 w, Color a, Color b, Color c, Color d) => a * w.x + b * w.y + c * w.z + d * w.w;
 
-    /// <summary>Writes the states, the fixtures and the night knobs to every painted layer when one changed, and poses the daylight.</summary>
+    /// <summary>Writes the states to every painted layer and the fixtures and night knobs as globals when one changed, and poses the daylight.</summary>
     public void Apply()
     {
-        if (rig == null || art == null || material == null || rig.Settings == null) return;
+        if (rig == null || art == null || rig.Settings == null) return;
         HallLightingSO settings = rig.Settings;
         var weights = HallBakedCycle.Weights(rig.Hour, settings.Cycle);
         var direction = DaylightDirection(weights);
@@ -114,7 +115,10 @@ public sealed class HallBakedLighting : MonoBehaviour
                 || settings.hallPoolStrength != writtenStrength || settings.hallEmissionGain != writtenGain;
 
         if (changed)
-            WriteLayers(settings, stateWeights, direction, amount, motion);
+        {
+            WriteGlobals(settings);
+            WriteLayers(stateWeights, direction, amount, motion);
+        }
 
         if (art.daylight != null)
         {
@@ -127,42 +131,59 @@ public sealed class HallBakedLighting : MonoBehaviour
         }
     }
 
-    /// <summary>Writes every painted layer's block (the fixtures' places once per gather, in edit mode every time).</summary>
-    void WriteLayers(HallLightingSO settings, Vector4 stateWeights, Vector3 direction, float amount, float motion)
+    /// <summary>
+    /// The fixtures (each one's lit share, place, wall glow and floor pool)
+    /// and the night knobs, as globals: the painting's layers and the slots
+    /// drawn with its material read the same values. The fixtures' places are
+    /// measured on the first layer with a sprite (the layers share one
+    /// registered canvas), once per gather (in edit mode every time).
+    /// </summary>
+    void WriteGlobals(HallLightingSO settings)
     {
-        properties ??= new MaterialPropertyBlock();
-        bool shapes = !shapesKnown;
-        foreach (var layer in art.layers)
-        {
-            if (layer.renderer == null) continue;
-            layer.renderer.GetPropertyBlock(properties);
-            properties.SetVector(StateWeightsId, stateWeights);
-            properties.SetVector(ShadowRayId, new Vector4(direction.x / -direction.y, direction.z / -direction.y, 0, 0));
-            properties.SetFloat(LightingAmountId, amount);
-            properties.SetFloat(CloudMotionId, motion);
-            properties.SetFloat(PaletteAmountId, 1);
-            properties.SetColor(NightTintId, settings.hallNightTint);
-            properties.SetColor(PoolColourId, settings.fixtureColour);
-            properties.SetFloat(PoolStrengthId, settings.hallPoolStrength);
-            properties.SetFloat(EmissionGainId, settings.hallEmissionGain);
-            properties.SetFloatArray(FixtureLevelsId, fixtureLevels);
-            properties.SetInt(FixtureCountId, fixtureCount);
-            var sprite = layer.renderer.sprite;
-            if (shapes && sprite != null)
-                Shapes(layer.renderer, sprite);
-            properties.SetVectorArray(FixtureCentersId, fixtureCenters);
-            properties.SetVectorArray(FixturePoolsId, fixturePools);
-            layer.renderer.SetPropertyBlock(properties);
-        }
+        if (!shapesKnown)
+            foreach (var layer in art.layers)
+                if (layer.renderer != null && layer.renderer.sprite != null)
+                {
+                    Shapes(layer.renderer, layer.renderer.sprite);
+                    break;
+                }
+        Shader.SetGlobalFloatArray(FixtureLevelsId, fixtureLevels);
+        Shader.SetGlobalFloat(FixtureCountId, fixtureCount);
+        Shader.SetGlobalVectorArray(FixtureCentersId, fixtureCenters);
+        Shader.SetGlobalVectorArray(FixturePoolsId, fixturePools);
+        // Alpha 1 marks the knobs as published (until then the shader keeps its built-in night, the knob's default).
+        Color night = settings.hallNightTint;
+        Shader.SetGlobalColor(NightTintId, new Color(night.r, night.g, night.b, 1f));
+        Shader.SetGlobalColor(PoolColourId, settings.fixtureColour);
+        Shader.SetGlobalFloat(PoolStrengthId, settings.hallPoolStrength);
+        Shader.SetGlobalFloat(EmissionGainId, settings.hallEmissionGain);
         shapesKnown = true;
-        writtenWeights = stateWeights;
-        writtenAmount = amount;
-        writtenMotion = motion;
         writtenNight = settings.hallNightTint;
         writtenPool = settings.fixtureColour;
         writtenStrength = settings.hallPoolStrength;
         writtenGain = settings.hallEmissionGain;
         System.Array.Copy(fixtureLevels, writtenLevels, MaxFixtures);
+    }
+
+    /// <summary>Writes every painted layer's block: the states, the floor shadows' ray, the lighting amount and the cloud motion.</summary>
+    void WriteLayers(Vector4 stateWeights, Vector3 direction, float amount, float motion)
+    {
+        properties ??= new MaterialPropertyBlock();
+        var ray = new Vector4(direction.x / -direction.y, direction.z / -direction.y, 0, 0);
+        foreach (var layer in art.layers)
+        {
+            if (layer.renderer == null) continue;
+            layer.renderer.GetPropertyBlock(properties);
+            properties.SetVector(StateWeightsId, stateWeights);
+            properties.SetVector(ShadowRayId, ray);
+            properties.SetFloat(LightingAmountId, amount);
+            properties.SetFloat(CloudMotionId, motion);
+            properties.SetFloat(PaletteAmountId, 1);
+            layer.renderer.SetPropertyBlock(properties);
+        }
+        writtenWeights = stateWeights;
+        writtenAmount = amount;
+        writtenMotion = motion;
     }
 
     /// <summary>

@@ -2,10 +2,11 @@ using NUnit.Framework;
 
 /// <summary>
 /// The desk's one light (DeskLighting, BUG-14): the full day draws the desk as
-/// drawn, the night keeps it readable (floor plus lamp at least
-/// ReadableNightLevel), the lamp switches on at the afternoon dip and only
-/// then adds its warm share, and the colour follows the room by day and the
-/// lamp at night.
+/// drawn, the night keeps the whole mat readable (luminance, with the lamp
+/// pool's falloff, at the mat's corners at least ReadableNightLuminance: luma
+/// 55; at the pool's centre TargetNightLuminance: luma 60), the lamp switches
+/// on at the afternoon dip and only then adds its warm share, and the colour
+/// follows the room by day and the lamp at night.
 /// </summary>
 public class DeskLightingTests
 {
@@ -14,9 +15,15 @@ public class DeskLightingTests
     /// <summary>HallLightingSO's cycle defaults: sunrise 07:00, sunset 16:30, 1.5 h twilights.</summary>
     private static readonly HallDayCycle.Settings Cycle = new HallDayCycle.Settings(7f, 16.5f, 1.5f, 0.6f, 0.1f, 4f);
 
-    /// <summary>HallLightingSO's desk defaults (HallLighting_Default.asset): night floor 0.35, cool night, lamp 0.25 warm, on at evening 0.1.</summary>
+    /// <summary>HallLightingSO's desk defaults (HallLighting_Default.asset): night floor 0.5, cool night, lamp 0.38 warm, on at evening 0.1.</summary>
     private static readonly DeskLighting.Knobs Knobs = new DeskLighting.Knobs(
-        0.35f, new Rgba(0.78f, 0.84f, 1f), 0.25f, new Rgba(1f, 0.82f, 0.6f), 0.1f);
+        0.5f, new Rgba(0.78f, 0.84f, 1f), 0.38f, new Rgba(1f, 0.82f, 0.6f), 0.1f);
+
+    /// <summary>The lamp pool's radius (HallLighting_Default.deskLampRadius).</summary>
+    private const float Radius = 1.5f;
+
+    /// <summary>The mat: the DeskSurface anchor, the blotter's 1.45 × 1.02 m (docs/SCENE_CONTRACT_GAMEPLAY.md).</summary>
+    private const float MatWidth = 1.45f, MatDepth = 1.02f;
 
     [Test]
     public void TheFullDay_DrawsTheDeskAsDrawn()
@@ -29,24 +36,62 @@ public class DeskLightingTests
     }
 
     [Test]
-    public void TheNightFloor_KeepsTheDeskReadable()
+    public void TheReadableLine_IsLuma55_AndTheTargetLuma60()
     {
-        Assert.That(DeskLighting.NightLevel(Knobs), Is.GreaterThanOrEqualTo(DeskLighting.ReadableNightLevel), "floor plus lamp");
+        // The plan's lines are lumas on screen; the light is linear: the sRGB-decoded ratios to the day mat's 76.
+        Assert.AreEqual(0.529f, DeskLighting.ReadableNightLuminance, 1e-3f);
+        Assert.AreEqual(0.625f, DeskLighting.TargetNightLuminance, 1e-3f);
+        Assert.AreEqual(55f, DeskLighting.LumaAt(DeskLighting.ReadableNightLuminance), 0.01f);
+        Assert.AreEqual(76f, DeskLighting.LumaAt(1f), 0.01f);
+        Assert.AreEqual(1f, DeskLighting.Luminance(1f, 1f, 1f), 1e-5f);
+    }
+
+    [Test]
+    public void ThePoolWeight_IsTheShadersFalloff()
+    {
+        Assert.AreEqual(1f, DeskLighting.PoolWeight(0f, Radius), Tolerance, "full at the centre");
+        Assert.AreEqual(1f, DeskLighting.PoolWeight(0.25f * Radius, Radius), Tolerance, "full out to a quarter of the radius");
+        Assert.AreEqual(0.5f, DeskLighting.PoolWeight(0.625f * Radius, Radius), Tolerance, "half way through the falloff");
+        Assert.AreEqual(0f, DeskLighting.PoolWeight(Radius, Radius), Tolerance, "none at the radius");
+        Assert.AreEqual(0f, DeskLighting.PoolWeight(3f, Radius), Tolerance);
+    }
+
+    [Test]
+    public void TheNight_KeepsTheWholeMatReadable_ItsCornersIncluded()
+    {
+        DeskLighting.Light night = DeskLighting.FullNight(Knobs);
+        float centre = DeskLighting.LuminanceAt(night, 1f);
+        float corner = DeskLighting.DarkestOnMat(night, Radius, MatWidth, MatDepth);
+        Assert.That(centre, Is.GreaterThanOrEqualTo(DeskLighting.TargetNightLuminance), $"the pool's centre: luma {DeskLighting.LumaAt(centre):0.0}");
+        Assert.That(corner, Is.GreaterThanOrEqualTo(DeskLighting.ReadableNightLuminance), $"the mat's corners: luma {DeskLighting.LumaAt(corner):0.0}");
+        Assert.That(corner, Is.LessThan(centre), "a pool: brighter under the lamp than at the mat's corners");
         foreach (float hour in new[] { 20f, 22f, 23f, 23.99f })
         {
-            DeskLighting.Light night = DeskLighting.Evaluate(hour, Cycle, Knobs, 1f);
-            Assert.That(night.Level, Is.GreaterThanOrEqualTo(DeskLighting.ReadableNightLevel), $"{hour}");
-            Assert.AreEqual(DeskLighting.NightLevel(Knobs), night.Level, Tolerance, $"{hour}: the floor plus the warm lamp");
+            DeskLighting.Light l = DeskLighting.Evaluate(hour, Cycle, Knobs, 1f);
+            Assert.AreEqual(night.Level, l.Level, Tolerance, $"{hour}: full night");
+            Assert.AreEqual(corner, DeskLighting.DarkestOnMat(l, Radius, MatWidth, MatDepth), 1e-4f, $"{hour}");
         }
     }
 
     [Test]
-    public void TheDeskNeverFallsBelowTheReadableLevel_OnceTheLampIsOn()
+    public void TheOldKnobs_FailTheRule()
     {
-        for (float hour = 9f; hour < 24f; hour += 1f / 60f)
+        // The first LIGHT tune (floor 0.35, lamp 0.25, a 0.45 m pool) passed a level-only rule but left the mat's corners
+        // at about luma 40 and the centre at about 54: the rule must catch it.
+        var old = new DeskLighting.Knobs(0.35f, new Rgba(0.78f, 0.84f, 1f), 0.25f, new Rgba(1f, 0.82f, 0.6f), 0.1f);
+        DeskLighting.Light night = DeskLighting.FullNight(old);
+        Assert.That(DeskLighting.DarkestOnMat(night, 0.45f, MatWidth, MatDepth), Is.LessThan(DeskLighting.ReadableNightLuminance));
+        Assert.That(DeskLighting.LuminanceAt(night, 1f), Is.LessThan(DeskLighting.TargetNightLuminance));
+    }
+
+    [Test]
+    public void TheMatNeverFallsBelowTheReadableLine_OnceTheLampIsOn()
+    {
+        for (float hour = 0f; hour < 24f; hour += 1f / 60f)
         {
             float warm = DeskLighting.LampOn(hour, Cycle, Knobs) ? 1f : 0f;
-            Assert.That(DeskLighting.Evaluate(hour, Cycle, Knobs, warm).Level, Is.GreaterThanOrEqualTo(DeskLighting.ReadableNightLevel), $"{hour:0.00}");
+            DeskLighting.Light l = DeskLighting.Evaluate(hour, Cycle, Knobs, warm);
+            Assert.That(DeskLighting.DarkestOnMat(l, Radius, MatWidth, MatDepth), Is.GreaterThanOrEqualTo(DeskLighting.ReadableNightLuminance), $"{hour:0.00}");
         }
     }
 
@@ -79,7 +124,7 @@ public class DeskLightingTests
     public void TheNight_IsCoolWithoutTheLamp_AndWarmerWithIt()
     {
         DeskLighting.Light dark = DeskLighting.Evaluate(23f, Cycle, Knobs, 0f);
-        Assert.AreEqual(0.35f, dark.Level, Tolerance);
+        Assert.AreEqual(0.5f, dark.Level, Tolerance);
         Assert.AreEqual(0.78f, dark.R, Tolerance); Assert.AreEqual(1f, dark.B, Tolerance);
         DeskLighting.Light lit = DeskLighting.Evaluate(23f, Cycle, Knobs, 1f);
         Assert.That(lit.R / lit.B, Is.GreaterThan(dark.R / dark.B), "the lamp warms the night");

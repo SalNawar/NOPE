@@ -17,27 +17,37 @@ public static class HallDayCycle
     public const float HoursPerDay = 24f;
 
     /// <summary>
+    /// The cycle's default knobs, the one source of them: HallLightingSO's
+    /// field defaults read these, and <see cref="Active"/> starts from them
+    /// (sunrise 07:00, sunset 16:30, 1.5 h twilights, fixtures on below 0.6
+    /// daylight over a 0.1 band, 4 minutes apart). The shipped asset
+    /// (HallLighting_Default) tunes its own values (fixtures on below 0.8);
+    /// they reach every reader once the rig publishes them, each frame.
+    /// </summary>
+    public static readonly Settings Defaults = new Settings(7f, 16.5f, 1.5f, 0.6f, 0.1f, 4f);
+
+    /// <summary>
     /// The cycle's knobs every reader of the one day cycle shares (BUG-25b):
     /// the hall rig publishes its HallLightingSO's (<see cref="Publish"/>), so
     /// the hall's four painted states (HallBakedCycle), the lamps, the city's
-    /// windows, the calendar, the desk light and the cheat menu's Dusk all
-    /// read the same day. Until a rig publishes: HallLightingSO's defaults
-    /// (sunrise 07:00, sunset 16:30, 1.5 h twilights, fixtures on below 0.6
-    /// daylight over a 0.1 band, 4 minutes apart).
+    /// windows, the calendar and the desk light all read the same day. Until
+    /// a rig publishes (a scene without the hall): <see cref="Defaults"/>.
     /// </summary>
-    public static Settings Active { get; private set; } = new Settings(7f, 16.5f, 1.5f, 0.6f, 0.1f, 4f);
+    public static Settings Active { get; private set; } = Defaults;
 
     /// <summary>Makes <paramref name="settings"/> the cycle every reader shares (HallLightingRig, from its knobs, each frame).</summary>
     public static void Publish(in Settings settings) => Active = settings;
 
     /// <summary>
-    /// The hour of dusk on the shared cycle (P0-A seam; owner LIGHT, read by
-    /// RUN-SAFE's cheat Dusk): the afternoon hour the hall's evening is half
-    /// (<see cref="HourAtEvening"/> of 0.5, the sunset of <see cref="Active"/>;
-    /// 16:30 with the default knobs), so the cheat shows the dusk a natural
-    /// day shows at that hour (it showed full night at 18:30).
+    /// The hour the cheat menu's Dusk sets (P0-A seam; owner LIGHT, read by
+    /// RUN-SAFE's DevCheats): 18:30, the plan's H4 and the value the seam was
+    /// stubbed with, so the LIGHT pass compares cheat Dusk with a natural
+    /// 18:30 (FIX_PLAN LIGHT). On the one cycle with the shipped knobs 18:30
+    /// is already full night; moving it to the cycle's sunset
+    /// (<see cref="HourAtEvening"/> of 0.5, 16:30) is a proposal waiting
+    /// for the orchestrator (docs/pending/LIGHT.md), not done here.
     /// </summary>
-    public static float DuskHour => HourAtEvening(0.5f, Active);
+    public static float DuskHour => 18.5f;
 
     /// <summary>How long a fixture's switch-on flicker lasts (real seconds).</summary>
     public const float FlickerSeconds = 0.6f;
@@ -95,7 +105,7 @@ public static class HallDayCycle
     /// <paramref name="evening"/> (clamped to 0..1): the inverse of
     /// <see cref="Evening"/> through the dusk, from the dusk's start (0) to
     /// night (1), the sunset at a half. The desk lamp's switch-on hour
-    /// (DeskLighting.LampOnHour) and the cheat's Dusk (<see cref="DuskHour"/>) read it.
+    /// (DeskLighting.LampOnHour) reads it.
     /// </summary>
     public static float HourAtEvening(float evening, in Settings s)
     {
