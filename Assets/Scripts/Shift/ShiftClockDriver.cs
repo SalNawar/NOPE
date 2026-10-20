@@ -5,7 +5,9 @@ using UnityEngine;
 /// Scene host for the pure <see cref="ShiftClock"/>: builds today's clock from
 /// the day's hours (DayPlanSO.Shift: the plan's own, else GameConfigSO's
 /// standard day) and GameConfigSO's real seconds, ticks it with scaled time,
-/// and re-raises Closed. GameManager
+/// and re-raises Closed. The clock holds while any pause source holds it
+/// (PauseState.Shared: Settings open, the window's focus lost, a citation
+/// slip, the booth closed; BUG-34). GameManager
 /// starts and stops it; readouts (and later, lighting) read <see cref="Clock"/>.
 /// While enabled it is also the read-only shift hook for the art side
 /// (<see cref="Live"/>, <see cref="IShiftProgress"/>).
@@ -34,8 +36,11 @@ public sealed class ShiftClockDriver : MonoBehaviour, IShiftProgress
     /// <summary>The config's standard day (GameConfigSO.Standard), which StandardProgress01 reads the hour on.</summary>
     private ShiftHours _standard = new ShiftHours(540, 1020);
 
-    /// <summary>Raised once, when the clock reaches closing time.</summary>
+    /// <summary>Raised once, when the shift ends: closing time, or an early finish (StopShift), so the closing bell rings either way (BUG-72).</summary>
     public event Action Closed;
+
+    /// <summary>True while this driver holds the clock for PauseState (one ShiftClock.Pause, released when no source holds).</summary>
+    private bool _held;
 
     /// <summary>
     /// Builds a fresh stopped clock for today: <paramref name="plan"/>'s hours
@@ -65,25 +70,40 @@ public sealed class ShiftClockDriver : MonoBehaviour, IShiftProgress
 
         if (Clock != null)
             Clock.Closed += RaiseClosed;
+        _held = false;
+        FollowPause();
     }
 
     /// <summary>Starts today's clock (Start Shift).</summary>
     public void StartShift() => Clock?.Start();
 
-    /// <summary>Freezes the clock without closing (the day ended early).</summary>
-    public void StopShift() => Clock?.Stop();
-
-    /// <summary>Holds time (e.g. while a citation slip is shown). Calls nest.</summary>
-    public void Pause() => Clock?.Pause();
-
-    /// <summary>Releases one Pause().</summary>
-    public void Resume() => Clock?.Resume();
+    /// <summary>The shift ends before closing time (the queue ran out, End Shift, a run that ended): the clock stops where it is and raises Closed once (ShiftClock.Finish), so the bell rings on an early finish (BUG-72).</summary>
+    public void StopShift() => Clock?.Finish();
 
     /// <summary>Spends <paramref name="minutes"/> of shift time at once (ShiftClock.Spend: a waiver signed from the desk's pad).</summary>
     public void Spend(float minutes) => Clock?.Spend(minutes);
 
-    /// <summary>Advances the clock with scaled time.</summary>
-    private void Update() => Clock?.Tick(Time.deltaTime);
+    /// <summary>Follows the pause, then advances the clock with scaled time.</summary>
+    private void Update()
+    {
+        FollowPause();
+        Clock?.Tick(Time.deltaTime);
+    }
+
+    /// <summary>Holds the clock while a pause source holds it (PauseState.Shared.ClockHeld) and lets it go when none does.</summary>
+    private void FollowPause()
+    {
+        if (Clock == null)
+            return;
+        bool held = PauseState.Shared.ClockHeld;
+        if (held == _held)
+            return;
+        _held = held;
+        if (held)
+            Clock.Pause();
+        else
+            Clock.Resume();
+    }
 
     /// <summary>Publishes this driver as the live shift hook.</summary>
     private void OnEnable() => Live = this;

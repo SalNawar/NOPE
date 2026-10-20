@@ -59,8 +59,6 @@ MonoBehaviour:
     stretchPerSpeed: 0.00012
     squashPerAccel: 1.2e-06
     maxStretch: 0.25
-    deskStretchPerSpeed: 0.06
-    deskSquashPerAccel: 0.0005
     reducedFadeSeconds: 0.12
     paperTiltMax: 7
     paperTiltPerSpeed: 14
@@ -88,3 +86,5 @@ MonoBehaviour:
     settleValue: 0.0005
     settleSpeed: 0.005
   breathingNoise: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
+  transitSeconds: 0.25
+  payoffWaitSeconds: 8

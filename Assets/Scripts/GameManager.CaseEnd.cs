@@ -81,13 +81,15 @@ public sealed partial class GameManager
 
         if (ending != null)
         {
-            Debug.Log($"[GameManager] Ending check: matched '{ending.id}' ({ending.displayName}).");
+            // The run ends at the day's end, not now (BUG-56a; TIMELINE-FAIL's Q4 = A): the verdict shows, the shift closes, the report, then the ending.
+            Debug.Log($"[GameManager] Ending check: matched '{ending.id}' ({ending.displayName}); the shift closes and the run ends at the day's end.");
             _worldState.endingId = ending.id;
 
             if (RunManager.HasInstance)
                 RunManager.Instance.SaveNow();
 
-            ShowVerdictThen(verdict, HandleEndingReached);
+            ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
+            CloseNow(ending.id);
             return;
         }
 
@@ -95,11 +97,13 @@ public sealed partial class GameManager
     }
 
     /// <summary>
-    /// Shows the verdict slip if a UI is wired (pausing the shift clock while a
-    /// citation slip is up, and holding the PC screen on so the slip can never
+    /// Shows the verdict slip if a UI is wired (holding the shift clock while a
+    /// citation slip is up: PauseState's Citation source, so no other pause's
+    /// release restarts it; and holding the PC screen on so the slip can never
     /// sit on a dark screen), then runs the continuation (Saleh 2026-10-07,
     /// after the 1007b demo: "I like the violation slip better": the slip is
-    /// back and the Citation paper on the desk is gone).
+    /// back and the Citation paper on the desk is gone). Until then the
+    /// verdict counts as showing: closing finishes this slot first (BUG-28b).
     /// </summary>
     private void ShowVerdictThen(CaseVerdict verdict, System.Action onContinue)
     {
@@ -111,18 +115,19 @@ public sealed partial class GameManager
 
         // A citation slip holds the day, the shift clock and the screen until acknowledged.
         bool citation = verdict != null && verdict.citationIssued;
-        bool holdsClock = shiftClock != null && citation;
-        if (holdsClock)
-            shiftClock.Pause();
+        if (citation)
+            PauseState.Shared.Request(PauseState.Citation, PauseScope.Clock);
         if (citation && booth != null)
             booth.SetCitationPending(true);
+        _verdictShowing = true;
 
         officeUI.ShowVerdict(verdict, () =>
         {
+            _verdictShowing = false;
             if (citation && booth != null)
                 booth.SetCitationPending(false);
-            if (holdsClock)
-                shiftClock.Resume();
+            if (citation)
+                PauseState.Shared.Release(PauseState.Citation);
             if (citation)
                 CitationAcknowledged?.Invoke(verdict);
             onContinue?.Invoke();
@@ -130,10 +135,10 @@ public sealed partial class GameManager
     }
 
     /// <summary>
-    /// Called once the verdict for a run-ending case, or the shift report of a
-    /// day whose dialog consequences reached an ending, has been shown. Loads
-    /// the title scene to display the ending (WorldState.endingId is already
-    /// set and saved).
+    /// Called after the shift report of a day that ended the run (a verdict's
+    /// CloseNow, or the day's close reaching an ending). Loads the title scene,
+    /// where the ending shows (WorldState.endingId is already set and saved;
+    /// the evening edition first: EveningEditionView).
     /// </summary>
     private void HandleEndingReached()
     {

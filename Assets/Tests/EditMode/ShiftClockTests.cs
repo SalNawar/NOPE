@@ -114,18 +114,44 @@ public class ShiftClockTests
     }
 
     [Test]
-    public void Stop_HaltsWithoutClosing()
+    public void Finish_HaltsAndClosesOnce_SoAnEarlyFinishRingsTheBell()
     {
+        // BUG-72: the queue ran out (or End Shift) before closing time: the clock stops where it is and closes, raising Closed once.
         var clock = NineToFive();
         int closed = 0;
         clock.Closed += () => closed++;
         clock.Start();
         clock.Tick(10f);
-        clock.Stop();
+        clock.Finish();
         clock.Tick(1000f);
-        Assert.AreEqual(550f, clock.CurrentMinute, 1e-3f);
-        Assert.IsFalse(clock.IsClosed);
-        Assert.AreEqual(0, closed);
+        Assert.AreEqual(550f, clock.CurrentMinute, 1e-3f, "the clock stays at the hour the shift ended");
+        Assert.IsTrue(clock.IsClosed);
+        Assert.IsFalse(clock.IsRunning);
+        Assert.AreEqual(1, closed);
+
+        clock.Finish();
+        clock.Start();
+        Assert.AreEqual(1, closed, "Closed is raised once");
+        Assert.IsFalse(clock.IsRunning, "a finished clock never starts again");
+    }
+
+    [Test]
+    public void Finish_BeforeTheShiftStarted_OrAfterClosing_RaisesNothing()
+    {
+        var never = NineToFive();
+        int closed = 0;
+        never.Closed += () => closed++;
+        never.Finish();
+        Assert.AreEqual(0, closed, "no shift ran (AVAILABLE never pressed): no bell");
+        Assert.IsFalse(never.IsClosed);
+
+        var full = NineToFive();
+        full.Closed += () => closed++;
+        full.Start();
+        full.Tick(480f);
+        Assert.AreEqual(1, closed);
+        full.Finish();
+        Assert.AreEqual(1, closed, "closing time already rang");
     }
 
     [Test]
@@ -154,6 +180,8 @@ public class ShiftClockTests
     [TestCase(1020f, "17:00")]
     [TestCase(0f, "00:00")]
     [TestCase(1439.5f, "23:59")]
+    [TestCase(1440f, "24:00")]
+    [TestCase(1500f, "01:00")]
     public void Format_IsZeroPaddedTwentyFourHour(float minute, string expected)
     {
         Assert.AreEqual(expected, ShiftClock.Format(minute));

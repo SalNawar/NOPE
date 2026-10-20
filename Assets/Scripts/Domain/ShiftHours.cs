@@ -32,7 +32,7 @@ public readonly struct ShiftHours : IEquatable<ShiftHours>
     /// <summary>The opening time as the clock shows it ("13:00").</summary>
     public string Open => ShiftClock.Format(StartMinute);
 
-    /// <summary>The closing time as the clock shows it ("21:00"; midnight shows "00:00").</summary>
+    /// <summary>The closing time as the clock shows it ("21:00"; the night shift's midnight shows "24:00", BUG-72).</summary>
     public string Close => ShiftClock.Format(EndMinute);
 
     /// <summary>

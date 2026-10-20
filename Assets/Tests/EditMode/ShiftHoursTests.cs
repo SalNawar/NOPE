@@ -44,11 +44,12 @@ public class ShiftHoursTests
     }
 
     [Test]
-    public void TheClockFace_PrintsMidnightAsZeroHundred()
+    public void TheClockFace_PrintsTheNightShiftsClosingAsTwentyFourHundred()
     {
+        // BUG-72: a night shift closes at "24:00", not "00:00" (the briefing's new hours, the report, the clocks).
         var night = new ShiftHours(16 * 60, 24 * 60);
         Assert.AreEqual("16:00", night.Open);
-        Assert.AreEqual("00:00", night.Close, "the night shift closes at 24:00, shown 00:00");
+        Assert.AreEqual("24:00", night.Close, "the night shift closes at 24:00");
         Assert.AreEqual(480, night.LengthMinutes);
         Assert.AreEqual("09:00", Standard.Open);
         Assert.AreEqual("17:00", Standard.Close);
@@ -81,7 +82,7 @@ public class ShiftHoursTests
         clock.Tick(30f);
         Assert.IsTrue(closed, "the desk closes at midnight");
         Assert.AreEqual(1440f, clock.CurrentMinute);
-        Assert.AreEqual("00:00", ShiftClock.Format(clock.CurrentMinute));
+        Assert.AreEqual("24:00", ShiftClock.Format(clock.CurrentMinute), "the clocks show the closing hour, not the next day's 00:00");
     }
 
     [Test]

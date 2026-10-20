@@ -6,7 +6,9 @@ using System.Collections.Generic;
 /// outer band and a hairline inside it, in the outline's shape, the legend
 /// printed in the middle by the renderers. The outlines are named as the
 /// Domain's SealShape values (the EditMode suite checks every name has one).
-/// Pure, so the drawing is tested headless; SealArt paints it into a texture.
+/// Pure, so the drawing is tested headless; SealArt paints it into a texture
+/// through <see cref="Resolve"/>, which looks the name up once (BUG-31a: the
+/// office's load spent most of its time on 2.7 million name lookups here).
 /// </summary>
 public static class SealOutlines
 {
@@ -36,16 +38,43 @@ public static class SealOutlines
     public const float EllipseHeight = 0.8f;
 
     /// <summary>True when (<paramref name="x"/>, <paramref name="y"/>) in [-1, 1] (y down) is inked: in the outer band or on the hairline of <paramref name="shape"/>'s outline; nothing for an unknown shape.</summary>
-    public static bool Inked(string shape, float x, float y) =>
-        Has(shape) && ((Inside(shape, x, y, 1f) && !Inside(shape, x, y, OuterBand)) || (Inside(shape, x, y, HairOuter) && !Inside(shape, x, y, HairInner)));
+    public static bool Inked(string shape, float x, float y) => Resolve(shape).Inked(x, y);
 
-    /// <summary>True when the point lies inside the outline scaled by <paramref name="scale"/> about the centre.</summary>
-    private static bool Inside(string shape, float x, float y, float scale)
+    /// <summary><paramref name="shape"/>'s outline, its name looked up once (an unknown name inks nothing): a painter tests every point against it.</summary>
+    public static Outline Resolve(string shape)
     {
         float round = Round(shape);
         if (round > 0f)
-            return PixelShapes.InEllipse(0f, 0f, scale, scale * round, x, y);
-        return PixelShapes.InPolygon(Polygons[shape], x / scale, y / scale);
+            return new Outline(round, null);
+        return shape != null && Polygons.TryGetValue(shape, out (float x, float y)[] polygon) ? new Outline(0f, polygon) : default;
+    }
+
+    /// <summary>One seal outline, resolved from its name (<see cref="Resolve"/>): round (its height over its width) or a polygon.</summary>
+    public readonly struct Outline
+    {
+        /// <summary>A round outline's height over its width; 0 for a polygon.</summary>
+        private readonly float _round;
+
+        /// <summary>A polygon outline's corners in [-1, 1] (y down); null for a round one.</summary>
+        private readonly (float x, float y)[] _polygon;
+
+        /// <summary>An outline: round (<paramref name="round"/> above 0) or <paramref name="polygon"/>.</summary>
+        public Outline(float round, (float x, float y)[] polygon)
+        {
+            _round = round;
+            _polygon = polygon;
+        }
+
+        /// <summary>True for a known outline (an unknown name resolves to one that inks nothing).</summary>
+        public bool Exists => _round > 0f || _polygon != null;
+
+        /// <summary>True when (<paramref name="x"/>, <paramref name="y"/>) in [-1, 1] (y down) is inked: in the outer band or on the hairline.</summary>
+        public bool Inked(float x, float y) =>
+            Exists && ((Inside(x, y, 1f) && !Inside(x, y, OuterBand)) || (Inside(x, y, HairOuter) && !Inside(x, y, HairInner)));
+
+        /// <summary>True when the point lies inside the outline scaled by <paramref name="scale"/> about the centre.</summary>
+        private bool Inside(float x, float y, float scale) =>
+            _round > 0f ? PixelShapes.InEllipse(0f, 0f, scale, scale * _round, x, y) : PixelShapes.InPolygon(_polygon, x / scale, y / scale);
     }
 
     /// <summary>A regular polygon of <paramref name="sides"/> sides on a circle of <paramref name="radius"/>, its first corner at <paramref name="start"/> radians.</summary>

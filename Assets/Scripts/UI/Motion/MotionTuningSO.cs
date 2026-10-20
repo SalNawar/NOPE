@@ -18,4 +18,10 @@ public sealed class MotionTuningSO : ScriptableObject
 
     /// <summary>The desk cameras' idle breathing noise profile (Cinemachine's mild handheld one when the builders made the asset; none: no breathing).</summary>
     public NoiseSettings breathingNoise;
+
+    /// <summary>The screen transitions' one length in seconds (Transit's kit: fades, slides, the fade through black of a scene change; BUG-32a, the bible's J5), kept within TransitCurve's 0.2-0.3 s.</summary>
+    [Range(TransitCurve.MinSeconds, TransitCurve.MaxSeconds)] public float transitSeconds = 0.25f;
+
+    /// <summary>The longest the shift report waits for the last traveller's reaction and walk-off (real seconds; BUG-32a: the payoff plays before the report, never stuck behind a figure that does not leave).</summary>
+    [Min(0f)] public float payoffWaitSeconds = 8f;
 }

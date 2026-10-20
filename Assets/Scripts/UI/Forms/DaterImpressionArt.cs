@@ -19,6 +19,10 @@ using UnityEngine.TextCore;
 /// clean print (density 1, no wear) shows in the dater's top window. A date
 /// band (Band) is the rubber ring of one date wheel: its labels round its
 /// circumference. The caller owns every texture made here and destroys it.
+/// The rubber is the bureau's: a verdict word it cannot print (a Greek,
+/// Arabic, Japanese or Chinese word) prints as its English APPROVED or
+/// DENIED (DaterRubber; BUG-38b). The word's outline, the costly layer, is
+/// painted once per word for the session (BUG-31a).
 /// </summary>
 public static class DaterImpressionArt
 {
@@ -40,6 +44,9 @@ public static class DaterImpressionArt
     /// <summary>The clean layers of a print, by its texts (the word, the date and the BY line change at most daily).</summary>
     private static readonly Dictionary<string, Layers> Cache = new Dictionary<string, Layers>();
 
+    /// <summary>The words' outline layers, by word and font: two words a session, painted once each (the date and the BY line change daily; the word never does).</summary>
+    private static readonly Dictionary<string, float[]> Words = new Dictionary<string, float[]>();
+
     /// <summary>The fonts' atlases' alpha, read once.</summary>
     private static readonly Dictionary<TMP_FontAsset, byte[]> Atlases = new Dictionary<TMP_FontAsset, byte[]>();
 
@@ -60,7 +67,7 @@ public static class DaterImpressionArt
     /// </summary>
     public static Texture2D Paint(string word, Color32 wordInk, string date, string byLine, TMP_FontAsset font, float density, int seed, bool worn = true)
     {
-        Layers layers = LayersOf(word ?? string.Empty, date ?? string.Empty, byLine ?? string.Empty, font);
+        Layers layers = LayersOf(RubberWord(word, wordInk, font), date ?? string.Empty, byLine ?? string.Empty, font);
         var pixels = new Color32[Width * Height];
         float d = Mathf.Clamp01(density);
         int sx = worn ? 1 + (int)(DaterInk.Hash01(seed, 1, 7) * 2.5f) : 0, sy = worn ? (int)(DaterInk.Hash01(seed, 2, 7) * 2.5f) - 1 : 0;
@@ -129,15 +136,34 @@ public static class DaterImpressionArt
         return texture;
     }
 
-    /// <summary>The clean layers of a print (painted once per texts).</summary>
+    /// <summary>
+    /// The word the rubber prints for <paramref name="word"/> (DaterRubber):
+    /// itself when each letter prints (the rubber's own capitals, or the
+    /// font's readable glyphs), else the English verdict word of
+    /// <paramref name="wordInk"/> (APPROVED for ApprovedInk, DENIED otherwise).
+    /// </summary>
+    private static string RubberWord(string word, Color32 wordInk, TMP_FontAsset font)
+    {
+        bool approved = wordInk.r == ApprovedInk.r && wordInk.g == ApprovedInk.g && wordInk.b == ApprovedInk.b;
+        bool fontReadable = AtlasOf(font) != null;
+        return DaterRubber.Word(word, approved, c => DaterLetters.Has(c) || (fontReadable && font.characterLookupTable.ContainsKey(c)));
+    }
+
+    /// <summary>The clean layers of a print (painted once per texts; the word's outline once per word).</summary>
     private static Layers LayersOf(string word, string date, string byLine, TMP_FontAsset font)
     {
-        string key = word + "\n" + date + "\n" + byLine + "\n" + (font != null ? font.GetInstanceID() : 0);
+        string fontKey = "\n" + (font != null ? font.GetHashCode() : 0);
+        string key = word + "\n" + date + "\n" + byLine + fontKey;
         if (Cache.TryGetValue(key, out Layers layers))
             return layers;
+        if (!Words.TryGetValue(word + fontKey, out float[] wordLayer))
+        {
+            wordLayer = WordLayer(word, font);
+            Words[word + fontKey] = wordLayer;
+        }
         layers = new Layers
         {
-            Word = WordLayer(word, font),
+            Word = wordLayer,
             Date = TextLayer(date, font, Width, Height, 0.06f, 0.94f, DateTop, DateBottom, 0.035f),
             By = TextLayer(byLine, font, Width, Height, 0.06f, 0.94f, ByTop, ByBottom, 0.02f)
         };
@@ -163,23 +189,43 @@ public static class DaterImpressionArt
         float rowH = (WordBottom - WordTop) * Height, rowW = 0.94f * Width;
         float cap = Mathf.Min(rowH, total > 0f ? rowW / total : rowH);
         float left = (Width - total * cap) / 2f, baseline = (1f - WordBottom) * Height + (rowH - cap) / 2f;
+
+        // Each letter's left edge, once (BUG-31a: the word was the second cost of the office's load).
+        var starts = new float[w.Length];
+        float pen = 0f;
+        for (int i = 0; i < w.Length; i++)
+        {
+            starts[i] = pen;
+            pen += (w[i] == ' ' ? 0.4f : DaterLetters.Width(w[i])) + Tracking;
+        }
+
         for (int y = 0; y < Height; y++)
             for (int x = 0; x < Width; x++)
             {
                 float ex = (x + 0.5f - left) / cap, ey = (y + 0.5f - baseline) / cap;
                 if (ex < -0.2f || ex > total + 0.2f || ey < -0.2f || ey > 1.2f)
                     continue;
-                float d = float.MaxValue, at = 0f;
-                foreach (char c in w)
+                float d = float.MaxValue;
+                for (int i = 0; i < w.Length; i++)
                 {
-                    if (c != ' ')
-                        d = Mathf.Min(d, DaterLetters.Distance(c, ex - at, ey));
-                    at += (c == ' ' ? 0.4f : DaterLetters.Width(c)) + Tracking;
+                    char c = w[i];
+                    // A letter more than LetterReach cap heights to the side cannot ink this pixel, nor be its nearest inked edge: skipped.
+                    if (c == ' ' || ex < starts[i] - LetterReach || ex > starts[i] + DaterLetters.Width(c) + LetterReach)
+                        continue;
+                    d = Mathf.Min(d, DaterLetters.Distance(c, ex - starts[i], ey));
                 }
                 cover[y * Width + x] = Mathf.Clamp01((Line - Mathf.Abs(d)) * cap + 0.5f);
             }
         return cover;
     }
+
+    /// <summary>
+    /// How far beside its advance box a letter is still measured (cap heights):
+    /// the serifs reach at most 0.1 past the box, and a pixel inks only within
+    /// Line plus half a pixel of an edge, so a letter further than this cannot
+    /// change the pixel (its distance is never the nearest inked one).
+    /// </summary>
+    private const float LetterReach = 0.3f;
 
     /// <summary>
     /// <paramref name="text"/> in <paramref name="font"/> as coverage over a
@@ -292,6 +338,7 @@ public static class DaterImpressionArt
     private static void ResetStatics()
     {
         Cache.Clear();
+        Words.Clear();
         Atlases.Clear();
     }
 }

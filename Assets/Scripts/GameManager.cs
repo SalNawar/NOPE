@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -91,6 +92,12 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>True from presenting a traveller until the player's decision (closing-time rule).</summary>
     private bool _travellerAtDesk;
 
+    /// <summary>True while a decided traveller's verdict (the ribbon, a citation slip) shows and their slot is not yet resolved: closing finishes the slot first (ShiftEnd.OnClosing; BUG-28b).</summary>
+    private bool _verdictShowing;
+
+    /// <summary>True once today's closing was handled (closing time, End Shift, CloseNow, or the day's end): it is handled once.</summary>
+    private bool _closingHandled;
+
     /// <summary>Gameplay tuning, pulled from RunConfig (null-safe).</summary>
     private GameConfigSO _gameConfig;
 
@@ -141,10 +148,13 @@ public sealed partial class GameManager : MonoBehaviour
         Current = this;
 
         // Acquire the run (creates RunManager + loads save/new run on first scene).
+        bool runExisted = RunManager.HasInstance;
         RunManager run = RunManager.GetOrCreate();
 
-        // The run exists now: theme the office for the present culture before the briefing shows.
-        CultureThemeService.RefreshActive();
+        // Each scene is themed for the run's culture as it loads (CultureThemeService, sceneLoaded), so the office is
+        // themed once (BUG-31a); only an office opened on its own, whose run is made here, is themed again for that run.
+        if (!runExisted)
+            CultureThemeService.RefreshActive();
 
         if (run != null)
         {
@@ -186,6 +196,8 @@ public sealed partial class GameManager : MonoBehaviour
             shiftClock.Configure(_gameConfig, dayPlan);
             shiftClock.Closed += HandleShiftClosed;
         }
+        else
+            Debug.LogWarning("GameManager: no ShiftClockDriver wired, so the day ends only when the queue empties (no closing time). Run Tools > TimeDesk > Build Office UI.");
 
         // The game feel's director (hit-stop, camera impulses, the shift's bells, the hall's ambience).
         FeelDirector.Attach(this, shiftClock);
@@ -193,10 +205,6 @@ public sealed partial class GameManager : MonoBehaviour
         // A waiver signed from the desk's pad costs shift time (the endings and strandings spec §7.3, Q15 = A).
         if (investigationUI != null)
             investigationUI.WaiverSigned += HandleWaiverSigned;
-        else
-        {
-            Debug.LogWarning("GameManager: no ShiftClockDriver wired, so the day ends only when the queue empties (no closing time). Run Tools > TimeDesk > Build Office UI.");
-        }
 
         // Fresh ledger for this shift.
         _ledger = new ShiftLedger();
@@ -338,6 +346,8 @@ public sealed partial class GameManager : MonoBehaviour
     {
         if (Current == this)
             Current = null;
+        // A citation slip still up as the office goes (a cheat's jump, quitting to the title) holds no clock in the next scene.
+        PauseState.Shared.Release(PauseState.Citation);
         if (shiftClock != null)
             shiftClock.Closed -= HandleShiftClosed;
         if (investigationUI != null)
@@ -354,30 +364,28 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the last case of the day resolves: closes the desk and ends
-    /// the last traveller's reaction (no bubble over the report), applies the narrative
-    /// dialogs' consequences (then refreshes the HUD and checks endings), saves
-    /// the run, shows the shift report and leads into the Home scene (or the
-    /// title scene when an ending was reached).
+    /// Called when the last case of the day resolves (or the booth closed):
+    /// closes the desk and stops the clock (an early finish rings the closing
+    /// bell, BUG-72), applies the narrative dialogs' consequences (then
+    /// refreshes the HUD and checks endings) and saves the run; then, once the
+    /// last traveller's reaction and walk-off have played (BUG-32a), shows the
+    /// shift report and leads into the Home scene, or into the run's ending
+    /// when one was reached during the shift or at its close (the title scene;
+    /// BUG-28b, BUG-56a).
     /// </summary>
     private void HandleDayCompleted()
     {
         Debug.Log($"[GameManager] >>> Entering HandleDayCompleted (day {_worldState.day}).");
 
-        // The booth is shut: freeze the clock (the queue may have run out before closing) and close the desk; an FTUE still open is over (saved below).
+        // The booth is shut: closing is handled, the clock stops (the queue may have run out before closing: the bell rings) and the desk closes; an FTUE still open is over (saved below).
         _travellerAtDesk = false;
         _shiftRunning = false;
+        _closingHandled = true;
         if (guide != null)
             guide.EndShift();
         CloseDesk();
-
-        // The last traveller's reaction ends as the booth shuts: the figure leaves and their bubble hides, so it never sits over the shift report.
-        if (travellerView != null)
-            travellerView.EndLinger();
-        EndReaction();
         if (shiftClock != null)
             shiftClock.StopShift();
-        _characterArt?.Retain(null);
 
         int correctCount = 0;
         int totalPay = 0;
@@ -436,17 +444,54 @@ public sealed partial class GameManager : MonoBehaviour
             RunManager.Instance.SaveNow();
         }
 
-        System.Action next = ending != null ? new System.Action(HandleEndingReached) : HandleGoHome;
+        // A run that reached an ending during the shift (a verdict's CloseNow(endingId)) or at its close ends here: the report, then the ending, never Home.
+        bool ends = ShiftEnd.EndsTheRun(_worldState.endingId);
+        System.Action next = ends ? new System.Action(HandleEndingReached) : HandleGoHome;
 
-        // Show the shift report, then hand off to the home phase (or the title
-        // scene after an ending). The report is read in the booth (like the
-        // morning briefing), so pull back first.
+        Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (the report once the last traveller's payoff has played, then {(ends ? "the ending" : "Home")}).");
+        StartCoroutine(AfterThePayoff(() => ShowDayReport(next, ends)));
+    }
+
+    /// <summary>
+    /// Waits until the last traveller's reaction and walk-off have played
+    /// (DeskAvailability.IsDeparting; at most MotionTuningSO.payoffWaitSeconds
+    /// of real time: ShiftEnd.PayoffDone), then ends their linger and bubble,
+    /// so neither sits over the report, frees their art and runs
+    /// <paramref name="then"/> (BUG-32a: the report wiped the payoff).
+    /// </summary>
+    private IEnumerator AfterThePayoff(System.Action then)
+    {
+        float max = UiMotion.Tuning != null ? UiMotion.Tuning.payoffWaitSeconds : DefaultPayoffWaitSeconds;
+        float waited = 0f;
+        while (!ShiftEnd.PayoffDone(_desk.IsDeparting, waited, max))
+        {
+            yield return null;
+            waited += Time.unscaledDeltaTime;
+        }
+        if (travellerView != null)
+            travellerView.EndLinger();
+        EndReaction();
+        _characterArt?.Retain(null);
+        then();
+    }
+
+    /// <summary>The payoff's longest wait without a MotionTuningSO (its default).</summary>
+    private const float DefaultPayoffWaitSeconds = 8f;
+
+    /// <summary>
+    /// Shows the shift report, then hands off to <paramref name="next"/> (Home,
+    /// or the ending when <paramref name="ends"/>). The report is read in the
+    /// booth (like the morning briefing), so the view pulls back first; without
+    /// a report panel, the day's line and <paramref name="next"/> at once.
+    /// </summary>
+    private void ShowDayReport(System.Action next, bool ends)
+    {
         if (dayFlowUI != null)
         {
             if (officeView != null)
                 officeView.FocusOffice();
 
-            Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then {(ending != null ? "the title scene" : "Home")}).");
+            Debug.Log($"[GameManager] The shift report, then {(ends ? "the ending" : "Home")}.");
             if (booth != null)
                 booth.SetPhase(BoothPhase.Newsletter);
             // The last verdict's ribbon goes with the shift (QA2 2026-10-16: CORRECT stayed above the report).
@@ -463,7 +508,7 @@ public sealed partial class GameManager : MonoBehaviour
             if (officeUI != null)
                 officeUI.SetResultText(UiText.Format("day.complete", _worldState.day));
 
-            Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (no results panel, going to {(ending != null ? "the title scene" : "Home")} directly).");
+            Debug.Log($"[GameManager] No results panel: going to {(ends ? "the ending" : "Home")} directly.");
             next();
         }
     }
@@ -510,20 +555,50 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Closing time: the desk closes (the AVAILABLE sign goes off and inert, and
-    /// a traveller still waiting in the queue is never called); a traveller
-    /// already at the desk may be finished, otherwise the booth closes at once.
+    /// Closing time (once a day: closing time, End Shift, CloseNow): the desk
+    /// closes (the AVAILABLE sign goes off and inert, and a traveller still
+    /// waiting in the queue is never called); a traveller at the desk, or a
+    /// decided one whose verdict still shows (a citation slip), is finished
+    /// first (ShiftEnd.OnClosing: the report never covers the slip; BUG-28b),
+    /// otherwise the booth closes at once.
     /// </summary>
     private void HandleShiftClosed()
     {
-        ClosingAction action = ShiftFlow.OnClosing(_travellerAtDesk);
-        Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}, waiting={_desk.IsWaiting}) -> {action}.");
+        if (_closingHandled)
+            return;
+        _closingHandled = true;
+        ClosingAction action = ShiftEnd.OnClosing(_travellerAtDesk, _verdictShowing);
+        Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}, verdictShowing={_verdictShowing}, waiting={_desk.IsWaiting}) -> {action}.");
         CloseDesk();
 
         if (action == ClosingAction.FinishCurrent)
             orchestrator.CloseAfterCurrentSlot();
         else
             orchestrator.CloseNow();
+    }
+
+    /// <summary>
+    /// The run ends at this day's end (TIMELINE-FAIL's Q4 = A; BUG-28b,
+    /// BUG-56a: failure plays out at the day's end, never the instant a
+    /// verdict lands): <paramref name="endingId"/> is set (blank keeps the one
+    /// set already) and, while the shift runs, it closes now: the AVAILABLE
+    /// sign goes off, nobody else is called, a traveller at the desk or a
+    /// decided one's verdict is finished first, the closing bell rings; then
+    /// the last payoff, the report and the ending (never Home). Before the
+    /// shift starts, the ending still waits for the day's end.
+    /// </summary>
+    public void CloseNow(string endingId)
+    {
+        if (_worldState == null)
+            return;
+        if (!string.IsNullOrEmpty(endingId))
+            _worldState.endingId = endingId;
+        if (!_shiftRunning)
+            return;
+        Debug.Log($"[GameManager] CloseNow('{_worldState.endingId}'): the shift closes now; the run ends at the day's end.");
+        if (shiftClock != null)
+            shiftClock.StopShift(); // rings the bell and raises Closed: HandleShiftClosed
+        HandleShiftClosed(); // when the clock never ran (handled once either way)
     }
 
     /// <summary>
