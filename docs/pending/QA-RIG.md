@@ -22,7 +22,7 @@ Branch `fix/p0-qa-rig`, cut from `fix/p0-carve` (f347060). Source: FIX_PLAN.md �
    - the runtime rig, in Assets/Tests/PlayMode/Rig (Assembly-CSharp, compiled only in the editor and QA builds);
    - the base class, in Assets/Tests/PlayMode/Editor (Assembly-CSharp-Editor);
    - each track's play tests, in `Assets/Tests/PlayMode/<Track>/Editor/` (also Assembly-CSharp-Editor). Its runtime ops go in `Assets/Tests/PlayMode/<Track>/Rig/`.
-3. **Quality.** `ProjectSettings/QualitySettings.asset` `m_CurrentQuality` goes from 0 (Very Low) to 5 (Ultra), the Standalone default. The editor therefore renders like the shipped player. The four editors will be heavier at Ultra. `QaPlayHarness` also sets the shipping level for every run. The gate `qa.quality.parity` fails whenever the editor and player levels differ.
+3. **Quality: per run, not per project.** P0-B asks for parity "during QA". `QaPlayHarness.Prepare` sets the Standalone default (Ultra) for every run and `Restore` puts the editor's level back; the run asserts `<scenario>.quality` (it started and ended at that level), and `qa.play.smoke` reads `smoke_day1.quality`. `QualitySettings.asset` is not changed (`m_CurrentQuality` stays 0): a project-wide Ultra would make the four persistent editors render at Ultra all day, would collide with the local QualitySettings change in Saleh's main checkout, and any quality switch in an editor would redden the gate. `qa.quality.parity` (static) only checks that the file names an existing Standalone level.
 4. **The lever (BUG-30).**
    - `OfficeSceneUIBuilder.Build()` first sweeps the objects it has retired. `QaSceneScan.Retired` lists only `Office/GateLever` for now.
    - Every build ends with the integrity gate: errors for missing scripts, null or error materials, and retired objects.
@@ -33,13 +33,21 @@ Branch `fix/p0-qa-rig`, cut from `fix/p0-carve` (f347060). Source: FIX_PLAN.md �
    - The merge gate lists these checks without refusing, so it refuses only on a regression.
    - The demo gate refuses them like any red check.
    - Every entry names its BUG part and owner. The gate report lists entries that now pass, so INTEGRATION can drop them.
+   - **Run patterns.** A line is `<check id> [<run pattern> ...]  # why`. The patterns (`*.camera`, `*.camera.*`, `*.liberationSans.*`, `*.seq.*.flicker`, `bp.*.seq.*.flicker`) name the run assertions and analysis results that feed the check. A play run whose only failures match them is "ok (N known red ...)" in `harness.txt`, `QaPlayTest.AssertRun` and `run_player.py` (`DemoGate.JudgeRun`), so the smoke day is not "failed" on every run until CAM and TEXT-LANG merge, and anything else red still fails it. `run.json`'s own `ok` and `done.txt` stay strict. The patterns leave with their entry.
 6. **Dead config (BUG-73a).**
    - The scanner covers every ScriptableObject class and every `[Serializable]` type an SO holds, such as MotionKnobs inside MotionTuning.
    - On f347060 it finds 41 SO classes, 139 held types, 1,495 fields and 8 unread fields: `SoundBankSO.mixer` and 7 MotionKnobs stamp and drawer knobs.
    - Those 8 are on `tools/qa/so_reader_allowlist.txt`, each with its BUG part and owner.
    - A new dead field fails the merge gate (`qa.so.readers`). Any field still on the list fails the demo gate (`qa.so.cleanup`).
 7. **Retired:** `tools/audit/unity/_TimeDeskQASweep.cs.txt` is deleted. It teleported papers and called handlers directly, which is BUG-53's root cause. `docs/FEATURES.md` still names it, and INTEGRATION drops that line. Its coverage list survives in git history (34e87b1) for the tracks that port its checks as scenarios.
-8. **Reference clips (v2 rule 8):**
+8. **Fixes after the 66f29e1 review (all ours):**
+   - **The QA player has its own product name** (the game's + `" QA"`, `QaRunner.QaProductSuffix`). `BuiltPlayerCapture.Build` sets it for the build only and puts `ProjectSettings.asset` back byte for byte. Its `persistentDataPath` (saves) and its registry key (PlayerPrefs, the window size `res` and `-screen-*` set) are its own, so a [BP] run never touches the demo's save or settings. The player refuses `-qaScenario` under any other name (exit 3), and `run_player.py` refuses a player whose `qa_build.json` does not name a QA product.
+   - **The rig does not measure itself.** `CameraMoveLog` is allocation-free and writes nothing while `QuietWhen` holds (a `gc` window or a timing sequence): rows wait in a buffer reserved before the window and are written after it. `realtime 1` now records a **timing sequence**: no screenshot, no PNG, no per-frame write or allocation (rows buffered, written at `recStop`; the start frame is left out); `dtMs` is real time between frame ends. The `gc` op reserves its samples and skips its first frame. So `bp.bp_smoke.gc.steady` (0 B) and the call-next hitches measure the game.
+   - **A blocked press fails.** When the target of `newRun`, `startShift`, `sign`, `button` or `click` (target) is not under the pointer, the rig still delivers it (so the run goes on) but counts it as blocked: `<scenario>.presses` fails and names it. `"direct": true` on a step allows it (noted, not failed) for a target meant to be reached so. `qa.play.smoke` and `qa.bp.smoke` read `presses`.
+   - **Drags run at the fixed step.** `drag` and `drop` set `Time.captureFramerate = 30` for the path and the settle (as a recording does), so the P-* speeds and the 45-frame (1.5 s) settle hold at any real frame rate.
+   - **A stopped run cleans up.** `QaRunner.OnDestroy` (deadline, `QaJobs.Reset`, play mode left by hand, player closed) gives the real mouse and keyboard back, removes the virtual devices, restores the focus rule, the frame rate, the seed and the hour, and writes a failed `run.json` (done.txt `aborted`). `QaPlayHarness.Restore` also calls `QaInput.ReleaseStray()` and restores the background behaviour from SessionState. The saves set aside are named in `<SaveSystem.Folder>/qa_rig_aside.txt` on disk; an editor that crashed or restarted mid-run puts them back when it loads (`RecoverSaves`).
+   - **Dirty results are stale.** A result carries `dirty` (uncommitted content changes under Assets, Packages or ProjectSettings, less the LiberationSans fallback churn; untracked files do not count). The editor stamps it from git; the QA player's results from `qa_build.json` (`dirty` at build time). `GateResults.Judge` fails dirty results as `DIRTY`, like stale ones.
+9. **Reference clips (v2 rule 8):**
    - Papers, Please and ReStory clips stay local, for review only, in `R7\REFERENCE\PapersPlease\` and `R7\REFERENCE\ReStory\`. They are never committed.
    - Extract a clip's frames to PNG at 30 fps with any tool.
    - `seqtools.py side <seq> <frames> out.gif` puts our sequence beside the reference.
@@ -49,10 +57,10 @@ Branch `fix/p0-qa-rig`, cut from `fix/p0-carve` (f347060). Source: FIX_PLAN.md �
 | Path | What |
 |---|---|
 | `Assets/Tests/PlayMode/Rig/QaSignals.cs` | **Seam, always compiled.** `CameraMoveCause` (Untagged, ViewKey, DeskDropTilt, SlideInFocus, Impulse), `QaSignals.TagCamera(cause, seconds, capPx)`, `QaSignals.Event(channel, name)` |
-| `.../Rig/QaPaths.cs` | The P-* paths (Plain, Fast ≥2,000 px/s, Slow ≤150, Wobble ±30, Diag, Flick ~1,500 at release, Edge 5 px, Off, Onto), one sample per frame at 30 fps, a hover, a press and a 2-frame grab |
+| `.../Rig/QaPaths.cs` | The P-* paths (Plain, Fast ≥2,000 px/s, Slow ≤150, Wobble ±30, Diag, Flick ~1,500 at release, Edge 5 px, Off, Onto), one sample per frame at the 30 fps game step (`drag`/`drop` fix it), a hover, a press and a 2-frame grab |
 | `.../Rig/QaInput.cs` | Virtual Input System mouse and keyboard (`QueueStateEvent`). Disables every other pointer and keyboard during a run. Reports the frame each press is seen |
-| `.../Rig/SeqRecorder.cs` | 30 fps recorder: PNG frames, `frames.tsv`, `events.tsv` and `meta.json`, plus full-resolution stills |
-| `.../Rig/CameraMoveLog.cs`, `QaCameraMoves.cs` | The camera logger: picture shift per frame (px at 1080p), cause windows, impulse cap. Writes `camera.tsv` |
+| `.../Rig/SeqRecorder.cs` | 30 fps recorder: PNG frames, `frames.tsv`, `events.tsv` and `meta.json`, plus full-resolution stills; or a timing sequence (real frame times, no capture) |
+| `.../Rig/CameraMoveLog.cs`, `QaCameraMoves.cs` | The camera logger: picture shift per frame (px at 1080p), cause windows, impulse cap. Writes `camera.tsv`; quiet (no allocation, no write) in GC windows and timing sequences |
 | `.../Rig/QaRunner.cs`, `QaScenario.cs`, `QaGame.cs`, `QaSelfTest.cs` | The scenario player (ops in §4), its JSON model and reports, the game access and probes, and the self-test |
 | `Assets/Tests/PlayMode/Editor/QaPlayTest.cs` | The UTF base class for every track's play tests |
 | `Assets/Tests/PlayMode/QaRig/Editor/QaRigPlayTests.cs` | QA-RIG's UTF play tests: the self-test and the smoke day (Explicit, category QaPlay) |
@@ -63,7 +71,6 @@ Branch `fix/p0-qa-rig`, cut from `fix/p0-carve` (f347060). Source: FIX_PLAN.md �
 | `Assets/Editor/QA/Tests/*` | QA-RIG's EditMode tests. They are pure except `QaEditorGateTests`, which is NeedsEditor |
 | `Assets/Editor/DemoBuild.cs` | Runs `DemoGate.Run(Demo)` first and refuses on red. `BuildScratch` builds a non-demo player without the gate |
 | `Assets/Editor/OfficeSceneUIBuilder.cs` (root) | `SweepRetired` and `CheckSceneIntegrity` |
-| `ProjectSettings/QualitySettings.asset` | `m_CurrentQuality: 5` |
 | `tools/qa/seqlib.py`, `seqtools.py`, `run_player.py`, `test_seqlib.py` | The offline frame analysis (§6), the [BP] launcher, and their unit tests |
 | `tools/qa/scenarios/*.json` | The standing recipes (§3) |
 | `tools/qa/editor_runner/` | The offline runner for the pure Editor-side tests (Assembly-CSharp-Editor) |
@@ -85,12 +92,12 @@ All Unity runs go through the persistent editor of the worktree, by job file. Ne
 | `QaJobs.GcSites` | `perf_day12.json`: day 12 with every item, GC per call site (editor profiler), drags, call-next frame times | `perf.gcsites` and `gc_sites.tsv` |
 | `QaJobs.Scenario` | The scenario named in `Library/QA/job_scenario.txt` (any track's recipe) | its results |
 | `QaJobs.Gate` / `QaJobs.GateDemo` | The merge or demo gate | `Library/QA/DemoGate/report.md` / `report_demo.md` |
-| `QaJobs.BuildQaPlayer` | Builds the QA player (DEMO_CHEATS + TIMEDESK_QA, development) to `E:\unity\NOPE-builds\QA_<worktree>\` with `qa_build.json` | the exe |
-| `QaJobs.Reset` | Unsticks the harness after a run that died: leaves play mode, then (run it again) restores the saves, view, input and quality | an empty scene, in edit mode |
+| `QaJobs.BuildQaPlayer` | Builds the QA player (DEMO_CHEATS + TIMEDESK_QA, development, product name + " QA") to `E:\unity\NOPE-builds\QA_<worktree>\` with `qa_build.json` (commit, dirty, product, quality) | the exe |
+| `QaJobs.Reset` | Unsticks the harness after a run that died: leaves play mode (the runner gives the input back as it is destroyed), then (run it again) restores the saves, view, input devices and quality | an empty scene, in edit mode |
 
 - **Play jobs** return at once. `Library/QA/last_run.txt` names the run folder `Library/QA/runs/<scenario>_<time>/`.
-- **The run folder holds:** `run.json`, `warnings.txt`, `camera.tsv`, `drags.tsv`, `seq/<name>/`, `stills/`, `analysis.txt` and `harness.txt`. Wait for `harness.txt`, then read `run.json` and `analysis.txt`.
-- **Built player [BP]:** run `python tools/qa/run_player.py tools/qa/scenarios/bp_smoke.json` after `QaJobs.BuildQaPlayer`. It opens a window, so run it only when Saleh is away. It imports `bp.`-prefixed results stamped with the built commit, then runs flicker, flash and latency on every sequence, and hitches on the real-time ones.
+- **The run folder holds:** `run.json`, `warnings.txt`, `camera.tsv`, `drags.tsv`, `seq/<name>/`, `stills/`, `analysis.txt` and `harness.txt`. Wait for `harness.txt`, then read `run.json` and `analysis.txt`. `harness.txt`'s first line is the verdict against the known-red list: `ok`, `ok (N known red: ...)` or `failed (...)`.
+- **Built player [BP]:** run `python tools/qa/run_player.py tools/qa/scenarios/bp_smoke.json` after `QaJobs.BuildQaPlayer`. It opens a window, so run it only when Saleh is away. It plays in the QA player's own save folder and window settings (never the demo's). It imports `bp.`-prefixed results stamped with the built commit (dirty when the build was), runs `seqtools all` on every sequence (flicker, flash and latency on a captured one, hitches on a timing one), and exits 0 when nothing but known red failed.
 - **Outside Unity (every change):**
   - compile check;
   - the house runner;
@@ -104,33 +111,36 @@ Screen positions are fractions of the screen (0..1, origin bottom-left), so a st
 | Op | Fields | Does |
 |---|---|---|
 | `title` | f timeout | Waits for the title, then sets RunConfig's seed to the scenario's (restored at the end) |
-| `newRun` | text = pet name | Clicks New Run, names the pet and clicks Adopt, with the virtual mouse |
+| `newRun` | text = pet name, direct | Clicks New Run, names the pet and clicks Adopt, with the virtual mouse |
 | `waitOffice` | n day (0 any), f timeout | Waits for the art office, the gameplay layer and that day's briefing |
-| `startShift` / `sign` / `waitTraveller` | f | Clicks Start Shift / clicks the AVAILABLE sign / waits for a traveller at the desk |
+| `startShift` / `sign` / `waitTraveller` | f, direct | Clicks Start Shift / clicks the AVAILABLE sign / waits for a traveller at the desk |
 | `hour` | f hour (-1 = clock) | `DevToolsState.ForcedHour` (H1 9, H2 12, H3 16.75, H4 18.5, H5 22) |
 | `jumpDay` / `cheat` | n / name (DevCheat), n, f, text | `RunManager.JumpToDay` / `DevCheats.Run` |
-| `call` / `button` / `waitActive` | target `Type.Member` | Calls a parameterless method / clicks a Button where it shows / waits until a GameObject or component is shown |
-| `click` | target (object path or name) or x, y | A virtual click at the object's screen point |
-| `drag` | path (P-*), target or x, y → target2 or x2, y2, name | Plays the path. From an object, the grab offset is the real one. Logged in `drags.tsv` |
-| `drop` | as `drag`, n settle frames (45), f max px (8) | Asserts the dragged object rests within f px at 1080p of where it was on the release frame (BUG-53 per-drop assertion; 1019a's ClearOfBlockers push fails it) |
+| `call` / `button` / `waitActive` | target `Type.Member`, direct | Calls a parameterless method / clicks a Button where it shows / waits until a GameObject or component is shown |
+| `click` | target (object path or name) or x, y, direct | A virtual click at the object's screen point |
+| `drag` | path (P-*), target or x, y → target2 or x2, y2, name | Plays the path at the fixed 30 fps game step. From an object, the grab offset is the real one. Logged in `drags.tsv` |
+| `drop` | as `drag`, n settle frames (45), f max px (8) | Asserts the dragged object rests within f px at 1080p of where it was on the release frame (BUG-53 per-drop assertion; 1019a's ClearOfBlockers push fails it). Path and settle run at the fixed step, so 45 frames are 1.5 s of game time |
 | `key` / `move` / `wait` | key + n hold / x, y + n / n frames or f seconds | Keyboard tap / hover move / wait |
 | `waitScene` | name, f | Waits for a loaded scene |
 | `res` | w, h | Sets the game view (editor) or the window (player) to w×h |
-| `recStart` / `recStop` / `record` | name / - / name + f seconds | A 30 fps sequence into `seq/<name>/` |
-| `realtime` | n (1 = real frame times) | Sets the recorder's step for the next sequence (the hitch measurement). Set it before `recStart` |
+| `recStart` / `recStop` / `record` | name / - / name + f seconds | A 30 fps sequence into `seq/<name>/` (a timing one after `realtime 1`) |
+| `realtime` | n (1 = timing sequences) | The next sequences are timing ones: real frame times only, no capture, nothing allocated or written per frame (the hitch measurement). Set it before `recStart`; `realtime 0` goes back to captures |
 | `still` | name | A full-resolution PNG in `stills/<name>_<w>x<h>.png` |
 | `track` | name, target | The object's screen rect goes into every frame row: the flicker detector's expected-motion mask, and a track's rect tests |
 | `probe` | name | Assertions: `missingScripts.<name>` and `materials.<name>` (QA-RIG), `liberationSans.<name>` (TEXT-LANG: a visible glyph from a LiberationSans asset) |
-| `gc` | name, f seconds, n byte budget | Asserts `gc.<name>`: GC Allocated In Frame, max ≤ n. In the editor the number includes the editor's own allocations, so the gate is [BP] |
+| `gc` | name, f seconds, n byte budget | Asserts `gc.<name>`: GC Allocated In Frame, max ≤ n. The rig's own logging is quiet in the window. In the editor the number includes the editor's own allocations, so the gate is [BP] |
 | `mark` | name | `QaSignals.Event("qa", name)`. `gcsites.start` and `gcsites.stop` bound the per-call-site GC window |
-| `cameraCheck` | name | Asserts `camera.<name>` now. Every run also asserts `camera` and `console` at its end |
+| `cameraCheck` | name | Asserts `camera.<name>` now. Every run also asserts `camera`, `console` and `presses` at its end, and in the editor `quality` |
 | `selftest` | - | The rig's self-test (`selftest.<Path>`) |
 | `note` / `quit` | text / - | A note in the step's report / ends the run there |
+
+**`direct`** (bool, any press op): when the target is not under the pointer, deliver it anyway without failing `presses` (noted in the step). Without it a covered target is delivered but fails `presses` (BUG-53, BUG-68's class).
 
 **Tracks' own ops:** `QaRunner.RegisterOp("name", (runner, step) => IEnumerator)`, called from the track's rig file in a `[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]` method under `#if UNITY_EDITOR || TIMEDESK_QA`. The body gets `runner.Input`, `runner.Recorder` (`Track`, `Column`, `Mark`), `runner.Cameras` and `runner.Assert(id, owner, pass, measured, detail)`. The scenario tests read the registered names, so a typo fails offline.
 
 **What a run writes:**
-- **`frames.tsv`, one row per captured frame:** i, frame, time, unscaled, timeScale (the hit-stop log, G4), screenW/H, capW/H, mx/my (the pointer, in capture pixels), down, gcBytes, mainMs, dtMs, tracked (`name:x0,y0,x1,y1;`), and extra (`key=value;` from `Recorder.Column`).
+- **`frames.tsv`, one row per frame:** i, frame, time, unscaled, timeScale (the hit-stop log, G4), screenW/H, capW/H (0 in a timing sequence), mx/my (the pointer, in capture pixels; screen pixels in a timing sequence), down, gcBytes, mainMs, dtMs (real time since the previous frame ended), tracked (`name:x0,y0,x1,y1;`), and extra (`key=value;` from `Recorder.Column`); a timing sequence leaves tracked and extra empty.
+- **`meta.json`:** `fixedStep` and `frames` (false for a timing sequence), fps, capture width, screen.
 - **`events.tsv`:** frame, i, unscaled, channel, name. It holds every `QaSignals.Event`, every press the game saw (channel `mouse` or `key`), and the marks.
 - **`camera.tsv`:** frame, unscaled, camera, stepPx, causes, pose and fov.
 
@@ -138,7 +148,7 @@ Screen positions are fractions of the screen (0..1, origin bottom-left), so a st
 
 | Check | Kind | Owner | Pass |
 |---|---|---|---|
-| `qa.quality.parity` | Static | QA-RIG | The editor's level (file and live) equals the Standalone default |
+| `qa.quality.parity` | Static | QA-RIG | QualitySettings names an existing Standalone level (every run plays at it and asserts `quality`) |
 | `qa.hall.previewHourOff` | Static | QA-RIG | No HallLightingSO has previewHourOn |
 | `qa.content.validator` | Static | CONTENT | `ContentLibraryValidator.Validate` logs no warning or error |
 | `qa.scenes.missingScripts` / `materials` / `retired` | Static | QA-RIG | 0 in every enabled build scene (opened additively, read only, never saved) |
@@ -146,17 +156,17 @@ Screen positions are fractions of the screen (0..1, origin bottom-left), so a st
 | `qa.so.readers` / `qa.so.cleanup` (demo) | Static | QA-RIG / INTEGRATION | No unread SO field off the allowlist / the allowlist is empty |
 | `qa.phaseb.approvals` / `qa.phaseb.bundles` (demo) | Static | INTEGRATION | Every merged Phase B track has an approval line in `docs/phaseb/APPROVALS.md` (or `<R7>\PHASEB\APPROVALS.md`, with `Library/QA/r7.txt` naming R7) / the language bundle is whole or absent |
 | `qa.play.selftest` | Play | QA-RIG | Every P-* path's press and release are delivered within 1 px, with a hover before and drag events between |
-| `qa.play.smoke` | Play | QA-RIG | The smoke day's console has 0 errors and its probes are clean |
+| `qa.play.smoke` | Play | QA-RIG | The smoke day's console has 0 errors, every press reached its target under the pointer, it played at the player's quality level, and its probes are clean |
 | `qa.play.camera` | Play | CAM | 0 untagged camera moves, impulses under their caps (known red) |
 | `qa.play.liberationSans` | Play | TEXT-LANG | 0 LiberationSans glyphs on screen at the probes (known red) |
 | `qa.play.flicker` | Play | HALL-FX | The smoke day's sequences pass flicker (known red) |
 | `qa.play.flash` / `qa.play.latency` (demo) | Play | UI-PC / QA-RIG | ≤3 flashes/s and no red full-field flash / every press visible within 1 frame |
 | `qa.perf.gcsites` | Play | QA-RIG | The per-call-site baseline was recorded at HEAD |
-| `qa.bp.smoke`, `qa.bp.flicker`, `qa.bp.flash`, `qa.bp.latency`, `qa.bp.perf` (demo) | BuiltPlayer | QA-RIG, HALL-FX, UI-PC, QA-RIG, QA-RIG | The same on the QA player. `perf`: 0 B/frame steady-state, and no call-next frame over 33.4 ms |
+| `qa.bp.smoke`, `qa.bp.flicker`, `qa.bp.flash`, `qa.bp.latency`, `qa.bp.perf` (demo) | BuiltPlayer | QA-RIG, HALL-FX, UI-PC, QA-RIG, QA-RIG | The same on the QA player (`smoke` with `presses`). `perf`: 0 B/frame steady-state, and no call-next frame over 33.4 ms (a timing sequence) |
 
 **How results are read:**
 - A Play or BuiltPlayer check reads `Library/QA/results/*.json` (`QaGateResult`).
-- It passes only when at least one result matches, every match passed, and every match was measured at HEAD (stale results fail).
+- It passes only when at least one result matches, every match passed, and every match was measured at HEAD on a clean tree (stale and dirty results fail).
 - A BuiltPlayer check also needs every match measured on a player.
 
 **Registering a check (each track, in `Assets/Editor/QA/Checks/<Track>Checks.cs`):**
@@ -185,13 +195,13 @@ public static class DocHandleChecks
 | `flicker <seq> [--static] [--mask m.png]` | **A-B-A toggle:** luma moves more than 24/255 and returns within 8 of it within 3 frames. The expected-motion mask covers tracked rects that moved (±4 px) and the pointer (±24 px) | No pixel toggles more than twice in any 10 s (FIX_PLAN). Writes `flicker_heat.png` and `flicker.txt` |
 | `flash <seq>` | **Flash meter (G3, gap 2):** per 8×6 cell, fast luma swings ≥20 (steep part ≤6 frames); flashes/s = changes/2 in any 1 s; full-field changes (≥50% of cells together); red ones (≥25% of the screen saturated red) | ≤3 flashes/s, no red full-field flash |
 | `latency <seq> [--roi] [--track name] [--need-cue]` | **Latency probe (check 2, gap 6):** per press in `events.tsv`, frames to the first change (≥12 px over 12 luma; the pointer's area is excluded), and to the nearest `audio` event | First change ≤1 frame. With `--need-cue`, the cue is on the press frame ±1 |
-| `hitches <seq>` | `dtMs` of a sequence recorded with `realtime 1` | No frame over 33.4 ms |
+| `hitches <seq>` | `dtMs` of a timing sequence (recorded after `realtime 1`) | No frame over 33.4 ms |
 | `frozen <seq>` / `cuts <seq>` | BUG-31's longest still run / BUG-32's single-frame full-screen jumps (≥60% of pixels change by more than 40) | ≤0.25 s / none |
-| `all <seq>` | flicker + flash + latency (when there are presses) | All |
+| `all <seq>` | flicker + flash + latency (when there are presses); on a timing sequence, hitches | All |
 | `gif`, `sheet`, `side`, `blockiness`, `import-run` | GIF with the pointer drawn; contact sheet; side by side with a reference; the 8×8 block ratio; run.json → results | - |
 
-- **Result ids:** with `--result-dir`, each analysis writes `<scenario>.seq.<name>.<analysis>` (`bp.`-prefixed with `--bp`), stamped with git HEAD or `--commit`.
-- **In the editor**, the harness runs `all` (plus `hitches` on real-time sequences) after every run, with python on the PATH.
+- **Result ids:** with `--result-dir`, each analysis writes `<scenario>.seq.<name>.<analysis>` (`bp.`-prefixed with `--bp`), stamped with git HEAD and the tree's state, or `--commit` and `--dirty`.
+- **In the editor**, the harness runs `all` on every sequence after every run, with python on the PATH.
 
 ## 7. Feel automation (GAME_FEEL_BIBLE §5.2 #4)
 
@@ -248,12 +258,12 @@ The pass lines are the plan's. The rig only measures them.
 |---|---|
 | `compile_check_t6.py` | 0 errors (Assembly-CSharp-Editor and TimeDeskEditMode) |
 | House runner | passed 3714, failed 0 (unchanged: the rig adds no TimeDeskEditMode test) |
-| `tools/qa/editor_runner` (QA_PROJECT set) | passed 62 (53 QA-RIG + the carve's 9 Editor-side seam tests), failed 0; 16 NeedsEditor skipped (12 carve + 4 QA-RIG) |
-| `python -m unittest discover -s tools/qa` | 28 tests OK (flicker, flash, latency, hitches, frozen, cuts, blockiness, results, the CLI end to end, scenario ops) |
+| `tools/qa/editor_runner` (QA_PROJECT set) | passed 68 (59 QA-RIG + the carve's 9 Editor-side seam tests), failed 0; 16 NeedsEditor skipped (12 carve + 4 QA-RIG) |
+| `python -m unittest discover -s tools/qa` | 34 tests OK (flicker, flash, latency, hitches, frozen, cuts, blockiness, results and dirty, the known-red verdict, timing sequences, the CLI end to end, scenario ops) |
 | QA player compile (Assembly-CSharp without UNITY_EDITOR, with TIMEDESK_QA + DEMO_CHEATS) | 0 errors; the demo configuration (no TIMEDESK_QA) also 0 errors (a scratch csproj, editor DLLs removed) |
-| TDD | `QaQualityTests.Project_EditorPlaysAtThePlayersLevel` failed on f347060 ("editor Very Low (0), Standalone player Ultra (5)") and passes after `m_CurrentQuality: 5`. The SO scan found the 8 dead fields, now listed |
+| TDD | The SO scan found the 8 dead fields, now listed. After the review: the known-red verdict, dirty results and the churn filter, and the quality file's Standalone level have pure tests (DemoGateTests, QaQualityTests, test_seqlib) |
 
-**Deferred to Unity:** the persistent editor, a QA player build, and Saleh away from the PC.
+**Deferred to Unity:** the persistent editor, a QA player build, and Saleh away from the PC. Also from the review fixes: an aborted run (stop `QaJobs.Smoke` with `QaJobs.Reset` mid-run) leaves no disabled device, no QaMouse and a failed run.json; a smoke day's `presses` passes with no `direct` step (any scenario step that hits a covered target needs a look before it gets `direct`); `bp.bp_smoke.gc.steady` reads only the game's allocations; the QA player writes under `LocalLow/<company>/<product> QA` and leaves the demo's save and registry key untouched.
 
 1. **Mechanism proof (§1.1).**
    - Run `QaRigPlayTests.SelfTest_EveryPathLandsWithin1Px` by name, then the job `QaJobs.SelfTest`.
@@ -280,7 +290,8 @@ The pass lines are the plan's. The rig only measures them.
 **FEATURES.md lines (new):**
 - "DemoBuild refuses to build a demo while DemoGate (every registered gate check) is red; the report is Library/QA/DemoGate/report_demo.md."
 - "The Office UI builder removes retired objects (Office/GateLever) and logs missing scripts and null or error materials in the layer."
-- "The editor plays at the Standalone quality level (Ultra)."
+- "Every QA run plays at the Standalone quality level (Ultra); the editor's own level is unchanged."
+- "The QA player is built under its own product name (+ " QA"), so its saves and settings never touch the game's."
 
 **Drop:** the `_TimeDeskQASweep` mention.
 

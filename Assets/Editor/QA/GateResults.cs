@@ -11,7 +11,8 @@ using UnityEngine;
 /// run.json's assertions, <see cref="Import"/>), by tools/qa (the built
 /// player's runs and the frame analyses) and read by the Play and
 /// BuiltPlayer checks through <see cref="Require"/>. A result counts only
-/// for the commit it measured: one from an older HEAD is stale.
+/// for the commit it measured: one from an older HEAD is stale, and so is one
+/// measured on uncommitted changes (<see cref="QaGateResult.dirty"/>).
 /// </summary>
 public static class GateResults
 {
@@ -54,8 +55,8 @@ public static class GateResults
     /// <summary>The file name for result <paramref name="id"/>.</summary>
     public static string FileName(string id) => Regex.Replace(id ?? "unnamed", @"[^A-Za-z0-9._-]", "_") + ".json";
 
-    /// <summary>Turns a run's assertions into gate results stamped with <paramref name="commit"/>.</summary>
-    public static List<QaGateResult> FromRun(QaRunReport report, string source, string commit, bool builtPlayer)
+    /// <summary>Turns a run's assertions into gate results stamped with <paramref name="commit"/> (<paramref name="dirty"/>: measured on uncommitted changes).</summary>
+    public static List<QaGateResult> FromRun(QaRunReport report, string source, string commit, bool builtPlayer, bool dirty = false)
     {
         string now = DateTime.Now.ToString("s");
         return (report.assertions ?? Array.Empty<QaAssertion>()).Select(a => new QaGateResult
@@ -66,16 +67,17 @@ public static class GateResults
             measured = a.measured,
             detail = a.detail,
             commit = commit ?? string.Empty,
+            dirty = dirty,
             written = now,
             source = source,
             builtPlayer = builtPlayer,
         }).ToList();
     }
 
-    /// <summary>Writes every assertion of a finished run into the results folder (the editor harness calls it).</summary>
+    /// <summary>Writes every assertion of a finished run into the results folder, stamped with HEAD and whether the tree is dirty (the editor harness calls it).</summary>
     public static int Import(QaRunReport report, string source, bool builtPlayer)
     {
-        List<QaGateResult> results = FromRun(report, source, GitHead.Read(ProjectRoot), builtPlayer);
+        List<QaGateResult> results = FromRun(report, source, GitHead.Read(ProjectRoot), builtPlayer, GitDirty.Changed(ProjectRoot).Count > 0);
         foreach (QaGateResult r in results)
             Write(r);
         return results.Count;
@@ -85,8 +87,8 @@ public static class GateResults
     /// The gate verdict on the results matching <paramref name="idPattern"/>
     /// ('*' matches any run of characters) for check <paramref name="checkId"/>
     /// of <paramref name="owner"/>: it passes only when at least one result
-    /// matches and every match passed, was measured at HEAD and (when
-    /// <paramref name="builtPlayer"/>) on a built player.
+    /// matches and every match passed, was measured at HEAD on a clean tree
+    /// and (when <paramref name="builtPlayer"/>) on a built player.
     /// </summary>
     public static GateResult Require(string checkId, string owner, string idPattern, bool builtPlayer = false) =>
         Judge(checkId, owner, idPattern, ReadAll(), GitHead.Read(ProjectRoot), builtPlayer);
@@ -99,12 +101,15 @@ public static class GateResults
             return GateResult.Fail(checkId, owner, "not measured", $"No result matches '{idPattern}': run the recipe (docs/pending/QA-RIG.md).");
         var red = matches.Where(r => !r.pass).ToList();
         var stale = string.IsNullOrEmpty(head) ? new List<QaGateResult>() : matches.Where(r => !string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase)).ToList();
+        // A result taken on uncommitted changes measured no commit (a stale one is already counted).
+        var dirty = matches.Where(r => r.dirty && !stale.Contains(r)).ToList();
         var notBp = builtPlayer ? matches.Where(r => !r.builtPlayer).ToList() : new List<QaGateResult>();
-        string measured = $"{matches.Count} result(s): {matches.Count - red.Count} pass, {red.Count} fail, {stale.Count} stale" + (builtPlayer ? $", {notBp.Count} not on a built player" : string.Empty);
-        if (red.Count == 0 && stale.Count == 0 && notBp.Count == 0)
+        string measured = $"{matches.Count} result(s): {matches.Count - red.Count} pass, {red.Count} fail, {stale.Count} stale, {dirty.Count} dirty" + (builtPlayer ? $", {notBp.Count} not on a built player" : string.Empty);
+        if (red.Count == 0 && stale.Count == 0 && dirty.Count == 0 && notBp.Count == 0)
             return GateResult.Ok(checkId, owner, measured, string.Join("; ", matches.Select(r => $"{r.id} {r.measured}")));
         var lines = red.Select(r => $"FAIL {r.id} [{r.owner}] {r.measured} {r.detail}")
                        .Concat(stale.Select(r => $"STALE {r.id} measured at {Short(r.commit)}, HEAD is {Short(head)}"))
+                       .Concat(dirty.Select(r => $"DIRTY {r.id} measured on uncommitted changes at {Short(r.commit)}: commit, then measure again"))
                        .Concat(notBp.Select(r => $"NOT-BP {r.id} was measured in the editor"));
         return GateResult.Fail(checkId, owner, measured, string.Join("; ", lines));
     }
@@ -119,6 +124,55 @@ public static class GateResults
     }
 
     private static string Short(string commit) => string.IsNullOrEmpty(commit) ? "unknown" : commit.Substring(0, Math.Min(8, commit.Length));
+}
+
+/// <summary>
+/// The uncommitted changes that make a measurement not one of HEAD: tracked
+/// files under Assets, Packages and ProjectSettings whose content differs
+/// from HEAD (staged or not; line-ending-only differences do not count, as
+/// with git diff), less the files Unity rewrites on its own
+/// (<see cref="Churn"/>). Untracked files do not count (the job runner's
+/// _TimeDesk* scripts are untracked by rule). Runs git; when git cannot run,
+/// it returns nothing (a result is then judged by its commit alone).
+/// </summary>
+public static class GitDirty
+{
+    /// <summary>The paths whose changes are Unity's own churn, never a change to what is measured.</summary>
+    public static readonly string[] Churn =
+    {
+        "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset",
+    };
+
+    /// <summary>The changed paths in <paramref name="root"/> (see the class), empty when clean or when git cannot run.</summary>
+    public static List<string> Changed(string root)
+    {
+        try
+        {
+            var start = new System.Diagnostics.ProcessStartInfo("git", "-c core.quotepath=off diff --name-only HEAD -- Assets Packages ProjectSettings")
+            {
+                WorkingDirectory = root,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+            };
+            using (System.Diagnostics.Process p = System.Diagnostics.Process.Start(start))
+            {
+                string output = p.StandardOutput.ReadToEnd();
+                p.StandardError.ReadToEnd();
+                p.WaitForExit(60000);
+                return p.HasExited && p.ExitCode == 0 ? Filter(output) : new List<string>();
+            }
+        }
+        catch (Exception e) when (e is System.ComponentModel.Win32Exception || e is InvalidOperationException || e is IOException)
+        {
+            return new List<string>();
+        }
+    }
+
+    /// <summary>git diff --name-only's output less the churn paths (pure; unit-tested).</summary>
+    public static List<string> Filter(string nameOnlyOutput) =>
+        (nameOnlyOutput ?? string.Empty).Split('\n').Select(l => l.Trim()).Where(l => l.Length > 0 && !Churn.Contains(l, StringComparer.OrdinalIgnoreCase)).ToList();
 }
 
 /// <summary>Reads the checked-out commit from a repository or worktree folder without running git (pure file reads).</summary>

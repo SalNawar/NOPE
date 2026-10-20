@@ -91,6 +91,16 @@ public sealed class QaStep
 
     /// <summary>The second point's y fraction.</summary>
     public float y2;
+
+    /// <summary>
+    /// A press op (newRun, startShift, sign, button, click on a target) that
+    /// may reach a covered or off-screen target directly: true invokes the
+    /// button or sends the click event and only notes it. False (the
+    /// default): the press is still delivered so the run goes on, but the
+    /// run's <c>presses</c> assertion fails and names it (BUG-53: a control
+    /// hidden behind an overlay must not pass; BUG-68's input-blocking class).
+    /// </summary>
+    public bool direct;
 }
 
 /// <summary>One step's outcome in a run report.</summary>
@@ -204,6 +214,9 @@ public sealed class QaGateResult
 
     /// <summary>The commit measured (git HEAD), or empty when unknown.</summary>
     public string commit;
+
+    /// <summary>True when the tree had uncommitted changes to Assets, Packages or ProjectSettings when it was measured (or the QA player was built): such a result is not a measurement of <see cref="commit"/> and counts as stale.</summary>
+    public bool dirty;
 
     /// <summary>When it was written (local, ISO).</summary>
     public string written;

@@ -8,8 +8,11 @@ using System.Text.RegularExpressions;
 /// 0 (frozen SSAO, half-res) while the player ships at Ultra"). Reads
 /// ProjectSettings/QualitySettings.asset as text (pure, unit-tested): the
 /// editor's current level, the levels' names and the Standalone default the
-/// Windows player boots with. QA plays at the shipping level, and the gate
-/// fails when the editor's level is not the player's.
+/// Windows player boots with. QA plays at the shipping level: QaPlayHarness
+/// sets the Standalone default for every run and the run asserts it
+/// (&lt;scenario&gt;.quality). The editor's own level outside a run is left as
+/// each editor has it (rendering four persistent editors at Ultra is not
+/// asked for, and a project-wide level would collide with local changes).
 /// </summary>
 public static class QaQuality
 {
@@ -19,7 +22,7 @@ public static class QaQuality
     /// <summary>What the file says.</summary>
     public sealed class Levels
     {
-        /// <summary>The editor's current level (m_CurrentQuality).</summary>
+        /// <summary>The editor's current level outside QA runs (m_CurrentQuality; informational).</summary>
         public int Current = -1;
 
         /// <summary>The Standalone player's default level (m_PerPlatformDefaultQuality: Standalone), -1 when absent.</summary>
@@ -31,8 +34,8 @@ public static class QaQuality
         /// <summary>The name of level <paramref name="i"/>, or "#i" when unnamed.</summary>
         public string Name(int i) => i >= 0 && i < Names.Count ? Names[i] : "#" + i;
 
-        /// <summary>True when the editor plays at the Standalone player's level.</summary>
-        public bool Match => Current >= 0 && Current == StandaloneDefault;
+        /// <summary>True when the file names the Standalone player's level and that level exists (what every QA run plays at).</summary>
+        public bool HasStandaloneLevel => StandaloneDefault >= 0 && StandaloneDefault < Names.Count;
     }
 
     /// <summary>Parses QualitySettings.asset's text.</summary>
@@ -59,7 +62,7 @@ public static class QaQuality
     /// <summary>Reads the project's file (under <paramref name="projectRoot"/>).</summary>
     public static Levels Read(string projectRoot) => Parse(File.ReadAllText(Path.Combine(projectRoot, AssetPath)).Replace("\r\n", "\n"));
 
-    /// <summary>One line: the editor's level against the player's.</summary>
+    /// <summary>One line: the editor's own level and the player's.</summary>
     public static string Describe(Levels l) =>
         $"editor {l.Name(l.Current)} ({l.Current}), Standalone player {l.Name(l.StandaloneDefault)} ({l.StandaloneDefault})";
 }

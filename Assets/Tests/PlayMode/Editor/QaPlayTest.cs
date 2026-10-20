@@ -1,7 +1,7 @@
 using System.Collections;
 using System.IO;
-using System.Linq;
 using NUnit.Framework;
+using UnityEngine;
 
 /// <summary>
 /// The base of every track's play tests (P0-B: "UTF [UnityTest]
@@ -53,12 +53,19 @@ public abstract class QaPlayTest
         return report;
     }
 
-    /// <summary>Fails with every failed step and assertion unless the run finished and passed.</summary>
+    /// <summary>
+    /// Fails with every unexpected failure unless the run finished and every
+    /// red assertion is on the known-red list (tools/qa/gate_known_red.txt's
+    /// run patterns: an open BUG part a later track owns, e.g. the camera
+    /// until CAM merges). Known red ones are logged, not failed, so the test
+    /// turns red only on a regression, as the merge gate does.
+    /// </summary>
     protected static void AssertRun(QaRunReport report)
     {
         Assert.IsNotNull(report, $"The run did not finish (see {QaPlayHarness.OutDir}).");
-        string failures = string.Join("\n", report.steps.Where(s => !s.ok).Select(s => $"step {s.i} {s.op}: {s.note}")
-            .Concat(report.assertions.Where(a => !a.pass).Select(a => $"{a.id} [{a.owner}] {a.measured}: {a.detail}")));
-        Assert.IsTrue(report.ok, $"{report.scenario} failed ({QaPlayHarness.OutDir}):\n{failures}");
+        RunVerdict verdict = DemoGate.JudgeRun(report, DemoGate.KnownRedRunPatterns());
+        if (verdict.KnownRed.Count > 0)
+            Debug.Log($"[QA] {report.scenario}: {verdict.KnownRed.Count} known red (tools/qa/gate_known_red.txt):\n{string.Join("\n", verdict.KnownRed)}");
+        Assert.IsTrue(verdict.Ok, $"{report.scenario} failed ({QaPlayHarness.OutDir}):\n{string.Join("\n", verdict.Unexpected)}");
     }
 }

@@ -10,31 +10,40 @@ using UnityEngine;
 
 /// <summary>
 /// The QA rig's 30 fps recorder (FIX_PLAN "SEQ capture"; promoted from the
-/// DOC audit's _DocAuditRec). While a sequence records, every frame is
-/// captured at the end of the frame, scaled to <see cref="CaptureWidth"/>
-/// wide, and saved as f0000.png, f0001.png ... with one row per frame in
-/// frames.tsv: the frame, game and unscaled time, the time scale (the
-/// hit-stop log), the screen and capture sizes, the virtual pointer (capture
-/// pixels, origin top-left, as the PNGs), the GC bytes allocated in the frame
-/// and the main thread's time (-1 where the player cannot read them), the
-/// tracked screen rects (the expected-motion mask for the flicker detector)
-/// and any extra columns a track adds. events.tsv gets every
-/// <see cref="QaSignals.Event"/> and every press the game saw, on the frame
-/// it happened (the latency probe's input). With <see cref="FixedStep"/> on
-/// (the default) Time.captureFramerate is 30, so the game advances exactly
-/// 1/30 s per captured frame however slow the capture is; turn it off to
-/// measure real frame times (meta.json says which). tools/qa/seqtools.py
-/// reads the folder.
+/// DOC audit's _DocAuditRec). It records a sequence one of two ways.
+/// With <see cref="FixedStep"/> on (the default) Time.captureFramerate is 30,
+/// so the game advances exactly 1/30 s per frame however slow the capture
+/// is, and every frame is captured at the end of the frame, scaled to
+/// <see cref="CaptureWidth"/> wide and saved as f0000.png, f0001.png ...
+/// With it off (the realtime op) the sequence is a timing one: no picture is
+/// captured and nothing is written or allocated per frame (the rows wait in a
+/// buffer reserved up front and are written by <see cref="Stop"/>), so its
+/// frame times are the game's, not the recorder's; the frame <see cref="Begin"/>
+/// ran on is left out. Either way frames.tsv has one row per frame: the frame,
+/// game and unscaled time, the time scale (the hit-stop log), the screen and
+/// capture sizes (0 in a timing sequence), the virtual pointer (capture
+/// pixels, origin top-left, as the PNGs), the GC bytes allocated in the
+/// frame and the main thread's time (-1 where the player cannot read them),
+/// the real time since the previous frame ended (dtMs; the hitch
+/// measurement, which reads timing sequences only), and in a captured
+/// sequence the tracked screen rects (the expected-motion mask for the
+/// flicker detector) and any extra columns a track adds. events.tsv gets
+/// every <see cref="QaSignals.Event"/> and every press the game saw, on the
+/// frame it happened (the latency probe's input). meta.json says which kind
+/// the sequence is (fixedStep, frames). tools/qa/seqtools.py reads the folder.
 /// </summary>
 public sealed class SeqRecorder : MonoBehaviour
 {
     /// <summary>The capture rate.</summary>
     public const int Fps = 30;
 
+    /// <summary>The rows a timing sequence keeps without allocating (about 4.5 minutes at 60 fps); a longer one grows the buffer.</summary>
+    public const int TimingCapacity = 16384;
+
     /// <summary>The captured frames' width in pixels (the height follows the screen's aspect).</summary>
     public int CaptureWidth = 960;
 
-    /// <summary>True: Time.captureFramerate = 30 while recording (a fixed game step per captured frame).</summary>
+    /// <summary>True: the next sequence is a fixed-step capture (Time.captureFramerate = 30, PNG frames); false: a timing sequence (real frame times, no capture).</summary>
     public bool FixedStep = true;
 
     /// <summary>The folder of the sequence recording now, or null.</summary>
@@ -46,26 +55,42 @@ public sealed class SeqRecorder : MonoBehaviour
     /// <summary>True while a sequence records.</summary>
     public bool Recording => Dir != null;
 
+    /// <summary>True while a timing sequence (real frame times, no capture) records.</summary>
+    public bool Timing => Dir != null && !_capturing;
+
     private readonly Dictionary<string, Func<Rect?>> _tracked = new Dictionary<string, Func<Rect?>>();
     private readonly Dictionary<string, Func<string>> _extra = new Dictionary<string, Func<string>>();
+    private readonly List<TimingRow> _timings = new List<TimingRow>();
     private StreamWriter _frames;
     private StreamWriter _events;
     private string _stillPath;
+    private bool _capturing;
+    private bool _skipBeginFrame;
     private int _oldCaptureFramerate;
+    private double _lastFrameEnd = -1;
     private RenderTexture _rt;
     private Texture2D _small;
     private ProfilerRecorder _gc;
     private ProfilerRecorder _mainThread;
 
+    /// <summary>One timing-sequence row, kept as values until <see cref="Stop"/> writes it.</summary>
+    private struct TimingRow
+    {
+        public int Index, Frame, ScreenW, ScreenH, Down;
+        public float Time, Unscaled, TimeScale, Mx, My, DtMs;
+        public long GcBytes;
+        public double MainMs;
+    }
+
     /// <summary>
     /// Tracks <paramref name="screenRect"/> (screen pixels, origin
     /// bottom-left; null when not on screen) under <paramref name="name"/>:
-    /// written per frame, so the flicker detector ignores the area while it
-    /// moves (the expected-motion mask).
+    /// written per captured frame, so the flicker detector ignores the area
+    /// while it moves (the expected-motion mask).
     /// </summary>
     public void Track(string name, Func<Rect?> screenRect) => _tracked[name] = screenRect;
 
-    /// <summary>Adds a column <paramref name="name"/>=value to every frame row (a track's own measurement).</summary>
+    /// <summary>Adds a column <paramref name="name"/>=value to every captured frame's row (a track's own measurement).</summary>
     public void Column(string name, Func<string> value) => _extra[name] = value;
 
     /// <summary>Stops tracking or writing <paramref name="name"/>.</summary>
@@ -75,34 +100,44 @@ public sealed class SeqRecorder : MonoBehaviour
         _extra.Remove(name);
     }
 
-    /// <summary>Starts a sequence into <paramref name="dir"/> (created); a running one is stopped first.</summary>
+    /// <summary>Starts a sequence into <paramref name="dir"/> (created), of the kind <see cref="FixedStep"/> says; a running one is stopped first.</summary>
     public void Begin(string dir)
     {
         Stop();
         Directory.CreateDirectory(dir);
         Dir = dir;
         Index = 0;
+        _capturing = FixedStep;
         _frames = new StreamWriter(Path.Combine(dir, "frames.tsv"));
         _frames.WriteLine("i\tframe\ttime\tunscaled\ttimeScale\tscreenW\tscreenH\tcapW\tcapH\tmx\tmy\tdown\tgcBytes\tmainMs\tdtMs\ttracked\textra");
         _events = new StreamWriter(Path.Combine(dir, "events.tsv"));
         _events.WriteLine("frame\ti\tunscaled\tchannel\tname");
-        // How the sequence was taken: a fixed-step capture, or real frame times (the hitch analysis reads only those).
+        // How the sequence was taken: a fixed-step capture with frames, or a timing sequence (the hitch analysis reads only those).
         File.WriteAllText(Path.Combine(dir, "meta.json"),
-            $"{{\"fixedStep\": {(FixedStep ? "true" : "false")}, \"fps\": {Fps}, \"captureWidth\": {CaptureWidth}, \"screen\": \"{Screen.width}x{Screen.height}\"}}\n");
-        if (FixedStep)
+            $"{{\"fixedStep\": {(_capturing ? "true" : "false")}, \"frames\": {(_capturing ? "true" : "false")}, \"fps\": {Fps}, \"captureWidth\": {CaptureWidth}, \"screen\": \"{Screen.width}x{Screen.height}\"}}\n");
+        if (_capturing)
         {
             _oldCaptureFramerate = Time.captureFramerate;
             Time.captureFramerate = Fps;
         }
+        else
+        {
+            _timings.Clear();
+            if (_timings.Capacity < TimingCapacity)
+                _timings.Capacity = TimingCapacity;
+            _skipBeginFrame = true;
+        }
     }
 
-    /// <summary>Ends the sequence (if one records) and restores the frame rate.</summary>
+    /// <summary>Ends the sequence (if one records): restores the frame rate, or writes a timing sequence's rows.</summary>
     public void Stop()
     {
         if (Dir == null)
             return;
-        if (FixedStep)
+        if (_capturing)
             Time.captureFramerate = _oldCaptureFramerate;
+        else
+            WriteTimings();
         _frames?.Dispose();
         _events?.Dispose();
         _frames = _events = null;
@@ -155,6 +190,10 @@ public sealed class SeqRecorder : MonoBehaviour
         while (true)
         {
             yield return eof;
+            // The real time since the previous frame ended (Time's own clocks follow captureFramerate, this one does not).
+            double now = Time.realtimeSinceStartupAsDouble;
+            float dtMs = _lastFrameEnd < 0 ? Time.unscaledDeltaTime * 1000f : (float)((now - _lastFrameEnd) * 1000.0);
+            _lastFrameEnd = now;
             if (_stillPath != null)
             {
                 Texture2D full = ScreenCapture.CaptureScreenshotAsTexture();
@@ -164,6 +203,14 @@ public sealed class SeqRecorder : MonoBehaviour
             }
             if (Dir == null)
                 continue;
+            if (!_capturing)
+            {
+                if (_skipBeginFrame)
+                    _skipBeginFrame = false;
+                else
+                    AddTiming(dtMs);
+                continue;
+            }
             int capW = Mathf.Max(16, CaptureWidth);
             int capH = Mathf.Max(16, Mathf.RoundToInt(capW * Screen.height / (float)Mathf.Max(1, Screen.width)));
             Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();
@@ -182,12 +229,44 @@ public sealed class SeqRecorder : MonoBehaviour
             RenderTexture.active = previous;
             Destroy(tex);
             File.WriteAllBytes(Path.Combine(Dir, $"f{Index:0000}.png"), _small.EncodeToPNG());
-            WriteRow(capW, capH);
+            WriteRow(capW, capH, dtMs);
             Index++;
         }
     }
 
-    private void WriteRow(int capW, int capH)
+    /// <summary>A timing sequence's frame: values into the reserved buffer, nothing allocated or written.</summary>
+    private void AddTiming(float dtMs)
+    {
+        QaInput input = QaInput.Current;
+        Vector2 m = input != null ? input.Position : Vector2.zero;
+        _timings.Add(new TimingRow
+        {
+            Index = Index,
+            Frame = Time.frameCount,
+            ScreenW = Screen.width,
+            ScreenH = Screen.height,
+            Down = input != null && input.Down ? 1 : 0,
+            Time = Time.time,
+            Unscaled = Time.unscaledTime,
+            TimeScale = Time.timeScale,
+            Mx = m.x,
+            My = Screen.height - m.y,
+            DtMs = dtMs,
+            GcBytes = _gc.Valid ? _gc.LastValue : -1,
+            MainMs = _mainThread.Valid ? _mainThread.LastValue * 1e-6 : -1,
+        });
+        Index++;
+    }
+
+    private void WriteTimings()
+    {
+        foreach (TimingRow r in _timings)
+            _frames.WriteLine(string.Join("\t", r.Index, r.Frame, F(r.Time), F(r.Unscaled), F(r.TimeScale), r.ScreenW, r.ScreenH, 0, 0,
+                F(r.Mx), F(r.My), r.Down, r.GcBytes, r.MainMs.ToString("0.###", CultureInfo.InvariantCulture), F(r.DtMs), string.Empty, string.Empty));
+        _timings.Clear();
+    }
+
+    private void WriteRow(int capW, int capH, float dtMs)
     {
         float sx = capW / (float)Mathf.Max(1, Screen.width), sy = capH / (float)Mathf.Max(1, Screen.height);
         QaInput input = QaInput.Current;
@@ -214,7 +293,7 @@ public sealed class SeqRecorder : MonoBehaviour
         double mainMs = _mainThread.Valid ? _mainThread.LastValue * 1e-6 : -1;
         _frames.WriteLine(string.Join("\t", Index, Time.frameCount, F(Time.time), F(Time.unscaledTime), F(Time.timeScale), Screen.width, Screen.height, capW, capH,
             F(m.x * sx), F((Screen.height - m.y) * sy), input != null && input.Down ? 1 : 0, gc, mainMs.ToString("0.###", CultureInfo.InvariantCulture),
-            F(Time.unscaledDeltaTime * 1000f), tracked.ToString(), extra.ToString()));
+            F(dtMs), tracked.ToString(), extra.ToString()));
     }
 
     private static Rect? SafeRect(Func<Rect?> f)

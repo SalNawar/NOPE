@@ -20,11 +20,16 @@ using Debug = UnityEngine.Debug;
 /// mechanism: the job returns at once, and the run finishes on its own);
 /// QaPlayTest chains them inside a UTF [UnityTest] (the preferred one). State
 /// lives in SessionState, so it survives the domain reload of entering play
-/// mode. One run at a time; its folder is Library/QA/runs/&lt;scenario&gt;_&lt;time&gt;,
-/// named by Library/QA/last_run.txt, and it ends with harness.txt. After the
-/// restore, <see cref="Analyze"/> runs tools/qa/seqtools.py on every recorded
-/// sequence (flicker, flash, latency; hitches when recorded in real time), so
-/// the editor's runs are gated on their frames too (analysis.txt).
+/// mode; the saves set aside are also named in a file beside them, so an
+/// editor that crashed or restarted mid-run puts them back when it next loads
+/// (<see cref="RecoverSaves"/>). One run at a time; its folder is
+/// Library/QA/runs/&lt;scenario&gt;_&lt;time&gt;, named by Library/QA/last_run.txt,
+/// and it ends with harness.txt, whose first word is the run's verdict
+/// against the known-red list (DemoGate.JudgeRun: "ok" when nothing failed
+/// but known red). After the restore, <see cref="Analyze"/> runs
+/// tools/qa/seqtools.py on every recorded sequence (flicker, flash, latency
+/// on a captured one; hitches on a timing one), so the editor's runs are
+/// gated on their frames too (analysis.txt).
 /// </summary>
 [InitializeOnLoad]
 public static class QaPlayHarness
@@ -37,8 +42,8 @@ public static class QaPlayHarness
     private const string ViewWKey = "QaRig.ViewW";
     private const string ViewHKey = "QaRig.ViewH";
     private const string InputKey = "QaRig.Input";
+    private const string BackgroundKey = "QaRig.Background";
     private const string QualityKey = "QaRig.Quality";
-    private const string SavesKey = "QaRig.Saves";
     private const string ResultKey = "QaRig.Result";
     private const string PreparedKey = "QaRig.Prepared";
     private const int Idle = 0, Playing = 1, Finishing = 2;
@@ -62,6 +67,20 @@ public static class QaPlayHarness
     {
         if (SessionState.GetInt(StepKey, Idle) != Idle)
             EditorApplication.update += Tick;
+        EditorApplication.delayCall += RecoverSaves;
+    }
+
+    /// <summary>
+    /// When no run is prepared in this editor session but saves are still set
+    /// aside (an editor that crashed or restarted mid-run: SessionState is
+    /// gone, the files are not), puts them back and drops what the run saved.
+    /// </summary>
+    private static void RecoverSaves()
+    {
+        if (Busy || !File.Exists(AsideManifest))
+            return;
+        PutBack();
+        Debug.Log($"[QA] Put back the saves a QA run had set aside in {SaveSystem.Folder} (the run did not finish: the editor stopped mid-run).");
     }
 
     /// <summary>
@@ -125,6 +144,7 @@ public static class QaPlayHarness
         SessionState.SetInt(ViewHKey, (int)h);
         PlayModeWindow.SetCustomRenderingResolution(1920, 1080, ViewName);
         SessionState.SetInt(InputKey, (int)InputSystem.settings.editorInputBehaviorInPlayMode);
+        SessionState.SetInt(BackgroundKey, (int)InputSystem.settings.backgroundBehavior);
         InputSystem.settings.editorInputBehaviorInPlayMode = InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
         SessionState.SetInt(QualityKey, QualitySettings.GetQualityLevel());
         QaQuality.Levels levels = QaQuality.Read(GateResults.ProjectRoot);
@@ -139,19 +159,27 @@ public static class QaPlayHarness
         return outDir;
     }
 
-    /// <summary>In play mode: starts the prepared scenario once (later calls return the same run).</summary>
+    /// <summary>In play mode: starts the prepared scenario once (later calls return the same run), asserting it plays at the Standalone player's quality level.</summary>
     public static QaRunner BeginRun()
     {
         if (SessionState.GetBool(BegunKey, false) && QaRunner.Active != null)
             return QaRunner.Active;
         SessionState.SetBool(BegunKey, true);
-        return QaRunner.Begin(QaScenario.Load(SessionState.GetString(ScenarioKey, string.Empty)), OutDir);
+        QaQuality.Levels levels = QaQuality.Read(GateResults.ProjectRoot);
+        return QaRunner.Begin(QaScenario.Load(SessionState.GetString(ScenarioKey, string.Empty)), OutDir, false,
+            levels.StandaloneDefault >= 0 ? levels.Name(levels.StandaloneDefault) : null);
     }
 
     /// <summary>True when the prepared run's deadline has passed.</summary>
     public static bool PastDeadline => EditorApplication.timeSinceStartup > SessionState.GetFloat(DeadlineKey, float.MaxValue);
 
-    /// <summary>After the run ended (still in play mode): imports its assertions as gate results and writes harness.txt. Returns its report (null when it did not finish).</summary>
+    /// <summary>
+    /// After the run ended (still in play mode): imports its assertions as
+    /// gate results and writes harness.txt, whose first line is the verdict
+    /// against the known-red list (<see cref="DemoGate.JudgeRun"/>: "ok" when
+    /// only known-red assertions failed; run.json's ok stays the strict one).
+    /// Returns its report (null when it did not finish).
+    /// </summary>
     public static QaRunReport Collect()
     {
         QaRunner runner = QaRunner.Active;
@@ -162,8 +190,9 @@ public static class QaPlayHarness
             return null;
         }
         int imported = GateResults.Import(runner.Report, OutDir, false);
-        SessionState.SetString(ResultKey, runner.Report.ok ? "ok" : "failed");
-        File.WriteAllText(Path.Combine(OutDir, "harness.txt"), $"{(runner.Report.ok ? "ok" : "failed")}: {imported} result(s) imported into {GateResults.Folder}");
+        RunVerdict verdict = DemoGate.JudgeRun(runner.Report, DemoGate.KnownRedRunPatterns());
+        SessionState.SetString(ResultKey, verdict.Ok ? "ok" : "failed");
+        File.WriteAllText(Path.Combine(OutDir, "harness.txt"), $"{verdict.Line}\n{imported} result(s) imported into {GateResults.Folder}\n");
         return runner.Report;
     }
 
@@ -237,13 +266,18 @@ public static class QaPlayHarness
             EditorApplication.ExitPlaymode();
     }
 
-    /// <summary>In edit mode, after the run: the game view, the input routing, the quality level and the saves as they were, on an empty scene.</summary>
+    /// <summary>In edit mode, after the run: the game view, the input routing and devices, the quality level and the saves as they were, on an empty scene.</summary>
     public static void Restore()
     {
         if (!Busy)
             return;
         PlayModeWindow.SetCustomRenderingResolution((uint)SessionState.GetInt(ViewWKey, 1920), (uint)SessionState.GetInt(ViewHKey, 1080), ViewName);
         InputSystem.settings.editorInputBehaviorInPlayMode = (InputSettings.EditorInputBehaviorInPlayMode)SessionState.GetInt(InputKey, 0);
+        // A run stopped from outside may not have given the input back: the real mouse and keyboard, no virtual device, the focus rule.
+        int devices = QaInput.ReleaseStray();
+        if (devices > 0)
+            Debug.Log($"[QA] Gave back {devices} input device(s) a stopped run had left disabled or added.");
+        InputSystem.settings.backgroundBehavior = (InputSettings.BackgroundBehavior)SessionState.GetInt(BackgroundKey, (int)InputSystem.settings.backgroundBehavior);
         QualitySettings.SetQualityLevel(SessionState.GetInt(QualityKey, QualitySettings.GetQualityLevel()), true);
         PutBack();
         SessionState.SetBool(PreparedKey, false);
@@ -253,9 +287,11 @@ public static class QaPlayHarness
 
     /// <summary>
     /// Runs tools/qa/seqtools.py (python on the PATH) on every sequence the
-    /// run recorded, writing gate results stamped with HEAD (ids
-    /// &lt;scenario&gt;.seq.&lt;name&gt;.&lt;analysis&gt;) and the output to the run's
-    /// analysis.txt. Returns false when an analysis failed or could not run.
+    /// run recorded (<c>all</c>: flicker, flash and latency on a captured one,
+    /// hitches on a timing one), writing gate results stamped with HEAD and
+    /// the tree's state (ids &lt;scenario&gt;.seq.&lt;name&gt;.&lt;analysis&gt;) and the
+    /// output to the run's analysis.txt. Returns false when an analysis
+    /// failed or could not run.
     /// </summary>
     public static bool Analyze()
     {
@@ -264,23 +300,19 @@ public static class QaPlayHarness
             return true;
         string tool = Path.Combine(GateResults.ProjectRoot, "tools", "qa", "seqtools.py");
         string head = GitHead.Read(GateResults.ProjectRoot);
+        bool dirty = GitDirty.Changed(GateResults.ProjectRoot).Count > 0;
         var log = new StringBuilder();
         bool ok = true;
         foreach (string seq in Directory.GetDirectories(seqRoot))
-        {
-            ok &= Python(log, tool, "all", seq, head);
-            string meta = Path.Combine(seq, "meta.json");
-            if (File.Exists(meta) && File.ReadAllText(meta).Replace(" ", string.Empty).Contains("\"fixedStep\":false"))
-                ok &= Python(log, tool, "hitches", seq, head);
-        }
+            ok &= Python(log, tool, "all", seq, head, dirty);
         File.WriteAllText(Path.Combine(OutDir, "analysis.txt"), log.ToString());
         Debug.Log($"[QA] Frame analysis {(ok ? "passed" : "FAILED")}: {Path.Combine(OutDir, "analysis.txt")}");
         return ok;
     }
 
-    private static bool Python(StringBuilder log, string tool, string command, string seq, string head)
+    private static bool Python(StringBuilder log, string tool, string command, string seq, string head, bool dirty)
     {
-        var start = new ProcessStartInfo("python", $"\"{tool}\" {command} \"{seq}\" --result-dir \"{GateResults.Folder}\" --commit \"{head}\"")
+        var start = new ProcessStartInfo("python", $"\"{tool}\" {command} \"{seq}\" --result-dir \"{GateResults.Folder}\" --commit \"{head}\"{(dirty ? " --dirty" : string.Empty)}")
         {
             UseShellExecute = false,
             RedirectStandardOutput = true,
@@ -304,25 +336,37 @@ public static class QaPlayHarness
         }
     }
 
-    /// <summary>Moves the player's save files aside (SaveSystem.Folder, per project in the editor) so a run starts clean.</summary>
+    /// <summary>
+    /// Moves the player's save files aside (SaveSystem.Folder, per project in
+    /// the editor) so a run starts clean. Which slots had a file is written to
+    /// <see cref="AsideManifest"/> first, on disk, so the saves can be put back
+    /// even when the editor dies mid-run (<see cref="RecoverSaves"/>).
+    /// </summary>
     private static void SetAside()
     {
+        if (File.Exists(AsideManifest))
+            PutBack();
         int had = 0;
         for (int i = 0; i < SaveSystem.Files.Count; i++)
+            if (File.Exists(SaveSystem.Files[i]))
+                had |= 1 << i;
+        Directory.CreateDirectory(SaveSystem.Folder);
+        File.WriteAllText(AsideManifest, had.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        for (int i = 0; i < SaveSystem.Files.Count; i++)
         {
-            if (!File.Exists(SaveSystem.Files[i]))
+            if ((had & (1 << i)) == 0)
                 continue;
-            had |= 1 << i;
             File.Copy(SaveSystem.Files[i], Backup(i), true);
             File.Delete(SaveSystem.Files[i]);
         }
-        SessionState.SetInt(SavesKey, had);
     }
 
-    /// <summary>Puts the player's saves back exactly as they were (and drops what the run saved).</summary>
+    /// <summary>Puts the player's saves back exactly as they were (and drops what the run saved), as <see cref="AsideManifest"/> records; nothing when no saves are aside.</summary>
     private static void PutBack()
     {
-        int had = SessionState.GetInt(SavesKey, 0);
+        if (!File.Exists(AsideManifest))
+            return;
+        int.TryParse(File.ReadAllText(AsideManifest).Trim(), out int had);
         for (int i = 0; i < SaveSystem.Files.Count; i++)
         {
             if ((had & (1 << i)) != 0 && File.Exists(Backup(i)))
@@ -335,7 +379,11 @@ public static class QaPlayHarness
                 File.Delete(SaveSystem.Files[i]);
             }
         }
+        File.Delete(AsideManifest);
     }
+
+    /// <summary>The file naming which save slots a run set aside (a bit per slot), beside the copies; present only while saves are aside.</summary>
+    private static string AsideManifest => Path.Combine(SaveSystem.Folder, "qa_rig_aside.txt");
 
     private static string Backup(int i) => Path.Combine(SaveSystem.Folder, $"qa_rig_backup_{i}.json");
 }

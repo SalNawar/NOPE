@@ -9,15 +9,18 @@ usage:
   python seqtools.py latency <seq> [--roi x0,y0,x1,y1] [--track name] [--need-cue] [--max-frames 1]
   python seqtools.py frozen <seq> [--max-seconds 0.25]
   python seqtools.py cuts <seq>
-  python seqtools.py hitches <seq> [--budget-ms 33.4]   (a sequence recorded after the op realtime n=1)
-  python seqtools.py all <seq>                 (flicker, flash, and latency when the sequence has presses)
+  python seqtools.py hitches <seq> [--budget-ms 33.4]   (a timing sequence: recorded after the op realtime n=1)
+  python seqtools.py all <seq>                 (flicker, flash, and latency when the sequence has presses; on a timing
+                                                sequence, which has no frames, hitches)
   python seqtools.py gif <seq> <out.gif> [--scale 0.67] [--start N] [--end M] [--step K]
   python seqtools.py sheet <seq> <out.png> [--start N] [--end M] [--step 3] [--cols 4]
   python seqtools.py side <seq> <reference frames folder> <out.gif> [--frames N] [--step K] [--height 360]
   python seqtools.py blockiness <png> [<png> ...]
-  python seqtools.py import-run <run.json> --result-dir D [--bp] [--commit C | --build-info qa_build.json]
-result options (every analysis): --result-dir D --id ID --owner TRACK [--commit C] [--bp]
-  (the id defaults to <run>.seq.<seq>.<analysis>, the owner to QA-RIG, the commit to git HEAD of --repo or the cwd)
+  python seqtools.py import-run <run.json> --result-dir D [--bp] [--commit C [--dirty] | --build-info qa_build.json]
+result options (every analysis): --result-dir D --id ID --owner TRACK [--commit C [--dirty]] [--bp]
+  (the id defaults to <run>.seq.<seq>.<analysis>, the owner to QA-RIG, the commit to git HEAD of --repo or the cwd;
+  --dirty marks a result measured on uncommitted changes, which DemoGate counts as stale; without --commit it is read
+  from git: changes to Assets, Packages or ProjectSettings less Unity's churn, as GitDirty)
 """
 import argparse
 import json
@@ -37,6 +40,21 @@ def git_head(repo):
         return subprocess.run(['git', '-C', repo, 'rev-parse', 'HEAD'], capture_output=True, text=True, check=True).stdout.strip()
     except (OSError, subprocess.CalledProcessError):
         return ''
+
+
+# Unity's own churn (GitDirty.Churn): never a change to what is measured.
+CHURN = {'Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset'.lower()}
+
+
+def git_dirty(repo):
+    """GitDirty.Changed: tracked files under Assets, Packages and ProjectSettings whose content differs from HEAD, less
+    the churn (False when git cannot run)."""
+    try:
+        out = subprocess.run(['git', '-C', repo, '-c', 'core.quotepath=off', 'diff', '--name-only', 'HEAD', '--',
+                              'Assets', 'Packages', 'ProjectSettings'], capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return False
+    return any(line.strip() and line.strip().lower() not in CHURN for line in out.splitlines())
 
 
 def load(seq):
@@ -65,8 +83,12 @@ def emit(args, seq, analysis, ok, measured, detail):
     rid = args.id or default_id(seq, analysis)
     if args.bp and not rid.startswith('bp.'):
         rid = 'bp.' + rid
-    commit = args.commit if args.commit is not None else git_head(args.repo or os.getcwd())
-    path = seqlib.write_result(args.result_dir, seqlib.gate_result(rid, args.owner, ok, measured, detail, commit, os.path.abspath(seq), args.bp))
+    if args.commit is not None:
+        commit, dirty = args.commit, args.dirty
+    else:
+        commit, dirty = git_head(args.repo or os.getcwd()), git_dirty(args.repo or os.getcwd())
+    path = seqlib.write_result(args.result_dir, seqlib.gate_result(rid, args.owner, ok, measured, detail, commit, os.path.abspath(seq), args.bp,
+                                                                   dirty))
     print('  result', path)
 
 
@@ -180,6 +202,9 @@ def cmd_hitches(args, seq=None):
 def cmd_all(args):
     # Each analysis writes its own result under its default id.
     args.id = None
+    if seqlib.is_timing(args.seq):
+        # A timing sequence has frame times and no frames: the hitch measurement is all it is for.
+        return cmd_hitches(args)
     ok = cmd_flicker(args)
     ok = cmd_flash(args) and ok
     ok = cmd_latency(args) and ok
@@ -269,13 +294,14 @@ def cmd_blockiness(args):
 def cmd_import_run(args):
     with open(args.run, encoding='utf-8') as f:
         run = json.load(f)
-    commit = args.commit
+    commit, dirty = args.commit, args.dirty
     if commit is None and args.build_info:
-        with open(args.build_info, encoding='utf-8') as f:
-            commit = json.load(f).get('commit', '')
+        with open(args.build_info, encoding='utf-8-sig') as f:
+            info = json.load(f)
+        commit, dirty = info.get('commit', ''), bool(info.get('dirty', False))
     if commit is None:
-        commit = git_head(args.repo or os.getcwd())
-    results = seqlib.results_from_run(run, commit, os.path.dirname(os.path.abspath(args.run)), args.bp)
+        commit, dirty = git_head(args.repo or os.getcwd()), git_dirty(args.repo or os.getcwd())
+    results = seqlib.results_from_run(run, commit, os.path.dirname(os.path.abspath(args.run)), args.bp, dirty)
     for r in results:
         seqlib.write_result(args.result_dir, r)
     print(f'imported {len(results)} result(s) from {args.run} into {args.result_dir} (commit {commit or "unknown"})')
@@ -291,6 +317,7 @@ def parser():
         p.add_argument('--id')
         p.add_argument('--owner', default='QA-RIG')
         p.add_argument('--commit')
+        p.add_argument('--dirty', action='store_true')
         p.add_argument('--repo')
         p.add_argument('--bp', action='store_true')
 
@@ -318,7 +345,8 @@ def parser():
     p = sub.add_parser('frozen'); p.add_argument('seq'); p.add_argument('--max-seconds', type=float, default=0.25); result_opts(p); p.set_defaults(fn=cmd_frozen)
     p = sub.add_parser('cuts'); p.add_argument('seq'); result_opts(p); p.set_defaults(fn=cmd_cuts)
     p = sub.add_parser('hitches'); p.add_argument('seq'); p.add_argument('--budget-ms', type=float, default=1000.0 / 30 + 0.1); result_opts(p); p.set_defaults(fn=cmd_hitches)
-    p = sub.add_parser('all'); p.add_argument('seq'); flicker_opts(p); flash_opts(p); latency_opts(p); result_opts(p); p.set_defaults(fn=cmd_all)
+    p = sub.add_parser('all'); p.add_argument('seq'); flicker_opts(p); flash_opts(p); latency_opts(p); result_opts(p)
+    p.add_argument('--budget-ms', type=float, default=1000.0 / 30 + 0.1); p.set_defaults(fn=cmd_all)
     p = sub.add_parser('gif'); p.add_argument('seq'); p.add_argument('out'); p.add_argument('--scale', type=float, default=0.67)
     p.add_argument('--start', type=int, default=0); p.add_argument('--end', type=int); p.add_argument('--step', type=int, default=1); p.set_defaults(fn=cmd_gif)
     p = sub.add_parser('sheet'); p.add_argument('seq'); p.add_argument('out'); p.add_argument('--start', type=int, default=0)
@@ -327,7 +355,8 @@ def parser():
     p.add_argument('--step', type=int, default=1); p.add_argument('--height', type=int, default=360); p.set_defaults(fn=cmd_side)
     p = sub.add_parser('blockiness'); p.add_argument('pngs', nargs='+'); p.set_defaults(fn=cmd_blockiness)
     p = sub.add_parser('import-run'); p.add_argument('run'); p.add_argument('--result-dir', required=True); p.add_argument('--bp', action='store_true')
-    p.add_argument('--commit'); p.add_argument('--build-info'); p.add_argument('--repo'); p.set_defaults(fn=cmd_import_run)
+    p.add_argument('--commit'); p.add_argument('--dirty', action='store_true'); p.add_argument('--build-info'); p.add_argument('--repo')
+    p.set_defaults(fn=cmd_import_run)
     return ap
 
 

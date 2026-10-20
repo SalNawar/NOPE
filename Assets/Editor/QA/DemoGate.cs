@@ -79,6 +79,25 @@ public sealed class DemoGateReport
     }
 }
 
+/// <summary>A play run judged against the known-red list (DemoGate.JudgeRun).</summary>
+public sealed class RunVerdict
+{
+    /// <summary>Failures that are not on the known-red list: a failed step, a red assertion, an unfinished run.</summary>
+    public List<string> Unexpected { get; } = new List<string>();
+
+    /// <summary>Red assertions the known-red list expects (an open BUG part a later track owns).</summary>
+    public List<string> KnownRed { get; } = new List<string>();
+
+    /// <summary>True when nothing failed but known red.</summary>
+    public bool Ok => Unexpected.Count == 0;
+
+    /// <summary>One line: "ok", "ok (known red: ...)" or "failed: ..." (harness.txt's first line).</summary>
+    public string Line =>
+        Ok
+            ? KnownRed.Count == 0 ? "ok" : $"ok ({KnownRed.Count} known red, tools/qa/gate_known_red.txt: {string.Join("; ", KnownRed)})"
+            : $"failed ({Unexpected.Count} unexpected{(KnownRed.Count > 0 ? $", {KnownRed.Count} known red" : string.Empty)}): {string.Join("; ", Unexpected)}";
+}
+
 /// <summary>
 /// The demo gate (P0-B QA-RIG; FIX_PLAN §5 exit gate #5, v2 rules 9 and 13):
 /// runs every registered <see cref="GateCheckAttribute"/> check (each track's
@@ -138,21 +157,89 @@ public static class DemoGate
     public static Dictionary<string, string> KnownRedList() =>
         File.Exists(KnownRedPath) ? ParseKnownRed(File.ReadAllText(KnownRedPath)) : new Dictionary<string, string>();
 
-    /// <summary>Parses the known-red list: "id  # BUG-n, OWNER: why" per line; blank lines and lines starting with '#' are skipped.</summary>
+    /// <summary>
+    /// Parses the known-red list: "check-id [run-pattern ...]  # BUG-n,
+    /// OWNER: why" per line (the check id is the first word); blank lines and
+    /// lines starting with '#' are skipped.
+    /// </summary>
     public static Dictionary<string, string> ParseKnownRed(string text)
     {
         var list = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (KnownRedLine line in KnownRedLines(text))
+            list[line.Words[0]] = line.Why;
+        return list;
+    }
+
+    /// <summary>
+    /// The known-red list's run patterns: every word after a line's check id.
+    /// Each names the run assertions or frame-analysis results ('*' wildcard,
+    /// e.g. "*.camera", "*.seq.*.flicker") that feed that check, so a play
+    /// run whose only failures are these is reported as passing with known
+    /// red (<see cref="JudgeRun"/>: harness.txt, QaPlayTest.AssertRun,
+    /// run_player.py) instead of failing every time until the owner merges.
+    /// </summary>
+    public static List<string> KnownRedRunPatterns(string text) =>
+        KnownRedLines(text).SelectMany(l => l.Words.Skip(1)).Distinct(StringComparer.Ordinal).ToList();
+
+    /// <summary>The run patterns of the project's known-red list.</summary>
+    public static List<string> KnownRedRunPatterns() =>
+        File.Exists(KnownRedPath) ? KnownRedRunPatterns(File.ReadAllText(KnownRedPath)) : new List<string>();
+
+    private readonly struct KnownRedLine
+    {
+        public readonly string[] Words;
+        public readonly string Why;
+
+        public KnownRedLine(string[] words, string why)
+        {
+            Words = words;
+            Why = why;
+        }
+    }
+
+    private static IEnumerable<KnownRedLine> KnownRedLines(string text)
+    {
         foreach (string raw in (text ?? string.Empty).Split('\n'))
         {
             string line = raw.Trim();
             if (line.Length == 0 || line.StartsWith("#", StringComparison.Ordinal))
                 continue;
             int hash = line.IndexOf('#');
-            string id = (hash >= 0 ? line.Substring(0, hash) : line).Trim();
-            if (id.Length > 0)
-                list[id] = hash >= 0 ? line.Substring(hash + 1).Trim() : string.Empty;
+            string[] words = (hash >= 0 ? line.Substring(0, hash) : line).Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (words.Length > 0)
+                yield return new KnownRedLine(words, hash >= 0 ? line.Substring(hash + 1).Trim() : string.Empty);
         }
-        return list;
+    }
+
+    /// <summary>
+    /// A play run's verdict against the known-red run patterns (pure;
+    /// DemoGateTests): it passes when every step ran and every failed
+    /// assertion matches a pattern (an open BUG part a later track owns). The
+    /// run's own ok (run.json) stays the strict one; this is what
+    /// harness.txt and QaPlayTest.AssertRun report.
+    /// </summary>
+    public static RunVerdict JudgeRun(QaRunReport report, IEnumerable<string> knownRedPatterns)
+    {
+        var verdict = new RunVerdict();
+        if (report == null)
+        {
+            verdict.Unexpected.Add("no report: the run did not finish");
+            return verdict;
+        }
+        List<string> patterns = (knownRedPatterns ?? Enumerable.Empty<string>()).ToList();
+        foreach (QaStepResult s in (report.steps ?? Array.Empty<QaStepResult>()).Where(s => !s.ok))
+            verdict.Unexpected.Add($"step {s.i} {s.op}: {s.note}");
+        foreach (QaAssertion a in (report.assertions ?? Array.Empty<QaAssertion>()).Where(a => !a.pass))
+        {
+            string line = $"{a.id} [{a.owner}] {a.measured}: {a.detail}";
+            if (patterns.Any(p => GateResults.Matches(p, a.id)))
+                verdict.KnownRed.Add(line);
+            else
+                verdict.Unexpected.Add(line);
+        }
+        if (!report.ok && verdict.Unexpected.Count == 0 && verdict.KnownRed.Count == 0)
+            verdict.Unexpected.Add("the run stopped before its last step");
+        return verdict;
     }
 
     /// <summary>

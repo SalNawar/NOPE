@@ -26,7 +26,10 @@ using UnityEngine.UI;
 /// <see cref="QaRunReport"/>), warnings.txt (every warning and error logged),
 /// camera.tsv, drags.tsv, seq/&lt;name&gt;/ and stills/, then done.txt. A step
 /// that throws or times out stops the run and fails it. Every run asserts a
-/// clean console and a camera that moved only for tagged causes.
+/// clean console, a camera that moved only for tagged causes, and presses
+/// that reached their targets under the pointer. A run stopped before its
+/// end puts the input, frame rate, seed and hour back and writes a failed
+/// run.json (done.txt "aborted").
 /// </summary>
 [DefaultExecutionOrder(-32000)]
 public sealed class QaRunner : MonoBehaviour
@@ -67,6 +70,17 @@ public sealed class QaRunner : MonoBehaviour
     private int? _oldSeed;
     private bool _hourForced;
     private string _started;
+    private bool _measuringGc;
+    private int? _dragRestoreRate;
+    private bool _cleanedUp;
+    private string _expectedQuality;
+    private string _startQuality;
+    private int _presses;
+    private readonly List<string> _blocked = new List<string>();
+    private readonly List<string> _direct = new List<string>();
+
+    /// <summary>The suffix of a QA player's product name (BuiltPlayerCapture builds it so): its saves, PlayerPrefs and window settings live apart from the game's, and a QA player of another name refuses to run.</summary>
+    public const string QaProductSuffix = " QA";
 
     /// <summary>Every op a step may name (lower case; docs/pending/QA-RIG.md describes each).</summary>
     public static readonly string[] Ops =
@@ -107,8 +121,15 @@ public sealed class QaRunner : MonoBehaviour
         scenario.steps.Select((s, i) => (s, i)).Where(p => !IsKnownOp(p.s.op))
                       .Select(p => $"step {p.i}: '{p.s.op}'").ToList();
 
-    /// <summary>Starts <paramref name="scenario"/>, writing into <paramref name="outDir"/>; a player quits at the end when <paramref name="quitWhenDone"/>. Refuses a scenario with an unknown op before anything runs.</summary>
-    public static QaRunner Begin(QaScenario scenario, string outDir, bool quitWhenDone = false)
+    /// <summary>
+    /// Starts <paramref name="scenario"/>, writing into <paramref name="outDir"/>;
+    /// a player quits at the end when <paramref name="quitWhenDone"/>. With
+    /// <paramref name="expectedQuality"/> (the editor harness: the Standalone
+    /// player's level name) the run asserts <c>quality</c>: it started and
+    /// ended at that level (BUG-53: QA plays at the shipping level). Refuses a
+    /// scenario with an unknown op before anything runs.
+    /// </summary>
+    public static QaRunner Begin(QaScenario scenario, string outDir, bool quitWhenDone = false, string expectedQuality = null)
     {
         if (Active != null && !Active.Done)
             throw new InvalidOperationException("A QA run is already playing.");
@@ -121,19 +142,33 @@ public sealed class QaRunner : MonoBehaviour
         runner.Scenario = scenario;
         runner.OutDir = outDir;
         runner._quitWhenDone = quitWhenDone;
+        runner._expectedQuality = expectedQuality;
         Active = runner;
         runner.StartCoroutine(runner.Run());
         return runner;
     }
 
 #if TIMEDESK_QA && !UNITY_EDITOR
-    /// <summary>A QA player build: starts the scenario named by -qaScenario (into -qaOut, else persistentDataPath/QA) and quits when it ends.</summary>
+    /// <summary>
+    /// A QA player build: starts the scenario named by -qaScenario (into
+    /// -qaOut, else persistentDataPath/QA) and quits when it ends. It refuses
+    /// (exit code 3) unless its product name ends in
+    /// <see cref="QaProductSuffix"/>: a run plays New Run, saves and sets the
+    /// window, so in a player named like the game it would overwrite the
+    /// player's real save and settings.
+    /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void FromCommandLine()
     {
         string file = Argument("-qaScenario");
         if (file == null)
             return;
+        if (!Application.productName.EndsWith(QaProductSuffix, StringComparison.Ordinal))
+        {
+            UnityEngine.Debug.LogError($"[QA] Refused: this player is '{Application.productName}', not a QA player (a name ending in '{QaProductSuffix}'), so a run would play over the game's own save and settings. Build it with QaJobs.BuildQaPlayer.");
+            Application.Quit(3);
+            return;
+        }
         QaScenario scenario = QaScenario.Load(file);
         string outDir = Argument("-qaOut") ?? Path.Combine(Application.persistentDataPath, "QA", scenario.name + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss"));
         Begin(scenario, outDir, true);
@@ -153,6 +188,7 @@ public sealed class QaRunner : MonoBehaviour
     {
         Directory.CreateDirectory(OutDir);
         _started = DateTime.Now.ToString("s");
+        _startQuality = QualityName();
         _warningLog = new StreamWriter(Path.Combine(OutDir, "warnings.txt"));
         _drags = new StreamWriter(Path.Combine(OutDir, "drags.tsv"));
         _drags.WriteLine("name\tpath\tpressX\tpressY\tendX\tendY\tpressFrame\treleaseFrame\tscreenW\tscreenH");
@@ -161,6 +197,8 @@ public sealed class QaRunner : MonoBehaviour
         Input = new QaInput();
         Recorder = gameObject.AddComponent<SeqRecorder>();
         Cameras = gameObject.AddComponent<CameraMoveLog>();
+        // The rig's own logging stays out of what a GC window and a timing sequence measure.
+        Cameras.QuietWhen = () => _measuringGc || Recorder != null && Recorder.Timing;
         Cameras.WriteTo(OutDir);
 
         for (int i = 0; i < Scenario.steps.Length; i++)
@@ -230,10 +268,10 @@ public sealed class QaRunner : MonoBehaviour
             case "newrun":
             {
                 TitleUIController title = QaGame.Find<TitleUIController>() ?? throw new InvalidOperationException("No title is loaded.");
-                yield return Press((Button)QaGame.Field(title, "newRunButton"), note);
+                yield return Press((Button)QaGame.Field(title, "newRunButton"), s, note);
                 yield return QaGame.Frames(5);
                 ((TMP_InputField)QaGame.Field(title, "adoptNameInput")).text = string.IsNullOrEmpty(s.text) ? "Biscuit" : s.text;
-                yield return Press((Button)QaGame.Field(title, "adoptButton"), note);
+                yield return Press((Button)QaGame.Field(title, "adoptButton"), s, note);
                 break;
             }
             case "waitoffice":
@@ -242,13 +280,13 @@ public sealed class QaRunner : MonoBehaviour
                 yield return QaGame.Frames(30);
                 break;
             case "startshift":
-                yield return Press(QaGame.ButtonAt("DayFlowUIController.startShiftButton"), note);
+                yield return Press(QaGame.ButtonAt("DayFlowUIController.startShiftButton"), s, note);
                 yield return QaGame.Until(() => !QaGame.BriefingShown(), 10f, "the briefing to close");
                 break;
             case "sign":
             {
                 var sign = (Component)QaGame.Field(QaGame.Find<GameManager>(), "readySign");
-                yield return ClickObject(sign.gameObject, note);
+                yield return ClickObject(sign.gameObject, s, note);
                 break;
             }
             case "waittraveller":
@@ -273,11 +311,11 @@ public sealed class QaRunner : MonoBehaviour
                 yield return QaGame.Frames(2);
                 break;
             case "button":
-                yield return Press(QaGame.ButtonAt(s.target), note);
+                yield return Press(QaGame.ButtonAt(s.target), s, note);
                 break;
             case "click":
                 if (!string.IsNullOrEmpty(s.target))
-                    yield return ClickObject(QaGame.GameObjectAt(s.target), note);
+                    yield return ClickObject(QaGame.GameObjectAt(s.target), s, note);
                 else
                     yield return Input.Play(QaPaths.Click(Frac(s.x, s.y)));
                 break;
@@ -351,7 +389,7 @@ public sealed class QaRunner : MonoBehaviour
                 yield return QaGame.Frames(10);
                 break;
             case "realtime":
-                // n = 1: record real frame times (no fixed step), for the hitch and frame-time measurements.
+                // n = 1: the next sequences are timing ones (real frame times, no capture, nothing allocated per frame), for the hitch and frame-time measurements.
                 Recorder.FixedStep = s.n == 0;
                 break;
             case "mark":
@@ -376,12 +414,20 @@ public sealed class QaRunner : MonoBehaviour
 
     private static Vector2 Frac(float x, float y) => new Vector2(x * Screen.width, y * Screen.height);
 
-    /// <summary>Clicks <paramref name="button"/> with the virtual mouse where it shows; when something else is on top there, invokes it and says so.</summary>
-    private IEnumerator Press(Button button, Action<string> note)
+    /// <summary>
+    /// Clicks <paramref name="button"/> with the virtual mouse where it shows.
+    /// When something else is on top there (an overlay, BUG-68's class) it
+    /// still invokes it so the run goes on, but unless the step says
+    /// <see cref="QaStep.direct"/> the press is counted as blocked and the
+    /// run's <c>presses</c> assertion fails (BUG-53: no handler is called
+    /// directly behind the player's back).
+    /// </summary>
+    private IEnumerator Press(Button button, QaStep step, Action<string> note)
     {
         if (button == null)
             throw new ArgumentNullException(nameof(button));
         yield return QaGame.Until(() => button.isActiveAndEnabled && button.interactable, 10f, $"{button.name} to be clickable");
+        _presses++;
         Vector2? p = QaGame.ScreenPoint(button.gameObject);
         GameObject top = p.HasValue ? QaGame.TopAt(p.Value) : null;
         if (top != null && top.transform.IsChildOf(button.transform))
@@ -389,14 +435,15 @@ public sealed class QaRunner : MonoBehaviour
             yield return Input.Play(QaPaths.Click(p.Value));
             yield break;
         }
-        note($"{button.name} was not on top at its screen point ({(top != null ? top.name : "nothing")} was): invoked directly");
+        Unreached(step, button.name, top, "invoked directly", note);
         button.onClick.Invoke();
         yield return null;
     }
 
-    /// <summary>Clicks <paramref name="go"/> with the virtual mouse at its screen point; when it is off screen or covered, sends the click event and says so.</summary>
-    private IEnumerator ClickObject(GameObject go, Action<string> note)
+    /// <summary>Clicks <paramref name="go"/> with the virtual mouse at its screen point; when it is off screen or covered, sends the click event and counts the press as blocked as <see cref="Press"/> does.</summary>
+    private IEnumerator ClickObject(GameObject go, QaStep step, Action<string> note)
     {
+        _presses++;
         Vector2? p = QaGame.ScreenPoint(go);
         GameObject top = p.HasValue ? QaGame.TopAt(p.Value) : null;
         if (top != null && (top.transform.IsChildOf(go.transform) || go.transform.IsChildOf(top.transform)))
@@ -404,9 +451,25 @@ public sealed class QaRunner : MonoBehaviour
             yield return Input.Play(QaPaths.Click(p.Value));
             yield break;
         }
-        note($"{go.name} was not under the pointer at its screen point ({(top != null ? top.name : "nothing")} was): click event sent");
+        Unreached(step, go.name, top, "click event sent", note);
         ExecuteEvents.Execute(go, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         yield return null;
+    }
+
+    /// <summary>Records a press the virtual mouse could not deliver: blocked (fails <c>presses</c>) unless the step allows it with <see cref="QaStep.direct"/>.</summary>
+    private void Unreached(QaStep step, string target, GameObject top, string how, Action<string> note)
+    {
+        string what = $"step {_steps.Count} {step.op}: {target} was not under the pointer at its screen point ({(top != null ? QaGame.Where(top) : "nothing")} was)";
+        if (step.direct)
+        {
+            _direct.Add(what);
+            note($"{what}: {how} (direct: true)");
+        }
+        else
+        {
+            _blocked.Add(what);
+            note($"BLOCKED {what}: {how} so the run goes on; the presses assertion fails (set \"direct\": true only for a target meant to be reached so)");
+        }
     }
 
     /// <summary>
@@ -417,7 +480,11 @@ public sealed class QaRunner : MonoBehaviour
     /// <c>n</c> settle frames (default 45) may be at most <c>f</c> pixels at
     /// 1080p (default 8, D1's "8 px in the release frame") from where it was
     /// on the release frame (BUG-53's per-drop assertion; a push after the
-    /// drop, like 1019a's ClearOfBlockers, fails it).
+    /// drop, like 1019a's ClearOfBlockers, fails it). The path plays one
+    /// sample per frame, so the whole drag and its settle run at the fixed
+    /// 30 fps game step (Time.captureFramerate, as a recording does): the
+    /// P-* speeds (QaPaths, in px per second at 30 fps) and the settle's
+    /// seconds hold at any real frame rate, in the editor and the player.
     /// </summary>
     private IEnumerator Drag(QaStep s, Action<string> note, bool checkRest)
     {
@@ -430,6 +497,12 @@ public sealed class QaRunner : MonoBehaviour
         QaPath path = QaPaths.Drag(kind, from, to, new Vector2(Screen.width, Screen.height));
         int pressFrame = 0, releaseFrame = 0;
         Rect? atRelease = null;
+        bool fixedHere = Time.captureFramerate != SeqRecorder.Fps;
+        if (fixedHere)
+        {
+            _dragRestoreRate = Time.captureFramerate;
+            Time.captureFramerate = SeqRecorder.Fps;
+        }
         yield return Input.Play(path, i =>
         {
             // The sample queued on this frame is seen by the game on the next one.
@@ -445,9 +518,15 @@ public sealed class QaRunner : MonoBehaviour
             pressFrame, releaseFrame, Screen.width, Screen.height));
         _drags.Flush();
         note($"{kind} from {F(path.Start.x)},{F(path.Start.y)} released at {F(path.End.x)},{F(path.End.y)}");
+        if (checkRest)
+            yield return QaGame.Frames(s.n > 0 ? s.n : 45);
+        if (fixedHere)
+        {
+            Time.captureFramerate = _dragRestoreRate ?? 0;
+            _dragRestoreRate = null;
+        }
         if (!checkRest)
             yield break;
-        yield return QaGame.Frames(s.n > 0 ? s.n : 45);
         Rect? rest = QaGame.ScreenRect(dragged);
         float limit = s.f > 0f ? s.f : 8f;
         if (atRelease == null || rest == null)
@@ -496,9 +575,12 @@ public sealed class QaRunner : MonoBehaviour
     private IEnumerator Gc(QaStep s)
     {
         int frames = Mathf.Max(10, Mathf.CeilToInt((s.f > 0f ? s.f : 3f) * SeqRecorder.Fps));
-        var samples = new List<long>();
+        // Reserved up front, and the camera log goes quiet: the window measures the game, not the rig.
+        var samples = new List<long>(frames);
+        _measuringGc = true;
         using (ProfilerRecorder gc = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame"))
         {
+            // The frame the window opened on (the recorder's start, the log's reservation) is not counted.
             yield return null;
             for (int i = 0; i < frames; i++)
             {
@@ -507,6 +589,7 @@ public sealed class QaRunner : MonoBehaviour
                     samples.Add(gc.LastValue);
             }
         }
+        _measuringGc = false;
         string id = "gc." + Safe(string.IsNullOrEmpty(s.name) ? "steady" : s.name);
         if (samples.Count == 0)
         {
@@ -534,32 +617,18 @@ public sealed class QaRunner : MonoBehaviour
     private void Finish()
     {
         Recorder.Stop();
+        Cameras.Flush();
         Assert("console", "QA-RIG", _errors == 0, $"errors {_errors}, warnings {_warnings}", "warnings.txt lists every warning and error logged during the run");
         AssertCamera("camera");
-        Application.logMessageReceived -= OnLog;
-        _warningLog?.Dispose();
-        _drags?.Dispose();
-        if (_oldSeed.HasValue && RunManager.HasInstance && RunManager.Instance.Config != null)
-            RunManager.Instance.Config.fixedRunSeed = _oldSeed.Value;
-        if (_hourForced)
-            DevToolsState.ForcedHour = null;
-        Input?.Dispose();
-
-        Report = new QaRunReport
+        AssertPresses();
+        if (!string.IsNullOrEmpty(_expectedQuality))
         {
-            scenario = Scenario.name,
-            owner = Scenario.owner,
-            player = !Application.isEditor,
-            unity = Application.unityVersion,
-            quality = QualitySettings.names[QualitySettings.GetQualityLevel()],
-            started = _started,
-            finished = DateTime.Now.ToString("s"),
-            errors = _errors,
-            warnings = _warnings,
-            camera = Cameras.Report().Summary(),
-            steps = _steps.ToArray(),
-            assertions = _assertions.ToArray(),
-        };
+            string end = QualityName();
+            Assert("quality", "QA-RIG", _startQuality == _expectedQuality && end == _expectedQuality, $"started at {_startQuality}, ended at {end}",
+                $"the Standalone player's level is {_expectedQuality} (BUG-53: QA plays at the shipping level; QaPlayHarness sets it for the run)");
+        }
+        CleanUp();
+        Report = BuildReport();
         bool complete = _steps.Count == Scenario.steps.Length || _steps.Count > 0 && string.Equals(_steps[_steps.Count - 1].op, "quit", StringComparison.OrdinalIgnoreCase);
         Report.ok = complete && _steps.All(x => x.ok) && _assertions.All(a => a.pass);
         File.WriteAllText(Path.Combine(OutDir, "run.json"), JsonUtility.ToJson(Report, true));
@@ -570,6 +639,89 @@ public sealed class QaRunner : MonoBehaviour
         Finished?.Invoke(Report);
         if (_quitWhenDone && !Application.isEditor)
             Application.Quit(Report.ok ? 0 : 1);
+    }
+
+    /// <summary>Every press was delivered by the virtual mouse to the target under it, except those a step allowed with <see cref="QaStep.direct"/>.</summary>
+    private void AssertPresses() =>
+        Assert("presses", "QA-RIG", _blocked.Count == 0, $"{_presses} presses, {_blocked.Count} blocked, {_direct.Count} direct by step",
+            _blocked.Count > 0 ? "Not under the pointer (an overlay or the target off screen): " + Join(_blocked)
+                : _direct.Count > 0 ? "Allowed direct: " + Join(_direct) : "every press reached its target under the pointer");
+
+    /// <summary>
+    /// A run that ends without <see cref="Finish"/> (its deadline, the
+    /// harness's Reset, play mode left by hand, the player closed): puts back
+    /// everything the run changed (the real input devices, the frame rate,
+    /// the seed, the hour) and writes a failed run.json with what it did so
+    /// far, done.txt "aborted".
+    /// </summary>
+    private void OnDestroy()
+    {
+        if (Done || Scenario == null)
+            return;
+        try
+        {
+            if (Cameras != null)
+                Cameras.Flush();
+            _steps.Add(new QaStepResult { i = _steps.Count, op = "aborted", ok = false, note = "The run was stopped before its end (its deadline, a harness reset, play mode left or the player closed)." });
+            Assert("console", "QA-RIG", _errors == 0, $"errors {_errors}, warnings {_warnings}", "warnings.txt lists every warning and error logged before the stop");
+            AssertPresses();
+            CleanUp();
+            Report = BuildReport();
+            Report.ok = false;
+            File.WriteAllText(Path.Combine(OutDir, "run.json"), JsonUtility.ToJson(Report, true));
+            File.WriteAllText(Path.Combine(OutDir, "done.txt"), "aborted");
+        }
+        catch (Exception e) when (e is IOException || e is UnauthorizedAccessException || e is NullReferenceException)
+        {
+        }
+        finally
+        {
+            CleanUp();
+        }
+    }
+
+    /// <summary>Puts back what the run changed (once): stops the recorder (its frame rate), a drag's frame rate, the log hook and files, the seed, the hour, and the virtual input (the real devices come back).</summary>
+    private void CleanUp()
+    {
+        if (_cleanedUp)
+            return;
+        _cleanedUp = true;
+        if (Recorder != null)
+            Recorder.Stop();
+        if (_dragRestoreRate.HasValue)
+        {
+            Time.captureFramerate = _dragRestoreRate.Value;
+            _dragRestoreRate = null;
+        }
+        _measuringGc = false;
+        Application.logMessageReceived -= OnLog;
+        _warningLog?.Dispose();
+        _drags?.Dispose();
+        if (_oldSeed.HasValue && RunManager.HasInstance && RunManager.Instance.Config != null)
+            RunManager.Instance.Config.fixedRunSeed = _oldSeed.Value;
+        if (_hourForced)
+            DevToolsState.ForcedHour = null;
+        Input?.Dispose();
+    }
+
+    private QaRunReport BuildReport()
+    {
+        return new QaRunReport
+        {
+            scenario = Scenario.name,
+            owner = Scenario.owner,
+            player = !Application.isEditor,
+            unity = Application.unityVersion,
+            quality = QualityName(),
+            started = _started,
+            finished = DateTime.Now.ToString("s"),
+            errors = _errors,
+            warnings = _warnings,
+            // The log's lists outlive the component (OnDestroy may run after it is gone).
+            camera = (object)Cameras != null ? Cameras.Report().Summary() : string.Empty,
+            steps = _steps.ToArray(),
+            assertions = _assertions.ToArray(),
+        };
     }
 
     private void OnLog(string message, string stack, LogType type)
@@ -595,6 +747,8 @@ public sealed class QaRunner : MonoBehaviour
     private static string Join(List<string> items) => items.Count == 0 ? "none" : string.Join("; ", items.Take(20)) + (items.Count > 20 ? $"; ... {items.Count - 20} more" : string.Empty);
 
     private static string F(float v) => v.ToString("0.#", CultureInfo.InvariantCulture);
+
+    private static string QualityName() => QualitySettings.names[QualitySettings.GetQualityLevel()];
 
     /// <summary>A name made safe for a file or an id (letters, digits, '-' and '_').</summary>
     public static string Safe(string s) => new string((s ?? string.Empty).Select(ch => char.IsLetterOrDigit(ch) || ch == '-' || ch == '_' ? ch : '_').ToArray());

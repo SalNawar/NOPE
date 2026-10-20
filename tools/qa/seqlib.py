@@ -8,12 +8,14 @@ Everything works on numpy arrays, so it is unit-tested on synthetic frames (test
 - latency: GAME_FEEL_BIBLE check 2, frames from a press (events.tsv) to the first visible change, and to its cue;
 - frozen and cuts: BUG-31's "no frame repeated more than 0.25 s" and BUG-32's single-frame full-screen jumps;
 - blockiness: the 8x8 block-artefact ratio (VIS audit).
-A sequence folder is what SeqRecorder writes: f0000.png ..., frames.tsv, events.tsv.
+A sequence folder is what SeqRecorder writes: f0000.png ..., frames.tsv, events.tsv, meta.json (a timing sequence,
+recorded after the op realtime n=1, has no frames: only frames.tsv's real frame times, for the hitch analysis).
 """
 import csv
 import glob
 import json
 import os
+import re
 import datetime
 
 import numpy as np
@@ -28,6 +30,17 @@ FPS = 30
 def frame_files(seq):
     """The sequence's frames in order."""
     return sorted(glob.glob(os.path.join(seq, 'f*.png')))
+
+
+def is_timing(seq):
+    """True for a timing sequence (meta.json frames false, or fixedStep false from before the frames key): real frame
+    times only, no captured frames."""
+    path = os.path.join(seq, 'meta.json')
+    if not os.path.exists(path):
+        return False
+    with open(path, encoding='utf-8-sig') as f:
+        meta = json.load(f)
+    return not meta.get('frames', meta.get('fixedStep', True))
 
 
 def read_tsv(path):
@@ -437,10 +450,11 @@ def blockiness(rgba):
 # ----------------------------------------------------------------------------------------------------------------------
 # Gate results (Library/QA/results/<id>.json, read by DemoGate; the C# QaGateResult's fields)
 
-def gate_result(rid, owner, ok, measured, detail, commit='', source='', built_player=False):
-    """A gate result dict in QaGateResult's shape."""
+def gate_result(rid, owner, ok, measured, detail, commit='', source='', built_player=False, dirty=False):
+    """A gate result dict in QaGateResult's shape (dirty: measured on uncommitted changes, so not a measurement of
+    commit; DemoGate counts it as stale)."""
     return {'id': rid, 'owner': owner, 'pass': bool(ok), 'measured': measured, 'detail': detail, 'commit': commit or '',
-            'written': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'), 'source': source,
+            'dirty': bool(dirty), 'written': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'), 'source': source,
             'builtPlayer': bool(built_player)}
 
 
@@ -458,11 +472,56 @@ def write_result(folder, result):
     return path
 
 
-def results_from_run(run, commit, source, built_player):
+def results_from_run(run, commit, source, built_player, dirty=False):
     """A run.json's assertions as gate results (GateResults.FromRun: built-player ids get the 'bp.' prefix)."""
     out = []
     for a in run.get('assertions', []):
         rid = ('bp.' if built_player else '') + a.get('id', '')
         out.append(gate_result(rid, a.get('owner', ''), a.get('pass', False), a.get('measured', ''), a.get('detail', ''),
-                               commit, source, built_player))
+                               commit, source, built_player, dirty))
     return out
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# The known-red list (tools/qa/gate_known_red.txt; DemoGate.ParseKnownRed / KnownRedRunPatterns / JudgeRun)
+
+def matches(pattern, rid):
+    """GateResults.Matches: '*' matches any run of characters, on the whole id, case-insensitive."""
+    if pattern is None or rid is None:
+        return False
+    rx = '^' + '.*'.join(re.escape(p) for p in pattern.split('*')) + '$'
+    return re.match(rx, rid, re.IGNORECASE) is not None
+
+
+def known_red_run_patterns(text):
+    """The run patterns of the known-red list: every word after a line's check id (before its '#')."""
+    out = []
+    for raw in (text or '').split('\n'):
+        line = raw.strip()
+        if not line or line.startswith('#'):
+            continue
+        words = line.split('#', 1)[0].split()
+        for w in words[1:]:
+            if w not in out:
+                out.append(w)
+    return out
+
+
+def judge(failures, patterns):
+    """Splits failures [(id, line)] into (unexpected lines, known-red lines) by the known-red run patterns."""
+    unexpected, known = [], []
+    for rid, line in failures:
+        (known if any(matches(p, rid) for p in patterns) else unexpected).append(line)
+    return unexpected, known
+
+
+def judge_run(run, patterns):
+    """DemoGate.JudgeRun: a run.json's failed steps and red assertions as (unexpected, known red) lines."""
+    unexpected = [f"step {s.get('i')} {s.get('op')}: {s.get('note', '')}" for s in run.get('steps', []) if not s.get('ok')]
+    red = [(a.get('id', ''), f"{a.get('id', '')} [{a.get('owner', '')}] {a.get('measured', '')}: {a.get('detail', '')}")
+           for a in run.get('assertions', []) if not a.get('pass')]
+    more, known = judge(red, patterns)
+    unexpected += more
+    if not run.get('ok') and not unexpected and not known:
+        unexpected.append('the run stopped before its last step')
+    return unexpected, known

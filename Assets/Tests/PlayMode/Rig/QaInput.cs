@@ -40,6 +40,7 @@ public sealed class QaInput : IDisposable
     private readonly List<InputDevice> _disabled = new List<InputDevice>();
     private readonly InputSettings.BackgroundBehavior _background;
     private Key _held = Key.None;
+    private bool _disposed;
 
     /// <summary>Adds the virtual devices, makes them current and disables every other pointer and keyboard.</summary>
     public QaInput()
@@ -113,9 +114,12 @@ public sealed class QaInput : IDisposable
             Pressed?.Invoke("key", _held.ToString());
     }
 
-    /// <summary>Removes the virtual devices, re-enables the devices it disabled and restores the background behaviour.</summary>
+    /// <summary>Removes the virtual devices, re-enables the devices it disabled and restores the background behaviour (once; later calls do nothing).</summary>
     public void Dispose()
     {
+        if (_disposed)
+            return;
+        _disposed = true;
         if (Mouse != null && Mouse.added)
             InputSystem.RemoveDevice(Mouse);
         if (Keyboard != null && Keyboard.added)
@@ -127,6 +131,37 @@ public sealed class QaInput : IDisposable
         InputSystem.settings.backgroundBehavior = _background;
         if (Current == this)
             Current = null;
+    }
+
+    /// <summary>
+    /// Undoes what a run that never reached <see cref="Dispose"/> left behind
+    /// (a crash, a domain reload, a run stopped from outside; the editor
+    /// harness calls it on every restore): disposes <see cref="Current"/>;
+    /// then, when a QaMouse or QaKeyboard device is still added (the input
+    /// system keeps devices across the editor's domain reloads, so one left
+    /// behind marks a run that never gave the input back), removes it and
+    /// enables every disabled pointer and keyboard, which that run disabled.
+    /// Returns how many devices it changed (0 when nothing was left behind).
+    /// </summary>
+    public static int ReleaseStray()
+    {
+        Current?.Dispose();
+        var stray = new List<InputDevice>();
+        foreach (InputDevice device in InputSystem.devices)
+            if (device.name.StartsWith("QaMouse", StringComparison.Ordinal) || device.name.StartsWith("QaKeyboard", StringComparison.Ordinal))
+                stray.Add(device);
+        if (stray.Count == 0)
+            return 0;
+        foreach (InputDevice device in stray)
+            InputSystem.RemoveDevice(device);
+        int changed = stray.Count;
+        var disabled = new List<InputDevice>();
+        foreach (InputDevice device in InputSystem.devices)
+            if ((device is Pointer || device is Keyboard) && !device.enabled)
+                disabled.Add(device);
+        foreach (InputDevice device in disabled)
+            InputSystem.EnableDevice(device);
+        return changed + disabled.Count;
     }
 }
 #endif

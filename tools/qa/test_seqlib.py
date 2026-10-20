@@ -221,10 +221,47 @@ class ResultTests(unittest.TestCase):
         self.assertEqual('bp.bp_smoke.console', r['id'])
         self.assertTrue(r['builtPlayer'])
         self.assertEqual('abc', r['commit'])
-        self.assertEqual(set(r), {'id', 'owner', 'pass', 'measured', 'detail', 'commit', 'written', 'source', 'builtPlayer'})
+        self.assertFalse(r['dirty'])
+        self.assertEqual(set(r), {'id', 'owner', 'pass', 'measured', 'detail', 'commit', 'dirty', 'written', 'source', 'builtPlayer'})
+        self.assertTrue(seqlib.results_from_run(run, 'abc', 'dir', True, True)[0]['dirty'])
 
     def test_file_names_match_the_csharp_side(self):
         self.assertEqual('bp.a_b.c.json', seqlib.result_file_name('bp.a b.c'))
+
+
+class KnownRedTests(unittest.TestCase):
+    """The known-red run patterns (DemoGate.KnownRedRunPatterns / JudgeRun's Python twin, for run_player.py)."""
+
+    TEXT = '# h\nqa.play.camera   *.camera *.camera.*  # BUG-17, CAM\nqa.bp.x  # BUG-2\nqa.y bp.*.seq.*.flicker *.camera\n'
+
+    def test_patterns_are_the_words_after_the_check(self):
+        self.assertEqual(['*.camera', '*.camera.*', 'bp.*.seq.*.flicker'], seqlib.known_red_run_patterns(self.TEXT))
+
+    def test_matches_is_the_csharp_wildcard(self):
+        self.assertTrue(seqlib.matches('*.camera', 'bp_smoke.camera'))
+        self.assertFalse(seqlib.matches('*.camera', 'bp_smoke.cameraX'))
+        self.assertTrue(seqlib.matches('bp.*.seq.*.flicker', 'BP.bp_smoke.seq.h2.flicker'))
+
+    def test_only_known_red_passes_a_regression_or_a_failed_step_does_not(self):
+        pats = seqlib.known_red_run_patterns(self.TEXT)
+        run = {'ok': False, 'steps': [{'i': 0, 'op': 'title', 'ok': True}],
+               'assertions': [{'id': 'bp_smoke.camera', 'pass': False}, {'id': 'bp_smoke.console', 'pass': True}]}
+        unexpected, known = seqlib.judge_run(run, pats)
+        self.assertEqual([], unexpected)
+        self.assertEqual(1, len(known))
+        run['assertions'].append({'id': 'bp_smoke.presses', 'pass': False})
+        self.assertEqual(1, len(seqlib.judge_run(run, pats)[0]))
+        run = {'ok': False, 'steps': [{'i': 4, 'op': 'sign', 'ok': False, 'note': 'timed out'}], 'assertions': []}
+        self.assertIn('step 4 sign', seqlib.judge_run(run, pats)[0][0])
+        self.assertEqual(['the run stopped before its last step'], seqlib.judge_run({'ok': False, 'steps': [], 'assertions': []}, pats)[0])
+
+    def test_the_projects_list_spares_the_open_parts_only(self):
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gate_known_red.txt'), encoding='utf-8') as f:
+            pats = seqlib.known_red_run_patterns(f.read())
+        for rid in ('bp_smoke.camera', 'bp_smoke.liberationSans.desk', 'bp.bp_smoke.seq.handover.flicker'):
+            self.assertTrue(any(seqlib.matches(p, rid) for p in pats), rid)
+        for rid in ('bp_smoke.console', 'bp_smoke.presses', 'bp.bp_smoke.gc.steady', 'bp.bp_smoke.seq.callnext.hitches', 'bp.bp_smoke.seq.x.flash'):
+            self.assertFalse(any(seqlib.matches(p, rid) for p in pats), rid)
 
 
 class CliTests(unittest.TestCase):
@@ -261,6 +298,29 @@ class CliTests(unittest.TestCase):
 
     def test_all_passes_at_the_default_limits_and_skips_latency_without_presses(self):
         self.assertEqual(0, seqtools.main(['all', self.seq]))
+
+    def test_dirty_marks_the_result(self):
+        results = os.path.join(self.root, 'results')
+        seqtools.main(['flicker', self.seq, '--result-dir', results, '--commit', 'abc', '--dirty'])
+        with open(os.path.join(results, 'smoke_day1.seq.idle.flicker.json'), encoding='utf-8') as f:
+            self.assertTrue(json.load(f)['dirty'])
+
+    def test_all_on_a_timing_sequence_measures_hitches_only(self):
+        timing = os.path.join(self.root, 'smoke_day1_20261020_120000', 'seq', 'callnext')
+        os.makedirs(timing)
+        rows = ['i\tframe\ttime\tunscaled\ttimeScale\tscreenW\tscreenH\tcapW\tcapH\tmx\tmy\tdown\tgcBytes\tmainMs\tdtMs\ttracked\textra']
+        rows += [f'{i}\t{600 + i}\t0\t0\t1\t1920\t1080\t0\t0\t90\t50\t0\t0\t1\t{48 if i == 5 else 16.7}\t\t' for i in range(20)]
+        with open(os.path.join(timing, 'frames.tsv'), 'w', encoding='utf-8') as f:
+            f.write('\n'.join(rows) + '\n')
+        with open(os.path.join(timing, 'events.tsv'), 'w', encoding='utf-8') as f:
+            f.write('frame\ti\tunscaled\tchannel\tname\n')
+        with open(os.path.join(timing, 'meta.json'), 'w', encoding='utf-8') as f:
+            f.write('{"fixedStep": false, "frames": false, "fps": 30}\n')
+        self.assertTrue(seqlib.is_timing(timing))
+        self.assertFalse(seqlib.is_timing(self.seq))
+        results = os.path.join(self.root, 'results')
+        self.assertEqual(1, seqtools.main(['all', timing, '--result-dir', results, '--commit', 'abc']))
+        self.assertEqual(['smoke_day1.seq.callnext.hitches.json'], os.listdir(results))
 
     def test_gif_sheet_and_side_by_side(self):
         self.assertEqual(0, seqtools.main(['gif', self.seq, os.path.join(self.root, 'a.gif'), '--scale', '1']))

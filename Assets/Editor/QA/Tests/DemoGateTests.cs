@@ -92,6 +92,83 @@ public class DemoGateTests
         }
     }
 
+    [Test]
+    public void ParseKnownRed_TakesTheFirstWordAsTheCheck_AndTheRestAsRunPatterns()
+    {
+        const string text = "# h\nqa.play.camera   *.camera *.camera.*  # BUG-17, CAM\nqa.bp.x  # BUG-2, QA-RIG\nqa.y bp.*.seq.*.flicker *.camera\n";
+        CollectionAssert.AreEquivalent(new[] { "qa.play.camera", "qa.bp.x", "qa.y" }, DemoGate.ParseKnownRed(text).Keys);
+        Assert.AreEqual("BUG-17, CAM", DemoGate.ParseKnownRed(text)["qa.play.camera"]);
+        CollectionAssert.AreEqual(new[] { "*.camera", "*.camera.*", "bp.*.seq.*.flicker" }, DemoGate.KnownRedRunPatterns(text));
+    }
+
+    private static QaRunReport Run(bool ok, params QaAssertion[] assertions) => new QaRunReport
+    {
+        scenario = "smoke_day1",
+        ok = ok,
+        steps = new[] { new QaStepResult { i = 0, op = "title", ok = true } },
+        assertions = assertions,
+    };
+
+    private static QaAssertion A(string id, bool pass) => new QaAssertion { id = id, owner = "QA-RIG", pass = pass, measured = "m", detail = "d" };
+
+    [Test]
+    public void JudgeRun_OnlyKnownRed_IsOk_AndSaysSo()
+    {
+        RunVerdict v = DemoGate.JudgeRun(Run(false, A("smoke_day1.console", true), A("smoke_day1.camera", false), A("smoke_day1.liberationSans.desk", false)),
+            new[] { "*.camera", "*.liberationSans.*" });
+        Assert.IsTrue(v.Ok);
+        Assert.AreEqual(2, v.KnownRed.Count);
+        StringAssert.StartsWith("ok (2 known red", v.Line);
+        Assert.AreEqual("ok", DemoGate.JudgeRun(Run(true, A("smoke_day1.console", true)), new[] { "*.camera" }).Line);
+    }
+
+    [Test]
+    public void JudgeRun_ARegressionOrAFailedStepOrAnUnfinishedRun_Fails()
+    {
+        RunVerdict red = DemoGate.JudgeRun(Run(false, A("smoke_day1.camera", false), A("smoke_day1.presses", false)), new[] { "*.camera" });
+        Assert.IsFalse(red.Ok);
+        StringAssert.StartsWith("failed (1 unexpected, 1 known red)", red.Line);
+        StringAssert.Contains("smoke_day1.presses", red.Line);
+
+        QaRunReport step = Run(false);
+        step.steps = new[] { new QaStepResult { i = 3, op = "sign", ok = false, note = "timed out" } };
+        StringAssert.Contains("step 3 sign: timed out", DemoGate.JudgeRun(step, new string[0]).Line);
+
+        Assert.IsFalse(DemoGate.JudgeRun(Run(false), new string[0]).Ok, "not ok with nothing red: it stopped early");
+        Assert.IsFalse(DemoGate.JudgeRun(null, new string[0]).Ok);
+    }
+
+    [Test]
+    public void TheProjectsKnownRedList_SparesTheSmokeDaysOpenParts_AndNothingOfQaRigs()
+    {
+        string file = Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt");
+        List<string> patterns = DemoGate.KnownRedRunPatterns(File.ReadAllText(file));
+        foreach (string id in new[] { "smoke_day1.camera", "smoke_day1.camera.handover", "smoke_day1.liberationSans.desk", "smoke_day1.seq.handover.flicker", "bp.bp_smoke.seq.office_h2_idle.flicker" })
+            Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
+        foreach (string id in new[] { "smoke_day1.console", "smoke_day1.presses", "smoke_day1.quality", "smoke_day1.missingScripts.desk", "smoke_day1.materials.end", "smoke_day1.seq.handover.flash", "bp.bp_smoke.gc.steady", "bp.bp_smoke.seq.callnext.hitches" })
+            Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
+    }
+
+    [Test]
+    public void Judge_AResultMeasuredOnUncommittedChanges_FailsAsDirty()
+    {
+        QaGateResult dirty = R("smoke_day1.console", true);
+        dirty.dirty = true;
+        GateResult g = GateResults.Judge("c", "QA-RIG", "smoke_day1.*", new[] { dirty }, "abc", false);
+        Assert.IsFalse(g.Pass);
+        StringAssert.Contains("DIRTY smoke_day1.console", g.Detail);
+        StringAssert.Contains("1 dirty", g.Measured);
+        Assert.IsTrue(GateResults.FromRun(Run(true, A("smoke_day1.console", true)), "dir", "abc", false, true).Single().dirty);
+    }
+
+    [Test]
+    public void GitDirty_Filter_DropsUnitysChurn()
+    {
+        string output = "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset\nAssets/Scripts/GameManager.cs\n\n";
+        CollectionAssert.AreEqual(new[] { "Assets/Scripts/GameManager.cs" }, GitDirty.Filter(output));
+        CollectionAssert.IsEmpty(GitDirty.Filter("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset\r\n"));
+    }
+
     private static GateResult Throws() => throw new InvalidOperationException("boom");
 
     private static GateResult NullResult() => null;

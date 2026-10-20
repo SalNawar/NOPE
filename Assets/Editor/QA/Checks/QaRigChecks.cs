@@ -7,7 +7,7 @@ using UnityEngine;
 
 /// <summary>
 /// QA-RIG's gate checks (P0-B; BUG-53, BUG-30, BUG-65a, BUG-73a; FIX_PLAN_v2
-/// rules 9 and 13). Static: quality parity, previewHourOn off, the content
+/// rules 9 and 13). Static: the player's quality level, previewHourOn off, the content
 /// validator, scene integrity (missing scripts, broken materials, retired
 /// objects) and LiberationSans in the shipped scenes, SO fields with a
 /// reader, Phase B approvals and whole bundles. Play: the rig's self-test,
@@ -26,15 +26,20 @@ public static class QaRigChecks
     /// <summary>A local pointer to the run's R7 folder (one line), whose PHASEB/APPROVALS.md is read when the repository has none.</summary>
     public static string R7PointerPath => Path.Combine(GateResults.ProjectRoot, "Library", "QA", "r7.txt");
 
-    /// <summary>The editor plays at the Standalone player's quality level (BUG-53).</summary>
+    /// <summary>
+    /// QA can play at the Standalone player's quality level (BUG-53): the
+    /// settings name it. Every run then plays at it (QaPlayHarness sets it)
+    /// and asserts so (&lt;scenario&gt;.quality, which qa.play.smoke reads); the
+    /// editor's own level outside a run is not gated.
+    /// </summary>
     [GateCheck("qa.quality.parity", "QA-RIG")]
     public static GateResult QualityParity()
     {
         QaQuality.Levels file = QaQuality.Read(GateResults.ProjectRoot);
-        int live = QualitySettings.GetQualityLevel();
-        bool pass = file.Match && live == file.StandaloneDefault;
-        return GateResult.Of("qa.quality.parity", "QA-RIG", pass, QaQuality.Describe(file) + $", live editor level {file.Name(live)} ({live})",
-            pass ? string.Empty : "Set the editor's quality to the player's (Edit > Project Settings > Quality, or QualitySettings.asset m_CurrentQuality).");
+        return GateResult.Of("qa.quality.parity", "QA-RIG", file.HasStandaloneLevel, QaQuality.Describe(file),
+            file.HasStandaloneLevel
+                ? $"QA runs play at {file.Name(file.StandaloneDefault)}; smoke_day1.quality (qa.play.smoke) measures it"
+                : "QualitySettings.asset names no existing Standalone default level (m_PerPlatformDefaultQuality: Standalone), so QA cannot play at the player's level.");
     }
 
     /// <summary>No hall lighting asset ships with its preview hour on (it would freeze the hall's time).</summary>
@@ -144,9 +149,10 @@ public static class QaRigChecks
     [GateCheck("qa.play.selftest", "QA-RIG", GateKind.Play)]
     public static GateResult SelfTest() => GateResults.Require("qa.play.selftest", "QA-RIG", "selftest.selftest.*");
 
-    /// <summary>The smoke day passed at HEAD (QaJobs.Smoke): a clean console, and no missing script or broken material at any probe.</summary>
+    /// <summary>The smoke day passed at HEAD (QaJobs.Smoke): a clean console, every press reached its target under the pointer, the player's quality level, and no missing script or broken material at any probe.</summary>
     [GateCheck("qa.play.smoke", "QA-RIG", GateKind.Play)]
-    public static GateResult Smoke() => All("qa.play.smoke", "QA-RIG", false, "smoke_day1.console", "smoke_day1.missingScripts.*", "smoke_day1.materials.*");
+    public static GateResult Smoke() =>
+        All("qa.play.smoke", "QA-RIG", false, "smoke_day1.console", "smoke_day1.presses", "smoke_day1.quality", "smoke_day1.missingScripts.*", "smoke_day1.materials.*");
 
     /// <summary>In the smoke day every camera move had a tagged cause (a view key, the D1 tilt, the D6 focus, an impulse under its cap).</summary>
     [GateCheck("qa.play.camera", "CAM", GateKind.Play)]
@@ -172,10 +178,10 @@ public static class QaRigChecks
     [GateCheck("qa.perf.gcsites", "QA-RIG", GateKind.Play)]
     public static GateResult GcSites() => GateResults.Require("qa.perf.gcsites", "QA-RIG", "perf.gcsites");
 
-    /// <summary>The built player's smoke day passed at HEAD (tools/qa/run_player.py): a clean console, no missing script or broken material.</summary>
+    /// <summary>The built player's smoke day passed at HEAD (tools/qa/run_player.py): a clean console, every press reached its target under the pointer, no missing script or broken material.</summary>
     [GateCheck("qa.bp.smoke", "QA-RIG", GateKind.BuiltPlayer, DemoOnly = true)]
     public static GateResult BuiltPlayerSmoke() =>
-        All("qa.bp.smoke", "QA-RIG", true, "bp.bp_smoke.console", "bp.bp_smoke.missingScripts.*", "bp.bp_smoke.materials.*");
+        All("qa.bp.smoke", "QA-RIG", true, "bp.bp_smoke.console", "bp.bp_smoke.presses", "bp.bp_smoke.missingScripts.*", "bp.bp_smoke.materials.*");
 
     /// <summary>[BP] No pixel of the smoke day's sequences toggles more than twice in 10 s outside the expected motion (FIX_PLAN flicker pass).</summary>
     [GateCheck("qa.bp.flicker", "HALL-FX", GateKind.BuiltPlayer, DemoOnly = true)]
