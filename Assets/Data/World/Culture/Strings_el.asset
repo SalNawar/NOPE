@@ -1366,19 +1366,6 @@ MonoBehaviour:
     text: "\u0395\u03BD\u03B5\u03C1\u03B3\u03CC"
     gloss: 0
     tier: 0
-  - key: settings.machineCloseUps
-    text: "\u039A\u03BF\u03BD\u03C4\u03B9\u03BD\u03AC \u03C0\u03BB\u03AC\u03BD\u03B1
-      \u03BC\u03B7\u03C7\u03B1\u03BD\u03CE\u03BD"
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOn
-    text: "\u0395\u03BD\u03B5\u03C1\u03B3\u03AC"
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOff
-    text: "\u0391\u03BD\u03B5\u03BD\u03B5\u03C1\u03B3\u03AC"
-    gloss: 0
-    tier: 0
   - key: settings.desktop
     text: "\u03A4\u03B1 \u03B5\u03B9\u03BA\u03BF\u03BD\u03AF\u03B4\u03B9\u03B1 \u03B1\u03BD\u03BF\u03AF\u03B3\u03BF\u03C5\u03BD
       \u03BC\u03B5"
@@ -2977,13 +2964,6 @@ MonoBehaviour:
     tier: 0
   - key: controls.stampsTab
     text: "\u03A3\u03A4\u0391\u039C\u03A0\u0395\u03A3"
-    gloss: 0
-    tier: 0
-  - key: controls.inspectHint
-    text: "\u0395\u03A0\u0399\u0398\u0395\u03A9\u03A1\u0397\u03A3\u0397: \u03BA\u03AC\u03BD\u03B5
-      \u03BA\u03BB\u03B9\u03BA \u03C3\u03B5 \u03B4\u03CD\u03BF \u03C0\u03C1\u03AC\u03B3\u03BC\u03B1\u03C4\u03B1
-      \u03B3\u03B9\u03B1 \u03C3\u03CD\u03B3\u03BA\u03C1\u03B9\u03C3\u03B7. \u0394\u03B5\u03BE\u03AF
-      \u03BA\u03BB\u03B9\u03BA \u03AE Esc \u03B3\u03B9\u03B1 \u03AD\u03BE\u03BF\u03B4\u03BF."
     gloss: 0
     tier: 0
   - key: stamp.zone.handBack

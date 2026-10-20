@@ -1177,18 +1177,6 @@ MonoBehaviour:
     text: An
     gloss: 0
     tier: 0
-  - key: settings.machineCloseUps
-    text: Maschinen-Nahaufnahmen
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOn
-    text: An
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOff
-    text: Aus
-    gloss: 0
-    tier: 0
   - key: settings.desktop
     text: "Desktop-Symbole \xF6ffnen mit"
     gloss: 0
@@ -2487,11 +2475,6 @@ MonoBehaviour:
     tier: 0
   - key: controls.stampsTab
     text: STEMPEL
-    gloss: 0
-    tier: 0
-  - key: controls.inspectHint
-    text: "PR\xDCFEN: klicke zwei Dinge zum Vergleichen. Rechtsklick oder Esc zum
-      Verlassen."
     gloss: 0
     tier: 0
   - key: stamp.zone.handBack

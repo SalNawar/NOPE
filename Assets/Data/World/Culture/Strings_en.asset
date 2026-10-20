@@ -1251,18 +1251,6 @@ MonoBehaviour:
     text: On
     gloss: 0
     tier: 1
-  - key: settings.machineCloseUps
-    text: Machine close-ups
-    gloss: 0
-    tier: 1
-  - key: settings.machineCloseUpsOn
-    text: On
-    gloss: 0
-    tier: 1
-  - key: settings.machineCloseUpsOff
-    text: Off
-    gloss: 0
-    tier: 1
   - key: settings.desktop
     text: Desktop icons open with
     gloss: 0
@@ -2664,10 +2652,6 @@ MonoBehaviour:
     tier: 1
   - key: controls.stampsTab
     text: STAMPS
-    gloss: 0
-    tier: 1
-  - key: controls.inspectHint
-    text: 'INSPECT: click two things to compare. Right-click or Esc to leave.'
     gloss: 0
     tier: 1
   - key: stamp.zone.handBack

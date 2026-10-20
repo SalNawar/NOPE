@@ -1178,18 +1178,6 @@ MonoBehaviour:
     text: Attivata
     gloss: 0
     tier: 0
-  - key: settings.machineCloseUps
-    text: Primi piani delle macchine
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOn
-    text: Attivati
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOff
-    text: Disattivati
-    gloss: 0
-    tier: 0
   - key: settings.desktop
     text: Le icone del desktop si aprono con
     gloss: 0
@@ -2487,10 +2475,6 @@ MonoBehaviour:
     tier: 0
   - key: controls.stampsTab
     text: TIMBRI
-    gloss: 0
-    tier: 0
-  - key: controls.inspectHint
-    text: 'ISPEZIONE: clicca due cose per confrontarle. Clic destro o Esc per uscire.'
     gloss: 0
     tier: 0
   - key: stamp.zone.handBack

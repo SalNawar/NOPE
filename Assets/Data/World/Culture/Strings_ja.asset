@@ -1170,18 +1170,6 @@ MonoBehaviour:
     text: "\u30AA\u30F3"
     gloss: 0
     tier: 0
-  - key: settings.machineCloseUps
-    text: "\u6A5F\u68B0\u306E\u30AF\u30ED\u30FC\u30BA\u30A2\u30C3\u30D7"
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOn
-    text: "\u30AA\u30F3"
-    gloss: 0
-    tier: 0
-  - key: settings.machineCloseUpsOff
-    text: "\u30AA\u30D5"
-    gloss: 0
-    tier: 0
   - key: settings.desktop
     text: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\u30A2\u30A4\u30B3\u30F3\u3092\u958B\u304F\u64CD\u4F5C"
     gloss: 0
@@ -2471,10 +2459,6 @@ MonoBehaviour:
     tier: 0
   - key: controls.stampsTab
     text: "\u30B9\u30BF\u30F3\u30D7"
-    gloss: 0
-    tier: 0
-  - key: controls.inspectHint
-    text: "\u691C\u67FB: 2\u3064\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u7167\u5408\u3002\u53F3\u30AF\u30EA\u30C3\u30AF\u304BEsc\u3067\u7D42\u4E86\u3002"
     gloss: 0
     tier: 0
   - key: stamp.zone.handBack
