@@ -18,13 +18,20 @@ using UnityEngine;
 /// and its cheats are compiled out as in any release build. It refuses before
 /// building when the first scene is not RunConfig's title scene, when a scene
 /// the game loads by name (RunConfig's title, art office, gameplay layer and
-/// Home) is not enabled, or when the output would land inside Assets. The
+/// Home) is not enabled, or when the output would land inside Assets. It also
+/// refuses when the demo gate refuses (P0-B QA-RIG, BUG-53: DemoGate at
+/// GateLevel.Demo runs every registered gate check: the content validator,
+/// previewHourOn off, zero missing scripts and broken materials, the smoke
+/// day's clean console, the built player's flicker sequences and every
+/// track's checks; Library/QA/DemoGate/report_demo.md says why). The
 /// product name, company and version come from PlayerSettings. Every run writes
 /// a summary (result, size, time, errors) to a text file beside the output
 /// folder (<see cref="ReportPathFor"/>). Callable from the menu, from the
 /// editor's job runner (<see cref="BuildWindowsDemo"/>, parameterless) and
 /// from the command line: -executeMethod DemoBuild.BuildWindowsDemo
-/// [-demoBuildPath &lt;exe path&gt;].
+/// [-demoBuildPath &lt;exe path&gt;]. <see cref="BuildScratch"/> builds a
+/// non-demo player from the same scenes without the gate (the QA player,
+/// BuiltPlayerCapture).
 /// </summary>
 public static class DemoBuild
 {
@@ -62,20 +69,44 @@ public static class DemoBuild
     }
 
     /// <summary>
-    /// Builds the Windows 64-bit release player to <paramref name="exePath"/>
-    /// (its folder is created) and writes the summary to <see cref="ReportPathFor"/>.
-    /// Returns the build's result (Failed when it refused to start).
+    /// Builds the Windows 64-bit release demo to <paramref name="exePath"/>
+    /// (its folder is created) after the demo gate passes, and writes the
+    /// summary to <see cref="ReportPathFor"/>. Returns the build's result
+    /// (Failed when it refused to start: a build problem or a refusing gate).
     /// </summary>
     public static BuildResult Build(string exePath)
     {
         exePath = Path.GetFullPath(exePath);
+        DemoGateReport gate = DemoGate.Run(GateLevel.Demo);
+        var gateProblems = gate.Refused
+            ? gate.Reasons.Select(r => "DemoGate: " + r).ToList()
+            : new List<string>();
+        string gateLine = $"Gate:     {(gate.Refused ? "REFUSED" : "PASS")} ({gate.Results.Count(r => r.Pass)} pass, {gate.Results.Count(r => !r.Pass)} fail; {Path.Combine(DemoGate.ReportFolder, "report_demo.md")})";
+        return BuildPlayer(exePath, DemoCheats ? new[] { CheatsDefine } : Array.Empty<string>(), BuildOptions.None, gateProblems, gateLine);
+    }
+
+    /// <summary>
+    /// Builds a non-demo player from the demo's scenes to <paramref name="exePath"/>
+    /// with <paramref name="defines"/>, as a development build when
+    /// <paramref name="development"/> (the QA player: BuiltPlayerCapture).
+    /// The demo gate does not run: the output is never a demo.
+    /// </summary>
+    public static BuildResult BuildScratch(string exePath, string[] defines, bool development) =>
+        BuildPlayer(Path.GetFullPath(exePath), defines ?? Array.Empty<string>(), development ? BuildOptions.Development : BuildOptions.None,
+            new List<string>(), "Gate:     not run (a scratch player, never a demo)");
+
+    /// <summary>The build itself: the problems and <paramref name="refusals"/> refuse it; otherwise it builds and writes the summary.</summary>
+    private static BuildResult BuildPlayer(string exePath, string[] defines, BuildOptions buildOptions, List<string> refusals, string gateLine)
+    {
         string reportPath = ReportPathFor(exePath);
         string[] scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
+        var setup = new BuildSetup(defines, buildOptions, gateLine);
 
         List<string> problems = Problems(exePath, scenes);
+        problems.AddRange(refusals);
         if (problems.Count > 0)
         {
-            string refused = Summary(exePath, scenes, null, problems, 0L);
+            string refused = Summary(exePath, scenes, null, problems, 0L, setup);
             Directory.CreateDirectory(Path.GetDirectoryName(reportPath));
             File.WriteAllText(reportPath, refused);
             Debug.LogError("[DemoBuild] Refused to build:\n" + refused);
@@ -89,14 +120,14 @@ public static class DemoBuild
             locationPathName = exePath,
             target = BuildTarget.StandaloneWindows64,
             targetGroup = BuildTargetGroup.Standalone,
-            options = BuildOptions.None,
-            extraScriptingDefines = DemoCheats ? new[] { CheatsDefine } : Array.Empty<string>(),
+            options = buildOptions,
+            extraScriptingDefines = defines,
         };
 
         Debug.Log($"[DemoBuild] Building {PlayerSettings.productName} {PlayerSettings.bundleVersion} to {exePath}.");
         BuildReport report = BuildPipeline.BuildPlayer(options);
 
-        string summary = Summary(exePath, scenes, report, problems, FolderBytes(Path.GetDirectoryName(exePath)));
+        string summary = Summary(exePath, scenes, report, problems, FolderBytes(Path.GetDirectoryName(exePath)), setup);
         File.WriteAllText(reportPath, summary);
         if (report.summary.result == BuildResult.Succeeded)
             Debug.Log("[DemoBuild] " + summary);
@@ -143,16 +174,41 @@ public static class DemoBuild
         return problems;
     }
 
+    /// <summary>What a build was asked for: its scripting defines, its options and the gate's verdict line.</summary>
+    private readonly struct BuildSetup
+    {
+        /// <summary>The extra scripting defines.</summary>
+        public readonly string[] Defines;
+
+        /// <summary>The build options (Development for a scratch player).</summary>
+        public readonly BuildOptions Options;
+
+        /// <summary>The report's gate line.</summary>
+        public readonly string GateLine;
+
+        /// <summary>A setup from its parts.</summary>
+        public BuildSetup(string[] defines, BuildOptions options, string gateLine)
+        {
+            Defines = defines;
+            Options = options;
+            GateLine = gateLine;
+        }
+    }
+
     /// <summary>The report's text: what was built, from what, with what result, size, time and messages.</summary>
-    private static string Summary(string exePath, string[] scenes, BuildReport report, List<string> problems, long folderBytes)
+    private static string Summary(string exePath, string[] scenes, BuildReport report, List<string> problems, long folderBytes, BuildSetup setup)
     {
         var sb = new StringBuilder();
         sb.AppendLine("Time Sorter demo build report");
         sb.AppendLine($"Written:  {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
         sb.AppendLine($"Result:   {(report == null ? "Refused" : report.summary.result.ToString())}");
         sb.AppendLine($"Output:   {exePath}");
-        sb.AppendLine("Target:   StandaloneWindows64, release (not a development build)");
-        sb.AppendLine(DemoCheats ? $"Cheats:   on ({CheatsDefine}: F9 or ~ opens the cheat menu; DemoBuild.DemoCheats)" : "Cheats:   off (DemoBuild.DemoCheats)");
+        sb.AppendLine((setup.Options & BuildOptions.Development) != 0
+            ? "Target:   StandaloneWindows64, development build (a scratch player, not a demo)"
+            : "Target:   StandaloneWindows64, release (not a development build)");
+        sb.AppendLine(setup.Defines.Contains(CheatsDefine) ? $"Cheats:   on ({CheatsDefine}: F9 or ~ opens the cheat menu; DemoBuild.DemoCheats)" : "Cheats:   off (DemoBuild.DemoCheats)");
+        sb.AppendLine($"Defines:  {(setup.Defines.Length == 0 ? "none" : string.Join(";", setup.Defines))}");
+        sb.AppendLine(setup.GateLine);
         sb.AppendLine($"Product:  {PlayerSettings.productName}   Company: {PlayerSettings.companyName}   Version: {PlayerSettings.bundleVersion}   Unity: {Application.unityVersion}");
         sb.AppendLine("Scenes:");
         for (int i = 0; i < scenes.Length; i++)

@@ -1,0 +1,384 @@
+{
+  "name": "aspect_sweep",
+  "owner": "QA-RIG",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "The office at every aspect (A1-A4) and hour (H1-H5): a still and the probes each (missing scripts, broken materials, LiberationSans)"
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "hour",
+      "f": 9.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A1_H1"
+    },
+    {
+      "op": "probe",
+      "name": "A1_H1"
+    },
+    {
+      "op": "hour",
+      "f": 12.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A1_H2"
+    },
+    {
+      "op": "probe",
+      "name": "A1_H2"
+    },
+    {
+      "op": "hour",
+      "f": 16.75
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A1_H3"
+    },
+    {
+      "op": "probe",
+      "name": "A1_H3"
+    },
+    {
+      "op": "hour",
+      "f": 18.5
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A1_H4"
+    },
+    {
+      "op": "probe",
+      "name": "A1_H4"
+    },
+    {
+      "op": "hour",
+      "f": 22.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A1_H5"
+    },
+    {
+      "op": "probe",
+      "name": "A1_H5"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "hour",
+      "f": 9.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A2_H1"
+    },
+    {
+      "op": "probe",
+      "name": "A2_H1"
+    },
+    {
+      "op": "hour",
+      "f": 12.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A2_H2"
+    },
+    {
+      "op": "probe",
+      "name": "A2_H2"
+    },
+    {
+      "op": "hour",
+      "f": 16.75
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A2_H3"
+    },
+    {
+      "op": "probe",
+      "name": "A2_H3"
+    },
+    {
+      "op": "hour",
+      "f": 18.5
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A2_H4"
+    },
+    {
+      "op": "probe",
+      "name": "A2_H4"
+    },
+    {
+      "op": "hour",
+      "f": 22.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A2_H5"
+    },
+    {
+      "op": "probe",
+      "name": "A2_H5"
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "hour",
+      "f": 9.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A3_H1"
+    },
+    {
+      "op": "probe",
+      "name": "A3_H1"
+    },
+    {
+      "op": "hour",
+      "f": 12.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A3_H2"
+    },
+    {
+      "op": "probe",
+      "name": "A3_H2"
+    },
+    {
+      "op": "hour",
+      "f": 16.75
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A3_H3"
+    },
+    {
+      "op": "probe",
+      "name": "A3_H3"
+    },
+    {
+      "op": "hour",
+      "f": 18.5
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A3_H4"
+    },
+    {
+      "op": "probe",
+      "name": "A3_H4"
+    },
+    {
+      "op": "hour",
+      "f": 22.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A3_H5"
+    },
+    {
+      "op": "probe",
+      "name": "A3_H5"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "hour",
+      "f": 9.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A4_H1"
+    },
+    {
+      "op": "probe",
+      "name": "A4_H1"
+    },
+    {
+      "op": "hour",
+      "f": 12.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A4_H2"
+    },
+    {
+      "op": "probe",
+      "name": "A4_H2"
+    },
+    {
+      "op": "hour",
+      "f": 16.75
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A4_H3"
+    },
+    {
+      "op": "probe",
+      "name": "A4_H3"
+    },
+    {
+      "op": "hour",
+      "f": 18.5
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A4_H4"
+    },
+    {
+      "op": "probe",
+      "name": "A4_H4"
+    },
+    {
+      "op": "hour",
+      "f": 22.0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "office_A4_H5"
+    },
+    {
+      "op": "probe",
+      "name": "A4_H5"
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    }
+  ]
+}

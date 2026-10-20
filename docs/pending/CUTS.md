@@ -106,7 +106,7 @@ Branch `fix/p0-cuts`, cut from `fix/p0-carve` (f347060). Source: FIX_PLAN_v2.md 
 - **Kept on purpose:**
   - `MicroLensTests` (MicroLens stays with TOOLS: FIX_PLAN_v2 65c).
   - The tests that use "Step closer"/"Speak up" as fixture rows: InterviewScriptTests, VoiceChecksTests, VoicesTests, DialogChoiceKindsTests, SeedsTests, and a BubbleLayoutTests comment. They test the spoken-request mechanism, which still exists, with their own data, not the cut content.
-- **QA sweep** (`tools/audit/unity/_TimeDeskQASweep.cs.txt`):
+- **QA sweep** (`tools/audit/unity/_TimeDeskQASweep.cs.txt`; QA-RIG retired the file, so on integrate/p0 these edits went with it and the scenarios that port its checks must carry them):
   - the wheel step now checks that a click on the traveller opens nothing, then opens the wheel through the desk intercom's click;
   - the city-view checks no longer name the inspect button;
   - `TimeDesk.MachineCloseUps` is out of the preferences it saves and restores.
