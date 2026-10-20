@@ -47,15 +47,19 @@ using UnityEngine.UI;
 /// moment through the game's own calls (FeelDirector) and asserts the shake
 /// table's row it drew, or none (<c>shake.&lt;name&gt;.&lt;moment&gt;</c>), and
 /// that the papers moved no more than the row's cap.</item>
-/// <item><c>camchrome</c> (n = 1 starts, its target naming the plates the leg
-/// shows, "guide" on day 1; 0 stops; 2 shows the stamp hint plate as the
-/// counter's bounce does; name): every frame between, no shown chrome (the
-/// pull tabs, the Back control, "◀ City") is drawn over a held thing or over
-/// the reading view's framed work (<c>chrome.&lt;name&gt;</c>, BUG-59), and
-/// each overlay plate CAM measured over the work that showed gets its own
-/// line under its owner (<c>chrome.&lt;name&gt;.guide</c>, CONTENT;
-/// <c>.stamphint</c>, STAMP); a plate the leg showed that was never drawn
-/// gets a red "not measured" line under CAM; their alpha goes into the
+/// <item><c>camchrome</c> (n = 1 starts, its target naming what the leg
+/// shows: "held" for its drag's held decoration, "reading" for the reading
+/// view at rest, a plate's key, "guide" on day 1; 0 stops; 2 shows the stamp
+/// hint plate as the counter's bounce does; name): every frame between, no
+/// shown chrome (the pull tabs, the Back control, "◀ City") is drawn over a
+/// held thing or over the reading view's framed work
+/// (<c>chrome.&lt;name&gt;</c>, BUG-59; red when a half the leg shows was
+/// never seen), and each overlay plate CAM measured over the work that was
+/// drawn gets its own line under its owner (<c>plate.&lt;name&gt;.guide</c>,
+/// CONTENT; <c>.stamphint</c>, STAMP); a plate the leg showed that was never
+/// drawn gets a red "not measured" line under CAM
+/// (<c>chrome.&lt;name&gt;.&lt;key&gt;</c>). The lines come from the pure
+/// <see cref="ShownBy"/> and <see cref="LegLines"/>; the alphas go into the
 /// recorder's rows.</item>
 /// <item><c>camtilts</c> (n = 1 starts, 0 stops; name): between, from the
 /// views' own turns (not the push-in's re-tags), every paper landing with
@@ -66,7 +70,9 @@ using UnityEngine.UI;
 /// the scripted day 12 with the virtual mouse: every counter paper dropped on
 /// the mat (every other one from the office view), the Auto-Feed tray
 /// clicked and its stack scanned, n scans finished on the scanner's bed, f
-/// chip reads on the reader, the intercom's wheel opened and a ring question
+/// chip reads on the reader, each counted only once its paper came back out
+/// (a stuck read ends the reads: the reader refuses the next paper while it
+/// holds one), the intercom's wheel opened and a ring question
 /// answered (a home the reading view shows too little of reached from the
 /// office view, as a player turns back); <c>play.&lt;name&gt;</c> passes on
 /// exactly those counts. The Rolodex's right-click is the one gap (QaInput
@@ -601,22 +607,22 @@ public static class CamOps
 
     // ------------------------------------------------------------------ camchrome
 
-    /// <summary>One watched piece of the overlay: its path, object and fade, the assertion it reports under (null: CAM's own chrome) and its owner, and its counts.</summary>
+    /// <summary>One watched piece of the overlay: its path, object and fade, its plate's key (null: CAM's own chrome), and its counts.</summary>
     private sealed class Watched
     {
-        public string Path, Key, Owner;
+        public string Path, Key;
         public GameObject Go;
         public CanvasGroup Group;
         public int Shown, Over;
         public readonly List<string> Notes = new List<string>();
     }
 
-    /// <summary>A running chrome watch (camchrome n = 1 to n = 0), with the keys of the plates its leg shows (each must report a line).</summary>
+    /// <summary>A running chrome watch (camchrome n = 1 to n = 0), with what its leg shows (<see cref="ShownBy"/>: each must be seen).</summary>
     private sealed class ChromeWatch
     {
         public readonly List<Watched> Controls = new List<Watched>();
         public readonly List<string> Violations = new List<string>();
-        public readonly HashSet<string> Expected = new HashSet<string>();
+        public readonly HashSet<string> Shows = new HashSet<string>();
         public int Frames, HoldingFrames, ReadingFrames, Over;
         public bool Running;
     }
@@ -628,108 +634,227 @@ public static class CamOps
 
     /// <summary>
     /// The overlay's plates CAM measured over the reading view's work (CAM.md's
-    /// hand-offs), each its own assertion under its owner until it moves: the
+    /// hand-offs), each its own line under its owner until it moves: the
     /// guide's prompt plate (CONTENT; day 1, over the intercom's top) and the
-    /// stamp hint plate (STAMP; over the rack). Both are under the gate's
-    /// <c>cam_chrome.chrome.*</c>, so <c>cam.play.chrome</c> stays red while
-    /// either covers the work, and while a plate the leg shows is never drawn
-    /// (<see cref="PlateLine"/>).
+    /// stamp hint plate (STAMP; over the rack). Their lines
+    /// (<c>plate.&lt;leg&gt;.&lt;key&gt;</c>) are outside CAM's
+    /// <c>cam_chrome.chrome.*</c>: each owner's own gate reads them
+    /// (CamChecks' <c>cam.play.guidePlate</c>, CONTENT;
+    /// <c>cam.play.stampHint</c>, STAMP), so <c>cam.play.chrome</c> goes
+    /// green on CAM's own chrome while they are red. A plate a leg shows that
+    /// is never drawn is CAM's red "not measured" line
+    /// (<c>chrome.&lt;leg&gt;.&lt;key&gt;</c>, <see cref="LegLines"/>).
     /// </summary>
     private static readonly (string path, string key, string owner)[] Plates = { ("GuidePrompt/Plate", "guide", "CONTENT"), ("StampBar/Hint", StampHint, "STAMP") };
 
-    /// <summary>The stamp hint plate's key (its line: <c>chrome.&lt;leg&gt;.stamphint</c>); camchrome n = 2 shows it.</summary>
+    /// <summary>The stamp hint plate's key (its line: <c>plate.&lt;leg&gt;.stamphint</c>); camchrome n = 2 shows it.</summary>
     private const string StampHint = "stamphint";
+
+    /// <summary>What a chrome leg shows besides its plates (camchrome n = 1's target): a held thing (the leg's drag holds a decoration).</summary>
+    public const string ShowsHeld = "held";
+
+    /// <summary>What a chrome leg shows besides its plates (camchrome n = 1's target): the reading view at rest.</summary>
+    public const string ShowsReading = "reading";
 
     /// <summary>The note the counter's bounce shows on the stamp hint plate (DeskController: a paper dropped back on the counter before the verdict).</summary>
     private const string BounceNote = "stamp.refused.handBackFirst";
 
     /// <summary>
-    /// The plates a chrome leg shows, from camchrome n = 1's target (keys
-    /// split on commas and spaces: "guide" for the day-1 leg, where the guide's
-    /// prompt plate shows); empty for none. An unknown key throws, so a typo
-    /// cannot drop the expectation in silence.
+    /// What a camchrome step makes its leg show (pure). n = 1 (the leg's
+    /// start): its target's keys, split on commas and spaces: a plate's key
+    /// ("guide" on day 1, where the guide's prompt plate shows),
+    /// <see cref="ShowsHeld"/> (the leg's drag holds a decoration) and
+    /// <see cref="ShowsReading"/> (the reading view comes to rest). n = 2: the
+    /// stamp hint plate, shown as the counter's bounce shows it. Every shown
+    /// thing is due in the leg's report (<see cref="LegLines"/>), seen or not.
+    /// An unknown key or step throws, so a typo cannot drop an expectation in
+    /// silence.
     /// </summary>
-    public static List<string> ExpectedPlates(string target)
+    public static List<string> ShownBy(int n, string target)
     {
+        if (n == 2)
+            return new List<string> { StampHint };
+        if (n != 1)
+            throw new InvalidOperationException($"camchrome: a step with n = {n} shows nothing (1 starts a leg, 2 shows the stamp hint, 0 ends the leg).");
         var keys = new List<string>();
         foreach (string key in (target ?? string.Empty).Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
         {
-            if (Array.FindIndex(Plates, p => p.key == key) < 0)
-                throw new InvalidOperationException($"camchrome: no plate '{key}' (the plates: {string.Join(", ", Plates.Select(p => p.key))}).");
+            if (key != ShowsHeld && key != ShowsReading && Array.FindIndex(Plates, p => p.key == key) < 0)
+                throw new InvalidOperationException($"camchrome: a leg cannot show '{key}' (the plates: {string.Join(", ", Plates.Select(p => p.key))}; or {ShowsHeld}, {ShowsReading}).");
             keys.Add(key);
         }
         return keys;
     }
 
-    /// <summary>
-    /// The line one overlay plate reports at the end of a chrome leg
-    /// (camchrome n = 0), pure. A plate drawn in the leg is judged under its
-    /// owner, red while it covered the work. A plate the leg showed (camchrome
-    /// n = 2, the stamp hint as the counter's bounce shows it; n = 1's target,
-    /// the day-1 guide) but that was drawn 0 frames, or was not found, is a red
-    /// "not measured" line under CAM: silence would let <c>cam.play.chrome</c>
-    /// go green by absence. A plate neither drawn nor shown reports nothing.
-    /// </summary>
-    public readonly struct PlateLine
+    /// <summary>What a chrome watch counted over its leg (the input of <see cref="LegLines"/>).</summary>
+    public struct ChromeTally
     {
-        /// <summary>True when the leg reports a line for the plate.</summary>
-        public readonly bool Reported;
+        /// <summary>Frames watched.</summary>
+        public int Frames;
 
-        /// <summary>The line's verdict.</summary>
-        public readonly bool Pass;
+        /// <summary>Frames with something held (HoldRegistry.Desk).</summary>
+        public int HoldingFrames;
 
-        /// <summary>Whose line it is: the plate's owner when it was drawn, CAM when the rig measured nothing.</summary>
-        public readonly string Owner;
+        /// <summary>Frames with the reading view on and at rest.</summary>
+        public int ReadingFrames;
 
-        /// <summary>The line's measured text.</summary>
-        public readonly string Measured;
+        /// <summary>Frames with CAM's own chrome over the held thing or the framed work.</summary>
+        public int Over;
 
-        private PlateLine(bool pass, string owner, string measured)
+        /// <summary>CAM's controls not found when the watch began, comma-separated (empty: none).</summary>
+        public string Missing;
+
+        /// <summary>The screen the leg ran at ("1920x1080").</summary>
+        public string ScreenSize;
+
+        /// <summary>The first frames CAM's chrome covered the work (at most 12).</summary>
+        public IReadOnlyList<string> Violations;
+    }
+
+    /// <summary>What a chrome watch saw of one plate it found when it began: frames drawn, frames over the work and their notes.</summary>
+    public readonly struct PlateSeen
+    {
+        /// <summary>The plate's key (<see cref="Plates"/>).</summary>
+        public readonly string Key;
+
+        /// <summary>Frames the plate was drawn.</summary>
+        public readonly int Shown;
+
+        /// <summary>Of those, frames over the held thing or the framed work.</summary>
+        public readonly int Over;
+
+        /// <summary>The first frames it covered the work (at most 12).</summary>
+        public readonly IReadOnlyList<string> Notes;
+
+        /// <summary>The plate <paramref name="key"/>, drawn <paramref name="shown"/> frames, <paramref name="over"/> of them over the work.</summary>
+        public PlateSeen(string key, int shown, int over, IReadOnlyList<string> notes)
         {
-            Reported = true;
-            Pass = pass;
-            Owner = owner;
-            Measured = measured;
-        }
-
-        /// <summary>The line for the plate at <paramref name="path"/> of <paramref name="owner"/>: <paramref name="expected"/> (the leg showed it), <paramref name="found"/> (loaded when the watch began), drawn <paramref name="shown"/> frames, <paramref name="over"/> of them over the work.</summary>
-        public static PlateLine Of(string path, string owner, bool expected, bool found, int shown, int over)
-        {
-            if (found && shown > 0)
-                return new PlateLine(over == 0, owner, $"{path} shown {shown} frames, {over} over the work");
-            if (!expected)
-                return default;
-            return new PlateLine(false, CamOps.Owner, found ? $"not measured: {path} shown 0 frames" : $"not measured: {path} not found");
+            Key = key;
+            Shown = shown;
+            Over = over;
+            Notes = notes ?? Array.Empty<string>();
         }
     }
+
+    /// <summary>One line of a chrome leg's report: its id in the scenario, its owner, its verdict and its texts.</summary>
+    public readonly struct ChromeLine
+    {
+        /// <summary>The assertion's id under the scenario (<c>chrome.&lt;leg&gt;</c>, <c>chrome.&lt;leg&gt;.&lt;key&gt;</c>, <c>plate.&lt;leg&gt;.&lt;key&gt;</c>).</summary>
+        public readonly string Id;
+
+        /// <summary>Whose line it is: CAM's for its own chrome and for a plate it could not measure, the plate's owner for a drawn plate.</summary>
+        public readonly string Owner;
+
+        /// <summary>The verdict.</summary>
+        public readonly bool Pass;
+
+        /// <summary>The measured text.</summary>
+        public readonly string Measured;
+
+        /// <summary>What was checked, and what failed.</summary>
+        public readonly string Detail;
+
+        /// <summary>A line <paramref name="id"/> of <paramref name="owner"/>.</summary>
+        public ChromeLine(string id, string owner, bool pass, string measured, string detail)
+        {
+            Id = id;
+            Owner = owner;
+            Pass = pass;
+            Measured = measured;
+            Detail = detail;
+        }
+    }
+
+    /// <summary>
+    /// A chrome leg's report (pure; camchrome n = 0), from what the leg
+    /// <paramref name="shows"/> (<see cref="ShownBy"/> of its steps), the
+    /// watch's <paramref name="tally"/> and each plate it found
+    /// (<paramref name="seen"/>; a plate missing from it was not found).
+    /// <list type="bullet">
+    /// <item><c>chrome.&lt;leg&gt;</c>, CAM's: no tab, Back control or city tab
+    /// drawn over a held thing or the reading view's framed work, at least one
+    /// frame watched, and each half the leg shows seen: a held thing on at
+    /// least one frame (<see cref="ShowsHeld"/>), the reading view at rest on
+    /// at least one (<see cref="ShowsReading"/>), so neither half passes
+    /// untested.</item>
+    /// <item><c>plate.&lt;leg&gt;.&lt;key&gt;</c>, the plate's owner's, for each
+    /// plate drawn in the leg: red while it covered the work.</item>
+    /// <item><c>chrome.&lt;leg&gt;.&lt;key&gt;</c>, CAM's red "not measured"
+    /// line, for each plate the leg shows that was drawn 0 frames or not found:
+    /// silence would let the plate's gate pass by absence.</item>
+    /// </list>
+    /// A plate neither drawn nor shown reports nothing.
+    /// </summary>
+    public static List<ChromeLine> LegLines(string leg, ICollection<string> shows, ChromeTally tally, IEnumerable<PlateSeen> seen)
+    {
+        var lines = new List<ChromeLine>();
+        List<PlateSeen> plates = (seen ?? Enumerable.Empty<PlateSeen>()).ToList();
+        var unseen = new List<string>();
+        if (tally.Frames == 0)
+            unseen.Add("no frame was watched");
+        if (shows.Contains(ShowsHeld) && tally.HoldingFrames == 0)
+            unseen.Add("the leg's drag held nothing on any frame (a blocked press, or the decoration not draggable at this aspect), so 'no chrome over the held thing' went untested");
+        if (shows.Contains(ShowsReading) && tally.ReadingFrames == 0)
+            unseen.Add("the reading view never came to rest, so 'no chrome over its framed work' went untested");
+        string drawn = string.Join(", ", plates.Select(p => $"{PathOf(p.Key)} shown {p.Shown} frames"));
+        string why = string.Join("; ", unseen.Concat(tally.Violations ?? Array.Empty<string>()));
+        lines.Add(new ChromeLine($"chrome.{leg}", Owner, tally.Over == 0 && unseen.Count == 0,
+                                 $"{tally.Frames} frames watched ({tally.HoldingFrames} holding, {tally.ReadingFrames} in the reading view), {tally.Over} with chrome over the work, {tally.ScreenSize}" +
+                                 (string.IsNullOrEmpty(tally.Missing) ? "" : $"; not found: {tally.Missing}") + (drawn.Length > 0 ? $"; plates: {drawn}" : ""),
+                                 why.Length > 0 ? why : "no tab, Back control or city tab drawn over a held thing or the reading view's framed work (BUG-59)"));
+        foreach ((string path, string key, string owner) in Plates)
+        {
+            int at = plates.FindIndex(p => p.Key == key);
+            if (at >= 0 && plates[at].Shown > 0)
+            {
+                PlateSeen p = plates[at];
+                lines.Add(new ChromeLine($"plate.{leg}.{key}", owner, p.Over == 0, $"{path} shown {p.Shown} frames, {p.Over} over the work",
+                                         p.Notes.Count > 0 ? string.Join("; ", p.Notes) + $" (expected red until {owner} moves it: CAM.md's hand-offs)"
+                                                           : "the plate never covers a held thing or the reading view's framed work (BUG-59)"));
+            }
+            else if (shows.Contains(key))
+            {
+                lines.Add(new ChromeLine($"chrome.{leg}.{key}", Owner, false, at >= 0 ? $"not measured: {path} shown 0 frames" : $"not measured: {path} not found",
+                                         $"the leg showed the plate ({(key == StampHint ? "camchrome n = 2, as the counter's bounce does" : "camchrome n = 1's target")}) and it was drawn 0 frames, so nothing was measured: a red line, never silence (DeskStampTray hides its hint while no passport is in play; the guide's plate shows on day 1). If {owner} now hides the plate where the leg shows it, show it where it does show, or take the expectation out of the scenario"));
+            }
+        }
+        return lines;
+    }
+
+    /// <summary>The overlay path of the plate <paramref name="key"/>.</summary>
+    private static string PathOf(string key) => Plates.First(p => p.key == key).path;
 
     private static IEnumerator Chrome(QaRunner runner, QaStep step)
     {
         string name = Name(step, "chrome");
-        if (step.n == 2)
-        {
-            // The stamp hint plate shown as the game shows it (DeskStampTray.Note, the counter's bounce), for the running watch: its line is due now, drawn or not.
-            if (_chrome == null || !_chrome.Running)
-                throw new InvalidOperationException("camchrome n = 2 shows the stamp hint to a running watch: start one first (n = 1).");
-            _chrome.Expected.Add(StampHint);
-            if (QaGame.Find<DeskStampTray>() is DeskStampTray stamps)
-                stamps.Note(BounceNote);
-            yield return QaGame.Frames(2);
-            yield break;
-        }
         if (step.n > 0)
         {
-            List<string> expected = ExpectedPlates(step.target);
-            if (_chrome != null)
-                _chrome.Running = false;
-            var watch = new ChromeWatch { Running = true };
-            watch.Expected.UnionWith(expected);
-            foreach (string control in ChromeNames)
-                Add(runner, watch, control, null, Owner);
-            foreach ((string path, string key, string owner) in Plates)
-                Add(runner, watch, path, key, owner);
-            _chrome = watch;
-            runner.StartCoroutine(Watch(watch));
+            List<string> shows = ShownBy(step.n, step.target);
+            if (step.n == 1)
+            {
+                if (_chrome != null)
+                    _chrome.Running = false;
+                var watch = new ChromeWatch { Running = true };
+                foreach (string control in ChromeNames)
+                    Add(runner, watch, control, null);
+                foreach ((string path, string key, _) in Plates)
+                    Add(runner, watch, path, key);
+                _chrome = watch;
+                runner.StartCoroutine(Watch(watch));
+            }
+            else if (_chrome == null || !_chrome.Running)
+            {
+                throw new InvalidOperationException("camchrome n = 2 shows the stamp hint to a running watch: start one first (n = 1).");
+            }
+            // What this step makes the leg show is due in the leg's report, seen or not (LegLines).
+            _chrome.Shows.UnionWith(shows);
+            if (step.n == 2)
+            {
+                // The stamp hint plate shown as the game shows it (DeskStampTray.Note, the counter's bounce).
+                if (QaGame.Find<DeskStampTray>() is DeskStampTray stamps)
+                    stamps.Note(BounceNote);
+                yield return QaGame.Frames(2);
+            }
             yield break;
         }
         ChromeWatch done = _chrome;
@@ -744,35 +869,27 @@ public static class CamOps
             yield break;
         }
         done.Running = false;
-        string missing = string.Join(", ", ChromeNames.Where(c => done.Controls.All(w => w.Path != c)));
-        string plates = string.Join(", ", done.Controls.Where(w => w.Key != null).Select(w => $"{w.Path} shown {w.Shown} frames"));
-        runner.Assert("chrome." + name, Owner, done.Over == 0 && done.Frames > 0,
-                      $"{done.Frames} frames watched ({done.HoldingFrames} holding, {done.ReadingFrames} in the reading view), {done.Over} with chrome over the work, {Screen.width}x{Screen.height}" +
-                      (missing.Length > 0 ? $"; not found: {missing}" : "") + (plates.Length > 0 ? $"; plates: {plates}" : ""),
-                      done.Violations.Count > 0 ? string.Join("; ", done.Violations) : "no tab, Back control or city tab drawn over a held thing or the reading view's framed work (BUG-59)");
-        // Each plate: its own assertion under its owner when it showed while the watch ran; a red "not measured" one under CAM when
-        // the leg showed it (n = 2, or n = 1's target) and it was never drawn; none when neither.
-        foreach ((string path, string key, string owner) in Plates)
+        var tally = new ChromeTally
         {
-            Watched plate = done.Controls.FirstOrDefault(w => w.Key == key);
-            PlateLine line = PlateLine.Of(path, owner, done.Expected.Contains(key), plate != null, plate != null ? plate.Shown : 0, plate != null ? plate.Over : 0);
-            if (!line.Reported)
-                continue;
-            string detail = plate == null || plate.Shown == 0
-                ? $"the leg showed the plate ({(key == StampHint ? "camchrome n = 2, as the counter's bounce does" : "camchrome n = 1's target")}) and it was drawn 0 frames, so nothing was measured: a red line, never silence (DeskStampTray hides its hint while no passport is in play; the guide's plate shows on day 1). If {owner} now hides the plate where the leg shows it, show it where it does show, or take the expectation out of the scenario"
-                : plate.Notes.Count > 0 ? string.Join("; ", plate.Notes) + $" (expected red until {owner} moves it: CAM.md's hand-offs)"
-                : "the plate never covers a held thing or the reading view's framed work (BUG-59)";
-            runner.Assert($"chrome.{name}.{key}", line.Owner, line.Pass, line.Measured, detail);
-        }
+            Frames = done.Frames,
+            HoldingFrames = done.HoldingFrames,
+            ReadingFrames = done.ReadingFrames,
+            Over = done.Over,
+            Missing = string.Join(", ", ChromeNames.Where(c => done.Controls.All(w => w.Path != c))),
+            ScreenSize = $"{Screen.width}x{Screen.height}",
+            Violations = done.Violations,
+        };
+        foreach (ChromeLine line in LegLines(name, done.Shows, tally, done.Controls.Where(w => w.Key != null).Select(w => new PlateSeen(w.Key, w.Shown, w.Over, w.Notes))))
+            runner.Assert(line.Id, line.Owner, line.Pass, line.Measured, line.Detail);
     }
 
     /// <summary>Watches the overlay object at <paramref name="path"/> (skipped when not loaded), its alpha in the recorder's rows.</summary>
-    private static void Add(QaRunner runner, ChromeWatch watch, string path, string key, string owner)
+    private static void Add(QaRunner runner, ChromeWatch watch, string path, string key)
     {
         GameObject go = TryAt(path);
         if (go == null)
             return;
-        var w = new Watched { Path = path, Key = key, Owner = owner, Go = go, Group = Group(go.transform) };
+        var w = new Watched { Path = path, Key = key, Go = go, Group = Group(go.transform) };
         watch.Controls.Add(w);
         runner.Recorder.Column("alpha:" + path, () => AlphaOf(w.Go, w.Group).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
     }
@@ -1109,7 +1226,9 @@ public static class CamOps
     /// landing with the view off and none on a landing with it on); a click
     /// on the scanner's Auto-Feed tray and its stack scanned; n scans on the
     /// scanner's bed; f chip reads on the reader (a paper it refuses bounces
-    /// back and the next is tried; the one it reads is read again); the
+    /// back and the next is tried; the one it reads is read again; a read
+    /// counts once its paper came back out, and one that never does ends the
+    /// reads); the
     /// intercom's wheel opened, a question asked on its ring (a submenu
     /// opened on the way) and answered, then Esc. A home the reading view
     /// shows too little of is reached from the office view (Back, a view
@@ -1288,10 +1407,14 @@ public static class CamOps
                 }
                 bool back = false;
                 yield return Wait(() => !reader.Busy && CountOf(desk, "_inReader") == 0, 12f, ok => back = ok);
+                if (!back)
+                {
+                    // A read counts only once its paper is out again; while the reader holds one, DeskController refuses every next paper, so the reads end here (play.<name> red: reads < f).
+                    notes.Add($"chip read {reads + 1} never came back out (paper {paper.Index} still in the reader after 12 s)");
+                    break;
+                }
                 reads++;
                 card = reader.Document >= 0 ? reader.Document : paper.Index;
-                if (!back)
-                    notes.Add($"chip read {reads} never came back out");
                 yield return new WaitForSecondsRealtime(0.8f);
             }
 
