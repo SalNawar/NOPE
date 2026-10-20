@@ -183,4 +183,28 @@ public class ArtSlotsTests
         Assert.IsFalse(ArtSlots.OnDeskPaper(ArtSlots.PetCorner));
         Assert.IsFalse(ArtSlots.OnDeskPaper(null));
     }
+
+    [Test]
+    public void Mipmapped_AndTrilinear_ThePapersArtAndThePetsPictures_NotTheUi()
+    {
+        Assert.IsTrue(ArtSlots.Mipmapped(ArtSlots.PaperFaces("TC-101")[0]), "a paper face (BUG-63)");
+        Assert.IsTrue(ArtSlots.Trilinear(ArtSlots.PhotoFrame));
+        Assert.IsTrue(ArtSlots.Mipmapped(ArtSlots.PetSprite(PetKind.Dog, "spotted", PetLook.Idle)[0]), "a dog's coat (BUG-29: no more speckle at 88 px)");
+        Assert.IsTrue(ArtSlots.Trilinear(ArtSlots.PetFrame(PetKind.Cat, "black", PetLook.Happy, "tail_b")));
+        Assert.IsFalse(ArtSlots.Mipmapped(ArtSlots.PetCorner), "the corner's backdrop is UI");
+        Assert.IsFalse(ArtSlots.Mipmapped(ArtSlots.UpgradeIcon("pet_bed")));
+        Assert.IsFalse(ArtSlots.Trilinear(null));
+    }
+
+    [Test]
+    public void OfficeImports_TheOfficesArt_NeverTheHallLayers()
+    {
+        Assert.IsTrue(ArtSlots.OfficeImports("Assets/Art/Office/Props/BrassDrawer/BrassDrawer_Albedo.png"));
+        Assert.IsTrue(ArtSlots.OfficeImports("Assets/Art/Office/Gameplay/Textures/UvPool.png"));
+        Assert.IsFalse(ArtSlots.OfficeImports("Assets/Art/Office/AnimeHallLayers/hall_base.png"), "art-side: the importer returns before it (FIX_PLAN §0 rule 2)");
+        Assert.IsFalse(ArtSlots.OfficeImports("Assets/Art/Office/AnimeHallLayers/Sub/layer_03.png"));
+        Assert.IsFalse(ArtSlots.OfficeImports("Assets/Art/UI/Resources/Forms/paper_tc101.png"), "the slots are ArtSlotImporter's");
+        Assert.IsFalse(ArtSlots.OfficeImports("Assets/Art/OfficeOther/x.png"));
+        Assert.IsFalse(ArtSlots.OfficeImports(null));
+    }
 }

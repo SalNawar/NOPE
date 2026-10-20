@@ -112,6 +112,40 @@ public readonly struct PaperBend : IEquatable<PaperBend>
         return (dX * 2f / Math.Max(width, 1e-6f), dY * 2f / Math.Max(height, 1e-6f));
     }
 
+    /// <summary>
+    /// How far the bent face rises toward the viewer past the plane a flat
+    /// printed part lies in (metres, at least 0): the part centred at
+    /// (<paramref name="x"/>, <paramref name="y"/>) (-1 to 1 across the face)
+    /// and <paramref name="halfWidth"/> by <paramref name="halfHeight"/>
+    /// metres, laid on the face's tangent plane under its centre. The paper
+    /// lifts the part by it, so the curling face never covers its print
+    /// (BUG-12a: rule lines vanished under the landing curl).
+    /// </summary>
+    public float Bulge(float x, float y, float halfWidth, float halfHeight, float width, float height)
+    {
+        if (IsFlat || width <= 0f || height <= 0f)
+            return 0f;
+        float centre = Depth(x, y, width, height);
+        (float dx, float dy) = Slope(x, y, width, height);
+        float most = 0f;
+        const int steps = 4;
+        for (int i = 0; i <= steps; i++)
+            for (int j = 0; j <= steps; j++)
+            {
+                float ox = halfWidth * (-1f + 2f * i / steps), oy = halfHeight * (-1f + 2f * j / steps);
+                float sx = Clamp(x + ox * 2f / width), sy = Clamp(y + oy * 2f / height);
+                float plane = centre + dx * ox + dy * oy;
+                most = Math.Max(most, plane - Depth(sx, sy, width, height));
+            }
+        return most;
+    }
+
+    /// <summary>How much a paper of <paramref name="kind"/> bends (its share of the physics' bend): a sheet's <paramref name="sheetFlex"/>, a booklet's <paramref name="bookletFlex"/>, and a card none at all, whatever any knob says (Saleh's D3: "other documents other than solid id cards should feel a bit like paper").</summary>
+    public static float FlexOf(PaperKind kind, float sheetFlex, float bookletFlex) =>
+        kind == PaperKind.Card ? 0f : kind == PaperKind.Booklet ? bookletFlex : sheetFlex;
+
+    private static float Clamp(float v) => v < -1f ? -1f : v > 1f ? 1f : v;
+
     /// <summary>The most the face goes away from the viewer anywhere (metres, at least 0): the paper rises by it so its bend never passes through what lies under it.</summary>
     public float Lowest(float width, float height)
     {

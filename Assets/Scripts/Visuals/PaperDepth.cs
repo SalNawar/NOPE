@@ -105,6 +105,50 @@ public static class PaperDepth
         return mesh;
     }
 
+    /// <summary>The sheet model's lifted corner (tools/props/documents/docs_models.py, sheet(): lift_max) and its reach (as a share of the face from the bottom right corner).</summary>
+    public const float CornerLift = 0.0007f, CornerReach = 0.28f;
+
+    /// <summary>The sheet model's edge curl (its height at the left and right edges) and its reach (a share of the width).</summary>
+    public const float EdgeCurl = 0.0002f, EdgeReach = 0.06f;
+
+    /// <summary>
+    /// How high the sheet model's face stands over its plane at
+    /// (<paramref name="u"/>, <paramref name="v"/>) (0 to 1 from its bottom
+    /// left; metres toward the viewer): its lifted bottom right corner and its
+    /// slight edge curl, as docs_models.py builds it. A printed part over the
+    /// corner lifts by it (ReliefOver), so the corner never hides print
+    /// (BUG-12a: "corner relief hides print in ~13% of the corner").
+    /// </summary>
+    public static float SheetRelief(float u, float v)
+    {
+        double d = Math.Sqrt((1 - u) * (1 - u) + v * v);
+        double corner = CornerLift * Math.Pow(Math.Max(0.0, 1 - d / CornerReach), 2);
+        double curl = EdgeCurl * (Math.Pow(Math.Max(0.0, 1 - u / EdgeReach), 2) + Math.Pow(Math.Max(0.0, 1 - (1 - u) / EdgeReach), 2));
+        return (float)(corner + curl);
+    }
+
+    /// <summary>The most the sheet model stands over its plane under a part centred at (<paramref name="u"/>, <paramref name="v"/>), <paramref name="halfU"/> by <paramref name="halfV"/> of the face either way (metres).</summary>
+    public static float ReliefOver(float u, float v, float halfU, float halfV)
+    {
+        float most = 0f;
+        const int steps = 4;
+        for (int i = 0; i <= steps; i++)
+            for (int j = 0; j <= steps; j++)
+            {
+                float su = Clamp01(u + halfU * (-1f + 2f * i / steps)), sv = Clamp01(v + halfV * (-1f + 2f * j / steps));
+                most = Math.Max(most, SheetRelief(su, sv));
+            }
+        return most;
+    }
+
+    /// <summary>The contact shadow's darkness per place up the papers' stack, and its most (BUG-40c: the top paper's shadow the darkest, so the stack order reads at a glance; GAME_FEEL_BIBLE A9).</summary>
+    public const float RankStep = 0.25f, MostRankStrength = 1.75f;
+
+    /// <summary>The share of its darkness a paper's contact shadow takes at <paramref name="rank"/> in the papers' stack (0 the bottom): 1 at the bottom, darker each place up, at most MostRankStrength.</summary>
+    public static float RankStrength(int rank) => Math.Min(MostRankStrength, 1f + RankStep * Math.Max(0, rank));
+
+    private static float Clamp01(float v) => v < 0f ? 0f : v > 1f ? 1f : v;
+
     /// <summary>The outward normal at corner <paramref name="i"/> (the mean of its two sides' normals; <paramref name="turn"/> 1 for a counter-clockwise outline, -1 for clockwise).</summary>
     private static (float x, float y) Normal((float x, float y)[] p, int i, float turn)
     {

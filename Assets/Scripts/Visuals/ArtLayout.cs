@@ -24,8 +24,18 @@ using System.Linq;
 /// </summary>
 public static class ArtLayout
 {
-    /// <summary>The least share of its size a value or a label shrinks to so that it fits its place (the renderers' fit; the check measures the longest value at it).</summary>
-    public const float FitFloor = 0.5f;
+    /// <summary>The least share of the art's own size a value or a label shrinks to so that it fits its place (the renderers' fit; the check measures the longest value at it): TextFit.Least. A grown text may shrink to the same absolute size (FitFloorOf); below TextFit.Floor it counts as shrunk (the cap-height gate).</summary>
+    public const float FitFloor = TextFit.Least;
+
+    /// <summary>The least share of its size an item of <paramref name="role"/> on <paramref name="art"/> shrinks to: FitFloor of the art's own size, so less of a grown size (labelGrowth for a label, valueGrowth for the rest).</summary>
+    public static float FitFloorOf(FormArt art, FormTextRole role) =>
+        TextFit.LeastOf(FitFloor, art == null ? 1f : role == FormTextRole.Label ? art.labelGrowth : art.valueGrowth);
+
+    /// <summary>A printed label's line over its size (the art's label face, Big Shoulders: 1.2 em, and a hair): the band a re-laid label takes at its cell's top.</summary>
+    public const float LabelLine = 1.25f;
+
+    /// <summary>The most of its place's height a grown value's size takes (the art's value face, Geist Mono, sets a line 1.3 em tall: a larger size would wrap or shrink).</summary>
+    public const float ValueFill = 0.74f;
 
     /// <summary>The nation's emblem inside a visa box, as a share of the box's smaller side.</summary>
     public const float EmblemShare = 0.7f;
@@ -152,6 +162,9 @@ public static class ArtLayout
         {
             int slot = slots.Count;
             FaceRect place = On(f.value);
+            float valueHeight = place.Height;
+            bool cell = worded && art.Regrown && Stacked(f) && !Hidden(data, f.field) && f.field != sealField && f.field != photoField;
+            FaceRect labelPlace = cell ? Cell(On(f.label), place, art, out place) : default;
             if (f.field == sealField)
             {
                 items.Add(new FormItem(FormItemKind.Seal, FormTextRole.Value, place, slot, Value(data, f.field), 0f, FormTextAlign.Centre));
@@ -167,15 +180,17 @@ public static class ArtLayout
             {
                 string value = Value(data, f.field);
                 bool hand = signed.Contains(f.field);
+                float size = Grown(art.valueShare * valueHeight, art.valueGrowth, ValueFill * place.Height);
                 if (hand && string.IsNullOrWhiteSpace(value))
-                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, data.Word(FormLayout.Unsigned), UnsignedShare * art.valueShare * place.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, data.Word(FormLayout.Unsigned), UnsignedShare * size, FormTextAlign.Left));
                 else if (!string.IsNullOrEmpty(value))
-                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, art.valueShare * place.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, size, FormTextAlign.Left));
                 if ((f.relabel || worded) && f.label.IsSet && !Hidden(data, f.field))
                 {
-                    FaceRect label = On(f.label);
+                    FaceRect label = cell ? labelPlace : On(f.label);
+                    float labelSize = cell ? labelPlace.Height / LabelLine : Grown(art.labelShare * label.Height, worded ? art.labelGrowth : 1f, label.Height / LabelLine);
                     string english = !f.relabel && !string.IsNullOrEmpty(f.labelText) ? f.labelText : f.field < data.FieldLabels.Count ? data.FieldLabels[f.field] ?? string.Empty : string.Empty;
-                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Label, label, slot, Capitals(data.Word(english)), art.labelShare * label.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Label, label, slot, Capitals(data.Word(english)), labelSize, FormTextAlign.Left));
                 }
             }
             slots.Add(new FormSlot(slot, f.field, -1, string.Empty, place, 0));
@@ -186,7 +201,7 @@ public static class ArtLayout
         if (worded)
             foreach (ArtCaption c in art.captions ?? new ArtCaption[0])
                 if (c != null && c.rect.IsSet && !string.IsNullOrWhiteSpace(c.text))
-                    items.Add(Caption(c, On(c.rect), data));
+                    items.Add(Caption(c, On(c.rect), data, art));
         foreach (ArtPrint p in art.prints ?? new ArtPrint[0])
         {
             if (p == null || !p.rect.IsSet || (p.field >= 0 && Hidden(data, p.field)))
@@ -196,7 +211,7 @@ public static class ArtLayout
                 continue;
             FaceRect place = On(p.rect);
             bool hand = p.kind == ArtPrintKind.Signature || p.kind == ArtPrintKind.Office;
-            items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, -1, words, art.valueShare * place.Height, FormTextAlign.Left));
+            items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, -1, words, Grown(art.valueShare * place.Height, art.valueGrowth, ValueFill * place.Height), FormTextAlign.Left));
         }
         return new PlacedForm(width, height, height, items, slots, new List<float> { 0f }, FormLayout.PrintUnit(spec, width, m));
     }
@@ -258,7 +273,7 @@ public static class ArtLayout
         {
             if (item.Kind != FormItemKind.Text || item.Slot < 0 || item.Role == FormTextRole.Label)
                 continue;
-            float need = measure.Height(item.Text, item.Role, item.Size * FitFloor, item.Rect.Width);
+            float need = measure.Height(item.Text, item.Role, item.Size * FitFloorOf(art, item.Role), item.Rect.Width);
             if (need > item.Rect.Height * 1.001f)
             {
                 int field = full.Slots[item.Slot].Field;
@@ -268,14 +283,43 @@ public static class ArtLayout
         return problems;
     }
 
-    /// <summary>An art caption printed in the reading language at its place (a label or title in capitals, a paragraph as written), never picked.</summary>
-    private static FormItem Caption(ArtCaption c, FaceRect place, FormData data)
+    /// <summary>An art caption printed in the reading language at its place (a label or title in capitals, a paragraph as written), never picked; a label caption grows with the art's labels (labelGrowth), never past a line of its place.</summary>
+    private static FormItem Caption(ArtCaption c, FaceRect place, FormData data, FormArt art)
     {
         string words = data.Word(c.text) ?? string.Empty;
         bool paragraph = c.kind == ArtCaptionKind.Paragraph;
         FormTextRole role = c.kind == ArtCaptionKind.Title ? FormTextRole.Title : paragraph ? FormTextRole.Paragraph : FormTextRole.Label;
-        return new FormItem(FormItemKind.Text, role, place, -1, paragraph ? words : Capitals(words), c.share * place.Height,
+        float size = c.share * place.Height;
+        if (role == FormTextRole.Label)
+            size = Grown(size, art.labelGrowth, place.Height / LabelLine);
+        return new FormItem(FormItemKind.Text, role, place, -1, paragraph ? words : Capitals(words), size,
                             c.centre ? FormTextAlign.Centre : FormTextAlign.Left, string.IsNullOrEmpty(c.ink) ? null : c.ink);
+    }
+
+    /// <summary>True when <paramref name="f"/>'s label stands above its value (a cell to re-lay: the label a band at its top, ArtLayout.Cell); a label beside its value keeps its place, and each grows inside its own.</summary>
+    public static bool Stacked(ArtField f) => f != null && f.label.IsSet && f.value.IsSet && f.label.y1 <= f.value.y0 + 0.25f * (f.value.y1 - f.value.y0);
+
+    /// <summary><paramref name="size"/> grown by <paramref name="growth"/> but never past <paramref name="room"/> (nor below the size it was); a growth of 1 or less leaves it as it is.</summary>
+    public static float Grown(float size, float growth, float room) => growth > 1f ? Math.Max(size, Math.Min(size * growth, room)) : size;
+
+    /// <summary>
+    /// A labelled field's cell re-laid for larger text (BUG-9; the art's
+    /// labels painted out of its clean face, FormArt.printLabels): from its
+    /// label's top to its value's foot, the label a band at the top
+    /// (labelShare of the art's label grown by labelGrowth, LabelLine of it
+    /// tall, as wide as the label and the value together) and the value the
+    /// rest, below it (<paramref name="valuePlace"/>; the field is picked
+    /// there), never less than half its own place. Returns the label's band.
+    /// </summary>
+    public static FaceRect Cell(FaceRect label, FaceRect value, FormArt art, out FaceRect valuePlace)
+    {
+        float top = Math.Min(label.YMin, value.YMin);
+        float band = art.labelShare * label.Height * Math.Max(1f, art.labelGrowth) * LabelLine;
+        float left = Math.Min(label.XMin, value.XMin);
+        float right = Math.Max(label.XMax, value.XMax);
+        float valueTop = Math.Min(top + band, value.YMax - value.Height * 0.5f);
+        valuePlace = new FaceRect(value.XMin, valueTop, value.XMax, value.YMax);
+        return new FaceRect(left, top, right, valueTop);
     }
 
     /// <summary>The art's fields in reading order (top to bottom, then left to right): the slots' order.</summary>

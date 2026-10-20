@@ -13,3 +13,4 @@ MotionKnobs.stampSquash         # BUG-73b, STAMP
 MotionKnobs.inkBloomSeconds     # BUG-73b, STAMP
 MotionKnobs.stampFeel           # BUG-73b, STAMP
 MotionKnobs.drawerStopHit       # BUG-73b, STAMP: a drawer knob with no reader
+MotionKnobs.cardFlex            # BUG-11b / D3, DOC-HANDLE: unread since DOC-LOOK made cards rigid by rule (PaperBend.FlexOf); the owner deletes it

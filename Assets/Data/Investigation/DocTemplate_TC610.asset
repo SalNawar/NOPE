@@ -282,3 +282,6 @@ MonoBehaviour:
           ink: '#263F54'
           centre: 1
         clean: 1
+        printLabels: 1
+        labelGrowth: 1.3
+        valueGrowth: 1.5

@@ -9,15 +9,20 @@ using UnityEngine;
 /// a Top (the readable face, mapped so the face art lands where the flat quad
 /// showed it, printed over by the paper's texts) and a Body (its sides, page
 /// blocks, stitches and rims, in the edge atlas), in the face quad's unit
-/// space, drawn in the unlit cel shader TimeDesk/DocumentCel (no hour's light
-/// crosses the text). A paper wears its kind's model when it binds (Wear: a
-/// sheet with a gentle curl and a lifted corner, an open passport booklet, a
-/// thick card); the folder and its tabs wear theirs from Build Office UI.
+/// space, drawn in the cel shader TimeDesk/DocumentCel (no hour's light
+/// crosses the text; the desk light's level and tint, DeskLight.hlsl, do). A
+/// paper wears its kind's model when it binds (Wear: a sheet with a gentle
+/// curl and a lifted corner, an open passport booklet, a thick card); the
+/// folder and its tabs wear theirs from Build Office UI.
 /// Under it lies a soft contact shadow in the cel kit's ink
 /// (PaperDepth.Shadow): tight at rest, and while its drag holds it up wider,
 /// softer and further to the bottom right, easing back when it is dropped
-/// (DeskConfigSO's shadow knobs). Nothing here takes a click: the click boxes
-/// are the face's own.
+/// (DeskConfigSO's shadow knobs); hovered, it lifts part of the way (D15:
+/// papers lift, HoverLift); darker the higher it lies in the papers' stack
+/// (BUG-40c: DeskEvents.StackChanged, PaperDepth.RankStrength). A page turn
+/// flicks its loose sheets (Flick: D3 retires "the folder never bends"). A
+/// booklet's shut cover hides its visa page (ClipAbove). Nothing here takes a
+/// click: the click boxes are the face's own.
 /// </summary>
 public sealed class DeskPaperDepth : MonoBehaviour
 {
@@ -41,6 +46,7 @@ public sealed class DeskPaperDepth : MonoBehaviour
 
     private static readonly int ShadeMapId = Shader.PropertyToID("_ShadeMap");
     private static readonly int FlexId = Shader.PropertyToID("_Flex"), Flex2Id = Shader.PropertyToID("_Flex2"), FlexSizeId = Shader.PropertyToID("_FlexSize");
+    private static readonly int ClipAboveId = Shader.PropertyToID("_ClipAbove");
 
     /// <summary>The model's renderers (its face's, its body's and its shadow's), found once.</summary>
     private Renderer[] _flexed;
@@ -54,6 +60,9 @@ public sealed class DeskPaperDepth : MonoBehaviour
     /// <summary>How far under the bottom of the thing the shadow lies (metres): clear of it for the depth buffer.</summary>
     private const float ShadowGap = 0.00005f;
 
+    /// <summary>How long a hover lift eases up or down (seconds; GAME_FEEL_BIBLE's Balanced spring, about 90 ms).</summary>
+    private const float HoverSeconds = 0.09f;
+
     private DeskConfigSO _config;
     private List<(float x, float y)> _outline = new List<(float x, float y)>();
     private Vector2 _size = Vector2.one;
@@ -62,8 +71,46 @@ public sealed class DeskPaperDepth : MonoBehaviour
     private bool _built;
     private Mesh _shadowMesh;
 
+    /// <summary>The shadow mesh's corners and colours (reused: a lift rebuilds it without allocating, BUG-65g).</summary>
+    private readonly List<Vector3> _shadowVertices = new List<Vector3>();
+    private readonly List<Color> _shadowColours = new List<Color>();
+
     /// <summary>How far the thing is held up now, 0 lying to 1 held (eases between them).</summary>
     private float _held;
+
+    /// <summary>The share of a hold the hover lifts it by (0: not hovered; HoverLift).</summary>
+    private float _hover;
+
+    /// <summary>True from a hold until its drop has eased down (the drop keeps the config's pace).</summary>
+    private bool _fromHold;
+
+    /// <summary>Its contact shadow's darkness for its place in the papers' stack (PaperDepth.RankStrength).</summary>
+    private float _rank = 1f;
+
+    /// <summary>The paper this body belongs to (its rank comes with it), found once; null for the folder and its tabs.</summary>
+    private DeskDocument _paper;
+
+    /// <summary>A page turn's flick: its bend at its start, how long it lasts and how far through it is (seconds).</summary>
+    private PaperBend _flick = PaperBend.Flat;
+    private float _flickSeconds, _flickElapsed;
+
+    private void Awake() => _paper = GetComponentInParent<DeskDocument>(true);
+
+    private void OnEnable() => DeskEvents.StackChanged += HandleStackChanged;
+
+    private void OnDisable() => DeskEvents.StackChanged -= HandleStackChanged;
+
+    /// <summary>A paper's place in the stack changed: its shadow darkens with its rank (BUG-40c).</summary>
+    private void HandleStackChanged(DeskDocument paper, int rank)
+    {
+        if (paper == null || paper != _paper)
+            return;
+        float strength = PaperDepth.RankStrength(rank);
+        if (Mathf.Approximately(strength, _rank))
+            return;
+        _rank = strength;
+        ShowShadow();
+    }
 
     /// <summary>A paper takes its kind's model (<paramref name="kind"/>: a sheet, a booklet, a card; the folder wears its own from the builder).</summary>
     public void Wear(PaperKind kind)
@@ -95,19 +142,8 @@ public sealed class DeskPaperDepth : MonoBehaviour
             return;
         _bendShown = bend;
         _bendSize = size;
-        if (_flexed == null)
-        {
-            var found = new List<Renderer>();
-            if (face != null && face.TryGetComponent(out Renderer faceRenderer))
-                found.Add(faceRenderer);
-            if (body != null && body.TryGetComponent(out Renderer bodyRenderer))
-                found.Add(bodyRenderer);
-            if (shadow != null && shadow.TryGetComponent(out Renderer shadowRenderer))
-                found.Add(shadowRenderer); // its contact shadow bends with it: the drooping face never dips through it
-            _flexed = found.ToArray();
-        }
         _flexBlock ??= new MaterialPropertyBlock();
-        foreach (Renderer r in _flexed)
+        foreach (Renderer r in Flexed())
         {
             r.GetPropertyBlock(_flexBlock);
             _flexBlock.SetVector(FlexId, new Vector4(bend.DirX, bend.DirY, bend.Bow, bend.Lag));
@@ -115,6 +151,60 @@ public sealed class DeskPaperDepth : MonoBehaviour
             _flexBlock.SetVector(FlexSizeId, new Vector4(size.x, size.y, ShadowReach, 0f));
             r.SetPropertyBlock(_flexBlock);
         }
+    }
+
+    /// <summary>
+    /// A page turn (D3: the folder bends now; GAME_FEEL_BIBLE A3, a bow of at
+    /// most 3 mm on the flip): the loose sheets take <paramref name="bend"/>
+    /// at once and ease flat over <paramref name="seconds"/> (none under
+    /// Reduced Motion), over a face of <paramref name="size"/> metres.
+    /// </summary>
+    public void Flick(PaperBend bend, Vector2 size, float seconds)
+    {
+        if (UiMotion.Amount.Still || seconds <= 0f)
+            return;
+        _flick = bend;
+        _flickSeconds = seconds;
+        _flickElapsed = 0f;
+        SetBend(bend, size);
+    }
+
+    /// <summary>
+    /// Hides the face and the body above <paramref name="y"/> (the face's unit
+    /// space, up the page; DocumentCel's _ClipAbove): a booklet's visa page
+    /// while its cover is shut over the data page (PaperCover); a value past
+    /// the face's top edge shows it whole.
+    /// </summary>
+    public void ClipAbove(float y)
+    {
+        _flexBlock ??= new MaterialPropertyBlock();
+        foreach (Renderer r in Flexed())
+        {
+            if (shadow != null && r.gameObject == shadow.gameObject)
+                continue;
+            r.GetPropertyBlock(_flexBlock);
+            _flexBlock.SetFloat(ClipAboveId, y);
+            r.SetPropertyBlock(_flexBlock);
+        }
+    }
+
+    /// <summary>The hover lift (D15: a paper under the pointer lifts, Papers, Please-style, and no outline is drawn on it): <paramref name="share"/> of a hold's shadow lift (0 lying; InteractionFeedbackSO.paperHoverLift), eased like a hold.</summary>
+    public void HoverLift(float share) => _hover = Mathf.Clamp01(share);
+
+    /// <summary>The face's, the body's and the shadow's renderers (found once).</summary>
+    private Renderer[] Flexed()
+    {
+        if (_flexed != null)
+            return _flexed;
+        var found = new List<Renderer>();
+        if (face != null && face.TryGetComponent(out Renderer faceRenderer))
+            found.Add(faceRenderer);
+        if (body != null && body.TryGetComponent(out Renderer bodyRenderer))
+            found.Add(bodyRenderer);
+        if (shadow != null && shadow.TryGetComponent(out Renderer shadowRenderer))
+            found.Add(shadowRenderer); // its contact shadow bends with it: the drooping face never dips through it
+        _flexed = found.ToArray();
+        return _flexed;
     }
 
     /// <summary>
@@ -135,20 +225,36 @@ public sealed class DeskPaperDepth : MonoBehaviour
         ShowShadow();
     }
 
-    /// <summary>Only while the hold changes: eases the shadow toward held or lying (at once under Reduced Motion).</summary>
+    /// <summary>Only while something changes: eases the shadow toward held, hovered or lying (at once under Reduced Motion), and runs a page turn's flick flat.</summary>
     private void Update()
     {
+        if (_flickSeconds > 0f)
+        {
+            _flickElapsed += Time.unscaledDeltaTime;
+            float left = 1f - Mathf.Clamp01(_flickElapsed / _flickSeconds);
+            PaperBend fading = left <= 0f ? PaperBend.Flat
+                : new PaperBend(_flick.DirX, _flick.DirY, _flick.Bow * left * left, _flick.Lag, _flick.Twist * left * left, 0f, 0f, 0f);
+            SetBend(fading, _bendSize);
+            if (left <= 0f)
+                _flickSeconds = 0f;
+        }
         if (!_built || _config == null)
             return;
-        float target = drag != null && drag.IsDragging ? 1f : 0f;
+        bool held = drag != null && drag.IsDragging;
+        float target = held ? 1f : _hover;
         if (Mathf.Approximately(_held, target))
             return;
-        float seconds = UiMotion.Amount.Still ? 0f : (target > _held ? _config.shadowLiftSeconds : _config.shadowDropSeconds);
+        if (held)
+            _fromHold = true;
+        // a hold and its drop ease at the config's pace; a hover's lift at the Balanced spring's
+        float seconds = UiMotion.Amount.Still ? 0f : _fromHold ? (target > _held ? _config.shadowLiftSeconds : _config.shadowDropSeconds) : HoverSeconds;
         _held = seconds > 0f ? Mathf.MoveTowards(_held, target, Time.unscaledDeltaTime / seconds) : target;
+        if (!held && _held <= target + 1e-4f)
+            _fromHold = false;
         ShowShadow();
     }
 
-    /// <summary>The shadow at the hold now: between the config's lying and held spread, offset and darkness.</summary>
+    /// <summary>The shadow at the hold now: between the config's lying and held spread, offset and darkness, darker by its rank in the stack.</summary>
     private void ShowShadow()
     {
         if (shadow == null || _config == null)
@@ -156,13 +262,19 @@ public sealed class DeskPaperDepth : MonoBehaviour
         float eased = _held * _held * (3f - 2f * _held);
         float spread = Mathf.Lerp(_config.shadowSpread, _config.shadowHeldSpread, eased);
         float offset = Mathf.Lerp(_config.shadowOffset, _config.shadowHeldOffset, eased);
-        float alpha = Mathf.Lerp(_config.shadowAlpha, _config.shadowHeldAlpha, eased) * _strength;
+        float alpha = Mathf.Clamp01(Mathf.Lerp(_config.shadowAlpha, _config.shadowHeldAlpha, eased) * _strength * _rank);
         DepthMesh mesh = PaperDepth.Shadow(_outline, _size.x, _size.y, _thickness + ShadowGap, spread,
                                            offset * PaperDepth.LeanRight, -offset * PaperDepth.LeanNear, alpha);
+        _shadowVertices.Clear();
+        foreach ((float x, float y, float z) v in mesh.Vertices)
+            _shadowVertices.Add(new Vector3(v.x, v.y, v.z));
+        _shadowColours.Clear();
+        foreach (Rgba c in mesh.Colours)
+            _shadowColours.Add(new Color(c.R, c.G, c.B, c.A));
         _shadowMesh ??= new Mesh { name = "PaperShadow" };
         _shadowMesh.Clear();
-        _shadowMesh.SetVertices(mesh.Vertices.ConvertAll(v => new Vector3(v.x, v.y, v.z)));
-        _shadowMesh.SetColors(mesh.Colours.ConvertAll(c => new Color(c.R, c.G, c.B, c.A)));
+        _shadowMesh.SetVertices(_shadowVertices);
+        _shadowMesh.SetColors(_shadowColours);
         _shadowMesh.SetTriangles(mesh.Triangles, 0);
         _shadowMesh.RecalculateBounds();
         shadow.sharedMesh = _shadowMesh;

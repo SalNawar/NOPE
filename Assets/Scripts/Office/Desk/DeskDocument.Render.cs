@@ -10,9 +10,37 @@ using UnityEngine.EventSystems;
 /// its bend, the printed text, art, patches, seals and photo frame. The
 /// paper's zone, scale, dock and drag stay in DeskDocument.cs.
 /// Carved out of DeskDocument.cs by P0-A (pure move). Owner: DOC-LOOK.
+/// DOC-LOOK (1019a): print and face are one surface (BUG-12a: the fills'
+/// and lines' meshes bend vertex by vertex with the face, each other part
+/// rides the bent face lifted by how far the curl rises past its plane,
+/// PaperBend.Bulge, and every part clears the sheet model's lifted corner,
+/// PaperDepth.ReliefOver); a stamp renews the parts' rest poses (BUG-12b); no
+/// word breaks across lines and an Arabic text is laid line by line
+/// (TmpFormText.Unbreak, BUG-9, 37c); a card never bends (D3); a hovered
+/// paper lifts instead of taking an outline (D15, IHoverLift); a passport
+/// arrives shut and opens (D3, PaperCover).
 /// </summary>
-public sealed partial class DeskDocument
+public sealed partial class DeskDocument : IHoverLift
 {
+    /// <summary>The passport's cover (shown on a booklet only; PaperCover: it arrives shut and opens on the desk).</summary>
+    [SerializeField] private PaperCover cover;
+
+    /// <summary>The paper's face art (ShowPaperArt's; the passport's cover shows its visa page from it as it swings).</summary>
+    private Texture2D _faceArt;
+
+    /// <summary>The paper's outline in the quad's unit space (BuildDepth's: its contact shadow; a shut booklet's shadow lies under its data page alone).</summary>
+    private List<(float x, float y)> _depthOutline = new List<(float x, float y)>();
+
+    /// <summary>The fills' and the lines' meshes as printed, and their vertices at rest (the corner's relief in) and bent now (reused: a bend allocates nothing).</summary>
+    private Mesh _fillsMesh, _linesMesh;
+    private Vector3[] _fillsRest, _linesRest, _fillsBent, _linesBent;
+
+    /// <inheritdoc />
+    public void HoverLift(float share)
+    {
+        if (depth != null)
+            depth.HoverLift(share);
+    }
     /// <summary>A box's quad colour: the pick's colour, else the hover tint while hovered, else clear.</summary>
     private void ApplySlotTint(int slot)
     {
@@ -64,6 +92,11 @@ public sealed partial class DeskDocument
     {
         if (inkMark == null || _form == null || impression == null)
             return new FaceRect(0f, 0f, 0f, 0f);
+        // BUG-12b: every part back at its rest before the mark moves, and the rest poses taken again on the next bend, so a
+        // stamp made while the paper still settles from its drop stays where the die pressed it (the first mark's old
+        // rest pose, the page's centre, used to win)
+        RestorePrints();
+        _bend = PaperBend.Flat;
         _impressions.Add(impression);
         float aspect = impression.height > 0 ? (float)impression.width / impression.height : 1f;
         FaceRect place = formPoint.HasValue ? StampSpots.AtPoint(_form, formPoint.Value.x / _scale, formPoint.Value.y / _scale, aspect) : StampSpots.Next(_form, _stamps, aspect);
@@ -72,7 +105,7 @@ public sealed partial class DeskDocument
         Renderer mark = _stamps == 1 ? inkMark : Instantiate(inkMark, inkMark.transform.parent);
         mark.name = $"Stamp_{_stamps}";
         Rect r = Local(place);
-        mark.transform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift);
+        mark.transform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift - Relief(r.center, r.size / 2f));
         mark.transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
         mark.transform.localScale = new Vector3(r.width, r.height, 1f);
         _block ??= new MaterialPropertyBlock();
@@ -174,16 +207,20 @@ public sealed partial class DeskDocument
     private void BuildDepth(List<(float x, float y)> outline, PaperKind kind)
     {
         _kind = kind;
-        if (depth == null || _config == null)
-            return;
-        depth.Wear(kind);
-        depth.Build(outline, Thickness, Size, _config);
+        _depthOutline = outline ?? new List<(float x, float y)>();
+        RestFlatPrints(kind);
+        if (depth != null && _config != null)
+        {
+            depth.Wear(kind);
+            depth.Build(_depthOutline, Thickness, Size, _config);
+        }
+        ShowCover(kind);
     }
 
-    /// <summary>The bend the physics gives the paper now: its bow along its travel (the trailing end lagging, MotionKnobs.paperBowLag), its corners' twist and its ripple, by its kind's flex.</summary>
+    /// <summary>The bend the physics gives the paper now: its bow along its travel (the trailing end lagging, MotionKnobs.paperBowLag), its corners' twist and its ripple, by its kind's flex (none on a card: PaperBend.FlexOf, D3).</summary>
     private PaperBend BendNow(MotionKnobs knobs)
     {
-        float flex = _kind == PaperKind.Booklet ? knobs.bookletFlex : _kind == PaperKind.Card ? knobs.cardFlex : knobs.sheetFlex;
+        float flex = PaperBend.FlexOf(_kind, knobs.sheetFlex, knobs.bookletFlex);
         if (flex <= 0f || (_physics.Bow == 0f && _physics.Twist == 0f && _physics.Flutter == 0f))
             return PaperBend.Flat;
         // the physics' frame is the paper's on the desk (x right, z away); the face's y runs up the page, away from the chair
@@ -192,11 +229,14 @@ public sealed partial class DeskDocument
 
     /// <summary>
     /// Bends the paper (Saleh's 1018a playtest: "all documents are stiff"):
-    /// its model takes the bend in its shader (DeskPaperDepth.SetBend), and
-    /// each printed part (a text, the photo, the seal, a stamp, a highlight)
-    /// moves to the bent face under its centre, turned to its slope, a hair
-    /// above it; flat again, every part goes back exactly where it was printed.
-    /// True when the bend changed.
+    /// its model takes the bend in its shader (DeskPaperDepth.SetBend); the
+    /// fills' and lines' meshes take it vertex by vertex (BendPrintMeshes:
+    /// print and face are one surface, BUG-12a); each other printed part (a
+    /// text, the photo, the seal, a stamp, a highlight) moves to the bent face
+    /// under its centre, turned to its slope, a hair above it and lifted by
+    /// as much as the curl rises past its flat piece (PaperBend.Bulge: no
+    /// line ever vanishes under the landing curl); flat again, every part goes
+    /// back exactly where it was printed. True when the bend changed.
     /// </summary>
     private bool ShowBend(PaperBend bend)
     {
@@ -207,17 +247,16 @@ public sealed partial class DeskDocument
             depth.SetBend(bend, Size);
         if (sheet == null)
             return true;
-        Transform face = paperQuad != null ? paperQuad.transform : null;
         if (bend.IsFlat)
         {
             RestorePrints();
             return true;
         }
-        if (_printRest.Count == 0 || _printRest.Count != sheet.childCount - (face != null && face.parent == sheet ? 1 : 0))
+        if (_printRest.Count == 0 || _printRest.Count != PrintPartCount())
         {
             RestorePrints();
             foreach (Transform part in sheet)
-                if (part != face)
+                if (IsPrintPart(part))
                     _printRest.Add((part, part.localPosition, part.localRotation, new Vector2(part.localPosition.x, part.localPosition.y)));
         }
         float w = Mathf.Max(Size.x, 1e-4f), h = Mathf.Max(Size.y, 1e-4f);
@@ -228,14 +267,17 @@ public sealed partial class DeskDocument
             float x = centre.x * 2f / w, y = centre.y * 2f / h;
             float drop = bend.Depth(x, y, w, h);
             (float dx, float dy) = bend.Slope(x, y, w, h);
+            Vector2 half = HalfSize(part);
+            float bulge = bend.Bulge(x, y, half.x, half.y, w, h);
             // the sheet's +z runs away from the viewer: a face sloping deeper to its right turns about its up
-            part.localPosition = position + new Vector3(0f, 0f, drop - BentPrintLift);
+            part.localPosition = position + new Vector3(0f, 0f, drop - BentPrintLift - bulge);
             part.localRotation = Quaternion.Euler(Mathf.Atan(dy) * Mathf.Rad2Deg, -Mathf.Atan(dx) * Mathf.Rad2Deg, 0f) * rotation;
         }
+        BendPrintMeshes(bend);
         return true;
     }
 
-    /// <summary>Every printed part back where it was printed (the paper lies flat).</summary>
+    /// <summary>Every printed part back where it was printed (the paper lies flat), the fills and lines flat again.</summary>
     private void RestorePrints()
     {
         foreach ((Transform part, Vector3 position, Quaternion rotation, Vector2 _) in _printRest)
@@ -245,11 +287,161 @@ public sealed partial class DeskDocument
                 part.localRotation = rotation;
             }
         _printRest.Clear();
+        BendPrintMeshes(PaperBend.Flat);
+    }
+
+    /// <summary>True for a part of the sheet that rides the bend as one piece: anything but the face itself, the fills' and the lines' meshes (they bend vertex by vertex) and the passport's cover (it hinges on its own).</summary>
+    private bool IsPrintPart(Transform part) =>
+        part != null && (paperQuad == null || part != paperQuad.transform) && (fills == null || part != fills.transform)
+        && (lines == null || part != lines.transform) && (cover == null || part != cover.transform);
+
+    /// <summary>How many of the sheet's children ride the bend as one piece (IsPrintPart).</summary>
+    private int PrintPartCount()
+    {
+        int count = 0;
+        foreach (Transform part in sheet)
+            if (IsPrintPart(part))
+                count++;
+        return count;
+    }
+
+    /// <summary>A part's half size on the sheet (metres): a text's box, else its quad's scale.</summary>
+    private static Vector2 HalfSize(Transform part)
+    {
+        Vector3 scale = part.localScale;
+        if (part is RectTransform rect)
+            return new Vector2(rect.sizeDelta.x * scale.x, rect.sizeDelta.y * scale.y) / 2f;
+        return new Vector2(Mathf.Abs(scale.x), Mathf.Abs(scale.y)) / 2f;
+    }
+
+    /// <summary>How far the sheet model's face stands over its plane under a part centred at <paramref name="centre"/> (sheet metres) of <paramref name="half"/> size: the lifted corner and the edge curl (PaperDepth.ReliefOver); 0 on any other kind.</summary>
+    private float Relief(Vector2 centre, Vector2 half)
+    {
+        if (_kind != PaperKind.Sheet || Size.x <= 0f || Size.y <= 0f)
+            return 0f;
+        return PaperDepth.ReliefOver(centre.x / Size.x + 0.5f, centre.y / Size.y + 0.5f, half.x / Size.x, half.y / Size.y);
+    }
+
+    /// <summary>
+    /// The printed parts at rest clear of the sheet model's relief (BUG-12a:
+    /// its lifted corner stood over the print in about 13% of the corner):
+    /// each part lifts by the most the face stands under it, the fills' and
+    /// lines' vertices each by the face under them. Runs once the paper is
+    /// printed (its kind known). The fills' and lines' rest vertices are kept
+    /// for the bend.
+    /// </summary>
+    private void RestFlatPrints(PaperKind kind)
+    {
+        RestorePrints();
+        _bend = PaperBend.Flat;
+        if (sheet != null && kind == PaperKind.Sheet)
+            foreach (Transform part in sheet)
+                if (IsPrintPart(part))
+                {
+                    Vector3 p = part.localPosition;
+                    part.localPosition = new Vector3(p.x, p.y, p.z - Relief(new Vector2(p.x, p.y), HalfSize(part)));
+                }
+        _fillsMesh = RestMesh(fills, ref _fillsRest, ref _fillsBent);
+        _linesMesh = RestMesh(lines, ref _linesRest, ref _linesBent);
+    }
+
+    /// <summary>A print mesh's rest vertices (each lifted by the relief under it), written back to it; null without one.</summary>
+    private Mesh RestMesh(MeshFilter filter, ref Vector3[] rest, ref Vector3[] bent)
+    {
+        Mesh mesh = filter != null ? filter.sharedMesh : null;
+        if (mesh == null)
+            return null;
+        rest = mesh.vertices;
+        for (int i = 0; i < rest.Length; i++)
+            rest[i].z -= Relief(new Vector2(rest[i].x, rest[i].y), Vector2.zero);
+        bent = new Vector3[rest.Length];
+        mesh.vertices = rest;
+        mesh.RecalculateBounds();
+        return mesh;
+    }
+
+    /// <summary>The fills' and lines' meshes on the bent face (flat: their rest), vertex by vertex, a hair above it.</summary>
+    private void BendPrintMeshes(PaperBend bend)
+    {
+        BendMesh(fills, _fillsMesh, _fillsRest, _fillsBent, bend);
+        BendMesh(lines, _linesMesh, _linesRest, _linesBent, bend);
+    }
+
+    private void BendMesh(MeshFilter filter, Mesh mesh, Vector3[] rest, Vector3[] bent, PaperBend bend)
+    {
+        if (filter == null || mesh == null || filter.sharedMesh != mesh || rest == null || bent == null || bent.Length != rest.Length)
+            return;
+        if (bend.IsFlat)
+        {
+            mesh.vertices = rest;
+            return;
+        }
+        float w = Mathf.Max(Size.x, 1e-4f), h = Mathf.Max(Size.y, 1e-4f);
+        for (int i = 0; i < rest.Length; i++)
+        {
+            Vector3 v = rest[i];
+            bent[i] = new Vector3(v.x, v.y, v.z + bend.Depth(Mathf.Clamp(v.x * 2f / w, -1f, 1f), Mathf.Clamp(v.y * 2f / h, -1f, 1f), w, h) - BentPrintLift);
+        }
+        mesh.vertices = bent;
+    }
+
+    /// <summary>The passport's cover on a booklet (shut: it arrives closed, PaperCover opens it on the desk), none on any other paper.</summary>
+    private void ShowCover(PaperKind kind)
+    {
+        if (cover == null)
+            return;
+        if (kind != PaperKind.Booklet || _form == null)
+        {
+            cover.Hide();
+            return;
+        }
+        float spine = 0f;
+        string colour = null;
+        string emblem = null;
+        foreach (FormItem item in _form.Items)
+        {
+            if (item.Kind == FormItemKind.Spine)
+                spine = Local(item.Rect).center.y;
+            else if (item.Kind == FormItemKind.Cover && !string.IsNullOrEmpty(item.Text))
+                colour = item.Text;
+            else if (item.Kind == FormItemKind.Watermark && !Seals.TryParse(item.Text, out _))
+                emblem = item.Text;
+        }
+        Color ink = EmblemArt.Ink(colour, new Color(0.14f, 0.19f, 0.37f, 1f));
+        cover.Arrive(this, drag, spine, Size, ink, string.IsNullOrEmpty(emblem) ? null : EmblemArt.Texture(emblem), _faceArt);
+    }
+
+    /// <summary>
+    /// A booklet shut (<paramref name="shut"/>: its cover over the data page,
+    /// PaperCover) or open: shut, its visa page above <paramref name="spine"/>
+    /// (sheet metres) is cut from its model (DeskPaperDepth.ClipAbove), its
+    /// prints there and its fills and lines hidden, and its contact shadow lies
+    /// under the data page alone; open, all of it shows.
+    /// </summary>
+    public void ShowShut(bool shut, float spine)
+    {
+        float h = Mathf.Max(Size.y, 1e-4f);
+        if (depth != null)
+        {
+            depth.ClipAbove(shut ? spine / h : 10f);
+            if (_config != null)
+                depth.Build(shut ? PaperEdge.Rectangle(1f, spine / h + 0.5f).ConvertAll(p => (p.x, p.y + (spine / h - 0.5f) / 2f)) : _depthOutline, Thickness, Size, _config);
+        }
+        if (sheet == null)
+            return;
+        foreach (Transform part in sheet)
+        {
+            if (!IsPrintPart(part) && (fills == null || part != fills.transform) && (lines == null || part != lines.transform))
+                continue;
+            bool above = part.localPosition.y > spine || (fills != null && part == fills.transform) || (lines != null && part == lines.transform);
+            foreach (Renderer r in part.GetComponentsInChildren<Renderer>(true))
+                r.forceRenderingOff = shut && above;
+        }
     }
 
     // ---------------- Printing ----------------
 
-    /// <summary>Prints one text item: a clone of the template in its role's style and ink, over its rectangle, shrunk just enough that its widest word fits its box (TmpFormText.WordFit, measured at the layout's scale), as on the PC; on a document drawn on its <paramref name="art"/>, in the art's fonts and inks, centred down its place and shrunk to fit it (TmpFormText.OnArt).</summary>
+    /// <summary>Prints one text item: a clone of the template in its role's style and ink, over its rectangle, shrunk just enough that its widest word fits its box (TmpFormText.WordFit, measured at the layout's scale), as on the PC; on a document drawn on its <paramref name="art"/>, in the art's fonts and inks, centred down its place and shrunk to fit it (TmpFormText.OnArt); then no word breaks across lines and an Arabic text is laid line by line (TmpFormText.Unbreak, BUG-9, 37c).</summary>
     private void Print(FormItem item, FormArt art)
     {
         TextMeshPro text = Instantiate(textTemplate, textTemplate.transform.parent);
@@ -265,6 +457,7 @@ public sealed partial class DeskDocument
         if (art != null)
             TmpFormText.OnArt(text, item, style, art, textTemplate);
         text.rectTransform.sizeDelta = new Vector2(r.width, r.height);
+        TmpFormText.Unbreak(text, r.width);
         text.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -TextLift);
         text.GetComponent<MeshRenderer>().enabled = true;
     }
@@ -283,6 +476,7 @@ public sealed partial class DeskDocument
     {
         _block ??= new MaterialPropertyBlock();
         Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber, issuer, clean)) : null;
+        _faceArt = face;
         if (face != null)
         {
             paperQuad.GetPropertyBlock(_block);

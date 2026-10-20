@@ -48,20 +48,15 @@ public sealed class TmpFormText : ITextMeasure
         return _text.GetPreferredValues(text, width, MeasureRoom).y;
     }
 
-    /// <summary>The least share of its size a printed text shrinks to so that its widest word fits its box (wave 5 A3: "TRANSPON / DER CLASS" never breaks mid-word).</summary>
-    public const float WordFitFloor = 0.6f;
-
-    /// <summary>Where a printed text's words part (a space, a line break).</summary>
-    private static readonly char[] WordBreaks = { ' ', '\n' };
-
     /// <summary>
     /// The share of its size <paramref name="text"/> in <paramref name="role"/>'s
     /// style at <paramref name="size"/> is printed at so that its widest word
-    /// fits <paramref name="width"/> (1 when it fits; never under
-    /// WordFitFloor): a word wraps whole and never breaks in the middle, and
-    /// the box keeps the layout's place and size (the document design spec,
-    /// D2). Measured on <paramref name="measure"/> (styled by this call; in the
-    /// units of <paramref name="size"/> and <paramref name="width"/>).
+    /// fits <paramref name="width"/> (TextFit.WordShare: 1 when it fits; never
+    /// under TextFit.Floor, BUG-9): a word wraps whole and never breaks in the
+    /// middle (Unbreak), and the box keeps the layout's place and size (the
+    /// document design spec, D2). Measured on <paramref name="measure"/>
+    /// (styled by this call; in the units of <paramref name="size"/> and
+    /// <paramref name="width"/>).
     /// </summary>
     public static float WordFit(TMP_Text measure, string text, FormTextRole role, float size, float width)
     {
@@ -69,10 +64,47 @@ public sealed class TmpFormText : ITextMeasure
             return 1f;
         Style(measure, role, size);
         float widest = 0f;
-        foreach (string word in text.Split(WordBreaks, StringSplitOptions.RemoveEmptyEntries))
-            widest = Mathf.Max(widest, measure.GetPreferredValues(word, float.PositiveInfinity, float.PositiveInfinity).x);
-        return widest > width ? Mathf.Max(WordFitFloor, width / widest * 0.98f) : 1f;
+        foreach (string word in TextFit.Words(text))
+            widest = Mathf.Max(widest, Width(measure, word));
+        return TextFit.WordShare(widest, width);
     }
+
+    /// <summary>
+    /// Lays a printed text out so that no word breaks across lines (BUG-9):
+    /// its widest word wider than <paramref name="width"/> (the box's, in the
+    /// text's units) shrinks the text just enough (TextFit.WordShare, never
+    /// under TextFit.WordLeast of its size now; only with
+    /// <paramref name="shrink"/>: a text whose size its owner sets again
+    /// after, like the rulebook's rows, is only cut), and a word still too
+    /// wide is cut with a full stop (TextFit.Unbroken; the validator keeps
+    /// generated values clear of it); a logical Arabic text is broken into
+    /// lines on its logical text, each line then put into visual order by the
+    /// per-line API (ArabicShaper.ToVisualLines, BUG-37c), and set from the
+    /// right.
+    /// </summary>
+    public static void Unbreak(TMP_Text text, float width, bool shrink = true)
+    {
+        if (text == null || string.IsNullOrEmpty(text.text) || width <= 0f)
+            return;
+        Func<string, float> measure = s => Width(text, s);
+        float widest = 0f;
+        foreach (string word in TextFit.Words(text.text))
+            widest = Mathf.Max(widest, measure(word));
+        float share = shrink ? TextFit.WordShare(widest, width) : 1f;
+        if (share < 1f)
+            text.fontSize *= share;
+        string laid = TextFit.Unbroken(text.text, width, 1f, measure);
+        if (TextFit.IsLogicalArabic(laid))
+        {
+            laid = string.Join("\n", ArabicShaper.ToVisualLines(TextFit.WrapWords(laid, width, measure)));
+            text.horizontalAlignment = HorizontalAlignmentOptions.Right;
+        }
+        if (laid != text.text)
+            text.text = laid;
+    }
+
+    /// <summary>A single line's width in <paramref name="text"/>'s style now.</summary>
+    private static float Width(TMP_Text text, string line) => text.GetPreferredValues(line, float.PositiveInfinity, float.PositiveInfinity).x;
 
     /// <summary>Puts <paramref name="target"/> in the font <paramref name="text"/> is printed in: ScriptOf's for it, else the measure's own font with its own material back (a pooled text that printed a foreign line gets the paper's ink again).</summary>
     public void SetFont(TMP_Text target, string text)
@@ -110,7 +142,7 @@ public sealed class TmpFormText : ITextMeasure
             text.font = font;
             text.fontSharedMaterial = font.material;
         }
-        text.fontSize *= ArtFit(measure, item, font);
+        text.fontSize *= ArtFit(measure, item, font, ArtLayout.FitFloorOf(art, item.Role));
         text.enableAutoSizing = false;
         text.alignment = item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Center : TextAlignmentOptions.Left;
         text.color = ArtInk(art, item, style);
@@ -122,8 +154,8 @@ public sealed class TmpFormText : ITextMeasure
     /// <summary>The steps ArtFit tries between the floor and the full size.</summary>
     private const int FitSteps = 8;
 
-    /// <summary>The largest share of <paramref name="item"/>'s size, from 1 down to ArtLayout.FitFloor (the floor when none fits), at which its words in <paramref name="font"/> (null: the measure's own), wrapped at its place's width, are no taller than its place, measured on <paramref name="measure"/> in the item's units (its font put back after; its style is the last tried).</summary>
-    public static float ArtFit(TMP_Text measure, FormItem item, TMP_FontAsset font)
+    /// <summary>The largest share of <paramref name="item"/>'s size, from 1 down to <paramref name="least"/> (ArtLayout.FitFloorOf; the least when none fits), at which its words in <paramref name="font"/> (null: the measure's own), wrapped at its place's width, are no taller than its place, measured on <paramref name="measure"/> in the item's units (its font put back after; its style is the last tried).</summary>
+    public static float ArtFit(TMP_Text measure, FormItem item, TMP_FontAsset font, float least)
     {
         if (measure == null || string.IsNullOrEmpty(item.Text))
             return 1f;
@@ -134,10 +166,10 @@ public sealed class TmpFormText : ITextMeasure
             measure.font = font;
             measure.fontSharedMaterial = font.material;
         }
-        float fit = ArtLayout.FitFloor;
+        float fit = least;
         for (int i = 0; i <= FitSteps; i++)
         {
-            float share = 1f - (1f - ArtLayout.FitFloor) * i / FitSteps;
+            float share = 1f - (1f - least) * i / FitSteps;
             Style(measure, item.Role, item.Size * share);
             Vector2 need = measure.GetPreferredValues(item.Text, item.Rect.Width, float.PositiveInfinity);
             if (need.y <= item.Rect.Height * 1.02f && need.x <= item.Rect.Width * 1.02f)

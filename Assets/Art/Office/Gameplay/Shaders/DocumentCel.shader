@@ -13,7 +13,13 @@
 // viewer), opaque, writing depth; an optional alpha cut-out (_Cutoff above 0) for art drawn on a
 // cut-out. While it moves the paper bends (PaperBend.hlsl: its bow, twist and ripple, as much as its
 // vertex alpha lets each part: stiff boards 0, loose pages 1), its tones staying its shape's at rest and
-// a soft airbrushed sheen showing the bend (_BendSheen: from the bent normal).
+// a soft airbrushed sheen showing the bend (_BendSheen: from the bent normal). DOC-LOOK (1019a):
+// - the desk's shared light (DeskLight.hlsl, LIGHT's level and tint) multiplies every document, as it
+//   does the props, the traveller and the photo (BUG-14c);
+// - a booklet's shut cover hides its visa page: everything above _ClipAbove (object space, up the
+//   page) is cut (PaperCover);
+// - where a model's edge overhangs the art's clear margin, the art's nearest opaque colour a few
+//   texels in fills it (BUG-10b: the folder's left edge drew a strip of _HoleColor).
 Shader "TimeDesk/DocumentCel"
 {
     Properties
@@ -32,7 +38,9 @@ Shader "TimeDesk/DocumentCel"
         _Flex ("Bend: travel (x, y), bow (m), lag", Vector) = (1, 0, 0, 0)
         _Flex2 ("Bend: twist (m), ripple (m), its phase, its half waves", Vector) = (0, 0, 0, 0)
         _FlexSize ("The paper's size (m)", Vector) = (1, 1, 0, 0)
-        _HoleColor ("Colour where the art is clear (no cut-out)", Color) = (0.68, 0.53, 0.36, 1)
+        _HoleColor ("Colour where the art is clear and no art lies near (no cut-out)", Color) = (0.68, 0.53, 0.36, 1)
+        _HoleReach ("How far in (uv) the art's edge colour is looked for under a clear margin", Range(0, 0.05)) = 0.012
+        _ClipAbove ("Cut above (object space, up the page; a booklet's shut cover)", Float) = 10
     }
 
     SubShader
@@ -52,6 +60,7 @@ Shader "TimeDesk/DocumentCel"
             #pragma fragment Frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "PaperBend.hlsl"
+            #include "Assets/Shaders/Include/DeskLight.hlsl"
 
             TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
@@ -70,6 +79,8 @@ Shader "TimeDesk/DocumentCel"
                 half _BendSheen;
                 half _Cutoff;
                 half4 _HoleColor;
+                half _HoleReach;
+                float _ClipAbove;
                 float4 _Flex;
                 float4 _Flex2;
                 float4 _FlexSize;
@@ -91,6 +102,7 @@ Shader "TimeDesk/DocumentCel"
                 float2 meshUv : TEXCOORD2;
                 float3 flatNormalWS : TEXCOORD3;
                 float3 positionWS : TEXCOORD4;
+                float pageY : TEXCOORD5;
                 half4 color : COLOR;
             };
 
@@ -112,6 +124,7 @@ Shader "TimeDesk/DocumentCel"
                 output.meshUv = input.uv;
                 output.normalWS = TransformObjectToWorldNormal(bent);
                 output.flatNormalWS = TransformObjectToWorldNormal(n);
+                output.pageY = input.positionOS.y;
                 output.color = input.color;
                 return output;
             }
@@ -127,11 +140,19 @@ Shader "TimeDesk/DocumentCel"
 
             half4 Frag(Varyings input) : SV_Target
             {
+                clip(_ClipAbove - input.pageY);
                 half4 art = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
                 if (_Cutoff > 0)
                     clip(art.a - _Cutoff);
                 else if (art.a < 0.5)
-                    art.rgb = _HoleColor.rgb; // a model's edge over the art's clear margin: the card's own colour, not the clear texels' leftovers
+                {
+                    // a model's edge over the art's clear margin: the art's own edge colour a few texels in (toward the
+                    // art's centre), else the card's own colour, never the clear texels' leftovers (BUG-10b)
+                    float2 inward = 0.5 - input.uv;
+                    float2 nearUv = input.uv + (dot(inward, inward) > 1e-8 ? normalize(inward) : float2(0, 0)) * _HoleReach;
+                    half4 near = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, nearUv) * _BaseColor;
+                    art.rgb = near.a >= 0.5 ? near.rgb : _HoleColor.rgb;
+                }
                 float3 view = normalize(GetWorldSpaceViewDir(input.positionWS));
                 float3 light = normalize(_LightDir.xyz);
                 // Three cel tones from the model's own shape (its normal at rest: a bend never flips a face into
@@ -144,7 +165,7 @@ Shader "TimeDesk/DocumentCel"
                 float ndl = Facing(input.normalWS, view, light);
                 half sheen = 1 + clamp((ndl - flat) * _BendSheen, -0.1, 0.06);
                 half3 baked = SAMPLE_TEXTURE2D(_ShadeMap, sampler_ShadeMap, input.meshUv).rgb;
-                return half4(art.rgb * input.color.rgb * baked * tone * sheen, 1);
+                return half4(art.rgb * input.color.rgb * baked * tone * sheen * DeskLight(), 1);
             }
             ENDHLSL
         }

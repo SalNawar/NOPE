@@ -11,7 +11,10 @@ using UnityEngine;
 /// measured with TextMeshPro as the paper prints), at the form style's sizes
 /// (FormStyle_Agency, or the defaults before Build Office UI made it).
 /// DeskFitProblems reports them, so Build Office UI and Validate Content
-/// Library check the same.
+/// Library check the same. A form drawn on its art is measured in the art's
+/// value face (FormStyleSO.artValueFont), the face its values print in
+/// (BUG-9: the check measured them in LiberationSans, so a value that fit the
+/// check overflowed its place on the paper).
 /// </summary>
 public static partial class ContentLibraryValidator
 {
@@ -67,22 +70,31 @@ public static partial class ContentLibraryValidator
         FormMetrics metrics = style != null ? style.metrics : new FormMetrics();
         int longestOrigin = lib.LongestOriginLabel;
         var probe = new GameObject("FormsCheckText", typeof(TextMeshPro)) { hideFlags = HideFlags.HideAndDontSave };
+        var artProbe = new GameObject("FormsCheckArtText", typeof(TextMeshPro)) { hideFlags = HideFlags.HideAndDontSave };
         try
         {
             var measure = new TmpFormText(probe.GetComponent<TextMeshPro>());
+            TextMeshPro artText = artProbe.GetComponent<TextMeshPro>();
+            if (style != null && style.artValueFont != null)
+            {
+                artText.font = style.artValueFont;
+                artText.fontSharedMaterial = style.artValueFont.material;
+            }
+            var artMeasure = new TmpFormText(artText);
             var seen = new HashSet<DocumentTemplateSO>();
             foreach (CaseBlueprintSO blueprint in TravellerBlueprints(lib))
                 foreach (DocumentTemplateSO template in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : new DocumentTemplateSO[0])
                 {
                     if (template == null || !seen.Add(template))
                         continue;
-                    foreach (string problem in DocumentForm.Problems(template, lib.Agency, longestOrigin, metrics, measure))
+                    foreach (string problem in DocumentForm.Problems(template, lib.Agency, longestOrigin, metrics, ArtLayout.IsArt(template.form) ? artMeasure : measure))
                         problems.Add($"{template.displayName} ({template.name}): {problem} (its form, FormLayout.Check; edit the template's form or FormStyle_Agency).");
                 }
         }
         finally
         {
             Object.DestroyImmediate(probe);
+            Object.DestroyImmediate(artProbe);
         }
         return problems;
     }

@@ -47,8 +47,17 @@ using UnityEngine;
 /// P0-A carve (docs/pending/CARVE.md): the folder's motion is in
 /// DeskRulebook.Motion.cs. Owner: DOC-LOOK.
 /// </summary>
-public sealed partial class DeskRulebook : MonoBehaviour
+public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
 {
+    /// <inheritdoc />
+    public void HoverLift(float share)
+    {
+        if (depth != null)
+            depth.HoverLift(share);
+    }
+
+    /// <summary>A page turn's flick of the folder's loose sheets (D3 retires "the folder never bends"; GAME_FEEL_BIBLE A3: a bow of at most 3 mm on the flip, curling from the corner, settling like a heavy paper): its bow and twist (metres) and how long it settles (seconds).</summary>
+    private const float FlipBow = 0.003f, FlipTwist = 0.0015f, FlipSeconds = 0.35f;
     /// <summary>The booklet's visible part and its click boxes, lifted off the desk plane by the stack (SetLift); the root stays on the plane, where the drag moves it.</summary>
     [SerializeField] private Transform booklet;
 
@@ -358,7 +367,10 @@ public sealed partial class DeskRulebook : MonoBehaviour
     /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced): its rows show, the others' hide; its tab looks open. The GUIDE shows its sheet (read).</summary>
     public void ShowPage(int page)
     {
+        int before = Page;
         Page = Mathf.Clamp(page, 0, _sealsIntroduced ? SealsPageIndex : GuidePageIndex);
+        if (Page != before && depth != null && folderFace != null && isActiveAndEnabled)
+            depth.Flick(new PaperBend(1f, 0f, FlipBow, 0.5f, FlipTwist, 0f, 0f, 0f), folderFace.transform.localScale, FlipSeconds);
         if (sealsPage != null)
             sealsPage.SetActive(Page == SealsPageIndex);
         if (rulesPage != null)
@@ -549,7 +561,13 @@ public sealed partial class DeskRulebook : MonoBehaviour
             bool on = r < count && start + r < _indices.Count;
             rows[r].gameObject.SetActive(on);
             if (on && rows[r].GetComponentInChildren<TMP_Text>(true) is TMP_Text text)
+            {
                 text.text = $"{start + r + 1}. {_rules[_indices[start + r]].Summary()}";
+                // no word breaks across lines, measured at the full size LayRows starts from (it only shrinks from there); an
+                // Arabic rule laid line by line (BUG-9, 37c)
+                text.fontSize = text.fontSizeMax;
+                TmpFormText.Unbreak(text, text.rectTransform.sizeDelta.x, shrink: false);
+            }
         }
     }
 
@@ -585,8 +603,8 @@ public sealed partial class DeskRulebook : MonoBehaviour
     /// <summary>The rule rows as built (empty until the first LayRows).</summary>
     private RowHome[] _rowHomes = Array.Empty<RowHome>();
 
-    /// <summary>The least share of its built size a rule row's text shrinks to so that the rows stay on the page.</summary>
-    private const float RowTextFloor = 0.6f;
+    /// <summary>The least share of its built size a rule row's text shrinks to before the rows go on to the next sheet: none (BUG-9: the rulebook paginates before it shrinks; only a rule alone on its sheet ever shrinks, TextFit.Floor first, RowTextLeast at the very last).</summary>
+    private const float RowTextFloor = 1f;
 
     /// <summary>The least share a rule alone on its sheet shrinks to when even at RowTextFloor it would leave the sheet (it never does: it shrinks instead).</summary>
     private const float RowTextLeast = 0.3f;
@@ -640,6 +658,7 @@ public sealed partial class DeskRulebook : MonoBehaviour
             return true;
         RowHome lastPlace = _rowHomes[rows.Length - 1];
         float pageBottom = lastPlace.Row.z - lastPlace.BoxSize.z / 2f - RowsFoot;
+        float pitch = rows.Length > 1 ? Mathf.Abs(_rowHomes[0].Row.z - _rowHomes[1].Row.z) : 0f; // the art's ruled lines (BUG-10c)
         for (float share = 1f; ; share -= 0.05f)
         {
             float shift = 0f, bottom = float.MaxValue;
@@ -654,7 +673,10 @@ public sealed partial class DeskRulebook : MonoBehaviour
                 {
                     t.enableAutoSizing = false;
                     t.fontSize = t.fontSizeMax * share;
-                    extra = Mathf.Max(0f, t.GetPreferredValues(t.text, home.TextSize.x, 0f).y - home.TextSize.y);
+                    // a wrapped rule's lines step down the ruled lines, and its row takes whole lines (BUG-10c: text sat through the rules)
+                    if (t.font != null && t.font.faceInfo.pointSize > 0f)
+                        t.lineSpacing = RuledLines.Spacing(pitch, t.fontSize * TmpFormText.WorldEmPerFontSize, t.font.faceInfo.lineHeight / t.font.faceInfo.pointSize);
+                    extra = RuledLines.Snap(Mathf.Max(0f, t.GetPreferredValues(t.text, home.TextSize.x, 0f).y - home.TextSize.y), pitch);
                     t.rectTransform.sizeDelta = new Vector2(home.TextSize.x, home.TextSize.y + extra);
                     t.transform.localPosition = home.TextPosition - new Vector3(0f, 0f, extra / 2f); // its top stays on the row's top
                 }
@@ -671,6 +693,8 @@ public sealed partial class DeskRulebook : MonoBehaviour
                 return true;
             if (share <= RowTextLeast + 0.001f || (share <= RowTextFloor + 0.001f && !final && count > 1))
                 return false;
+            if (share > TextFit.Floor + 0.001f && share - 0.05f < TextFit.Floor)
+                share = TextFit.Floor + 0.05f; // the next step lands on the floor before it goes under it
         }
     }
 
@@ -752,7 +776,10 @@ public sealed partial class DeskRulebook : MonoBehaviour
         if (guideTitle != null)
             guideTitle.text = sheet.Title ?? string.Empty;
         if (guideBody != null)
+        {
             guideBody.text = sheet.Body ?? string.Empty;
+            TmpFormText.Unbreak(guideBody, guideBody.rectTransform.sizeDelta.x, shrink: false); // auto-sized: only cut, never shrunk again on every sheet
+        }
         if (guideNumber != null)
             guideNumber.text = any ? UiText.Format("desk.guide.page", _sheet + 1, _sheets.Count) : string.Empty;
         if (guideNew != null)
