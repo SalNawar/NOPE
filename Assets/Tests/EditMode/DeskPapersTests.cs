@@ -341,10 +341,13 @@ public class DeskPapersTests
     public void TheSizeAfterTheRelease_IsTheSizeItWasHeldAt_ForEveryDropThatDoesNotDock()
     {
         // The drop matrix's (c) and D1's one size per zone, over every outcome: a paper's zone (counter or desk), the verdict
-        // in or not, the pointer over the counter or the desk, over the scanner (idle or busy) or the chip reader or neither.
-        // The held size is DeskController.HandleDragged's (PaperSizes.HeldZone); the size after the release is what every
-        // drop branch sets (PaperSizes.ZoneAfterDrop), and DeskPapers records the same zone. Only a paper going into a machine
-        // (Scanning: its docked size) or back to the traveller (HandsBack) is exempt from "the size it was held at".
+        // in or not, the pointer over the counter or the desk, its footprint's centre over the scanner (idle or busy) or the
+        // chip reader or neither. The held size is DeskController.HandleDragged's (PaperSizes.HeldZone, over a machine when
+        // DockAt finds one); the size after the release is what every drop branch sets (PaperSizes.ZoneAfterDrop), and
+        // DeskPapers records the same zone. Only a paper going into a machine (Scanning: its docked size) or back to the
+        // traveller (HandsBack) is exempt from "the size it was held at". The pointer over the counter with the centre over a
+        // machine (a counter paper held by its far edge, a machine within half a paper of the counter) is included: the dock
+        // is judged by the centre, so the held size is too (verifier, round 2).
         const float counterScale = 0.6f, deskScale = 1.5f;
         var seen = new HashSet<DropOutcome>();
         foreach (DeskZone was in new[] { DeskZone.Counter, DeskZone.Desk })
@@ -354,8 +357,6 @@ public class DeskPapersTests
         foreach (bool busy in new[] { false, true })
         {
             bool overScanner = machine == 1;
-            if ((overScanner || machine == AtTheReader) && under == DeskZone.Counter)
-                continue; // the machines stand on the desk, never on the counter
             DeskPapers p = AllOnDesk();
             if (was == DeskZone.Desk)
                 Assert.AreEqual(DropOutcome.Stays, p.Drop(0, false, DeskZone.Desk));
@@ -363,7 +364,7 @@ public class DeskPapersTests
                 Assert.AreEqual(DropOutcome.Scanning, p.Drop(2, true));
             string at = $"a {was} paper, verdict {verdict}, over the {under}, machine {machine}, scanner busy {busy}";
 
-            DeskZone held = PaperSizes.HeldZone(under, p.ZoneOf(0), verdict);
+            DeskZone held = PaperSizes.HeldZone(under, p.ZoneOf(0), verdict, machine != 0);
             DeskZone before = p.ZoneOf(0);
             DropOutcome outcome;
             DeskZone after;
@@ -444,6 +445,98 @@ public class DeskPapersTests
         Assert.AreEqual(DropOutcome.Scanning, p.Drop(1, true, DeskZone.Desk));
         Assert.AreEqual(1, p.Tick(Scan));
         Assert.AreEqual(DeskZone.Desk, p.ZoneOf(1), "it comes back to the desk, where it was last picked up, not to the counter");
+    }
+
+    [Test]
+    public void AHeldPaper_OverAMachine_ShowsAtItsDeskSize_WhateverThePointer()
+    {
+        // Verifier round 2 (low): the dock is the footprint's centre's, so the held size follows it too. A counter paper
+        // held by its far edge, the pointer just inside the counter, its centre over a machine: desk size, as it lies after.
+        foreach (DeskZone recorded in new[] { DeskZone.Counter, DeskZone.Desk })
+        foreach (bool verdict in new[] { false, true })
+        foreach (DeskZone under in new[] { DeskZone.Counter, DeskZone.Desk })
+            Assert.AreEqual(DeskZone.Desk, PaperSizes.HeldZone(under, recorded, verdict, true), $"a {recorded} paper, verdict {verdict}, pointer over the {under}");
+        Assert.AreEqual(DeskZone.Counter, PaperSizes.HeldZone(DeskZone.Counter, DeskZone.Counter, false), "off every machine, a counter paper over the counter keeps the counter's size");
+        Assert.AreEqual(DeskZone.Counter, PaperSizes.HeldZone(DeskZone.Counter, DeskZone.Desk, true, false), "off every machine, once the verdict is in, any paper over the counter takes its size");
+    }
+
+    [Test]
+    public void AQueuedPaper_LiftedThenCancelled_ThenScanned_LiesInTheDeskZone()
+    {
+        // Verifier round 2, repro A: a counter paper waits beside the busy scanner; lifted from there (its pick-up position
+        // is now the waiting spot) and let go by a cancel (Esc, right-click, Alt+Tab: DeskPapers is not told), it stays in the
+        // feed. Scanned, the desk carries it to the waiting spot, on the desk: it must lie there in the desk's zone.
+        DeskPapers p = AllOnDesk();
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(2, true));
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(0, true, DeskZone.Desk));
+        Assert.AreEqual(DeskZone.Desk, p.ZoneOf(0));
+        Assert.IsTrue(p.Lift(0), "the drag begins (DeskController.HandleDragBegan)");
+        Assert.IsTrue(p.IsQueued(0), "a lift alone changes nothing in the feed (a cancel keeps it waiting)");
+        Assert.AreEqual(DeskZone.Desk, p.ZoneOf(0), "held and cancelled, it lies where it waited, a desk paper");
+        Assert.AreEqual(2, p.Tick(Scan));
+        Assert.AreEqual(0, p.FeedNext(null), "it scans at its turn");
+        Assert.AreEqual(0, p.Tick(Scan));
+        Assert.AreEqual(DeskZone.Desk, p.ZoneOf(0), "scanned, it comes back to the waiting spot it was last lifted from, in the desk's zone, not the counter's");
+
+        // lifted and dropped on the busy scanner again: it comes back to the spot it was lifted from, in its zone there
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(2, true));
+        Assert.AreEqual(DeskZone.Counter, p.ZoneOf(1));
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true, DeskZone.Desk), "a counter paper queued");
+        Assert.IsTrue(p.Lift(1));
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true, DeskZone.Desk), "re-dropped on the busy scanner from where it waited");
+        Assert.AreEqual(2, p.Tick(Scan));
+        Assert.AreEqual(1, p.FeedNext(null));
+        Assert.AreEqual(1, p.Tick(Scan));
+        Assert.AreEqual(DeskZone.Desk, p.ZoneOf(1), "its last pick-up was the waiting spot, on the desk");
+
+        Assert.IsFalse(p.Lift(-1), "out of range");
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(1, true));
+        Assert.IsFalse(p.Lift(1), "a paper on the bed is not lifted");
+        p.ReturnAll();
+        Assert.IsFalse(p.Lift(0), "a paper given back is not lifted");
+    }
+
+    [Test]
+    public void AQueuedPaper_DroppedAtTheReader_LeavesTheFeed()
+    {
+        // Verifier round 2, repro B: a paper waiting beside the busy scanner, dragged onto the chip reader (refused: laid on
+        // the desk; or accepted and read), is off the scanner: like any drop off the scanner it leaves the feed, so it is
+        // never fed from beside the reader, and no scan carries it back to the counter.
+        foreach (bool refused in new[] { true, false })
+        {
+            DeskPapers p = AllOnDesk();
+            Assert.AreEqual(DropOutcome.Scanning, p.Drop(2, true));
+            Assert.AreEqual(DropOutcome.Queued, p.Drop(0, true, DeskZone.Desk));
+            Assert.IsTrue(p.Lift(0));
+            Assert.IsTrue(p.LeaveFeed(0), "dropped at the reader (DeskController's reader branch)");
+            if (refused)
+                Assert.IsTrue(p.Lay(0, PaperSizes.ZoneAfterDrop(DropOutcome.MachineRefused, DeskZone.Desk, p.ZoneOf(0))));
+            Assert.IsFalse(p.IsQueued(0), $"refused {refused}: it left the feed");
+            Assert.AreEqual(0, p.QueuedCount);
+            Assert.AreEqual(2, p.Tick(Scan));
+            Assert.AreEqual(-1, p.FeedNext(null), $"refused {refused}: it is never fed from beside the reader");
+            Assert.AreEqual(DeskZone.Desk, p.ZoneOf(0), $"refused {refused}: it stays a desk paper");
+        }
+
+        // with no lift in between (a direct call), the zone it would have come back to is forgotten too
+        DeskPapers q = AllOnDesk();
+        Assert.AreEqual(DropOutcome.Scanning, q.Drop(2, true));
+        Assert.AreEqual(DropOutcome.Queued, q.Drop(0, true, DeskZone.Desk));
+        Assert.IsTrue(q.LeaveFeed(0));
+        Assert.AreEqual(2, q.Tick(Scan));
+        Assert.AreEqual(DropOutcome.Scanning, q.Drop(0, true, DeskZone.Desk), "later scanned by hand from the desk");
+        Assert.AreEqual(0, q.Tick(Scan));
+        Assert.AreEqual(DeskZone.Desk, q.ZoneOf(0), "nothing carries it back to the counter");
+
+        // an Auto-Fed paper keeps its place, as with Drop off the scanner
+        DeskPapers r = AllOnDesk();
+        Assert.AreEqual(DropOutcome.Scanning, r.Drop(2, true));
+        Assert.IsTrue(r.Enqueue(1));
+        Assert.IsTrue(r.LeaveFeed(1));
+        Assert.IsTrue(r.IsQueued(1), "an Auto-Fed paper stays in the feed, fed from wherever it lies");
+
+        Assert.IsFalse(r.LeaveFeed(-1), "out of range");
+        Assert.IsFalse(r.LeaveFeed(2), "a paper on the bed");
     }
 
     [Test]

@@ -338,7 +338,7 @@ public sealed class DeskController : MonoBehaviour
             return;
 
         DeskDocument paper = _papers[done];
-        // one dropped on the busy scanner waited on the desk: it comes back to where it was picked up, in that zone (DeskPapers.Tick); docked meanwhile, its size changes only once it is clear
+        // one dropped on the busy scanner waited on the desk: it comes back to where it was last picked up (its PickUpPosition), in the zone it lay in there (DeskPapers.Tick and Lift); docked meanwhile, its size changes only once it is clear
         if (paper.Zone != _state.ZoneOf(done))
             paper.SetZone(_state.ZoneOf(done), false);
         CarryOut(paper, Rest(paper, paper.Drag.PickUpPosition, false));
@@ -705,11 +705,13 @@ public sealed class DeskController : MonoBehaviour
             deskView.TiltIn();
     }
 
-    /// <summary>A drag begins: the dragged paper lifts above the stack (and is drawn above every prop: DeskDocument, HeldOnTop).</summary>
+    /// <summary>A drag begins: the dragged paper lifts above the stack (and is drawn above every prop: DeskDocument, HeldOnTop). Its pick-up position is where it lies now (DeskDraggable), so DeskPapers is told (Lift): a paper waiting beside the busy scanner, lifted and let go by a cancel, comes back there once scanned, in the desk's zone, not to the counter it was first picked up from.</summary>
     private void HandleDragBegan(DeskDraggable drag)
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = paper.Index;
+        if (_state != null)
+            _state.Lift(paper.Index);
         MeasureMachines();
         ApplyStack();
     }
@@ -720,8 +722,11 @@ public sealed class DeskController : MonoBehaviour
     /// takes the counter's size over the counter when it could lie there (a
     /// counter paper, or any paper once the passport carries its verdict: a
     /// drop there hands the papers back), else it keeps its desk size (a drop
-    /// there is refused). Over the counter the counter's strip lights; near the
-    /// scanner its lid opens.
+    /// there is refused). With its footprint's centre over a machine (DockAt,
+    /// the dock a release there goes to) it shows at its desk size whatever
+    /// the pointer, the size it lies at if the machine refuses or queues it.
+    /// Over the counter the counter's strip lights; near the scanner its lid
+    /// opens.
     /// </summary>
     private void HandleDragged(DeskDraggable drag, Vector3 point)
     {
@@ -731,7 +736,9 @@ public sealed class DeskController : MonoBehaviour
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         if (paper != null && _state != null)
         {
-            DeskZone sized = PaperSizes.HeldZone(under, _state.ZoneOf(paper.Index), stamps != null && stamps.HasVerdict);
+            Vector3 at = paper.transform.position;
+            bool overMachine = DockAt(PaperFootprint(paper, at), at.y) != null;
+            DeskZone sized = PaperSizes.HeldZone(under, _state.ZoneOf(paper.Index), stamps != null && stamps.HasVerdict, overMachine);
             if (paper.Zone != sized)
                 paper.SetZone(sized, false);
         }
@@ -778,6 +785,9 @@ public sealed class DeskController : MonoBehaviour
         IPaperDock dock = DockAt(PaperFootprint(paper, at), at.y);
         if (dock != null && dock.Machine == DeskMachine.ChipReader)
         {
+            // Off the scanner: a paper that waited beside it leaves the feed, as any drop off the scanner (DeskPapers.LeaveFeed).
+            _state.LeaveFeed(index);
+            _waiting.Remove(index);
             MachineDock where = MachineIntake.Dock(dock.Machine, FeedOf(paper));
             if (where == MachineDock.Refused || hardware.ReaderBusy || _docks.Busy(DeskMachine.ChipReader))
                 RefuseAt(paper, dock, at, zone);
@@ -924,18 +934,18 @@ public sealed class DeskController : MonoBehaviour
     /// its root's height <paramref name="y"/>) drops on, or null
     /// (DropResolver.DockOf): the machine whose drop area holds the
     /// footprint's centre, not the pointer, the chip reader first (it stands
-    /// clear of the scanner).
+    /// clear of the scanner). The machines are the ones Docks() lists, listed
+    /// here without an enumerator: a held paper asks every frame
+    /// (HandleDragged).
     /// </summary>
     private IPaperDock DockAt(DeskRect world, float y)
     {
         _dockOrder.Clear();
-        foreach (IPaperDock dock in Docks())
-        {
-            if (dock.Machine == DeskMachine.ChipReader)
-                _dockOrder.Insert(0, dock);
-            else
-                _dockOrder.Add(dock);
-        }
+        IPaperDock reader = hardware != null ? hardware.ReaderDock : null;
+        if (reader != null && reader.OnDesk)
+            _dockOrder.Add(reader);
+        if (scanner != null && !_scanners.Hidden && scanner.OnDesk)
+            _dockOrder.Add(scanner);
         _dockY = y;
         _holdsCentre ??= (d, x, z) => d.Contains(new Vector3(x, _dockY, z));
         int i = DropResolver.DockOf(world, _dockOrder, _holdsCentre);
@@ -1005,8 +1015,8 @@ public sealed class DeskController : MonoBehaviour
         return _casings;
     }
 
-    /// <summary>The world x, z bounds of <paramref name="corners"/> (DeskObstacles' frame).</summary>
-    private static DeskRect WorldFootprint(IEnumerable<Vector3> corners)
+    /// <summary>The world x, z bounds of <paramref name="corners"/> (DeskObstacles' frame). An array, so no enumerator is made: a held paper's footprint is taken every frame (HandleDragged).</summary>
+    private static DeskRect WorldFootprint(Vector3[] corners)
     {
         float minX = float.MaxValue, minZ = float.MaxValue, maxX = float.MinValue, maxZ = float.MinValue;
         foreach (Vector3 c in corners)
