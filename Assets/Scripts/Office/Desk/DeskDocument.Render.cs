@@ -476,8 +476,14 @@ public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
     /// A booklet shut (<paramref name="shut"/>: its cover over the data page,
     /// PaperCover) or open: shut, its visa page above <paramref name="spine"/>
     /// (sheet metres) is cut from its model (DeskPaperDepth.ClipAbove), its
-    /// prints there and its fills and lines hidden, and its contact shadow lies
-    /// under the data page alone; open, all of it shows.
+    /// prints there and its fills and lines hidden, its contact shadow lies
+    /// under the data page alone, and the visa page takes no pointer: the
+    /// sheet's box (the click's, the hover's and the drag's) covers the data
+    /// page alone (ShutBox) and every printed part's box over the spine is off
+    /// (DOC-LOOK review, S3: the hidden half used to take hovers, clicks,
+    /// presses and drags over the bare counter); open, all of it shows and
+    /// takes the pointer again. Each print and box is judged where it lies,
+    /// so a layer's marks (UvPaperLayer, MicroPaperLayer) on the data page stay.
     /// </summary>
     public void ShowShut(bool shut, float spine)
     {
@@ -490,14 +496,40 @@ public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
         }
         if (sheet == null)
             return;
+        if (sheet.TryGetComponent(out BoxCollider box))
+        {
+            (float centre, float tall) = shut ? ShutBox.Keep(0f, Size.y, spine, true) : (0f, Size.y);
+            box.center = new Vector3(box.center.x, centre, box.center.z);
+            box.size = new Vector3(box.size.x, tall, box.size.z);
+        }
         foreach (Transform part in sheet)
         {
-            if (!IsPrintPart(part) && (fills == null || part != fills.transform) && (lines == null || part != lines.transform))
+            bool printMesh = (fills != null && part == fills.transform) || (lines != null && part == lines.transform);
+            if (!printMesh && !IsPrintPart(part))
                 continue;
-            bool above = part.localPosition.y > spine || (fills != null && part == fills.transform) || (lines != null && part == lines.transform);
             foreach (Renderer r in part.GetComponentsInChildren<Renderer>(true))
-                r.forceRenderingOff = shut && above;
+                r.forceRenderingOff = shut && (printMesh || OverSpine(r.transform, spine));
+            foreach (Collider c in part.GetComponentsInChildren<Collider>(true))
+                ShutOut(c, shut && OverSpine(c.transform, spine));
         }
+    }
+
+    /// <summary>The printed parts' boxes a shut booklet turned off (ShowShut: over its spine); only these come back on as it opens.</summary>
+    private readonly HashSet<Collider> _shutOut = new HashSet<Collider>();
+
+    /// <summary>True when <paramref name="part"/> lies over the booklet's <paramref name="spine"/> (sheet metres): on the visa page.</summary>
+    private bool OverSpine(Transform part, float spine) => sheet.InverseTransformPoint(part.position).y > spine;
+
+    /// <summary>Turns a printed part's box off (<paramref name="off"/>) while its booklet is shut, or back on once it opens when ShowShut turned it off.</summary>
+    private void ShutOut(Collider box, bool off)
+    {
+        if (off && box.enabled)
+        {
+            box.enabled = false;
+            _shutOut.Add(box);
+        }
+        else if (!off && _shutOut.Remove(box))
+            box.enabled = true;
     }
 
     // ---------------- Printing ----------------

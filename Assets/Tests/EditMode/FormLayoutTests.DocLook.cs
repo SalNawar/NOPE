@@ -123,5 +123,19 @@ public partial class FormLayoutTests
         Assert.IsEmpty(ArtLayout.CutWords(Booklet(), words, new FakeMeasure()), "a form off the art prints no cut words");
     }
 
+    [Test]
+    public void Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit()
+    {
+        FormData single = BookletData();
+        single.FieldValues = single.FieldValues.Select((v, i) => i == 1 ? new string('W', 30) : v).ToArray();
+        string problems = string.Join("\n", FormLayout.Check(ArtPassport(), single, M, new FakeMeasure()));
+        StringAssert.Contains("field 1 (Citizen ID)'s longest value has a word", problems, "a single-token value (an ID) the paper would cut with a full stop");
+        StringAssert.DoesNotContain("does not fit its place", problems, "its two broken lines fit the place's height: only the word check sees it");
+
+        FormData words = BookletData();
+        words.FieldValues = words.FieldValues.Select((v, i) => i == 1 ? new string('W', 10) + " " + new string('W', 10) : v).ToArray();
+        Assert.IsEmpty(FormLayout.Check(ArtPassport(), words, M, new FakeMeasure()), "as long in words that each fit, it wraps whole");
+    }
+
     private static float Grow(float size, float growth, float room) => System.Math.Max(size, System.Math.Min(size * growth, room));
 }

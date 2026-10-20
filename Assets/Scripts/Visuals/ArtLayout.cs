@@ -223,8 +223,11 @@ public static class ArtLayout
     /// field the template does not have, a place off the face or without an
     /// area, a relabelled field without a label's place, a print naming no
     /// field or printing nothing, a caption without a visa box, an art without
-    /// its aspect, and a value that does not fit its place at FitFloor of its
-    /// size (measured wrapped at its place's width). Empty when the art fits.
+    /// its aspect, a value that does not fit its place at FitFloor of its
+    /// size (measured wrapped at its place's width), and a value with a word
+    /// wider than its place there (the paper never breaks a word, so it would
+    /// cut it: a single-token value such as a Citizen ID is its own probe's
+    /// one word, as long as the longest). Empty when the art fits.
     /// </summary>
     public static List<string> Problems(FormSpec spec, FormData probe, ITextMeasure measure)
     {
@@ -273,12 +276,12 @@ public static class ArtLayout
         {
             if (item.Kind != FormItemKind.Text || item.Slot < 0 || item.Role == FormTextRole.Label)
                 continue;
-            float need = measure.Height(item.Text, item.Role, item.Size * FitFloorOf(art, item.Role), item.Rect.Width);
-            if (need > item.Rect.Height * 1.001f)
-            {
-                int field = full.Slots[item.Slot].Field;
+            float least = item.Size * FitFloorOf(art, item.Role);
+            int field = full.Slots[item.Slot].Field;
+            if (measure.Height(item.Text, item.Role, least, item.Rect.Width) > item.Rect.Height * 1.001f)
                 problems.Add($"field {field} ({probe.FieldLabels[field]})'s longest value does not fit its place on the art even at {FitFloor:0.0} of its size");
-            }
+            else if (TextFit.Words(item.Text).FirstOrDefault(w => Breaks(measure, w, item.Role, least, item.Rect.Width)) is string cut)
+                problems.Add($"field {field} ({probe.FieldLabels[field]})'s longest value has a word ('{cut}') wider than its place on the art even at {FitFloor:0.0} of its size: the paper would cut it (re-lay the place, or shorten the value)");
         }
         return problems;
     }
@@ -322,7 +325,7 @@ public static class ArtLayout
             float size = item.Size * FitFloorOf(art, item.Role);
             foreach (string word in words[field])
             {
-                if (string.IsNullOrEmpty(word) || measure.Height(word, item.Role, size, item.Rect.Width) <= measure.Height(word, item.Role, size, Unwrapped) * OneLine)
+                if (string.IsNullOrEmpty(word) || !Breaks(measure, word, item.Role, size, item.Rect.Width))
                     continue;
                 problems.Add($"field {field}'s value word '{word}' is wider than its place on the art even at its least size: the paper would cut it (re-lay the place, or shorten the content)");
                 reported.Add(field);
@@ -331,6 +334,10 @@ public static class ArtLayout
         }
         return problems;
     }
+
+    /// <summary>True when <paramref name="word"/> alone, in <paramref name="role"/>'s style at <paramref name="size"/>, wraps at <paramref name="width"/> onto more than one line: wider than its place, so TextMeshPro would break it mid-word (the paper cuts it instead, TmpFormText.Unbreak).</summary>
+    private static bool Breaks(ITextMeasure measure, string word, FormTextRole role, float size, float width) =>
+        measure.Height(word, role, size, width) > measure.Height(word, role, size, Unwrapped) * OneLine;
 
     /// <summary>An art caption printed in the reading language at its place (a label or title in capitals, a paragraph as written), never picked; a label caption grows with the art's labels (labelGrowth), never past a line of its place.</summary>
     private static FormItem Caption(ArtCaption c, FaceRect place, FormData data, FormArt art)

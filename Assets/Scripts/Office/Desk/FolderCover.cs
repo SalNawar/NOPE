@@ -14,8 +14,9 @@ using UnityEngine;
 /// shows. It swings on unscaled time (BookletFlip: a 15 degree lift, then
 /// the swing, its overshoot a rebound off the desk, never through it; at once
 /// under Reduced Motion), its free edge bowing 2 mm behind the swing (a
-/// heavy board: GAME_FEEL_BIBLE A3, at most 3 mm on the flip; PaperCover.Bow),
-/// with the bank's rulebook_page cue (FEEDBACK's). The
+/// heavy board: GAME_FEEL_BIBLE A3, at most 3 mm on the flip; PaperCover.Bow;
+/// the seal rides the bow, PaperCover.Ride, so the board never comes up
+/// through it), with the bank's rulebook_page cue (FEEDBACK's). The
 /// folder arrives shut each day (DeskRulebook.Show); a click on the shut
 /// folder or on a tab opens it, a click on its open cover page (the
 /// FolderCoverClick box over the left board) shuts it. DESK-HOMES' pocket
@@ -31,6 +32,9 @@ public sealed class FolderCover : MonoBehaviour
 
     /// <summary>The board's inside (a unit quad showing the left half of the folder's art, turned to face away while shut).</summary>
     [SerializeField] private Renderer back;
+
+    /// <summary>The Bureau's seal on the board's outside (a quad over the front's middle): it rides the front's bow (PaperCover.Ride).</summary>
+    [SerializeField] private Transform seal;
 
     /// <summary>The open folder's cover page as a click box (over the left board): a click shuts the folder; off while it is shut.</summary>
     [SerializeField] private Clickable coverClick;
@@ -49,6 +53,10 @@ public sealed class FolderCover : MonoBehaviour
 
     /// <summary>The bow last shown (metres).</summary>
     private float _bowShown = float.NaN;
+
+    /// <summary>The seal's place on the flat board (the hinge's space) and its half size (metres), as built.</summary>
+    private Vector3 _sealRest;
+    private Vector2 _sealHalf;
 
     private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
 
@@ -70,6 +78,11 @@ public sealed class FolderCover : MonoBehaviour
 
     private void Awake()
     {
+        if (seal != null)
+        {
+            _sealRest = seal.localPosition;
+            _sealHalf = new Vector2(Mathf.Abs(seal.localScale.x), Mathf.Abs(seal.localScale.y)) / 2f;
+        }
         PaperCover.UseSheet(front);
         PaperCover.UseSheet(back);
         if (coverClick != null)
@@ -136,6 +149,8 @@ public sealed class FolderCover : MonoBehaviour
             // the outside's free edge is its +x; the inside is turned over the spine (its free edge its -x, its +z the other way)
             PaperCover.Bow(front, _block, Vector2.right, bow);
             PaperCover.Bow(back, _block, Vector2.left, -bow);
+            if (front != null)
+                PaperCover.Ride(seal, _sealRest, _sealHalf, front.transform, PaperCover.BowOf(Vector2.right, bow));
         }
         if (coverClick != null && coverClick.TryGetComponent(out Collider box))
             box.enabled = !shut;

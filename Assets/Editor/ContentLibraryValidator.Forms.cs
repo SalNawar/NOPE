@@ -108,12 +108,13 @@ public static partial class ContentLibraryValidator
     /// <summary>How many of a category's longest words (by letters) CutWords measures in each field.</summary>
     private const int CutWordsPerField = 12;
 
-    /// <summary>The content's longest words each of <paramref name="template"/>'s fields prints (ArtLayout.CutWords), in capitals as a printed form sets them: a Name field's every place's given names, a Destination field's every place's origin label; none for the other fields (their probe values are measured by FormLayout.Check).</summary>
+    /// <summary>The content's longest words each of <paramref name="template"/>'s fields prints (ArtLayout.CutWords), in capitals as a printed form sets them: a Name field's every given name a traveller can carry (every place's lists, the 2150 citizens' among them, and every premade's own name, CaseFactory's two sources; a returning traveller keeps the name drawn from them), a Destination field's every place's origin label; none for the other fields (FormLayout.Check measures their probe values, whose words stand in for theirs: ArtLayout.Problems).</summary>
     private static IReadOnlyList<IReadOnlyList<string>> ContentWords(ContentLibrarySO lib, DocumentTemplateSO template)
     {
         List<string> Longest(IEnumerable<string> texts) => texts.Where(t => !string.IsNullOrWhiteSpace(t)).SelectMany(TextFit.Words).Select(ArtLayout.Capitals)
             .Distinct().OrderByDescending(w => w.Length).Take(CutWordsPerField).ToList();
-        List<string> names = Longest(lib.Profiles.Where(p => p != null).SelectMany(p => (p.maleNames ?? new string[0]).Concat(p.femaleNames ?? new string[0])));
+        List<string> names = Longest(lib.Profiles.Where(p => p != null).SelectMany(p => (p.maleNames ?? new string[0]).Concat(p.femaleNames ?? new string[0]))
+                                        .Concat(lib.Legendaries.Where(l => l != null).Select(l => l.displayName)));
         List<string> origins = Longest(lib.Profiles.Where(p => p != null).Select(p => p.OriginLabel));
         var words = new List<IReadOnlyList<string>>();
         foreach (DocumentFieldSpec spec in template.fieldSpecs ?? new DocumentFieldSpec[0])

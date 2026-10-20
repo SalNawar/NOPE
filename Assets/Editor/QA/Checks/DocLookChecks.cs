@@ -16,7 +16,9 @@ using UnityEngine;
 /// (it is red until the papers read: Saleh's call on the mat, the reading
 /// view and the floors, docs/pending/DOC-LOOK.md). Demo only: the measured
 /// cap height on screen (doclook.play.capHeight, the doclook_cap scenario's
-/// capHeight op).
+/// capHeight op), and the pointer on a shut passport's and the shut folder's
+/// hidden halves (doclook.play.coverHits, the doclook_print scenario's
+/// coverHits op: they take no hover, click or drag).
 /// </summary>
 public static class DocLookChecks
 {
@@ -88,6 +90,10 @@ public static class DocLookChecks
     /// <summary>The on-screen cap height of every printed value and label at A1 and A2 passed (the doclook_cap scenario's capHeight op).</summary>
     [GateCheck("doclook.play.capHeight", Owner, GateKind.Play, DemoOnly = true)]
     public static GateResult PlayCapHeight() => GateResults.Require("doclook.play.capHeight", Owner, "doclook_cap.capHeight.*");
+
+    /// <summary>The hidden half of a shut passport and of the shut folder takes no pointer, the shown half does, and both halves do once open (the doclook_print scenario's coverHits op; DOC-LOOK review, S3).</summary>
+    [GateCheck("doclook.play.coverHits", Owner, GateKind.Play, DemoOnly = true)]
+    public static GateResult PlayCoverHits() => GateResults.Require("doclook.play.coverHits", Owner, "doclook_print.coverHits.*");
 
     /// <summary>Every texture of the office's art (ArtSlots.OfficeImports: never the art side's hall layers) imports with mipmaps, trilinear and the high-quality compression (OfficeArtImporter; BUG-63).</summary>
     [GateCheck("doclook.import.office", Owner)]

@@ -108,8 +108,10 @@ public enum CoverState
 /// rebounds off the surface instead, toward the viewer (Swing), and the angle
 /// stays in [0, 180]. Turning back mid-swing starts from the angle the cover
 /// is at, with no lift (it is already up), over a time in proportion to the
-/// way left (as fast as a swing from rest), so the cover never jumps. Pure: PaperCover and FolderCover drive
-/// it on unscaled time, and under Reduced Motion it jumps (instant).
+/// way left (as fast as a swing from rest), so the cover never jumps. Its
+/// free edge bows behind the swing (Flex), eased so a turn back never flips
+/// the bow in one frame. Pure: PaperCover and FolderCover drive it on
+/// unscaled time, and under Reduced Motion it jumps (instant), unbowed.
 /// </summary>
 public sealed class BookletFlip
 {
@@ -128,6 +130,12 @@ public sealed class BookletFlip
     /// <summary>The least share of a whole swing's time a turn back takes (a cover turned back a hair from where it started still swings, never snaps).</summary>
     public const float LeastShare = 0.25f;
 
+    /// <summary>The swing's angular speed at which its free edge bows fully (degrees a second): a whole swing's mean, the lift aside.</summary>
+    public const float FullBowSpeed = (OpenDegrees - ShutDegrees - LiftDegrees) / SwingSeconds;
+
+    /// <summary>The most the bow (Flex) changes in a second, as a share of its most: it turns from one way's most to the other's in no less than 2 / FlexRate seconds (67 ms; at 60 frames a second the passport's free edge moves at most 1.5 mm a frame), so a turn back never pops the edge across (DOC-LOOK review: the bow's sign used to flip in one frame, a 6 mm pop on the passport).</summary>
+    public const float FlexRate = 30f;
+
     /// <summary>Where the cover is.</summary>
     public CoverState State { get; private set; } = CoverState.Closed;
 
@@ -140,8 +148,17 @@ public sealed class BookletFlip
     /// <summary>True while the cover swings.</summary>
     public bool Moving => State == CoverState.Opening || State == CoverState.Closing;
 
-    /// <summary>How much the swinging cover's free edge bows behind its swing (GAME_FEEL_BIBLE A1: a page bow of 2 to 4 mm on the flip), as a share of the most: the sine of its angle (none lying shut or open), positive while it opens and negative while it shuts, so the edge always trails.</summary>
-    public float Flex => Moving ? (float)Math.Sin(Angle * Math.PI / 180.0) * (State == CoverState.Opening ? 1f : -1f) : 0f;
+    /// <summary>
+    /// How much the swinging cover's free edge bows behind its swing
+    /// (GAME_FEEL_BIBLE A1: a page bow of 2 to 4 mm on the flip), as a share
+    /// of the most (-1 to 1). Each Tick it follows the sine of the cover's
+    /// angle times its angular speed over FullBowSpeed (at most all of it),
+    /// signed by the way the cover turns (positive toward open), so the edge
+    /// trails the swing and its rebound off the desk alike; it never changes
+    /// faster than FlexRate (a turn back eases it through flat, never a flip
+    /// in one frame) and it settles flat once the cover rests.
+    /// </summary>
+    public float Flex { get; private set; }
 
     /// <summary>The angle the swing under way started from (degrees).</summary>
     private float _from;
@@ -158,24 +175,35 @@ public sealed class BookletFlip
     /// <summary>Starts closing (nothing when shut or closing); <paramref name="instant"/> shuts at once. True when it started to close.</summary>
     public bool Close(bool instant = false) => Go(CoverState.Closing, CoverState.Closed, ShutDegrees, instant);
 
-    /// <summary>Shut at once, with no swing (a booklet arriving, a folder at the day's start).</summary>
+    /// <summary>Shut at once, with no swing and no bow (a booklet arriving, a folder at the day's start).</summary>
     public void Shut()
     {
         State = CoverState.Closed;
         Progress = 0f;
+        Flex = 0f;
     }
 
-    /// <summary>Advances a swing by <paramref name="seconds"/>; true while it moved this step.</summary>
+    /// <summary>Advances a swing and its bow (Flex) by <paramref name="seconds"/>; true while the cover moved or its bow settled this step (false at rest, flat).</summary>
     public bool Tick(float seconds)
     {
-        if (!Moving)
+        if (!Moving && Flex == 0f)
             return false;
-        Progress = Math.Min(1f, Progress + Math.Max(0f, seconds) / Math.Max(_seconds, 1e-4f));
-        if (Progress >= 1f)
+        seconds = Math.Max(0f, seconds);
+        float before = Angle;
+        if (Moving)
         {
-            State = State == CoverState.Opening ? CoverState.Open : CoverState.Closed;
-            Progress = 0f;
+            Progress = Math.Min(1f, Progress + seconds / Math.Max(_seconds, 1e-4f));
+            if (Progress >= 1f)
+            {
+                State = State == CoverState.Opening ? CoverState.Open : CoverState.Closed;
+                Progress = 0f;
+            }
         }
+        float after = Angle;
+        float speed = seconds > 0f ? (after - before) / seconds : 0f;
+        float trail = (float)Math.Sin(after * Math.PI / 180.0) * Math.Max(-1f, Math.Min(1f, speed / FullBowSpeed));
+        float most = FlexRate * seconds;
+        Flex += Math.Max(-most, Math.Min(most, trail - Flex));
         return true;
     }
 
@@ -236,10 +264,36 @@ public sealed class BookletFlip
         float from = Angle;
         State = instant ? done : moving;
         Progress = 0f;
+        if (instant)
+            Flex = 0f; // Reduced Motion: no swing, no bow
         _from = from;
         _lift = fromRest;
         _seconds = fromRest ? LiftSeconds + SwingSeconds
             : SwingSeconds * Math.Max(LeastShare, Math.Abs(target - from) / (OpenDegrees - ShutDegrees - LiftDegrees));
         return true;
+    }
+}
+
+/// <summary>
+/// A shut booklet's or folder's click box (DOC-LOOK review, S3: shut, a
+/// passport and the folder kept their whole boxes, so the half hidden under
+/// the cover, where only bare counter or desk shows, still took the hover,
+/// the click, the press that opens it and the drag): the part of the box's
+/// span along one axis on the shown side of the spine. DeskDocument.ShowShut
+/// keeps a shut passport's sheet box under its spine, DeskRulebook.ShowShut
+/// the shut folder's card box on the side of its board. Pure.
+/// </summary>
+public static class ShutBox
+{
+    /// <summary>The span centred on <paramref name="centre"/>, <paramref name="size"/> long, cut at <paramref name="spine"/> and kept under it (<paramref name="below"/>) or over it: its centre and size (a spine outside the span keeps all of it or none).</summary>
+    public static (float centre, float size) Keep(float centre, float size, float spine, bool below)
+    {
+        float low = centre - Math.Abs(size) / 2f, high = centre + Math.Abs(size) / 2f;
+        float cut = Math.Min(high, Math.Max(low, spine));
+        if (below)
+            high = cut;
+        else
+            low = cut;
+        return ((low + high) / 2f, high - low);
     }
 }

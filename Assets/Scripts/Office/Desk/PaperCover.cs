@@ -19,7 +19,8 @@ using UnityEngine;
 /// overshoot a rebound off the desk, never through it; at once under Reduced
 /// Motion), its free edge bowing up to 3 mm behind the swing (GAME_FEEL_BIBLE
 /// A1: a page bow of 2 to 4 mm on the flip; the cover's sheets are cut in a
-/// grid, Sheet, so DocumentCel bends them, Bow), with passport_open and
+/// grid, Sheet, so DocumentCel bends them, Bow; the emblem rides the bow,
+/// Ride, so the board never comes up through it), with passport_open and
 /// passport_close (the sound bank's cues, FEEDBACK's). Every paper but a
 /// booklet hides it.
 /// </summary>
@@ -62,6 +63,10 @@ public sealed class PaperCover : MonoBehaviour
 
     /// <summary>The bow last shown (metres; Show sets the sheets' bend only when it changes).</summary>
     private float _bowShown;
+
+    /// <summary>The emblem's place on the flat cover (the hinge's space) and its half size (metres): Ride lifts it off the bowing front.</summary>
+    private Vector3 _emblemRest;
+    private Vector2 _emblemHalf;
 
     /// <summary>The sound bank's cues for the cover's swing (SoundBank_Default; GAME_FEEL_BIBLE A1).</summary>
     private const string OpenCue = "passport_open", CloseCue = "passport_close";
@@ -111,7 +116,10 @@ public sealed class PaperCover : MonoBehaviour
         {
             float side = halfWidth * 2f * emblemShare;
             emblem.gameObject.SetActive(mark != null);
-            emblem.transform.localPosition = new Vector3(0f, -below / 2f, -PaperLayers.Seal);
+            _emblemRest = new Vector3(0f, -below / 2f, -PaperLayers.Seal);
+            _emblemHalf = new Vector2(side / 2f, side / 2f);
+            emblem.transform.localPosition = _emblemRest;
+            emblem.transform.localRotation = Quaternion.identity;
             emblem.transform.localScale = new Vector3(side, side, 1f);
             if (mark != null)
             {
@@ -201,12 +209,42 @@ public sealed class PaperCover : MonoBehaviour
         if (sheet == null)
             return;
         Vector3 size = sheet.transform.localScale;
+        PaperBend bend = BowOf(freeEdge, bow);
         sheet.GetPropertyBlock(block);
-        // the bend's travel points at the hinge: its full lag keeps that end flat and curls the free edge
-        block.SetVector(FlexId, new Vector4(-freeEdge.x, -freeEdge.y, bow, 1f));
+        block.SetVector(FlexId, new Vector4(bend.DirX, bend.DirY, bend.Bow, bend.Lag));
         block.SetVector(Flex2Id, Vector4.zero);
         block.SetVector(FlexSizeId, new Vector4(Mathf.Abs(size.x), Mathf.Abs(size.y), 0f, 0f));
         sheet.SetPropertyBlock(block);
+    }
+
+    /// <summary>A cover sheet's bow (Bow's, as DocumentCel draws it): its travel points at the hinge, away from <paramref name="freeEdge"/>, and its full lag keeps the hinge end flat and curls the free edge twice <paramref name="bow"/> metres.</summary>
+    public static PaperBend BowOf(Vector2 freeEdge, float bow) => new PaperBend(-freeEdge.x, -freeEdge.y, bow, 1f, 0f, 0f, 0f, 0f);
+
+    /// <summary>
+    /// Lays a flat mark printed on a cover's sheet (<paramref name="mark"/>:
+    /// the passport's emblem, the folder's seal; at <paramref name="rest"/> on
+    /// the flat sheet, both in the hinge's space, <paramref name="half"/>
+    /// metres each way) on the sheet's <paramref name="bend"/> (BowOf), as a
+    /// paper's prints ride its bend: on the face under its centre, turned to
+    /// its slope and lifted by how far the curl rises past it
+    /// (PaperBend.Bulge), so the bowing board never comes up through the mark
+    /// (DOC-LOOK review: shutting, the board rose up to 0.25 mm under the
+    /// seal and 0.8 mm under the emblem, more than their 0.05 and 0.1 mm
+    /// gaps); flat, the mark lies at rest.
+    /// </summary>
+    public static void Ride(Transform mark, Vector3 rest, Vector2 half, Transform sheet, PaperBend bend)
+    {
+        if (mark == null || sheet == null)
+            return;
+        Vector3 size = sheet.localScale;
+        float w = Mathf.Max(Mathf.Abs(size.x), 1e-4f), h = Mathf.Max(Mathf.Abs(size.y), 1e-4f);
+        float x = (rest.x - sheet.localPosition.x) * 2f / w, y = (rest.y - sheet.localPosition.y) * 2f / h;
+        float drop = bend.Depth(x, y, w, h);
+        (float dx, float dy) = bend.Slope(x, y, w, h);
+        float bulge = bend.Bulge(x, y, half.x, half.y, w, h);
+        // the sheet's +z runs away from the viewer: a face sloping deeper to its right turns about its up
+        mark.localPosition = rest + new Vector3(0f, 0f, drop - bulge);
+        mark.localRotation = Quaternion.Euler(Mathf.Atan(dy) * Mathf.Rad2Deg, -Mathf.Atan(dx) * Mathf.Rad2Deg, 0f);
     }
 
     /// <summary>A press on the booklet (DeskDocument's pointer down, the left button): a shut cover swings open on the press frame (GAME_FEEL_BIBLE A1); a drag from it works open or closed.</summary>
@@ -268,6 +306,8 @@ public sealed class PaperCover : MonoBehaviour
             // the front's free edge is its bottom; the back is turned over the spine (its free edge its top, its +z the other way)
             Bow(front, _block, Vector2.down, bow);
             Bow(back, _block, Vector2.up, -bow);
+            if (emblem != null && front != null)
+                Ride(emblem.transform, _emblemRest, _emblemHalf, front.transform, BowOf(Vector2.down, bow));
         }
         bool shut = _flip.State != CoverState.Open;
         if (shut == _shut && !force)

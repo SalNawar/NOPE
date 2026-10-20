@@ -89,6 +89,10 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     private Vector3 _pagesRest;
     private DeskConfigSO _config;
 
+    /// <summary>The folder's own click box (card's: the click's, the hover's and the drag's) and its centre and size as built: the whole folder, cut to the side the shut board covers while it is shut (ShowShut).</summary>
+    private BoxCollider _cardBox;
+    private Vector3 _cardCentre, _cardSize;
+
     /// <summary>True while the folder shows shut (its board over the right sheet, or swinging).</summary>
     public bool Shut => folderCover != null && folderCover.Shut;
 
@@ -303,6 +307,11 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
 
     private void Awake()
     {
+        if (card != null && card.TryGetComponent(out _cardBox))
+        {
+            _cardCentre = _cardBox.center;
+            _cardSize = _cardBox.size;
+        }
         _coverEnglish = Array.ConvertAll(coverWords, w => w != null ? w.text : string.Empty);
         _pages = rulesPage != null ? rulesPage.transform.parent : null;
         if (_pages != null)
@@ -457,14 +466,17 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// board is cut from its model (DeskPaperDepth.ClipLeftOf at the spine), its
     /// contact shadow lies under the right sheet alone, its pages lie under its
     /// face (ShutDepth: out of sight and out of the raycast, so a click there
-    /// meets the folder's own box and opens it), and its cover's words and the
-    /// tabs over the left board hide; open, all of it shows again.
+    /// meets the folder's own box and opens it), its own box covers the board's
+    /// side alone (ShutBox: DOC-LOOK review, S3, the cut left board used to take
+    /// hovers, clicks and drags over the bare desk), and its cover's words and
+    /// the tabs over the left board hide; open, all of it shows again.
     /// </summary>
     private void ShowShut(bool shut)
     {
         if (depth != null)
             depth.ClipLeftOf(shut ? folderCover.Spine : -10f);
         BuildShadow();
+        ShowCardBox(shut);
         if (_pages != null)
             _pages.localPosition = shut ? _pagesRest + Vector3.down * ShutDepth : _pagesRest;
         foreach (TMP_Text word in coverWords)
@@ -482,6 +494,23 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
             if (i < tabPlates.Length && tabPlates[i] != null)
                 tabPlates[i].gameObject.SetActive(show);
         }
+    }
+
+    /// <summary>The folder's own box: as built while open; shut, cut at the spine to the side its board covers (the spine's and the face's right edge measured into the box's space through the face, so the cut follows the art whatever the box's frame).</summary>
+    private void ShowCardBox(bool shut)
+    {
+        if (_cardBox == null)
+            return;
+        Vector3 centre = _cardCentre, size = _cardSize;
+        if (shut && folderFace != null)
+        {
+            Transform face = folderFace.transform, frame = _cardBox.transform;
+            float spine = frame.InverseTransformPoint(face.TransformPoint(new Vector3(folderCover.Spine, 0f, 0f))).x;
+            float edge = frame.InverseTransformPoint(face.TransformPoint(new Vector3(0.5f, 0f, 0f))).x;
+            (centre.x, size.x) = ShutBox.Keep(_cardCentre.x, _cardSize.x, spine, edge < spine);
+        }
+        _cardBox.center = centre;
+        _cardBox.size = size;
     }
 
     /// <summary>The folder's contact shadow under its body (the right sheet alone while shut).</summary>

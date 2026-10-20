@@ -1,5 +1,6 @@
 #if UNITY_EDITOR || TIMEDESK_QA
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -16,7 +17,13 @@ using UnityEngine.TextCore;
 /// at least CapHeight.LabelFloorA2 at 720 lines and under. The measure is
 /// the font's cap line at the text's size, from the text's place, projected
 /// up its own page: what a reader sees, the reading view's tilt and the
-/// paper's world size included.
+/// paper's world size included. <c>coverHits</c> asserts
+/// <c>coverHits.&lt;name&gt;</c> (DOC-LOOK review, S3): what a click, a hover
+/// or a drag would meet (QaGame.TopAt, the event system's own raycast) at the
+/// middle of each half of every booklet and of the rulebook folder shown now.
+/// A shut booklet's visa page and a shut folder's left board, hidden, meet
+/// nothing of theirs, and the half that shows meets them; open, both halves
+/// meet them.
 /// </summary>
 public static class DocLookOps
 {
@@ -24,7 +31,67 @@ public static class DocLookOps
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
 #endif
-    private static void Register() => QaRunner.RegisterOp("capHeight", CapHeightOp);
+    private static void Register()
+    {
+        QaRunner.RegisterOp("capHeight", CapHeightOp);
+        QaRunner.RegisterOp("coverHits", CoverHitsOp);
+    }
+
+    private static IEnumerator CoverHitsOp(QaRunner runner, QaStep step)
+    {
+        yield return null;
+        string name = string.IsNullOrEmpty(step.name) ? "covers" : step.name;
+        Camera camera = QaGame.PointerCamera();
+        if (camera == null)
+        {
+            runner.Assert("coverHits." + name, "DOC-LOOK", false, "no camera", "No pointer camera to probe through.");
+            yield break;
+        }
+        var wrong = new List<string>();
+        int probes = 0;
+        foreach (DeskDocument paper in Object.FindObjectsByType<DeskDocument>(FindObjectsInactive.Exclude))
+        {
+            PaperCover cover = paper.Sheet != null ? paper.Sheet.GetComponentInChildren<PaperCover>(false) : null;
+            if (cover == null)
+                continue; // no booklet
+            bool shut = (bool)QaGame.Field(cover, "_shut");
+            float spine = (float)QaGame.Field(cover, "_spine");
+            float bottom = -paper.Size.y / 2f, top = paper.Size.y / 2f;
+            Probe(paper.name + " visa page", paper.Sheet.TransformPoint(new Vector3(0f, (spine + top) / 2f, 0f)), paper.transform, !shut, camera, wrong, ref probes);
+            Probe(paper.name + " data page", paper.Sheet.TransformPoint(new Vector3(0f, (bottom + spine) / 2f, 0f)), paper.transform, true, camera, wrong, ref probes);
+        }
+        DeskRulebook folder = Object.FindAnyObjectByType<DeskRulebook>(FindObjectsInactive.Exclude);
+        FolderCover board = folder != null ? folder.GetComponentInChildren<FolderCover>(true) : null;
+        if (board != null && QaGame.Field(folder, "folderFace") is Renderer face && face != null)
+        {
+            float left = DeskRulebook.BodyCentreX - DeskRulebook.BodyWidth / 2f, right = DeskRulebook.BodyCentreX + DeskRulebook.BodyWidth / 2f;
+            Probe("folder left board", face.transform.TransformPoint(new Vector3((left + board.Spine) / 2f, DeskRulebook.BodyCentreY, 0f)), folder.transform, !folder.Shut, camera, wrong, ref probes);
+            Probe("folder right sheet", face.transform.TransformPoint(new Vector3((board.Spine + right) / 2f, DeskRulebook.BodyCentreY, 0f)), folder.transform, true, camera, wrong, ref probes);
+        }
+        runner.Assert("coverHits." + name, "DOC-LOOK", probes > 0 && wrong.Count == 0, $"{probes} probes, {wrong.Count} wrong",
+                      probes == 0 ? "No booklet or folder shown to probe." : string.Join("; ", wrong));
+    }
+
+    /// <summary>
+    /// What the pointer meets at <paramref name="world"/> (through
+    /// <paramref name="camera"/>) against what it should: a part of
+    /// <paramref name="owner"/> when <paramref name="takes"/>, anything else
+    /// (or nothing) when not; a wrong meeting goes into <paramref name="wrong"/>.
+    /// </summary>
+    private static void Probe(string what, Vector3 world, Transform owner, bool takes, Camera camera, List<string> wrong, ref int probes)
+    {
+        Vector3 screen = camera.WorldToScreenPoint(world);
+        if (screen.z <= 0f || screen.x < 0f || screen.y < 0f || screen.x > Screen.width || screen.y > Screen.height)
+        {
+            wrong.Add($"{what}: off the screen");
+            return;
+        }
+        probes++;
+        GameObject top = QaGame.TopAt(screen);
+        bool met = top != null && top.transform.IsChildOf(owner);
+        if (met != takes)
+            wrong.Add(takes ? $"{what} shows but the pointer meets {(top != null ? QaGame.Where(top) : "nothing")}" : $"{what} is hidden but the pointer meets {QaGame.Where(top)}");
+    }
 
     private static IEnumerator CapHeightOp(QaRunner runner, QaStep step)
     {

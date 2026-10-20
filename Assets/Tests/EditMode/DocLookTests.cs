@@ -6,9 +6,10 @@ using NUnit.Framework;
 /// <summary>
 /// DOC-LOOK's pure rules (FIX_PLAN DOC-LOOK, BUG-9, 10c, 11b, 12a, 14c, 40c;
 /// Saleh's D3 and D15): no word breaks across lines, a ruled page's lines,
-/// the cap height on screen, the passport's cover, a card that never bends,
-/// print that rides the curl and the sheet's lifted corner, and the contact
-/// shadow by stack rank.
+/// the cap height on screen, the passport's cover (its swing, its bow and
+/// the box a shut booklet or folder keeps), a card that never bends, print
+/// that rides the curl and the sheet's lifted corner, and the contact shadow
+/// by stack rank.
 /// </summary>
 public class DocLookTests
 {
@@ -262,6 +263,125 @@ public class DocLookTests
         flip.Close();
         int steps = Swing(flip, 0.001f).Count - 1;
         Assert.LessOrEqual(steps * 0.001f, BookletFlip.SwingSeconds * BookletFlip.LeastShare + 0.002f, "15 degrees back takes the least share of a swing, not a whole one");
+    }
+
+    [Test]
+    public void BookletFlip_Flex_NeverJumps_WhenTheCoverTurnsBack()
+    {
+        float biggestTurned = 0f;
+        foreach (float fps in new[] { 60f, 120f })
+            foreach (float share in new[] { 0.1f, 0.3f, 0.5f, 0.75f, 0.9f })
+                foreach (bool opening in new[] { true, false })
+                {
+                    string at = $"{fps} fps, {share} of the {(opening ? "opening" : "shutting")}";
+                    var flip = new BookletFlip();
+                    if (!opening)
+                        flip.Open(instant: true);
+                    if (opening)
+                        flip.Open();
+                    else
+                        flip.Close();
+                    float step = 1f / fps, last = flip.Flex, most = 0f;
+                    int frames = Math.Max(1, (int)Math.Round((BookletFlip.LiftSeconds + BookletFlip.SwingSeconds) * share * fps));
+                    for (int i = 0; i < frames; i++)
+                    {
+                        flip.Tick(step);
+                        most = Math.Max(most, Math.Abs(flip.Flex - last));
+                        last = flip.Flex;
+                    }
+                    float turned = flip.Flex;
+                    biggestTurned = Math.Max(biggestTurned, Math.Abs(turned));
+                    if (opening)
+                        flip.Close();
+                    else
+                        flip.Open();
+                    Assert.AreEqual(turned, flip.Flex, $"{at}: turning back alone leaves the bow where it is");
+                    for (int i = 0; i < 400 && (flip.Moving || flip.Flex != 0f); i++)
+                    {
+                        flip.Tick(step);
+                        most = Math.Max(most, Math.Abs(flip.Flex - last));
+                        last = flip.Flex;
+                    }
+                    Assert.LessOrEqual(most, BookletFlip.FlexRate * step + 1e-4f, $"{at}: the bow eases through flat, never a pop (the old sign flip was 2 in one frame)");
+                    Assert.AreEqual(0f, flip.Flex, $"{at}: flat once the cover rests");
+                    Assert.IsFalse(flip.Moving);
+                }
+        Assert.Greater(biggestTurned, 0.5f, "some turn back happened under a full bow (at about 90 degrees)");
+        Assert.LessOrEqual(BookletFlip.FlexRate / 60f, 0.5f, "at 60 frames a second the passport's free edge (3 mm at the most) moves at most 1.5 mm a frame");
+    }
+
+    [Test]
+    public void BookletFlip_Flex_TrailsTheSwingAndItsRebound_AndNoneUnderReducedMotion()
+    {
+        var flip = new BookletFlip();
+        flip.Open();
+        float least = 0f, most = 0f;
+        for (int i = 0; i < 1000 && (flip.Moving || flip.Flex != 0f); i++)
+        {
+            flip.Tick(1f / 240f);
+            least = Math.Min(least, flip.Flex);
+            most = Math.Max(most, flip.Flex);
+        }
+        Assert.Greater(most, 0.6f, "the swing bows its free edge behind it (GAME_FEEL_BIBLE A1: 2 to 4 mm on the passport)");
+        Assert.Less(least, -0.03f, "rebounding off the desk the cover turns back toward the viewer, and its edge trails that way too");
+        Assert.AreEqual(0f, flip.Flex);
+        Assert.IsFalse(flip.Tick(1f / 240f), "at rest and flat, a tick does nothing");
+
+        var still = new BookletFlip();
+        still.Open();
+        still.Tick(BookletFlip.LiftSeconds + BookletFlip.SwingSeconds * 0.1f);
+        Assert.AreNotEqual(0f, still.Flex);
+        still.Close(instant: true);
+        Assert.AreEqual(0f, still.Flex, "Reduced Motion: shut at once, unbowed");
+        still.Open();
+        still.Tick(0.05f);
+        still.Shut();
+        Assert.AreEqual(0f, still.Flex, "a booklet arriving shut lies flat");
+    }
+
+    [Test]
+    public void ShutBox_KeepsOnlyTheSideOfTheSpineThatShows()
+    {
+        // a passport 0.125 m tall, its spine 5 mm under its middle: shut, its box keeps the data page under the spine
+        (float centre, float size) = ShutBox.Keep(0f, 0.125f, -0.005f, true);
+        Assert.AreEqual(-0.0625f, centre - size / 2f, Eps, "from the data page's foot");
+        Assert.AreEqual(-0.005f, centre + size / 2f, Eps, "to the spine: nothing over the hidden visa page");
+        // the folder's box (0.4 m wide, centred 1 cm right) keeps its board's side, right of a spine at 1.44 cm
+        (centre, size) = ShutBox.Keep(0.01f, 0.4f, 0.0144f, false);
+        Assert.AreEqual(0.0144f, centre - size / 2f, Eps);
+        Assert.AreEqual(0.21f, centre + size / 2f, Eps, "to the folder's right edge");
+        // a spine past the box keeps all of it on its own side and none on the other
+        (centre, size) = ShutBox.Keep(0f, 0.2f, 0.5f, true);
+        Assert.AreEqual(0f, centre, Eps);
+        Assert.AreEqual(0.2f, size, Eps);
+        Assert.AreEqual(0f, ShutBox.Keep(0f, 0.2f, 0.5f, false).size, Eps);
+    }
+
+    [Test]
+    public void CoverMarks_RideTheShuttingBow_ClearOfTheBoard()
+    {
+        // the folder's board (its seal 0.05 mm over it, a 1 mm bow, its free edge to its right) and the passport's front
+        // (its emblem 0.1 mm over it, a 1.5 mm bow, its free edge at its foot): each mark a centred square 0.42 of the sheet's width
+        foreach ((float w, float h, float dirX, float dirY, float bow, float gap) in new[]
+                 {
+                     (0.12f, 0.25f, -1f, 0f, 0.001f, 0.00005f),
+                     (0.088f, 0.0625f, 0f, 1f, 0.0015f, 0.0001f)
+                 })
+        {
+            var shutting = new PaperBend(dirX, dirY, -bow, 1f, 0f, 0f, 0f, 0f); // shutting, the free edge curls toward the mark
+            float half = 0.42f * w / 2f, rise = 0f;
+            for (int i = -4; i <= 4; i++)
+                for (int j = -4; j <= 4; j++)
+                    rise = Math.Max(rise, -shutting.Depth(half * i / 4f * 2f / w, half * j / 4f * 2f / h, w, h));
+            Assert.Greater(rise, gap, $"a {w} m sheet: the board rises past the mark's old gap (it came up through it)");
+            float bulge = shutting.Bulge(0f, 0f, half, half, w, h);
+            for (int i = -4; i <= 4; i++)
+                for (int j = -4; j <= 4; j++)
+                {
+                    float x = half * i / 4f * 2f / w, y = half * j / 4f * 2f / h;
+                    Assert.LessOrEqual(shutting.Depth(0f, 0f, w, h) - bulge, shutting.Depth(x, y, w, h) + 1e-7f, "the mark, lifted by its bulge, lies over the board everywhere under it");
+                }
+        }
     }
 
     // ---------------- PaperBend (D3, BUG-12a) ----------------

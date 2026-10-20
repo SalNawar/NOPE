@@ -749,6 +749,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "hinge", hinge);
         SetRef(so, "front", front.GetComponent<Renderer>());
         SetRef(so, "back", back.GetComponent<Renderer>());
+        SetRef(so, "seal", emblem.transform);
         SetRef(so, "coverClick", coverClick);
         so.FindProperty("spine").floatValue = RulebookSpine;
         so.ApplyModifiedProperties();
