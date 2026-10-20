@@ -64,13 +64,6 @@ MonoBehaviour:
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
-  - id: 8
-    fallbacks:
-    - HybridOffice/Booth/Blender_Stamp
-    - Clean_Stamp__DeskClean_Wood
-    hasDefault: 0
-    defaultPosition: {x: 0, y: 0, z: 0}
-    defaultYaw: 0
   - id: 9
     fallbacks:
     - HybridOffice/Booth/Finish_Till
@@ -184,3 +177,6 @@ MonoBehaviour:
   - OfficeOverlayCanvas
   - OfficeRoot
   - Cameras/MonitorVCam
+  - Clean_Stamp__DeskClean_Wood
+  - Clean_Stamp__DeskClean_Brass
+  - Clean_Stamp__DeskClean_Dark

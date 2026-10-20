@@ -42,10 +42,10 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The PC frame's power button.</summary>
     [SerializeField] private Selectable framePowerButton;
 
-    /// <summary>The traveller's hit zone (opens the wheel, or picks the face in inspect mode).</summary>
+    /// <summary>The traveller's hit zone (picks the face in inspect mode).</summary>
     [SerializeField] private Clickable travellerHitZone;
 
-    /// <summary>The desk props (stamp, intercom, scanner, till, stability monitor, calendar, clock, the flavour props and the rulebook's clicks).</summary>
+    /// <summary>The desk props (the phone, scanner, till, stability monitor, calendar, clock, the flavour props and the rulebook's clicks).</summary>
     [SerializeField] private Clickable[] props;
 
     /// <summary>The day-1 note above the traveller.</summary>
@@ -212,7 +212,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (stampTray != null)
             stampTray.SetLive(first.StampsLive, first.PropsLive);
         if (inspect != null)
-            inspect.SetLive(first.InspectLive, first.PropsLive);
+            inspect.SetLive(first.InspectLive);
         if (deskView != null && !first.DeskViewAllowed)
             deskView.Return();
 

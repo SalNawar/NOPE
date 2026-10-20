@@ -77,9 +77,6 @@ public sealed class GuideDirector : MonoBehaviour
     /// <summary>The traveller's hit zone ("traveller").</summary>
     [SerializeField] private Collider traveller;
 
-    /// <summary>The red inspect button ("inspect").</summary>
-    [SerializeField] private RectTransform inspectButton;
-
     /// <summary>The grey stamp tab ("stamps").</summary>
     [SerializeField] private RectTransform stampTab;
 
@@ -479,7 +476,6 @@ public sealed class GuideDirector : MonoBehaviour
     {
         ui = target switch
         {
-            "inspect" => inspectButton,
             "stamps" => stampTab,
             "pc" => pcTab,
             _ => null

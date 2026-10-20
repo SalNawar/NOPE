@@ -154,9 +154,6 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>True while a document is being dragged (a right-click or Esc cancels the drag first: ControlRules).</summary>
     public bool IsDragging => _dragged >= 0;
 
-    /// <summary>True while the scanner reads a paper (the machine close-up holds on it: MachineCloseUp).</summary>
-    public bool Scanning => _state != null && _state.ScannerBusy;
-
     /// <summary>Raised when a scan finishes, with the paper's index and its pass (ScanPass: the analysis pass for a first scan by hand with the Analysis Scanner): its scanned copy reaches the PC (the Investigation app's Documents tab), which marks the papers after an analysis.</summary>
     public event Action<int, ScanPass> ScanFinished;
 
@@ -1114,9 +1111,6 @@ public sealed class DeskController : MonoBehaviour
         // The UV torch's cradle on the mat's corner (the desk machines spec §1): no paper lies over it either.
         if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
             (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(cradle), desk);
-        // The lens stand on its bay in the tool pouch (the desk machines spec §10, the desk layout spec): none over it either.
-        if (hardware != null && hardware.TryLensFootprint(out Vector3[] stand))
-            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(stand), desk);
         // Nor over the chip reader's casing (a paper lies beside it, never in it).
         IPaperDock reader = hardware != null ? hardware.ReaderDock : null;
         if (reader != null && reader.OnDesk)

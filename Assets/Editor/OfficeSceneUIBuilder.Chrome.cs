@@ -9,7 +9,7 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 /// <summary>
-/// The office builder's view chrome: the inspect button, the office controls
+/// The office builder's view chrome: the office controls
 /// (Papers, Please's keys), the desk view and its back button, and the city
 /// view.
 /// Part of <see cref="OfficeSceneUIBuilder"/>; carved out of OfficeSceneUIBuilder.Desk.cs by P0-A (pure move). Owner: CAM.
@@ -23,13 +23,6 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
 
     private const float CityButtonHeight = 0.74f;
-
-    /// <summary>The red inspect button (reference px), its margin from the bottom right corner, and its hint beside it.</summary>
-    private static readonly Vector2 InspectButtonSize = new Vector2(112f, 112f);
-
-    private const float InspectMargin = 18f;
-
-    private static readonly Vector2 InspectHintSize = new Vector2(470f, 56f);
 
     /// <summary>The PC's grey tab on the overlay's left edge (reference px) and its height on the screen (a share from the bottom).</summary>
     private static readonly Vector2 PcTabSize = new Vector2(96f, 96f);
@@ -79,72 +72,6 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Papers, Please's red inspect button (Saleh 2026-10-06), rebuilt each run
-    /// on the office overlay at the bottom right: a red Button with a white
-    /// magnifying glass drawn in code (MagnifierGlyph; Saleh: "the inspect mode
-    /// should be a magnify glass icon") over the key (SPACE,
-    /// ControlRules.InspectKey), and its On state
-    /// (inactive: DeskInspect shows it while inspect mode is on): a yellow ring
-    /// round the button and the hint beside it on the tooltip's plate. Wired
-    /// into <paramref name="inspect"/>; the button is inactive until the booth
-    /// shows it.
-    /// </summary>
-    private static void BuildInspectButton(Transform overlay, DeskInspect inspect)
-    {
-        DestroyChildIfPresent(overlay, "InspectButton");
-        Button button = MakeButton(overlay, "InspectButton", null, Vector2.zero, Vector2.one, new Color(0.72f, 0.12f, 0.1f, 1f), ThemeRoleId.DiegeticDevice);
-        var rt = (RectTransform)button.transform;
-        rt.anchorMin = rt.anchorMax = new Vector2(1f, 0f);
-        rt.pivot = new Vector2(1f, 0f);
-        rt.anchoredPosition = new Vector2(-InspectMargin, InspectMargin);
-        rt.sizeDelta = InspectButtonSize;
-        TMP_Text label = button.transform.Find("Label").GetComponent<TMP_Text>();
-        label.text = ControlRules.InspectKey;
-        label.color = Color.white;
-        label.enableAutoSizing = false;
-        label.fontSize = 19f;
-        label.fontStyle = FontStyles.Bold;
-        var labelRect = (RectTransform)label.transform;
-        labelRect.anchorMin = new Vector2(0f, 0.04f);
-        labelRect.anchorMax = new Vector2(1f, 0.3f);
-        labelRect.offsetMin = labelRect.offsetMax = Vector2.zero;
-        var icon = new GameObject("Magnifier", typeof(RectTransform), typeof(CanvasRenderer), typeof(MagnifierGlyph));
-        icon.transform.SetParent(button.transform, false);
-        var iconRect = (RectTransform)icon.transform;
-        iconRect.anchorMin = new Vector2(0.2f, 0.3f);
-        iconRect.anchorMax = new Vector2(0.8f, 0.94f);
-        iconRect.offsetMin = iconRect.offsetMax = Vector2.zero;
-        MagnifierGlyph glyph = icon.GetComponent<MagnifierGlyph>();
-        glyph.color = Color.white;
-        glyph.raycastTarget = false;
-        SceneUiKit.Tag(glyph, ThemeRoleId.DiegeticDevice, ThemePart.Ink);
-
-        Transform on = Panel(button.transform, "On", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        void Ring(string side, Vector2 aMin, Vector2 aMax, Vector2 pos, Vector2 size)
-        {
-            Transform bar = Panel(on, side, aMin, aMax, pos, size, new Color(1f, 0.82f, 0.18f, 1f), ThemeRoleId.DiegeticDevice);
-            bar.GetComponent<Image>().raycastTarget = false;
-        }
-        Ring("Top", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 3f), new Vector2(12f, 6f));
-        Ring("Bottom", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, -3f), new Vector2(12f, 6f));
-        Ring("Left", new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(-3f, 0f), new Vector2(6f, 0f));
-        Ring("Right", new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(3f, 0f), new Vector2(6f, 0f));
-        Transform hint = Panel(on, "Hint", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(-16f, 0f), InspectHintSize, Tooltip, ThemeRoleId.Tooltip);
-        ((RectTransform)hint).pivot = new Vector2(1f, 0.5f);
-        hint.GetComponent<Image>().raycastTarget = false;
-        TMP_Text hintText = Text(hint, "Label", null, 20, TextAlignmentOptions.Center, new Vector2(0.03f, 0.06f), new Vector2(0.97f, 0.94f), Ink, ThemeRoleId.Tooltip,
-                                 "controls.inspectHint", FontStyles.Normal, ThemeTextKind.Body, true);
-        hintText.raycastTarget = false;
-        on.gameObject.SetActive(false);
-        button.gameObject.SetActive(false);
-
-        var so = new SerializedObject(inspect);
-        SetRef(so, "inspectButton", button);
-        SetRef(so, "onState", on.gameObject);
-        so.ApplyModifiedProperties();
-    }
-
-    /// <summary>
     /// The one input model (Saleh 2026-10-06), rebuilt each run: the
     /// OfficeControls on the Office root, wired to the view, the desktop's
     /// keyboard poller, the booth, the wheel, inspect mode, the stamp bar, the
@@ -188,11 +115,11 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "pcTabLabel", label);
         so.ApplyModifiedProperties();
 
-        // In the city view only the DESK tab shows: the PC and STAMPS tabs and the inspect button fade out (CityView.deskControls),
+        // In the city view only the DESK tab shows: the PC and STAMPS tabs fade out (CityView.deskControls),
         // and so do the props' tooltips and the case HUD's strip, which drew over the city.
         var soCity = new SerializedObject(cityView);
         SerializedProperty hidden = soCity.FindProperty("deskControls");
-        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("InspectButton"), overlay.Find("DeskTooltip"), overlay.Find("OfficeCaseHud") };
+        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("DeskTooltip"), overlay.Find("OfficeCaseHud") };
         hidden.arraySize = deskControls.Length;
         for (int i = 0; i < deskControls.Length; i++)
             hidden.GetArrayElementAtIndex(i).objectReferenceValue = deskControls[i] != null ? GetOrAdd<CanvasGroup>(deskControls[i].gameObject) : null;

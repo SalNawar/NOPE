@@ -518,7 +518,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The counter lies along the desk's far edge in the office view's frame, ending where the desk view shows the desk (Papers, Please's zones).
         if (counter != null && _office != null)
             counter.Bind(_office.transform.forward);
-        // Everything else stands on its bay (the desk layout spec, DeskLayoutSettings): the stamp rack beside the counter, DETAIN by the AVAILABLE sign, the machines and the upgrades' objects, each first-day note over its machine; the back shelves and the intercom are built there, and the machine close-up is readied.
+        // Everything else stands on its bay (the desk layout spec, DeskLayoutSettings): the stamp rack beside the counter, DETAIN by the AVAILABLE sign, the machines and the upgrades' objects, each first-day note over its machine; the back shelves and the intercom are built there.
         if (_hasFrame)
         {
             DeskLayoutSettings layout = config.layout;
@@ -538,9 +538,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (hardware.ChipNote != null && hardware.Reader != null)
                 FaceCamera(hardware.ChipNote, hardware.Reader.transform.position + Vector3.up * HintHeight, viewer);
         }
-        if (_hasFrame && _officeVcam != null)
-            gameObject.AddComponent<MachineCloseUp>().Init(_officeVcam, config.layout, _frame, this.desk, hardware,
-                                                            scanner != null && scanner.TryGetComponent(out Clickable scanned) ? scanned.Outline.ToArray() : null);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
@@ -915,11 +912,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         note.SetPositionAndRotation(position, away.sqrMagnitude > 1e-6f ? Quaternion.LookRotation(away, Vector3.up) : Quaternion.identity);
     }
 
-    /// <summary>One log line for the anchors found by fallback paths, one warning for those on default poses or missing.</summary>
+    /// <summary>One log line for the anchors found by fallback paths, one warning for those on default poses or missing (an anchor the contract lists no spec for, the cut old stamp's, is wanted by nothing and left out of it).</summary>
     private void Report()
     {
         List<ResolvedAnchor> fallbacks = _anchors.Values.Where(a => a.Source == AnchorSource.Fallback).ToList();
-        List<ResolvedAnchor> stand = _anchors.Values.Where(a => a.Source == AnchorSource.Default || a.Source == AnchorSource.Missing).ToList();
+        List<ResolvedAnchor> stand = _anchors.Values.Where(a => (a.Source == AnchorSource.Default || a.Source == AnchorSource.Missing) && contract != null && contract.Spec(a.Id) != null).ToList();
         if (fallbacks.Count > 0)
             Debug.Log($"[OfficeSceneBinder] Office contract: {fallbacks.Count} anchor(s) found by fallback paths ({string.Join(", ", fallbacks.Select(a => $"{a.Id} = '{a.Path}'"))}).", this);
         if (stand.Count > 0)

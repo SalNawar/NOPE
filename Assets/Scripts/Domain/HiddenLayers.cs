@@ -48,7 +48,7 @@ public sealed class HiddenContent
     /// <summary>The chance a value a forger printed over the issued one (a record lie's box) leaves the ghost of the issued value under UV (0 to 1; one draw per such box on the case's hidden stream).</summary>
     public float ghostChance;
 
-    /// <summary>The forms whose paper prints a microprint line along its foot repeating the holder's Citizen ID (the desk machines spec §10), read under the lens stand's magnifiers.</summary>
+    /// <summary>The forms whose paper prints a microprint line along its foot repeating the holder's Citizen ID (the desk machines spec §10); the lens stand's magnifiers that read it were cut by P0-C, 2026-10-20: until the scanner shows the microprint, FIX_PLAN_v2 #17, nothing reads it.</summary>
     public List<string> microForms = new List<string>();
 
     /// <summary>True when paper <paramref name="formNumber"/> carries a chip.</summary>

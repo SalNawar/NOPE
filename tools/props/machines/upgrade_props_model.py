@@ -1,10 +1,11 @@
 """
-Time Sorter (NOPE) - the eight upgrade desk props (track MC): supply crate, Auto-Feed tray, analysis beacon,
-Interview Protocols card ring, BABEL translator rack, Translation Lens kit, Rolodex, RING SERVICE panel.
+Time Sorter (NOPE) - the seven upgrade desk props (track MC): supply crate, Auto-Feed tray, analysis beacon,
+Interview Protocols card ring, BABEL translator rack, Rolodex, RING SERVICE panel. (The Translation Lens kit,
+the lens stand and its magnifiers, was cut on 2026-10-20: P0-C CUTS, docs/pending/CUTS.md.)
 
 Run (background only; never open Blender's window, Saleh uses this PC):
     "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe" -b --python upgrade_props_model.py -- <render_dir> [prop ...]
-<prop> limits the run to some of: crate feeder beacon ring babel lens rolodex panel (default: all).
+<prop> limits the run to some of: crate feeder beacon ring babel rolodex panel (default: all).
 Re-runnable: each prop starts from an empty scene (its own reset) and overwrites its outputs.
 
 Writes, per prop: Assets/Art/Office/Gameplay/Machines/<Name>.fbx (textures beside it, drawn by
@@ -78,20 +79,6 @@ BabelRack.fbx (origin bottom centre)
                   label decal on the front face
     CartridgeLED_0..3 -> Cartridge_n. Lamp on top, own material each (Babel_LED0..3, off at rest)
 
-LensKit.fbx (origin bottom centre of the base)
-    LensStand     oxblood base 0.11 x 0.07 + brass post 0.09 (back, viewer's left), root
-    Loupe         -> LensStand. Word level: brass ring (r 0.022) on an arm; pivot = the swivel at the post top;
-                  spins about local Y, tilts about local X
-    LoupeGlass    -> Loupe. Pale cyan, semi-transparent (both sides)
-    BarMagnifier  -> LensStand. Sentence level: 0.12 x 0.02 bar lens on two feet along the base's front edge;
-                  pivot its bottom centre
-    BarLine       -> BarMagnifier. Thin red emissive line along its top
-    FresnelArm    -> LensStand. Object level: empty at the clamp on the post
-    ArmBase       -> FresnelArm. The clamp collar and hinge knuckle
-    ArmUpper      -> FresnelArm. Hinge bar + frame; pivot on the hinge (behind the post); unfolds with local X
-                  rotation 0 (stowed upright) to -100 (folded forward over the desk, sheet facing down)
-    FresnelSheet  -> ArmUpper. 0.15 x 0.11 semi-transparent sheet (LensKit_Fresnel), pivot its centre
-
 Rolodex.fbx (origin bottom centre)
     Rolodex       oxblood base, two side wheels (r 0.05), brass axle (along X, 0.06 up), root
     Knob          -> Rolodex. Brass knob on the viewer's right wheel, pivot on the axle; turns about local X
@@ -136,7 +123,6 @@ KRAFT, CREAM = "#C4A070", "#DCD0B4"           # the brief's two extra colours
 SLATE, OXBLOOD, SIGNAL, BRASS = K.KIT["slate"], K.KIT["oxblood"], K.KIT["signal"], K.KIT["brass"]
 MANILA, BONE, LAVENDER, INK, CARD = K.KIT["manila"], K.KIT["bone"], K.KIT["lavender"], K.KIT["ink"], K.KIT["card"]
 CHROME = "#C9CCD4"                            # as the torch's chrome
-GLASS = "#BFE6EA"                             # the lens kit's pale cyan (the brief's)
 LED_GREEN, LED_AMBER, LED_RED = "#3CFF86", "#FFB23C", "#FF3A2A"
 
 X, Y, Z = Vector((1, 0, 0)), Vector((0, 1, 0)), Vector((0, 0, 1))
@@ -146,7 +132,7 @@ TOP = (-X, -Y, Z)         # a decal on a top face, read from the front
 TEXTURES = ["Crate_Label.png", "Crate_Tape.png", "Feeder_Plate.png", "Beacon_Plate.png", "Protocol_Card.png",
             "Babel_Plate.png", "Babel_VU.png", "Cartridge_NearEast.png", "Cartridge_Mediterranean.png",
             "Cartridge_EastAsia.png", "Cartridge_NorthEurope.png", "Rolodex_Card.png", "Rolodex_GoldCard.png",
-            "Relay_Face.png", "Relay_Serviced.png", "LensKit_Fresnel.png"]
+            "Relay_Face.png", "Relay_Serviced.png"]
 
 
 def tex(name):
@@ -713,96 +699,7 @@ def build_babel():
     finish("babel_rack", "BabelRack.fbx", body, objs, contract, use)
 
 
-# ================================================================ 6. TRANSLATION LENS kit
-def build_lens():
-    begin("LensKit")
-    K.material("Lens_Base", OXBLOOD, 0.5, note="weighted base: kit oxblood")
-    K.material("Lens_Brass", BRASS, 0.35, metal=0.4, note="post, loupe ring, arm, frame: kit brass")
-    K.material("Lens_Ink", INK, 0.7, note="thumbscrew, felt: kit ink")
-    K.material("Lens_Glass", GLASS, 0.05, alpha=0.35, note="loupe glass: pale cyan (the brief's), Transparent ~0.35")
-    K.material("Lens_Bar", GLASS, 0.05, alpha=0.55, note="bar magnifier: pale cyan, Transparent ~0.55")
-    K.material("Lens_Line", SIGNAL, 0.3, emit=LED_RED, emit_strength=2.0, note="bar line: signal red, emissive")
-    K.material("Lens_Fresnel", GLASS, 0.1, alpha=0.4, tex=tex("LensKit_Fresnel.png"), note="Fresnel sheet; LensKit_Fresnel.png, Transparent ~0.4")
-    BZ = 0.014
-    PX, PY = 0.043, -0.023
-    PTOP = BZ + 0.090
-    st = K.Part("LensStand")
-    st.box((0, 0, BZ / 2), (0.110, 0.070, BZ), "Lens_Base")
-    st.cyl((PX, PY, BZ + 0.002), 0.0072, 0.004, "Lens_Brass", "Z", 16)
-    st.cyl((PX, PY, BZ + 0.045), 0.0045, 0.090, "Lens_Brass", "Z", 14)
-    stand = st.build(COLL, bevel=0.0025, segments=2, angle=30)
-
-    swivel = (PX, PY, PTOP)
-    lp = K.Part("Loupe", swivel)
-    lp.cyl((PX, PY, PTOP + 0.004), 0.006, 0.008, "Lens_Brass", "Z", 16)
-    LC = Vector((0.011, PY, PTOP + 0.004))
-    lp.box((0.0365, PY, PTOP + 0.004), (0.010, 0.004, 0.004), "Lens_Brass")
-    P.torus_axis(lp, LC, 0.0215, 0.0022, "Lens_Brass", Y, segs=32, tube=6)
-    loupe = lp.build(COLL, bevel=0.0005, segments=1, angle=40)
-    lg = K.Part("LoupeGlass", LC)
-    P.disc(lg, LC + Vector((0, 0.0004, 0)), 0.0205, "Lens_Glass", (-X, Z, Y), segs=24)
-    P.disc(lg, LC + Vector((0, -0.0004, 0)), 0.0205, "Lens_Glass", (X, Z, -Y), segs=24)
-    loupe_glass = lg.build(COLL)
-
-    BMY = 0.0235
-    bm = K.Part("BarMagnifier", (0, BMY, BZ))
-    for x in (-0.045, 0.045):
-        bm.box((x, BMY, BZ + 0.002), (0.008, 0.012, 0.004), "Lens_Brass")
-    prof = [(BMY - 0.010, BZ + 0.004), (BMY + 0.010, BZ + 0.004)]      # flat underside, then the dome
-    for k in range(0, 9):
-        t = math.pi * k / 8
-        prof.append((BMY + 0.010 * math.cos(t), BZ + 0.0065 + 0.0045 * math.sin(t)))
-    bm.prism_yz(prof, -0.060, 0.060, "Lens_Bar")
-    bar = bm.build(COLL)
-    blc = (0, BMY, BZ + 0.0113)
-    barline = K.Part("BarLine", blc).box(blc, (0.116, 0.0022, 0.0008), "Lens_Line").build(COLL)
-
-    clamp = Vector((PX, PY, 0.080))
-    arm = P.empty(COLL, "FresnelArm", tuple(clamp))
-    ab = K.Part("ArmBase", clamp)
-    ab.cyl(clamp, 0.0068, 0.010, "Lens_Brass", "Z", 16)
-    ab.box((PX, PY - 0.0105, 0.080), (0.010, 0.013, 0.008), "Lens_Brass")
-    P.cyl_axis(ab, (PX + 0.0085, PY, 0.080), 0.0025, 0.004, "Lens_Ink", X, segs=10)
-    arm_base = ab.build(COLL, bevel=0.0006, segments=1)
-    HINGE = Vector((0, -0.0385, 0.080))
-    au = K.Part("ArmUpper", HINGE)
-    P.cyl_axis(au, HINGE, 0.0025, 0.156, "Lens_Brass", X, segs=10)
-    S0, SH = 0.080 + 0.056, 0.110
-    for s in (-1, 1):
-        au.box((s * 0.0765, HINGE.y, (0.080 + S0 + SH) / 2), (0.003, 0.003, S0 + SH - 0.080), "Lens_Brass")
-    for z in (S0 - 0.0015, S0 + SH + 0.0015):
-        au.box((0, HINGE.y, z), (0.156, 0.003, 0.003), "Lens_Brass")
-    arm_upper = au.build(COLL, bevel=0.0005, segments=1)
-    shc = Vector((0, HINGE.y, S0 + SH / 2))
-    sh = K.Part("FresnelSheet", shc)
-    sh.quad(shc + Vector((0, 0.0003, 0)), (0.150, SH), "Lens_Fresnel", (-X, Z, Y))
-    sh.quad(shc + Vector((0, -0.0003, 0)), (0.150, SH), "Lens_Fresnel", (X, Z, -Y))
-    sheet = sh.build(COLL)
-
-    objs = [stand, loupe, loupe_glass, bar, barline, arm, arm_base, arm_upper, sheet]
-    unwrap_parent([(loupe_glass, loupe), (barline, bar), (sheet, arm_upper), (arm_base, arm), (arm_upper, arm),
-                   (loupe, stand), (bar, stand), (arm, stand)], objs)
-    contract = {"LensStand": None, "Loupe": "LensStand", "LoupeGlass": "Loupe", "BarMagnifier": "LensStand",
-                "BarLine": "BarMagnifier", "FresnelArm": "LensStand", "ArmBase": "FresnelArm", "ArmUpper": "FresnelArm",
-                "FresnelSheet": "ArmUpper"}
-
-    def use(cam, cam_d, path, tgt, dist):
-        arm_upper.rotation_euler.x = math.radians(-82)
-        loupe.rotation_euler = (math.radians(-18), 0, math.radians(-28))
-        stage_mats(("Stage_Paper", MANILA, 0.8), ("Stage_PaperInk", "#6B5A4A", 0.8))
-        pp = K.Part("StagePaper", (0, 0.10, 0.0005))
-        pp.box((0.0, 0.11, 0.0005), (0.16, 0.12, 0.001), "Stage_Paper")
-        for i in range(6):
-            pp.box((0.0 - (0.02 if i % 2 else 0), 0.07 + i * 0.016, 0.00115), (0.11 if i % 2 else 0.13, 0.003, 0.0003), "Stage_PaperInk")
-        pp.build(COLL)
-        K.toonify()
-        glow(barline, 3.0)
-        shoot(cam, cam_d, path, (0.34, 0.50, 0.40), (0.0, 0.03, 0.07), lens=45)
-
-    finish("lens_kit", "LensKit.fbx", stand, objs, contract, use)
-
-
-# ================================================================ 7. ROLODEX
+# ================================================================ 6. ROLODEX
 def build_rolodex():
     begin("Rolodex")
     K.material("Rdx_Oxblood", OXBLOOD, 0.5, note="base, wheels: kit oxblood")
@@ -851,7 +748,7 @@ def build_rolodex():
     finish("rolodex", "Rolodex.fbx", root, objs, contract, use)
 
 
-# ================================================================ 8. RING SERVICE relay panel
+# ================================================================ 7. RING SERVICE relay panel
 def build_panel():
     begin("RingPanel")
     K.material("Panel_Slate", SLATE, 0.45, note="console: kit slate")
@@ -928,7 +825,7 @@ def build_panel():
 
 # ================================================================ run
 BUILDERS = [("crate", build_crate), ("feeder", build_feeder), ("beacon", build_beacon), ("ring", build_ring),
-            ("babel", build_babel), ("lens", build_lens), ("rolodex", build_rolodex), ("panel", build_panel)]
+            ("babel", build_babel), ("rolodex", build_rolodex), ("panel", build_panel)]
 for key, fn in BUILDERS:
     if ONLY and key not in ONLY:
         continue

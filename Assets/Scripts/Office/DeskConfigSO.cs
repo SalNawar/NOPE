@@ -278,8 +278,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;
 
-    [Header("The desk's plan (the desk layout spec): every bay, the office view's framing, the close-ups")]
-    /// <summary>Where every machine, upgrade's object, tool, shelf and decoration stands, in the desk's own frame, the office camera's framing and the machine close-ups (DeskLayoutSettings).</summary>
+    [Header("The desk's plan (the desk layout spec): every bay, the office view's framing")]
+    /// <summary>Where every machine, upgrade's object, tool, shelf and decoration stands, in the desk's own frame, and the office camera's framing (DeskLayoutSettings).</summary>
     public DeskLayoutSettings layout = new DeskLayoutSettings();
 
     [Header("Desk view (piece 10)")]

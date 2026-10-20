@@ -2048,7 +2048,7 @@
         "lie": "ReprintedPaper",
         "directive": "",
         "variant": "reprinted",
-        "against": "the lens stand's loupe · the microprint along the foot",
+        "against": "the microprint along the foot",
         "note": "Someone else's Entry Ticket, its print changed to the traveller's own true details: the microprint along its foot still repeats the first holder's Citizen ID."
       },
       {
@@ -2058,7 +2058,7 @@
         "lie": "ReprintedPaper",
         "directive": "",
         "variant": "reprinted",
-        "against": "the lens stand's loupe · the microprint along the foot",
+        "against": "the microprint along the foot",
         "note": "Someone else's Work Permit, reprinted with the traveller's own true details: its microprint still repeats the first holder's Citizen ID."
       }
     ],
@@ -2159,7 +2159,7 @@
           "WashedPaper",
           "ReprintedPaper"
         ],
-        "tip": "A doctored blank is on its way to {place}. Put it under the light, through the reader and under the loupe.",
+        "tip": "A doctored blank is on its way to {place}. Put it under the light and through the reader.",
         "quiet": "The chip room is quiet. No clones on the wire today."
       }
     ]
@@ -10895,7 +10895,7 @@
       "queue": 16,
       "shiftStart": "13:00",
       "shiftEnd": "21:00",
-      "bulletin": "NEW: dress for the destination. Look at their clothes (the wheel's Look menu): an item from another time or place causes a panic. Check it against the Costume Guide on your shelf. WARNING: reprinted tickets are about. A genuine paper's microprint, along its foot, repeats the holder's Citizen ID: read it under the loupe and click it against the box.",
+      "bulletin": "NEW: dress for the destination. Look at their clothes (the wheel's Look menu): an item from another time or place causes a panic. Check it against the Costume Guide on your shelf.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -12143,20 +12143,7 @@
     "backLabel": "< Back",
     "smallTalkLabel": "Small talk",
     "smallTalkPrompt": "How is life back home?",
-    "requests": [
-      {
-        "id": "step_closer",
-        "label": "Step closer",
-        "prompt": "Step closer to the glass, please.",
-        "reply": "Like this?"
-      },
-      {
-        "id": "speak_up",
-        "label": "Speak up",
-        "prompt": "Speak up, please. I can barely hear you.",
-        "reply": "Sorry. Is this better?"
-      }
-    ],
+    "requests": [],
     "missingFormReplies": [
       {
         "kind": "RichTourist",
@@ -13562,458 +13549,7 @@
           "text": "A waiver? I waive only my socks. I never wear them."
         }
       ],
-      "spoken": [
-        {
-          "personality": "curt",
-          "request": "speak_up",
-          "text": "Said it once. That was billed."
-        },
-        {
-          "personality": "grand",
-          "request": "step_closer",
-          "text": "I don't step. I proceed."
-        },
-        {
-          "personality": "chatty",
-          "request": "step_closer",
-          "text": "Closer? Ooh, like a secret. I love a secret."
-        },
-        {
-          "personality": "chatty",
-          "request": "speak_up",
-          "text": "SORRY. Is this better? My mum says I mumble. She mumbles too."
-        },
-        {
-          "personality": "curt",
-          "request": "step_closer",
-          "text": "Closer. Fine."
-        },
-        {
-          "personality": "anxious",
-          "request": "step_closer",
-          "text": "Closer? Is that the line? I don't want to cross the line."
-        },
-        {
-          "personality": "anxious",
-          "request": "speak_up",
-          "text": "Sorry! Sorry. Is this too loud now? Tell me if it's too loud."
-        },
-        {
-          "personality": "sunny",
-          "request": "step_closer",
-          "text": "Closer! Love a bit of closeness!"
-        },
-        {
-          "personality": "sunny",
-          "request": "speak_up",
-          "text": "HELLO! Is this better? I love being heard!"
-        },
-        {
-          "personality": "grand",
-          "request": "speak_up",
-          "text": "I do not raise my voice. People lean in."
-        },
-        {
-          "personality": "stickler",
-          "request": "step_closer",
-          "text": "The yellow line is here. I'm on the yellow line. Exactly on it."
-        },
-        {
-          "personality": "stickler",
-          "request": "speak_up",
-          "text": "Speaking at the regulation volume. As posted."
-        },
-        {
-          "personality": "glum",
-          "request": "step_closer",
-          "text": "Closer. Right. Here's closer."
-        },
-        {
-          "personality": "glum",
-          "request": "speak_up",
-          "text": "Sorry. I'll try to be louder. It won't help."
-        },
-        {
-          "premade": "socrates",
-          "request": "step_closer",
-          "text": "Closer? Then tell me: is the truth nearer here?"
-        },
-        {
-          "premade": "socrates",
-          "request": "speak_up",
-          "text": "I speak softly so that you must listen. It is a method."
-        },
-        {
-          "premade": "khwarizmi",
-          "request": "step_closer",
-          "text": "Closer. The distance was not a problem. It was only a question."
-        },
-        {
-          "premade": "khwarizmi",
-          "request": "speak_up",
-          "text": "Better? I usually speak to students, and they sleep."
-        },
-        {
-          "premade": "gutenberg",
-          "request": "step_closer",
-          "text": "Closer? Is something wrong? Nothing is wrong. Is it?"
-        },
-        {
-          "premade": "gutenberg",
-          "request": "speak_up",
-          "text": "Louder? Sorry. I am used to talking to metal."
-        },
-        {
-          "premade": "leonardo",
-          "request": "step_closer",
-          "text": "Closer. Ah, now the light falls better. Hold still."
-        },
-        {
-          "premade": "leonardo",
-          "request": "speak_up",
-          "text": "Forgive me. I was sketching your ceiling in my head."
-        },
-        {
-          "premade": "kulthum",
-          "request": "step_closer",
-          "text": "Closer? The front row. Very well."
-        },
-        {
-          "premade": "kulthum",
-          "request": "speak_up",
-          "text": "Louder? Habibi, I have not yet begun."
-        },
-        {
-          "premade": "turing",
-          "request": "step_closer",
-          "text": "Closer. Interesting. Do you ask everyone that?"
-        },
-        {
-          "premade": "turing",
-          "request": "speak_up",
-          "text": "Sorry. I was thinking. It happens a lot."
-        },
-        {
-          "premade": "ada",
-          "request": "step_closer",
-          "text": "Closer? Delightful! Like a demonstration!"
-        },
-        {
-          "premade": "ada",
-          "request": "speak_up",
-          "text": "Louder? Of course! Drawing rooms, you know. Very echoey."
-        },
-        {
-          "premade": "ramesses",
-          "request": "step_closer",
-          "text": "Closer? Pharaohs are usually viewed from far below."
-        },
-        {
-          "premade": "ramesses",
-          "request": "speak_up",
-          "text": "Louder? My scribes will carve it larger, if you prefer."
-        },
-        {
-          "premade": "cleopatra",
-          "request": "step_closer",
-          "text": "Closer? Most men need no asking."
-        },
-        {
-          "premade": "cleopatra",
-          "request": "speak_up",
-          "text": "Louder? I speak nine languages. Pick one."
-        },
-        {
-          "premade": "saladin",
-          "request": "step_closer",
-          "text": "Closer, certainly. A guest should not have to shout."
-        },
-        {
-          "premade": "saladin",
-          "request": "speak_up",
-          "text": "Louder? Forgive me. In the camp we speak softly."
-        },
-        {
-          "premade": "alexander",
-          "request": "step_closer",
-          "text": "Closer? I only advance. Very well."
-        },
-        {
-          "premade": "alexander",
-          "request": "speak_up",
-          "text": "Louder? On the battlefield, they hear me fine."
-        },
-        {
-          "premade": "aristotle",
-          "request": "step_closer",
-          "text": "Closer. Observation precedes knowledge."
-        },
-        {
-          "premade": "aristotle",
-          "request": "speak_up",
-          "text": "Louder? Virtue lies in the mean. So does volume."
-        },
-        {
-          "premade": "confucius",
-          "request": "step_closer",
-          "text": "Closer, yes. Respect does not need distance."
-        },
-        {
-          "premade": "confucius",
-          "request": "speak_up",
-          "text": "Louder? The superior man is slow to speak."
-        },
-        {
-          "premade": "suntzu",
-          "request": "step_closer",
-          "text": "Closer. Appear weak when you are strong."
-        },
-        {
-          "premade": "suntzu",
-          "request": "speak_up",
-          "text": "Louder? All warfare is based on deception. Also whispering."
-        },
-        {
-          "premade": "qinshihuang",
-          "request": "step_closer",
-          "text": "Closer? Few are allowed this close. Note it."
-        },
-        {
-          "premade": "qinshihuang",
-          "request": "speak_up",
-          "text": "Louder? An emperor's word is carved, not shouted."
-        },
-        {
-          "premade": "caesar",
-          "request": "step_closer",
-          "text": "Closer? I prefer to keep my friends close. And my clerks."
-        },
-        {
-          "premade": "caesar",
-          "request": "speak_up",
-          "text": "Louder? I wrote my own war reports. They are quite loud."
-        },
-        {
-          "premade": "archimedes",
-          "request": "step_closer",
-          "text": "Closer? Careful. You are standing on my circles."
-        },
-        {
-          "premade": "archimedes",
-          "request": "speak_up",
-          "text": "Louder? EUREKA. Is that loud enough?"
-        },
-        {
-          "premade": "marcopolo",
-          "request": "step_closer",
-          "text": "Closer? I have crossed deserts. A desk is nothing."
-        },
-        {
-          "premade": "marcopolo",
-          "request": "speak_up",
-          "text": "Louder? I have told my story so often my voice is tired."
-        },
-        {
-          "premade": "genghis",
-          "request": "step_closer",
-          "text": "Closer? A horseman likes room. Very well."
-        },
-        {
-          "premade": "genghis",
-          "request": "speak_up",
-          "text": "Louder? I give orders across valleys. This is a desk."
-        },
-        {
-          "premade": "galileo",
-          "request": "step_closer",
-          "text": "Closer. Through a lens everything is closer anyway."
-        },
-        {
-          "premade": "galileo",
-          "request": "speak_up",
-          "text": "Louder? I am used to speaking softly. For safety."
-        },
-        {
-          "premade": "nobunaga",
-          "request": "step_closer",
-          "text": "Closer? A lord does not step closer. Very well, once."
-        },
-        {
-          "premade": "nobunaga",
-          "request": "speak_up",
-          "text": "Louder? Human life is fifty years. Speak quickly."
-        },
-        {
-          "premade": "hokusai",
-          "request": "step_closer",
-          "text": "Closer? At seventy I see everything better. Come."
-        },
-        {
-          "premade": "hokusai",
-          "request": "speak_up",
-          "text": "Louder? Forgive me. I was drawing your ear."
-        },
-        {
-          "premade": "elizabeth",
-          "request": "step_closer",
-          "text": "Closer? We have the heart and stomach of a king. Approach."
-        },
-        {
-          "premade": "elizabeth",
-          "request": "speak_up",
-          "text": "Louder? A queen need never raise her voice. Listen better."
-        },
-        {
-          "premade": "newton",
-          "request": "step_closer",
-          "text": "Closer. The force between us grows with the square. Mind it."
-        },
-        {
-          "premade": "newton",
-          "request": "speak_up",
-          "text": "Louder? I wrote the laws of motion. Not of shouting."
-        },
-        {
-          "premade": "luther",
-          "request": "step_closer",
-          "text": "Closer? Here I stand. I can do no other."
-        },
-        {
-          "premade": "luther",
-          "request": "speak_up",
-          "text": "Louder? Gladly. I preach to whole towns."
-        },
-        {
-          "premade": "beethoven",
-          "request": "step_closer",
-          "text": "Closer, yes. I like to hear things up close."
-        },
-        {
-          "premade": "beethoven",
-          "request": "speak_up",
-          "text": "Louder? Gladly! I always play fortissimo."
-        },
-        {
-          "premade": "marx",
-          "request": "step_closer",
-          "text": "Closer. A clerk and a traveller have more in common than you think."
-        },
-        {
-          "premade": "marx",
-          "request": "speak_up",
-          "text": "Louder? History repeats itself. So can I."
-        },
-        {
-          "premade": "hammurabi",
-          "request": "step_closer",
-          "text": "Closer. An eye for an eye, and a step for a step."
-        },
-        {
-          "premade": "hammurabi",
-          "request": "speak_up",
-          "text": "Louder? Read my laws. They are carved large on purpose."
-        },
-        {
-          "premade": "michelangelo",
-          "request": "step_closer",
-          "text": "Closer? I see a statue in you. A small one."
-        },
-        {
-          "premade": "michelangelo",
-          "request": "speak_up",
-          "text": "Louder? I was listening to the stone."
-        },
-        {
-          "premade": "kurosawa",
-          "request": "step_closer",
-          "text": "Closer. Good. Now look troubled."
-        },
-        {
-          "premade": "kurosawa",
-          "request": "speak_up",
-          "text": "Louder? On my set, everyone shouts. It rains a lot."
-        },
-        {
-          "premade": "shakespeare",
-          "request": "step_closer",
-          "text": "Closer? Methinks the clerk doth ask too much."
-        },
-        {
-          "premade": "shakespeare",
-          "request": "speak_up",
-          "text": "Louder? I tell my actors: speak the speech trippingly."
-        },
-        {
-          "premade": "darwin",
-          "request": "step_closer",
-          "text": "Closer. Fascinating. Your species queues by instinct."
-        },
-        {
-          "premade": "darwin",
-          "request": "speak_up",
-          "text": "Louder? Forgive me. I was observing your colleague."
-        },
-        {
-          "premade": "einstein",
-          "request": "step_closer",
-          "text": "Closer? From my frame of reference, I am already close."
-        },
-        {
-          "premade": "einstein",
-          "request": "speak_up",
-          "text": "Louder? Imagination is more important than volume."
-        },
-        {
-          "premade": "pell",
-          "request": "step_closer",
-          "text": "Closer! Love it! Like a photo booth!"
-        },
-        {
-          "premade": "pell",
-          "request": "speak_up",
-          "text": "HELLO! Sorry! Honeymoon nerves!"
-        },
-        {
-          "premade": "ines",
-          "request": "step_closer",
-          "text": "Closer. I know where the yellow line is, believe me."
-        },
-        {
-          "premade": "ines",
-          "request": "speak_up",
-          "text": "Sorry. I'm used to being the one who says speak up."
-        },
-        {
-          "premade": "rook",
-          "request": "step_closer",
-          "text": "Closer? Happy to. Let's be friends."
-        },
-        {
-          "premade": "rook",
-          "request": "speak_up",
-          "text": "Better? I can be very persuasive at any volume."
-        },
-        {
-          "premade": "hollis",
-          "request": "step_closer",
-          "text": "Closer? Is something wrong? Something's wrong."
-        },
-        {
-          "premade": "hollis",
-          "request": "speak_up",
-          "text": "Sorry. Sorry. Is this better? I don't want to be trouble."
-        },
-        {
-          "premade": "auditor",
-          "request": "step_closer",
-          "text": "Closer. Exactly to the line. Observe."
-        },
-        {
-          "premade": "auditor",
-          "request": "speak_up",
-          "text": "Speaking at the posted volume. You'll find it's regulation."
-        }
-      ],
+      "spoken": [],
       "answers": [
         {
           "personality": "chatty",
@@ -24697,24 +24233,6 @@
         "tier": "Flavour"
       },
       {
-        "key": "settings.machineCloseUps",
-        "text": "Machine close-ups",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "settings.machineCloseUpsOn",
-        "text": "On",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "settings.machineCloseUpsOff",
-        "text": "Off",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
         "key": "settings.desktop",
         "text": "Desktop icons open with",
         "gloss": "None",
@@ -26769,12 +26287,6 @@
       {
         "key": "controls.stampsTab",
         "text": "STAMPS",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "controls.inspectHint",
-        "text": "INSPECT: click two things to compare. Right-click or Esc to leave.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -30289,18 +29801,6 @@
             "text": "تشغيل"
           },
           {
-            "key": "settings.machineCloseUps",
-            "text": "لقطات قريبة للآلات"
-          },
-          {
-            "key": "settings.machineCloseUpsOn",
-            "text": "تشغيل"
-          },
-          {
-            "key": "settings.machineCloseUpsOff",
-            "text": "إيقاف"
-          },
-          {
             "key": "settings.desktop",
             "text": "فتح أيقونات سطح المكتب بواسطة"
           },
@@ -31571,10 +31071,6 @@
           {
             "key": "controls.stampsTab",
             "text": "الأختام"
-          },
-          {
-            "key": "controls.inspectHint",
-            "text": "الفحص: انقر شيئين للمقارنة. النقر الأيمن أو Esc للخروج."
           },
           {
             "key": "stamp.zone.handBack",
@@ -38865,18 +38361,6 @@
             "text": "Ενεργό"
           },
           {
-            "key": "settings.machineCloseUps",
-            "text": "Κοντινά πλάνα μηχανών"
-          },
-          {
-            "key": "settings.machineCloseUpsOn",
-            "text": "Ενεργά"
-          },
-          {
-            "key": "settings.machineCloseUpsOff",
-            "text": "Ανενεργά"
-          },
-          {
             "key": "settings.desktop",
             "text": "Τα εικονίδια ανοίγουν με"
           },
@@ -40147,10 +39631,6 @@
           {
             "key": "controls.stampsTab",
             "text": "ΣΤΑΜΠΕΣ"
-          },
-          {
-            "key": "controls.inspectHint",
-            "text": "ΕΠΙΘΕΩΡΗΣΗ: κάνε κλικ σε δύο πράγματα για σύγκριση. Δεξί κλικ ή Esc για έξοδο."
           },
           {
             "key": "stamp.zone.handBack",
@@ -46889,18 +46369,6 @@
             "text": "Attivata"
           },
           {
-            "key": "settings.machineCloseUps",
-            "text": "Primi piani delle macchine"
-          },
-          {
-            "key": "settings.machineCloseUpsOn",
-            "text": "Attivati"
-          },
-          {
-            "key": "settings.machineCloseUpsOff",
-            "text": "Disattivati"
-          },
-          {
             "key": "settings.desktop",
             "text": "Le icone del desktop si aprono con"
           },
@@ -48171,10 +47639,6 @@
           {
             "key": "controls.stampsTab",
             "text": "TIMBRI"
-          },
-          {
-            "key": "controls.inspectHint",
-            "text": "ISPEZIONE: clicca due cose per confrontarle. Clic destro o Esc per uscire."
           },
           {
             "key": "stamp.zone.handBack",
@@ -55033,18 +54497,6 @@
             "text": "An"
           },
           {
-            "key": "settings.machineCloseUps",
-            "text": "Maschinen-Nahaufnahmen"
-          },
-          {
-            "key": "settings.machineCloseUpsOn",
-            "text": "An"
-          },
-          {
-            "key": "settings.machineCloseUpsOff",
-            "text": "Aus"
-          },
-          {
             "key": "settings.desktop",
             "text": "Desktop-Symbole öffnen mit"
           },
@@ -56315,10 +55767,6 @@
           {
             "key": "controls.stampsTab",
             "text": "STEMPEL"
-          },
-          {
-            "key": "controls.inspectHint",
-            "text": "PRÜFEN: klicke zwei Dinge zum Vergleichen. Rechtsklick oder Esc zum Verlassen."
           },
           {
             "key": "stamp.zone.handBack",
@@ -63401,18 +62849,6 @@
             "text": "开"
           },
           {
-            "key": "settings.machineCloseUps",
-            "text": "机器特写"
-          },
-          {
-            "key": "settings.machineCloseUpsOn",
-            "text": "开"
-          },
-          {
-            "key": "settings.machineCloseUpsOff",
-            "text": "关"
-          },
-          {
             "key": "settings.desktop",
             "text": "桌面图标打开方式"
           },
@@ -64683,10 +64119,6 @@
           {
             "key": "controls.stampsTab",
             "text": "印章"
-          },
-          {
-            "key": "controls.inspectHint",
-            "text": "检查：点击两样东西进行比对。右键或 Esc退出。"
           },
           {
             "key": "stamp.zone.handBack",
@@ -71117,18 +70549,6 @@
             "text": "オン"
           },
           {
-            "key": "settings.machineCloseUps",
-            "text": "機械のクローズアップ"
-          },
-          {
-            "key": "settings.machineCloseUpsOn",
-            "text": "オン"
-          },
-          {
-            "key": "settings.machineCloseUpsOff",
-            "text": "オフ"
-          },
-          {
             "key": "settings.desktop",
             "text": "デスクトップアイコンを開く操作"
           },
@@ -72399,10 +71819,6 @@
           {
             "key": "controls.stampsTab",
             "text": "スタンプ"
-          },
-          {
-            "key": "controls.inspectHint",
-            "text": "検査: 2つをクリックして照合。右クリックかEscで終了。"
           },
           {
             "key": "stamp.zone.handBack",
@@ -78581,7 +77997,7 @@
     "basicsTitle": "BASICS",
     "basics": [
       "Left-drag moves a paper: small on the counter, full size on the desk.",
-      "{inspect} or the red magnifier: inspect. Click one value, then another, to compare them.",
+      "{inspect}: inspect. Click one value, then another, to compare them.",
       "{stamps} or the grey STAMPS tab: the stamps. Drag one onto the Passport and let go: one verdict per Passport.",
       "Once the Passport is stamped, drop a paper on the counter: the papers go back and the case is decided.",
       "{pc} or the grey PC tab: your PC (mail; from day 5 the Investigation app, the records and the books).",
@@ -78823,7 +78239,7 @@
         "title": "THE TRANSLATION LENS",
         "named": "Translation Lens",
         "check": "Any word your desk prints in the world's language: a paper's labels, the rulebook, the morning paper, a notice. Hover it and it flips into English.",
-        "against": "From today the desk's language follows history: Settings no longer switches it. The PC stays in English: scan a paper to read its copy cleanly. Orders sells the lens's Sentences and Objects. The lens stand's loupe magnifies: hold it over a paper's foot to read its microprint, which repeats the holder's Citizen ID.",
+        "against": "From today the desk's language follows history: Settings no longer switches it. The PC stays in English: scan a paper to read its copy cleanly. Orders sells the lens's Sentences and Objects.",
         "fault": "Stamping a paper you cannot read: hover its words first, or scan it.",
         "point": "rulebook",
         "practice": {
@@ -79002,8 +78418,8 @@
         "action": "Inspect",
         "categories": [],
         "form": "",
-        "target": "inspect",
-        "text": "Press {inspect} (or the red magnifier) to inspect."
+        "target": "paper:TC-101",
+        "text": "Press {inspect} to inspect."
       },
       {
         "id": "destination",

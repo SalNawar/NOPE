@@ -6,8 +6,8 @@ using UnityEngine;
 /// 2026-10-17: "every upgrade should have a visual representation on the
 /// desk" "and a satysfing interaction"): the supply crate on a delivery
 /// morning, the Interview Protocols' card ring, the BABEL rack of the Speech
-/// translators, the Translation Lens's stand, the Diplomatic Contacts'
-/// Rolodex and the RING SERVICE panel of the portals' repairs (the
+/// translators, the Diplomatic Contacts' Rolodex and the RING SERVICE
+/// panel of the portals' repairs (the
 /// scanner's two upgrades sit on the scanner: ScannerAddOns). GameManager
 /// starts each day with the world (BeginDay): each object stands on the desk
 /// while its upgrade is owned; one delivered this morning appears when the
@@ -24,7 +24,6 @@ public sealed class DeskUpgrades : MonoBehaviour
     [SerializeField] private SupplyCrate crate;
     [SerializeField] private ProtocolRing protocolRing;
     [SerializeField] private BabelRack babelRack;
-    [SerializeField] private LensKit lensKit;
     [SerializeField] private Rolodex rolodex;
     [SerializeField] private RingPanel ringPanel;
 
@@ -61,41 +60,6 @@ public sealed class DeskUpgrades : MonoBehaviour
 
     private InvestigationUIController _investigation;
 
-    /// <summary>The lens stand's footprint on the mat (the corners of everything drawn under it, its magnifiers at rest), so no paper is laid over it; false while it is not on the desk.</summary>
-    public bool TryLensFootprint(out Vector3[] corners)
-    {
-        corners = null;
-        if (lensKit == null || !lensKit.isActiveAndEnabled)
-            return false;
-        Bounds b = default;
-        bool any = false;
-        foreach (Renderer r in lensKit.GetComponentsInChildren<Renderer>(false))
-        {
-            if (!r.enabled || r.GetComponent<TMPro.TMP_Text>() != null || r.GetComponentInParent<DeskMagnifier>() is DeskMagnifier m && m.Magnifying)
-                continue;
-            if (any)
-                b.Encapsulate(r.bounds);
-            else
-                b = r.bounds;
-            any = true;
-        }
-        if (!any)
-            return false;
-        corners = new[] { new Vector3(b.min.x, b.min.y, b.min.z), new Vector3(b.max.x, b.min.y, b.min.z), new Vector3(b.min.x, b.min.y, b.max.z), new Vector3(b.max.x, b.min.y, b.max.z) };
-        return true;
-    }
-
-    /// <summary>The objects on the desk today (the binder keeps them clear of the scanner; the probes read them).</summary>
-    public IEnumerable<Component> Shown
-    {
-        get
-        {
-            foreach (Component c in new Component[] { crate, protocolRing, babelRack, lensKit, rolodex, ringPanel })
-                if (c != null && c.gameObject.activeSelf)
-                    yield return c;
-        }
-    }
-
     private void Awake()
     {
         if (ringPanel != null)
@@ -114,13 +78,11 @@ public sealed class DeskUpgrades : MonoBehaviour
     private void OnEnable()
     {
         TravellerWheel.TongueTranslated += HandleTongue;
-        TranslationLensPresenter.WordTurned += HandleWord;
     }
 
     private void OnDisable()
     {
         TravellerWheel.TongueTranslated -= HandleTongue;
-        TranslationLensPresenter.WordTurned -= HandleWord;
     }
 
     /// <summary>
@@ -168,13 +130,6 @@ public sealed class DeskUpgrades : MonoBehaviour
                     if (t != null && !string.IsNullOrEmpty(t.id))
                         _bayOfTongue[t.id] = packIds.IndexOf(t.pack);
             Show(babelRack, babelRack.SetDay(bays, rackNew), rackNew);
-        }
-        if (lensKit != null)
-        {
-            List<string> levels = translation.lens != null && translation.lens.rules != null ? translation.lens.rules.levelIds : null;
-            LensReach reach = TranslationLens.Reach(world.day, library.Introductions, levels, owns);
-            bool fresh = levels != null && levels.Count > 0 && today.Contains(levels[0]);
-            Show(lensKit, lensKit.SetReach(reach), fresh);
         }
         if (ringPanel != null)
         {
@@ -252,20 +207,11 @@ public sealed class DeskUpgrades : MonoBehaviour
         }
     }
 
-    /// <summary>The traveller left: the rack's pilot goes out, a held magnifier goes back to its stand.</summary>
+    /// <summary>The traveller left: the rack's pilot goes out.</summary>
     public void EndCase()
     {
         if (babelRack != null)
             babelRack.SetSpeaker(-1);
-        if (lensKit != null)
-            lensKit.Release();
-    }
-
-    /// <summary>Wires the objects that work with the desk machines' hub (DeskHardware, at its wake): the lens stand's magnifiers read the papers' microprint.</summary>
-    public void BindHardware(DeskHardware hardware)
-    {
-        if (lensKit != null)
-            lensKit.Bind(hardware);
     }
 
     /// <summary>A traveller went through portal <paramref name="portal"/>: the panel's lamp flashes.</summary>
@@ -279,12 +225,6 @@ public sealed class DeskUpgrades : MonoBehaviour
     {
         if (babelRack != null && babelRack.gameObject.activeInHierarchy && tongueId != null && _bayOfTongue.TryGetValue(tongueId, out int bay))
             babelRack.Spoke(bay);
-    }
-
-    private void HandleWord()
-    {
-        if (lensKit != null && lensKit.gameObject.activeInHierarchy)
-            lensKit.Tick();
     }
 
     private void Update()
@@ -306,8 +246,7 @@ public sealed class DeskUpgrades : MonoBehaviour
 
     /// <summary>
     /// Lays the objects on their bays (DeskHardware.Lay; the desk layout spec):
-    /// the crate off the mat at its front right, the lens stand in the tool
-    /// pouch under the papers, the protocol cards, the BABEL rack and the
+    /// the crate off the mat at its front right, the protocol cards, the BABEL rack and the
     /// Rolodex on the comms shelf, the RING SERVICE panel on the hall shelf
     /// (DeskLayoutSettings, in <paramref name="frame"/>), each at
     /// DeskConfigSO.upgradeScale; the laid roots are added to
@@ -321,7 +260,6 @@ public sealed class DeskUpgrades : MonoBehaviour
         LayOne(crate, frame, layout.crate, laid);
         LayOne(protocolRing, frame, layout.protocolRing, laid);
         LayOne(babelRack, frame, layout.babelRack, laid);
-        LayOne(lensKit, frame, layout.lensKit, laid);
         LayOne(rolodex, frame, layout.rolodex, laid);
         LayOne(ringPanel, frame, layout.ringPanel, laid);
         if (crate != null)

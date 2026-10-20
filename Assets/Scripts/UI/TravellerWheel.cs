@@ -9,7 +9,8 @@ using UnityEngine.UI;
 /// The traveller wheel: the interview's choices on an elliptical ring around
 /// the traveller (the ring's InteractionPanelController lays them out with
 /// RadialLayoutGroup; "&lt; Back" sits in the centre slot), opened by clicking
-/// the traveller or the desk intercom while BoothCoordinator allows it, each
+/// the desk intercom (the only way since P0-C, Saleh 2026-10-20: "intercom to
+/// bring out dialogue options") while BoothCoordinator allows it, each
 /// choice with its kind's icon; and the traveller's speech: their lines in a
 /// speech bubble beside them, one after another, typed out and paced
 /// (SpeechQueue), each changing a premade's expression as it starts, and the
@@ -304,7 +305,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>The current traveller's translation (InvestigationUIController sets it before they speak).</summary>
     public void SetTranslation(CaseTranslation translation) => _translation = translation ?? CaseTranslation.None;
 
-    /// <summary>Opens the wheel over the traveller, unless it may not open or is open (the traveller hit zone's and the desk intercom's persistent call); a line flipping in the bubble shows its English at once.</summary>
+    /// <summary>Opens the wheel over the traveller, unless it may not open or is open (the desk intercom's click, OfficeSceneBinder.OpenWheel); a line flipping in the bubble shows its English at once.</summary>
     public void Open()
     {
         if (!_canOpen || IsOpen || catcher == null)

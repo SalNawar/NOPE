@@ -18,8 +18,8 @@ using UnityEngine.UI;
 /// counter, the mat's click, the scanner and its
 /// stand-in machine, the day-1 notes), the desk view's camera, the traveller,
 /// the AVAILABLE sign, the readouts, the decoration slots, the booth coordinator
-/// and the binder; on the overlay the office case HUD, the stamp bar, the
-/// inspect button and the PC's tab (Papers, Please's controls). Nothing here
+/// and the binder; on the overlay the office case HUD, the stamp bar and
+/// the PC's tab (Papers, Please's controls). Nothing here
 /// knows where the art puts things: the binder reads the scene contract at
 /// load. Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these in
 /// its order.
@@ -337,12 +337,13 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soDesk, "stamps", stampTray);
         soDesk.ApplyModifiedProperties();
 
-        // The traveller and the wheel's openers (the traveller and the desk intercom).
+        // The traveller (the wheel's one opener is the desk intercom the office binder builds: P0-C, docs/pending/CUTS.md).
         TravellerView traveller = BuildTraveller(office, out Clickable travellerZone);
-        // Inspection at the desk (Papers, Please's inspect mode): a click on the traveller picks their face in inspect mode, else opens the wheel.
+        // Inspection at the desk (Papers, Please's inspect mode): a click on the traveller picks their face in inspect mode, else nothing.
         DestroyChildIfPresent(office, "DeskInspect");
         DeskInspect inspect = EnsureChild(office, "DeskInspect").gameObject.AddComponent<DeskInspect>();
-        BuildInspectButton(deskViewBack.transform.parent, inspect);
+        // The red SPACE inspect button is cut (P0-C): a scene built before keeps none.
+        DestroyChildIfPresent(deskViewBack.transform.parent, "InspectButton");
         DeskRulebook rulebook = BuildRulebook(office, desk.GetComponent<DeskSurface>(), counter);
         var soDeskBook = new SerializedObject(desk);
         SetRef(soDeskBook, "rulebook", rulebook);
@@ -370,7 +371,9 @@ public static partial class OfficeSceneUIBuilder
             clicks.Add(click);
         }
 
-        Prop("Stamp", OfficeAnchorId.Stamp, EnsureDeskReaction("Reaction_Stamp", ReactionKind.Squash, ""), null, "stamp");
+        // The old stamp is cut (P0-C): a scene built before keeps no click box for it.
+        DestroyChildIfPresent(propsRoot, "Stamp");
+        // The art's phone (the Intercom anchor): a squash only; the wheel opens from the desk intercom alone (P0-C).
         Prop("Intercom", OfficeAnchorId.Intercom, EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), null, null);
         Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Pulse, "tooltip.credits", 0.08f), OfficeAnchorId.ReadoutCredits, null);
         Prop("StabilityMonitor", OfficeAnchorId.StabilityMonitor, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), null, null);
@@ -379,12 +382,11 @@ public static partial class OfficeSceneUIBuilder
         Prop("Calculator", OfficeAnchorId.Calculator, EnsureDeskReaction("Reaction_Calculator", ReactionKind.Squash, ""), null, "calculator");
         Prop("PenPot", OfficeAnchorId.PenPot, EnsureDeskReaction("Reaction_PenPot", ReactionKind.Wobble, ""), null, "pen_pot");
         Prop("Stapler", OfficeAnchorId.Stapler, EnsureDeskReaction("Reaction_Stapler", ReactionKind.Squash, ""), null, "stapler");
-        WirePersistentVoid(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick", wheel, nameof(TravellerWheel.Open));
+        ClearPersistentCalls(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick");
         WirePersistentVoid(propsRoot.Find("Calendar").GetComponent<Clickable>(), "onClick", inspect, nameof(DeskInspect.CalendarClicked));
         clicks.AddRange(rulebook.Clicks);
         var soInspect = new SerializedObject(inspect);
         SetRef(soInspect, "desk", desk);
-        SetRef(soInspect, "wheel", wheel);
         SetRef(soInspect, "traveller", traveller);
         SetRef(soInspect, "calendar", propsRoot.Find("Calendar"));
         SetRef(soInspect, "rulebook", rulebook);
@@ -392,7 +394,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInspect, "view", view);
         SetRef(soInspect, "city", cityView);
         soInspect.ApplyModifiedProperties();
-        WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(DeskStampTray.ToggleRack));
         var soStamps = new SerializedObject(stampTray);
         SetRef(soStamps, "deskView", deskView);
         SetRef(soStamps, "surface", desk.GetComponent<DeskSurface>());

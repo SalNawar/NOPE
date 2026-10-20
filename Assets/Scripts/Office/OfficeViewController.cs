@@ -17,8 +17,8 @@ public enum OfficeView
 /// right-click or Esc once the desktop's own chain has nothing left to close
 /// (ControlRules.BackOut, OfficeControls), a click outside the frame, its
 /// close button and the desktop's "&lt; Desk" button close it (OfficeFocus); a click outside the
-/// frame then goes on to what it lands on (the traveller or the intercom opens
-/// the wheel, the desk tilts the view: the exit catcher's pass-through), and
+/// frame then goes on to what it lands on (the intercom opens the wheel, the
+/// desk tilts the view: the exit catcher's pass-through), and
 /// the "&lt; Desk" button closes it straight into the desk view (FocusDesk;
 /// Saleh 2026-09-30). The frame itself moves no camera (from the desk view,
 /// BoothCoordinator blends it back up as the frame opens). BoothCoordinator

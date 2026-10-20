@@ -73,7 +73,6 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         new AnchorSpec(OfficeAnchorId.HandOver, null, true, new Vector3(0.05f, 1.07f, 0.45f)),
         new AnchorSpec(OfficeAnchorId.NextSign, new[] { "HybridOffice/Booth/Blender_Next", "Clean_Next__DeskClean_ABS" }, true, new Vector3(0.13f, 1.06f, 0.16f), 180f),
         new AnchorSpec(OfficeAnchorId.Intercom, new[] { "ImportedOfficeDress/Desk/Clerk hotline", "HybridOffice/Booth/Finish_Intercom", "Clean_Phone__DeskClean_PhoneBody" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Stamp, new[] { "HybridOffice/Booth/Blender_Stamp", "Clean_Stamp__DeskClean_Wood" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.Till, new[] { "HybridOffice/Booth/Finish_Till", "Clean_Till__DeskClean_Green" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.StabilityMonitor, new[] { "HybridOffice/Booth/Blender_Stability", "Office_Stability__Plastic_WarmGrey" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.Calendar, new[] { "HybridOffice/Booth/Blender_DayCalendar", "Office_Calendar__Office_TealDark" }, false, Vector3.zero),
@@ -95,12 +94,14 @@ public sealed class OfficeSceneContractSO : ScriptableObject
     /// <summary>
     /// The art scene's leftover gameplay objects (copies from before the move:
     /// the old game manager, desktop, overlay, event system, 2D booth and the
-    /// monitor push-in camera), root paths switched off when the art office
-    /// loads, before any of them starts. The art side may delete them.
+    /// monitor push-in camera; and the cut old stamp's three parts, P0-C),
+    /// root paths or bare names switched off when the art office loads,
+    /// before any of them starts. The art side may delete them.
     /// </summary>
     public string[] legacyRoots =
     {
-        "GameManager", "DaySystem", "EventSystem", "Canvas", "OfficeOverlayCanvas", "OfficeRoot", "Cameras/MonitorVCam"
+        "GameManager", "DaySystem", "EventSystem", "Canvas", "OfficeOverlayCanvas", "OfficeRoot", "Cameras/MonitorVCam",
+        "Clean_Stamp__DeskClean_Wood", "Clean_Stamp__DeskClean_Brass", "Clean_Stamp__DeskClean_Dark"
     };
 
     /// <summary>The spec for an anchor, or null when the contract lists none.</summary>

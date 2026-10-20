@@ -75,9 +75,6 @@ public sealed class DeskHardware : MonoBehaviour
     /// <summary>The desk tuning.</summary>
     public DeskConfigSO Config => config;
 
-    /// <summary>The upgrades' objects on the desk (null without them).</summary>
-    public DeskUpgrades Upgrades => upgrades;
-
     /// <summary>A reading picked at the desk in inspect mode: the paper, the box's index in its fields, what the machine reads there and on which layer (CaseDocumentsPresenter logs it against the box).</summary>
     public event Action<int, int, string, ScanLayer> Picked;
 
@@ -108,8 +105,6 @@ public sealed class DeskHardware : MonoBehaviour
             uvTorch.Bind(this);
         if (chipReader != null)
             chipReader.Bind(this);
-        if (upgrades != null)
-            upgrades.BindHardware(this);
     }
 
     /// <summary>
@@ -174,7 +169,7 @@ public sealed class DeskHardware : MonoBehaviour
         _micro.Add(micro);
     }
 
-    /// <summary>A magnifier this frame (DeskMagnifier; the desk machines spec §10): every paper's microprint line counts how long it has been readable under it (MicroPaperLayer.Track); <paramref name="toLens"/> takes a desk point into the lens's frame (null, or <paramref name="on"/> false: nothing magnified).</summary>
+    /// <summary>A magnifier this frame (the lens stand's DeskMagnifier, cut by P0-C: no caller until the scanner shows the microprint, FIX_PLAN_v2 #17; the desk machines spec §10): every paper's microprint line counts how long it has been readable under it (MicroPaperLayer.Track); <paramref name="toLens"/> takes a desk point into the lens's frame (null, or <paramref name="on"/> false: nothing magnified).</summary>
     public void TrackLens(Func<Vector3, Vector2> toLens, LensShape shape, float halfWidth, float halfHeight, bool on, float dt)
     {
         for (int i = _micro.Count - 1; i >= 0; i--)
@@ -297,13 +292,6 @@ public sealed class DeskHardware : MonoBehaviour
             return false;
         corners = new[] { new Vector3(b.min.x, b.min.y, b.min.z), new Vector3(b.max.x, b.min.y, b.min.z), new Vector3(b.min.x, b.min.y, b.max.z), new Vector3(b.max.x, b.min.y, b.max.z) };
         return true;
-    }
-
-    /// <summary>The lens stand's footprint on the mat (DeskUpgrades.TryLensFootprint), so no paper is laid over it.</summary>
-    public bool TryLensFootprint(out Vector3[] corners)
-    {
-        corners = null;
-        return upgrades != null && upgrades.TryLensFootprint(out corners);
     }
 
     /// <summary>The UV torch's first-day note (the binder lays it over the torch).</summary>

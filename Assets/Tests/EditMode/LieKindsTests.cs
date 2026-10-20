@@ -93,6 +93,19 @@ public class LieKindsTests
 
     /// <summary>The desk machines spec §2-3: a hidden lie fits every 2150 citizen (the displaced carry no chipped paper and no name to wash), is a forgery (a crime, DETAIN) and names the machine that shows it.</summary>
     [Test]
+    public void For_NeverDrawsTheDormantReprintedPaper_UntilTheScannerShowsTheMicroprint()
+    {
+        var day = new List<LieKind> { LieKind.WashedPaper, LieKind.ReprintedPaper, LieKind.ClonedChip };
+        foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
+            CollectionAssert.DoesNotContain(LieKinds.For(day, kind), LieKind.ReprintedPaper, kind.ToString());
+        CollectionAssert.AreEqual(new[] { LieKind.WashedPaper, LieKind.ClonedChip }, LieKinds.For(day, TravellerKind.Labourer), "the other hidden lies still come, in the plan's order");
+        Assert.IsTrue(LieKinds.IsDormant(LieKind.ReprintedPaper));
+        foreach (LieKind lie in (LieKind[])System.Enum.GetValues(typeof(LieKind)))
+            if (lie != LieKind.ReprintedPaper)
+                Assert.IsFalse(LieKinds.IsDormant(lie), lie.ToString());
+    }
+
+    [Test]
     public void TheHiddenLies_FitThe2150Citizens_AreForgedPapers_AndNameTheirMachine()
     {
         foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
@@ -102,7 +115,7 @@ public class LieKindsTests
             Assert.AreEqual(kind != TravellerKind.Displaced, LieKinds.AppliesTo(LieKind.ReprintedPaper, kind), kind.ToString());
         }
         Assert.IsTrue(Law.Breaks(LieKind.ReprintedPaper));
-        Assert.AreEqual(Feature.Lens, LieKinds.MachineOf(LieKind.ReprintedPaper), "the lens stand's magnifiers show it");
+        Assert.AreEqual(Feature.Lens, LieKinds.MachineOf(LieKind.ReprintedPaper), "issued with the lens (dormant: P0-C)");
         Assert.AreEqual(Faults.Forged, Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.ClonedChip));
         Assert.IsTrue(Law.Breaks(LieKind.WashedPaper));
         Assert.AreEqual(Feature.ChipReader, LieKinds.MachineOf(LieKind.ClonedChip));

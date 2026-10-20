@@ -78,13 +78,13 @@ public sealed class DeskDecorItem
 /// moves a machine. One paper mat in the middle; the paper machines at its
 /// right edge, their beds reaching into the reading view (the scanner, the
 /// chip reader); the fixed stamp rack beside the counter; the tool pouch under
-/// the papers (the UV torch, the lens stand); the intercom on the counter;
+/// the papers (the UV torch); the intercom on the counter;
 /// two low back shelves (comms on the left with the phone, the BABEL rack, the
 /// Rolodex and the protocol cards; the hall on the right with the RING SERVICE
 /// panel); the four later machines' bays kept empty (hidden until their
 /// machine comes); two decor zones the art's small props live in, the player
 /// moving them there (DeskDecor). The office camera's new framing (58 degrees,
-/// 5 further down: Saleh's "Yes") and the machine close-ups live here too.
+/// 5 further down: Saleh's "Yes") lives here too.
 /// Read at bind (OfficeSceneBinder); the builder checks the bays
 /// (DeskArrangement.Problems). A section of DeskConfigSO.
 /// </summary>
@@ -117,9 +117,6 @@ public sealed class DeskLayoutSettings
 
     /// <summary>The tool pouch under the papers, its UV torch's cradle (inside the reading view's bottom edge).</summary>
     public DeskBay uvTorch = new DeskBay(0.18f, -0.22f, 0.24f, 0.10f, -90f);
-
-    /// <summary>The lens stand, above the torch and right of the rulebook, clear of both and inside the reading view (its magnifiers taken up over the papers).</summary>
-    public DeskBay lensKit = new DeskBay(0.10f, -0.09f, 0.20f, 0.15f);
 
     /// <summary>The DETAIN button, beside the AVAILABLE sign (rare: one trip to the office view).</summary>
     public DeskBay detain = new DeskBay(-0.51f, 0.74f, 0.26f, 0.28f);
@@ -170,7 +167,6 @@ public sealed class DeskLayoutSettings
         new DeskDecorItem("pen_pot", 0, "Clean_PenPot"),
         new DeskDecorItem("stapler", 0, "Clean_Stapler"),
         new DeskDecorItem("ink_pad", 0, "Clean_Inkpad"),
-        new DeskDecorItem("old_stamp", 0, "Clean_Stamp"),
     };
 
     /// <summary>The grid a dropped decoration settles on (metres, DeskArrangement.TrySettle).</summary>
@@ -178,22 +174,6 @@ public sealed class DeskLayoutSettings
 
     /// <summary>How high a dragged decoration lifts off the desk (metres).</summary>
     [Min(0f)] public float decorLift = 0.03f;
-
-    [Header("Machine close-ups (Settings: Machine close-ups, on by default)")]
-    /// <summary>The close-up's camera: how far from the machine's centre it stands (metres) and how far above the desk it looks from, as a share of that distance; its field of view.</summary>
-    [Min(0.1f)] public float closeUpDistance = 0.75f;
-
-    /// <inheritdoc cref="closeUpDistance"/>
-    [Range(0.1f, 2f)] public float closeUpHeight = 0.8f;
-
-    /// <inheritdoc cref="closeUpDistance"/>
-    [Range(10f, 90f)] public float closeUpFieldOfView = 38f;
-
-    /// <summary>Seconds of the push-in and of the way back (a cut under Reduced Motion).</summary>
-    [Min(0f)] public float closeUpBlendSeconds = 0.35f;
-
-    /// <summary>How long a close-up holds after a click on an upgrade's object (seconds; a machine's read or scan holds it while it works).</summary>
-    [Min(0f)] public float closeUpHoldSeconds = 1.6f;
 
     /// <summary>Every bay the plan keeps, by name (the builder's check: on the desk, none overlapping; the back shelves hold their own bays, so they are left out).</summary>
     public IEnumerable<KeyValuePair<string, DeskRect>> Bays()
@@ -203,7 +183,6 @@ public sealed class DeskLayoutSettings
         yield return Named("stampRack", stampRack);
         yield return Named("intercom", intercom);
         yield return Named("uvTorch", uvTorch);
-        yield return Named("lensKit", lensKit);
         yield return Named("detain", detain);
         yield return Named("crate", crate);
         yield return Named("phone", phone);

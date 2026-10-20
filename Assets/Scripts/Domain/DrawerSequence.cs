@@ -348,8 +348,6 @@ public static class PropArt
         "BabelRack/Cartridge_0/CartridgeLED_0", "BabelRack/Cartridge_1/CartridgeLED_1", "BabelRack/Cartridge_2/CartridgeLED_2", "BabelRack/Cartridge_3/CartridgeLED_3"
     };
 
-    /// <summary>The Translation Lens's stand: the loupe, the bar magnifier and the Fresnel arm with its hinged upper part.</summary>
-    public static readonly string[] LensKit = { "LensStand", "LensStand/Loupe", "LensStand/BarMagnifier", "LensStand/FresnelArm", "LensStand/FresnelArm/ArmUpper" };
 
     /// <summary>The Rolodex: the drum and the knob.</summary>
     public static readonly string[] Rolodex = { "Rolodex", "Rolodex/Drum", "Rolodex/Knob" };

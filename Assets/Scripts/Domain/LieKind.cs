@@ -54,7 +54,7 @@ public enum LieKind
     /// <summary>L14, a washed paper (the desk machines spec §2-3): one of the traveller's papers was another person's, washed and printed over with the traveller's own true values, so under the UV torch the ghost of the first holder's name shows beneath theirs (a forgery only the torch shows).</summary>
     WashedPaper,
 
-    /// <summary>L15, a reprinted paper (the desk machines spec §10): one of the traveller's papers is a genuine paper of another citizen's, its print changed to the traveller's own true values, but its microprint, too fine to reprint, still repeats the first holder's Citizen ID (a forgery only the lens stand's magnifiers show).</summary>
+    /// <summary>L15, a reprinted paper (the desk machines spec §10): one of the traveller's papers is a genuine paper of another citizen's, its print changed to the traveller's own true values, but its microprint, too fine to reprint, still repeats the first holder's Citizen ID. Dormant since P0-C (2026-10-20): the lens stand's magnifiers that showed it are cut, so LieKinds.For never draws it until the scanner shows the microprint (FIX_PLAN_v2 #17; LieKinds.IsDormant).</summary>
     ReprintedPaper
 }
 
@@ -117,11 +117,20 @@ public static class LieKinds
             return lies;
 
         foreach (LieKind lie in enabled)
-            if (AppliesTo(lie, kind) && !lies.Contains(lie))
+            if (AppliesTo(lie, kind) && !IsDormant(lie) && !lies.Contains(lie))
                 lies.Add(lie);
 
         return lies;
     }
+
+    /// <summary>
+    /// True for a lie switched off for now although a day lists it (P0-C
+    /// CUTS, 2026-10-20): the reprinted paper, whose only proof, the lens
+    /// stand's magnifiers, is cut; it comes back when the scanner shows the
+    /// microprint (FIX_PLAN_v2 #17: delete it from here then), so no lie is
+    /// unprovable in between. For never draws a dormant lie.
+    /// </summary>
+    public static bool IsDormant(LieKind lie) => lie == LieKind.ReprintedPaper;
 
     /// <summary>True for a place lie, planned by Lies.Plan: the false origin (another of today's places), the fake displaced (the present as the one candidate home) or smuggling (the present's goods).</summary>
     public static bool IsPlaceLie(LieKind lie) => lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced || lie == LieKind.Smuggling;
@@ -129,10 +138,10 @@ public static class LieKinds
     /// <summary>True for a visual lie (the document design spec, D4, D8): a forged seal, proven against the Seal Register, or someone else's photo, proven against the traveller at the desk; planned by their own makers (Seals.Forge, Looks.Stranger), never by RecordLies or Lies.Plan.</summary>
     public static bool IsVisualLie(LieKind lie) => lie == LieKind.ForgedSeal || lie == LieKind.SwappedPhoto;
 
-    /// <summary>True for a hidden lie (the desk machines spec §2-3, §10): a cloned chip, shown only by the chip reader, a washed paper, shown only under the UV torch, or a reprinted paper, shown only by the lens stand's magnifiers; every value printed is true; planned by HiddenLies, never by RecordLies or Lies.Plan.</summary>
+    /// <summary>True for a hidden lie (the desk machines spec §2-3, §10): a cloned chip, shown only by the chip reader, a washed paper, shown only under the UV torch, or a reprinted paper, shown only by its microprint (dormant: IsDormant); every value printed is true; planned by HiddenLies, never by RecordLies or Lies.Plan.</summary>
     public static bool IsHiddenLie(LieKind lie) => lie == LieKind.ClonedChip || lie == LieKind.WashedPaper || lie == LieKind.ReprintedPaper;
 
-    /// <summary>The machine that shows a hidden lie (the Feature key the day ramp issues it under: Feature.ChipReader, Feature.UvTorch, Feature.Lens for the lens stand); null for every other lie.</summary>
+    /// <summary>The machine that shows a hidden lie (the Feature key the day ramp issues it under: Feature.ChipReader, Feature.UvTorch, Feature.Lens for the reprinted paper, issued with the Translation Lens); null for every other lie.</summary>
     public static string MachineOf(LieKind lie) =>
         lie == LieKind.ClonedChip ? Feature.ChipReader : lie == LieKind.WashedPaper ? Feature.UvTorch : lie == LieKind.ReprintedPaper ? Feature.Lens : null;
 

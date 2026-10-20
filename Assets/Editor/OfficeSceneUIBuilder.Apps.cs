@@ -327,15 +327,6 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<LayoutElement>(swayLabel.gameObject).flexibleWidth = 1f;
         Button swayOff = SettingsChoice(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
         Button swayOn = SettingsChoice(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
-        // Machine close-ups (Saleh 2026-10-18: a Settings toggle, on by default; the desk layout spec §4): its word, then the On / Off pair.
-        Transform closeUpRow = SettingsRow(column, "MachineCloseUpsRow");
-        TMP_Text closeUpLabel = Text(closeUpRow, "MachineCloseUpsLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
-                                     ThemeRoleId.WindowBody, "settings.machineCloseUps");
-        Chrome(closeUpLabel, PcType.Body);
-        closeUpLabel.raycastTarget = false;
-        GetOrAdd<LayoutElement>(closeUpLabel.gameObject).flexibleWidth = 1f;
-        Button closeUpsOn = SettingsChoice(closeUpRow, "MachineCloseUpsOnButton", "settings.machineCloseUpsOn");
-        Button closeUpsOff = SettingsChoice(closeUpRow, "MachineCloseUpsOffButton", "settings.machineCloseUpsOff");
 
         SettingsHeading(column, "DesktopLabel", "settings.desktop");
         Transform icons = SettingsRow(column, "IconOpenRow");
@@ -380,8 +371,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "motionIntensityText", intensityValue);
         SetRef(so, "cameraSwayOffButton", swayOff);
         SetRef(so, "cameraSwayOnButton", swayOn);
-        SetRef(so, "closeUpsOnButton", closeUpsOn);
-        SetRef(so, "closeUpsOffButton", closeUpsOff);
         SetRef(so, "iconDoubleClickButton", iconDouble);
         SetRef(so, "iconSingleClickButton", iconSingle);
         SetRef(so, "resetIconsButton", resetIcons);

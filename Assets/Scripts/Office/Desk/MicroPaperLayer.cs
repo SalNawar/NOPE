@@ -13,7 +13,8 @@ using UnityEngine;
 /// mode a click on the line picks its reading against the Citizen ID box
 /// (DeskHardware.Pick, ScanLayer.Micro), which a reprinted paper's
 /// mismatch proves. DeskHardware adds one to each paper the desk hands over
-/// whose form prints one.
+/// whose form prints one. The lens stand's magnifiers were cut by P0-C, 2026-10-20: until the scanner shows the microprint, FIX_PLAN_v2 #17, nothing reads it:
+/// the line is printed, never read (Track has no caller).
 /// </summary>
 public sealed class MicroPaperLayer : MonoBehaviour
 {

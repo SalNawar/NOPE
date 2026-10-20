@@ -83,7 +83,7 @@ public class UpgradeObjectsTests
     [Test]
     public void PropContracts_NameEachObjectsMovingParts()
     {
-        foreach (string[] contract in new[] { PropArt.SupplyCrate, PropArt.ScannerFeeder, PropArt.AnalysisBeacon, PropArt.ProtocolRing, PropArt.BabelRack, PropArt.LensKit, PropArt.Rolodex, PropArt.RingPanel })
+        foreach (string[] contract in new[] { PropArt.SupplyCrate, PropArt.ScannerFeeder, PropArt.AnalysisBeacon, PropArt.ProtocolRing, PropArt.BabelRack, PropArt.Rolodex, PropArt.RingPanel })
         {
             var all = new HashSet<string>(contract);
             Assert.IsTrue(PropArt.UseArt(true, contract, all.Contains));

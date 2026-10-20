@@ -20,7 +20,9 @@ public enum LensShape
 /// read once the shape has shown at least <see cref="ReadLength"/> of it (one
 /// repeat of the Bureau's mark, the form and the Citizen ID; all of a shorter
 /// line) for <see cref="UvCone.SeenSeconds"/> in a row. Pure: the magnifiers'
-/// MonoBehaviours feed it the line's ends in each lens's frame.
+/// MonoBehaviours fed it the line's ends in each lens's frame. The magnifiers
+/// were cut by P0-C, 2026-10-20: until the scanner shows the microprint, FIX_PLAN_v2 #17, nothing reads it;
+/// it stays with TOOLS (FIX_PLAN_v2 65c), through DeskHardware.TrackLens.
 /// </summary>
 public static class MicroLens
 {

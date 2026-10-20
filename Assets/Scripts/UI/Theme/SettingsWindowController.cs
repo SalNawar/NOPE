@@ -15,9 +15,7 @@ using UnityEngine.UI;
 /// slider under it (0-100 %, MotionPreference.Intensity: how far the game
 /// feel's springs, shakes and the camera move; off while Reduced is chosen),
 /// and Camera sway, "Off" (the default) or "On" (MotionPreference.CameraSway:
-/// the cameras' idle breathing; off and inert while Reduced is chosen),
-/// and Machine close-ups, "On" (the default) or "Off" (MotionPreference.MachineCloseUps:
-/// the camera pushes in on a machine in use; a cut under Reduced motion);
+/// the cameras' idle breathing; off and inert while Reduced is chosen);
 /// and the desktop's icons (the PC redesign DK5, DK6): open
 /// with a "Double click" (the default) or a "Single click"
 /// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange)
@@ -51,12 +49,6 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     /// <summary>Camera sway "On": the cameras' idle breathing (MotionPreference.CameraSway; off while Reduced is chosen).</summary>
     [SerializeField] private Button cameraSwayOnButton;
-
-    /// <summary>Machine close-ups "On" (the default) in the Motion group: a machine in use is shown close (MotionPreference.MachineCloseUps).</summary>
-    [SerializeField] private Button closeUpsOnButton;
-
-    /// <summary>Machine close-ups "Off": the camera stays where the player put it.</summary>
-    [SerializeField] private Button closeUpsOffButton;
 
     /// <summary>The Motion intensity slider (0 to 100).</summary>
     [SerializeField] private Slider motionIntensitySlider;
@@ -108,10 +100,6 @@ public sealed class SettingsWindowController : MonoBehaviour
             cameraSwayOffButton.onClick.AddListener(() => ChooseSway(false));
         if (cameraSwayOnButton != null)
             cameraSwayOnButton.onClick.AddListener(() => ChooseSway(true));
-        if (closeUpsOnButton != null)
-            closeUpsOnButton.onClick.AddListener(() => ChooseCloseUps(true));
-        if (closeUpsOffButton != null)
-            closeUpsOffButton.onClick.AddListener(() => ChooseCloseUps(false));
         if (motionIntensitySlider != null)
             motionIntensitySlider.onValueChanged.AddListener(ChooseIntensity);
         if (iconDoubleClickButton != null)
@@ -154,13 +142,6 @@ public sealed class SettingsWindowController : MonoBehaviour
         if (MotionPreference.Reduced)
             return;
         MotionPreference.CameraSway = on;
-        ShowSelection();
-    }
-
-    /// <summary>Stores the machine close-up choice and shows it.</summary>
-    private void ChooseCloseUps(bool on)
-    {
-        MotionPreference.MachineCloseUps = on;
         ShowSelection();
     }
 
@@ -237,9 +218,6 @@ public sealed class SettingsWindowController : MonoBehaviour
             cameraSwayOffButton.interactable = !reduced;
         if (cameraSwayOnButton != null)
             cameraSwayOnButton.interactable = !reduced;
-        bool closeUps = MotionPreference.MachineCloseUps;
-        Paint(closeUpsOnButton, closeUps, theme);
-        Paint(closeUpsOffButton, !closeUps, theme);
         bool single = DesktopPreferences.OpenIconsWithSingleClick;
         Paint(iconDoubleClickButton, !single, theme);
         Paint(iconSingleClickButton, single, theme);

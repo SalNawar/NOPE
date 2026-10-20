@@ -18,7 +18,7 @@ public enum GuideAction
     /// <summary>A paper lands on the desk, full size, to be read (dragged there or sent by a click); a step may name the form.</summary>
     OnDesk = 2,
 
-    /// <summary>Inspect mode is turned on (SPACE or the magnifier).</summary>
+    /// <summary>Inspect mode is turned on (SPACE).</summary>
     Inspect = 3,
 
     /// <summary>A comparison is logged in the findings; a step may name the details it must be about (the finding's category).</summary>
@@ -267,7 +267,7 @@ public sealed class GuideContent
 }
 
 /// <summary>
-/// Where a guide arrow may point: the AVAILABLE sign, the red inspect button,
+/// Where a guide arrow may point: the AVAILABLE sign,
 /// the grey stamp tab, the PC's grey tab, the rulebook, the calendar, the
 /// Seal Register (the rulebook's SEALS tab), the
 /// Departure Board, the scanner, the counter, the traveller, the UV torch, the
@@ -279,7 +279,7 @@ public sealed class GuideContent
 public static class GuideTargets
 {
     /// <summary>The named targets.</summary>
-    public static readonly IReadOnlyList<string> Named = new[] { "sign", "inspect", "stamps", "pc", "rulebook", "seals", "calendar", "board", "scanner", "counter", "traveller", "uv_torch", "chip_reader", "stamp_rack", "intercom" };
+    public static readonly IReadOnlyList<string> Named = new[] { "sign", "stamps", "pc", "rulebook", "seals", "calendar", "board", "scanner", "counter", "traveller", "uv_torch", "chip_reader", "stamp_rack", "intercom" };
 
     /// <summary>The targets in words, for a problem's message.</summary>
     public static string Describe => string.Join(", ", Named) + ", paper:<form>, field:<form>/<ClueCategory>";

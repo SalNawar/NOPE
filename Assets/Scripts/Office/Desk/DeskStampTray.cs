@@ -20,9 +20,9 @@ using UnityEngine.UI;
 /// and pinion, a cradle per dater) stands the daters up as a case begins,
 /// DENIED then APPROVED, each locking upright with a click, and folds them
 /// down as it ends (DrawerSequence's cradles; its slide is not used). The
-/// tab on the screen's top edge ("STAMPS" beside "TAB"), the TAB key
-/// (OfficeControls) and the desk's old stamp bring the reading view over the
-/// rack, or go back (ToggleRack); the tab shows in the office view only.
+/// tab on the screen's top edge ("STAMPS" beside "TAB") and the TAB key
+/// (OfficeControls) bring the reading view over the rack, or go back
+/// (ToggleRack; the desk's old stamp was cut by P0-C); the tab shows in the office view only.
 /// A dater takes input once its cradle is locked. Without the drawer's art
 /// the built rack (a lip with end caps) holds them upright all the time. The rack holds the DENIED dater
 /// (left) and the APPROVED dater (right), self-inking daters after Saleh's
@@ -385,7 +385,7 @@ public sealed class DeskStampTray : MonoBehaviour
     public Texture2D Impression(bool approved) =>
         DaterImpressionArt.Paint(Word(approved), Ink(approved), _dateText, _byLine, daterFont, 1f, _day * 977 + _presses++);
 
-    /// <summary>The grey tab, TAB, the desk's old stamp: brings the reading view over the rack, or goes back to the office view (Papers, Please's TAB); nothing while the daters take no input.</summary>
+    /// <summary>The grey tab, TAB: brings the reading view over the rack, or goes back to the office view (Papers, Please's TAB); nothing while the daters take no input.</summary>
     public void ToggleRack()
     {
         Deselect();

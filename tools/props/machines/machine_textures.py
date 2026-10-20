@@ -350,29 +350,6 @@ TEXTURES = {
 }
 
 
-def fresnel_rings(path, w=600, h=440):
-    """The Fresnel page magnifier's sheet (LensKit, Object level): pale cyan acrylic, concentric grooves
-    closing in toward the rim (zone radii ~ sqrt(k)), a thin rim line and a small maker's mark."""
-    img = Image.new("RGB", (w, h), (214, 238, 240))
-    d = ImageDraw.Draw(img)
-    cx, cy = w / 2, h / 2
-    rmax = math.hypot(cx, cy)
-    k = 1
-    while True:
-        r = 46.0 * math.sqrt(k)
-        if r > rmax:
-            break
-        shade = (150, 196, 204) if k % 4 else (112, 160, 176)
-        d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=shade, width=2 if k % 4 else 3)
-        k += 1
-    d.rectangle([4, 4, w - 5, h - 5], outline=SLATE, width=4)
-    d.text((16, h - 40), "TCB · FRESNEL 3×", font=font(24), fill=SLATE)
-    img.save(path)
-
-
-TEXTURES["LensKit_Fresnel.png"] = fresnel_rings
-
-
 def main():
     os.makedirs(OUT, exist_ok=True)
     for name, fn in TEXTURES.items():

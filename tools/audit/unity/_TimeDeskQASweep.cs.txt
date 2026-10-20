@@ -78,7 +78,7 @@ public static class _TimeDeskQASweep
 
     /// <summary>The per-player preferences the sweep starts without and restores: Settings' language and motion and the desktop's layout (DesktopPreferences' keys), each under its stored name (PlayerPrefKeys).</summary>
     private static IEnumerable<string> PrefNames() =>
-        new[] { "TimeDesk.UiLanguage", "TimeDesk.ReducedMotion", "TimeDesk.MotionIntensity", "TimeDesk.CameraSway", "TimeDesk.MachineCloseUps", "TimeDesk.DeskDecor" }
+        new[] { "TimeDesk.UiLanguage", "TimeDesk.ReducedMotion", "TimeDesk.MotionIntensity", "TimeDesk.CameraSway", "TimeDesk.DeskDecor" }
             .Concat(typeof(DesktopPreferences).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(f => f.IsLiteral && f.FieldType == typeof(string)).Select(f => (string)f.GetRawConstantValue()).Where(v => v.StartsWith("TimeDesk.")))
             .Select(PlayerPrefKeys.For);
@@ -471,7 +471,7 @@ public static class _TimeDeskQASweep
         o.GoHome.onClick.Invoke();
     }
 
-    /// <summary>The wheel: opened as the player does (the traveller clicked), every choice of its first ring and of the menus they open chosen once, with the speech bubble's place checked (on the screen, off the wheel).</summary>
+    /// <summary>The wheel: a click on the traveller opens nothing (P0-C: the intercom is the one way to talk); opened as the player does (the desk intercom clicked), every choice of its first ring and of the menus they open chosen once, with the speech bubble's place checked (on the screen, off the wheel).</summary>
     private static IEnumerator Wheel(Office o, string tag)
     {
         var inspect = Office.One<DeskInspect>();
@@ -479,15 +479,21 @@ public static class _TimeDeskQASweep
             inspect.SetOn(false);
         inspect.TravellerClicked();
         yield return Seconds(0.6f);
+        Check(!o.Wheel.IsOpen, $"{tag}: a click on the traveller opens no wheel (open: {o.Wheel.IsOpen})");
+        Transform intercom = Office.One<OfficeSceneBinder>().transform.Find("DeskFurniture/Intercom");
+        Clickable talk = intercom != null ? intercom.GetComponent<Clickable>() : null;
+        if (talk != null)
+            talk.onClick.Invoke();
+        yield return Seconds(0.6f);
         if (!o.Wheel.IsOpen)
         {
             o.Wheel.Open();
             yield return Seconds(0.6f);
-            Check(o.Wheel.IsOpen, $"{tag}: the wheel opens (a click on the traveller did not open it; Open did: {o.Wheel.IsOpen})");
+            Check(o.Wheel.IsOpen, $"{tag}: the wheel opens (the desk intercom {(talk != null ? "did not open it" : "is missing")}; Open did: {o.Wheel.IsOpen})");
         }
         else
         {
-            Check(true, $"{tag}: a click on the traveller opens the wheel");
+            Check(true, $"{tag}: a click on the desk intercom opens the wheel");
         }
         yield return Shot("office", $"{tag}_wheel_open");
         yield return KitChecks("office", $"{tag} wheel open");
@@ -755,12 +761,12 @@ public static class _TimeDeskQASweep
         var screen = (CanvasGroup)Field(city, "screen");
         Check(screen != null && screen.alpha >= 0.99f, $"{tag}: the whole city panorama shows (alpha {(screen != null ? screen.alpha : -1f):0.00})");
         yield return Shot("office", $"{tag}_city");
-        // Only the DESK tab shows over the city: the PC and STAMPS tabs and the inspect button are faded out and take no clicks, and
+        // Only the DESK tab shows over the city: the PC and STAMPS tabs are faded out and take no clicks, and
         // so are the office callouts the city view also hides since fix/leftovers-1016 (the speech bubble, the tooltips, the case HUD).
         var back = (Button)Field(city, "backButton");
         var hidden = (CanvasGroup[])Field(city, "deskControls");
         string Names(IEnumerable<CanvasGroup> gs) => string.Join(", ", gs.Select(g => g != null ? $"{g.name} {g.alpha:0.00}/{g.blocksRaycasts}" : "null"));
-        Check(hidden.Length >= 3 && hidden.All(g => g != null && g.alpha <= 0.01f && !g.blocksRaycasts), $"{tag}: in the city view the PC and STAMPS tabs, the inspect button and the office callouts are hidden [{Names(hidden)}]");
+        Check(hidden.Length >= 3 && hidden.All(g => g != null && g.alpha <= 0.01f && !g.blocksRaycasts), $"{tag}: in the city view the PC and STAMPS tabs and the office callouts are hidden [{Names(hidden)}]");
         Check(back != null && back.gameObject.activeInHierarchy && back.interactable, $"{tag}: in the city view the DESK tab shows");
         yield return KitChecks("office", $"{tag} city");
         if (back != null && back.gameObject.activeInHierarchy && back.interactable)
@@ -769,7 +775,7 @@ public static class _TimeDeskQASweep
             city.Return();
         yield return Seconds(1.2f);
         Check(!city.IsOn, $"{tag}: the DESK tab brings the desk back");
-        Check(hidden.All(g => g != null && g.alpha >= 0.99f && g.blocksRaycasts), $"{tag}: back at the desk the PC and STAMPS tabs and the inspect button show again [{Names(hidden)}]");
+        Check(hidden.All(g => g != null && g.alpha >= 0.99f && g.blocksRaycasts), $"{tag}: back at the desk the PC and STAMPS tabs show again [{Names(hidden)}]");
     }
 
     /// <summary>The pull tabs: the PC tab (the PC opens, then closes), the stamps tab (the reading view over the stamp rack, then back).</summary>

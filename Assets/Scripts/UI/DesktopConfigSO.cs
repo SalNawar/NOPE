@@ -90,7 +90,7 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Notes window's size.</summary>
     public Vector2 notesWindowSize = new Vector2(960f, 800f);
 
-    /// <summary>The Settings window's size (1010 u tall, the desktop's height above the taskbar: every row fits with the Machine close-ups row, the locked language line's three lines and the note's three, in the culture fonts too).</summary>
+    /// <summary>The Settings window's size (1010 u tall, the desktop's height above the taskbar: every row fits (sized when it still had the Machine close-ups row, cut by P0-C), the locked language line's three lines and the note's three, in the culture fonts too).</summary>
     public Vector2 settingsWindowSize = new Vector2(800f, 1010f);
 
     /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>

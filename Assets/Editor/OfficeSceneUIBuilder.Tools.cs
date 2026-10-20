@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 /// <summary>
 /// The office builder's desk tools: the UV torch (its pool, collider and
-/// materials) and the magnifiers (the lens kit).
+/// materials). The magnifiers (the lens kit) were cut by P0-C (docs/pending/CUTS.md).
 /// Part of <see cref="OfficeSceneUIBuilder"/>; carved out of OfficeSceneUIBuilder.Machines.cs and .Upgrades.cs by P0-A (pure move). Owner: TOOLS.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -120,67 +120,5 @@ public static partial class OfficeSceneUIBuilder
                 });
             default: return AnimeMaterial("TorchArt_Body", Hex("#4A5872"));
         }
-    }
-
-    private static LensKit BuildLensKit(Transform root)
-    {
-        Transform host = PropHost(root, "LensKit", LensKitModel, PropArt.LensKit, out Transform m);
-        if (host == null)
-            return null;
-        LensKit kit = GetOrAdd<LensKit>(host.gameObject);
-        Transform s = m.Find("LensStand");
-        AudioSource sound = host.GetComponent<AudioSource>();
-        Transform loupe = s.Find("Loupe"), bar = s.Find("BarMagnifier");
-        // The bar's glass: its lens's centre (the part's pivot is its bottom centre).
-        DestroyChildIfPresent(bar, "BarGlass");
-        var barGlass = new GameObject("BarGlass").transform;
-        barGlass.SetParent(bar, false);
-        barGlass.localPosition = LocalBounds(bar, bar).center;
-        var so = new SerializedObject(kit);
-        SetRef(so, "loupe", loupe);
-        SetRef(so, "barMagnifier", bar);
-        SetRef(so, "fresnelArm", s.Find("FresnelArm"));
-        SetRef(so, "armUpper", s.Find("FresnelArm/ArmUpper"));
-        SetRef(so, "loupeLens", Magnifier(loupe, loupe.Find("LoupeGlass"), LensShape.Round, new Vector2(0.019f, 0.019f), 2.5f, true, sound));
-        SetRef(so, "barLens", Magnifier(bar, barGlass, LensShape.Rectangle, new Vector2(0.058f, 0.009f), 1.8f, true, sound));
-        SetRef(so, "fresnelLens", Magnifier(s.Find("FresnelArm/ArmUpper/FresnelSheet"), s.Find("FresnelArm/ArmUpper/FresnelSheet"), LensShape.Rectangle, new Vector2(0.073f, 0.053f), 1.4f, false, sound));
-        // The stand's click box (it folds the Fresnel's arm): the base alone, low, so the loupe's and the bar's grabs above it take their presses.
-        DestroyChildIfPresent(host, "Click");
-        Clickable click = EnsureClickBox(host, "Click");
-        Bounds stand = LocalBounds(s, host);
-        float baseHeight = Mathf.Min(stand.size.y, 0.012f);
-        click.transform.localPosition = new Vector3(stand.center.x, stand.min.y + baseHeight / 2f, stand.center.z);
-        click.transform.localRotation = Quaternion.identity;
-        click.GetComponent<BoxCollider>().size = new Vector3(stand.size.x + 0.02f, baseHeight, stand.size.z + 0.02f);
-        click.SetOutline(new[] { s.GetComponent<Renderer>() });
-        SetRef(so, "click", click);
-        SetRef(so, "sound", sound);
-        so.ApplyModifiedProperties();
-        return kit;
-    }
-
-    /// <summary>A lens stand part as a magnifier (DeskMagnifier on <paramref name="part"/>): its glass, shape, half size (in the glass's space), magnification, whether it is held, and for a held one its grab box (a click box over the part, which the part's presses reach).</summary>
-    private static DeskMagnifier Magnifier(Transform part, Transform glass, LensShape shape, Vector2 halfSize, float magnification, bool held, AudioSource sound)
-    {
-        DeskMagnifier lens = GetOrAdd<DeskMagnifier>(part.gameObject);
-        var so = new SerializedObject(lens);
-        SetRef(so, "glass", glass);
-        so.FindProperty("shape").enumValueIndex = (int)shape;
-        so.FindProperty("halfSize").vector2Value = halfSize;
-        so.FindProperty("magnification").floatValue = magnification;
-        so.FindProperty("held").boolValue = held;
-        SetRef(so, "sound", sound);
-        so.ApplyModifiedProperties();
-        DestroyChildIfPresent(part, "Grab");
-        if (held)
-        {
-            Clickable grab = EnsureClickBox(part, "Grab");
-            Bounds b = LocalBounds(part, part);
-            grab.transform.localPosition = b.center;
-            grab.transform.localRotation = Quaternion.identity;
-            grab.GetComponent<BoxCollider>().size = b.size + Vector3.one * 0.008f;
-            grab.SetOutline(part.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TMP_Text>() == null).ToArray());
-        }
-        return lens;
     }
 }

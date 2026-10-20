@@ -8,22 +8,22 @@ using UnityEngine;
 /// The upgrades' desk objects (the desk machines spec §4; Saleh 2026-10-17:
 /// "every upgrade should have a visual representation on the desk" "and a
 /// satysfing interaction"): DeskHardware/DeskUpgrades with the supply crate,
-/// the protocol ring, the BABEL rack, the lens stand, the Rolodex and the
+/// the protocol ring, the BABEL rack, the Rolodex and the
 /// RING SERVICE panel, and the scanner's Auto-Feed tray and Analysis beacon
 /// on the scanner's art (ScannerAddOns), each the model of
 /// tools/props/machines/upgrade_props_model.py in the desk's materials (its
 /// slots' colours and decals, PropSlots), with its click box and its cues'
 /// source. An object whose model lacks a part of its contract (PropArt) is
 /// left out with a warning. Idempotent (DeskHardware is rebuilt whole).
-/// P0-A carve (docs/pending/CARVE.md): the lens kit and its magnifiers are in
-/// .Tools.cs, the BABEL rack in .Babel.cs, the RING SERVICE panel in
-/// .Ring.cs. Owner: DESK-PLAN.
+/// P0-A carve (docs/pending/CARVE.md): the BABEL rack is in .Babel.cs, the
+/// RING SERVICE panel in .Ring.cs; the lens stand and its magnifiers were cut
+/// by P0-C (docs/pending/CUTS.md). Owner: DESK-PLAN.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
     private const string SupplyCrateModel = MachinesFolder + "/SupplyCrate.fbx", ScannerFeederModel = MachinesFolder + "/ScannerFeeder.fbx",
                          AnalysisBeaconModel = MachinesFolder + "/AnalysisBeacon.fbx", ProtocolRingModel = MachinesFolder + "/ProtocolRing.fbx",
-                         BabelRackModel = MachinesFolder + "/BabelRack.fbx", LensKitModel = MachinesFolder + "/LensKit.fbx",
+                         BabelRackModel = MachinesFolder + "/BabelRack.fbx",
                          RolodexModel = MachinesFolder + "/Rolodex.fbx", RingPanelModel = MachinesFolder + "/RingPanel.fbx";
 
     private enum PropSlotKind { Solid, Decal, Glass, Lamp }
@@ -73,13 +73,6 @@ public static partial class OfficeSceneUIBuilder
             ["Babel_Cart3"] = (PropSlotKind.Solid, "#9886A8", 1f, null),
             ["Babel_CartLabel3"] = (PropSlotKind.Decal, "#9886A8", 1f, "Cartridge_NorthEurope.png"),
             ["Babel_LED3"] = (PropSlotKind.Lamp, "#3CFF86", 1f, null),
-            ["Lens_Base"] = (PropSlotKind.Solid, "#8A2F3B", 1f, null),
-            ["Lens_Brass"] = (PropSlotKind.Solid, "#D4A055", 1f, null),
-            ["Lens_Ink"] = (PropSlotKind.Solid, "#2B1C24", 1f, null),
-            ["Lens_Glass"] = (PropSlotKind.Glass, "#BFE6EA", 0.35f, null),
-            ["Lens_Bar"] = (PropSlotKind.Glass, "#BFE6EA", 0.55f, null),
-            ["Lens_Line"] = (PropSlotKind.Lamp, "#FF3A2A", 1f, null),
-            ["Lens_Fresnel"] = (PropSlotKind.Glass, "#BFE6EA", 0.4f, "LensKit_Fresnel.png"),
             ["Rdx_Oxblood"] = (PropSlotKind.Solid, "#8A2F3B", 1f, null),
             ["Rdx_Brass"] = (PropSlotKind.Solid, "#D4A055", 1f, null),
             ["Rdx_Slate"] = (PropSlotKind.Solid, "#4A5872", 1f, null),
@@ -199,7 +192,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "crate", BuildSupplyCrate(root));
         SetRef(so, "protocolRing", BuildProtocolRing(root));
         SetRef(so, "babelRack", BuildBabelRack(root));
-        SetRef(so, "lensKit", BuildLensKit(root));
         SetRef(so, "rolodex", BuildRolodex(root));
         SetRef(so, "ringPanel", BuildRingPanel(root));
         SetRef(so, "config", config);

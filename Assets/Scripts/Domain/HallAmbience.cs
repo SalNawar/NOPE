@@ -104,9 +104,9 @@ public static class SoundCues
     public const string ChipInsert = "chip_insert", ChipRead = "chip_read", ChipOk = "chip_ok", ChipFault = "chip_fault", ChipEject = "chip_eject",
                         UvOn = "uv_on", UvOff = "uv_off", UvHum = "uv_hum";
 
-    /// <summary>The upgrades' desk objects (the desk machines spec §4): the supply crate's tape tearing and flaps popping, the Auto-Feed's roller zip, the Analysis beacon popping up, a translator cartridge clunking in and its test chirp, the loupe's ring ticking, the Fresnel arm folding, the RING SERVICE relay's clack, the Rolodex's cards flicking.</summary>
+    /// <summary>The upgrades' desk objects (the desk machines spec §4): the supply crate's tape tearing and flaps popping, the Auto-Feed's roller zip, the Analysis beacon popping up, a translator cartridge clunking in and its test chirp, the RING SERVICE relay's clack, the Rolodex's cards flicking.</summary>
     public const string CrateTear = "crate_tear", CratePop = "crate_pop", AdfFeed = "adf_feed", BeaconPop = "beacon_pop", CartridgeIn = "cartridge_in",
-                        TranslatorChirp = "translator_chirp", LoupeTick = "loupe_tick", ArmFold = "arm_fold", RelayClack = "relay_clack", RolodexFlick = "rolodex_flick";
+                        TranslatorChirp = "translator_chirp", RelayClack = "relay_clack", RolodexFlick = "rolodex_flick";
 
     /// <summary>The booth.</summary>
     public const string CallNext = "call_next", PortalThrough = "portal_through", DialogueBlip = "dialogue_blip";

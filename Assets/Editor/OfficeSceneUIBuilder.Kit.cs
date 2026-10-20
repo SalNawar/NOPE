@@ -51,7 +51,6 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 PullTabKeycap = new Vector2(58f, 34f);
 
     /// <summary>The inspect button's SPACE keycap under it (overlay units).</summary>
-    private static readonly Vector2 InspectKeycap = new Vector2(96f, 34f);
 
     /// <summary>The kit pass over the desktop and the overlay canvases (see the class summary).</summary>
     private static void ApplyKit(Canvas desktop, Canvas overlay)
@@ -64,7 +63,6 @@ public static partial class OfficeSceneUIBuilder
         KitStampsTab(o.Find("StampBar/Tab"));
         KitPullTab(o.Find("CityLook"), true, ControlRules.CityKey);
         KitPullTab(o.Find("CityBack"), false, ControlRules.CityBackKey);
-        KitInspect(o.Find("InspectButton"));
         KitSpeechBubble(o.Find("SpeechBubble/Panel"));
         KitWheel(o.Find("TravellerWheel/Catcher/Ring"));
         KitDeskProps();
@@ -236,30 +234,6 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text word = Text(cap, "Key", key, 20, TextAlignmentOptions.Center, new Vector2(0.1f, 0.18f), new Vector2(0.9f, 0.9f), _kit.InkOn(piece), ThemeRoleId.DiegeticDevice);
         word.raycastTarget = false;
         SceneUiKit.SkinText(word, _kit, KitText.Keycap, size.y, _kit.InkOn(piece), 0f, (RectTransform)cap);
-    }
-
-    /// <summary>The red inspect button (sheet 01 B2): the domed button in its housing with the magnifier in the art, the code-drawn glyph and key label dropped, the lavender SPACE keycap under it.</summary>
-    private static void KitInspect(Transform button)
-    {
-        if (button == null)
-            return;
-        KitSkin(button, "inspect", _kit.overlayScale);
-        DestroyChildIfPresent(button, "Magnifier");
-        Transform label = button.Find("Label");
-        if (label != null)
-            label.gameObject.SetActive(false);
-        KitKeycap(button, "Keycap", "keycap_bone", ControlRules.InspectKey, new Vector2(0.5f, -0.06f), InspectKeycap);
-
-        // Inspect mode on: the button stays lit (its hover face, the halo and the glint) instead of the old square ring.
-        Transform on = button.Find("On");
-        if (on == null)
-            return;
-        foreach (string side in new[] { "Top", "Bottom", "Left", "Right" })
-            DestroyChildIfPresent(on, side);
-        Transform lit = Panel(on, "Lit", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Color.white, ThemeRoleId.DiegeticDevice);
-        lit.SetAsFirstSibling();
-        lit.GetComponent<Image>().raycastTarget = false;
-        KitSkin(lit, "inspect_hover", _kit.overlayScale);
     }
 
     /// <summary>The counter strip's three looks (sheet 05: slate COUNTER, green HAND BACK, red STAMP THE PASSPORT FIRST) and the rulebook's folder tabs (their art as drawn when open, a shade darker when shut).</summary>

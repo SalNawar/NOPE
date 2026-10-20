@@ -31,10 +31,10 @@ public enum OfficeAnchorId
     /// <summary>The AVAILABLE sign (the art's NEXT sign): a click turns the desk available (travellers are called one after another) or pauses it.</summary>
     NextSign,
 
-    /// <summary>The desk intercom (a phone): a click opens the traveller wheel.</summary>
+    /// <summary>The art's phone (the old desk intercom): a click squashes it. Since P0-C (2026-10-20) it opens nothing: only the desk intercom the office binder builds (DeskFurniture) opens the traveller wheel.</summary>
     Intercom,
 
-    /// <summary>The stamp (a click reaction).</summary>
+    /// <summary>The old stamp: cut by P0-C (2026-10-20, Saleh: "cut"). The contract lists no spec for it and its art parts are switched off (legacyRoots); the value stays for the stored numbering (append only).</summary>
     Stamp,
 
     /// <summary>The credits till (a click shows the credits).</summary>

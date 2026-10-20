@@ -14,7 +14,7 @@ public enum ScanLayer
     /// <summary>The chip's stored data, in the print's layout so differences line up.</summary>
     Chip,
 
-    /// <summary>The microprint line along a paper's foot (the desk machines spec §10): the holder's Citizen ID, repeated too fine to read without the lens stand's magnifiers.</summary>
+    /// <summary>The microprint line along a paper's foot (the desk machines spec §10): the holder's Citizen ID, repeated too fine to read by eye; the lens stand's magnifiers that read it were cut by P0-C, 2026-10-20: until the scanner shows the microprint, FIX_PLAN_v2 #17, nothing reads it.</summary>
     Micro
 }
 

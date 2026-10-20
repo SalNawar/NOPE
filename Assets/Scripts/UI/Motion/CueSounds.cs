@@ -55,8 +55,6 @@ public static class CueSounds
             case SoundCues.BeaconPop: return Sweep("BeaconPop", 500f, 1100f, 0.18f, 0.3f);
             case SoundCues.CartridgeIn: return Noise("CartridgeIn", 0.1f, 0.6f, 800f);
             case SoundCues.TranslatorChirp: return Sweep("TranslatorChirp", 900f, 2200f, 0.16f, 0.22f);
-            case SoundCues.LoupeTick: return Noise("LoupeTick", 0.02f, 0.3f, 3200f);
-            case SoundCues.ArmFold: return Noise("ArmFold", 0.22f, 0.4f, 1000f);
             case SoundCues.RelayClack: return Noise("RelayClack", 0.06f, 0.6f, 1600f);
             case SoundCues.RolodexFlick: return Noise("RolodexFlick", 0.03f, 0.35f, 2800f);
             default: return null;

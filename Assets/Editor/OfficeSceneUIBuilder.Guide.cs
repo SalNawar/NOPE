@@ -28,7 +28,7 @@ public static partial class OfficeSceneUIBuilder
     /// The guide (the class summary): <paramref name="overlay"/> gets the
     /// prompt (last, over the PC frame), the Office root its director; every
     /// part is wired. The overlay controls the arrows point at are read from
-    /// their owners (the inspect button, the stamp tab, the PC tab).
+    /// their owners (the stamp tab, the PC tab).
     /// </summary>
     private static void BuildGuide(Transform overlay, OfficeViewController view, DeskView deskView, DeskController desk, DeskInspect inspect, DeskStampTray stamps,
                                    DeskRulebook rulebook, OfficeControls controls, Clickable readySign, Transform calendar, DepartureBoardView board,
@@ -54,11 +54,10 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "scanner", scanner.transform);
         SetRef(so, "counter", counter.transform);
         SetRef(so, "traveller", travellerZone.GetComponent<Collider>());
-        SetRef(so, "inspectButton", OwnedRect(inspect, "inspectButton"));
         SetRef(so, "stampTab", OwnedRect(stamps, "tab"));
         SetRef(so, "pcTab", OwnedRect(controls, "pcTab"));
         so.ApplyModifiedProperties();
-        foreach (string missing in new[] { "board", "inspectButton", "stampTab", "pcTab" }.Where(p => so.FindProperty(p).objectReferenceValue == null))
+        foreach (string missing in new[] { "board", "stampTab", "pcTab" }.Where(p => so.FindProperty(p).objectReferenceValue == null))
             Debug.LogError($"[TimeDesk] The guide's '{missing}' is unwired: its arrow cannot point there.", director);
 
         var soGame = new SerializedObject(game);

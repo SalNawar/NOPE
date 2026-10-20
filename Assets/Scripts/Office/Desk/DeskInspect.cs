@@ -9,9 +9,9 @@ using UnityEngine.UI;
 /// Inspection at the desk (the desk-first redesign, Saleh 2026-10-05, item
 /// 11: "the player should be able to check documents at the desk, highlight
 /// clear mistakes and approve; scanning allows using additional features").
-/// Papers, Please's inspect mode (Saleh 2026-10-06): the red inspect button
-/// at the overlay's bottom right ("SPACE" printed on it) and the SPACE key
-/// (OfficeControls) toggle it (Toggle); a right-click or Esc lets go of a held
+/// Papers, Please's inspect mode (Saleh 2026-10-06): the SPACE key
+/// (OfficeControls) toggles it (Toggle; the red SPACE button was cut by P0-C,
+/// docs/pending/CUTS.md); a right-click or Esc lets go of a held
 /// value, then leaves it (ControlRules.BackOut). In inspect mode every
 /// comparable thing highlights (the papers' values, the rulebook's rows; the
 /// calendar and the traveller outline under the pointer) and a left-click on
@@ -21,8 +21,10 @@ using UnityEngine.UI;
 /// (DeskController routes it into the compare), the calendar on the desk
 /// (today's date, once the calendar is introduced), the traveller's face, or
 /// a row of the rulebook on the desk (today's directives, once the rulebook
-/// is introduced). Outside inspect mode no click compares: the traveller
-/// opens the wheel, the calendar and the rulebook's rows are only read.
+/// is introduced). Outside inspect mode no click compares: a click on the
+/// traveller does nothing (only the desk intercom opens the wheel, Saleh
+/// 2026-10-20: "intercom to bring out dialogue options"), the calendar and
+/// the rulebook's rows are only read.
 /// Leaving inspect mode lets go of a held value. It is live while
 /// BoothRules.InspectLive (false leaves it). The workbench's line is drawn over the office too,
 /// between the two values where they lie (MatchLines over two proxy ends
@@ -59,9 +61,6 @@ public sealed class DeskInspect : MonoBehaviour
     /// <summary>The papers on the desk (their boxes' places, the marks).</summary>
     [SerializeField] private DeskController desk;
 
-    /// <summary>The traveller wheel (a click on the traveller opens it when nothing is held).</summary>
-    [SerializeField] private TravellerWheel wheel;
-
     /// <summary>The traveller figure (the face's place).</summary>
     [SerializeField] private TravellerView traveller;
 
@@ -97,12 +96,6 @@ public sealed class DeskInspect : MonoBehaviour
 
     /// <summary>The smallest end on the screen, in canvas px (a far value still gets a visible box).</summary>
     [SerializeField] private Vector2 minimumEnd = new Vector2(24f, 18f);
-
-    /// <summary>The red inspect button ("SPACE" printed on it) at the overlay's bottom right: a click toggles inspect mode.</summary>
-    [SerializeField] private Button inspectButton;
-
-    /// <summary>What shows while inspect mode is on (the button's lit ring and the hint beside it: "click two things to compare").</summary>
-    [SerializeField] private GameObject onState;
 
     /// <summary>How far inside the screen's edge (px) the end of a value off the screen waits.</summary>
     private const float EdgeMargin = 24f;
@@ -141,14 +134,10 @@ public sealed class DeskInspect : MonoBehaviour
     private void Awake()
     {
         _canvas = endA != null ? OverlayProjection.CanvasRectOf(endA) : null;
-        if (inspectButton != null)
-            inspectButton.onClick.AddListener(Toggle);
-        if (onState != null)
-            onState.SetActive(false);
         Wire();
     }
 
-    /// <summary>The red button, SPACE: inspect mode on, or off (nothing while it is not live).</summary>
+    /// <summary>SPACE: inspect mode on, or off (nothing while it is not live).</summary>
     public void Toggle()
     {
         if (EventSystem.current != null)
@@ -170,21 +159,13 @@ public sealed class DeskInspect : MonoBehaviour
                 board.Release();
             board.ClearLine();
         }
-        if (onState != null)
-            onState.SetActive(on);
         Changed?.Invoke();
     }
 
-    /// <summary>Lets inspect mode be used (<paramref name="live"/>: BoothRules.InspectLive; false leaves it) and shows the red button (<paramref name="shown"/>: BoothRules.PropsLive).</summary>
-    public void SetLive(bool live, bool shown)
+    /// <summary>Lets inspect mode be used (<paramref name="live"/>: BoothRules.InspectLive; false leaves it).</summary>
+    public void SetLive(bool live)
     {
         _live = live;
-        if (inspectButton != null)
-        {
-            if (inspectButton.gameObject.activeSelf != shown)
-                inspectButton.gameObject.SetActive(shown);
-            inspectButton.interactable = live;
-        }
         if (!live)
             SetOn(false);
     }
@@ -291,17 +272,11 @@ public sealed class DeskInspect : MonoBehaviour
     /// <summary>The decision: no case until the next.</summary>
     public void EndCase() => _case = null;
 
-    /// <summary>A click on the traveller: in inspect mode their face is picked (held, or judged against the value held: the photo's check at the desk); otherwise the wheel opens.</summary>
+    /// <summary>A click on the traveller: in inspect mode their face is picked (held, or judged against the value held: the photo's check at the desk); otherwise nothing (only the desk intercom opens the wheel).</summary>
     public void TravellerClicked()
     {
-        if (IsOn)
-        {
-            if (compare != null && _case != null && _case.look != null)
-                compare.Select(EvidencePicks.ForFace(_case.look), null);
-            return;
-        }
-        if (wheel != null)
-            wheel.Open();
+        if (IsOn && compare != null && _case != null && _case.look != null)
+            compare.Select(EvidencePicks.ForFace(_case.look), null);
     }
 
     /// <summary>A click on the desk's calendar: in inspect mode today's date is held on the workbench (or judged against the value held), once the calendar is introduced.</summary>

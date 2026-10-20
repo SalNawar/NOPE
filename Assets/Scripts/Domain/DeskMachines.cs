@@ -42,7 +42,7 @@ public sealed class DeskReadings
         _micro.Clear();
     }
 
-    /// <summary>A magnifier has shown paper <paramref name="document"/>'s microprint line long enough to read it (once; false when it was already read): from then on the line is picked in inspect mode (the desk machines spec §10).</summary>
+    /// <summary>A magnifier has shown paper <paramref name="document"/>'s microprint line long enough to read it (once; false when it was already read): from then on the line is picked in inspect mode (the desk machines spec §10). The lens stand's magnifiers were cut by P0-C, 2026-10-20: until the scanner shows the microprint, FIX_PLAN_v2 #17, nothing reads it.</summary>
     public bool ReadMicro(int document)
     {
         if (document < 0 || !_micro.Add(document))
