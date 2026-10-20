@@ -383,13 +383,19 @@ public class UiStringsTests
         Assert.AreEqual("Simple vs x", s.ForSurface(TextSurface.Paper, "pair", culture, "x"), "a paper keeps it");
     }
 
-    /// <summary>FIX_PLAN_v2 ("Paper: documents and the newspaper"): the newspaper's own words, looked up the chrome's way, read the culture's language on the culture day; the Bureau memo's line stays the chrome's.</summary>
+    /// <summary>FIX_PLAN_v2 ("Paper: documents and the newspaper"): the newspaper's own words, looked up the chrome's way (UiText.Get on the Desk surface, as CultureThemeService resolves the masthead's, edition line's and price's theme tags), read the culture's language on the culture day; the Bureau memo's line stays the chrome's.</summary>
     [TestCase("el")]
     [TestCase("ar")]
+    [TestCase("it")]
+    [TestCase("de")]
+    [TestCase("zh-Hans")]
+    [TestCase("ja")]
     public void TheNewspapersWords_ReadTheCulture_TheMemoDoesNot(string language)
     {
         ContentNode ui = TodaysUi();
         UiStrings s = TodaysStrings(ui, language);
+        foreach (string key in new[] { "briefing.masthead", "paper.edition", "paper.price" })
+            CollectionAssert.Contains(CultureChoice.NewspaperKeys, key, "the masthead, the edition line and the price are the newspaper's words");
         foreach (string key in CultureChoice.NewspaperKeys)
         {
             string shown = s.ForSurface(CultureChoice.SurfaceOfKey(key, TextSurface.Desk), key, 8);
@@ -398,5 +404,34 @@ public class UiStringsTests
         }
         Assert.AreEqual(s.English("briefing.newHours", "08:00", "17:00"),
                         s.ForSurface(CultureChoice.SurfaceOfKey("briefing.newHours", TextSurface.Desk), "briefing.newHours", "08:00", "17:00"));
+    }
+
+    /// <summary>The verifier's case: on a Greek culture day the paper's masthead, edition line and price read Greek (not "The Temporal Times", "MORNING EDITION", "ONE CREDIT") under the Greek dateline; Settings' note beside it stays the PC's (the reading language).</summary>
+    [Test]
+    public void TheNewspapersMasthead_ReadsGreek_OnAGreekCultureDay()
+    {
+        UiStrings s = TodaysStrings(TodaysUi(), "el");
+        string Paper(string key) => s.ForSurface(CultureChoice.SurfaceOfKey(key, TextSurface.Desk), key);
+        Assert.AreEqual("Η ΧΡΟΝΙΚΗ ΕΦΗΜΕΡΙΔΑ", Paper("briefing.masthead"));
+        Assert.AreEqual("ΠΡΩΙΝΗ ΕΚΔΟΣΗ", Paper("paper.edition"));
+        Assert.AreEqual("ΜΙΑ ΜΟΝΑΔΑ", Paper("paper.price"));
+        Assert.AreEqual(s.English("settings.note"), s.ForSurface(CultureChoice.SurfaceOfKey("settings.note", TextSurface.Pc), "settings.note"));
+    }
+
+    /// <summary>Settings' note (under the language pair) no longer claims what TEXT-LANG undid: fonts do not follow history (BUG-38a: the PC keeps its kit face) and a language change does not wait for the office to reopen (it applies at once). No culture's note says so either.</summary>
+    [Test]
+    public void SettingsNote_ClaimsNoFontFollowingOrLanguageWait()
+    {
+        ContentNode ui = TodaysUi();
+        string note = ui.Get("strings").Items.First(e => e.Get("key").Text == "settings.note").Get("text").Text;
+        StringAssert.DoesNotContain("fonts", note);
+        StringAssert.DoesNotContain("next time the office opens", note);
+        foreach (ContentNode table in ui.Get("languages").Items)
+        {
+            string language = table.Get("language").Text;
+            ContentNode entry = table.Get("entries").Items.FirstOrDefault(e => e.Get("key").Text == "settings.note");
+            Assert.IsNotNull(entry, language);
+            Assert.AreEqual(2, entry.Get("text").Text.Split(new[] { '.', '\u3002' }, System.StringSplitOptions.RemoveEmptyEntries).Length, language + ": two sentences, as the English (no language-change sentence)");
+        }
     }
 }

@@ -24378,7 +24378,7 @@
       },
       {
         "key": "settings.note",
-        "text": "Colours, fonts and the wallpaper always follow history. A language change applies the next time the office opens. Reduced motion shows translations at once.",
+        "text": "Colours and the wallpaper always follow history; the PC's type and language stay yours. Reduced motion shows translations at once.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -29930,7 +29930,7 @@
           },
           {
             "key": "settings.note",
-            "text": "الألوان والخطوط والخلفية تتبع التاريخ دائما. تغيير اللغة يسري في المرة القادمة التي يفتح فيها المكتب. الحركة المخففة تعرض الترجمات فورا."
+            "text": "الألوان والخلفية تتبع التاريخ دائما، أما خط الحاسوب ولغته فيبقيان كما اخترت. الحركة المخففة تعرض الترجمات فورا."
           },
           {
             "key": "startmenu.mail",
@@ -38486,7 +38486,7 @@
           },
           {
             "key": "settings.note",
-            "text": "Τα χρώματα, οι γραμματοσειρές και η ταπετσαρία ακολουθούν πάντα την ιστορία. Μια αλλαγή γλώσσας ισχύει την επόμενη φορά που ανοίγει το γραφείο. Με μειωμένη κίνηση οι μεταφράσεις εμφανίζονται αμέσως."
+            "text": "Τα χρώματα και η ταπετσαρία ακολουθούν πάντα την ιστορία, ενώ η γραμματοσειρά και η γλώσσα του υπολογιστή μένουν δικές σας. Με μειωμένη κίνηση οι μεταφράσεις εμφανίζονται αμέσως."
           },
           {
             "key": "startmenu.mail",
@@ -46490,7 +46490,7 @@
           },
           {
             "key": "settings.note",
-            "text": "Colori, caratteri e sfondo seguono sempre la storia. Un cambio di lingua vale dalla prossima apertura dell'ufficio. Il movimento ridotto mostra subito le traduzioni."
+            "text": "Colori e sfondo seguono sempre la storia; caratteri e lingua del PC restano i tuoi. Il movimento ridotto mostra subito le traduzioni."
           },
           {
             "key": "startmenu.mail",
@@ -54614,7 +54614,7 @@
           },
           {
             "key": "settings.note",
-            "text": "Farben, Schriften und das Hintergrundbild folgen immer der Geschichte. Ein Sprachwechsel gilt ab dem nächsten Öffnen des Amts. Reduzierte Bewegung zeigt Übersetzungen sofort."
+            "text": "Farben und das Hintergrundbild folgen immer der Geschichte; Schrift und Sprache des PCs bleiben deine. Reduzierte Bewegung zeigt Übersetzungen sofort."
           },
           {
             "key": "startmenu.mail",
@@ -62962,7 +62962,7 @@
           },
           {
             "key": "settings.note",
-            "text": "颜色、字体和壁纸始终跟随历史。语言更改在下次打开办公室时生效。减弱动效会立即显示译文。"
+            "text": "颜色和壁纸始终跟随历史；电脑的字体和语言保持你的选择。减弱动效会立即显示译文。"
           },
           {
             "key": "startmenu.mail",
@@ -70658,7 +70658,7 @@
           },
           {
             "key": "settings.note",
-            "text": "色、フォント、壁紙は常に歴史に従います。言語の変更は次に局を開いた時に反映されます。動きを控えめにすると翻訳がすぐ表示されます。"
+            "text": "色と壁紙は常に歴史に従い、PCのフォントと言語はあなたの設定のままです。動きを控えめにすると翻訳がすぐ表示されます。"
           },
           {
             "key": "startmenu.mail",

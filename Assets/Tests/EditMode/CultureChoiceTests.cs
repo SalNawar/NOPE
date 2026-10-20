@@ -148,16 +148,17 @@ public class CultureChoiceTests
         Assert.AreEqual(LabelLanguage.Culture, CultureChoice.Surface(TextSurface.Paper, paper));
     }
 
-    /// <summary>FIX_PLAN_v2 TEXT-LANG ("Paper: documents and the newspaper"), D7 (the glasses work "on news paper and documents"): the newspaper's own words print on the Paper surface even when looked up through the chrome's lookup; the Bureau memo's and every other chrome key stay the chrome's; a key asked for on another surface stays there.</summary>
+    /// <summary>FIX_PLAN_v2 TEXT-LANG ("Paper: documents and the newspaper"), D7 (the glasses work "on news paper and documents"): the newspaper's own words (its masthead, edition line and price as well as its dateline and heads) print on the Paper surface even when looked up through the chrome's lookup; the Bureau memo's and every other chrome key stay the chrome's; a key asked for on another surface stays there.</summary>
     [Test]
     public void SurfaceOfKey_TheNewspapersWords_AreAPapers()
     {
-        foreach (string key in new[] { "briefing.title", "briefing.empty", "briefing.newsHeader", "briefing.deskHeader" })
+        foreach (string key in new[] { "briefing.masthead", "paper.edition", "paper.price", "briefing.title", "briefing.empty", "briefing.newsHeader", "briefing.deskHeader" })
         {
             Assert.IsTrue(CultureChoice.IsNewspaperKey(key), key);
             Assert.AreEqual(TextSurface.Paper, CultureChoice.SurfaceOfKey(key, TextSurface.Desk), key);
             Assert.AreEqual(TextSurface.Pc, CultureChoice.SurfaceOfKey(key, TextSurface.Pc), key + " asked for on the PC stays the PC's");
         }
+        Assert.AreEqual(7, CultureChoice.NewspaperKeys.Length, "the masthead, edition line, price, dateline, \"no news\" line and the two story heads");
         foreach (string key in new[] { "briefing.newHours", "citation.label.onPaper", "list.bullet", "settings.language", null, "" })
         {
             Assert.IsFalse(CultureChoice.IsNewspaperKey(key), key ?? "null");

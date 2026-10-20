@@ -75,15 +75,17 @@ public static class CultureChoice
     public static bool FollowsWorld(TextSurface surface) => surface == TextSurface.Paper || surface == TextSurface.Sign;
 
     /// <summary>
-    /// The newspaper's own keyed words (the morning paper DayFlowUIController
-    /// prints: its masthead, its "no news" line and its small story's heads):
+    /// The newspaper's own keyed words: the morning paper's masthead, edition
+    /// line and price (theme tags the office builder puts on the paper,
+    /// resolved by CultureThemeService) and the words DayFlowUIController
+    /// prints (its dateline, its "no news" line and its small story's heads):
     /// the newspaper is a Paper surface (FIX_PLAN_v2 TEXT-LANG: "Paper:
     /// documents and the newspaper. These take the world's language from the
     /// culture day"; D7: the glasses work "on news paper and documents").
     /// The Bureau memo beside it (briefing.newHours, the bulletin) is the
     /// chrome's. list.bullet is a Full-tier key, so no culture translates it.
     /// </summary>
-    public static readonly string[] NewspaperKeys = { "briefing.title", "briefing.empty", "briefing.newsHeader", "briefing.deskHeader" };
+    public static readonly string[] NewspaperKeys = { "briefing.masthead", "paper.edition", "paper.price", "briefing.title", "briefing.empty", "briefing.newsHeader", "briefing.deskHeader" };
 
     /// <summary>True when <paramref name="key"/> is one of the newspaper's own words (<see cref="NewspaperKeys"/>).</summary>
     public static bool IsNewspaperKey(string key) => key != null && System.Array.IndexOf(NewspaperKeys, key) >= 0;

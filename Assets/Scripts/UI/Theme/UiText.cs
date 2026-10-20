@@ -142,7 +142,7 @@ public static class UiText
         public static string DocumentWord(string english) => english;
     }
 
-    /// <summary>Where a text is printed: the PC for one on the desktop's layer (the desktop canvas and everything under it), else the chrome at the desk (a paper's words are printed through <see cref="FormWords"/>, never through a theme tag).</summary>
+    /// <summary>Where a text is printed: the PC for one on the desktop's layer (the desktop canvas and everything under it), else the chrome at the desk (a paper's words are printed through <see cref="FormWords"/>, never through a theme tag; the newspaper's keyed words, its masthead, edition line and price tags included, move to the Paper surface by key in the lookup, CultureChoice.SurfaceOfKey).</summary>
     public static TextSurface SurfaceOf(Component text) =>
         text != null && OfficeLayers.PcDesktopLayer >= 0 && text.gameObject.layer == OfficeLayers.PcDesktopLayer ? TextSurface.Pc : TextSurface.Desk;
 
