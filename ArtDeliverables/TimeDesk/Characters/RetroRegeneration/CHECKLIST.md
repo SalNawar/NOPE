@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 671. Full regeneration is NOT complete.
+Saved: 696. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -675,3 +675,28 @@ Saved: 671. Full regeneration is NOT complete.
 | hair_m_italy_ancient2 | visually reviewed; registration pending |
 | facialhair_m_italy_ancient2 | visually reviewed; registration pending |
 | headwear_m_italy_ancient2 | visually reviewed; registration pending |
+| outfit_f_italy_ancient2 | visually reviewed; registration pending |
+| outfit_f_italy_ancient2__explaining_b | visually reviewed; registration pending |
+| outfit_f_italy_ancient2__thinking_c | visually reviewed; registration pending |
+| outfit_f_italy_ancient2__objecting_a | visually reviewed; registration pending |
+| hair_f_italy_ancient2 | visually reviewed; registration pending |
+| accessory_f_italy_ancient2 | visually reviewed; registration pending |
+| outfit_m_italy_medieval2 | visually reviewed; registration pending |
+| outfit_m_italy_medieval2__explaining_b | visually reviewed; registration pending |
+| outfit_m_italy_medieval2__thinking_c | visually reviewed; registration pending |
+| outfit_m_italy_medieval2__objecting_a | visually reviewed; registration pending |
+| hair_m_italy_medieval2 | visually reviewed; registration pending |
+| facialhair_m_italy_medieval2 | visually reviewed; registration pending |
+| headwear_m_italy_medieval2 | visually reviewed; registration pending |
+| outfit_f_italy_medieval2 | visually reviewed; registration pending |
+| outfit_f_italy_medieval2__explaining_c | visually reviewed; registration pending |
+| outfit_f_italy_medieval2__thinking_a | visually reviewed; registration pending |
+| outfit_f_italy_medieval2__objecting_b | visually reviewed; registration pending |
+| hair_f_italy_medieval2 | visually reviewed; registration pending |
+| headwear_f_italy_medieval2 | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern2 | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern2__explaining_c | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern2__thinking_a | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern2__objecting_b | visually reviewed; registration pending |
+| hair_m_italy_earlymodern2 | visually reviewed; registration pending |
+| facialhair_m_italy_earlymodern2 | visually reviewed; registration pending |

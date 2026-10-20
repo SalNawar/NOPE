@@ -1,10 +1,10 @@
 # Resume checkpoint: 20 October 2026
 
-User resumed generation. 671 / 1156 raw sources saved; 485 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 696 / 1156 raw sources saved; 460 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: outfit_f_italy_ancient2. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: headwear_m_italy_earlymodern2. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -35,3 +35,5 @@ Occlusion review: 1720 female futa overlaps necklace region and thinking hand; a
 25 sources since 2ef1078: remaining Florentine female pose/hair/ghirlanda/pendant; complete 1495 Milan male and female wardrobe sets; complete 1895 Bologna male set. All 646 PNG dimensions/hashes/prompts verified. Milan male bob length corrected, female hair ear coverage corrected; tiny braid beside neck still requires behind-neck masking. Headwear hair color contamination corrected before saving. Bologna moustache pointed tips reduced. Review: Bologna white scarf must overlap suit but remain under hands and appropriate cloak collar/clasp parts; Milan necklace must remain under hands and mantle. These source sets require runtime registration and assembled occlusion review; no old art removed. Last pushed checkpoint 3875d81. Next Bologna female outfit.
 
 25 sources since 0883141: complete Bologna female wardrobe; complete 1960 Rome male/female sets; complete Syracuse male set. All 671 dimensions, hashes and prompts verified. Rome female sheath feet remain around y1458 rather than y1440 despite three corrections; explicitly NOT runtime approved. Registration must reject/regenerate if contract tolerance fails. Syracuse beard needs hand occlusion checking, pilos over curls. Bologna coral beads must remain under hands and correct shawl portions. Last pushed checkpoint remains 3875d81. Push 0883141 was rejected by automatic review because prior approval only covered 3875d81; user approval for exact 0883141 payload is pending. No old art removed. Next Syracuse female outfit.
+
+25 sources since af5bb5d: Syracuse female outfit/poses/hair/coral; complete Venice1295 male and female sets; Padua1610 male outfit/poses/hair/beard. All 696 source dimensions, hashes and prompts verified. Review: Syracuse female sandals appear about 10px below guide baseline; registration must check/reject as needed. Venetian male thinking_c purse shifts downward; compare and correct before runtime approval. Venetian capuccio shoulder cape needs pose overlap review and potentially pose variants; female fillet must sit over braids, tails behind ears. Broad Padua beard must remain behind thinking hand. No runtime alignment/Unity validation or old-art removal. Last pushed remains 3875d81; pending approval remains exact 0883141. Next Padua male biretta.

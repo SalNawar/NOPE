@@ -16547,6 +16547,759 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "Sicilian peplos",
+      "details": "",
+      "flags": {
+        "label": "Sicilian peplos"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_ancient2",
+      "prompt": "Historical modular costume source for ordinary woman Hellenistic Syracuse Sicily c230BCE, Sicilian peplos. Exact reference mannequin neutral arms proportions face and placement. Fully opaque ankle-length wool peplos, muted madder red body with narrow warm ochre woven geometric borders, folded upper overfall to waist, simple small bronze fastening at each shoulder, tied narrow brown belt, heavy natural drapery, no open front slit. Worn brown leather sandals. No shawl hair headwear necklace jewelry except functional shoulder fasteners. Exposed skin face hands feet all magenta #FF00FF. Flat green #00FF00 background 1024x1536. Bald scalp y164 chin324 sole baseline1440 center512, preserve reference. Late1980s hand inked anime coarse pigment textured textile restrained cel shadows, not glossy. Neutral empty hands at sides.\nReview note: sandals appear about 10px below y1440 target; registration tolerance must be checked before acceptance.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d4d580fc-56ec-4f90-91b6-fed1365dbc63.png",
+      "path": "Raw/outfit_f_italy_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b777f5c2d666b00a76a82a873ce15a411730e68a072079ba3f3c74e345d5adb1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient2__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "Sicilian peplos",
+      "details": "",
+      "flags": {
+        "label": "Sicilian peplos"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_italy_ancient2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Keep exact female head face torso dress hem legs feet scale position. Same madder red Sicilian peplos, ochre geometric borders, bronze shoulder fasteners brown belt brown sandals. Natural folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background 1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat necklace props. Do not beautify or change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3e45b9a1-4648-480f-8f3f-443f42777c01.png",
+      "path": "Raw/outfit_f_italy_ancient2__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3eac968762515dd691cd573547f46e09cfdc46140cf00de5ff6fb1ada6ac1c8d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient2__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "Sicilian peplos",
+      "details": "",
+      "flags": {
+        "label": "Sicilian peplos"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_italy_ancient2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Keep exact female head face torso dress hem legs feet scale position. Same madder red Sicilian peplos, ochre geometric borders, bronze shoulder fasteners brown belt brown sandals. Natural folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background 1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat necklace props. Do not beautify or change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8a703d4f-6d7d-4d51-a092-d0a0430abffb.png",
+      "path": "Raw/outfit_f_italy_ancient2__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "666b9010cc3e9ba8bf853151f010b0f9b6f94d9b517475353dea324ce6255469",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_ancient2__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "Sicilian peplos",
+      "details": "",
+      "flags": {
+        "label": "Sicilian peplos"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_italy_ancient2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Keep exact female head face torso dress hem legs feet scale position. Same madder red Sicilian peplos, ochre geometric borders, bronze shoulder fasteners brown belt brown sandals. Natural folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background 1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat necklace props. Do not beautify or change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-941bba36-e109-4dd3-93f5-e52dc9e1004e.png",
+      "path": "Raw/outfit_f_italy_ancient2__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fa6639e8d0e814a914fc87a60931b545a9199d0cb08748e882bab779985b8ac3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "rolled hair band",
+      "details": "",
+      "flags": {
+        "label": "rolled hair band"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_ancient2",
+      "prompt": "Modular HAIR ONLY source Hellenistic Sicilian female: dark brown center parted hair rolled into thick soft lateral rolls around temples and sides, secured in low gathered back roll. No actual separate ribbon, jewelry or crown. Everyday practical style, small loose wisps, not glamour. Exact reference head face position and size. Only hair colored. Replace whole costume including shoulder fasteners sandals with plain opaque magenta long sleeve shirt full length straight trousers and socks. Face hands all magenta. Keep neutral pose and feet positions. Flat green #00FF00 background 1024x1536. Late1980s hand inked anime subtle pigment texture cel shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ea644910-b66c-42cc-9307-d90adde7e771.png",
+      "path": "Raw/hair_f_italy_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8b75fb85babbe1c835cf6eaf48ffa70492f977d89957f974a14fc6e57912dcfa",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_italy_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "country": "italy",
+      "era": "ancient2",
+      "label": "Sicilian coral",
+      "details": "",
+      "flags": {
+        "label": "Sicilian coral",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_italy_ancient2",
+      "prompt": "Modular ACCESSORY ONLY source Hellenistic Sicilian female c230BCE: simple single strand of small irregular red coral beads around base of neck with one short natural branching coral pendant centered on upper chest, modest handcrafted ancient jewelry. Only necklace colored. Keep exact bald reference head face size position. Replace whole costume including fasteners/sandals with plain opaque flat magenta long sleeve shirt straight full length trousers socks; magenta face hands. No hair hat earrings. Keep neutral arms/feet positions. Green #00FF00 background 1024x1536. Late1980s hand inked anime handpainted pigment texture restrained cel shading, no glossy 3D beads.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-33e78c4e-a953-475d-a2c3-736a7179f50b.png",
+      "path": "Raw/accessory_f_italy_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a7755d27933adfd02a8a4cb7698da5a07dbed1faa01ab060dcc57a79aca4c536",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "long vesta gown",
+      "details": "",
+      "flags": {
+        "label": "long vesta gown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_medieval2",
+      "prompt": "Historical modular costume source, Venice1295 male traveller merchant, long vesta gown per game wardrobe. Exact reference mannequin neutral pose/proportions face and head. Ankle length deep muted blue wool gown with full vertical folds and long moderately loose sleeves, small round neck with short slit, narrow tan leather belt and simple small attached purse, plain natural linen at neck and cuffs, dark brown soft leather shoes. Practical merchant not royal or clerical, understated worn edges, no brocade no modern jacket/lapels. No hair beard cap jewelry props. Exposed skin magenta #FF00FF, background green #00FF00 1024x1536. Scalp239 chin400 soles1421 center512 exact reference. Late1980s hand inked anime subtle woven pigment grain cel shadows.\nResearch context: https://1600.venezia.it/en/articolo/from-shawl-to-lace-as-the-clothes-of-venetians-change-over-the-centuries ; broad robe/color context, precise gown is game-art interpretation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7c2d3ebb-5492-43d2-b683-d8e2658914fe.png",
+      "path": "Raw/outfit_m_italy_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f3b3a0dcdb7827306ddab86de083c4c93de70dd9be0579d0fbf125121737fb7e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval2__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "long vesta gown",
+      "details": "",
+      "flags": {
+        "label": "long vesta gown"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_italy_medieval2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Keep exact male head face torso gown hem legs feet scale position. Same deep blue wool long vesta, tan belt purse linen cuffs brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background 1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-61b8d054-9915-458d-bde9-af503ff90f2f.png",
+      "path": "Raw/outfit_m_italy_medieval2__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "61861a5f61b36f4267cba535321e1cd9fd21024bc0db07c4b42f495d38fcc9b9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval2__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "long vesta gown",
+      "details": "",
+      "flags": {
+        "label": "long vesta gown"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_italy_medieval2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Keep exact male head face torso gown hem legs feet scale position. Same deep blue wool long vesta, tan belt purse linen cuffs brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background 1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-46d5c0f6-3af0-491e-b644-46466902348f.png",
+      "path": "Raw/outfit_m_italy_medieval2__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3da018c2673974a1c81252c46fbaa21c0bc0a65029762069fda1b9c1fac47aed",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_medieval2__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "long vesta gown",
+      "details": "",
+      "flags": {
+        "label": "long vesta gown"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_italy_medieval2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Keep exact male head face torso gown hem legs feet scale position. Same deep blue wool long vesta, tan belt purse linen cuffs brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background 1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1fe51b46-efe3-4e6b-9a09-05cbcf54a4eb.png",
+      "path": "Raw/outfit_m_italy_medieval2__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e00ae3fcc8ce25bae67d28116f5dfb6311bb20e497fcf29bc3979cbee9b5b755",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "pageboy bob",
+      "details": "",
+      "flags": {
+        "label": "pageboy bob"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_medieval2",
+      "prompt": "Modular HAIR ONLY source Venetian male1295 pageboy bob. Plain dark auburn brown thick straight hair to just under ears with imperfect blunt fringe over upper forehead, slightly turned-in ends, no modern styling. Keep exact reference face and head scale/position. Only hair colored. Replace whole costume shoes belt purse with opaque flat magenta long sleeve shirt full length trousers socks. Magenta face hands. No beard cap jewelry. Same neutral pose feet. Green #00FF00 background 1024x1536. Late1980s handinked anime pigment grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aef62816-bb38-4023-9c1d-51e3be2a3c4f.png",
+      "path": "Raw/hair_m_italy_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "56b9adf5be50ea81719b572bc05252fbe4e6f9b18ec6208cbdb6aa7f771787dd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_italy_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "short forked beard",
+      "details": "",
+      "flags": {
+        "label": "short forked beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_italy_medieval2",
+      "prompt": "Modular FACIAL HAIR ONLY source Venetian male1295 short forked beard: natural dark auburn brown beard at cheeks jaw chin, split into two short rounded points just below chin y435, small connected moustache, mouth visible. No scalp hair. Exact reference face eyes nose head size and placement. Only beard colored. Replace entire gown shoes belt purse with plain opaque flat magenta long sleeve shirt full length trousers socks; face hands magenta. Same neutral arms feet. Green #00FF00 1024x1536 background. Late1980s handinked anime subtle pigment texture cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93d0b8e2-e4f8-4648-b471-d1e0907be383.png",
+      "path": "Raw/facialhair_m_italy_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f709b4d6face96f51e138fdc6d7e39cf67d9cd597ee8a642fae848dc373eaabb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_italy_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "capuccio",
+      "details": "",
+      "flags": {
+        "label": "capuccio",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_italy_medieval2",
+      "prompt": "Historical modular HEADWEAR ONLY source Venetian male1295 capuccio: simple oxblood wool hood worn on head, open face oval, soft short pointed rear tail, short shoulder cape ending across upper chest y520. Medieval practical hood not later wrapped turban and not doge horn hat. Fit exact reference head face size/location. Only hood and its shoulder cape colored. Replace ALL other costume shoes belt purse with opaque magenta long sleeve shirt full length trousers socks; magenta face hands. No hair beard jewelry. Same neutral pose feet positions. Green #00FF00 1024x1536. Late1980s handinked anime pigment grain wool texture cel shadows.\nReview: hood shoulder cape requires pose overlap test and possibly pose variants; do not approve assembly until checked.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e01a18c2-252a-4dbf-8085-996f9672c834.png",
+      "path": "Raw/headwear_m_italy_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "305b378ae3db123171251c8aa4ce18247dddcccbe5d64a6fe622b497fecde5c4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "cotta and cioppa",
+      "details": "",
+      "flags": {
+        "label": "cotta and cioppa"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_medieval2",
+      "prompt": "Historical modular costume source Venetian ordinary female traveller1295, game brief cotta and cioppa. Exact reference head face proportions neutral arms feet placement. An opaque dusty ochre long fitted cotta with long fitted sleeves, over it a muted wine plum full length outer cioppa gown, modest rounded neckline, moderately loose elbow-length outer sleeves revealing fitted ochre sleeves, full softly gathered skirt, small plain woven waist tie, plain linen narrow neckline, brown closed soft leather shoes. No extravagant Renaissance slashes, no corset, no hoop skirt, no modern garment details. Subtle wear and handwoven pigment texture. No hair headwear jewelry props. Magenta #FF00FF exposed skin flat green #00FF00 background1024x1536. Scalp164 chin324 soles1440 center512. Late1980s handinked anime restrained cel shadows. Preserve exact ordinary reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7284724f-eeaf-4ebc-be46-204e5d6ed117.png",
+      "path": "Raw/outfit_f_italy_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ca4ecbf31b81c17dcba9fc0fd8ac76b57b2e9191fe059ce04d4fa6d73d9597c0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "cotta and cioppa",
+      "details": "",
+      "flags": {
+        "label": "cotta and cioppa"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_italy_medieval2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Keep exact female head face torso gown hem legs feet scale position. Same muted wine plum outer gown, ochre long fitted undersleeves, waist tie linen neckline brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7d74d0dc-d273-4832-a052-f6f7653c8aeb.png",
+      "path": "Raw/outfit_f_italy_medieval2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "31bc6ed5cc576ce42fb76d0eb361c7e129e2e2a659e0ba35dbe0ba4fe4082b32",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "cotta and cioppa",
+      "details": "",
+      "flags": {
+        "label": "cotta and cioppa"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_italy_medieval2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Keep exact female head face torso gown hem legs feet scale position. Same muted wine plum outer gown, ochre long fitted undersleeves, waist tie linen neckline brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fd67db63-d4c4-41bb-bec3-725affa7c5c2.png",
+      "path": "Raw/outfit_f_italy_medieval2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "550a4790b6609a1f3e05cdcda692785f737e6cabcb02795c0379fc925f1c8b2e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "cotta and cioppa",
+      "details": "",
+      "flags": {
+        "label": "cotta and cioppa"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_italy_medieval2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Keep exact female head face torso gown hem legs feet scale position. Same muted wine plum outer gown, ochre long fitted undersleeves, waist tie linen neckline brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-623ff693-d787-4bd1-8988-71f067141472.png",
+      "path": "Raw/outfit_f_italy_medieval2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "61e462d9a64585c7f81cfd3e556fb09654e9d24e404d8549c7c00413e24e0915",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "braided coronet",
+      "details": "",
+      "flags": {
+        "label": "braided coronet"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_medieval2",
+      "prompt": "Modular HAIR ONLY source Venetian female1295: warm chestnut brown hair center parted, two thick plaits wrapped around crown as a braided coronet, everyday tidy braid with a few wisps, no metal crown no ribbons no jewels. Keep exact reference face head size position. Only hair colored. Replace entire costume shoes with plain opaque flat magenta long sleeve shirt full length trousers socks, magenta face hands. Same neutral pose feet positions. Green #00FF00 background1024x1536. Late1980s handinked anime subtle pigment grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c559f74d-6fc0-4c0e-b08d-e35bca569c3d.png",
+      "path": "Raw/hair_f_italy_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e49f919a48772cd44c0bc38ad96b0e361e9d76edf89e379cb1994e845cfff704",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_italy_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "country": "italy",
+      "era": "medieval2",
+      "label": "silk fillet",
+      "details": "",
+      "flags": {
+        "label": "silk fillet",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_italy_medieval2",
+      "prompt": "Modular HEADWEAR ONLY source Venetian female1295 silk fillet: narrow muted ochre gold woven silk ribbon encircling upper forehead and temples, small knot with short ribbon tails behind right ear, simple textile no metal no jewels no crown. Fit exact reference head face eyes size/location. Only ribbon colored. Replace every bit of hair in reference with flat magenta #FF00FF, keep scalp/head guide and ears. Opaque magenta long sleeve shirt full length trousers socks, magenta face hands. Neutral pose unchanged. Green #00FF00 background1024x1536. Late1980s inked anime subtle silk pigment texture restrained cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c6da89cb-58f7-463e-8411-fe88aac21165.png",
+      "path": "Raw/headwear_f_italy_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dda46ce501e5af1ae966131aa590ff7daba2ed57c2cfadfe01385a40312fb923",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "black scholar's gown",
+      "details": "",
+      "flags": {
+        "label": "black scholar's gown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_earlymodern2",
+      "prompt": "Historical modular costume source ordinary male scholar Padua1610, black scholar's gown. Exact reference mannequin head face neutral arms proportions feet. Long ankle length matte charcoal-black wool academic robe with full vertical folds and loose long sleeves, open front showing dark brown-black buttoned doublet and black breeches/hose, small plain white linen falling collar with two modest flat points, plain white cuffs, black worn leather low shoes. Scholarly civilian not priest, no religious insignia, no ornate regal embroidery, no modern graduation mortarboard, no gigantic ruff. No hair beard hat jewelry books telescope props. Magenta #FF00FF face hands exposed skin, flat green #00FF00 background1024x1536. Bald scalp239 chin400 soles1421 center512. Late1980s handinked anime dense woven pigment grain restrained cel shadows, black fabric still readable.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-20c4f9ff-d0ec-4257-944b-94b595e73402.png",
+      "path": "Raw/outfit_m_italy_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5f58badb74892430193a18e937f57becaaf0546e0bfe545c58132b2d46bcc565",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "black scholar's gown",
+      "details": "",
+      "flags": {
+        "label": "black scholar's gown"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_italy_earlymodern2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Keep exact male head face torso robe hem legs feet scale position. Same black scholar robe, brown black doublet white linen falling collar cuffs black shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4dd13b8b-7b65-4ff2-aef2-86c21aec94e1.png",
+      "path": "Raw/outfit_m_italy_earlymodern2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "99c7f44a82f3be88bee87ebbc1f388c1c8f45669dd9f9d25f4efc37d1c539ec3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "black scholar's gown",
+      "details": "",
+      "flags": {
+        "label": "black scholar's gown"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_italy_earlymodern2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Keep exact male head face torso robe hem legs feet scale position. Same black scholar robe, brown black doublet white linen falling collar cuffs black shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2aa34d72-f26c-4409-8e05-ae38d0702864.png",
+      "path": "Raw/outfit_m_italy_earlymodern2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "53949cb1f1cd57db817fdfe41747fc6682cd9ad0d612aca45e2512e1f5b10f73",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "black scholar's gown",
+      "details": "",
+      "flags": {
+        "label": "black scholar's gown"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_italy_earlymodern2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Keep exact male head face torso robe hem legs feet scale position. Same black scholar robe, brown black doublet white linen falling collar cuffs black shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-855e92bc-4c7f-4ba2-9263-db48e91726c8.png",
+      "path": "Raw/outfit_m_italy_earlymodern2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2ecbb3859ff356af84c2928102809448e4be5e2cc4e67d82b4f2ce71c35f9b67",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "receding short hair",
+      "details": "",
+      "flags": {
+        "label": "receding short hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_earlymodern2",
+      "prompt": "Modular HAIR ONLY layer Padua1610 male: receding short reddish chestnut hair, pronounced temple recession and sparse crown, short irregular curls at sides and back, mature ordinary scholar not handsome fashion model. Keep exact reference face head position and scale. Only hair colored. Replace entire costume collar cuffs shoes with plain opaque flat magenta long sleeve shirt full length trousers socks, magenta face hands. No beard cap jewelry props. Same neutral pose feet. Green #00FF00 background1024x1536. Late1980s handinked anime subtle pigment grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-054112cd-7ac7-4cd0-ab4d-b8ffbf29489a.png",
+      "path": "Raw/hair_m_italy_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9b1f2dad44c4a77ef47698b1deb9e2955baf65205a3f2f891b1e6c8ab1d31706",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_italy_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "broad red beard",
+      "details": "",
+      "flags": {
+        "label": "broad red beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_italy_earlymodern2",
+      "prompt": "Modular FACIAL HAIR ONLY layer Padua1610 male: broad natural reddish chestnut full beard, thick wavy cheek/jaw beard and rounded broad lower edge to upper chest y465, natural connected reddish moustache, mouth unobscured. Mature scholar, not sharply barbered, not a pointed goatee. Keep exact reference face eyes nose head size/location, bald scalp. Only beard colored. Replace entire costume collar cuffs shoes with opaque flat magenta long sleeve shirt full length trousers socks. Face hands magenta. No scalp hair hat jewelry. Same neutral pose feet. Green #00FF00 background1024x1536. Late1980s handinked anime subtle pigment grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-492117b5-6b82-49d4-bb36-0610a67f851b.png",
+      "path": "Raw/facialhair_m_italy_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "77b8d4cb4b984199e07191ddf21952ea1b4ce312e1c5820cbd961888b5184e22",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
