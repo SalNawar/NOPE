@@ -6,10 +6,13 @@
 # Measured on fix/p0-carve (f347060) by the scanner: 41 SO classes and 139 serializable types they hold, 1,495 fields.
 
 SoundBankSO.mixer               # BUG-73 (sound), FEEDBACK: written by SoundBankImporter, read by nothing (the groups are read)
-MotionKnobs.stampLift           # BUG-73b, STAMP: a stamp knob with no reader
-MotionKnobs.stampRiseSeconds    # BUG-73b, STAMP
-MotionKnobs.stampSlamSeconds    # BUG-73b, STAMP
-MotionKnobs.stampSquash         # BUG-73b, STAMP
+MotionKnobs.stampSlamSeconds    # BUG-73b, STAMP: a stamp knob with no reader (the slam is the Dater spring)
 MotionKnobs.inkBloomSeconds     # BUG-73b, STAMP
-MotionKnobs.stampFeel           # BUG-73b, STAMP
 MotionKnobs.drawerStopHit       # BUG-73b, STAMP: a drawer knob with no reader
+MotionKnobs.drawerCarrySeconds  # BUG-73c, DOC-HANDLE: dead since STAMP cut the drawer's slide (BUG-73b); its owner deletes it
+MotionKnobs.drawerCarryPower    # BUG-73c, DOC-HANDLE (the drawer's slide, cut by STAMP)
+MotionKnobs.drawerStopCarry     # BUG-73c, DOC-HANDLE (the drawer's slide, cut by STAMP)
+MotionKnobs.drawerRaiseFrom     # BUG-73c, DOC-HANDLE (the drawer's slide, cut by STAMP)
+MotionKnobs.drawerShoveSeconds  # BUG-73c, DOC-HANDLE (the drawer's shove, cut by STAMP)
+MotionKnobs.drawerShoveKick     # BUG-73c, DOC-HANDLE (the drawer's shove, cut by STAMP)
+MotionKnobs.drawerFeel          # BUG-73c, DOC-HANDLE (the drawer's stop, cut by STAMP; MotionFeel.Drawer stays: serialized enums are append-only)
