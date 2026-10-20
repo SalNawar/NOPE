@@ -15039,6 +15039,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_medieval__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "gamurra and giornea",
+      "details": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Fitted gamurra gown in plain silk with long, close sleeves, under a giornea: an open-sided, sleeveless overgown of crimson or bottle-green silk velvet with the Italian pomegranate pattern, falling from the shoulders to the floor with a short train, edged with fur or brocade at the neck. No trailing sleeves.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw outfit_f_italy_medieval.",
+      "flags": {
+        "label": "gamurra and giornea"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_italy_medieval",
+      "prompt": "Edit FIRST costume arms and sleeves only to match SECOND pose guide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Same copper silk close sleeves, green gold pomegranate patterned giornea continuous front panel open at sides, same brown shoes. Preserve head, torso, lower gown, feet and scale. Sleeves fold naturally with gesture, no detached hands. Hand-inked 1980s anime, textured fabric cel shadows. 1024x1536 scalp164 chin324 soles1440 center512. Exposed head/hands magenta #FF00FF background green #00FF00. No hair hats jewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-682071bb-bd0f-4615-876a-1584d7def98d.png",
+      "path": "Raw/outfit_f_italy_medieval__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "415a69a7c02fa012f2e5637ccc48022425ddb1c4755f9800cd705b59e02d59a5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "drawn-back coil",
+      "details": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Fashionably plucked high forehead; hair drawn back smoothly and gathered into a coil at the back of the head, partly visible\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw hair_f_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "drawn-back coil"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_medieval",
+      "prompt": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Fashionably plucked high forehead; hair drawn back smoothly and gathered into a coil at the back of the head, partly visible\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw hair_f_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hair colored dark auburn, smooth drawn-back hair with high plucked forehead, coil barely peeking at back sides, no modern bangs. Reference head EXACT position scalp164 chin324. Replace entire costume/shoes with opaque plain magenta longshirt full trousers socks. Magenta face hands #FF00FF. Keep pose feet center512 soles1440, 1024x1536 green #00FF00. Late1980s inked anime, subtle pigment grain and cel shadows. No hats jewels ribbons.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1a6b19fa-e694-4585-aa0b-a3698aabcc47.png",
+      "path": "Raw/hair_f_italy_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "73a845ca03603fb7bf87dcf29035dc68cd46cfe2b01440ad0b82601b52301c8a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_italy_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "ghirlanda",
+      "details": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Ghirlanda: a thick padded roll, like a fat wreath, covered in crimson silk and studded with pearls, set around the crown of the head. No veil, so the drawn-back hair and the high bare forehead show.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw headwear_f_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "ghirlanda",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_italy_medieval",
+      "prompt": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: Ghirlanda: a thick padded roll, like a fat wreath, covered in crimson silk and studded with pearls, set around the crown of the head. No veil, so the drawn-back hair and the high bare forehead show.\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw headwear_f_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly headwear colored: crimson silk padded circular roll studded with small ivory pearls, set around crown. Hair guide becomes magenta #FF00FF while retaining exact silhouette for fit, visible below roll. No metal royal crown, no veil or jewelry. Preserve reference head and pose. Fully clothed support shirt trousers socks face hands all flat magenta #FF00FF. 1024x1536 green #00FF00. Late1980s inked anime with tactile silk grain, outlined cel-shaded pearls, no glossy 3D.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7c7ed5e0-50e0-4b4c-b547-ae02d02d024b.png",
+      "path": "Raw/headwear_f_italy_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2577c5076dc9feac692de83b2c2dfbb2b6b63095752e93178d7ec8d4b286fece",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_italy_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "country": "italy",
+      "era": "medieval",
+      "label": "pearl pendant jewel",
+      "details": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: A large gold pendant jewel (fermaglio) with a pearl cluster, as wide as the palm, hanging at the base of the throat on its own short gold chain\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw accessory_f_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pearl pendant jewel"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_italy_medieval",
+      "prompt": "Subject: woman of Florentine Republic; Florence of the Medici bank, during the Council of Florence, 1439.\nDraw: A large gold pendant jewel (fermaglio) with a pearl cluster, as wide as the palm, hanging at the base of the throat on its own short gold chain\nAvoid: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem\nOutput one full-canvas raw accessory_f_italy_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly necklace colored: short delicate gold chain, gold fermaglio pearl cluster pendant width about 65px at base of throat upper chest, no symbols or family crest. Replace ALL costume shoes with opaque flatmagenta long shirt trousers socks. Bald magenta head and hands. Preserve head position scalp164 chin324 center512 soles1440,1024x1536 green #00FF00. Inked late1980s anime, outlined ivory pearls with simple cel highlights, subtle pigment texture, no 3D photoreal jewelry. No hair hat other accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e1bf4fdb-0131-4615-99f1-9fd125025c6a.png",
+      "path": "Raw/accessory_f_italy_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0626c787bc7df4d79b74fa1bd80d0d0f9fc2e69ca0ebab4d986ecafc3654ffab",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "coral pitocco",
+      "details": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Knee-length dusty-coral wool pitocco, a short, belted overgown with a full pleated skirt, worn when long gowns were the norm. At the neck the doublet collar shows a finely gathered white linen shirt. A small leather-bound notebook hangs from the belt on a cord. Close-fitting dark hose and soft round-toed shoes.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_m_italy_earlymodern.",
+      "flags": {
+        "label": "coral pitocco"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_earlymodern",
+      "prompt": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Knee-length dusty-coral wool pitocco, a short, belted overgown with a full pleated skirt, worn when long gowns were the norm. At the neck the doublet collar shows a finely gathered white linen shirt. A small leather-bound notebook hangs from the belt on a cord. Close-fitting dark hose and soft round-toed shoes.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_m_italy_earlymodern.\nDress reference mannequin: dusty coral wool knee-length pitocco, plain full sleeves and pleated skirt, simple leather belt, small worn notebook hanging on cord at hip, white gathered linen at collar, dark charcoal hose brown soft round-toed shoes. No hat hair beard jewelry. Exposed head/hands flat #FF00FF magenta, background #00FF00 green,1024x1536. Preserve scalp239 chin400 soles1421 center512 neutral arms slightly away. Textured late1980s anime hand inks and painted wool pigment grain, restrained cel shading, ordinary worn civilian garments.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-169b2f5e-8a6d-48cc-b42f-16a591c2bd36.png",
+      "path": "Raw/outfit_m_italy_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "45e59c03357c0e0c79170c1214ef8b99bf8abbdf2b236e2c64f980d82c5a8673",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "coral pitocco",
+      "details": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Knee-length dusty-coral wool pitocco, a short, belted overgown with a full pleated skirt, worn when long gowns were the norm. At the neck the doublet collar shows a finely gathered white linen shirt. A small leather-bound notebook hangs from the belt on a cord. Close-fitting dark hose and soft round-toed shoes.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_m_italy_earlymodern.",
+      "flags": {
+        "label": "coral pitocco"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_italy_earlymodern",
+      "prompt": "Edit FIRST costume arms and sleeves only matching SECOND pose guide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Same dusty coral pitocco, gathered linen collar and cuffs, leather belt with notebook hanging at hip, charcoal hose brown round shoes. Preserve head torso lowergown feet and scale. Natural sleeve folds following gesture. Inked late1980s textured anime, wool pigment grain and cel shading. 1024x1536 scalp239 chin400 soles1421 center512. Exposed bald head hands magenta #FF00FF green background#00FF00. No hair hat accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-171e573f-865d-4df6-8476-0b977f9cf1cf.png",
+      "path": "Raw/outfit_m_italy_earlymodern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1e89a6d9d496f97ccf61ec52f54318e15bb41adca161053317deb0d38a8b78f3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "coral pitocco",
+      "details": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Knee-length dusty-coral wool pitocco, a short, belted overgown with a full pleated skirt, worn when long gowns were the norm. At the neck the doublet collar shows a finely gathered white linen shirt. A small leather-bound notebook hangs from the belt on a cord. Close-fitting dark hose and soft round-toed shoes.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_m_italy_earlymodern.",
+      "flags": {
+        "label": "coral pitocco"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_italy_earlymodern",
+      "prompt": "Edit FIRST costume arms and sleeves only matching SECOND pose guide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Same dusty coral pitocco, gathered linen collar and cuffs, leather belt with notebook hanging at hip, charcoal hose brown round shoes. Preserve head torso lowergown feet and scale. Natural sleeve folds following gesture. Inked late1980s textured anime, wool pigment grain and cel shading. 1024x1536 scalp239 chin400 soles1421 center512. Exposed bald head hands magenta #FF00FF green background#00FF00. No hair hat accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ed68631e-0a87-4499-8c2b-38a881113433.png",
+      "path": "Raw/outfit_m_italy_earlymodern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4745b3f159dc798b15747ed3190476ca5887b178ae21184c7bec4b6c95ff4360",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_earlymodern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "coral pitocco",
+      "details": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Knee-length dusty-coral wool pitocco, a short, belted overgown with a full pleated skirt, worn when long gowns were the norm. At the neck the doublet collar shows a finely gathered white linen shirt. A small leather-bound notebook hangs from the belt on a cord. Close-fitting dark hose and soft round-toed shoes.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_m_italy_earlymodern.",
+      "flags": {
+        "label": "coral pitocco"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_italy_earlymodern",
+      "prompt": "Edit FIRST costume arms and sleeves only matching SECOND pose guide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Same dusty coral pitocco, gathered linen collar and cuffs, leather belt with notebook hanging at hip, charcoal hose brown round shoes. Preserve head torso lowergown feet and scale. Natural sleeve folds following gesture. Inked late1980s textured anime, wool pigment grain and cel shading. 1024x1536 scalp239 chin400 soles1421 center512. Exposed bald head hands magenta #FF00FF green background#00FF00. No hair hat accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6e374711-1ea7-4092-95a5-c6dfe42e7bdb.png",
+      "path": "Raw/outfit_m_italy_earlymodern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "92d987589874c3d013c41a3102a36d42902ddabafdc9eabb2458b28e7d509b96",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "zazzera bob",
+      "details": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Zazzera: straight, chin-to-shoulder-length bob with a blunt fringe across the brow\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw hair_m_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "zazzera bob"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_earlymodern",
+      "prompt": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Zazzera: straight, chin-to-shoulder-length bob with a blunt fringe across the brow\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw hair_m_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hair colored: dark brown zazzera straight bob ending between chin and shoulders, blunt fringe across forehead just above brows. Inked individual strands restrained cel highlights. No beard hat ornaments. Replace entire costume/shoes including notebook with opaque magenta longshirt full trousers socks, face hands magenta #FF00FF. Keep scalp239 chin400 soles1421 center512,1024x1536 green #00FF00. Same reference head position. Textured late1980s anime.\nCorrection: lengthen side and back bob to BELOW chin, ending at y435 just above shoulders. Keep fringe, head and all other positions unchanged. Straight blunt ends.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-89dcbd57-58e1-4d06-8475-6cad325eba25.png",
+      "path": "Raw/hair_m_italy_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5150a0a1b4b0f7cf08db39102ffedd67029a02f01cebc1f700dc36310ff9ccf3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_italy_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "red berretta",
+      "details": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Small, soft, round red berretta cap worn straight on the head, with no brim and no feather\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw headwear_m_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "red berretta",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_italy_earlymodern",
+      "prompt": "Subject: man of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Small, soft, round red berretta cap worn straight on the head, with no brim and no feather\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw headwear_m_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly small round red soft wool cap colored, straight symmetrical fit, no brim feather crown or clerical corners. Reference bob hair becomes magenta #FF00FF retain silhouette below cap for fit. All support opaque longshirt trousers socks face hands flatmagenta. Preserve exact head/pose/feet,1024x1536 green #00FF00. Late1980s handinked anime wool grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4b93c646-4592-422a-b4c9-2a5bc33d2a77.png",
+      "path": "Raw/headwear_m_italy_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d801cb1d9d758710f5df8d5c124a4e58bdb4e3f065ca2c1ea7c081cb4463de21",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "laced-sleeve gamurra",
+      "details": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Square-necked gown (gamurra) in deep blue or crimson. Its contrasting sleeves are laced on at the shoulder and elbow, so puffs of the white camicia show through the gaps. A sbernia mantle is draped over one shoulder.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_f_italy_earlymodern.",
+      "flags": {
+        "label": "laced-sleeve gamurra"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_earlymodern",
+      "prompt": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Square-necked gown (gamurra) in deep blue or crimson. Its contrasting sleeves are laced on at the shoulder and elbow, so puffs of the white camicia show through the gaps. A sbernia mantle is draped over one shoulder.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_f_italy_earlymodern.\nDress reference female mannequin in deep blue square-neck gamurra, contrasting russet sleeves laced at shoulders AND elbows with small white linen camicia puffs in gaps. Ochre sbernia mantle draped over left shoulder, arms free for gestures. Brown closed shoes visible floorlengthhem. Civilian no jewelry hat hair. Exposed bald head hands magenta#FF00FF backgroundgreen#00FF00,1024x1536 scalp164 chin324 soles1440center512 same reference neutral pose. Handinked late1980s anime textured wool silk and linen, pigmentgrain celshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7393ace6-f89c-4181-9867-d5315a1bf7e3.png",
+      "path": "Raw/outfit_f_italy_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a0f04b346fcbfc858dc022c2bfa919353cad14fe67c06720c3999eefd2ade4c7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "laced-sleeve gamurra",
+      "details": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Square-necked gown (gamurra) in deep blue or crimson. Its contrasting sleeves are laced on at the shoulder and elbow, so puffs of the white camicia show through the gaps. A sbernia mantle is draped over one shoulder.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_f_italy_earlymodern.",
+      "flags": {
+        "label": "laced-sleeve gamurra"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_italy_earlymodern",
+      "prompt": "Edit FIRST costume arms and sleeves only matching SECOND poseguide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Same deepblue gamurra, russet tied sleeves with white linen puffs, ochre sbernia leftshoulder, brown closed shoes. Sleeve and mantle folds follow arm pose plausibly. Preserve head torso skirt feet and scale. 1024x1536 scalp164 chin324 soles1440 center512 magenta exposed headhands #FF00FF greenbackground #00FF00. Late1980s inked texturedanime pigmentgrain cel shadows. No hair hat jewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1ff2d08b-9f41-4b7d-93b9-8034b5b19eb4.png",
+      "path": "Raw/outfit_f_italy_earlymodern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0d70e687ec5c76bb3c241099a445aa892e99eae6a231e8d196bdfb5b49486f12",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "laced-sleeve gamurra",
+      "details": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Square-necked gown (gamurra) in deep blue or crimson. Its contrasting sleeves are laced on at the shoulder and elbow, so puffs of the white camicia show through the gaps. A sbernia mantle is draped over one shoulder.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_f_italy_earlymodern.",
+      "flags": {
+        "label": "laced-sleeve gamurra"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_italy_earlymodern",
+      "prompt": "Edit FIRST costume arms and sleeves only matching SECOND poseguide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Same deepblue gamurra, russet tied sleeves with white linen puffs, ochre sbernia leftshoulder, brown closed shoes. Sleeve and mantle folds follow arm pose plausibly. Preserve head torso skirt feet and scale. 1024x1536 scalp164 chin324 soles1440 center512 magenta exposed headhands #FF00FF greenbackground #00FF00. Late1980s inked texturedanime pigmentgrain cel shadows. No hair hat jewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c5215d8c-8f43-4458-aff9-f69adb3a93e0.png",
+      "path": "Raw/outfit_f_italy_earlymodern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8373b963d4bf266ec92659eec534450e6125e869eae1aca17ce9714fefe68dbb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "laced-sleeve gamurra",
+      "details": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Square-necked gown (gamurra) in deep blue or crimson. Its contrasting sleeves are laced on at the shoulder and elbow, so puffs of the white camicia show through the gaps. A sbernia mantle is draped over one shoulder.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw outfit_f_italy_earlymodern.",
+      "flags": {
+        "label": "laced-sleeve gamurra"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_italy_earlymodern",
+      "prompt": "Edit FIRST costume arms and sleeves only matching SECOND poseguide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Same deepblue gamurra, russet tied sleeves with white linen puffs, ochre sbernia leftshoulder, brown closed shoes. Sleeve and mantle folds follow arm pose plausibly. Preserve head torso skirt feet and scale. 1024x1536 scalp164 chin324 soles1440 center512 magenta exposed headhands #FF00FF greenbackground #00FF00. Late1980s inked texturedanime pigmentgrain cel shadows. No hair hat jewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5716a9e0-e158-4afd-81cf-0143c60fbef9.png",
+      "path": "Raw/outfit_f_italy_earlymodern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a6de058d3f0ecb728bcd2991a38c69ca40264d4abdce5cfebe8a593f2d3a4544",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "smooth centre parting",
+      "details": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Centre-parted, smooth and flat over the ears, with the rest bound into one very long braid down the back (coazzone), hidden from the front. No hat.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw hair_f_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "smooth centre parting"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_earlymodern",
+      "prompt": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Centre-parted, smooth and flat over the ears, with the rest bound into one very long braid down the back (coazzone), hidden from the front. No hat.\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw hair_f_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hair colored: dark chestnut centerpart smooth flat hair covering ears, drawn back into long coazzone braid hidden behind torso so no front braids or bun. No hairband jewelry hat. Replace all costume mantle shoes with plain opaque magenta longshirt trousers socks; headhands magenta#FF00FF. Preserve scalp164 chin324 center512 soles1440,1024x1536 greenbackground#00FF00. Same head pose scale. Late1980s inkedanime subtle strands and pigmentgrain cel shading.\nCorrection: smooth side hair MUST cover both ears completely, flat curving curtains over ears into back braid. Hide visible braid beside neck behind torso. Keep center part and scalp/face exact; change hair only.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7646b012-f85e-4357-accd-f58049eaa52d.png",
+      "path": "Raw/hair_f_italy_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a15d8db9475b2e262280c65ffc6c472bc15a447aae5ed89eb4bcc191a33bbbe",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_italy_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "lenza",
+      "details": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Lenza: a finger-wide dark velvet band worn straight across the forehead, with a large dark-red stone set in gold, as big as the whole eye, at the centre of the brow\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw headwear_f_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "lenza",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_italy_earlymodern",
+      "prompt": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Lenza: a finger-wide dark velvet band worn straight across the forehead, with a large dark-red stone set in gold, as big as the whole eye, at the centre of the brow\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw headwear_f_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly lenza colored: fingerwide blackvelvet straight horizontal foreheadband, central oval darkredstone goldsetting widthabout25px same eye width. No royal crown. Reference hair allflatmagenta retaining contour forbandfit; support fullyclothed shirt trousers socks face hands #FF00FF. Exact reference head/pose/feet,1024x1536 solidgreen#00FF00. Late1980s inked anime celshadedstone texturedvelvet.\nIMPORTANT correction: recolor ALL brown hair including crown side panels and braid PURE MAGENTA #FF00FF. Only BLACK HEADBAND and RED/GOLD JEWEL retain natural colors. Keep exact contours and everything else.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-655095f1-da4d-4425-9098-319ab773eec0.png",
+      "path": "Raw/headwear_f_italy_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f6c755f01b3aae04195266f1fd15e07f2e416445c299b667daf47302ab5b0303",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_italy_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "country": "italy",
+      "era": "earlymodern",
+      "label": "jet bead necklace",
+      "details": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Long necklace of dark jet beads looped twice around the neck\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw accessory_f_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "jet bead necklace"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_italy_earlymodern",
+      "prompt": "Subject: woman of Sforza Milan; Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495.\nDraw: Long necklace of dark jet beads looped twice around the neck\nAvoid: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)\nOutput one full-canvas raw accessory_f_italy_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly necklace colored: small dark jet beads in two long loops, upper loop to upperchest lower loop midchest, restrained gray celhighlights. No pendant. Replace entire costume mantle shoes with opaque flat magenta longshirt trousers socks. Baldhead face hands#FF00FF. Preserve exact head pose position scalp164 chin324 soles1440center512 1024x1536 green#00FF00. Inked late1980s anime no photoreal3D.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-43bb2e36-d056-457e-afce-24bec5e67e62.png",
+      "path": "Raw/accessory_f_italy_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d0e7c51df75b84cb2dc073301b1469dd4704f9283085ab78af00400e31c1944a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "suit and tabarro",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Dark wool three-piece suit with a white shirt, stiff standing collar and dark cravat. Over it is a full, calf-length circular tabarro cloak in black or midnight-blue wool, with a velvet collar and a metal chain clasp at the throat. One side is flung back over the opposite shoulder, showing the suit.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_m_italy_industrial.",
+      "flags": {
+        "label": "suit and tabarro"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_industrial",
+      "prompt": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Dark wool three-piece suit with a white shirt, stiff standing collar and dark cravat. Over it is a full, calf-length circular tabarro cloak in black or midnight-blue wool, with a velvet collar and a metal chain clasp at the throat. One side is flung back over the opposite shoulder, showing the suit.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_m_italy_industrial.\nDress reference mannequin: charcoal wool threepiece suit white standingcollarshirt darkplumcravat, midnightblue circular calf-length tabarro with blackvelvetcollar silverchain throatclasp. One side flung back over opposite shoulder, keep both arms free outside cloak and suitfront visible. Black leather shoes. Ordinary worn civilian, no hat hair beard accessories. Preserve reference scalp239chin400soles1421center512 neutral armsdownslightlyaway. 1024x1536 green#00FF00 exposedheadhandsmagenta#FF00FF. Late1980s inkedanime paintedwool texture celshading no photoreal.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fe7bc4bb-46cc-4dc1-93de-3be9359051e5.png",
+      "path": "Raw/outfit_m_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6dc2a25b75599f50aad35351c6f32702ac432d1cce821d0aa32876af84e0053a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "suit and tabarro",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Dark wool three-piece suit with a white shirt, stiff standing collar and dark cravat. Over it is a full, calf-length circular tabarro cloak in black or midnight-blue wool, with a velvet collar and a metal chain clasp at the throat. One side is flung back over the opposite shoulder, showing the suit.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_m_italy_industrial.",
+      "flags": {
+        "label": "suit and tabarro"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_italy_industrial",
+      "prompt": "Edit FIRST costume arms/sleeves and locally cloak folds to match SECOND guide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Same charcoal threepiece suit, white standingcollar, plumcravat, midnightblue tabarro silverchain clasp blackvelvetcollar, black shoes. Arms stay outside cloak natural folds. Preserve head torso lowerbody feet scale. 1024x1536 scalp239chin400soles1421center512 magenta#FF00FF exposedheadhands green#00FF00background. Late1980s inked texturedanime celshading. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ddd6c9b1-bf82-40ff-ac7d-080ac1a7b2a0.png",
+      "path": "Raw/outfit_m_italy_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "91af8cd2c68c9c00ab8bac37d75678ec0bdb833ed4704214e10706cee679bb42",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "suit and tabarro",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Dark wool three-piece suit with a white shirt, stiff standing collar and dark cravat. Over it is a full, calf-length circular tabarro cloak in black or midnight-blue wool, with a velvet collar and a metal chain clasp at the throat. One side is flung back over the opposite shoulder, showing the suit.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_m_italy_industrial.",
+      "flags": {
+        "label": "suit and tabarro"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_italy_industrial",
+      "prompt": "Edit FIRST costume arms/sleeves and locally cloak folds to match SECOND guide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Same charcoal threepiece suit, white standingcollar, plumcravat, midnightblue tabarro silverchain clasp blackvelvetcollar, black shoes. Arms stay outside cloak natural folds. Preserve head torso lowerbody feet scale. 1024x1536 scalp239chin400soles1421center512 magenta#FF00FF exposedheadhands green#00FF00background. Late1980s inked texturedanime celshading. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-20437947-f161-433e-8a66-d13daa59061b.png",
+      "path": "Raw/outfit_m_italy_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8f9446a89b3bcda479efc908191ccd5f60876228357f8010ea94b8330b107589",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "suit and tabarro",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Dark wool three-piece suit with a white shirt, stiff standing collar and dark cravat. Over it is a full, calf-length circular tabarro cloak in black or midnight-blue wool, with a velvet collar and a metal chain clasp at the throat. One side is flung back over the opposite shoulder, showing the suit.\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw outfit_m_italy_industrial.",
+      "flags": {
+        "label": "suit and tabarro"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_italy_industrial",
+      "prompt": "Edit FIRST costume arms/sleeves and locally cloak folds to match SECOND guide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Same charcoal threepiece suit, white standingcollar, plumcravat, midnightblue tabarro silverchain clasp blackvelvetcollar, black shoes. Arms stay outside cloak natural folds. Preserve head torso lowerbody feet scale. 1024x1536 scalp239chin400soles1421center512 magenta#FF00FF exposedheadhands green#00FF00background. Late1980s inked texturedanime celshading. No hairhatjewelry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ebc58f17-4c57-475b-8747-80ac03d3fb6d.png",
+      "path": "Raw/outfit_m_italy_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ce892761664e61f32026b5c7ce683ded677caf0329e2e5c8f3ecabb2ac5cd227",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "pomaded side parting",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Short, side-parted and pomaded\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw hair_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pomaded side parting"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_italy_industrial",
+      "prompt": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Short, side-parted and pomaded\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw hair_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hair colored short darkbrown pomaded sidepart smooth modest volume, slight temple recession. No beard moustache hat. Replace ALL suit cloak chain shoes with opaque plain magenta longshirt trousers socks; facehands#FF00FF. Preserve exact reference head position scalp239chin400 feet1421center512.1024x1536 green#00FF00. Late1980s inkedanime strands pigmentgrain cel shading, no 3D.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-479f3c8a-a248-4931-95fc-71d9f625058b.png",
+      "path": "Raw/hair_m_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "21eb8cded8c1d83de658d25595a2a34a13dc2d183127661cb32dc1a8c8b69976",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "Umbertine moustache",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Full, thick moustache brushed outward in the 'Umbertine' fashion, not waxed to points\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw facialhair_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Umbertine moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_italy_industrial",
+      "prompt": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Full, thick moustache brushed outward in the 'Umbertine' fashion, not waxed to points\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw facialhair_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly moustache colored darkbrown full thick brushedoutward natural rounded ends, no waxed spikes, no beard scalp hair. Replace ALL suitcloakchainshoes with opaque flatmagenta longshirt trousers socks facehands#FF00FF. Preserve exact head scalp239chin400 nose mouth position,soles1421center512 1024x1536 solidgreen#00FF00. Late1980s inked anime natural hairstrands celshading.\nCorrection: moustache thick bushy with blunt ragged drooping rounded ends. Remove pointed waxed tips completely. Shorten width to within cheek boundaries about85px. No longhandlebar caricature. Change moustache only.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1401647c-ce81-4caa-bed0-0772c14c7f14.png",
+      "path": "Raw/facialhair_m_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f72f9d7e2878c6c20210bf8459659730fece0d16069b0287eb46597c0b47bb58",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "wide black felt hat",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Wide-brimmed soft black felt hat with a low rounded crown and a broad, slightly drooping brim, set level and high enough that the eyes stay clearly visible (the hat worn with the tabarro in the Po Valley)\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw headwear_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "wide black felt hat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_italy_industrial",
+      "prompt": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Wide-brimmed soft black felt hat with a low rounded crown and a broad, slightly drooping brim, set level and high enough that the eyes stay clearly visible (the hat worn with the tabarro in the Po Valley)\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw headwear_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly hat colored blackfelt low smoothly rounded crown NO dents, wide slightly drooping brim at highforehead above eyes. Simple civilian no feathers emblems. Reference hair allmagenta#FF00FF preserve contour beneathhat. Entire support shirt trousers socks face hands magenta, same pose/headfeet.1024x1536 green#00FF00. Textured late1980s anime inked feltgrain celshading.\nCorrection: recolor remaining dark hair at both temples under brim PURE MAGENTA #FF00FF. Only hat stays black. Preserve hat and all geometry.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c51f4d5-5fd6-4259-a93c-86b1b2bd16bb.png",
+      "path": "Raw/headwear_m_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fc2cd5e2c3784c1a55150840101c51f326d13746c427f513cee9a9866c02817d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_italy_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "country": "italy",
+      "era": "industrial",
+      "label": "silk scarf",
+      "details": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Long white silk scarf hanging loose around the neck, both ends falling straight down the front of the chest, in the style of Verdi\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw accessory_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "silk scarf",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_italy_industrial",
+      "prompt": "Subject: man of Bologna, Kingdom of Italy; Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895.\nDraw: Long white silk scarf hanging loose around the neck, both ends falling straight down the front of the chest, in the style of Verdi\nAvoid: Garibaldi red shirt (volunteer military uniform); Bersaglieri feathered hat, carabinieri, any uniform; King Umberto I style regalia (royalty); mafia, gangster or cloaked-villain caricature; organ-grinder or peasant caricature; Greek fustanella or fez (reads as Greece); Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial); top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)\nOutput one full-canvas raw accessory_m_italy_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nOnly scarf colored ivorywhite silk loose around back ofneck, two narrow straight hanging ends down front chest to waist, no knot, no emblem. Keep all support fullyclothed magenta longshirt trousers socks baldfacehands#FF00FF, replace suit cloak chain cravat shoes. Exact reference head239chin400feet1421center512 1024x1536 green#00FF00. Late1980s inked textileanime silk grain and restrained celshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-039c9d8a-3aec-40f2-9303-68c96349b1aa.png",
+      "path": "Raw/accessory_m_italy_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fdaf313e486a31faa6fa2f7b5b6c48c53e71471e75d47feb988de340fabb0cb8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

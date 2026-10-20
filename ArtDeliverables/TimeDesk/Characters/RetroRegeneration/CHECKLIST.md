@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 621. Full regeneration is NOT complete.
+Saved: 646. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -625,3 +625,28 @@ Saved: 621. Full regeneration is NOT complete.
 | outfit_f_italy_medieval | visually reviewed; registration pending |
 | outfit_f_italy_medieval__explaining_a | visually reviewed; registration pending |
 | outfit_f_italy_medieval__thinking_b | visually reviewed; registration pending |
+| outfit_f_italy_medieval__objecting_c | visually reviewed; registration pending |
+| hair_f_italy_medieval | visually reviewed; registration pending |
+| headwear_f_italy_medieval | visually reviewed; registration pending |
+| accessory_f_italy_medieval | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern__explaining_a | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern__thinking_b | visually reviewed; registration pending |
+| outfit_m_italy_earlymodern__objecting_c | visually reviewed; registration pending |
+| hair_m_italy_earlymodern | visually reviewed; registration pending |
+| headwear_m_italy_earlymodern | visually reviewed; registration pending |
+| outfit_f_italy_earlymodern | visually reviewed; registration pending |
+| outfit_f_italy_earlymodern__explaining_b | visually reviewed; registration pending |
+| outfit_f_italy_earlymodern__thinking_c | visually reviewed; registration pending |
+| outfit_f_italy_earlymodern__objecting_a | visually reviewed; registration pending |
+| hair_f_italy_earlymodern | visually reviewed; registration pending |
+| headwear_f_italy_earlymodern | visually reviewed; registration pending |
+| accessory_f_italy_earlymodern | visually reviewed; registration pending |
+| outfit_m_italy_industrial | visually reviewed; registration pending |
+| outfit_m_italy_industrial__explaining_b | visually reviewed; registration pending |
+| outfit_m_italy_industrial__thinking_c | visually reviewed; registration pending |
+| outfit_m_italy_industrial__objecting_a | visually reviewed; registration pending |
+| hair_m_italy_industrial | visually reviewed; registration pending |
+| facialhair_m_italy_industrial | visually reviewed; registration pending |
+| headwear_m_italy_industrial | visually reviewed; registration pending |
+| accessory_m_italy_industrial | visually reviewed; registration pending |
