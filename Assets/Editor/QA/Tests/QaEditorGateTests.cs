@@ -63,9 +63,14 @@ public class QaEditorGateTests
             SceneManager.MoveGameObjectToScene(broken, scene);
             var office = new GameObject("Office");
             new GameObject("GateLever").transform.SetParent(office.transform);
+            // The desk monitor's river quad gets its material from HelixRiverMonitor in Awake: its empty slot is not a finding.
+            var river = new GameObject("DeskRiver", typeof(MeshFilter), typeof(MeshRenderer), typeof(HelixRiverMonitor));
+            river.GetComponent<MeshRenderer>().sharedMaterials = new Material[1];
+            river.transform.SetParent(office.transform);
             SceneManager.MoveGameObjectToScene(office, scene);
             QaSceneScan.Findings f = QaSceneScan.Scan(scene);
-            Assert.AreEqual(1, f.BrokenMaterials.Count);
+            Assert.AreEqual(1, f.BrokenMaterials.Count, string.Join("; ", f.BrokenMaterials));
+            StringAssert.EndsWith("NoMaterial", f.BrokenMaterials[0]);
             CollectionAssert.AreEqual(new[] { scene.name + ": Office/GateLever" }, f.RetiredPresent);
             Assert.IsEmpty(f.MissingScripts);
         }

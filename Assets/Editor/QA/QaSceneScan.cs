@@ -10,7 +10,9 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// The scene integrity gate (BUG-30: "a build gate on missing scripts and
 /// null materials"): scans scenes for GameObjects with a missing script,
-/// enabled renderers with a null material or the error (magenta) shader,
+/// enabled renderers with a null material or the error (magenta) shader
+/// (except a Helix River screen, whose material its HelixRiverMonitor makes
+/// in Awake: <see cref="MaterialMadeAtRuntime"/>),
 /// texts whose font is LiberationSans (the TMP default no culture uses,
 /// BUG-3/37: TEXT-LANG's), and objects the builder retired that are still
 /// there (<see cref="Retired"/>, BUG-30's Office/GateLever). Used by the
@@ -51,6 +53,15 @@ public static class QaSceneScan
         }
     }
 
+    /// <summary>
+    /// True when <paramref name="r"/>'s material is made in play mode, so its
+    /// empty slot in the saved scene is not a magenta block: the desk monitor's
+    /// Helix River quad (Office/DeskRiver), whose HelixRiverMonitor gives it a
+    /// runtime material in Awake. In play mode the runtime probe
+    /// (QaGame.BrokenMaterials) still checks it once it is shown.
+    /// </summary>
+    private static bool MaterialMadeAtRuntime(Renderer r) => r != null && r.GetComponent<HelixRiverMonitor>() != null;
+
     /// <summary>Scans one loaded scene.</summary>
     public static Findings Scan(Scene scene)
     {
@@ -63,7 +74,7 @@ public static class QaSceneScan
                 if (GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(go) > 0)
                     f.MissingScripts.Add(QaGame.Where(go));
                 foreach (Renderer r in go.GetComponents<Renderer>())
-                    if (r.enabled && !(r is ParticleSystemRenderer) && QaGame.IsBroken(r))
+                    if (r.enabled && !(r is ParticleSystemRenderer) && !MaterialMadeAtRuntime(r) && QaGame.IsBroken(r))
                         f.BrokenMaterials.Add(QaGame.Where(go));
                 TMP_Text text = go.GetComponent<TMP_Text>();
                 if (text != null && QaGame.IsLiberationSans(text.font))
