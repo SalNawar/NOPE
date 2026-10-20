@@ -1,6 +1,6 @@
 # UI-PC: a clean desktop with a real taskbar clock
 
-Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase), fix round 1 (`d6fd65b`, `3996e95`: the review of `60fe324`), fix round 2 (`4e2445a`: the review of `d6fd65b`) and fix round 3 (the reverify of `4e2445a`, WAVE2_OPEN "UI-PC", below).
+Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase), fix round 1 (`d6fd65b`, `3996e95`: the review of `60fe324`), fix round 2 (`4e2445a`: the review of `d6fd65b`) and fix round 3 (`e85d9bd`: the reverify of `4e2445a`, WAVE2_OPEN "UI-PC", below).
 
 **Sources:**
 - FIX_PLAN.md §3 "UI-PC" and FIX_PLAN_v2.md "UI-PC: delta" (v2 wins);
