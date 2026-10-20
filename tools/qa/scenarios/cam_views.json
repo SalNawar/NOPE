@@ -1,0 +1,580 @@
+{
+  "name": "cam_views",
+  "owner": "CAM",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "CAM: the two fixed poses frame what they must at A1-A4 (camframe; days 1 and 12), every camera move is tagged (the logger: cameraCheck and the run's own camera assertion), the controls fade in over the last third of a move (camfade; reading and city, then under Reduced Motion), no view changes while something is held (camhold), the city fills the screen with parallax under 1 px a frame (camparallax). Sequences for the offline cuts/frozen analysis: the reading toggle and the city look at A1 and A4."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d1_office"
+    },
+    {
+      "op": "camframe",
+      "name": "a1_d1_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d1_reading"
+    },
+    {
+      "op": "camframe",
+      "name": "a1_d1_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a1_d1_poses"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d1_office"
+    },
+    {
+      "op": "camframe",
+      "name": "a2_d1_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d1_reading"
+    },
+    {
+      "op": "camframe",
+      "name": "a2_d1_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a2_d1_poses"
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d1_office"
+    },
+    {
+      "op": "camframe",
+      "name": "a3_d1_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d1_reading"
+    },
+    {
+      "op": "camframe",
+      "name": "a3_d1_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a3_d1_poses"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d1_office"
+    },
+    {
+      "op": "camframe",
+      "name": "a4_d1_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d1_reading"
+    },
+    {
+      "op": "camframe",
+      "name": "a4_d1_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a4_d1_poses"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "recStart",
+      "name": "a1_reading_toggle"
+    },
+    {
+      "op": "camfade",
+      "target": "reading",
+      "name": "a1_reading"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "recStart",
+      "name": "a1_city_look"
+    },
+    {
+      "op": "camfade",
+      "target": "city",
+      "name": "a1_city"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a1_fades"
+    },
+    {
+      "op": "camhold",
+      "name": "a1_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "camhold",
+      "name": "a1_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "d1_city"
+    },
+    {
+      "op": "camparallax",
+      "name": "a1",
+      "n": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a1_city"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "recStart",
+      "name": "a4_city_look"
+    },
+    {
+      "op": "key",
+      "key": "A"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "camparallax",
+      "name": "a4",
+      "n": 60
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "recStart",
+      "name": "a4_reading_toggle"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a4_city"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "cammotion",
+      "n": 1
+    },
+    {
+      "op": "recStart",
+      "name": "rm_reading_toggle"
+    },
+    {
+      "op": "camfade",
+      "target": "reading",
+      "name": "rm_reading"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_city_look"
+    },
+    {
+      "op": "camfade",
+      "target": "city",
+      "name": "rm_city"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "cameraCheck",
+      "name": "rm"
+    },
+    {
+      "op": "cammotion",
+      "n": 0
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d12_office"
+    },
+    {
+      "op": "camframe",
+      "name": "a1_d12_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d12_reading"
+    },
+    {
+      "op": "camframe",
+      "name": "a1_d12_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a1_d12_poses"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d12_office"
+    },
+    {
+      "op": "camframe",
+      "name": "a4_d12_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d12_reading"
+    },
+    {
+      "op": "camframe",
+      "name": "a4_d12_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a4_d12_poses"
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d12_office"
+    },
+    {
+      "op": "camframe",
+      "name": "a3_d12_office"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.TiltIn"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d12_reading"
+    },
+    {
+      "op": "camframe",
+      "name": "a3_d12_reading"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "cameraCheck",
+      "name": "a3_d12_poses"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    }
+  ]
+}
