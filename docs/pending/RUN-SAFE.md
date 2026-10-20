@@ -55,7 +55,7 @@ Three commits: the Domain rules (1530848), the fix (3904133) with this doc (b2fa
 **Not touched:** RunConfigSO.cs, PlayerPrefKeys.cs, HallSlotsDev.cs, FeelCheats.cs, HallSlotsCheats.cs, DebugInspector.cs. Nothing outside RUN-SAFE's list was edited: no scene, asset, string table or other track's file.
 
 **Staged, for after QA-RIG merges** (this branch did not carry QA-RIG's registry):
-- The gate checks: installed at the integration merge as `Assets/Editor/QA/Checks/RunSafeChecks.cs`.
+- The gate checks: installed at the integration merge as `Assets/Editor/QA/Checks/RunSafeChecks.cs`. Its play checks (`runsafe.play.dayJumps`, `runsafe.play.overlayBlock`) read RUN-SAFE's own results of each run: console, presses, quality, every probe's missing scripts and materials, and one probe per landing (`day_jumps.missingScripts.<landing>` for all eight, `overlay_block.missingScripts.after`), so a run that stops early fails them. The probes' LiberationSans results and the run's camera are TEXT-LANG's and CAM's (`qa.play.liberationSans`, `qa.play.camera`, both known red); with `day_jumps.*` the check refused every merge until TEXT-LANG lands (found at the integration's first gate run).
 - The overlay scenario: installed at the integration merge as `tools/qa/scenarios/overlay_block.json`.
 - `docs/pending/data/RUN-SAFE/ui_strings.md`: the four `save.notice.*` strings, for the string tables' owner.
 

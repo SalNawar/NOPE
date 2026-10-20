@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +10,11 @@ using System.Reflection;
 /// every cheat switch has one scope, and the one kept elsewhere (the
 /// language lock) is on the badge. Play: the day_jumps scenario (each
 /// cheat path lands at the day's briefing, console clean) and the overlay
-/// block (0 game input behind the open panel).
+/// block (0 game input behind the open panel). The play checks read RUN-SAFE's
+/// own results of each run (console, presses, quality, the probes' scripts and
+/// materials, one probe per landing); the probes' LiberationSans and the run's
+/// camera results are TEXT-LANG's and CAM's, judged by qa.play.liberationSans
+/// and qa.play.camera.
 /// </summary>
 public static class RunSafeChecks
 {
@@ -78,11 +83,29 @@ public static class RunSafeChecks
         }
     }
 
-    /// <summary>The day_jumps scenario passed at HEAD: Restart d1, Jump d5, d7, Restart, Skip to d8, Jump d12, Restart, Jump d15, each at the day's briefing with a clean console (QaJobs.DayJumps).</summary>
-    [GateCheck("runsafe.play.dayJumps", "RUN-SAFE", GateKind.Play)]
-    public static GateResult DayJumps() => GateResults.Require("runsafe.play.dayJumps", "RUN-SAFE", "day_jumps.*");
+    /// <summary>The landings of the day_jumps scenario, in order: each one's probe runs at that day's briefing (after its waitOffice step), so a probe's result proves the landing was reached.</summary>
+    private static readonly string[] DayJumpLandings = { "d1_restart", "d5_jump", "d7_jump", "d7_restart", "d8_skip", "d12_jump", "d12_restart", "d15_jump" };
 
-    /// <summary>The overlay block passed at HEAD: the cheat panel open, clicks and keys over the desk and the PC, 0 game actions (the overlay_block scenario, docs/pending/RUN-SAFE.md).</summary>
+    /// <summary>The day_jumps scenario passed at HEAD: Restart d1, Jump d5, d7, Restart, Skip to d8, Jump d12, Restart, Jump d15, each at the day's briefing (every landing's probe present and green) with a clean console (QaJobs.DayJumps).</summary>
+    [GateCheck("runsafe.play.dayJumps", "RUN-SAFE", GateKind.Play)]
+    public static GateResult DayJumps() =>
+        All("runsafe.play.dayJumps", RunPatterns("day_jumps").Concat(DayJumpLandings.Select(l => "day_jumps.missingScripts." + l)));
+
+    /// <summary>The overlay block passed at HEAD: the cheat panel open, clicks and keys over the desk and the PC, 0 game actions, the run reaching its last probe (the overlay_block scenario, docs/pending/RUN-SAFE.md).</summary>
     [GateCheck("runsafe.play.overlayBlock", "RUN-SAFE", GateKind.Play)]
-    public static GateResult OverlayBlock() => GateResults.Require("runsafe.play.overlayBlock", "RUN-SAFE", "overlay_block.*");
+    public static GateResult OverlayBlock() =>
+        All("runsafe.play.overlayBlock", RunPatterns("overlay_block").Append("overlay_block.missingScripts.after"));
+
+    /// <summary>A run's own results that RUN-SAFE judges: its console, its presses, its quality level, and every probe's missing scripts and materials.</summary>
+    private static IEnumerable<string> RunPatterns(string scenario) =>
+        new[] { "console", "presses", "quality", "missingScripts.*", "materials.*" }.Select(r => scenario + "." + r);
+
+    /// <summary>One check over several result patterns: it passes when every pattern has results and all of them pass at HEAD (GateResults.Require for each).</summary>
+    private static GateResult All(string id, IEnumerable<string> patterns)
+    {
+        List<string> list = patterns.ToList();
+        List<GateResult> parts = list.Select(p => GateResults.Require(id, "RUN-SAFE", p)).ToList();
+        return GateResult.Of(id, "RUN-SAFE", parts.All(r => r.Pass), string.Join("; ", list.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
+            string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
+    }
 }
