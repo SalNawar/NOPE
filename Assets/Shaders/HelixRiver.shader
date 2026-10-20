@@ -137,7 +137,7 @@ Shader "TimeDesk/HelixRiver"
             // The eight nations' colours, in the reference's order.
             float3 Nation(float index)
             {
-                int i = (int)(index - 8.0 * floor(index / 8.0) + 0.5) % 8;
+                uint i = (uint)(index - 8.0 * floor(index / 8.0) + 0.5) % 8u;
                 if (i == 0) return float3(0.86, 0.36, 0.40);
                 if (i == 1) return float3(0.45, 0.62, 0.95);
                 if (i == 2) return float3(1.0, 0.45, 0.30);
