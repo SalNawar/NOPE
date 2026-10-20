@@ -5,22 +5,26 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// The heavy brass stamp drawer's art (Track BR, Saleh 2026-10-08: the brass
-/// concept, "a heavy brass drawer that makes the sound a typewriter makes when
-/// the carriage returns"; flipped and deep since Saleh's 1016a playtest: its
-/// labelled bar on the far side, the daters in a cast-brass box in front of
-/// it): the model tools/props/brass_drawer.py writes
-/// (BrassDrawer.fbx, every part in the rack's space, upright) installed under
-/// the stamp rack in the desk's NOPE/Desk Anime materials, its mechanism
-/// wired (BrassDrawer) and its enamel plates carrying the verdict words as
-/// live text. Used only when the model is there with every part of its
+/// The brass stamp rack's art (Track BR, Saleh 2026-10-08: the brass
+/// concept; flipped and deep since Saleh's 1016a playtest: its labelled bar
+/// on the far side, the daters in a cast-brass box in front of it; a fixed
+/// rack since his D4, the drawer never slides): the model
+/// tools/props/brass_drawer.py writes (BrassDrawer.fbx, every part in the
+/// rack's space, upright) installed under the stamp rack in the desk's
+/// NOPE/Desk Anime materials (cel brass since BUG-16a: two tones, a painted
+/// highlight, an ink rim, no photo texture), its mechanism wired
+/// (BrassDrawer) and its enamel plates carrying the verdict words as live
+/// text. Used only when the model is there with every part of its
 /// contract (PropArt.BrassDrawer); otherwise the stamp tray keeps its built
 /// lip (the fallback), and a model missing parts says which.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The drawer's model and its brushed brass texture.</summary>
-    private const string BrassDrawerModel = "Assets/Art/Office/Props/BrassDrawer/BrassDrawer.fbx", BrassDrawerTexture = "Assets/Art/Office/Props/BrassDrawer/BrassDrawer_Brass.png";
+    /// <summary>The drawer's model.</summary>
+    private const string BrassDrawerModel = "Assets/Art/Office/Props/BrassDrawer/BrassDrawer.fbx";
+
+    /// <summary>The desk's cel shader, the rack's brass is painted in.</summary>
+    private const string DeskAnimeShader = "NOPE/Desk Anime";
 
     /// <summary>The model's measures the game needs (tools/props/brass_drawer.py: keep in step): a cradle's pivot in front of the dater's centre (its front-foot edge, toward the chair: the dater folds that way), the pinions' radius, the levers' length, the rack's pin past its middle, and the plates' tilt toward the chair (degrees from flat) and their face's height over their origin.</summary>
     private const float BrassPivotDepth = 0.023f, BrassPinionRadius = 0.011f, BrassLeverLength = 0.021f, BrassPinReach = 0.027f, BrassPlateTilt = 35f, BrassPlateFace = 0.0019f;
@@ -31,8 +35,9 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The brass drawer under <paramref name="rack"/> (its Drawer child: the
-    /// model's parts, each renderer's slots in the desk's materials, no
-    /// shadows: the rack casts none) with its mechanism (BrassDrawer: the
+    /// model's parts, each renderer's slots in the desk's materials, casting
+    /// no light's shadow: its drawn contact shadow is laid with it,
+    /// DeskStampTray.Lay) with its mechanism (BrassDrawer: the
     /// cradles, pinions, racks and levers, DENIED then APPROVED); null when the
     /// model is missing or lacks a part (a warning names them: the fallback
     /// lip is built instead).
@@ -94,7 +99,7 @@ public static partial class OfficeSceneUIBuilder
         switch (slot)
         {
             case "BrassDark":
-                return BrassMaterial("Drawer_BrassDark", new Color(0.82f, 0.62f, 0.34f), 0.62f, false);
+                return BrassMaterial("Drawer_BrassDark", new Color(0.6f, 0.43f, 0.21f), 0.2f);
             case "Steel":
                 return DaterMaterial("Drawer_Steel", new Color(0.4f, 0.4f, 0.43f), 0.3f, 0.12f);
             case "EnamelRed":
@@ -102,18 +107,49 @@ public static partial class OfficeSceneUIBuilder
             case "EnamelGreen":
                 return DaterMaterial("Drawer_EnamelGreen", new Color(0.12f, 0.42f, 0.22f), 0.35f, 0.1f);
             default:
-                return BrassMaterial("Drawer_Brass", new Color(1f, 0.86f, 0.52f), 0.72f, true);
+                return BrassMaterial("Drawer_Brass", new Color(0.88f, 0.68f, 0.31f), 0.35f);
         }
     }
 
-    /// <summary>A brass material in URP Lit, metallic and smooth (leftover 2026-10-08: in the desk's NOPE/Desk Anime shader, which paints no reflection, the drawer read as varnished wood): warm gold whose reflections and specular highlight take its warmth, the brushed texture on the bright brass.</summary>
-    private static Material BrassMaterial(string name, Color colour, float smoothness, bool brushed) =>
-        EnsureMaterial(name, "Universal Render Pipeline/Lit", m =>
+    /// <summary>
+    /// A brass material of the rack, cel brass (BUG-16a: the drawer was the
+    /// only photoreal metal on a cel desk, URP Lit with a brushed texture that
+    /// had no mipmaps and turned olive-grey at night) in the desk's
+    /// NOPE/Desk Anime: <paramref name="colour"/> in two tones (a hard band
+    /// edge, the midtone lifted to the light), a painted highlight of
+    /// <paramref name="highlight"/> taking the brass's own hue, a contour, and
+    /// LIGHT's painted-highlight and ink-rim seams full on; no texture. Set on
+    /// every build, so the old URP Lit asset is converted in place (its GUID
+    /// kept); without the shader the asset stays as it is.
+    /// </summary>
+    private static Material BrassMaterial(string name, Color colour, float highlight)
+    {
+        Material m = EnsureMaterial(name, DeskAnimeShader, null);
+        Shader anime = Shader.Find(DeskAnimeShader);
+        if (m == null || anime == null)
+            return m;
+        if (m.shader != anime)
         {
-            m.SetColor("_BaseColor", colour);
-            m.SetFloat("_Metallic", 0.55f);
-            m.SetFloat("_Smoothness", smoothness);
-            if (brushed)
-                m.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(BrassDrawerTexture));
-        });
+            foreach (string texture in new[] { "_BaseMap", "_MainTex" })
+                if (m.HasProperty(texture))
+                    m.SetTexture(texture, null);
+            m.shader = anime;
+        }
+        m.SetTexture("_BaseMap", null);
+        m.SetColor("_BaseColor", colour);
+        m.SetFloat("_ShadowValue", 0.5f);
+        m.SetFloat("_MidValue", 1f);
+        m.SetFloat("_BandSoftness", 0.02f);
+        m.SetFloat("_ShadowThreshold", 0f);
+        m.SetFloat("_LightThreshold", 0.62f);
+        m.SetFloat("_HighlightStrength", highlight);
+        m.SetFloat("_HighlightSize", 0.1f);
+        m.SetFloat("_Metallic", 1f);
+        m.SetFloat("_EdgeStrength", 0.22f);
+        m.SetFloat("_PaintedHighlight", 1f);
+        m.SetFloat("_InkRim", 1f);
+        EditorUtility.SetDirty(m);
+        AssetDatabase.SaveAssetIfDirty(m);
+        return m;
+    }
 }
