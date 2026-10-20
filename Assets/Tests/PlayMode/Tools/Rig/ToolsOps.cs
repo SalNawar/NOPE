@@ -141,7 +141,7 @@ public static class ToolsOps
             }
     }
 
-    /// <summary>The torch's body on the screen (the art's UvTorch under the host, the one that lifts out of the cradle): its meshes' vertices (their boxes' corners for a mesh the player cannot read), the beam's cone left out.</summary>
+    /// <summary>The torch's body on the screen (the art's UvTorch under the host, the one that lifts out of the cradle): its meshes' vertices (their boxes' corners for a mesh a QA player cannot read), the beam's cone left out.</summary>
     private static List<Vector2> BodyPoints(UvTorch torch, Camera cam)
     {
         var points = new List<Vector2>();
@@ -155,7 +155,8 @@ public static class ToolsOps
             Renderer r = f.GetComponent<Renderer>();
             if (r == null || !r.enabled)
                 continue;
-            IEnumerable<Vector3> local = f.sharedMesh.isReadable ? f.sharedMesh.vertices : Corners(f.sharedMesh.bounds);
+            // The editor reads any mesh; a QA player only a readable one (else its box: a slightly larger outline, so the measure errs strict).
+            IEnumerable<Vector3> local = f.sharedMesh.isReadable || Application.isEditor ? f.sharedMesh.vertices : Corners(f.sharedMesh.bounds);
             foreach (Vector3 v in local)
             {
                 Vector3 sp = cam.WorldToScreenPoint(f.transform.TransformPoint(v));
