@@ -161,7 +161,9 @@ public sealed class HelixRiverMonitor : MonoBehaviour
                                         config != null ? config.stabilityCriticalMargin : 0f,
                                         ledger != null ? ledger.TotalStabilityDelta : 0f,
                                         _reduced, ScreenScale(), _warningHeld);
-        Apply(_river.Step(Time.unscaledDeltaTime, input));
+        // Real time (a hit-stop never freezes the river), or the capture's frame while frames are captured at a fixed
+        // rate (UiMotion.Delta), so the speed cap holds per recorded frame and a recording shows the river's true speed.
+        Apply(_river.Step(UiMotion.Delta(Time.unscaledDeltaTime), input));
     }
 
     /// <summary>Hands one frame of the river to the material, with this display's shape.</summary>

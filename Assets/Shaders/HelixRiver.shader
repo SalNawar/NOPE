@@ -385,7 +385,7 @@ Shader "TimeDesk/HelixRiver"
                 {
                     float band = floor(y / 8.0);
                     if (Hash21(float2(band, _GlitchSeed)) < 0.12)
-                        x += (Hash21(float2(band + 3.1, _GlitchSeed)) * 2.0 - 1.0) * 16.0 * _Glitch;
+                        x += (Hash21(float2(band + 3.1, _GlitchSeed)) * 2.0 - 1.0) * 8.0 * _Glitch;
                 }
 
                 // The chroma split: only in the burst's first frames (while it is over half strength).

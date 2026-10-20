@@ -44,12 +44,13 @@ Everything else below that is a design choice is marked **proposal (ours)**.
 
 ### BUG-54 Helix River monitor strobes (and BUG-56e, the warning state)
 - **One readable glitch on a drop, then calm.** The glitch used to grow with the warning band and with the day's losses. The day's-loss part never decayed (the "gain per correct call is 0" root cause), so after one mistake the glass tore at 10 Hz all shift. Now any fall of the hidden stability starts one burst: `glitchWild` x (1 - u)^2 over `glitchSeconds` 0.2 s (bible J4: "1 burst of 200 ms per drop"), then 0.
-  - The bands that slip are chosen by the burst's number (`GlitchSeed`), so they kink once and slide back as it fades. Before, they were re-rolled at 10 Hz.
+  - The bands that slip are chosen by the burst's number (`GlitchSeed`), so they kink once and slide back as it fades. Before, they were re-rolled at 10 Hz. A band slips at most 8 reference px (16 until the integration's Unity pass: sliding back over the rungs, 16 toggled a desk-river pixel three times in the burst).
   - The chroma split shows only while the burst is over half strength: about 2 frames at 30 fps (bible J4: "a 2-frame RGB split on the monitor only").
   - No glitch under Reduced Motion.
   - The knob `agitationGlitch` is gone. The day's losses still speed the motes (`agitationFlow`).
 - **The 15 Hz critical-band flicker is gone.** `HelixRiverFrame.Flicker` and the shader's `_Flicker` are deleted.
-- **Speed cap: no detail crosses more than 0.5 px a frame at 30 fps** (FIX_PLAN: "capped to ≤0.5 px per frame at the RT scale").
+- **Speed cap: no detail crosses more than 0.4 px a frame at 30 fps** (FIX_PLAN: "capped to ≤0.5 px per frame at the RT scale"; the knob was 0.5 until the integration's Unity pass: at 0.5 the rungs' passing still toggled a few desk-river pixels three times in 10 s, so it is 0.4, inside the plan's bound).
+  - The river steps by the capture's frame while frames are captured at a fixed rate (`UiMotion.Delta`, as the UI's motion does), else by real time: a recording ran it on real time, about 45 ms a captured frame, so it moved 1.3-1.5 times the cap a frame and strobed under the flicker check (integration finding).
   - The monitor measures its glass's height in pixels where it is drawn: the screen, or the render texture its canvas's camera draws to (`HelixRiverMonitor.ScreenScale`).
   - `HelixRiver.SpeedCap` turns that height into a speed. The river's clock slows by cap / `FastestOnClock` (80 reference px/s: the current streaks, the rungs and the twist).
   - The motes' travel is capped and integrated (`MoteTravel`), so a change of speed never jumps them. Before, the shader used `t * _Flow`, and a change of `_Flow` swept every mote.
@@ -66,7 +67,7 @@ Everything else below that is a design choice is marked **proposal (ours)**.
   - `HelixRiverMonitor.SetWarning(bool)` (the P0 seam) holds it on for FLOW, CONTENT and TIMELINE-FAIL whatever the stability. It is runtime state only.
   - **Proposal (ours):** the critical band, not the warning band, is the warning line. The config's `stabilityWarningMargin` (70 today) is exactly the 70% D12 rules out ("70% is not a firing warning"); the critical band is "near the destruction point". CONTENT (#17) owns both values (56d) and may retune them; the monitor reads whatever the config says.
 - **Files:** `Assets/Scripts/Domain/HelixRiver.cs`, `Assets/Scripts/UI/HelixRiverMonitor.cs`, `Assets/Shaders/HelixRiver.shader`, `Assets/Data/Config/HelixRiver_Default.asset`.
-  - New knobs: `glitchSeconds` 0.2, `warningSettleSeconds` 0.8, `warningHysteresis` 0.5, `maxPixelsPerFrame` 0.5, `captureFps` 30.
+  - New knobs: `glitchSeconds` 0.2, `warningSettleSeconds` 0.8, `warningHysteresis` 0.5, `maxPixelsPerFrame` 0.4 (0.5 until the integration's Unity pass), `captureFps` 30.
   - `agitationGlitch` is removed. `glitchWild` now means the burst's peak.
 
 ### BUG-67 The AVAILABLE sign pulses forever

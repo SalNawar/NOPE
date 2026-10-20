@@ -39,7 +39,7 @@ MonoBehaviour:
     glitchSeconds: 0.2
     warningSettleSeconds: 0.8
     warningHysteresis: 0.5
-    maxPixelsPerFrame: 0.5
+    maxPixelsPerFrame: 0.4
     captureFps: 30
     agitationFullDrop: 7.5
     agitationFlow: 0.4
