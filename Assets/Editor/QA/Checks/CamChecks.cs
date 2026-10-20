@@ -30,7 +30,10 @@ using UnityEngine;
 /// city look, and that run's camera moves tagged. tools/qa/test_cam_gates.py
 /// checks offline that every line CAM's scenarios write that CAM measures
 /// (its ops' lines and the built-in ops' CAM lines: gc, cameraCheck, the
-/// run's camera) sits under one of these checks, under the line's owner.
+/// run's camera) sits under one of these checks, under the line's owner, and
+/// the reverse: no check here reads a line of another owner (QA-RIG's,
+/// TEXT-LANG's, a plate owner's) but cam.play.deskplan's listed DESK-PLAN and
+/// QA-RIG lines.
 /// </summary>
 public static class CamChecks
 {
@@ -200,8 +203,9 @@ public static class CamChecks
     /// <summary>
     /// No chrome of CAM's (the pull tabs, the Back control, "◀ City") is drawn
     /// over a held thing or over the reading view's framed work, at A1-A4
-    /// (BUG-59), with both halves seen in each leg (a held thing, the reading
-    /// view at rest), and every overlay plate a leg shows was drawn and
+    /// (BUG-59), with both halves seen in each leg (a held thing, a dragged
+    /// decoration placed by its Root; the reading view at rest), every one of
+    /// CAM's controls found, and every overlay plate a leg shows was drawn and
     /// measured (a plate never drawn is a red "not measured" line here). The
     /// plates' own verdicts are their owners' checks below, so this one goes
     /// green on CAM's work while they are red.
@@ -227,13 +231,24 @@ public static class CamChecks
     [GateCheck("cam.play.stampHint", "STAMP", GateKind.Play)]
     public static GateResult StampHintPlate() => GateResults.Require("cam.play.stampHint", "STAMP", "cam_chrome.plate.*.stamphint");
 
-    /// <summary>The cap heights of the desk's printed text were measured at CAM's reading pose, A1 and A2, days 1 and 12 (the desk plan's §6 smoke; a report: the pass on the heights is DOC-LOOK's at #9; red only when nothing could be measured).</summary>
+    /// <summary>The cap heights of the desk's printed text were measured at CAM's reading pose, A1 and A2 on day 12, once the scripted day has laid its papers on the desk (the desk plan's §6 smoke; a report: the pass on the heights is DOC-LOOK's at #9; red only when nothing could be measured).</summary>
     [GateCheck("cam.play.capreport", Owner, GateKind.Play)]
     public static GateResult CapReport() => GateResults.Require("cam.play.capreport", Owner, "cam_views.capreport.*");
 
-    /// <summary>DESK-PLAN's homes at A3 and A4 (FIX_PLAN v1: "DESK-PLAN at A3 and A4 (deferred to here)"): every kept object ≥90% seen and its centre click reaching it; the intercom opening the wheel from the reading view with no camera move.</summary>
+    /// <summary>
+    /// DESK-PLAN's homes at A3 and A4 (FIX_PLAN v1: "DESK-PLAN at A3 and A4
+    /// (deferred to here)"): every kept object ≥90% seen (DESK-PLAN's
+    /// visible lines) and its centre click reaching it (QA-RIG's presses), the
+    /// intercom opening the wheel from the reading view with the view kept
+    /// (DESK-PLAN's expect lines), and the run reaching its last probe (its
+    /// scripts and materials, QA-RIG's), so a run that stops early fails. Only
+    /// these: the run's other lines are their owners' (its camera lines
+    /// cam.play.tags; its LiberationSans probe TEXT-LANG's, known red until
+    /// #12), as qa.play.smoke and RUN-SAFE's checks (fa5a045) read theirs.
+    /// </summary>
     [GateCheck("cam.play.deskplan", Owner, GateKind.Play)]
-    public static GateResult DeskPlanWide() => GateResults.Require("cam.play.deskplan", Owner, "cam_desk.*");
+    public static GateResult DeskPlanWide() =>
+        All("cam.play.deskplan", "cam_desk.visible.*", "cam_desk.expect.*", "cam_desk.presses", "cam_desk.missingScripts.end", "cam_desk.materials.end");
 
     /// <summary>
     /// [BP] No per-frame allocation from DeskView, CameraFeel or CityView: the
@@ -250,4 +265,12 @@ public static class CamChecks
     /// <summary>[BP] The cam_gc run on the QA player tagged every camera move (its run's camera line; the editor runs' are cam.play.tags).</summary>
     [GateCheck("cam.bp.camera", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
     public static GateResult BuiltPlayerCamera() => GateResults.Require("cam.bp.camera", Owner, "bp.cam_*.camera*", true);
+
+    /// <summary>One play check over several result patterns: each must be measured, green and current (GateResults.Require for each).</summary>
+    private static GateResult All(string id, params string[] patterns)
+    {
+        List<GateResult> parts = patterns.Select(p => GateResults.Require(id, Owner, p)).ToList();
+        return GateResult.Of(id, Owner, parts.All(r => r.Pass), string.Join("; ", patterns.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
+                             string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
+    }
 }
