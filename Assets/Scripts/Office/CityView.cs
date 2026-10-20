@@ -26,7 +26,8 @@ using UnityEngine.UI;
 /// to it? GPT made the assets for it"): it comes into view with a gentle
 /// pan of the whole painting (its uvRect, from DeskConfigSO.cityParallax to
 /// 0 over citySettleSeconds; the painting cropped by as much each side), then
-/// follows the pointer a little (cityLookParallax), the flying traffic in
+/// follows the pointer a little (cityLookParallax, kept to what eases within
+/// the speed limit: CityParallax.LookShare), the flying traffic in
 /// front panning further (TrafficDepth): one painting and one layer of
 /// flyers, never the shader's depth reprojection, whose coarse depth map
 /// smeared and doubled the painted edges full screen; its sky, airship, bus
@@ -398,9 +399,9 @@ public sealed class CityView : MonoBehaviour
         _material.SetFloat(SecondsId, Time.time);
         _material.SetFloat(MotionId, moving ? 1f : 0f);
 
-        // The depth parallax: the sweep as it comes into view (kept small enough to ease within the speed limit), then the
-        // pointer's look; the pan follows them on a spring that never moves the nearest layer more than a pixel at 1080p a
-        // frame of a 30 fps capture (BUG-69), from where the city first shows.
+        // The depth parallax: the sweep as it comes into view, then the pointer's look (each kept small enough to ease within
+        // the speed limit: no crawl at it); the pan follows them on a spring that never moves the nearest layer more than a
+        // pixel at 1080p a frame of a 30 fps capture (BUG-69), from where the city first shows.
         float dt = Time.unscaledDeltaTime;
         _shown += IsOn ? dt : 0f;
         float cityPan = 0f;
@@ -410,7 +411,7 @@ public sealed class CityView : MonoBehaviour
             Mouse mouse = Mouse.current;
             float x = mouse != null && UnityEngine.Screen.width > 0 ? Mathf.Clamp(mouse.position.ReadValue().x / UnityEngine.Screen.width * 2f - 1f, -1f, 1f) : 0f;
             float sweep = CityParallax.SweepShare(config.cityParallax, config.citySettleSeconds, maxSpeed);
-            cityPan = sweep * CityLookTimeline.Sweep(_shown, config.citySettleSeconds) + x * config.cityLookParallax;
+            cityPan = sweep * CityLookTimeline.Sweep(_shown, config.citySettleSeconds) + x * CityParallax.LookShare(config.cityLookParallax, maxSpeed);
         }
         if (!_revealed || !moving)
         {

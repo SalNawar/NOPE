@@ -86,6 +86,55 @@ public class CityParallaxTests
     }
 
     [Test]
+    public void LookShare_FitsAnEdgeToEdgePointerMove_IntoTheSpring_SoItNeverCrawls()
+    {
+        float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
+        float look = CityParallax.LookShare(0.02f, speed);
+        Assert.Less(look, 0.02f, "the knob's 0.02 a side would crawl at the limit");
+        Assert.AreEqual(speed * CityParallax.SmoothSeconds, 2f * look, 1e-7f, "edge to edge: what the spring covers within the limit");
+        Assert.AreEqual(10.5f, 2f * look * PxPerShare, 1e-3f, "10.5 px of traffic at 1080p edge to edge (30 px a second over 0.35 s)");
+        Assert.AreEqual(0.0005f, CityParallax.LookShare(0.0005f, speed), "a small look is kept as it is");
+        Assert.AreEqual(0f, CityParallax.LookShare(0.02f, 0f), "no limit, no look");
+        Assert.AreEqual(0f, CityParallax.LookShare(0f, speed), "the knob off");
+    }
+
+    /// <summary>Plays the pointer crossing the screen with a look of <paramref name="look"/> a side at <paramref name="fps"/>: the worst move per 30 fps frame (px at 1080p), its fastest share of the limit and the seconds until it lies within 0.1 px of its target.</summary>
+    private static (float worst, float fastest, float settled) Look(float look, float fps)
+    {
+        float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
+        float dt = 1f / fps, shown = -look, velocity = 0f, worst = 0f, fastest = 0f, settled = -1f;
+        for (float t = dt; t < 12f && settled < 0f; t += dt)
+        {
+            float next = CityParallax.Follow(shown, ref velocity, look, speed, dt);
+            float step = System.Math.Abs(next - shown);
+            worst = System.Math.Max(worst, step * PxPerShare * fps / 30f);
+            fastest = System.Math.Max(fastest, step / dt / speed);
+            if (System.Math.Abs(look - next) * PxPerShare < 0.1f)
+                settled = t;
+            shown = next;
+        }
+        return (worst, fastest, settled);
+    }
+
+    [Test]
+    public void Follow_TheFittedLook_EasesInAboutASecond_AtAnyFrameRate_WhereTheKnobsCrawls()
+    {
+        float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
+        float fitted = CityParallax.LookShare(0.02f, speed);
+        foreach (float fps in new[] { 30f, 60f, 144f })
+        {
+            (float worst, float fastest, float settled) = Look(fitted, fps);
+            Assert.LessOrEqual(worst, 1f + 1e-4f, $"at most 1 px a 30 fps frame at {fps} fps");
+            Assert.Less(fastest, 0.8f, $"never at the limit at {fps} fps: an ease, not a crawl");
+            Assert.Greater(settled, 0.8f, $"an ease, not a jump, at {fps} fps");
+            Assert.Less(settled, 1.5f, $"lands in about 1.2 s at {fps} fps");
+        }
+        (_, float knobFastest, float knobSettled) = Look(0.02f, 30f);
+        Assert.Greater(knobFastest, 0.9f, "the knob's own 0.02 a side runs at the limit");
+        Assert.Greater(knobSettled, 5f, "and takes about 6.5 s (the crawl Needs Saleh 4 lists)");
+    }
+
+    [Test]
     public void Follow_APointerJumpEdgeToEdge_NeverOutrunsTheLimit_AndLandsOnTheTarget()
     {
         float speed = CityParallax.MaxSpeed(Span, Width, 1080f, Depth);
