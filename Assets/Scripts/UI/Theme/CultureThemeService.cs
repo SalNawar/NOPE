@@ -24,6 +24,13 @@ using UnityEngine.UI;
 /// Home, the report, the PC) keeps the player's language and its kit face
 /// (CultureChoice.Surface, UiText). The setting never locks and applies at
 /// once (<see cref="RefreshActive"/>; papers already printed keep their print).
+/// While it runs, a text made at run time with no font of its own gets the
+/// kit's body face, not TMP's default LiberationSans, and a scene's text
+/// still set in LiberationSans (the art scene's, Home's, the Title's) is set
+/// in the kit's body face as the scene is themed (BUG-38a: zero LiberationSans
+/// on screen; only the loaded objects change, never a scene file; the
+/// project's default is swapped for the session, never saved, and put back
+/// when it goes).
 /// Every decision is a tested rule (CultureCue.Pick, CultureChoice, UiStrings,
 /// ThemeRoles); this class only reads engine objects and sets them.
 /// </summary>
@@ -189,6 +196,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
     {
         if (Library == null || Library.NeutralTheme == null)
             return;
+        UseKitFaceAsDefault();
 
         string id = CultureCue.Pick(cues, out int matches);
         if (matches > 1)
@@ -267,6 +275,8 @@ public sealed class CultureThemeService : TimelineCueReceiver
     {
         SetGlobalFallback(null);
         ReleaseKeptFallbacks();
+        if (_kitFaceIsDefault)
+            TMP_Settings.defaultFontAsset = _projectDefaultFont;
         _fonts?.Dispose();
         if (Instance == this)
             Instance = null;
@@ -296,6 +306,40 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
     /// <summary>Culture fonts taken off the front while a scene still shows papers printed with them (a mid-day language change, CODE-80): kept in the list until the next place loads.</summary>
     private readonly List<TMP_FontAsset> _keptFallbacks = new List<TMP_FontAsset>();
+
+    /// <summary>TMP's default font before the kit's body face took its place (<see cref="UseKitFaceAsDefault"/>), put back when the service goes; null until then.</summary>
+    private TMP_FontAsset _projectDefaultFont;
+
+    /// <summary>True once the kit's body face is TMP's default for the session.</summary>
+    private bool _kitFaceIsDefault;
+
+    /// <summary>The kit's body face and its bold face (the loaded kit's), once found; null before.</summary>
+    private TMP_FontAsset _kitBody, _kitBodyBold;
+
+    /// <summary>
+    /// Makes the kit's body face TMP's default for the session (BUG-38a: a text
+    /// made at run time with no font of its own, a Home row or a hall label,
+    /// is never LiberationSans): the face of the UI kit a loaded scene refers
+    /// to (every scene's UI controller holds the kit). Once per session; the
+    /// project's default comes back in OnDestroy, and the settings asset is
+    /// never saved.
+    /// </summary>
+    private void UseKitFaceAsDefault()
+    {
+        if (_kitFaceIsDefault)
+            return;
+        foreach (UiKitSO kit in Resources.FindObjectsOfTypeAll<UiKitSO>())
+        {
+            if (kit == null || kit.bodyFont == null)
+                continue;
+            _projectDefaultFont = TMP_Settings.defaultFontAsset;
+            TMP_Settings.defaultFontAsset = kit.bodyFont;
+            _kitBody = kit.bodyFont;
+            _kitBodyBold = kit.bodyBoldFont != null ? kit.bodyBoldFont : kit.bodyFont;
+            _kitFaceIsDefault = true;
+            return;
+        }
+    }
 
     /// <summary>The culture fonts already prewarmed this session (RuntimeFonts.Prewarm runs once per font).</summary>
     private readonly HashSet<TMP_FontAsset> _prewarmed = new HashSet<TMP_FontAsset>();
@@ -406,9 +450,10 @@ public sealed class CultureThemeService : TimelineCueReceiver
             Apply(root);
     }
 
-    /// <summary>Applies the theme to every tag and compare controller under a root (inactive ones included).</summary>
+    /// <summary>Applies the theme to every tag and compare controller under a root (inactive ones included), and sets its texts still in LiberationSans in the kit's body face.</summary>
     private void Apply(GameObject root)
     {
+        RefontDefaults(root);
         foreach (ThemeTag tag in root.GetComponentsInChildren<ThemeTag>(true))
             ApplyTag(tag);
 
@@ -417,6 +462,20 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
         foreach (MatchLines lines in root.GetComponentsInChildren<MatchLines>(true))
             lines.ApplyTheme(Ink(ThemeRoleId.FindingMatch), Ink(ThemeRoleId.FindingDiffer), Ink(ThemeRoleId.Info), Ink(ThemeRoleId.Holding));
+    }
+
+    /// <summary>
+    /// Sets every text under <paramref name="root"/> (inactive ones included)
+    /// still in LiberationSans, or in no font, in the kit's body face (its bold
+    /// face when bold; BUG-38a). Nothing before the kit is found.
+    /// </summary>
+    private void RefontDefaults(GameObject root)
+    {
+        if (_kitBody == null)
+            return;
+        foreach (TMP_Text text in root.GetComponentsInChildren<TMP_Text>(true))
+            if (text.font == null || text.font.name.StartsWith("LiberationSans", System.StringComparison.Ordinal))
+                text.font = (text.fontStyle & FontStyles.Bold) != 0 ? _kitBodyBold : _kitBody;
     }
 
     /// <summary>

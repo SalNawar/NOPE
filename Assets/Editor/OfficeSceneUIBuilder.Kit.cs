@@ -19,6 +19,9 @@ using UnityEngine.UI;
 /// control's states swapped) with its label in the kit's face and ink. Kit
 /// graphics take the ThemePart.Kit tag: a culture's theme keeps their
 /// colours and changes only their font when its labels are in its own script.
+/// Last, every text of the office's scene still in TMP's default
+/// LiberationSans is set in the kit's body face (<see cref="KitRefont"/>,
+/// BUG-38a: zero LiberationSans).
 /// Part of <see cref="OfficeSceneUIBuilder"/>.
 /// P0-A carve (docs/pending/CARVE.md): the chrome's pieces are in .KitTray.cs
 /// (ChromePiece), the verdict ribbon and the citation slip in .Verdict.cs.
@@ -86,6 +89,25 @@ public static partial class OfficeSceneUIBuilder
         ApplyKitByRole(o, _kit.overlayScale);
         ApplyKitByRole(desktop.transform, _kit.desktopScale);
         KitStartBanner(desktop.transform.Find("StartMenu"));
+        KitRefont(desktop.gameObject.scene);
+    }
+
+    /// <summary>
+    /// The font sweep (BUG-38a: "the kit pass re-fonts every remaining
+    /// default-font text"): every text on every root of the office's scene
+    /// (the canvases, the desk's 3D words, the templates) still in TMP's
+    /// default LiberationSans is set in the kit's body face (SceneUiKit.Refont);
+    /// the number is logged so a build shows what it changed.
+    /// </summary>
+    private static void KitRefont(UnityEngine.SceneManagement.Scene scene)
+    {
+        if (!scene.IsValid())
+            return;
+        int changed = 0;
+        foreach (GameObject root in scene.GetRootGameObjects())
+            changed += SceneUiKit.Refont(root.transform);
+        if (changed > 0)
+            Debug.Log($"[TimeDesk] The kit pass set {changed} text(s) still in LiberationSans in the kit's body face (BUG-38a).");
     }
 
     /// <summary>Skins a host and remembers it (the role pass leaves it); returns the face.</summary>
