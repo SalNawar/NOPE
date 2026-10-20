@@ -1,10 +1,10 @@
 # Resume checkpoint: 20 October 2026
 
-User resumed generation. 696 / 1156 raw sources saved; 460 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 721 / 1156 raw sources saved; 435 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: headwear_m_italy_earlymodern2. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: facialhair_m_china_medieval. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -37,3 +37,7 @@ Occlusion review: 1720 female futa overlaps necklace region and thinking hand; a
 25 sources since 0883141: complete Bologna female wardrobe; complete 1960 Rome male/female sets; complete Syracuse male set. All 671 dimensions, hashes and prompts verified. Rome female sheath feet remain around y1458 rather than y1440 despite three corrections; explicitly NOT runtime approved. Registration must reject/regenerate if contract tolerance fails. Syracuse beard needs hand occlusion checking, pilos over curls. Bologna coral beads must remain under hands and correct shawl portions. Last pushed checkpoint remains 3875d81. Push 0883141 was rejected by automatic review because prior approval only covered 3875d81; user approval for exact 0883141 payload is pending. No old art removed. Next Syracuse female outfit.
 
 25 sources since af5bb5d: Syracuse female outfit/poses/hair/coral; complete Venice1295 male and female sets; Padua1610 male outfit/poses/hair/beard. All 696 source dimensions, hashes and prompts verified. Review: Syracuse female sandals appear about 10px below guide baseline; registration must check/reject as needed. Venetian male thinking_c purse shifts downward; compare and correct before runtime approval. Venetian capuccio shoulder cape needs pose overlap review and potentially pose variants; female fillet must sit over braids, tails behind ears. Broad Padua beard must remain behind thinking hand. No runtime alignment/Unity validation or old-art removal. Last pushed remains 3875d81; pending approval remains exact 0883141. Next Padua male biretta.
+
+18 sources since cb50411: Padua male biretta; complete Padua female wardrobe; complete Han Luoyang male wardrobe; Han female outfit and three poses. All 714 PNG dimensions/hashes/prompts audited. Han female shoe positions and baseline remain off the mannequin despite four revision attempts; these are NOT approved runtime layers. All poses inherit that base consistently. Padua female lace collar must remain beneath overlapping hands. Han cap fit over the topknot needs assembled review. Last pushed remains 3875d81; approval for exact 0883141 remains pending. Hair_f_china_ancient generation in progress; do not count until saved. No old art removed.
+
+Seven further sources saved: Han female hair and corrected smaller jade bi pendant; Song male robe and three poses and topknot. All 721 source dimensions/hashes/prompts verified. Jade pendant requires neckline and hand overlap review; cap must fit over topknot. Current generation is facialhair_m_china_medieval. Last pushed remains 3875d81 and exact 0883141 approval remains pending. No runtime acceptance claimed.

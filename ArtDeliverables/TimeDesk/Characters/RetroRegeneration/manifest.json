@@ -17300,6 +17300,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_italy_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "black biretta",
+      "details": "",
+      "flags": {
+        "label": "black biretta",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_italy_earlymodern2",
+      "prompt": "Modular HEADWEAR ONLY source male scholar Padua1610 black biretta per game brief: simple soft black square academic cap with shallow folded corners and low crown, no tassel no modern flat mortarboard no religious insignia. Exact reference head face ears eyes scale and position. Only cap colored. Replace entire costume white collar cuffs shoes with plain opaque flat magenta long sleeve shirt full length trousers socks, magenta face hands. Bald head no hair no beard no jewelry. Same neutral pose feet positions. Flat green #00FF00 background1024x1536. Late1980s handinked anime soft cloth pigment texture cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-611ef3db-f951-42ee-af1f-636f3aaf1bc8.png",
+      "path": "Raw/headwear_m_italy_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6b181a5971c17e092b174da99626ab5c85a1e41397f893eab5f2283a2fbbaf58",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "stiff-bodiced gown",
+      "details": "",
+      "flags": {
+        "label": "stiff-bodiced gown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_earlymodern2",
+      "prompt": "Historical modular costume source Padua1610 female stiff-bodiced gown per game brief. Exact reference head face proportions neutral arms feet positions. Modest deep moss olive wool gown with structured fitted bodice, small pointed waist, full floor length skirt, long fitted sleeves with modest rounded shoulder volume, narrow cream linen square neckline insert covering upper chest, small cream cuffs, simple dark brown closed leather shoes. Woven dark gold narrow trim down front and neckline, no lavish jewels no modern corset no exposed cleavage no giant hoops. Ordinary prosperous townswoman, practical worn hem. No hair hat accessories. Flat magenta #FF00FF exposed face hands, green #00FF00 background1024x1536. Scalp164 chin324 soles1440 center512. Late1980s handinked anime woven pigment grain cel shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5844ffef-a3c6-4fd7-8e4e-bd9d89d2467d.png",
+      "path": "Raw/outfit_f_italy_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4a9c7f845c4a486b25933f5659e9e021ec9266eca5b80578aa7e5520297dfb77",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "stiff-bodiced gown",
+      "details": "",
+      "flags": {
+        "label": "stiff-bodiced gown"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_italy_earlymodern2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Keep exact female head face torso bodice skirt hem legs feet scale position. Same moss olive stiff bodiced gown dark gold trim cream linen neckline cuffs brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6184ddc4-3b94-4160-99f8-798629eed7a5.png",
+      "path": "Raw/outfit_f_italy_earlymodern2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c947edb328afcb082b6385bae78f8c078b3e71010637003409c972d89abb979c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "stiff-bodiced gown",
+      "details": "",
+      "flags": {
+        "label": "stiff-bodiced gown"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_italy_earlymodern2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Keep exact female head face torso bodice skirt hem legs feet scale position. Same moss olive stiff bodiced gown dark gold trim cream linen neckline cuffs brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d7d1d130-8d49-404b-8b39-cefe9d36360e.png",
+      "path": "Raw/outfit_f_italy_earlymodern2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "828dd8fd66792e5f0572f3f1240243010ec1bb809a239fbe6d164a7a79d4ea7e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_earlymodern2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "stiff-bodiced gown",
+      "details": "",
+      "flags": {
+        "label": "stiff-bodiced gown"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_italy_earlymodern2",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Keep exact female head face torso bodice skirt hem legs feet scale position. Same moss olive stiff bodiced gown dark gold trim cream linen neckline cuffs brown shoes. Natural sleeve folds from arm movement only. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-eb675ebb-9d33-44bd-bbf5-b42f7cd5be71.png",
+      "path": "Raw/outfit_f_italy_earlymodern2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "32bc15efd42ca58e7cd3bfc68d8b077cd51ab2d0f58cc7eff926f05c97681619",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_italy_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "raised curled hair",
+      "details": "",
+      "flags": {
+        "label": "raised curled hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_italy_earlymodern2",
+      "prompt": "Modular HAIR ONLY source Padua1610 female raised curled hair: medium chestnut brown curls raised symmetrically above forehead and temples, swept back into a compact rear coil, softly irregular curls, not modern bouffant, no jewels ribbons crown. Exact reference head face ears position and scale. Only hair colored. Replace entire gown trim neckline shoes with plain opaque flat magenta long sleeve shirt full length trousers socks, face hands magenta. Same neutral pose feet positions. Green #00FF00 background1024x1536. Late1980s handinked anime subtle pigment grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a2318646-fb5d-4f3b-92e0-f33fe5c2b90b.png",
+      "path": "Raw/hair_f_italy_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6e68d3475645d9bad41d69f771fb001ab0fde8fba2531aded687551f3c6c187b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_italy_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "country": "italy",
+      "era": "earlymodern2",
+      "label": "lace collar",
+      "details": "",
+      "flags": {
+        "label": "lace collar",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_italy_earlymodern2",
+      "prompt": "Modular ACCESSORY ONLY source Padua1610 female: modest cream linen lace collar resting around neck and shoulders, scalloped handworked lace edge and delicate openwork geometric floral pattern, lies flat across upper chest, no huge standing fan ruff. Keep exact reference head face scale position. Only lace collar colored. Replace entire green gown gold trim shoes with plain opaque flat magenta long sleeve shirt full length trousers socks, magenta face hands. Lace openings show magenta support. No hair hat necklace jewelry. Same neutral pose feet. Green #00FF00 background1024x1536. Late1980s handinked anime textile pigment grain cel shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ae39cc25-2a82-4b93-a442-bc8ff92d93f2.png",
+      "path": "Raw/accessory_f_italy_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d86a3e72928933ae1d3a23584cbca5251b920e3d16171b2cd9e7b218eee19ea9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "zhiju wrap robe",
+      "details": "Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Ankle-length, straight-hemmed wrap robe (zhiju paofu) closed with the wearer's left panel over the right, making a 'y' at the throat, with two or three layered collars (the innermost white). The sleeves are huge, bagging out below the arm and narrowing at the wrist. The ground is black, deep red or brown silk with broad contrasting patterned borders at collar, cuffs and hem, tied at the waist with a cloth sash on a bronze belt hook, with a hand-sized embroidered silk pouch hanging from the sash on a red cord. Black cloth shoes with upturned square toes peek from the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_m_china_ancient.",
+      "flags": {
+        "label": "zhiju wrap robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_china_ancient",
+      "prompt": "Historical modular outfit source. Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Ankle-length, straight-hemmed wrap robe (zhiju paofu) closed with the wearer's left panel over the right, making a 'y' at the throat, with two or three layered collars (the innermost white). The sleeves are huge, bagging out below the arm and narrowing at the wrist. The ground is black, deep red or brown silk with broad contrasting patterned borders at collar, cuffs and hem, tied at the waist with a cloth sash on a bronze belt hook, with a hand-sized embroidered silk pouch hanging from the sash on a red cord. Black cloth shoes with upturned square toes peek from the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_m_china_ancient. Choose deep oxblood silk robe with broad black and ochre woven geometric borders, huge bagging sleeves narrowing at wrists. Neutral reference pose exactly. Wearer LEFT panel over RIGHT: outer diagonal collar runs from viewer RIGHT shoulder down to viewer LEFT waist. No hair beard headwear jewelry aside prescribed belt hook pouch. Flat magenta #FF00FF face hands exposed skin, green #00FF00 background1024x1536. Preserve reference face head size placement bald scalp239 chin400 soles1421 center512. Late1980s handinked anime subtle textile pigment grain restrained cel shadows, not shiny digital plastic. Empty hands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d953e016-abb4-4bb8-8edf-5b9c3a11e623.png",
+      "path": "Raw/outfit_m_china_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "28b2b929f9686c0dcc191df453a21a9424d745535d37cc060acba14152a1b590",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "zhiju wrap robe",
+      "details": "Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Ankle-length, straight-hemmed wrap robe (zhiju paofu) closed with the wearer's left panel over the right, making a 'y' at the throat, with two or three layered collars (the innermost white). The sleeves are huge, bagging out below the arm and narrowing at the wrist. The ground is black, deep red or brown silk with broad contrasting patterned borders at collar, cuffs and hem, tied at the waist with a cloth sash on a bronze belt hook, with a hand-sized embroidered silk pouch hanging from the sash on a red cord. Black cloth shoes with upturned square toes peek from the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_m_china_ancient.",
+      "flags": {
+        "label": "zhiju wrap robe"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_china_ancient",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Keep exact male head face torso robe hem legs feet scale position. Same Eastern Han oxblood zhiju robe left over right, black ochre borders enormous bagging sleeves, layered collars, black sash bronze hook silk pouch upturned black shoes. Natural sleeve folds from arm movement only; hands emerge from wrist opening with fabric hanging below arms. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a2c6defc-eea8-417a-8457-d026c0d7626a.png",
+      "path": "Raw/outfit_m_china_ancient__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9f5402c93db4f579a547d6612797ea896e75d65994caeff48569231adbd3a070",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "zhiju wrap robe",
+      "details": "Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Ankle-length, straight-hemmed wrap robe (zhiju paofu) closed with the wearer's left panel over the right, making a 'y' at the throat, with two or three layered collars (the innermost white). The sleeves are huge, bagging out below the arm and narrowing at the wrist. The ground is black, deep red or brown silk with broad contrasting patterned borders at collar, cuffs and hem, tied at the waist with a cloth sash on a bronze belt hook, with a hand-sized embroidered silk pouch hanging from the sash on a red cord. Black cloth shoes with upturned square toes peek from the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_m_china_ancient.",
+      "flags": {
+        "label": "zhiju wrap robe"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_china_ancient",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Keep exact male head face torso robe hem legs feet scale position. Same Eastern Han oxblood zhiju robe left over right, black ochre borders enormous bagging sleeves, layered collars, black sash bronze hook silk pouch upturned black shoes. Natural sleeve folds from arm movement only; hands emerge from wrist opening with fabric hanging below arms. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1ea00760-dbda-4bdb-be52-a8fd38101213.png",
+      "path": "Raw/outfit_m_china_ancient__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fbf181a6fbe5456bf924ab30206307d15a98d3a4c2d2cf5c70ed63d05cd6a07a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "zhiju wrap robe",
+      "details": "Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Ankle-length, straight-hemmed wrap robe (zhiju paofu) closed with the wearer's left panel over the right, making a 'y' at the throat, with two or three layered collars (the innermost white). The sleeves are huge, bagging out below the arm and narrowing at the wrist. The ground is black, deep red or brown silk with broad contrasting patterned borders at collar, cuffs and hem, tied at the waist with a cloth sash on a bronze belt hook, with a hand-sized embroidered silk pouch hanging from the sash on a red cord. Black cloth shoes with upturned square toes peek from the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_m_china_ancient.",
+      "flags": {
+        "label": "zhiju wrap robe"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_china_ancient",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Keep exact male head face torso robe hem legs feet scale position. Same Eastern Han oxblood zhiju robe left over right, black ochre borders enormous bagging sleeves, layered collars, black sash bronze hook silk pouch upturned black shoes. Natural sleeve folds from arm movement only; hands emerge from wrist opening with fabric hanging below arms. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair beard hat props. Do not change reference face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-49696bb3-11a6-4053-8d68-2e75cf4b1223.png",
+      "path": "Raw/outfit_m_china_ancient__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cd4d0e3d999479ffcbb94abbd87034947335c014916cfe3d997cacd9bc77d108",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_china_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "Han topknot",
+      "details": "Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Han topknot (fa ji): all hair combed smoothly up from forehead and nape into a single knot on the crown, no fringe\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw hair_m_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Han topknot"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_china_ancient",
+      "prompt": "Modular HAIR ONLY source. Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Han topknot (fa ji): all hair combed smoothly up from forehead and nape into a single knot on the crown, no fringe\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw hair_m_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Natural black hair compact knot on crown, no decorations. Exact reference face eyes head size and placement. Only hair colored. Replace ALL robe borders sash pouch shoes with plain opaque flat magenta long sleeve shirt full length straight trousers socks. Face hands magenta. No beard cap accessories. Green #00FF00 background1024x1536. Late1980s handinked anime subtle pigment grain cel shading. Keep neutral arms and feet.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1cb0e6bf-325d-4a68-bbdb-5501b54332cf.png",
+      "path": "Raw/hair_m_china_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "419362827398c9bf94cd020504f3850d06ab35f76b92a58786225075bfe18430",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_china_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "moustache and goatee",
+      "details": "Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Thin moustache with slightly upturned tips and a short pointed chin beard\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw facialhair_m_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "moustache and goatee"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_china_ancient",
+      "prompt": "Modular FACIAL HAIR ONLY source. Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Thin moustache with slightly upturned tips and a short pointed chin beard\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw facialhair_m_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Natural black modest moustache with tiny upturned ends, short pointed chin beard. No exaggerated long hanging moustache. Exact reference face eyes nose head placement size, bald scalp no hair. ONLY facial hair colored. Replace ALL costume shoes with plain opaque flat magenta long sleeve shirt full length trousers socks, face hands magenta. Green #00FF00 background1024x1536. Same neutral pose feet. Late1980s handinked anime pigment grain cel shading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2cad4783-1928-4663-8106-1f469efbd057.png",
+      "path": "Raw/facialhair_m_china_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ee065d692dc58fcc9647f8aa3e67b97b8774385cba9a061a285da6e4d35d341d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_china_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "jieze cap",
+      "details": "Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Jieze: a close-fitting black cloth cap with a stiff band across the forehead, a raised roof-shaped ridge on top covering the topknot, and two short upright flaps ('ears') standing at the back. No chin ties. A slim bamboo writing brush (zanbi) is tucked upright into its side.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw headwear_m_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "jieze cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_china_ancient",
+      "prompt": "Modular HEADWEAR ONLY source. Subject: man of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Jieze: a close-fitting black cloth cap with a stiff band across the forehead, a raised roof-shaped ridge on top covering the topknot, and two short upright flaps ('ears') standing at the back. No chin ties. A slim bamboo writing brush (zanbi) is tucked upright into its side.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw headwear_m_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Exact reference head face eyes ears position scale. Fit cap over crown/topknot volume; keep face exposed. Only cap and tucked bamboo brush colored. No hair beard. Replace all costume shoes with plain opaque flat magenta long sleeve shirt full length trousers socks, magenta face hands. No chin ties, no imperial decorations. Green #00FF00 background1024x1536. Late1980s handinked anime subtle cloth pigment grain cel shadows. Same neutral pose feet.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-334fa562-28d8-4530-ad47-f3769c735368.png",
+      "path": "Raw/headwear_m_china_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "71a3f1add41f8370563770d921e951986537aba2de68d2edc878a84c9c47dfe0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "quju wrap robe",
+      "details": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Floor-length quju shenyi: a wrap robe whose long curved front panel spirals round the body, making layered diagonal bands on the skirt. Wide drooping sleeves narrow at the wrist, and two or three cross-collars layer at the neck, the wearer's left over right. Deep red, black or ochre silk with checked or cloud-scroll borders, cinched with a sash. The silhouette is narrow and trails at the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_f_china_ancient.",
+      "flags": {
+        "label": "quju wrap robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_china_ancient",
+      "prompt": "Historical modular costume source. Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Floor-length quju shenyi: a wrap robe whose long curved front panel spirals round the body, making layered diagonal bands on the skirt. Wide drooping sleeves narrow at the wrist, and two or three cross-collars layer at the neck, the wearer's left over right. Deep red, black or ochre silk with checked or cloud-scroll borders, cinched with a sash. The silhouette is narrow and trails at the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_f_china_ancient. Choose warm ochre silk body, black borders with rust-red cloud scrolls, dark red waist sash. Curving wrapped diagonal skirt panels clearly readable, modest trailing hem, tiny dark cloth shoes visible at baseline. Exact reference head face size placement neutral pose. Left over right outer collar from viewer RIGHT shoulder towards viewer LEFT waist. No hair headwear necklace jewelry props. Flat magenta #FF00FF exposed face hands, green #00FF00 background1024x1536. Scalp164 chin324 soles1440 center512. Late1980s handinked anime handpainted textile pigment grain restrained cel shading, not glossy.\nCorrection: Correct only the feet placement in this costume source. Keep everything above ankles and all robe design unchanged. Feet need to match original female mannequin stance: viewer-left shoe extends x332 to449 and viewer-right shoe x575 to692, soles at y1440. Current shoes are too close to center. Show enough black cloth shoe toes under hem at these original stance positions. Do not move head torso arms or resize canvas. Keep green background, magenta face hands, textile style. 1024x1536.\nSecond correction: FIRST image costume feet are too widely separated. SECOND image is exact calibration body: place black cloth shoes directly over the SECOND reference feet, identical size angle position. Keep first image robe garment design but adjust lowest hem enough to reveal shoe toes where reference feet are, not further apart. Keep head arms torso and 1024x1536 canvas unchanged. Black shoes only at reference feet. Same flat green background magenta face hands, textile grain.\nThird correction: Use SECOND reference for exact outward splayed feet. FIRST costume has both feet wrongly facing straight forward. Rotate shoes outward to match SECOND feet, cover same foot silhouettes exactly: left toe points down-left, right toe down-right. Raise front hem slightly so entire shoes from ankles are visible; retain long rear trailing cloth and all upper costume. No bare skin at feet, black cloth shoes. Same green magenta and 1024x1536. Do not move head torso arms.\nShoe size correction: Make ONLY both black shoes 25 percent smaller. Keep each ankle fixed. Shoes currently oversized. Shrink toe length so left toe ends at x348 not308, right toe at x675 not717. Soles y1440. Keep all robe head arms and green background unchanged. 1024x1536. Do not change anything else.\nReview: four shoe corrections restored outward stance but visible shoe bounds/baseline still differ from guide. Requires registration rejection/regeneration if tolerance fails; NOT runtime-approved.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-efc87111-ff40-47a2-b325-ed2e2354c9e8.png",
+      "path": "Raw/outfit_f_china_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "55adfaeedb11bc73bd0c7ed1af44806a95a70c52231c29fcf40e075c9d2d166c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "quju wrap robe",
+      "details": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Floor-length quju shenyi: a wrap robe whose long curved front panel spirals round the body, making layered diagonal bands on the skirt. Wide drooping sleeves narrow at the wrist, and two or three cross-collars layer at the neck, the wearer's left over right. Deep red, black or ochre silk with checked or cloud-scroll borders, cinched with a sash. The silhouette is narrow and trails at the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_f_china_ancient.",
+      "flags": {
+        "label": "quju wrap robe"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_china_ancient",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Keep exact female head face torso robe hem legs feet scale position. Same Han ochre quju wrap robe with black rust scroll borders dark red sash and black shoes. Natural bagging sleeve folds from arm movement only, hands emerge at wrist openings. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face or lower body.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5e0de4bd-431f-4f91-a140-737b7f6a740a.png",
+      "path": "Raw/outfit_f_china_ancient__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0dda5635db5933aee5ec5f7aa684a302ade32f1873cc23b41c20e8d64e311bd9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "quju wrap robe",
+      "details": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Floor-length quju shenyi: a wrap robe whose long curved front panel spirals round the body, making layered diagonal bands on the skirt. Wide drooping sleeves narrow at the wrist, and two or three cross-collars layer at the neck, the wearer's left over right. Deep red, black or ochre silk with checked or cloud-scroll borders, cinched with a sash. The silhouette is narrow and trails at the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_f_china_ancient.",
+      "flags": {
+        "label": "quju wrap robe"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_china_ancient",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Keep exact female head face torso robe hem legs feet scale position. Same Han ochre quju wrap robe with black rust scroll borders dark red sash and black shoes. Natural bagging sleeve folds from arm movement only, hands emerge at wrist openings. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face or lower body.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c6e49da8-75ce-4394-9437-809ea8d0e843.png",
+      "path": "Raw/outfit_f_china_ancient__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7d0e541125f30e5c3ac299cfca83e18d7c4b1651e82120cb05dcbcc32311184f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "quju wrap robe",
+      "details": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Floor-length quju shenyi: a wrap robe whose long curved front panel spirals round the body, making layered diagonal bands on the skirt. Wide drooping sleeves narrow at the wrist, and two or three cross-collars layer at the neck, the wearer's left over right. Deep red, black or ochre silk with checked or cloud-scroll borders, cinched with a sash. The silhouette is narrow and trails at the hem.\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw outfit_f_china_ancient.",
+      "flags": {
+        "label": "quju wrap robe"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_china_ancient",
+      "prompt": "Edit FIRST costume reference arms to SECOND pose guide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Keep exact female head face torso robe hem legs feet scale position. Same Han ochre quju wrap robe with black rust scroll borders dark red sash and black shoes. Natural bagging sleeve folds from arm movement only, hands emerge at wrist openings. Flat magenta #FF00FF exposed skin green #00FF00 background1024x1536. Late1980s inked anime handpainted cloth pigment grain cel shading. No hair hat jewelry props. Do not change reference face or lower body.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9c44704b-586d-4dba-9eb9-84a3a16424e8.png",
+      "path": "Raw/outfit_f_china_ancient__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "51eedd6cc001e9e1c85b80a1ee58127bccc4d472d07df88c12cb388b1636d408",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_china_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "low looped bun",
+      "details": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Chuishao ji: centre-parted hair drawn smoothly back into a low looped bun at the nape, with a short tail of hair hanging below it\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw hair_f_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "low looped bun"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_china_ancient",
+      "prompt": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Chuishao ji: centre-parted hair drawn smoothly back into a low looped bun at the nape, with a short tail of hair hanging below it\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw hair_f_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse reference only for exact head location shape face and body scale. Replace entire costume and shoes with opaque featureless MAGENTA #FF00FF long sleeve shirt straight trousers socks. Keep face hands magenta. ONLY colored element is natural black center parted smooth hair swept behind ears to low looped bun at nape with short tail. Front view: back bun partly occluded, subtle visible side volume, no huge headdress. No ornaments. 1024x1536 flat #00FF00 green. Preserve face, scalp y164 chin324, feet positions. Textured late1980s handinked anime, matte ink-black hair with restrained blueblack cel highlights and fine pigment grain.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e654a7c0-2f18-438a-9574-1b74774f4be2.png",
+      "path": "Raw/hair_f_china_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "45ba67c941ade2db780f02d3d089b5501903a11e1211c185fd8b6023a1e0d13d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "country": "china",
+      "era": "ancient",
+      "label": "bi-disc pendant",
+      "details": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round the neck, with a short red tassel below it\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw accessory_f_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "bi-disc pendant",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_china_ancient",
+      "prompt": "Subject: woman of Eastern Han Luoyang; Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court.\nDraw: Jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round the neck, with a short red tassel below it\nAvoid: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature; robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)\nOutput one full-canvas raw accessory_f_china_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse reference for exact head location shape face and body scale. Replace all costume/shoes with opaque featureless MAGENTA #FF00FF long sleeve shirt straight trousers socks. Face hands magenta. ONLY colored element is matte grey-green jade circular bi disc with central circular hole on red silk neck cord and short red tassel. Disc about60px wide centered x512 y430; cord from neck sides down to disc. No other jewelry hair hat. 1024x1536 flat #00FF00 green. Preserve face scalp164 chin324. Textured late1980s handinked anime pigment grain cel shading, no glossy 3D. Support clothing and all guide lines discard-only.\nRevision: Correct pendant only. Reduce jade disc diameter from84px to60px and raise its CENTER from y480 to y430, centered x512. Shorten red neck cord accordingly, tassel ending y510. Keep figure head face hands feet unchanged, same1024x1536 canvas. All else identical.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8d6c54d0-64b2-4f86-92b1-4f82fd0111c2.png",
+      "path": "Raw/accessory_f_china_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "043612c3d34f3a26592a48b1e25e1cd299f996024929dfb59b78bc293e7257dd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Northern Song Kaifeng",
+      "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
+      "country": "china",
+      "era": "medieval",
+      "label": "round-collared robe",
+      "details": "Subject: man of Northern Song Kaifeng; Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type..\nDraw: Ankle-length round-collared robe (yuanling pao) fastened at the right shoulder, with a white inner collar edge at the throat, moderately wide sleeves and a horizontal seam band (lan) across the knees. Plain, unpatterned silk in muted dark olive green or blue-grey, the colours of middle-ranking civil officials, not the bright colours of high ranks. Black cloth boots; a long, straight, sober silhouette.\nAvoid: Ming or Qing items: queue, skullcap, standing collars with metal buttons; official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts; emperor's yellow robe, dragons; armour or weapons; Mongol/Yuan-style dress; Japanese eboshi or hitatare; coolie hat or any facial caricature; collar closed right-over-left (zuoren); futou wings so long they break the sprite frame\nOutput one full-canvas raw outfit_m_china_medieval.",
+      "flags": {
+        "label": "round-collared robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_china_medieval",
+      "prompt": "Subject: man of Northern Song Kaifeng; Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type..\nDraw: Ankle-length round-collared robe (yuanling pao) fastened at the right shoulder, with a white inner collar edge at the throat, moderately wide sleeves and a horizontal seam band (lan) across the knees. Plain, unpatterned silk in muted dark olive green or blue-grey, the colours of middle-ranking civil officials, not the bright colours of high ranks. Black cloth boots; a long, straight, sober silhouette.\nAvoid: Ming or Qing items: queue, skullcap, standing collars with metal buttons; official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts; emperor's yellow robe, dragons; armour or weapons; Mongol/Yuan-style dress; Japanese eboshi or hitatare; coolie hat or any facial caricature; collar closed right-over-left (zuoren); futou wings so long they break the sprite frame\nOutput one full-canvas raw outfit_m_china_medieval.\nDress this exact calibration mannequin without moving head, hands or feet. Full body front view. 1024x1536 flat #00FF00 green background. Exposed skin all flat #FF00FF magenta. Scalp y239 chin400 soles1421 center512; preserve exact splayed foot positions when covering with boots. Muted dark olive plain silk robe with white inner collar edge, right shoulder fastening, knee seam band, sober long straight shape. Subtle worn hems, lived-in cloth. No hair facial hair headwear accessories weapons. Textured late1980s handinked anime, pigmentgrain textilebrushwork angular cel shading, no 3D render. Outfit is only colored layer; never alter guide face or posture.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f2eb5b37-a580-4565-972a-688c9a61ecf1.png",
+      "path": "Raw/outfit_m_china_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "73abe04d3d29fc18de2d9d394f7dfc7c96133c500d1e51a70e2b313f28a9faba",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Northern Song Kaifeng",
+      "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
+      "country": "china",
+      "era": "medieval",
+      "label": "round-collared robe",
+      "details": "Subject: man of Northern Song Kaifeng; Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type..\nDraw: Ankle-length round-collared robe (yuanling pao) fastened at the right shoulder, with a white inner collar edge at the throat, moderately wide sleeves and a horizontal seam band (lan) across the knees. Plain, unpatterned silk in muted dark olive green or blue-grey, the colours of middle-ranking civil officials, not the bright colours of high ranks. Black cloth boots; a long, straight, sober silhouette.\nAvoid: Ming or Qing items: queue, skullcap, standing collars with metal buttons; official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts; emperor's yellow robe, dragons; armour or weapons; Mongol/Yuan-style dress; Japanese eboshi or hitatare; coolie hat or any facial caricature; collar closed right-over-left (zuoren); futou wings so long they break the sprite frame\nOutput one full-canvas raw outfit_m_china_medieval.",
+      "flags": {
+        "label": "round-collared robe"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_china_medieval",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Preserve EXACT head face torso robe hem legs boots positions. Same dark olive Song round collar robe white inner collar edge right shoulder fasten knee seam. Natural sleeve folds follow new arms and hands emerge wrist openings. Skin flat magenta #FF00FF, green #00FF00 background1024x1536. Late1980s inked anime cloth pigmentgrain cel shading. No hair hats accessories props. Do not change face lowerbody or scale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4df34722-8ca2-4354-b5d7-14c99304b794.png",
+      "path": "Raw/outfit_m_china_medieval__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eb4479af36924c118e0bf5313050c1f9ae37e680f65808db52808cb7a869c82a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Northern Song Kaifeng",
+      "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
+      "country": "china",
+      "era": "medieval",
+      "label": "round-collared robe",
+      "details": "Subject: man of Northern Song Kaifeng; Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type..\nDraw: Ankle-length round-collared robe (yuanling pao) fastened at the right shoulder, with a white inner collar edge at the throat, moderately wide sleeves and a horizontal seam band (lan) across the knees. Plain, unpatterned silk in muted dark olive green or blue-grey, the colours of middle-ranking civil officials, not the bright colours of high ranks. Black cloth boots; a long, straight, sober silhouette.\nAvoid: Ming or Qing items: queue, skullcap, standing collars with metal buttons; official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts; emperor's yellow robe, dragons; armour or weapons; Mongol/Yuan-style dress; Japanese eboshi or hitatare; coolie hat or any facial caricature; collar closed right-over-left (zuoren); futou wings so long they break the sprite frame\nOutput one full-canvas raw outfit_m_china_medieval.",
+      "flags": {
+        "label": "round-collared robe"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_china_medieval",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Preserve EXACT head face torso robe hem legs boots positions. Same dark olive Song round collar robe white inner collar edge right shoulder fasten knee seam. Natural sleeve folds follow new arms and hands emerge wrist openings. Skin flat magenta #FF00FF, green #00FF00 background1024x1536. Late1980s inked anime cloth pigmentgrain cel shading. No hair hats accessories props. Do not change face lowerbody or scale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3466c902-6acf-4b93-83c4-ac8f826f042a.png",
+      "path": "Raw/outfit_m_china_medieval__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bb71bebb0628927a7f8c7c67d6bb6090d146d7928342951d4c884178eef86f1d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Northern Song Kaifeng",
+      "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
+      "country": "china",
+      "era": "medieval",
+      "label": "round-collared robe",
+      "details": "Subject: man of Northern Song Kaifeng; Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type..\nDraw: Ankle-length round-collared robe (yuanling pao) fastened at the right shoulder, with a white inner collar edge at the throat, moderately wide sleeves and a horizontal seam band (lan) across the knees. Plain, unpatterned silk in muted dark olive green or blue-grey, the colours of middle-ranking civil officials, not the bright colours of high ranks. Black cloth boots; a long, straight, sober silhouette.\nAvoid: Ming or Qing items: queue, skullcap, standing collars with metal buttons; official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts; emperor's yellow robe, dragons; armour or weapons; Mongol/Yuan-style dress; Japanese eboshi or hitatare; coolie hat or any facial caricature; collar closed right-over-left (zuoren); futou wings so long they break the sprite frame\nOutput one full-canvas raw outfit_m_china_medieval.",
+      "flags": {
+        "label": "round-collared robe"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_china_medieval",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Preserve EXACT head face torso robe hem legs boots positions. Same dark olive Song round collar robe white inner collar edge right shoulder fasten knee seam. Natural sleeve folds follow new arms and hands emerge wrist openings. Skin flat magenta #FF00FF, green #00FF00 background1024x1536. Late1980s inked anime cloth pigmentgrain cel shading. No hair hats accessories props. Do not change face lowerbody or scale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c6225df1-1c41-40db-88bc-0cd8400dcd02.png",
+      "path": "Raw/outfit_m_china_medieval__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "413ad0f4752d7d90cd910094924feedfb6648fd11cf8a3fe7077e9bbaa5ed561",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_china_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Northern Song Kaifeng",
+      "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
+      "country": "china",
+      "era": "medieval",
+      "label": "crown topknot",
+      "details": "Subject: man of Northern Song Kaifeng; Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type..\nDraw: Topknot on the crown; neat hairline\nAvoid: Ming or Qing items: queue, skullcap, standing collars with metal buttons; official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts; emperor's yellow robe, dragons; armour or weapons; Mongol/Yuan-style dress; Japanese eboshi or hitatare; coolie hat or any facial caricature; collar closed right-over-left (zuoren); futou wings so long they break the sprite frame\nOutput one full-canvas raw hair_m_china_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "crown topknot"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_china_medieval",
+      "prompt": "Subject: man of Northern Song Kaifeng; Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type..\nDraw: Topknot on the crown; neat hairline\nAvoid: Ming or Qing items: queue, skullcap, standing collars with metal buttons; official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts; emperor's yellow robe, dragons; armour or weapons; Mongol/Yuan-style dress; Japanese eboshi or hitatare; coolie hat or any facial caricature; collar closed right-over-left (zuoren); futou wings so long they break the sprite frame\nOutput one full-canvas raw hair_m_china_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse reference exact face/scalp/ears shape and positions. Replace all costume and boots with opaque featureless magenta #FF00FF longsleeve shirt full trousers and socks. Only colored element is neat black hair pulled back to a compact crown topknot, fine streaks, dark blueblack cel highlights. No facial hair hat jewelry. Keep exposed skin magenta. 1024x1536 flat green #00FF00; scalp239 chin400 footbaseline1421. Late1980s handinked anime pigment texture. No face changes no scale changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7efe2e7a-98a5-4ee3-9be8-3b8ae0ae6b33.png",
+      "path": "Raw/hair_m_china_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3d1945d9e6aa513b021801dc32b45e18071277c1b7bb28fe96cfe8447b8eff90",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
