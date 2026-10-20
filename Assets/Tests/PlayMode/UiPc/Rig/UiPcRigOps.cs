@@ -23,7 +23,9 @@ using UnityEngine.UI;
 /// <item><c>uipcRoom</c>: a click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</item>
 /// <item><c>uipcBezel</c>: a click on the bezel leaves the PC (R3/R4: "press Q or click the bezel").</item>
 /// <item><c>uipcPowerOn</c>: a right-click and Esc a few frames after Q, while the picture still powers on (the desktop's clicks wait for it): each is taken by the desktop, the PC stays open and Esc brings Settings forward, with full motion and with Reduced Motion, and the player's motion choice is put back whatever the passes did (R3/R4: "Esc = Settings everywhere").</item>
-/// <item><c>uipcFullMotion</c>: before the session records pc_open and pc_close, Reduced Motion is off, so the recordings show the CRT line.</item>
+/// <item><c>uipcFullMotion</c>: before the session records the PC's moves (pc_open, pc_close, pc_reverse_open, pc_reverse_close), Reduced Motion is off, so the recordings show the CRT line.</item>
+/// <item><c>uipcReverseOpen</c>: Q, then Q again 2 frames later, during the power-on: the frame fades out from where it is (BUG-32c, F1; CrtPower.Resume as PcFrame draws it).</item>
+/// <item><c>uipcReverseClose</c>: Q, then a click on the office's PC 2 frames later, during the collapse: the closing frame takes no click, so the PC opens again, and the picture powers on from the same line (BUG-32c, F1).</item>
 /// <item><c>uipcTray</c>: the tray clock reads the shift clock's time over today's date, the CRT clock plate is gone, no credits in the tray (BUG-20a, 21a).</item>
 /// <item><c>uipcWindows</c>: every app opened from the Start menu, and the F1 card (at least 8 windows); the taskbar names each open window by a button or counts it behind the chevron, nothing over the tray, and the chevron brings each waiting window forward in turn (BUG-21a).</item>
 /// <item><c>uipcOrder</c>: a double-click on an orderable Orders card places exactly one order, charged once (BUG-58a, UI-25).</item>
@@ -50,6 +52,8 @@ public static class UiPcRigOps
         QaRunner.RegisterOp("uipcBezel", Bezel);
         QaRunner.RegisterOp("uipcPowerOn", PowerOn);
         QaRunner.RegisterOp("uipcFullMotion", FullMotion);
+        QaRunner.RegisterOp("uipcReverseOpen", ReverseOpen);
+        QaRunner.RegisterOp("uipcReverseClose", ReverseClose);
         QaRunner.RegisterOp("uipcWindows", Windows);
         QaRunner.RegisterOp("uipcOrder", Order);
         QaRunner.RegisterOp("uipcEnter", Enter);
@@ -116,16 +120,20 @@ public static class UiPcRigOps
     /// review of fix round 2 found the keys gated on the raycaster the
     /// power-on holds off, so the office's back-out closed the PC.
     /// Reduced Motion is a saved player preference (its setter writes
-    /// PlayerPrefs), so the op always puts the player's choice back: each pass
-    /// runs under <see cref="QaRunner.Guard"/>, so a wait that times out (or
-    /// anything else that throws) fails that pass's assert with the
-    /// exception's text instead of ending the run inside the op, and the
-    /// choice is restored in a finally. Left on, it would make the next
-    /// session record pc_open and pc_close as the Reduced fade (uipcFullMotion
-    /// fails that). Not covered: a run stopped from outside during a pass (its
-    /// deadline, a harness reset, play mode left, the player closed) stops
-    /// this op without running the finally; that needs QA-RIG's run-level
-    /// cleanup (docs/pending/UI-PC.md, Requests).
+    /// PlayerPrefs), so the passes run under <see cref="EachMotion"/>: a wait
+    /// that times out (or anything else that throws) fails that pass's assert
+    /// with the exception's text instead of ending the run inside the op, the
+    /// other pass still runs, and the player's choice is always put back
+    /// (tested offline with passes that throw: UiPcRigTests). Left on, it
+    /// would make the next session record pc_open and pc_close as the Reduced
+    /// fade (uipcFullMotion fails that). The step's <c>f</c>, when set, is
+    /// each wait's timeout in seconds (<see cref="WaitSeconds"/> otherwise, as
+    /// QaRunner's waiting ops read it): a tiny one forces the timeouts, for the
+    /// one-off stopped-pass run (docs/pending/UI-PC.md, RESULT recipe 18).
+    /// Not covered: a run stopped from outside during a pass (its deadline, a
+    /// harness reset, play mode left, the player closed) stops this op
+    /// without disposing it, so the restore does not run; that needs QA-RIG's
+    /// run-level cleanup (docs/pending/UI-PC.md, Requests).
     /// </summary>
     private static IEnumerator PowerOn(QaRunner runner, QaStep step)
     {
@@ -143,23 +151,46 @@ public static class UiPcRigOps
         glass.GetWorldCorners(g);
         yield return runner.Input.MoveTo((g[0] + g[2]) / 2f, 4); // over the glass's middle (the overlay canvas's world space is the screen)
 
-        bool chosen = MotionPreference.Reduced;
+        float timeout = step.f > 0f ? step.f : WaitSeconds;
+        yield return EachMotion(() => MotionPreference.Reduced, reduced => MotionPreference.Reduced = reduced,
+            reduced => PowerOnPass(runner, PowerOnId(reduced), view, keys, settings, timeout),
+            (reduced, e) => runner.Assert(PowerOnId(reduced), Owner, false, $"stopped: {e.GetType().Name}: {e.Message}",
+                "the pass did not finish (a wait timed out or it threw), so nothing was measured; Reduced Motion is put back all the same"));
+    }
+
+    /// <summary>The assert id of uipcPowerOn's pass at <paramref name="reduced"/>.</summary>
+    private static string PowerOnId(bool reduced) => reduced ? "poweron.reduced" : "poweron.full";
+
+    /// <summary>
+    /// uipcPowerOn's two passes: <paramref name="pass"/> with full motion, then
+    /// with Reduced Motion (<paramref name="write"/> sets the saved preference
+    /// before each), and the setting <paramref name="read"/> gave at the start
+    /// (the player's choice) always put back. Each pass runs under
+    /// <see cref="QaRunner.Guard"/>, so an exception in it (QaGame.Until's
+    /// TimeoutException) ends that pass only: it goes to
+    /// <paramref name="stopped"/> with the pass's setting, and the next pass
+    /// still runs, so both passes' asserts are always recorded. The restore is
+    /// in a finally, so it also runs when the op is disposed during a pass.
+    /// Pure (the preference and the asserts are the caller's), so UiPcRigTests
+    /// drives it offline, as the runner does, with passes that throw.
+    /// </summary>
+    public static IEnumerator EachMotion(System.Func<bool> read, System.Action<bool> write, System.Func<bool, IEnumerator> pass, System.Action<bool, System.Exception> stopped)
+    {
+        bool chosen = read();
         try
         {
             foreach (bool reduced in new[] { false, true })
             {
-                MotionPreference.Reduced = reduced;
-                string id = reduced ? "poweron.reduced" : "poweron.full";
-                string stopped = null;
-                yield return QaRunner.Guard(PowerOnPass(runner, id, view, keys, settings), e => stopped = $"{e.GetType().Name}: {e.Message}");
-                if (stopped != null)
-                    runner.Assert(id, Owner, false, $"stopped: {stopped}",
-                        "the pass did not finish (a wait timed out or it threw), so nothing was measured; Reduced Motion is put back all the same");
+                write(reduced);
+                System.Exception error = null;
+                yield return QaRunner.Guard(pass(reduced), e => error = e);
+                if (error != null)
+                    stopped(reduced, error);
             }
         }
         finally
         {
-            MotionPreference.Reduced = chosen; // the player's choice, never left as a pass set it
+            write(chosen); // the player's choice, never left as a pass set it
         }
     }
 
@@ -173,12 +204,13 @@ public static class UiPcRigOps
     /// taken by the desktop in its own frame (DesktopKeyboard stamps every
     /// back-out with <see cref="DesktopKeyboard.EscapeTakenFrame"/>), so a
     /// press the rig failed to deliver fails instead of passing for nothing;
-    /// the PC must stay open and Settings come forward.
+    /// the PC must stay open and Settings come forward. Each wait gives up
+    /// after <paramref name="timeout"/> seconds (a TimeoutException).
     /// </summary>
-    private static IEnumerator PowerOnPass(QaRunner runner, string id, OfficeViewController view, DesktopKeyboard keys, DesktopWindow settings)
+    private static IEnumerator PowerOnPass(QaRunner runner, string id, OfficeViewController view, DesktopKeyboard keys, DesktopWindow settings, float timeout)
     {
         yield return runner.Input.Tap(Key.Q); // leave the PC (Q is one of its two ways out)
-        yield return QaGame.Until(() => !PcOpen(view) && !PcFrame.PictureMoving, 3f, "the PC frame to close");
+        yield return QaGame.Until(() => !PcOpen(view) && !PcFrame.PictureMoving, timeout, "the PC frame to close");
         if (settings.IsOpen)
             settings.Close(); // Settings must come forward by this Esc, not stay from an earlier step
         yield return runner.Input.Tap(Key.Q, 1); // open it: Tap returns on the frame after the one that took the press
@@ -196,7 +228,7 @@ public static class UiPcRigOps
         bool escEarly = PcFrame.PictureMoving;
         bool escTaken = keys.EscapeTakenFrame == Time.frameCount; // the desktop took this Esc
         InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState());
-        yield return QaGame.Until(() => !PcFrame.PictureMoving, 3f, "the PC's picture to be whole");
+        yield return QaGame.Until(() => !PcFrame.PictureMoving, timeout, "the PC's picture to be whole");
         yield return QaGame.Frames(2);
 
         bool open = PcOpen(view), front = settings.IsOpen && !settings.IsMinimised;
@@ -222,6 +254,185 @@ public static class UiPcRigOps
             "the session records the PC's open and close with full motion (Settings > Motion: Full); with Reduced Motion they show the fade, and uipc.transitions would pass without measuring the CRT line");
         yield break;
     }
+
+    // -----------------------------
+    // A reversed power move (BUG-32c, F1)
+    // -----------------------------
+
+    /// <summary>The longest a UI-PC op waits for the PC frame by default, in seconds.</summary>
+    private const float WaitSeconds = 3f;
+
+    /// <summary>The most the frame's alpha may change from one frame's end to the next and stay under seqtools' cut against the room (PcDesktopRulesTests' CutStep: the frame is 63-77 % of the screen).</summary>
+    private const float CutStep = 0.25f;
+
+    /// <summary>How close two moments must be to show the same glass (CrtPower.Resume's promise on a reversed move, on float frame times).</summary>
+    private const float SameGlassTolerance = 0.02f;
+
+    /// <summary>A frame's end: PcFrame has drawn the frame by then (it steps in LateUpdate).</summary>
+    private static readonly WaitForEndOfFrame FrameEnd = new WaitForEndOfFrame();
+
+    /// <summary>
+    /// A power-on turned back (the session records it as pc_reverse_open):
+    /// from the office, Q opens the PC and a second Q 2 frames later closes it
+    /// while the frame still fades in, before any picture. Asserts
+    /// <c>reverse.open</c>: the second Q was taken while the picture moved,
+    /// the glass on its frame is the frame before's (CrtPower.Resume: the
+    /// frame fades out from its alpha, never whole for a frame), no step of
+    /// the frame's alpha from one frame's end to the next is a cut's, and the
+    /// frame ends gone with the PC closed. The review of 1eab563: with
+    /// PcFrame.SetOpen back to replaying a move from its start, every offline
+    /// test and uipc.transitions' plain open and close stayed green.
+    /// </summary>
+    private static IEnumerator ReverseOpen(QaRunner runner, QaStep step)
+    {
+        OfficeViewController view = QaGame.Find<OfficeViewController>();
+        PcFrame frame = QaGame.Find<PcFrame>();
+        if (view == null || frame == null || PcOpen(view) || PcFrame.PictureMoving)
+        {
+            runner.Assert("reverse.open", Owner, false, "no PC frame, or the PC is open or its frame still moves", "run it in the office with the PC closed and its frame gone");
+            yield break;
+        }
+        var seen = new List<CrtFrame>();
+        Keyboard keyboard = runner.Input.Keyboard;
+        yield return Ends(frame, seen, 3); // the room before the press (and the recording's first frames)
+        InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Q));
+        yield return Ends(frame, seen, 1); // the game takes Q: the frame starts to fade in
+        bool opened = PcOpen(view);
+        InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+        yield return Ends(frame, seen, 1);
+        bool moving = PcFrame.PictureMoving;
+        InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Q));
+        yield return Ends(frame, seen, 1); // the second Q, 2 frames after the first: the power-on turns back
+        int turned = seen.Count - 1;
+        bool closed = !PcOpen(view);
+        InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+        bool done = false;
+        yield return EndsUntil(frame, seen, () => !PcFrame.PictureMoving && !FrameShown(frame), step.f > 0f ? step.f : WaitSeconds, met => done = met);
+
+        CrtFrame before = seen[turned - 1], at = seen[turned];
+        bool same = SameGlass(before, at);
+        float largest = LargestAlphaStep(seen);
+        bool gone = done && !PcOpen(view);
+        runner.Assert("reverse.open", Owner, opened && moving && closed && same && largest <= CutStep && gone,
+            $"Q: pc {(opened ? "opened" : "not opened")}; Q 2 frames later, {(moving ? "during" : "after")} the power-on: {(closed ? "taken" : "not taken")}, glass {Describe(before)} -> {Describe(at)}; largest frame step {N(largest)}; {(gone ? "the frame faded out, pc closed" : done ? "pc open" : "still moving after the wait")}",
+            "a power-on turned back fades the frame out from where it is, never the whole frame or picture for one frame (F1, CrtPower.Resume); seqtools cuts judges the recording pc_reverse_open under uipc.transitions");
+    }
+
+    /// <summary>
+    /// A collapse turned back (the session records it as pc_reverse_close):
+    /// with the PC open and whole, the pointer waits over the office's PC
+    /// (BoothCoordinator's crt click box, under the open frame), Q closes the
+    /// PC, and a click there is pressed 1 frame and released 2 frames after
+    /// Q, during the collapse (at the session's 30 fps capture step, 67 ms
+    /// into the 120 ms collapse, in its squeeze). The closing frame takes no
+    /// click, so the click reaches the office's PC and opens it again.
+    /// Asserts <c>reverse.close</c>: Q started the collapse, the press landed
+    /// on the office's PC while the picture moved and the click opened the PC,
+    /// the glass on its frame is the frame before's (the power-on goes on from
+    /// the same line), no step of the frame's alpha is a cut's, and the
+    /// picture ends whole with the PC open.
+    /// </summary>
+    private static IEnumerator ReverseClose(QaRunner runner, QaStep step)
+    {
+        OfficeViewController view = QaGame.Find<OfficeViewController>();
+        PcFrame frame = QaGame.Find<PcFrame>();
+        BoothCoordinator booth = QaGame.Find<BoothCoordinator>();
+        var pc = booth != null ? QaGame.Field(booth, "crt") as Clickable : null;
+        Vector2? at = pc != null ? QaGame.ScreenPoint(pc.gameObject) : null;
+        if (view == null || frame == null || !at.HasValue || !PcOpen(view) || PcFrame.PictureMoving)
+        {
+            runner.Assert("reverse.close", Owner, false, at.HasValue ? "no PC frame, or the PC is closed or its picture still moves" : "the office's PC is not on the screen",
+                "run it with the PC open and whole in the office");
+            yield break;
+        }
+        yield return runner.Input.MoveTo(at.Value, 4); // the pointer waits over the office's PC, under the open frame
+        var seen = new List<CrtFrame>();
+        Keyboard keyboard = runner.Input.Keyboard;
+        yield return Ends(frame, seen, 3); // the whole picture before the press
+        InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Q));
+        yield return Ends(frame, seen, 1); // the game takes Q: the picture starts to collapse, and the frame takes no click from now
+        bool closing = !PcOpen(view);
+        InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+        InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position }.WithButton(MouseButton.Left));
+        yield return Ends(frame, seen, 1); // the press, 1 frame after Q
+        GameObject top = QaGame.TopAt(at.Value);
+        bool onPc = top != null && top.transform.IsChildOf(pc.transform);
+        bool moving = PcFrame.PictureMoving;
+        InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position });
+        yield return Ends(frame, seen, 1); // the release, 2 frames after Q: the click opens the PC again during the collapse
+        int turned = seen.Count - 1;
+        bool reopened = PcOpen(view);
+        bool done = false;
+        yield return EndsUntil(frame, seen, () => !PcFrame.PictureMoving, step.f > 0f ? step.f : WaitSeconds, met => done = met);
+
+        CrtFrame before = seen[turned - 1], now = seen[turned];
+        bool same = SameGlass(before, now);
+        float largest = LargestAlphaStep(seen);
+        bool whole = done && PcOpen(view) && Whole(seen[seen.Count - 1]);
+        runner.Assert("reverse.close", Owner, closing && onPc && moving && reopened && same && largest <= CutStep && whole,
+            $"Q: pc {(closing ? "closing" : "still open")}; the click on the office's PC 2 frames later, {(moving ? "during" : "after")} the collapse, pressed on {(onPc ? "the PC" : top != null ? top.name : "nothing")}: pc {(reopened ? "opened again" : "not opened")}, glass {Describe(before)} -> {Describe(now)}; largest frame step {N(largest)}; {(whole ? "the picture whole, pc open" : done ? "the picture not whole" : "still moving after the wait")}",
+            "a collapse turned back by a click on the PC powers on from where the glass is (F1, CrtPower.Resume), and the closing frame takes no click, so the click reaches the room; seqtools cuts judges the recording pc_reverse_close under uipc.transitions");
+    }
+
+    /// <summary>Waits for the end of each of the next <paramref name="frames"/> frames and adds what the glass showed then to <paramref name="seen"/>.</summary>
+    private static IEnumerator Ends(PcFrame frame, List<CrtFrame> seen, int frames)
+    {
+        for (int i = 0; i < frames; i++)
+        {
+            yield return FrameEnd;
+            seen.Add(Shown(frame));
+        }
+    }
+
+    /// <summary>Adds what the glass shows at each frame's end to <paramref name="seen"/> until <paramref name="done"/> holds (<paramref name="met"/> gets true) or <paramref name="timeout"/> seconds pass (false). It never throws, so the op's assert is always recorded.</summary>
+    private static IEnumerator EndsUntil(PcFrame frame, List<CrtFrame> seen, System.Func<bool> done, float timeout, System.Action<bool> met)
+    {
+        float end = Time.realtimeSinceStartup + timeout;
+        while (!done())
+        {
+            if (Time.realtimeSinceStartup > end)
+            {
+                met(false);
+                yield break;
+            }
+            yield return Ends(frame, seen, 1);
+        }
+        met(true);
+    }
+
+    /// <summary>What the glass shows now: the PC frame's last drawn moment while its overlay shows, else nothing (alpha 0, no picture).</summary>
+    private static CrtFrame Shown(PcFrame frame) => FrameShown(frame) ? (CrtFrame)QaGame.Field(frame, "_drawn") : new CrtFrame(0f, 0f, 0f, 1f, false);
+
+    /// <summary>True while the PC frame's overlay shows (its root is active).</summary>
+    private static bool FrameShown(PcFrame frame) => QaGame.Field(frame, "root") is GameObject root && root != null && root.activeSelf;
+
+    /// <summary>True when <paramref name="a"/> and <paramref name="b"/> show the same glass: the frame's alpha, the dark glass, the picture the eye sees and, both drawn, its line (PcDesktopRulesTests' AssertSameGlass, on the drawn frames).</summary>
+    private static bool SameGlass(CrtFrame a, CrtFrame b)
+    {
+        bool same = Mathf.Abs(a.Bezel - b.Bezel) <= SameGlassTolerance && Mathf.Abs(a.Veil - b.Veil) <= SameGlassTolerance && Mathf.Abs(Seen(a) - Seen(b)) <= SameGlassTolerance;
+        return same && (!a.Picture || !b.Picture || Mathf.Abs(a.X - b.X) <= SameGlassTolerance && Mathf.Abs(a.Y - b.Y) <= SameGlassTolerance);
+    }
+
+    /// <summary>How much of the desktop's picture the eye sees: the picture under the dark glass, which fades with the frame.</summary>
+    private static float Seen(CrtFrame f) => f.Picture ? 1f - f.Bezel * f.Veil : 0f;
+
+    /// <summary>True when <paramref name="f"/> is the whole picture: the full glass, the frame whole, the glass clear.</summary>
+    private static bool Whole(CrtFrame f) => f.Picture && f.X >= 1f - SameGlassTolerance && f.Y >= 1f - SameGlassTolerance && f.Bezel >= 1f - SameGlassTolerance && f.Veil <= SameGlassTolerance;
+
+    /// <summary>The largest change of the frame's alpha from one frame's end to the next in <paramref name="seen"/>.</summary>
+    private static float LargestAlphaStep(List<CrtFrame> seen)
+    {
+        float largest = 0f;
+        for (int i = 1; i < seen.Count; i++)
+            largest = Mathf.Max(largest, Mathf.Abs(seen[i].Bezel - seen[i - 1].Bezel));
+        return largest;
+    }
+
+    /// <summary>A moment of the glass for a measured line: the frame's alpha, then the picture's line or a dark glass.</summary>
+    private static string Describe(CrtFrame f) => $"(alpha {N(f.Bezel)}, {(f.Picture ? "picture " + N(f.X) + " x " + N(f.Y) + ", dark " + N(f.Veil) : "no picture")})";
+
+    /// <summary>A share with two decimals, the same in every culture.</summary>
+    private static string N(float v) => v.ToString("0.00", CultureInfo.InvariantCulture);
 
     /// <summary>A click on the room right of the frame: the PC stays open.</summary>
     private static IEnumerator Room(QaRunner runner, QaStep step)

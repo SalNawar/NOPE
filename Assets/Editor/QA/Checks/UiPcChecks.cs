@@ -16,8 +16,10 @@ using UnityEngine.Experimental.Rendering;
 /// on the taskbar with the chevron (BUG-21a), one order per double-click,
 /// one action per Enter, the 150 % zoom, Orders' state across minimise and
 /// restore and one balance everywhere (BUG-58a), and the PC's open and close
-/// with no single-frame full-screen jump (BUG-32c; seqtools cuts on pc_open
-/// and pc_close, both recorded with full motion).
+/// with no single-frame full-screen jump, also when turned back under way
+/// (BUG-32c; seqtools cuts on pc_open, pc_close, pc_reverse_open and
+/// pc_reverse_close, all recorded with full motion, and the glass on each
+/// reversing frame).
 /// </summary>
 public static class UiPcChecks
 {
@@ -121,11 +123,15 @@ public static class UiPcChecks
     [GateCheck("uipc.restore", Owner, GateKind.Play)]
     public static GateResult Restore() => GateResults.Require("uipc.restore", Owner, "ui_pc_session.restore");
 
-    /// <summary>The PC's open and close have no single-frame full-screen jump (seqtools cuts on the session's pc_open and pc_close sequences).</summary>
+    /// <summary>The PC's open and close have no single-frame full-screen jump, also when turned back under way (seqtools cuts on the session's pc_open, pc_close, pc_reverse_open and pc_reverse_close sequences).</summary>
     [GateCheck("uipc.transitions", Owner, GateKind.Play)]
     public static GateResult Transitions() => GateResults.Require("uipc.transitions", Owner, "ui_pc_session.seq.pc_*.cuts");
 
-    /// <summary>The session recorded pc_open and pc_close with full motion, so <c>uipc.transitions</c> judged the CRT line and not the Reduced fade (Reduced Motion is a saved preference: set by hand, or left on by a run stopped during uipcPowerOn's reduced pass).</summary>
+    /// <summary>The session recorded the PC's moves (pc_open, pc_close, pc_reverse_open, pc_reverse_close) with full motion, so <c>uipc.transitions</c> judged the CRT line and not the Reduced fade (Reduced Motion is a saved preference: set by hand, or left on by a run stopped during uipcPowerOn's reduced pass).</summary>
     [GateCheck("uipc.fullmotion", Owner, GateKind.Play)]
     public static GateResult FullMotion() => GateResults.Require("uipc.fullmotion", Owner, "ui_pc_session.fullmotion.*");
+
+    /// <summary>A move turned back under way (Q 2 frames into the power-on; a click on the office's PC during the collapse, which the closing frame lets through) picks up where the glass is: on the reversing frame the glass is the frame before's, no step of the frame's alpha is a cut's, and it ends where the new move goes (BUG-32c, F1; CrtPower.Resume as PcFrame draws it).</summary>
+    [GateCheck("uipc.reverse", Owner, GateKind.Play)]
+    public static GateResult Reverse() => GateResults.Require("uipc.reverse", Owner, "ui_pc_session.reverse.*");
 }
