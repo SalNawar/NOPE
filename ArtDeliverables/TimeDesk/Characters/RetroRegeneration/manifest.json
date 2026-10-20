@@ -12019,6 +12019,764 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "forward curls",
+      "details": "Draw: Classical Athenian crop: short-to-medium thick curls brushed forward, half covering the ears\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "forward curls"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_greece_ancient",
+      "prompt": "Separate HAIR only layer using this reference figure exact head position. Draw: Classical Athenian crop: short-to-medium thick curls brushed forward, half covering the ears\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)\nOnly darkbrown short-to-medium thick forward curls colored, halfcover ears, slightly unruly ordinary civilian hair. NO beard (separate layer), no wreath/headwear. Recolor ALL clothes/sandals/face/body flatmagenta#FF00FF, keep clothed supportfigure. Puregreen#00FF00 background,1024x1536 fullbody. Preserve scalp239 chin400 sole1421 center512 and reference stance. Late1980s handinked textured anime, fine hairline grain, restrained highlights. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-11c2ba22-7a27-4f29-bb9f-3e1ffaa5fbc3.png",
+      "path": "Raw/hair_m_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4e84ff38d26294223c9912a6b71f43b32d4c475a609f78109c141583314d5116",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "rounded beard",
+      "details": "Draw: Full, rounded, neatly trimmed beard with moustache (the norm for an adult Athenian citizen)\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "rounded beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_greece_ancient",
+      "prompt": "Separate FACIAL HAIR layer on exact reference figure. Draw: Full, rounded, neatly trimmed beard with moustache (the norm for an adult Athenian citizen)\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)\nOnly full rounded darkbrown beard and moustache colored; scalp remains bald magenta (hair separate). Beard neatly trimmed, individual curls, ordinary adult Athenian civilian. No jewelry/headwear. Recolor ALL outfit/shoes and face/body solidmagenta #FF00FF. Keep clothed figure original pose and scale, chin400 scalp239 feet1421 center512, canvas1024x1536,puregreen #00FF00. Fine handinked textured late80s anime, not shiny realistic hair. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8618baef-ca63-4e80-9e55-09f223dc3a51.png",
+      "path": "Raw/facialhair_m_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ebdc0479abec45b0e3a19c21c2e2b81960514c21da7983d9a2b213bd330d3e28",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "petasos hat",
+      "details": "Draw: Petasos: a flat, wide-brimmed traveller's hat of undyed tan felt with a low crown, worn tilted back on the head with the brim turned up at the front so the face is fully clear, tied under the chin with a thin cord\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "petasos hat",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_greece_ancient",
+      "prompt": "Change only the clothing and sandals in this image to solid flat bright magenta #FF00FF. ALL yellow and blue fabric and all brown sandalstraps must become magenta. Preserve the tan hat and chin cord exactly unchanged and colored. Keep face/body magenta and background green. This is a HAT ONLY extraction source. No other colored objects below chin cord. Same positions and1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7a972578-0552-4ade-92c2-8da8b60f1c3e.png",
+      "path": "Raw/headwear_m_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "87e3a4538edb21ef69b3e8a8ba954200f10cc73d805316ab6fce76f37cd6fa4e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "pera pouch",
+      "details": "Draw: Pera: a hand-sized soft leather traveller's pouch on a thin strap slung diagonally across the body from the left shoulder\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "pera pouch"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_greece_ancient",
+      "prompt": "Separate ACCESSORY layer on exact reference figure: small HAND-SIZED worn soft brown leather pera travel pouch at right hip, thin brown shoulderstrap diagonally from left shoulder to right hip, plain tied leather fastening. ONLY pouch and strap colored. ALL existing clothes and sandals MUST recolor solidflatmagenta#FF00FF as face/body. Keep clothed reference figure exact pose,size, head239chin400 soles1421. No hairbeardheadwear or otherjewelry. Puregreen#00FF00 background1024x1536. Late80s handinked textured anime softleather grain, restrained celshading, no logos/text. Strap travels torso, not across face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-433700ee-da44-41c7-bb1f-aa8602718244.png",
+      "path": "Raw/accessory_m_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f16c4c1def8edba3b6a4ecaa77ac86d65c2d4563226db06be65af3d1cca454e0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "Ionic chiton",
+      "details": "Draw: Ankle-length Ionic chiton of fine crinkled linen, with short sleeves formed by a row of small pins along the upper arms, tied at the natural waist with a narrow woven girdle and bloused over it (kolpos). A himation in saffron, madder red or indigo is wrapped diagonally over one shoulder, with a meander or wave-pattern band at its hem.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "Ionic chiton"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_greece_ancient",
+      "prompt": "Dress reference fittingfigure with full opaque historical Athens costume. Draw: Ankle-length Ionic chiton of fine crinkled linen, with short sleeves formed by a row of small pins along the upper arms, tied at the natural waist with a narrow woven girdle and bloused over it (kolpos). A himation in saffron, madder red or indigo is wrapped diagonally over one shoulder, with a meander or wave-pattern band at its hem.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)\nDusty warm cream crinkled linen Ionic chiton anklelength, sleeves pinned along upperarms with smallbronze pins, natural waist narrow wovenbelt and bloused kolpos. Madderred himation diagonally over left shoulder, narrow darkbrown wavepattern hem. Plainbrownleather flatsandals. No hair/jewelry/headwear separate layers. Preserve reference head239? FEMALE scalp164 chin324 soles1440 center512 exactly, body proportions and armsdownhandpositions unchanged. Exposedfigure flatmagenta#FF00FF on puregreen#00FF00.1024x1536. Textured handinked late1980s anime, fine linen grain, worn civilian clothing, restrainedcelshadows, no idealized princess decoration or modern dress shapes. No text/backgroundshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-be84d981-13dc-4e31-b8ba-082e5090850f.png",
+      "path": "Raw/outfit_f_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "01041c54df4635d87ef24904e01c80f407bea3787c6927592979addd836a0075",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "Ionic chiton",
+      "details": "Draw: Ankle-length Ionic chiton of fine crinkled linen, with short sleeves formed by a row of small pins along the upper arms, tied at the natural waist with a narrow woven girdle and bloused over it (kolpos). A himation in saffron, madder red or indigo is wrapped diagonally over one shoulder, with a meander or wave-pattern band at its hem.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "Ionic chiton"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_greece_ancient",
+      "prompt": "Edit FIRST costume image, only arms and adjacent drapery: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Follow SECOND guide exact handposition. Keep FIRST face head size, shoulders, hips, lowerrobe and sandals unchanged. Cream crinkled linen Ionic chiton with pinned shortsleeves, madderred himation leftshoulder wavehem, wovenwaistbelt, brownsandals. Cloth folds follow gesture. Scalp164 chin324 soles1440 centered512 fixed.1024x1536 puregreenbackground, solidmagenta exposedfigure. No hair jewelry headwear. Same late80s handinked textured anime fine clothgrain. Do not liftfeet, movehead or rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b9a5d17e-061f-4831-835d-a0cd759f486d.png",
+      "path": "Raw/outfit_f_greece_ancient__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ceff625a8bd37f2f626cf7dc1b7d8837012fcfcd6e2178cb13ffa772732c3cb9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "Ionic chiton",
+      "details": "Draw: Ankle-length Ionic chiton of fine crinkled linen, with short sleeves formed by a row of small pins along the upper arms, tied at the natural waist with a narrow woven girdle and bloused over it (kolpos). A himation in saffron, madder red or indigo is wrapped diagonally over one shoulder, with a meander or wave-pattern band at its hem.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "Ionic chiton"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_greece_ancient",
+      "prompt": "Edit FIRST costume image only arms and adjacent cloth: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. SECOND exact pose guide governs handposition. Keep FIRST head and lowerbody fixed, chin324 scalp164 soles1440 center512. Same cream Ionic chiton pinned sleeves, madderred leftshoulder mantle wavehem, narrowwovenbelt,brownsandals. No hairheadwearjewelry, exposedfigure flatmagenta#FF00FF, puregreen#00FF00 background.1024x1536. Late80s handinked textured anime linen grain, samecolors, keep skirt and feetunchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-57d9e244-6529-43ca-b70f-7cb114f213f9.png",
+      "path": "Raw/outfit_f_greece_ancient__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8e68ef45de07f23c88b597388b3f50b7ea2a45e6cc6cdb661771b833bb480048",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "Ionic chiton",
+      "details": "Draw: Ankle-length Ionic chiton of fine crinkled linen, with short sleeves formed by a row of small pins along the upper arms, tied at the natural waist with a narrow woven girdle and bloused over it (kolpos). A himation in saffron, madder red or indigo is wrapped diagonally over one shoulder, with a meander or wave-pattern band at its hem.\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "Ionic chiton"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_greece_ancient",
+      "prompt": "Edit FIRST costume image only arms and adjacent cloth: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. SECOND exact pose guide governs handposition. Keep FIRST head and lowerbody fixed, chin324 scalp164 soles1440 center512. Same cream Ionic chiton pinned sleeves, madderred leftshoulder mantle wavehem, narrowwovenbelt,brownsandals. No hairheadwearjewelry, exposedfigure flatmagenta#FF00FF, puregreen#00FF00 background.1024x1536. Late80s handinked textured anime linen grain, samecolors, keep skirt and feetunchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3b2c50ac-0e9a-4d39-95ca-24a9a785a95b.png",
+      "path": "Raw/outfit_f_greece_ancient__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c30ae2319dc63c353e34ad434a7e9f219f7cd9c763fc68478e6c0f862020e11c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "wavy low bun",
+      "details": "Draw: Centre-parted wavy hair drawn back to a bun at the nape, with a few curls escaping at the temples\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "wavy low bun"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_greece_ancient",
+      "prompt": "Separate HAIR layer. Draw: Centre-parted wavy hair drawn back to a bun at the nape, with a few curls escaping at the temples\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)\nDarkbrown centerparted wavy hair swept to low nape bun, small escaping templecurls. No jewelry, ribbons or headwear. Recolor ALL clothing and sandals entirelyflatmagenta#FF00FF, facebodyhandsmagenta. Only hair colored. Preserve original headposition/scalp164chin324 and shoulders/hand/feetpositions, fullcanvas1024x1536 puregreen#00FF00. Same textured late80s handinked anime, finepigment grain, modest highlights, ordinary civilian appearance. No text or backgroundshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-97589c78-2f15-412c-8245-4a938f568aeb.png",
+      "path": "Raw/hair_f_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "193ece35ae633502f2cdb24201b0dd54439739ea06cd02c80e6f3be269961b3c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_greece_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "country": "greece",
+      "era": "ancient",
+      "label": "sakkos snood",
+      "details": "Draw: Sakkos: a patterned cloth snood that covers the crown and back of the head and wraps the bun, leaving the forehead and face fully visible\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)",
+      "flags": {
+        "label": "sakkos snood",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_greece_ancient",
+      "prompt": "Separate HEADWEAR only layer using exact referencefigure. Draw: Sakkos: a patterned cloth snood that covers the crown and back of the head and wraps the bun, leaving the forehead and face fully visible\nAvoid: Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome); clean-shaven adult men (reads as Roman); laurel or olive victory wreaths; Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military); short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume); all-white marble-statue clothing (real Greek dress was coloured); 'toga party' bedsheet look; girdle high under the bust (a Hellenistic fashion, a century later); Greek national flag colours or modern symbols; priestess or temple ritual dress (sacred)\nSakkos snood in ochre linen with restrained small darkred geometric woven pattern, covers crown and back, rounded slight bulge at nape for bun, face and foreheadfullyopen. No hair visible, no earrings or otherjewelry. ALL existing clothes and sandals recolor flatmagenta#FF00FF as facehandsbody. Only snood colored. Full1024x1536 puregreen#00FF00. Keep scalp164chin324 feet1440 center512 and stance. Late80s handinked textured anime modest fabricgrain. No text/no backgroundshadows.\nCORRECTION to supplied image: sandals still colored. Change BOTH sandals ALL straps and soles to pureflatmagenta#FF00FF, same as feet. Preserve only snood colored. Absolutelyeverything below neck is magenta, no redbrown areas. Preserve positions and1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b044b42a-87ee-4573-b790-1095c3845e96.png",
+      "path": "Raw/headwear_f_greece_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e3207b81f718a10bddec94fcd64f7738d01b2a199771daa46841e12f8dd20d48",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "buttoned kabbadion",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Ankle-length kabbadion: a caftan-like robe closed down the centre front with a long row of small round buttons, with long narrow sleeves, in bottle green, wine or blue silk with a small woven pattern. No overcoat, so the button row stays fully visible. Soft dark boots.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_m_greece_medieval.",
+      "flags": {
+        "label": "buttoned kabbadion"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_greece_medieval",
+      "prompt": "Dress reference fittingfigure in complete opaque historical costume: Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Ankle-length kabbadion: a caftan-like robe closed down the centre front with a long row of small round buttons, with long narrow sleeves, in bottle green, wine or blue silk with a small woven pattern. No overcoat, so the button row stays fully visible. Soft dark boots.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_m_greece_medieval.\nBottle-green silk kabbadion small subtle tonal diamond weave, long narrow sleeves, anklelength, FULL central row small brassbuttons, plain narrow collar, soft charcoalbrown boots. No belt hidingbuttonrow, no overcoat. ONLY outfit colored, no beardhairheadwearaccessories separate. Exposedfacehands solidmagenta#FF00FF. Same exact referencepose scalp239chin400soles1421 center512,1024x1536 puregreen#00FF00. Late1980s textured handinked anime, modest lived-in civilian cloth, fine grain, restrainedcelshadows. No gold royalregalia, no text/backgroundshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b4f2e6df-2649-4e7f-8fb9-4661377c12ab.png",
+      "path": "Raw/outfit_m_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0932d669e7c64e86313bd8f72298e3b43afadd1665870aaae8fdf0c39653db9d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_medieval__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "buttoned kabbadion",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Ankle-length kabbadion: a caftan-like robe closed down the centre front with a long row of small round buttons, with long narrow sleeves, in bottle green, wine or blue silk with a small woven pattern. No overcoat, so the button row stays fully visible. Soft dark boots.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_m_greece_medieval.",
+      "flags": {
+        "label": "buttoned kabbadion"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_greece_medieval",
+      "prompt": "Edit FIRST costume image only arms: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. SECOND exactposeguide controls hands. Same bottle-green small diamondwoven silk kabbadion, narrowlongsleeves buttoned fullfront, charcoalbrown softboots. Sleevefolds follow elbows. Keep FIRST head, body, robehem and boots exactly unchanged, scalp239 chin400 soles1421 center512,1024x1536. No hairbeardheadwearjewelry. Exposedfigureflatmagenta#FF00FF puregreenbackground#00FF00. Same textured late80s inkedanime, no resizing/reframing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5b31711f-d7af-4103-aa44-f337b69fd0d2.png",
+      "path": "Raw/outfit_m_greece_medieval__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4806f2ec0edc93cb88f335d8727236c1b1c6bfcfe2928edcec6d1137b38d2745",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_medieval__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "buttoned kabbadion",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Ankle-length kabbadion: a caftan-like robe closed down the centre front with a long row of small round buttons, with long narrow sleeves, in bottle green, wine or blue silk with a small woven pattern. No overcoat, so the button row stays fully visible. Soft dark boots.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_m_greece_medieval.",
+      "flags": {
+        "label": "buttoned kabbadion"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_greece_medieval",
+      "prompt": "Edit FIRST costume image only arms: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. SECOND exactposeguide controls hands. Same bottle-green small diamondwoven silk kabbadion, narrowlongsleeves buttoned fullfront, charcoalbrown softboots. Sleevefolds follow elbows. Keep FIRST head, body, robehem and boots exactly unchanged, scalp239 chin400 soles1421 center512,1024x1536. No hairbeardheadwearjewelry. Exposedfigureflatmagenta#FF00FF puregreenbackground#00FF00. Same textured late80s inkedanime, no resizing/reframing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-01c499e6-9c4c-4754-8593-0daebe6b9285.png",
+      "path": "Raw/outfit_m_greece_medieval__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "935a273f65eee9230ec3b996460ccbfeb5a69a9ec9816485e4ce7d795a01936d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_medieval__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "buttoned kabbadion",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Ankle-length kabbadion: a caftan-like robe closed down the centre front with a long row of small round buttons, with long narrow sleeves, in bottle green, wine or blue silk with a small woven pattern. No overcoat, so the button row stays fully visible. Soft dark boots.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_m_greece_medieval.",
+      "flags": {
+        "label": "buttoned kabbadion"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_greece_medieval",
+      "prompt": "Edit FIRST costume image only arms: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. SECOND exactposeguide controls hands. Same bottle-green small diamondwoven silk kabbadion, narrowlongsleeves buttoned fullfront, charcoalbrown softboots. Sleevefolds follow elbows. Keep FIRST head, body, robehem and boots exactly unchanged, scalp239 chin400 soles1421 center512,1024x1536. No hairbeardheadwearjewelry. Exposedfigureflatmagenta#FF00FF puregreenbackground#00FF00. Same textured late80s inkedanime, no resizing/reframing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cbb3a2e8-4316-4975-81c2-cd06105fe896.png",
+      "path": "Raw/outfit_m_greece_medieval__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5cbd96b0dc23be97c73084bde357b78605802935ae028908abbb2cab97f3d328",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "long centre-parted hair",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Long hair, centre-parted, falling to the shoulders\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw hair_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "long centre-parted hair",
+        "back": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_greece_medieval",
+      "prompt": "Separate HAIR layer on exact reference. Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Long hair, centre-parted, falling to the shoulders\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw hair_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nChestnutbrown long centerparted hair falling behindshoulders, modest wavystrands slightly uneven everydayhair. No facialhair, no hatjewelry. ALL clothes/boots/facebodyhands flatmagenta#FF00FF, hairONLY colored. Preserve reference head chin400scalp239 and handsfeetpose exact,1024x1536 green#00FF00background. Finegrain textured late80s handinkedanime, subtle highlights notglossy. Hair behind shoulder line not hanging over chest or hands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ad4db486-ce0e-4905-8afd-073b66aa7af2.png",
+      "path": "Raw/hair_m_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e75e68958ab753afc3e4ea770ef24ab4336d2bcb570b78429ddab62ebef9cb26",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "long full beard",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Long full beard with moustache (the Byzantine lay norm, noted by Italian observers in 1438)\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw facialhair_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "long full beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_greece_medieval",
+      "prompt": "Separate BEARD only layer. Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Long full beard with moustache (the Byzantine lay norm, noted by Italian observers in 1438)\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw facialhair_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nLong full chestnutbrown beard with moustache, extends to upperchest, coarse gentle waves, ordinary layman. Scalp baldmagenta no hairhatjewelry. ALL reference clothing and boots flatmagenta#FF00FF, facehandsbodymagenta. ONLY beard colored. Keep referencehead chin400scalp239 and allfigurepositionunchanged,1024x1536 puregreenbackground. Fine textured late80s handinked anime with restrainedwarmhighlights. No text/backgroundshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7d07de0b-3973-48da-aef4-db4be6e539e7.png",
+      "path": "Raw/facialhair_m_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "afdb5245095bb7049676cdaccecbe50071342eb0fe20e96eb0154d87a99f7dcd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "Palaiologan hat",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Tall felt hat with a high rounded crown and a brim turned sharply up all round against it, with a light crown and a darker brim, as Pisanello sketched among the Byzantine delegation.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw headwear_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Palaiologan hat",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_greece_medieval",
+      "prompt": "Separate HEADWEAR layer on reference figure. Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Tall felt hat with a high rounded crown and a brim turned sharply up all round against it, with a light crown and a darker brim, as Pisanello sketched among the Byzantine delegation.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw headwear_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nLighttan felt tall rounded crown, darkbrown brim turned sharply up allaround hugging crown, plain civilian Palaiologan hat, no pointed visor, no emblems. No hairbeardjewelry. ALL clothesbootsfacebodyhands flatmagenta#FF00FF, ONLY hat colored. Keep headposition scalp239chin400 and stance unchanged,1024x1536 puregreenbackground#00FF00. Fine feltgrain textured handinked late80s anime restrainedcelshading no photorealgloss. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1d8c0fad-ee57-4027-b20b-f88da60ce25a.png",
+      "path": "Raw/headwear_m_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "788063907b61ebd8cc32c4c1e69ea6e259dc9db71ab5d4fdc83f194356775c90",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "gilt-mounted belt",
+      "details": "Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Belt with gilt metal mounts, worn at the waist\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw accessory_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "gilt-mounted belt"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_greece_medieval",
+      "prompt": "Separate BELT accessory only on exact referencefigure. Subject: man of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Belt with gilt metal mounts, worn at the waist\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw accessory_m_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nNarrow darkbrown leatherbelt naturalwaist, small rectangular giltmetal mounts simple geometric ornament plainoval buckle, everyday prosperouslayman notroyalty. ONLY beltcolored. ALL clothesincludingbuttons and boots flatmagenta#FF00FF as facehands. No hairhatbeardjewelry otherthanbelt. Opaqueclothed supportfigure original stance and headsize unchanged.1024x1536 puregreenbackground#00FF00. Male scalp239chin400feet1421 center512. Textured late80s handinkedanime restrained giltshading. No emblems/text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c52f84a6-e3c7-4ff4-8962-928fb38e4a5c.png",
+      "path": "Raw/accessory_m_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c465cd9ca4f2fdd69938e6e4271b683e4e5ca6f490b83a35e2775cd8cf5e88b3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "damask over-dress",
+      "details": "Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: A fitted, sleeveless over-dress of patterned silk damask (for example wine red with a small floral pattern), shaped close at the bust and flaring from just below it to the floor, with braided gold trim at the neckline and armholes. Under it is a long T-shaped under-tunic of lighter patterned silk whose long, fitted sleeves show full-length on the arms.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_f_greece_medieval.",
+      "flags": {
+        "label": "damask over-dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_greece_medieval",
+      "prompt": "Dress exact reference fittingfigure: Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: A fitted, sleeveless over-dress of patterned silk damask (for example wine red with a small floral pattern), shaped close at the bust and flaring from just below it to the floor, with braided gold trim at the neckline and armholes. Under it is a long T-shaped under-tunic of lighter patterned silk whose long, fitted sleeves show full-length on the arms.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_f_greece_medieval.\nWine red small floral silkdamask sleeveless overdress, modest neckline narrow braidedgold edging neckline/armholes, flares just belowbust tofloor. Underneath lighter warmochre patterned silk longTtunic with fitted longsleeves, plain brown closedleathershoes visible justunderhem. No belt or jewelry/headwear/hair separate. Opaque civilian clothing, not royalprincess. Same figurehead/scalp164chin324 soles1440 center512 and handpositions unchanged. Exposedfacehands flatmagenta#FF00FF, puregreen#00FF00 background1024x1536. Late80s handinked textured anime clothpigmentgrain restrainedcelshadows. No symbols/text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8072bff3-f776-44b6-8472-1670741eca45.png",
+      "path": "Raw/outfit_f_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "51cd880491ea7000d149bce026f93997fd53f18ad98ae41072c4368fb2c62e32",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_medieval__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "damask over-dress",
+      "details": "Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: A fitted, sleeveless over-dress of patterned silk damask (for example wine red with a small floral pattern), shaped close at the bust and flaring from just below it to the floor, with braided gold trim at the neckline and armholes. Under it is a long T-shaped under-tunic of lighter patterned silk whose long, fitted sleeves show full-length on the arms.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_f_greece_medieval.",
+      "flags": {
+        "label": "damask over-dress"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_greece_medieval",
+      "prompt": "Edit FIRST costume only arms: RIGHT elbow open, right palm up at lower chest, left arm relaxed. SECONDguide exact handpositions. Same wine floral damask sleevelessoverdress goldneckarmhole trim, warmochre silk fittedlongsleeves underneath, brownclosedshoes. Adjust sleevefolds naturally, preserve all otherdetails. FIRST head and lowerdress/feet fixed scalp164chin324soles1440 center512.1024x1536 puregreenbackground flatmagentafacehands. No hairheadwearjewelry. Same handinked textured late80s anime fineclothgrain. Do not rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6a73c963-9fe5-48b6-8e97-7b80e9e175e9.png",
+      "path": "Raw/outfit_f_greece_medieval__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7e33a99dcf596ad151c7989cca7cd9a52896041de62d55f937aae9ff999ba34b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_medieval__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "damask over-dress",
+      "details": "Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: A fitted, sleeveless over-dress of patterned silk damask (for example wine red with a small floral pattern), shaped close at the bust and flaring from just below it to the floor, with braided gold trim at the neckline and armholes. Under it is a long T-shaped under-tunic of lighter patterned silk whose long, fitted sleeves show full-length on the arms.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_f_greece_medieval.",
+      "flags": {
+        "label": "damask over-dress"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_greece_medieval",
+      "prompt": "Edit FIRST costume only arms: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. SECONDguide exact handpositions. Same wine floral damask sleevelessoverdress goldneckarmhole trim, warmochre silk fittedlongsleeves underneath, brownclosedshoes. Adjust sleevefolds naturally, preserve all otherdetails. FIRST head and lowerdress/feet fixed scalp164chin324soles1440 center512.1024x1536 puregreenbackground flatmagentafacehands. No hairheadwearjewelry. Same handinked textured late80s anime fineclothgrain. Do not rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-39556c42-3488-48a2-b84c-6f615088a2ae.png",
+      "path": "Raw/outfit_f_greece_medieval__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d75e699431245b16dd8af64dd52b69ae93b94286b091752bf1474c71506741a6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_medieval__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "damask over-dress",
+      "details": "Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: A fitted, sleeveless over-dress of patterned silk damask (for example wine red with a small floral pattern), shaped close at the bust and flaring from just below it to the floor, with braided gold trim at the neckline and armholes. Under it is a long T-shaped under-tunic of lighter patterned silk whose long, fitted sleeves show full-length on the arms.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw outfit_f_greece_medieval.",
+      "flags": {
+        "label": "damask over-dress"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_greece_medieval",
+      "prompt": "Edit FIRST costume only arms: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. SECONDguide exact handpositions. Same wine floral damask sleevelessoverdress goldneckarmhole trim, warmochre silk fittedlongsleeves underneath, brownclosedshoes. Adjust sleevefolds naturally, preserve all otherdetails. FIRST head and lowerdress/feet fixed scalp164chin324soles1440 center512.1024x1536 puregreenbackground flatmagentafacehands. No hairheadwearjewelry. Same handinked textured late80s anime fineclothgrain. Do not rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-019c3ae2-f5f5-4279-b9b6-a41d6488d9c5.png",
+      "path": "Raw/outfit_f_greece_medieval__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3ce20ae7da9c3497f17a9fb1aae4b5412abd313f78622896af4c1c914553cf42",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "pinned-up hair",
+      "details": "Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Hair pinned up close to the head, with a smooth edge at the forehead\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw hair_f_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pinned-up hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_greece_medieval",
+      "prompt": "Separate HAIR ONLY layer. Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Hair pinned up close to the head, with a smooth edge at the forehead\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw hair_f_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nDeepchestnut hair tightly pinned close to scalp in compact lowcoil behindhead, smoothhairline, no loose strands/large bun. Must fit underneath turban. No jewelryheadwear. ALL clothing/shoes and facehands flatmagenta#FF00FF, onlyhaircolored. Exact referencefigureposition scalp164chin324soles1440,center512 fullcanvas1024x1536 puregreen#00FF00. Late80s textured handinked animefinehairgrain restrained highlights. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23707441-2a0d-4bb0-9f78-12c16528b47d.png",
+      "path": "Raw/hair_f_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fd3ca147ad81c7068af9d72aa8a875550bbfafc14320107f3546c049e809255e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "fakiolion",
+      "details": "Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Turban-style headdress (fakiolion): a long strip of cream silk woven with bands of gold and red, wound high and rounded around the head so it covers all the hair. The neck, ears and face stay open, with no cloth wrapped under the chin.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw headwear_f_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "fakiolion",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_greece_medieval",
+      "prompt": "Separate HEADWEAR layer: Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Turban-style headdress (fakiolion): a long strip of cream silk woven with bands of gold and red, wound high and rounded around the head so it covers all the hair. The neck, ears and face stay open, with no cloth wrapped under the chin.\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw headwear_f_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nCream silk longstrip woven red/gold bands wrapped high rounded around crown, allhaircovered, earsneckfacefullyopen, NO clothunderchin and no trailingcloth over shoulders. Plaincivilian fakiolion. ALL clothes/shoes/facehands flatmagenta#FF00FF, onlyheadwrapcolored. Preserve exact reference headposition chin324scalp164 and fullfigurepose1024x1536 puregreen#00FF00. No hairjewelry. Texturedlate80s handinkedanime finewovenclothgrain subduedcelhighlights. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5b279c7c-be6c-49e4-ac53-51f1112af9aa.png",
+      "path": "Raw/headwear_f_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "09e5fb242994cf5fc2840d9e8928f94c1743c1972eb6913bc7bcc44b90bcaafe",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_greece_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "country": "greece",
+      "era": "medieval",
+      "label": "lunate earrings",
+      "details": "Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Large gold crescent-shaped (lunate) earrings edged with pearls, hanging clearly below the headdress\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw accessory_f_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "lunate earrings"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_greece_medieval",
+      "prompt": "Separate EARRINGS ONLY layer: Subject: woman of Byzantine Mystras; Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430.\nDraw: Large gold crescent-shaped (lunate) earrings edged with pearls, hanging clearly below the headdress\nAvoid: imperial regalia: loros, crowns, purple silk, double-headed eagle; emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia); Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred); Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred); plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt); wide bell-sleeved overgown (reads Britain); the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda); Ottoman white turban on men (anachronistic here; reads Egypt or Iraq); Italian cappuccio hood-hat, or clean-shaven men (reads Italy); armour or weapons, including the sabre in Pisanello's sketches\nOutput one full-canvas raw accessory_f_greece_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPair gold lunate crescent earrings edged small pearls, hanging ear lobes justbelow jaw, not huge shoulderjewelry. No necklace hairheadwear. ALL referenceclothing and shoes flatmagenta#FF00FF, facehandsbodymagenta. Onlyearringscolored. Keep exact headposition/scalp164chin324 and stance same,full1024x1536 puregreen#00FF00background. Texturedlate80s handinkedanime finegoldgrain, restrainedhighlights notphotoreal. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-87385398-32be-444a-866a-c13e76785f0d.png",
+      "path": "Raw/accessory_f_greece_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bce5b1711cb0c1ecf628a6f1917c65cf76969f7553dfa8ad20fcde876ba5a5fd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
