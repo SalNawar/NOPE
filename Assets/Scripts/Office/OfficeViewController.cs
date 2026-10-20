@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>The two views of the office.</summary>
 public enum OfficeView
@@ -22,10 +23,11 @@ public enum OfficeView
 /// the "&lt; Desk" button closes it straight into the reading view (FocusDesk;
 /// Saleh 2026-09-30: a view key's move, tagged so for the QA camera logger).
 /// The frame itself moves no camera (from the reading view, BoothCoordinator
-/// blends it back up as the frame opens). While the city view is on, what
-/// would open the PC (Q) leaves the city instead (FIX_PLAN_v2's CAM delta:
-/// the city view is left "with Q or a click on the city, the same as the
-/// PC"). The PC never opens while the player holds something on the desk
+/// blends it back up as the frame opens). While the city view is on, Q
+/// leaves the city instead of opening the PC (FIX_PLAN_v2's CAM delta: the
+/// city view is left "with Q or a click on the city, the same as the PC");
+/// F1 still opens the PC with its keys card there, as it always did. The PC
+/// never opens while the player holds something on the desk
 /// (HoldRegistry.Desk; BUG-55c: no view change while holding).
 /// BoothCoordinator reads the view to gate the office's input.
 /// </summary>
@@ -37,7 +39,7 @@ public sealed class OfficeViewController : MonoBehaviour
     /// <summary>The desk view (optional): the taskbar's "&lt; Desk" button closes the frame straight into it (FocusDesk).</summary>
     [SerializeField] private DeskView deskView;
 
-    /// <summary>The city view (optional): while it is on, Q leaves it instead of opening the PC (FocusMonitor).</summary>
+    /// <summary>The city view (optional): while it is on, Q leaves it instead of opening the PC (FocusMonitor; F1 still opens the PC).</summary>
     [SerializeField] private CityView cityView;
 
     /// <summary>The current view.</summary>
@@ -46,12 +48,23 @@ public sealed class OfficeViewController : MonoBehaviour
     /// <summary>Raised after the view changes.</summary>
     public event Action<OfficeView> ViewChanged;
 
-    /// <summary>Opens the PC frame (no-op if open, or while something is held: BUG-55c); while the city view is on, leaves the city instead (Q leaves the city as it leaves the PC).</summary>
+    /// <summary>The PC's key (ControlRules.PcKey, Q) on the Input System's keyboard.</summary>
+    private static readonly Key PcKey = Enum.TryParse(ControlRules.PcKey, true, out Key key) ? key : Key.Q;
+
+    /// <summary>
+    /// Opens the PC frame (no-op if open, or while something is held:
+    /// BUG-55c). While the city view is on, the PC's key (Q) pressed this
+    /// frame leaves the city instead (Q leaves the city as it leaves the PC);
+    /// every other way here (F1's keys card) opens the PC as before, the city
+    /// turning back as the PC takes over (BoothCoordinator). The key is read
+    /// here until ControlRules sends Q in the city view to LeaveCity itself
+    /// (DOC-HANDLE's hand-off, CAM.md).
+    /// </summary>
     public void FocusMonitor()
     {
         if (HoldRegistry.Desk.IsHolding)
             return;
-        if (cityView != null && cityView.IsOn)
+        if (cityView != null && cityView.IsOn && Keyboard.current is Keyboard keyboard && keyboard[PcKey].wasPressedThisFrame)
         {
             cityView.Return();
             return;

@@ -35,30 +35,40 @@ using UnityEngine.UI;
 /// <item><c>camparallax</c> (name; n = pointer frames, 90 when 0): at the
 /// recorder's 30 fps step, A turns to the city (its sweep measured), the
 /// pointer jumps edge to edge, and every frame's move of the nearest layer is
-/// at most 1 px at 1080p (<c>city.parallax.&lt;name&gt;</c>, BUG-69); the
-/// panorama covers the screen (<c>city.nobars</c>, BUG-42); a click on the
-/// city returns (<c>city.click</c>); Q returns from it with the PC closed
-/// (<c>city.q</c>).</item>
+/// at most 1 px at 1080p (<c>city.parallax.&lt;name&gt;</c>, BUG-69); held at
+/// the other edge, the look lands within 2 s (<c>city.look</c>: no crawl);
+/// the panorama covers the screen (<c>city.nobars</c>, BUG-42); a click on
+/// the city returns (<c>city.click</c>); Q returns from it with the PC
+/// closed (<c>city.q</c>); F1 opens the PC with its keys card as on main
+/// (<c>city.f1</c>).</item>
 /// <item><c>cammotion</c> (n = 0 full motion, 1 Reduced Motion, 2 a Motion
 /// intensity of 0): as the Settings toggle and slider set them.</item>
 /// <item><c>camshake</c> (name; n = 1 when motion is still): fires each shake
 /// moment through the game's own calls (FeelDirector) and asserts the shake
 /// table's row it drew, or none (<c>shake.&lt;name&gt;.&lt;moment&gt;</c>), and
 /// that the papers moved no more than the row's cap.</item>
-/// <item><c>camchrome</c> (n = 1 starts, 0 stops; name): every frame between,
-/// no shown chrome (the pull tabs, the Back control, "◀ City") is drawn over
-/// a held thing or over the reading view's framed work
-/// (<c>chrome.&lt;name&gt;</c>, BUG-59); the controls' alpha goes into the
-/// recorder's rows.</item>
-/// <item><c>camtilts</c> (n = 1 starts, 0 stops; name): between, the D1 drop
-/// tilt is tagged at most once per paper landing and no view moves while
-/// something is held (<c>tilts.&lt;name&gt;</c>).</item>
+/// <item><c>camchrome</c> (n = 1 starts, 0 stops, 2 shows the stamp hint
+/// plate as the counter's bounce does; name): every frame between, no shown
+/// chrome (the pull tabs, the Back control, "◀ City") is drawn over a held
+/// thing or over the reading view's framed work (<c>chrome.&lt;name&gt;</c>,
+/// BUG-59), and each overlay plate CAM measured over the work that showed
+/// gets its own line under its owner (<c>chrome.&lt;name&gt;.guide</c>,
+/// CONTENT; <c>.stamphint</c>, STAMP); their alpha goes into the recorder's
+/// rows.</item>
+/// <item><c>camtilts</c> (n = 1 starts, 0 stops; name): between, from the
+/// views' own turns (not the push-in's re-tags), every paper landing with
+/// the reading view off and live tilts in once in its frame, none without a
+/// landing, and nothing turns while something is held
+/// (<c>tilts.&lt;name&gt;</c>).</item>
 /// <item><c>camplay</c> (n = scans, 10 when 0; f = chip reads, 5 when 0):
-/// the scripted day's desk work with the virtual mouse: every counter paper
-/// dropped on the mat, scans on the scanner's bed, chip reads on the reader's
-/// pad (a machine the reading view shows too little of reached from the
-/// office view, as a player turns back), the intercom's wheel opened and
-/// closed (<c>play.&lt;name&gt;</c>: it ran).</item>
+/// the scripted day 12 with the virtual mouse: every counter paper dropped on
+/// the mat (every other one from the office view), the Auto-Feed tray
+/// clicked and its stack scanned, n scans finished on the scanner's bed, f
+/// chip reads on the reader, the intercom's wheel opened and a ring question
+/// answered (a home the reading view shows too little of reached from the
+/// office view, as a player turns back); <c>play.&lt;name&gt;</c> passes on
+/// exactly those counts. The Rolodex's right-click is the one gap (QaInput
+/// has no right button).</item>
 /// <item><c>camcap</c> (name): in the reading view, the cap height in pixels
 /// at 1080p of the text printed on the desk's papers; a report of the margin
 /// to DOC-LOOK's floor (<c>capreport.&lt;name&gt;</c>; the pass is DOC-LOOK's at
@@ -74,6 +84,9 @@ public static class CamOps
 
     /// <summary>The flying traffic's parallax against the painting's (CityView.TrafficDepth).</summary>
     private const float TrafficDepth = 1.25f;
+
+    /// <summary>The city's pointer look lands within this many seconds of an edge-to-edge pointer move (CityParallax.LookShare: about 1.2 s at any frame rate; the knob's own range crawled about 7 s at the speed limit).</summary>
+    private const float LookSettleSeconds = 2f;
 
     /// <summary>A footprint is sampled on a grid this many cells a side, on its top and on the desk.</summary>
     private const int Samples = 12;
@@ -407,9 +420,34 @@ public static class CamOps
                 }
                 last = u;
             }
+
+            // The look after the last jump: the pointer held at the other edge, the seconds until the pan lands (a step under 0.01 px for 3 frames).
+            float TrafficPx(float du) => panorama.uvRect.width > 0f
+                ? Mathf.Abs(du) / panorama.uvRect.width * panorama.rectTransform.rect.width * (canvas != null ? canvas.rootCanvas.scaleFactor : 1f) * (1080f / Screen.height) * TrafficDepth
+                : 0f;
+            float lookFrom = panorama.uvRect.x, settled = -1f;
+            int stillFrames = 0;
+            bool toRight = ((pointerFrames - 1) / 15) % 2 == 0;
+            input.Set(new Vector2(toRight ? Screen.width - 2f : 2f, Screen.height * 0.5f), false);
+            last = panorama.uvRect.x;
+            for (int i = 0; i < SeqRecorder.Fps * 4 && settled < 0f; i++)
+            {
+                yield return null;
+                float px = TrafficPx(panorama.uvRect.x - last);
+                last = panorama.uvRect.x;
+                worst = Mathf.Max(worst, px);
+                frames++;
+                stillFrames = px < 0.01f ? stillFrames + 1 : 0;
+                if (stillFrames >= 3)
+                    settled = (i - 2) / (float)SeqRecorder.Fps;
+            }
+            float lookPx = TrafficPx(panorama.uvRect.x - lookFrom);
             runner.Assert("city.parallax." + name, Owner, frames > 0 && worst <= CityParallax.MaxPixelsPerFrame + 1e-3f,
-                          $"worst {worst:0.000} px a 30 fps frame at 1080p over {frames} frames (the sweep, then the pointer edge to edge)",
+                          $"worst {worst:0.000} px a 30 fps frame at 1080p over {frames} frames (the sweep, the pointer edge to edge, the look settling)",
                           "the nearest layer (traffic at 1.25x the painting) moves at most 1 px a frame (BUG-69)");
+            runner.Assert("city.look." + name, Owner, settled >= 0f && settled <= LookSettleSeconds,
+                          settled >= 0f ? $"the look landed {settled:0.00} s after the pointer crossed the screen, the traffic moving {lookPx:0.0} px" : $"the look still moving after 4 s ({lookPx:0.0} px so far)",
+                          $"an edge-to-edge pointer move eases in within {LookSettleSeconds:0.0} s, never a crawl at the limit (CityParallax.LookShare; the knob's own range took about 7 s: Needs Saleh 4)");
             Rect r = panorama.rectTransform.rect;
             float k = canvas != null ? canvas.rootCanvas.scaleFactor : 1f;
             runner.Assert("city.nobars." + name, Owner, r.width * k >= Screen.width - 1f && r.height * k >= Screen.height - 1f,
@@ -429,6 +467,25 @@ public static class CamOps
             yield return QaGame.Frames(2);
             bool pcClosed = office == null || office.Current == OfficeView.OfficeFocus;
             runner.Assert("city.q." + name, Owner, !city.IsOn && pcClosed, $"city {(city.IsOn ? "on" : "off")}, PC {(pcClosed ? "closed" : "open")}", "Q leaves the city view as it leaves the PC");
+            yield return QaGame.Until(() => !(QaGame.GameObjectAt("CityScreen") is GameObject s && s.activeInHierarchy), 5f, "the city to fade out");
+
+            // F1 still opens the PC with its keys card from the city, as on main (only Q's press leaves the city: OfficeViewController).
+            DesktopKeyboard keys = QaGame.Find<DesktopKeyboard>();
+            yield return input.Tap(Key.A);
+            yield return QaGame.Until(() => city.IsOn && panorama.color.a >= 1f, 5f, "the city to show");
+            yield return input.Tap(Key.F1);
+            yield return QaGame.Frames(4);
+            bool pcOpen = office != null && office.Current == OfficeView.MonitorFocus, card = keys != null && keys.CardOpen;
+            runner.Assert("city.f1." + name, Owner, pcOpen && card && !city.IsOn,
+                          $"PC {(pcOpen ? "open" : "closed")}, keys card {(card ? "shown" : "hidden")}, city {(city.IsOn ? "on" : "off")}",
+                          "F1 in the city view opens the PC with the keys card, the city turning back as the PC takes over (as on main)");
+            if (card)
+                keys.ToggleCard(); // as F1 on the PC hides it
+            if (office != null && office.Current == OfficeView.MonitorFocus)
+            {
+                yield return input.Tap(Key.Q);
+                yield return QaGame.Until(() => office.Current == OfficeView.OfficeFocus, 5f, "the PC to close");
+            }
             yield return QaGame.Until(() => !(QaGame.GameObjectAt("CityScreen") is GameObject s && s.activeInHierarchy), 5f, "the city to fade out");
         }
         finally
@@ -542,10 +599,20 @@ public static class CamOps
 
     // ------------------------------------------------------------------ camchrome
 
+    /// <summary>One watched piece of the overlay: its path, object and fade, the assertion it reports under (null: CAM's own chrome) and its owner, and its counts.</summary>
+    private sealed class Watched
+    {
+        public string Path, Key, Owner;
+        public GameObject Go;
+        public CanvasGroup Group;
+        public int Shown, Over;
+        public readonly List<string> Notes = new List<string>();
+    }
+
     /// <summary>A running chrome watch (camchrome n = 1 to n = 0).</summary>
     private sealed class ChromeWatch
     {
-        public readonly List<(string name, GameObject go, CanvasGroup group)> Controls = new List<(string, GameObject, CanvasGroup)>();
+        public readonly List<Watched> Controls = new List<Watched>();
         public readonly List<string> Violations = new List<string>();
         public int Frames, HoldingFrames, ReadingFrames, Over;
         public bool Running;
@@ -553,26 +620,42 @@ public static class CamOps
 
     private static ChromeWatch _chrome;
 
-    /// <summary>The chrome a view shows (BUG-59's): the PC and STAMPS pull tabs, the reading view's Back control, "◀ City".</summary>
+    /// <summary>The chrome a view shows (BUG-59's, CAM's): the PC and STAMPS pull tabs, the reading view's Back control, "◀ City".</summary>
     private static readonly string[] ChromeNames = { "PcTab", "StampBar/Tab", "DeskViewBack", "CityLook" };
+
+    /// <summary>
+    /// The overlay's plates CAM measured over the reading view's work (CAM.md's
+    /// hand-offs), each its own assertion under its owner until it moves: the
+    /// guide's prompt plate (CONTENT; day 1, over the intercom's top) and the
+    /// stamp hint plate (STAMP; over the rack). Both are under the gate's
+    /// <c>cam_chrome.chrome.*</c>, so <c>cam.play.chrome</c> stays red while
+    /// either covers the work.
+    /// </summary>
+    private static readonly (string path, string key, string owner)[] Plates = { ("GuidePrompt/Plate", "guide", "CONTENT"), ("StampBar/Hint", "stamphint", "STAMP") };
+
+    /// <summary>The note the counter's bounce shows on the stamp hint plate (DeskController: a paper dropped back on the counter before the verdict).</summary>
+    private const string BounceNote = "stamp.refused.handBackFirst";
 
     private static IEnumerator Chrome(QaRunner runner, QaStep step)
     {
         string name = Name(step, "chrome");
+        if (step.n == 2)
+        {
+            // The stamp hint plate shown as the game shows it (DeskStampTray.Note, the counter's bounce), for the running watch.
+            if (QaGame.Find<DeskStampTray>() is DeskStampTray stamps)
+                stamps.Note(BounceNote);
+            yield return QaGame.Frames(2);
+            yield break;
+        }
         if (step.n > 0)
         {
             if (_chrome != null)
                 _chrome.Running = false;
             var watch = new ChromeWatch { Running = true };
             foreach (string control in ChromeNames)
-            {
-                GameObject go = TryAt(control);
-                if (go == null)
-                    continue;
-                CanvasGroup group = Group(go.transform);
-                watch.Controls.Add((control, go, group));
-                runner.Recorder.Column("alpha:" + control, () => AlphaOf(go, group).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
-            }
+                Add(runner, watch, control, null, Owner);
+            foreach ((string path, string key, string owner) in Plates)
+                Add(runner, watch, path, key, owner);
             _chrome = watch;
             runner.StartCoroutine(Watch(watch));
             yield break;
@@ -581,17 +664,40 @@ public static class CamOps
         _chrome = null;
         foreach (string control in ChromeNames)
             runner.Recorder.Forget("alpha:" + control);
+        foreach ((string path, _, _) in Plates)
+            runner.Recorder.Forget("alpha:" + path);
         if (done == null)
         {
             runner.Assert("chrome." + name, Owner, false, "not measured", "no camchrome watch was started (n = 1)");
             yield break;
         }
         done.Running = false;
+        string missing = string.Join(", ", ChromeNames.Where(c => done.Controls.All(w => w.Path != c)));
+        string plates = string.Join(", ", done.Controls.Where(w => w.Key != null).Select(w => $"{w.Path} shown {w.Shown} frames"));
         runner.Assert("chrome." + name, Owner, done.Over == 0 && done.Frames > 0,
-                      $"{done.Frames} frames watched ({done.HoldingFrames} holding, {done.ReadingFrames} in the reading view), {done.Over} with chrome over the work, {Screen.width}x{Screen.height}",
+                      $"{done.Frames} frames watched ({done.HoldingFrames} holding, {done.ReadingFrames} in the reading view), {done.Over} with chrome over the work, {Screen.width}x{Screen.height}" +
+                      (missing.Length > 0 ? $"; not found: {missing}" : "") + (plates.Length > 0 ? $"; plates: {plates}" : ""),
                       done.Violations.Count > 0 ? string.Join("; ", done.Violations) : "no tab, Back control or city tab drawn over a held thing or the reading view's framed work (BUG-59)");
+        // Each plate that showed while the watch ran: its own assertion, under its owner (none for a plate that never showed: nothing was measured).
+        foreach (Watched plate in done.Controls.Where(w => w.Key != null && w.Shown > 0))
+            runner.Assert($"chrome.{name}.{plate.Key}", plate.Owner, plate.Over == 0,
+                          $"{plate.Path} shown {plate.Shown} frames, {plate.Over} over the work",
+                          plate.Notes.Count > 0 ? string.Join("; ", plate.Notes) + $" (expected red until {plate.Owner} moves it: CAM.md's hand-offs)" :
+                          "the plate never covers a held thing or the reading view's framed work (BUG-59)");
     }
 
+    /// <summary>Watches the overlay object at <paramref name="path"/> (skipped when not loaded), its alpha in the recorder's rows.</summary>
+    private static void Add(QaRunner runner, ChromeWatch watch, string path, string key, string owner)
+    {
+        GameObject go = TryAt(path);
+        if (go == null)
+            return;
+        var w = new Watched { Path = path, Key = key, Owner = owner, Go = go, Group = Group(go.transform) };
+        watch.Controls.Add(w);
+        runner.Recorder.Column("alpha:" + path, () => AlphaOf(w.Go, w.Group).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>A loaded object by its path or name (QaGame.GameObjectAt), or by a path under any object named its first part ("StampBar/Tab": the overlay's StampBar's Tab), or null.</summary>
     private static GameObject TryAt(string pathOrName)
     {
         try
@@ -600,13 +706,20 @@ public static class CamOps
         }
         catch (InvalidOperationException)
         {
+            int slash = pathOrName.IndexOf('/');
+            if (slash <= 0)
+                return null;
+            string first = pathOrName.Substring(0, slash), rest = pathOrName.Substring(slash + 1);
+            foreach (Transform t in UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include))
+                if (t.name == first && t.Find(rest) is Transform found)
+                    return found.gameObject;
             return null;
         }
     }
 
     private static float AlphaOf(GameObject go, CanvasGroup group) => go == null || !go.activeInHierarchy ? 0f : group != null ? group.alpha : 1f;
 
-    /// <summary>Each frame's end: every shown chrome control's screen rect against the held thing's and, in the reading view, the framed work's.</summary>
+    /// <summary>Each frame's end: every shown chrome control's and plate's screen rect against the held thing's and, in the reading view, the framed work's.</summary>
     private static IEnumerator Watch(ChromeWatch watch)
     {
         var eof = new WaitForEndOfFrame();
@@ -634,17 +747,24 @@ public static class CamOps
                     work.Add(("the reading view's work", framed.Value));
             }
             bool over = false;
-            foreach ((string control, GameObject go, CanvasGroup group) in watch.Controls)
+            foreach (Watched w in watch.Controls)
             {
-                if (AlphaOf(go, group) <= 0f || !(QaGame.ScreenRect(go) is Rect rect))
+                if (AlphaOf(w.Go, w.Group) <= 0f || !(QaGame.ScreenRect(w.Go) is Rect rect))
                     continue;
+                w.Shown++;
+                bool covers = false;
                 foreach ((string what, Rect area) in work)
                     if (rect.Overlaps(area))
                     {
-                        over = true;
-                        if (watch.Violations.Count < 12)
-                            watch.Violations.Add($"frame {Time.frameCount}: {control} over {what}");
+                        covers = true;
+                        List<string> notes = w.Key == null ? watch.Violations : w.Notes;
+                        if (notes.Count < 12)
+                            notes.Add($"frame {Time.frameCount}: {w.Path} over {what}");
                     }
+                if (!covers)
+                    continue;
+                w.Over++;
+                over |= w.Key == null;
             }
             if (over)
                 watch.Over++;
@@ -670,27 +790,95 @@ public static class CamOps
 
     // ------------------------------------------------------------------ camtilts
 
-    /// <summary>A running tilt count (camtilts n = 1 to n = 0).</summary>
+    /// <summary>
+    /// A running tilt count (camtilts n = 1 to n = 0). It counts the views'
+    /// own turns (DeskView.Changed, CityView.Changed, the PC's ViewChanged),
+    /// never the camera tags: the push-in that follows a tilt re-tags itself
+    /// with the tilt's cause about every 0.2 s while it settles
+    /// (CameraFeel.TickMotion), so one drop tilt is several DeskDropTilt tags.
+    /// A paper landing with the reading view off and the desk taking input
+    /// (DeskView's toggle live) expects the D1 tilt in the same frame
+    /// (DeskController.Read tilts right after PaperExamined); a landing with
+    /// the view on expects none.
+    /// </summary>
     private sealed class TiltCount
     {
         public DeskController Desk;
-        public int Landings, DropTilts, ViewKeys, WhileHolding;
+        public DeskView View;
+        public CityView City;
+        public OfficeViewController Office;
+        public int Landings, Expected, Met, DropTilts, ViewKeys, Untagged, WhileHolding;
         public readonly List<string> Notes = new List<string>();
 
-        public void Landed(int paper) => Landings++;
+        /// <summary>The landings still waiting for their tilt: the frame, the paper and whether something was held then.</summary>
+        public readonly List<(int frame, int paper, bool holding)> Pending = new List<(int, int, bool)>();
 
-        public void Tagged(CameraMoveCause cause, float seconds, float cap)
+        public void Note(string text)
         {
-            if (cause == CameraMoveCause.DeskDropTilt)
-                DropTilts++;
-            else if (cause == CameraMoveCause.ViewKey)
-                ViewKeys++;
-            if (cause != CameraMoveCause.Impulse && HoldRegistry.Desk.IsHolding)
+            if (Notes.Count < 8)
+                Notes.Add(text);
+        }
+
+        public void Landed(int paper)
+        {
+            Landings++;
+            if (View == null || View.IsOn || !(QaGame.Field(View, "_toggleLive") is bool live) || !live)
+                return;
+            Expected++;
+            Pending.Add((Time.frameCount, paper, HoldRegistry.Desk.IsHolding));
+        }
+
+        public void ViewChanged()
+        {
+            Moved(View.IsOn ? "the reading view's tilt in" : "the reading view's return");
+            if (!View.IsOn)
             {
-                WhileHolding++;
-                if (Notes.Count < 8)
-                    Notes.Add($"{cause} at frame {Time.frameCount} while holding");
+                ViewKeys++;
+                return;
             }
+            switch (View.LastCause)
+            {
+                case CameraMoveCause.DeskDropTilt:
+                    DropTilts++;
+                    int i = Pending.FindIndex(p => p.frame == Time.frameCount);
+                    if (i >= 0)
+                    {
+                        Met++;
+                        Pending.RemoveAt(i);
+                    }
+                    else
+                    {
+                        Note($"a drop tilt at frame {Time.frameCount} with no paper landing that frame");
+                    }
+                    break;
+                case CameraMoveCause.Untagged:
+                    Untagged++;
+                    Note($"an untagged tilt at frame {Time.frameCount} (TAB or the guide's day-start page: STAMP's and CONTENT's hand-offs; the logger fails it)");
+                    break;
+                default:
+                    ViewKeys++;
+                    break;
+            }
+        }
+
+        public void CityChanged()
+        {
+            ViewKeys++;
+            Moved(City.IsOn ? "the turn to the city" : "the turn back from the city");
+        }
+
+        public void PcChanged(OfficeView view)
+        {
+            ViewKeys++;
+            Moved(view == OfficeView.MonitorFocus ? "the PC opening" : "the PC closing");
+        }
+
+        private void Moved(string what)
+        {
+            if (!HoldRegistry.Desk.IsHolding)
+                return;
+            WhileHolding++;
+            Note($"{what} at frame {Time.frameCount} while holding");
         }
     }
 
@@ -702,10 +890,22 @@ public static class CamOps
         if (step.n > 0)
         {
             Stop(_tilts);
-            _tilts = new TiltCount { Desk = QaGame.Find<DeskController>() };
-            if (_tilts.Desk != null)
-                _tilts.Desk.PaperExamined += _tilts.Landed;
-            QaSignals.CameraTagged += _tilts.Tagged;
+            var count = new TiltCount
+            {
+                Desk = QaGame.Find<DeskController>(),
+                View = QaGame.Find<DeskView>(),
+                City = QaGame.Find<CityView>(),
+                Office = QaGame.Find<OfficeViewController>()
+            };
+            if (count.Desk != null)
+                count.Desk.PaperExamined += count.Landed;
+            if (count.View != null)
+                count.View.Changed += count.ViewChanged;
+            if (count.City != null)
+                count.City.Changed += count.CityChanged;
+            if (count.Office != null)
+                count.Office.ViewChanged += count.PcChanged;
+            _tilts = count;
             yield break;
         }
         TiltCount done = _tilts;
@@ -716,9 +916,14 @@ public static class CamOps
             yield break;
         }
         Stop(done);
-        bool ok = done.Desk != null && done.Landings > 0 && done.DropTilts <= done.Landings && done.WhileHolding == 0;
-        runner.Assert("tilts." + name, Owner, ok, $"{done.Landings} paper landings, {done.DropTilts} drop tilts, {done.ViewKeys} view-key moves, {done.WhileHolding} while holding",
-                      done.Notes.Count > 0 ? string.Join("; ", done.Notes) : "the D1 tilt at most once per drop, never while holding (v2's CAM pass at #6); 0 untagged moves is the run's camera assertion");
+        foreach ((int frame, int paper, bool holding) in done.Pending)
+            done.Note($"paper {paper} landed at frame {frame} with the view off and no tilt followed" + (holding ? " (something was held then: DOC-HANDLE ends a paper's hold before the drop's tilt)" : ""));
+        if (done.Expected == 0)
+            done.Note("no landing found the view off and the desk live: the drop tilt was never played (camplay turns the view back before every other drop)");
+        bool ok = done.Desk != null && done.View != null && done.Landings > 0 && done.Expected > 0 && done.Met == done.Expected && done.DropTilts == done.Met && done.WhileHolding == 0;
+        runner.Assert("tilts." + name, Owner, ok,
+                      $"{done.Landings} paper landings ({done.Expected} with the view off and live), {done.DropTilts} drop tilts ({done.Met} on those landings), {done.ViewKeys} view-key turns, {done.Untagged} untagged tilts, {done.WhileHolding} turns while holding",
+                      done.Notes.Count > 0 ? string.Join("; ", done.Notes) : "each landing with the view off tilts in once, in its own frame; none with the view on, none without a landing, nothing turns while holding (v2's CAM pass at #6; the views' own turns, not the push-in's re-tags); 0 untagged moves is the run's camera assertion");
     }
 
     private static void Stop(TiltCount count)
@@ -727,7 +932,12 @@ public static class CamOps
             return;
         if (count.Desk != null)
             count.Desk.PaperExamined -= count.Landed;
-        QaSignals.CameraTagged -= count.Tagged;
+        if (count.View != null)
+            count.View.Changed -= count.ViewChanged;
+        if (count.City != null)
+            count.City.Changed -= count.CityChanged;
+        if (count.Office != null)
+            count.Office.ViewChanged -= count.PcChanged;
     }
 
     // ------------------------------------------------------------------ camplay
@@ -761,6 +971,52 @@ public static class CamOps
         UnityEngine.Object.FindObjectsByType<DeskDocument>()
                       .Where(p => p.isActiveAndEnabled && p.Zone == zone && !p.IsSliding).OrderBy(p => p.Index).ToList();
 
+    /// <summary>Waits (real time) until <paramref name="condition"/> holds or <paramref name="timeout"/> s pass, then tells <paramref name="held"/> which (no throw: camplay notes a miss and goes on).</summary>
+    private static IEnumerator Wait(Func<bool> condition, float timeout, Action<bool> held)
+    {
+        float end = Time.realtimeSinceStartup + timeout;
+        while (!condition())
+        {
+            if (Time.realtimeSinceStartup > end)
+            {
+                held(false);
+                yield break;
+            }
+            yield return null;
+        }
+        held(true);
+    }
+
+    /// <summary>The count of a private collection field of <paramref name="target"/> (0 without it).</summary>
+    private static int CountOf(object target, string field) => target != null && QaGame.Field(target, field) is ICollection c ? c.Count : 0;
+
+    /// <summary>The traveller wheel's ring pills that take a click now (its RadialLayoutGroup's children; "&lt; Back" in the centre slot is not one).</summary>
+    private static List<Button> RingPills(TravellerWheel wheel)
+    {
+        var pills = new List<Button>();
+        if (wheel == null || !(QaGame.Field(wheel, "layout") is Component layout))
+            return pills;
+        foreach (Transform child in layout.transform)
+            if (child.gameObject.activeInHierarchy && child.TryGetComponent(out Button b) && b.interactable)
+                pills.Add(b);
+        return pills;
+    }
+
+    /// <summary>
+    /// The scripted day 12 at the desk (v1's scripted day minus the loupe,
+    /// FIX_PLAN_v2's CAM delta) with the virtual mouse: every counter paper
+    /// dropped on the mat (every other one from the office view, the view
+    /// turned back first as a player does, so the D1 drop tilt plays on a
+    /// landing with the view off and none on a landing with it on); a click
+    /// on the scanner's Auto-Feed tray and its stack scanned; n scans on the
+    /// scanner's bed; f chip reads on the reader (a paper it refuses bounces
+    /// back and the next is tried; the one it reads is read again); the
+    /// intercom's wheel opened, a question asked on its ring (a submenu
+    /// opened on the way) and answered, then Esc. A home the reading view
+    /// shows too little of is reached from the office view (Back, a view
+    /// key). The Rolodex's right-click is the one known gap (QaInput has no
+    /// right button: QA-RIG's hand-off).
+    /// </summary>
     private static IEnumerator Play(QaRunner runner, QaStep step)
     {
         QaInput input = QaInput.Current;
@@ -768,93 +1024,242 @@ public static class CamOps
             throw new InvalidOperationException("camplay needs the virtual mouse and a bound desk.");
         var notes = new List<string>();
         yield return QaGame.Until(() => Papers(DeskZone.Counter).Count > 0, 10f, "papers on the counter");
-
-        // Every counter paper dropped on the mat, each at its own spot (the D1 drop tilt comes with the first).
-        DeskRect mat = DeskLayout.Mat.Rect;
-        int drops = 0;
-        for (int guard = 0; guard < 8; guard++)
-        {
-            List<DeskDocument> counter = Papers(DeskZone.Counter);
-            if (counter.Count == 0)
-                break;
-            Vector2? from = QaGame.ScreenPoint(counter[0].gameObject);
-            (float x, float y) spot = mat.PointAt(0.3f + 0.13f * (drops % 4), 0.35f + 0.15f * (drops / 4 % 2));
-            Vector2? to = ScreenOf(DeskLayout.Frame.Point(new Vector2(spot.x, spot.y)));
-            if (from == null || to == null)
-            {
-                notes.Add($"paper {counter[0].Index} or its spot is off the screen");
-                break;
-            }
-            yield return DragAt(input, from.Value, to.Value);
-            drops++;
-            yield return new WaitForSecondsRealtime(0.8f); // the tilt's blend and the paper's slide settle
-        }
-
-        // A machine the reading view shows too little of is reached from the office view: Back, a view key, as a player turns.
         DeskView view = QaGame.Find<DeskView>();
-        IEnumerator Reach(Vector3 world)
+        DeskController desk = QaGame.Find<DeskController>();
+        DeskScanner scanner = QaGame.Find<DeskScanner>();
+
+        // Back to the office view (a view key), as a player turns: the drop tilt's start, and a home the reading view shows too little of.
+        IEnumerator Office()
         {
-            if (ScreenOf(world) == null && view != null && view.IsOn)
+            if (view != null && view.IsOn)
             {
                 view.Return();
                 yield return new WaitForSecondsRealtime(1f);
             }
         }
 
-        // Scans: a desk paper onto the scanner's bed.
-        int scans = 0, scanTarget = step.n > 0 ? step.n : 10;
-        DeskScanner scanner = QaGame.Find<DeskScanner>();
-        for (int i = 0; scanner != null && scanner.OnDesk && i < scanTarget; i++)
+        IEnumerator Reach(Vector3 world)
         {
-            List<DeskDocument> desk = Papers(DeskZone.Desk);
-            if (desk.Count == 0)
-                break;
-            DeskDocument paper = desk[i % desk.Count];
-            yield return Reach(scanner.BedPoint);
-            Vector2? from = QaGame.ScreenPoint(paper.gameObject), to = ScreenOf(scanner.BedPoint);
-            if (from == null || to == null)
-            {
-                notes.Add("the scanner's bed is off the screen");
-                break;
-            }
-            yield return DragAt(input, from.Value, to.Value);
-            scans++;
-            yield return new WaitForSecondsRealtime(2.5f);
+            if (ScreenOf(world) == null)
+                yield return Office();
         }
 
-        // Chip reads: a desk paper onto the reader's pad (a passport reads; anything else bounces back).
-        int reads = 0, readTarget = step.f > 0f ? Mathf.RoundToInt(step.f) : 5;
-        ChipReader reader = QaGame.Find<ChipReader>();
-        for (int i = 0; reader != null && reader.isActiveAndEnabled && i < readTarget; i++)
+        // Every counter paper dropped on the mat, each at its own spot.
+        if (view != null && view.IsOn)
+            notes.Add("the reading view was on before the first drop (a tilt at the day's start; turned back)");
+        DeskRect mat = DeskLayout.Mat.Rect;
+        int drops = 0;
+        for (int guard = 0; guard < 12; guard++)
         {
-            List<DeskDocument> desk = Papers(DeskZone.Desk);
-            if (desk.Count == 0)
+            List<DeskDocument> counter = Papers(DeskZone.Counter);
+            if (counter.Count == 0)
                 break;
-            DeskDocument paper = desk[i % desk.Count];
-            yield return Reach(reader.DockPoint(MachineDock.Pad));
-            Vector2? from = QaGame.ScreenPoint(paper.gameObject), to = ScreenOf(reader.DockPoint(MachineDock.Pad));
+            if (drops % 2 == 0)
+                yield return Office();
+            (float x, float y) spot = mat.PointAt(0.3f + 0.13f * (drops % 4), 0.35f + 0.15f * (drops / 4 % 2));
+            Vector3 onMat = DeskLayout.Frame.Point(new Vector2(spot.x, spot.y));
+            Vector2? from = QaGame.ScreenPoint(counter[0].gameObject), to = ScreenOf(onMat);
+            if ((from == null || to == null) && view != null && view.IsOn)
+            {
+                yield return Office(); // the reading view shows too little of the counter: turned back, as a player does
+                from = QaGame.ScreenPoint(counter[0].gameObject);
+                to = ScreenOf(onMat);
+            }
             if (from == null || to == null)
             {
-                notes.Add("the chip reader's pad is off the screen");
+                notes.Add($"paper {counter[0].Index} or its spot is off the screen");
                 break;
             }
+            DeskDocument dropped = counter[0];
             yield return DragAt(input, from.Value, to.Value);
-            reads++;
-            yield return new WaitForSecondsRealtime(2f);
+            drops++;
+            yield return new WaitForSecondsRealtime(0.8f); // the tilt's blend and the paper's slide settle
+            if (dropped != null && dropped.Zone == DeskZone.Counter && notes.Count < 12)
+                notes.Add($"paper {dropped.Index} stayed on the counter after its drop");
+        }
+        int left = Papers(DeskZone.Counter).Count;
+
+        int scanned = 0;
+        void Finished(int paper, ScanPass pass) => scanned++;
+        if (desk != null)
+            desk.ScanFinished += Finished;
+        int fed = 0, scans = 0, scanTarget = step.n > 0 ? step.n : 10;
+        int reads = 0, refused = 0, readTarget = step.f > 0f ? Mathf.RoundToInt(step.f) : 5;
+        bool wheelOpened = false, asked = false;
+        try
+        {
+            // The Auto-Feed: a click on the scanner's tray feeds every paper not scanned yet through it, one after another.
+            ScannerAddOns addOns = QaGame.Find<ScannerAddOns>();
+            Component tray = addOns != null ? QaGame.Field(addOns, "trayClick") as Component : null;
+            DeskPapers papers = desk != null ? QaGame.Field(desk, "_state") as DeskPapers : null;
+            if (scanner == null || tray == null || !tray.gameObject.activeInHierarchy)
+            {
+                notes.Add("no Auto-Feed tray on the scanner (the upgrade owned: GiveAllItems)");
+            }
+            else
+            {
+                yield return Reach(tray.transform.position);
+                Vector2? at = QaGame.ScreenPoint(tray.gameObject);
+                if (at == null)
+                {
+                    notes.Add("the Auto-Feed tray is off the screen");
+                }
+                else
+                {
+                    bool clicked = false;
+                    void Tray() => clicked = true;
+                    scanner.TrayClicked += Tray;
+                    int before = scanned;
+                    yield return input.Play(QaPaths.Click(at.Value));
+                    yield return QaGame.Frames(3);
+                    scanner.TrayClicked -= Tray;
+                    bool emptied = false;
+                    yield return Wait(() => papers == null || (!papers.ScannerBusy && papers.QueuedCount == 0), 60f, ok => emptied = ok);
+                    fed = scanned - before;
+                    if (!clicked)
+                        notes.Add("the click on the Auto-Feed tray did not reach it");
+                    if (!emptied)
+                        notes.Add("the Auto-Feed's stack was still scanning after 60 s");
+                    yield return new WaitForSecondsRealtime(0.8f); // the last paper slides back
+                }
+            }
+
+            // Scans: a desk paper onto the scanner's bed, each scan finished before the next.
+            for (int i = 0; scanner != null && scanner.OnDesk && i < scanTarget; i++)
+            {
+                List<DeskDocument> onDesk = Papers(DeskZone.Desk);
+                if (onDesk.Count == 0)
+                {
+                    notes.Add("no paper lies on the desk to scan");
+                    break;
+                }
+                DeskDocument paper = onDesk[i % onDesk.Count];
+                yield return Reach(scanner.BedPoint);
+                Vector2? from = QaGame.ScreenPoint(paper.gameObject), to = ScreenOf(scanner.BedPoint);
+                if (from == null || to == null)
+                {
+                    notes.Add("the scanner's bed is off the screen");
+                    break;
+                }
+                int before = scanned;
+                yield return DragAt(input, from.Value, to.Value);
+                bool done = false;
+                yield return Wait(() => scanned > before, 12f, ok => done = ok);
+                if (done)
+                    scans++;
+                else if (notes.Count < 12)
+                    notes.Add($"scan {i + 1} never finished (the drop missed the bed?)");
+                yield return new WaitForSecondsRealtime(0.8f); // the scanned paper slides back
+            }
+
+            // Chip reads: a desk paper onto the reader; one it refuses (no chip) bounces back and the next is tried, the one it reads is read again.
+            ChipReader reader = QaGame.Find<ChipReader>();
+            int card = -1;
+            var tried = new HashSet<int>();
+            for (int attempt = 0; reader != null && reader.OnDesk && reads < readTarget && attempt < readTarget + 8; attempt++)
+            {
+                List<DeskDocument> onDesk = Papers(DeskZone.Desk);
+                DeskDocument paper = card >= 0 ? onDesk.FirstOrDefault(p => p.Index == card) : onDesk.FirstOrDefault(p => !tried.Contains(p.Index));
+                if (paper == null)
+                {
+                    if (card >= 0)
+                    {
+                        yield return new WaitForSecondsRealtime(0.5f); // the read paper is still on its way back
+                        continue;
+                    }
+                    notes.Add("no paper on the desk the chip reader takes");
+                    break;
+                }
+                tried.Add(paper.Index);
+                yield return Reach(reader.DockPoint(MachineDock.Pad));
+                Vector2? from = QaGame.ScreenPoint(paper.gameObject), to = ScreenOf(reader.DockPoint(MachineDock.Pad));
+                if (from == null || to == null)
+                {
+                    notes.Add("the chip reader is off the screen");
+                    break;
+                }
+                yield return DragAt(input, from.Value, to.Value);
+                bool began = false;
+                yield return Wait(() => reader.Busy, 4f, ok => began = ok);
+                if (!began)
+                {
+                    refused++;
+                    yield return new WaitForSecondsRealtime(1f); // it bounces back to where it was picked up
+                    continue;
+                }
+                bool back = false;
+                yield return Wait(() => !reader.Busy && CountOf(desk, "_inReader") == 0, 12f, ok => back = ok);
+                reads++;
+                card = reader.Document >= 0 ? reader.Document : paper.Index;
+                if (!back)
+                    notes.Add($"chip read {reads} never came back out");
+                yield return new WaitForSecondsRealtime(0.8f);
+            }
+
+            // The intercom: its wheel opens in the view the player is in (no camera move); a question asked on its ring and answered (the bubble says a line), then Esc.
+            TravellerWheel wheel = QaGame.Find<TravellerWheel>();
+            if (wheel == null || !DeskLayout.TryPose(DeskHomeMap.Intercom, out Vector3 intercom, out _))
+            {
+                notes.Add("no traveller wheel or intercom");
+            }
+            else
+            {
+                yield return Reach(intercom);
+                int said = CountOf(wheel, "_said"), closedSilent = 0;
+                for (int attempt = 0; attempt < 5 && !asked; attempt++)
+                {
+                    if (!wheel.IsOpen)
+                    {
+                        if (!(ScreenOf(intercom) is Vector2 button))
+                        {
+                            notes.Add("the intercom is off the screen");
+                            break;
+                        }
+                        yield return input.Play(QaPaths.Click(button));
+                        yield return new WaitForSecondsRealtime(0.8f); // the pills fly out
+                        wheelOpened |= wheel.IsOpen;
+                        if (!wheel.IsOpen)
+                        {
+                            notes.Add("the intercom's click opened no wheel");
+                            break;
+                        }
+                    }
+                    List<Button> pills = RingPills(wheel);
+                    if (pills.Count == 0)
+                    {
+                        notes.Add("the wheel's ring shows no question");
+                        break;
+                    }
+                    Button pill = pills[Mathf.Min(closedSilent, pills.Count - 1)];
+                    if (!(QaGame.ScreenPoint(pill.gameObject) is Vector2 p))
+                    {
+                        notes.Add("a ring pill is off the screen");
+                        break;
+                    }
+                    yield return input.Play(QaPaths.Click(p));
+                    yield return new WaitForSecondsRealtime(0.8f);
+                    asked = CountOf(wheel, "_said") > said;
+                    if (!asked && !wheel.IsOpen)
+                        closedSilent++; // a look or a paper asked for: the wheel closed with nothing said; the next pill on the next opening
+                }
+                if (wheel.IsOpen)
+                {
+                    yield return input.Tap(Key.Escape);
+                    yield return new WaitForSecondsRealtime(0.5f);
+                }
+            }
+        }
+        finally
+        {
+            if (desk != null)
+                desk.ScanFinished -= Finished;
         }
 
-        // The intercom: its wheel opens in the view the player is in (no camera move), and Esc closes it.
-        bool wheel = false;
-        if (DeskLayout.TryPose(DeskHomeMap.Intercom, out Vector3 intercom, out _) && ScreenOf(intercom) is Vector2 at)
-        {
-            yield return input.Play(QaPaths.Click(at));
-            yield return new WaitForSecondsRealtime(0.5f);
-            wheel = QaGame.Find<TravellerWheel>() is TravellerWheel w && w.IsOpen;
-            yield return input.Tap(Key.Escape);
-            yield return new WaitForSecondsRealtime(0.5f);
-        }
-        runner.Assert("play." + Name(step, "desk"), Owner, drops > 0, $"{drops} drops, {scans} scans, {reads} chip reads, the intercom's wheel {(wheel ? "opened" : "not opened")}",
-                      notes.Count > 0 ? string.Join("; ", notes) : "the scripted desk work ran (its camera moves: the run's camera assertion and camtilts)");
+        bool ran = drops > 0 && left == 0 && fed > 0 && scans == scanTarget && reads == readTarget && wheelOpened && asked;
+        runner.Assert("play." + Name(step, "desk"), Owner, ran,
+                      $"{drops} drops ({left} left on the counter), the Auto-Feed scanned {fed}, {scans} of {scanTarget} scans, {reads} of {readTarget} chip reads ({refused} papers refused), the wheel {(wheelOpened ? "opened" : "not opened")}, a question {(asked ? "answered" : "not answered")}",
+                      (notes.Count > 0 ? string.Join("; ", notes) + "; " : "") +
+                      "the scripted day 12 ran whole: every counter paper dropped, the Auto-Feed's stack scanned, each scan and chip read finished, a ring question answered (its camera moves: the run's camera assertion and camtilts); the Rolodex's right-click is the one known gap (QaInput has no right button: QA-RIG)");
     }
 
     // ------------------------------------------------------------------ camcap

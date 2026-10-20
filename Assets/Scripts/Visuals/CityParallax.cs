@@ -11,7 +11,8 @@ using System;
 /// <see cref="MaxPixelsPerSecond"/> at 1080p: one pixel a frame at the QA
 /// recorder's 30 fps, the same seconds at any frame rate, easing into its
 /// target. The sweep is kept small enough that its own ease never needs the
-/// limit (<see cref="SweepShare"/>). Pure; CityView applies it.
+/// limit (<see cref="SweepShare"/>), and so is the pointer's look
+/// (<see cref="LookShare"/>). Pure; CityView applies it.
 /// </summary>
 public static class CityParallax
 {
@@ -63,6 +64,25 @@ public static class CityParallax
         if (requested <= 0f || settleSeconds <= 0f || maxSpeed <= 0f)
             return 0f;
         return Math.Min(requested, SweepHeadroom * maxSpeed * settleSeconds / EasePeak);
+    }
+
+    /// <summary>
+    /// The pointer's look (shares of the painting a side) the pan may follow:
+    /// the <paramref name="requested"/> one (DeskConfigSO.cityLookParallax),
+    /// made smaller where a move of the pointer from one edge of the screen
+    /// to the other (twice the share) would be more than the spring covers
+    /// without meeting <paramref name="maxSpeed"/> (the limit over
+    /// <see cref="SmoothSeconds"/>): the look then eases in on the spring
+    /// alone, landing in about 1.2 s at any frame rate at about three
+    /// quarters of the limit at its fastest, never a crawl at the limit
+    /// (BUG-69's fix: "tiny, heavily smoothed parallax"). 0 for no look or no
+    /// limit.
+    /// </summary>
+    public static float LookShare(float requested, float maxSpeed)
+    {
+        if (requested <= 0f || maxSpeed <= 0f)
+            return 0f;
+        return Math.Min(requested, maxSpeed * SmoothSeconds / 2f);
     }
 
     /// <summary>
