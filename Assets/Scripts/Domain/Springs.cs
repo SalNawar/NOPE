@@ -159,6 +159,14 @@ public struct Spring
     public void Kick(float speed) => Velocity += speed;
 
     /// <summary>
+    /// A prop's kick as the player's comfort settings allow it (BUG-64a: "every
+    /// motion respects the comfort settings live"): <paramref name="speed"/>
+    /// scaled by <paramref name="amount"/>'s share, so Reduced Motion or a
+    /// Motion intensity of 0 adds no velocity at all.
+    /// </summary>
+    public void Kick(float speed, MotionAmount amount) => Velocity += speed * amount.Share;
+
+    /// <summary>
     /// Advances it by <paramref name="dt"/> seconds with <paramref name="tuning"/>
     /// (clamped to <see cref="MaxFrame"/>, in equal sub-steps of at most
     /// <see cref="MaxSubStep"/>), then settles it when within

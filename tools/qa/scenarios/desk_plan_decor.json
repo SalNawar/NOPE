@@ -1,0 +1,30 @@
+{
+  "name": "desk_plan_decor",
+  "owner": "DESK-PLAN",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "DESK-PLAN BUG-23: each decoration dragged (Fast, Slow, Wobble, Diag) to free spots off the mat rests where it was let go (drop <= 8 px at 1080p); one let go onto the scanner's home and one onto the mat go back; the camera never moves (A1)" },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "cheat", "name": "GiveAllItems" },
+    { "op": "jumpDay", "n": 12 },
+    { "op": "waitOffice", "n": 12 },
+    { "op": "startShift" },
+    { "op": "wait", "f": 4 },
+    { "op": "still", "name": "decor_before" },
+    { "op": "recStart", "name": "decor_drags" },
+    { "op": "drop", "path": "Fast", "target": "Decor_form_sorter", "x2": 0.697, "y2": 0.292, "f": 8 },
+    { "op": "drop", "path": "Slow", "target": "Decor_form_sorter", "x2": 0.828, "y2": 0.285, "f": 8 },
+    { "op": "drop", "path": "Wobble", "target": "Decor_tray", "x2": 0.834, "y2": 0.315, "f": 8 },
+    { "op": "drop", "path": "Diag", "target": "Decor_tray", "x2": 0.788, "y2": 0.265, "f": 8 },
+    { "op": "drag", "path": "Onto", "target": "Decor_form_sorter", "x2": 0.738, "y2": 0.185 },
+    { "op": "wait", "f": 1 },
+    { "op": "drag", "path": "Plain", "target": "Decor_tray", "x2": 0.568, "y2": 0.199 },
+    { "op": "wait", "f": 1 },
+    { "op": "recStop" },
+    { "op": "still", "name": "decor_after" },
+    { "op": "cameraCheck", "name": "decor" },
+    { "op": "probe", "name": "end" }
+  ]
+}
