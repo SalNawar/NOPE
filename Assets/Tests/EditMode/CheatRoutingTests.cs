@@ -6,7 +6,9 @@ using NUnit.Framework;
 /// restart run the same steps play runs (the shift's close, Home's night on
 /// the default care, Sleep, the morning), a jump back replays from a new
 /// world, a restart restores the morning; Sleep checks the endings after the
-/// night's resolve as well as before it; every rewind names what it loses.
+/// night's resolve as well as before it; every rewind names what it loses;
+/// the cheat's End Shift goes to a set ending, never Home, and never draws
+/// the report over an open citation slip (BUG-28b, EndShiftRule).
 /// The ledger half (money, citations, the pet, orders and premades equal a
 /// played day field by field) needs the content library: CheatLedgerTests,
 /// in the Editor tests, run in Unity.
@@ -166,7 +168,6 @@ public class CheatRoutingTests
         string line = RewindWarnings.JumpBack(today: 6, target: 3);
         StringAssert.Contains("day 3", line);
         StringAssert.Contains("days 3-6", line);
-        StringAssert.Contains("day 3", RewindWarnings.JumpBack(3, 3), "the same day: today alone");
     }
 
     [Test]
@@ -175,5 +176,41 @@ public class CheatRoutingTests
         Assert.AreEqual(Rewind.JumpBack, RewindWarnings.Of(today: 6, target: 3));
         Assert.AreEqual(Rewind.Restart, RewindWarnings.Of(6, 6));
         Assert.AreEqual(Rewind.None, RewindWarnings.Of(6, 9));
+    }
+
+    [Test]
+    public void EndShift_WithASetEnding_RoutesToTheEnding_NeverHome()
+    {
+        foreach (bool running in new[] { true, false })
+            foreach (bool closed in new[] { true, false })
+            {
+                Assert.AreEqual(EndShiftAction.EndingNow, EndShiftRule.Decide(endingSet: true, slipOpen: false, shiftRunning: running, deskClosed: closed),
+                                $"running {running}, closed {closed}: the ending at once, whatever the shift's state");
+                Assert.AreEqual(EndShiftAction.EndingAfterSlip, EndShiftRule.Decide(true, true, running, closed),
+                                $"running {running}, closed {closed}: the slip's Acknowledge leads to the ending");
+            }
+    }
+
+    [Test]
+    public void EndShift_OverAnOpenSlip_WaitsForItsAcknowledge()
+    {
+        Assert.AreEqual(EndShiftAction.CloseAfterSlip, EndShiftRule.Decide(endingSet: false, slipOpen: true, shiftRunning: true, deskClosed: false), "the report is never drawn over the slip");
+        Assert.AreEqual(EndShiftAction.CloseNow, EndShiftRule.Decide(false, false, true, false));
+    }
+
+    [Test]
+    public void EndShift_WithNoShiftRunning_EndsNothing()
+    {
+        Assert.AreEqual(EndShiftAction.NoShift, EndShiftRule.Decide(endingSet: false, slipOpen: false, shiftRunning: false, deskClosed: false), "before the briefing ends, or after the shift");
+        Assert.AreEqual(EndShiftAction.NoShift, EndShiftRule.Decide(false, false, true, true), "closing time already called");
+        Assert.AreEqual(EndShiftAction.NoShift, EndShiftRule.Decide(false, true, false, false), "a slip with no shift running");
+    }
+
+    [Test]
+    public void ASlipOpens_OnlyWhereSlipsAreShown()
+    {
+        Assert.IsTrue(EndShiftRule.SlipOpens(citationIssued: true, slipShown: true));
+        Assert.IsFalse(EndShiftRule.SlipOpens(true, false), "with no office UI no Acknowledge comes, so End Shift must never wait for one");
+        Assert.IsFalse(EndShiftRule.SlipOpens(false, true), "no citation, no slip");
     }
 }

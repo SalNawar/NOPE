@@ -71,6 +71,8 @@ public enum DevCheat
 /// RestartShift; RUN-SAFE, BUG-28a); a cheat that rewinds the run has a
 /// warning (<see cref="Warning"/>) the overlay shows for a confirm first; an
 /// item given by a cheat cancels and refunds its pending order (BUG-28c).
+/// Every change a cheat makes to the world is noted (Edit,
+/// RunManager.CheatEdits), so a skip or jump from Home keeps it.
 /// </summary>
 public static class DevCheats
 {
@@ -255,11 +257,11 @@ public static class DevCheats
                 break;
             case DevCheat.ForceLeader:
                 Say(text == null ? "No leader." : $"Force leader '{text}'.");
-                HistoryService.ForceLeader(world, lib, text);
+                Edit(run, text == null ? "no leader" : $"leader {text}", w => HistoryService.ForceLeader(w, lib, text));
                 break;
             case DevCheat.AddMoney:
                 int before = world.money;
-                world.money += number;
+                Edit(run, $"money {number:+0;-0}", w => w.money += number);
                 WalletEvents.Raise();
                 Say($"money {before} -> {world.money} ({number:+0;-0}).");
                 if (game != null)
@@ -267,29 +269,29 @@ public static class DevCheats
                 break;
             case DevCheat.AddStability:
                 float was = world.timelineStability;
-                world.timelineStability = StabilityRules.Round(world.timelineStability + amount);
+                Edit(run, $"stability {StabilityRules.FormatChange(amount)}", w => w.timelineStability = StabilityRules.Round(w.timelineStability + amount));
                 Say($"stability {StabilityRules.Format(was)} -> {StabilityRules.Format(world.timelineStability)} ({StabilityRules.FormatChange(amount)}).");
                 if (game != null)
                     game.CheatRefreshHud();
                 break;
             case DevCheat.SetStability:
                 float old = world.timelineStability;
-                world.timelineStability = StabilityRules.Round(amount);
+                Edit(run, $"stability set {StabilityRules.Format(StabilityRules.Round(amount))}", w => w.timelineStability = StabilityRules.Round(amount));
                 Say($"stability {StabilityRules.Format(old)} -> {StabilityRules.Format(world.timelineStability)} (set).");
                 if (game != null)
                     game.CheatRefreshHud();
                 break;
             case DevCheat.SetFlag:
                 Say($"SetFlag('{text}').");
-                world.SetFlag(text);
+                Edit(run, $"flag {text} set", w => w.SetFlag(text));
                 break;
             case DevCheat.ClearFlag:
                 Say($"ClearFlag('{text}').");
-                world.ClearFlag(text);
+                Edit(run, $"flag {text} cleared", w => w.ClearFlag(text));
                 break;
             case DevCheat.ClearListedFlag:
                 Say($"ClearFlag('{text}') (from active list).");
-                world.ClearFlag(text);
+                Edit(run, $"flag {text} cleared", w => w.ClearFlag(text));
                 break;
             case DevCheat.ForcePersonality:
                 Say($"ForcedPersonality set to '{text ?? "drawn"}' (from the next generation).");
@@ -302,12 +304,17 @@ public static class DevCheats
                 break;
             case DevCheat.LockUpgrade:
                 Say($"removing upgrade '{text}'.");
-                world.unlockedUpgradeIds.Remove(text);
+                Edit(run, $"upgrade {text} removed", w => w.unlockedUpgradeIds.Remove(text));
                 break;
             case DevCheat.UnlockUpgrade:
-                bool cancelled = CancelPending(world, lib != null ? lib.GetUpgradeById(text) : null);
+                UpgradeSO unlocked = lib != null ? lib.GetUpgradeById(text) : null;
+                bool cancelled = false;
+                Edit(run, $"upgrade {text} unlocked", w =>
+                {
+                    cancelled = CancelPending(w, unlocked);
+                    w.UnlockUpgrade(text);
+                });
                 Say($"unlocking upgrade '{text}'{(cancelled ? " (its pending order cancelled and refunded)" : string.Empty)}.");
-                world.UnlockUpgrade(text);
                 break;
             case DevCheat.JumpToDay:
                 int target = RunRoutes.Clamp(number, lib != null ? lib.LastDay : 0);
@@ -347,7 +354,11 @@ public static class DevCheats
                     run.RestartShift(w => GrantAll(w, lib));
                 }
                 else
-                    Say($"{GrantAll(world, lib)} Orders and House item(s) given, in force from the next shift.");
+                {
+                    int given = 0;
+                    Edit(run, "every item given", w => given = GrantAll(w, lib));
+                    Say($"{given} Orders and House item(s) given, in force from the next shift.");
+                }
                 break;
             case DevCheat.Tutorial:
                 Say(game != null ? game.CheatTutorial(number != 0) : "Not in the office.");
@@ -376,16 +387,31 @@ public static class DevCheats
                 Say($"Time of day: {TimeNames[next]} (until the next morning).");
                 break;
             case DevCheat.Extra:
-                (string label, Action<RunManager> extra, bool _) = Extras.FirstOrDefault(e => e.label == text);
+                (string label, Action<RunManager> extra, bool restarts) = Extras.FirstOrDefault(e => e.label == text);
                 if (extra == null)
                 {
                     Say($"No cheat '{text}'.");
                     break;
                 }
-                extra(run);
+                if (restarts)
+                    extra(run);   // its world change comes with its own restart (a route), or none outside a shift: nothing to replay
+                else
+                    Edit(run, label, w => run.RunOn(w, extra));
                 Say($"{label}: done.");
                 break;
         }
+    }
+
+    /// <summary>
+    /// A cheat's change to the world (<paramref name="edit"/>): made on the
+    /// run's world now, and noted (RunManager.CheatEdits) so a skip or a jump
+    /// from Home, which starts its night from the end-of-shift save, replays
+    /// it on that save and keeps it (RUN-SAFE, BUG-28a).
+    /// </summary>
+    private static void Edit(RunManager run, string label, Action<WorldState> edit)
+    {
+        edit(run.World);
+        run.CheatEdits.Note(label, edit);
     }
 
     /// <summary>A switch that applies from a shift's start: a running shift starts over with it (RunManager.RestartShift).</summary>

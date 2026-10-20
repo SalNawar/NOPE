@@ -9,7 +9,9 @@ using UnityEngine;
 /// as play"): today's shift closes as played (the live shift on its own
 /// ledger, else an empty one; DayCycle.EndShift) with the ending check play
 /// runs after it, a day jumped over is played with its whole queue decided
-/// correctly (DayCycle.PlayShiftCorrectly), Home's night on the default care
+/// correctly (DayCycle.PlayShiftCorrectly; the next generation's cheat
+/// switches held aside meanwhile, so the forced appearance, lie, premade or
+/// costume error reaches the day the route lands on), Home's night on the default care
 /// (DayCycle.HomeNight), Sleep (DayCycle.Sleep: the endings before and after
 /// the night), a jump back's new world (the run's seed, its pet adopted
 /// afresh), a restart's morning snapshot. RunManager plays it, then saves and
@@ -27,8 +29,11 @@ public static class CheatRoute
     /// route's first close of its starting day (null: none is running);
     /// <paramref name="morning"/> gives today's morning snapshot (a restart);
     /// <paramref name="endOfShift"/> gives the end-of-shift save a route
-    /// starting at Home begins its night from (SaveSystem.Load), so a Home
-    /// arrival already charged in memory is never charged twice. Returns the
+    /// starting at Home begins its night from (RunManager: SaveSystem.Load with
+    /// the cheat changes made since that save replayed on it, CheatEdits), so
+    /// a Home arrival already charged in memory is never charged twice and no
+    /// cheat change is lost; what Home itself did (bills paid, purchases) is
+    /// replaced by the night on the default care. Returns the
     /// ending reached on the way, or null when the route landed at a morning.
     /// </summary>
     public static EndingSO Play(ref WorldState world, IReadOnlyList<RunStep> route, RunConfigSO run,
@@ -53,7 +58,16 @@ public static class CheatRoute
                     ending = moved && config != null ? EndingService.Evaluate(world, lib, config, EndingMoment.Immediate) : null;
                     break;
                 case RunStep.PlayShift:
-                    ending = DayCycle.PlayShiftCorrectly(world, lib, config);
+                    // The next generation's switches are for the day the route lands on: held aside while a day passed over generates (BUG-27a/28a).
+                    DevToolsState.HeldSwitches held = DevToolsState.HoldNextGeneration();
+                    try
+                    {
+                        ending = DayCycle.PlayShiftCorrectly(world, lib, config);
+                    }
+                    finally
+                    {
+                        DevToolsState.RestoreNextGeneration(held);
+                    }
                     break;
                 case RunStep.HomeNight:
                     if (fromHome)

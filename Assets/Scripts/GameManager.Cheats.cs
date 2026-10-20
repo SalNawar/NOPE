@@ -17,7 +17,8 @@ using UnityEngine;
 /// live shift here (CloseShiftForCheat: play's close on the shift's own
 /// ledger; RUN-SAFE, BUG-28a). End Shift never draws the report over an
 /// open citation slip, and a run that has ended goes to its ending, never
-/// Home (BUG-28b, the cheat side; FLOW makes CloseNow honour it in play).
+/// Home (BUG-28b, the cheat side, EndShiftRule; FLOW makes CloseNow honour
+/// it in play).
 /// </summary>
 public sealed partial class GameManager
 {
@@ -89,20 +90,21 @@ public sealed partial class GameManager
     /// </summary>
     public string CheatEndShift()
     {
-        if (_worldState != null && !string.IsNullOrEmpty(_worldState.endingId))
+        bool endingSet = _worldState != null && !string.IsNullOrEmpty(_worldState.endingId);
+        switch (EndShiftRule.Decide(endingSet, _slipOpen, _shiftRunning, _desk.IsClosed))
         {
-            if (_slipOpen)
+            case EndShiftAction.EndingAfterSlip:
                 return $"The run has ended ('{_worldState.endingId}'): acknowledge the slip and the ending follows.";
-            _shiftRunning = false;
-            HandleEndingReached();
-            return $"The run has ended ('{_worldState.endingId}'): the ending shows.";
-        }
-        if (!_shiftRunning || _desk.IsClosed)
-            return "No shift to end (it has not started, or it is over).";
-        if (_slipOpen)
-        {
-            _endShiftAfterSlip = true;
-            return "Closing time once the citation slip is acknowledged.";
+            case EndShiftAction.EndingNow:
+                // An ending's own continuation (the verdict's, the report's) may ask for the title too: RunManager loads it once.
+                _shiftRunning = false;
+                HandleEndingReached();
+                return $"The run has ended ('{_worldState.endingId}'): the ending shows.";
+            case EndShiftAction.NoShift:
+                return "No shift to end (it has not started, or it is over).";
+            case EndShiftAction.CloseAfterSlip:
+                _endShiftAfterSlip = true;
+                return "Closing time once the citation slip is acknowledged.";
         }
         if (shiftClock != null)
             shiftClock.StopShift();
@@ -201,10 +203,10 @@ public sealed partial class GameManager
         CitationAcknowledged += SlipAcknowledged;
     }
 
-    /// <summary>A verdict is resolved: a citation's slip opens.</summary>
+    /// <summary>A verdict is resolved: a citation's slip opens, where the office shows slips (EndShiftRule.SlipOpens: with no office UI the verdict's continuation runs at once and no Acknowledge comes, so End Shift never waits for one).</summary>
     private void NoteSlip(CaseInstance inst, CaseVerdict verdict, bool accepted, float stabilityBefore)
     {
-        if (verdict != null && verdict.citationIssued)
+        if (EndShiftRule.SlipOpens(verdict != null && verdict.citationIssued, officeUI != null))
             _slipOpen = true;
     }
 

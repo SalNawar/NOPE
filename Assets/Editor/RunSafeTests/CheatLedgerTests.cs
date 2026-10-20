@@ -13,8 +13,13 @@ using UnityEngine;
 /// day between (the whole queue decided correctly), so it reaches the run's
 /// last day as a played run would; a jump back is a new run with the same
 /// seed and pet played to the day; a restart is the morning; a
-/// route from Home starts from the end-of-shift save; the live shift is
-/// closed on its own ledger once; a cheat grant cancels its pending order.
+/// route from Home starts from the end-of-shift save with the cheat changes
+/// made since replayed on it; the live shift is closed on its own ledger
+/// once; a jump keeps the next generation's switches for the day it lands on;
+/// a cheat grant cancels its pending order. "Play" here is DayCycle's steps
+/// (the ones GameManager and HomeManager run between their screens), not the
+/// scenes themselves: what the scenes add (the News site's back issues, the
+/// desk guide, the desk upgrades' day) is listed in docs/pending/RUN-SAFE.md.
 /// "NeedsEditor": the steps read the run's content library and game config
 /// (Resources/RunConfig), so these run in Unity's EditMode suite.
 /// </summary>
@@ -38,6 +43,10 @@ public class CheatLedgerTests
         Assert.IsNotNull(_config, "RunConfig's game config");
         DevToolsState.ResetAll();
     }
+
+    /// <summary>The cheat switches off again (they are static).</summary>
+    [TearDown]
+    public void Clean() => DevToolsState.ResetAll();
 
     /// <summary>A new run's world on the golden seed, its pet adopted as the Title would.</summary>
     private WorldState Fresh()
@@ -219,5 +228,60 @@ public class CheatLedgerTests
         world.day++;
         List<UpgradeSO> delivered = OrderBook.Deliver(world, _lib);
         CollectionAssert.DoesNotContain(delivered, item, "never delivered again");
+    }
+
+    [Test, Category("NeedsEditor")]
+    public void ASkipFromHome_KeepsTheCheatChangesMadeAtHome()
+    {
+        WorldState endOfShift = Fresh();
+        DayCycle.EndShift(endOfShift, new ShiftLedger(), Array.Empty<CaseInstance>(), null, _lib, _config);
+        WorldState cheat = Copy(endOfShift);
+        DayCycle.OpenHome(cheat, _lib, _config, Seeds.Day(cheat.runSeed, cheat.day));   // the Home scene charged the arrival in memory
+        var edits = new CheatEdits();
+        void AtHome(string label, Action<WorldState> edit)   // as DevCheats.Run does: the change made, and noted
+        {
+            edit(cheat);
+            edits.Note(label, edit);
+        }
+        float stability = StabilityRules.Round(cheat.timelineStability - 1f);
+        AtHome("stability set", w => w.timelineStability = stability);
+        AtHome("money +100", w => w.money += 100);
+        AtHome("flag set", w => w.SetFlag("ledger-test-rook"));
+
+        Assert.IsNull(CheatRoute.Play(ref cheat, RunRoutes.Skip(true), _run, endOfShift: () => edits.ReplayOn(Copy(endOfShift))));
+
+        WorldState play = edits.ReplayOn(Copy(endOfShift));
+        DayCycle.HomeNight(play, _lib, _config);
+        Assert.IsNull(DayCycle.Sleep(play, _lib, _config));
+        AssertSame(play, cheat, "skip from Home with cheats vs the cheats on the end-of-shift save, then the night");
+        Assert.IsTrue(cheat.HasFlag("ledger-test-rook"), "the flag cheat survives the skip");
+    }
+
+    [Test, Category("NeedsEditor")]
+    public void AJump_KeepsTheNextGenerationsSwitches_ForTheDayItLandsOn()
+    {
+        LegendarySO premade = _lib.Legendaries.FirstOrDefault(l => l != null && l.oncePerRun && !string.IsNullOrWhiteSpace(l.id));
+        Assert.IsNotNull(premade, "a once-per-run premade in the library");
+        WorldState plain = Fresh();
+        Assert.IsTrue(PlayDay(plain, false), "day 1 ended the run");
+        Assert.AreEqual(2, plain.day);
+        WorldState cheat = Copy(plain);
+        Assert.IsNull(CheatRoute.Play(ref plain, RunRoutes.Jump(2, 8, _lib.LastDay, false), _run), "the jump with no switch set");
+
+        // Force appearance (a premade) and Law-breaker next on day 2, then the jump to 8 (DevCheats.Run sets the switch, then jumps).
+        ForcedCaseSlot appearance = DevCheats.Appearance(_lib, "premade:" + premade.id);
+        DevToolsState.ForcedAppearance = appearance;
+        DevToolsState.ForcedLie = LieKind.SwappedPhoto;
+        Assert.IsNull(CheatRoute.Play(ref cheat, RunRoutes.Jump(2, 8, _lib.LastDay, false), _run));
+
+        Assert.AreEqual(8, cheat.day);
+        Assert.AreSame(appearance, DevToolsState.ForcedAppearance, "the forced appearance waits for day 8 (days 3-7 never took it)");
+        Assert.AreEqual(LieKind.SwappedPhoto, DevToolsState.ForcedLie, "Law-breaker next waits for day 8");
+        Assert.AreEqual(plain.HasMetPremade(premade.id), cheat.HasMetPremade(premade.id), "the premade was not met on a day the jump passed over");
+        AssertSame(plain, cheat, "the days passed over are the same with the switches waiting as without them");
+
+        Assert.IsNull(DayCycle.PlayShiftCorrectly(cheat, _lib, _config), "day 8 played");
+        Assert.IsNull(DevToolsState.ForcedAppearance, "day 8's generation used it");
+        Assert.IsTrue(cheat.HasMetPremade(premade.id), "they stood first on day 8");
     }
 }

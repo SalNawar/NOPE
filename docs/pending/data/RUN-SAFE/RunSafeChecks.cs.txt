@@ -11,7 +11,8 @@ using System.Reflection;
 /// RUN-SAFE's gate checks (FIX_PLAN §3 RUN-SAFE; BUG-27a, BUG-25b, BUG-68a,
 /// BUG-28a, BUG-35a). Static: the three input consumers check the InputGate
 /// and the cheat panel holds it; the cheat menu's Dusk is the day cycle's;
-/// every cheat switch has one scope. Play: the day_jumps scenario (each
+/// every cheat switch has one scope, and the one kept elsewhere (the
+/// language lock) is on the badge. Play: the day_jumps scenario (each
 /// cheat path lands at the day's briefing, console clean) and the overlay
 /// block (0 game input behind the open panel).
 /// </summary>
@@ -58,6 +59,28 @@ public static class RunSafeChecks
         bool pass = unscoped.Count == 0 && twice.Count == 0;
         return GateResult.Of("runsafe.switch.scopes", "RUN-SAFE", pass, $"{switches.Count} switches, {unscoped.Count} unscoped, {twice.Count} in two scopes",
             pass ? string.Empty : $"Unscoped: {string.Join(", ", unscoped)}; in two scopes: {string.Join(", ", twice)}");
+    }
+
+    /// <summary>The switch kept outside DevToolsState (the language lock, CultureThemeService.LockOverride) is on the badge while set and cleared by a new run (BUG-27a: "any sticky switch is shown loudly"); the field reflection above cannot see it.</summary>
+    [GateCheck("runsafe.switch.elsewhere", "RUN-SAFE")]
+    public static GateResult SwitchElsewhere()
+    {
+        bool? was = CultureThemeService.LockOverride;
+        try
+        {
+            CultureThemeService.LockOverride = true;
+            bool shown = DevToolsState.StickyLine(false).Contains("Language locked");
+            DevToolsState.ResetAll();
+            bool cleared = CultureThemeService.LockOverride == null;
+            bool listed = System.Array.IndexOf(DevToolsState.Elsewhere, "CultureThemeService.LockOverride") >= 0;
+            bool pass = shown && cleared && listed;
+            return GateResult.Of("runsafe.switch.elsewhere", "RUN-SAFE", pass, $"badge {shown}, cleared by ResetAll {cleared}, listed {listed}",
+                pass ? string.Empty : "The language lock must be named on the badge (StickyLine), cleared by ResetAll and listed in DevToolsState.Elsewhere.");
+        }
+        finally
+        {
+            CultureThemeService.LockOverride = was;
+        }
     }
 
     /// <summary>The day_jumps scenario passed at HEAD: Restart d1, Jump d5, d7, Restart, Skip to d8, Jump d12, Restart, Jump d15, each at the day's briefing with a clean console (QaJobs.DayJumps).</summary>

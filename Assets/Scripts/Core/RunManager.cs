@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Persistent run owner. Survives scene loads (Office <-> Home), owns the
@@ -38,6 +39,17 @@ public sealed class RunManager : MonoBehaviour
     /// opened one (the day starts at its briefing, nothing left open; BUG-27).
     /// </summary>
     public int Mornings { get; private set; }
+
+    /// <summary>
+    /// The cheat changes made to the world since it was last saved (DevCheats
+    /// notes each one): a skip or a jump from Home replays them on the
+    /// end-of-shift save it starts from, so none is lost (BUG-28a). Cleared at
+    /// every save and every new or continued run.
+    /// </summary>
+    public CheatEdits CheatEdits { get; } = new CheatEdits();
+
+    /// <summary>True from a title load's request until the scene changes: a second request meanwhile (an ending's own continuation after the cheat's End Shift went there) is ignored, so the title never loads twice.</summary>
+    private bool _titleOnItsWay;
 
     /// <summary>The run's tuning (null when RunConfig names none).</summary>
     private GameConfigSO GameConfig => Config != null ? Config.gameConfig : null;
@@ -102,12 +114,19 @@ public sealed class RunManager : MonoBehaviour
         return mgr;
     }
 
+    /// <summary>Listens for scene changes (a title load under way ends with one).</summary>
+    private void Awake() => SceneManager.activeSceneChanged += SceneChanged;
+
     /// <summary>Clears the singleton when destroyed (e.g., exiting play mode).</summary>
     private void OnDestroy()
     {
+        SceneManager.activeSceneChanged -= SceneChanged;
         if (Instance == this)
             Instance = null;
     }
+
+    /// <summary>A scene became active: a title load requested earlier is done.</summary>
+    private void SceneChanged(Scene from, Scene to) => _titleOnItsWay = false;
 
     // -----------------------------
     // Run lifecycle
@@ -145,6 +164,7 @@ public sealed class RunManager : MonoBehaviour
 
         DevToolsState.ResetAll();
         SaveSystem.SetAsideForNewRun();
+        CheatEdits.Clear();
         World = FreshWorld();
         adopt?.Invoke(World);
 
@@ -157,6 +177,7 @@ public sealed class RunManager : MonoBehaviour
     private void StartUnsavedRun()
     {
         DevToolsState.ResetAll();
+        CheatEdits.Clear();
         World = FreshWorld();
         _morning = null;
         Debug.Log($"[RunManager] No save to continue: a fresh run in memory (day {World.day}, seed {World.runSeed}), unsaved until it is started or played.");
@@ -187,6 +208,7 @@ public sealed class RunManager : MonoBehaviour
 
         World = loaded;
         DevToolsState.ResetAll();
+        CheatEdits.Clear();
 
         // A save from before the pet (the Home pet spec) adopts the run config's default;
         // one from before the coats (PS11) gives its pet the kind's first coat.
@@ -233,7 +255,10 @@ public sealed class RunManager : MonoBehaviour
         }
 
         if (SaveSystem.Save(World))
+        {
+            CheatEdits.Clear();
             Debug.Log($"[RunManager] Saved (day {World.day}).");
+        }
         else
             Debug.LogWarning("[RunManager] SaveNow: SaveSystem.Save reported failure.");
     }
@@ -408,7 +433,7 @@ public sealed class RunManager : MonoBehaviour
         Debug.Log($"[RunManager] Cheat route from day {World.day} ({World.phase}): {string.Join(", ", route)}.");
         GameManager live = GameManager.Current != null && GameManager.Current.World == World ? GameManager.Current : null;
         WorldState world = World;
-        EndingSO ending = CheatRoute.Play(ref world, route, Config, live != null ? live.CloseShiftForCheat : (Func<bool>)null, TodaysMorning, SaveSystem.Load);
+        EndingSO ending = CheatRoute.Play(ref world, route, Config, live != null ? live.CloseShiftForCheat : (Func<bool>)null, TodaysMorning, EndOfShiftSave);
         World = world;
 
         if (ending != null)
@@ -421,6 +446,45 @@ public sealed class RunManager : MonoBehaviour
         World.cheated = true;
         OpenMorning();
         return true;
+    }
+
+    /// <summary>
+    /// The end-of-shift save a route from Home starts its night from
+    /// (SaveSystem.Load), with every cheat change made since that save
+    /// replayed on it (CheatEdits: stability, money, flags, items, unlocks,
+    /// the leader, other tracks' cheats made at Home or over the shift
+    /// report), so the route keeps them (BUG-28a). Null when there is no save.
+    /// </summary>
+    private WorldState EndOfShiftSave()
+    {
+        WorldState saved = SaveSystem.Load();
+        if (saved != null && CheatEdits.Count > 0)
+        {
+            Debug.Log($"[RunManager] Replaying {CheatEdits.Count} cheat change(s) made since the save on it: {string.Join(", ", CheatEdits.Labels)}.");
+            CheatEdits.ReplayOn(saved);
+        }
+        return saved;
+    }
+
+    /// <summary>
+    /// Runs another track's cheat (<paramref name="cheat"/>) on
+    /// <paramref name="world"/>, which is the run's World while it runs: the
+    /// replay of that cheat's change on the end-of-shift save (CheatEdits).
+    /// </summary>
+    public void RunOn(WorldState world, Action<RunManager> cheat)
+    {
+        if (world == null || cheat == null)
+            return;
+        WorldState keep = World;
+        World = world;
+        try
+        {
+            cheat(this);
+        }
+        finally
+        {
+            World = keep;
+        }
     }
 
     /// <summary>
@@ -465,6 +529,7 @@ public sealed class RunManager : MonoBehaviour
     /// <summary>Loads the art office; its load brings the gameplay layer on top (OfficeScenes). Through SceneTransit (FLOW's transition).</summary>
     public void LoadOfficeScene()
     {
+        _titleOnItsWay = false;
         Debug.Log($"[RunManager] LoadOfficeScene -> '{Config.officeSceneName}' (+ '{Config.officeGameplaySceneName}' on top).");
         SceneTransit.Load(Config.officeSceneName);
     }
@@ -472,13 +537,20 @@ public sealed class RunManager : MonoBehaviour
     /// <summary>Loads the home scene (through SceneTransit).</summary>
     public void LoadHomeScene()
     {
+        _titleOnItsWay = false;
         Debug.Log($"[RunManager] LoadHomeScene -> '{Config.homeSceneName}'.");
         SceneTransit.Load(Config.homeSceneName);
     }
 
-    /// <summary>Loads the title scene (run ended — ending display, Continue/New Run; through SceneTransit).</summary>
+    /// <summary>Loads the title scene (run ended — ending display, Continue/New Run; through SceneTransit). A second request while the first is under way is ignored (the cheat's End Shift and an ending's own continuation can both ask; BUG-28b).</summary>
     public void LoadTitleScene()
     {
+        if (_titleOnItsWay)
+        {
+            Debug.Log("[RunManager] LoadTitleScene: the title is already on its way; the second request is ignored.");
+            return;
+        }
+        _titleOnItsWay = true;
         Debug.Log($"[RunManager] LoadTitleScene -> '{Config.titleSceneName}'.");
         SceneTransit.Load(Config.titleSceneName);
     }

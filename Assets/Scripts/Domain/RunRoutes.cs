@@ -162,9 +162,52 @@ public static class RewindWarnings
         $"Restart day {day} from its morning? Lost: {decisions} decision(s) today, {moneyChange:+0;-0;0} credits since the morning, " +
         $"{citations} citation(s), and every cheat change made since the morning.";
 
-    /// <summary>A jump from <paramref name="today"/> back to <paramref name="target"/>: the days from the target to today as played are lost; the run replays from day 1 with its seed and pet.</summary>
+    /// <summary>A jump from <paramref name="today"/> back to an earlier <paramref name="target"/> (a jump to today is a restart: Restart's warning): the days from the target to today as played are lost; the run replays from day 1 with its seed and pet.</summary>
     public static string JumpBack(int today, int target) =>
-        target >= today
-            ? $"Jump back to day {target}? Lost: today as played."
-            : $"Jump back to day {target}? Lost: days {target}-{today} as played. The run replays from day 1 with its seed and pet, each day's travellers decided correctly and each night on the default care.";
+        $"Jump back to day {target}? Lost: days {target}-{today} as played. The run replays from day 1 with its seed and pet, each day's travellers decided correctly and each night on the default care.";
+}
+
+/// <summary>What the cheat menu's "End shift" does now (EndShiftRule.Decide).</summary>
+public enum EndShiftAction
+{
+    /// <summary>No shift to end: it has not started, or it is over.</summary>
+    NoShift,
+
+    /// <summary>Closing time now: the clock stops, nobody else is called, the report follows.</summary>
+    CloseNow,
+
+    /// <summary>A citation slip is open: closing time once it is acknowledged, so the report is never drawn over the slip.</summary>
+    CloseAfterSlip,
+
+    /// <summary>The run has ended: its ending now, never Home.</summary>
+    EndingNow,
+
+    /// <summary>The run has ended and a citation slip is open: the slip's Acknowledge leads to the ending (its own way there).</summary>
+    EndingAfterSlip
+}
+
+/// <summary>
+/// The cheat menu's "End shift" (RUN-SAFE, BUG-28b, the cheat side; FLOW's
+/// CloseNow honours the ending in play): a run that has ended (an ending set:
+/// fired, bankrupt) goes to its ending, never Home, after an open citation
+/// slip's Acknowledge (its own way there), else at once; otherwise, with a
+/// slip open, closing time waits for its Acknowledge, so the report is never
+/// drawn over it; with no shift running there is nothing to end. A slip is
+/// open only where one is shown (SlipOpens). Pure, so GameManager.Cheats'
+/// decision is tested headless.
+/// </summary>
+public static class EndShiftRule
+{
+    /// <summary>What End Shift does: <paramref name="endingSet"/> (the run has ended), <paramref name="slipOpen"/> (a citation slip waits for Acknowledge), <paramref name="shiftRunning"/> (after the briefing, before the shift's end) and <paramref name="deskClosed"/> (closing time already called).</summary>
+    public static EndShiftAction Decide(bool endingSet, bool slipOpen, bool shiftRunning, bool deskClosed)
+    {
+        if (endingSet)
+            return slipOpen ? EndShiftAction.EndingAfterSlip : EndShiftAction.EndingNow;
+        if (!shiftRunning || deskClosed)
+            return EndShiftAction.NoShift;
+        return slipOpen ? EndShiftAction.CloseAfterSlip : EndShiftAction.CloseNow;
+    }
+
+    /// <summary>True when a verdict opens a slip End Shift must wait for: it issued a citation and the office shows slips (<paramref name="slipShown"/>: with no office UI the verdict's continuation runs at once and no Acknowledge ever comes).</summary>
+    public static bool SlipOpens(bool citationIssued, bool slipShown) => citationIssued && slipShown;
 }
