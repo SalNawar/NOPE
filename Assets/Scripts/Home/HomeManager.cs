@@ -89,9 +89,7 @@ public sealed class HomeManager : MonoBehaviour
 
         // The break-in and the fixed bill, deterministically seeded by the day so it's stable on reload.
         _bill = DayCycle.OpenHome(_world, _lib, _config, _daySeed);
-        _care = PetRules.DefaultCare(Pet.Needs);
-        if (HomeEconomy.BillsTotal(_world, _lib, _care) > Mathf.Max(0, _world.money))
-            _care = AffordableCare();
+        _care = NightRules.StartingCare(_world, _lib);
         _slotRandom = new SeededRandom(Seeds.ForSlot(_daySeed));
         _household = _bill.total;
         RecordStatement();
@@ -200,10 +198,6 @@ public sealed class HomeManager : MonoBehaviour
         return string.Join(separator, lines);
     }
 
-    /// <summary>What the wallet covers, in the careful carer's order (PetPolicy: food, the heating, medicine when unwell, the electricity; never the TV): the starting choice when the default is more than the wallet, so Pay is never offered beyond it.</summary>
-    private PetCare AffordableCare() =>
-        PetPolicy.Care(Pet.Needs, _world.money, bill => HomeEconomy.BillPrice(_world, _lib, bill), int.MaxValue, false);
-
     /// <summary>A bill's row clicked: that bill alone paid or skipped (PetCare.Toggle: skipping the electricity moves the TV to Skip; nothing is ever paid for the player), then the panel again.</summary>
     private void HandleToggleBill(HomeBill bill)
     {
@@ -213,18 +207,12 @@ public sealed class HomeManager : MonoBehaviour
         ShowBills();
     }
 
-    /// <summary>Pay clicked: the chosen bills leave the wallet (HomeEconomy.PayBills; refused when it cannot cover them), then the pet's corner.</summary>
+    /// <summary>Pay clicked: the chosen bills leave the wallet (NightRules.PayBills: HomeEconomy.PayBills, a care it cannot cover becoming what it covers), then the pet's corner.</summary>
     private void HandlePay()
     {
         if (_paid)
             return;
-        int paid = HomeEconomy.PayBills(_world, _lib, _care);
-        if (paid < 0)
-        {
-            // Unwired panels pay what the wallet covers; a wired panel never offers Pay it cannot cover.
-            _care = AffordableCare();
-            paid = Mathf.Max(0, HomeEconomy.PayBills(_world, _lib, _care));
-        }
+        int paid = NightRules.PayBills(_world, _lib, ref _care);
         _paid = true;
         _household += paid;
         RecordStatement();
@@ -401,6 +389,7 @@ public sealed class HomeManager : MonoBehaviour
         }
 
         _world.money -= spinCost;
+        WalletEvents.Raise();
         _purchases += spinCost;
 
         SlotOutcomeSO outcome = WeightedRandom.Pick(outcomes, o => o != null ? o.weight : 0f, _slotRandom);
@@ -414,6 +403,7 @@ public sealed class HomeManager : MonoBehaviour
         }
 
         _world.money += outcome.moneyDelta;
+        WalletEvents.Raise();
         _world.legendaryChanceBonus += outcome.legendaryChanceBonus;
         _world.forgeryChanceModifier += outcome.forgeryChanceModifier;
         _world.payRateMultiplier += outcome.payRateMultiplierDelta;

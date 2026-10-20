@@ -7,8 +7,10 @@ using UnityEngine.UI;
 /// The office's HUD, verdict line and citation slip (the case itself is
 /// shown by the investigation desk; the legacy era-pick screen is gone,
 /// audit R3-011).
+/// P0-A carve (docs/pending/CARVE.md): the HUD is in
+/// OfficeUIController.Hud.cs. Owner: FEEDBACK.
 /// </summary>
-public sealed class OfficeUIController : MonoBehaviour
+public sealed partial class OfficeUIController : MonoBehaviour
 {
     [Header("Text")]
     /// <summary>Shows the result after the player decides.</summary>
@@ -83,42 +85,6 @@ public sealed class OfficeUIController : MonoBehaviour
         resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
         if (changed && !string.IsNullOrEmpty(text))
             UiAppear.Of(resultBackdrop, AppearStyle.Whip).Open(); // the verdict ribbon whips in (the game feel)
-    }
-
-    /// <summary>
-    /// Refreshes the money/day HUD from world state (stability shows as the Helix River, HelixRiverMonitor, never a number).
-    /// Safe to call with unwired HUD fields.
-    /// </summary>
-    public void UpdateHud(WorldState world)
-    {
-        if (world == null)
-            return;
-
-        if (moneyText != null)
-            moneyText.text = UiText.Pc.Format("tray.money", UiText.Pc.Currency(UiText.WalletForm.Label), world.money);
-
-        if (dayText != null)
-            dayText.text = TrayDate(world.day);
-        if (crtDateText != null)
-            crtDateText.text = CrtDate(world.day);
-    }
-
-    /// <summary>The desk CRT's date for <paramref name="day"/>: today in the agency's calendar, in capitals ("14 MAR 2150"), or the plain day when the library has no readable first date.</summary>
-    private static string CrtDate(int day) => Today(day) ?? UiText.Pc.Format("tray.day", day);
-
-    /// <summary>Today (shift day <paramref name="day"/>) in the agency's calendar, in capitals ("14 MAR 2150"), or null when the library has no readable first date.</summary>
-    private static string Today(int day)
-    {
-        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
-        string today = library != null ? AgencyCalendar.Today(library.Agency.firstDate, day) : null;
-        return today?.ToUpperInvariant();
-    }
-
-    /// <summary>The taskbar's date for <paramref name="day"/>: today in the agency's calendar, in capitals, and the day ("14 MAR 2150 · Day 1"), or the plain day when the library has no readable first date.</summary>
-    private static string TrayDate(int day)
-    {
-        string today = Today(day);
-        return today != null ? UiText.Pc.Format("tray.date", today, day) : UiText.Pc.Format("tray.day", day);
     }
 
     /// <summary>The date's button holds today on the app's workbench.</summary>

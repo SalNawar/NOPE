@@ -126,4 +126,15 @@ public class ArabicShaperTests
         Assert.IsFalse(ArabicShaper.CanShape(text, out string unsupported));
         StringAssert.Contains(code, unsupported);
     }
+
+    [Test]
+    public void ToVisualLines_IsToVisualOnEachLine()
+    {
+        var lines = new List<string> { "مرحبا بالعالم", "Desk 3", "رقم 42", string.Empty };
+        List<string> visual = ArabicShaper.ToVisualLines(lines);
+        Assert.AreEqual(lines.Count, visual.Count);
+        for (int i = 0; i < lines.Count; i++)
+            Assert.AreEqual(ArabicShaper.ToVisual(lines[i]), visual[i]);
+        Assert.AreEqual(0, ArabicShaper.ToVisualLines(null).Count);
+    }
 }

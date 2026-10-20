@@ -176,6 +176,11 @@ public sealed class HelixRiverMonitor : MonoBehaviour
         _material.SetFloat(CornerId, corner);
     }
 
+    /// <summary>Shows or clears the river's warning (P0-A seam; owner HALL-FX, consumed by FLOW and CONTENT). The P0 stub: no-op.</summary>
+    public void SetWarning(bool on)
+    {
+    }
+
     /// <summary>The display's width over its height: the graphic's rect, or the quad's scale.</summary>
     private float Aspect()
     {

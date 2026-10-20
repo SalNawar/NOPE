@@ -112,6 +112,7 @@ public static class ShiftScoring
         {
             v.moneyPenalty = VerdictRules.WrongDecisionPenalty(world.citationsToday, config.freeWarningsPerDay, config.wrongDecisionPenalty);
             world.money -= v.moneyPenalty;
+            WalletEvents.Raise();
             v.citationText = Citation(v, mistake, facts, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)));
         }
 
@@ -133,6 +134,7 @@ public static class ShiftScoring
         v.payAwarded = Mathf.RoundToInt(pay);
 
         world.money += v.payAwarded;
+        WalletEvents.Raise();
         ChangeStability(v, world, config.stabilityGainPerCorrect, config);
 
         Debug.Log($"[ShiftScoring] ApplyCorrect: payRate={payRate:0.##}, basePay={config.basePayPerCorrect}, legendaryBonus={(v.wasLegendary ? config.legendaryBonusPay : 0)}, payAwarded={v.payAwarded}, stabilityDelta={StabilityRules.FormatChange(v.stabilityDelta)}, money={world.money}.");

@@ -98,6 +98,16 @@ public static class ArabicShaper
         return sb.ToString();
     }
 
+    /// <summary>Lines laid out by the text box (each without a line break) into visual order, one by one (P0-A seam; owner TEXT-LANG, the per-line RTL API). The P0 stub: ToVisual on each line, today's shaper unchanged.</summary>
+    public static List<string> ToVisualLines(IReadOnlyList<string> lines)
+    {
+        var visual = new List<string>(lines != null ? lines.Count : 0);
+        if (lines != null)
+            foreach (string line in lines)
+                visual.Add(ToVisual(line));
+        return visual;
+    }
+
     /// <summary>One line (no line break) into visual order; <paramref name="sources"/> (cleared first; null skips it) as ToVisual's.</summary>
     private static string Line(string logical, List<int> sources)
     {

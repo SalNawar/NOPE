@@ -195,6 +195,7 @@ public static class DevCheats
             case DevCheat.AddMoney:
                 int before = world.money;
                 world.money += number;
+                WalletEvents.Raise();
                 Say($"money {before} -> {world.money} ({number:+0;-0}).");
                 if (game != null)
                     game.CheatRefreshHud();

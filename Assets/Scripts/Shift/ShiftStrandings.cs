@@ -100,6 +100,7 @@ public static class ShiftStrandings
         if (fine > 0)
         {
             world.money -= fine;
+            WalletEvents.Raise();
             ledger.strandingFines += fine;
             world.AddCounter(FinesCounter, fine);
             moved = true;

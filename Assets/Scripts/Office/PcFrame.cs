@@ -30,6 +30,9 @@ public sealed class PcFrame : MonoBehaviour
     /// <summary>True while the frame is open.</summary>
     public bool IsOpen => root != null && root.activeSelf;
 
+    /// <summary>True when the PC frame may open now (P0-A seam; owner UI-PC; OfficeControls' F1 path checks it, BUG-58c). The P0 stub: always, as today.</summary>
+    public static bool CanOpen => true;
+
     /// <summary>The frame starts closed.</summary>
     private void Awake() => SetOpen(false);
 

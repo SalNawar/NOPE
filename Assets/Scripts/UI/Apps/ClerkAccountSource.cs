@@ -66,6 +66,7 @@ public sealed class ClerkAccountSource : IClerkAccountSource
 
         int instalment = ClerkDebt.Instalment(ledger.TotalPay, debt.SharePercent, debt.Owed);
         world.money -= instalment;
+        WalletEvents.Raise();
         world.clerkDebtPaid += instalment;
         ledger.debtInstalment = instalment;
         ledger.debtOwed = source.Debt.Owed;

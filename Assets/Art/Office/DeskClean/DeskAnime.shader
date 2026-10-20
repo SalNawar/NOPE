@@ -33,6 +33,9 @@ Shader "NOPE/Desk Anime"
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull",Float)=2
         [HideInInspector] _Surface("Surface",Float)=0
         [HideInInspector] _ZWrite("Z write",Float)=1
+        // P0-A seam (owner LIGHT, consumed by STAMP): declared with no visual effect yet.
+        _PaintedHighlight("Painted highlight seam",Range(0,1))=0
+        _InkRim("Ink rim seam",Range(0,1))=0
     }
     SubShader
     {
@@ -45,6 +48,7 @@ Shader "NOPE/Desk Anime"
             half4 _BaseColor,_ShadowTint,_LightTint;
             half _ShadowValue,_ShadowReception,_MidValue,_BandSoftness,_ShadowThreshold,_LightThreshold;
             half _HighlightStrength,_HighlightSize,_EdgeStrength,_Smoothness,_Metallic,_Cutoff;
+            half _PaintedHighlight,_InkRim;
         CBUFFER_END
         struct Attributes {float4 positionOS:POSITION;float3 normalOS:NORMAL;float2 uv:TEXCOORD0;UNITY_VERTEX_INPUT_INSTANCE_ID};
         struct Varyings {float4 positionCS:SV_POSITION;float3 positionWS:TEXCOORD0;half3 normalWS:TEXCOORD1;float2 uv:TEXCOORD2;half fog:TEXCOORD3;UNITY_VERTEX_INPUT_INSTANCE_ID UNITY_VERTEX_OUTPUT_STEREO};

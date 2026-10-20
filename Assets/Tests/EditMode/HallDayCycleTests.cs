@@ -184,4 +184,10 @@ public class HallDayCycleTests
         Assert.That(HallDayCycle.FixtureLevel(12f, 2, odd), Is.InRange(0f, 1f));
         Assert.That(HallDayCycle.SolarPosition(12f, odd), Is.InRange(0f, 1f));
     }
+
+    [Test]
+    public void DuskHour_IsTheCheatMenusDusk()
+    {
+        Assert.AreEqual(18.5f, HallDayCycle.DuskHour);
+    }
 }

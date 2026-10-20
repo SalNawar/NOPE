@@ -90,6 +90,8 @@ public sealed class OfficeControls : MonoBehaviour
     /// <summary>Polls the back-out (Esc, the right mouse button) and the office's keys, once per press.</summary>
     private void Update()
     {
+        if (InputGate.Blocked)
+            return;
         Keyboard kb = Keyboard.current;
         Mouse mouse = Mouse.current;
         bool back = (kb != null && kb.escapeKey.wasPressedThisFrame) || (mouse != null && mouse.rightButton.wasPressedThisFrame);
@@ -203,6 +205,8 @@ public sealed class OfficeControls : MonoBehaviour
                     cityView.Return();
                 break;
             case ControlAction.ShowKeys:
+                if (!PcFrame.CanOpen)
+                    break;
                 if (wheel != null)
                     wheel.Close();
                 if (view != null)

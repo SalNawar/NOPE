@@ -54,6 +54,7 @@ public static class OrderBook
             return false;
 
         world.money -= placed.price;
+        WalletEvents.Raise();
         Debug.Log($"[OrderBook] Day {world.day}: ordered '{upgrade.id}' for {placed.price} (money={world.money}); arrives day {Orders.ArrivalDay(placed)}.");
         return true;
     }
@@ -66,9 +67,13 @@ public static class OrderBook
 
         int refund = Orders.Cancel(world.orders, upgrade.id, world.day);
         world.money += refund;
+        WalletEvents.Raise();
         Debug.Log($"[OrderBook] Day {world.day}: cancelled '{upgrade.id}', refunded {refund} (money={world.money}).");
         return true;
     }
+
+    /// <summary>Cancels the pending order for <paramref name="item"/> and refunds it (P0-A seam; owner UI-PC, consumed by RUN-SAFE). The P0 stub: OrderBook's own cancel path (Cancel). True when cancelled.</summary>
+    public static bool CancelPendingFor(WorldState world, UpgradeSO item) => Cancel(world, item);
 
     /// <summary>The upgrades in force today: every owned one without an install slot, and each slot's installed one (Installs.InForce; what ScannerDay reads at the day's start).</summary>
     public static List<string> InForce(WorldState world, ContentLibrarySO lib) =>

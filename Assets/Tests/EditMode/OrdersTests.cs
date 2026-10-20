@@ -164,4 +164,11 @@ public class OrdersTests
         Assert.AreEqual(10, Orders.SpentOn(log, 2));
         Assert.IsTrue(Orders.CanCancel(log, "b", 2));
     }
+
+    [Test]
+    public void CanOrder_EveryDay()
+    {
+        for (int day = 1; day <= 15; day++)
+            Assert.IsTrue(Orders.CanOrder(day));
+    }
 }

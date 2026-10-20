@@ -72,6 +72,7 @@ public static class HomeEconomy
         float share = HomeRules.Adjusted(config.breakInShare, HouseSum(world, lib, EffectOpType.BreakInShare));
         int loss = HomeRules.BreakInLoss(world.money, share, config.breakInMaxLoss);
         world.money -= loss;
+        WalletEvents.Raise();
         return loss;
     }
 
@@ -91,6 +92,7 @@ public static class HomeEconomy
 
         ExpenseReport report = DailyExpenses(world, lib, config, breakInLoss);
         world.money -= report.total - breakInLoss;
+        WalletEvents.Raise();
         return report;
     }
 
@@ -147,6 +149,7 @@ public static class HomeEconomy
         if (total > 0 && world.money < total)
             return -1;
         world.money -= total;
+        WalletEvents.Raise();
         return total;
     }
 
@@ -237,6 +240,7 @@ public static class HomeEconomy
 
         int price = OrderBook.Price(world, lib, upgrade);
         world.money -= price;
+        WalletEvents.Raise();
         world.UnlockUpgrade(upgrade.id);
         if (upgrade.unlockEffect != null)
             TimelineService.ActivateEffect(world, upgrade.unlockEffect, $"Upgrade: {upgrade.displayName}", world.day, upgrade.unlockEffect.defaultDurationDays, applyInstantOps: true);

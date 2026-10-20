@@ -341,6 +341,8 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// <summary>Polls the press while the desktop takes input.</summary>
     private void Update()
     {
+        if (InputGate.Blocked)
+            return;
         if (raycaster == null || !raycaster.isActiveAndEnabled)
             return;
 

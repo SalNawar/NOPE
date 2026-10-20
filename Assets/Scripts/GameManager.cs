@@ -7,6 +7,8 @@ using UnityEngine;
 /// Generates cases at day start, displays the active case on UI,
 /// resolves the player's Accept/Deny decision, then advances the day. The
 /// cheat menu's entry points are in GameManager.Cheats.cs.
+/// P0-A carve (docs/pending/CARVE.md): today's bulletin is in
+/// GameManager.Bulletin.cs.
 /// </summary>
 public sealed partial class GameManager : MonoBehaviour
 {
@@ -299,22 +301,6 @@ public sealed partial class GameManager : MonoBehaviour
             Debug.Log("[GameManager] <<< Exiting Start (starting day loop directly).");
             BeginShift(dayPlan, seed);
         }
-    }
-
-    /// <summary>
-    /// Today's bulletin: the plan's line, then, when today's desk hours differ
-    /// from yesterday's (ShiftHours.Announces; the night shifts' days 8 and 12),
-    /// the line naming the new hours (UI string briefing.newHours).
-    /// </summary>
-    private string TodaysBulletin()
-    {
-        string bulletin = dayPlan.Bulletin.Trim();
-        ShiftHours today = dayPlan.Shift(_gameConfig);
-        DayPlanSO yesterdayPlan = _worldState.day > 1 ? contentLibrary.GetDayPlan(_worldState.day - 1) : null;
-        if (!ShiftHours.Announces(yesterdayPlan != null ? yesterdayPlan.Shift(_gameConfig) : (ShiftHours?)null, today))
-            return bulletin;
-        string hours = UiText.Format("briefing.newHours", today.Open, today.Close);
-        return string.IsNullOrEmpty(bulletin) ? hours : bulletin + " " + hours;
     }
 
     /// <summary>

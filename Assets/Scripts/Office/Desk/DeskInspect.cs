@@ -386,6 +386,8 @@ public sealed class DeskInspect : MonoBehaviour
     /// <summary>The player moved on (Papers, Please's: the line stays until the next click): a left-press this frame, in inspect mode, with nothing held, that drew no new line (a result logged this frame changes the board's LineVersion) takes the shown result's line away.</summary>
     private void MoveOn()
     {
+        if (InputGate.Blocked)
+            return;
         bool pressed = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
         if (pressed && IsOn && !board.IsHolding && board.LineVersion == _seenLine && board.Line.a != null)
             board.ClearLine();

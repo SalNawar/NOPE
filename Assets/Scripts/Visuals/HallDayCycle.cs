@@ -16,6 +16,9 @@ public static class HallDayCycle
     /// <summary>Hours in a day.</summary>
     public const float HoursPerDay = 24f;
 
+    /// <summary>The hour dusk starts (P0-A seam; owner LIGHT, consumed by RUN-SAFE). The P0 stub: 18.5, the cheat menu's Dusk (DevCheats.TimesOfDay).</summary>
+    public static float DuskHour => 18.5f;
+
     /// <summary>How long a fixture's switch-on flicker lasts (real seconds).</summary>
     public const float FlickerSeconds = 0.6f;
 

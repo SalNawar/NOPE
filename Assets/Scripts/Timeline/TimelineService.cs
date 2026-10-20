@@ -588,7 +588,7 @@ public static class TimelineService
                     case EffectOpType.SetFlag: world.SetFlag(op.stringParam); break;
                     case EffectOpType.ClearFlag: world.ClearFlag(op.stringParam); break;
                     case EffectOpType.AddCounter: world.AddCounter(op.stringParam, Mathf.RoundToInt(op.floatParam)); break;
-                    case EffectOpType.AddMoney: world.money += Mathf.RoundToInt(op.floatParam); break;
+                    case EffectOpType.AddMoney: world.money += Mathf.RoundToInt(op.floatParam); WalletEvents.Raise(); break;
                     case EffectOpType.AddStability:
                         world.timelineStability = StabilityRules.ApplyPercent(world.timelineStability, op.floatParam);
                         break;

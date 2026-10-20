@@ -133,6 +133,9 @@ public sealed class GuideDirector : MonoBehaviour
     /// <summary>What the prompt shows: "step", "done", "moment", "practice" or "" (the probe and the audit read it).</summary>
     public string ShowingNow => _showing == Showing.None ? string.Empty : _showing.ToString().ToLowerInvariant();
 
+    /// <summary>True while today's guide plate shows (P0-A seam; owner CONTENT, consumed by FEEDBACK: callouts yield to the guide).</summary>
+    public bool IsShowing => _showing != Showing.None;
+
     /// <summary>The FTUE step shown (its id), or empty.</summary>
     public string StepShown => _showing == Showing.Step ? _guide?.CurrentStep(_state)?.id ?? string.Empty : string.Empty;
 

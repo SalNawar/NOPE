@@ -152,6 +152,14 @@ public sealed class CultureThemeService : TimelineCueReceiver
             Instance.OnCuesChanged(System.Array.Empty<string>());
     }
 
+    /// <summary>
+    /// The culture's day-scoped state cleared for a new day (P0-A seam; owner
+    /// TEXT-LANG, consumed by RUN-SAFE's jumps, BUG-27a). The P0 stub does the
+    /// culture's part of the reset NewRun already does (DevToolsState.ResetAll:
+    /// the forced leader cleared); TEXT-LANG refines it (the language lock).
+    /// </summary>
+    public static void ResetForNewDay() => DevToolsState.ForcedLeaderId = null;
+
     /// <summary>Applies the current theme under one root (UI built at runtime, such as the investigation text fallback).</summary>
     public void ApplyTo(GameObject root)
     {
