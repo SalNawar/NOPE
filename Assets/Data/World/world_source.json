@@ -24176,7 +24176,7 @@
         "key": "settings.languageDesk",
         "text": "For the papers and the newspaper only: the rest of the game and the PC always read your language. Never locked; papers already on your desk keep their print.",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.motion",
@@ -24230,25 +24230,25 @@
         "key": "settings.sound",
         "text": "Sound",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.volumeMaster",
         "text": "Master volume",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.volumeMusic",
         "text": "Music",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.volumeEffects",
         "text": "Effects",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.volumeValue",
@@ -24260,31 +24260,31 @@
         "key": "settings.display",
         "text": "Display",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.windowed",
         "text": "Windowed",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.borderless",
         "text": "Borderless",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.fullscreen",
         "text": "Fullscreen",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.resolution",
         "text": "Resolution",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.resolutionValue",
@@ -24308,25 +24308,25 @@
         "key": "settings.vsync",
         "text": "VSync",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.off",
         "text": "Off",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.on",
         "text": "On",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.brightness",
         "text": "Brightness",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.brightnessValue",
@@ -24338,7 +24338,7 @@
         "key": "settings.reduceFlashing",
         "text": "Reduce flashing",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "settings.desktop",
@@ -29877,6 +29877,10 @@
             "text": "الإنجليزية دائما"
           },
           {
+            "key": "settings.languageDesk",
+            "text": "للأوراق والصحيفة فقط: بقية اللعبة والحاسوب بلغتك دائما. لا يقفل أبدا، والأوراق التي على مكتبك تحتفظ بطباعتها."
+          },
+          {
             "key": "settings.motion",
             "text": "الحركة"
           },
@@ -29903,6 +29907,62 @@
           {
             "key": "settings.cameraSwayOn",
             "text": "تشغيل"
+          },
+          {
+            "key": "settings.sound",
+            "text": "الصوت"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "مستوى الصوت العام"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "الموسيقى"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "المؤثرات"
+          },
+          {
+            "key": "settings.display",
+            "text": "العرض"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "نافذة"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "بلا إطار"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "ملء الشاشة"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "الدقة"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "المزامنة الرأسية"
+          },
+          {
+            "key": "settings.off",
+            "text": "إيقاف"
+          },
+          {
+            "key": "settings.on",
+            "text": "تشغيل"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "السطوع"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "تخفيف الوميض"
           },
           {
             "key": "settings.desktop",
@@ -38433,6 +38493,10 @@
             "text": "Πάντα αγγλικά"
           },
           {
+            "key": "settings.languageDesk",
+            "text": "Μόνο για τα έγγραφα και την εφημερίδα: το υπόλοιπο παιχνίδι και ο υπολογιστής είναι πάντα στη γλώσσα σας. Δεν κλειδώνει ποτέ· τα έγγραφα που είναι ήδη στο γραφείο σας κρατούν την εκτύπωσή τους."
+          },
+          {
             "key": "settings.motion",
             "text": "Κίνηση"
           },
@@ -38459,6 +38523,62 @@
           {
             "key": "settings.cameraSwayOn",
             "text": "Ενεργό"
+          },
+          {
+            "key": "settings.sound",
+            "text": "Ήχος"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "Γενική ένταση"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "Μουσική"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "Εφέ"
+          },
+          {
+            "key": "settings.display",
+            "text": "Οθόνη"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "Σε παράθυρο"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "Χωρίς πλαίσιο"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "Πλήρης οθόνη"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "Ανάλυση"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "Κάθετος συγχρονισμός"
+          },
+          {
+            "key": "settings.off",
+            "text": "Ανενεργό"
+          },
+          {
+            "key": "settings.on",
+            "text": "Ενεργό"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "Φωτεινότητα"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "Λιγότερες αναλαμπές"
           },
           {
             "key": "settings.desktop",
@@ -46437,6 +46557,10 @@
             "text": "Sempre inglese"
           },
           {
+            "key": "settings.languageDesk",
+            "text": "Solo per i documenti e il giornale: il resto del gioco e il PC sono sempre nella tua lingua. Mai bloccata; i documenti già sulla scrivania restano come sono stampati."
+          },
+          {
             "key": "settings.motion",
             "text": "Movimento"
           },
@@ -46463,6 +46587,62 @@
           {
             "key": "settings.cameraSwayOn",
             "text": "Attivata"
+          },
+          {
+            "key": "settings.sound",
+            "text": "Audio"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "Volume generale"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "Musica"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "Effetti"
+          },
+          {
+            "key": "settings.display",
+            "text": "Schermo"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "In finestra"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "Senza bordi"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "Schermo intero"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "Risoluzione"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "Sincronia verticale"
+          },
+          {
+            "key": "settings.off",
+            "text": "Disattivato"
+          },
+          {
+            "key": "settings.on",
+            "text": "Attivato"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "Luminosità"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "Riduci i lampeggi"
           },
           {
             "key": "settings.desktop",
@@ -54561,6 +54741,10 @@
             "text": "Immer Englisch"
           },
           {
+            "key": "settings.languageDesk",
+            "text": "Nur für die Papiere und die Zeitung: Der Rest des Spiels und der PC bleiben immer in deiner Sprache. Nie gesperrt; Papiere, die schon auf deinem Schreibtisch liegen, behalten ihren Druck."
+          },
+          {
             "key": "settings.motion",
             "text": "Bewegung"
           },
@@ -54587,6 +54771,62 @@
           {
             "key": "settings.cameraSwayOn",
             "text": "An"
+          },
+          {
+            "key": "settings.sound",
+            "text": "Ton"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "Gesamtlautstärke"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "Musik"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "Effekte"
+          },
+          {
+            "key": "settings.display",
+            "text": "Anzeige"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "Fenster"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "Rahmenlos"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "Vollbild"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "Auflösung"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "VSync"
+          },
+          {
+            "key": "settings.off",
+            "text": "Aus"
+          },
+          {
+            "key": "settings.on",
+            "text": "An"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "Helligkeit"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "Weniger Blitzen"
           },
           {
             "key": "settings.desktop",
@@ -62909,6 +63149,10 @@
             "text": "始终英语"
           },
           {
+            "key": "settings.languageDesk",
+            "text": "仅限文件和报纸：游戏的其余部分和电脑始终使用你的语言。从不锁定；桌上已有的文件保留原来的印刷。"
+          },
+          {
             "key": "settings.motion",
             "text": "动效"
           },
@@ -62935,6 +63179,62 @@
           {
             "key": "settings.cameraSwayOn",
             "text": "开"
+          },
+          {
+            "key": "settings.sound",
+            "text": "声音"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "主音量"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "音乐"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "音效"
+          },
+          {
+            "key": "settings.display",
+            "text": "显示"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "窗口"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "无边框"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "全屏"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "分辨率"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "垂直同步"
+          },
+          {
+            "key": "settings.off",
+            "text": "关"
+          },
+          {
+            "key": "settings.on",
+            "text": "开"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "亮度"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "减少闪烁"
           },
           {
             "key": "settings.desktop",
@@ -70605,6 +70905,10 @@
             "text": "常に英語"
           },
           {
+            "key": "settings.languageDesk",
+            "text": "書類と新聞のみ：ゲームのほかの部分とPCは常にあなたの言語のままです。ロックされることはなく、机の上にある書類は印刷されたままです。"
+          },
+          {
             "key": "settings.motion",
             "text": "動き"
           },
@@ -70631,6 +70935,62 @@
           {
             "key": "settings.cameraSwayOn",
             "text": "オン"
+          },
+          {
+            "key": "settings.sound",
+            "text": "サウンド"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "マスター音量"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "音楽"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "効果音"
+          },
+          {
+            "key": "settings.display",
+            "text": "画面"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "ウィンドウ"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "ボーダーレス"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "フルスクリーン"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "解像度"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "垂直同期"
+          },
+          {
+            "key": "settings.off",
+            "text": "オフ"
+          },
+          {
+            "key": "settings.on",
+            "text": "オン"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "明るさ"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "点滅を抑える"
           },
           {
             "key": "settings.desktop",

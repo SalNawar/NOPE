@@ -21,8 +21,10 @@ using UnityEngine.UI;
 /// any day; Follow history or no choice, English until the culture day and
 /// the world's language from then on), in the culture's
 /// font (<see cref="CultureFont"/>), and the lens (TranslationLensPresenter,
-/// on the same host) reads them. Every themed text (the chrome at the desk,
-/// Home, the report, the PC) keeps the player's language and its kit face
+/// on the same host) reads them. Every themed text keeps its kit face, and
+/// every one but the newspaper's (its masthead, edition line and price:
+/// CultureChoice.NewspaperKeys, moved to the Paper surface by key) keeps the
+/// player's language: the chrome at the desk, Home, the report, the PC
 /// (CultureChoice.Surface, UiText). The setting never locks and applies at
 /// once (<see cref="RefreshActive"/>; papers already printed keep their print).
 /// While it runs, a text made at run time with no font of its own gets the
@@ -530,7 +532,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
             image.color = ink ? entry.ink : entry.fill;
     }
 
-    /// <summary>A themed text (the chrome or the PC: the player's language, BUG-3a): ink (not a kit text's), its kit face (else the font it was built with: never the project's default LiberationSans, BUG-38a), style (italics stripped or additions), shrink-to-fit, and its label when keyed, in the player's language.</summary>
+    /// <summary>A themed text: ink (not a kit text's), its kit face (else the font it was built with: never the project's default LiberationSans, BUG-38a), style (italics stripped or additions), shrink-to-fit, and its label when keyed, looked up on the text's surface (UiText.SurfaceOf): the chrome's and the PC's in the player's language (BUG-3a), except the newspaper's own words (its masthead, edition line and price tags, CultureChoice.NewspaperKeys), which the lookup moves to the Paper surface (CultureChoice.SurfaceOfKey: the world's language from the culture day).</summary>
     private void ApplyText(ThemeTag tag, TMP_Text text, PaletteEntry entry)
     {
         if (entry.hasInk && tag.Part != ThemePart.Kit)
