@@ -16,7 +16,8 @@ using System.Text.RegularExpressions;
 /// report and no single-frame cut at the day's end, Go Home and Sleep
 /// (BUG-32a); an ending is the evening edition with Title and Quit (BUG-56a);
 /// the night shift closes at 24:00 and an early finish rings the bell (BUG-72).
-/// Built player: the loads hold no frame over 0.25 s (BUG-31a).
+/// Built player: the loads hold no frame over 0.25 s, in real time and in the
+/// captures, and the office shows within 1.0 s (BUG-31a).
 /// </summary>
 public static class FlowChecks
 {
@@ -108,7 +109,20 @@ public static class FlowChecks
     [GateCheck("flow.night.bell", Owner, GateKind.Play)]
     public static GateResult EarlyBell() => GateResults.Require("flow.night.bell", Owner, "flow_night.bell.early");
 
-    /// <summary>The loads (title to office, Home to office) never hold a frame over 0.25 s, on the QA player.</summary>
+    /// <summary>
+    /// The loads, on the QA player: in real time (flow_load, FlowLoadWatch) no
+    /// frame from the click to the shutter off is over 250 ms and the office
+    /// shows within 1.0 s; in the captures (flow_load_seq, seqtools frozen) the
+    /// shutter's light never stands still over 0.25 s. Both halves are needed:
+    /// a fixed-step capture cannot see a long activation frame.
+    /// </summary>
     [GateCheck("flow.bp.load", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
-    public static GateResult Load() => GateResults.Require("flow.bp.load", Owner, "bp.flow_load.seq.*.frozen", true);
+    public static GateResult Load()
+    {
+        GateResult realTime = GateResults.Require("flow.bp.load", Owner, "bp.flow_load.load.*", true);
+        GateResult captured = GateResults.Require("flow.bp.load", Owner, "bp.flow_load_seq.seq.*.frozen", true);
+        return GateResult.Of("flow.bp.load", Owner, realTime.Pass && captured.Pass,
+            $"real time: {realTime.Measured}; captures: {captured.Measured}",
+            string.Join("; ", new[] { realTime.Detail, captured.Detail }.Where(d => !string.IsNullOrEmpty(d))));
+    }
 }

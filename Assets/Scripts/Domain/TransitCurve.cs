@@ -2,7 +2,7 @@ using System;
 
 /// <summary>
 /// The screen transitions' timing (FLOW, BUG-32a; the bible's J5: one shared
-/// kit of 0.2-0.3 s): how far a fade, a slide or a fade through black has
+/// kit of 0.2-0.3 s): how far a fade, a slide or the scene-change shutter's roll has
 /// gone after some real seconds, eased in and out (a cubic smoothstep: it
 /// leaves and lands at rest, so a fade never pops). Pure; Transit plays it.
 /// </summary>

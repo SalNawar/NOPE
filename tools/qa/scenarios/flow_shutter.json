@@ -3,7 +3,7 @@
   "owner": "FLOW",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "BUG-31a / J5: a scene change through SceneTransit (the path RunManager's loads take once RUN-SAFE routes them): the booth's shutter comes down, the scene and the office's gameplay layer load behind it, the light moves through the slats meanwhile, the shutter goes up. Analyse seq/office_title and seq/title_office with seqtools frozen (<= 0.25 s) and cuts (none)" },
+    { "op": "note", "text": "BUG-31a / J5: a scene change through SceneTransit (the path every RunManager load takes, RUN-SAFE): the booth's shutter comes down, the scene and the office's gameplay layer load behind it, the light moves through the slats meanwhile, the shutter goes up. Analyse seq/office_title and seq/title_office with seqtools frozen (<= 0.25 s) and cuts (none)" },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },

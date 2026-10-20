@@ -3,23 +3,23 @@
   "owner": "FLOW",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "BUG-31a [BP]: title -> office and home -> office as timing sequences (hitches) and as captures ('frozen': no frame held over 0.25 s; 'cuts'); five runs give the median load time" },
+    { "op": "note", "text": "BUG-31a [BP], the real-time half: each load is timed on real frame times from the click (SceneTransit's start mark) to the shutter off, with nothing recording (a capture's cost would be timed). load.<name>.frames: no real frame over 250 ms; load.<name>.time: the office shown (the shutter starting up) within 1.0 s of the click. The first load is the session's cold one (seals and daters painted for the first time). flow_load_seq captures the same loads for 'frozen' and 'cuts'" },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "recStart", "name": "title_office" },
+    { "op": "flowLoadClock", "name": "title_office" },
     { "op": "newRun", "text": "Biscuit" },
     { "op": "waitOffice", "n": 1, "f": 120 },
-    { "op": "wait", "f": 1 },
-    { "op": "recStop" },
+    { "op": "flowLoadTime", "name": "title_office", "n": 250, "f": 1.0 },
     { "op": "startShift" },
     { "op": "cheat", "name": "EndShift" },
     { "op": "waitActive", "target": "DayFlowUIController.resultsPanel", "f": 60 },
+    { "op": "flowLoadClock", "name": "office_home" },
     { "op": "button", "target": "DayFlowUIController.goHomeButton" },
     { "op": "waitScene", "name": "HomeScene", "f": 120 },
-    { "op": "recStart", "name": "home_office" },
+    { "op": "flowLoadTime", "name": "office_home", "n": 250 },
+    { "op": "flowLoadClock", "name": "home_office" },
     { "op": "call", "target": "RunManager.Sleep" },
     { "op": "waitOffice", "n": 2, "f": 120 },
-    { "op": "wait", "f": 1 },
-    { "op": "recStop" }
+    { "op": "flowLoadTime", "name": "home_office", "n": 250, "f": 1.0 }
   ]
 }

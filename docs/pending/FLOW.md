@@ -1,13 +1,19 @@
 # FLOW: smooth transitions, real pause, fast loads, endings that land
 
-Branch `fix/a-flow`, cut from main `9b8ab5f` (P0: carve, cuts, QA-RIG). Sources: FIX_PLAN.md §3 "FLOW" and FIX_PLAN_v2.md "FLOW: delta (D20, D12)" (v2 wins), BUGLIST.md, DECISIONS_1019a.md (D12, D20, R3/R4), GAME_FEEL_BIBLE.md rows F3, G1, G3, G4, J5, J6, and R7\PHASEB\LEASES.md (the GameManager carve, the scoped pause, the Esc seam).
+Branch `fix/a-flow`, cut from main `9b8ab5f` (P0: carve, cuts, QA-RIG) and **rebased onto origin/main `4290bd6`** (RUN-SAFE merged) in verifier round 2. Sources: FIX_PLAN.md §3 "FLOW" and FIX_PLAN_v2.md "FLOW: delta (D20, D12)" (v2 wins), BUGLIST.md, DECISIONS_1019a.md (D12, D20, R3/R4), GAME_FEEL_BIBLE.md rows F3, G1, G3, G4, J5, J6, and R7\PHASEB\LEASES.md (the GameManager carve, the scoped pause, the Esc seam).
 
 **Bugs closed here (code; each still needs its Unity recipe, §3):** 28b (CloseNow honours the ending), 32a, 34a, 38b, 56a, 65k, 72, 73c (MotionTuning_Default), 73f (the clock warning); 34b **in the office** (R3 included).
 
-**Not closed here, with their owners:**
-- **34b at Home and on the Title:** no Settings window exists there. Assigned to HOME (§1, BUG-34b). Known red until then.
-- **31a in play:** the code is done, but no scene change uses it until RUN-SAFE routes RunManager's loads through `SceneTransit.Load`.
-- **70b:** the fix is DESK-PLAN's builder line and asset. FLOW adds the gate check `flow.clock.tooltip`, red until then. **INTEGRATION must assign it.**
+**Verifier round 2 (this commit):** rebased onto `4290bd6` (one conflict, the FEATURES.md endings line: both insertions kept, RUN-SAFE's night check first); the statements that RUN-SAFE had not yet adopted `SceneTransit.Load` corrected everywhere; the [BP] load line now measured in real time (`FlowLoadWatch`, `flow_load` / `flow_load_seq`, §1 BUG-31a, recipe 9); `Transit.cs`'s summaries say shutter, not fade; the known-red owners and the right-click question listed for INTEGRATION and Saleh.
+
+**Live in play since the rebase: 31a's shutter and async load.** RUN-SAFE's `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` (`RunManager.cs`, on main) already call `SceneTransit.Load`, so on this branch every scene change in play brings the shutter down and loads the scene (and the office's gameplay layer) asynchronously. FIX_PLAN names the risk: "Async loading reorders Awake/Start: smoke play and full sequence at every step". **Every recipe in §3 runs on this rebased tree**, and recipe 2 (smoke) and recipe 11 (a full played day) come first.
+
+**Not closed here, with their owners. No register assigns any of them yet: INTEGRATION must carry them as known red and confirm each owner.**
+- **34b at Home and on the Title:** no Settings window exists there. FLOW proposes HOME for both (§1, BUG-34b); the Title is in FIX_PLAN's HOME section, Home is only FLOW's proposal. `flow.esc.home` and `flow.esc.title` are red until then.
+- **70b:** the fix is DESK-PLAN's builder line and asset; neither is changed on main (`Reaction_Clock.asset:19` `tooltipKey: tooltip.value`, `OfficeSceneUIBuilder.Desk.cs:381` passes `"tooltip.value"`). FLOW adds the gate check `flow.clock.tooltip`, red until then.
+- **G3, G4 and J5 (feel rows):** red until the art's `BoothShutter` object and the clips `booth_shutter_open`, `booth_shutter_close`, `day_start`, `available_on` and `amb_hall_day` exist (DESK-PLAN's art pass, FEEDBACK's clips).
+
+**For Saleh to confirm (FLOW's reading, not his words):** a right-click still backs out of the PC. R3 says "To leave the PC, press Q or click the bezel"; FLOW keeps the right-click back-out (Papers, Please's way) because `DesktopKeyboard` routes a right-click the PC's own chain does not take as its back-out, `EscapeChain.KeepsTheOfficeOut` returns false for it, and `OfficeControls` then runs `ClosePc`. If Saleh wants Q and the bezel only, the change is one line in `KeepsTheOfficeOut` (true for a right-click in the PC) and its test (§5.6).
 
 **Saleh's calls built:**
 - **D20:** "if you press escape you should auto open the pc setting menu"; pausing is the AVAILABLE sign. There is **no pause card**. FLOW provides the scoped pause (`PauseState`) for BELL-SIGN's closed booth; it does not wire the sign (BELL-SIGN P2, and its question 2 is still open with Saleh).
@@ -57,7 +63,7 @@ No serialized field moved. `carve_check.py --base origin/main --head b8c6e1b`: 1
 - **R3: Esc never closes the PC, and never leaves a mode.** This is new in this round. Before it, the office's own back-out (`OfficeControls` → `ControlRules.BackOut`, DOC-HANDLE's) still closed the PC on Esc.
   - **`Domain/EscapeChain.cs`: `KeepsTheOfficeOut(state, desktopTookIt, rightClick)` (pure, tested).** It is true when the office's back-out would leave a mode on this Esc press: the PC, the wheel, the value held, inspect mode, the city, the reading view.
     - A drag is a hold, so the back-out still cancels it first (v2's precedence: "cancel a hold first, then open Settings").
-    - A right-click still backs out, Papers, Please's way.
+    - A right-click still backs out, Papers, Please's way, **including out of the PC** (`DesktopKeyboard` routes an untaken right-click as the back-out; `KeepsTheOfficeOut` returns false for it; `OfficeControls` runs `ClosePc`). R3 names only Q and the bezel, so this is FLOW's decision for Saleh to confirm (§5.6).
     - The PC's own chain still goes first: a menu, the card, the search, a field (`DesktopKeyboard.EscapeTakenFrame`).
   - **`UI/EscapeWatch.cs`** now runs at -1085, between the PC's poller (`DesktopKeyboard`, -1090) and the office's (`OfficeControls`, -1080). On such a press it keeps `OfficeControls` out of that one frame (`enabled = false`), and `PauseMenu.Update` turns it back on in the same frame.
     - So the PC stays open and Settings comes to the front. Only Q or the bezel leave the PC.
@@ -77,7 +83,7 @@ No serialized field moved. `carve_check.py --base origin/main --head b8c6e1b`: 1
 - **Hand-off: Quit to Title and Quit from Settings (v2's proposal; not built, and not FLOW's files).** Owners:
   - **UI-PC** (`OfficeSceneUIBuilder.Apps.cs`, the Settings app's window): two rows at the window's foot.
   - **TEXT-LANG** (`SettingsWindowController.cs`): their buttons, and the strings `settings.quitToTitle` and `settings.quit` in all 7 tables.
-  - **Behind them:** Quit is `Application.Quit()`, as `DesktopShell`'s Start-menu "Quit game" does today. Quit to Title is `RunManager.LoadTitleScene()`. RUN-SAFE decides what a mid-shift Quit to Title does to the run (save, or drop the day), and loads it through `SceneTransit.Load`.
+  - **Behind them:** Quit is `Application.Quit()`, as `DesktopShell`'s Start-menu "Quit game" does today. Quit to Title is `RunManager.LoadTitleScene()`. RUN-SAFE decides what a mid-shift Quit to Title does to the run (save, or drop the day); `LoadTitleScene` already goes through `SceneTransit.Load`.
   - **HOME's** Title and Home windows carry the same two rows; Quit to Title is hidden on the Title itself.
   - FLOW's `flowSettings` op is extended for them when they land.
 
@@ -94,15 +100,17 @@ No serialized field moved. `carve_check.py --base origin/main --head b8c6e1b`: 1
   - **While it is down, the hall's warm light moves through its slat gaps and glints on its faces** (`ShutterRoll.Sweep`, tested: it moves at least 1% of a screen height every 30 fps frame, under Reduced Motion too). So no frame is held without motion, which a static black hold during a multi-second load could not pass ([BP]: no frame repeated without motion over 0.25 s).
   - Under Reduced Motion it fades in and out where it hangs instead of rolling.
   - It blocks clicks while shown. A second load while one runs is ignored with a warning. Outside play mode, or for a scene that cannot load, it is `SceneManager.LoadScene`.
-  - It runs on real time (`UiMotion.Delta`), so a long activation frame never freezes the light; the light just jumps on.
+  - It runs on real time (`UiMotion.Delta`), so the light catches up after a long frame. **It does not hide one:** a long frame of main-thread work (a scene's activation) holds the screen, shutter and all, for its whole length. Only a real-time measurement sees that (recipe 9, below).
+  - **QA marks (new in round 2).** `TransitRunner` raises `QaSignals.Event("transit", ...)` at `start:<scene>` (the load accepted, the click's frame), `rise:<scene>` (the shutter starting up over the settled scene) and `up:<scene>` (the shutter off). They cost nothing when nothing listens, and they land in a recording's `events.tsv`.
 - **`Office/OfficeScenes.cs`: the gameplay layer loads asynchronously.** Behind the shutter (`SceneTransit.Loading`), the office's gameplay layer now comes in with `LoadSceneAsync` (additive), so the shutter keeps moving while it streams. Before, it was a synchronous `SceneManager.LoadScene`.
   - The runner's settle wait (every scene in `SceneManager` loaded) covers it.
-  - Without the shutter (RunManager's direct loads, Play in the editor), it still loads on the next frame as before, so the art office never shows alone for longer than today.
+  - Without the shutter (Play in the editor, a scene SceneTransit cannot stream), it still loads on the next frame as before, so the art office never shows alone for longer than today.
 - **`GameManager.cs`: theme once.** `CultureThemeService` already themes each scene as it loads. GameManager's second `RefreshActive()` now runs only when it made the run itself (an office opened on its own in the editor).
-- **Not live in play yet: RUN-SAFE's adoption.** `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` still call `SceneManager.LoadScene` (RUN-SAFE's `RunManager.cs`; CARVE's seam table). Until RUN-SAFE (#3) routes them through `SceneTransit.Load`, neither the shutter nor the async load runs in play.
-  - FEATURES.md's line said "(`SceneTransit.Load`, RunManager's)", which misstated live behaviour. It now says no scene change uses it yet.
+- **Live in play (round 2, after the rebase).** RUN-SAFE's `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` call `SceneTransit.Load` on main, so the shutter and the async load run in every scene change in play. FEATURES.md, `Transit.cs`, `OfficeScenes.cs`, `FlowOps.cs` and `flow_shutter.json` now say so.
   - 31b (the ~650 MB of hall layers) is the art-side request LIGHT files.
-  - `GameManager.Start`'s case generation still runs in one activation frame. Behind the moving shutter that is one long frame, not a held one; its time counts against the ≤1.0 s line in `flow_load`.
+- **The [BP] pass is still at risk: `GameManager.Start`'s case generation runs in one activation frame.** A player sees that frame held, shutter and all, for as long as it takes. Round 1 called it "one long frame, not a held one", which was wrong. A fixed-step capture cannot see it either: `flow_load` recorded at `Time.captureFramerate = 30`, and the shutter's light steps on `UiMotion.Delta`, so `seqtools frozen` reads a multi-second activation frame as one moving frame and passes whatever the hitch.
+  - **Round 2 measures it in real time.** `FlowLoadWatch` (new, rig only) times every real frame (`Time.realtimeSinceStartupAsDouble`, which `captureFramerate` does not touch) from the `start` mark to the `up` mark, with nothing recording. The ops `flowLoadClock` / `flowLoadTime` assert `load.<name>.frames` (no real frame over 250 ms) and `load.<name>.time` (shown within 1.0 s of the click) for title → office (the session's cold load), office → Home and Home → office (`flow_load.json`). The old captures moved to `flow_load_seq.json` for `frozen` and `cuts`. `flow.bp.load` needs both halves.
+  - **The activation work is not split here.** Splitting `GameManager.Start` across frames reorders what other components' `Start` read from it, which is the FIX_PLAN risk above. If `load.*.frames` is red on the QA player, the follow-up is to split it (the day's case generation over frames behind the shutter, with the shutter's settle wait extended to cover it), and `flow.bp.load` stays red until then.
 
 ### BUG-32a: the transition kit; the last traveller's payoff before the report
 - **`Domain/TransitCurve.cs` (new, pure).** The kit's ease (a cubic smoothstep: it leaves and lands at rest) and its length, clamped to 0.2-0.3 s.
@@ -183,26 +191,27 @@ The feel cards are written, planned with their evidence recipes: `R7\FIX\FEEL\G3
     - `flow.motionTuning.live`: no stale knob in MotionTuning_Default.
     - **`flow.clock.tooltip`** (new): Reaction_Clock has no tooltip key. Red until DESK-PLAN.
   - **play:** `flow.esc.office`, **`flow.esc.pc`** (new: Esc with the PC open keeps it open and Settings showing, R3), `flow.esc.home`, `flow.esc.title`, `flow.focus`, `flow.payoff`, `flow.transitions.cuts`, **`flow.transit.shutter`** (new: a scene change through SceneTransit brings the shutter down, loads behind it and lifts it), `flow.endings`, `flow.night.close`, `flow.night.bell`;
-  - **built player (demo):** `flow.bp.load`.
-- **Recipes** (`tools/qa/scenarios/`): `flow_pause.json` (now with a second Esc in the PC: `settings.pcEsc`), `flow_transitions.json`, **`flow_shutter.json`** (new: office → Title and Title → office through `SceneTransit.Load`, recorded, so the shutter is measured before RUN-SAFE adopts it), `flow_endings.json`, `flow_night.json`, `flow_load.json` ([BP]).
-- **Rig ops** (`Assets/Tests/PlayMode/FLOW/Rig/FlowOps.cs`): `flowSettings`, `flowFocus`, `flowPayoff`, `flowEdition`, `flowClosed`, `flowEarlyFinish`, and **`flowTransit`** (new: a scene by name, or `office` for RunConfig's art office, loaded through `SceneTransit.Load`; asserts `transit.<name>`).
+  - **built player (demo):** `flow.bp.load`: both `bp.flow_load.load.*` (real time: no frame over 250 ms, the office shown within 1.0 s) and `bp.flow_load_seq.seq.*.frozen` (the captures; round 2).
+- **Recipes** (`tools/qa/scenarios/`): `flow_pause.json` (now with a second Esc in the PC: `settings.pcEsc`), `flow_transitions.json`, **`flow_shutter.json`** (new: office → Title and Title → office through `SceneTransit.Load`, recorded: the shutter measured on its own, apart from a run's loads), `flow_endings.json`, `flow_night.json`, and for [BP] **`flow_load.json`** (round 2: the loads timed in real time, nothing recorded) and **`flow_load_seq.json`** (round 2: round 1's captured `flow_load`, renamed).
+- **Rig ops** (`Assets/Tests/PlayMode/FLOW/Rig/FlowOps.cs`): `flowSettings`, `flowFocus`, `flowPayoff`, `flowEdition`, `flowClosed`, `flowEarlyFinish`, **`flowTransit`** (new: a scene by name, or `office` for RunConfig's art office, loaded through `SceneTransit.Load`; asserts `transit.<name>`), and in round 2 **`flowLoadClock`** (name: starts `FlowLoadWatch` before the step that starts a load) and **`flowLoadTime`** (name, n frame budget in ms (250), f visible budget in s (0 reports only): asserts `load.<name>.frames` and `load.<name>.time`).
   - **The red python test.** Before this round, all six went through a `TryRegister` wrapper, so `tools/qa/test_seqlib.py`'s scan for literal `QaRunner.RegisterOp("name"` calls saw none of them. Every `flow_*.json` failed `test_scenarios_use_known_ops` ('flowpayoff' not found, flow_endings step 12): 35 tests, 1 failure, though the first round reported it OK.
   - **The fix:** each is now a literal `QaRunner.RegisterOp("flowX", ...)` call, still registered once (`flowTransit` too).
-- **UTF play tests** (`Assets/Tests/PlayMode/FLOW/Editor/FlowPlayTests.cs`, Explicit, category QaPlay): one per recipe but `flow_load` (`Shutter_ASceneChangeLoadsBehindTheShutter` is new).
+- **UTF play tests** (`Assets/Tests/PlayMode/FLOW/Editor/FlowPlayTests.cs`, Explicit, category QaPlay): one per recipe but `flow_load` and `flow_load_seq` (QA player only; `Shutter_ASceneChangeLoadsBehindTheShutter` is new).
 - **For INTEGRATION's known-red list** (`tools/qa/gate_known_red.txt`, not FLOW's file):
   - `flow.esc.home  flow_pause.settings.home  # BUG-34b, HOME (#14): Home has no Settings window until HOME builds one`;
   - `flow.esc.title  flow_pause.settings.title  # BUG-34b, HOME (#14): the Title has no Settings window until HOME builds one`;
   - `flow.clock.tooltip  # BUG-70b, DESK-PLAN (#5): Reaction_Clock's tooltip copies the readout until its key is blank (asset + builder)`.
-  - Each leaves once its owner has merged.
+  - Each leaves once its owner has merged. None of the three owners is confirmed in any register yet (round 2 checked main `4290bd6`): INTEGRATION confirms them.
+  - The feel rows G3, G4 and J5 are red for the same kind of reason (the `BoothShutter` art object; the `booth_shutter_open/close`, `day_start`, `available_on` and `amb_hall_day` clips). INTEGRATION carries them in the feel index as red, with those blockers.
 
 ## 2. Tests (outside Unity)
 
 | Check | Result |
 |---|---|
-| `compile_check_any.py E:\unity\NOPE-docs` | 0 errors in every project (161 warnings, the baseline) |
-| Offline runner (`cc_docs`) | passed 3759, failed 0 (3747 before this round, +12) |
-| QA editor runner (`tools/qa/editor_runner`, `QA_PROJECT` set) | passed 69, failed 0, 21 NeedsEditor skipped (the two new dater tests are NeedsEditor) |
-| `python -m unittest discover -s tools/qa -p "test_*.py"` | 35 tests, **OK** (it was 1 failure: `test_scenarios_use_known_ops`, fixed above) |
+| `compile_check_any.py E:\unity\NOPE-docs` | 0 errors in every project (161 warnings, the baseline); round 2, rebased: the same |
+| Offline runner (`cc_docs`) | passed 3759, failed 0 (3747 before this round, +12); round 2, rebased on `4290bd6` (RUN-SAFE's tests included): passed 3788, failed 0 |
+| QA editor runner (`tools/qa/editor_runner`, `QA_PROJECT` set) | passed 69, failed 0, 21 NeedsEditor skipped (the two new dater tests are NeedsEditor); round 2, rebased (RUN-SAFE's and QA-RIG's on main included): passed 81, failed 0, 41 NeedsEditor skipped |
+| `python -m unittest discover -s tools/qa -p "test_*.py"` | 35 tests, **OK** (it was 1 failure: `test_scenarios_use_known_ops`, fixed above); round 2: 35 tests, OK (`flow_load` and `flow_load_seq` use known ops, `flowLoadClock` and `flowLoadTime` included) |
 
 New and changed EditMode tests:
 - **`PauseStateTests` (new):**
@@ -234,6 +243,7 @@ New and changed EditMode tests:
 **Code done; deferred: Unity.** FLOW runs code-only, and another agent holds the Unity lane.
 - No scene, generated asset or builder changed, so no Build Office UI or Generate World is needed for FLOW. `MotionTuning_Default.asset` gains `shutterSeconds: 1.2`, an Inspector knob.
 - Every recipe below runs in this worktree's editor by job (`Library/ClaudeJobs/<name>.job`), never while Saleh is on the PC.
+- **They run on the rebased tree (main `4290bd6` + FLOW).** RUN-SAFE's loads go through the shutter there, so async loading is live in play and can reorder Awake/Start (FIX_PLAN's risk). Run recipe 2 (smoke) and recipe 11 (a full played day) first; any new console error or missing reference after a load is FLOW's to fix before the rest.
 
 1. **EditMode suite in Unity** (TestRunnerApi job). **Pass:** green except the known UnitySkills failure, including `FlowSeamTests`' seven NeedsEditor tests and `PauseStateTests`, `FlowRulesTests` and `EveningEditionTests`.
 2. **Smoke** (`QaJobs.Smoke`). **Pass:**
@@ -255,9 +265,9 @@ New and changed EditMode tests:
 4. **Transitions** (`flow_transitions.json`). **Pass:**
    - `flow_transitions.payoff` ok: "report shown True, ... report over a leaving traveller False";
    - `python tools/qa/seqtools.py cuts <run>/seq/{dayend,gohome,sleep}`: no single-frame full-screen change;
-   - `frozen` on `gohome` and `sleep`: ≤0.25 s, **after RUN-SAFE routes RunManager's loads through SceneTransit** (until then, listed as RUN-SAFE's adoption);
+   - `frozen` on `gohome` and `sleep`: ≤0.25 s (the loads go through the shutter on this tree);
    - by eye on `seq/dayend`: the ribbon, reaction and walk-off are fully visible before the report's first frame.
-5. **The shutter veil** (`flow_shutter.json`, or `FlowPlayTests.Shutter_ASceneChangeLoadsBehindTheShutter`; FLOW's own check, before RUN-SAFE). **Pass:**
+5. **The shutter veil** (`flow_shutter.json`, or `FlowPlayTests.Shutter_ASceneChangeLoadsBehindTheShutter`; `SceneTransit.Load` directly, the path RunManager's loads take). **Pass:**
    - `flow_shutter.transit.TitleScene` and `flow_shutter.transit.office` ok: "shutter seen down True, '<scene>' loaded True, shutter up and off True, still loading False";
    - `python tools/qa/seqtools.py frozen <run>/seq/office_title` and `.../title_office`: longest still run ≤0.25 s; `seqtools.py cuts` on both: none;
    - by eye on the sequences: the shutter rolls down in about 8 frames, holds with the light moving through its slats, and rolls up over the new scene;
@@ -278,10 +288,17 @@ New and changed EditMode tests:
    - ink in the word band ≥80% of the en baseline;
    - read by eye on stills;
    - the APPROVED and DENIED outlines look as before this round (DaterWordOutline is pixel-identical offline; this is the in-game confirmation).
-9. **Load [BP]** (after `QaJobs.BuildQaPlayer`; `python tools/qa/run_player.py tools/qa/scenarios/flow_load.json`, five times). **Pass:**
-   - `bp.flow_load.seq.*.frozen` ok (no frame held over 0.25 s);
-   - the office visible within 1.0 s of the click, median of 5 (read from `frames.tsv`).
-   - Needs RUN-SAFE's adoption of `SceneTransit.Load`. 31b's hall layers are listed as a known art fallback if not yet landed.
+9. **Load [BP]** (after `QaJobs.BuildQaPlayer` on the rebased tree, committed, so the results are not dirty). Two halves; `flow.bp.load` needs both.
+   - **a. Real time, the line a capture cannot see.** `python tools/qa/run_player.py tools/qa/scenarios/flow_load.json`, five times (a fresh player each time, so title → office is the cold load). Nothing records during the loads. **Pass lines in each run's `run.json` (imported as `bp.flow_load.load.*`):**
+     - `flow_load.load.title_office.frames`, `.office_home.frames` and `.home_office.frames` ok: "worst real frame N ms of M frames from the click to the shutter off, 0 over 250 ms; shutter off True", on every one of the five runs;
+     - `flow_load.load.title_office.time` and `.home_office.time` ok: "shown X s after the click (the shutter starting up) ... budget 1.0 s", on every run (FIX_PLAN's median of 5 then holds too; write the five X values and their median into the result note);
+     - `.office_home.time` is reported only (FIX_PLAN gives no budget for it).
+     - A red `.frames` is the activation frame (§1, BUG-31a): the follow-up is splitting `GameManager.Start`'s case generation across frames, not a looser line.
+   - **b. The captures.** `python tools/qa/run_player.py tools/qa/scenarios/flow_load_seq.json` once, then on its run folder `<run>`, with `<c>` the QA player's commit from `qa_build.json`:
+     - `python tools/qa/seqtools.py frozen <run>/seq/title_office --result-dir Library/QA/results --bp --owner FLOW --commit <c>`, and the same for `home_office`. **Pass:** "longest still run" ≤0.25 s on both (`bp.flow_load_seq.seq.*.frozen`);
+     - `python tools/qa/seqtools.py cuts <run>/seq/title_office`, and `home_office`: none.
+   - **c. The gate:** `flow.bp.load` green ("real time: ... 0 fail ...; captures: 2 result(s): 2 pass ...").
+   - 31b's hall layers are listed as a known art fallback if not yet landed.
 10. **Booth shutter (G3, G4)** once the art's `BoothShutter` object exists. **Pass:**
     - the first AVAILABLE press starts the clock on that frame and the shutter rolls up over 1.2 s (36 frames, fast then settling);
     - at the day's end, after the walk-off, it rolls down over 1.2 s (slow then landing) with `booth_shutter_close` on the landing frame, and the report's first frame comes after it;
@@ -295,7 +312,7 @@ New and changed EditMode tests:
 
 | Track | What |
 |---|---|
-| RUN-SAFE | Route `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` through `SceneTransit.Load(scene)`. Until then, no scene change in play shows the shutter or loads asynchronously. The cheat End Shift already works with FLOW's once-a-day closing: its second `HandleShiftClosed` call is a no-op. Decide what Settings' Quit to Title does to a mid-shift run. |
+| RUN-SAFE | Done on main: `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` call `SceneTransit.Load(scene)`, so the shutter and the async load are live in play (FLOW is rebased on it). The cheat End Shift already works with FLOW's once-a-day closing: its second `HandleShiftClosed` call is a no-op. Still open: decide what Settings' Quit to Title does to a mid-shift run. |
 | UI-PC, HOME, CAM, CONTENT | Screen changes go through `Transit.Fade/Slide/Wait` (0.2-0.3 s; `Transit.Seconds`). |
 | UI-PC, TEXT-LANG | Quit to Title and Quit rows in the Settings window (§1, BUG-34b): UI-PC's `.Apps.cs` builds them, TEXT-LANG's `SettingsWindowController` wires them and adds `settings.quitToTitle` and `settings.quit` to all 7 tables. |
 | HOME | Build a modal `SettingsWindowController` into the Title **and** Home scenes (Home is FLOW's proposed assignment; INTEGRATION confirms). PauseMenu finds and opens it on Esc, with no code needed, and `flow.esc.home` / `flow.esc.title` turn green then. Add `mus_title` on the Title (J6). |
@@ -307,7 +324,7 @@ New and changed EditMode tests:
 | DIALOGUE, PORTALS | Let go first: `EscapeChain.Shared.Register("<name>", EscapeChain.TrackOrder, () => /* let go, true */)`; unregister on destroy. |
 | TIMELINE-FAIL | `GameManager.CloseNow(endingId)` ends the run at the day's end (its Q4 = A). It holds `GameManager.CaseEnd.cs`, `Endings/**`, `TimelineService.cs` and `ShiftStrandings.cs` after FLOW. J6's destruction moment (rumble, 120 ms hit-stop, warning) is its own. |
 | CONTENT | D12: `firedAtStability` at the destruction point (FLOW's no-firing-at-70% pass re-runs at #17). G4's printed-sheet report (32e). |
-| INTEGRATION | Assign BUG-70b to DESK-PLAN and Home's Settings to HOME. Add the three known-red lines (§1). LEASES.md's `GameManager.cs` rows now name the four partials. Fold the feel cards `R7\FIX\FEEL\G3/G4/J5/J6.md` into the index. The FEATURES lines are updated in this branch. |
+| INTEGRATION | **Confirm the owners nobody has confirmed yet:** BUG-70b to DESK-PLAN; Settings at Home and on the Title (34b) to HOME. Add the three known-red lines (§1: `flow.clock.tooltip`, `flow.esc.home`, `flow.esc.title`) and carry G3/G4/J5 as red in the feel index with their blockers (the `BoothShutter` object; the shutter, `day_start`, `available_on` and `amb_hall_day` clips). Put §5.6's right-click question to Saleh. LEASES.md's `GameManager.cs` rows now name the four partials. Fold the feel cards `R7\FIX\FEEL\G3/G4/J5/J6.md` into the index. The FEATURES lines are updated in this branch. |
 
 ## 5. Decisions taken in FLOW (ours, not Saleh's)
 
@@ -316,7 +333,7 @@ New and changed EditMode tests:
 3. **A run-ending verdict closes the shift at once** (`CloseNow`): the day's end comes forward (the report, then the ending), instead of the clerk working on to closing time on a run that is already over.
 4. **The payoff wait is capped at 8 s** (`payoffWaitSeconds`), so the report can never be stuck behind a figure that does not leave.
 5. **The evening edition is built at runtime** in the Title's own faces from existing strings, so no scene or string table changes with it. Its fallback headline for an ending without a name is "The End".
-6. **Esc never leaves a mode, only Settings opens** (R3 read with D20 and v2's DOC-HANDLE line): not the PC (Saleh's words), and not the wheel, inspect mode, the city or the reading view either. A right-click backs out of them, as in Papers, Please. A drag is a hold and is still cancelled first.
-7. **The scene-change veil is the booth's roll shutter, not a black fade** (J5 says "a fade through black, 250 ms"; FIX_PLAN v1 says "an in-world transition"). A static black hold cannot pass "no frame repeated without motion > 0.25 s" during a multi-second load; the shutter's moving light can. It keeps J5's 250 ms for the roll. **For Saleh's approval** with the stills of recipe 5. If he prefers black, the light can move on black instead (a code change in `TransitShutter` only).
+6. **Esc never leaves a mode, only Settings opens** (R3 read with D20 and v2's DOC-HANDLE line): not the PC (Saleh's words), and not the wheel, inspect mode, the city or the reading view either. A right-click backs out of them, as in Papers, Please. A drag is a hold and is still cancelled first. **For Saleh to confirm:** the right-click also closes the PC (an untaken right-click is `DesktopKeyboard`'s back-out, `KeepsTheOfficeOut` is false for it, `OfficeControls` runs `ClosePc`), though R3 names only "Q or click the bezel". This is FLOW's call, not his. If he wants Q and the bezel only, `KeepsTheOfficeOut` returns true for a right-click with the PC open (one line and its test).
+7. **The scene-change veil is the booth's roll shutter, not a black fade** (J5 says "a fade through black, 250 ms"; FIX_PLAN v1 says "an in-world transition"). A static black hold cannot pass "no frame repeated without motion > 0.25 s" during a multi-second load; the shutter's moving light can, between frames (a single long frame is held whatever the veil: recipe 9a measures it). It keeps J5's 250 ms for the roll. **For Saleh's approval** with the stills of recipe 5. If he prefers black, the light can move on black instead (a code change in `TransitShutter` only).
 8. **PauseScope.Full blocks no input itself.** The context does it (§1, BUG-34a), so FLOW adds no second input gate beside RUN-SAFE's.
 9. **The colour-only dater `Paint` refuses an unknown ink** rather than guessing a verdict: a loud error in a test beats a silent DENIED on an approval.

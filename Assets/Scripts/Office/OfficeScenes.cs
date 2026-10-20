@@ -9,11 +9,11 @@ using UnityEngine.SceneManagement;
 /// editor) loads the gameplay layer additively; the art scene's leftover
 /// gameplay objects (the contract's legacy roots) are switched off the moment
 /// it loads, after their Awake and before any Start. Behind a scene change's
-/// shutter (SceneTransit) the gameplay layer streams in asynchronously, so the
-/// shutter's light keeps moving while it loads (BUG-31a); a direct load (no
-/// shutter: RunManager until RUN-SAFE routes it through SceneTransit, Play in
-/// the editor) loads it on the next frame as before, so the art office never
-/// shows without it for longer. Pressing Play on the
+/// shutter (SceneTransit: every RunManager load, RUN-SAFE) the gameplay layer
+/// streams in asynchronously, so the shutter's light keeps moving while it
+/// loads (BUG-31a); a direct load (no shutter: Play in the editor, a scene
+/// SceneTransit cannot stream) loads it on the next frame as before, so the
+/// art office never shows without it for longer. Pressing Play on the
 /// gameplay layer alone loads the art office under it and makes it active.
 /// </summary>
 public static class OfficeScenes

@@ -27,11 +27,23 @@ using UnityEngine.SceneManagement;
 /// (FeelDirector) rings on an early finish: <c>bell.&lt;name&gt;</c>.</item>
 /// <item><c>flowTransit</c> (name: a scene, or <c>office</c> for the art office
 /// RunConfig names; f timeout): loads the scene through
-/// SceneTransit.Load, as RunManager's loads will once RUN-SAFE routes them
+/// SceneTransit.Load, as RunManager's loads do (RUN-SAFE)
 /// (BUG-31a, the bible's J5): the booth's shutter is seen down, the scene
 /// (and the office's gameplay layer) loads behind it, and the shutter is up
 /// and off again: <c>transit.&lt;name&gt;</c>. Record it (recStart/recStop)
 /// for seqtools' frozen and cuts analyses.</item>
+/// <item><c>flowLoadClock</c> (name): starts the real-time load watch
+/// (FlowLoadWatch) before the step that starts a scene change (newRun, a Go
+/// Home button, RunManager.Sleep). Record nothing during the load: the
+/// capture's own cost would be timed.</item>
+/// <item><c>flowLoadTime</c> (name; n frame budget in ms, default 250; f the
+/// visible budget in seconds, 0 to report only): waits (at most 60 s) for
+/// that load's shutter to be off, then asserts
+/// <c>load.&lt;name&gt;.frames</c> (no real frame from the click to the shutter
+/// off is longer than n ms: the [BP] "no frame held over 0.25 s" in real
+/// time, which a fixed-step capture cannot see) and
+/// <c>load.&lt;name&gt;.time</c> (the new scene shows, the shutter starting
+/// up, within f seconds of the click; BUG-31a's "load at most 1.0 s").</item>
 /// </list>
 /// </summary>
 public static class FlowOps
@@ -67,6 +79,58 @@ public static class FlowOps
             QaRunner.RegisterOp("flowEarlyFinish", EarlyFinish);
         if (!QaRunner.IsKnownOp("flowTransit"))
             QaRunner.RegisterOp("flowTransit", SceneChange);
+        if (!QaRunner.IsKnownOp("flowLoadClock"))
+            QaRunner.RegisterOp("flowLoadClock", LoadClock);
+        if (!QaRunner.IsKnownOp("flowLoadTime"))
+            QaRunner.RegisterOp("flowLoadTime", LoadTime);
+    }
+
+    /// <summary>The load watch flowLoadClock started (one at a time).</summary>
+    private static FlowLoadWatch _loadWatch;
+
+    private static IEnumerator LoadClock(QaRunner runner, QaStep step)
+    {
+        if (_loadWatch != null)
+            _loadWatch.End();
+        _loadWatch = FlowLoadWatch.Begin();
+        if (step.n > 0)
+            _loadWatch.LongFrameMs = step.n;
+        yield break;
+    }
+
+    private static IEnumerator LoadTime(QaRunner runner, QaStep step)
+    {
+        FlowLoadWatch watch = _loadWatch;
+        string name = string.IsNullOrEmpty(step.name) ? "load" : step.name;
+        double budgetMs = step.n > 0 ? step.n : 250.0;
+        if (watch == null)
+        {
+            runner.Assert($"load.{name}.frames", Owner, false, "no load watch", "flowLoadClock must come before the step that starts the scene change");
+            yield break;
+        }
+        float end = Time.realtimeSinceStartup + 60f;
+        while (Time.realtimeSinceStartup < end && !watch.Done)
+            yield return null;
+        // One more frame, so the frame the shutter went off in is timed too.
+        yield return null;
+
+        bool started = watch.Started >= 0, done = watch.Done;
+        string scene = started ? $"'{watch.Scene}'" : "no scene change";
+        runner.Assert($"load.{name}.frames", Owner, started && done && watch.WorstFrameMs <= budgetMs,
+            started
+                ? $"{scene}: worst real frame {watch.WorstFrameMs:0} ms of {watch.Frames} frames from the click to the shutter off, {watch.LongFrames} over {budgetMs:0} ms; shutter off {done}"
+                : "no SceneTransit load was seen (no 'transit' start mark): the load did not go through the shutter",
+            $"BUG-31a [BP]: no frame held over {budgetMs:0} ms in real time across the load (a fixed-step capture's 'frozen' cannot see a long activation frame)");
+        double visible = started && watch.Rising >= 0 ? watch.Rising - watch.Started : double.NaN;
+        double off = started && done ? watch.Up - watch.Started : double.NaN;
+        bool judged = step.f > 0f;
+        runner.Assert($"load.{name}.time", Owner, !double.IsNaN(visible) && (!judged || visible <= step.f),
+            $"{scene}: shown {(double.IsNaN(visible) ? "never" : visible.ToString("0.00") + " s")} after the click (the shutter starting up), off at {(double.IsNaN(off) ? "never" : off.ToString("0.00") + " s")}"
+                + (judged ? $"; budget {step.f:0.0#} s" : "; reported only"),
+            "BUG-31a [BP]: the scene is shown within the budget of the click (FIX_PLAN: load at most 1.0 s)");
+        watch.End();
+        if (_loadWatch == watch)
+            _loadWatch = null;
     }
 
     /// <summary>The shift clock's minute now (NaN without a shift).</summary>

@@ -80,16 +80,21 @@ public static class Transit
 /// left nor a half-built one; while it is down the light moves through its
 /// slats, so no frame is held without motion. Clicks are blocked while it is
 /// down. Outside play mode, or for a scene that cannot load, it is
-/// SceneManager.LoadScene (its own error for a missing scene). RUN-SAFE routes
-/// RunManager's loads through it (until then they are SceneManager.LoadScene
-/// and show none of this).
+/// SceneManager.LoadScene (its own error for a missing scene). RunManager's
+/// loads (the office, Home, the Title) all come through it (RUN-SAFE).
+/// The shutter's light moves on real time, but a long frame on the main
+/// thread (a scene's activation, GameManager.Start making the day's cases)
+/// still holds the screen for that frame: the QA rig's real-time load watch
+/// (FlowLoadWatch, flow_load) measures the worst frame of each load against
+/// 250 ms, from the transit events marked here (QaSignals "transit":
+/// start, rise, up).
 /// </summary>
 public static class SceneTransit
 {
-    /// <summary>True from a Load's first frame of fade until the new scene has settled (Esc opens nothing meanwhile: PauseMenu).</summary>
+    /// <summary>True from the frame a Load starts lowering the shutter until the new scene has settled (Esc opens nothing meanwhile: PauseMenu).</summary>
     public static bool Loading => TransitRunner.SceneLoading;
 
-    /// <summary>Loads <paramref name="scene"/> (by name, replacing every loaded scene) behind a fade through black. A second Load while one runs is ignored, with a warning.</summary>
+    /// <summary>Loads <paramref name="scene"/> (by name, replacing every loaded scene) behind the booth's roll shutter (TransitShutter). A second Load while one runs is ignored, with a warning.</summary>
     public static void Load(string scene)
     {
         if (!Application.isPlaying || !Application.CanStreamedLevelBeLoaded(scene))
@@ -118,6 +123,15 @@ public sealed class TransitRunner : MonoBehaviour
 
     /// <summary>Frames the veil stays up after the scenes loaded (their Awake, Start and first layout).</summary>
     private const int FramesAfterLoad = 2;
+
+    /// <summary>
+    /// The QA channel of a scene change's moments (QaSignals.Event, free when
+    /// nothing listens): "start:&lt;scene&gt;" as the load is accepted (the
+    /// click's frame), "rise:&lt;scene&gt;" as the shutter starts up over the
+    /// settled scene, "up:&lt;scene&gt;" once it is off. FLOW's load watch and
+    /// the recorder's events.tsv read them.
+    /// </summary>
+    public const string TransitSignal = "transit";
 
     private static TransitRunner _runner;
 
@@ -154,6 +168,7 @@ public sealed class TransitRunner : MonoBehaviour
             return;
         }
         runner._loading = scene;
+        QaSignals.Event(TransitSignal, "start:" + scene);
         runner.StartCoroutine(runner.LoadRoutine(scene));
     }
 
@@ -212,7 +227,9 @@ public sealed class TransitRunner : MonoBehaviour
             yield return null;
 
         _loading = null;
+        QaSignals.Event(TransitSignal, "rise:" + scene);
         yield return _veil.Raise(seconds);
+        QaSignals.Event(TransitSignal, "up:" + scene);
     }
 
     /// <summary>True while a loaded scene has not finished loading (the office's gameplay layer after the art office).</summary>

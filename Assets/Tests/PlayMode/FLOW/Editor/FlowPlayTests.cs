@@ -8,8 +8,8 @@ using UnityEngine.TestTools;
 /// harness and asserts its run. Explicit (each enters play mode for
 /// minutes): run them by name, or by the job runner's QaJobs.Scenario with
 /// Library/QA/job_scenario.txt naming the recipe, which plays the same
-/// scenario. The built-player load gate (flow_load on the QA player) runs
-/// through tools/qa/run_player.py instead.
+/// scenario. The built-player load gate (flow_load and flow_load_seq on the
+/// QA player) runs through tools/qa/run_player.py instead.
 /// </summary>
 public class FlowPlayTests : QaPlayTest
 {
