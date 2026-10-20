@@ -8,7 +8,7 @@ public enum DevCheat
 {
     /// <summary>Nothing queued.</summary>
     None,
-    /// <summary>Skip the day (through Sleep: endings, the nightly resolve, the advance).</summary>
+    /// <summary>Skip the day (RunManager.SkipDay: the shift's close, Home's night on the default care, Sleep, the next morning).</summary>
     SkipDay,
     /// <summary>Force a nation's leader (the text: its id; none: no leader).</summary>
     ForceLeader,
@@ -52,7 +52,7 @@ public enum DevCheat
     Tutorial,
     /// <summary>The cheat menu: the text's appearance (an AppearanceChoices key) in slot 1 of the next shift (a running shift restarts with it).</summary>
     ForceAppearance,
-    /// <summary>The cheat menu: the hall's time of day, the next of TimesOfDay.</summary>
+    /// <summary>The cheat menu: the hall's time of day, the next of TimeNames (HourOf).</summary>
     TimeOfDay,
     /// <summary>Another track's cheat (the text: its Register label).</summary>
     Extra
@@ -67,17 +67,47 @@ public enum DevCheat
 /// during its GUI pass and runs it here after the pass (audit R2-003), so the
 /// drawing itself builds no log line. Another track adds its own cheats
 /// through Register (the translation lens's abilities, Saleh 2026-10-06).
+/// The day changes run play's own steps (RunManager.SkipDay, JumpToDay,
+/// RestartShift; RUN-SAFE, BUG-28a); a cheat that rewinds the run has a
+/// warning (<see cref="Warning"/>) the overlay shows for a confirm first; an
+/// item given by a cheat cancels and refunds its pending order (BUG-28c).
+/// Every change a cheat makes to the world is noted (Edit,
+/// RunManager.CheatEdits), so a skip or jump from Home keeps it.
 /// </summary>
 public static class DevCheats
 {
-    /// <summary>The cheat menu's time-of-day choices in toggle order (null: the shift clock's hour), and their names.</summary>
-    public static readonly (float? hour, string name)[] TimesOfDay = { (null, "Clock"), (9f, "Morning"), (18.5f, "Dusk"), (22f, "Night") };
+    /// <summary>The cheat menu's time-of-day choices in toggle order (HourOf gives each one's hour).</summary>
+    public static readonly string[] TimeNames = { "Clock", "Morning", "Dusk", "Night" };
+
+    /// <summary>The hour of time-of-day choice <paramref name="choice"/>: the shift clock's (null), 09:00, dusk (HallDayCycle.DuskHour, the one day cycle's; BUG-25b) or 22:00.</summary>
+    public static float? HourOf(int choice)
+    {
+        switch (choice)
+        {
+            case 0: return null;
+            case 1: return 9f;
+            case 2: return HallDayCycle.DuskHour;
+            default: return 22f;
+        }
+    }
+
+    /// <summary>The time-of-day choice the hall shows now (the one whose hour is DevToolsState.ForcedHour; the clock's when none is).</summary>
+    public static int TimeChoice
+    {
+        get
+        {
+            for (int i = 0; i < TimeNames.Length; i++)
+                if (Nullable.Equals(HourOf(i), DevToolsState.ForcedHour))
+                    return i;
+            return 0;
+        }
+    }
 
     /// <summary>What the last cheat said (the overlay shows it under the buttons).</summary>
     public static string LastResult { get; private set; } = string.Empty;
 
-    /// <summary>The other tracks' cheats by label, in registration order (Register).</summary>
-    private static readonly List<(string label, Action<RunManager> run)> Extras = new List<(string, Action<RunManager>)>();
+    /// <summary>The other tracks' cheats by label, in registration order (Register), and whether each starts a running shift over.</summary>
+    private static readonly List<(string label, Action<RunManager> run, bool restartsShift)> Extras = new List<(string, Action<RunManager>, bool)>();
 
     /// <summary>The other tracks' cheats' labels, in registration order (the overlay draws a button for each).</summary>
     public static IEnumerable<string> ExtraLabels => Extras.Select(e => e.label);
@@ -90,13 +120,50 @@ public static class DevCheats
     /// <paramref name="label"/> is clicked under "More" in the Play tab. A
     /// second registration of a label replaces the first. Call it once, from
     /// the owning system's start (a [RuntimeInitializeOnLoadMethod] works).
+    /// A cheat that starts a running shift over (<paramref name="restartsShift"/>,
+    /// through RunManager.RestartShift) is a rewind: the overlay asks first.
     /// </summary>
-    public static void Register(string label, Action<RunManager> run)
+    public static void Register(string label, Action<RunManager> run, bool restartsShift = false)
     {
         if (string.IsNullOrWhiteSpace(label) || run == null)
             return;
         Extras.RemoveAll(e => e.label == label);
-        Extras.Add((label, run));
+        Extras.Add((label, run, restartsShift));
+    }
+
+    /// <summary>
+    /// What <paramref name="cheat"/> would lose before it runs, or null when it
+    /// rewinds nothing (RUN-SAFE, BUG-28: "Rewinding cheats warn first"): a
+    /// restart; a jump to an earlier day (or today); a forced appearance whose
+    /// day is earlier, or today's in a running shift; a switch, a give-all or
+    /// another track's cheat that starts a running shift over. The overlay
+    /// shows it and runs the cheat only on a confirm (a script calling Run
+    /// directly has confirmed by calling).
+    /// </summary>
+    public static string Warning(DevCheat cheat, RunManager run, int number, string text)
+    {
+        WorldState world = run != null ? run.World : null;
+        if (world == null)
+            return null;
+        bool inShift = GameManager.Current != null;
+        int last = run.Library != null ? run.Library.LastDay : 0;
+        switch (cheat)
+        {
+            case DevCheat.RestartShift:
+                return run.RestartWarning();
+            case DevCheat.JumpToDay:
+                return RewindWarnings.Of(world.day, RunRoutes.Clamp(number, last)) != Rewind.None ? run.JumpWarning(number) : null;
+            case DevCheat.ForceAppearance:
+                int on = ForceDay(run.Library, text, world.day);
+                return on < world.day ? run.JumpWarning(on) : on == world.day && inShift ? run.RestartWarning() : null;
+            case DevCheat.UnlockEverything:
+            case DevCheat.GiveAllItems:
+                return inShift ? run.RestartWarning() : null;
+            case DevCheat.Extra:
+                return inShift && Extras.Any(e => e.label == text && e.restartsShift) ? run.RestartWarning() : null;
+            default:
+                return null;
+        }
     }
 
     /// <summary>
@@ -185,16 +252,16 @@ public static class DevCheats
         switch (cheat)
         {
             case DevCheat.SkipDay:
-                Say("Skip Day requested (through Sleep).");
-                run.Sleep();
+                int skipped = world.day;
+                Say(run.SkipDay() ? $"Day {skipped} skipped: its shift closed, Home's night on the default care, Sleep." : "The run has ended: restart the day or jump back.");
                 break;
             case DevCheat.ForceLeader:
                 Say(text == null ? "No leader." : $"Force leader '{text}'.");
-                HistoryService.ForceLeader(world, lib, text);
+                Edit(run, text == null ? "no leader" : $"leader {text}", w => HistoryService.ForceLeader(w, lib, text));
                 break;
             case DevCheat.AddMoney:
                 int before = world.money;
-                world.money += number;
+                Edit(run, $"money {number:+0;-0}", w => w.money += number);
                 WalletEvents.Raise();
                 Say($"money {before} -> {world.money} ({number:+0;-0}).");
                 if (game != null)
@@ -202,29 +269,29 @@ public static class DevCheats
                 break;
             case DevCheat.AddStability:
                 float was = world.timelineStability;
-                world.timelineStability = StabilityRules.Round(world.timelineStability + amount);
+                Edit(run, $"stability {StabilityRules.FormatChange(amount)}", w => w.timelineStability = StabilityRules.Round(w.timelineStability + amount));
                 Say($"stability {StabilityRules.Format(was)} -> {StabilityRules.Format(world.timelineStability)} ({StabilityRules.FormatChange(amount)}).");
                 if (game != null)
                     game.CheatRefreshHud();
                 break;
             case DevCheat.SetStability:
                 float old = world.timelineStability;
-                world.timelineStability = StabilityRules.Round(amount);
+                Edit(run, $"stability set {StabilityRules.Format(StabilityRules.Round(amount))}", w => w.timelineStability = StabilityRules.Round(amount));
                 Say($"stability {StabilityRules.Format(old)} -> {StabilityRules.Format(world.timelineStability)} (set).");
                 if (game != null)
                     game.CheatRefreshHud();
                 break;
             case DevCheat.SetFlag:
                 Say($"SetFlag('{text}').");
-                world.SetFlag(text);
+                Edit(run, $"flag {text} set", w => w.SetFlag(text));
                 break;
             case DevCheat.ClearFlag:
                 Say($"ClearFlag('{text}').");
-                world.ClearFlag(text);
+                Edit(run, $"flag {text} cleared", w => w.ClearFlag(text));
                 break;
             case DevCheat.ClearListedFlag:
                 Say($"ClearFlag('{text}') (from active list).");
-                world.ClearFlag(text);
+                Edit(run, $"flag {text} cleared", w => w.ClearFlag(text));
                 break;
             case DevCheat.ForcePersonality:
                 Say($"ForcedPersonality set to '{text ?? "drawn"}' (from the next generation).");
@@ -237,18 +304,24 @@ public static class DevCheats
                 break;
             case DevCheat.LockUpgrade:
                 Say($"removing upgrade '{text}'.");
-                world.unlockedUpgradeIds.Remove(text);
+                Edit(run, $"upgrade {text} removed", w => w.unlockedUpgradeIds.Remove(text));
                 break;
             case DevCheat.UnlockUpgrade:
-                Say($"unlocking upgrade '{text}'.");
-                world.UnlockUpgrade(text);
+                UpgradeSO unlocked = lib != null ? lib.GetUpgradeById(text) : null;
+                bool cancelled = false;
+                Edit(run, $"upgrade {text} unlocked", w =>
+                {
+                    cancelled = CancelPending(w, unlocked);
+                    w.UnlockUpgrade(text);
+                });
+                Say($"unlocking upgrade '{text}'{(cancelled ? " (its pending order cancelled and refunded)" : string.Empty)}.");
                 break;
             case DevCheat.JumpToDay:
-                Say($"Day {number}: the shift starts.");
-                run.JumpToDay(number);
+                int target = RunRoutes.Clamp(number, lib != null ? lib.LastDay : 0);
+                Say(run.JumpToDay(number) ? $"Day {target}: the shift starts." : "The run has ended: jump back or restart the day.");
                 break;
             case DevCheat.RestartShift:
-                Say($"Day {world.day}: the shift starts over.");
+                Say($"Day {world.day}: the shift starts over from its morning.");
                 run.RestartShift();
                 break;
             case DevCheat.DecideCorrectly:
@@ -275,9 +348,17 @@ public static class DevCheats
                 RestartIfInShift(run, game);
                 break;
             case DevCheat.GiveAllItems:
-                int granted = lib != null ? lib.Upgrades.Count(u => u != null && OrderBook.Grant(world, u)) : 0;
-                Say($"{granted} Orders and House item(s) given{(game != null ? ": today's shift starts over with them." : ", in force from the next shift.")}");
-                RestartIfInShift(run, game);
+                if (game != null)
+                {
+                    Say("Every Orders and House item given: today's shift starts over with them.");
+                    run.RestartShift(w => GrantAll(w, lib));
+                }
+                else
+                {
+                    int given = 0;
+                    Edit(run, "every item given", w => given = GrantAll(w, lib));
+                    Say($"{given} Orders and House item(s) given, in force from the next shift.");
+                }
                 break;
             case DevCheat.Tutorial:
                 Say(game != null ? game.CheatTutorial(number != 0) : "Not in the office.");
@@ -301,21 +382,36 @@ public static class DevCheats
                 RestartIfInShift(run, game);
                 break;
             case DevCheat.TimeOfDay:
-                int next = (Array.FindIndex(TimesOfDay, t => Nullable.Equals(t.hour, DevToolsState.ForcedHour)) + 1) % TimesOfDay.Length;
-                DevToolsState.ForcedHour = TimesOfDay[next].hour;
-                Say($"Time of day: {TimesOfDay[next].name}.");
+                int next = (TimeChoice + 1) % TimeNames.Length;
+                DevToolsState.ForcedHour = HourOf(next);
+                Say($"Time of day: {TimeNames[next]} (until the next morning).");
                 break;
             case DevCheat.Extra:
-                (string label, Action<RunManager> extra) = Extras.FirstOrDefault(e => e.label == text);
+                (string label, Action<RunManager> extra, bool restarts) = Extras.FirstOrDefault(e => e.label == text);
                 if (extra == null)
                 {
                     Say($"No cheat '{text}'.");
                     break;
                 }
-                extra(run);
+                if (restarts)
+                    extra(run);   // its world change comes with its own restart (a route), or none outside a shift: nothing to replay
+                else
+                    Edit(run, label, w => run.RunOn(w, extra));
                 Say($"{label}: done.");
                 break;
         }
+    }
+
+    /// <summary>
+    /// A cheat's change to the world (<paramref name="edit"/>): made on the
+    /// run's world now, and noted (RunManager.CheatEdits) so a skip or a jump
+    /// from Home, which starts its night from the end-of-shift save, replays
+    /// it on that save and keeps it (RUN-SAFE, BUG-28a).
+    /// </summary>
+    private static void Edit(RunManager run, string label, Action<WorldState> edit)
+    {
+        edit(run.World);
+        run.CheatEdits.Note(label, edit);
     }
 
     /// <summary>A switch that applies from a shift's start: a running shift starts over with it (RunManager.RestartShift).</summary>
@@ -324,6 +420,27 @@ public static class DevCheats
         if (game != null)
             run.RestartShift();
     }
+
+    /// <summary>The cheat menu's "Give all items": every library item (both venues) given to <paramref name="world"/> (OrderBook.Grant), each one's pending order cancelled and refunded first (BUG-28c: never delivered again). Returns how many were not owned.</summary>
+    public static int GrantAll(WorldState world, ContentLibrarySO lib)
+    {
+        int granted = 0;
+        if (lib == null)
+            return granted;
+        foreach (UpgradeSO upgrade in lib.Upgrades)
+        {
+            if (upgrade == null)
+                continue;
+            CancelPending(world, upgrade);
+            if (OrderBook.Grant(world, upgrade))
+                granted++;
+        }
+        return granted;
+    }
+
+    /// <summary>A cheat gives <paramref name="upgrade"/>: its order still in transit is cancelled and refunded (OrderBook.CancelPendingFor), so the next delivery never brings it again. True when one was.</summary>
+    private static bool CancelPending(WorldState world, UpgradeSO upgrade) =>
+        upgrade != null && OrderBook.CancelPendingFor(world, upgrade);
 
     /// <summary>Logs a cheat's line and keeps it for the overlay.</summary>
     private static void Say(string line)

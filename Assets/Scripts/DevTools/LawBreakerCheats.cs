@@ -7,13 +7,14 @@ using UnityEngine;
 /// law-breaker exists early enough to try DETAIN): "Law-breaker next" makes
 /// the next generated traveller carry someone else's photo (DevToolsState.ForcedLie,
 /// consumed by CaseFactory) and starts today's shift over, so the first
-/// traveller who can carry it is a law-breaker.
+/// traveller who can carry it is a law-breaker. Starting the shift over is a
+/// rewind, so the overlay asks first (DevCheats.Register's restartsShift).
 /// </summary>
 public static class LawBreakerCheats
 {
     /// <summary>Registers the cheat once, at startup.</summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void Register() => DevCheats.Register("Law-breaker next", ForceLawBreaker);
+    private static void Register() => DevCheats.Register("Law-breaker next", ForceLawBreaker, restartsShift: true);
 
     /// <summary>Forces someone else's photo (a false identity: Law.Breaks) on the next generated traveller and starts the shift over (from the next shift outside the office).</summary>
     private static void ForceLawBreaker(RunManager run)

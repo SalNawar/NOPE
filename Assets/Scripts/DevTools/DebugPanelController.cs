@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Phase 6 developer overlay, the cheat menu (Saleh 2026-10-06: "I want
@@ -17,14 +16,21 @@ using UnityEngine.SceneManagement;
 /// RunManager.GetOrCreate() attaches this to its persistent GameObject in the
 /// editor, development builds and the Windows demo built with
 /// DemoBuild.DemoCheats (the DEMO_CHEATS define), so it's available from any
-/// scene with no scene wiring and absent from any other release build. A run
-/// any cheat touched (WorldState.cheated) shows a small "CHEATS ON" at the
-/// screen's bottom left, the overlay closed or open. The component is enabled
-/// only while the overlay is open or that badge shows: otherwise it runs no
-/// OnGUI, so IMGUI costs nothing per frame (audit R2-012, R3-030); the key is
+/// scene with no scene wiring and absent from any other release build (D18,
+/// Saleh 2026-10-20: "visible, as now"). A run any cheat touched
+/// (WorldState.cheated) shows "CHEATS ON" and every sticky switch at the
+/// screen's bottom left (CheatBadge, uGUI), the overlay closed or open. While
+/// the overlay is open the game takes no input (RUN-SAFE, BUG-68a): it holds
+/// the InputGate (the office's, the desk's and the PC's input handlers stand
+/// still) and CheatBadge's blocker takes every click behind it. The component
+/// is enabled only while the overlay is open: otherwise it runs no OnGUI, so
+/// IMGUI costs nothing per frame (BUG-65b; audit R2-012, R3-030); the key is
 /// an input action, heard while the component is off. A cheat clicked in a
 /// GUI pass is queued and runs after the pass (audit R2-003; DevCheats runs
-/// and logs it). An open overlay allocates nothing per frame for what did not
+/// and logs it); a cheat that rewinds the run shows what it loses and runs
+/// only on Confirm (DevCheats.Warning; BUG-28). A cheat that opens a new
+/// morning (a skip, a jump, a restart) or ends the run closes the overlay,
+/// so the day starts at its briefing. An open overlay allocates nothing per frame for what did not
 /// change: each line is rebuilt only when what it shows changes, the layout
 /// options, the buttons' names and the costume errors' names are made once,
 /// and the shift is GameManager.Current. The Timeline Inspector tab and the
@@ -42,14 +48,14 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>The panel's plate colour (near-black, nearly opaque).</summary>
     private static readonly Color PlateColour = new Color(0.06f, 0.06f, 0.07f, 0.92f);
 
-    /// <summary>The badge a cheated run shows (WorldState.cheated).</summary>
-    private const string BadgeText = "CHEATS ON";
+    /// <summary>The name the open overlay holds the InputGate under.</summary>
+    private const string GateHolder = "cheat panel";
 
     /// <summary>The day buttons' names ("1" to "15"), made once (index: the day).</summary>
     private static readonly string[] DayNames = Enumerable.Range(0, 31).Select(i => i.ToString()).ToArray();
 
-    /// <summary>The time-of-day toggle's names, one per DevCheats.TimesOfDay choice, made once.</summary>
-    private static readonly string[] TimeNames = Array.ConvertAll(DevCheats.TimesOfDay, t => "Time: " + t.name);
+    /// <summary>The time-of-day toggle's names, one per DevCheats.TimeNames choice, made once.</summary>
+    private static readonly string[] TimeNames = Array.ConvertAll(DevCheats.TimeNames, name => "Time: " + name);
 
     /// <summary>The costume error cheat's buttons, None first (one per variant).</summary>
     private static readonly CostumeError[] CostumeErrorChoices = (CostumeError[])Enum.GetValues(typeof(CostumeError));
@@ -128,11 +134,11 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>The library the forced appearances were listed from.</summary>
     private ContentLibrarySO _appearancesFor;
 
-    /// <summary>True while the overlay is open (the component may also run for the badge alone).</summary>
+    /// <summary>True while the overlay is open.</summary>
     private bool _open;
 
-    /// <summary>The badge's style (made in the first GUI pass: GUI.skin exists only there).</summary>
-    private GUIStyle _badgeStyle;
+    /// <summary>The overlay's screen layer: the badge and the click blocker.</summary>
+    private CheatBadge _layer;
 
     /// <summary>Currently selected tab (0 = Play, 1 = More cheats, 2 = Timeline Inspector).</summary>
     private int _tab;
@@ -146,35 +152,46 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>The toggle keys (F9, backtick/tilde), heard while the component is disabled.</summary>
     private InputAction _toggle;
 
+    /// <summary>A cheat with its argument, and what it would lose (DevCheats.Warning; null: it rewinds nothing).</summary>
+    private struct Click
+    {
+        public DevCheat Cheat;
+        public int Number;
+        public float Amount;
+        public string Text;
+        public string Warning;
+    }
+
     /// <summary>
-    /// What a click in this GUI pass changes (a cheat and its argument, or
-    /// the tab), run once the pass has drawn everything: changing what is
-    /// drawn mid-pass (a new flag row, the other tab) would draw more controls
-    /// than IMGUI's layout pass counted, and GUILayout throws. A pass carries
-    /// one click.
+    /// What a click in this GUI pass changes (a cheat and its argument, the
+    /// tab, the confirm's answer), applied once the pass has drawn everything:
+    /// changing what is drawn mid-pass (a new flag row, the other tab, the
+    /// confirm row) would draw more controls than IMGUI's layout pass counted,
+    /// and GUILayout throws. A pass carries one click.
     /// </summary>
-    private DevCheat _cheat;
-    private int _cheatNumber;
-    private float _cheatAmount;
-    private string _cheatText;
+    private Click _click;
     private int _pendingTab = -1;
 
-    /// <summary>Listens for the toggle keys and for scene loads, and starts closed (disabled: no OnGUI).</summary>
+    /// <summary>The rewind waiting for Confirm (its Cheat None: none), and this pass's answer (1 Confirm, 2 Cancel, 0 none).</summary>
+    private Click _confirm;
+    private int _answer;
+
+    /// <summary>Listens for the toggle keys, adds the screen layer (the badge, the blocker), and starts closed (disabled: no OnGUI).</summary>
     private void Awake()
     {
         _toggle = new InputAction("DevOverlay", InputActionType.Button, "<Keyboard>/f9");
         _toggle.AddBinding("<Keyboard>/backquote");
         _toggle.performed += OnToggle;
         _toggle.Enable();
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        _layer = gameObject.AddComponent<CheatBadge>();
         enabled = false;
         Debug.Log("[DebugPanelController] Attached to persistent RunManager object (press F9 or ~ to toggle the cheat menu).");
     }
 
-    /// <summary>Stops listening for the toggle key and scene loads.</summary>
+    /// <summary>Stops listening for the toggle key and gives the input back.</summary>
     private void OnDestroy()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        InputGate.Release(GateHolder);
         if (_toggle == null)
             return;
         _toggle.performed -= OnToggle;
@@ -182,31 +199,37 @@ public sealed class DebugPanelController : MonoBehaviour
         _toggle = null;
     }
 
-    /// <summary>A scene loaded (the office, Home, the title): the badge shows when the run is cheated (a continued or a new run).</summary>
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => enabled = _open || Cheated;
-
-    /// <summary>True when the current run was touched by a cheat (WorldState.cheated).</summary>
-    private static bool Cheated => RunManager.HasInstance && RunManager.Instance.World != null && RunManager.Instance.World.cheated;
-
     /// <summary>Opens or closes the overlay (F9 or ~).</summary>
     private void OnToggle(InputAction.CallbackContext _)
     {
-        _open = !_open;
-        enabled = _open || Cheated;
-        _scroll = Vector2.zero;
-        _cheat = DevCheat.None;
-        _pendingTab = -1;
+        SetOpen(!_open);
         Debug.Log($"[DebugPanelController] Overlay {(_open ? "opened" : "closed")} (F9 or ~ pressed).");
     }
 
-    /// <summary>Draws the badge and the open overlay, then applies what a click in this pass changed (the badge stays from the first cheat on).</summary>
+    /// <summary>Opens or closes the overlay: open, it holds the game's input (InputGate) and blocks every click behind it (CheatBadge); closed, it runs no OnGUI. A queued click and a waiting confirm are dropped.</summary>
+    private void SetOpen(bool open)
+    {
+        _open = open;
+        enabled = open;
+        if (open)
+            InputGate.Hold(GateHolder);
+        else
+            InputGate.Release(GateHolder);
+        if (_layer != null)
+            _layer.SetBlocking(open);
+        _scroll = Vector2.zero;
+        _click = default;
+        _confirm = default;
+        _answer = 0;
+        _pendingTab = -1;
+    }
+
+    /// <summary>Draws the open overlay, then applies what a click in this pass changed: the tab; a rewind waits for Confirm, anything else runs; a cheat that opened a morning or ended the run closes the overlay.</summary>
     private void OnGUI()
     {
-        if (Cheated)
-            DrawBadge();
         if (!_open)
         {
-            enabled = Cheated;
+            enabled = false;
             return;
         }
         Draw();
@@ -214,26 +237,58 @@ public sealed class DebugPanelController : MonoBehaviour
         if (_pendingTab >= 0)
             _tab = _pendingTab;
         _pendingTab = -1;
-        DevCheat cheat = _cheat;
-        _cheat = DevCheat.None;
-        if (cheat != DevCheat.None && RunManager.HasInstance)
-            DevCheats.Run(cheat, RunManager.Instance, _cheatNumber, _cheatAmount, _cheatText);
+
+        Click click = _click;
+        _click = default;
+        if (_answer == 1)
+        {
+            click = _confirm;
+            click.Warning = null;
+        }
+        if (_answer != 0)
+            _confirm = default;
+        _answer = 0;
+
+        if (click.Cheat == DevCheat.None || !RunManager.HasInstance)
+            return;
+        if (click.Warning != null)
+        {
+            _confirm = click;
+            return;
+        }
+
+        RunManager run = RunManager.Instance;
+        int mornings = run.Mornings;
+        DevCheats.Run(click.Cheat, run, click.Number, click.Amount, click.Text);
+        if (run.Mornings != mornings || (run.World != null && !string.IsNullOrEmpty(run.World.endingId)))
+        {
+            SetOpen(false);
+            Debug.Log("[DebugPanelController] Overlay closed: the cheat opened a new morning or ended the run.");
+        }
     }
 
-    /// <summary>The small "CHEATS ON" at the screen's bottom left (grey, out of the way).</summary>
-    private void DrawBadge()
-    {
-        _badgeStyle ??= new GUIStyle(GUI.skin.label) { fontSize = 12, fontStyle = FontStyle.Bold, normal = { textColor = new Color(1f, 1f, 1f, 0.55f) } };
-        GUI.Label(new Rect(8f, Screen.height - 22f, 120f, 20f), BadgeText, _badgeStyle);
-    }
-
-    /// <summary>Queues a cheat to run after this GUI pass (a pass carries one click).</summary>
+    /// <summary>Queues a cheat to run after this GUI pass (a pass carries one click), with what it would lose (DevCheats.Warning): a rewind waits for Confirm.</summary>
     private void Queue(DevCheat cheat, int number = 0, float amount = 0f, string text = null)
     {
-        _cheat = cheat;
-        _cheatNumber = number;
-        _cheatAmount = amount;
-        _cheatText = text;
+        _click = new Click
+        {
+            Cheat = cheat, Number = number, Amount = amount, Text = text,
+            Warning = RunManager.HasInstance ? DevCheats.Warning(cheat, RunManager.Instance, number, text) : null
+        };
+    }
+
+    /// <summary>The waiting rewind's line and its Confirm and Cancel (nothing changes until Confirm).</summary>
+    private void DrawConfirm()
+    {
+        if (_confirm.Cheat == DevCheat.None)
+            return;
+        GUILayout.Label(_confirm.Warning);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Confirm"))
+            _answer = 1;
+        if (GUILayout.Button("Cancel"))
+            _answer = 2;
+        GUILayout.EndHorizontal();
     }
 
     /// <summary>Draws the overlay's panel and the selected tab.</summary>
@@ -251,7 +306,7 @@ public sealed class DebugPanelController : MonoBehaviour
         GUI.color = tint;
         GUILayout.BeginArea(rect, GUI.skin.box);
 
-        GUILayout.Label("NOPE cheats (F9 or ~ to close; a cheated run shows CHEATS ON)");
+        GUILayout.Label("NOPE cheats (F9 or ~ to close; the game takes no input while open)");
 
         if (run == null || world == null)
         {
@@ -263,6 +318,7 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.Label(_runLine.Get((world.day, world.money, world.timelineStability, world.endingId), RunText));
         if (!string.IsNullOrEmpty(DevCheats.LastResult))
             GUILayout.Label(DevCheats.LastResult);
+        DrawConfirm();
 
         int tab = GUILayout.Toolbar(_tab, TabLabels);
         if (tab != _tab)
@@ -344,7 +400,7 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Restart shift")) Queue(DevCheat.RestartShift);
         if (GUILayout.Button("End shift")) Queue(DevCheat.EndShift);
-        if (GUILayout.Button("Skip day (sleep)")) Queue(DevCheat.SkipDay);
+        if (GUILayout.Button("Skip day")) Queue(DevCheat.SkipDay);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
@@ -371,8 +427,7 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Skip tutorial")) Queue(DevCheat.Tutorial, 0);
         if (GUILayout.Button("Replay tutorial")) Queue(DevCheat.Tutorial, 1);
-        int time = Math.Max(0, Array.FindIndex(DevCheats.TimesOfDay, t => Nullable.Equals(t.hour, DevToolsState.ForcedHour)));
-        if (GUILayout.Button(TimeNames[time])) Queue(DevCheat.TimeOfDay);
+        if (GUILayout.Button(TimeNames[DevCheats.TimeChoice])) Queue(DevCheat.TimeOfDay);
         GUILayout.EndHorizontal();
 
         if (lib != _appearancesFor)
@@ -411,7 +466,7 @@ public sealed class DebugPanelController : MonoBehaviour
     {
         GUILayout.Label("Day flow");
 
-        if (GUILayout.Button("Skip Day (sleep: endings + nightly resolve + advance)"))
+        if (GUILayout.Button("Skip day (its close, Home's night on the default care, Sleep)"))
             Queue(DevCheat.SkipDay);
 
         if (lib != null)
@@ -436,7 +491,7 @@ public sealed class DebugPanelController : MonoBehaviour
                     Queue(DevCheat.ForceLeader, text: nation.id);
             }
             GUILayout.EndHorizontal();
-            GUILayout.Label("Kept every night this session; the Future follows at the next office day.");
+            GUILayout.Label("Kept through the next night (the morning clears it); the Future follows at the next office day.");
         }
 
         GUILayout.Space(6f);

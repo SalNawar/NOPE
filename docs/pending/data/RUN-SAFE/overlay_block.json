@@ -1,0 +1,33 @@
+{
+  "name": "overlay_block",
+  "owner": "RUN-SAFE",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "BUG-68a: with the cheat panel open, clicks and keys over the desk and the PC reach nothing behind it (0 game actions); closed, they work again. INTEGRATION copies this to tools/qa/scenarios/ once QA-RIG has merged." },
+    { "op": "title" },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "startShift" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "probe", "name": "before" },
+    { "op": "key", "key": "F9" },
+    { "op": "wait", "n": 3 },
+    { "op": "mark", "name": "panel_open" },
+    { "op": "click", "x": 0.55, "y": 0.75 },
+    { "op": "key", "key": "Q" },
+    { "op": "key", "key": "Tab" },
+    { "op": "key", "key": "Space" },
+    { "op": "key", "key": "A" },
+    { "op": "key", "key": "Escape" },
+    { "op": "click", "x": 0.5, "y": 0.35 },
+    { "op": "wait", "n": 10 },
+    { "op": "probe", "name": "panel_open" },
+    { "op": "key", "key": "F9" },
+    { "op": "wait", "n": 3 },
+    { "op": "mark", "name": "panel_closed" },
+    { "op": "key", "key": "Q" },
+    { "op": "wait", "n": 30 },
+    { "op": "probe", "name": "after" }
+  ]
+}
