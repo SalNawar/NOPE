@@ -50,13 +50,16 @@ public sealed class UiStringEntry
 /// {n} and {n:format} arguments; numbers are formatted in the invariant
 /// culture (R17) and strings are inserted verbatim, so canonical values stay
 /// exactly as generated. A right-to-left culture's text is shaped
-/// (ArabicShaper) after its arguments are filled; a culture label whose
+/// (ArabicShaper) once, after its arguments are filled (an argument already
+/// shaped goes back to logical text first: BUG-37a, CODE-44); a culture label whose
 /// reading entry has a gloss shows the English word with it. Every culture
 /// label it returns is remembered as a LensPhrase (its text as drawn, its
 /// English, its words), so the Translation Lens can find and translate it
 /// wherever it is shown; so is the same label in capitals (a paper's printed
 /// words, a label styled in capitals, a form's section head: ArtLayout.Capitals
-/// and plain upper case), its English in capitals.
+/// and plain upper case), its English in capitals. Which surface reads which
+/// language is <see cref="ForSurface"/>'s: only a paper and a sign take the
+/// culture's labels (D7, BUG-3a).
 /// </summary>
 public sealed class UiStrings
 {
@@ -111,7 +114,7 @@ public sealed class UiStrings
         _reading.TryGetValue(key, out UiStringEntry reading);
         if (_culture.TryGetValue(key, out UiStringEntry culture) && !string.IsNullOrEmpty(culture.text))
         {
-            string logical = Fill(culture.text, args);
+            string logical = Fill(culture.text, _rightToLeft ? Logical(args) : args);
             string native = _rightToLeft ? ArabicShaper.ToVisual(logical) : logical;
             bool hasEnglish = reading != null && !string.IsNullOrEmpty(reading.text);
             string english = hasEnglish ? Fill(reading.text, args) : null;
@@ -148,6 +151,16 @@ public sealed class UiStrings
     }
 
     /// <summary>
+    /// The string for a key as <paramref name="surface"/> prints it (D7,
+    /// BUG-3a): a paper or a sign by the culture rule (<see cref="Format"/>:
+    /// the culture's label when a culture table applies), every other surface
+    /// (the chrome, the PC) in the reading language (<see cref="English"/>),
+    /// so no chrome text ever turns into the world's language.
+    /// </summary>
+    public string ForSurface(TextSurface surface, string key, params object[] args) =>
+        CultureChoice.FollowsWorld(surface) ? Format(key, args) : English(key, args);
+
+    /// <summary>
     /// The reading language's string for a key with its placeholders filled,
     /// whatever culture table applies (the PC: always in English, Saleh
     /// 2026-10-18): neither shaped nor glossed, and never remembered for the
@@ -161,6 +174,14 @@ public sealed class UiStrings
         if (_missingSet.Add(key))
             _missing.Add(key);
         return key;
+    }
+
+    /// <summary>A right-to-left template's arguments with every shaped one back in logical order (ArabicShaper.ToLogical), so the label is shaped once, whole (CODE-44); the array itself when none is shaped.</summary>
+    private static object[] Logical(object[] args)
+    {
+        if (args == null || !args.Any(a => a is string s && ArabicShaper.IsVisual(s)))
+            return args;
+        return args.Select(a => a is string s && ArabicShaper.IsVisual(s) ? ArabicShaper.ToLogical(s) : a).ToArray();
     }
 
     /// <summary>Remembers a culture label for the lens under its text as drawn (<paramref name="native"/>), once.</summary>

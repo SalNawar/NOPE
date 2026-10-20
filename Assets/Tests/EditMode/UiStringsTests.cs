@@ -263,4 +263,56 @@ public class UiStringsTests
         s.English("ok");
         Assert.AreEqual(0, s.Phrases.Count);
     }
+
+    // TEXT-LANG (BUG-3a, D7): surfaces. Only a paper and a sign read the culture's labels; the chrome and the PC never do.
+
+    /// <summary>A culture table of today's content as the theme service builds it (its entries, its direction, its words).</summary>
+    private static UiStrings TodaysStrings(ContentNode ui, string language)
+    {
+        UiStringEntry[] Entries(IEnumerable<ContentNode> items) => items.Select(e => new UiStringEntry
+        {
+            key = e.Get("key").Text,
+            text = e.Get("text").Text,
+            gloss = e.Get("gloss") != null && e.Get("gloss").Text == "Below" ? GlossStyle.Below : e.Get("gloss") != null && e.Get("gloss").Text == "Inline" ? GlossStyle.Inline : GlossStyle.None,
+            tier = e.Get("tier") != null && e.Get("tier").Text == "Flavour" ? StringTier.Flavour : StringTier.Full
+        }).ToArray();
+        ContentNode table = ui.Get("languages").Items.First(l => l.Get("language").Text == language);
+        return new UiStrings(Entries(ui.Get("strings").Items), Entries(table.Get("entries").Items), table.Get("rtl").Text == "true", 60);
+    }
+
+    /// <summary>Surface routing for every UI key of today's content, in a left-to-right and a right-to-left culture: the chrome and the PC read the reading text, a paper and a sign the culture's label.</summary>
+    [TestCase("el")]
+    [TestCase("ar")]
+    public void ForSurface_EveryKey_OnlyAPaperOrASignReadsTheCulture(string language)
+    {
+        ContentNode ui = TodaysUi();
+        UiStrings s = TodaysStrings(ui, language);
+        UiStrings reading = Strings();
+        int cultured = 0;
+        foreach (ContentNode e in ui.Get("strings").Items)
+        {
+            string key = e.Get("key").Text;
+            object[] args = { "A", "B", "C", "D" };
+            string english = s.English(key, args);
+            Assert.AreEqual(english, s.ForSurface(TextSurface.Desk, key, args), key + " on the chrome");
+            Assert.AreEqual(english, s.ForSurface(TextSurface.Pc, key, args), key + " on the PC");
+            Assert.AreEqual(s.Format(key, args), s.ForSurface(TextSurface.Paper, key, args), key + " on a paper");
+            Assert.AreEqual(s.Format(key, args), s.ForSurface(TextSurface.Sign, key, args), key + " on a sign");
+            if (s.ForSurface(TextSurface.Paper, key, args) != english)
+                cultured++;
+        }
+        Assert.Greater(cultured, 900, "the papers do read the culture's labels");
+        Assert.AreEqual("nope.key", reading.ForSurface(TextSurface.Desk, "nope.key"), "a missing key is the key on any surface");
+    }
+
+    /// <summary>CODE-44: an argument already shaped is turned back into logical text, so a right-to-left label is shaped once, at the outermost format, and reads the same as with the logical argument.</summary>
+    [Test]
+    public void Format_RightToLeft_AShapedArgument_IsShapedOnce()
+    {
+        UiStrings s = Strings(new[] { E("day", "اليوم {0}"), E("pair", "{0} مقابل {1}") }, rtl: true);
+        string word = "الأدلة";
+        Assert.AreEqual(s.Format("day", word), s.Format("day", ArabicShaper.ToVisual(word)));
+        Assert.AreEqual(s.Format("pair", word, "سجل"), s.Format("pair", ArabicShaper.ToVisual(word), ArabicShaper.ToVisual("سجل")));
+        Assert.AreEqual(ArabicShaper.ToVisual("اليوم " + word), s.Format("day", ArabicShaper.ToVisual(word)), "the whole label in visual order, the argument read in place");
+    }
 }

@@ -24173,14 +24173,8 @@
         "tier": "Flavour"
       },
       {
-        "key": "settings.languageLocked",
-        "text": "Locked from day {0}: the papers and labels on your desk read the world's language now; hover a word to translate it (the Translation Lens). The PC always reads English: scan a paper to read its copy cleanly.",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
         "key": "settings.languageDesk",
-        "text": "For the papers and labels on your desk. The PC always reads English.",
+        "text": "For the papers and the newspaper only: the rest of the game and the PC always read your language. Never locked; papers already on your desk keep their print.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -24231,6 +24225,120 @@
         "text": "On",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "settings.sound",
+        "text": "Sound",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.volumeMaster",
+        "text": "Master volume",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.volumeMusic",
+        "text": "Music",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.volumeEffects",
+        "text": "Effects",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.volumeValue",
+        "text": "{0} %",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.display",
+        "text": "Display",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.windowed",
+        "text": "Windowed",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.borderless",
+        "text": "Borderless",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.fullscreen",
+        "text": "Fullscreen",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resolution",
+        "text": "Resolution",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resolutionValue",
+        "text": "{0} × {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resolutionDown",
+        "text": "◀",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resolutionUp",
+        "text": "▶",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.vsync",
+        "text": "VSync",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.off",
+        "text": "Off",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.on",
+        "text": "On",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.brightness",
+        "text": "Brightness",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.brightnessValue",
+        "text": "{0} %",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.reduceFlashing",
+        "text": "Reduce flashing",
+        "gloss": "None",
+        "tier": "Full"
       },
       {
         "key": "settings.desktop",
@@ -25986,7 +26094,7 @@
       },
       {
         "key": "case.roleUnknown",
-        "text": "Traveler",
+        "text": "Traveller",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -26064,7 +26172,7 @@
       },
       {
         "key": "citation.deniedWrong",
-        "text": "Denied a legitimate, permitted traveler.",
+        "text": "Denied a legitimate, permitted traveller.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -29767,10 +29875,6 @@
           {
             "key": "settings.alwaysEnglish",
             "text": "الإنجليزية دائما"
-          },
-          {
-            "key": "settings.languageLocked",
-            "text": "مقفلة منذ اليوم {0}: المكتب يقرأ لغة العالم الآن.\nمرر المؤشر فوق كلمة لترجمتها (عدسة الترجمة)."
           },
           {
             "key": "settings.motion",
@@ -38329,10 +38433,6 @@
             "text": "Πάντα αγγλικά"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "Κλειδωμένο από την ημέρα {0}: το γραφείο διαβάζει πλέον τη γλώσσα του κόσμου. Πέρασε τον δείκτη πάνω από μια λέξη για να τη μεταφράσεις (ο Φακός Μετάφρασης)."
-          },
-          {
             "key": "settings.motion",
             "text": "Κίνηση"
           },
@@ -46335,10 +46435,6 @@
           {
             "key": "settings.alwaysEnglish",
             "text": "Sempre inglese"
-          },
-          {
-            "key": "settings.languageLocked",
-            "text": "Bloccata dal giorno {0}: ora l'ufficio legge la lingua del mondo. Passa sopra una parola per tradurla (la Lente di traduzione)."
           },
           {
             "key": "settings.motion",
@@ -54463,10 +54559,6 @@
           {
             "key": "settings.alwaysEnglish",
             "text": "Immer Englisch"
-          },
-          {
-            "key": "settings.languageLocked",
-            "text": "Gesperrt seit Tag {0}: Das Amt spricht jetzt die Sprache der Welt. Fahre über ein Wort, um es zu übersetzen (die Übersetzungslupe)."
           },
           {
             "key": "settings.motion",
@@ -62817,10 +62909,6 @@
             "text": "始终英语"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "自第{0}天起锁定：办公室现在使用世界的语言。将鼠标悬停在词语上即可翻译（翻译透镜）。"
-          },
-          {
             "key": "settings.motion",
             "text": "动效"
           },
@@ -70515,10 +70603,6 @@
           {
             "key": "settings.alwaysEnglish",
             "text": "常に英語"
-          },
-          {
-            "key": "settings.languageLocked",
-            "text": "{0}日目から固定: 局は今や世界の言語を使います。単語にカーソルを合わせると翻訳されます (翻訳レンズ)。"
           },
           {
             "key": "settings.motion",

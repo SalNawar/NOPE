@@ -6,24 +6,24 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// The PC reacts to history (piece 6): one persistent receiver of the UI cue
-/// channel (created by CultureThemeBootstrap). The present culture is the
+/// The office reacts to history (piece 6): one persistent receiver of the UI
+/// cue channel (created by CultureThemeBootstrap). The present culture is the
 /// timeline leader's culture:{id} cue (piece 5); its theme (neutral before any
 /// leader) is applied to every ThemeTag in the loaded scene when the scene
-/// loads, never during a shift: colours by role, the culture's font, its
-/// labels (or English: by setting, the default before the Translation Lens's
-/// day, CultureChoice.EnglishBySetting; or when no installed font draws them), the
-/// wallpaper (the most recent world change's: DesktopWallpaper), the compare
-/// colours; diegetic roles are skipped. It also holds
-/// the string lookup UiText reads and the Future currency the wallet shows.
-/// From the Translation Lens's day (TranslationLens.LanguageLocked) the
-/// player's "Always English" (the default) no longer applies: the desk's
-/// labels and the papers' printed words follow history and the lens
-/// (TranslationLensPresenter, on the same host) reads them. The PC never
-/// changes language (Saleh 2026-10-18): a tag on the desktop's layer takes
-/// its colours from the theme but its words in English and its kit face
-/// (CultureChoice.Surface, UiText.Pc), so a scanned paper's copy reads in
-/// English there.
+/// loads: colours by role, the wallpaper (the most recent world change's:
+/// DesktopWallpaper), the compare colours; diegetic roles are skipped. It
+/// also holds the string lookup UiText reads, the Future currency the wallet
+/// shows and the culture's font.
+/// Surfaces (D7, Saleh 2026-10-20: "papers will change language and the pc
+/// background ... its a pc you set the language"; BUG-3a): only the papers'
+/// printed words (and the newspaper) take the culture's language, by the
+/// player's setting (CultureChoice.EnglishBySetting: Follow history, Always
+/// English, or no choice, English until the culture day), in the culture's
+/// font (<see cref="CultureFont"/>), and the lens (TranslationLensPresenter,
+/// on the same host) reads them. Every themed text (the chrome at the desk,
+/// Home, the report, the PC) keeps the player's language and its kit face
+/// (CultureChoice.Surface, UiText). The setting never locks and applies at
+/// once (<see cref="RefreshActive"/>; papers already printed keep their print).
 /// Every decision is a tested rule (CultureCue.Pick, CultureChoice, UiStrings,
 /// ThemeRoles); this class only reads engine objects and sets them.
 /// </summary>
@@ -53,7 +53,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>The resolved font, for the inspector ("default" for the project font).</summary>
     public string FontName { get; private set; } = "default";
 
-    /// <summary>The culture's font while its labels show (LabelLanguage.Culture), else null: the papers and the PC's forms print their translated words in it (TmpFormText).</summary>
+    /// <summary>The culture's font while the papers read its labels (LabelLanguage.Culture), else null: the papers print their translated words in it (TmpFormText).</summary>
     public TMP_FontAsset CultureFont => Language == LabelLanguage.Culture ? _font : null;
 
     /// <summary>The session's runtime fonts, also used by translation for its script fonts (piece 9); null before Configure.</summary>
@@ -90,11 +90,15 @@ public sealed class CultureThemeService : TimelineCueReceiver
     }
 
     /// <summary>
-    /// True from the Translation Lens's day of the run in progress
-    /// (TranslationLens.LanguageLocked: the day the ramp introduces the lens,
-    /// day 8): the office's language follows history whatever Settings holds.
+    /// True from the culture day of the run in progress (today's trigger: the
+    /// Translation Lens's day, TranslationLens.LanguageLocked, day 8; LANGUAGE
+    /// moves it to one config value): a player who never chose in Settings
+    /// reads the papers in the world's language from then on. It no longer
+    /// locks the setting (BUG-3a: "Always English" and "Follow history" hold
+    /// on any day); the name is the cheat menu's (TranslationLensCheats).
     /// False with no run (the title) or no content. The cheat menu's
-    /// <see cref="LockOverride"/> wins while it is set.
+    /// <see cref="LockOverride"/> wins while it is set (until the next day,
+    /// <see cref="ResetForNewDay"/>).
     /// </summary>
     public static bool LanguageLocked
     {
@@ -110,13 +114,12 @@ public sealed class CultureThemeService : TimelineCueReceiver
     }
 
     /// <summary>
-    /// Raised after the labels' language changed (a culture's table now
+    /// Raised after the papers' language changed (a culture's table now
     /// applies, another culture's, or English again): a text a component
     /// printed from a UI string earlier in the scene (KeyedText, the rulebook,
     /// the counter's strip, the AVAILABLE caption, the wheel hint) prints it
-    /// again (Saleh 2026-10-07: "I want the language to change on all
-    /// documents and the apps"; open windows and papers re-read their strings
-    /// the next time they show).
+    /// again, so a Paper or Sign text follows at once (BUG-3a); a paper
+    /// already on the desk keeps its print until it is printed again.
     /// </summary>
     public static event System.Action LabelsChanged;
 
@@ -129,7 +132,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>The language the labels were last applied in (the table's language, or the reading language), to raise <see cref="LabelsChanged"/> only on a change.</summary>
     private string _labelsLanguage;
 
-    /// <summary>The cheat menu's language lock for this session (TranslationLensCheats: lock now, unlock), or null to follow the ramp.</summary>
+    /// <summary>The cheat menu's culture day for today (TranslationLensCheats: lock now, unlock), or null to follow the ramp; cleared on a new day (<see cref="ResetForNewDay"/>, BUG-27a).</summary>
     public static bool? LockOverride { get; set; }
 
     /// <summary>Re-applies the present culture to every loaded scene (the bootstrap, and GameManager.Start once the run exists); null-safe.</summary>
@@ -154,11 +157,17 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
     /// <summary>
     /// The culture's day-scoped state cleared for a new day (P0-A seam; owner
-    /// TEXT-LANG, consumed by RUN-SAFE's jumps, BUG-27a). The P0 stub does the
-    /// culture's part of the reset NewRun already does (DevToolsState.ResetAll:
-    /// the forced leader cleared); TEXT-LANG refines it (the language lock).
+    /// TEXT-LANG, consumed by RUN-SAFE's day jumps, skips and restarts,
+    /// BUG-27a): the cheat menu's forced leader (the culture's part of
+    /// DevToolsState.ResetAll) and its culture-day override
+    /// (<see cref="LockOverride"/>), so neither outlives the day it was set on.
+    /// The player's Settings choice is not day-scoped and stays.
     /// </summary>
-    public static void ResetForNewDay() => DevToolsState.ForcedLeaderId = null;
+    public static void ResetForNewDay()
+    {
+        DevToolsState.ForcedLeaderId = null;
+        LockOverride = null;
+    }
 
     /// <summary>Applies the current theme under one root (UI built at runtime, such as the investigation text fallback).</summary>
     public void ApplyTo(GameObject root)
@@ -205,6 +214,8 @@ public sealed class CultureThemeService : TimelineCueReceiver
         _font = Language == LabelLanguage.EnglishNoFont ? null : font.Asset;
         FontName = _font != null ? font.Name : "default";
         SetGlobalFallback(Language == LabelLanguage.Culture ? _font : null);
+        if (Language == LabelLanguage.Culture && _font != null && _prewarmed.Add(_font))
+            StartCoroutine(_fonts.Prewarm(_font, Sample(reading, cultureTable, ui.glossPercent), ui.prewarmGlyphsPerFrame)); // CODE-81: off the load's frame
 
         bool cultureLabels = Language == LabelLanguage.Culture;
         UiStringTableSO labelsTable = cultureLabels ? cultureTable : null;
@@ -255,6 +266,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
     private void OnDestroy()
     {
         SetGlobalFallback(null);
+        ReleaseKeptFallbacks();
         _fonts?.Dispose();
         if (Instance == this)
             Instance = null;
@@ -264,7 +276,10 @@ public sealed class CultureThemeService : TimelineCueReceiver
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (mode == LoadSceneMode.Single)
+        {
             _stringsBuilt = false; // a new place (title, office, home): the lens's labels start afresh, so they never pile up over a session
+            ReleaseKeptFallbacks(); // no paper of the last place is left to draw with them
+        }
         _target = scene;
         try
         {
@@ -279,26 +294,45 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>The culture font this service put first in TMP's global fallback list, or null.</summary>
     private TMP_FontAsset _globalFallback;
 
+    /// <summary>Culture fonts taken off the front while a scene still shows papers printed with them (a mid-day language change, CODE-80): kept in the list until the next place loads.</summary>
+    private readonly List<TMP_FontAsset> _keptFallbacks = new List<TMP_FontAsset>();
+
+    /// <summary>The culture fonts already prewarmed this session (RuntimeFonts.Prewarm runs once per font).</summary>
+    private readonly HashSet<TMP_FontAsset> _prewarmed = new HashSet<TMP_FontAsset>();
+
     /// <summary>
-    /// Puts <paramref name="font"/> (the culture's, while its labels show)
-    /// first in TMP's global fallback list, in place of the one put there
-    /// before (null: none): a text whose own font lacks a culture label's
-    /// glyphs (a diegetic row, a 3D desk label printed in a kit face) draws
-    /// them from the culture's font instead of empty boxes (Saleh 2026-10-07:
-    /// every document and app in the game's language). Only the session's list
-    /// changes (the runtime font is never saved), and it is taken out again
-    /// when the service goes.
+    /// Puts <paramref name="font"/> (the culture's, while the papers read its
+    /// labels) first in TMP's global fallback list, in place of the one put
+    /// there before (null: none): a paper's word printed in a kit face draws
+    /// the glyphs the face lacks from the culture's font instead of empty
+    /// boxes. The one it replaces stays in the list (behind it) until the next
+    /// place loads, so a paper printed before a mid-day change never loses its
+    /// glyphs (CODE-80). Only the session's list changes (the runtime font is
+    /// never saved), and every font is taken out again when the service goes.
     /// </summary>
     private void SetGlobalFallback(TMP_FontAsset font)
     {
         List<TMP_FontAsset> list = TMP_Settings.fallbackFontAssets;
         if (list == null || _globalFallback == font)
             return;
-        if (_globalFallback != null)
-            list.Remove(_globalFallback);
+        if (_globalFallback != null && !_keptFallbacks.Contains(_globalFallback))
+            _keptFallbacks.Add(_globalFallback);
         _globalFallback = font;
-        if (font != null && !list.Contains(font))
-            list.Insert(0, font);
+        if (font == null)
+            return;
+        _keptFallbacks.Remove(font);
+        list.Remove(font);
+        list.Insert(0, font);
+    }
+
+    /// <summary>Takes the kept culture fonts (<see cref="_keptFallbacks"/>) out of TMP's global fallback list.</summary>
+    private void ReleaseKeptFallbacks()
+    {
+        List<TMP_FontAsset> list = TMP_Settings.fallbackFontAssets;
+        foreach (TMP_FontAsset kept in _keptFallbacks)
+            if (kept != _globalFallback)
+                list?.Remove(kept);
+        _keptFallbacks.Clear();
     }
 
     /// <summary>The reading language's table (null with a one-time warning).</summary>
@@ -436,17 +470,14 @@ public sealed class CultureThemeService : TimelineCueReceiver
             image.color = ink ? entry.ink : entry.fill;
     }
 
-    /// <summary>A themed text: ink (not a kit text's), font (a kit face unless the labels are in a culture's script), style (italics stripped or additions), shrink-to-fit, and its label when keyed; a culture's label set in capitals by its style is written in capitals itself (ArtLayout.Capitals: TMP's capitals keep a Greek word's accents, Greek capitals drop them).</summary>
+    /// <summary>A themed text (the chrome or the PC: the player's language, BUG-3a): ink (not a kit text's), its kit face (else the font it was built with: never the project's default LiberationSans, BUG-38a), style (italics stripped or additions), shrink-to-fit, and its label when keyed, in the player's language.</summary>
     private void ApplyText(ThemeTag tag, TMP_Text text, PaletteEntry entry)
     {
         if (entry.hasInk && tag.Part != ThemePart.Kit)
             text.color = entry.ink;
 
-        // The PC's words stay English (UiText.Pc): its texts keep their kit faces, as the desk's do while English is read.
-        bool culture = CultureChoice.ShowsCulture(CultureChoice.Surface(UiText.SurfaceOf(tag), Language));
-        TMP_FontAsset font = tag.Face != null && !culture ? tag.Face : _font != null ? _font : TMP_Settings.defaultFontAsset;
-        if (font != null)
-            text.font = font;
+        if (tag.Face != null)
+            text.font = tag.Face;
 
         int add = tag.TextKind == ThemeTextKind.Heading ? (int)ActiveTheme.headingAdd : tag.TextKind == ThemeTextKind.Button ? (int)ActiveTheme.buttonAdd : 0;
         text.fontStyle = (FontStyles)CultureChoice.ComposeStyle((int)tag.BaseStyle, (int)FontStyles.Italic, ActiveTheme.stripItalic, add);
@@ -456,8 +487,6 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
         if (!string.IsNullOrEmpty(tag.LabelKey))
             text.text = UiText.Get(tag.LabelKey, UiText.SurfaceOf(tag));
-        if ((text.fontStyle & FontStyles.UpperCase) != 0 && culture)
-            text.text = ArtLayout.Capitals(text.text);
     }
 
     /// <summary>No wrapping; auto-size from labelMinScale of the text's first size to that size (R21).</summary>

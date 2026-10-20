@@ -7,29 +7,40 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 /// <summary>
-/// TEXT-LANG's P0-A seams: CultureThemeService.ResetForNewDay (the stub
-/// clears the forced leader, the culture's part of DevToolsState.ResetAll)
-/// and UiKeys (each key is one the string tables already hold, so it
-/// resolves to today's string in every language).
+/// TEXT-LANG's seams: CultureThemeService.ResetForNewDay (the forced leader
+/// and the cheat's culture-day override cleared for a new day, BUG-27a),
+/// UiKeys (each key is one the string tables already hold, so it resolves to
+/// today's string in every language) and SettingsWindowController.Open (for
+/// FLOW's Esc).
 /// </summary>
 public class TextLangSeamTests
 {
     private const string Tables = "Assets/Data/World/Culture";
 
     [Test]
-    public void ResetForNewDay_StubClearsTheForcedLeader()
+    public void ResetForNewDay_ClearsTheForcedLeaderAndTheCultureDayOverride()
     {
         string before = DevToolsState.ForcedLeaderId;
+        bool? lockBefore = CultureThemeService.LockOverride;
         try
         {
             DevToolsState.ForcedLeaderId = "seam-test-leader";
+            CultureThemeService.LockOverride = true;
             CultureThemeService.ResetForNewDay();
             Assert.IsNull(DevToolsState.ForcedLeaderId);
+            Assert.IsNull(CultureThemeService.LockOverride, "the cheat's culture day lasts one day (BUG-27a)");
         }
         finally
         {
             DevToolsState.ForcedLeaderId = before;
+            CultureThemeService.LockOverride = lockBefore;
         }
+    }
+
+    [Test]
+    public void SettingsOpen_WithNoSettingsWindowLoaded_IsFalse()
+    {
+        Assert.IsFalse(SettingsWindowController.Open());
     }
 
     [Test]

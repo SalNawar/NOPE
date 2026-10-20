@@ -9,6 +9,16 @@ using UnityEngine;
 /// key itself. A key no table has is logged once. Numbers are formatted by the
 /// template's specifiers in the invariant culture; canonical values (names,
 /// places, facts, dates) go in as string arguments, verbatim.
+/// Surfaces (D7, Saleh 2026-10-20: "papers will change language and the pc
+/// background ... its a pc you set the language"; BUG-3a): <see cref="Get(string)"/>
+/// and <see cref="Format"/> are the chrome's (the report, Home, the citation,
+/// the verdict, the wheel, the guide, the memo, the briefing, the desk's
+/// controls) and always read the player's language; <see cref="Pc"/> the PC's,
+/// likewise; only a paper's printed words (<see cref="FormWords"/>,
+/// <see cref="DocumentWord"/>, <see cref="InReadingLanguage"/>) and a text
+/// asked for on the Paper or Sign surface (<see cref="Get(string, TextSurface)"/>)
+/// take the world's language, by the culture rule. A record built from these
+/// strings therefore never holds the world's language (CODE-45, CODE-79).
 /// </summary>
 public static class UiText
 {
@@ -37,23 +47,16 @@ public static class UiText
     /// <summary>Keys already reported missing.</summary>
     private static readonly HashSet<string> WarnedKeys = new HashSet<string>();
 
-    /// <summary>The string for a key.</summary>
+    /// <summary>The chrome's string for a key, in the player's language.</summary>
     public static string Get(string key) => Format(key);
 
-    /// <summary>The string for a key with its placeholders filled (UiStrings.Format).</summary>
-    public static string Format(string key, params object[] args)
-    {
-        UiStrings strings = Strings();
-        if (strings == null)
-            return key;
+    /// <summary>The chrome's string for a key with its placeholders filled (UiStrings.English), in the player's language whatever culture leads (BUG-3a).</summary>
+    public static string Format(string key, params object[] args) => Lookup(TextSurface.Desk, key, args);
 
-        string text = strings.Format(key, args);
-        if (text == key && !string.IsNullOrEmpty(key) && System.Linq.Enumerable.Contains(strings.MissingKeys, key) && WarnedKeys.Add(key))
-            Debug.LogWarning($"[UiText] No UI string '{key}'; add it to world_source.json ui.strings and run Tools > TimeDesk > Generate World.");
-        return text;
-    }
+    /// <summary>The string for a key on a surface (UiStrings.ForSurface): a paper's or a sign's by the culture rule, the chrome's and the PC's in the player's language.</summary>
+    public static string Get(string key, TextSurface surface) => Lookup(surface, key, null);
 
-    /// <summary>The wallet's word in a form: the present culture's Future currency, else the neutral word (CultureChoice.Wallet).</summary>
+    /// <summary>The wallet's word in a form: the present culture's Future currency (a value of the world, as printed), else the neutral word (CultureChoice.Wallet).</summary>
     public static string Currency(WalletForm form)
     {
         CultureThemeService service = CultureThemeService.Instance;
@@ -62,19 +65,19 @@ public static class UiText
     }
 
     /// <summary>
-    /// The reading language's words for a form's fixed English words
-    /// (FormData.Words; Saleh 2026-10-07: "I want the language to change on
-    /// all documents and the apps"): each word's doc.* string
+    /// A paper's words in the world's language (the Paper surface; Saleh
+    /// 2026-10-07: "I want the language to change on all documents", D7:
+    /// "papers will change language"): each fixed English word's doc.* string
     /// (DocumentWords.Key) in the culture's language (in capitals,
-    /// ArtLayout.Capitals, where the English is), a word with no string
-    /// as it is; null while English is read (no theme service, "Always
-    /// English", or no installed font draws the culture's labels), so the
-    /// papers keep their own printed English.
+    /// ArtLayout.Capitals, where the English is), a word with no string as it
+    /// is; null while the papers read English (no theme service, "Always
+    /// English", no choice before the culture day, or no installed font draws
+    /// the culture's labels), so the papers keep their own printed English.
     /// </summary>
     public static System.Func<string, string> FormWords()
     {
         CultureThemeService service = CultureThemeService.Instance;
-        if (service == null || service.Language != LabelLanguage.Culture || service.Strings == null)
+        if (service == null || !CultureChoice.ShowsCulture(CultureChoice.Surface(TextSurface.Paper, service.Language)) || service.Strings == null)
             return null;
         UiStrings strings = service.Strings;
         return english =>
@@ -87,14 +90,14 @@ public static class UiText
         };
     }
 
-    /// <summary>One fixed English word a document prints (a scan strip, a stamp's word) in the reading language (<see cref="FormWords"/>), else as it is.</summary>
+    /// <summary>One fixed English word a document prints (a scan strip, a stamp's word) in the world's language (<see cref="FormWords"/>), else as it is.</summary>
     public static string DocumentWord(string english)
     {
         System.Func<string, string> words = FormWords();
         return words == null || string.IsNullOrEmpty(english) ? english : words(english);
     }
 
-    /// <summary><paramref name="data"/> to print in the reading language: a copy with <see cref="FormWords"/> when a culture's language is read, else itself.</summary>
+    /// <summary><paramref name="data"/> to print on a paper: a copy with <see cref="FormWords"/> when the papers read a culture's language, else itself.</summary>
     public static FormData InReadingLanguage(FormData data)
     {
         System.Func<string, string> words = FormWords();
@@ -108,61 +111,50 @@ public static class UiText
     /// <summary>
     /// The PC's words (Saleh 2026-10-18: "language in the pc shouldn't change
     /// this will give scaning a porpose once the documents start chanign
-    /// languages"): every app, window, the taskbar, the Start menu, the icons,
-    /// Settings and the CRT's clock print in the reading language whatever
-    /// culture leads and from any day (CultureChoice.Surface), so a scanned
-    /// paper's copy reads in English on the PC while the papers on the desk
-    /// follow the culture. Colours, fonts and the wallpaper still follow
-    /// history (CultureThemeService); only the words stay English.
+    /// languages"; D7: "its a pc you set the language"): every app, window,
+    /// the taskbar, the Start menu, the icons, Settings and the clock print in
+    /// the player's language whatever culture leads and from any day
+    /// (CultureChoice.Surface), so a scanned paper's copy reads in English on
+    /// the PC while the papers on the desk follow the culture. Colours, fonts
+    /// and the wallpaper still follow history (CultureThemeService; their look
+    /// is PC-LANG-FX's); only the words stay the player's.
     /// </summary>
     public static class Pc
     {
-        /// <summary>The reading language's string for a key.</summary>
+        /// <summary>The PC's string for a key.</summary>
         public static string Get(string key) => Format(key);
 
-        /// <summary>The reading language's string for a key with its placeholders filled (UiStrings.English).</summary>
-        public static string Format(string key, params object[] args)
-        {
-            UiStrings strings = Strings();
-            return strings != null ? strings.English(key, args) : key;
-        }
+        /// <summary>The PC's string for a key with its placeholders filled (UiStrings.English).</summary>
+        public static string Format(string key, params object[] args) => Lookup(TextSurface.Pc, key, args);
 
-        /// <summary>A category's report word in English (ClueLabels.Key).</summary>
+        /// <summary>A category's report word (ClueLabels.Key).</summary>
         public static string Category(ClueCategory category) => Get(ClueLabels.Key(category));
 
-        /// <summary>A garment slot's word in English (Looks.SlotKey).</summary>
+        /// <summary>A garment slot's word (Looks.SlotKey).</summary>
         public static string Slot(LookSlot slot) => Get(Looks.SlotKey(slot));
 
-        /// <summary>A deviation's report line in English.</summary>
+        /// <summary>A deviation's report line.</summary>
         public static string Deviation(Discrepancy d) =>
             d == null ? string.Empty : Format(d.ReportKey, Category(d.category), d.documentValue, d.ReportOther);
 
-        /// <summary>The wallet's word: the present culture's Future currency (a value of the world, as printed), else the neutral word in English.</summary>
-        public static string Currency(WalletForm form)
-        {
-            CultureThemeService service = CultureThemeService.Instance;
-            string fallback = Get(form == WalletForm.Label ? "wallet.credits" : form == WalletForm.Inline ? "wallet.creditsInline" : "wallet.creditsShort");
-            return service != null ? CultureChoice.Wallet(service.ActiveCultureId, service.FutureCurrency, fallback) : fallback;
-        }
+        /// <summary>The wallet's word: the present culture's Future currency (a value of the world, as printed), else the neutral word.</summary>
+        public static string Currency(WalletForm form) => UiText.Currency(form);
 
         /// <summary>A document's fixed English word as the PC prints it: as it is (the papers' own English; a scanned copy reads in English).</summary>
         public static string DocumentWord(string english) => english;
     }
 
-    /// <summary>Where a text is printed: the PC for one on the desktop's layer (the desktop canvas and everything under it), else the desk.</summary>
+    /// <summary>Where a text is printed: the PC for one on the desktop's layer (the desktop canvas and everything under it), else the chrome at the desk (a paper's words are printed through <see cref="FormWords"/>, never through a theme tag).</summary>
     public static TextSurface SurfaceOf(Component text) =>
         text != null && OfficeLayers.PcDesktopLayer >= 0 && text.gameObject.layer == OfficeLayers.PcDesktopLayer ? TextSurface.Pc : TextSurface.Desk;
 
-    /// <summary>The string for a key on a surface: the PC's in English (<see cref="Pc"/>), the desk's in the labels' language.</summary>
-    public static string Get(string key, TextSurface surface) => surface == TextSurface.Pc ? Pc.Get(key) : Get(key);
-
-    /// <summary>A category's report word (ClueLabels.Key).</summary>
+    /// <summary>A category's report word (ClueLabels.Key), in the player's language.</summary>
     public static string Category(ClueCategory category) => Get(ClueLabels.Key(category));
 
-    /// <summary>A garment slot's word (Looks.SlotKey).</summary>
+    /// <summary>A garment slot's word (Looks.SlotKey), in the player's language.</summary>
     public static string Slot(LookSlot slot) => Get(Looks.SlotKey(slot));
 
-    /// <summary>A deviation's report line: the template Domain chose, with the category word, the stated value and ReportOther.</summary>
+    /// <summary>A deviation's report line: the template Domain chose, with the category word, the stated value and ReportOther, in the player's language.</summary>
     public static string Deviation(Discrepancy d) =>
         d == null ? string.Empty : Format(d.ReportKey, Category(d.category), d.documentValue, d.ReportOther);
 
@@ -206,6 +198,19 @@ public static class UiText
         if (library == null || width <= 0f || needed <= width)
             return;
         text.fontSize = Mathf.Max(size * library.CultureUi.labelMinScale, size * width / needed);
+    }
+
+    /// <summary>A key's string on a surface (UiStrings.ForSurface), the key itself without a lookup; a key no table has is reported once.</summary>
+    private static string Lookup(TextSurface surface, string key, object[] args)
+    {
+        UiStrings strings = Strings();
+        if (strings == null)
+            return key;
+
+        string text = strings.ForSurface(surface, key, args);
+        if (text == key && !string.IsNullOrEmpty(key) && System.Linq.Enumerable.Contains(strings.MissingKeys, key) && WarnedKeys.Add(key))
+            Debug.LogWarning($"[UiText] No UI string '{key}'; add it to world_source.json ui.strings and run Tools > TimeDesk > Generate World.");
+        return text;
     }
 
     /// <summary>The lookup in use (null when no content library is reachable).</summary>

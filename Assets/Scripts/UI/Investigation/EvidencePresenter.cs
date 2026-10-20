@@ -13,7 +13,8 @@ using System.Collections.Generic;
 /// ALREADY DOCUMENTED. The report is drawn into each pane's Report tab (its
 /// form: ReportView). The log clears with each case. It subscribes to the
 /// compare it was given and unsubscribes from that same instance (audit
-/// R4-003). Plain C#; InvestigationUIController owns it.
+/// R4-003). The compare strip's lines are the desk's chrome, in the player's
+/// language (UiText, CODE-159; D7). Plain C#; InvestigationUIController owns it.
 /// </summary>
 public sealed class EvidencePresenter
 {
@@ -99,7 +100,7 @@ public sealed class EvidencePresenter
         if (!_discrepancies.Add(proof))
         {
             if (_compare != null)
-                _compare.ShowAlreadyDocumented(UiText.Pc.Category(proof.category));
+                _compare.ShowAlreadyDocumented(UiText.Category(proof.category)); // the desk's compare strip: the chrome's words (CODE-159)
             return;
         }
 
@@ -107,7 +108,7 @@ public sealed class EvidencePresenter
         RefreshReport();
 
         if (_compare != null)
-            _compare.ShowDeviation(UiText.Pc.Deviation(proof));
+            _compare.ShowDeviation(UiText.Deviation(proof));
 
         _logged();
     }
