@@ -50,8 +50,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A pull tab's keycap under its word (overlay units).</summary>
     private static readonly Vector2 PullTabKeycap = new Vector2(58f, 34f);
 
-    /// <summary>The inspect button's SPACE keycap under it (overlay units).</summary>
-
     /// <summary>The kit pass over the desktop and the overlay canvases (see the class summary).</summary>
     private static void ApplyKit(Canvas desktop, Canvas overlay)
     {

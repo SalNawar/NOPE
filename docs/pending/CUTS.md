@@ -16,7 +16,7 @@ Branch `fix/p0-cuts`, cut from `fix/p0-carve` (f347060). Source: FIX_PLAN_v2.md 
 | 2 | **The old stamp:** its click box (it was a hidden third TAB that called `DeskStampTray.ToggleRack`), its decor entry with its drag handle, and its art parts | "Old stamp: cut." (D5) |
 | 3 | **Machine close-ups:** `MachineCloseUp`, `CloseUpTimeline`, their triggers, and the Settings "Machine close-ups" row | D6: "when they slide in, we subtly zoom in a bit not too hard just a small focus to frame the shot", so there are no full machine close-ups. FIX_PLAN_v2 64b, 65e and 73e: CUT |
 | 4 | **Talk routes other than the intercom:** clicking the traveller and clicking the art's phone no longer open the wheel. The desk intercom (`DeskFurniture`, built by the office binder) is the one way to talk | "intercom to bring out dialogue options" (D5, Talking) |
-| 5 | **Dead dialogue options:** "Step closer" and "Speak up" (`interview.requests`), with the 90 voice rows that answered them (`interview.voices.spoken`) | "there are dialogue that does nothing like step closer" (D5); "Speak up" is R7 |
+| 5 | **Dead dialogue options:** "Step closer" and "Speak up" (`interview.requests`), with the 90 voice rows that answered them (`interview.voices.spoken`) | "Step closer": "there are dialogue that does nothing like step closer" (D5). "Speak up": **our proposal** (FIX_PLAN_v2 P0-C item 5), not Saleh's call; it is R7, which DECISIONS_1019a.md lists as not asked yet (see Decisions, 7) |
 | 6 | **ReprintedPaper, for now:** never drawn, although days 9 onward still list it | Our proposal (FIX_PLAN_v2 P0-C item 6): with the magnifiers gone nothing can prove it, so it waits until the scanner shows the microprint (re-enabled at #17) and no lie is unprovable in between |
 
 ## What was removed
@@ -176,17 +176,26 @@ These need the editor. Until they run, **the branch's OfficeGameplay.unity and t
 - **QA-RIG:** the QA sweep's wheel step and city checks have changed (see Tests). The play probe's `ReadMicro` path stays, but no Micro tell is planned while ReprintedPaper is dormant.
 - **Art side (Saleh / ChatGPT):** the hall art may delete `Clean_Stamp__*` (the game switches them off). The kit's inspect-button pieces (`inspect`, `inspect_hover` in `kit_manifest.json`) are unused now. `ArtDeliverables/TimeDesk/Audio/SOUND_LIST.md` rows 103 `loupe_tick` and 104 `arm_fold` have no player any more.
 
+## Stale references left for the tracks
+
+These still name cut items. They are not edited here; each owner fixes its own when it next touches the file.
+- **`docs/pending/CARVE.md`** (the file to owner map), for INTEGRATION: line 47 lists `BuildInspectButton` under `.Chrome.cs` (CAM), and line 56 lists `BuildLensKit` and `Magnifier` under `.Tools.cs` (TOOLS). Both are deleted (see "Builder" above). Line 158 (carve decision 2) records where they went in the carve; it is history and stays true of f347060.
+- **`Assets/Scripts/Domain/ContentSheets/ContentSheetMap.cs:749`**, for CONTENT: the guide `point` note still lists `inspect` as a valid target, but `GuideTargets.Named` no longer accepts it (the guide check, `GuideTargets.IsKnown`, refuses a page that points there). Drop `inspect` from the note with the template at #17, alongside the `microForms` note at :124 (see CONTENT above). The `{inspect}` key placeholders at :740, :755 and :762 are the SPACE key's print, not the button, and stay.
+- **`docs/ART_ASSET_LIST.md:177`**, for the art side / INTEGRATION: the "Inspect button" row (`inspect_button.png`, `inspect_button_on.png`, `MagnifierGlyph`) describes the cut button. Drop the row.
+
 ## FEATURES and CHEATS (for INTEGRATION)
 
 Rewrite these `docs/FEATURES.md` lines (line numbers as of f347060):
 - **51 (the desk machines):** the microprint line is printed but cannot be read until #17, and `LieKind.ReprintedPaper` is dormant (`LieKinds.IsDormant`, tested: `LieKindsTests.For_NeverDrawsTheDormantReprintedPaper_UntilTheScannerShowsTheMicroprint`).
 - **52 (the upgrades' desk objects):** drop the Translation Lens's stand, LensKit, its magnifiers, `TryLensFootprint`, loupe_tick and `WordTurned`.
 - **53 (the desk's plan):** drop the lens stand's bay, the old stamp from the decor list, and the machine close-ups (with "tested: `CloseUpTimelineTests`").
+- **24 (closing the PC):** a click on the room beside the PC goes on to what it lands on, but the traveller no longer opens the wheel; only the intercom does.
 - **55 and 62 (the traveller wheel, the reading view):** only the desk intercom opens the wheel. Clicking the traveller or the art's phone does not.
 - **59, 63, 64 and 71 (inspection, the guide, the controls, the desk's pieces):**
   - no red inspect button: SPACE toggles inspect mode;
   - the FTUE's inspect arrow points at the Passport;
   - no inspect button kit piece or keycap.
+- **58 (the city view):** only the PC and STAMPS pull tabs fade out; there is no red inspect button.
 - **121 (the wheel entries):** no spoken requests today.
 - **189 (motion settings):** no Machine close-ups row.
 
@@ -197,8 +206,9 @@ Rewrite these `docs/FEATURES.md` lines (line numbers as of f347060):
 1. **What "the magnifiers" covers.** The physical lens stand and its three magnifiers, and the red SPACE chrome button (FIX_PLAN_v2 59).
    - **Not covered:** the Translation Lens itself (the hover translation, its three Orders levels and its cheats). D7's GLASSES replaces it later. Until then, cutting it would leave the language days unplayable.
    - **Not covered:** the Investigation app's magnifier desktop icon (`tile_magnifier`).
-2. **Hiding the old stamp's art.** The art scene is never edited, so its three parts join the contract's existing `legacyRoots` switch-off. The binder's anchor warning skips an anchor the contract lists no spec for, so the cut `Stamp` anchor raises no new console line. That condition is the one line of new logic.
+2. **Hiding the old stamp's art.** The art scene is never edited, so its three parts join the contract's existing `legacyRoots` switch-off. The binder's anchor warning skips an anchor the contract lists no spec for, so the cut `Stamp` anchor raises no new console line. With no contract assigned, every default or missing anchor still warns, as before. That condition is the one line of new logic.
 3. **The cut inspect button's FTUE step** keeps its action (Inspect) but needs a valid arrow target. It points at the Passport, the paper being inspected, rather than at nothing.
 4. **The builder destroys the stale objects** (`Props/Stamp`, `InspectButton`) and clears the phone's persistent wheel call, so a rebuild over an older OfficeGameplay leaves nothing behind. Without this, Build Office UI is not idempotent for removals.
 5. **MicroLens and the microprint read path stay without a caller.** FIX_PLAN_v2 65c leaves "MicroLens arrays" with TOOLS, and #17 brings the microprint back through the scanner. This is a listed exception to "no dead code", and it is temporary.
 6. **ReprintedPaper is switched off in code** (`LieKinds.IsDormant`), not by deleting it from 7 days' `lies` lists. The data stays authored and the switch is one line to undo.
+7. **"Speak up" is cut with "Step closer".** Saleh named only "step closer" as a dialogue that does nothing (D5); cutting "Speak up" is R7, which DECISIONS_1019a.md lists as not asked yet. We cut it because it is the same kind of dead option (FIX_PLAN_v2 P0-C item 5). If Saleh says keep it, restore its `interview.requests` row and its `voices.spoken` rows from f347060's `world_source.json`; the mechanism is untouched.

@@ -91,7 +91,7 @@ public class LieKindsTests
         }
     }
 
-    /// <summary>The desk machines spec §2-3: a hidden lie fits every 2150 citizen (the displaced carry no chipped paper and no name to wash), is a forgery (a crime, DETAIN) and names the machine that shows it.</summary>
+    /// <summary>P0-C cuts: the reprinted paper lie is dormant until the scanner shows the microprint, so For never draws it for any traveller kind, and it is the only dormant lie.</summary>
     [Test]
     public void For_NeverDrawsTheDormantReprintedPaper_UntilTheScannerShowsTheMicroprint()
     {
@@ -105,6 +105,7 @@ public class LieKindsTests
                 Assert.IsFalse(LieKinds.IsDormant(lie), lie.ToString());
     }
 
+    /// <summary>The desk machines spec §2-3: a hidden lie fits every 2150 citizen (the displaced carry no chipped paper and no name to wash), is a forgery (a crime, DETAIN) and names the machine that shows it.</summary>
     [Test]
     public void TheHiddenLies_FitThe2150Citizens_AreForgedPapers_AndNameTheirMachine()
     {

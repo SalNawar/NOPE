@@ -916,7 +916,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     private void Report()
     {
         List<ResolvedAnchor> fallbacks = _anchors.Values.Where(a => a.Source == AnchorSource.Fallback).ToList();
-        List<ResolvedAnchor> stand = _anchors.Values.Where(a => (a.Source == AnchorSource.Default || a.Source == AnchorSource.Missing) && contract != null && contract.Spec(a.Id) != null).ToList();
+        List<ResolvedAnchor> stand = _anchors.Values.Where(a => (a.Source == AnchorSource.Default || a.Source == AnchorSource.Missing) && (contract == null || contract.Spec(a.Id) != null)).ToList();
         if (fallbacks.Count > 0)
             Debug.Log($"[OfficeSceneBinder] Office contract: {fallbacks.Count} anchor(s) found by fallback paths ({string.Join(", ", fallbacks.Select(a => $"{a.Id} = '{a.Path}'"))}).", this);
         if (stand.Count > 0)

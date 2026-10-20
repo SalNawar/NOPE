@@ -348,7 +348,6 @@ public static class PropArt
         "BabelRack/Cartridge_0/CartridgeLED_0", "BabelRack/Cartridge_1/CartridgeLED_1", "BabelRack/Cartridge_2/CartridgeLED_2", "BabelRack/Cartridge_3/CartridgeLED_3"
     };
 
-
     /// <summary>The Rolodex: the drum and the knob.</summary>
     public static readonly string[] Rolodex = { "Rolodex", "Rolodex/Drum", "Rolodex/Knob" };
 
