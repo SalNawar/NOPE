@@ -16,7 +16,10 @@ using UnityEngine;
 /// moves today's shift clock forward to that hour (ShiftClock.Spend: it never runs backwards, and closing time
 /// still closes) and adds two columns to every captured frame from then on, hallHour (the hour the hall shows)
 /// and cityLit (_HallCityLights.x, the city's lit share), so a dusk sequence shows its windows lighting while the
-/// clock runs; it forces no hour (the scenario clears any with "hour" -1 first).
+/// clock runs; it forces no hour (the scenario clears any with "hour" -1 first). BUG-71: <c>hallHitStop</c> is the game's
+/// hit-stop alone (MotionKnobs.hitStopScale for hitStopSeconds of real time, as FeelDirector.HitStop does, then the
+/// time scale back), without the citation punch's camera shake, which is FEEDBACK's and CAM's and would fail
+/// hall_fx_crossfade's flicker check on their motion, not on the crossfade's.
 /// </summary>
 public static class HallFxRig
 {
@@ -34,6 +37,7 @@ public static class HallFxRig
         QaRunner.RegisterOp("hallPortals", (runner, step) => Show(step.n != 0));
         QaRunner.RegisterOp("hallPortalsShot", Shot);
         QaRunner.RegisterOp("hallClock", Clock);
+        QaRunner.RegisterOp("hallHitStop", (runner, step) => HitStop());
     }
 
     private static IEnumerator Clock(QaRunner runner, QaStep step)
@@ -48,6 +52,17 @@ public static class HallFxRig
         runner.Recorder.Column("hallHour", () => lights != null ? lights.Hour.ToString("0.000", CultureInfo.InvariantCulture) : "-");
         runner.Recorder.Column("cityLit", () => Shader.GetGlobalVector("_HallCityLights").x.ToString("0.0000", CultureInfo.InvariantCulture));
         yield return QaGame.Frames(5);
+    }
+
+    private static IEnumerator HitStop()
+    {
+        MotionKnobs knobs = UiMotion.Knobs;
+        float scale = Time.timeScale;
+        Time.timeScale = Mathf.Clamp(knobs.hitStopScale, 0f, 1f);
+        float until = Time.unscaledTime + knobs.hitStopSeconds;
+        while (Time.unscaledTime < until)
+            yield return null;
+        Time.timeScale = scale;
     }
 
     private static IEnumerator Show(bool on)

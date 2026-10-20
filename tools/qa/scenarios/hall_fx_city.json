@@ -83,6 +83,46 @@
       "target": "Exterior flying vehicle 7"
     },
     {
+      "op": "track",
+      "name": "city_car0",
+      "target": "Traffic Exterior flying vehicle 0"
+    },
+    {
+      "op": "track",
+      "name": "city_car1",
+      "target": "Traffic Exterior flying vehicle 1"
+    },
+    {
+      "op": "track",
+      "name": "city_car2",
+      "target": "Traffic Exterior flying vehicle 2"
+    },
+    {
+      "op": "track",
+      "name": "city_car3",
+      "target": "Traffic Exterior flying vehicle 3"
+    },
+    {
+      "op": "track",
+      "name": "city_car4",
+      "target": "Traffic Exterior flying vehicle 4"
+    },
+    {
+      "op": "track",
+      "name": "city_car5",
+      "target": "Traffic Exterior flying vehicle 5"
+    },
+    {
+      "op": "track",
+      "name": "city_car6",
+      "target": "Traffic Exterior flying vehicle 6"
+    },
+    {
+      "op": "track",
+      "name": "city_car7",
+      "target": "Traffic Exterior flying vehicle 7"
+    },
+    {
       "op": "res",
       "w": 1920,
       "h": 1080

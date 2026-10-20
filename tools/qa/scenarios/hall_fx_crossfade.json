@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "HALL-FX BUG-71: the hall slot crossfade never shows the painting through. The cheat 'Hall: culture' steps the run's culture to neutral, then to the content's first nation (the flags take their art), then to the second: an art-to-art fade (crossfadeSeconds 0.6) recorded over the left flag (tracked: 'Hall slot 13-flag-left-cloth') and the board frame. The second fade runs with a citation's hit-stop on top ('Feel: citation'): it still completes on unscaled time. Pass: region_luma --track flag --monotonic on both sequences (no dip toward the painting), and flicker. LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end): its shimmer is LIGHT's to measure (BUG-13 split, #11)."
+      "text": "HALL-FX BUG-71: the hall slot crossfade never shows the painting through. The cheat 'Hall: culture' steps the run's culture to neutral, then to the content's first nation (the flags take their art), then to the second: an art-to-art fade (crossfadeSeconds 0.6) recorded over the left flag (tracked: 'Hall slot 13-flag-left-cloth') and the board frame. The second fade runs with the game's hit-stop on top (HallFxRig's hallHitStop: MotionKnobs.hitStopScale for hitStopSeconds, as a citation's punch does, without the punch's camera shake, which is FEEDBACK's and CAM's motion): it still completes on unscaled time. Pass: region_luma --track flag --monotonic on both sequences (no dip toward the painting), and flicker. LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end): its shimmer is LIGHT's to measure (BUG-13 split, #11)."
     },
     {
       "op": "title"
@@ -156,9 +156,7 @@
       "text": "Hall: culture"
     },
     {
-      "op": "cheat",
-      "name": "Extra",
-      "text": "Feel: citation"
+      "op": "hallHitStop"
     },
     {
       "op": "wait",
