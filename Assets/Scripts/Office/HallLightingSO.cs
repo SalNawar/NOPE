@@ -108,8 +108,8 @@ public sealed class HallLightingSO : ScriptableObject
     [Range(0f, 1f)] public float deskScreenDayShare = 0.4f;
 
     [Header("Night stages (Saleh 1018a: \"need more lights to activate as it gets darker\"; the evening: 0 by day, 1 at night)")]
-    /// <summary>The evening at which the desk's work lamp switches on (the first light of the night; off before it): the afternoon dip (DeskLighting.LampOnHour), read by DeskLightLevel.</summary>
-    [Range(0f, 1f)] public float deskLampOnAt = 0.1f;
+    /// <summary>The evening at which the desk's work lamp switches on (off before it): the afternoon dip (DeskLighting.LampOnHour), read by DeskLightLevel. 0.5 is the sunset (16:30 on the shipped cycle): the room has lost enough by then for the switch-on to show, since the lamp fills only what the room has lost.</summary>
+    [Range(0f, 1f)] public float deskLampOnAt = 0.5f;
 
     /// <summary>Seconds the desk lamp's filament takes to warm up (a dim blink, then easing up; at once with reduced motion).</summary>
     [Range(0f, 3f)] public float deskLampWarmSeconds = 0.6f;
@@ -155,20 +155,20 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>NOPE/Desk Anime's key light energy at the full day (the old noon daylight's: 0.7 times its warm white), which the desk light's level scales.</summary>
     [Range(0.1f, 2f)] public float deskKeyAtDay = 0.68f;
 
-    /// <summary>The room's light on the desk at night as a share of the full day's, without the lamp (with the lamp's pool it keeps the whole mat readable: DeskLighting.ReadableNightLuminance at its corners).</summary>
-    [Range(0f, 1f)] public float deskNightFloor = 0.5f;
+    /// <summary>The room's light on the desk at night as a share of the full day's, without the lamp (with the lamp's pool it keeps the whole mat readable after the finish: DeskLighting.ReadableAfterFinish).</summary>
+    [Range(0f, 1f)] public float deskNightFloor = 0.55f;
 
     /// <summary>The room's colour on the desk at night (white by day).</summary>
     public Color deskNightTint = new Color(0.78f, 0.84f, 1f);
 
-    /// <summary>What the work lamp adds to the desk's level, warm and full, at the pool's centre.</summary>
-    [Range(0f, 1f)] public float deskLampLevel = 0.38f;
+    /// <summary>What the work lamp adds to the desk's level, warm and full, at the pool's centre; it fills at most what the room has lost (the level never passes the full day's 1), so floor + lamp = 1 puts the pool's centre at the drawn level at night.</summary>
+    [Range(0f, 1f)] public float deskLampLevel = 0.45f;
 
     /// <summary>The work lamp's colour (a warm filament).</summary>
     public Color deskLampColour = new Color(1f, 0.82f, 0.6f);
 
-    /// <summary>The lamp pool's radius on the desk (metres), centred on the mat; its share is full out to a quarter of it and falls off to nothing at the edge (1.5: the 1.45 x 1.02 m mat's corners keep about half the lamp).</summary>
-    [Range(0.1f, 2f)] public float deskLampRadius = 1.5f;
+    /// <summary>The lamp pool's radius on the desk (metres), centred on the mat; its share and its warm colour are full out to a quarter of it and fall off to nothing at the edge (1.35: the 1.45 x 1.02 m mat's corners keep about 0.47 of the lamp, so the pool reads and the corners stay readable).</summary>
+    [Range(0.1f, 2f)] public float deskLampRadius = 1.35f;
 
     [Header("The hall at night (NOPE/Hall Deep Layout, through HallBakedLighting)")]
     /// <summary>The painted hall's tint at full night, away from the lamp pools.</summary>
@@ -219,6 +219,29 @@ public sealed class HallLightingSO : ScriptableObject
 
     /// <summary>The desk light's knobs for DeskLighting.</summary>
     public DeskLighting.Knobs DeskKnobs => new DeskLighting.Knobs(deskNightFloor, Rgb(deskNightTint), deskLampLevel, Rgb(deskLampColour), deskLampOnAt);
+
+    /// <summary>
+    /// The office finish as DeskLighting's readable rule models it: the
+    /// profile's Color Adjustments (post exposure, contrast) and Neutral
+    /// tonemapping, in the active URP asset's grading mode (none when there
+    /// is no profile).
+    /// </summary>
+    public DeskLighting.Finish FinishModel()
+    {
+        if (finishProfile == null)
+            return DeskLighting.Finish.None;
+        float exposure = 0f, contrast = 0f;
+        if (finishProfile.TryGet(out UnityEngine.Rendering.Universal.ColorAdjustments grade) && grade.active)
+        {
+            exposure = grade.postExposure.overrideState ? grade.postExposure.value : 0f;
+            contrast = grade.contrast.overrideState ? grade.contrast.value : 0f;
+        }
+        bool neutral = finishProfile.TryGet(out UnityEngine.Rendering.Universal.Tonemapping tonemapping) && tonemapping.active
+                       && tonemapping.mode.value == UnityEngine.Rendering.Universal.TonemappingMode.Neutral;
+        bool hdr = GraphicsSettings.currentRenderPipeline is UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset urp
+                   && urp.colorGradingMode == UnityEngine.Rendering.Universal.ColorGradingMode.HighDynamicRange;
+        return new DeskLighting.Finish(exposure, contrast, neutral, hdr);
+    }
 
     private static Rgba Rgb(Color c) => new Rgba(c.r, c.g, c.b, c.a);
 

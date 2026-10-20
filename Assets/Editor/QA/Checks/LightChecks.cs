@@ -43,10 +43,15 @@ public static class LightChecks
     }
 
     /// <summary>
-    /// BUG-14a: at full night with the lamp on, the whole mat reads: its
-    /// corners (the farthest from the lamp's pool) at luma 55 or more and the
-    /// pool's centre at luma 60 or more, in luminance with the pool's falloff
-    /// (DeskLighting, the same maths as DeskLight.hlsl).
+    /// BUG-14a: at full night with the lamp on, the whole mat reads on the
+    /// image shown: after the office finish (the profile's exposure, Neutral
+    /// tonemapping and contrast in the URP asset's grading mode,
+    /// HallLightingSO.FinishModel) the mat's corners (the farthest from the
+    /// lamp's pool) clear luma 55 by DeskLighting.MarginLuma, the pool's
+    /// centre reaches 60, and the pool reads (centre to corners at least
+    /// DeskLighting.PoolContrastLuma). DeskLighting is DeskLight.hlsl's maths;
+    /// the vignette is a frame (the same factor by day) and is reported, not
+    /// ruled on (docs/pending/LIGHT.md).
     /// </summary>
     [GateCheck("light.desk.readableAtNight", Owner)]
     public static GateResult DeskStaysReadableAtNight()
@@ -54,16 +59,25 @@ public static class LightChecks
         HallLightingSO knobs = Knobs();
         if (knobs == null)
             return GateResult.Fail("light.desk.readableAtNight", Owner, "no knobs", $"{HallLighting} is missing.");
+        DeskLighting.Finish finish = knobs.FinishModel();
+        bool pass = DeskLighting.ReadableAfterFinish(knobs.DeskKnobs, knobs.deskLampRadius, MatWidth, MatDepth, finish, out float centre, out float corners);
         DeskLighting.Light night = DeskLighting.FullNight(knobs.DeskKnobs);
-        float centre = DeskLighting.LuminanceAt(night, 1f);
-        float corner = DeskLighting.DarkestOnMat(night, knobs.deskLampRadius, MatWidth, MatDepth);
-        bool pass = centre >= DeskLighting.TargetNightLuminance && corner >= DeskLighting.ReadableNightLuminance;
+        float rawCorners = DeskLighting.LumaAt(DeskLighting.DarkestOnMat(night, knobs.deskLampRadius, MatWidth, MatDepth));
         return GateResult.Of("light.desk.readableAtNight", Owner, pass,
-            $"night mat luma: centre {DeskLighting.LumaAt(centre):0.0}, corners {DeskLighting.LumaAt(corner):0.0}",
-            pass ? string.Empty : $"Needs the centre ≥ {DeskLighting.TargetMatLuma:0} and the corners ≥ {DeskLighting.ReadableMatLuma:0}: raise deskNightFloor, deskLampLevel or deskLampRadius.");
+            $"night mat luma after the finish (EV {finish.PostExposure:+0.0;-0.0}, contrast {finish.Contrast:0}, {(finish.Neutral ? "Neutral" : "no tonemap")}, {(finish.HdrGrading ? "HDR" : "LDR")} grading): centre {centre:0.0}, corners {corners:0.0} (before the finish {rawCorners:0.0}), pool step {centre - corners:0.0}",
+            pass ? string.Empty : $"Needs the corners ≥ {DeskLighting.ReadableMatLuma + DeskLighting.MarginLuma:0}, the centre ≥ {DeskLighting.TargetMatLuma:0} and a pool step ≥ {DeskLighting.PoolContrastLuma:0}: retune deskNightFloor, deskLampLevel or deskLampRadius.");
     }
 
-    /// <summary>BUG-14a: the work lamp switches on in the dusk (the afternoon dip), before the sunset.</summary>
+    /// <summary>The plan's afternoon dip (FIX_PLAN's H3, 16:45): the lamp is on by then.</summary>
+    public const float AfternoonDipHour = 16.75f;
+
+    /// <summary>
+    /// BUG-14a: the work lamp switches on in the dusk, by the plan's afternoon
+    /// dip (H3, 16:45), and visibly: the pool's centre gains at least
+    /// DeskLighting.SwitchOnLuma after the finish as it comes on (the lamp
+    /// fills only what the room has lost, so a switch-on in full daylight
+    /// would not show).
+    /// </summary>
     [GateCheck("light.desk.lampAtTheDip", Owner)]
     public static GateResult LampSwitchesOnAtTheDip()
     {
@@ -71,11 +85,18 @@ public static class LightChecks
         if (knobs == null)
             return GateResult.Fail("light.desk.lampAtTheDip", Owner, "no knobs", $"{HallLighting} is missing.");
         HallDayCycle.Settings cycle = knobs.Cycle;
-        float dip = DeskLighting.LampOnHour(cycle, knobs.DeskKnobs);
-        float from = HallDayCycle.HourAtEvening(0f, cycle), sunset = HallDayCycle.HourAtEvening(0.5f, cycle);
-        bool pass = dip >= from - 1e-3f && dip <= sunset + 1e-3f;
-        return GateResult.Of("light.desk.lampAtTheDip", Owner, pass, $"lamp on at {Clock(dip)} (dusk {Clock(from)}-{Clock(sunset)})",
-            pass ? string.Empty : "The lamp switches on outside the dusk's first half.");
+        DeskLighting.Knobs desk = knobs.DeskKnobs;
+        float dip = DeskLighting.LampOnHour(cycle, desk);
+        float from = HallDayCycle.HourAtEvening(0f, cycle);
+        DeskLighting.Finish finish = knobs.FinishModel();
+        float off = DeskLighting.GradedLuma(DeskLighting.LuminanceAt(DeskLighting.Evaluate(dip, cycle, desk, 0f), 1f), finish);
+        float on = DeskLighting.GradedLuma(DeskLighting.LuminanceAt(DeskLighting.Evaluate(dip, cycle, desk, 1f), 1f), finish);
+        bool inTime = dip >= from - 1e-3f && dip <= AfternoonDipHour + 1e-3f;
+        bool visible = on - off >= DeskLighting.SwitchOnLuma;
+        return GateResult.Of("light.desk.lampAtTheDip", Owner, inTime && visible,
+            $"lamp on at {Clock(dip)} (dusk from {Clock(from)}, dip {Clock(AfternoonDipHour)}); pool centre {off:0.0} -> {on:0.0}",
+            !inTime ? "The lamp switches on outside the dusk or after the afternoon dip (H3)."
+            : !visible ? $"The switch-on lifts the pool's centre by under {DeskLighting.SwitchOnLuma:0} luma: switch it on later (deskLampOnAt), when the room has lost more." : string.Empty);
     }
 
     /// <summary>BUG-51: the office finish has tonemapping, a grade, bloom and a vignette.</summary>
@@ -124,9 +145,10 @@ public static class LightChecks
         bool hidden = Regex.IsMatch(properties, @"_Hall(NightTint|PoolColour|PoolStrength|EmissionGain|Fixture)");
         Match builtIn = Regex.Match(source, @"#define HALL_DEFAULT_NIGHT half3\(([^)]*)\)");
         HallLightingSO knobs = Knobs();
-        bool same = builtIn.Success && knobs != null && SameColour(builtIn.Groups[1].Value, knobs.hallNightTint);
+        // HallBakedLighting publishes the knob's linear value (the project is in linear colour space): compare with that.
+        bool same = builtIn.Success && knobs != null && SameColour(builtIn.Groups[1].Value, knobs.hallNightTint.linear);
         return GateResult.Of("light.hall.nightIsShared", Owner, !hidden && same,
-            $"built-in night ({builtIn.Groups[1].Value}), knob {(knobs != null ? knobs.hallNightTint.ToString() : "missing")}",
+            $"built-in night ({builtIn.Groups[1].Value}), knob {(knobs != null ? knobs.hallNightTint.ToString() : "missing")} = linear {(knobs != null ? knobs.hallNightTint.linear.ToString("F4") : "missing")}",
             hidden ? "A night knob is in HallDeepLayout's Properties: the slots would draw with the material's value." : same ? string.Empty : "HallDeepLayout's built-in night differs from hallNightTint.");
     }
 
@@ -155,7 +177,7 @@ public static class LightChecks
             return false;
         float[] want = { c.r, c.g, c.b };
         for (int i = 0; i < 3; i++)
-            if (!float.TryParse(parts[i].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float v) || Mathf.Abs(v - want[i]) > 0.005f)
+            if (!float.TryParse(parts[i].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float v) || Mathf.Abs(v - want[i]) > 0.002f)
                 return false;
         return true;
     }

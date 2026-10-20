@@ -152,9 +152,13 @@ public sealed class HallBakedLighting : MonoBehaviour
         Shader.SetGlobalVectorArray(FixtureCentersId, fixtureCenters);
         Shader.SetGlobalVectorArray(FixturePoolsId, fixturePools);
         // Alpha 1 marks the knobs as published (until then the shader keeps its built-in night, the knob's default).
-        Color night = settings.hallNightTint;
-        Shader.SetGlobalColor(NightTintId, new Color(night.r, night.g, night.b, 1f));
-        Shader.SetGlobalColor(PoolColourId, settings.fixtureColour);
+        // The knobs are sRGB colours; the shader works in linear (the project's colour space), so they go as their
+        // linear values, explicitly (SetGlobalColor would convert too, implicitly), and HALL_DEFAULT_NIGHT is the
+        // night knob's linear value: the built-in night and the published one are the same colour.
+        Color night = settings.hallNightTint.linear;
+        Shader.SetGlobalVector(NightTintId, new Vector4(night.r, night.g, night.b, 1f));
+        Color pool = settings.fixtureColour.linear;
+        Shader.SetGlobalVector(PoolColourId, new Vector4(pool.r, pool.g, pool.b, 1f));
         Shader.SetGlobalFloat(PoolStrengthId, settings.hallPoolStrength);
         Shader.SetGlobalFloat(EmissionGainId, settings.hallEmissionGain);
         shapesKnown = true;

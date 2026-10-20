@@ -35,8 +35,10 @@ Shader "NOPE/Hall Deep Layout"
  float _HallFixtureLevels[16];float4 _HallFixtureCenters[16];float4 _HallFixturePools[16];float _HallFixtureCount;
  // The night knobs (HallLightingSO: hallNightTint, fixtureColour, hallPoolStrength, hallEmissionGain). The tint's
  // alpha is 1 once published; until then the built-in night below (the knob's default) and the painted glow.
+ // HallBakedLighting publishes the knobs' linear values; the built-in night is hallNightTint (.2,.27,.43) decoded
+ // from sRGB, so it is the same colour (LightChecks light.hall.nightIsShared and LightSeamTests hold them equal).
  float4 _HallNightTint,_HallPoolColour;float _HallPoolStrength,_HallEmissionGain;
- #define HALL_DEFAULT_NIGHT half3(.2,.27,.43)
+ #define HALL_DEFAULT_NIGHT half3(.0331,.0593,.1549)
  // A lamp's soft ellipse (the four-state bake's falloff): 1 at its centre, 0 at its rim.
  float Ellipse(float2 uv,float4 shape){float2 d=(uv-shape.xy)/max(shape.zw,1e-4);float r=dot(d,d);return r<1?exp(-r*3)*(1-r)*(1-r):0;}
  struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
