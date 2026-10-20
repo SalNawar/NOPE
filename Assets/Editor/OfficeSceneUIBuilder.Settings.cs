@@ -13,8 +13,10 @@ using UnityEngine.UI;
 /// Reduce flashing Off / On), in the Settings window's own row, slider and
 /// choice styles, wired to SettingsWindowController. The Settings window
 /// itself is UI-PC's (.Apps.cs BuildSettingsWindow, its size DesktopConfigSO);
-/// it calls <see cref="BuildSettingsBasics"/> with its column, before the
-/// note, and gives the window room (a scroll or a second column).
+/// it calls <see cref="BuildSettingsBasics"/> with the window's
+/// SettingsWindowController and the column the rows go in, before the note,
+/// and gives the window room (a scroll or a second column: the column may sit
+/// under a viewport, since the controller is passed in, never looked up).
 /// Part of <see cref="OfficeSceneUIBuilder"/>. Owner: TEXT-LANG.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -34,10 +36,19 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// Adds the Sound and Display groups to the Settings window's
     /// <paramref name="column"/> (its rows rebuilt fresh with the window) and
-    /// wires them to the window's SettingsWindowController (BUG-62).
+    /// wires them to <paramref name="controller"/>, the window's one
+    /// SettingsWindowController (BUG-62). The controller is the caller's (UI-PC
+    /// passes the one on the window), so a column moved under a scroll
+    /// viewport or split in two never gets a second controller. Throws when
+    /// either is missing, so a wrong wiring fails the build loudly.
     /// </summary>
-    private static void BuildSettingsBasics(Transform column)
+    private static void BuildSettingsBasics(SettingsWindowController controller, Transform column)
     {
+        if (controller == null)
+            throw new System.ArgumentNullException(nameof(controller), "BuildSettingsBasics needs the Settings window's SettingsWindowController (UI-PC: pass GetOrAdd<SettingsWindowController>(win.gameObject)).");
+        if (column == null)
+            throw new System.ArgumentNullException(nameof(column), "BuildSettingsBasics needs the Settings column the rows go in.");
+
         SettingsHeading(column, "SoundLabel", "settings.sound");
         var volumes = new List<Object>();
         var volumeValues = new List<Object>();
@@ -72,7 +83,6 @@ public static partial class OfficeSceneUIBuilder
         Button flashOff = SettingsChoice(flashing, "ReduceFlashingOffButton", "settings.off");
         Button flashOn = SettingsChoice(flashing, "ReduceFlashingOnButton", "settings.on");
 
-        SettingsWindowController controller = GetOrAdd<SettingsWindowController>(column.parent.gameObject);
         var so = new SerializedObject(controller);
         SerializedArrays.Set(so, "volumeSliders", volumes);
         SerializedArrays.Set(so, "volumeTexts", volumeValues);

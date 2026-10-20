@@ -19,7 +19,7 @@ public enum LabelLanguage
     /// <summary>The PC: always the reading language, whatever leads (Saleh 2026-10-18: "language in the pc shouldn't change"; D7: "its a pc you set the language").</summary>
     EnglishOnPc,
 
-    /// <summary>The chrome around the papers (report, Home, citation, verdict, wheel, guide, memo, briefing, the desk's controls): always the player's language (BUG-3a, D7).</summary>
+    /// <summary>The chrome around the papers (report, Home, citation, verdict, wheel, guide, the Bureau memo, the desk's controls): always the player's language (BUG-3a, D7). The newspaper is a paper (CultureChoice.NewspaperKeys).</summary>
     PlayerLanguage
 }
 
@@ -32,7 +32,7 @@ public enum LabelLanguage
 /// </summary>
 public enum TextSurface
 {
-    /// <summary>The chrome at the desk and around it: the desk's controls and labels, the report, Home, the citation, the verdict, the wheel, the guide, the memo and the briefing (the player's language).</summary>
+    /// <summary>The chrome at the desk and around it: the desk's controls and labels, the report, Home, the citation, the verdict, the wheel, the guide and the Bureau memo (the player's language). The morning newspaper's own words are a paper's (CultureChoice.SurfaceOfKey).</summary>
     Desk,
 
     /// <summary>The PC: every app, window, the taskbar, the Start menu, the icons, Settings and the clock (the player's language; its look changes, PC-LANG-FX).</summary>
@@ -75,13 +75,37 @@ public static class CultureChoice
     public static bool FollowsWorld(TextSurface surface) => surface == TextSurface.Paper || surface == TextSurface.Sign;
 
     /// <summary>
+    /// The newspaper's own keyed words (the morning paper DayFlowUIController
+    /// prints: its masthead, its "no news" line and its small story's heads):
+    /// the newspaper is a Paper surface (FIX_PLAN_v2 TEXT-LANG: "Paper:
+    /// documents and the newspaper. These take the world's language from the
+    /// culture day"; D7: the glasses work "on news paper and documents").
+    /// The Bureau memo beside it (briefing.newHours, the bulletin) is the
+    /// chrome's. list.bullet is a Full-tier key, so no culture translates it.
+    /// </summary>
+    public static readonly string[] NewspaperKeys = { "briefing.title", "briefing.empty", "briefing.newsHeader", "briefing.deskHeader" };
+
+    /// <summary>True when <paramref name="key"/> is one of the newspaper's own words (<see cref="NewspaperKeys"/>).</summary>
+    public static bool IsNewspaperKey(string key) => key != null && System.Array.IndexOf(NewspaperKeys, key) >= 0;
+
+    /// <summary>
+    /// The surface a key prints on when <paramref name="asked"/> is the chrome:
+    /// the newspaper's words on the Paper surface (<see cref="NewspaperKeys"/>),
+    /// whoever looks them up through the chrome's lookup; every other key, and
+    /// every key asked for on the PC, a paper or a sign, where it was asked.
+    /// </summary>
+    public static TextSurface SurfaceOfKey(string key, TextSurface asked) =>
+        asked == TextSurface.Desk && IsNewspaperKey(key) ? TextSurface.Paper : asked;
+
+    /// <summary>
     /// The language a surface prints in: the PC always the reading language
     /// (EnglishOnPc), so a scanned paper's copy on the PC reads in English
     /// and scanning is how a foreign paper is read cleanly (Saleh
     /// 2026-10-18); the chrome always the player's (PlayerLanguage: the
-    /// report, Home, the citation, the verdict, the wheel, the guide, the memo
-    /// and the briefing never turn into the world's language, BUG-3a); a paper
-    /// or a sign <paramref name="paper"/>, the culture rule's (<see cref="Language"/>).
+    /// report, Home, the citation, the verdict, the wheel, the guide and the
+    /// Bureau memo never turn into the world's language, BUG-3a); a paper, the
+    /// newspaper or a sign <paramref name="paper"/>, the culture rule's
+    /// (<see cref="Language"/>).
     /// </summary>
     public static LabelLanguage Surface(TextSurface surface, LabelLanguage paper) =>
         surface == TextSurface.Pc ? LabelLanguage.EnglishOnPc : FollowsWorld(surface) ? paper : LabelLanguage.PlayerLanguage;
@@ -89,29 +113,31 @@ public static class CultureChoice
     /// <summary>True when a language prints the culture's own labels.</summary>
     public static bool ShowsCulture(LabelLanguage language) => language == LabelLanguage.Culture;
 
-    /// <summary>The value Settings stores for "Follow history" (UiLanguagePreference): the papers take the world's language from day 1.</summary>
+    /// <summary>The value Settings stores for "Follow history" (UiLanguagePreference): the papers take the world's language from the culture day, as with no choice (D7, R2).</summary>
     public const string FollowHistoryChoice = "history";
 
     /// <summary>The value Settings stores for "Always English" (UiLanguagePreference): the papers stay English.</summary>
     public const string AlwaysEnglishChoice = "english";
 
+    /// <summary>True when the player chose "Always English" (the Settings pair shows it chosen); "Follow history" and no choice show "Follow history" chosen, on any day (it is what the papers do from the culture day).</summary>
+    public static bool ChoseAlwaysEnglish(string storedChoice) => string.Equals(storedChoice, AlwaysEnglishChoice, System.StringComparison.Ordinal);
+
     /// <summary>
-    /// True when the papers read English by the player's setting. The setting
-    /// never locks (D7, "you set the language"; BUG-3a): "Always English"
-    /// keeps them English on any day, "Follow history" gives them the world's
-    /// language on any day, and a player who never chose reads English until
-    /// the culture day (<paramref name="cultureDay"/>: the Translation Lens's
-    /// day, TranslationLens.LanguageLocked; track LANG's default of
-    /// 2026-10-08, after Saleh's playtest of demo 1008a) and the world's
-    /// language from then on. Any other stored value reads as no choice.
+    /// True when the papers (and the newspaper) read English by the player's
+    /// setting. The setting never locks (D7, "you set the language"; BUG-3a):
+    /// "Always English" keeps them English on any day; "Follow history", like
+    /// a player who never chose, reads English until the culture day
+    /// (<paramref name="cultureDay"/>: the Translation Lens's day,
+    /// TranslationLens.LanguageLocked) and the world's language from then on.
+    /// Culture effects only show after day 7 (D7: "only start to impact the
+    /// game after day 7"; R2: "become visible from day 8"), so no choice
+    /// brings the world's language before the culture day (the 2026-10-08
+    /// LANG opt-in that did is superseded). Any other stored value reads as
+    /// no choice.
     /// </summary>
     public static bool EnglishBySetting(string storedChoice, bool cultureDay)
     {
-        if (string.Equals(storedChoice, AlwaysEnglishChoice, System.StringComparison.Ordinal))
-            return true;
-        if (string.Equals(storedChoice, FollowHistoryChoice, System.StringComparison.Ordinal))
-            return false;
-        return !cultureDay;
+        return ChoseAlwaysEnglish(storedChoice) || !cultureDay;
     }
 
     /// <summary>The wallet's word: the Future currency when a culture leads and its Future place has one, else the fallback (the neutral word).</summary>
@@ -127,7 +153,7 @@ public static class CultureChoice
     public static bool NeedsOsFont(string text)
     {
         foreach (char c in text ?? string.Empty)
-            if (c > 'Ͽ' && (c < ' ' || c > '⁯'))
+            if (c > '\u03FF' && (c < '\u2000' || c > '\u206F'))
                 return true;
         return false;
     }

@@ -16,9 +16,10 @@ using UnityEngine.UI;
 /// shows and the culture's font.
 /// Surfaces (D7, Saleh 2026-10-20: "papers will change language and the pc
 /// background ... its a pc you set the language"; BUG-3a): only the papers'
-/// printed words (and the newspaper) take the culture's language, by the
-/// player's setting (CultureChoice.EnglishBySetting: Follow history, Always
-/// English, or no choice, English until the culture day), in the culture's
+/// printed words (and the newspaper's own words) take the culture's language,
+/// by the player's setting (CultureChoice.EnglishBySetting: Always English on
+/// any day; Follow history or no choice, English until the culture day and
+/// the world's language from then on), in the culture's
 /// font (<see cref="CultureFont"/>), and the lens (TranslationLensPresenter,
 /// on the same host) reads them. Every themed text (the chrome at the desk,
 /// Home, the report, the PC) keeps the player's language and its kit face
@@ -100,8 +101,8 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// True from the culture day of the run in progress (today's trigger: the
     /// Translation Lens's day, TranslationLens.LanguageLocked, day 8; LANGUAGE
     /// moves it to one config value): a player who never chose in Settings
-    /// reads the papers in the world's language from then on. It no longer
-    /// locks the setting (BUG-3a: "Always English" and "Follow history" hold
+    /// or chose "Follow history" reads the papers in the world's language from
+    /// then on. It no longer locks the setting (BUG-3a: "Always English" holds
     /// on any day); the name is the cheat menu's (TranslationLensCheats).
     /// False with no run (the title) or no content. The cheat menu's
     /// <see cref="LockOverride"/> wins while it is set (until the next day,

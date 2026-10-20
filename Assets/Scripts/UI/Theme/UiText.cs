@@ -12,13 +12,17 @@ using UnityEngine;
 /// Surfaces (D7, Saleh 2026-10-20: "papers will change language and the pc
 /// background ... its a pc you set the language"; BUG-3a): <see cref="Get(string)"/>
 /// and <see cref="Format"/> are the chrome's (the report, Home, the citation,
-/// the verdict, the wheel, the guide, the memo, the briefing, the desk's
-/// controls) and always read the player's language; <see cref="Pc"/> the PC's,
-/// likewise; only a paper's printed words (<see cref="FormWords"/>,
-/// <see cref="DocumentWord"/>, <see cref="InReadingLanguage"/>) and a text
-/// asked for on the Paper or Sign surface (<see cref="Get(string, TextSurface)"/>)
-/// take the world's language, by the culture rule. A record built from these
-/// strings therefore never holds the world's language (CODE-45, CODE-79).
+/// the verdict, the wheel, the guide, the memo, the desk's controls) and
+/// always read the player's language; <see cref="Pc"/> the PC's, likewise;
+/// only a paper's printed words (<see cref="FormWords"/>,
+/// <see cref="DocumentWord"/>, <see cref="InReadingLanguage"/>), the
+/// newspaper's own words (CultureChoice.NewspaperKeys, whoever looks them up)
+/// and a text asked for on the Paper or Sign surface
+/// (<see cref="Get(string, TextSurface)"/>) take the world's language, by the
+/// culture rule. A paper's word passed into a chrome or PC string (a
+/// citation's "{0} on the {1}") prints in its English (UiStrings.English), so
+/// a record built from these strings never holds the world's language
+/// (CODE-45, CODE-79; tested: UiStringsTests).
 /// </summary>
 public static class UiText
 {
@@ -50,7 +54,7 @@ public static class UiText
     /// <summary>The chrome's string for a key, in the player's language.</summary>
     public static string Get(string key) => Format(key);
 
-    /// <summary>The chrome's string for a key with its placeholders filled (UiStrings.English), in the player's language whatever culture leads (BUG-3a).</summary>
+    /// <summary>The chrome's string for a key with its placeholders filled (UiStrings.English), in the player's language whatever culture leads (BUG-3a); the newspaper's own words (CultureChoice.NewspaperKeys) on the Paper surface.</summary>
     public static string Format(string key, params object[] args) => Lookup(TextSurface.Desk, key, args);
 
     /// <summary>The string for a key on a surface (UiStrings.ForSurface): a paper's or a sign's by the culture rule, the chrome's and the PC's in the player's language.</summary>
@@ -80,14 +84,7 @@ public static class UiText
         if (service == null || !CultureChoice.ShowsCulture(CultureChoice.Surface(TextSurface.Paper, service.Language)) || service.Strings == null)
             return null;
         UiStrings strings = service.Strings;
-        return english =>
-        {
-            string key = DocumentWords.Key(english);
-            if (key == null || !strings.Has(key))
-                return english;
-            string native = strings.Get(key);
-            return ArtLayout.IsCapitals(english) ? ArtLayout.Capitals(native) : native;
-        };
+        return english => strings.PaperWord(DocumentWords.Key(english), english);
     }
 
     /// <summary>One fixed English word a document prints (a scan strip, a stamp's word) in the world's language (<see cref="FormWords"/>), else as it is.</summary>
@@ -115,9 +112,10 @@ public static class UiText
     /// the taskbar, the Start menu, the icons, Settings and the clock print in
     /// the player's language whatever culture leads and from any day
     /// (CultureChoice.Surface), so a scanned paper's copy reads in English on
-    /// the PC while the papers on the desk follow the culture. Colours, fonts
-    /// and the wallpaper still follow history (CultureThemeService; their look
-    /// is PC-LANG-FX's); only the words stay the player's.
+    /// the PC while the papers on the desk follow the culture. A themed text
+    /// keeps its kit face, or the font it was built with (BUG-38a: a culture
+    /// font is the papers' only); colours and the wallpaper still follow
+    /// history (CultureThemeService; the PC's look is PC-LANG-FX's).
     /// </summary>
     public static class Pc
     {
@@ -200,14 +198,14 @@ public static class UiText
         text.fontSize = Mathf.Max(size * library.CultureUi.labelMinScale, size * width / needed);
     }
 
-    /// <summary>A key's string on a surface (UiStrings.ForSurface), the key itself without a lookup; a key no table has is reported once.</summary>
+    /// <summary>A key's string on a surface (UiStrings.ForSurface; the newspaper's words on the Paper surface, CultureChoice.SurfaceOfKey), the key itself without a lookup; a key no table has is reported once.</summary>
     private static string Lookup(TextSurface surface, string key, object[] args)
     {
         UiStrings strings = Strings();
         if (strings == null)
             return key;
 
-        string text = strings.ForSurface(surface, key, args);
+        string text = strings.ForSurface(CultureChoice.SurfaceOfKey(key, surface), key, args);
         if (text == key && !string.IsNullOrEmpty(key) && System.Linq.Enumerable.Contains(strings.MissingKeys, key) && WarnedKeys.Add(key))
             Debug.LogWarning($"[UiText] No UI string '{key}'; add it to world_source.json ui.strings and run Tools > TimeDesk > Generate World.");
         return text;

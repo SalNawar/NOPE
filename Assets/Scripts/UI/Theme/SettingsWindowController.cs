@@ -9,8 +9,10 @@ using UnityEngine.UI;
 /// and the rest of the game always read the player's language;
 /// UiLanguagePreference), never locked and applied at once (the papers
 /// already on the desk keep their print, and the line under the pair says
-/// so); with no choice the papers read English until the culture day and the
-/// world's language from then on (CultureChoice.EnglishBySetting). Motion
+/// so); with "Follow history", as with no choice, the papers read English
+/// until the culture day and the world's language from then on (D7, R2;
+/// CultureChoice.EnglishBySetting), and the pair shows the stored choice
+/// (CultureChoice.ChoseAlwaysEnglish). Motion
 /// (piece 9 R17): "Full" or "Reduced" (MotionPreference; reduced shows
 /// translations at once, from the next traveller, and cuts the game feel's
 /// motion), with the Motion intensity slider under it (0-100 %,
@@ -31,7 +33,7 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class SettingsWindowController : MonoBehaviour
 {
-    /// <summary>Chooses "Follow history" (the papers take the world's language).</summary>
+    /// <summary>Chooses "Follow history" (the papers take the world's language from the culture day).</summary>
     [SerializeField] private Button followHistoryButton;
 
     /// <summary>Chooses "Always English" (the papers stay English).</summary>
@@ -312,7 +314,7 @@ public sealed class SettingsWindowController : MonoBehaviour
     {
         CultureThemeService service = CultureThemeService.Instance;
         ThemeSO theme = service != null ? service.ActiveTheme : null;
-        bool english = CultureChoice.EnglishBySetting(UiLanguagePreference.Stored, CultureThemeService.LanguageLocked);
+        bool english = CultureChoice.ChoseAlwaysEnglish(UiLanguagePreference.Stored); // the stored choice, not today's effect: Follow history stays chosen before the culture day
         Paint(followHistoryButton, !english, theme);
         Paint(alwaysEnglishButton, english, theme);
         if (languageLockText != null)

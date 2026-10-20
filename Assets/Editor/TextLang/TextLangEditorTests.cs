@@ -90,18 +90,23 @@ public class TextLangEditorTests
         Assert.AreEqual("Traveller", UiText.Get("case.roleUnknown"), "one spelling (BUG-43b)");
     }
 
-    /// <summary>The Settings basics' builder (the seam UI-PC calls) builds the Sound and Display rows and wires every control to the window's controller (BUG-62).</summary>
+    /// <summary>The Settings basics' builder (the seam UI-PC calls) builds the Sound and Display rows and wires every control to the controller it is given, with the column under a scroll viewport (UI-PC may scroll or split it): no second controller appears.</summary>
     [Test, Category("NeedsEditor")]
     public void SettingsBasics_BuildTheRows_AndWireTheController()
     {
         var window = new GameObject("SettingsWindow", typeof(RectTransform));
         try
         {
+            SettingsWindowController controller = window.AddComponent<SettingsWindowController>();
+            var viewport = new GameObject("Viewport", typeof(RectTransform)).transform;
+            viewport.SetParent(window.transform);
             var column = new GameObject("Column", typeof(RectTransform), typeof(VerticalLayoutGroup)).transform;
-            column.SetParent(window.transform);
-            typeof(OfficeSceneUIBuilder).GetMethod("BuildSettingsBasics", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { column });
+            column.SetParent(viewport);
+            MethodInfo build = typeof(OfficeSceneUIBuilder).GetMethod("BuildSettingsBasics", BindingFlags.NonPublic | BindingFlags.Static);
+            build.Invoke(null, new object[] { controller, column });
 
-            var so = new SerializedObject(window.GetComponent<SettingsWindowController>());
+            Assert.AreEqual(1, window.GetComponentsInChildren<SettingsWindowController>(true).Length, "one controller, the one passed in");
+            var so = new SerializedObject(controller);
             Assert.AreEqual(3, so.FindProperty("volumeSliders").arraySize, "Master, Music, Effects");
             Assert.AreEqual(3, so.FindProperty("windowModeButtons").arraySize, "Windowed, Borderless, Fullscreen");
             foreach (string field in new[] { "resolutionDownButton", "resolutionUpButton", "resolutionText", "vsyncOffButton", "vsyncOnButton", "brightnessSlider", "brightnessText", "reduceFlashingOffButton", "reduceFlashingOnButton" })
@@ -113,6 +118,24 @@ public class TextLangEditorTests
         finally
         {
             Object.DestroyImmediate(window);
+        }
+    }
+
+    /// <summary>The Settings basics' builder fails loudly with no controller (the seam never looks one up, so a scroll or split column cannot get a second one).</summary>
+    [Test, Category("NeedsEditor")]
+    public void SettingsBasics_NoController_Throws()
+    {
+        var column = new GameObject("Column", typeof(RectTransform));
+        try
+        {
+            MethodInfo build = typeof(OfficeSceneUIBuilder).GetMethod("BuildSettingsBasics", BindingFlags.NonPublic | BindingFlags.Static);
+            var thrown = Assert.Throws<TargetInvocationException>(() => build.Invoke(null, new object[] { null, column.transform }));
+            Assert.IsInstanceOf<System.ArgumentNullException>(thrown.InnerException);
+            Assert.AreEqual(0, column.transform.childCount, "nothing built");
+        }
+        finally
+        {
+            Object.DestroyImmediate(column);
         }
     }
 }

@@ -93,15 +93,50 @@ public static class TextLangAudit
     public static List<string> LiberationSansOnScreen() =>
         ShownTexts().Where(t => SceneUiKit.IsDefaultFace(t)).Select(t => $"{PathOf(t.transform)}: {t.text}").ToList();
 
-    /// <summary>In a play: the texts on a player-language surface (the chrome, the PC) that hold one of the culture labels shown so far (TextAudit.CultureOnPlayerSurfaces; the takeover grep, BUG-3a); a text on a paper is a Paper text.</summary>
+    /// <summary>
+    /// In a play: the texts on a player-language surface (the chrome, the PC)
+    /// that hold one of the culture labels shown so far
+    /// (TextAudit.CultureOnPlayerSurfaces; the takeover grep, BUG-3a). A text
+    /// on a paper and a text of the morning newspaper (FIX_PLAN_v2: "Paper:
+    /// documents and the newspaper"; the Bureau memo on it is chrome) are
+    /// Paper texts; a citation, Mail's copy or any other chrome text quoting a
+    /// paper's word in the culture's language is a hit.
+    /// </summary>
     public static List<string> CultureOnPlayerSurfaces()
     {
         CultureThemeService service = CultureThemeService.Instance;
         if (service == null || service.Strings == null)
             return new List<string>();
         IEnumerable<(string, string)> labels = service.Strings.Phrases.SelectMany(p => new[] { (p.Visual, p.English), (p.Logical, p.English) });
-        IEnumerable<(string, TextSurface)> shown = ShownTexts().Select(t => (t.text, t.GetComponentInParent<DeskDocument>(true) != null ? TextSurface.Paper : UiText.SurfaceOf(t)));
+        List<(Transform paper, Transform memo)> newspapers = Newspapers();
+        IEnumerable<(string, TextSurface)> shown = ShownTexts().Select(t => (t.text, SurfaceOf(t, newspapers)));
         return TextAudit.CultureOnPlayerSurfaces(shown, labels);
+    }
+
+    /// <summary>A shown text's surface for the takeover grep: a paper's (DeskDocument) or the newspaper's (outside its memo) is Paper, else UiText.SurfaceOf (the PC's layer or the chrome).</summary>
+    private static TextSurface SurfaceOf(TMP_Text text, List<(Transform paper, Transform memo)> newspapers)
+    {
+        if (text.GetComponentInParent<DeskDocument>(true) != null)
+            return TextSurface.Paper;
+        Transform t = text.transform;
+        if (newspapers.Any(n => n.paper != null && t.IsChildOf(n.paper) && (n.memo == null || !t.IsChildOf(n.memo))))
+            return TextSurface.Paper;
+        return UiText.SurfaceOf(text);
+    }
+
+    /// <summary>Every loaded morning newspaper (DayFlowUIController's briefing panel) with its Bureau memo, read through the controller's serialized fields (CONTENT's file, read only).</summary>
+    private static List<(Transform paper, Transform memo)> Newspapers()
+    {
+        var found = new List<(Transform, Transform)>();
+        foreach (DayFlowUIController flow in Object.FindObjectsByType<DayFlowUIController>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            var so = new SerializedObject(flow);
+            var paper = so.FindProperty("briefingPanel")?.objectReferenceValue as GameObject;
+            var memo = so.FindProperty("briefingMemo")?.objectReferenceValue as GameObject;
+            if (paper != null)
+                found.Add((paper.transform, memo != null ? memo.transform : null));
+        }
+        return found;
     }
 
     /// <summary>In a play: the texts drawn with an accented Greek capital (TMP's UpperCase applied on the text's own letters, or the letters themselves; BUG-38a's pass: none).</summary>

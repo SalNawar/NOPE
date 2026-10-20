@@ -25,15 +25,16 @@ public class CultureChoiceTests
         Assert.AreEqual(LabelLanguage.EnglishNoFont, CultureChoice.Language("el", "en", true, false, false));
     }
 
-    /// <summary>BUG-3a, D7 ("you set the language"): the setting never locks. Always English keeps the papers English on any day, Follow history gives them the world's language on any day, and no choice reads English until the culture day (the lens's day) and the world's language from then on.</summary>
+    /// <summary>BUG-3a, D7 ("you set the language"; culture effects "only start to impact the game after day 7"), R2 ("become visible from day 8"): the setting never locks. Always English keeps the papers English on any day; Follow history, like no choice, reads English until the culture day (the lens's day) and the world's language from then on, never before.</summary>
     [TestCase(null, false, true, Description = "week 1, never chosen: English")]
     [TestCase(null, true, false, Description = "the culture day, never chosen: the world's language")]
     [TestCase("english", false, true)]
     [TestCase("english", true, true, Description = "never locked: Always English still holds on the culture day")]
-    [TestCase("history", false, false, Description = "week 1, opted in: history")]
+    [TestCase("history", false, true, Description = "week 1, Follow history: English until the culture day (D7, R2)")]
     [TestCase("history", true, false)]
     [TestCase("", true, false, Description = "an unknown value reads as no choice")]
-    [TestCase("History", false, true, Description = "ordinal: only the stored value itself opts in")]
+    [TestCase("", false, true)]
+    [TestCase("English", true, false, Description = "ordinal: only the stored value itself keeps English")]
     public void EnglishBySetting_NeverLocks(string stored, bool cultureDay, bool expected)
     {
         Assert.AreEqual(expected, CultureChoice.EnglishBySetting(stored, cultureDay));
@@ -44,10 +45,21 @@ public class CultureChoiceTests
     {
         // Saleh's playtest of demo 1008a: day 1's decision made Greece lead and day 2 read Greek with no lens.
         Assert.AreEqual(LabelLanguage.EnglishBySetting, CultureChoice.Language("el", "en", true, CultureChoice.EnglishBySetting(null, false), true));
-        Assert.AreEqual(LabelLanguage.Culture, CultureChoice.Language("el", "en", true, CultureChoice.EnglishBySetting(CultureChoice.FollowHistoryChoice, false), true));
+        Assert.AreEqual(LabelLanguage.EnglishBySetting, CultureChoice.Language("el", "en", true, CultureChoice.EnglishBySetting(CultureChoice.FollowHistoryChoice, false), true),
+                        "Follow history waits for the culture day too (D7, R2)");
         Assert.AreEqual(LabelLanguage.Culture, CultureChoice.Language("el", "en", true, CultureChoice.EnglishBySetting(null, true), true));
         Assert.AreEqual(LabelLanguage.EnglishBySetting, CultureChoice.Language("el", "en", true, CultureChoice.EnglishBySetting(CultureChoice.AlwaysEnglishChoice, true), true),
                         "the setting never locks (BUG-3a)");
+    }
+
+    /// <summary>The Settings pair shows the stored choice, not today's effect: Follow history (or no choice) stays chosen before the culture day.</summary>
+    [TestCase(null, false)]
+    [TestCase("history", false)]
+    [TestCase("english", true)]
+    [TestCase("English", false)]
+    public void ChoseAlwaysEnglish_IsTheStoredChoice(string stored, bool expected)
+    {
+        Assert.AreEqual(expected, CultureChoice.ChoseAlwaysEnglish(stored));
     }
 
     [TestCase("c", "Digital yuan (e-CNY)", "Credits", "Digital yuan (e-CNY)")]
@@ -83,8 +95,9 @@ public class CultureChoiceTests
     }
 
     // D7 (Saleh 2026-10-20: "papers will change language and the pc background ... its a pc you set the language"): only a
-    // paper's printed words, the newspaper and (our proposal) an in-world sign take the world's language; the PC and the
-    // chrome (report, Home, citation, verdict, wheel, guide, memo, briefing) never do (BUG-3a).
+    // paper's printed words, the newspaper's own words (CultureChoice.NewspaperKeys) and (our proposal) an in-world sign
+    // take the world's language; the PC and the chrome (report, Home, citation, verdict, wheel, guide, the Bureau memo)
+    // never do (BUG-3a).
 
     [TestCase(LabelLanguage.Culture)]
     [TestCase(LabelLanguage.SameAsReading)]
@@ -133,5 +146,23 @@ public class CultureChoiceTests
         Assert.AreEqual(LabelLanguage.EnglishOnPc, CultureChoice.Surface(TextSurface.Pc, paper));
         Assert.AreEqual(LabelLanguage.PlayerLanguage, CultureChoice.Surface(TextSurface.Desk, paper));
         Assert.AreEqual(LabelLanguage.Culture, CultureChoice.Surface(TextSurface.Paper, paper));
+    }
+
+    /// <summary>FIX_PLAN_v2 TEXT-LANG ("Paper: documents and the newspaper"), D7 (the glasses work "on news paper and documents"): the newspaper's own words print on the Paper surface even when looked up through the chrome's lookup; the Bureau memo's and every other chrome key stay the chrome's; a key asked for on another surface stays there.</summary>
+    [Test]
+    public void SurfaceOfKey_TheNewspapersWords_AreAPapers()
+    {
+        foreach (string key in new[] { "briefing.title", "briefing.empty", "briefing.newsHeader", "briefing.deskHeader" })
+        {
+            Assert.IsTrue(CultureChoice.IsNewspaperKey(key), key);
+            Assert.AreEqual(TextSurface.Paper, CultureChoice.SurfaceOfKey(key, TextSurface.Desk), key);
+            Assert.AreEqual(TextSurface.Pc, CultureChoice.SurfaceOfKey(key, TextSurface.Pc), key + " asked for on the PC stays the PC's");
+        }
+        foreach (string key in new[] { "briefing.newHours", "citation.label.onPaper", "list.bullet", "settings.language", null, "" })
+        {
+            Assert.IsFalse(CultureChoice.IsNewspaperKey(key), key ?? "null");
+            Assert.AreEqual(TextSurface.Desk, CultureChoice.SurfaceOfKey(key, TextSurface.Desk), key ?? "null");
+        }
+        Assert.AreEqual(TextSurface.Sign, CultureChoice.SurfaceOfKey("accept", TextSurface.Sign));
     }
 }
