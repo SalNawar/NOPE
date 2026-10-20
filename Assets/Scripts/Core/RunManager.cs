@@ -319,7 +319,7 @@ public sealed class RunManager : MonoBehaviour
 
     /// <summary>
     /// The cheat menu's "Skip day" (RunRoutes.Skip): today's shift closes as
-    /// play closes it (the live shift on its ledger; unless the run is at Home,
+    /// played (the live shift on its ledger; unless the run is at Home,
     /// its shift closed), Home's night on the default care, Sleep, and the next
     /// morning at the briefing; an ending on the way ends the run there. False
     /// (nothing done) once the run has ended.
@@ -334,11 +334,12 @@ public sealed class RunManager : MonoBehaviour
     /// <summary>
     /// The cheat menu's "Jump to day N" (Saleh 2026-10-06; RunRoutes.Jump):
     /// the start of day <paramref name="day"/>'s shift (1 to the run's last
-    /// day). Forward, today and every day before the target are played
-    /// through as a skip does (no traveller decided: each shift closes, Home's
-    /// night on the default care, Sleep); back, a new world with the run's
-    /// seed and pet is played through the same way from day 1; today restarts
-    /// (RestartShift). The run is marked cheated, its morning saved and the
+    /// day). Forward, today closes as played and has its night, as a skip
+    /// does, then every day before the target is played with its whole queue
+    /// decided correctly (as the cheat menu's Auto-decide plays it, so the run
+    /// earns its pay) with Home's night on the default care and Sleep; back, a
+    /// new world with the run's seed and pet is played the same way from day
+    /// 1; today restarts (RestartShift). The run is marked cheated, its morning saved and the
     /// office opens at the briefing. False when nothing was done (no run, or
     /// a jump forward from a run that has ended).
     /// </summary>
