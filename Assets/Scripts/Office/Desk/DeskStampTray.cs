@@ -24,9 +24,10 @@ using UnityEngine.UI;
 /// (DrawerSequence's cradles; the drawer's old invisible slide, which held
 /// them back about 0.34 s a case, is gone: BUG-73b). The tab on the screen's
 /// top edge ("STAMPS" beside "TAB") and the TAB key (OfficeControls) take the
-/// player to the stamps: the reading view, which frames the rack, and the
-/// daters lift in their cradles to answer (ToggleRack; TAB again goes back;
-/// the tab shows in the office view only). A dater takes input once its
+/// player to the reading view, and the daters lift in their cradles to
+/// answer (ToggleRack; TAB again goes back; the tab shows in the office view
+/// only; whether the reading view frames the rack is CAM's LensFit, asked
+/// for in docs/pending/STAMP.md). A dater takes input once its
 /// cradle is locked and while it is not mid-stroke. Without the drawer's art
 /// the built rack (a lip with end caps) holds them upright all the time. The
 /// rack holds the DENIED dater (left) and the APPROVED dater (right),
@@ -62,10 +63,12 @@ using UnityEngine.UI;
 /// button re-inks the pad (a squish). A stroke prints only on the passport,
 /// anywhere on it, once (StampFlow: the other dater, another paper or the
 /// rulebook are refused with a thunk, a bounce off the paper and a note);
-/// over the bare desk the die thumps the wood (stamp_miss) and the dater goes
-/// back. Then the stamped passport dropped on the counter hands the papers
-/// back (HandBack), and that commits the verdict (Saleh 2026-10-07: no extra
-/// step): APPROVED spins the portal up, DENIED sends the traveller back; the
+/// over the bare desk the die thumps the wood (stamp_miss), bounces off it
+/// and the dater goes back; over the rack, a machine or any other prop (a
+/// collider or the rack's box under the die's footprint) it does not stroke
+/// at all and just goes back. Then the stamped passport dropped on the
+/// counter hands the papers back (HandBack), and that commits the verdict
+/// (Saleh 2026-10-07: no extra step): APPROVED spins the portal up, DENIED sends the traveller back; the
 /// desk's DETAIN button commits the third verdict any time (Commit). A
 /// right-click or Esc drops a carried dater back into the rack
 /// (ControlRules.BackOut). The daters take input while BoothRules.StampsLive;
@@ -79,7 +82,7 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The desk tuning (the daters' hover, the rack's scale, the ink, a note's time, the contact shadow's spread and darkness).</summary>
     [SerializeField] private DeskConfigSO config;
 
-    /// <summary>The reading view (optional): TAB and the tab take the player to it, where the rack is framed (ToggleRack); the tab hides while it is on.</summary>
+    /// <summary>The reading view (optional): TAB and the tab take the player to it (ToggleRack); the tab hides while it is on.</summary>
     [SerializeField] private DeskView deskView;
 
     /// <summary>The desk plane (the daters are dragged over it).</summary>
@@ -159,6 +162,12 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>How far above the desk the rack's contact shadow lies (metres): clear of the desk's top for the depth test.</summary>
     private const float ShadowLift = 0.0004f;
+
+    /// <summary>How high over the desk's plane something under a die's footprint may reach and still be the bare desk (metres: a sheet's edge, the desk top's own mesh).</summary>
+    private const float DeskClear = 0.002f;
+
+    /// <summary>A die's footprint's half-width (metres) when its dater has no click box to size it by.</summary>
+    private const float DieHalf = 0.015f;
 
     /// <summary>Where a stroke is.</summary>
     private enum Stroke
@@ -261,6 +270,7 @@ public sealed class DeskStampTray : MonoBehaviour
     private readonly List<StampCandidate> _candidates = new List<StampCandidate>();
     private readonly List<(Component thing, Vector3 point)> _met = new List<(Component, Vector3)>();
     private readonly List<BoxCollider> _boxes = new List<BoxCollider>();
+    private readonly Collider[] _standing = new Collider[32];
     private Handle[] _handles = Array.Empty<Handle>();
     private Handle _carried;
     private int _passport = -1;
@@ -429,21 +439,30 @@ public sealed class DeskStampTray : MonoBehaviour
         LayShadow();
     }
 
-    /// <summary>The meshes of the rack's box: the drawer's Tray part or, for the built rack, every part.</summary>
-    private IEnumerable<MeshFilter> BoxMeshes()
+    /// <summary>The meshes of the rack's box: the drawer's Tray part or, for the built rack, every part (<paramref name="withoutDaters"/>: none of a dater's, wherever it is).</summary>
+    private IEnumerable<MeshFilter> BoxMeshes(bool withoutDaters)
     {
         Transform box = drawer != null ? drawer.transform.Find("Tray") : null;
         foreach (MeshFilter mesh in (box != null ? box : rack).GetComponentsInChildren<MeshFilter>(true))
-            if (mesh.sharedMesh != null && mesh.GetComponent<TMP_Text>() == null && mesh != contactShadow)
+            if (mesh.sharedMesh != null && mesh.GetComponent<TMP_Text>() == null && mesh != contactShadow && !(withoutDaters && OfADater(mesh.transform)))
                 yield return mesh;
     }
 
-    /// <summary>The rack's box's bounds in the rack's own space (its meshes' corners), and false without any.</summary>
-    private bool BoxBounds(out Bounds bounds)
+    /// <summary>True when <paramref name="part"/> belongs to a dater (its click box's root or below).</summary>
+    private bool OfADater(Transform part)
+    {
+        foreach (Handle handle in _handles)
+            if (handle.Click != null && part.IsChildOf(handle.Click.transform))
+                return true;
+        return false;
+    }
+
+    /// <summary>The rack's box's bounds in the rack's own space (its meshes' corners; <paramref name="withoutDaters"/>: the daters' own left out), and false without any.</summary>
+    private bool BoxBounds(out Bounds bounds, bool withoutDaters = false)
     {
         bounds = default;
         bool any = false;
-        foreach (MeshFilter mesh in BoxMeshes())
+        foreach (MeshFilter mesh in BoxMeshes(withoutDaters))
         {
             Bounds b = mesh.sharedMesh.bounds;
             for (int i = 0; i < 8; i++)
@@ -528,10 +547,11 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>
     /// The grey tab, TAB (Papers, Please's TAB; the rack is fixed, Saleh's
-    /// D4): takes the player to the stamps, the reading view, which frames
-    /// the rack, and the daters lift in their cradles to answer; from the
-    /// reading view, back to the office view. Nothing while the daters take
-    /// no input.
+    /// D4): takes the player to the reading view and the daters lift in their
+    /// cradles to answer; from the reading view, back to the office view.
+    /// Nothing while the daters take no input. (That the reading view frames
+    /// the rack is CAM's LensFit, requested; until it does, the tab's label
+    /// is its owner's to change: docs/pending/STAMP.md.)
     /// </summary>
     public void ToggleRack()
     {
@@ -662,7 +682,9 @@ public sealed class DeskStampTray : MonoBehaviour
     /// paper under it): StampFlow decides; an accepted press owes its print
     /// and strokes the dater onto the passport (the print lands as it
     /// bottoms out); a refused one thunks, bounces the dater off the paper
-    /// and says why; over the bare desk the die thumps the wood.
+    /// and says why; over the bare desk (BareDeskUnder) the die thumps the
+    /// wood; over anything else (the rack, a machine, a prop) it does not
+    /// stroke and goes back.
     /// </summary>
     private void Press(Handle handle)
     {
@@ -678,8 +700,17 @@ public sealed class DeskStampTray : MonoBehaviour
         LastPress = _flow.Press(handle.Kind, under != null, paper != null && paper.Index == _passport);
         if (LastPress == StampPress.Nothing)
         {
-            LastPressPoint = handle.Die != null ? handle.Die.position - Up * Height(handle.Die.position) : point;
-            BeginStroke(handle, LastPressPoint, true);
+            if (BareDeskUnder(handle, out Vector3 floor))
+            {
+                LastPressPoint = floor;
+                BeginStroke(handle, floor, true);
+            }
+            else
+            {
+                // Over the rack, a machine or a prop: a stroke to the desk's plane would go down through it, so none; the dater just goes back.
+                LastPressPoint = handle.Die != null ? handle.Die.position : point;
+                Return(handle);
+            }
         }
         else if (LastPress == StampPress.Stamped)
         {
@@ -745,22 +776,27 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>
     /// The stroke bottomed out: on the passport the owed impression lands
     /// (its ink the pad's, DaterInk), the body squashes and the hit comes; on
-    /// the bare desk the wood's thump (stamp_miss) and no print.
+    /// the bare desk the wood's thump (stamp_miss), no print, and the die
+    /// rebounds at once: the B4 bounce (6 mm, Elastic) as it springs up.
     /// </summary>
     private void Bottom(Handle handle)
     {
         handle.Contact = true;
         handle.ContactAt = UiMotion.Now;
+        MotionKnobs knobs = UiMotion.Knobs;
+        MotionAmount amount = UiMotion.Amount;
         if (handle.Miss)
         {
             if (!Sounds.Play(SoundCues.StampMiss))
                 Play(_thunk, MissPitch);
+            if (!amount.Still)
+                handle.Sway.Kick(knobs.Get(knobs.refuseFeel).KickFor(Bounce * amount.Share));
+            Release(handle);
             return;
         }
         PrintOwed(handle);
-        MotionKnobs knobs = UiMotion.Knobs;
-        MotionAmount amount = UiMotion.Amount;
-        if (!amount.Still)
+        // The squash is stepped on the body: a dater without one (art missing the contract's Body) gets none, so IsMoving never waits on it.
+        if (!amount.Still && handle.Body != null)
             handle.Squash.Kick(knobs.Get(knobs.stampFeel).KickFor(amount.Share));
         FeelDirector.Punch(FeelHit.Stamp);
     }
@@ -950,6 +986,55 @@ public sealed class DeskStampTray : MonoBehaviour
         if (thing != null && Vector3.ProjectOnPlane(point - die.position, Up).magnitude <= AimSlack)
             return thing;
         return Pick(down, RayLength, out point);
+    }
+
+    /// <summary>
+    /// True when a let-go that met no paper is over the bare desk (B4: the
+    /// die thumps the wood), with <paramref name="floor"/> the point on the
+    /// desk's plane straight under the die: nothing stands under the die's
+    /// footprint (its dater's click box across, DieHalf without one) higher
+    /// than DeskClear, neither the rack's box (StampTarget.Overlaps on its
+    /// meshes' bounds; it has no collider) nor any collider but the dater's
+    /// own (a machine, a prop, the other dater). False without a die.
+    /// DOC-HANDLE's DeskObstacles may replace the collider look once it has
+    /// a desk instance.
+    /// </summary>
+    private bool BareDeskUnder(Handle handle, out Vector3 floor)
+    {
+        floor = default;
+        if (handle.Die == null)
+            return false;
+        Vector3 up = Up;
+        float dieHeight = Height(handle.Die.position);
+        floor = handle.Die.position - up * dieHeight;
+        float half = FootprintHalf(handle);
+        if (rack != null && BoxBounds(out Bounds box, true))
+        {
+            Vector3 local = rack.InverseTransformPoint(floor);
+            float scale = Mathf.Max(1e-4f, Mathf.Abs(rack.lossyScale.x));
+            if (StampTarget.Overlaps(local.x, local.z, half / scale, box.min.x, box.max.x, box.min.z, box.max.z))
+                return false;
+        }
+        float column = dieHeight - DeskClear;
+        if (column <= 0f)
+            return true;
+        Quaternion turn = surface != null ? surface.transform.rotation : Quaternion.identity;
+        int n = Physics.OverlapBoxNonAlloc(floor + up * (DeskClear + column / 2f), new Vector3(half, column / 2f, half), _standing, turn, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+        Transform own = handle.Click != null ? handle.Click.transform : null;
+        for (int i = 0; i < n; i++)
+            if (own == null || !_standing[i].transform.IsChildOf(own))
+                return false;
+        return true;
+    }
+
+    /// <summary>The half-width of <paramref name="handle"/>'s footprint on the desk (metres): its click box's wider side, or DieHalf without one.</summary>
+    private static float FootprintHalf(Handle handle)
+    {
+        if (handle.Box == null)
+            return DieHalf;
+        Vector3 scale = handle.Box.transform.lossyScale;
+        float half = 0.5f * Mathf.Max(Mathf.Abs(handle.Box.size.x * scale.x), Mathf.Abs(handle.Box.size.z * scale.z));
+        return half > 1e-4f ? half : DieHalf;
     }
 
     /// <summary>The documents and the rulebook along <paramref name="ray"/> within <paramref name="length"/> (each by its nearest hit), and StampTarget.Pick's choice among them with where the ray met it; null when it meets neither.</summary>

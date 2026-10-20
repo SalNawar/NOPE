@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 
-/// <summary>Where a dater lands (StampTarget, BUG-40a): the top-most thing under its aim, a folder's edge passed over for the paper under it, the stroke stopping on the surface it meets, and the ink a stroke owes (StampInk).</summary>
+/// <summary>Where a dater lands (StampTarget, BUG-40a): the top-most thing under its aim, a folder's edge passed over for the paper under it, the stroke stopping on the surface it meets (StrokeDrop's arithmetic only: the tray's use of it is DaterStrokeTests', editor), a let-go over the rack kept off it (Overlaps), and the ink a stroke owes (StampInk).</summary>
 public sealed class StampTargetTests
 {
     private const float Band = 0.02f;
@@ -45,6 +45,27 @@ public sealed class StampTargetTests
     {
         Assert.AreEqual(-1, StampTarget.Pick(new List<StampCandidate>(), Band));
         Assert.AreEqual(-1, StampTarget.Pick(null, Band));
+    }
+
+    [Test]
+    public void Pick_Ties_GoToTheFirstListed_AndAFolderEdgeOverAFolderEdge_StillFindsThePaper()
+    {
+        Assert.AreEqual(1, StampTarget.Pick(new List<StampCandidate> { Doc(1.2f), Doc(1.1f), Doc(1.1f) }, Band), "two met at the same distance: the first listed");
+        var under = new List<StampCandidate> { Doc(1.05f), Folder(1.0f, 0.004f), Folder(1.02f, 0.001f) };
+        Assert.AreEqual(0, StampTarget.Pick(under, Band), "both folder edges are passed over for the paper beyond them");
+        under = new List<StampCandidate> { Folder(1.0f, 0.004f), Folder(1.02f, 0.06f), Doc(1.05f) };
+        Assert.AreEqual(1, StampTarget.Pick(under, Band), "the second folder's middle is what the stamp meets");
+    }
+
+    [Test]
+    public void Footprint_OverTheRack_OrClearOfIt()
+    {
+        // The rack's box from -0.10 to 0.10 across and -0.04 to 0.04 deep; a die 3 cm wide (half 0.015).
+        Assert.IsTrue(StampTarget.Overlaps(0f, 0f, 0.015f, -0.10f, 0.10f, -0.04f, 0.04f), "let go over the rack's middle");
+        Assert.IsTrue(StampTarget.Overlaps(0.11f, 0f, 0.015f, -0.10f, 0.10f, -0.04f, 0.04f), "the die's edge still over the rack's end");
+        Assert.IsTrue(StampTarget.Overlaps(0f, -0.05f, 0.015f, -0.10f, 0.10f, -0.04f, 0.04f), "the die's edge still over the rack's front");
+        Assert.IsFalse(StampTarget.Overlaps(0.12f, 0f, 0.015f, -0.10f, 0.10f, -0.04f, 0.04f), "clear of the rack's end: the bare desk");
+        Assert.IsFalse(StampTarget.Overlaps(0f, 0.06f, 0.015f, -0.10f, 0.10f, -0.04f, 0.04f), "clear of the rack's back: the bare desk");
     }
 
     [Test]

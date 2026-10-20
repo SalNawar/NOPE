@@ -49,33 +49,53 @@ public static class StampTarget
     /// nearest along the view's ray, passing over a Folder met within
     /// <paramref name="folderEdge"/> metres of its edge when a Document lies
     /// beyond it on the ray; -1 when nothing was met (the bare desk). The
-    /// list may come in any order.
+    /// list may come in any order (ties: the first listed). Allocates
+    /// nothing: it runs on every pointer move while a dater is carried.
     /// </summary>
     public static int Pick(IReadOnlyList<StampCandidate> under, float folderEdge)
     {
-        if (under == null || under.Count == 0)
+        if (under == null)
             return -1;
-        var order = new List<int>(under.Count);
-        for (int i = 0; i < under.Count; i++)
-            order.Add(i);
-        order.Sort((a, b) => under[a].Distance != under[b].Distance ? under[a].Distance.CompareTo(under[b].Distance) : a.CompareTo(b));
-        for (int k = 0; k < order.Count; k++)
+        // Walk the candidates nearest first: each step takes the nearest one after the last (distance, then index).
+        int last = -1;
+        while (true)
         {
-            StampCandidate c = under[order[k]];
-            if (c.Kind == StampTargetKind.Folder && c.EdgeDistance < folderEdge && DocumentBeyond(under, order, k))
-                continue;
-            return order[k];
+            int next = -1;
+            for (int i = 0; i < under.Count; i++)
+                if ((last < 0 || After(under, i, last)) && (next < 0 || After(under, next, i)))
+                    next = i;
+            if (next < 0)
+                return -1;
+            StampCandidate c = under[next];
+            if (c.Kind != StampTargetKind.Folder || c.EdgeDistance >= folderEdge || !DocumentBeyond(under, next))
+                return next;
+            last = next;
         }
-        return -1;
     }
 
     /// <summary>How far a stroke drops the die from <paramref name="dieHeight"/> (its foot's height over the desk, metres) so its foot stands on the surface it met at <paramref name="surfaceHeight"/>; 0 when it is there already.</summary>
     public static float StrokeDrop(float dieHeight, float surfaceHeight) => dieHeight > surfaceHeight ? dieHeight - surfaceHeight : 0f;
 
-    private static bool DocumentBeyond(IReadOnlyList<StampCandidate> under, List<int> order, int k)
+    /// <summary>
+    /// True when a die's square footprint, centred at (<paramref name="x"/>,
+    /// <paramref name="z"/>) on the desk with half-width
+    /// <paramref name="half"/>, overlaps the rectangle
+    /// <paramref name="minX"/>..<paramref name="maxX"/> by
+    /// <paramref name="minZ"/>..<paramref name="maxZ"/> (the rack's box): a
+    /// let-go there is over the rack, not the bare desk, so the dater does
+    /// not stroke down through it (DeskStampTray).
+    /// </summary>
+    public static bool Overlaps(float x, float z, float half, float minX, float maxX, float minZ, float maxZ) =>
+        x + half > minX && x - half < maxX && z + half > minZ && z - half < maxZ;
+
+    /// <summary>True when <paramref name="a"/> lies after <paramref name="b"/> along the ray (farther, or as far and listed later).</summary>
+    private static bool After(IReadOnlyList<StampCandidate> under, int a, int b) =>
+        under[a].Distance != under[b].Distance ? under[a].Distance > under[b].Distance : a > b;
+
+    private static bool DocumentBeyond(IReadOnlyList<StampCandidate> under, int k)
     {
-        for (int j = k + 1; j < order.Count; j++)
-            if (under[order[j]].Kind == StampTargetKind.Document)
+        for (int j = 0; j < under.Count; j++)
+            if (under[j].Kind == StampTargetKind.Document && After(under, j, k))
                 return true;
         return false;
     }
