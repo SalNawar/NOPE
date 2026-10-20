@@ -12777,6 +12777,759 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and fur coat",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Ankle-length anteri (caftan) of striped silk-cotton (alaca) wrapped across the chest. Over it a long dark-blue or black wool overcoat (kavadi/gouna) with loose sleeves, lined and edged with fox or lamb fur at the collar and all down the front. Black leather shoes, the colour prescribed for Christians.\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_m_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and fur coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_greece_earlymodern",
+      "prompt": "Dress exact referencefigure historical civilian outfit: Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Ankle-length anteri (caftan) of striped silk-cotton (alaca) wrapped across the chest. Over it a long dark-blue or black wool overcoat (kavadi/gouna) with loose sleeves, lined and edged with fox or lamb fur at the collar and all down the front. Black leather shoes, the colour prescribed for Christians.\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_m_greece_earlymodern.\nAnteri fine rust/cream/navy striped silkcotton wrappedchest anklelength, plainbrown waist sash. Long darknavy wool loose-sleeve overcoat lined/edged mutedgrey lambfur collar/allfront, simpleblackclosedleathershoes. No weapons, no religioussymbols, no green/redhat/sable. No hairbeardheadwearaccessories separate. Exact reference neutralpose handsheadfeet unchanged scalp239chin400soles1421 center512,1024x1536 puregreen#00FF00 background, exposedfacehandsmagenta#FF00FF. Textured late80s handinkedanime finewoolgrain lived-inclothes restrainedcelshading. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c5dd083c-9daa-40b4-8fdc-3dc1d70d0d64.png",
+      "path": "Raw/outfit_m_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8e709db70e67795fff68cd058c43d1feba73b2b2e1ff55854cebcfa282fab73d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_earlymodern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and fur coat",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Ankle-length anteri (caftan) of striped silk-cotton (alaca) wrapped across the chest. Over it a long dark-blue or black wool overcoat (kavadi/gouna) with loose sleeves, lined and edged with fox or lamb fur at the collar and all down the front. Black leather shoes, the colour prescribed for Christians.\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_m_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and fur coat"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_greece_earlymodern",
+      "prompt": "Edit FIRST costume only arms and sleeves: RIGHT elbow open, right palm up at lower chest, left arm relaxed. SECONDguide exacthandposition. Preserve navy loose-sleeve fur-edged overcoat, rustcreamnavy striped wrap anteri,brownsash blackshoes same texture. Sleevefur follows forearm naturally. Head and all lowerbody fixed scalp239chin400soles1421 center512.1024x1536 flatmagenta exposedfigure, puregreen#00FF00. No hairbeardhatjewelry. Same late80s handinked finewoolgrain anime, no rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f0519c6c-622a-41de-8e95-143328370263.png",
+      "path": "Raw/outfit_m_greece_earlymodern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fb8eb8c987037404ff877779ecb51c05854b259635b137efd946862ce4677976",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_earlymodern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and fur coat",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Ankle-length anteri (caftan) of striped silk-cotton (alaca) wrapped across the chest. Over it a long dark-blue or black wool overcoat (kavadi/gouna) with loose sleeves, lined and edged with fox or lamb fur at the collar and all down the front. Black leather shoes, the colour prescribed for Christians.\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_m_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and fur coat"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_greece_earlymodern",
+      "prompt": "Edit FIRST costume only arms and sleeves: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. SECONDguide exacthandposition. Preserve navy loose-sleeve fur-edged overcoat, rustcreamnavy striped wrap anteri,brownsash blackshoes same texture. Sleevefur follows forearm naturally. Head and all lowerbody fixed scalp239chin400soles1421 center512.1024x1536 flatmagenta exposedfigure, puregreen#00FF00. No hairbeardhatjewelry. Same late80s handinked finewoolgrain anime, no rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b4740f69-1e1e-45c4-be66-9202fd43a522.png",
+      "path": "Raw/outfit_m_greece_earlymodern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "361f3b0636038cc46b83a54b53572dbe18cb1ca21f886c9e0b7d03839189a051",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_earlymodern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and fur coat",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Ankle-length anteri (caftan) of striped silk-cotton (alaca) wrapped across the chest. Over it a long dark-blue or black wool overcoat (kavadi/gouna) with loose sleeves, lined and edged with fox or lamb fur at the collar and all down the front. Black leather shoes, the colour prescribed for Christians.\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_m_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and fur coat"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_greece_earlymodern",
+      "prompt": "Edit FIRST costume only arms and sleeves: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. SECONDguide exacthandposition. Preserve navy loose-sleeve fur-edged overcoat, rustcreamnavy striped wrap anteri,brownsash blackshoes same texture. Sleevefur follows forearm naturally. Head and all lowerbody fixed scalp239chin400soles1421 center512.1024x1536 flatmagenta exposedfigure, puregreen#00FF00. No hairbeardhatjewelry. Same late80s handinked finewoolgrain anime, no rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-da3b6ca3-8b6b-4ee0-bd00-a8684eaa4a61.png",
+      "path": "Raw/outfit_m_greece_earlymodern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d5d3bcaa9c02fda5625c9e728abe040b7c1f72728a6a00fd20ea081e89fbd854",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "short crop",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Cropped short\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw hair_m_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_greece_earlymodern",
+      "prompt": "Use FIRST figure as immutable registration reference. Add ONLY short cropped darkbrown hair with subtle grey temples. Keep exact face position and contour; do not move chin up: chin must remain y400 as first. Recolor all outfit/shoes magenta, facehandsmagenta. Only hair colored. No beardhatjewelry. Puregreenbackground1024x1536. Textured late80s anime hair, no other changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-55e260eb-b9c9-4286-bff6-b66520f18631.png",
+      "path": "Raw/hair_m_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7d7ea03ca9f5be29c8b9886e2fc0d0e63bbee36132bf634cc71f21d54da72f67",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "full beard",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Full beard with a moustache\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw facialhair_m_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "full beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_greece_earlymodern",
+      "prompt": "Separate FULL BEARD layer: Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Full beard with a moustache\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw facialhair_m_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nDarkbrown full natural beard and moustache, moderate length belowchin with scattered greyhairs, not hipsterstyled. No scalphairhatjewelry. ALL outfit/shoes flatmagenta#FF00FF as facehands. Onlybeardcolored. Keep exact referenceface/head chin400 scalp239 and bodypose unchanged,1024x1536 puregreenbackground#00FF00. Fine textured late80s handinkedanime, no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-af3b8c69-e5bc-4bb2-b367-ca7438ce1462.png",
+      "path": "Raw/facialhair_m_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "53e73f0f758e5e30a738b07be6e6151c09f23f273e68ae812386f87642d0d52d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "kalpak",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Tall black lambskin kalpak: a brimless, clearly fur-textured cap with a softly rounded top, worn instead of a turban as the typical headgear of Greek Christian merchants\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw headwear_m_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "kalpak",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_greece_earlymodern",
+      "prompt": "Separate HEADWEAR ONLY layer. Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Tall black lambskin kalpak: a brimless, clearly fur-textured cap with a softly rounded top, worn instead of a turban as the typical headgear of Greek Christian merchants\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw headwear_m_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nTallblack lambskin kalpak with visible smallcurledfur, brimless softlyroundedtop, no tassel, no metalbadge. No hairbeardjewelry. ALL outfitandshoes and facehands solidflatmagenta#FF00FF, onlyhatcolored. Preserve exact referenceface position/scalp239chin400,fullfigurehandsfeetunchanged1024x1536 puregreen#00FF00. Textured late80s handinkedanime furgrain restrainedshading, no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7d4b1b15-cdcc-427c-a010-859c57e0a719.png",
+      "path": "Raw/headwear_m_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "88a0c9b8389bacb986fff224834006725927f83901be55743ef01f52c9a5f2eb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "striped sash",
+      "details": "Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Wide striped silk-cotton sash (zonari) wound several times around the waist\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw accessory_m_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "striped sash"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_greece_earlymodern",
+      "prompt": "Separate SASH accessory layer. Subject: man of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Wide striped silk-cotton sash (zonari) wound several times around the waist\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw accessory_m_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nWide zonari in mutedrust cream darkbrown fine stripes woundseveraltimes naturalwaist. Use referencewaistplacement, sash sits OVER innercaftan but UNDER openovercoat, coloredstrip visible only inside coatfrontopening between furedges. Restofoutfit includingfur and blackshoes fullyflatmagenta#FF00FF, as facehands. ONLY sashcolored. No hairbeardhatjewelry, no text. Preserve figure headposition scalp239chin400 and stance1024x1536 puregreen#00FF00. Texturedlate80s handinked animeclothgrain.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-17206aee-f2a4-45a4-a7d3-2b6002564b3f.png",
+      "path": "Raw/accessory_m_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bd8b430b9ff38862a990a05d46663ea317a75a5c1f86b6b3afcfcf9f6ba15cac",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and zipouni",
+      "details": "Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_f_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and zipouni"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_greece_earlymodern",
+      "prompt": "Dress referencefittingfigure in opaque historical civilian costume: Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_f_greece_earlymodern.\nLong openfront anteri fine indigo/coral/cream striped silk over white wide-sleeve chemise/fullskirt, short sleeveless darknavy velvet zipouni goldcordembroidered, silverdoubleplate pafti belt, plainblackleathershoes. No hairheadwearnecklaceearrings separate. Referencehead scalp164chin324soles1440 center512, handsdownbodypositionsunchanged.1024x1536 puregreen#00FF00 background, exposedfacehands flatmagenta#FF00FF. Late80s texturedhandinked anime fineclothgrain and restrainedcelshading, civilianmerchantsclothing notroyalty. No weapons/text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fb6b4bcf-089b-4948-85b4-87b2cd248b97.png",
+      "path": "Raw/outfit_f_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4095bdcae896ecf20be0ea0bb0f62f2df486f4109b23d57b0a48ef27a3301fdd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_earlymodern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and zipouni",
+      "details": "Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_f_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and zipouni"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_greece_earlymodern",
+      "prompt": "Edit FIRST outfit only arms/sleeves: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. SECONDposeguide gives exacthandpositions. Keep original indigo coral cream striped anteri, whitechemise fullsleeves, navy velvetgoldcord waistcoat, silverdoubleplatebelt,blackshoes. Sleevefolds followarms. Headandlowerbodyunchanged scalp164chin324soles1440 center512.1024x1536puregreen#00FF00 exposedfiguremagenta#FF00FF. No hairheadwearjewelry. Same texturedlate80s inkedanime fabricgrain, no rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d7f0cc8a-3bf9-4f41-85e4-15bcc2de90ad.png",
+      "path": "Raw/outfit_f_greece_earlymodern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "68ea8b1b778d3b869e63aa08235968bd280bf45bfcd64aed1b6f2cb197830786",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_earlymodern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and zipouni",
+      "details": "Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_f_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and zipouni"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_greece_earlymodern",
+      "prompt": "Edit FIRST outfit only arms/sleeves: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. SECONDposeguide gives exacthandpositions. Keep original indigo coral cream striped anteri, whitechemise fullsleeves, navy velvetgoldcord waistcoat, silverdoubleplatebelt,blackshoes. Sleevefolds followarms. Headandlowerbodyunchanged scalp164chin324soles1440 center512.1024x1536puregreen#00FF00 exposedfiguremagenta#FF00FF. No hairheadwearjewelry. Same texturedlate80s inkedanime fabricgrain, no rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9d223f07-3589-49da-8b24-a408c64261df.png",
+      "path": "Raw/outfit_f_greece_earlymodern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5f4e9ae4205060bb5e13d170cdd1186bd6db1e449aba1d7b71b1a295e4be9e5f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_earlymodern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "anteri and zipouni",
+      "details": "Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw outfit_f_greece_earlymodern.",
+      "flags": {
+        "label": "anteri and zipouni"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_greece_earlymodern",
+      "prompt": "Edit FIRST outfit only arms/sleeves: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. SECONDposeguide gives exacthandpositions. Keep original indigo coral cream striped anteri, whitechemise fullsleeves, navy velvetgoldcord waistcoat, silverdoubleplatebelt,blackshoes. Sleevefolds followarms. Headandlowerbodyunchanged scalp164chin324soles1440 center512.1024x1536puregreen#00FF00 exposedfiguremagenta#FF00FF. No hairheadwearjewelry. Same texturedlate80s inkedanime fabricgrain, no rescale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d24f52c8-a0af-4312-b5a6-6fd4c8fe0341.png",
+      "path": "Raw/outfit_f_greece_earlymodern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "09f8416ad5786a382f5bff0f0595a73b2bcd2a78098244dcc2aca7cad5ed0c0d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "two front braids",
+      "details": "Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Long hair plaited into two braids that fall forward over the shoulders onto the chest\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw hair_f_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "two front braids"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_greece_earlymodern",
+      "prompt": "Separate HAIR layer: Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Long hair plaited into two braids that fall forward over the shoulders onto the chest\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw hair_f_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nDarkbrown centerparted hair two long plainbraids overfrontshoulders ending upperchest abovewaist, plain darkties. No capjewelry. ALL reference outfit/shoes/metalbelt entirelysolidmagenta#FF00FF as facehandsbody. Onlyhaircolored. Exact reference headposition chin324 scalp164 stanceunchanged1024x1536 puregreen#00FF00. Late80s fine handinked texturedanime hairgrain restrainedhighlights.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-980bacc6-fe89-4c31-aae3-f528e9455bed.png",
+      "path": "Raw/hair_f_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "95b8b0ae899c595dffff396f0461df3933d2911678f759806a29228b10d5379b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "cap and tsemberi",
+      "details": "Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Small red cap wrapped with a patterned silk headscarf (tsemberi) tied at the back. The braids and face stay visible.\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw headwear_f_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "cap and tsemberi"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_greece_earlymodern",
+      "prompt": "Separate HEADWEAR only layer. Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Small red cap wrapped with a patterned silk headscarf (tsemberi) tied at the back. The braids and face stay visible.\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw headwear_f_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nSmalllow redcap wrapped patterned indigo/cream/madder silk tsemberi tiedbehindhead, shortendsbehindneck, leavesfaceandearsopen. No braids orhair (separate layer), no necklacejewelry. Recolor ALL outfit shoes and silverbelt flatmagenta#FF00FF as facehands. Onlycapscarfcolored. Exact reference headposition scalp164chin324 and figurepose fixed1024x1536 green#00FF00background. Texturedlate80s handinkedanime finefabricgrain. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2430dcda-011f-40e9-bfc2-9454ac8294ff.png",
+      "path": "Raw/headwear_f_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a7717abde025a4ca115da5fd76b4d5b4c922904a80987ed45b78b00ee4b613d5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_greece_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "country": "greece",
+      "era": "earlymodern",
+      "label": "silver chest chains",
+      "details": "Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Silver chest chains: four or five rows of fine silver chains hanging in festoons across the upper chest from two round silver-filigree rosettes on the collarbones, the rosettes joined by a silver chain round the back of the neck; the chains are strung with round silver filigree beads (Ioannina silverwork)\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw accessory_f_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "silver chest chains",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_greece_earlymodern",
+      "prompt": "Separate CHEST JEWELRY only layer. Subject: woman of Ottoman Ioannina; Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700.\nDraw: Silver chest chains: four or five rows of fine silver chains hanging in festoons across the upper chest from two round silver-filigree rosettes on the collarbones, the rosettes joined by a silver chain round the back of the neck; the chains are strung with round silver filigree beads (Ioannina silverwork)\nAvoid: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)\nOutput one full-canvas raw accessory_f_greece_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nFour delicate silverchain festoons with smallsilverfiligreebeads between two smallroundfiligree rosettes atcollarbones, neckchainbehind. Not solidbib, not medals. ONLY chestchainscolored. Recolor ALL clothes/shoes/beltbuckle magenta#FF00FF, facehandsmagenta. No hairheadwear earrings. Exact referenceheadchin324scalp164 and stanceunchanged1024x1536 puregreen#00FF00background. Texturedlate80s handinkedanime finelydrawnsilver restrainedhighlights. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4e925bd0-9f39-4b39-adb3-8ee39f51e275.png",
+      "path": "Raw/accessory_f_greece_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fcf13bb46a8d5caf806d8c66a540f9fa24bd4a1cc53098a990dda51747e4b253",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "fustanella",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Civilian fustanella: a white, many-pleated linen kilt ending just above the knee, a full-sleeved white shirt, and a dark-crimson sleeveless jacket (fermeli) trimmed with gold braid and worn open over an embroidered waistcoat. Below are knitted white stockings with tasselled garters and plain black leather shoes.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_m_greece_industrial.",
+      "flags": {
+        "label": "fustanella"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_greece_industrial",
+      "prompt": "Dress exact referencefigure historical CIVILIAN costume: Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Civilian fustanella: a white, many-pleated linen kilt ending just above the knee, a full-sleeved white shirt, and a dark-crimson sleeveless jacket (fermeli) trimmed with gold braid and worn open over an embroidered waistcoat. Below are knitted white stockings with tasselled garters and plain black leather shoes.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_m_greece_industrial.\nWhite manypleated linen fustanella above knee, fullsleevedwhiteshirt, darkcrimson sleeveless fermeli goldbraid open over embroidered waistcoat, knittedwhitestockings tasselledgarters, plainblackclosedshoes without pompoms. No weapons/headwear/hair/beard/accessories. Everydayclothing notceremonialguard. Referenceposebodyfixed scalp239chin400soles1421 center512,1024x1536 puregreen#00FF00, exposedfacehandsflatmagenta#FF00FF. Late80s handinked textured anime fineclothgrain restrainedcelshadows. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-40da0ce5-30e3-499a-8b82-0ef024678841.png",
+      "path": "Raw/outfit_m_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1a6c74110172ea987998432c93acafc4e11211744d2b675ab15f5a19c86382e5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "fustanella",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Civilian fustanella: a white, many-pleated linen kilt ending just above the knee, a full-sleeved white shirt, and a dark-crimson sleeveless jacket (fermeli) trimmed with gold braid and worn open over an embroidered waistcoat. Below are knitted white stockings with tasselled garters and plain black leather shoes.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_m_greece_industrial.",
+      "flags": {
+        "label": "fustanella"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_greece_industrial",
+      "prompt": "Edit FIRST costume only arms/sleeves: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. SECONDguide exact handplacement. Same white fustanella fullshirt, darkcrimson openfermeli goldbraid embroideredwaistcoat, whitestockings tasselledgarters blackplainshoes. Original headbodylowercostume and feet unchanged scalp239chin400soles1421 center512.1024x1536 puregreen#00FF00 exposedmagenta#FF00FF. No hairbeardhataccessories. Same handinkedlate80s texturedanime linen grain. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-50c960f9-5702-4683-966a-dfc6fd7a1272.png",
+      "path": "Raw/outfit_m_greece_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7eaeccb002542e83923ee6cdc606a6600f89e9c1dc74b4977301e5aab1249092",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "fustanella",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Civilian fustanella: a white, many-pleated linen kilt ending just above the knee, a full-sleeved white shirt, and a dark-crimson sleeveless jacket (fermeli) trimmed with gold braid and worn open over an embroidered waistcoat. Below are knitted white stockings with tasselled garters and plain black leather shoes.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_m_greece_industrial.",
+      "flags": {
+        "label": "fustanella"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_greece_industrial",
+      "prompt": "Edit FIRST costume only arms/sleeves: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. SECONDguide exact handplacement. Same white fustanella fullshirt, darkcrimson openfermeli goldbraid embroideredwaistcoat, whitestockings tasselledgarters blackplainshoes. Original headbodylowercostume and feet unchanged scalp239chin400soles1421 center512.1024x1536 puregreen#00FF00 exposedmagenta#FF00FF. No hairbeardhataccessories. Same handinkedlate80s texturedanime linen grain. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e8529464-569f-4ad8-9dc5-6adf6bce4629.png",
+      "path": "Raw/outfit_m_greece_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fd0b4dd4ba0ae62014610ece43f9dbffc2a7a96bc490840dca1996e7144b5771",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "fustanella",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Civilian fustanella: a white, many-pleated linen kilt ending just above the knee, a full-sleeved white shirt, and a dark-crimson sleeveless jacket (fermeli) trimmed with gold braid and worn open over an embroidered waistcoat. Below are knitted white stockings with tasselled garters and plain black leather shoes.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_m_greece_industrial.",
+      "flags": {
+        "label": "fustanella"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_greece_industrial",
+      "prompt": "Edit FIRST costume only arms/sleeves: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. SECOND guide exact hand placement. Same white fustanella full shirt, dark crimson open fermeli gold braid embroidered waistcoat, white stockings tasselled garters black plain shoes. Original head body lower costume and feet unchanged scalp239 chin400 soles1421 center512. 1024x1536 pure green #00FF00 exposed magenta #FF00FF. No hair beard hat accessories. Same hand inked late80s textured anime linen grain. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ef3a8584-c2ae-4a3c-a6dd-eb22fd6cc571.png",
+      "path": "Raw/outfit_m_greece_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "72e4a0066526c3d880a53b6beee810c8282cff4b45aca31e8e49fad877e9e610",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "short tapered hair",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Short on top, slightly longer at the nape\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw hair_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short tapered hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_greece_industrial",
+      "prompt": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Short on top, slightly longer at the nape\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw hair_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse attached figure as registration reference. Add dark brown short tapered hair, modest side part, slightly longer nape, textured inked strands. Replace ALL outfit and shoes with flat opaque magenta long sleeved shirt/trousers/socks; NO colored clothes left. Entire figure magenta #FF00FF except requested hair. Green #00FF00 background. Same head position, chin400 scalp239 soles1421 center512 on1024x1536. Keep face guide lines. Textured late1980s hand painted anime, natural ordinary civilian, no glamour. No beard, hat, jewelry, text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4b5ea458-af45-43b9-abed-f2734e8a3687.png",
+      "path": "Raw/hair_m_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8ebf45117f2bbbff96877a374ca38d053a202ada9469bbb0f9d9233f4334ea1e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "upturned moustache",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Thick moustache with slightly upturned ends\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw facialhair_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "upturned moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_greece_industrial",
+      "prompt": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Thick moustache with slightly upturned ends\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw facialhair_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nEdit attached calibration figure: REMOVE scalp hair, add ONLY thick dark brown moustache with subtly upturned ends, natural inked individual hairs. Head unchanged chin400 scalp239 center512. Retain flat magenta face and fully clothed magenta shirt/trousers/socks, entire support #FF00FF. Background #00FF00, canvas1024x1536 feet1421. No beard, hat, jewelry or colored garments. Textured late1980s cel anime. Correction: use original neutral costume reference head contour exactly: bald scalp y239 NOT y221; keep chin y400. Recolor all outfit and shoes puremagenta. Add only moustache.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bd45aad2-1bcd-489b-85ea-70114acef05f.png",
+      "path": "Raw/facialhair_m_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2a8f2ce7ab9163349462a2f53d9b93888447cb6905c022a9a8124165f2a91a36",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "fesi",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Fesi: a soft Greek fez of red felt whose limp crown droops to one side, worn tilted, with a very long dark-blue silk tassel falling to the chest. It is clearly floppy, unlike Egypt's stiff, upright tarboush.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw headwear_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "fesi",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_greece_industrial",
+      "prompt": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Fesi: a soft Greek fez of red felt whose limp crown droops to one side, worn tilted, with a very long dark-blue silk tassel falling to the chest. It is clearly floppy, unlike Egypt's stiff, upright tarboush.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw headwear_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nEdit reference: remove moustache, add ONLY specified floppy red felt fesi, long dark blue silk tassel to chest on viewer right. Rest fully magenta unchanged, including entire face, clothing and feet. Pure green #00FF00 background.1024x1536 canvas. Head unchanged scalp239 chin400 soles1421 center512. Textured handinked late1980s anime, felt grain and fine silk strands. No hair or beard, jewelry, text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fcc1157a-d502-4961-bd2d-7131b7991e34.png",
+      "path": "Raw/headwear_m_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "52cee4440e7722f5c7c80ea856229efebce5582d344c0f20358609bff3523123",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "red silk sash",
+      "details": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Wide red silk sash (zonari) wound around the waist\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw accessory_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "red silk sash"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_greece_industrial",
+      "prompt": "Subject: man of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Wide red silk sash (zonari) wound around the waist\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw accessory_m_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nReference outfit shows exact waist placement. Replace entire costume and shoes with opaque flat magenta calibration shirt/trousers/socks. Add ONLY wide red silk zonari sash wound at waist y672-728, center512, width250px, naturally folded. No hanging ends or other accessories. Preserve exact head scalp239 chin400 soles1421 and pose. Green#00FF00 background, support#FF00FF.1024x1536. Fine fabric grain, handinked late80s anime. IMPORTANT sash must cover original white waistband exactly between y675 and y722, across x390 to638. Do NOT put it up at ribs y630. Keep original costume silhouette as magenta guide, jacket lines may remain magenta. Sash is only colored object.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-09a2f69c-40cd-4fb0-ab8c-3b64133b70b4.png",
+      "path": "Raw/accessory_m_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d3435c7e12188e3a7586d5991b06e319531c173d3c77ba0c6e30493f6d213b82",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "Amalia dress",
+      "details": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Amalia dress: a floor-length full skirt of pale ivory or dusty-coral silk, a white long-sleeved blouse with a lace chemisette front, and a short, fitted, open bolero jacket (kontogouni) of deep-burgundy velvet heavily embroidered with gold braid.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_f_greece_industrial.",
+      "flags": {
+        "label": "Amalia dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_greece_industrial",
+      "prompt": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Amalia dress: a floor-length full skirt of pale ivory or dusty-coral silk, a white long-sleeved blouse with a lace chemisette front, and a short, fitted, open bolero jacket (kontogouni) of deep-burgundy velvet heavily embroidered with gold braid.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_f_greece_industrial.\nDress exact attached calibration figure without moving head hands feet. Full skirt dusty coral silk to ankles, white long sleeve blouse and lace chemisette, deep burgundy velvet open bolero kontogouni densely gold embroidered; practical closed dark brown shoes visible. No hat hair jewelry crown accessories. Exposed head neck hands flat magenta#FF00FF. Background solid green#00FF00.1024x1536, scalp164 chin324 soles1440 center512. Late1980s handinked anime with rich tactile pigment grain, worn silk and velvet texture, restrained celshading. Natural civilian costume, not glossy fantasy.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-09e09b25-47f6-4752-bc17-782cf6fc8816.png",
+      "path": "Raw/outfit_f_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "822381307b0f826c418f27053dc81caa76ec37215e5aa356fb7f15a69e418040",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_industrial__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "Amalia dress",
+      "details": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Amalia dress: a floor-length full skirt of pale ivory or dusty-coral silk, a white long-sleeved blouse with a lace chemisette front, and a short, fitted, open bolero jacket (kontogouni) of deep-burgundy velvet heavily embroidered with gold braid.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_f_greece_industrial.",
+      "flags": {
+        "label": "Amalia dress"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_greece_industrial",
+      "prompt": "Edit FIRST costume arms/sleeves only to match SECOND mannequin gesture exactly: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Keep all original dress design: dusty coral silk fullskirt, goldembroidered burgundy velvet bolero, white lacechemissette and fullblouse sleeves, closedbrownshoes. Preserve original head body skirt feet, scalp164 chin324 soles1440 center512.1024x1536 green#00FF00 backdrop, exposedskinmagenta#FF00FF. No hairhatjewelry. Rich late80s handinked anime textilegrain. Never resize.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-190a4f67-9f18-4d4f-9bef-63807955b6f9.png",
+      "path": "Raw/outfit_f_greece_industrial__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "74e58a4fc4659707b954f5d73590bf7a2ab629978a5398025e0f53bf3597d4de",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

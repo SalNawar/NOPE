@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 546. Full regeneration is NOT complete.
+Saved: 571. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -550,3 +550,28 @@ Saved: 546. Full regeneration is NOT complete.
 | hair_f_greece_medieval | visually reviewed; registration pending |
 | headwear_f_greece_medieval | visually reviewed; registration pending |
 | accessory_f_greece_medieval | visually reviewed; registration pending |
+| outfit_m_greece_earlymodern | visually reviewed; registration pending |
+| outfit_m_greece_earlymodern__explaining_a | visually reviewed; registration pending |
+| outfit_m_greece_earlymodern__thinking_b | visually reviewed; registration pending |
+| outfit_m_greece_earlymodern__objecting_c | visually reviewed; registration pending |
+| hair_m_greece_earlymodern | visually reviewed; registration pending |
+| facialhair_m_greece_earlymodern | visually reviewed; registration pending |
+| headwear_m_greece_earlymodern | visually reviewed; registration pending |
+| accessory_m_greece_earlymodern | visually reviewed; registration pending |
+| outfit_f_greece_earlymodern | visually reviewed; registration pending |
+| outfit_f_greece_earlymodern__explaining_b | visually reviewed; registration pending |
+| outfit_f_greece_earlymodern__thinking_c | visually reviewed; registration pending |
+| outfit_f_greece_earlymodern__objecting_a | visually reviewed; registration pending |
+| hair_f_greece_earlymodern | visually reviewed; registration pending |
+| headwear_f_greece_earlymodern | visually reviewed; registration pending |
+| accessory_f_greece_earlymodern | visually reviewed; registration pending |
+| outfit_m_greece_industrial | visually reviewed; registration pending |
+| outfit_m_greece_industrial__explaining_b | visually reviewed; registration pending |
+| outfit_m_greece_industrial__thinking_c | visually reviewed; registration pending |
+| outfit_m_greece_industrial__objecting_a | visually reviewed; registration pending |
+| hair_m_greece_industrial | visually reviewed; registration pending |
+| facialhair_m_greece_industrial | visually reviewed; registration pending |
+| headwear_m_greece_industrial | visually reviewed; registration pending |
+| accessory_m_greece_industrial | visually reviewed; registration pending |
+| outfit_f_greece_industrial | visually reviewed; registration pending |
+| outfit_f_greece_industrial__explaining_c | visually reviewed; registration pending |

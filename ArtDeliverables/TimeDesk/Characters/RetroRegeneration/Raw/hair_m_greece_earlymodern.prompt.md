@@ -1,0 +1,1 @@
+Use FIRST figure as immutable registration reference. Add ONLY short cropped darkbrown hair with subtle grey temples. Keep exact face position and contour; do not move chin up: chin must remain y400 as first. Recolor all outfit/shoes magenta, facehandsmagenta. Only hair colored. No beardhatjewelry. Puregreenbackground1024x1536. Textured late80s anime hair, no other changes.

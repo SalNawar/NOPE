@@ -1,10 +1,10 @@
 # Resume checkpoint: 20 October 2026
 
-User resumed generation. 546 / 1156 raw sources saved; 610 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 571 / 1156 raw sources saved; 585 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: outfit_m_greece_earlymodern. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_f_greece_industrial__thinking_a. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -25,3 +25,6 @@ Occlusion review: 1720 female futa overlaps necklace region and thinking hand; a
 25 more sources since 4f98fa5: remaining 1870 Baghdad female hair, veil, bangles and three matching wrist-pose variants; complete 1956 Baghdad male/female sets; Athens male outfit and three gestures. Queue expanded by three wrist accessory variants (1156 total). Athens explaining pose regenerated twice to restore feet; final visually checked but registration remains pending. Latest audit verified first 520 source dimensions, hashes and prompts. Baghdad shawl shoulder/hand occlusion and necklace collar layering need assembled checks. Current checkpoint remains local.
 
 25 further sources since f1604b7: Athens male hair/beard/hat/pouch; female outfit and three gestures, hair/snood; complete Mystras male/female source sets. Audit verified all 546 PNG dimensions/hashes/prompts. Hat and snood drafts corrected for clothing color leakage. Athens pouch strap must render behind crossed hands; Mystras long beard and earrings need hand-over-face occlusion tests. No runtime-ready claim. Continue with Ioannina male outfit. Only 2070048 is confirmed pushed so far.
+
+25 further sources since e6d4b3d: complete 1700 Ioannina male/female sets; 1860 Athens male outfit and three poses, hair/moustache/fesi/sash; Athens female neutral outfit and explaining_c. All 571 dimensions/hashes/prompts audited. Moustache head drift corrected. Sash needs masking beneath jacket and thinking hands; fesi tassel needs hand/chest occlusion checks. Ioannina male zonari must cover original plain sash; female front braids must overlap chest chains correctly. These are raw sources, not registered runtime art. Next female thinking_a. No old art removed.
+
