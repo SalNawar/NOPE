@@ -4,8 +4,11 @@ using System.Collections.Generic;
 /// <summary>One step of a day-changing cheat's route (RunRoutes), each run by RunManager with the same code play runs.</summary>
 public enum RunStep
 {
-    /// <summary>Today's shift closes as play closes it (DayCycle.EndShift on the shift's ledger), with the ending check play runs after it.</summary>
+    /// <summary>Today's shift closes as played so far (DayCycle.EndShift on the shift's ledger), with the ending check play runs after it.</summary>
     CloseShift,
+
+    /// <summary>A day the cheat passes over is played: its whole queue decided correctly, as the cheat menu's Auto-decide does, then its close (DayCycle.PlayShiftCorrectly).</summary>
+    PlayShift,
 
     /// <summary>Home's night on the default care (DayCycle.HomeNight: the break-in and the fixed bill, the default care's bills, the pet's night).</summary>
     HomeNight,
@@ -26,24 +29,24 @@ public enum RunStep
 /// <summary>
 /// The routes of the cheat menu's day changes (RUN-SAFE, BUG-28a: "cheats
 /// route through the same close and night code as play"). A skip closes
-/// today's shift (unless play closed it already), plays Home's night on the
-/// default care, sleeps and opens the next morning; a jump forward does the
-/// same for every day up to the target; a jump back starts a new world with
-/// the run's seed and pet and plays each day up to the target the same way;
-/// a jump to today is a restart, which restores today's morning snapshot.
-/// RunManager runs the steps in order and stops where one ends the run.
-/// Pure, so the routes are tested headless.
+/// today's shift as played (unless play closed it already), plays Home's
+/// night on the default care, sleeps and opens the next morning; a jump
+/// forward does the same for today, then plays every day before the target
+/// (its whole queue decided correctly, as the cheat menu's Auto-decide plays
+/// it, so the run earns its pay and the economy stays a played run's), each
+/// with its night; a jump back starts a new world with the run's seed and pet
+/// and plays each day up to the target the same way; a jump to today is a
+/// restart, which restores today's morning snapshot. RunManager runs the
+/// steps in order and stops where one ends the run. Pure, so the routes are
+/// tested headless.
 /// </summary>
 public static class RunRoutes
 {
-    /// <summary>One day played through with nothing decided: its shift closes, Home's night, Sleep.</summary>
-    private static readonly RunStep[] PlayedDay = { RunStep.CloseShift, RunStep.HomeNight, RunStep.Sleep };
-
-    /// <summary>The cheat menu's "Skip day": today's close (unless <paramref name="shiftClosed"/>: play closed it, the run is at Home), Home's night, Sleep, the next morning.</summary>
+    /// <summary>The cheat menu's "Skip day": today's close as played (unless <paramref name="shiftClosed"/>: play closed it, the run is at Home), Home's night, Sleep, the next morning.</summary>
     public static List<RunStep> Skip(bool shiftClosed)
     {
         var route = new List<RunStep>();
-        AddDay(route, shiftClosed);
+        AddDay(route, shiftClosed ? (RunStep?)null : RunStep.CloseShift);
         route.Add(RunStep.OpenMorning);
         return route;
     }
@@ -51,10 +54,11 @@ public static class RunRoutes
     /// <summary>
     /// The cheat menu's "Jump to day N" from <paramref name="today"/> to
     /// <paramref name="target"/> (Clamp to the run's <paramref name="lastDay"/>):
-    /// today itself is a restart; forward, today's close (unless
-    /// <paramref name="shiftClosed"/>), its night and every day after it up to
-    /// the target played through; back, a new world played through from day
-    /// 1 up to the target. Each ends at the target's morning.
+    /// today itself is a restart; forward, today's close as played (unless
+    /// <paramref name="shiftClosed"/>) and its night, then every day before the
+    /// target played (PlayShift) with its night; back, a new world with every
+    /// day from day 1 to the target's eve played the same way. Each ends at
+    /// the target's morning.
     /// </summary>
     public static List<RunStep> Jump(int today, int target, int lastDay, bool shiftClosed)
     {
@@ -68,13 +72,14 @@ public static class RunRoutes
         {
             route.Add(RunStep.NewWorld);
             day = 1;
-            shiftClosed = false;
+        }
+        else
+        {
+            AddDay(route, shiftClosed ? (RunStep?)null : RunStep.CloseShift);
+            day++;
         }
         for (; day < target; day++)
-        {
-            AddDay(route, shiftClosed);
-            shiftClosed = false;
-        }
+            AddDay(route, RunStep.PlayShift);
         route.Add(RunStep.OpenMorning);
         return route;
     }
@@ -85,11 +90,13 @@ public static class RunRoutes
     /// <summary>A jump's target within the run's days (1 to <paramref name="lastDay"/>); with no last day known (0 or less) the target stands, at least 1.</summary>
     public static int Clamp(int target, int lastDay) => Math.Max(1, lastDay > 0 ? Math.Min(target, lastDay) : target);
 
-    /// <summary>A day played through: its shift's close (not when already closed), Home's night, Sleep.</summary>
-    private static void AddDay(List<RunStep> route, bool shiftClosed)
+    /// <summary>A day through: its <paramref name="shift"/> step (none when play closed it already), Home's night, Sleep.</summary>
+    private static void AddDay(List<RunStep> route, RunStep? shift)
     {
-        for (int i = shiftClosed ? 1 : 0; i < PlayedDay.Length; i++)
-            route.Add(PlayedDay[i]);
+        if (shift.HasValue)
+            route.Add(shift.Value);
+        route.Add(RunStep.HomeNight);
+        route.Add(RunStep.Sleep);
     }
 }
 
@@ -159,5 +166,5 @@ public static class RewindWarnings
     public static string JumpBack(int today, int target) =>
         target >= today
             ? $"Jump back to day {target}? Lost: today as played."
-            : $"Jump back to day {target}? Lost: days {target}-{today} as played. The run replays from day 1 with its seed and pet, each night on the default care.";
+            : $"Jump back to day {target}? Lost: days {target}-{today} as played. The run replays from day 1 with its seed and pet, each day's travellers decided correctly and each night on the default care.";
 }
