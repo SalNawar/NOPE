@@ -108,7 +108,7 @@ public sealed class HallLightingSO : ScriptableObject
     [Range(0f, 1f)] public float deskScreenDayShare = 0.4f;
 
     [Header("Night stages (Saleh 1018a: \"need more lights to activate as it gets darker\"; the evening: 0 by day, 1 at night)")]
-    /// <summary>The evening at which the desk's work lamp switches on (off before it): the afternoon dip (DeskLighting.LampOnHour), read by DeskLightLevel. 0.5 is the sunset (16:30 on the shipped cycle): the room has lost enough by then for the switch-on to show, since the lamp fills only what the room has lost.</summary>
+    /// <summary>The evening at which the desk's work lamp switches on (off before it; DeskLighting.LampOnHour), read by DeskLightLevel. 0.5 is the sunset (16:30 on the shipped cycle), a quarter of an hour before the plan's afternoon dip (H3, 16:45, evening about 0.74): by 16:30 the room has lost enough for the switch-on to show (the lamp fills only what the room has lost), and a lamp still off at 16:45 would leave the unlit mat under the readable line (luma 56 after the finish).</summary>
     [Range(0f, 1f)] public float deskLampOnAt = 0.5f;
 
     /// <summary>Seconds the desk lamp's filament takes to warm up (a dim blink, then easing up; at once with reduced motion).</summary>

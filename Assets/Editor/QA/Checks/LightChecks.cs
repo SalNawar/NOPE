@@ -72,8 +72,9 @@ public static class LightChecks
     public const float AfternoonDipHour = 16.75f;
 
     /// <summary>
-    /// BUG-14a: the work lamp switches on in the dusk, by the plan's afternoon
-    /// dip (H3, 16:45), and visibly: the pool's centre gains at least
+    /// BUG-14a: the work lamp switches on in the dusk, no later than the plan's
+    /// afternoon dip (H3, 16:45; the shipped knob switches it on at the sunset,
+    /// 16:30, a deviation flagged in docs/pending/LIGHT.md), and visibly: the pool's centre gains at least
     /// DeskLighting.SwitchOnLuma after the finish as it comes on (the lamp
     /// fills only what the room has lost, so a switch-on in full daylight
     /// would not show).

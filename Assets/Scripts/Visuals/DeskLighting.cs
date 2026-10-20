@@ -7,9 +7,11 @@ using System;
 /// one level and one colour that every desk shader multiplies by (DeskLight.hlsl,
 /// published by DeskLightLevel): the room's light falling from the full day
 /// (level 1, the desk as drawn) to its night floor (a cool tint), plus the
-/// work lamp's warm share once the lamp is on. The lamp switches on at the
-/// afternoon dip (<see cref="LampOnHour"/>: the hour the hall's evening reaches
-/// the lamp's knob) and its share counts only while it warms up and burns,
+/// work lamp's warm share once the lamp is on. The lamp switches on in the
+/// dusk (<see cref="LampOnHour"/>: the hour the hall's evening reaches the
+/// lamp's knob; the sunset, 16:30, with the shipped knob, a quarter of an hour
+/// before the plan's afternoon dip H3, because the unlit mat would fall under
+/// the readable line by 16:45) and its share counts only while it warms up and burns,
 /// so the switch-on reads as a warm pool coming up on the mat. Levels are
 /// relative to the full day: 1 draws the desk as by day, so nothing changes
 /// at noon, and the level never passes 1 (the lamp fills only what the room
@@ -278,7 +280,7 @@ public static class DeskLighting
     public static bool LampOn(float hour, in HallDayCycle.Settings cycle, in Knobs k) =>
         HallDayCycle.SwitchedOn(hour, Clamp01(k.LampOnAtEvening), 0, 0f, cycle);
 
-    /// <summary>The afternoon dip: the hour the lamp switches on (the hall's evening reaches the lamp's knob).</summary>
+    /// <summary>The hour the lamp switches on: the hall's evening reaches the lamp's knob (the sunset, 16:30, with the shipped knob: a quarter of an hour before the plan's afternoon dip, H3 16:45).</summary>
     public static float LampOnHour(in HallDayCycle.Settings cycle, in Knobs k) => HallDayCycle.HourAtEvening(Clamp01(k.LampOnAtEvening), cycle);
 
     /// <summary>

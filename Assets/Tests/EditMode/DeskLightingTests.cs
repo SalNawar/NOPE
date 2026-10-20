@@ -182,16 +182,34 @@ public class DeskLightingTests
     }
 
     [Test]
-    public void TheLampOnHour_IsTheAfternoonDip()
+    public void TheLampOnHour_IsTheSunset_ByThePlansDip()
     {
         float dip = DeskLighting.LampOnHour(Cycle, Knobs);
         Assert.That(dip, Is.InRange(15.75f, 16.75f), "within the dusk, by the plan's afternoon dip (H3, 16:45)");
-        Assert.AreEqual(16.5f, dip, 1f / 60f, "the sunset, with the shipped knob");
+        Assert.AreEqual(16.5f, dip, 1f / 60f, "the sunset, with the shipped knob: a quarter of an hour before H3 (a flagged deviation)");
         Assert.AreEqual(Knobs.LampOnAtEvening, HallDayCycle.Evening(dip, Cycle), 1e-3f, "where the hall's evening reaches the lamp's knob");
         Assert.IsFalse(DeskLighting.LampOn(dip - 1f / 60f, Cycle, Knobs), "off a minute before the dip");
         Assert.IsTrue(DeskLighting.LampOn(dip + 1f / 60f, Cycle, Knobs), "on a minute after it");
         for (float hour = 9f; hour < dip - 1f / 60f; hour += 1f / 60f)
             Assert.IsFalse(DeskLighting.LampOn(hour, Cycle, Knobs), $"{hour:0.00}: never earlier");
+    }
+
+    [Test]
+    public void ALampAtThePlansDip_WouldLeaveTheUnlitMatUnderTheLine()
+    {
+        // Why the lamp does not wait for H3 (16:45, the plan's afternoon dip): with the lamp switching on there, the room
+        // alone takes the mat under the readable line first (about luma 56 after the finish at 16:44), and again at dawn,
+        // where the lamp goes off as the evening falls back past the same knob.
+        const float h3 = 16.75f;
+        var atH3 = new DeskLighting.Knobs(Knobs.NightFloor, Knobs.NightTint, Knobs.LampLevel, Knobs.LampTint, HallDayCycle.Evening(h3, Cycle));
+        Assert.AreEqual(h3, DeskLighting.LampOnHour(Cycle, atH3), 1f / 60f, "this knob switches the lamp on at H3");
+        float before = h3 - 1f / 60f;
+        Assert.IsFalse(DeskLighting.LampOn(before, Cycle, atH3));
+        float unlit = DeskLighting.GradedLuma(DeskLighting.DarkestOnMat(DeskLighting.Evaluate(before, Cycle, atH3, 0f), Radius, MatWidth, MatDepth), Office);
+        Assert.That(unlit, Is.LessThan(DeskLighting.ReadableMatLuma + DeskLighting.MarginLuma), $"16:44 unlit: {unlit:0.0}");
+        // The shipped knob (the sunset) keeps the mat over the line at that minute: the lamp is on by then.
+        float shipped = DeskLighting.GradedLuma(DeskLighting.DarkestOnMat(DeskLighting.Evaluate(before, Cycle, Knobs, 1f), Radius, MatWidth, MatDepth), Office);
+        Assert.That(shipped, Is.GreaterThanOrEqualTo(DeskLighting.ReadableMatLuma + DeskLighting.MarginLuma), $"16:44 with the lamp on since 16:30: {shipped:0.0}");
     }
 
     [Test]

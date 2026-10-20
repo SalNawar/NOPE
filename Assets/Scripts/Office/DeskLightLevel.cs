@@ -14,9 +14,13 @@ using UnityEngine;
 /// so <see cref="Light"/> never clamps on a sprite's vertex colour. The lamp switches
 /// on at the afternoon dip (the hall's evening reaches the lamp's knob) with a
 /// click and a filament's warm-up (at once with reduced motion; a lamp already
-/// on when the office opens is simply on). <see cref="Light"/> is the same
-/// uniform light for the traveller (AnimeHallShiftLink) that DeskLight() gives
-/// the passport photo, so the photo check is fair at every hour. Made at run
+/// on when the office opens is simply on). <see cref="Light"/> is the uniform
+/// light (DeskLight()'s value) as a sprite tint: the traveller's figure takes
+/// it (AnimeHallShiftLink), and so must the passport photo, which is a
+/// LookSpriteStack of SpriteRenderers that DocumentCel's DeskLight() never
+/// reaches (its tint is DOC-LOOK's, requested in docs/pending/LIGHT.md);
+/// both through the same vertex colour, so the photo check is fair at every
+/// hour. Made at run
 /// time by the rig; while it is off, the globals fall back to today's look.
 /// When it is bound it checks the knobs against the real mat once, after the
 /// office finish (DeskLighting.ReadableAfterFinish: at full night the mat's
@@ -29,7 +33,7 @@ public sealed class DeskLightLevel : MonoBehaviour
     /// <summary>The desk light while one is enabled (the office in play); null otherwise.</summary>
     public static DeskLightLevel Live { get; private set; }
 
-    /// <summary>The uniform desk light (colour times level; white while unpublished): what the traveller is tinted by.</summary>
+    /// <summary>The uniform desk light (colour times level; white while unpublished): the sprite tint of the traveller (AnimeHallShiftLink) and, once DOC-LOOK applies it, of the passport photo.</summary>
     public Color Light { get; private set; } = Color.white;
 
     private static readonly int TintId = Shader.PropertyToID("_DeskLightTint");
