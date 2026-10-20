@@ -42,8 +42,18 @@ def git_head(repo):
         return ''
 
 
-# Unity's own churn (GitDirty.Churn): never a change to what is measured.
-CHURN = {'Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset'.lower()}
+# Unity's own churn (GitDirty.Churn): never a change to what is measured. An editor rewrites the build scene list and the
+# current quality level by itself; the generated project files (*.csproj, *.sln) are outside the paths and dropped anyway.
+CHURN = {p.lower() for p in ('Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset',
+                             'ProjectSettings/EditorBuildSettings.asset',
+                             'ProjectSettings/QualitySettings.asset')}
+CHURN_EXTENSIONS = ('.csproj', '.sln')
+
+
+def dirty_paths(name_only_output):
+    """GitDirty.Filter: git diff --name-only's output less the churn paths and the generated project files."""
+    paths = (line.strip() for line in (name_only_output or '').splitlines())
+    return [p for p in paths if p and p.lower() not in CHURN and not p.lower().endswith(CHURN_EXTENSIONS)]
 
 
 def git_dirty(repo):
@@ -54,7 +64,7 @@ def git_dirty(repo):
                               'Assets', 'Packages', 'ProjectSettings'], capture_output=True, text=True, check=True).stdout
     except (OSError, subprocess.CalledProcessError):
         return False
-    return any(line.strip() and line.strip().lower() not in CHURN for line in out.splitlines())
+    return bool(dirty_paths(out))
 
 
 def load(seq):

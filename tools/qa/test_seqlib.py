@@ -363,5 +363,16 @@ class ScenarioTests(unittest.TestCase):
                     self.assertRegex(step['path'], r'(?i)^(P-)?(plain|fast|slow|wobble|diag|flick|edge|off|onto)$', f'{name} step {i}')
 
 
+class DirtyTests(unittest.TestCase):
+    def test_unitys_churn_is_not_a_dirty_tree(self):
+        out = ('Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset\n'
+               'ProjectSettings/EditorBuildSettings.asset\r\nprojectsettings/qualitysettings.asset\n'
+               'Assembly-CSharp.csproj\nNOPE-t6.sln\n'
+               'ProjectSettings/ProjectSettings.asset\nPackages/manifest.json\nAssets/Scripts/GameManager.cs\n\n')
+        self.assertEqual(['ProjectSettings/ProjectSettings.asset', 'Packages/manifest.json', 'Assets/Scripts/GameManager.cs'],
+                         seqtools.dirty_paths(out))
+        self.assertEqual([], seqtools.dirty_paths('ProjectSettings/QualitySettings.asset\n'))
+
+
 if __name__ == '__main__':
     unittest.main()

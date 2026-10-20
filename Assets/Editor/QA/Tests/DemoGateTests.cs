@@ -169,6 +169,16 @@ public class DemoGateTests
         CollectionAssert.IsEmpty(GitDirty.Filter("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset\r\n"));
     }
 
+    /// <summary>An editor rewrites the build scene list, the current quality level and the project files by itself: none of them makes a dirty tree; a real settings or package change still does.</summary>
+    [Test]
+    public void GitDirty_Filter_DropsUnitysProjectSettingsChurn()
+    {
+        string output = "ProjectSettings/EditorBuildSettings.asset\r\nProjectSettings/QualitySettings.asset\nAssembly-CSharp.csproj\nNOPE-t6.sln\n"
+                      + "ProjectSettings/ProjectSettings.asset\nProjectSettings/InputManager.asset\nPackages/manifest.json\n";
+        CollectionAssert.AreEqual(new[] { "ProjectSettings/ProjectSettings.asset", "ProjectSettings/InputManager.asset", "Packages/manifest.json" }, GitDirty.Filter(output));
+        CollectionAssert.IsEmpty(GitDirty.Filter("projectsettings/qualitysettings.asset\nProjectSettings/EditorBuildSettings.asset\n"));
+    }
+
     private static GateResult Throws() => throw new InvalidOperationException("boom");
 
     private static GateResult NullResult() => null;

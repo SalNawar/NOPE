@@ -48,6 +48,8 @@ public static class BuiltPlayerCapture
         string product = PlayerSettings.productName;
         string settingsFile = Path.Combine(GateResults.ProjectRoot, ProjectSettingsAsset);
         byte[] settingsBefore = File.Exists(settingsFile) ? File.ReadAllBytes(settingsFile) : null;
+        // The tree's state before the build sets the QA product name (it may save ProjectSettings.asset).
+        bool dirty = GitDirty.Changed(GateResults.ProjectRoot).Count > 0;
         BuildResult result;
         try
         {
@@ -67,7 +69,7 @@ public static class BuiltPlayerCapture
             var info = new QaBuildInfo
             {
                 commit = GitHead.Read(GateResults.ProjectRoot),
-                dirty = GitDirty.Changed(GateResults.ProjectRoot).Count > 0,
+                dirty = dirty,
                 project = GateResults.ProjectRoot,
                 product = QaProductName(product),
                 built = DateTime.Now.ToString("s"),

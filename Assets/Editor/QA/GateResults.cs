@@ -74,10 +74,14 @@ public static class GateResults
         }).ToList();
     }
 
-    /// <summary>Writes every assertion of a finished run into the results folder, stamped with HEAD and whether the tree is dirty (the editor harness calls it).</summary>
-    public static int Import(QaRunReport report, string source, bool builtPlayer)
+    /// <summary>
+    /// Writes every assertion of a finished run into the results folder,
+    /// stamped with HEAD and <paramref name="dirty"/> (the editor harness passes
+    /// the tree's state it snapshotted before it touched any setting).
+    /// </summary>
+    public static int Import(QaRunReport report, string source, bool builtPlayer, bool dirty)
     {
-        List<QaGateResult> results = FromRun(report, source, GitHead.Read(ProjectRoot), builtPlayer, GitDirty.Changed(ProjectRoot).Count > 0);
+        List<QaGateResult> results = FromRun(report, source, GitHead.Read(ProjectRoot), builtPlayer, dirty);
         foreach (QaGateResult r in results)
             Write(r);
         return results.Count;
@@ -131,9 +135,15 @@ public static class GateResults
 /// files under Assets, Packages and ProjectSettings whose content differs
 /// from HEAD (staged or not; line-ending-only differences do not count, as
 /// with git diff), less the files Unity rewrites on its own
-/// (<see cref="Churn"/>). Untracked files do not count (the job runner's
-/// _TimeDesk* scripts are untracked by rule). Runs git; when git cannot run,
-/// it returns nothing (a result is then judged by its commit alone).
+/// (<see cref="Churn"/>: an editor rewrites the build scene list and the
+/// current quality level by itself, HOUSE_RULES "after Unity runs"; the
+/// generated *.csproj/*.sln at the root are outside the paths and dropped
+/// anyway). Untracked files do not count (the job runner's _TimeDesk* scripts
+/// are untracked by rule). The rig's own setting changes (the QA quality
+/// level, the QA product name) never count: the harness and the QA build
+/// take this snapshot before they touch a setting. Runs git; when git cannot
+/// run, it returns nothing (a result is then judged by its commit alone).
+/// Mirrored by tools/qa/seqtools.py (CHURN, dirty_paths, git_dirty).
 /// </summary>
 public static class GitDirty
 {
@@ -141,7 +151,12 @@ public static class GitDirty
     public static readonly string[] Churn =
     {
         "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset",
+        "ProjectSettings/EditorBuildSettings.asset",
+        "ProjectSettings/QualitySettings.asset",
     };
+
+    /// <summary>The generated project files Unity rewrites at every import (never part of a measurement).</summary>
+    private static readonly string[] ChurnExtensions = { ".csproj", ".sln" };
 
     /// <summary>The changed paths in <paramref name="root"/> (see the class), empty when clean or when git cannot run.</summary>
     public static List<string> Changed(string root)
@@ -170,9 +185,13 @@ public static class GitDirty
         }
     }
 
-    /// <summary>git diff --name-only's output less the churn paths (pure; unit-tested).</summary>
+    /// <summary>git diff --name-only's output less the churn paths and generated project files (pure; unit-tested).</summary>
     public static List<string> Filter(string nameOnlyOutput) =>
-        (nameOnlyOutput ?? string.Empty).Split('\n').Select(l => l.Trim()).Where(l => l.Length > 0 && !Churn.Contains(l, StringComparer.OrdinalIgnoreCase)).ToList();
+        (nameOnlyOutput ?? string.Empty).Split('\n').Select(l => l.Trim()).Where(l => l.Length > 0 && !IsChurn(l)).ToList();
+
+    private static bool IsChurn(string path) =>
+        Churn.Contains(path, StringComparer.OrdinalIgnoreCase)
+        || ChurnExtensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase));
 }
 
 /// <summary>Reads the checked-out commit from a repository or worktree folder without running git (pure file reads).</summary>

@@ -46,6 +46,7 @@ public static class QaPlayHarness
     private const string QualityKey = "QaRig.Quality";
     private const string ResultKey = "QaRig.Result";
     private const string PreparedKey = "QaRig.Prepared";
+    private const string DirtyKey = "QaRig.Dirty";
     private const int Idle = 0, Playing = 1, Finishing = 2;
 
     /// <summary>The game view's resolution name while QA plays.</summary>
@@ -137,6 +138,8 @@ public static class QaPlayHarness
         SessionState.SetBool(BegunKey, false);
         SessionState.SetFloat(DeadlineKey, (float)(EditorApplication.timeSinceStartup + maxMinutes * 60f));
         SessionState.SetString(ResultKey, string.Empty);
+        // The tree's state before the rig touches a setting (the quality level below is saved into QualitySettings.asset).
+        SessionState.SetBool(DirtyKey, GitDirty.Changed(GateResults.ProjectRoot).Count > 0);
 
         SetAside();
         PlayModeWindow.GetRenderingResolution(out uint w, out uint h);
@@ -189,7 +192,7 @@ public static class QaPlayHarness
             File.WriteAllText(Path.Combine(OutDir, "harness.txt"), "timeout: the run did not finish before its deadline");
             return null;
         }
-        int imported = GateResults.Import(runner.Report, OutDir, false);
+        int imported = GateResults.Import(runner.Report, OutDir, false, SessionState.GetBool(DirtyKey, false));
         RunVerdict verdict = DemoGate.JudgeRun(runner.Report, DemoGate.KnownRedRunPatterns());
         SessionState.SetString(ResultKey, verdict.Ok ? "ok" : "failed");
         File.WriteAllText(Path.Combine(OutDir, "harness.txt"), $"{verdict.Line}\n{imported} result(s) imported into {GateResults.Folder}\n");
@@ -300,7 +303,7 @@ public static class QaPlayHarness
             return true;
         string tool = Path.Combine(GateResults.ProjectRoot, "tools", "qa", "seqtools.py");
         string head = GitHead.Read(GateResults.ProjectRoot);
-        bool dirty = GitDirty.Changed(GateResults.ProjectRoot).Count > 0;
+        bool dirty = SessionState.GetBool(DirtyKey, false);
         var log = new StringBuilder();
         bool ok = true;
         foreach (string seq in Directory.GetDirectories(seqRoot))
