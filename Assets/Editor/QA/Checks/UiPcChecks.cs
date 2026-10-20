@@ -17,7 +17,7 @@ using UnityEngine.Experimental.Rendering;
 /// one action per Enter, the 150 % zoom, Orders' state across minimise and
 /// restore and one balance everywhere (BUG-58a), and the PC's open and close
 /// with no single-frame full-screen jump (BUG-32c; seqtools cuts on pc_open
-/// and pc_close).
+/// and pc_close, both recorded with full motion).
 /// </summary>
 public static class UiPcChecks
 {
@@ -124,4 +124,8 @@ public static class UiPcChecks
     /// <summary>The PC's open and close have no single-frame full-screen jump (seqtools cuts on the session's pc_open and pc_close sequences).</summary>
     [GateCheck("uipc.transitions", Owner, GateKind.Play)]
     public static GateResult Transitions() => GateResults.Require("uipc.transitions", Owner, "ui_pc_session.seq.pc_*.cuts");
+
+    /// <summary>The session recorded pc_open and pc_close with full motion, so <c>uipc.transitions</c> judged the CRT line and not the Reduced fade (Reduced Motion is a saved preference: set by hand, or left on by a run stopped during uipcPowerOn's reduced pass).</summary>
+    [GateCheck("uipc.fullmotion", Owner, GateKind.Play)]
+    public static GateResult FullMotion() => GateResults.Require("uipc.fullmotion", Owner, "ui_pc_session.fullmotion.*");
 }

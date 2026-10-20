@@ -22,7 +22,8 @@ using UnityEngine.UI;
 /// <item><c>uipcEscDark</c>: with the screen turned off by the frame's power button, Esc turns it on and brings Settings forward, a right-click does nothing, and the PC stays open (R3/R4).</item>
 /// <item><c>uipcRoom</c>: a click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</item>
 /// <item><c>uipcBezel</c>: a click on the bezel leaves the PC (R3/R4: "press Q or click the bezel").</item>
-/// <item><c>uipcPowerOn</c>: a right-click and Esc a few frames after Q, while the picture still powers on (the desktop's clicks wait for it): the PC stays open and Esc brings Settings forward, with full motion and with Reduced Motion (R3/R4: "Esc = Settings everywhere").</item>
+/// <item><c>uipcPowerOn</c>: a right-click and Esc a few frames after Q, while the picture still powers on (the desktop's clicks wait for it): each is taken by the desktop, the PC stays open and Esc brings Settings forward, with full motion and with Reduced Motion, and the player's motion choice is put back whatever the passes did (R3/R4: "Esc = Settings everywhere").</item>
+/// <item><c>uipcFullMotion</c>: before the session records pc_open and pc_close, Reduced Motion is off, so the recordings show the CRT line.</item>
 /// <item><c>uipcTray</c>: the tray clock reads the shift clock's time over today's date, the CRT clock plate is gone, no credits in the tray (BUG-20a, 21a).</item>
 /// <item><c>uipcWindows</c>: every app opened from the Start menu, and the F1 card (at least 8 windows); the taskbar names each open window by a button or counts it behind the chevron, nothing over the tray, and the chevron brings each waiting window forward in turn (BUG-21a).</item>
 /// <item><c>uipcOrder</c>: a double-click on an orderable Orders card places exactly one order, charged once (BUG-58a, UI-25).</item>
@@ -48,6 +49,7 @@ public static class UiPcRigOps
         QaRunner.RegisterOp("uipcRoom", Room);
         QaRunner.RegisterOp("uipcBezel", Bezel);
         QaRunner.RegisterOp("uipcPowerOn", PowerOn);
+        QaRunner.RegisterOp("uipcFullMotion", FullMotion);
         QaRunner.RegisterOp("uipcWindows", Windows);
         QaRunner.RegisterOp("uipcOrder", Order);
         QaRunner.RegisterOp("uipcEnter", Enter);
@@ -107,26 +109,34 @@ public static class UiPcRigOps
 
     /// <summary>
     /// The back-out during the power-on, with full motion, then with Reduced
-    /// Motion (the player's choice, set for the step and put back after: a
-    /// setting, not the input under test). Each time: Q leaves the PC and the
-    /// close is waited out, then Q opens it, and 2 frames later a right-click
-    /// over the glass and then Esc arrive while the picture still moves
-    /// (PcFrame.PictureMoving, about 300 ms: the desktop's clicks wait for the
-    /// whole picture, its keys and back-out never do). The PC must stay open
-    /// and Settings come forward (asserts <c>poweron.full</c> and
-    /// <c>poweron.reduced</c>; the review of fix round 2: the keys were gated on
-    /// the raycaster the power-on holds off, so the office's back-out closed
-    /// the PC).
+    /// Motion (a setting for the step, not the input under test). Each pass
+    /// (<see cref="PowerOnPass"/>, asserts <c>poweron.full</c> and
+    /// <c>poweron.reduced</c>) closes the PC with Q, opens it with Q, and
+    /// sends a right-click and then Esc while the picture still moves; the
+    /// review of fix round 2 found the keys gated on the raycaster the
+    /// power-on holds off, so the office's back-out closed the PC.
+    /// Reduced Motion is a saved player preference (its setter writes
+    /// PlayerPrefs), so the op always puts the player's choice back: each pass
+    /// runs under <see cref="QaRunner.Guard"/>, so a wait that times out (or
+    /// anything else that throws) fails that pass's assert with the
+    /// exception's text instead of ending the run inside the op, and the
+    /// choice is restored in a finally. Left on, it would make the next
+    /// session record pc_open and pc_close as the Reduced fade (uipcFullMotion
+    /// fails that). Not covered: a run stopped from outside during a pass (its
+    /// deadline, a harness reset, play mode left, the player closed) stops
+    /// this op without running the finally; that needs QA-RIG's run-level
+    /// cleanup (docs/pending/UI-PC.md, Requests).
     /// </summary>
     private static IEnumerator PowerOn(QaRunner runner, QaStep step)
     {
         OfficeViewController view = QaGame.Find<OfficeViewController>();
         PcFrame frame = QaGame.Find<PcFrame>();
+        DesktopKeyboard keys = QaGame.Find<DesktopKeyboard>();
         DesktopWindow settings = Window<SettingsWindowController>();
         var glass = frame != null ? (RectTransform)typeof(PcFrame).GetField("glass", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(frame) : null;
-        if (view == null || settings == null || glass == null || !PcOpen(view))
+        if (view == null || keys == null || settings == null || glass == null || !PcOpen(view))
         {
-            runner.Assert("poweron.full", Owner, false, "no open PC frame or Settings", "run it with the PC open in the office");
+            runner.Assert("poweron.full", Owner, false, "no open PC frame, desktop keys or Settings", "run it with the PC open in the office");
             yield break;
         }
         var g = new Vector3[4];
@@ -134,36 +144,83 @@ public static class UiPcRigOps
         yield return runner.Input.MoveTo((g[0] + g[2]) / 2f, 4); // over the glass's middle (the overlay canvas's world space is the screen)
 
         bool chosen = MotionPreference.Reduced;
-        foreach (bool reduced in new[] { false, true })
+        try
         {
-            MotionPreference.Reduced = reduced;
-            string id = reduced ? "poweron.reduced" : "poweron.full";
-            yield return runner.Input.Tap(Key.Q); // leave the PC (Q is one of its two ways out)
-            yield return QaGame.Until(() => !PcOpen(view) && !PcFrame.PictureMoving, 3f, "the PC frame to close");
-            if (settings.IsOpen)
-                settings.Close(); // Settings must come forward by this Esc, not stay from an earlier step
-            yield return runner.Input.Tap(Key.Q, 1); // open it: Tap returns on the frame after the one that took the press
-
-            InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position }.WithButton(MouseButton.Right));
-            yield return null; // the game takes the right-click this frame, 2 frames after the Q
-            bool rightEarly = PcFrame.PictureMoving;
-            InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position });
-            yield return null;
-            bool afterRight = PcOpen(view);
-
-            InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState(Key.Escape));
-            yield return null; // the game takes the Esc this frame, 4 frames after the Q
-            bool escEarly = PcFrame.PictureMoving;
-            InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState());
-            yield return QaGame.Until(() => !PcFrame.PictureMoving, 3f, "the PC's picture to be whole");
-            yield return QaGame.Frames(2);
-
-            bool open = PcOpen(view), front = settings.IsOpen && !settings.IsMinimised;
-            runner.Assert(id, Owner, rightEarly && escEarly && afterRight && open && front,
-                $"right-click {(rightEarly ? "during" : "after")} the power-on: pc {(afterRight ? "stayed open" : "closed")}; Esc {(escEarly ? "during" : "after")} it: pc {(open ? "open" : "closed")}, settings {(front ? "in front" : "not shown")}",
-                "the keys and the back-out are the PC's from the press frame, so Esc opens Settings and nothing but Q and the bezel leaves (R3/R4); both presses must land while the picture moves");
+            foreach (bool reduced in new[] { false, true })
+            {
+                MotionPreference.Reduced = reduced;
+                string id = reduced ? "poweron.reduced" : "poweron.full";
+                string stopped = null;
+                yield return QaRunner.Guard(PowerOnPass(runner, id, view, keys, settings), e => stopped = $"{e.GetType().Name}: {e.Message}");
+                if (stopped != null)
+                    runner.Assert(id, Owner, false, $"stopped: {stopped}",
+                        "the pass did not finish (a wait timed out or it threw), so nothing was measured; Reduced Motion is put back all the same");
+            }
         }
-        MotionPreference.Reduced = chosen;
+        finally
+        {
+            MotionPreference.Reduced = chosen; // the player's choice, never left as a pass set it
+        }
+    }
+
+    /// <summary>
+    /// One pass of <see cref="PowerOn"/> at the motion setting in force,
+    /// asserting <paramref name="id"/>: Q leaves the PC and the close is
+    /// waited out, then Q opens it, and 2 frames later a right-click over the
+    /// glass and then Esc arrive while the picture still moves
+    /// (PcFrame.PictureMoving, about 300 ms: the desktop's clicks wait for the
+    /// whole picture, its keys and back-out never do). Each press must be
+    /// taken by the desktop in its own frame (DesktopKeyboard stamps every
+    /// back-out with <see cref="DesktopKeyboard.EscapeTakenFrame"/>), so a
+    /// press the rig failed to deliver fails instead of passing for nothing;
+    /// the PC must stay open and Settings come forward.
+    /// </summary>
+    private static IEnumerator PowerOnPass(QaRunner runner, string id, OfficeViewController view, DesktopKeyboard keys, DesktopWindow settings)
+    {
+        yield return runner.Input.Tap(Key.Q); // leave the PC (Q is one of its two ways out)
+        yield return QaGame.Until(() => !PcOpen(view) && !PcFrame.PictureMoving, 3f, "the PC frame to close");
+        if (settings.IsOpen)
+            settings.Close(); // Settings must come forward by this Esc, not stay from an earlier step
+        yield return runner.Input.Tap(Key.Q, 1); // open it: Tap returns on the frame after the one that took the press
+
+        InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position }.WithButton(MouseButton.Right));
+        yield return null; // the game takes the right-click this frame, 2 frames after the Q
+        bool rightEarly = PcFrame.PictureMoving;
+        bool rightTaken = keys.EscapeTakenFrame == Time.frameCount; // the desktop's back-out took this right-click
+        InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position });
+        yield return null;
+        bool afterRight = PcOpen(view);
+
+        InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState(Key.Escape));
+        yield return null; // the game takes the Esc this frame, 4 frames after the Q
+        bool escEarly = PcFrame.PictureMoving;
+        bool escTaken = keys.EscapeTakenFrame == Time.frameCount; // the desktop took this Esc
+        InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState());
+        yield return QaGame.Until(() => !PcFrame.PictureMoving, 3f, "the PC's picture to be whole");
+        yield return QaGame.Frames(2);
+
+        bool open = PcOpen(view), front = settings.IsOpen && !settings.IsMinimised;
+        runner.Assert(id, Owner, rightEarly && rightTaken && escEarly && escTaken && afterRight && open && front,
+            $"right-click {(rightEarly ? "during" : "after")} the power-on, {(rightTaken ? "taken by the desktop" : "not taken by the desktop")}: pc {(afterRight ? "stayed open" : "closed")}; Esc {(escEarly ? "during" : "after")} it, {(escTaken ? "taken by the desktop" : "not taken by the desktop")}: pc {(open ? "open" : "closed")}, settings {(front ? "in front" : "not shown")}",
+            "the keys and the back-out are the PC's from the press frame, so Esc opens Settings and nothing but Q and the bezel leaves (R3/R4); both presses must land while the picture moves, each taken by the desktop in its own frame");
+    }
+
+    /// <summary>
+    /// Before a recording of the PC's open or close (the step's name, pc_open
+    /// or pc_close): Reduced Motion is off, so the recording shows the CRT
+    /// line that <c>uipc.transitions</c> judges, not the Reduced fade (asserts
+    /// <c>fullmotion.&lt;name&gt;</c>). Reduced Motion is a saved preference:
+    /// one set by hand in this project's prefs, or left on by a run stopped
+    /// during uipcPowerOn's reduced pass, fails here instead of letting the
+    /// cuts check pass on the fade.
+    /// </summary>
+    private static IEnumerator FullMotion(QaRunner runner, QaStep step)
+    {
+        bool full = !MotionPreference.Reduced;
+        runner.Assert("fullmotion." + QaRunner.Safe(string.IsNullOrEmpty(step.name) ? "pc" : step.name), Owner, full,
+            full ? "full motion" : "Reduced Motion is on",
+            "the session records the PC's open and close with full motion (Settings > Motion: Full); with Reduced Motion they show the fade, and uipc.transitions would pass without measuring the CRT line");
+        yield break;
     }
 
     /// <summary>A click on the room right of the frame: the PC stays open.</summary>
