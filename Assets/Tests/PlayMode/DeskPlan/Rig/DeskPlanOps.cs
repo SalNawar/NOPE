@@ -15,8 +15,16 @@ using UnityEngine.Rendering;
 /// in black with the object's in white over the depth (its pixels left in
 /// sight), and asserts <c>visible.&lt;name&gt;</c>: seen ÷ own ≥ f. A click
 /// box with no renderers is measured through the renderers its Clickable
-/// outlines (an art prop's). <c>deskexpect</c> asserts a bool member reads
-/// true (the intercom's wheel open with the reading view still on).
+/// outlines (an art prop's). <c>deskclickboxes</c> (name = the assertion's
+/// name; f = the tolerance in metres, 0.005 when 0) asserts
+/// <c>clickboxes.&lt;name&gt;</c>: no two desk objects' real click boxes go
+/// into each other (BUG-4a: "fails the build on ... overlapping click
+/// boxes"): every shown Clickable's BoxCollider over the desk and off the
+/// paper mat, grouped by the desk object it belongs to
+/// (DeskLayout.HomeIdOf), measured by Physics.ComputePenetration and judged
+/// by DeskArrangement.ClickBoxClashes. <c>deskexpect</c> asserts a bool
+/// member reads true (the intercom's wheel open with the reading view still
+/// on).
 /// Registered at load in the editor and at play start in the QA player.
 /// </summary>
 public static class DeskPlanOps
@@ -36,6 +44,62 @@ public static class DeskPlanOps
     {
         QaRunner.RegisterOp("deskvisible", Visible);
         QaRunner.RegisterOp("deskexpect", Expect);
+        QaRunner.RegisterOp("deskclickboxes", ClickBoxes);
+    }
+
+    /// <summary>How high over the desk's top a click box's centre may stand and still count as the desk's (metres): the PC and the lamp, not the hall.</summary>
+    private const float DeskReach = 0.8f;
+
+    private static IEnumerator ClickBoxes(QaRunner runner, QaStep step)
+    {
+        yield return new WaitForFixedUpdate();
+        string name = "clickboxes." + (string.IsNullOrEmpty(step.name) ? "desk" : step.name);
+        float tolerance = step.f > 0f ? step.f : 0.005f;
+        if (!DeskLayout.Bound)
+        {
+            runner.Assert(name, Owner, false, "not measured", "the desk is not bound (DeskLayout.Bound)");
+            yield break;
+        }
+        DeskFrame frame = DeskLayout.Frame;
+        DeskRect desk = DeskHomeMap.DeskTop;
+        var boxes = new List<BoxCollider>();
+        var names = new List<string>();
+        var owners = new List<string>();
+        foreach (Clickable click in Object.FindObjectsByType<Clickable>(FindObjectsSortMode.None))
+        {
+            if (!click.isActiveAndEnabled || !click.TryGetComponent(out BoxCollider box) || !box.enabled)
+                continue;
+            Vector3 centre = box.bounds.center;
+            Vector2 at = frame.Local(centre);
+            float over = centre.y - frame.Origin.y;
+            if (!desk.Contains(at.x, at.y) || DeskLayout.Mat.IsOnMat(at.x, at.y) || over < -0.05f || over > DeskReach)
+                continue; // the hall, the traveller's side, the papers and the mat's own toggle
+            boxes.Add(box);
+            names.Add(Path(click.transform));
+            owners.Add(DeskLayout.HomeIdOf(click.transform));
+        }
+        float Depth(int i, int j)
+        {
+            BoxCollider a = boxes[i], b = boxes[j];
+            if (!a.bounds.Intersects(b.bounds))
+                return 0f;
+            return Physics.ComputePenetration(a, a.transform.position, a.transform.rotation, b, b.transform.position, b.transform.rotation, out _, out float d) ? d : 0f;
+        }
+        List<string> clashes = DeskArrangement.ClickBoxClashes(names, owners, Depth, tolerance);
+        runner.Assert(name, Owner, clashes.Count == 0, $"{boxes.Count} desk click box(es), {clashes.Count} clash(es)",
+                      clashes.Count > 0 ? string.Join("; ", clashes) : $"tolerance {tolerance * 1000f:0} mm (BUG-4a)");
+    }
+
+    /// <summary>A click box's path for the report (its object and up to two parents).</summary>
+    private static string Path(Transform t)
+    {
+        string path = t.name;
+        for (int i = 0; i < 2 && t.parent != null; i++)
+        {
+            t = t.parent;
+            path = t.name + "/" + path;
+        }
+        return path;
     }
 
     /// <summary><c>deskexpect</c> (target = a bool "Type.Member"; name = the assertion's name): asserts <c>expect.&lt;name&gt;</c>, the member reads true now (the reading view still on, the wheel open).</summary>

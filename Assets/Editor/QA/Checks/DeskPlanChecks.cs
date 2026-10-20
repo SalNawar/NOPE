@@ -12,14 +12,16 @@ using UnityEditor;
 /// QaJobs.Scenario): every kept object ≥90% seen (the ID-buffer op
 /// deskvisible) at A1 and A2 and its centre click reaching it; the intercom
 /// opening the wheel in the office and the reading view, the reading view
-/// kept; decorations resting where let go (drop ≤8 px). The crate mornings
+/// kept; no two desk objects' real click boxes overlapping (the op
+/// deskclickboxes, days 1 and 12); decorations resting where let go (drop
+/// ≤8 px). The crate mornings
 /// and the delivery-once criterion are recipes in docs/pending/DESK-PLAN.md.
 /// </summary>
 public static class DeskPlanChecks
 {
     private const string Owner = "DESK-PLAN";
 
-    /// <summary>The live desk config's home map has no problem (DeskLayoutSettings.Problems; the builder also stops on one).</summary>
+    /// <summary>The live desk config's home map has no problem (DeskLayoutSettings.Problems: the homes and their click boxes with the builder's pad; the builder also stops on one).</summary>
     [GateCheck("desk.plan.homes", Owner)]
     public static GateResult Homes()
     {
@@ -60,6 +62,10 @@ public static class DeskPlanChecks
     /// <summary>Every click of the home run reached its object under the pointer (centre-clickable; nothing covers it).</summary>
     [GateCheck("desk.play.clicks", Owner, GateKind.Play)]
     public static GateResult Clicks() => GateResults.Require("desk.play.clicks", Owner, "desk_plan_homes.presses");
+
+    /// <summary>No two desk objects' real click boxes go into each other deeper than 5 mm, days 1 and 12 (BUG-4a; the static half is desk.plan.homes' ClickBoxProblems).</summary>
+    [GateCheck("desk.play.clickBoxes", Owner, GateKind.Play)]
+    public static GateResult ClickBoxes() => GateResults.Require("desk.play.clickBoxes", Owner, "desk_plan_homes.clickboxes.*");
 
     /// <summary>The intercom opens the wheel from the office view and from the reading view, and the reading view stays (FIX_PLAN_v2's DESK-PLAN delta).</summary>
     [GateCheck("desk.play.intercom", Owner, GateKind.Play)]
