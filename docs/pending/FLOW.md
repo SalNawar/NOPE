@@ -4,7 +4,9 @@ Branch `fix/a-flow`, cut from main `9b8ab5f` (P0: carve, cuts, QA-RIG) and **reb
 
 **Bugs closed here (code; each still needs its Unity recipe, §3):** 28b (CloseNow honours the ending), 32a, 34a, 38b, 56a, 65k, 72, 73c (MotionTuning_Default), 73f (the clock warning); 34b **in the office** (R3 included).
 
-**Verifier round 2 (this commit):** rebased onto `4290bd6` (one conflict, the FEATURES.md endings line: both insertions kept, RUN-SAFE's night check first); the statements that RUN-SAFE had not yet adopted `SceneTransit.Load` corrected everywhere; the [BP] load line now measured in real time (`FlowLoadWatch`, `flow_load` / `flow_load_seq`, §1 BUG-31a, recipe 9); `Transit.cs`'s summaries say shutter, not fade; the known-red owners and the right-click question listed for INTEGRATION and Saleh.
+**Verifier round 3 (this commit, docs only):** §1 Carve cites the rebased carve `cb1846a` (14 MOVED, 68 SAME) instead of the pre-rebase `b8c6e1b`; `EveningEditionView.SortingOrder`'s summary says the scene change's shutter (`TransitShutter`), not a black veil.
+
+**Verifier round 2 (`e1218f9`):** rebased onto `4290bd6` (one conflict, the FEATURES.md endings line: both insertions kept, RUN-SAFE's night check first); the statements that RUN-SAFE had not yet adopted `SceneTransit.Load` corrected everywhere; the [BP] load line now measured in real time (`FlowLoadWatch`, `flow_load` / `flow_load_seq`, §1 BUG-31a, recipe 9); `Transit.cs`'s summaries say shutter, not fade; the known-red owners and the right-click question listed for INTEGRATION and Saleh.
 
 **Live in play since the rebase: 31a's shutter and async load.** RUN-SAFE's `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` (`RunManager.cs`, on main) already call `SceneTransit.Load`, so on this branch every scene change in play brings the shutter down and loads the scene (and the office's gameplay layer) asynchronously. FIX_PLAN names the risk: "Async loading reorders Awake/Start: smoke play and full sequence at every step". **Every recipe in §3 runs on this rebased tree**, and recipe 2 (smoke) and recipe 11 (a full played day) come first.
 
@@ -24,7 +26,7 @@ Branch `fix/a-flow`, cut from main `9b8ab5f` (P0: carve, cuts, QA-RIG) and **reb
 
 ## 1. Changes by BUG id
 
-### Carve (LEASES.md proposal, done as a pure move): commit `b8c6e1b`
+### Carve (LEASES.md proposal, done as a pure move): commit `cb1846a`
 `GameManager.cs` is split so each Phase B track holds its own partial instead of chaining on the root:
 
 | Partial | What moved | Phase B holder |
@@ -34,7 +36,7 @@ Branch `fix/a-flow`, cut from main `9b8ab5f` (P0: carve, cuts, QA-RIG) and **reb
 | `GameManager.News.cs` | Start's archive call, extracted as `RecordTodaysPaper` | NEWS-WEB |
 | `GameManager.Departures.cs` | `Departed`, `AnnounceDeparture` | PORTALS |
 
-No serialized field moved. `carve_check.py --base origin/main --head b8c6e1b`: 14 MOVED, 60 SAME. Its two reports are the extract itself: `Start` lost the archive lines, and `RecordTodaysPaper` is the new member holding them, unchanged. Both were checked by hand. LEASES.md's "if FLOW doesn't carve" chain on `GameManager.cs` no longer applies, and INTEGRATION updates the register. The shutter's call in `OpenShift` (`GameManager.Booth.cs`, this branch) passes to BELL-SIGN with the partial.
+No serialized field moved. `python E:\unity\NOPE-tools\scripts\carve_check.py --base origin/main --head cb1846a E:\unity\NOPE-docs`: 14 MOVED, 68 SAME. (`cb1846a` is the carve after the round 2 rebase onto `4290bd6`; the pre-rebase carve `b8c6e1b` is no longer on this branch, and checking it against today's origin/main prints spurious VANISHED/CHANGED lines from RUN-SAFE's files.) Its two reports are the extract itself: `Start` lost the archive lines, and `RecordTodaysPaper` is the new member holding them, unchanged. Both were checked by hand. LEASES.md's "if FLOW doesn't carve" chain on `GameManager.cs` no longer applies, and INTEGRATION updates the register. The shutter's call in `OpenShift` (`GameManager.Booth.cs`, this branch) passes to BELL-SIGN with the partial.
 
 ### BUG-34a: the clock and audio pause on focus loss and while Settings is open
 - **`Domain/PauseState.cs` (new, pure).** The game's pause is a set of named sources: `Request(source, scope)` and `Release(source)`.

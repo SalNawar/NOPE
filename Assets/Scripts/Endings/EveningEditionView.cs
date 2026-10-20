@@ -29,7 +29,7 @@ public sealed class EveningEditionView : MonoBehaviour
     /// <summary>The page's size in reference pixels (the canvas fits 1920x1080 by its height).</summary>
     private static readonly Vector2 PageSize = new Vector2(1000f, 1000f);
 
-    /// <summary>The canvas's sorting order: over the title's panels, under the transition's black veil.</summary>
+    /// <summary>The canvas's sorting order: over the title's panels, under the scene change's shutter (TransitShutter).</summary>
     private const int SortingOrder = 500;
 
     /// <summary>True once a scene other than the title loaded since the title last did: the run was played this session.</summary>
