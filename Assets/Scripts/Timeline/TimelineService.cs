@@ -41,6 +41,15 @@ public static class TimelineService
     /// <summary>Source label prefix for dominance-tier effects (cleared and rebuilt nightly).</summary>
     private const string TierSourcePrefix = "tier:";
 
+    /// <summary>
+    /// The nightly resolve's trace (each step's entry, exit and counts): logged
+    /// only in a build with TIMEDESK_TRACE_TIMELINE defined (Player Settings,
+    /// Scripting Define Symbols), otherwise compiled out with its arguments
+    /// (BUG-65k: about 80 stack-traced lines a night). Errors still log.
+    /// </summary>
+    [System.Diagnostics.Conditional("TIMEDESK_TRACE_TIMELINE")]
+    private static void Trace(string line) => Debug.Log(line);
+
     // =========================================================
     // Shift-time: impacts per decision
     // =========================================================
@@ -132,7 +141,7 @@ public static class TimelineService
             return;
         }
 
-        Debug.Log($"[TimelineService] >>> Entering NightlyResolve (day {world.day} -> {world.day + 1}).");
+        Trace($"[TimelineService] >>> Entering NightlyResolve (day {world.day} -> {world.day + 1}).");
 
         int tomorrow = world.day + 1;
         var news = new List<string>();
@@ -153,7 +162,7 @@ public static class TimelineService
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, History.FrontFirst(front, news), desk);
 
-        Debug.Log($"[TimelineService] <<< Exiting NightlyResolve (activeEffects={world.timeline.activeEffects.Count}, dominant={world.timeline.dominantKeys.Count}, supporting={world.timeline.supportingKeys.Count}, briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count}).");
+        Trace($"[TimelineService] <<< Exiting NightlyResolve (activeEffects={world.timeline.activeEffects.Count}, dominant={world.timeline.dominantKeys.Count}, supporting={world.timeline.supportingKeys.Count}, briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count}).");
     }
 
     /// <summary>
@@ -189,7 +198,7 @@ public static class TimelineService
     private static void RecomputeDominance(WorldState world, ContentLibrarySO lib, GameConfigSO config, List<string> news,
                                            HashSet<NationEraProfileSO> tomorrowPlaces)
     {
-        Debug.Log("[TimelineService] >>> Entering RecomputeDominance.");
+        Trace("[TimelineService] >>> Entering RecomputeDominance.");
 
         int dominantCount = config != null ? config.dominantPerProfile : 1;
         int supportingCount = config != null ? config.supportingPerProfile : 2;
@@ -213,7 +222,7 @@ public static class TimelineService
             var scores = attrs.Select(a => new RankedScore(a.id, GetProfileAttributeScore(world, profile, a))).ToList();
             DominanceTier[] tiers = DominanceTiers.Classify(scores, dominantCount, supportingCount);
 
-            Debug.Log($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", attrs.Select((a, i) => $"{a.displayName}={scores[i].score:0.#} ({tiers[i]})"))}.");
+            Trace($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", attrs.Select((a, i) => $"{a.displayName}={scores[i].score:0.#} ({tiers[i]})"))}.");
 
             for (int i = 0; i < attrs.Count; i++)
             {
@@ -237,7 +246,7 @@ public static class TimelineService
         world.timeline.dominantKeys = newDominant;
         world.timeline.supportingKeys = newSupporting;
 
-        Debug.Log($"[TimelineService] <<< Exiting RecomputeDominance (dominant={newDominant.Count}, supporting={newSupporting.Count}, announced={announce}).");
+        Trace($"[TimelineService] <<< Exiting RecomputeDominance (dominant={newDominant.Count}, supporting={newSupporting.Count}, announced={announce}).");
     }
 
     /// <summary>
@@ -247,7 +256,7 @@ public static class TimelineService
     /// </summary>
     private static void RebuildTierEffects(WorldState world, ContentLibrarySO lib, int startDay)
     {
-        Debug.Log("[TimelineService] >>> Entering RebuildTierEffects.");
+        Trace("[TimelineService] >>> Entering RebuildTierEffects.");
 
         int removed = RemoveEffectsFrom(world, TierSourcePrefix);
 
@@ -282,7 +291,7 @@ public static class TimelineService
             }
         }
 
-        Debug.Log($"[TimelineService] <<< Exiting RebuildTierEffects (removed {removed} old tier effect(s), activated {activated} new).");
+        Trace($"[TimelineService] <<< Exiting RebuildTierEffects (removed {removed} old tier effect(s), activated {activated} new).");
     }
 
     /// <summary>
@@ -310,7 +319,7 @@ public static class TimelineService
         int total = lib.Triggers != null ? lib.Triggers.Count : 0;
         int fired = 0;
 
-        Debug.Log($"[TimelineService] >>> Entering EvaluateTriggers ({total} trigger(s) to check).");
+        Trace($"[TimelineService] >>> Entering EvaluateTriggers ({total} trigger(s) to check).");
 
         foreach (TimelineTriggerSO trigger in lib.Triggers)
         {
@@ -319,14 +328,14 @@ public static class TimelineService
 
             if (trigger.oneShot && world.HasFlag(trigger.FiredFlag))
             {
-                Debug.Log($"[TimelineService] Trigger '{trigger.displayName}' skipped (already fired, one-shot).");
+                Trace($"[TimelineService] Trigger '{trigger.displayName}' skipped (already fired, one-shot).");
                 continue;
             }
 
             if (!AllConditionsPass(trigger, world))
                 continue;
 
-            Debug.Log($"[Timeline] Trigger fired: {trigger.displayName}");
+            Trace($"[Timeline] Trigger fired: {trigger.displayName}");
             fired++;
 
             History.FileStory(trigger.section, trigger.newsLineOnFire, front, news, desk);
@@ -347,7 +356,7 @@ public static class TimelineService
                 world.SetFlag(trigger.FiredFlag);
         }
 
-        Debug.Log($"[TimelineService] <<< Exiting EvaluateTriggers ({fired}/{total} fired).");
+        Trace($"[TimelineService] <<< Exiting EvaluateTriggers ({fired}/{total} fired).");
     }
 
     /// <summary>
@@ -625,7 +634,7 @@ public static class TimelineService
         });
         RunManager.NotifyEffectsChanged();
 
-        Debug.Log($"[TimelineService] ActivateEffect: effectId='{effect.name}', sourceLabel='{sourceLabel}', startDay={startDay}, durationDays={durationDays}, applyInstantOps={applyInstantOps}.");
+        Trace($"[TimelineService] ActivateEffect: effectId='{effect.name}', sourceLabel='{sourceLabel}', startDay={startDay}, durationDays={durationDays}, applyInstantOps={applyInstantOps}.");
     }
 
     /// <summary>The morning paper's debt lines (redesign phases 13 and 9; the traveller-types spec's §10): tomorrow's line of the news.debt pool in the run's order (DebtNews.Line; none when the pool is empty), then the count of the Debt Relief departures the last shift approved (WorldState.debtReliefYesterday; DebtNews.YesterdayLine; none for none).</summary>
@@ -658,7 +667,7 @@ public static class TimelineService
         if (removed > 0)
             RunManager.NotifyEffectsChanged();
 
-        Debug.Log($"[TimelineService] ExpireEffects (day {day}): removed {removed} effect(s), {world.timeline.activeEffects.Count} remain active.");
+        Trace($"[TimelineService] ExpireEffects (day {day}): removed {removed} effect(s), {world.timeline.activeEffects.Count} remain active.");
     }
 
     /// <summary>
@@ -668,7 +677,7 @@ public static class TimelineService
     /// </summary>
     private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news, List<string> desk)
     {
-        Debug.Log("[TimelineService] >>> Entering BuildTomorrowPackage.");
+        Trace("[TimelineService] >>> Entering BuildTomorrowPackage.");
 
         world.tomorrow.briefingLines.Clear();
         world.tomorrow.newsLines.Clear();
@@ -682,6 +691,6 @@ public static class TimelineService
         world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine, tomorrow));
         world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine, tomorrow));
 
-        Debug.Log($"[TimelineService] <<< Exiting BuildTomorrowPackage (briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count} [{news.Count} from dominance/triggers]).");
+        Trace($"[TimelineService] <<< Exiting BuildTomorrowPackage (briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count} [{news.Count} from dominance/triggers]).");
     }
 }
