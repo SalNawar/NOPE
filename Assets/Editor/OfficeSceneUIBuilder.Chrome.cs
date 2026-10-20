@@ -115,14 +115,17 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "pcTabLabel", label);
         so.ApplyModifiedProperties();
 
-        // In the city view only the DESK tab shows: the PC and STAMPS tabs fade out (CityView.deskControls),
+        // In the city view only the DESK tab shows: the PC and STAMPS tabs go (CityView.deskControls),
         // and so do the props' tooltips and the case HUD's strip, which drew over the city.
+        // The two pull tabs (CityView.chrome) also go in the reading view and while something is held (BUG-59).
         var soCity = new SerializedObject(cityView);
-        SerializedProperty hidden = soCity.FindProperty("deskControls");
-        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("DeskTooltip"), overlay.Find("OfficeCaseHud") };
-        hidden.arraySize = deskControls.Length;
-        for (int i = 0; i < deskControls.Length; i++)
-            hidden.GetArrayElementAtIndex(i).objectReferenceValue = deskControls[i] != null ? GetOrAdd<CanvasGroup>(deskControls[i].gameObject) : null;
+        Transform stampTab = overlay.Find("StampBar/Tab");
+        Transform[] deskControls = { tab.transform, stampTab, overlay.Find("DeskTooltip"), overlay.Find("OfficeCaseHud") };
+        Transform[] chrome = { tab.transform, stampTab };
+        CanvasGroup Group(Transform t) => t != null ? GetOrAdd<CanvasGroup>(t.gameObject) : null;
+        SerializedArrays.Set(soCity, "deskControls", deskControls.Select(Group).ToArray());
+        SerializedArrays.Set(soCity, "chrome", chrome.Select(Group).ToArray());
+        SetRef(soCity, "deskView", deskView);
         soCity.ApplyModifiedProperties();
 
         // The office's callouts over the hall (the traveller's speech bubble, the board's tooltip) show only in the office view:
@@ -201,9 +204,10 @@ public static partial class OfficeSceneUIBuilder
     /// of the overlay draws over it, CityScreen (full screen, inactive until
     /// the fade: its CanvasGroup the fade, its Image the matte in
     /// DeskConfigSO.cityMatte; both in the diegetic DiegeticDevice role, so no
-    /// theme recolours the art's view) holding Panorama (a RawImage fitted whole
-    /// inside the screen by an AspectRatioFitter; the view gives it the living
-    /// city's material at bind); then the CITY pull tab at the left edge and
+    /// theme recolours the art's view; a click on it turns back, CityView)
+    /// holding Panorama (a RawImage covering the whole screen through an
+    /// AspectRatioFitter, cropped, never letterboxed: BUG-42; the view gives
+    /// it the living city's material at bind); then the CITY pull tab at the left edge and
     /// the DESK one at the right edge (the UI kit's, OfficeSceneUIBuilder.Kit:
     /// the word over its key's keycap; inactive: the view shows them). Returns it.
     /// </summary>
@@ -224,7 +228,7 @@ public static partial class OfficeSceneUIBuilder
         panorama.raycastTarget = false;
         SceneUiKit.Tag(panorama, ThemeRoleId.DiegeticDevice, ThemePart.Fill);
         AspectRatioFitter fitter = picture.gameObject.AddComponent<AspectRatioFitter>();
-        fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent; // BUG-42: the city fills the screen, cropped, never letterboxed
         fitter.aspectRatio = 3f;
         screen.gameObject.SetActive(false);
 

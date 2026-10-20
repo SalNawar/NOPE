@@ -19,10 +19,12 @@ public enum OfficeView
 /// close button and the desktop's "&lt; Desk" button close it (OfficeFocus); a click outside the
 /// frame then goes on to what it lands on (the intercom opens the wheel, the
 /// desk tilts the view: the exit catcher's pass-through), and
-/// the "&lt; Desk" button closes it straight into the desk view (FocusDesk;
-/// Saleh 2026-09-30). The frame itself moves no camera (from the desk view,
-/// BoothCoordinator blends it back up as the frame opens). BoothCoordinator
-/// reads the view to gate the office's input.
+/// the "&lt; Desk" button closes it straight into the reading view (FocusDesk;
+/// Saleh 2026-09-30: a view key's move, tagged so for the QA camera logger).
+/// The frame itself moves no camera (from the reading view, BoothCoordinator
+/// blends it back up as the frame opens). The PC never opens while the player
+/// holds something on the desk (HoldRegistry.Desk; BUG-55c: no view change
+/// while holding). BoothCoordinator reads the view to gate the office's input.
 /// </summary>
 public sealed class OfficeViewController : MonoBehaviour
 {
@@ -38,8 +40,12 @@ public sealed class OfficeViewController : MonoBehaviour
     /// <summary>Raised after the view changes.</summary>
     public event Action<OfficeView> ViewChanged;
 
-    /// <summary>Opens the PC frame (no-op if open).</summary>
-    public void FocusMonitor() => SetView(OfficeView.MonitorFocus);
+    /// <summary>Opens the PC frame (no-op if open, or while something is held: BUG-55c).</summary>
+    public void FocusMonitor()
+    {
+        if (!HoldRegistry.Desk.IsHolding)
+            SetView(OfficeView.MonitorFocus);
+    }
 
     /// <summary>Closes the PC frame (no-op if closed).</summary>
     public void FocusOffice() => SetView(OfficeView.OfficeFocus);
@@ -49,7 +55,7 @@ public sealed class OfficeViewController : MonoBehaviour
     {
         FocusOffice();
         if (deskView != null)
-            deskView.TiltIn();
+            deskView.TiltIn(CameraMoveCause.ViewKey);
     }
 
     private void SetView(OfficeView view)
