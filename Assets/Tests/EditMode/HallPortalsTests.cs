@@ -169,6 +169,10 @@ public class HallPortalsTests
         public static Png Read(string path)
         {
             byte[] file = File.ReadAllBytes(path);
+            // A checkout without its LFS objects holds a text pointer: the mask cannot be read there.
+            if (file.Length > 0 && file[0] == (byte)'v')
+                Assert.Ignore($"{path} is a Git LFS pointer in this checkout (git lfs pull fetches the mask).");
+            Assert.IsTrue(file.Length > 8 && file[1] == (byte)'P' && file[2] == (byte)'N' && file[3] == (byte)'G', $"{path} is not a PNG");
             var png = new Png();
             var idat = new MemoryStream();
             int pos = 8;
