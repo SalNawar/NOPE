@@ -13530,6 +13530,761 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_industrial__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "Amalia dress",
+      "details": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Amalia dress: a floor-length full skirt of pale ivory or dusty-coral silk, a white long-sleeved blouse with a lace chemisette front, and a short, fitted, open bolero jacket (kontogouni) of deep-burgundy velvet heavily embroidered with gold braid.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_f_greece_industrial.",
+      "flags": {
+        "label": "Amalia dress"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_greece_industrial",
+      "prompt": "Edit FIRST costume arms/sleeves only to match SECOND mannequin gesture exactly: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Keep all original dress design: dusty coral silk fullskirt, goldembroidered burgundy velvet bolero, white lacechemissette and fullblouse sleeves, closedbrownshoes. Preserve original head body skirt feet, scalp164 chin324 soles1440 center512.1024x1536 green#00FF00 backdrop, exposedskinmagenta#FF00FF. No hairhatjewelry. Rich late80s handinked anime textilegrain. Never resize.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5cb86f2c-2c99-4dd8-a66b-f506471f846a.png",
+      "path": "Raw/outfit_f_greece_industrial__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7d2def6c41112724222f6a2d42e5bf4ca26e99aa729380adb3465d3d72fdf802",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_industrial__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "Amalia dress",
+      "details": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Amalia dress: a floor-length full skirt of pale ivory or dusty-coral silk, a white long-sleeved blouse with a lace chemisette front, and a short, fitted, open bolero jacket (kontogouni) of deep-burgundy velvet heavily embroidered with gold braid.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw outfit_f_greece_industrial.",
+      "flags": {
+        "label": "Amalia dress"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_greece_industrial",
+      "prompt": "Edit FIRST costume arms/sleeves only to match SECOND mannequin gesture exactly: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Keep all original dress design: dusty coral silk fullskirt, goldembroidered burgundy velvet bolero, white lacechemissette and fullblouse sleeves, closedbrownshoes. Preserve original head body skirt feet, scalp164 chin324 soles1440 center512.1024x1536 green#00FF00 backdrop, exposedskinmagenta#FF00FF. No hairhatjewelry. Rich late80s handinked anime textilegrain. Never resize.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d7881788-98a8-4e5e-8a88-1fc4ecd3e9b4.png",
+      "path": "Raw/outfit_f_greece_industrial__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "014c931b1e0d78e427e56c6d28ad9214ff69fd829911675567c300f4bd7f9b20",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "braids round the crown",
+      "details": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Long hair plaited into two braids and wound around the crown of the head\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw hair_f_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "braids round the crown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_greece_industrial",
+      "prompt": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Long hair plaited into two braids and wound around the crown of the head\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw hair_f_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAdd chestnut brown hair center parted, two braids neatly wound round crown with visible interwoven strands, compact practical pinned hairstyle. Keep head unchanged scalp164 chin324. Replace ALL dress and shoes with fully opaque flatmagenta shirt/trousers/socks. Only hair colored. Reference body pose preserved, feet1440,center512,1024x1536. Green#00FF00 background, facehandsclothes#FF00FF. No jewels hat text. Handinked late80s anime finepigmentgrain, soft strand highlights.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2ae19ccb-d622-40af-b3b9-2bdf6c04ccad.png",
+      "path": "Raw/hair_f_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "61b5d159266a6c745670fda5a35315e9a87ee0706187d511206e0beeeca6b923",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "fesi",
+      "details": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Small red fesi pinned tilted on the crown, with a long tassel of braided gold thread falling to the shoulder. The face and hairline are fully visible.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw headwear_f_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "fesi",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_greece_industrial",
+      "prompt": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Small red fesi pinned tilted on the crown, with a long tassel of braided gold thread falling to the shoulder. The face and hairline are fully visible.\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw headwear_f_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nFit small tilted red felt fesi atop reference crown braids. Long braided gold thread tassel ending at shoulder on viewer right. Turn hair fully MAGENTA while preserving silhouette as fit guide. Face, hands and fully clothed support all flat#FF00FF. Only red hat and gold tassel colored. Background#00FF00.1024x1536 chin324 scalp164 soles1440 center512, exact head registration preserved. No crown jewels. Textured late1980s anime feltgrain silkthreads handink.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f95a0d17-8d62-4c08-8f03-98682c73f1d7.png",
+      "path": "Raw/headwear_f_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3db553affe6d1e96b30fdf4cd3b15d0720ccd0e4de9bb5e7a78f7044ac79a80c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_greece_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "country": "greece",
+      "era": "industrial",
+      "label": "gold disc necklace",
+      "details": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Necklace of plain gold discs with raised rims on a chain (the dowry flouria, drawn with no face, letters or marks)\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw accessory_f_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "gold disc necklace"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_greece_industrial",
+      "prompt": "Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.\nDraw: Necklace of plain gold discs with raised rims on a chain (the dowry flouria, drawn with no face, letters or marks)\nAvoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)\nOutput one full-canvas raw accessory_f_greece_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAdd modest plain gold disc necklace with raised rims, short drape over upper chest of reference blouse. Seven small round unmarked discs on delicate chain. Replace ALL outfit and shoes with flat opaque magenta shirt/trousers/socks, entire facehandsclothes#FF00FF. Only necklace goldcolored. Head scalp164chin324 unchanged.1024x1536 feet1440center512, green#00FF00 background. No hair hat. Late80s textured inked anime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-324e422f-398b-471d-a8f2-22d853f3a301.png",
+      "path": "Raw/accessory_f_greece_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "842aebc93d37d388ccc6dbf50c1b5e6b683dad94c7e56af209145281dbc52c3d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "corduroy and flares",
+      "details": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Brown corduroy jacket over a thick hand-knit wool sweater or an open-collared patterned shirt, with flared jeans and suede desert boots.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_m_greece_modern.",
+      "flags": {
+        "label": "corduroy and flares"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_greece_modern",
+      "prompt": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Brown corduroy jacket over a thick hand-knit wool sweater or an open-collared patterned shirt, with flared jeans and suede desert boots.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_m_greece_modern.\nDress reference exact figure: lived-in brown wide-wale corduroy jacket open over thick oatmeal handknitted wool cable sweater; slightly faded indigo flared jeans, tan suede desert boots. Ordinary1975 civilian, no fashionmodel styling. No hair beard hat bag jewelry. Exposedfigure flat#FF00FF magenta, solid#00FF00 green background. Exact reference headhandsfeet scalp239 chin400 soles1421 center512,1024x1536. Textured late1980s inked cel anime, tactile pigments, woolfibres, worn corduroy and denim, restrainedshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e7e730a5-2a57-40cc-8f37-4b7323fb8c10.png",
+      "path": "Raw/outfit_m_greece_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b912498948da653da55e4c1930d1c3cbf846743062283789df5de0ef550a3941",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_modern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "corduroy and flares",
+      "details": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Brown corduroy jacket over a thick hand-knit wool sweater or an open-collared patterned shirt, with flared jeans and suede desert boots.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_m_greece_modern.",
+      "flags": {
+        "label": "corduroy and flares"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_greece_modern",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Same browncorduroy jacket, oatmeal cablesweater, fadedindigoflares, tansuededesertboots. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93673573-184e-42d8-ac0d-9e166d83c962.png",
+      "path": "Raw/outfit_m_greece_modern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "30c1b3483a2502a6975ea21d53d28f737f93a74c6f7675397d00e842d37663a0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_modern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "corduroy and flares",
+      "details": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Brown corduroy jacket over a thick hand-knit wool sweater or an open-collared patterned shirt, with flared jeans and suede desert boots.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_m_greece_modern.",
+      "flags": {
+        "label": "corduroy and flares"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_greece_modern",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Same browncorduroy jacket, oatmeal cablesweater, fadedindigoflares, tansuededesertboots. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5ef5e99d-bae0-42c4-bd84-a3ad5c5bc41f.png",
+      "path": "Raw/outfit_m_greece_modern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "16d5002ad220c3fcb9e855740860fdc433f531ca4237177a85785d7bcb01a532",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_modern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "corduroy and flares",
+      "details": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Brown corduroy jacket over a thick hand-knit wool sweater or an open-collared patterned shirt, with flared jeans and suede desert boots.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_m_greece_modern.",
+      "flags": {
+        "label": "corduroy and flares"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_greece_modern",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Same browncorduroy jacket, oatmeal cablesweater, fadedindigoflares, tansuededesertboots. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93288a6c-fc9f-4c56-91d7-5de4efa80989.png",
+      "path": "Raw/outfit_m_greece_modern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a67afffc5c755ca5c1fdaa1ae1e6fb975a1e06bfbdecc817a914a94a2f375e05",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_greece_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "shaggy 1970s cut",
+      "details": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Collar-length, slightly shaggy 1970s cut\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw hair_m_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "shaggy 1970s cut"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_greece_modern",
+      "prompt": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Collar-length, slightly shaggy 1970s cut\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw hair_m_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAdd shaggy collarlength darkbrown 1970s hair with uneven feathered ends and loosefringe, ordinary adult. Keep exact head scalp239 chin400. Replace ALL costume/shoes with solidmagenta fullyclothed shirttrouserssocks. Only requestedhair colored, everythingelse#FF00FF. Background#00FF00.1024x1536 samepose feet1421center512. No beardhataccessories. Textured handpainted late80s anime strandsgrain, nonglossy.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a08d9d80-231b-4265-afd7-87d4cab92bb2.png",
+      "path": "Raw/hair_m_greece_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0a98aad2c16c6f4024be249116c2107ac017002e096cd7f95cc6a039a5b6ccec",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_greece_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "thick full moustache",
+      "details": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Thick full moustache\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw facialhair_m_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "thick full moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_greece_modern",
+      "prompt": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Thick full moustache\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw facialhair_m_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAdd ONLY thick natural darkbrown full1970s moustache, gently downward ends, no upturned curls. Keep exact baldhead scalp239chin400. Replace ALL costume/shoes with flatmagenta fullyclothed shirttrouserssocks. No scalp hair beardhatjewelry. Background#00FF00 support#FF00FF1024x1536 exactposefeet1421center512. Handinked late80s anime, fine hairstrands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e8af897b-1d77-4332-b3cc-fe4c76e3a2a7.png",
+      "path": "Raw/facialhair_m_greece_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3b0b087800b379c076062c194633fdeab22a5bde856c04e38a84c81e58777eaa",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_greece_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "tagari bag",
+      "details": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw accessory_m_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "tagari bag",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_greece_modern",
+      "prompt": "Subject: man of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw accessory_m_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nGenerate ONLY tagari colored: rust ochre indigo ivory horizontal woolstripes, fringedbottom. SMALL 160pixel tall bag includingfringe, top y510 bottom670 on figure left/viewerRIGHT chest; broad strap from right/viewerLEFT shoulder downacross chest. Replace allcostume/shoes flatmagenta shirttrouserssocks, facehandsmagenta, nohairbeardhat.1024x1536 scalp239chin400feet1421center512. Background#00FF00 support#FF00FF. Textured late80s handinkedanime woolweave. Bag lies beneath arms when posed; no handgrip.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-65783f6d-804d-44d4-9757-8d5847bc5df7.png",
+      "path": "Raw/accessory_m_greece_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "87c13d941450bc3ed303113e5f0ae7329b754a4b847ad44ebc13e80e1266a1cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "embroidered blouse",
+      "details": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_f_greece_modern.",
+      "flags": {
+        "label": "embroidered blouse"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_greece_modern",
+      "prompt": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_f_greece_modern.\nDress exact reference calibrationfigure. White cotton blouse redblack crossstitch necklinecuffs, loosechunky handknit muted ochre cardigan, dark plum wool midicalf skirt, brown handmade flat leather strapsandals. Practical everyday1975 clothing, slightlyworn. No hairhatjewelrybag. Exposedheadhandfeet magenta#FF00FF, background#00FF00.1024x1536 scalp164chin324soles1440center512 preservebodypose. Late80s handinked anime with visible fibregrain,crossstitch,knittexture,paintedcelshading. No glamour.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-be5f678f-86b3-4f80-aa0a-735f0990eff7.png",
+      "path": "Raw/outfit_f_greece_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f809d3218978d057db34cb1e8883adbea235abe5db65eac7bd511764ba70d8b8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_modern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "embroidered blouse",
+      "details": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_f_greece_modern.",
+      "flags": {
+        "label": "embroidered blouse"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_greece_modern",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Same ochre chunky cardigan, white redblack crossstitch blouse, plum midiskirt, brown leather flat sandals. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9501fd8c-245b-45a7-80ca-e9019512aed9.png",
+      "path": "Raw/outfit_f_greece_modern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2cfdda08bc23f81304d3ecec16075cd8de5327227d6aa2216b8392f24a8a3cd6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_modern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "embroidered blouse",
+      "details": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_f_greece_modern.",
+      "flags": {
+        "label": "embroidered blouse"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_greece_modern",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Same ochre chunky cardigan, white redblack crossstitch blouse, plum midiskirt, brown leather flat sandals. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-31f11148-a545-42a6-9c96-5970636f3f94.png",
+      "path": "Raw/outfit_f_greece_modern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "06c90bf25501cd46f44c2c649f3a5381ef3f83506a5498bfac8f78e19dbe06fd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_modern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "embroidered blouse",
+      "details": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw outfit_f_greece_modern.",
+      "flags": {
+        "label": "embroidered blouse"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_greece_modern",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Same ochre chunky cardigan, white redblack crossstitch blouse, plum midiskirt, brown leather flat sandals. Preserve head body lowercostume feet exactly scalp164chin324soles1440center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4211ceb1-b83c-4921-8430-3c4986285de7.png",
+      "path": "Raw/outfit_f_greece_modern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1806aa3d8618f5e25baf5f321b5da4a62964fd492833c53d28c4abaf0da02c23",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_greece_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "long loose hair",
+      "details": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Long, straight, centre-parted and loose\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw hair_f_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "long loose hair",
+        "back": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_greece_modern",
+      "prompt": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Long, straight, centre-parted and loose\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw hair_f_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAdd long darkbrown straight centerparted loosehair to midback, hair falls BEHIND shoulders/arms, unobstructed blousefront. Keep face/head fixed scalp164chin324. All costume replaced by flatmagenta shirttrouserssocks, only hair colored; support#FF00FF background#00FF00.1024x1536 feet1440center512 unchangedpose. No hat jewelry. Late80s handinkedanime finepigmenttexture, natural strands notglossy.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a2472993-2e9b-458c-9db5-0bf1c7675325.png",
+      "path": "Raw/hair_f_greece_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "19d91b5b48ef37c3e0ff10faee82ec74e9e48fb453b396d5b95312180fd9ed68",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_greece_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "country": "greece",
+      "era": "modern",
+      "label": "tagari bag",
+      "details": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw accessory_f_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "tagari bag",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_greece_modern",
+      "prompt": "Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.\nDraw: Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit\nAvoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)\nOutput one full-canvas raw accessory_f_greece_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nGenerate ONLY tagari colored, plum ochre cream rust horizontalwovenwoolstripes and fringe. Small bag160pxhigh INCLUDING fringe, upperedge levelarmpit on figureleft/viewerright at y450, bottom610. Broad shortstrap from right/viewerleft shoulder. ReplaceALLcostume/shoes with flatmagenta shirttrouserssocks, exposedfiguremagenta. No hairhatjewelry.1024x1536 scalp164chin324feet1440center512 preservepose. Background#00FF00 support#FF00FF. Handinked late80s anime wooltexture. No heldprop. Correction to current result: shorten strap and reduce bag itself to 160pixels total height including fringe. Current bag too large and low. Bag top y450 bottom610 (not y490 to705). Preserve everythingelse.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8eb653e4-dd78-4604-b88c-061ab15e0cee.png",
+      "path": "Raw/accessory_f_greece_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "52125d3005fba1427c17d1268c697e916a0110310a0b8a263a46dbedca226fc2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "chlamys and chiton",
+      "details": "",
+      "flags": {
+        "label": "chlamys and chiton"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_greece_ancient2",
+      "prompt": "Raw modular outfit for ordinary male traveller of Macedonian Pella336BCE. Repository wardrobe: chlamys and chiton. Short ochre woven wool chlamys fastened at right shoulder with small bronze pin over muted cream knee-length short sleeved linen chiton, simple woven brown waistcord, plain worn leather ankleboots. Cloak drapes behind torso leaving arms free to gesture. Civilian, unarmed, noarmor/crown/royalpurple/props. No hairheadwearjewelry. Dress attached exactcalibrationbody, scalp239chin400soles1421center512 on1024x1536. Exposedskinflatmagenta#FF00FF, backgroundsolidgreen#00FF00. Rich late80s handinked cel anime, linen/wool fibre grain, restrained paintedshading. No floatingextras.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23f96ca2-a296-4c75-8d0b-1e9b2fe95279.png",
+      "path": "Raw/outfit_m_greece_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "04f74f4e5374398a26b5ac6a09a996e50ca57880be5379596a3fc78c75edb5a2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "chlamys and chiton",
+      "details": "",
+      "flags": {
+        "label": "chlamys and chiton"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_greece_ancient2",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Same ochre wool chlamys bronze rightshoulderpin, cream knee chiton, browncordbelt, wornleatherankleboots. Cloak remainsbehind arms, naturalfolds. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e6e933f2-e307-4bba-b3f1-98bb8e61b179.png",
+      "path": "Raw/outfit_m_greece_ancient2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "809d1d3176283e1d80bb519ff10fd7f302e2f2eb300b5342d3c6e2ce980d6ff7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "chlamys and chiton",
+      "details": "",
+      "flags": {
+        "label": "chlamys and chiton"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_greece_ancient2",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Same ochre wool chlamys bronze rightshoulderpin, cream knee chiton, browncordbelt, wornleatherankleboots. Cloak remainsbehind arms, naturalfolds. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-85678d1a-3ddf-4ca7-9c2a-e1ba73ab11e2.png",
+      "path": "Raw/outfit_m_greece_ancient2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "deee687f045f7f130267d654a74bda15eabde1a94c2a9e6acc6f9b66969243ac",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_ancient2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "chlamys and chiton",
+      "details": "",
+      "flags": {
+        "label": "chlamys and chiton"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_greece_ancient2",
+      "prompt": "Edit FIRST costume arms/sleeves only matching SECOND poseguide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Same ochre wool chlamys bronze rightshoulderpin, cream knee chiton, browncordbelt, wornleatherankleboots. Cloak remainsbehind arms, naturalfolds. Preserve head body lowercostume feet exactly scalp239chin400soles1421center512,1024x1536. Exposedmagenta#FF00FF greenbackground#00FF00. No hair beard hat accessories. Handinked late80s anime textilegrain, restrainedcelshading. No resizing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-47b573f1-33a6-4ea8-bddd-835d8e0b9069.png",
+      "path": "Raw/outfit_m_greece_ancient2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c62bd32c899f89586a52187b20995eb499bbb432afa30c2d3210dc5fc44766bc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_greece_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "lion-mane hair",
+      "details": "",
+      "flags": {
+        "label": "lion-mane hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_greece_ancient2",
+      "prompt": "Modular hair layer for male Macedonian Pella336BCE, brief label lion-mane hair: thick wavy tawnybrown hair swept upward off forehead, naturally tousled curls framing ears and nape, no exaggerated spikes. Ordinary civilian. On attached figure keep face head fixed scalp239chin400. Replace ALL clothing shoes and exposedskin with flatmagenta#FF00FF fullyclothed longshirt fulltrousers socks. Onlyhaircolored.1024x1536 green#00FF00 background center512feet1421. No beardhatjewelry. Textured late80s handinked celanime, delicate strands pigmentgrain.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-42cc011d-ae0c-49c5-bfc8-f2dd78814bab.png",
+      "path": "Raw/hair_m_greece_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c5beceffc88a8dd192c85cf03015f4031fa1e264fd8a02f39e27cd786c2c1f53",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_greece_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "kausia",
+      "details": "",
+      "flags": {
+        "label": "kausia",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_greece_ancient2",
+      "prompt": "Modular headwear male Macedonian Pella336BCE. Plain civilian kausia: low broad round flat soft felt hat, warm grey brown, slightly raised soft central dome and broad rounded disk edge. No diadem, crown, royalpurple, emblems. Fit attached reference head scalp239chin400, keepheadpose unchanged. Replace ALL clothing/shoes with fullyclothed flatmagenta longshirt/trousers/socks;facehandsmagenta. Onlyhatcolored, nohairbeard.1024x1536 green#00FF00 support#FF00FF center512soles1421. Textured late80s handinkedanime feltgrain. Correct hat: broad FLAT disk-like cap with very LOW crown. Remove the thick rolled donut brim and projecting dome. Plain flat felt kausia, gently convex upper disk edge, no curled rim. Rest unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-58947a8d-5992-481c-b6e4-ec45ced0fcb3.png",
+      "path": "Raw/headwear_m_greece_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e0020c5d65b9926bac4e5defab7c96bdf1e43b3ad90f946cbb725123c7e20880",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "country": "greece",
+      "era": "ancient2",
+      "label": "Doric peplos",
+      "details": "",
+      "flags": {
+        "label": "Doric peplos"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_greece_ancient2",
+      "prompt": "Modular outfit female civilian Macedonian Pella336BCE, repository label Doric peplos. Muted madder brick-red wool anklelength peplos, broad foldedover top apoptygma endingat waist, fastened by two smallbronze shoulderpins, simple narrowwovenbelt atnaturalwaist, ochre geometricwoven hem border. Fully opaque loose drapery, no modern seams. Brownleather flatsandals. No hairhatjewelrycrownprops. Dress exact attachedfigure neutralpose scalp164chin324soles1440center512,1024x1536. Exposedheadarmsfeet puremagenta#FF00FF,backgroundgreen#00FF00. Textured late80s handinked anime, visiblewoolgrain mutedpigment shadedfolds.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e9cb3f72-9b74-439a-ae59-556da747b7c0.png",
+      "path": "Raw/outfit_f_greece_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d507f86a4827bffd188657f39008e794e54dba968ff17d2b50cd704e6a5d8adb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

@@ -1,10 +1,10 @@
 # Resume checkpoint: 20 October 2026
 
-User resumed generation. 571 / 1156 raw sources saved; 585 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 596 / 1156 raw sources saved; 560 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: outfit_f_greece_industrial__thinking_a. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_f_greece_ancient2__explaining_b. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -28,3 +28,4 @@ Occlusion review: 1720 female futa overlaps necklace region and thinking hand; a
 
 25 further sources since e6d4b3d: complete 1700 Ioannina male/female sets; 1860 Athens male outfit and three poses, hair/moustache/fesi/sash; Athens female neutral outfit and explaining_c. All 571 dimensions/hashes/prompts audited. Moustache head drift corrected. Sash needs masking beneath jacket and thinking hands; fesi tassel needs hand/chest occlusion checks. Ioannina male zonari must cover original plain sash; female front braids must overlap chest chains correctly. These are raw sources, not registered runtime art. Next female thinking_a. No old art removed.
 
+25 more sources since 3875d81: complete remaining 1860 Athens female poses/hair/fesi/necklace; complete 1975 Athens male/female sets; Pella male outfit/poses/hair/kausia, female neutral peplos. 596 file dimensions/hashes/prompts audited. User explicitly approved checkpoint3875d81 and push succeeded with all100 LFS files (155MB). That is the last pushed checkpoint. New sources remain local. Pella brief has labels only, checked world_source wardrobe definitions. Kausia shape corrected after reference check. Review: 1975 tagari bags need chest-height fit and arm-over-strap masking; female bag shortened after oversized draft. Long female hair needs complete behind-arm fill on extraction. 1860 necklace must sit beneath explaining hand, fesi over braids. Runtime assembly still unverified.
