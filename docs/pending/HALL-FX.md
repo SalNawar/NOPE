@@ -279,7 +279,7 @@ Run them in one batch in the NOPE-feat-clock editor (job runner), then the built
 
 ## For INTEGRATION
 
-### FEATURES.md (fold into the merge commit)
+### FEATURES.md (fold into the merge commit) - folded at the integration (integrate/a), with the INTEGRATION rows of the cleanup list (SCENE_CONTRACT_GAMEPLAY.md, ART_ASSET_LIST.md)
 - **Line 31 (AVAILABLE sign):** "...the caption invites the press with a gentle pulse between the two inks (`readyInviteSeconds` 1.6 s a beat; steady under Reduced Motion..." becomes "...the caption invites the press: lit and steady while the morning briefing covers the office, then from Start Shift (the first frame it can be pressed) it pulses between the two inks for three beats (`readyInviteSeconds` 1.6 s each; `InvitePulse`, tested: `InvitePulseTests`), then holds lit and steady (BUG-67); lit and steady at once under Reduced Motion...".
 - **Line 36 (portal rings):** replace the placement and look sentences with this.
 
