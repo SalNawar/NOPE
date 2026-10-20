@@ -1,0 +1,1 @@
+Edit image: preserve beard, moustache, face and pose exactly. Recolor ALL robe, underrobe, gold embroidery, sleeves and boots to FLAT SOLID MAGENTA #FF00FF matching mannequin skin. Remove clothing patterns and shading. Keep opaque clothing silhouettes. Only beard and moustache remain natural brown. Background stays pure green. Full1024x1536canvas unchanged, no other changes.

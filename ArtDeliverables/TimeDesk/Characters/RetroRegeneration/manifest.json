@@ -9777,6 +9777,730 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "curled beard",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Full, long beard reaching the upper chest, squared at the bottom, combed into long wavy strands that end in neat rows of small curls, with a moustache\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw facialhair_m_iraq_ancient.",
+      "flags": {
+        "label": "curled beard",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_iraq_ancient",
+      "prompt": "FACIAL HAIR source only1024x1536. Supplied male fitting guide exact registration unchanged. Babylon c1760BCE: full long dark brown beard reaching upper chest, squared bottom, combed long wavy strands ending in neat rows of small curls, connected moustache, no scalp hair or hat. Late1980s textured anime ink, restrained highlights, readable hair clumps not photoreal. Only beard/moustache rendered color; all fitting skin/body and full coverage plain tunic/trousers solid magenta #FF00FF. Preserve head scalp239 chin400 exact face, torso arms legs feet1421. Pure green #00FF00 background. No ornament/weapons/text/groundshadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a895638a-512a-4b6b-9c7c-184e15534000.png",
+      "path": "Raw/facialhair_m_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "64c44a98d6abdfe494ec336a87b9b68c330f163bb5fd2f3983a5ef176ce4675a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "wool fillet",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Narrow twisted-wool headband (fillet) circling the head and holding the hair\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw headwear_m_iraq_ancient.",
+      "flags": {
+        "label": "wool fillet"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_iraq_ancient",
+      "prompt": "HEADWEAR layer source only1024x1536. Add narrow twisted ochre wool fillet/headband circling head just above forehead of supplied male fitting guide, Old Babylonian c1760BCE. Small fibers and twist texture, practical cloth hair binding, no crown/metal/gems/horns. No hair or beard. Preserve exact guide head face body pose and feet; scalp239 chin400 soles1421. Only headband rendered color, all guide skin and plain full coverage clothing solid magenta #FF00FF. Late1980s anime hand ink subtle pigment, flat green #00FF00 background, even light, no text/floor shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8155bd97-a602-455f-91fa-9b0541eb74c3.png",
+      "path": "Raw/headwear_m_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e523257016af7af070e105b2d35fc33f8e6af32cc737c032178fe662ee26c2f5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "cylinder seal",
+      "details": "Subject: man of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Lapis-lazuli cylinder seal: a finger-length carved stone cylinder hung on a cord around the neck. It was the owner's signature, rolled onto clay contracts.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw accessory_m_iraq_ancient.",
+      "flags": {
+        "label": "cylinder seal"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_iraq_ancient",
+      "prompt": "ACCESSORY layer source1024x1536 on unchanged supplied male fitting guide. Babylon c1760BCE lapis lazuli cylinder seal pendant: small finger-length deep blue carved stone cylinder hanging VERTICALLY from thin brown neck cord through its long central bore. Cylinder located upper chest around y510, approximately40px long by15px wide, fine carved abstract bands and tiny gold-like lapis flecks, no readable text or religious figures. Actual small personal seal not giant necklace. Only cord and stone rendered color. Guide figure skin and plain full coverage clothing solid magenta #FF00FF, same exact pose/head/feet alignment scalp239 chin400 soles1421. No hair/beard/hat or other accessories. Late1980s textured anime ink, pure green #00FF00 background, no shadow/text/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-effa9647-098b-4c52-bdb1-62e2858de053.png",
+      "path": "Raw/accessory_m_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5a55d7391a78df10b02b2bcd2854dd509e768ebf3481b46082d54d8a620dd5f7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed shawl-dress",
+      "details": "Subject: woman of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length shawl-dress of dyed wool (saffron-yellow, rust or blue), wound round the body with the end thrown over the left shoulder so the right shoulder is bare, and it is fastened at the chest with a pair of long bronze toggle pins. A thick contrasting fringe runs along its edges and spirals down the body in one or two bands. It is a fringed wrap, not a tiered flounced robe.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_f_iraq_ancient.",
+      "flags": {
+        "label": "fringed shawl-dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_iraq_ancient",
+      "prompt": "Dress supplied adult female fitting guide in historical opaque wardrobe, exact1024x1536 and identical pose/registration. Subject: woman of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length shawl-dress of dyed wool (saffron-yellow, rust or blue), wound round the body with the end thrown over the left shoulder so the right shoulder is bare, and it is fastened at the chest with a pair of long bronze toggle pins. A thick contrasting fringe runs along its edges and spirals down the body in one or two bands. It is a fringed wrap, not a tiered flounced robe.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_f_iraq_ancient.\nChoose deep blue dyed wool with saffron ochre fringe and two restrained bronze toggle pins, simple brown leather sandals. Keep bust fully covered by opaque wrap; only right shoulder and arms exposed. No hair/headwear/jewelry outside garment pins, these are separate assets. All exposed fitting skin flat magenta #FF00FF with no anatomical chest lines. Preserve scalp164 chin324 soles1440 head/hands/feet exact positions. Late1980s textured anime ink, matte wool fiber/pigment texture, readable restrained cel folds. Pure green #00FF00 background, no text/floor shadows/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3346a85b-7dce-46ec-8716-ed8e7da614a5.png",
+      "path": "Raw/outfit_f_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "51258ef0241afc034d647fa3ecd6895b202f9589be744ba0e0a7ea4287aaeaa7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_ancient__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed shawl-dress",
+      "details": "Subject: woman of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length shawl-dress of dyed wool (saffron-yellow, rust or blue), wound round the body with the end thrown over the left shoulder so the right shoulder is bare, and it is fastened at the chest with a pair of long bronze toggle pins. A thick contrasting fringe runs along its edges and spirals down the body in one or two bands. It is a fringed wrap, not a tiered flounced robe.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_f_iraq_ancient.",
+      "flags": {
+        "label": "fringed shawl-dress"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_iraq_ancient",
+      "prompt": "EDIT FIRST IMAGE by dressing unchanged fitting mannequin in exact opaque costume of SECOND image. First controls pose and registration: right elbow bent palmup near waist, left down. Preserve exact head and hand contours/coordinates. Second controls costume: deep blue Babylonian wool shawl-dress with spiral ochre fringe, two long bronze toggle pins on left upper chest, brown sandals. Identical construction, length, texture, late1980s anime hand ink; only necessary arm folds change. Bust fully covered, bare shoulder skin flat magenta #FF00FF with no anatomy lines. All skin magenta, background green #00FF00. Same scalp164 chin324 soles1440 canvas1024x1536. No hair/headwear/accessory/text/floor shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b24184fe-7175-4faf-9adf-1b1cc0d1533e.png",
+      "path": "Raw/outfit_f_iraq_ancient__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "57ec6bb303183b5b646da7723c53ce4174865f3c9fcd578b8d057d6b4625867a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_ancient__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed shawl-dress",
+      "details": "Subject: woman of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length shawl-dress of dyed wool (saffron-yellow, rust or blue), wound round the body with the end thrown over the left shoulder so the right shoulder is bare, and it is fastened at the chest with a pair of long bronze toggle pins. A thick contrasting fringe runs along its edges and spirals down the body in one or two bands. It is a fringed wrap, not a tiered flounced robe.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_f_iraq_ancient.",
+      "flags": {
+        "label": "fringed shawl-dress"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_iraq_ancient",
+      "prompt": "EDIT FIRST IMAGE by dressing unchanged fitting mannequin in exact opaque costume of SECOND image. First controls pose and registration: LEFT fingertips near cheek, RIGHT forearm supports elbow. Preserve exposed head/hand/arm contours and coordinates exactly. Second controls deep blue Babylonian wool shawl-dress, spiral ochre fringe, two bronze toggle pins on left upper chest, brown sandals. Identical construction,length,texture,late1980s anime hand ink; necessary folds at arms only change. Bust fully covered, skin flat magenta #FF00FF without anatomy lines. Pure green #00FF00 background, same scalp164 chin324 soles1440 canvas1024x1536. No hair/headwear/accessory/text/floor shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f1394af5-5acb-4154-ba98-2c1e3c3e165e.png",
+      "path": "Raw/outfit_f_iraq_ancient__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d6430697e530f287ec811cf67ed3bfb8f27d068e0c803914e494c6feb6bc0e4a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_ancient__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "fringed shawl-dress",
+      "details": "Subject: woman of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Ankle-length shawl-dress of dyed wool (saffron-yellow, rust or blue), wound round the body with the end thrown over the left shoulder so the right shoulder is bare, and it is fastened at the chest with a pair of long bronze toggle pins. A thick contrasting fringe runs along its edges and spirals down the body in one or two bands. It is a fringed wrap, not a tiered flounced robe.\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw outfit_f_iraq_ancient.",
+      "flags": {
+        "label": "fringed shawl-dress"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_iraq_ancient",
+      "prompt": "EDIT FIRST fitting illustration: replace its guide clothes with exact historical opaque costume of SECOND image. First controls pose only: RIGHT hand rests upper chest, LEFT palm extended low sideways. Preserve head/hand coordinates and scale exactly. Second controls all costume and feet: deep blue Babylonian wool shawl-dress, spiral ochre fringe, two long bronze toggle pins left upper chest, brown sandals, same length/weave/late1980s anime ink. Do not keep first modern guide clothing. Bust fully covered, exposed shoulder/arms magenta #FF00FF with no anatomy lines. All skin magenta, background pure green #00FF00. Scalp164 chin324 soles1440,1024x1536, no hair/headwear/accessories/text/floor shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9d2f9176-991a-4309-b8f1-b0887304adae.png",
+      "path": "Raw/outfit_f_iraq_ancient__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "90ef4b9fcc27f35f4502229f4149e8afc9a8cc9dd4fe9b079c768f68e0d162a4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "braid crown",
+      "details": "Subject: woman of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: Centre-parted hair braided into one thick plait wound round the head like a crown\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw hair_f_iraq_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "braid crown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_iraq_ancient",
+      "prompt": "Edit supplied fully clothed adult fitting illustration to historical HAIR source. Add dark brown center-parted hair braided into one thick plait wound around head like a hair crown, Old Babylonian c1760BCE. This is braided hair, no metal crown/ornaments/headband. Late1980s hand-ink anime matte strand texture. Preserve exact face/head proportions, scalp position, body/hand/feet positions and1024x1536canvas. Recolor entire opaque long-sleeved ankle robe/shoes to plain solid magenta #FF00FF matching guide skin; remove robe decoration, only hair finished natural color. Keep full clothing coverage. Pure green #00FF00 background, no text/floor shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-130efd2f-ac89-4508-9e27-736f1737085f.png",
+      "path": "Raw/hair_f_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b4867bd23bc66d29dedf92a5e8f2f1667138acb535ec6a0da546ab31a3eb1009",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_iraq_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "country": "iraq",
+      "era": "ancient",
+      "label": "gold fillet",
+      "details": "Subject: woman of Babylonia; Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals).\nDraw: A wide gold-thread ribbon wound over the coiled braid, hung with small gold ring pendants\nAvoid: horned crowns (divine) and Hammurabi's royal brimmed cap; tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess); Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs; Sumerian sheepskin kaunakes skirts (an earlier period); plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient); white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt); maces, weapons, or clay tablets held in the hand\nOutput one full-canvas raw headwear_f_iraq_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "gold fillet",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_iraq_ancient",
+      "prompt": "Edit supplied fully clothed fitting image into HEADWEAR source. Add Old Babylonian gold-thread ribbon fillet wrapped over coiled braid, with small simple gold ring pendants hanging from ribbon near temples. Cloth woven with gold thread, not crown, no horns/gems. Preserve exact head/face/body pose and registration. Recolor ALL hair to same flat magenta #FF00FF as figure, including braid, so only ribbon and tiny rings have finished color. Keep opaque full coverage long sleeved robe magenta. Late1980s textured anime hand ink matte woven grain, no sparkle. Pure green #00FF00 background,1024x1536, no zoom/crop/text/floor shadow. Headwear must match existing braid volume exactly.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7532bd62-3bbf-4081-b0e8-ebe9b2cea5c2.png",
+      "path": "Raw/headwear_f_iraq_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d39a9a9f53ccfed7d19f3d0113badbbafda77490a0679d3c4081d84ff1376a18",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "black durra'a robe",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Ankle-length pale linen qamis and sirwal under a front-opening, calf-length durra'a robe of black wool or silk. Broad bands of gold embroidery (tiraz) circle both upper sleeves, patterned with abstract strokes and knots, not letters. The sleeves are moderately wide and end at the wrist. Soft leather khuff boots.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_m_iraq_medieval.",
+      "flags": {
+        "label": "black durra'a robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_iraq_medieval",
+      "prompt": "Production OUTFIT source1024x1536. Dress supplied male fitting guide exactly without moving/reproportioning figure. Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Ankle-length pale linen qamis and sirwal under a front-opening, calf-length durra'a robe of black wool or silk. Broad bands of gold embroidery (tiraz) circle both upper sleeves, patterned with abstract strokes and knots, not letters. The sleeves are moderately wide and end at the wrist. Soft leather khuff boots.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_m_iraq_medieval.\nUse matte black wool outer robe with restrained charcoal highlights, warm ivory underrobe, aged ochre-gold geometric arm bands, dark brown plain boots. Only clothing rendered; no hair/beard/hat/accessories. Exposed guide skin flat #FF00FF magenta. Exact scalp239 chin400 feet1421 and neutral hand positions. Late1980s hand-inked textured anime with woven fibers and subtle pigment, readable cel folds, not glossy digital vector. Pure green #00FF00 background,no floor shadow,text,zoom,crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-445f69f7-d592-4c26-99ed-1d3932061e41.png",
+      "path": "Raw/outfit_m_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "711233344215dc9dbd3d98cec633d1560b4fdd92f9a18f0caa887dae4244740d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_medieval__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "black durra'a robe",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Ankle-length pale linen qamis and sirwal under a front-opening, calf-length durra'a robe of black wool or silk. Broad bands of gold embroidery (tiraz) circle both upper sleeves, patterned with abstract strokes and knots, not letters. The sleeves are moderately wide and end at the wrist. Soft leather khuff boots.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_m_iraq_medieval.",
+      "flags": {
+        "label": "black durra'a robe"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_iraq_medieval",
+      "prompt": "EDIT FIRST fitting guide by dressing in exact costume of SECOND. First controls pose/registration: right palm up at lower chest, left arm down. Preserve exposed head and hands pixel-aligned; natural sleeves match guide arms. Second controls black Abbasid durraa robe with gold geometric upper-arm bands and front trim, ivory ankle qamis, brown soft boots, identical construction/colors/length and woven textured late1980s anime hand ink. Scalp239 chin400 soles1421 unchanged. All exposed skin solid magenta #FF00FF, green #00FF00 background. No headwear/hair/beard/accessories, no writing/shadow/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-75194ea7-b144-4085-bbef-e915ebbf7e98.png",
+      "path": "Raw/outfit_m_iraq_medieval__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f8ed79b5649f566d37397fdf8d1d19a11d388e61715a39999f51b28156bd8229",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_medieval__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "black durra'a robe",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Ankle-length pale linen qamis and sirwal under a front-opening, calf-length durra'a robe of black wool or silk. Broad bands of gold embroidery (tiraz) circle both upper sleeves, patterned with abstract strokes and knots, not letters. The sleeves are moderately wide and end at the wrist. Soft leather khuff boots.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_m_iraq_medieval.",
+      "flags": {
+        "label": "black durra'a robe"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_iraq_medieval",
+      "prompt": "EDIT FIRST fitting guide by dressing in exact costume of SECOND. First controls pose/registration: LEFT fingertips at cheek, RIGHT forearm supports elbow. Preserve exposed head/hands pixel aligned; sleeves follow guide arms naturally. Second controls black Abbasid durraa robe with gold geometric upper-arm bands and front trim, ivory ankle qamis, brown soft boots, identical construction/colors/length, woven textured late1980s anime ink. Scalp239 chin400 soles1421 unchanged. All exposed skin solid magenta #FF00FF, green #00FF00 background. No headwear/hair/beard/accessories, no writing/shadow/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2bae2f3b-63cb-4f73-ad32-2f57b7106c91.png",
+      "path": "Raw/outfit_m_iraq_medieval__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cdd3f72da3e4f72c427e04873b45b68cd0f19e8977a6b766e5b657ba74238a81",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_medieval__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "black durra'a robe",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Ankle-length pale linen qamis and sirwal under a front-opening, calf-length durra'a robe of black wool or silk. Broad bands of gold embroidery (tiraz) circle both upper sleeves, patterned with abstract strokes and knots, not letters. The sleeves are moderately wide and end at the wrist. Soft leather khuff boots.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_m_iraq_medieval.",
+      "flags": {
+        "label": "black durra'a robe"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_iraq_medieval",
+      "prompt": "EDIT FIRST fitting guide by dressing in exact costume of SECOND. First controls pose/registration: RIGHT hand on upper chest, LEFT hand low to side in restrained objection. Preserve exposed head/hands pixel aligned; sleeves naturally follow guide arms. Second controls black Abbasid durraa robe with gold geometric upper-arm bands and front trim, ivory ankle qamis, brown soft boots, identical construction/colors/length woven textured late1980s anime ink. Scalp239 chin400 soles1421 unchanged. All exposed skin solid magenta #FF00FF, green #00FF00 background. No headwear/hair/beard/accessories, no writing/shadow/zoom/crop.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cf2eff47-d296-494a-be43-04b8f8614212.png",
+      "path": "Raw/outfit_m_iraq_medieval__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c01a9a20b0630833335d90c793a5313e7b14dbb900c6034ecdb25e41bacd49a3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "smooth nape-length hair",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Hair to the nape, combed smooth and close to the head\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw hair_m_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "smooth nape-length hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_iraq_medieval",
+      "prompt": "Edit supplied fully clothed adult fitting illustration into HAIR layer source1024x1536. Abbasid Baghdad c830: dark brown hair to nape, combed smooth and close to head, gently swept back, natural understated hairline, no modern fade or quiff. No beard/headwear. Late1980s anime hand ink matte subtle strand texture. Preserve exact head face body pose and feet registration. Recolor ALL existing clothing/boots to flat solid magenta #FF00FF matching guide skin; remove decoration, retain opaque full clothing coverage. Only hair finished natural color. Pure green #00FF00 background, no text/shadow/zoom/crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ac826f41-04dc-4285-9404-c2af0387bcfc.png",
+      "path": "Raw/hair_m_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "02b9e329dfb26ce1e1dc5d9e6450813e0c7ea8a57069178aeacbb791b3e2f4bd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "rounded beard",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Full beard, neatly trimmed and rounded, with a moustache\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw facialhair_m_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "rounded beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_iraq_medieval",
+      "prompt": "Edit image: preserve beard, moustache, face and pose exactly. Recolor ALL robe, underrobe, gold embroidery, sleeves and boots to FLAT SOLID MAGENTA #FF00FF matching mannequin skin. Remove clothing patterns and shading. Keep opaque clothing silhouettes. Only beard and moustache remain natural brown. Background stays pure green. Full1024x1536canvas unchanged, no other changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-140fa576-a991-4229-b97f-bc5f51658b86.png",
+      "path": "Raw/facialhair_m_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0c3c4f3186a63b3e7e1805d72c3a25f069a8e36a5cfa540028a6d5adf69e590c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "qalansuwa",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Qalansuwa tawila: a tall, stiff, smooth black cap (a cone or high cylinder about one and a half times the height of the head) with a white turban wound round its base. The tall black top rises clearly above the turban and stays upright, not soft or crumpled.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw headwear_m_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "qalansuwa",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_iraq_medieval",
+      "prompt": "Edit the supplied costume fitting image into a HEADWEAR extraction source. Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Qalansuwa tawila: a tall, stiff, smooth black cap (a cone or high cylinder about one and a half times the height of the head) with a white turban wound round its base. The tall black top rises clearly above the turban and stays upright, not soft or crumpled.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw headwear_m_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nKeep original head position, hands and feet exactly. Replace ALL existing robe, embroidery, trousers, boots and exposed figure with SOLID FLAT MAGENTA #FF00FF, opaque long sleeved clothing, no patterns/shadows on guide. Only requested black qalansuwa and white wrapped base retain natural colors. Tall cap fits entirely in top margin. Late1980s hand inked anime with fine pigment texture on cap and white fabric. Pure green #00FF00 background. Exact1024x1536canvas, full figure. No lettering or additional items.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7f7f7b3b-efbb-4cae-a441-108e24a50146.png",
+      "path": "Raw/headwear_m_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f493cff086c15376b4d66ccb67423b1a24519c5f0db0a4503e33baf2448f3013",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "taylasan shawl",
+      "details": "Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Taylasan: a dark shawl draped over both shoulders, its ends falling down the front of the chest, the mark of a scholar. It stays on top of the shoulders, clear of the tiraz armbands on the upper sleeves.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw accessory_m_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "taylasan shawl"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_iraq_medieval",
+      "prompt": "Edit supplied fully clothed fitting figure into an ACCESSORY extraction source. Subject: man of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Taylasan: a dark shawl draped over both shoulders, its ends falling down the front of the chest, the mark of a scholar. It stays on top of the shoulders, clear of the tiraz armbands on the upper sleeves.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw accessory_m_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPreserve head hands feet coordinates and pose. Recolor all existing clothes/boots/gold trim and skin to flat solid magenta #FF00FF. Add only the scholar taylasan in charcoal-brown, subtle woven wool pigment texture, folds and thin ink lines, no ornamental border. Short draped ends to lower chest, neither hands nor upper-arm armband positions covered. No headwear, hair, beard or other accessories. Matte hand-inked1980s anime. Exact1024x1536fullcanvas,puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a11aa2f4-dc42-44cf-9789-b4c02ccafbc8.png",
+      "path": "Raw/accessory_m_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "abd111dce93e6482568c2d27c24005e984dcaa80fee46be546fc396daed8113a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "qamis with tiraz bands",
+      "details": "Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Long-sleeved, ankle-length qamis in a rich colour (dusty coral, saffron or olive) with gold-embroidered tiraz bands (abstract pattern, no letters) at the upper arms, over full sirwal gathered at the ankle. A light mantle (rida') lies over the shoulders only, not over the head.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_f_iraq_medieval.",
+      "flags": {
+        "label": "qamis with tiraz bands"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_iraq_medieval",
+      "prompt": "Dress exact supplied calibration mannequin in this historical costume, maintain all head hands feet positions and scale. Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Long-sleeved, ankle-length qamis in a rich colour (dusty coral, saffron or olive) with gold-embroidered tiraz bands (abstract pattern, no letters) at the upper arms, over full sirwal gathered at the ankle. A light mantle (rida') lies over the shoulders only, not over the head.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_f_iraq_medieval.\nDusty coral qamis with narrow ochre geometric tiraz bands around upper sleeves, ivory sirwal showing below hem, flat brown leather slippers, light sand rida mantle lying on shoulders only and clear of arms. Believable practical loose fabric, not glamorous. No hair headwear jewellery. Exposed head neck hands solid magenta #FF00FF, same mannequin face. Late1980s hand inked anime, textured cloth pigment shading, restrained cel shadows, no glossy modern finish. Puregreen#00FF00 flat background, exact1024x1536fullfigure. No cast shadow, floor or writing. Female guide scalp164 chin324 feet1440 x512, do not recenter or enlarge.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e5e0fdec-3607-4261-a755-949229979532.png",
+      "path": "Raw/outfit_f_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d4f944de4d3fe86247e1cb2f5fb9e68cf7bc0e328add43637c16fb067775e076",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_medieval__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "qamis with tiraz bands",
+      "details": "Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Long-sleeved, ankle-length qamis in a rich colour (dusty coral, saffron or olive) with gold-embroidered tiraz bands (abstract pattern, no letters) at the upper arms, over full sirwal gathered at the ankle. A light mantle (rida') lies over the shoulders only, not over the head.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_f_iraq_medieval.",
+      "flags": {
+        "label": "qamis with tiraz bands"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_iraq_medieval",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Preserve first head and hand contours exactly. Same dusty coral qamis, geometric ochre upper-arm bands, sand mantle on shoulders behind arms, ivory gathered sirwal and brown slippers. Natural sleeve folds follow raised arms. Same head centered x512 scalp164 chin324 and soles1440. Solid magenta exposedfigure, puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or shadows on background. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d4c105c9-f186-49d3-ac23-eef69a311d5b.png",
+      "path": "Raw/outfit_f_iraq_medieval__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d7805c4ede65395cb8f34ac0ee37340db853871f9de788b86487e874d173bf9e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_medieval__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "qamis with tiraz bands",
+      "details": "Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Long-sleeved, ankle-length qamis in a rich colour (dusty coral, saffron or olive) with gold-embroidered tiraz bands (abstract pattern, no letters) at the upper arms, over full sirwal gathered at the ankle. A light mantle (rida') lies over the shoulders only, not over the head.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_f_iraq_medieval.",
+      "flags": {
+        "label": "qamis with tiraz bands"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_iraq_medieval",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Preserve first head and hand contours exactly. Same dusty coral qamis, geometric ochre upper-arm bands, sand mantle on shoulders behind arms, ivory gathered sirwal and brown slippers. Natural sleeve folds follow arms. Same head centered x512 scalp164 chin324 and soles1440. Solid magenta exposedfigure, puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or shadows on background. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fa07cc60-91f3-43b4-90c1-cd0a0d8ff630.png",
+      "path": "Raw/outfit_f_iraq_medieval__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1f2fada0126427cb8e5823ffd581e52fb30803545f46a44e3aad9ccb506d3f93",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_medieval__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "qamis with tiraz bands",
+      "details": "Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Long-sleeved, ankle-length qamis in a rich colour (dusty coral, saffron or olive) with gold-embroidered tiraz bands (abstract pattern, no letters) at the upper arms, over full sirwal gathered at the ankle. A light mantle (rida') lies over the shoulders only, not over the head.\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw outfit_f_iraq_medieval.",
+      "flags": {
+        "label": "qamis with tiraz bands"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_iraq_medieval",
+      "prompt": "EDIT FIRST fitting figure by dressing it in exact historical costume from SECOND image. FIRST governs head hands feet torso position and gesture, SECOND only clothes identity and texture. Pose: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Preserve first head and hand contours exactly. Same dusty coral qamis, geometric ochre upper-arm bands, sand mantle on shoulders behind arms, ivory gathered sirwal and brown slippers. Natural sleeve folds follow arms. Same head centered x512 scalp164 chin324 and soles1440. Solid magenta exposedfigure, puregreenbackground. Late80s inked textured anime exact samefabrictexture. No hair,jewelry,text or shadows on background. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9101bef0-bd77-49ba-a783-d9bf3069777e.png",
+      "path": "Raw/outfit_f_iraq_medieval__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8330de4b3b6da70bc7625a713f877a9394cba2425bf52b38271bffc527354900",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "S-curl side locks",
+      "details": "Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Long hair pinned up close to the head, with two glossy S-shaped side-curls (sudgh) combed forward onto the cheeks at the temples\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw hair_f_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "S-curl side locks"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_iraq_medieval",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HAIR ONLY extraction source. Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Long hair pinned up close to the head, with two glossy S-shaped side-curls (sudgh) combed forward onto the cheeks at the temples\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw hair_f_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAll existing clothes mantle shoes trim and skin must become SOLID FLAT MAGENTA #FF00FF. Only natural dark brown hair colored. Preserve original face scale and position exactly scalp164 chin324 x512, body handsfeetpositions unchanged. Pinned-up compact hair with distinctive two S-shaped temple curls lying forward on cheeks, no jewelry or headdress. Fine 1980s anime ink strokes, subtle painted highlight rather than plastic sheen. 1024x1536 puregreen#00FF00 background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c84f0b3f-e6e1-41cd-a0db-20d64752a78e.png",
+      "path": "Raw/hair_f_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d09688e2136d01b7d1cf97c6dd33027c31a9389ab03eae784fe14f54a85900de",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "veil with isaba",
+      "details": "Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Light khimar veil over the hair, drawn opaque (not sheer or see-through), bound at the brow by an 'isaba: a narrow jewelled and embroidered headband embroidered with a line of small abstract gold patterns (no letters). The veil's sides fall behind the temples so the cheeks and the S-shaped side-curls stay uncovered\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw headwear_f_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "veil with isaba",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_iraq_medieval",
+      "prompt": "Edit supplied fullyclothed fittingfigure into HEADWEAR ONLY extraction source. Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Light khimar veil over the hair, drawn opaque (not sheer or see-through), bound at the brow by an 'isaba: a narrow jewelled and embroidered headband embroidered with a line of small abstract gold patterns (no letters). The veil's sides fall behind the temples so the cheeks and the S-shaped side-curls stay uncovered\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw headwear_f_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAll existing clothes mantle shoes trim and skin must become SOLID FLAT MAGENTA #FF00FF. Only requested ivory opaque veil and narrow dustycoral gold embroidered browband with small turquoise stones colored. NO HAIR painted: keep cheek/temple areas clear magenta for later S-curl hair layer. Veil sides fall behind ears toward shoulder backs, not over chest or arms. Preserve original face scale and position exactly scalp164 chin324 x512, body handsfeetpositions unchanged. Not a crown, no projecting ornaments. Fine1980s anime ink strokes, softly textured painted fabric.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-25a86898-8d22-43c2-ae8d-c62ea76c450f.png",
+      "path": "Raw/headwear_f_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dacc6c99aa1bd11174655184c92999278b582de8223e2b8525be2f1d196680b6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_iraq_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "country": "iraq",
+      "era": "medieval",
+      "label": "pearl choker",
+      "details": "Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Choker of large pearls\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw accessory_f_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pearl choker"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_iraq_medieval",
+      "prompt": "Edit supplied fullyclothed fittingfigure into ACCESSORY ONLY extraction source. Subject: woman of Abbasid Baghdad; Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra).\nDraw: Choker of large pearls\nAvoid: 'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes; harem stereotypes and face-covering veils; any Arabic letters or writing, real or fake, on clothing; keffiyeh with agal (a later style); Ottoman bulbous turbans; Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval); soft, crumpled or forward-leaning cap (reads as the Japanese eboshi); Sasanian royal crowns, black battle banners, weapons\nOutput one full-canvas raw accessory_f_iraq_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nAll existing clothes mantle shoes trim and skin become SOLID FLAT MAGENTA #FF00FF. Only one single strand of large ivory pearls snug around lower neck retain natural colors, muted painted sheen and thin dark ink, no goldpendant. Preserve original head handsfeetpositions exactly. No hair veil or other jewelry. Fine1980s anime ink strokes, softly textured painted beads.1024x1536 puregreen#00FF00background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1728358a-3b11-49c8-ac3c-dc0911b56785.png",
+      "path": "Raw/accessory_f_iraq_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2ca2f0c7e55b7f18465203dc03f14a59631a6077533404332536d60b3d1963a8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

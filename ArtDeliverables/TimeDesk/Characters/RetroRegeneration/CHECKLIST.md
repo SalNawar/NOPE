@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 447. Full regeneration is NOT complete.
+Saved: 471. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -451,3 +451,27 @@ Saved: 447. Full regeneration is NOT complete.
 | outfit_m_iraq_ancient__thinking_a | visually reviewed; registration pending |
 | outfit_m_iraq_ancient__objecting_b | visually reviewed; registration pending |
 | hair_m_iraq_ancient | visually reviewed; registration pending |
+| facialhair_m_iraq_ancient | visually reviewed; registration pending |
+| headwear_m_iraq_ancient | visually reviewed; registration pending |
+| accessory_m_iraq_ancient | visually reviewed; registration pending |
+| outfit_f_iraq_ancient | visually reviewed; registration pending |
+| outfit_f_iraq_ancient__explaining_a | visually reviewed; registration pending |
+| outfit_f_iraq_ancient__thinking_b | visually reviewed; registration pending |
+| outfit_f_iraq_ancient__objecting_c | visually reviewed; registration pending |
+| hair_f_iraq_ancient | visually reviewed; registration pending |
+| headwear_f_iraq_ancient | visually reviewed; registration pending |
+| outfit_m_iraq_medieval | visually reviewed; registration pending |
+| outfit_m_iraq_medieval__explaining_a | visually reviewed; registration pending |
+| outfit_m_iraq_medieval__thinking_b | visually reviewed; registration pending |
+| outfit_m_iraq_medieval__objecting_c | visually reviewed; registration pending |
+| hair_m_iraq_medieval | visually reviewed; registration pending |
+| facialhair_m_iraq_medieval | visually reviewed; registration pending |
+| headwear_m_iraq_medieval | visually reviewed; registration pending |
+| accessory_m_iraq_medieval | visually reviewed; registration pending |
+| outfit_f_iraq_medieval | visually reviewed; registration pending |
+| outfit_f_iraq_medieval__explaining_b | visually reviewed; registration pending |
+| outfit_f_iraq_medieval__thinking_c | visually reviewed; registration pending |
+| outfit_f_iraq_medieval__objecting_a | visually reviewed; registration pending |
+| hair_f_iraq_medieval | visually reviewed; registration pending |
+| headwear_f_iraq_medieval | visually reviewed; registration pending |
+| accessory_f_iraq_medieval | visually reviewed; registration pending |
