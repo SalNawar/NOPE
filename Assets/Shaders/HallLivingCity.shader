@@ -1,3 +1,12 @@
+// The living city behind the hall's windows and in the full-screen city view (CityView): the four
+// painted states blended by the hour, depth parallax with the hall's pan, clouds, an airship, a bus and
+// smoke, the windows switching on as the hall darkens, and headlights on three roads. Nothing toggles
+// (HALL-FX, BUG-13): every window fades in once as the lit share (_HallCityLights.x, from the shift
+// clock's hour) passes its moment, over the fade band HallCityExterior sizes to ~0.4 s at the clock's
+// pace (_CityWindowFade; HallCity.WindowLevel mirrors it), and holds still while the clock does; the
+// cell hash is never 0 (HallCity.WindowHash); headlights are at least ~1.8 px across (widened by the
+// pixel's size) and fade at their lanes' ends, and the flyers cross from off one edge to off the other.
+// The rain path is gone (it was always dry: BUG-73d).
 Shader "NOPE/Hall Living City"
 {
  Properties {
@@ -8,10 +17,6 @@ Shader "NOPE/Hall Living City"
  _NoonClear("Noon clear",2D)="white"{}
  _EveningClear("Evening clear",2D)="white"{}
  _NightClear("Night clear",2D)="white"{}
- _MorningRain("Morning rain",2D)="white"{}
- _NoonRain("Noon rain",2D)="white"{}
- _EveningRain("Evening rain",2D)="white"{}
- _NightRain("Night rain",2D)="white"{}
  _CityDepth("Registered parallax depth",2D)="black"{}
  _Atmosphere("Cloud smoke ship bus atlas",2D)="black"{}
  _AtmospherePace("Clouds, airship, bus and headlights pace (1: the hall window's)",Float)=1
@@ -26,13 +31,21 @@ Shader "NOPE/Hall Living City"
  TEXTURE2D(_Masks);SAMPLER(sampler_Masks);
  TEXTURE2D(_MorningClear);SAMPLER(sampler_MorningClear);
  TEXTURE2D(_NoonClear);TEXTURE2D(_EveningClear);TEXTURE2D(_NightClear);
- TEXTURE2D(_MorningRain);TEXTURE2D(_NoonRain);TEXTURE2D(_EveningRain);TEXTURE2D(_NightRain);
  TEXTURE2D(_CityDepth);TEXTURE2D(_Atmosphere);
  float4 _StateWeights;
  // The city's windows lighting as the hall darkens (HallLightingRig, a global: x 0 by day to 1 when every window is lit, y their brightness).
  float4 _HallCityLights;
- float CityHash(float2 p){p=frac(p*float2(127.1,311.7));p+=dot(p,p+34.5);return frac(p.x*p.y);}
- float _Region,_CityPan,_CityRain,_CityDepthStrength,_CitySeconds,_CityMotion,_AtmospherePace,_HeadlightSize,_CityView;
+ // The windows' fade band (a share of _HallCityLights.x; a global HallCityExterior sets: HallCity.NextFadeWidth).
+ float _CityWindowFade;
+ // A window cell's moment (HallCity.WindowHash, bit for bit): an integer (Wang) hash, never under 1/256, so no
+ // window waits on a lit share of 0 and no crowd of cells shares one moment.
+ float CityHash(float2 c)
+ {
+  uint2 u=(uint2)c;uint h=(u.x*73856093u)^(u.y*19349663u);
+  h=(h^61u)^(h>>16);h*=9u;h^=h>>4;h*=0x27d4eb2du;h^=h>>15;
+  return 1.0/256.0+(1.0-1.0/256.0)*((float)(h&0xFFFFFFu)/16777216.0);
+ }
+ float _Region,_CityPan,_CityDepthStrength,_CitySeconds,_CityMotion,_AtmospherePace,_HeadlightSize,_CityView;
  struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  V vert(A v){V o;o.position=TransformObjectToHClip(v.position.xyz);o.uv=v.uv;o.color=v.color;return o;}
@@ -44,10 +57,10 @@ Shader "NOPE/Hall Living City"
   half4 c=SAMPLE_TEXTURE2D(_Atmosphere,sampler_MorningClear,(clamp(q,.002,.998)+cell)*.5);
   c.a*=inside;return c;
  }
- // Where a flyer's centre is across the painting at frac f of its pass: the hall window keeps f (its
- // apertures hide the wrap); the city view (CityView, _CityView 1) runs it from wholly off one edge
- // to wholly off the other (halfWidth past each edge), so it never pops in or out in view.
- float Fly(float f,float halfWidth){return lerp(f,f*(1+2*halfWidth+.004)-halfWidth-.002,_CityView);}
+ // Where a flyer's centre is across the painting at frac f of its pass: from wholly off one edge to
+ // wholly off the other (halfWidth past each edge), so it never pops in or out in view (BUG-13: the
+ // hall's apertures did not hide every wrap).
+ float Fly(float f,float halfWidth){return f*(1+2*halfWidth+.004)-halfWidth-.002;}
  half3 Over(half3 baseColor,half4 layer,half opacity,half3 light)
  {return lerp(baseColor,layer.rgb*light,saturate(layer.a*opacity));}
  half4 frag(V v):SV_Target
@@ -61,25 +74,27 @@ Shader "NOPE/Hall Living City"
   // Same depth coordinates across all eight states prevents blend swimming.
   [unroll] for(int i=0;i<4;i++)uv=saturate(baseUV+float2(shift*_CityDepthStrength*Depth(uv),0));
   half4 w=_StateWeights/max(dot(_StateWeights,half4(1,1,1,1)),.001);
-  half3 clear=SAMPLE_TEXTURE2D(_MorningClear,sampler_MorningClear,uv).rgb*w.x+
+  half3 rgb=SAMPLE_TEXTURE2D(_MorningClear,sampler_MorningClear,uv).rgb*w.x+
    SAMPLE_TEXTURE2D(_NoonClear,sampler_MorningClear,uv).rgb*w.y+
    SAMPLE_TEXTURE2D(_EveningClear,sampler_MorningClear,uv).rgb*w.z+
    SAMPLE_TEXTURE2D(_NightClear,sampler_MorningClear,uv).rgb*w.w;
-  half3 rain=SAMPLE_TEXTURE2D(_MorningRain,sampler_MorningClear,uv).rgb*w.x+
-   SAMPLE_TEXTURE2D(_NoonRain,sampler_MorningClear,uv).rgb*w.y+
-   SAMPLE_TEXTURE2D(_EveningRain,sampler_MorningClear,uv).rgb*w.z+
-   SAMPLE_TEXTURE2D(_NightRain,sampler_MorningClear,uv).rgb*w.w;
-  half wet=saturate(_CityRain);half3 rgb=lerp(clear,rain,wet);
   float t=_CitySeconds*_CityMotion;
   // The city view (CityView) draws the panorama full screen: its sky and traffic move at a pace
   // that reads there, and its headlights are drawn larger; the hall windows keep 1 and 1.
   float tf=t*_AtmospherePace;
-  float glow=4000000/max(_HeadlightSize*_HeadlightSize,.0001);
+  // A headlight's spread in the lane's stretched space (d = (uv - head) * (3, 1)): its painted size, widened to
+  // at least 0.9 screen px a side (a sub-pixel light twinkles as it crosses pixel centres, BUG-13), dimmed
+  // a little as it widens so a widened light keeps about its weight.
+  float sigma0=sqrt(.5/(4000000/max(_HeadlightSize*_HeadlightSize,.0001)));
+  float2 pixel=fwidth(uv);
+  float2 sigma=max(float2(sigma0,sigma0),.9*float2(3*pixel.x,pixel.y));
+  half spreadDim=pow(saturate(sigma0*sigma0/(sigma.x*sigma.y)),.35);
+  // The hour's light (HallCity.HourLight mirrors it).
   half3 light=half3(.95,.97,1)*w.x+half3(1,1,1)*w.y+half3(.75,.55,.55)*w.z+half3(.22,.29,.43)*w.w;
   half sky=1-smoothstep(.015,.06,Depth(uv));
-  rgb=Over(rgb,Fx(uv,float2(Fly(frac(.16+tf*.0011),.175),.91),float2(.35,.22),float2(0,1)),.5*sky*(1-wet*.5),light);
+  rgb=Over(rgb,Fx(uv,float2(Fly(frac(.16+tf*.0011),.175),.91),float2(.35,.22),float2(0,1)),.5*sky,light);
   // The second cloud is the first's picture again: full screen it reads as a ghost copy, so the city view draws one.
-  rgb=Over(rgb,Fx(uv,float2(frac(.68+tf*.0007),.86),float2(.26,.18),float2(0,1)),.3*sky*(1-_CityView),light);
+  rgb=Over(rgb,Fx(uv,float2(Fly(frac(.68+tf*.0007),.13),.86),float2(.26,.18),float2(0,1)),.3*sky*(1-_CityView),light);
   // Plumes remain attached to the existing industrial stacks.
   [unroll] for(int s=0;s<3;s++)
   {
@@ -95,12 +110,12 @@ Shader "NOPE/Hall Living City"
   rgb+=warm*(w.z+w.w)*.018*(.5+.5*sin(floor(uv.x*390)+floor(uv.y*210)+t*.6));
   // The windows switch on one by one as the hall darkens (Saleh's demo 1018a: "need more lights to activate as it gets
   // darker"): the night painting's lit windows (warm, bright pixels), in cells each with its own moment along
-  // _HallCityLights.x, blinking as they catch; fainter where the night painting already shows them.
+  // _HallCityLights.x, each fading in once as the lit share passes it (HallCity.WindowLevel); fainter where the
+  // night painting already shows them. Off while the share is 0 (by day).
   half3 lit=SAMPLE_TEXTURE2D(_NightClear,sampler_MorningClear,uv).rgb;
   half window=step(lit.b*1.25,lit.r)*smoothstep(.38,.62,lit.r)*step(.1,Depth(uv));
   float2 wcell=floor(uv*float2(240,120));float wh=CityHash(wcell);
-  float catchUp=_HallCityLights.x-wh*.97;
-  half on=step(0,catchUp)*lerp(step(.45,frac(t*6+wh*17)),1,step(.025,catchUp));
+  half on=step(1e-5,_HallCityLights.x)*saturate((_HallCityLights.x-wh*.97)/max(_CityWindowFade,.0005));
   rgb+=window*on*_HallCityLights.y*half3(1,.8,.48)*lit*(1-.7*w.w);
   // Small moving headlight pairs follow three authored road segments.
   [unroll] for(int lane=0;lane<3;lane++)
@@ -117,15 +132,13 @@ Shader "NOPE/Hall Living City"
    {
     float travel=frac(tf*(.007+lane*.002)+car*.19+lane*.27);
     float2 head=lerp(a,b,travel);float2 d=(uv-head)*float2(3,1);
-    // ...and come out from behind the building and go behind the next one (a short fade at the ends).
-    half emerge=lerp(1,smoothstep(0,.06,travel)*(1-smoothstep(.94,1,travel)),_CityView);
-    rgb+=half3(1,.74,.38)*exp(-dot(d,d)*glow)*(.25+.55*w.w)*emerge;
+    // ...and come out from behind the building and go behind the next one (a short fade at the ends,
+    // HallCity.LaneEndFade), in the hall window as in the city view: a lane's wrap never pops a light.
+    half emerge=smoothstep(0,.06,travel)*(1-smoothstep(.94,1,travel));
+    float2 z=d/sigma;
+    rgb+=half3(1,.74,.38)*exp(-.5*dot(z,z))*spreadDim*(.25+.55*w.w)*emerge;
    }
   }
-  // A fine moving rain layer stays inside the exterior aperture.
-  float2 ruv=uv*float2(360,60);ruv.x+=uv.y*12;
-  float streak=step(.978,frac(ruv.x))*pow(saturate(1-frac(ruv.y+t*5+sin(floor(ruv.x))*7)),8);
-  rgb=lerp(rgb,half3(.55,.64,.72),streak*wet*.2);
   return half4(rgb*v.color.rgb,aperture*v.color.a);
  }
  ENDHLSL
