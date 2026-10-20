@@ -43,6 +43,15 @@ Sources:
 - It eases over `resizeSeconds` (0.15 s; a cut under Reduced Motion).
 - The held point stays under the cursor: `DeskDraggable.GrabScale` = `PaperSizes.GrabRatio`.
 - A desk paper held over the counter before the verdict keeps its desk size, because it could not stay there. So a refused drop never changes size after release.
+- **Both halves are pure and tested (verifier findings 1 and 5):**
+  - `PaperSizes.HeldZone(under, recorded, verdict)` is the size while held (it was `HandleDragged`'s inline `canLie`).
+  - `PaperSizes.ZoneAfterDrop(outcome, released, before)` is the zone, and so the size, a paper takes after its release, for every `DropOutcome`. Every drop branch in `HandleDragEnded` and `RefuseAt` now sets that zone, and DeskPapers records the same one.
+- **The fix for finding 1 (a counter paper dragged straight onto a machine):**
+  - Over a machine (machines stand on the desk) it is held at its desk size.
+  - If the chip reader refuses it (`DropOutcome.MachineRefused`, new; DeskPapers.Drop never returns it), it lies on the desk beside the reader. It becomes a desk paper (`DeskPapers.Lay`, new) at the size it was held at.
+  - If the busy scanner queues it (`Queued`), DeskPapers.Drop records the desk's zone, and it waits beside the scanner on the desk at its desk size. Both rests are kept off the counter (`Rest(…, offCounter: true)`).
+  - Once its scan ends, the desk carries it back to where it was picked up, as before. DeskPapers.Tick gives it back the zone it was picked up in (`_comesBackTo`), so a counter paper goes back to its counter size there. The change happens while it is still docked, so the size eases only once it is clear of the scanner, as every carry-out does.
+  - Before: both paths called `SetZone(_state.ZoneOf(index))`, which was still Counter, so the paper eased down to counter size while lying on the desk.
 
 **Clearance:**
 - It is judged at the paper's zone size (`DeskDocument.ZoneSize`, `RestCorners`), never the size it is easing from.
@@ -57,7 +66,7 @@ Sources:
 - `Rest(footprint, area, keepOuts)` gives the release centre unless the rect would leave `area` or overlap a keep-out.
 - When it would, it gives the least move clear of **all** keep-outs at once: a candidate grid over every keep-out's sides, clamped into the area, nearest first. Where nothing is clear, the least overlap.
 - `Inside` keeps the whole rect in the area.
-- `DockOf` documents the footprint-centre dock rule.
+- `DockOf(footprint, docks, holds)` is the dock rule that ships. `DeskController.DockAt` calls it (verifier finding 3; before, `DockAt` used `IPaperDock.Contains` directly, and `DockOf` was dead code that only its test called).
 
 **`DeskController`:**
 - `Rest`/`RestOf` builds the keep-outs in the office view's frame:
@@ -72,8 +81,12 @@ Sources:
 - `ScannerClearance.Clear`, `ClearProp`, `Eject` and `Overlaps`. They were unreachable once the push went, so `ScannerClearanceTests` shrinks to `Shadow`/`Blocked`.
 
 **The dock:**
-- It is picked by the paper's root, which is its footprint's centre, not the pointer (`DockAt(paper.transform.position)`).
-- **The zone is still the pointer's** (our decision). The size switches when the pointer crosses the edge, so the drop's zone is the zone the paper is already sized for. Judging the zone by the footprint would make the size flip back after release, breaking matrix (c).
+- It is picked by the footprint's centre, not the pointer: `DockAt(PaperFootprint(paper, at), at.y)` → `DropResolver.DockOf`.
+  - Each machine's own drop-area test (`IPaperDock.Contains`) is the `holds` predicate.
+  - The chip reader is listed first, so it wins where its drop area meets the scanner's, as before.
+- The rulebook folder is judged the same way, at the centre of its renderers' footprint. Before, it was judged at its root.
+- `MachineOccupancy.IsIn` had no caller and is deleted.
+- **The zone is still the pointer's. This is a deviation from v1 step 3, listed for sign-off below.** The size switches when the pointer crosses the edge, so the drop's zone is the zone the paper is already sized for. Judging the zone by the footprint would make the size flip after release, breaking matrix (c). This rule is now tested: `DeskPapersTests.TheSizeAfterTheRelease_IsTheSizeItWasHeldAt_ForEveryDropThatDoesNotDock` runs every pointer zone × outcome.
 
 **PaperPhysics:**
 - No release slide (`SlideStart`, `OffsetX/Z`, `paperSlideSeconds`, `paperSlideMax`: removed).
@@ -90,7 +103,7 @@ Sources:
 - **No teleport on a counter drop:**
   - `Dropped` now only shakes the folder's "no".
   - `DeskController.RulebookDropped` lays it just off the counter, beside a refusing machine or clear of any prop (`RestOf`, then `Refused`/`RestAt`, which carry the folder the short way).
-- **Held:** it is drawn above every prop (`ShowHeld`, HeldOnTop), and its swing pivots on the held point.
+- **Held:** it is drawn above every prop (`ShowHeld`, HeldOnTop). Any swing pivots on the held point; by default there is none (`paperSwayMax` 0, BUG-11a).
 
 ### BUG-8: no shared obstacle model
 
@@ -118,9 +131,11 @@ Sources:
   - A slow drop barely settles.
   - `PaperPhysics.Land(settle)` is also the hand-over's slap.
 - **No squash:** `paperDropSquash` and `DeskDocument._squash` are removed. A paper never changes size, which closes the feel bible's gap 8 and G5.
-- **Yaw while held:**
-  - v1 says "no yaw while held"; the feel bible's A6 keeps the sway (16°/(m/s), ≤12°). **Our reconciliation:** the swing stays but **pivots on the held point** (`PaperPhysics.PivotOffset`). The point under the cursor never moves (A7 "glued at the grab offset"), and after a drop it springs back to square about that same point, so the rest pose does not move.
-  - The adversarial reviewer should judge this one by eye. If it reads as a yaw, set `paperSwayMax` to 0 in MotionTuning_Default (FLOW's asset).
+- **No yaw while held (verifier finding 2):**
+  - BUG-11a's "Fix must achieve" and v1 step 4 say "no yaw while held". The feel bible's A6 keeps a sway (16°/(m/s), ≤12°). Only Saleh or the orchestrator can reconcile the two, so the default now follows the plan.
+  - `MotionKnobs.paperSwayMax` defaults to **0** (this track owns `MotionKnobs`). `MotionTuning_Default.asset` does not serialize the key, so the code default is what runs.
+  - What this costs: the corners' twist follows the swing, so it rests too. The bow, the flutter and the landing curl stay, so a paper still bends.
+  - The pivot machinery stays (`PaperPhysics.PivotOffset`), so a swing never moves the point under the cursor or the rest pose. If the call is "keep A6's sway", set `paperSwayMax` back to 12 and nothing else changes. `PaperPhysicsTests` runs the swing tests with `paperSwayMax` 12 (`Swaying()`), and `ByDefault_AHeldPaper_NeverYaws_ButStillBows` pins the default.
 - **ID cards rigid (D3):**
   - `PaperPhysics.Rigid` (set in `DeskDocument.Bind` for `PaperKind.Card`): no bow, twist or ripple, and a hop ≤ `cardDropHop` 1 mm.
   - `MotionKnobs.cardFlex` defaults to 0.
@@ -136,6 +151,11 @@ Sources:
   - It is the case's: `MachineOccupancy` (Domain/MachineDocks.cs, new) replaces `_docked`/`_inReader`, is cleared in `BeginCase` and `SendBack`, and the lift reads `DeskDocument.IsDocked`.
   - A new case's paper with the same index is never taken for docked.
   - **No queue steals:** `Landed` (the Auto-Feed's readiness) requires `MachineOccupancy.FreeToFeed`.
+  - **The hand-off (verifier finding 4):**
+    - The problem: in the Auto-Feed chain a finished paper stayed in `MachineOccupancy` as the scanner's until its carry-out landed. The next frame `StartScan(next)` called `_docks.Dock(next, Scanner)`, which returned false (and the result was ignored). The fed paper was never recorded as docked.
+    - The fix: `CarryOut` now calls `MachineOccupancy.HandOff` (new) as the paper leaves the bed. A handed-off paper is still the machine's until it lands clear: `IsDocked` stays true, `FreeToFeed` false, and it keeps its docked size. But it no longer fills the machine (`Busy`), so the next paper docks and is recorded.
+    - `StartScan` now checks `Dock`'s result, and logs an error if the bed was not free, so a regression shows in the log.
+    - The chip reader does not hand off: it keeps its paper until the carry-out lands, because a card leaves the slot the way the next one would come in.
 - **The lid:**
   - `SendBack` lets go of the lid (`HoldOpen(false)`, `SetNear(false)`).
   - `DeskCarry.Start` on a running carry, and `Stop`, run the replaced carry's **cut** callback. `StartScan` passes the lid's let-go as its cut. Before, the replaced callback was dropped and the lid stayed held open.
@@ -204,7 +224,23 @@ Sources:
 
 ## Tests
 
-**Offline:** compile_check 0 errors; runner `passed 3716, failed 0`. The baseline at 5aecb60 was `passed 3710, failed 0`.
+**Offline:** compile_check 0 errors; runner `passed 3723, failed 0`.
+- The baseline at 5aecb60 was `passed 3710, failed 0`.
+- The first DOC-HANDLE commit (b465a0f) was at `passed 3716`.
+- The verifier-fix commit adds 7 tests.
+
+**Added for the verifier findings:**
+- `DeskPapersTests.TheSizeAfterTheRelease_IsTheSizeItWasHeldAt_ForEveryDropThatDoesNotDock` (findings 1, 3 and 5):
+  - It covers every recorded zone × verdict × pointer zone × machine (none, the scanner, the chip reader) × scanner idle or busy.
+  - It checks the held size (`HeldZone`) against the size after the release (`ZoneAfterDrop`) and DeskPapers' recorded zone, for every outcome.
+  - The counter paper refused or queued at a machine fails it on the old rule.
+- `DeskPapersTests.ACounterPaper_RefusedOrQueuedAtAMachine_LiesOnTheDesk_AtItsDeskSize`: the finding's own scenario, and the queued paper's zone back on the counter once it is scanned.
+- `DeskPapersTests.AQueuedPaper_PickedUpAgain_ComesBackToWhereItWasLastPickedUp`.
+- `DropResolverTests.WhereTwoDropAreasMeet_TheFirstListed_TakesIt`.
+- `DropResolverTests.TheFootprint_NotThePointer_DecidesTheDock`, now through the `DockOf` signature that `DockAt` calls.
+- `MachineDocksTests.TheAutoFeedChain_DocksEachPaper_WhileTheLastIsCarriedOut` (finding 4).
+- `MachineDocksTests.AMachine_HoldsOnePaper_UntilItIsHandedOff`.
+- `PaperPhysicsTests.ByDefault_AHeldPaper_NeverYaws_ButStillBows` (finding 2).
 
 **New (EditMode, offline):**
 - `DropResolverTests`:
@@ -277,9 +313,34 @@ Sources:
   - `BendNow` keeps reading `cardFlex`, which is 0 now.
 - **FEEDBACK (#16):** play the hand-over slap on `DeskEvents.DocumentLanded`, which is raised for hand-overs only; a drop plays `paper_drop` from `DeskDocument.Feel` as before. `PaperPhysics.ReleaseSpeed` is there for the louder fast drop.
 - **CAM (#6):** read `HoldRegistry.Desk.IsHolding` for "no view change while holding" (55c). This track's keys already cancel a hold before any view key acts.
-- **CONTENT / TEXT-LANG:** the day-1 scanner note (`desk.scanHint`, world_source.json, all languages) still says "Click a paper to read it; drag it onto the scanner to open it on the PC." Clicking no longer reads.
+- **CONTENT / TEXT-LANG: a merge blocker for the demo.**
+  - The problem: the day-1 scanner note (`desk.scanHint`, in all 7 string tables and world_source.json) still says "Click a paper to read it; drag it onto the scanner to open it on the PC." Clicking no longer reads (R6).
+  - **INTEGRATION must not build a demo with DOC-HANDLE merged until CONTENT has changed this string** in every table.
+  - The string is correctly left to CONTENT; this track does not own those files.
   - Proposed English: "Drag a paper onto the desk to read it; drag it onto the scanner to open it on the PC."
 - **UI-PC (#13):** when `CrtClock.cs` stops reading `DeskConfigSO.crtClockSize`, DOC-HANDLE deletes the field (BUG-20b).
+
+## Deviations and readings that need sign-off (orchestrator or Saleh) before merge
+
+These are listed so nobody has to find them in the recipes. None is one of Saleh's decisions.
+
+1. **The drop's zone is judged by the pointer, not the footprint.**
+   - v1 step 3 and the v1 test list say the zone and the dock are both judged by the footprint. The dock is (`DockOf`); the zone is not.
+   - Why: the size changes under the cursor as the pointer crosses the counter's edge, so judging by the pointer keeps the size after release equal to the size held (matrix (c)). That rule is tested over every outcome.
+   - Effect: a paper released with the pointer on the desk can lie partly over the counter strip, and the reverse.
+2. **BUG-11a's yaw: the default is now no yaw while held (`paperSwayMax` 0), as the plan says.**
+   - The open call is whether A6's ≤12° sway (pivoted on the held point) comes back. That is one knob.
+   - With the sway at 0, the corners' twist also rests.
+3. **Recipe 5(a) widens v2's pass line.** v2 says the rest pose is ≤8 px from the release grab point "unless the paper was docked or handed back". Recipe 5(a) also exempts:
+   - a refused drop, which v1 step 3 and the v2 refusal rule have resting beside what refused it;
+   - a paper released overlapping a prop, or partly out of the reading view, which the obstacles pass line and matrix (e) move.
+   
+   Each exempt drop is logged with its move, and its move must be the least clear move (DropResolver). If the sign-off keeps v2's narrower line, those drops count as failures by definition, so the line has to change or the matrix cannot pass.
+4. **R6 includes the counter (our reading of D1 and R6).** A click on a counter paper only brings it to the top. It no longer slides it to the desk and enlarges it. The day-1 note that says "Click a paper to read it" is the CONTENT blocker above.
+5. **A counter paper refused or queued at a machine becomes a desk paper.**
+   - Why: it lies on the desk beside the machine, so it takes the desk's zone, and before the verdict it cannot be dropped back on the counter (`NotStamped`), like any desk paper.
+   - Exception: a queued counter paper that gets scanned is carried back to the counter, and is a counter paper again.
+6. **The rulebook folder's dock is judged at its footprint's centre.** Before, it was judged at its root. Same rule as a paper.
 
 ## FEATURES (for INTEGRATION to fold in)
 
@@ -292,7 +353,7 @@ Sources:
 - **Line 64 (Controls):** add:
   > "While anything is held (`HoldRegistry`: a paper, the folder, a dater), a view key (TAB, Q, A, D, F1) or a right-click or Esc lets go of it first and does nothing else, and losing the focus lets go without committing (tested: `ControlRulesTests`, `HoldRegistryTests`)".
 - **Line 185 (Desk feel):** replace "drops with a soft squash and a flutter" with:
-  > "lands where it was let go, settling (a hop and a curl of its ends) as much as it was moving, with no squash and no slide (`PaperPhysics`, tested: `PaperPhysicsTests`); ID cards are rigid; its swing pivots on the held point".
+  > "lands where it was let go, settling (a hop and a curl of its ends) as much as it was moving, with no squash and no slide (`PaperPhysics`, tested: `PaperPhysicsTests`); ID cards are rigid; a held paper never turns (no yaw while held, `MotionKnobs.paperSwayMax` 0, pending the A6 call)".
 - **Chip reader and scanner (lines 50-51):** add:
   > "a passport lies on the reader's pad upright to the player, sized to fit the pad (`DockFit`), and every docked paper keeps its docked size until it is clear of the machine; no queue takes a paper from a machine (`MachineOccupancy`, tested: `MachineDocksTests`)".
 
@@ -300,7 +361,7 @@ Sources:
 
 **Measured here (outside Unity):**
 - `compile_check_any.py E:\unity\NOPE-int`: 0 errors in every project, the Editor project at 161 warnings (as at the baseline).
-- Offline runner: `passed 3716, failed 0`.
+- Offline runner: `passed 3723, failed 0`.
 
 **Everything else is deferred: Unity.** Saleh may be on the PC, so no Unity editor or player was started.
 
@@ -324,12 +385,25 @@ The recipes below are for the Unity pass. They run in one batch, in the art offi
      - every P-* path: counter→desk, desk→desk, desk→counter (before and after the verdict), onto the folder, beside every machine, P-EDGE and P-OFF;
      - A1 and A2, days 1, 5 and 12 (`jumpDay` + `cheat GiveAllItems`), H2 and H5.
    - Pass (v2):
-     - (a) the rest pose, projected through the **release-frame camera**, is ≤8 px from the release grab point, unless docked, handed back, refused, or the paper was released overlapping a prop or out of view (those are logged with their move);
+     - (a) the rest pose, projected through the **release-frame camera**, is ≤8 px from the release grab point, unless the paper was docked or handed back (v2's line).
+       - **Pending sign-off (deviation 3):** this recipe also exempts refused drops and papers released overlapping a prop or partly out of view.
+       - Log each exempt drop with its move, and check that the move is DropResolver's least clear move.
+       - Report the (a) count both ways: under v2's line and under the widened line.
      - (b) 0 backward jumps in the first 10 frames;
      - (c) world scale after release changes by 0%, the counter-edge crossing is the only size change, and the on-screen size after the tilt is the projection of the unchanged world rect ±1%;
      - (d) the only drop-caused camera change is one tagged D1 tilt, none when already tilted;
      - (e) the whole rect is in the viewport at rest (after the tilt);
-     - (f) 10/10 clicks on a resting desk paper change neither its world scale nor the camera, and it comes to the top in the same frame.
+     - (f) 10/10 clicks on a resting desk paper change neither its world scale nor the camera, and it comes to the top in the same frame;
+     - (g) **a counter paper refused or queued at each machine keeps its size** (verifier findings 1 and 6). Four drops, each straight from the counter:
+       - a fresh counter permit with no chip onto the chip reader;
+       - a counter passport onto the chip reader while it reads another;
+       - a counter paper onto the busy scanner;
+       - the same with Auto-Feed on.
+       
+       Pass for each:
+       - world scale at release = world scale 1 s later (0% change: the desk size it was held at);
+       - it rests on the desk beside the machine, wholly off the counter;
+       - the queued one, once scanned, is carried back to its counter spot and eases to counter size only as it lands clear of the scanner.
 6. **deferred: Unity. Obstacles.**
    - SEQ of the open passport dragged across every prop at its largest.
    - Pass: in 100% of frames no prop pixel over the held paper (ID buffer), and 0 resting papers under a prop.
@@ -342,7 +416,9 @@ The recipes below are for the Unity pass. They run in one batch, in the art offi
      - the docked size held until clear;
      - the scanner lid shut after the mid-scan end;
      - the next case's papers at stack depth;
-     - Auto-Feed never takes a paper out of the reader.
+     - Auto-Feed never takes a paper out of the reader;
+     - in the Auto-Feed chain, no `[Desk] paper … went onto the scanner's bed while the bed was not free` error in the log;
+     - each fed paper is inert, with no hover and no drag, while it is on the bed (MachineOccupancy recorded it: verifier finding 4).
 8. **deferred: Unity. Holds.**
    - Hold a paper, the folder and each dater; press Esc, Q, A, TAB, F1 and Alt+Tab (focus loss), and right-click.
    - Pass: the hold is cancelled, nothing is stamped or handed back, and there is no view change while holding.
@@ -352,7 +428,8 @@ The recipes below are for the Unity pass. They run in one batch, in the art offi
      - a P-SLOW drop (≤150 px/s) peaks at ≤2 px of settle motion;
      - a P-FAST drop settles visibly but in ≤0.25 s;
      - an ID card does not bend (mesh-vertex diff) and its hop is ≤1 mm.
-   - Judge the pivoted swing by eye (see BUG-11a).
+     - a held paper's yaw is 0 in every frame (`paperSwayMax` 0, deviation 2), while it still bows.
+   - If the call restores A6's sway (`paperSwayMax` 12), judge the pivoted swing by eye instead: the held point never moves.
 10. **deferred: Unity. Hand-over.**
     - SEQ of 5 hand-overs at A1 and A2.
     - Pass:

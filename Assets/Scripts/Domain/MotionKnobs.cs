@@ -102,7 +102,12 @@ public sealed class MotionKnobs
     /// The desk's physics feel (PaperPhysics; Saleh 2026-10-17: "KEEP IT TOP
     /// DOWN BUT GIVE IT PHYSICS"; 1018a: "all documents are stiff"): a held
     /// paper's swing against its travel (degrees per metre per second, at most
-    /// paperSwayMax, pivoted on the held point); let go, it stays where it was
+    /// paperSwayMax, pivoted on the held point). paperSwayMax is 0 by default:
+    /// no yaw while held (BUG-11a's "Fix must achieve", FIX_PLAN v1 §3
+    /// DOC-HANDLE step 4), so the corners' twist, which follows the swing,
+    /// rests too. The feel bible's A6 keeps a sway of 16°/(m/s) to ≤12°: set
+    /// paperSwayMax to 12 once Saleh or the orchestrator makes that call (the
+    /// swing then pivots on the held point, PaperPhysics.PivotOffset). Let go, it stays where it was
     /// let go (DOC-HANDLE, BUG-6: no slide on, no spin, no squash: a paper
     /// never changes size, the feel bible's G5) and hops (metres high) as much
     /// as it was moving: its hop and its landing curl scale with its speed
@@ -111,7 +116,7 @@ public sealed class MotionKnobs
     /// speed smoothed over paperSpeedSmoothing seconds. The folder takes them
     /// divided by its weight.
     /// </summary>
-    public float paperSwayPerSpeed = 16f, paperSwayMax = 12f;
+    public float paperSwayPerSpeed = 16f, paperSwayMax = 0f;
 
     /// <inheritdoc cref="paperSwayPerSpeed"/>
     public float paperDropHop = 0.004f, paperSettleSpeed = 1f, cardDropHop = 0.001f, paperSpeedSmoothing = 0.05f;

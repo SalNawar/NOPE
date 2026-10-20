@@ -99,17 +99,20 @@ public static class DropResolver
 
     /// <summary>
     /// The dock a thing dropped with footprint <paramref name="paper"/> goes
-    /// to: the index of the first of <paramref name="docks"/> (their drop
-    /// areas) holding the footprint's centre, or -1. The footprint, not the
-    /// pointer, decides (a paper grabbed by its edge hangs away from the
-    /// pointer: BUG-6).
+    /// to (DeskController.DockAt's rule, for a paper and the folder alike):
+    /// the index of the first of <paramref name="docks"/> (in priority order:
+    /// the desk lists the chip reader first, it stands clear of the scanner)
+    /// whose drop area holds the footprint's centre (<paramref name="holds"/>:
+    /// the dock, then the centre's x and y in the footprint's frame), or -1.
+    /// The footprint, not the pointer, decides (a paper grabbed by its edge
+    /// hangs away from the pointer: BUG-6).
     /// </summary>
-    public static int DockOf(DeskRect paper, IReadOnlyList<DeskRect> docks)
+    public static int DockOf<T>(DeskRect paper, IReadOnlyList<T> docks, Func<T, float, float, bool> holds)
     {
-        if (docks == null)
+        if (docks == null || holds == null)
             return -1;
         for (int i = 0; i < docks.Count; i++)
-            if (docks[i].Contains(paper.CentreX, paper.CentreY))
+            if (holds(docks[i], paper.CentreX, paper.CentreY))
                 return i;
         return -1;
     }

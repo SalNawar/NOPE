@@ -92,7 +92,7 @@ public enum DropOutcome
     /// <summary>It starts scanning (over the idle scanner).</summary>
     Scanning,
 
-    /// <summary>It goes back to where it was picked up (the scanner is busy, or the paper could not be dropped).</summary>
+    /// <summary>The paper could not be dropped (it is not on the desk, or out of range): nothing changes.</summary>
     Refused,
 
     /// <summary>A paper was dropped on the counter once the passport carries its verdict: the papers go back to the traveller with it (Papers, Please's hand-back).</summary>
@@ -101,8 +101,11 @@ public enum DropOutcome
     /// <summary>A paper from the desk was dropped on the counter before the passport carries a verdict: it goes back to where it was picked up, on the desk, with the note "Stamp the passport first" (Saleh 2026-10-06: "documents can only be returned after stamping").</summary>
     NotStamped,
 
-    /// <summary>It was dropped on the busy scanner: it waits its turn by the glass and feeds through by itself (drop and go, the scanner app spec §1: "a stack feeds through one paper at a time").</summary>
-    Queued
+    /// <summary>It was dropped on the busy scanner: it waits its turn beside the glass, on the desk (it takes the desk's zone), and feeds through by itself (drop and go, the scanner app spec §1: "a stack feeds through one paper at a time").</summary>
+    Queued,
+
+    /// <summary>A machine under it would not take it (the chip reader: a paper with no chip, or the reader busy; MachineIntake): it shakes in place and lies on the desk just beside the machine, in the desk's zone. The desk decides it (DeskPapers.Drop never returns it).</summary>
+    MachineRefused
 }
 
 /// <summary>The desk's two zones (Papers, Please's, Saleh 2026-10-06): where a document lies decides its size, one world size per zone whatever the view (DeskZones.SheetScale; Saleh's D1).</summary>
@@ -184,6 +187,9 @@ public sealed class DeskPapers
 
     /// <summary>The queued papers dropped on the scanner (drop and go): they scan by hand when their turn comes.</summary>
     private readonly HashSet<int> _dropped = new HashSet<int>();
+
+    /// <summary>The zone each paper dropped on the busy scanner comes back to once scanned (the desk carries it back to where it was picked up), while it waits beside the scanner on the desk.</summary>
+    private readonly Dictionary<int, DeskZone> _comesBackTo = new Dictionary<int, DeskZone>();
 
     /// <summary>The paper being scanned, or -1.</summary>
     private int _scanning = -1;
@@ -326,11 +332,28 @@ public sealed class DeskPapers
     public bool CanDrag(int i) => InRange(i) && StateOf(i) == PaperState.OnDesk;
 
     /// <summary>
+    /// Paper <paramref name="i"/>, on the desk, comes to lie in
+    /// <paramref name="zone"/> where the desk laid it after a drop it decided
+    /// itself (a machine that refused it: it rests on the desk beside the
+    /// machine, PaperSizes.ZoneAfterDrop's MachineRefused): its zone, and so
+    /// its size, is the zone it lies in. False (nothing changes) for a paper
+    /// not on the desk or out of range.
+    /// </summary>
+    public bool Lay(int i, DeskZone zone)
+    {
+        if (!CanDrag(i))
+            return false;
+        _zones[i] = zone;
+        return true;
+    }
+
+    /// <summary>
     /// Decides a released paper: a paper that is not on the desk (or an index
     /// out of range) is Refused and nothing changes; over the scanner it
     /// starts scanning by hand while the scanner is idle (a queued paper
     /// leaves the queue) and, while it is busy, joins the feed to scan by hand
-    /// at its turn (Queued: drop and go, the scanner app spec §1); off the
+    /// at its turn (Queued: drop and go, the scanner app spec §1; it waits
+    /// beside the scanner, on the desk, so it takes the desk's zone); off the
     /// scanner a waiting paper leaves the feed; on the counter, once
     /// the passport carries its verdict (<paramref name="verdict"/>), any
     /// paper hands the papers back (HandsBack: the controller then ends the
@@ -350,13 +373,18 @@ public sealed class DeskPapers
                 if (!_queue.Contains(i))
                     _queue.Add(i);
                 _dropped.Add(i);
+                // it waits beside the scanner, on the desk (PaperSizes.ZoneAfterDrop), and once scanned comes back to where it was picked up, in that zone (Tick)
+                _comesBackTo[i] = _zones[i];
+                _zones[i] =PaperSizes.ZoneAfterDrop(DropOutcome.Queued, zone, _zones[i]);
                 return DropOutcome.Queued;
             }
+            _comesBackTo.Remove(i); // picked up from where it waited: it comes back there, in the zone it lies in
             BeginScan(i, true);
             return DropOutcome.Scanning;
         }
         if (_dropped.Remove(i))
             _queue.Remove(i);
+        _comesBackTo.Remove(i);
         if (zone == DeskZone.Counter)
         {
             if (verdict)
@@ -372,7 +400,9 @@ public sealed class DeskPapers
     /// Advances a running scan by a positive amount (0 and negative amounts
     /// are ignored). When it reaches the scan's duration (the analysis pass's
     /// for an analysis, else the plain one) the paper goes back on the desk
-    /// (analysed, after an analysis pass) and its index is returned;
+    /// (analysed, after an analysis pass; one dropped on the busy scanner
+    /// takes back the zone it was picked up in, as the desk carries it back
+    /// there) and its index is returned;
     /// otherwise, or with no scan running, -1.
     /// </summary>
     public int Tick(float seconds)
@@ -386,6 +416,12 @@ public sealed class DeskPapers
 
         int done = _scanning;
         _states[done] = PaperState.OnDesk;
+        if (_comesBackTo.TryGetValue(done, out DeskZone back))
+        {
+            // dropped on the busy scanner, it waited on the desk; it comes back to where it was picked up, in that zone
+            _zones[done] = back;
+            _comesBackTo.Remove(done);
+        }
         _scanned[done] = true;
         if (Pass == ScanPass.Analysis)
             _analysed[done] = true;
@@ -405,6 +441,7 @@ public sealed class DeskPapers
         }
         _queue.Clear();
         _dropped.Clear();
+        _comesBackTo.Clear();
         _scanning = -1;
         _elapsed = 0f;
         Pass = ScanPass.Plain;
@@ -461,6 +498,49 @@ public static class PaperSizes
 
     /// <summary>How much a held paper's grab offset (the held point's distance from its centre) grows when its scale goes from <paramref name="from"/> to <paramref name="to"/>: by the same ratio, so the held point stays under the cursor (1 for a scale of 0).</summary>
     public static float GrabRatio(float from, float to) => from > 0f && to > 0f ? to / from : 1f;
+
+    /// <summary>
+    /// The zone whose size a held paper shows at, its pointer over
+    /// <paramref name="under"/> (its zone <paramref name="recorded"/>; the
+    /// passport carrying its <paramref name="verdict"/> or not): the zone under
+    /// the pointer where the paper could lie there (the desk; the counter for
+    /// a counter paper, or for any paper once the verdict is in: a drop there
+    /// hands the papers back), else the desk (a desk paper over the counter
+    /// before the verdict: that drop is refused and it stays on the desk, so it
+    /// keeps its desk size).
+    /// </summary>
+    public static DeskZone HeldZone(DeskZone under, DeskZone recorded, bool verdict) =>
+        under == DeskZone.Desk || recorded == DeskZone.Counter || verdict ? under : DeskZone.Desk;
+
+    /// <summary>
+    /// The zone a paper lies in once its drop is decided, and so the one size
+    /// it takes after the release (DOC-HANDLE, the drop matrix's (c): a drop
+    /// never changes a paper's size after the release): released over
+    /// <paramref name="released"/> (the pointer's zone), its zone
+    /// <paramref name="before"/> the drop.
+    /// <list type="bullet">
+    /// <item>Stays: the zone it was dropped in.</item>
+    /// <item>HandsBack: the counter (it goes back to the traveller).</item>
+    /// <item>NotStamped, Queued, MachineRefused: the desk. It lies on the desk, off the counter or just beside the machine (machines stand on the desk), which is the size it was held at there (HeldZone).</item>
+    /// <item>Scanning, Refused: <paramref name="before"/>. Docked, it shows at its docked size and comes back out to where it was picked up, in its own zone; refused by DeskPapers it was never on the desk, and nothing changes.</item>
+    /// </list>
+    /// </summary>
+    public static DeskZone ZoneAfterDrop(DropOutcome outcome, DeskZone released, DeskZone before)
+    {
+        switch (outcome)
+        {
+            case DropOutcome.Stays:
+                return released;
+            case DropOutcome.HandsBack:
+                return DeskZone.Counter;
+            case DropOutcome.NotStamped:
+            case DropOutcome.Queued:
+            case DropOutcome.MachineRefused:
+                return DeskZone.Desk;
+            default:
+                return before;
+        }
+    }
 }
 
 /// <summary>How a left-click on a document routes (the one input model: only left-clicks act; a right-click backs out, ControlRules).</summary>

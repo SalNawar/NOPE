@@ -123,7 +123,7 @@ public class MachineDocksTests
         var docks = new MachineOccupancy();
         Assert.IsTrue(docks.Dock(0, DeskMachine.ChipReader));
         Assert.IsTrue(docks.IsDocked(0));
-        Assert.IsTrue(docks.IsIn(0, DeskMachine.ChipReader));
+        Assert.IsTrue(docks.Busy(DeskMachine.ChipReader));
         Assert.IsFalse(docks.IsDocked(1), "paper 1 is not paper 0");
         Assert.IsFalse(docks.Dock(1, DeskMachine.ChipReader), "the reader holds one paper at a time");
         Assert.IsTrue(docks.Dock(1, DeskMachine.Scanner));
@@ -136,6 +136,59 @@ public class MachineDocksTests
         docks.Clear(); // the case ended mid-read
         Assert.IsFalse(docks.IsDocked(0), "the next case's paper 0 is not taken for docked (it lay at desk height and clipped)");
         Assert.IsFalse(docks.Busy(DeskMachine.ChipReader));
+    }
+
+    [Test]
+    public void TheAutoFeedChain_DocksEachPaper_WhileTheLastIsCarriedOut()
+    {
+        // BUG-24 verifier finding 4: the scan of paper 0 ends and its carry-out starts (DeskController.CarryOut hands it off);
+        // the next frame the Auto-Feed puts paper 1 on the bed (StartScan) before paper 0's carry-out has landed.
+        var docs = new[]
+        {
+            new CaseDocument { name = "Passport", handOver = DocumentHandOver.OnArrival },
+            new CaseDocument { name = "Permit", handOver = DocumentHandOver.OnArrival },
+        };
+        var papers = new DeskPapers(docs, 0.5f, 0.5f, new ScannerDay(true, false));
+        papers.HandOver(0);
+        papers.HandOver(1);
+        var docks = new MachineOccupancy();
+        papers.FeedStack();
+        Assert.AreEqual(0, papers.FeedNext(docks.FreeToFeed));
+        Assert.IsTrue(docks.Dock(0, DeskMachine.Scanner), "paper 0 on the bed");
+        Assert.AreEqual(0, papers.Tick(1f), "its scan ends");
+
+        Assert.IsTrue(docks.HandOff(0), "its carry-out starts: handed off");
+        Assert.IsTrue(docks.IsDocked(0), "still the scanner's until it lands clear (its docked size, no input)");
+        Assert.IsFalse(docks.FreeToFeed(0), "no queue takes it on its way out");
+        Assert.IsFalse(docks.Busy(DeskMachine.Scanner), "but the bed is free");
+
+        Assert.AreEqual(1, papers.FeedNext(docks.FreeToFeed), "the next frame the Auto-Feed takes paper 1");
+        Assert.IsTrue(docks.Dock(1, DeskMachine.Scanner), "and paper 1 is recorded on the bed (it used to be refused and never recorded)");
+        Assert.IsTrue(docks.IsDocked(1));
+        Assert.IsFalse(docks.FreeToFeed(1));
+        Assert.IsTrue(docks.Busy(DeskMachine.Scanner));
+        Assert.IsFalse(docks.Dock(0, DeskMachine.Scanner), "a paper on its way out does not go back in");
+
+        Assert.IsTrue(docks.Leave(0), "paper 0's carry-out lands");
+        Assert.IsFalse(docks.IsDocked(0));
+        Assert.IsTrue(docks.Busy(DeskMachine.Scanner), "paper 1 still fills the bed");
+        Assert.IsTrue(docks.HandOff(1));
+        Assert.IsTrue(docks.Leave(1), "paper 1's own carry-out lands: its Leave finds it");
+        Assert.IsFalse(docks.Busy(DeskMachine.Scanner));
+        Assert.IsFalse(docks.HandOff(1), "it is in no machine now");
+    }
+
+    [Test]
+    public void AMachine_HoldsOnePaper_UntilItIsHandedOff()
+    {
+        var docks = new MachineOccupancy();
+        Assert.IsTrue(docks.Dock(0, DeskMachine.Scanner));
+        Assert.IsFalse(docks.Dock(1, DeskMachine.Scanner), "the bed holds one paper");
+        Assert.IsFalse(docks.IsDocked(1), "a refused dock records nothing");
+        docks.HandOff(0);
+        docks.Clear();
+        Assert.IsFalse(docks.IsDocked(0), "a case's end clears the hand-offs too");
+        Assert.IsTrue(docks.Dock(0, DeskMachine.Scanner), "and the next case's paper 0 goes in");
     }
 
     [Test]

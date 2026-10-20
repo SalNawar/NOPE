@@ -17,10 +17,10 @@ public class PaperPhysicsTests
     private const float Dt = 1f / 60f;
 
     /// <summary>Holds a body and drags it at (vx, vz) metres per second for a quarter second; returns it and its place.</summary>
-    private static (PaperPhysics body, float x, float z) Dragged(float vx, float vz, float weight = 1f, MotionAmount? amount = null, bool rigid = false)
+    private static (PaperPhysics body, float x, float z) Dragged(float vx, float vz, float weight = 1f, MotionAmount? amount = null, bool rigid = false, MotionKnobs knobs = null)
     {
         var body = new PaperPhysics(weight) { Rigid = rigid };
-        var knobs = new MotionKnobs();
+        knobs = knobs ?? new MotionKnobs();
         float x = 0f, z = 0f;
         for (int i = 0; i < 15; i++)
         {
@@ -31,18 +31,47 @@ public class PaperPhysicsTests
         return (body, x, z);
     }
 
+    /// <summary>The feel bible's A6 sway (16°/(m/s) to ≤12°), which the swing tests run with: the default is no yaw while held (BUG-11a), pending Saleh's or the orchestrator's call on A6.</summary>
+    private static MotionKnobs Swaying() => new MotionKnobs { paperSwayMax = 12f };
+
+    [Test]
+    public void ByDefault_AHeldPaper_NeverYaws_ButStillBows()
+    {
+        // BUG-11a's "Fix must achieve" and FIX_PLAN v1 §3 DOC-HANDLE step 4: no yaw while held (MotionKnobs.paperSwayMax 0).
+        Assert.AreEqual(0f, new MotionKnobs().paperSwayMax, "no yaw while held, by default");
+        foreach ((float vx, float vz) in new[] { (0.8f, 0f), (-1.5f, 0.4f), (0.3f, -2f) })
+        {
+            var body = new PaperPhysics();
+            var knobs = new MotionKnobs();
+            float x = 0f, z = 0f;
+            for (int i = 0; i < 30; i++)
+            {
+                body.Step(Dt, x, z, true, knobs, MotionAmount.Full);
+                Assert.AreEqual(0f, body.Yaw, "held, it never turns");
+                x += vx * Dt;
+                z += vz * Dt;
+            }
+            Assert.Greater(body.Bow, 0f, "it still bows along its travel: a paper, not a card");
+            for (int i = 0; i < 300; i++)
+            {
+                body.Step(Dt, x, z, false, knobs, MotionAmount.Full);
+                Assert.AreEqual(0f, body.Yaw, "nor as it settles");
+            }
+        }
+    }
+
     [Test]
     public void AHeldBody_SwingsAgainstItsSidewaysTravel_AndBowsAlongIt()
     {
-        (PaperPhysics right, _, _) = Dragged(0.8f, 0f);
-        (PaperPhysics left, _, _) = Dragged(-0.8f, 0f);
+        (PaperPhysics right, _, _) = Dragged(0.8f, 0f, knobs: Swaying());
+        (PaperPhysics left, _, _) = Dragged(-0.8f, 0f, knobs: Swaying());
         Assert.Less(right.Yaw, 0f, "dragged right, it turns against it (its trailing corners lag)");
         Assert.Greater(left.Yaw, 0f);
         Assert.Greater(right.Bow, 0f, "its ends droop with its speed");
         Assert.AreEqual(1f, right.BowDirX, 1e-3f, "along its travel");
         Assert.LessOrEqual(right.Bow, new MotionKnobs().paperBowMax * 1.6f, "within its most (the spring's overshoot aside)");
         Assert.AreNotEqual(0f, right.Twist, "its corners twist as it swings");
-        (PaperPhysics still, _, _) = Dragged(0f, 0f);
+        (PaperPhysics still, _, _) = Dragged(0f, 0f, knobs: Swaying());
         Assert.AreEqual(0f, still.Yaw, 1e-4f, "held still, no swing");
         Assert.AreEqual(0f, still.Bow, 1e-5f);
         Assert.AreEqual(0f, still.Twist, 1e-5f);
@@ -221,8 +250,8 @@ public class PaperPhysicsTests
     [Test]
     public void AHeavierBody_SwingsAndBendsLess()
     {
-        (PaperPhysics paper, _, _) = Dragged(0.6f, 0f);
-        (PaperPhysics folder, _, _) = Dragged(0.6f, 0f, 2.5f);
+        (PaperPhysics paper, _, _) = Dragged(0.6f, 0f, knobs: Swaying());
+        (PaperPhysics folder, _, _) = Dragged(0.6f, 0f, 2.5f, knobs: Swaying());
         Assert.Less(System.Math.Abs(folder.Yaw), System.Math.Abs(paper.Yaw));
         Assert.Less(folder.Bow, paper.Bow);
     }

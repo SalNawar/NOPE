@@ -119,46 +119,73 @@ public static class DockFit
 /// same index is never taken for docked). A docked paper is the machine's: no
 /// queue takes it from there (the scanner's Auto-Feed skips a paper in the
 /// chip reader, <see cref="FreeToFeed"/>), and a machine holds one paper at a
-/// time. Pure.
+/// time on its bed, pad or slot. A paper carried back out of a machine is
+/// handed off (<see cref="HandOff"/>): it is still the machine's until it lands
+/// clear (docked, not free to feed, its docked size), but it no longer fills
+/// the machine, so the next paper can go in while it travels out (the
+/// Auto-Feed chain: the scanner takes its next paper the frame after the last
+/// one's scan ends). Pure.
 /// </summary>
 public sealed class MachineOccupancy
 {
     private readonly Dictionary<int, DeskMachine> _in = new Dictionary<int, DeskMachine>();
 
-    /// <summary>Paper <paramref name="paper"/> goes into <paramref name="machine"/>; false (nothing changes) while that machine holds another paper or the paper is in another machine.</summary>
+    /// <summary>The papers handed off: on their way out of their machine, which they no longer fill.</summary>
+    private readonly HashSet<int> _leaving = new HashSet<int>();
+
+    /// <summary>Paper <paramref name="paper"/> goes into <paramref name="machine"/>; false (nothing changes) while that machine holds another paper (not one handed off) or the paper is in another machine (or still on its way out of one).</summary>
     public bool Dock(int paper, DeskMachine machine)
     {
         if (_in.TryGetValue(paper, out DeskMachine at))
-            return at == machine;
+            return at == machine && !_leaving.Contains(paper);
         if (Busy(machine))
             return false;
         _in[paper] = machine;
         return true;
     }
 
-    /// <summary>Paper <paramref name="paper"/> is clear of its machine again; false when it was in none.</summary>
-    public bool Leave(int paper) => _in.Remove(paper);
+    /// <summary>
+    /// Paper <paramref name="paper"/> is carried back out of its machine: it
+    /// stays the machine's (docked, not free to feed) until it lands clear
+    /// (<see cref="Leave"/>), but the machine is free for the next paper. False
+    /// when it is in none.
+    /// </summary>
+    public bool HandOff(int paper)
+    {
+        if (!_in.ContainsKey(paper))
+            return false;
+        _leaving.Add(paper);
+        return true;
+    }
 
-    /// <summary>True while paper <paramref name="paper"/> lies in a machine.</summary>
+    /// <summary>Paper <paramref name="paper"/> is clear of its machine again; false when it was in none.</summary>
+    public bool Leave(int paper)
+    {
+        _leaving.Remove(paper);
+        return _in.Remove(paper);
+    }
+
+    /// <summary>True while paper <paramref name="paper"/> lies in a machine or is on its way out of one.</summary>
     public bool IsDocked(int paper) => _in.ContainsKey(paper);
 
-    /// <summary>True while paper <paramref name="paper"/> lies in <paramref name="machine"/>.</summary>
-    public bool IsIn(int paper, DeskMachine machine) => _in.TryGetValue(paper, out DeskMachine at) && at == machine;
-
-    /// <summary>True while <paramref name="machine"/> holds a paper.</summary>
+    /// <summary>True while <paramref name="machine"/> holds a paper (one handed off and on its way out does not count).</summary>
     public bool Busy(DeskMachine machine)
     {
-        foreach (DeskMachine at in _in.Values)
-            if (at == machine)
+        foreach (KeyValuePair<int, DeskMachine> p in _in)
+            if (p.Value == machine && !_leaving.Contains(p.Key))
                 return true;
         return false;
     }
 
-    /// <summary>True when a queue may take paper <paramref name="paper"/> (it lies in no machine).</summary>
+    /// <summary>True when a queue may take paper <paramref name="paper"/> (it lies in no machine and is on its way out of none).</summary>
     public bool FreeToFeed(int paper) => !_in.ContainsKey(paper);
 
     /// <summary>The case ended (or began): no paper is in any machine.</summary>
-    public void Clear() => _in.Clear();
+    public void Clear()
+    {
+        _in.Clear();
+        _leaving.Clear();
+    }
 }
 
 /// <summary>

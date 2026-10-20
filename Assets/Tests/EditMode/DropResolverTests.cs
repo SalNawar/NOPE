@@ -90,12 +90,32 @@ public class DropResolverTests
         var reader = new DeskRect(0.3f, 0f, 0.26f, 0.26f);
         var scanner = new DeskRect(-0.3f, 0f, 0.3f, 0.3f);
         var docks = new List<DeskRect> { reader, scanner };
+        // DeskController.DockAt calls DockOf with the paper's footprint (DeskDocument.RestCorners at its root) and each machine's own drop-area test.
+        int Dock(DeskRect paper) => DropResolver.DockOf(paper, docks, (d, x, y) => d.Contains(x, y));
         // Grabbed by its left edge, the pointer at x 0.1 is off the reader, but the paper's centre at x 0.25 lies on it.
-        Assert.AreEqual(0, DropResolver.DockOf(new DeskRect(0.25f, 0f, 0.26f, 0.34f), docks), "the paper's centre lies on the reader");
+        Assert.AreEqual(0, Dock(new DeskRect(0.25f, 0f, 0.26f, 0.34f)), "the paper's centre lies on the reader");
         // Grabbed by its right edge over the reader, the paper itself hangs off it: no dock.
-        Assert.AreEqual(-1, DropResolver.DockOf(new DeskRect(0.05f, 0.3f, 0.26f, 0.34f), docks));
-        Assert.AreEqual(1, DropResolver.DockOf(new DeskRect(-0.32f, 0.02f, 0.1f, 0.1f), docks));
-        Assert.AreEqual(-1, DropResolver.DockOf(new DeskRect(0f, 0f, 1f, 1f), null));
+        Assert.AreEqual(-1, Dock(new DeskRect(0.05f, 0.3f, 0.26f, 0.34f)));
+        Assert.AreEqual(1, Dock(new DeskRect(-0.32f, 0.02f, 0.1f, 0.1f)));
+        Assert.AreEqual(-1, DropResolver.DockOf(new DeskRect(0f, 0f, 1f, 1f), (List<DeskRect>)null, (d, x, y) => true));
+        Assert.AreEqual(-1, DropResolver.DockOf(new DeskRect(0f, 0f, 1f, 1f), docks, null));
+    }
+
+    [Test]
+    public void WhereTwoDropAreasMeet_TheFirstListed_TakesIt()
+    {
+        // DeskController.DockAt lists the chip reader first: where its drop area meets the scanner's, the reader takes the paper.
+        var reader = new DeskRect(0.1f, 0f, 0.3f, 0.3f);
+        var scanner = new DeskRect(-0.1f, 0f, 0.3f, 0.3f);
+        var tried = new List<int>();
+        int dock = DropResolver.DockOf(new DeskRect(0f, 0f, 0.2f, 0.2f), new List<DeskRect> { reader, scanner }, (d, x, y) =>
+        {
+            tried.Add(tried.Count);
+            return d.Contains(x, y);
+        });
+        Assert.AreEqual(0, dock, "both hold the centre: the first listed wins");
+        Assert.AreEqual(1, tried.Count, "and the rest are not tried");
+        Assert.AreEqual(1, DropResolver.DockOf(new DeskRect(0f, 0f, 0.2f, 0.2f), new List<DeskRect> { new DeskRect(5f, 5f, 1f, 1f), scanner }, (d, x, y) => d.Contains(x, y)));
     }
 
     [Test]
