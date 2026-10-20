@@ -30,9 +30,11 @@ using UnityEngine.EventSystems;
 /// desk's HoldRegistry and Ends there; the registry's Cancel cancels it
 /// (CancelHold). The held object follows the pointer every frame, re-projected
 /// through the moving camera during any blend (LateUpdate), not only when the
-/// pointer moves; and a release that comes while the game has lost the focus
-/// (Alt+Tab: the Input System lets go of the button) cancels the drag
-/// instead of dropping it, so nothing is committed.
+/// pointer moves; and the game losing the focus (Alt+Tab) cancels the drag
+/// before the Input System's release of the button can drop it
+/// (OnApplicationFocus, on the change only: a drag driven while the editor
+/// runs unfocused, as the QA rig's does, is not affected), so nothing is
+/// committed.
 /// </summary>
 public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IHoldable
 {
@@ -63,7 +65,7 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>Raised when a drag ends, with the pointer projected onto the desk (or the object's position when the projection fails).</summary>
     public event Action<DeskDraggable, Vector3> DragEnded;
 
-    /// <summary>Raised when a drag is cut short: the object was disabled mid-drag (its owner took its input away, or it is being destroyed), the drag was cancelled (a right-click, Esc or a view key: the hold registry), or its release came while the game had lost the focus, so no drop will come.</summary>
+    /// <summary>Raised when a drag is cut short: the object was disabled mid-drag (its owner took its input away, or it is being destroyed), the drag was cancelled (a right-click, Esc or a view key: the hold registry), or the game lost the focus, so no drop will come.</summary>
     public event Action<DeskDraggable> DragCancelled;
 
     /// <summary>Raised as the object follows the pointer, with the pointer projected onto the desk (the desk sizes a document by the zone it is over).</summary>
@@ -167,16 +169,11 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         Dragged?.Invoke(this, point);
     }
 
-    /// <summary>Turns the proxy back on (unless the object is out of the raycast), lets go of the hold and reports where the pointer was released (nothing once the drag was cut short). A release while the game has no focus (Alt+Tab) cancels instead: nothing is committed.</summary>
+    /// <summary>Turns the proxy back on (unless the object is out of the raycast), lets go of the hold and reports where the pointer was released (nothing once the drag was cut short: a cancel, the focus lost).</summary>
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!_dragging)
             return;
-        if (!Application.isFocused)
-        {
-            OnDisable();
-            return;
-        }
         _dragging = false;
         HoldRegistry.Desk.End(this);
         if (proxy != null)
@@ -199,6 +196,13 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
 
     /// <summary>The hold registry lets go of this drag (another hold began, a back-out, a view key, the focus lost): the drag is cancelled.</summary>
     public void CancelHold() => Cancel();
+
+    /// <summary>The game lost the focus (Alt+Tab): a running drag is cancelled at once, so the release the Input System sends for the button on focus loss is ignored (BUG-55: it used to drop the paper on the counter or stamp with the held dater).</summary>
+    private void OnApplicationFocus(bool focused)
+    {
+        if (!focused)
+            Cancel();
+    }
 
     /// <summary>A drag cut short: disabled (or cancelled), the object gets no release from the EventSystem, so the drag ends here, the hold is let go, the proxy follows the raycast again and DragCancelled says so.</summary>
     private void OnDisable()
