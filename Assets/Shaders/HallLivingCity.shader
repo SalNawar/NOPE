@@ -4,7 +4,7 @@
 // (HALL-FX, BUG-13): every window fades in once as the lit share (_HallCityLights.x, from the shift
 // clock's hour) passes its moment, over the fade band HallCityExterior sizes to ~0.4 s at the clock's
 // pace (_CityWindowFade; HallCity.WindowLevel mirrors it), and holds still while the clock does; the
-// cell hash is never 0 (HallCity.WindowHash); headlights are at least ~1.8 px across (widened by the
+// cell hash is never 0 (HallCity.WindowHash); headlights are at least ~2.7 px across (widened by the
 // pixel's size) and fade at their lanes' ends, and the flyers cross from off one edge to off the other.
 // The rain path is gone (it was always dry: BUG-73d).
 Shader "NOPE/Hall Living City"
@@ -83,11 +83,12 @@ Shader "NOPE/Hall Living City"
   // that reads there, and its headlights are drawn larger; the hall windows keep 1 and 1.
   float tf=t*_AtmospherePace;
   // A headlight's spread in the lane's stretched space (d = (uv - head) * (3, 1)): its painted size, widened to
-  // at least 0.9 screen px a side (a sub-pixel light twinkles as it crosses pixel centres, BUG-13), dimmed
+  // at least 1.35 screen px a side (a sub-pixel light twinkles as it crosses pixel centres, BUG-13; 0.9 still
+  // toggled a few pixels by day under the flicker check, integration), dimmed
   // a little as it widens so a widened light keeps about its weight.
   float sigma0=sqrt(.5/(4000000/max(_HeadlightSize*_HeadlightSize,.0001)));
   float2 pixel=fwidth(uv);
-  float2 sigma=max(float2(sigma0,sigma0),.9*float2(3*pixel.x,pixel.y));
+  float2 sigma=max(float2(sigma0,sigma0),1.35*float2(3*pixel.x,pixel.y));
   half spreadDim=pow(saturate(sigma0*sigma0/(sigma.x*sigma.y)),.35);
   // The hour's light (HallCity.HourLight mirrors it).
   half3 light=half3(.95,.97,1)*w.x+half3(1,1,1)*w.y+half3(.75,.55,.55)*w.z+half3(.22,.29,.43)*w.w;
