@@ -57,8 +57,8 @@ Branch `fix/a-cam`, cut from `fix/a-desk-plan` (DESK-PLAN #5, because CAM frames
 
 ## Tests
 
-- Offline (`compile_check_any.py` 0 errors; runner): **passed 3757, failed 0** (before CAM on this base: 3742; new: `LensFitTests` +6, `DeskViewPoseTests` +3, `CameraShakeTableTests` 4, `CityParallaxTests` 2).
-- Editor-side offline runner (`tools/qa/editor_runner`, QA_PROJECT set): passed 69, failed 0, 16 NeedsEditor skipped (the SO-reader scan finds every new knob read).
+- Offline (`compile_check_any.py` 0 errors; runner): **passed 3786, failed 0** on `origin/main` 4290bd6 + DESK-PLAN + CAM (without CAM: 3771; new: `LensFitTests` +6, `DeskViewPoseTests` +3, `CameraShakeTableTests` 4, `CityParallaxTests` 2).
+- Editor-side offline runner (`tools/qa/editor_runner`, QA_PROJECT set): passed 81, failed 0, 36 NeedsEditor skipped (the SO-reader scan finds every new knob read).
 - Gate checks (`CamChecks`): static `cam.closeups.none`, `cam.lens.reading` (the live config solves at 16:9, 16:10, 21:9 and 5:4 with every point in the margins and the bottom row on the desk), `cam.lens.office` (21:9 no wider than the art; 16:9 is the plan's lens); play `cam.play.tags`, `cam.play.framing`, `cam.play.fade`, `cam.play.hold`, `cam.play.city` (from `cam_views`).
 
 Measured by the solve on the approved map (16:9 / 16:10 / 21:9 / 5:4): distance 1.29 / 1.40 / 1.29 / 1.75 m; papers on screen 62% / 57% / 62% / 46% of the old 0.8 m view; bottom row at -0.59 / -0.63 / -0.59 / -0.75 m (desk front edge -0.75).
