@@ -12,7 +12,8 @@ Branch `fix/p0-carve`, cut from main `34e87b1`. Source: FIX_PLAN.md §3 "P0-A CA
 |---|---|---|
 | `compile_check_t5.py` | 0 errors, 161 warnings | 0 errors, 161 warnings |
 | Offline runner | passed 3706, failed 0 | passed 3714, failed 0 (the 3706, plus 8 new seam tests) |
-| `carve_check.py` (new, `E:\unity\NOPE-tools\scripts`) | - | PASS: 144 MOVED, 1332 SAME, 17 INSERTION, 4 LISTED, 29 NEW-SEAM, 0 CHANGED/VANISHED/DUPLICATED |
+| Editor-side seam tests (`Assets/Editor/SeamTests`), offline | - | passed 9, failed 0; the 12 `NeedsEditor` tests run only in Unity's EditMode suite |
+| `carve_check.py` (new, `E:\unity\NOPE-tools\scripts`) | - | PASS: 144 MOVED, 1332 SAME, 17 INSERTION, 4 LISTED, 37 NEW-SEAM (29 + the 8 Editor-side test classes), 0 CHANGED/VANISHED/DUPLICATED. The script's `NEW_CLASSES` must list the 8 `*SeamTests` classes as "seam stub test (Editor)"; until the orchestrator adds them to the shared script, it reports exactly those 8 as "NEW (not listed)" |
 
 `carve_check.py <worktree> [--base origin/main] [--head HEAD | --worktree-files]` works like this:
 - It finds every class declared in a changed `.cs` file.
@@ -25,7 +26,7 @@ It was checked against planted faults: one changed character in a moved method i
 **Deferred to Unity:** these need the editor, and Saleh was on the PC.
 - The semantic scene dump: Build Office UI, then the OfficeGameplay dump compared with 34e87b1's.
 - The smoke play: Title, New Run, day 1, one traveller, and no console lines that 34e87b1 doesn't log.
-- The EditMode suite in Unity.
+- The EditMode suite in Unity, with the 12 `NeedsEditor` seam tests in `Assets/Editor/SeamTests` (they create Unity objects, load a scene or read imported assets).
 - The import of the shader include and of DeskAnime.shader's two new properties.
 
 ## File → owner map (the track ownership table)
@@ -93,6 +94,7 @@ Rule: a file that is not listed here, and not listed in a track's Owns in FIX_PL
 | `Scripts/UI/Theme/UiKeys.cs` | TEXT-LANG |
 | `Shaders/Include/DeskLight.hlsl` | LIGHT |
 | Tests: `InputGateTests.cs` (RUN-SAFE), `WalletEventsTests.cs` (UI-PC), `HoldRegistryTests.cs` and `DeskObstaclesTests.cs` (DOC-HANDLE), `DeskMatTests.cs` (DESK-PLAN) | as named |
+| Editor-side tests (`Assets/Editor/SeamTests/`, in Assembly-CSharp-Editor): `FlowSeamTests.cs` (FLOW), `TextLangSeamTests.cs` (TEXT-LANG), `UiPcSeamTests.cs` (UI-PC), `ContentSeamTests.cs` (CONTENT), `HallFxSeamTests.cs` (HALL-FX), `HomeSeamTests.cs` (HOME), `DocHandleSeamTests.cs` (DOC-HANDLE), `LightSeamTests.cs` (LIGHT) | as named; the folder is P0's, each file its seam owner's |
 
 The insertion lines and seam stubs in other tracks' files belong to those files' owners from here on: OfficeControls (DOC-HANDLE), DeskInspect (CONTENT), DesktopWindowManager, PcFrame, OrderBook and ClerkAccountSource (UI-PC), HomeEconomy (HOME), ShiftScoring (TEXT-LANG), ShiftStrandings and TimelineService (FLOW), DevCheats (RUN-SAFE), CultureThemeService and ArabicShaper (TEXT-LANG), HallDayCycle and DeskAnime.shader (LIGHT), GuideDirector and Orders (CONTENT), HelixRiverMonitor (HALL-FX). The stub tests went into the owners' existing test files: HallDayCycleTests (LIGHT), OrdersTests (CONTENT), ArabicShaperTests (TEXT-LANG).
 
@@ -101,29 +103,32 @@ The insertion lines and seam stubs in other tracks' files belong to those files'
 | Seam | File | Owner (merge #) | Consumers | Stub (= today) | Test |
 |---|---|---|---|---|---|
 | `InputGate.Blocked` | Domain/InputGate.cs | RUN-SAFE (#3) | OfficeControls, DeskInspect, DesktopWindowManager (checks inserted) | always false | InputGateTests |
-| `WalletEvents.Changed` / `Raise()` | Domain/WalletEvents.cs | UI-PC (#13) | raised after all 13 wallet writes | raised; no listener | WalletEventsTests |
+| `WalletEvents.Changed` / `Raise()` | Domain/WalletEvents.cs | UI-PC (#13) | raised after all 14 wallet writes | raised; no listener | WalletEventsTests |
 | `HoldRegistry` + `IHoldable` (Begin, End, Cancel, IsHolding, OnFocusLost, `Desk`) | Domain/HoldRegistry.cs | DOC-HANDLE (#8) | STAMP, TOOLS, DESK-PLAN, DOC-LOOK, CAM, FEEDBACK | tracks one hold; nothing registers | HoldRegistryTests |
 | `DeskObstacles` (Register, Unregister, HeightAt, Count) | Visuals/DeskObstacles.cs | DOC-HANDLE (#8) | DESK-PLAN, STAMP, TOOLS, FEEDBACK | empty registry | DeskObstaclesTests |
 | `DeskMat` (Rect, IsOnMat) | Visuals/DeskMat.cs | DESK-PLAN (#5) | DOC-HANDLE, others | holds the rect it is given | DeskMatTests |
-| `_DeskLightTint`, `_DeskLightLevel`, `DeskLight()` | Shaders/Include/DeskLight.hlsl | LIGHT (#11) | desk shaders | returns 1; included nowhere yet | deferred to Unity (shader import) |
-| `Transit.Fade/Slide/Wait` | UI/Motion/Transit.cs | FLOW (#15) | every screen change | cuts instantly | deferred (Assembly-CSharp) |
-| `SceneTransit.Load(scene)` | UI/Motion/Transit.cs | FLOW (#15) | RUN-SAFE (#3) | `SceneManager.LoadScene(scene)` | deferred (Assembly-CSharp) |
-| `UiKeys` (VerdictCorrect, VerdictWrong, VerdictWrongPenalty, HomeTitle, HomePay) | UI/Theme/UiKeys.cs | TEXT-LANG (#12) | HOME, UI-PC, FEEDBACK | constants equal to today's keys | deferred (Assembly-CSharp) |
-| `DeskEvents` (DocumentLanded, CaseEnded, UpgradeArrived, StackChanged + Raise*) | Office/Desk/DeskEvents.cs | DOC-HANDLE (#8) | DOC-LOOK (stack rank, BUG-40c), FEEDBACK | declared; nothing raises | deferred (Assembly-CSharp) |
-| `CultureThemeService.ResetForNewDay()` | UI/Theme/CultureThemeService.cs | TEXT-LANG (#12) | RUN-SAFE (#3) | clears `DevToolsState.ForcedLeaderId`, the culture part of ResetAll | deferred (Assembly-CSharp) |
-| `OrderBook.CancelPendingFor(world, item)` | UI/Apps/OrderBook.cs | UI-PC (#13) | RUN-SAFE (#3) | `Cancel(world, item)`, the existing cancel and refund | deferred (Assembly-CSharp) |
+| `_DeskLightTint`, `_DeskLightLevel`, `DeskLight()` | Shaders/Include/DeskLight.hlsl | LIGHT (#11) | desk shaders | returns 1; included nowhere yet | LightSeamTests (source text; the import is `NeedsEditor`) |
+| `Transit.Fade/Slide/Wait` | UI/Motion/Transit.cs | FLOW (#15) | every screen change | cuts instantly | FlowSeamTests (with a CanvasGroup and a RectTransform: `NeedsEditor`) |
+| `SceneTransit.Load(scene)` | UI/Motion/Transit.cs | FLOW (#15) | RUN-SAFE (#3) | `SceneManager.LoadScene(scene)` | FlowSeamTests (the same outcome as SceneManager.LoadScene: `NeedsEditor`) |
+| `UiKeys` (VerdictCorrect, VerdictWrong, VerdictWrongPenalty, HomeTitle, HomePay) | UI/Theme/UiKeys.cs | TEXT-LANG (#12) | HOME, UI-PC, FEEDBACK | constants equal to today's keys | TextLangSeamTests (each key in all 7 string tables) |
+| `DeskEvents` (DocumentLanded, CaseEnded, UpgradeArrived, StackChanged + Raise*) | Office/Desk/DeskEvents.cs | DOC-HANDLE (#8) | DOC-LOOK (stack rank, BUG-40c), FEEDBACK | declared; nothing raises | DocHandleSeamTests |
+| `CultureThemeService.ResetForNewDay()` | UI/Theme/CultureThemeService.cs | TEXT-LANG (#12) | RUN-SAFE (#3) | clears `DevToolsState.ForcedLeaderId`, the culture part of ResetAll (not `LockOverride` nor RUN-SAFE's other day-scoped switches, BUG-27) | TextLangSeamTests |
+| `OrderBook.CancelPendingFor(world, item)` | UI/Apps/OrderBook.cs | UI-PC (#13) | RUN-SAFE (#3) | `Cancel(world, item)`, the existing cancel and refund | UiPcSeamTests (the equivalence with an UpgradeSO: `NeedsEditor`) |
 | `HallDayCycle.DuskHour` | Visuals/HallDayCycle.cs | LIGHT (#11) | RUN-SAFE (#3) | 18.5 (the cheat menu's Dusk) | HallDayCycleTests |
-| `GuideDirector.IsShowing` | Office/GuideDirector.cs | CONTENT (#17) | FEEDBACK (#16) | true while the guide plate shows (`_showing != None`) | deferred (Assembly-CSharp) |
+| `GuideDirector.IsShowing` | Office/GuideDirector.cs | CONTENT (#17) | FEEDBACK (#16) | true while the guide plate shows anything: a step, a done line, a moment or practice (`_showing != None`), not only an FTUE step | ContentSeamTests (`NeedsEditor`) |
 | `Orders.CanOrder(day)` | Domain/Orders.cs | CONTENT (#17) | UI-PC (#13), DESK-PLAN (#5) | true | OrdersTests |
-| `NightRules` (StartingCare, AffordableCare, PayBills, DefaultNight) | Home/NightRules.cs | HOME (#14) | RUN-SAFE (#3) | today's starting care, pay with fallback and PetNight, moved out of HomeManager | deferred (Assembly-CSharp) |
-| `PcFrame.CanOpen` (static) | Office/PcFrame.cs | UI-PC (#13) | DOC-HANDLE (#8): the F1 guard | true | deferred (Assembly-CSharp) |
-| `HelixRiverMonitor.SetWarning(bool)` | UI/HelixRiverMonitor.cs | HALL-FX (#4) | FLOW (#15), CONTENT (#17) | no-op | deferred (Assembly-CSharp) |
-| DeskAnime.shader `_PaintedHighlight`, `_InkRim` | Art/Office/DeskClean/DeskAnime.shader | LIGHT (#11) | STAMP (#7) | declared (Properties + UnityPerMaterial), read by nothing | deferred to Unity (shader compile) |
+| `NightRules` (StartingCare, AffordableCare, PayBills, DefaultNight) | Home/NightRules.cs | HOME (#14) | RUN-SAFE (#3) | today's starting care, pay with fallback and PetNight, moved out of HomeManager; DefaultNight is new composed code (StartingCare, PayBills, PetNight) and does not run DayCycle.OpenHome (break-in, fixed bill, rent), which RUN-SAFE calls first | HomeSeamTests (with the real library and config: `NeedsEditor`) |
+| `PcFrame.CanOpen` (static) | Office/PcFrame.cs | UI-PC (#13) | DOC-HANDLE (#8): the F1 guard | true | UiPcSeamTests |
+| `HelixRiverMonitor.SetWarning(bool)` | UI/HelixRiverMonitor.cs | HALL-FX (#4) | FLOW (#15), CONTENT (#17) | no-op | HallFxSeamTests (serialized state unchanged: `NeedsEditor`) |
+| DeskAnime.shader `_PaintedHighlight`, `_InkRim` | Art/Office/DeskClean/DeskAnime.shader | LIGHT (#11) | STAMP (#7) | declared (Properties + UnityPerMaterial), read by nothing | LightSeamTests (source text; the compiled shader's properties are `NeedsEditor`) |
 | `ArabicShaper.ToVisualLines(lines)` (per-line RTL) | Visuals/ArabicShaper.cs | TEXT-LANG (#12) | DOC-LOOK (#9), CONTENT (#17) | `ToVisual` on each line | ArabicShaperTests |
 
 **Pass criterion "every stub is called from at least one test":**
-- **Met** for the stubs in the pure assemblies (Domain, Visuals).
-- **Not yet met** for the Assembly-CSharp stubs. TimeDeskEditMode references only TimeDesk.Domain and TimeDesk.Visuals, so it cannot reach them. Their tests wait for QA-RIG's Editor-side test assembly (P0-B) or a Unity EditMode job.
+- **Met** for the stubs in the pure assemblies (Domain, Visuals): their tests are in TimeDeskEditMode and run in the offline runner.
+- **Met in code** for the Assembly-CSharp stubs and the shader seams. TimeDeskEditMode references only TimeDesk.Domain and TimeDesk.Visuals, so their tests live in `Assets/Editor/SeamTests/`, in the predefined Assembly-CSharp-Editor (it references nunit.framework and the Test Runner and compiles with UNITY_INCLUDE_TESTS, so Unity's EditMode suite should list them; the deferred Unity run confirms it). Every Assembly-CSharp and shader stub in the table is called from at least one of them.
+  - 9 of their 21 tests need no Unity engine. They pass outside Unity (a scratch variant of the offline runner that loads Assembly-CSharp-Editor.dll and skips the `NeedsEditor` category).
+  - The 12 `NeedsEditor` tests create Unity objects, load a scene or read imported assets. They run with the EditMode suite in Unity, which is deferred (Saleh was on the PC).
+  - The offline runner (NOPE-tools/runner) loads only TimeDeskEditMode.dll, so its count stays 3714. QA-RIG may fold these tests into its Editor-side harness (P0-B).
 
 ## Behaviour-neutral insertions
 
@@ -132,7 +137,7 @@ The insertion lines and seam stubs in other tracks' files belong to those files'
   - `DeskInspect.MoveOn`, its polled left-press. LateUpdate only draws, and it stays ungated;
   - `DesktopWindowManager.Update`.
 - **F1 guard (BUG-58c).** `if (!PcFrame.CanOpen) break;` goes first in `OfficeControls.Do`'s `ShowKeys` case. That is the action F1 (ControlKey.Help) resolves to.
-- **Wallet signal (BUG-58a).** `WalletEvents.Raise();` goes right after each of the 13 wallet writes:
+- **Wallet signal (BUG-58a).** `WalletEvents.Raise();` goes right after each of the 14 wallet writes:
   - DevCheats.Run;
   - HomeEconomy: RollBreakIn, ApplyDailyExpenses, PayBills, BuyHouseUpgrade;
   - HomeManager.HandleSpin (2);
