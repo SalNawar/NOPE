@@ -1,6 +1,6 @@
 # UI-PC: a clean desktop with a real taskbar clock
 
-Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase, `8eccae8` on the branch), fix round 1 (`d6fd65b`, `3996e95`: the review of `60fe324`), fix round 2 (`4e2445a`: the review of `d6fd65b`), fix round 3 (`e85d9bd`: the reverify of `4e2445a`, WAVE2_OPEN "UI-PC"), fix round 4 (`1eab563`: the reverify of `e85d9bd`) and fix round 5 (the reverify of `1eab563`, below).
+Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase, `8eccae8` on the branch), fix round 1 (`d6fd65b`, `3996e95`: the review of `60fe324`), fix round 2 (`4e2445a`: the review of `d6fd65b`), fix round 3 (`e85d9bd`: the reverify of `4e2445a`, WAVE2_OPEN "UI-PC"), fix round 4 (`1eab563`: the reverify of `e85d9bd`) and fix round 5 (`9df4287`: the reverify of `1eab563`, below).
 
 **Sources:**
 - FIX_PLAN.md §3 "UI-PC" and FIX_PLAN_v2.md "UI-PC: delta" (v2 wins);
@@ -65,7 +65,7 @@ The reverify found round 3's five fixable items fixed. It raised one new S4 and 
 | 2 | **Minor, test strength: `poweron.*` never proved the right-click reached the game.** `rightEarly` read only `PcFrame.PictureMoving`, and `afterRight` only that the PC was still open, so a right button the rig failed to deliver passed that half for nothing. | **Each press must be taken by the desktop in its own frame.** In the right-click's frame and in the Esc's frame, the pass now also requires `DesktopKeyboard.EscapeTakenFrame == Time.frameCount`. DesktopKeyboard stamps every back-out it takes, from a key or the right button, with the screen on or off, and only those. The measured line reads "taken by the desktop" or "not taken by the desktop" for each press. |
 | 3 | **Not this round's: WAVE2 item 6's rulings** (BUG-20's 9 px clause, Transit, the owner of Desktop_Default.asset, the inert room). | Still open, so the track is not done: see **Needs a ruling**. Until rulings 1 and 2 are made, the BUG-20 and BUG-32c pass lines are not met as written. |
 
-## Fix round 5: the reverify of 1eab563
+## Fix round 5: the reverify of 1eab563 (`9df4287`)
 
 The reverify found WAVE2 items 1 to 5 and fix round 4 fixed, and no new bug in the round 3 or round 4 code. It raised one blocking item (the rulings), two test-strength items and one doc slip. Only UI-PC's files change: the rig ops, a new rig test file, the session, the gate checks and this doc.
 
