@@ -91,10 +91,21 @@ public static class Transit
 /// </summary>
 public static class SceneTransit
 {
-    /// <summary>True from the frame a Load starts lowering the shutter until the new scene has settled (Esc opens nothing meanwhile: PauseMenu).</summary>
+    /// <summary>True from the frame a Load starts lowering the shutter until the new scene has settled (Esc opens nothing meanwhile: PauseMenu). It clears before the shutter rises; <see cref="Changing"/> holds until the shutter is off.</summary>
     public static bool Loading => TransitRunner.SceneLoading;
 
-    /// <summary>Loads <paramref name="scene"/> (by name, replacing every loaded scene) behind the booth's roll shutter (TransitShutter). A second Load while one runs is ignored, with a warning.</summary>
+    /// <summary>
+    /// True for the whole scene change: from the frame a Load is accepted
+    /// until the shutter is off again, a load queued behind it included
+    /// (<see cref="Loading"/> clears before the rise). The scene being left
+    /// stays loaded under the shutter for the lowering and the load, while
+    /// RunManager's world has already moved on, so the QA rig waits on this
+    /// after a cheat that reloads the office: a wait on the office's day and
+    /// briefing alone passes on the office being replaced.
+    /// </summary>
+    public static bool Changing => TransitRunner.SceneChanging;
+
+    /// <summary>Loads <paramref name="scene"/> (by name, replacing every loaded scene) behind the booth's roll shutter (TransitShutter). A Load while another scene change runs is never dropped: it loads next behind the same shutter, and the latest request wins (RunManager has already moved its world for it).</summary>
     public static void Load(string scene)
     {
         if (!Application.isPlaying || !Application.CanStreamedLevelBeLoaded(scene))
@@ -115,8 +126,8 @@ public static class SceneTransit
 /// </summary>
 public sealed class TransitRunner : MonoBehaviour
 {
-    /// <summary>The veil's sorting order: above every scene canvas.</summary>
-    private const int VeilOrder = 32000;
+    /// <summary>The veil's sorting order: above every scene canvas, and one under RUN-SAFE's SaveNotice (32000), so a failed-save strip raised just before a load (GoHomeOrAdvance's save, the morning's, an ending's) stays readable over the shutter.</summary>
+    private const int VeilOrder = 31999;
 
     /// <summary>The longest a load waits for the scenes it brings to finish loading (real seconds) before the veil lifts anyway.</summary>
     private const float SceneSettleTimeout = 10f;
@@ -141,11 +152,17 @@ public sealed class TransitRunner : MonoBehaviour
     /// <summary>The scene change's veil, the drawn booth shutter (made on the first load).</summary>
     private TransitShutter _veil;
 
-    /// <summary>The scene being loaded (null when none).</summary>
+    /// <summary>The scene being loaded (null when none, and while the shutter rises).</summary>
     private string _loading;
+
+    /// <summary>The scene changes, one at a time: a request during one waits, the latest winning (SceneChangeQueue).</summary>
+    private readonly SceneChangeQueue _scenes = new SceneChangeQueue();
 
     /// <summary>True while a scene change runs, until the new scene has settled (SceneTransit.Loading).</summary>
     public static bool SceneLoading => _runner != null && _runner._loading != null;
+
+    /// <summary>True while a scene change runs, until the shutter is off (SceneTransit.Changing).</summary>
+    public static bool SceneChanging => _runner != null && _runner._scenes.Changing;
 
     /// <summary>Plays a transition of <paramref name="seconds"/> on <paramref name="target"/> (null: a plain wait), applying the eased share each frame, then <paramref name="done"/>.</summary>
     public static void Play(UnityEngine.Object target, float seconds, Action<float> apply, Action done)
@@ -158,18 +175,36 @@ public sealed class TransitRunner : MonoBehaviour
             runner._running[target] = routine;
     }
 
-    /// <summary>Starts a scene change to <paramref name="scene"/> (ignored, with a warning, while another runs).</summary>
+    /// <summary>
+    /// Starts a scene change to <paramref name="scene"/>. While another runs,
+    /// the request is queued instead (a later one replaces it): RunManager has
+    /// already moved its world for it (a second cheat while the first one's
+    /// office loads), so the scene asked for last is the one that must end up
+    /// loaded. It loads behind the same shutter, or the shutter comes down
+    /// again for it when it was already rising.
+    /// </summary>
     public static void LoadScene(string scene)
     {
         TransitRunner runner = Runner();
-        if (runner._loading != null)
+        string waiting = runner._scenes.Queued;
+        if (!runner._scenes.Request(scene))
         {
-            Debug.LogWarning($"[SceneTransit] '{scene}' was asked for while '{runner._loading}' is loading; the second load is ignored.");
+            Debug.Log($"[SceneTransit] '{scene}' was asked for during a scene change; it loads next, behind the same shutter{(waiting != null ? $" (instead of '{waiting}', asked for earlier)" : string.Empty)}.");
             return;
         }
         runner._loading = scene;
         QaSignals.Event(TransitSignal, "start:" + scene);
         runner.StartCoroutine(runner.LoadRoutine(scene));
+    }
+
+    /// <summary>Takes the waiting request, if any, into <paramref name="scene"/> (marked as a new start); false when none waits.</summary>
+    private bool TakeQueued(ref string scene)
+    {
+        if (!_scenes.TakeQueued(ref scene))
+            return false;
+        _loading = scene;
+        QaSignals.Event(TransitSignal, "start:" + scene);
+        return true;
     }
 
     /// <summary>The runner, made on first use (hidden, kept across scenes).</summary>
@@ -202,34 +237,50 @@ public sealed class TransitRunner : MonoBehaviour
         done?.Invoke();
     }
 
-    /// <summary>The scene change: the shutter comes down, the scene loads behind it, every scene settles, the shutter goes up.</summary>
+    /// <summary>
+    /// The scene change: the shutter comes down, the scene loads behind it,
+    /// every scene settles, the shutter goes up. A request queued meanwhile
+    /// (LoadScene) is loaded before the shutter rises (one asked for while it
+    /// came down replaces the scene before any load), and one asked for while
+    /// it rose brings it down again.
+    /// </summary>
     private IEnumerator LoadRoutine(string scene)
     {
         if (_veil == null)
             _veil = TransitShutter.Build(transform, VeilOrder);
         float seconds = Transit.Seconds;
-        yield return _veil.Lower(seconds);
-
-        AsyncOperation load = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
-        if (load == null)
-            SceneManager.LoadScene(scene);
-        else
-            while (!load.isDone)
-                yield return null;
-
-        float waited = 0f;
-        while (AnySceneLoading() && waited < SceneSettleTimeout)
+        while (scene != null)
         {
-            yield return null;
-            waited += Time.unscaledDeltaTime;
-        }
-        for (int i = 0; i < FramesAfterLoad; i++)
-            yield return null;
+            yield return _veil.Lower(seconds);
+            TakeQueued(ref scene);
+            do
+            {
+                AsyncOperation load = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
+                if (load == null)
+                    SceneManager.LoadScene(scene);
+                else
+                    while (!load.isDone)
+                        yield return null;
 
-        _loading = null;
-        QaSignals.Event(TransitSignal, "rise:" + scene);
-        yield return _veil.Raise(seconds);
-        QaSignals.Event(TransitSignal, "up:" + scene);
+                float waited = 0f;
+                while (AnySceneLoading() && waited < SceneSettleTimeout)
+                {
+                    yield return null;
+                    waited += Time.unscaledDeltaTime;
+                }
+                for (int i = 0; i < FramesAfterLoad; i++)
+                    yield return null;
+            }
+            while (TakeQueued(ref scene));
+
+            _loading = null;
+            QaSignals.Event(TransitSignal, "rise:" + scene);
+            yield return _veil.Raise(seconds);
+            QaSignals.Event(TransitSignal, "up:" + scene);
+            if (!TakeQueued(ref scene))
+                scene = null;
+        }
+        _scenes.Finish();
     }
 
     /// <summary>True while a loaded scene has not finished loading (the office's gameplay layer after the art office).</summary>

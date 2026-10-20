@@ -4,7 +4,13 @@ Branch `fix/a-flow`, cut from main `9b8ab5f` (P0: carve, cuts, QA-RIG) and **reb
 
 **Bugs closed here (code; each still needs its Unity recipe, §3):** 28b (CloseNow honours the ending), 32a, 34a, 38b, 56a, 65k, 72, 73c (MotionTuning_Default), 73f (the clock warning); 34b **in the office** (R3 included).
 
-**Verifier round 3 (this commit, docs only):** §1 Carve cites the rebased carve `cb1846a` (14 MOVED, 68 SAME) instead of the pre-rebase `b8c6e1b`; `EveningEditionView.SortingOrder`'s summary says the scene change's shutter (`TransitShutter`), not a black veil.
+**Verifier round 4 (this commit):**
+- **Ownership:** `docs/FEATURES.md` is back to origin/main `4290bd6` (FIX_PLAN §0 rule 2: only INTEGRATION writes it). FLOW's lines are in §6, "FEATURES lines (for INTEGRATION)", each with the line it replaces.
+- **S2, a cheat's close is the day's only close** (§1, round 4): a Skip day or a forward jump from the office mid-shift no longer ends the day a second time on the landing morning. `GameManager` ignores its clock's Closed and its day loop's end once its shift is closed elsewhere or a scene change is replacing the office (`ShiftEnd.LeftBehind`, tested). New QA recipe `flow_skip` (recipe 13) and gate check `flow.skip.midshift`.
+- **S3, the rig waits for the shutter** (§1, round 4): `SceneTransit.Changing` holds from the accepted load until the shutter is off; FLOW's op `flowSettled` waits on it after a reloading cheat (`flow_night`, `flow_skip`); QA-RIG's `waitOffice`/`waitScene` line is handed to INTEGRATION (§4). A load asked for during another is queued, the latest winning (`SceneChangeQueue`, tested), never dropped.
+- **Minor:** §1 Carve's `carve_check` command has a pinned base (`cb1846a~1`); the shutter sorts at 31999, one under RUN-SAFE's `SaveNotice` (32000).
+
+**Verifier round 3 (`d8bc05b`, docs only):** §1 Carve cites the rebased carve `cb1846a` (14 MOVED, 68 SAME) instead of the pre-rebase `b8c6e1b`; `EveningEditionView.SortingOrder`'s summary says the scene change's shutter (`TransitShutter`), not a black veil.
 
 **Verifier round 2 (`e1218f9`):** rebased onto `4290bd6` (one conflict, the FEATURES.md endings line: both insertions kept, RUN-SAFE's night check first); the statements that RUN-SAFE had not yet adopted `SceneTransit.Load` corrected everywhere; the [BP] load line now measured in real time (`FlowLoadWatch`, `flow_load` / `flow_load_seq`, §1 BUG-31a, recipe 9); `Transit.cs`'s summaries say shutter, not fade; the known-red owners and the right-click question listed for INTEGRATION and Saleh.
 
@@ -36,7 +42,7 @@ Branch `fix/a-flow`, cut from main `9b8ab5f` (P0: carve, cuts, QA-RIG) and **reb
 | `GameManager.News.cs` | Start's archive call, extracted as `RecordTodaysPaper` | NEWS-WEB |
 | `GameManager.Departures.cs` | `Departed`, `AnnounceDeparture` | PORTALS |
 
-No serialized field moved. `python E:\unity\NOPE-tools\scripts\carve_check.py --base origin/main --head cb1846a E:\unity\NOPE-docs`: 14 MOVED, 68 SAME. (`cb1846a` is the carve after the round 2 rebase onto `4290bd6`; the pre-rebase carve `b8c6e1b` is no longer on this branch, and checking it against today's origin/main prints spurious VANISHED/CHANGED lines from RUN-SAFE's files.) Its two reports are the extract itself: `Start` lost the archive lines, and `RecordTodaysPaper` is the new member holding them, unchanged. Both were checked by hand. LEASES.md's "if FLOW doesn't carve" chain on `GameManager.cs` no longer applies, and INTEGRATION updates the register. The shutter's call in `OpenShift` (`GameManager.Booth.cs`, this branch) passes to BELL-SIGN with the partial.
+No serialized field moved. `python E:\unity\NOPE-tools\scripts\carve_check.py --base cb1846a~1 --head cb1846a E:\unity\NOPE-docs`: 14 MOVED, 68 SAME. The base is pinned to the carve's own parent (`cb1846a~1` is `4290bd6`), so the result holds after main moves; a base of `origin/main` breaks as soon as main moves (with main at HALL-FX's integration it prints "FAIL (231)"). (`cb1846a` is the carve after the round 2 rebase onto `4290bd6`; the pre-rebase carve `b8c6e1b` is no longer on this branch. **After any later rebase, update the hash here.**) Its two reports are the extract itself: `Start` lost the archive lines, and `RecordTodaysPaper` is the new member holding them, unchanged. Both were checked by hand. LEASES.md's "if FLOW doesn't carve" chain on `GameManager.cs` no longer applies, and INTEGRATION updates the register. The shutter's call in `OpenShift` (`GameManager.Booth.cs`, this branch) passes to BELL-SIGN with the partial.
 
 ### BUG-34a: the clock and audio pause on focus loss and while Settings is open
 - **`Domain/PauseState.cs` (new, pure).** The game's pause is a set of named sources: `Request(source, scope)` and `Release(source)`.
@@ -101,14 +107,17 @@ No serialized field moved. `python E:\unity\NOPE-tools\scripts\carve_check.py --
   - It rolls down in the kit's length (`Transit.Seconds`, 0.25 s), the scene loads with `LoadSceneAsync` behind it, and it rolls up once every loaded scene has loaded and run two frames.
   - **While it is down, the hall's warm light moves through its slat gaps and glints on its faces** (`ShutterRoll.Sweep`, tested: it moves at least 1% of a screen height every 30 fps frame, under Reduced Motion too). So no frame is held without motion, which a static black hold during a multi-second load could not pass ([BP]: no frame repeated without motion over 0.25 s).
   - Under Reduced Motion it fades in and out where it hangs instead of rolling.
-  - It blocks clicks while shown. A second load while one runs is ignored with a warning. Outside play mode, or for a scene that cannot load, it is `SceneManager.LoadScene`.
+  - It blocks clicks while shown. Outside play mode, or for a scene that cannot load, it is `SceneManager.LoadScene`.
+  - **A load asked for during another is never dropped (round 4).** It waits, a later one replacing it (`Domain/SceneChangeQueue.cs`, new, pure, tested), and loads behind the same shutter; one asked for while the shutter rises brings it down again. Before, it was ignored with a warning, while RunManager had already moved its world for it (a second cheat while the first one's office loaded), so the world and the loaded scene agreed only by luck. RunManager needs no change.
+  - **`SceneTransit.Changing` (round 4)** holds from the accepted load until the shutter is off. `SceneTransit.Loading` clears before the rise, as before (PauseMenu's Esc guard and GameManager read it).
+  - **Sorting order 31999 (round 4)**, one under RUN-SAFE's `SaveNotice` (32000, "above every screen of the game"). At the same order the two root overlay canvases fell back to hierarchy order, so a failed-save strip raised just before a load (GoHomeOrAdvance's `SaveNow` then `LoadHomeScene`, OpenMorning's `SaveMorning`, `EndRunAt`) could sit under the shutter for the load and lose part of its 9 s (RUN-SAFE recipe 5).
   - It runs on real time (`UiMotion.Delta`), so the light catches up after a long frame. **It does not hide one:** a long frame of main-thread work (a scene's activation) holds the screen, shutter and all, for its whole length. Only a real-time measurement sees that (recipe 9, below).
   - **QA marks (new in round 2).** `TransitRunner` raises `QaSignals.Event("transit", ...)` at `start:<scene>` (the load accepted, the click's frame), `rise:<scene>` (the shutter starting up over the settled scene) and `up:<scene>` (the shutter off). They cost nothing when nothing listens, and they land in a recording's `events.tsv`.
 - **`Office/OfficeScenes.cs`: the gameplay layer loads asynchronously.** Behind the shutter (`SceneTransit.Loading`), the office's gameplay layer now comes in with `LoadSceneAsync` (additive), so the shutter keeps moving while it streams. Before, it was a synchronous `SceneManager.LoadScene`.
   - The runner's settle wait (every scene in `SceneManager` loaded) covers it.
   - Without the shutter (Play in the editor, a scene SceneTransit cannot stream), it still loads on the next frame as before, so the art office never shows alone for longer than today.
 - **`GameManager.cs`: theme once.** `CultureThemeService` already themes each scene as it loads. GameManager's second `RefreshActive()` now runs only when it made the run itself (an office opened on its own in the editor).
-- **Live in play (round 2, after the rebase).** RUN-SAFE's `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` call `SceneTransit.Load` on main, so the shutter and the async load run in every scene change in play. FEATURES.md, `Transit.cs`, `OfficeScenes.cs`, `FlowOps.cs` and `flow_shutter.json` now say so.
+- **Live in play (round 2, after the rebase).** RUN-SAFE's `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` call `SceneTransit.Load` on main, so the shutter and the async load run in every scene change in play. `Transit.cs`, `OfficeScenes.cs`, `FlowOps.cs` and `flow_shutter.json` now say so, and so do the FEATURES lines in §6.
   - 31b (the ~650 MB of hall layers) is the art-side request LIGHT files.
 - **The [BP] pass is still at risk: `GameManager.Start`'s case generation runs in one activation frame.** A player sees that frame held, shutter and all, for as long as it takes. Round 1 called it "one long frame, not a held one", which was wrong. A fixed-step capture cannot see it either: `flow_load` recorded at `Time.captureFramerate = 30`, and the shutter's light steps on `UiMotion.Delta`, so `seqtools frozen` reads a multi-second activation frame as one moving frame and passes whatever the hitch.
   - **Round 2 measures it in real time.** `FlowLoadWatch` (new, rig only) times every real frame (`Time.realtimeSinceStartupAsDouble`, which `captureFramerate` does not touch) from the `start` mark to the `up` mark, with nothing recording. The ops `flowLoadClock` / `flowLoadTime` assert `load.<name>.frames` (no real frame over 250 ms) and `load.<name>.time` (shown within 1.0 s of the click) for title → office (the session's cold load), office → Home and Home → office (`flow_load.json`). The old captures moved to `flow_load_seq.json` for `frozen` and `cuts`. `flow.bp.load` needs both halves.
@@ -186,19 +195,42 @@ The feel cards are written, planned with their evidence recipes: `R7\FIX\FEEL\G3
 - **73c, `MotionTuning_Default.asset`.** The two knobs MotionKnobs no longer has (`deskStretchPerSpeed`, `deskSquashPerAccel`) are removed. The live ones are added: `transitSeconds`, `payoffWaitSeconds`, and in this round `shutterSeconds`. DOC-HANDLE keeps its own 73c part (the duplicate `paperSlideSeconds`, MotionKnobs' dead knobs).
 - **73f, `GameManager.cs`.** "no ShiftClockDriver wired" was logged when the investigation UI was missing; it now logs when the clock is missing.
 
+### Round 4, S2: a cheat's close is the day's only close
+- **The bug (came with the round 2 rebase).** RUN-SAFE's `GameManager.CloseShiftForCheat` (`GameManager.Cheats.cs`) is the first route step (`RunStep.CloseShift`) of `RunManager.SkipDay` and of a forward `JumpToDay`. It clears `_travellerAtDesk` and `_shiftRunning`, then calls `shiftClock.StopShift()`. On main that was the silent `Clock.Stop()`; FLOW made it `ShiftClock.Finish()` (BUG-72), which raises `Closed` once the clock has started (after the first AVAILABLE press). So:
+  1. `HandleShiftClosed` ran (`_closingHandled` was false), and `ShiftEnd.OnClosing` picked `orchestrator.CloseNow()`, which released the day loop's wait.
+  2. The old office, still alive behind the shutter (the load is async), raised `OnDayCompleted` on its next check.
+  3. `HandleDayCompleted` ran on `_worldState`, the same object as `RunManager.World` (an office route changes that world in place), which the route had already closed, turned to the landing morning and saved.
+  4. It repeated `DayCycle.CloseShift` (no once-only guard: strandings, the instalment charged again to `money` and `clerkDebtPaid`, the dialogs' outcomes), wrote a second statement row under the landing day, set `phase = Home`, reset the landing day's tomorrow modifiers and overwrote the morning save. A Continue then went to Home and skipped the landing day's shift.
+  - The same happened a moment later with a verdict ribbon showing (`FinishCurrent`), and on the last slot even without `Closed` (the ribbon's end resolved the slot and the queue ran out).
+- **The fix (FLOW's files only, no change to RUN-SAFE's).**
+  - **`Domain/ShiftEnd.cs`: `LeftBehind(shiftRunning, sceneChanging)`** (pure, tested: `FlowRulesTests`): an office's shift is no longer its own to close when it is not running (a cheat's route closed it, or End Shift showed its ending at once) or a scene change is replacing the office.
+  - **`GameManager.cs`: `ShiftLeftBehind`** (`ShiftEnd.LeftBehind(_shiftRunning, SceneTransit.Loading)`). `HandleShiftClosed` and `HandleDayCompleted` return at once when it is true, each with one log line. `HandleDayCompleted` checks it before its "Entering HandleDayCompleted" line, so the line counts the day ends really handled.
+  - The scene-change half also covers a **restart or a jump back** with a verdict ribbon on the last slot: the old office's day loop ended under the shutter and its `ResetTomorrowModifiers` and `SaveNow` hit `RunManager.World`, the restored morning.
+  - **`BeginShift`** sets `_shiftRunning` before `orchestrator.StartDay`, so a day loop that ends at once (a slot resolved inside `OnCaseSlotStarted`) is never taken for a shift left behind.
+  - Unchanged: `CheatEndShift` keeps `_shiftRunning` true (its own `HandleShiftClosed` call is still the close), and `CloseNow` requires it.
+- **Still true, for RUN-SAFE and Saleh:** a skip or a forward jump from a started shift rings the closing bell as the shutter comes down (`Finish` raises `Closed`, and FeelDirector rings on it). FLOW keeps it: the shift does end. If it is unwanted, `CloseShiftForCheat` needs a silent halt (a RUN-SAFE line), and FLOW would add one to `ShiftClockDriver`.
+- **QA:** `flow_skip.json` (recipe 13): two fresh runs of the golden seed, a Skip day from day 1's briefing, then one mid-shift (AVAILABLE pressed, a traveller at the desk). The landing day's day, phase, money, `clerkDebtPaid`, statement rows and save must match (`flow_skip.same.midshift`; the saves compared without what presenting a traveller may mark: a premade met, a returner, the guide), and until the landing day's own report exactly one day end is handled, day 2's (`flow_skip.dayEnds.midshift`). Gate check **`flow.skip.midshift`** (FlowChecks, Play) needs both. `day_jumps` and `flow_night` jump at the briefing, where `Finish` returns early, so nothing covered this before.
+
+### Round 4, S3: the QA rig waits for the shutter
+- **The race (new with the async load going live).** A cheat changes `RunManager.World` at once; `TransitRunner` then lowers the shutter for `Transit.Seconds` before `LoadSceneAsync`, so the old office, its briefing still up, stays loaded for 0.25 s plus the load. QA-RIG's `waitoffice` (`QaRunner.cs:278`) checks `QaGame.OfficeLoaded()` (any GameManager), `QaGame.Day()` (the run's world, already the new day) and `BriefingShown()` (the old briefing), so it returned at once.
+  - `flow_night` recipe 7 pressed the old office's Start Shift under the shutter, then waited for a traveller in an office about to be replaced.
+  - RUN-SAFE's `day_jumps.json` (on main) takes its stills and probes right after `waitOffice` at all 8 landings, so they could capture the shutter or the old office.
+- **FLOW's part (done).** `SceneTransit.Changing` (above, BUG-31a). FLOW's op **`flowSettled`** (f timeout, 120 s) waits until it is false; `flow_night` has it after `jumpDay 12` and after `RestartShift`, and `flow_skip` after each scene change.
+- **QA-RIG's part (handed to INTEGRATION, §4):** the same condition in `waitoffice` and `waitscene`, so every scenario (`day_jumps` included) waits for the shutter without a FLOW op.
+
 ### Gate checks and QA recipes (FLOW's)
 - **`Assets/Editor/QA/Checks/FlowChecks.cs`:**
   - **static:**
     - `flow.runInBackground`: ProjectSettings has it at 0.
     - `flow.motionTuning.live`: no stale knob in MotionTuning_Default.
     - **`flow.clock.tooltip`** (new): Reaction_Clock has no tooltip key. Red until DESK-PLAN.
-  - **play:** `flow.esc.office`, **`flow.esc.pc`** (new: Esc with the PC open keeps it open and Settings showing, R3), `flow.esc.home`, `flow.esc.title`, `flow.focus`, `flow.payoff`, `flow.transitions.cuts`, **`flow.transit.shutter`** (new: a scene change through SceneTransit brings the shutter down, loads behind it and lifts it), `flow.endings`, `flow.night.close`, `flow.night.bell`;
+  - **play:** `flow.esc.office`, **`flow.esc.pc`** (new: Esc with the PC open keeps it open and Settings showing, R3), `flow.esc.home`, `flow.esc.title`, `flow.focus`, `flow.payoff`, `flow.transitions.cuts`, **`flow.transit.shutter`** (new: a scene change through SceneTransit brings the shutter down, loads behind it and lifts it), `flow.endings`, `flow.night.close`, `flow.night.bell`, **`flow.skip.midshift`** (round 4: `flow_skip.same.*` and `flow_skip.dayEnds.*`);
   - **built player (demo):** `flow.bp.load`: both `bp.flow_load.load.*` (real time: no frame over 250 ms, the office shown within 1.0 s) and `bp.flow_load_seq.seq.*.frozen` (the captures; round 2).
-- **Recipes** (`tools/qa/scenarios/`): `flow_pause.json` (now with a second Esc in the PC: `settings.pcEsc`), `flow_transitions.json`, **`flow_shutter.json`** (new: office → Title and Title → office through `SceneTransit.Load`, recorded: the shutter measured on its own, apart from a run's loads), `flow_endings.json`, `flow_night.json`, and for [BP] **`flow_load.json`** (round 2: the loads timed in real time, nothing recorded) and **`flow_load_seq.json`** (round 2: round 1's captured `flow_load`, renamed).
-- **Rig ops** (`Assets/Tests/PlayMode/FLOW/Rig/FlowOps.cs`): `flowSettings`, `flowFocus`, `flowPayoff`, `flowEdition`, `flowClosed`, `flowEarlyFinish`, **`flowTransit`** (new: a scene by name, or `office` for RunConfig's art office, loaded through `SceneTransit.Load`; asserts `transit.<name>`), and in round 2 **`flowLoadClock`** (name: starts `FlowLoadWatch` before the step that starts a load) and **`flowLoadTime`** (name, n frame budget in ms (250), f visible budget in s (0 reports only): asserts `load.<name>.frames` and `load.<name>.time`).
+- **Recipes** (`tools/qa/scenarios/`): `flow_pause.json` (now with a second Esc in the PC: `settings.pcEsc`), `flow_transitions.json`, **`flow_shutter.json`** (new: office → Title and Title → office through `SceneTransit.Load`, recorded: the shutter measured on its own, apart from a run's loads), `flow_endings.json`, `flow_night.json`, **`flow_skip.json`** (round 4: a mid-shift Skip day against one from the briefing), and for [BP] **`flow_load.json`** (round 2: the loads timed in real time, nothing recorded) and **`flow_load_seq.json`** (round 2: round 1's captured `flow_load`, renamed).
+- **Rig ops** (`Assets/Tests/PlayMode/FLOW/Rig/FlowOps.cs`): `flowSettings`, `flowFocus`, `flowPayoff`, `flowEdition`, `flowClosed`, `flowEarlyFinish`, **`flowTransit`** (new: a scene by name, or `office` for RunConfig's art office, loaded through `SceneTransit.Load`; asserts `transit.<name>`), and in round 2 **`flowLoadClock`** (name: starts `FlowLoadWatch` before the step that starts a load) and **`flowLoadTime`** (name, n frame budget in ms (250), f visible budget in s (0 reports only): asserts `load.<name>.frames` and `load.<name>.time`)), and in round 4 **`flowSettled`** (f timeout: waits until `SceneTransit.Changing` is false, after a reloading cheat), **`flowRunState`** (name, text: records the run's day, phase, money, `clerkDebtPaid`, statement rows and save; with text, asserts `same.<name>` against that record) and **`flowWatchDayEnds`** / **`flowDayEnds`** (name, n, text: counts the "Entering HandleDayCompleted" lines and asserts `dayEnds.<name>`: exactly n, on the days in text).
   - **The red python test.** Before this round, all six went through a `TryRegister` wrapper, so `tools/qa/test_seqlib.py`'s scan for literal `QaRunner.RegisterOp("name"` calls saw none of them. Every `flow_*.json` failed `test_scenarios_use_known_ops` ('flowpayoff' not found, flow_endings step 12): 35 tests, 1 failure, though the first round reported it OK.
   - **The fix:** each is now a literal `QaRunner.RegisterOp("flowX", ...)` call, still registered once (`flowTransit` too).
-- **UTF play tests** (`Assets/Tests/PlayMode/FLOW/Editor/FlowPlayTests.cs`, Explicit, category QaPlay): one per recipe but `flow_load` and `flow_load_seq` (QA player only; `Shutter_ASceneChangeLoadsBehindTheShutter` is new).
+- **UTF play tests** (`Assets/Tests/PlayMode/FLOW/Editor/FlowPlayTests.cs`, Explicit, category QaPlay): one per recipe but `flow_load` and `flow_load_seq` (QA player only; `Shutter_ASceneChangeLoadsBehindTheShutter` is new; round 4: `Skip_MidShiftLandsAsASkipFromTheBriefing`).
 - **For INTEGRATION's known-red list** (`tools/qa/gate_known_red.txt`, not FLOW's file):
   - `flow.esc.home  flow_pause.settings.home  # BUG-34b, HOME (#14): Home has no Settings window until HOME builds one`;
   - `flow.esc.title  flow_pause.settings.title  # BUG-34b, HOME (#14): the Title has no Settings window until HOME builds one`;
@@ -210,10 +242,10 @@ The feel cards are written, planned with their evidence recipes: `R7\FIX\FEEL\G3
 
 | Check | Result |
 |---|---|
-| `compile_check_any.py E:\unity\NOPE-docs` | 0 errors in every project (161 warnings, the baseline); round 2, rebased: the same |
-| Offline runner (`cc_docs`) | passed 3759, failed 0 (3747 before this round, +12); round 2, rebased on `4290bd6` (RUN-SAFE's tests included): passed 3788, failed 0 |
-| QA editor runner (`tools/qa/editor_runner`, `QA_PROJECT` set) | passed 69, failed 0, 21 NeedsEditor skipped (the two new dater tests are NeedsEditor); round 2, rebased (RUN-SAFE's and QA-RIG's on main included): passed 81, failed 0, 41 NeedsEditor skipped |
-| `python -m unittest discover -s tools/qa -p "test_*.py"` | 35 tests, **OK** (it was 1 failure: `test_scenarios_use_known_ops`, fixed above); round 2: 35 tests, OK (`flow_load` and `flow_load_seq` use known ops, `flowLoadClock` and `flowLoadTime` included) |
+| `compile_check_any.py E:\unity\NOPE-docs` | 0 errors in every project (161 warnings, the baseline); round 2, rebased: the same; round 4: the same |
+| Offline runner (`cc_docs`) | passed 3759, failed 0 (3747 before this round, +12); round 2, rebased on `4290bd6` (RUN-SAFE's tests included): passed 3788, failed 0; round 4: passed 3791, failed 0 (+3: `ShiftEnd.LeftBehind`, `SceneChangeQueue` twice) |
+| QA editor runner (`tools/qa/editor_runner`, `QA_PROJECT` set) | passed 69, failed 0, 21 NeedsEditor skipped (the two new dater tests are NeedsEditor); round 2, rebased (RUN-SAFE's and QA-RIG's on main included): passed 81, failed 0, 41 NeedsEditor skipped; round 4: passed 81, failed 0, 41 NeedsEditor skipped |
+| `python -m unittest discover -s tools/qa -p "test_*.py"` | 35 tests, **OK** (it was 1 failure: `test_scenarios_use_known_ops`, fixed above); round 2: 35 tests, OK (`flow_load` and `flow_load_seq` use known ops, `flowLoadClock` and `flowLoadTime` included); round 4: 35 tests, OK (`flow_skip` and the `flowSettled` lines use known ops) |
 
 New and changed EditMode tests:
 - **`PauseStateTests` (new):**
@@ -226,7 +258,8 @@ New and changed EditMode tests:
   - every seal shape resolves and inks exactly as by name, and an unknown name inks nothing;
   - `TransitCurve` eases from rest to rest, never goes back, cuts only outside play or for no length, and keeps the kit's range;
   - `EscapeChain` order, ties and re-registration, and **(new) `KeepsTheOfficeOut`**: Esc keeps every mode (the PC, the wheel, the value, inspect, the city, the reading view, and combinations); a right-click, or the PC's own chain taking the press, does not; a drag is cancelled first; nothing under a newsletter;
-  - `ShiftEnd` closing, payoff wait and ending routing;
+  - `ShiftEnd` closing, payoff wait and ending routing, and **(round 4) `LeftBehind`**: a running shift closes its own day; one closed elsewhere, or an office a scene change is replacing, closes nothing again;
+  - **(round 4) `SceneChangeQueue`:** a request during a change waits and the latest wins; taking it keeps the change going; nothing waiting keeps the scene; after `Finish` a request starts at once;
   - `DaterRubber` prints a printable word as given and falls back to the English word;
   - **(new) `ShutterRoll`:** 1.2 s, OutCubic up and InCubic down, never goes back, a roll from part-way covers the rest; the veil's light moves at least 1% of a screen every 30 fps frame for 300 frames, also under Reduced Motion, and wraps;
   - **(new) `DaterWordOutline`:** the reaching-letters outline is pixel-identical to the every-letter one (7 words × 3 sizes); the reach is past every letter's farthest serif; a word with an undrawn letter is not drawn.
@@ -284,7 +317,9 @@ New and changed EditMode tests:
 7. **Night shift** (`flow_night.json`, about 10 minutes). **Pass:**
    - `flow_night.closed.midnight` ok: "closed True, the clock reads 24:00";
    - `flow_night.bell.early` ok: "Closed raised 1 time(s) ... before closing True";
-   - the bell heard on an audio capture of the `early` sequence.
+   - the bell heard on an audio capture of the `early` sequence;
+   - **the presses reached the new office (round 4):** `flow_night.presses` ok with 0 blocked. The recipe waits for the shutter (`flowSettled`) after `jumpDay 12` and after `RestartShift`; without it, `waitOffice` passed on the old office still loaded under the shutter, and `startShift` pressed its Start Shift directly (S3).
+   - **RUN-SAFE's `day_jumps.json` needs the same wait** at all 8 landings: it comes with QA-RIG's `waitoffice` line (§4, the QA-RIG row). INTEGRATION re-runs `day_jumps` at FLOW's merge only after that line lands, else its stills and probes may catch the shutter or the old office.
 8. **Dater words** (cheat JumpToDay to an el, ar, ja and zh era day and en; stamp APPROVED and DENIED on a passport each). **Pass:**
    - every impression shows its verdict word (APPROVED/DENIED where the culture's word cannot print);
    - ink in the word band ≥80% of the en baseline;
@@ -309,12 +344,19 @@ New and changed EditMode tests:
 12. **Clock tooltip** (after DESK-PLAN's two edits). **Pass:**
     - `flow.clock.tooltip` green;
     - by hand, a click on the desk clock shows no tooltip.
+13. **A mid-shift Skip day closes the day once** (`flow_skip.json`, or `FlowPlayTests.Skip_MidShiftLandsAsASkipFromTheBriefing`; round 4, S2). **Pass:**
+    - `flow_skip.same.midshift` ok: "midshift: day 2, phase Office, money M, clerkDebtPaid C, statement rows R, ...; briefing: the same ...; saves match". Before the fix: phase Home, one statement row more, the instalment charged twice, and the saves differ;
+    - `flow_skip.dayEnds.midshift` ok: "1 day end(s) handled (expected 1), on day(s) [2]" (the landing day's own End Shift). Before the fix: 2;
+    - `flow.skip.midshift` green; 0 console errors; the console shows "Closing time of day 1 ignored" once, as the mid-shift skip's clock closes;
+    - the still `d2_after_midshift_skip`: day 2's briefing, the shutter off.
+    - Then by hand: the same with a verdict ribbon showing on the last traveller (DecideCorrectly, then Skip day at once), and with Restart shift in the same moment: no second "Entering HandleDayCompleted", and Continue from the Title lands on the landing day's briefing.
 
 ## 4. What other tracks must know
 
 | Track | What |
 |---|---|
-| RUN-SAFE | Done on main: `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` call `SceneTransit.Load(scene)`, so the shutter and the async load are live in play (FLOW is rebased on it). The cheat End Shift already works with FLOW's once-a-day closing: its second `HandleShiftClosed` call is a no-op. Still open: decide what Settings' Quit to Title does to a mid-shift run. |
+| RUN-SAFE | Done on main: `RunManager.LoadOfficeScene/LoadHomeScene/LoadTitleScene` call `SceneTransit.Load(scene)`, so the shutter and the async load are live in play (FLOW is rebased on it). **The cheats and FLOW's closing (round 4):** (1) End Shift: its own `HandleShiftClosed` call closes the day, and the second call (from the clock's `Closed`) is a no-op. (2) A skip or a forward jump: `CloseShiftForCheat` clears `_shiftRunning`, then `StopShift()` is FLOW's `ShiftClock.Finish()`, which raises `Closed` once the clock has started. FLOW's `HandleShiftClosed` and `HandleDayCompleted` ignore a shift that is no longer running or an office a scene change is replacing (`ShiftEnd.LeftBehind`), so the route's `DayCycle.EndShift` stays the day's only close and the landing morning's save is never overwritten (§1, round 4, S2; `flow_skip`). (3) A restart or a jump back: the old office's day loop, if it ends under the shutter, closes nothing (`SceneTransit.Loading`). No RunManager change is needed: a second `SceneTransit.Load` during a scene change is now queued (the latest wins), never dropped. The closing bell rings on a skip from a started shift; a silent halt in `CloseShiftForCheat` would be RUN-SAFE's line if Saleh does not want it. **`day_jumps.json`** needs QA-RIG's `waitoffice` line below before its stills and probes are trustworthy (S3). Still open: decide what Settings' Quit to Title does to a mid-shift run. |
+| QA-RIG | **Round 4, S3 (INTEGRATION applies it at FLOW's merge, or QA-RIG on its next change):** the rig's waits must not pass while a scene change runs. `Assets/Tests/PlayMode/Rig/QaRunner.cs:278` (`waitoffice`): `yield return QaGame.Until(() => !SceneTransit.Changing && QaGame.OfficeLoaded() && (s.n <= 0 \|\| QaGame.Day() == s.n) && QaGame.BriefingShown(),`; and `:345` (`waitscene`): `yield return QaGame.Until(() => !SceneTransit.Changing && SceneManager.GetSceneByName(s.name).isLoaded, Timeout(s, 60f), $"the scene {s.name}");`. Then `flowSettled` in FLOW's recipes is redundant but harmless. Without it, `waitoffice` passes on the office a cheat is replacing (its briefing still up under the shutter, the run's world already on the new day), which affects RUN-SAFE's `day_jumps` at all 8 landings. |
 | UI-PC, HOME, CAM, CONTENT | Screen changes go through `Transit.Fade/Slide/Wait` (0.2-0.3 s; `Transit.Seconds`). |
 | UI-PC, TEXT-LANG | Quit to Title and Quit rows in the Settings window (§1, BUG-34b): UI-PC's `.Apps.cs` builds them, TEXT-LANG's `SettingsWindowController` wires them and adds `settings.quitToTitle` and `settings.quit` to all 7 tables. |
 | HOME | Build a modal `SettingsWindowController` into the Title **and** Home scenes (Home is FLOW's proposed assignment; INTEGRATION confirms). PauseMenu finds and opens it on Esc, with no code needed, and `flow.esc.home` / `flow.esc.title` turn green then. Add `mus_title` on the Title (J6). |
@@ -326,7 +368,7 @@ New and changed EditMode tests:
 | DIALOGUE, PORTALS | Let go first: `EscapeChain.Shared.Register("<name>", EscapeChain.TrackOrder, () => /* let go, true */)`; unregister on destroy. |
 | TIMELINE-FAIL | `GameManager.CloseNow(endingId)` ends the run at the day's end (its Q4 = A). It holds `GameManager.CaseEnd.cs`, `Endings/**`, `TimelineService.cs` and `ShiftStrandings.cs` after FLOW. J6's destruction moment (rumble, 120 ms hit-stop, warning) is its own. |
 | CONTENT | D12: `firedAtStability` at the destruction point (FLOW's no-firing-at-70% pass re-runs at #17). G4's printed-sheet report (32e). |
-| INTEGRATION | **Confirm the owners nobody has confirmed yet:** BUG-70b to DESK-PLAN; Settings at Home and on the Title (34b) to HOME. Add the three known-red lines (§1: `flow.clock.tooltip`, `flow.esc.home`, `flow.esc.title`) and carry G3/G4/J5 as red in the feel index with their blockers (the `BoothShutter` object; the shutter, `day_start`, `available_on` and `amb_hall_day` clips). Put §5.6's right-click question to Saleh. LEASES.md's `GameManager.cs` rows now name the four partials. Fold the feel cards `R7\FIX\FEEL\G3/G4/J5/J6.md` into the index. The FEATURES lines are updated in this branch. |
+| INTEGRATION | **Confirm the owners nobody has confirmed yet:** BUG-70b to DESK-PLAN; Settings at Home and on the Title (34b) to HOME. Add the three known-red lines (§1: `flow.clock.tooltip`, `flow.esc.home`, `flow.esc.title`) and carry G3/G4/J5 as red in the feel index with their blockers (the `BoothShutter` object; the shutter, `day_start`, `available_on` and `amb_hall_day` clips). Put §5.6's right-click question to Saleh. LEASES.md's `GameManager.cs` rows now name the four partials. Fold the feel cards `R7\FIX\FEEL\G3/G4/J5/J6.md` into the index. **Fold §6's FEATURES lines into `docs/FEATURES.md`** in the merge commit (this branch no longer edits it). Apply the QA-RIG row's two `QaRunner.cs` lines (S3) before re-running `day_jumps` as regression. |
 
 ## 5. Decisions taken in FLOW (ours, not Saleh's)
 
@@ -339,3 +381,92 @@ New and changed EditMode tests:
 7. **The scene-change veil is the booth's roll shutter, not a black fade** (J5 says "a fade through black, 250 ms"; FIX_PLAN v1 says "an in-world transition"). A static black hold cannot pass "no frame repeated without motion > 0.25 s" during a multi-second load; the shutter's moving light can, between frames (a single long frame is held whatever the veil: recipe 9a measures it). It keeps J5's 250 ms for the roll. **For Saleh's approval** with the stills of recipe 5. If he prefers black, the light can move on black instead (a code change in `TransitShutter` only).
 8. **PauseScope.Full blocks no input itself.** The context does it (§1, BUG-34a), so FLOW adds no second input gate beside RUN-SAFE's.
 9. **The colour-only dater `Paint` refuses an unknown ink** rather than guessing a verdict: a loud error in a test beats a silent DENIED on an approval.
+10. **A load asked for during a scene change is queued, the latest winning (round 4),** not refused. RunManager assumes every `SceneTransit.Load` happens and moves its world first, so refusing would need a RUN-SAFE change and still leave the world and the scene apart; queueing in FLOW's runner keeps them together with no RunManager change.
+11. **A cheat's close of a started shift still rings the closing bell (round 4).** The guard is in FLOW's handlers (`ShiftEnd.LeftBehind`), not a silent halt in RUN-SAFE's `CloseShiftForCheat`, so the fix needs no other track's file. The bell sounds as the shutter comes down on a skip; if Saleh finds it wrong there, the halt is RUN-SAFE's one line.
+
+## 6. FEATURES lines (for INTEGRATION)
+
+`docs/FEATURES.md` is **not** edited in this branch (FIX_PLAN §0 rule 2: INTEGRATION writes it; round 4 restored it to origin/main `4290bd6`). INTEGRATION folds these into it in FLOW's merge commit. Line numbers are origin/main `4290bd6`'s. Each change is an exact replacement: find the old text on that line, put the new text in its place.
+
+**Line 14** (Endings, `EndingService`: BUG-56a, BUG-28b, the evening edition):
+- Old:
+```text
+`NightOrder`; tested: `CheatRoutingTests`). No ending judges
+```
+- New:
+```text
+`NightOrder`; tested: `CheatRoutingTests`). A failure plays out at the day's end, never the instant a verdict lands (BUG-56a; TIMELINE-FAIL's Q4 = A): the verdict that meets it shows (its slip, if any), the shift closes at once (`GameManager.CloseNow(endingId)`: the AVAILABLE sign goes off, nobody else is called, the closing bell rings), the last traveller's reaction and walk-off play, then the shift report, and its button leads to the ending, never Home; End Shift over an open citation slip finishes that traveller's slot first, so the report never covers the slip, and a run whose ending was set during the shift ends in it (BUG-28b; `ShiftEnd`, tested: `FlowRulesTests`). After an ending reached in the session, the Title opens on the evening edition (`EveningEditionView`, built at runtime in the Title's own faces): the morning paper's masthead, "Edition of day N", the ending's name as the headline over its picture and story (the pet's name put in), and the pet's fate in Home's own words (the Welfare Office's line when it was taken, else its four needs; never a number; `EveningEdition`, tested: `EveningEditionTests`), with Menu (the paper is laid down onto the Title's own ending page) and Quit game; a Title opened at boot over an old ending shows its own page only. No ending judges
+```
+
+**Line 48** (Stamps on the papers: BUG-38b, the dater's word):
+- Old:
+```text
+a letter they lack, the font's outline), under it today
+```
+- New:
+```text
+a letter they lack, the font's outline; the rubber is the bureau's English: a word it cannot print, a Greek, Arabic, Japanese or Chinese one, prints as APPROVED or DENIED by the verdict the stamp passes, never read back from the ink's colour (an ink that is neither verdict's is refused), BUG-38b, `DaterRubber`, tested: `FlowRulesTests`; the word's hollow outline, `DaterWordOutline`, measures at each pixel only the letters that can reach it and paints exactly what measuring every letter paints, tested: `FlowRulesTests`), under it today
+```
+
+**Line 64** (Controls, Papers, Please's one input model: R3, Esc no longer backs out):
+- Old:
+```text
+A right-click and Esc always back out, of the innermost mode
+```
+- New:
+```text
+A right-click always backs out, of the innermost mode
+```
+- Old:
+```text
+in one order everywhere (`ControlRules.BackOut`): a drag
+```
+- New:
+```text
+in one order everywhere (`ControlRules.BackOut`); Esc only cancels a drag and otherwise opens Settings, never leaving a mode (Saleh's R3: Q or the bezel leave the PC; see Pause and Esc): a drag
+```
+
+**Line 172** (The hours grow: BUG-72, 24:00):
+- Old:
+```text
+close at midnight, shown 00:00 (each span
+```
+- New:
+```text
+close at midnight, shown 24:00 (BUG-72; `ShiftClock.Format`; each span
+```
+- Old:
+```text
+"Desk hours: 16:00 to 00:00"
+```
+- New:
+```text
+"Desk hours: 16:00 to 24:00"
+```
+
+**Line 176** (the clock's pauses: BUG-34a) is replaced by six lines, in this order: the first replaces it, the other five are new.
+- Old (the whole line):
+```text
+- [ ] The clock pauses only while a citation slip is shown, and the slip keeps the PC screen on until acknowledged (the slip is back since Saleh's 1007b demo; the interview, scans and camera moves take real time and cost nothing else)
+```
+- New:
+```text
+- [ ] The clock pauses while a citation slip is shown (the slip keeps the PC screen on until acknowledged; the slip is back since Saleh's 1007b demo), while Settings is open and while the game's window has lost the focus (see Pause and Esc); every pause is a named source of `PauseState` (a Clock source holds the clock only, a Full one the clock and the audio), and the clock runs only while none holds it, so one source's release never restarts a clock another holds (tested: `PauseStateTests`, in every order of booth, Settings, focus and slip). The interview, scans and camera moves take real time and cost nothing else
+- [ ] Pause and Esc (BUG-34; Saleh's D20, R3/R4; `PauseMenu`, made at startup and kept across scenes; no pause card: pausing the queue is the AVAILABLE sign): Esc lets go of one thing first, if anything (`EscapeChain`, tested: `FlowRulesTests`: the desk's hold, then the PC's own Escape chain, then a drag the office's back-out cancels, then a step a later track registers), and otherwise opens Settings, never leaving a mode (R3: with the PC open, Esc brings its Settings app to the front and the PC stays open, only Q or the bezel leave it; the wheel, inspect mode, the city and the reading view stay too, a right-click backs out of them; `EscapeChain.KeepsTheOfficeOut`, tested: `FlowRulesTests`; `EscapeWatch` keeps the office's back-out off such a press): in the office the PC (by Q's rules, so not under the briefing or the report) with its Settings app in front; in a scene with a Settings window of its own (none yet on the Title and at Home: HOME's), that window; nothing while a scene loads or the cheat overlay holds the input. While Settings is the PC's front window with the PC open, the shift clock holds and the looping beds pause (one-shot cues finish). The player no longer runs in the background (`ProjectSettings` runInBackground off): losing the window's focus holds the clock and pauses all audio until it comes back, and cancels the desk's hold (`HoldRegistry`); the QA rig and the editor's job runner turn runInBackground on for their runs (the rule tested: `PauseStateTests`; the presses, the clock and the audio checked in Unity: FLOW's `flow_pause` recipe)
+- [ ] The day's end waits for the last traveller's payoff (BUG-32a): their reaction and walk-off play before the shift report (up to `MotionTuningSO.payoffWaitSeconds`, 8 s), then their bubble goes; the day's bookkeeping and the save happen at once (`ShiftEnd.PayoffDone`, tested: `FlowRulesTests`; the order checked in Unity: `flow_transitions`)
+- [ ] A day is closed once (FLOW round 4): a skip or a forward jump from the office closes today's shift through the cheat's route (`GameManager.CloseShiftForCheat`, then the route's night), and the office it leaves behind the shutter then handles neither its clock's closing nor its day loop's end; nor does an office that a restart or a jump back is replacing (`ShiftEnd.LeftBehind`, tested: `FlowRulesTests`). So a mid-shift skip lands exactly as a skip of the same day from the briefing: the same money, debt paid, statement rows, phase and save (its Unity recipe: FLOW's `flow_skip`)
+- [ ] The booth's roll shutter (the bible's G3 and G4; `BoothShutter`): shut at the day's start, it rolls up as the shift opens (the first AVAILABLE press: `MotionTuningSO.shutterSeconds`, 1.2 s, eased out, cue booth_shutter_open) and rolls down once the last traveller's payoff has played, before the report (1.2 s, eased in, ending on booth_shutter_close; `ShutterRoll`, tested: `FlowRulesTests`). It is the office's object named BoothShutter, placed shut, rolling up by its own height; the office has none yet (the desk set's shutter is an art request), so today nothing rolls or sounds and the report follows the payoff at once
+- [ ] Screen transitions (BUG-32a, the bible's J5: one shared kit, `Transit`): a fade, a slide and a wait, eased in and out on real time over `MotionTuningSO.transitSeconds` (0.25 s, kept within 0.2-0.3 s; `TransitCurve`, tested: `FlowRulesTests`; a slide cuts under Reduced Motion); a scene change through `SceneTransit.Load` (every RunManager load: the office, Home and the Title) brings the booth's roll shutter down over the screen in the kit's length (`TransitShutter`, drawn at runtime in the cel kit: painted slats, inked edges, a brass bar; a fade where it hangs under Reduced Motion), loads the scene asynchronously behind it (the office's gameplay layer too, `OfficeScenes`; without the shutter it loads on the next frame as before), keeps the hall's light moving through its slats while it is down, so no frame is held without motion (`ShutterRoll.Sweep`, tested: `FlowRulesTests`; a long frame of work on the main thread, such as the office's activation, still holds the screen for that frame: the QA player's real-time load watch measures each load's worst frame against 250 ms, `flow_load`), and rolls it up once every scene it brings has loaded and run its first frames, so a load never shows a frozen frame of the scene left nor a half-built one; clicks are blocked meanwhile, and a scene asked for during a change is never dropped: it loads next behind the same shutter, the latest request winning (`SceneChangeQueue`, tested: `FlowRulesTests`); the shutter sorts just under the save notice, so a failed save's strip stays readable over it; outside play mode both cut at once (tested: `FlowSeamTests`). The office loads faster (BUG-31a): each seal outline is painted once a session from its outline resolved once (`SealOutlines.Resolve`, tested: `FlowRulesTests`), each dater word's outline once a session (`DaterImpressionArt`), and each scene is themed once as it loads (GameManager themes again only an office opened on its own)
+```
+
+**Line 191** (Cues the game plays: BUG-72, the bell on an early finish), at the line's end:
+- Old:
+```text
+and shift_end_bell at closing time
+```
+- New:
+```text
+and shift_end_bell when the shift ends: at closing time, and on an early finish (the queue ran out, End Shift, a run that ended, a skip or a jump from a started shift), once (BUG-72; `ShiftClock.Finish`, tested: `ShiftClockTests`)
+```
+
+Round 4 changed three of these against round 3's branch text: the transitions line names the queued load and the shutter's order under the save notice; the line "A day is closed once" is new; the bell line names a skip or a jump from a started shift.

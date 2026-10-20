@@ -190,6 +190,48 @@ public class FlowRulesTests
         Assert.IsFalse(ShiftEnd.EndsTheRun(null));
     }
 
+    [Test]
+    public void ShiftEnd_AShiftClosedElsewhere_OrAnOfficeBeingReplaced_ClosesNothingAgain()
+    {
+        Assert.IsFalse(ShiftEnd.LeftBehind(shiftRunning: true, sceneChanging: false), "a running shift closes and ends its own day");
+        Assert.IsTrue(ShiftEnd.LeftBehind(shiftRunning: false, sceneChanging: false), "a cheat's route closed it (or its ending showed at once): no second close on the landing morning");
+        Assert.IsTrue(ShiftEnd.LeftBehind(shiftRunning: true, sceneChanging: true), "a restart or a jump back replaces the office behind the shutter: its day loop must not save over the new morning");
+        Assert.IsTrue(ShiftEnd.LeftBehind(shiftRunning: false, sceneChanging: true));
+    }
+
+    // --- SceneChangeQueue (round 4: a scene asked for during a change is never dropped; the latest wins) ---
+
+    [Test]
+    public void SceneChangeQueue_ARequestDuringAChange_Waits_AndTheLatestWins()
+    {
+        var q = new SceneChangeQueue();
+        Assert.IsFalse(q.Changing);
+        Assert.IsTrue(q.Request("OfficeScene"), "nothing runs: the change starts now");
+        Assert.IsTrue(q.Changing);
+        Assert.IsFalse(q.Request("HomeScene"), "one runs: it waits");
+        Assert.IsFalse(q.Request("OfficeScene"), "a later request replaces the waiting one");
+        Assert.AreEqual("OfficeScene", q.Queued);
+
+        string scene = "first";
+        Assert.IsTrue(q.TakeQueued(ref scene));
+        Assert.AreEqual("OfficeScene", scene, "the run's world matches the last request: that scene loads");
+        Assert.IsNull(q.Queued);
+        Assert.IsTrue(q.Changing, "the change goes on with the scene taken");
+    }
+
+    [Test]
+    public void SceneChangeQueue_NothingWaiting_KeepsTheScene_AndAFinishedChangeTakesANewRequestAtOnce()
+    {
+        var q = new SceneChangeQueue();
+        Assert.IsTrue(q.Request("TitleScene"));
+        string scene = "TitleScene";
+        Assert.IsFalse(q.TakeQueued(ref scene));
+        Assert.AreEqual("TitleScene", scene);
+        q.Finish();
+        Assert.IsFalse(q.Changing);
+        Assert.IsTrue(q.Request("OfficeScene"), "after the shutter is off, the next request starts its own change");
+    }
+
     // --- ShutterRoll (the bible's G3/G4: the booth shutter's 1.2 s roll; J5/BUG-31a: the veil's light never stops) ---
 
     [Test]

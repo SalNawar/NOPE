@@ -15,8 +15,9 @@ using System.Text.RegularExpressions;
 /// the clock and the audio (BUG-34a); the last traveller's payoff before the
 /// report and no single-frame cut at the day's end, Go Home and Sleep
 /// (BUG-32a); an ending is the evening edition with Title and Quit (BUG-56a);
-/// the night shift closes at 24:00 and an early finish rings the bell (BUG-72).
-/// Built player: the loads hold no frame over 0.25 s, in real time and in the
+/// the night shift closes at 24:00 and an early finish rings the bell (BUG-72);
+/// a Skip day from the office mid-shift lands as one from the briefing, the
+/// day closed once (round 4). Built player: the loads hold no frame over 0.25 s, in real time and in the
 /// captures, and the office shows within 1.0 s (BUG-31a).
 /// </summary>
 public static class FlowChecks
@@ -108,6 +109,23 @@ public static class FlowChecks
     /// <summary>An early finish (End Shift) raises the clock's Closed once, so the closing bell rings.</summary>
     [GateCheck("flow.night.bell", Owner, GateKind.Play)]
     public static GateResult EarlyBell() => GateResults.Require("flow.night.bell", Owner, "flow_night.bell.early");
+
+    /// <summary>
+    /// A Skip day from the office mid-shift lands as a skip of the same day
+    /// from the briefing (the same day, phase, money, debt paid, statement
+    /// rows and save), and the skipped day is closed once: the office the
+    /// cheat's route left behind the shutter handles no day's end of its own
+    /// (flow_skip; FLOW round 4).
+    /// </summary>
+    [GateCheck("flow.skip.midshift", Owner, GateKind.Play)]
+    public static GateResult SkipMidShift()
+    {
+        GateResult same = GateResults.Require("flow.skip.midshift", Owner, "flow_skip.same.*");
+        GateResult once = GateResults.Require("flow.skip.midshift", Owner, "flow_skip.dayEnds.*");
+        return GateResult.Of("flow.skip.midshift", Owner, same.Pass && once.Pass,
+            $"same: {same.Measured}; day ends: {once.Measured}",
+            string.Join("; ", new[] { same.Detail, once.Detail }.Where(d => !string.IsNullOrEmpty(d))));
+    }
 
     /// <summary>
     /// The loads, on the QA player: in real time (flow_load, FlowLoadWatch) no

@@ -98,6 +98,24 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>True once today's closing was handled (closing time, End Shift, CloseNow, or the day's end): it is handled once.</summary>
     private bool _closingHandled;
 
+    /// <summary>
+    /// True once this office's shift is no longer its own to close: it is not
+    /// running (never begun, its day already ended, a cheat's route closed it:
+    /// CloseShiftForCheat ended the day on the run's world, which the route
+    /// then moved on and saved; or End Shift showed its ending at once), or a
+    /// scene change is under way (SceneTransit.Loading: a cheat's landing, a
+    /// restart or the Title replaces this office, which stays alive behind
+    /// the shutter until the new scene activates). Its clock's Closed and its
+    /// day loop's end are then ignored, so a day is never closed twice and
+    /// the landing morning's save is never overwritten by the office left
+    /// behind (FLOW round 4: a mid-shift Skip day closed day N again on day
+    /// N+1's world).
+    /// </summary>
+    private bool ShiftLeftBehind => ShiftEnd.LeftBehind(_shiftRunning, SceneTransit.Loading);
+
+    /// <summary>The day this office runs (its plan's), for the log; the run's world may already be on another day after a cheat's route.</summary>
+    private int DayNumber => dayPlan != null ? dayPlan.DayNumber : 0;
+
     /// <summary>The booth's roll shutter (the bible's G3 and G4): up as the shift opens, down after the last payoff, before the report.</summary>
     private BoothShutter _shutter;
 
@@ -377,10 +395,17 @@ public sealed partial class GameManager : MonoBehaviour
     /// last traveller's reaction and walk-off have played (BUG-32a), shows the
     /// shift report and leads into the Home scene, or into the run's ending
     /// when one was reached during the shift or at its close (the title scene;
-    /// BUG-28b, BUG-56a).
+    /// BUG-28b, BUG-56a). Nothing when the shift is no longer this office's
+    /// to close (ShiftLeftBehind): a cheat's route has already closed the day.
     /// </summary>
     private void HandleDayCompleted()
     {
+        if (ShiftLeftBehind)
+        {
+            Debug.Log($"[GameManager] The day loop of day {DayNumber} ended after its shift was closed elsewhere (a cheat's route, an ending shown at once) or while a scene change replaces this office: nothing is closed again (the run is on day {_worldState.day}).");
+            return;
+        }
+
         Debug.Log($"[GameManager] >>> Entering HandleDayCompleted (day {_worldState.day}).");
 
         // The booth is shut: closing is handled, the clock stops (the queue may have run out before closing: the bell rings) and the desk closes; an FTUE still open is over (saved below).
@@ -550,6 +575,9 @@ public sealed partial class GameManager : MonoBehaviour
         if (readySign != null)
             readySign.Interactable = true;
 
+        // The shift runs from here, before the day loop starts: closing time and the day's end are handled only for a running shift (ShiftLeftBehind).
+        _shiftRunning = true;
+
         orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
         if (readySign == null)
@@ -560,7 +588,6 @@ public sealed partial class GameManager : MonoBehaviour
             guide.BeginShift(_worldState.day, _worldState.guide, contentLibrary);
 
         // The cheat menu's "Auto-decide" keeps the queue coming from the shift's start.
-        _shiftRunning = true;
         StartAutoDecide();
     }
 
@@ -570,12 +597,20 @@ public sealed partial class GameManager : MonoBehaviour
     /// waiting in the queue is never called); a traveller at the desk, or a
     /// decided one whose verdict still shows (a citation slip), is finished
     /// first (ShiftEnd.OnClosing: the report never covers the slip; BUG-28b),
-    /// otherwise the booth closes at once.
+    /// otherwise the booth closes at once. Nothing when the shift is no longer
+    /// this office's to close (ShiftLeftBehind): the clock's Closed raised by a
+    /// cheat's close (CloseShiftForCheat finishes the clock after clearing
+    /// _shiftRunning) must not release the day loop into a second day's end.
     /// </summary>
     private void HandleShiftClosed()
     {
         if (_closingHandled)
             return;
+        if (ShiftLeftBehind)
+        {
+            Debug.Log($"[GameManager] Closing time of day {DayNumber} ignored: its shift was closed by a cheat's route or its ending, or a scene change is replacing this office.");
+            return;
+        }
         _closingHandled = true;
         ClosingAction action = ShiftEnd.OnClosing(_travellerAtDesk, _verdictShowing);
         Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}, verdictShowing={_verdictShowing}, waiting={_desk.IsWaiting}) -> {action}.");

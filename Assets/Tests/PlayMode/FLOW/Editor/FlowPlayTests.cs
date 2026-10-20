@@ -57,6 +57,17 @@ public class FlowPlayTests : QaPlayTest
         AssertRun(Finish());
     }
 
+    /// <summary>A Skip day from the office mid-shift lands exactly as a skip of the same day from the briefing, and the skipped day is closed once (FLOW round 4: the office left behind the shutter closed it a second time on the landing morning).</summary>
+    [UnityTest, Explicit, Category("QaPlay")]
+    public IEnumerator Skip_MidShiftLandsAsASkipFromTheBriefing()
+    {
+        Assert.IsTrue(Prepare("flow_skip.json"));
+        yield return new EnterPlayMode();
+        yield return Play();
+        yield return new ExitPlayMode();
+        AssertRun(Finish());
+    }
+
     /// <summary>A verdict that ends the run closes the shift; the report, then the evening edition with Title and Quit (BUG-56a, BUG-28b).</summary>
     [UnityTest, Explicit, Category("QaPlay")]
     public IEnumerator Endings_TheReportThenTheEveningEdition()

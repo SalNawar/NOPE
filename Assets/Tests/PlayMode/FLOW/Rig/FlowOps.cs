@@ -1,5 +1,7 @@
 #if UNITY_EDITOR || TIMEDESK_QA
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -44,6 +46,26 @@ using UnityEngine.SceneManagement;
 /// time, which a fixed-step capture cannot see) and
 /// <c>load.&lt;name&gt;.time</c> (the new scene shows, the shutter starting
 /// up, within f seconds of the click; BUG-31a's "load at most 1.0 s").</item>
+/// <item><c>flowSettled</c> (f timeout, default 120 s): waits until no scene
+/// change runs (SceneTransit.Changing: from the accepted load until the
+/// shutter is off). Put it after a cheat that reloads the office (jumpDay,
+/// RestartShift, SkipDay) and before <c>waitOffice</c>: the office being
+/// replaced stays loaded under the shutter, its briefing up, while
+/// RunManager's world already shows the new day, so <c>waitOffice</c> alone
+/// passes on the old office. QA-RIG's own waits take the same condition at
+/// INTEGRATION (docs/pending/FLOW.md, section 4).</item>
+/// <item><c>flowRunState</c> (name; text: an earlier record's name): records
+/// the run as it stands (RunManager's world: day, phase, money,
+/// clerkDebtPaid, the statement's rows; and the save file). With
+/// <c>text</c>, asserts <c>same.&lt;name&gt;</c>: all of them match that record,
+/// the saves compared without what presenting a traveller may legitimately
+/// mark (a premade met, a returning traveller come back, the desk guide's
+/// progress).</item>
+/// <item><c>flowWatchDayEnds</c> (name): starts counting the day ends the
+/// offices handle (GameManager's "Entering HandleDayCompleted" lines).</item>
+/// <item><c>flowDayEnds</c> (name; n the count expected; text the days
+/// expected, comma-separated): stops the count and asserts
+/// <c>dayEnds.&lt;name&gt;</c>: exactly n day ends, on those days.</item>
 /// </list>
 /// </summary>
 public static class FlowOps
@@ -83,6 +105,172 @@ public static class FlowOps
             QaRunner.RegisterOp("flowLoadClock", LoadClock);
         if (!QaRunner.IsKnownOp("flowLoadTime"))
             QaRunner.RegisterOp("flowLoadTime", LoadTime);
+        if (!QaRunner.IsKnownOp("flowSettled"))
+            QaRunner.RegisterOp("flowSettled", Settled);
+        if (!QaRunner.IsKnownOp("flowRunState"))
+            QaRunner.RegisterOp("flowRunState", RunStateOp);
+        if (!QaRunner.IsKnownOp("flowWatchDayEnds"))
+            QaRunner.RegisterOp("flowWatchDayEnds", WatchDayEnds);
+        if (!QaRunner.IsKnownOp("flowDayEnds"))
+            QaRunner.RegisterOp("flowDayEnds", DayEndsOp);
+        // A new play session starts with no records and no count (the editor without a domain reload keeps statics).
+        States.Clear();
+        StopDayEnds();
+    }
+
+    private static IEnumerator Settled(QaRunner runner, QaStep step)
+    {
+        yield return QaGame.Until(() => !SceneTransit.Changing, step.f > 0f ? step.f : 120f, "the scene change's shutter to be off");
+    }
+
+    /// <summary>What flowRunState records: the run's world as it stands and its save file.</summary>
+    private sealed class RunRecord
+    {
+        public int Day;
+        public RunPhase Phase;
+        public int Money;
+        public int DebtPaid;
+        public int StatementRows;
+        public string Save;
+
+        public override string ToString() =>
+            $"day {Day}, phase {Phase}, money {Money}, clerkDebtPaid {DebtPaid}, statement rows {StatementRows}, save {(Save != null ? Save.Length + " chars" : "missing")}";
+    }
+
+    /// <summary>The save file read for comparison (the world without its version wrapper's private type).</summary>
+    [System.Serializable]
+    private sealed class SaveCopy
+    {
+        public int version;
+        public WorldState world;
+    }
+
+    /// <summary>flowRunState's records of this play session, by name.</summary>
+    private static readonly Dictionary<string, RunRecord> States = new Dictionary<string, RunRecord>();
+
+    private static IEnumerator RunStateOp(QaRunner runner, QaStep step)
+    {
+        yield return QaGame.Frames(2);
+        WorldState world = RunManager.HasInstance ? RunManager.Instance.World : null;
+        var now = new RunRecord
+        {
+            Day = world != null ? world.day : 0,
+            Phase = world != null ? world.phase : RunPhase.Office,
+            Money = world != null ? world.money : 0,
+            DebtPaid = world != null ? world.clerkDebtPaid : 0,
+            StatementRows = world != null && world.accountDays != null ? world.accountDays.Count : 0,
+            Save = File.Exists(SaveSystem.SavePath) ? Comparable(File.ReadAllText(SaveSystem.SavePath)) : null,
+        };
+        string name = string.IsNullOrEmpty(step.name) ? "state" : step.name;
+        States[name] = now;
+        if (string.IsNullOrEmpty(step.text))
+            yield break;
+
+        bool known = States.TryGetValue(step.text, out RunRecord then);
+        bool fields = known && now.Day == then.Day && now.Phase == then.Phase && now.Money == then.Money && now.DebtPaid == then.DebtPaid && now.StatementRows == then.StatementRows;
+        bool saves = known && now.Save != null && then.Save != null && now.Save == then.Save;
+        runner.Assert($"same.{name}", Owner, known && fields && saves && world != null,
+            known ? $"{name}: {now}; {step.text}: {then}; saves {(saves ? "match" : "differ")}" : $"no record named '{step.text}'",
+            "Round 4, S2: a Skip day from the office mid-shift lands as a skip of the same day from the briefing (the day closed once: no second strandings, instalment, statement row, Home phase or overwritten morning save)"
+                + (known && !saves ? "; " + FirstDifference(then.Save, now.Save) : string.Empty));
+    }
+
+    /// <summary>
+    /// The save's world as JSON without what presenting a traveller may
+    /// legitimately mark (DayCycle.Present: a once-per-run premade met, a
+    /// returning traveller come back; the desk guide's progress through the
+    /// shift), so a run that played part of a shift compares with one that
+    /// never opened it. Null for a file that does not read as a save.
+    /// </summary>
+    private static string Comparable(string json)
+    {
+        SaveCopy copy;
+        try
+        {
+            copy = JsonUtility.FromJson<SaveCopy>(json);
+        }
+        catch (System.ArgumentException)
+        {
+            return null;
+        }
+        if (copy == null || copy.world == null)
+            return null;
+        WorldState w = copy.world;
+        string marker = FlagKeys.PremadeMet("\u0001");
+        int at = marker.IndexOf('\u0001');
+        string prefix = marker.Substring(0, at), suffix = marker.Substring(at + 1);
+        w.flags?.RemoveAll(f => f != null && f.StartsWith(prefix, System.StringComparison.Ordinal) && f.EndsWith(suffix, System.StringComparison.Ordinal));
+        if (w.returns != null)
+            foreach (ReturningTraveller r in w.returns)
+                if (r != null)
+                    r.returned = false;
+        w.guide = new GuideState();
+        return copy.version + "|" + JsonUtility.ToJson(w);
+    }
+
+    /// <summary>Where two compared saves first differ, with a little of each around it.</summary>
+    private static string FirstDifference(string a, string b)
+    {
+        if (a == null || b == null)
+            return a == null ? "the first save is missing or unreadable" : "the second save is missing or unreadable";
+        int i = 0;
+        while (i < a.Length && i < b.Length && a[i] == b[i])
+            i++;
+        int from = System.Math.Max(0, i - 40);
+        string Around(string s) => i >= s.Length ? "(end)" : s.Substring(from, System.Math.Min(s.Length - from, 120));
+        return $"the saves first differ at character {i}: '{Around(a)}' against '{Around(b)}'";
+    }
+
+    /// <summary>The line GameManager logs as an office handles its day's end.</summary>
+    private const string DayEndLine = ">>> Entering HandleDayCompleted (day ";
+
+    /// <summary>The days of the day ends counted since flowWatchDayEnds.</summary>
+    private static readonly List<int> DayEnds = new List<int>();
+
+    /// <summary>True while the log is watched for day ends.</summary>
+    private static bool _watchingDayEnds;
+
+    private static IEnumerator WatchDayEnds(QaRunner runner, QaStep step)
+    {
+        StopDayEnds();
+        Application.logMessageReceived += OnDayEndLog;
+        _watchingDayEnds = true;
+        yield break;
+    }
+
+    private static void StopDayEnds()
+    {
+        if (_watchingDayEnds)
+            Application.logMessageReceived -= OnDayEndLog;
+        _watchingDayEnds = false;
+        DayEnds.Clear();
+    }
+
+    private static void OnDayEndLog(string message, string stack, LogType type)
+    {
+        int at = message != null ? message.IndexOf(DayEndLine, System.StringComparison.Ordinal) : -1;
+        if (at < 0)
+            return;
+        int start = at + DayEndLine.Length, end = message.IndexOf(')', start);
+        DayEnds.Add(end > start && int.TryParse(message.Substring(start, end - start), out int day) ? day : 0);
+    }
+
+    private static IEnumerator DayEndsOp(QaRunner runner, QaStep step)
+    {
+        yield return QaGame.Frames(2);
+        bool watched = _watchingDayEnds;
+        var seen = new List<int>(DayEnds);
+        StopDayEnds();
+        var expected = new List<int>();
+        foreach (string part in (step.text ?? string.Empty).Split(','))
+            if (int.TryParse(part.Trim(), out int day))
+                expected.Add(day);
+        bool count = seen.Count == step.n;
+        bool days = expected.Count == 0 || string.Join(",", seen) == string.Join(",", expected);
+        runner.Assert($"dayEnds.{step.name}", Owner, watched && count && days,
+            watched ? $"{seen.Count} day end(s) handled (expected {step.n}), on day(s) [{string.Join(", ", seen)}]" + (expected.Count > 0 ? $" (expected [{string.Join(", ", expected)}])" : string.Empty)
+                    : "not watched: flowWatchDayEnds must come first",
+            "Round 4, S2: a day is closed once; the office a cheat's route closed and left behind the shutter handles no day's end of its own");
     }
 
     /// <summary>The load watch flowLoadClock started (one at a time).</summary>
