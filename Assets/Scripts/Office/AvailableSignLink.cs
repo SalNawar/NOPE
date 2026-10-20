@@ -33,8 +33,11 @@ public sealed class AvailableSignLink : MonoBehaviour
     /// <summary>The label's own ink (the lit sign).</summary>
     private Color _lit;
 
-    /// <summary>When (unscaled seconds) the sign began inviting its press; NaN while it does not invite.</summary>
+    /// <summary>When (on <see cref="_clock"/>) the sign began inviting its press; NaN while it does not invite.</summary>
     private float _invitingSince = float.NaN;
+
+    /// <summary>The invitation's clock (seconds while the link runs): real time, or the capture's frame while frames are captured at a fixed rate (UiMotion.Delta), so a recording shows the beats at their true pace.</summary>
+    private float _clock;
 
     /// <summary>Points the link at the sign's label and the desk's availability, writes the caption and shows the current state.</summary>
     public void Configure(TMP_Text caption, DeskConfigSO config, DeskAvailability desk)
@@ -70,11 +73,12 @@ public sealed class AvailableSignLink : MonoBehaviour
             enabled = false;
             return;
         }
-        _invitingSince = InvitePulse.Since(_invitingSince, true, Pressable, Time.unscaledTime);
+        _clock += UiMotion.Delta(Time.unscaledDeltaTime);
+        _invitingSince = InvitePulse.Since(_invitingSince, true, Pressable, _clock);
         if (float.IsNaN(_invitingSince))
             return; // the briefing still covers the office: the sign holds lit and waits
         float beat = Mathf.Max(0.1f, _config.readyInviteSeconds);
-        float elapsed = Time.unscaledTime - _invitingSince;
+        float elapsed = _clock - _invitingSince;
         bool reduced = MotionPreference.Reduced;
         _caption.color = Color.Lerp(_config.readyPausedInk, _lit, InvitePulse.Level(elapsed, beat, reduced));
         if (InvitePulse.Settled(elapsed, beat, reduced))
@@ -111,9 +115,9 @@ public sealed class AvailableSignLink : MonoBehaviour
         if (_caption == null)
             return;
         bool inviting = Inviting;
-        _invitingSince = InvitePulse.Since(_invitingSince, inviting, false, Time.unscaledTime);
+        _invitingSince = InvitePulse.Since(_invitingSince, inviting, false, _clock);
         _caption.color = _desk.IsAvailable || inviting ? _lit : _config.readyPausedInk;
         enabled = inviting && (float.IsNaN(_invitingSince)
-            || !InvitePulse.Settled(Time.unscaledTime - _invitingSince, Mathf.Max(0.1f, _config.readyInviteSeconds), MotionPreference.Reduced));
+            || !InvitePulse.Settled(_clock - _invitingSince, Mathf.Max(0.1f, _config.readyInviteSeconds), MotionPreference.Reduced));
     }
 }

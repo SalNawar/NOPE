@@ -57,6 +57,25 @@ Shader "NOPE/Hall Living City"
   half4 c=SAMPLE_TEXTURE2D(_Atmosphere,sampler_MorningClear,(clamp(q,.002,.998)+cell)*.5);
   c.a*=inside;return c;
  }
+ // A small flyer (the airship, the bus) drawn from the unmipped atlas many times smaller than its cell: one
+ // sample a pixel sparkles as it moves (its windows and outline hop texels; at 1280 px wide the bus failed the
+ // flicker check, integration), so it is the average of a 4 x 4 grid over the pixel's footprint (premultiplied).
+ half4 FxFine(float2 uv,float2 center,float2 size,float2 cell)
+ {
+  float2 q=(uv-center)/size+.5;
+  float2 dx=ddx(q),dy=ddy(q);
+  half4 sum=0;
+  [unroll] for(int i=0;i<4;i++)
+  [unroll] for(int j=0;j<4;j++)
+  {
+   float2 o=(float2(i,j)+.5)*.25-.5;
+   float2 p=q+o.x*dx+o.y*dy;
+   half inside=step(0,p.x)*step(p.x,1)*step(0,p.y)*step(p.y,1);
+   half4 c=SAMPLE_TEXTURE2D_LOD(_Atmosphere,sampler_MorningClear,(clamp(p,.002,.998)+cell)*.5,0);
+   c.a*=inside;sum+=half4(c.rgb*c.a,c.a);
+  }
+  return half4(sum.rgb/max(sum.a,1e-4),sum.a*.0625);
+ }
  // Where a flyer's centre is across the painting at frac f of its pass: from wholly off one edge to
  // wholly off the other (halfWidth past each edge), so it never pops in or out in view (BUG-13: the
  // hall's apertures did not hide every wrap).
@@ -104,8 +123,8 @@ Shader "NOPE/Hall Living City"
    float2 smokeUV=uv;smokeUV.x+=sin(t*.35+s)*.0015*saturate((uv.y-origin.y)/height);
    rgb=Over(rgb,Fx(smokeUV,origin+float2(.009,height*.5),float2(.055,height),float2(1,1)),.23+.04*sin(t*.4+s),light);
   }
-  rgb=Over(rgb,Fx(uv,float2(Fly(frac(.32+tf*.0005),.022),.81),float2(.044,.095),float2(0,0)),.85,light);
-  rgb=Over(rgb,Fx(uv,float2(1-Fly(frac(.68+tf*.0013),.0115),.61),float2(.023,.055),float2(1,0)),.9,light);
+  rgb=Over(rgb,FxFine(uv,float2(Fly(frac(.32+tf*.0005),.022),.81),float2(.044,.095),float2(0,0)),.85,light);
+  rgb=Over(rgb,FxFine(uv,float2(1-Fly(frac(.68+tf*.0013),.0115),.61),float2(.023,.055),float2(1,0)),.9,light);
   // Sparse warm building lights gently vary rather than flashing the whole image.
   half warm=step(rgb.b*1.5,rgb.r)*step(.22,rgb.r)*step(.1,Depth(uv));
   rgb+=warm*(w.z+w.w)*.018*(.5+.5*sin(floor(uv.x*390)+floor(uv.y*210)+t*.6));
