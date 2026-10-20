@@ -46,6 +46,16 @@ using UnityEngine;
 /// only the first ones).
 /// P0-A carve (docs/pending/CARVE.md): the folder's motion is in
 /// DeskRulebook.Motion.cs. Owner: DOC-LOOK.
+/// DOC-LOOK (1019a, Saleh's D3): the folder opens and closes (FolderCover):
+/// it arrives shut each day (Show), its front board over the right sheet and
+/// only the tabs over that sheet showing; a click on it or on a tab, a page
+/// turn (ShowPage) or the guide opening a sheet swings it open; a click on its
+/// open cover page swings it shut. While shut its pages lie under its face
+/// (ShowShut: hidden and out of the raycast), its left board is cut from its
+/// model and its contact shadow lies under the right sheet alone. A page
+/// turn's flick bends the loose sheets and every printed row, line and mark of
+/// the open page rides the bend (RidePrints, as a paper's prints do: BUG-12a,
+/// 10c), so no text sinks under the curl or slides off its ruled line.
 /// </summary>
 public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
 {
@@ -58,6 +68,30 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
 
     /// <summary>A page turn's flick of the folder's loose sheets (D3 retires "the folder never bends"; GAME_FEEL_BIBLE A3: a bow of at most 3 mm on the flip, curling from the corner, settling like a heavy paper): its bow and twist (metres) and how long it settles (seconds).</summary>
     private const float FlipBow = 0.003f, FlipTwist = 0.0015f, FlipSeconds = 0.35f;
+
+    /// <summary>How far a printed part riding the flick stands over the bent face, besides its own lift (metres; a paper's bent print's, DeskDocument).</summary>
+    private const float RideLift = 0.0003f;
+
+    /// <summary>How far under the folder's face its pages lie while it is shut (metres, booklet space, down): inside its body, out of sight and under its click box.</summary>
+    private const float ShutDepth = 0.004f;
+
+    /// <summary>The folder's front board (D3: it opens and closes; FolderCover). None: the folder lies open, as before.</summary>
+    [SerializeField] private FolderCover folderCover;
+
+    /// <summary>The printed parts riding the flick now: each one's rest pose and the pose it was given (a part a layout moved since keeps its new place).</summary>
+    private readonly List<(Transform part, Vector3 rest, Quaternion restRotation, Vector3 shown, Quaternion shownRotation)> _riding = new List<(Transform, Vector3, Quaternion, Vector3, Quaternion)>();
+
+    /// <summary>A riding part's renderers (reused: the flick allocates nothing per frame).</summary>
+    private readonly List<Renderer> _rideRenderers = new List<Renderer>();
+
+    /// <summary>The pages' root as built (the parent of the pages) and its place, the folder's config (for its shadow).</summary>
+    private Transform _pages;
+    private Vector3 _pagesRest;
+    private DeskConfigSO _config;
+
+    /// <summary>True while the folder shows shut (its board over the right sheet, or swinging).</summary>
+    public bool Shut => folderCover != null && folderCover.Shut;
+
     /// <summary>The booklet's visible part and its click boxes, lifted off the desk plane by the stack (SetLift); the root stays on the plane, where the drag moves it.</summary>
     [SerializeField] private Transform booklet;
 
@@ -205,7 +239,8 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     public event Action<string> PaperFlagged;
 
     /// <summary>Every click of the booklet (the rows, the papers' rows, the tabs, the booklet itself): the booth makes them live with the props.</summary>
-    public IReadOnlyList<Clickable> Clicks => rows.Concat(paperRows).Concat(sealRows).Concat(tabs).Append(guidePrev).Append(guideNext).Append(card).Where(c => c != null).ToArray();
+    public IReadOnlyList<Clickable> Clicks => rows.Concat(paperRows).Concat(sealRows).Concat(tabs).Append(guidePrev).Append(guideNext).Append(card)
+        .Append(folderCover != null ? folderCover.CoverClick : null).Where(c => c != null).ToArray();
 
     /// <summary>The booklet's drag (DeskController lifts it above the stack while it runs).</summary>
     public DeskDraggable Drag => drag;
@@ -243,19 +278,23 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         {
             var block = new MaterialPropertyBlock();
             folderFace.GetPropertyBlock(block);
+            // the art's own face back by name (a cleared block would drop the shut folder's cut and the flick's bend too)
+            Texture own = folderFace.sharedMaterial != null ? folderFace.sharedMaterial.GetTexture(BaseMapId) : null;
             if (worded)
                 block.SetTexture(BaseMapId, clean);
-            else
-                block.Clear();
+            else if (own != null)
+                block.SetTexture(BaseMapId, own);
             folderFace.SetPropertyBlock(block);
         }
+        if (folderCover != null)
+            folderCover.Face(worded ? clean : null);
         for (int i = 0; i < coverWords.Length; i++)
         {
             if (coverWords[i] == null)
                 continue;
             if (worded && i < _coverEnglish.Length)
                 coverWords[i].text = UiText.DocumentWord(_coverEnglish[i]);
-            coverWords[i].gameObject.SetActive(worded);
+            coverWords[i].gameObject.SetActive(worded && !Shut); // on the cover page: gone with it while shut
         }
     }
 
@@ -265,6 +304,15 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     private void Awake()
     {
         _coverEnglish = Array.ConvertAll(coverWords, w => w != null ? w.text : string.Empty);
+        _pages = rulesPage != null ? rulesPage.transform.parent : null;
+        if (_pages != null)
+            _pagesRest = _pages.localPosition;
+        if (depth != null)
+            depth.Bent += RidePrints;
+        if (folderCover != null)
+            folderCover.ShutChanged += ShowShut;
+        if (card != null)
+            card.onClick.AddListener(() => Open());
         PrintLabels();
         CultureThemeService.LabelsChanged += PrintLabels;
         for (int i = 0; i < rows.Length; i++)
@@ -322,6 +370,10 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     private void OnDestroy()
     {
         CultureThemeService.LabelsChanged -= PrintLabels;
+        if (depth != null)
+            depth.Bent -= RidePrints;
+        if (folderCover != null)
+            folderCover.ShutChanged -= ShowShut;
         if (drag != null)
             drag.DragEnded -= Dropped;
     }
@@ -329,8 +381,8 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// <summary>The folder's thickness (metres; DeskConfigSO.folderThickness through ShowDepth, as deep as its model under the face its pages print on): its room in the papers' stack.</summary>
     public float Thickness { get; private set; } = 0.0055f;
 
-    /// <summary>The folder's body on its card (shares of the card, centre and size): the art's opaque folder (measured on Forms/rulebook_folder), its tabs above it left out.</summary>
-    private const float BodyCentreX = 0.003f, BodyCentreY = -0.0275f, BodyWidth = 0.957f, BodyHeight = 0.917f;
+    /// <summary>The folder's body on its card (shares of the card, centre and size): the art's opaque folder (measured on Forms/rulebook_folder), its tabs above it left out. The builder sizes the front board by them (FolderCover).</summary>
+    public const float BodyCentreX = 0.003f, BodyCentreY = -0.0275f, BodyWidth = 0.957f, BodyHeight = 0.917f;
 
     /// <summary>A tab's outline on its plate (unit space, counter-clockwise from its bottom left; measured on the tab art: a slight trapezoid, its top corners rounded, as its model).</summary>
     private static readonly List<(float x, float y)> TabOutline = new List<(float x, float y)>
@@ -354,23 +406,28 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     {
         if (config == null)
             return;
+        _config = config;
         Thickness = config.folderThickness;
-        if (depth != null && folderFace != null)
-        {
-            var outline = PaperEdge.Rectangle(BodyWidth, BodyHeight).ConvertAll(p => (p.x + BodyCentreX, p.y + BodyCentreY));
-            depth.Build(outline, Thickness, folderFace.transform.localScale, config);
-        }
+        BuildShadow();
         for (int i = 0; i < tabDepths.Length && i < tabPlates.Length; i++)
             if (tabDepths[i] != null && tabPlates[i] != null)
                 tabDepths[i].Build(TabOutline, TabThickness, tabPlates[i].transform.localScale, config, TabShadow);
     }
-    /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced): its rows show, the others' hide; its tab looks open. The GUIDE shows its sheet (read).</summary>
+    /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced), opening the folder first when it is shut (D3): its rows show, the others' hide; its tab looks open; a turn flicks the loose sheets. The GUIDE shows its sheet (read).</summary>
     public void ShowPage(int page)
+    {
+        Open();
+        TurnTo(page, true);
+    }
+
+    /// <summary>Swings the folder open when it is shut (FolderCover; nothing without one); true when it started.</summary>
+    public bool Open() => folderCover != null && folderCover.Shut && folderCover.Open();
+
+    /// <summary>Turns to <paramref name="page"/> (ShowPage's turn), shut or open; <paramref name="flick"/>: a change of page flicks the loose sheets (their rows riding it).</summary>
+    private void TurnTo(int page, bool flick)
     {
         int before = Page;
         Page = Mathf.Clamp(page, 0, _sealsIntroduced ? SealsPageIndex : GuidePageIndex);
-        if (Page != before && depth != null && folderFace != null && isActiveAndEnabled)
-            depth.Flick(new PaperBend(1f, 0f, FlipBow, 0.5f, FlipTwist, 0f, 0f, 0f), folderFace.transform.localScale, FlipSeconds);
         if (sealsPage != null)
             sealsPage.SetActive(Page == SealsPageIndex);
         if (rulesPage != null)
@@ -390,6 +447,117 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
             _block.SetColor(BaseColorId, i == Page ? openTab : closedTab);
             tabPlates[i].SetPropertyBlock(_block);
         }
+        if (flick && Page != before && depth != null && folderFace != null && isActiveAndEnabled)
+            depth.Flick(new PaperBend(1f, 0f, FlipBow, 0.5f, FlipTwist, 0f, 0f, 0f), folderFace.transform.localScale, FlipSeconds);
+    }
+
+    /// <summary>
+    /// The folder shut (<paramref name="shut"/>: its front board over the right
+    /// sheet, or swinging; FolderCover.ShutChanged) or open: shut, its left
+    /// board is cut from its model (DeskPaperDepth.ClipLeftOf at the spine), its
+    /// contact shadow lies under the right sheet alone, its pages lie under its
+    /// face (ShutDepth: out of sight and out of the raycast, so a click there
+    /// meets the folder's own box and opens it), and its cover's words and the
+    /// tabs over the left board hide; open, all of it shows again.
+    /// </summary>
+    private void ShowShut(bool shut)
+    {
+        if (depth != null)
+            depth.ClipLeftOf(shut ? folderCover.Spine : -10f);
+        BuildShadow();
+        if (_pages != null)
+            _pages.localPosition = shut ? _pagesRest + Vector3.down * ShutDepth : _pagesRest;
+        foreach (TMP_Text word in coverWords)
+            if (word != null && word.gameObject.activeSelf && shut)
+                word.gameObject.SetActive(false);
+        if (!shut)
+            ShowCover();
+        Transform face = folderFace != null ? folderFace.transform : null;
+        for (int i = 0; i < tabs.Length; i++)
+        {
+            if (tabs[i] == null || face == null || (i == SealsPageIndex && !_sealsIntroduced))
+                continue;
+            bool show = !shut || face.InverseTransformPoint(tabs[i].transform.position).x > folderCover.Spine;
+            tabs[i].gameObject.SetActive(show);
+            if (i < tabPlates.Length && tabPlates[i] != null)
+                tabPlates[i].gameObject.SetActive(show);
+        }
+    }
+
+    /// <summary>The folder's contact shadow under its body (the right sheet alone while shut).</summary>
+    private void BuildShadow()
+    {
+        if (_config == null || depth == null || folderFace == null)
+            return;
+        float left = BodyCentreX - BodyWidth / 2f, right = BodyCentreX + BodyWidth / 2f;
+        if (Shut)
+            left = folderCover.Spine;
+        float width = right - left, centre = (left + right) / 2f;
+        var outline = PaperEdge.Rectangle(width, BodyHeight).ConvertAll(p => (p.x + centre, p.y + BodyCentreY));
+        depth.Build(outline, Thickness, folderFace.transform.localScale, _config);
+    }
+
+    /// <summary>
+    /// A page turn's flick (DeskPaperDepth.Bent, every step of it): each
+    /// printed part of the open page (its title, rows, lines and marks) and
+    /// the cover's words go back to where they were printed, then ride the bent
+    /// face under their centre, turned to its slope and lifted by how far the
+    /// curl rises past their flat piece (PaperBend.Bulge), as a paper's prints
+    /// do (BUG-12a); flat, they stay where they were printed. A part a layout
+    /// moved meanwhile keeps its new place.
+    /// </summary>
+    private void RidePrints(PaperBend bend)
+    {
+        foreach ((Transform part, Vector3 rest, Quaternion restRotation, Vector3 shown, Quaternion shownRotation) in _riding)
+            if (part != null && part.localPosition == shown && part.localRotation == shownRotation)
+            {
+                part.localPosition = rest;
+                part.localRotation = restRotation;
+            }
+        _riding.Clear();
+        if (bend.IsFlat || folderFace == null || _pages == null || depth == null)
+            return;
+        Transform face = folderFace.transform;
+        Vector2 size = depth.BendSize;
+        float w = Mathf.Max(size.x, 1e-4f), h = Mathf.Max(size.y, 1e-4f);
+        foreach (Transform page in _pages)
+            if (page.gameObject.activeSelf)
+                foreach (Transform part in page)
+                    if (part.gameObject.activeSelf)
+                        Ride(part, bend, face, w, h);
+        foreach (TMP_Text word in coverWords)
+            if (word != null && word.gameObject.activeSelf)
+                Ride(word.transform, bend, face, w, h);
+    }
+
+    /// <summary>One printed part on the bent face (RidePrints): its centre and half size in the face's frame from its renderers' bounds.</summary>
+    private void Ride(Transform part, PaperBend bend, Transform face, float w, float h)
+    {
+        part.GetComponentsInChildren(false, _rideRenderers);
+        if (_rideRenderers.Count == 0)
+            return;
+        Bounds bounds = _rideRenderers[0].bounds;
+        for (int i = 1; i < _rideRenderers.Count; i++)
+            bounds.Encapsulate(_rideRenderers[i].bounds);
+        Vector3 centre = face.InverseTransformPoint(bounds.center);
+        float halfX = 0f, halfY = 0f;
+        for (int c = 0; c < 8; c++)
+        {
+            Vector3 corner = bounds.center + Vector3.Scale(bounds.extents, new Vector3((c & 1) == 0 ? -1f : 1f, (c & 2) == 0 ? -1f : 1f, (c & 4) == 0 ? -1f : 1f));
+            Vector3 local = face.InverseTransformPoint(corner);
+            halfX = Mathf.Max(halfX, Mathf.Abs(local.x - centre.x) * w);
+            halfY = Mathf.Max(halfY, Mathf.Abs(local.y - centre.y) * h);
+        }
+        float x = Mathf.Clamp(centre.x * 2f, -1f, 1f), y = Mathf.Clamp(centre.y * 2f, -1f, 1f);
+        float drop = bend.Depth(x, y, w, h);
+        (float dx, float dy) = bend.Slope(x, y, w, h);
+        float bulge = bend.Bulge(x, y, halfX, halfY, w, h);
+        Vector3 rest = part.localPosition;
+        Quaternion restRotation = part.localRotation;
+        // the face's +z runs away from the viewer (into the desk), as a paper's sheet's does
+        part.position += face.TransformDirection(Vector3.forward) * (drop - RideLift - bulge);
+        part.rotation = face.rotation * Quaternion.Euler(Mathf.Atan(dy) * Mathf.Rad2Deg, -Mathf.Atan(dx) * Mathf.Rad2Deg, 0f) * Quaternion.Inverse(face.rotation) * part.rotation;
+        _riding.Add((part, rest, restRotation, part.localPosition, part.localRotation));
     }
 
     /// <summary>Inspect mode on or off (BoothCoordinator): the rules' rows and the seals' names print in the comparable ink, and a click on one compares.</summary>
@@ -413,7 +581,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         if (tabPlates.Length > SealsPageIndex && tabPlates[SealsPageIndex] != null)
             tabPlates[SealsPageIndex].gameObject.SetActive(introduced);
         if (!introduced && Page == SealsPageIndex)
-            ShowPage(0);
+            TurnTo(0, false);
     }
 
     /// <summary>Prints the Seal Register: each office's seal (its outline texture and ink, its legend) and name, one row each (more offices than rows print only the first).</summary>
@@ -451,7 +619,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     public bool TrySealBounds(int index, out Bounds bounds)
     {
         bounds = default;
-        if (!isActiveAndEnabled || index < 0 || index >= _sealCount || index >= sealRows.Length || sealRows[index] == null ||
+        if (!isActiveAndEnabled || Shut || index < 0 || index >= _sealCount || index >= sealRows.Length || sealRows[index] == null ||
             !sealRows[index].gameObject.activeInHierarchy || !sealRows[index].TryGetComponent(out Collider box))
             return false;
         bounds = box.bounds;
@@ -501,10 +669,12 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         for (int i = 0; i < _rules.Count; i++)
             if (_rules[i] != null && !string.IsNullOrWhiteSpace(_rules[i].Summary()))
                 _indices.Add(i);
-        ShowPage(0);
+        TurnTo(0, false);
         Paginate(0);
         if (none != null)
             none.gameObject.SetActive(_indices.Count == 0);
+        if (folderCover != null)
+            folderCover.ShutNow(); // the day's rules arrive in a shut folder (D3)
     }
 
     /// <summary>
@@ -583,6 +753,11 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// <summary>A tab clicked: turns to its page (RULES at its first sheet); the RULES tab clicked on an open RULES page with several sheets turns to the next sheet.</summary>
     private void TabClicked(int page)
     {
+        if (Shut && page == Page)
+        {
+            Open(); // the shut folder opens at its tab, without turning a sheet
+            return;
+        }
         if (page == 0 && Page == 0 && _sheetStarts.Count > 1)
         {
             ShowRuleSheet(_ruleSheet + 1);
@@ -796,7 +971,8 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// Where the guide's arrow looks in the booklet: today's rules (its
     /// "rulebook" target: <paramref name="seals"/> false) or the Seal Register
     /// (its "seals" target): on that page, open, its row <paramref name="row"/>
-    /// (the first when out of range), else the tab that turns to it; false
+    /// (the first when out of range), else the tab that turns to it; the shut
+    /// folder's board while it is shut (a click there opens it, D3); false
     /// while the booklet (or the SEALS tab, before the register is introduced) is hidden.
     /// </summary>
     public bool TryRulesPoint(bool seals, int row, out Vector3 world)
@@ -804,6 +980,12 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         world = default;
         if (!isActiveAndEnabled)
             return false;
+        if (Shut && folderFace != null)
+        {
+            // the shut folder: the arrow looks at its board (a click there opens it)
+            world = folderFace.transform.TransformPoint(new Vector3((folderCover.Spine + BodyCentreX + BodyWidth / 2f) / 2f, BodyCentreY, 0f));
+            return true;
+        }
         int page = seals ? SealsPageIndex : 0;
         Clickable[] open = seals ? sealRows : rows;
         Clickable at = Page == page && open.Length > 0 ? open[row >= 0 && row < open.Length ? row : 0] : null;
@@ -826,7 +1008,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         int row = _indices.IndexOf(ruleIndex) - SheetStart;
         if (row >= SheetCount)
             return false;
-        if (!isActiveAndEnabled || row < 0 || row >= rows.Length || rows[row] == null || !rows[row].gameObject.activeInHierarchy ||
+        if (!isActiveAndEnabled || Shut || row < 0 || row >= rows.Length || rows[row] == null || !rows[row].gameObject.activeInHierarchy ||
             !rows[row].TryGetComponent(out Collider box))
             return false;
         bounds = box.bounds;

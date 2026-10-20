@@ -624,6 +624,7 @@ public static partial class OfficeSceneUIBuilder
         cardBox.center = new Vector3(0f, -0.0002f, 0f);
         cardBox.size = new Vector3(RulebookFolderSize.x, 0.0004f, RulebookFolderSize.y);
         cardClick.SetOutline(new[] { card.GetComponent<Renderer>() });
+        FolderCover folderCover = BuildFolderCover(booklet);
 
         DeskDraggable drag = GetOrAdd<DeskDraggable>(book.gameObject);
         var soDrag = new SerializedObject(drag);
@@ -637,6 +638,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "depth", folderDepth);
         SerializedArrays.Set(so, "tabDepths", tabDepths);
         SetRef(so, "card", cardClick);
+        SetRef(so, "folderCover", folderCover);
         SetRef(so, "folderFace", card.GetComponent<Renderer>());
         SerializedArrays.Set(so, "coverWords", cover);
         SetRef(so, "title", title);
@@ -668,6 +670,89 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "counter", counter);
         so.ApplyModifiedProperties();
         return rulebook;
+    }
+
+    /// <summary>The folder's spine across its face (the face's unit space: the crease between the rivets, measured on Forms/rulebook_folder at 51.1% of its width) and the front board's outer edge (its body's left edge, DeskRulebook.BodyCentreX less half its BodyWidth).</summary>
+    private const float RulebookSpine = 0.011f, RulebookBoardEdge = DeskRulebook.BodyCentreX - DeskRulebook.BodyWidth / 2f;
+
+    /// <summary>The folder's front board's outside: the manila of the folder's boards (sampled on its art) and the Bureau seal's brown ink on it.</summary>
+    private static readonly Color RulebookManila = new Color(0.7f, 0.54f, 0.37f, 1f), RulebookSealInk = new Color(0.36f, 0.22f, 0.12f, 0.85f);
+
+    /// <summary>
+    /// The rulebook folder's front board (FolderCover; Saleh's D3: the folder
+    /// opens and closes), in the folder card's plane (the booklet turned as the
+    /// card is, unscaled): a hinge on the spine, FolderCover.Lift over the
+    /// face, carrying the board's outside (the cel material in the folder's
+    /// manila; shut, it lies over the right sheet), the Bureau's seal on it, and
+    /// back to back with it the board's inside (the cel material showing the
+    /// left half of the folder's art: its cover page, laid where it lies open
+    /// at 180 degrees); and the open cover page's click box (FolderCoverClick,
+    /// over the left board just above the folder's own box: a click there
+    /// shuts the folder). Rebuilt with the folder.
+    /// </summary>
+    private static FolderCover BuildFolderCover(Transform booklet)
+    {
+        Transform root = EnsureChild(booklet, "Cover");
+        root.localPosition = Vector3.zero;
+        root.localRotation = Quaternion.Euler(90f, 0f, 0f); // the card's plane: x across, y up the page, +z into the desk
+        root.localScale = Vector3.one;
+        Transform hinge = EnsureChild(root, "Hinge");
+        float w = RulebookFolderSize.x, h = RulebookFolderSize.y;
+        float board = (RulebookSpine - RulebookBoardEdge) * w, tall = DeskRulebook.BodyHeight * h, middle = DeskRulebook.BodyCentreY * h;
+        hinge.localPosition = new Vector3(RulebookSpine * w, 0f, -FolderCover.Lift);
+        hinge.localRotation = Quaternion.identity;
+        const float gap = 0.00005f;
+        Material outside = EnsureMaterial("Rulebook_CoverOutside", "TimeDesk/DocumentCel", m =>
+        {
+            m.SetTexture("_BaseMap", null);
+            m.SetColor("_BaseColor", RulebookManila);
+            m.SetFloat("_Cutoff", 0f);
+        });
+        Texture2D folderArt = AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.RulebookFolder + ".png");
+        float u0 = RulebookBoardEdge + 0.5f, u1 = RulebookSpine + 0.5f, v0 = DeskRulebook.BodyCentreY + 0.5f - DeskRulebook.BodyHeight / 2f;
+        Material inside = EnsureMaterial("Rulebook_CoverInside", "TimeDesk/DocumentCel", m =>
+        {
+            m.SetTexture("_BaseMap", folderArt);
+            m.SetTextureScale("_BaseMap", new Vector2(u1 - u0, DeskRulebook.BodyHeight));
+            m.SetTextureOffset("_BaseMap", new Vector2(u0, v0));
+            m.SetColor("_BaseColor", Color.white);
+            m.SetFloat("_Cutoff", 0f);
+        });
+        Texture2D sealArt = AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.AgencySeal + ".png");
+        Material seal = EnsureMaterial("Rulebook_CoverSeal", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetTexture("_BaseMap", sealArt);
+            m.SetColor("_BaseColor", RulebookSealInk);
+            m.SetFloat("_Surface", 1f);
+            m.SetFloat("_Blend", 0f);
+            m.SetFloat("_QueueOffset", SealQueue - (int)RenderQueue.Transparent);
+            UnityEditor.BaseShaderGUI.SetMaterialKeywords(m);
+        });
+        GameObject front = PrimitivePart(hinge, "Front", PrimitiveType.Quad, new Vector3(board / 2f, middle, -gap), new Vector3(board, tall, 1f), outside);
+        float side = board * 0.42f;
+        GameObject emblem = PrimitivePart(hinge, "Seal", PrimitiveType.Quad, new Vector3(board / 2f, middle, -2f * gap), new Vector3(side, side, 1f), seal);
+        // the inside faces away while shut; at 180 degrees it lies where the cover page lies open, the right way round
+        GameObject back = PrimitivePart(hinge, "Back", PrimitiveType.Quad, new Vector3(board / 2f, middle, gap), new Vector3(board, tall, 1f), inside);
+        back.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+        foreach (GameObject part in new[] { front, emblem, back })
+            part.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
+
+        Clickable coverClick = EnsureClickBox(booklet, "FolderCoverClick");
+        coverClick.transform.localPosition = new Vector3((RulebookBoardEdge + RulebookSpine) / 2f * w, 0.0002f, middle);
+        var box = coverClick.GetComponent<BoxCollider>();
+        box.center = Vector3.zero;
+        box.size = new Vector3(board, PaperBoxThickness / 2f, tall);
+        coverClick.SetOutline(System.Array.Empty<Renderer>());
+
+        FolderCover cover = GetOrAdd<FolderCover>(root.gameObject);
+        var so = new SerializedObject(cover);
+        SetRef(so, "hinge", hinge);
+        SetRef(so, "front", front.GetComponent<Renderer>());
+        SetRef(so, "back", back.GetComponent<Renderer>());
+        SetRef(so, "coverClick", coverClick);
+        so.FindProperty("spine").floatValue = RulebookSpine;
+        so.ApplyModifiedProperties();
+        return cover;
     }
 
     /// <summary>The centre of a place on the folder art (shares from its top-left: x0, y0, x1, y1) in the booklet's space (metres; the art's top at the folder's far edge).</summary>

@@ -16,8 +16,9 @@
 // a soft airbrushed sheen showing the bend (_BendSheen: from the bent normal). DOC-LOOK (1019a):
 // - the desk's shared light (DeskLight.hlsl, LIGHT's level and tint) multiplies every document, as it
 //   does the props, the traveller and the photo (BUG-14c);
-// - a booklet's shut cover hides its visa page: everything above _ClipAbove (object space, up the
-//   page) is cut (PaperCover);
+// - a shut cover hides the page it folded off: everything on the far side of the line _Clip
+//   (object space: a x + b y > c) is cut, a booklet's visa page above its spine (PaperCover) and
+//   the folder's left board left of its spine (FolderCover);
 // - where a model's edge overhangs the art's clear margin, the art's nearest opaque colour a few
 //   texels in fills it (BUG-10b: the folder's left edge drew a strip of _HoleColor).
 Shader "TimeDesk/DocumentCel"
@@ -40,7 +41,7 @@ Shader "TimeDesk/DocumentCel"
         _FlexSize ("The paper's size (m)", Vector) = (1, 1, 0, 0)
         _HoleColor ("Colour where the art is clear and no art lies near (no cut-out)", Color) = (0.68, 0.53, 0.36, 1)
         _HoleReach ("How far in (uv) the art's edge colour is looked for under a clear margin", Range(0, 0.05)) = 0.012
-        _ClipAbove ("Cut above (object space, up the page; a booklet's shut cover)", Float) = 10
+        _Clip ("Cut where a x + b y > c (object space; a shut cover's folded-off page): (a, b, c, unused)", Vector) = (0, 0, 1, 0)
     }
 
     SubShader
@@ -80,7 +81,7 @@ Shader "TimeDesk/DocumentCel"
                 half _Cutoff;
                 half4 _HoleColor;
                 half _HoleReach;
-                float _ClipAbove;
+                float4 _Clip;
                 float4 _Flex;
                 float4 _Flex2;
                 float4 _FlexSize;
@@ -102,7 +103,7 @@ Shader "TimeDesk/DocumentCel"
                 float2 meshUv : TEXCOORD2;
                 float3 flatNormalWS : TEXCOORD3;
                 float3 positionWS : TEXCOORD4;
-                float pageY : TEXCOORD5;
+                float2 pagePos : TEXCOORD5;
                 half4 color : COLOR;
             };
 
@@ -124,7 +125,7 @@ Shader "TimeDesk/DocumentCel"
                 output.meshUv = input.uv;
                 output.normalWS = TransformObjectToWorldNormal(bent);
                 output.flatNormalWS = TransformObjectToWorldNormal(n);
-                output.pageY = input.positionOS.y;
+                output.pagePos = input.positionOS.xy;
                 output.color = input.color;
                 return output;
             }
@@ -140,7 +141,7 @@ Shader "TimeDesk/DocumentCel"
 
             half4 Frag(Varyings input) : SV_Target
             {
-                clip(_ClipAbove - input.pageY);
+                clip(_Clip.z - dot(_Clip.xy, input.pagePos));
                 half4 art = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
                 if (_Cutoff > 0)
                     clip(art.a - _Cutoff);

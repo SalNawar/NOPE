@@ -109,5 +109,19 @@ public partial class FormLayoutTests
         Assert.AreEqual(0f, CapHeight.Smallest(null, false));
     }
 
+    [Test]
+    public void CutWords_AContentWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_AShortOneIsNot()
+    {
+        FormSpec spec = GrownPassport(1.3f, 1.5f);
+        var words = new System.Collections.Generic.List<System.Collections.Generic.IReadOnlyList<string>> { new[] { "OMAR", "KONSTANTINOS" }, null, null, new[] { "ATHENS" } };
+        Assert.IsEmpty(ArtLayout.CutWords(spec, words, new FakeMeasure()), "every name and origin word fits its place");
+
+        words[0] = new[] { "OMAR", new string('W', 90) };
+        var problems = ArtLayout.CutWords(spec, words, new FakeMeasure());
+        Assert.AreEqual(1, problems.Count, string.Join("; ", problems));
+        StringAssert.Contains("field 0", problems[0], "the paper would cut the name: a false discrepancy");
+        Assert.IsEmpty(ArtLayout.CutWords(Booklet(), words, new FakeMeasure()), "a form off the art prints no cut words");
+    }
+
     private static float Grow(float size, float growth, float room) => System.Math.Max(size, System.Math.Min(size * growth, room));
 }

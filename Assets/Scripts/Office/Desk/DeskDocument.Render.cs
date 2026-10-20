@@ -18,9 +18,12 @@ using UnityEngine.EventSystems;
 /// word breaks across lines and an Arabic text is laid line by line
 /// (TmpFormText.Unbreak, BUG-9, 37c); a card never bends (D3); a hovered
 /// paper lifts instead of taking an outline (D15, IHoverLift); a passport
-/// arrives shut and opens (D3, PaperCover).
+/// arrives shut and opens, on the press frame of a click on its cover too
+/// (D3, PaperCover; GAME_FEEL_BIBLE A1). The fills' and lines' quads are cut
+/// into cells no wider than PaperBend.PrintCellShare of the page, so their
+/// straight chords never sink under the bent face (BUG-12a).
 /// </summary>
-public sealed partial class DeskDocument : IHoverLift
+public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
 {
     /// <summary>The passport's cover (shown on a booklet only; PaperCover: it arrives shut and opens on the desk).</summary>
     [SerializeField] private PaperCover cover;
@@ -40,6 +43,13 @@ public sealed partial class DeskDocument : IHoverLift
     {
         if (depth != null)
             depth.HoverLift(share);
+    }
+
+    /// <summary>A left press on the paper: a passport's shut cover swings open on the press frame (GAME_FEEL_BIBLE A1, PaperCover.Press); nothing else here (the pick-up is the drag's, the click to the front the click's).</summary>
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left && cover != null)
+            cover.Press();
     }
     /// <summary>A box's quad colour: the pick's colour, else the hover tint while hovered, else clear.</summary>
     private void ApplySlotTint(int slot)
@@ -94,9 +104,10 @@ public sealed partial class DeskDocument : IHoverLift
             return new FaceRect(0f, 0f, 0f, 0f);
         // BUG-12b: every part back at its rest before the mark moves, and the rest poses taken again on the next bend, so a
         // stamp made while the paper still settles from its drop stays where the die pressed it (the first mark's old
-        // rest pose, the page's centre, used to win)
+        // rest pose, the page's centre, used to win). ShowBend flattens the model in its shader as well, so a physics bend
+        // that comes back exactly flat on the next frame finds face and print already flat together.
+        ShowBend(PaperBend.Flat);
         RestorePrints();
-        _bend = PaperBend.Flat;
         _impressions.Add(impression);
         float aspect = impression.height > 0 ? (float)impression.width / impression.height : 1f;
         FaceRect place = formPoint.HasValue ? StampSpots.AtPoint(_form, formPoint.Value.x / _scale, formPoint.Value.y / _scale, aspect) : StampSpots.Next(_form, _stamps, aspect);
@@ -345,12 +356,13 @@ public sealed partial class DeskDocument : IHoverLift
         _linesMesh = RestMesh(lines, ref _linesRest, ref _linesBent);
     }
 
-    /// <summary>A print mesh's rest vertices (each lifted by the relief under it), written back to it; null without one.</summary>
+    /// <summary>A print mesh's rest vertices (its quads cut into cells, Subdivide; each vertex lifted by the relief under it), written back to it; null without one.</summary>
     private Mesh RestMesh(MeshFilter filter, ref Vector3[] rest, ref Vector3[] bent)
     {
         Mesh mesh = filter != null ? filter.sharedMesh : null;
         if (mesh == null)
             return null;
+        Subdivide(mesh);
         rest = mesh.vertices;
         for (int i = 0; i < rest.Length; i++)
             rest[i].z -= Relief(new Vector2(rest[i].x, rest[i].y), Vector2.zero);
@@ -358,6 +370,55 @@ public sealed partial class DeskDocument : IHoverLift
         mesh.vertices = rest;
         mesh.RecalculateBounds();
         return mesh;
+    }
+
+    /// <summary>
+    /// Cuts each of a print mesh's quads (MeshBuilder.Rect's: four corners,
+    /// two triangles) into a grid of cells no wider and no taller than
+    /// PaperBend.PrintCellShare of the page (BUG-12a: a quad bent at its four
+    /// corners only lay on the straight chord between them, up to the bow's
+    /// whole depth behind the drooping face, and its rules and boxes vanished
+    /// mid-span). A mesh of any other shape is left as it is.
+    /// </summary>
+    private void Subdivide(Mesh mesh)
+    {
+        Vector3[] corners = mesh.vertices;
+        Color[] colours = mesh.colors;
+        int[] triangles = mesh.triangles;
+        int quads = corners.Length / 4;
+        if (quads == 0 || corners.Length % 4 != 0 || triangles.Length != quads * 6 || colours.Length != corners.Length)
+            return;
+        var vertices = new List<Vector3>(corners.Length);
+        var tints = new List<Color>(corners.Length);
+        var tris = new List<int>(triangles.Length);
+        for (int q = 0; q < quads; q++)
+        {
+            // MeshBuilder.Rect's order: (xMin, yMin), (xMin, yMax), (xMax, yMax), (xMax, yMin)
+            Vector3 low = corners[q * 4], high = corners[q * 4 + 2];
+            int nx = PaperBend.PrintCells(Mathf.Abs(high.x - low.x), Size.x), ny = PaperBend.PrintCells(Mathf.Abs(high.y - low.y), Size.y);
+            int first = vertices.Count;
+            for (int j = 0; j <= ny; j++)
+                for (int i = 0; i <= nx; i++)
+                {
+                    vertices.Add(new Vector3(Mathf.Lerp(low.x, high.x, (float)i / nx), Mathf.Lerp(low.y, high.y, (float)j / ny), low.z));
+                    tints.Add(colours[q * 4]);
+                }
+            for (int j = 0; j < ny; j++)
+                for (int i = 0; i < nx; i++)
+                {
+                    int a = first + j * (nx + 1) + i, b = a + nx + 1;
+                    // the same winding as MeshBuilder.Rect: (xMin, yMin), (xMin, yMax), (xMax, yMax) then (xMin, yMin), (xMax, yMax), (xMax, yMin)
+                    tris.AddRange(new[] { a, b, b + 1, a, b + 1, a + 1 });
+                }
+        }
+        if (vertices.Count == corners.Length)
+            return;
+        mesh.Clear();
+        mesh.indexFormat = vertices.Count > 65000 ? UnityEngine.Rendering.IndexFormat.UInt32 : UnityEngine.Rendering.IndexFormat.UInt16;
+        mesh.SetVertices(vertices);
+        mesh.SetColors(tints);
+        mesh.SetTriangles(tris, 0);
+        mesh.RecalculateBounds();
     }
 
     /// <summary>The fills' and lines' meshes on the bent face (flat: their rest), vertex by vertex, a hair above it.</summary>

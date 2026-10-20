@@ -60,4 +60,12 @@ public static class CapHeight
 
     /// <summary>True when data at <paramref name="a1"/> and <paramref name="a2"/> pixels of cap height meets both floors.</summary>
     public static bool DataReads(float a1, float a2) => a1 + 1e-3f >= DataFloorA1 && a2 + 1e-3f >= DataFloorA2;
+
+    /// <summary>How many times larger data at <paramref name="a1"/> and <paramref name="a2"/> pixels of cap height must print to meet both floors (1 when it reads; the cap-height gate's report, DocLookChecks).</summary>
+    public static float Needed(float a1, float a2)
+    {
+        if (a1 <= 0f || a2 <= 0f)
+            return float.PositiveInfinity;
+        return Math.Max(1f, Math.Max(DataFloorA1 / a1, DataFloorA2 / a2));
+    }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +15,10 @@ using UnityEngine;
 /// Library check the same. A form drawn on its art is measured in the art's
 /// value face (FormStyleSO.artValueFont), the face its values print in
 /// (BUG-9: the check measured them in LiberationSans, so a value that fit the
-/// check overflowed its place on the paper).
+/// check overflowed its place on the paper), and none of the content's names
+/// or origins has a word wider than its place there even at the least size
+/// (ArtLayout.CutWords: the paper would cut it with a full stop, and a cut
+/// value reads as a false discrepancy against another paper).
 /// </summary>
 public static partial class ContentLibraryValidator
 {
@@ -89,6 +93,8 @@ public static partial class ContentLibraryValidator
                         continue;
                     foreach (string problem in DocumentForm.Problems(template, lib.Agency, longestOrigin, metrics, ArtLayout.IsArt(template.form) ? artMeasure : measure))
                         problems.Add($"{template.displayName} ({template.name}): {problem} (its form, FormLayout.Check; edit the template's form or FormStyle_Agency).");
+                    foreach (string problem in ArtLayout.CutWords(template.form, ContentWords(lib, template), artMeasure))
+                        problems.Add($"{template.displayName} ({template.name}): {problem}.");
                 }
         }
         finally
@@ -97,5 +103,21 @@ public static partial class ContentLibraryValidator
             Object.DestroyImmediate(artProbe);
         }
         return problems;
+    }
+
+    /// <summary>How many of a category's longest words (by letters) CutWords measures in each field.</summary>
+    private const int CutWordsPerField = 12;
+
+    /// <summary>The content's longest words each of <paramref name="template"/>'s fields prints (ArtLayout.CutWords), in capitals as a printed form sets them: a Name field's every place's given names, a Destination field's every place's origin label; none for the other fields (their probe values are measured by FormLayout.Check).</summary>
+    private static IReadOnlyList<IReadOnlyList<string>> ContentWords(ContentLibrarySO lib, DocumentTemplateSO template)
+    {
+        List<string> Longest(IEnumerable<string> texts) => texts.Where(t => !string.IsNullOrWhiteSpace(t)).SelectMany(TextFit.Words).Select(ArtLayout.Capitals)
+            .Distinct().OrderByDescending(w => w.Length).Take(CutWordsPerField).ToList();
+        List<string> names = Longest(lib.Profiles.Where(p => p != null).SelectMany(p => (p.maleNames ?? new string[0]).Concat(p.femaleNames ?? new string[0])));
+        List<string> origins = Longest(lib.Profiles.Where(p => p != null).Select(p => p.OriginLabel));
+        var words = new List<IReadOnlyList<string>>();
+        foreach (DocumentFieldSpec spec in template.fieldSpecs ?? new DocumentFieldSpec[0])
+            words.Add(spec == null ? null : spec.category == ClueCategory.Name ? names : spec.category == ClueCategory.Destination ? origins : null);
+        return words;
     }
 }

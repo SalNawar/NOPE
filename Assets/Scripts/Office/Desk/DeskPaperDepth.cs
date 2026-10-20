@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,9 +21,11 @@ using UnityEngine;
 /// (DeskConfigSO's shadow knobs); hovered, it lifts part of the way (D15:
 /// papers lift, HoverLift); darker the higher it lies in the papers' stack
 /// (BUG-40c: DeskEvents.StackChanged, PaperDepth.RankStrength). A page turn
-/// flicks its loose sheets (Flick: D3 retires "the folder never bends"). A
-/// booklet's shut cover hides its visa page (ClipAbove). Nothing here takes a
-/// click: the click boxes are the face's own.
+/// flicks its loose sheets (Flick: D3 retires "the folder never bends"), and
+/// every bend it shows is reported (Bent) so the folder's printed rows ride it
+/// (DeskRulebook). A shut cover hides the page it folded off (a booklet's visa
+/// page, ClipAbove; the folder's left board, ClipLeftOf). Nothing here takes
+/// a click: the click boxes are the face's own.
 /// </summary>
 public sealed class DeskPaperDepth : MonoBehaviour
 {
@@ -46,7 +49,13 @@ public sealed class DeskPaperDepth : MonoBehaviour
 
     private static readonly int ShadeMapId = Shader.PropertyToID("_ShadeMap");
     private static readonly int FlexId = Shader.PropertyToID("_Flex"), Flex2Id = Shader.PropertyToID("_Flex2"), FlexSizeId = Shader.PropertyToID("_FlexSize");
-    private static readonly int ClipAboveId = Shader.PropertyToID("_ClipAbove");
+    private static readonly int ClipId = Shader.PropertyToID("_Clip");
+
+    /// <summary>Raised with every bend the model shows (SetBend, a flick's every step; PaperBend.Flat when it lies flat again): the folder's printed rows ride it (DeskRulebook).</summary>
+    public event Action<PaperBend> Bent;
+
+    /// <summary>The face's size the bend shown is laid over (metres).</summary>
+    public Vector2 BendSize => _bendSize;
 
     /// <summary>The model's renderers (its face's, its body's and its shadow's), found once.</summary>
     private Renderer[] _flexed;
@@ -151,6 +160,7 @@ public sealed class DeskPaperDepth : MonoBehaviour
             _flexBlock.SetVector(FlexSizeId, new Vector4(size.x, size.y, ShadowReach, 0f));
             r.SetPropertyBlock(_flexBlock);
         }
+        Bent?.Invoke(bend);
     }
 
     /// <summary>
@@ -171,11 +181,17 @@ public sealed class DeskPaperDepth : MonoBehaviour
 
     /// <summary>
     /// Hides the face and the body above <paramref name="y"/> (the face's unit
-    /// space, up the page; DocumentCel's _ClipAbove): a booklet's visa page
-    /// while its cover is shut over the data page (PaperCover); a value past
-    /// the face's top edge shows it whole.
+    /// space, up the page; DocumentCel's _Clip): a booklet's visa page while
+    /// its cover is shut over the data page (PaperCover); a value past the
+    /// face's top edge shows it whole.
     /// </summary>
-    public void ClipAbove(float y)
+    public void ClipAbove(float y) => Clip(new Vector4(0f, 1f, y, 0f));
+
+    /// <summary>Hides the face and the body left of <paramref name="x"/> (the face's unit space, across): the folder's left board while it is shut over the right sheet (FolderCover); a value past the face's left edge shows it whole.</summary>
+    public void ClipLeftOf(float x) => Clip(new Vector4(-1f, 0f, -x, 0f));
+
+    /// <summary>DocumentCel's _Clip on the face and the body (never the shadow): cut where a x + b y > c.</summary>
+    private void Clip(Vector4 line)
     {
         _flexBlock ??= new MaterialPropertyBlock();
         foreach (Renderer r in Flexed())
@@ -183,7 +199,7 @@ public sealed class DeskPaperDepth : MonoBehaviour
             if (shadow != null && r.gameObject == shadow.gameObject)
                 continue;
             r.GetPropertyBlock(_flexBlock);
-            _flexBlock.SetFloat(ClipAboveId, y);
+            _flexBlock.SetVector(ClipId, line);
             r.SetPropertyBlock(_flexBlock);
         }
     }

@@ -283,6 +283,55 @@ public static class ArtLayout
         return problems;
     }
 
+    /// <summary>How much taller than one line a single word may measure in its place before it counts as broken across lines (a hair over one line).</summary>
+    private const float OneLine = 1.2f;
+
+    /// <summary>The width a word is measured at on one line (in the form's units: more than any page).</summary>
+    private const float Unwrapped = 1e5f;
+
+    /// <summary>
+    /// The words a paper of <paramref name="spec"/> would cut (BUG-9: the
+    /// paper never breaks a word across lines, TmpFormText.Unbreak, so a word
+    /// wider than its place even at the least size, FitFloorOf, is cut with a
+    /// full stop, and a cut name or origin would read as a false discrepancy
+    /// against another paper): for each field, each of
+    /// <paramref name="words"/>[field] (the content's longest words that field
+    /// prints: its names' or its origins'), measured alone in the field's
+    /// value or hand style at the least size its place lets it shrink to; a
+    /// problem for each field one of whose words breaks there. Empty off the
+    /// art, without a measure, or when every word fits.
+    /// </summary>
+    public static List<string> CutWords(FormSpec spec, IReadOnlyList<IReadOnlyList<string>> words, ITextMeasure measure)
+    {
+        var problems = new List<string>();
+        if (!IsArt(spec) || words == null || measure == null)
+            return problems;
+        FormArt art = spec.look.art;
+        int count = Math.Max(words.Count, art.fields.Where(f => f != null).Select(f => f.field + 1).DefaultIfEmpty(0).Max());
+        List<string> labels = Enumerable.Repeat("FIELD", count).ToList();
+        var data = new FormData { FieldLabels = labels, FieldValues = Enumerable.Repeat("W", count).ToList(), HasPhoto = true };
+        PlacedForm form = Place(spec, data, spec.look.AspectOr(1f), null);
+        var reported = new HashSet<int>();
+        foreach (FormItem item in form.Items)
+        {
+            if (item.Kind != FormItemKind.Text || item.Slot < 0 || (item.Role != FormTextRole.Value && item.Role != FormTextRole.Hand))
+                continue;
+            int field = form.Slots[item.Slot].Field;
+            if (field < 0 || field >= words.Count || words[field] == null || reported.Contains(field))
+                continue;
+            float size = item.Size * FitFloorOf(art, item.Role);
+            foreach (string word in words[field])
+            {
+                if (string.IsNullOrEmpty(word) || measure.Height(word, item.Role, size, item.Rect.Width) <= measure.Height(word, item.Role, size, Unwrapped) * OneLine)
+                    continue;
+                problems.Add($"field {field}'s value word '{word}' is wider than its place on the art even at its least size: the paper would cut it (re-lay the place, or shorten the content)");
+                reported.Add(field);
+                break;
+            }
+        }
+        return problems;
+    }
+
     /// <summary>An art caption printed in the reading language at its place (a label or title in capitals, a paragraph as written), never picked; a label caption grows with the art's labels (labelGrowth), never past a line of its place.</summary>
     private static FormItem Caption(ArtCaption c, FaceRect place, FormData data, FormArt art)
     {

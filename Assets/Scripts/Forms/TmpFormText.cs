@@ -154,7 +154,7 @@ public sealed class TmpFormText : ITextMeasure
     /// <summary>The steps ArtFit tries between the floor and the full size.</summary>
     private const int FitSteps = 8;
 
-    /// <summary>The largest share of <paramref name="item"/>'s size, from 1 down to <paramref name="least"/> (ArtLayout.FitFloorOf; the least when none fits), at which its words in <paramref name="font"/> (null: the measure's own), wrapped at its place's width, are no taller than its place, measured on <paramref name="measure"/> in the item's units (its font put back after; its style is the last tried).</summary>
+    /// <summary>The largest share of <paramref name="item"/>'s size, from 1 down to <paramref name="least"/> (ArtLayout.FitFloorOf; the least when none fits), at which its words in <paramref name="font"/> (null: the measure's own), wrapped at its place's width, are no taller than its place and none of them is wider than it (a word TextMeshPro would break mid-word fits nothing: Unbreak would cut it; ArtLayout.CutWords keeps the content's words clear of that at the least size), measured on <paramref name="measure"/> in the item's units (its font put back after; its style is the last tried).</summary>
     public static float ArtFit(TMP_Text measure, FormItem item, TMP_FontAsset font, float least)
     {
         if (measure == null || string.IsNullOrEmpty(item.Text))
@@ -166,13 +166,17 @@ public sealed class TmpFormText : ITextMeasure
             measure.font = font;
             measure.fontSharedMaterial = font.material;
         }
+        Style(measure, item.Role, item.Size);
+        float widest = 0f;
+        foreach (string word in TextFit.Words(item.Text))
+            widest = Mathf.Max(widest, Width(measure, word));
         float fit = least;
         for (int i = 0; i <= FitSteps; i++)
         {
             float share = 1f - (1f - least) * i / FitSteps;
             Style(measure, item.Role, item.Size * share);
             Vector2 need = measure.GetPreferredValues(item.Text, item.Rect.Width, float.PositiveInfinity);
-            if (need.y <= item.Rect.Height * 1.02f && need.x <= item.Rect.Width * 1.02f)
+            if (need.y <= item.Rect.Height * 1.02f && need.x <= item.Rect.Width * 1.02f && widest * share <= item.Rect.Width * TextFit.WidthSlack)
             {
                 fit = share;
                 break;

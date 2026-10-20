@@ -9,11 +9,14 @@ using UnityEngine;
 /// document drawn on its art prints its labels over its clean face and its
 /// data grew (doclook.forms.regrown); the office's art imports with mipmaps,
 /// trilinear and the high-quality compression, the art side's hall layers
-/// untouched (doclook.import.office). Demo only: the modelled cap height of
-/// every document's smallest data at the big mat's reading view
-/// (doclook.forms.capModel) and the measured one on screen
-/// (doclook.play.capHeight, the doclook_cap scenario's capHeight op), each
-/// against the floor of 10 px at A1 and 7 px at A2.
+/// untouched (doclook.import.office); the modelled cap height of every
+/// document's smallest data and label at the big mat's reading view against
+/// BUG-9's floors (doclook.forms.capModel: 10 px data at A1, 7 px at A2,
+/// labels 6 px at A2), at merge level so the merge gate shows the shortfall
+/// (it is red until the papers read: Saleh's call on the mat, the reading
+/// view and the floors, docs/pending/DOC-LOOK.md). Demo only: the measured
+/// cap height on screen (doclook.play.capHeight, the doclook_cap scenario's
+/// capHeight op).
 /// </summary>
 public static class DocLookChecks
 {
@@ -56,8 +59,8 @@ public static class DocLookChecks
         return GateResult.Of("doclook.forms.regrown", Owner, problems.Count == 0, string.Join(", ", lines), string.Join("; ", problems));
     }
 
-    /// <summary>Every document's smallest data, modelled at the big mat's reading view (ModelPixelsPerMetre) at its desk size, reads at 10 px cap at A1 and 7 px at A2 (BUG-9's floor).</summary>
-    [GateCheck("doclook.forms.capModel", Owner, DemoOnly = true)]
+    /// <summary>Every document's smallest data, modelled at the big mat's reading view (ModelPixelsPerMetre) at its desk size, reads at 10 px cap at A1 and 7 px at A2, and its smallest label at 6 px at A2 (BUG-9's floors); each line says how much larger the smallest data must print to read. Merge level: the gate shows the shortfall at every merge.</summary>
+    [GateCheck("doclook.forms.capModel", Owner)]
     public static GateResult CapModel()
     {
         DeskConfigSO config = AssetDatabase.FindAssets("t:" + nameof(DeskConfigSO)).Select(g => AssetDatabase.LoadAssetAtPath<DeskConfigSO>(AssetDatabase.GUIDToAssetPath(g))).FirstOrDefault(c => c != null);
@@ -68,13 +71,16 @@ public static class DocLookChecks
         foreach ((DocumentTemplateSO template, FormSpec spec) in ArtTemplates())
         {
             PlacedForm form = Place(spec);
-            float smallest = CapHeight.Smallest(form, false);
+            float smallest = CapHeight.Smallest(form, false), label = CapHeight.Smallest(form, true);
             float metres = DeskHeight(spec, config);
             float a1 = CapHeight.Pixels(smallest, form.PageHeight, metres, CapHeight.ValueCapPerEm, ModelPixelsPerMetre, CapHeight.A1Lines);
             float a2 = CapHeight.Pixels(smallest, form.PageHeight, metres, CapHeight.ValueCapPerEm, ModelPixelsPerMetre, CapHeight.A2Lines);
-            lines.Add(string.Format(CultureInfo.InvariantCulture, "{0} {1:0.0}/{2:0.0} px", template.formNumber, a1, a2));
+            float labelA2 = CapHeight.Pixels(label, form.PageHeight, metres, CapHeight.LabelCapPerEm, ModelPixelsPerMetre, CapHeight.A2Lines);
+            lines.Add(string.Format(CultureInfo.InvariantCulture, "{0} data {1:0.0}/{2:0.0} px, labels {3:0.0} px at A2 (x{4:0.0} to read)", template.formNumber, a1, a2, labelA2, CapHeight.Needed(a1, a2)));
             if (!CapHeight.DataReads(a1, a2))
                 problems.Add(string.Format(CultureInfo.InvariantCulture, "{0}: data {1:0.0} px at A1, {2:0.0} px at A2 (floor {3:0}/{4:0})", template.name, a1, a2, CapHeight.DataFloorA1, CapHeight.DataFloorA2));
+            if (label > 0f && labelA2 + 1e-3f < CapHeight.LabelFloorA2)
+                problems.Add(string.Format(CultureInfo.InvariantCulture, "{0}: labels {1:0.0} px at A2 (floor {2:0})", template.name, labelA2, CapHeight.LabelFloorA2));
         }
         return GateResult.Of("doclook.forms.capModel", Owner, problems.Count == 0, string.Join(", ", lines), string.Join("; ", problems));
     }

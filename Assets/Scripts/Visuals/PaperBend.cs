@@ -146,6 +146,24 @@ public readonly struct PaperBend : IEquatable<PaperBend>
 
     private static float Clamp(float v) => v < -1f ? -1f : v > 1f ? 1f : v;
 
+    /// <summary>
+    /// The widest a cell of a bent print mesh may be, as a share of the page
+    /// along the same side (BUG-12a): a mesh bent at its vertices lies on
+    /// straight chords between them, and over a cell this narrow the chord
+    /// never sinks under the face by more than the print rides over it
+    /// (0.3 mm, DeskDocument.BentPrintLift) at the knobs' greatest bow, lag,
+    /// twist and ripple (DocLookTests.PrintCells_*).
+    /// </summary>
+    public const float PrintCellShare = 1f / 24f;
+
+    /// <summary>How many cells a print quad <paramref name="span"/> long (metres) is cut into along a page side <paramref name="page"/> long so that none is wider than PrintCellShare of the page (at least 1).</summary>
+    public static int PrintCells(float span, float page)
+    {
+        if (span <= 0f || page <= 0f)
+            return 1;
+        return Math.Max(1, (int)Math.Ceiling(span / (page * PrintCellShare) - 1e-4f));
+    }
+
     /// <summary>The most the face goes away from the viewer anywhere (metres, at least 0): the paper rises by it so its bend never passes through what lies under it.</summary>
     public float Lowest(float width, float height)
     {
