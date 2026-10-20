@@ -1,7 +1,3 @@
-// HALL-FX's QA rig ops (QA-RIG §4 "Tracks' own ops"). QaRunner is not on fix/p0-cuts, the branch HALL-FX was cut
-// from, so this file waits here as text: after QA-RIG merges, move it to Assets/Tests/PlayMode/HALL-FX/HallFxRig.cs
-// (with a .meta), then docs/pending/HALL-FX/hall_fx_portals.json and hall_fx_dusk.json to tools/qa/scenarios/ (their
-// ops must be registered first, or QA-RIG's scenario test fails on the unknown names).
 #if UNITY_EDITOR || TIMEDESK_QA
 using System.Collections;
 using System.Globalization;

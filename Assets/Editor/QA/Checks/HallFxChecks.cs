@@ -1,9 +1,3 @@
-// HALL-FX's DemoGate checks. QA-RIG's GateCheck API (Assets/Editor/QA/GateCheck.cs, GateResults.cs) is not on
-// fix/p0-cuts, the branch HALL-FX was cut from, so this file waits here as text. INTEGRATION (or HALL-FX after
-// QA-RIG has merged) moves it to Assets/Editor/QA/Checks/HallFxChecks.cs, adds its .meta
-// (E:\unity\NOPE-tools\scripts\make_meta.py) and compiles. The scenarios it reads are
-// tools/qa/scenarios/hall_fx_city.json, hall_fx_helix.json, hall_fx_sign.json and hall_fx_crossfade.json (on this
-// branch) and hall_fx_dusk.json (docs/pending/HALL-FX/, installed with HallFxRig: it needs the hallClock op).
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;

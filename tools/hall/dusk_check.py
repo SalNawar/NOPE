@@ -34,7 +34,7 @@ def main():
     args = ap.parse_args()
     seqs = sorted(glob.glob(os.path.join(args.run, 'seq', 'dusk_*')))
     if not seqs:
-        raise SystemExit(f'no seq/dusk_* in {args.run}: run docs/pending/HALL-FX/hall_fx_dusk.json (with HallFxRig)')
+        raise SystemExit(f'no seq/dusk_* in {args.run}: run tools/qa/scenarios/hall_fx_dusk.json (with HallFxRig)')
     ok = True
     for seq in seqs:
         rows = [r for r in columns(seq) if 'cityLit' in r and 'hallHour' in r and r['hallHour'] != '-']

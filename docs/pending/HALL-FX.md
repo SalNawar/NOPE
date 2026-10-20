@@ -186,10 +186,10 @@ The baseline (fix/p0-cuts) was passed 3710, failed 0, with compile_check at 0 er
 | `PortalVortexTests.MaskMap_PutsTheQuadOnItsRingsCropOfTheAtlas` | The quad's uv to the atlas, at the centre and both corners. `TextureQuad` and `FenceV` tests are deleted with the code |
 | `Assets/Editor/SeamTests/HallFxSeamTests.SetWarning_IsRuntimeStateOnly` (NeedsEditor) | The seam holds the warning without touching serialized state |
 
-**Waiting for QA-RIG (#2; not on this branch's base):**
-- `docs/pending/HALL-FX/HallFxChecks.cs.txt` holds the DemoGate checks: `hallfx.city.flicker`, `hallfx.dusk.flicker`, `hallfx.helix.flicker`, `hallfx.sign.flicker` (the `sign_steady_*` sequences), `hallfx.crossfade.flicker`, `hallfx.bp.city.flicker`, `hallfx.bp.dusk.flicker`, `hallfx.bp.helix.flicker` and the static `hallfx.portals.source`. It goes to `Assets/Editor/QA/Checks/HallFxChecks.cs`.
-- `docs/pending/HALL-FX/HallFxRig.cs.txt` holds the ops `hallPortals`, `hallPortalsShot` and `hallClock` (moves the running shift clock forward to an hour and adds the `hallHour` and `cityLit` columns to every captured frame). It goes to `Assets/Tests/PlayMode/HALL-FX/HallFxRig.cs`.
-- `docs/pending/HALL-FX/hall_fx_portals.json` and `hall_fx_dusk.json` go to `tools/qa/scenarios/` after the rig is in.
+**Waiting for QA-RIG (#2; not on this branch's base). Installed at the integration merge (integrate/a):**
+- The DemoGate checks, installed as `Assets/Editor/QA/Checks/HallFxChecks.cs`: `hallfx.city.flicker`, `hallfx.dusk.flicker`, `hallfx.helix.flicker`, `hallfx.sign.flicker` (the `sign_steady_*` sequences), `hallfx.crossfade.flicker`, `hallfx.bp.city.flicker`, `hallfx.bp.dusk.flicker`, `hallfx.bp.helix.flicker` and the static `hallfx.portals.source`.
+- The rig ops, installed as `Assets/Tests/PlayMode/HALL-FX/HallFxRig.cs`: `hallPortals`, `hallPortalsShot` and `hallClock` (moves the running shift clock forward to an hour and adds the `hallHour` and `cityLit` columns to every captured frame).
+- `hall_fx_portals.json` and `hall_fx_dusk.json`: installed in `tools/qa/scenarios/` with the rig.
 - The scenarios `tools/qa/scenarios/hall_fx_city.json`, `hall_fx_helix.json`, `hall_fx_sign.json` and `hall_fx_crossfade.json` use only QA-RIG's built-in ops (and registered cheats through `cheat` `Extra`), so they are on this branch. Every HALL-FX scenario hides LIGHT's dust for its run ("Hall FX: dust") and shows it again at the end.
 - **Tools** (all offline, Python, reading QA-RIG run folders; self-tested on synthetic sequences in the scratchpad):
   - `tools/hall/region_luma.py`: a region's luma over a sequence. The region is a fixed `--roi` in screen fractions, or `--track NAME[,NAME]`, the rects the scenario tracked (frames.tsv), so no recipe needs a hand-drawn box. Modes: steady range (`--max-range`), `--dips N` (the sign's invitation), `--monotonic` (the crossfade), `--compare` (the traffic tint; `--stat p90` reads a car's lit body, not the sky in its rect).
