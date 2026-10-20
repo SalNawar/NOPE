@@ -53,21 +53,76 @@ public readonly struct CameraShakeRow
 }
 
 /// <summary>
+/// The knobs the shake calls that predate the table are built from
+/// (MotionKnobs: the stamp's and the breach's force and seconds;
+/// FeelDirector.Hit's strengths for the DETAIN press and the CITED slam), so
+/// <see cref="CameraShakeTable.TryLegacy"/> can tell which moment a call is.
+/// </summary>
+public readonly struct CameraShakeKnobs
+{
+    /// <summary>The knobs as MotionKnobs holds them: shakeStamp, shakeStampSeconds, shakeBreach, shakeBreachSeconds, detainHit, citedHit.</summary>
+    public CameraShakeKnobs(float stamp, float stampSeconds, float breach, float breachSeconds, float detainHit, float citedHit)
+    {
+        Stamp = stamp;
+        StampSeconds = stampSeconds;
+        Breach = breach;
+        BreachSeconds = breachSeconds;
+        DetainHit = detainHit;
+        CitedHit = citedHit;
+    }
+
+    /// <summary>MotionKnobs.shakeStamp: FeelHit.Stamp's force.</summary>
+    public float Stamp { get; }
+
+    /// <summary>MotionKnobs.shakeStampSeconds: FeelHit.Stamp's seconds (FeelDirector.Hit's at strength 0).</summary>
+    public float StampSeconds { get; }
+
+    /// <summary>MotionKnobs.shakeBreach: FeelHit.Breach's force (FeelDirector.Hit's at strength 1).</summary>
+    public float Breach { get; }
+
+    /// <summary>MotionKnobs.shakeBreachSeconds: FeelHit.Breach's seconds (FeelDirector.Hit's at strength 1).</summary>
+    public float BreachSeconds { get; }
+
+    /// <summary>MotionKnobs.detainHit: the DETAIN press's FeelDirector.Hit strength.</summary>
+    public float DetainHit { get; }
+
+    /// <summary>MotionKnobs.citedHit: the CITED slam's FeelDirector.Hit strength.</summary>
+    public float CitedHit { get; }
+}
+
+/// <summary>
 /// The game feel's shake table (GAME_FEEL_BIBLE §1.3; CAM owns every camera
 /// shake cell): tiny, directional, only on heavy impacts, each capped in
-/// pixels at 1080p so the QA camera logger can hold it to its row. The
-/// callers' knobs (MotionKnobs.shakeStamp, shakeCitation, shakeBreach) pick
-/// the row (<see cref="Pick"/>); the row sets the size, length and
+/// pixels at 1080p so the QA camera logger can hold it to its row; no other
+/// moment shakes ("Everything else: 0"). A shake names its moment
+/// (CameraFeel.Shake); the calls that predate the table are read by their
+/// knobs (<see cref="TryLegacy"/>). The row sets the size, length and
 /// direction, scaled by the Motion intensity, none under Reduced Motion
 /// (CameraFeel). Pure.
 /// </summary>
 public static class CameraShakeTable
 {
-    /// <summary>The share of a row's cap a shake aims for, so the measured peak (the shape's overshoot, the blend under it) stays under the cap.</summary>
+    /// <summary>The share of a row's cap a shake aims for, so the measured peak (the blend under it, a frame's rounding) stays under the cap.</summary>
     public const float Headroom = 0.8f;
 
-    /// <summary>How deep the QA logger's reference points sit in front of the camera (metres; QaCameraMoves.ReferenceDepth): the size of a move in pixels is measured there.</summary>
+    /// <summary>How deep the QA logger's reference points sit in front of the camera (metres; QaCameraMoves.ReferenceDepth): no shake is sized for anything deeper.</summary>
     public const float ReferenceDepth = 2f;
+
+    /// <summary>
+    /// The largest offset of Cinemachine 3's Bump impulse from its start, per
+    /// unit of its velocity (the signal is the velocity times the shape's
+    /// curve): its standard curve (keys (0, 0, -4.9), (0.2, 0, 8.25),
+    /// (1, 0, -0.25), Hermite; CinemachineImpulseDefinition) dips 0.334
+    /// against the direction at 11% of its length, then peaks at 0.9928 along
+    /// it at 47%.
+    /// </summary>
+    public const float BumpPeak = 0.9928f;
+
+    /// <summary>The largest offset of Cinemachine 3's Rumble impulse per unit of its velocity: its standard curve's keys are flat, the highest 1 at half its length.</summary>
+    public const float RumblePeak = 1f;
+
+    /// <summary>Two knob values this close are the same (the callers scale float knobs).</summary>
+    private const float Same = 1e-4f;
 
     private static readonly float Diagonal = (float)Math.Sqrt(0.5);
 
@@ -93,27 +148,80 @@ public static class CameraShakeTable
     }
 
     /// <summary>
-    /// The row a shake of <paramref name="force"/> asks for, read against the
-    /// callers' knobs: a rumble is the breach, or the destroyed timeline above
-    /// the breach's force; a bump is the stamp up to halfway to the
-    /// citation's force, the CITED slam above it.
+    /// The table moment of a shake call that predates the table (a force,
+    /// its seconds and whether it rumbles, as the callers build them from
+    /// MotionKnobs), read by its knobs: FeelHit.Stamp's shake (the stamp's
+    /// force and seconds) is the stamp; FeelDirector.Hit at the DETAIN
+    /// press's strength (the breach's force times detainHit, its seconds from
+    /// the stamp's toward the breach's by it) is DETAIN; at the CITED slam's
+    /// (citedHit) the CITED stamp on the slip; FeelHit.Breach's rumble the
+    /// breach. Anything else has no row and does not shake: the citation's
+    /// own shake at the verdict (the slip's slam carries the CITED moment,
+    /// once), the approval's hand-back, the chip reader's insert and fault,
+    /// any other strength (GAME_FEEL_BIBLE §1.3: "Everything else: 0").
     /// </summary>
-    public static CameraShakeRow Pick(float force, bool rumble, float stampForce, float citationForce, float breachForce)
+    public static bool TryLegacy(float force, float seconds, bool rumble, CameraShakeKnobs knobs, out CameraShakeMoment moment)
     {
-        if (rumble)
-            return Row(force > breachForce * 1.001f ? CameraShakeMoment.Destroyed : CameraShakeMoment.Breach);
-        return Row(force <= (stampForce + citationForce) / 2f ? CameraShakeMoment.Stamp : CameraShakeMoment.Cited);
+        moment = CameraShakeMoment.Stamp;
+        if (!rumble && Near(force, knobs.Stamp) && Near(seconds, knobs.StampSeconds))
+            return true;
+        if (IsHit(force, seconds, rumble, knobs, knobs.DetainHit))
+        {
+            moment = CameraShakeMoment.Detain;
+            return true;
+        }
+        if (IsHit(force, seconds, rumble, knobs, knobs.CitedHit))
+        {
+            moment = CameraShakeMoment.Cited;
+            return true;
+        }
+        if (rumble && Near(force, knobs.Breach) && Near(seconds, knobs.BreachSeconds))
+        {
+            moment = CameraShakeMoment.Breach;
+            return true;
+        }
+        return false;
     }
+
+    /// <summary>True when (<paramref name="force"/>, <paramref name="seconds"/>, <paramref name="rumble"/>) is FeelDirector.Hit at <paramref name="strength"/> (above 0): the breach's force times it, its seconds from the stamp's toward the breach's by it, a rumble from 0.75.</summary>
+    private static bool IsHit(float force, float seconds, bool rumble, CameraShakeKnobs knobs, float strength)
+    {
+        if (strength <= 0f)
+            return false;
+        float s = Math.Min(1f, strength);
+        return rumble == (s >= 0.75f) && Near(force, knobs.Breach * s) &&
+               Near(seconds, knobs.StampSeconds + (knobs.BreachSeconds - knobs.StampSeconds) * s);
+    }
+
+    private static bool Near(float a, float b) => Math.Abs(a - b) <= Same;
 
     /// <summary>
     /// The camera's sideways move (metres) that shifts the picture of things
-    /// <see cref="ReferenceDepth"/> ahead by <paramref name="px"/> pixels at
-    /// 1080p through a lens of vertical field of view
-    /// <paramref name="fovDegrees"/>.
+    /// <paramref name="depth"/> metres ahead (at most
+    /// <see cref="ReferenceDepth"/>, at least a centimetre) by
+    /// <paramref name="px"/> pixels at 1080p through a lens of vertical field
+    /// of view <paramref name="fovDegrees"/>. Nearer things shift more for
+    /// the same move, so a shake is sized at the nearest work's depth.
     /// </summary>
-    public static float Metres(float px, float fovDegrees)
+    public static float Metres(float px, float fovDegrees, float depth = ReferenceDepth)
     {
         double tan = Math.Tan(Math.Max(1f, Math.Min(179f, fovDegrees)) * Math.PI / 360.0);
-        return (float)(Math.Max(0f, px) / 540.0 * ReferenceDepth * tan);
+        double d = Math.Max(0.01, Math.Min(ReferenceDepth, depth));
+        return (float)(Math.Max(0f, px) / 540.0 * d * tan);
+    }
+
+    /// <summary>
+    /// The impulse velocity (metres) that draws <paramref name="row"/>: its
+    /// cap less the headroom, scaled by the Motion intensity
+    /// <paramref name="share"/> (0..1), as a camera move at
+    /// <paramref name="depth"/> through <paramref name="fovDegrees"/>
+    /// (<see cref="Metres"/>), over its impulse shape's peak
+    /// (<see cref="BumpPeak"/>, <see cref="RumblePeak"/>), so the largest
+    /// offset is that move.
+    /// </summary>
+    public static float Velocity(CameraShakeRow row, float share, float fovDegrees, float depth)
+    {
+        float px = row.CapPx * Headroom * Math.Max(0f, Math.Min(1f, share));
+        return Metres(px, fovDegrees, depth) / (row.Rumble ? RumblePeak : BumpPeak);
     }
 }

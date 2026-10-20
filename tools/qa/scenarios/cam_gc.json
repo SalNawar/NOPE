@@ -1,0 +1,74 @@
+{
+  "name": "cam_gc",
+  "owner": "CAM",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "CAM BUG-65e/73e: no per-frame allocation from DeskView, CameraFeel or CityView over two reading toggles and city looks on day 12 (camcycle runs them in the background under the gc window; gc_sites.tsv names the call sites). The 0 B gate is [BP]: run it with run_player.py on the QA player; in the editor the number includes the editor's own allocations."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "mark",
+      "name": "gcsites.start"
+    },
+    {
+      "op": "camcycle",
+      "n": 2
+    },
+    {
+      "op": "gc",
+      "name": "cam_cycle",
+      "f": 11,
+      "n": 0
+    },
+    {
+      "op": "mark",
+      "name": "gcsites.stop"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}

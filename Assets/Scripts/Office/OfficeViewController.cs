@@ -22,9 +22,12 @@ public enum OfficeView
 /// the "&lt; Desk" button closes it straight into the reading view (FocusDesk;
 /// Saleh 2026-09-30: a view key's move, tagged so for the QA camera logger).
 /// The frame itself moves no camera (from the reading view, BoothCoordinator
-/// blends it back up as the frame opens). The PC never opens while the player
-/// holds something on the desk (HoldRegistry.Desk; BUG-55c: no view change
-/// while holding). BoothCoordinator reads the view to gate the office's input.
+/// blends it back up as the frame opens). While the city view is on, what
+/// would open the PC (Q) leaves the city instead (FIX_PLAN_v2's CAM delta:
+/// the city view is left "with Q or a click on the city, the same as the
+/// PC"). The PC never opens while the player holds something on the desk
+/// (HoldRegistry.Desk; BUG-55c: no view change while holding).
+/// BoothCoordinator reads the view to gate the office's input.
 /// </summary>
 public sealed class OfficeViewController : MonoBehaviour
 {
@@ -34,17 +37,26 @@ public sealed class OfficeViewController : MonoBehaviour
     /// <summary>The desk view (optional): the taskbar's "&lt; Desk" button closes the frame straight into it (FocusDesk).</summary>
     [SerializeField] private DeskView deskView;
 
+    /// <summary>The city view (optional): while it is on, Q leaves it instead of opening the PC (FocusMonitor).</summary>
+    [SerializeField] private CityView cityView;
+
     /// <summary>The current view.</summary>
     public OfficeView Current { get; private set; } = OfficeView.OfficeFocus;
 
     /// <summary>Raised after the view changes.</summary>
     public event Action<OfficeView> ViewChanged;
 
-    /// <summary>Opens the PC frame (no-op if open, or while something is held: BUG-55c).</summary>
+    /// <summary>Opens the PC frame (no-op if open, or while something is held: BUG-55c); while the city view is on, leaves the city instead (Q leaves the city as it leaves the PC).</summary>
     public void FocusMonitor()
     {
-        if (!HoldRegistry.Desk.IsHolding)
-            SetView(OfficeView.MonitorFocus);
+        if (HoldRegistry.Desk.IsHolding)
+            return;
+        if (cityView != null && cityView.IsOn)
+        {
+            cityView.Return();
+            return;
+        }
+        SetView(OfficeView.MonitorFocus);
     }
 
     /// <summary>Closes the PC frame (no-op if closed).</summary>

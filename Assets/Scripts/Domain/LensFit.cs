@@ -21,10 +21,11 @@ using System.Collections.Generic;
 /// The reading pose (<see cref="Reading"/>): the tilted pose a desk drop
 /// tilts to (D1), fixed per aspect and never re-aimed per paper. At its
 /// pitch and lens it backs out, and slides along the desk, just far enough
-/// that every target point (the big mat, the inner strips of the side
-/// columns' homes, the deal tray) lies inside the screen's margins, centred
-/// between them, and the screen's bottom row never passes the desk's front
-/// edge (under the desk is never shown).
+/// that every target point (the big mat, the stamp rack and the intercom
+/// whole, the inner strips of the other side homes, the deal tray) lies
+/// inside the screen's margins (the top one the overlay's band of chrome),
+/// centred between them, and the screen's bottom row never passes the desk's
+/// front edge (under the desk is never shown).
 /// </para>
 /// </summary>
 public static class LensFit

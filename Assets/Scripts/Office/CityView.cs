@@ -19,8 +19,8 @@ using UnityEngine.UI;
 /// over it: never both at once; Saleh 2026-10-08: "it shows everything
 /// doubled"): the art's living city (the hall
 /// windows' "NOPE/Hall Living City" material, its eight time and weather
-/// paintings, depth map and moving atmosphere) drawn unmasked, fitted
-/// whole inside the screen on the cityMatte colour, at the hall's hour
+/// paintings, depth map and moving atmosphere) drawn unmasked over the
+/// cityMatte colour, at the hall's hour
 /// (HallBakedCycle, the lights' clock) and its rain. The city lives (Saleh
 /// 2026-10-07: "why is the city not animated and no parallax when you switch
 /// to it? GPT made the assets for it"): it comes into view with a gentle
@@ -38,12 +38,14 @@ using UnityEngine.UI;
 /// leaving off the frame (CityLookTimeline.Flight; cityTrafficPace,
 /// cityTrafficScale), the farther (smaller) behind, lit by the hour. The
 /// panorama fills the whole screen (BUG-42: no letterbox; it is cropped to
-/// the screen's shape, never shown with bars), and its parallax (the sweep
-/// and the pointer's look) moves its nearest layer at most one pixel at
-/// 1080p a frame (BUG-69; CityParallax). A click on the city, D, the right
-/// arrow, a right-click, Esc (ControlRules) or the "Desk ▶" button at the
-/// right edge runs the same timeline back (CityLookTimeline: the fade first,
-/// then the turn). While it looks at the city only the DESK tab shows: the
+/// the screen's shape, never shown with bars: Saleh's call, CAM.md), and its
+/// parallax (the sweep and the pointer's look) eases on a spring that never
+/// moves its nearest layer more than one pixel at 1080p a frame of a 30 fps
+/// capture, the same seconds at any frame rate (BUG-69; CityParallax). A
+/// click on the city, Q (OfficeViewController: Q leaves the city as it
+/// leaves the PC), D, the right arrow, a right-click, Esc (ControlRules) or
+/// the "Desk ▶" button at the right edge runs the same timeline back
+/// (CityLookTimeline: the fade first, then the turn). While it looks at the city only the DESK tab shows: the
 /// desk's own controls (the PC and STAMPS pull tabs) and the props'
 /// tooltips and the case HUD's strip (deskControls) go at once and take no
 /// clicks, and fade back in over the last third of the turn back (BUG-32b;
@@ -53,8 +55,9 @@ using UnityEngine.UI;
 /// is on and while the player holds something (BUG-59: no tab over the
 /// papers or the work), and fade back in over the last third of the move
 /// back. Nothing turns the view while something is held (BUG-55c), and each
-/// turn is tagged as a view key for the QA camera logger. Reduced Motion
-/// cuts both ways and holds the city still.
+/// turn is tagged as a view key for the QA camera logger. When motion is
+/// still (Reduced Motion or no intensity: BUG-64b) it cuts both ways and
+/// holds the city still.
 /// BoothCoordinator says when it may turn (BoothRules.NormalViewLive: the
 /// normal view, no newsletter, wheel or PC) and returns it when the next
 /// traveller steps up or the PC, the wheel or the reading view take over.
@@ -109,9 +112,6 @@ public sealed class CityView : MonoBehaviour
     /// <summary>The flying traffic flies in front of the painting: it pans this many times the painting's pan.</summary>
     private const float TrafficDepth = 1.25f;
 
-    /// <summary>How fast the pointer's look follows it (per second).</summary>
-    private const float LookFollow = 4f;
-
     /// <summary>One vehicle of the hall window's traffic drawn over the panorama.</summary>
     private struct Vehicle
     {
@@ -124,7 +124,7 @@ public sealed class CityView : MonoBehaviour
     private float _crop;
     private float _reach;
     private float _shown;
-    private float _look;
+    private float _panVelocity;
     private Vector2 _canvas;
 
     private AnimeHallPresentation _hall;
@@ -290,14 +290,14 @@ public sealed class CityView : MonoBehaviour
     /// <summary>Turns back to the desk (no-op when not looking at the city): a click on the city, D, the right arrow, a right-click, Esc, "Desk ▶".</summary>
     public void Return() => Set(false);
 
-    /// <summary>Turns the view (never while something is held: BUG-55c), tagging the turn's remaining length as a view key for the QA camera logger (0 under Reduced Motion: a cut).</summary>
+    /// <summary>Turns the view (never while something is held: BUG-55c), tagging the turn's remaining length as a view key for the QA camera logger (0 when motion is still: a cut).</summary>
     private void Set(bool on)
     {
         if (on == IsOn || (on && (_material == null || !_live)) || HoldRegistry.Desk.IsHolding)
             return;
         IsOn = on;
         float total = Total;
-        QaSignals.TagCamera(CameraMoveCause.ViewKey, MotionPreference.Reduced ? 0f : on ? total - _clock : _clock);
+        QaSignals.TagCamera(CameraMoveCause.ViewKey, UiMotion.Amount.Still ? 0f : on ? total - _clock : _clock);
         Show();
         Changed?.Invoke();
     }
@@ -311,7 +311,7 @@ public sealed class CityView : MonoBehaviour
         if (config == null)
             return;
         float total = Total;
-        _clock = CityLookTimeline.Step(_clock, IsOn, Time.unscaledDeltaTime, total, MotionPreference.Reduced);
+        _clock = CityLookTimeline.Step(_clock, IsOn, Time.unscaledDeltaTime, total, UiMotion.Amount.Still);
         Draw(_clock);
         ShowControls(total);
     }
@@ -322,14 +322,15 @@ public sealed class CityView : MonoBehaviour
     /// the last third of the turn back; the "Desk ▶" tab fades in over the
     /// last third of the turn to the city; the pull tabs also go while the
     /// reading view is on (back over the last third of its return) and while
-    /// something is held. A cut under Reduced Motion. Each takes clicks while
+    /// something is held. A cut when motion is still. Each takes clicks while
     /// it shows; whether each is on stays its owner's.
     /// </summary>
     private void ShowControls(float total)
     {
         bool held = HoldRegistry.Desk.IsHolding;
-        float atDesk = IsOn ? 0f : DeskViewPose.ControlAlpha(total - _clock, MotionPreference.Reduced ? 0f : total);
-        float atCity = IsOn ? DeskViewPose.ControlAlpha(_clock, MotionPreference.Reduced ? 0f : total) : 0f;
+        float seconds = UiMotion.Amount.Still ? 0f : total;
+        float atDesk = IsOn ? 0f : DeskViewPose.ControlAlpha(total - _clock, seconds);
+        float atCity = IsOn ? DeskViewPose.ControlAlpha(_clock, seconds) : 0f;
         float office = deskView != null ? deskView.OfficeControlsAlpha : 1f;
         float tabs = held ? 0f : Mathf.Min(atDesk, office);
         for (int i = 0; i < _controls.Count; i++)
@@ -390,29 +391,34 @@ public sealed class CityView : MonoBehaviour
             _revealed = false;
             return;
         }
-        bool moving = !MotionPreference.Reduced && (_exterior == null || _exterior.animateCity);
+        bool moving = !UiMotion.Amount.Still && (_exterior == null || _exterior.animateCity);
         HallBakedCycle.Weights4 w = HallBakedCycle.Weights(_lights != null ? _lights.Hour : 12f);
         _material.SetVector(WeightsId, new Vector4(w.x, w.y, w.z, w.w));
         _material.SetFloat(RainId, _exterior != null ? _exterior.rain : 0f);
         _material.SetFloat(SecondsId, Time.time);
         _material.SetFloat(MotionId, moving ? 1f : 0f);
 
-        // The depth parallax: the sweep as it comes into view, then the pointer's look.
+        // The depth parallax: the sweep as it comes into view (kept small enough to ease within the speed limit), then the
+        // pointer's look; the pan follows them on a spring that never moves the nearest layer more than a pixel at 1080p a
+        // frame of a 30 fps capture (BUG-69), from where the city first shows.
         float dt = Time.unscaledDeltaTime;
         _shown += IsOn ? dt : 0f;
         float cityPan = 0f;
+        float maxSpeed = CityParallax.MaxSpeed(1f - 2f * _crop, ShownWidthPx(), UnityEngine.Screen.height, TrafficDepth);
         if (moving && config != null)
         {
             Mouse mouse = Mouse.current;
             float x = mouse != null && UnityEngine.Screen.width > 0 ? Mathf.Clamp(mouse.position.ReadValue().x / UnityEngine.Screen.width * 2f - 1f, -1f, 1f) : 0f;
-            _look = Mathf.Lerp(_look, x * config.cityLookParallax, 1f - Mathf.Exp(-dt * LookFollow));
-            cityPan = config.cityParallax * CityLookTimeline.Sweep(_shown, config.citySettleSeconds) + _look;
+            float sweep = CityParallax.SweepShare(config.cityParallax, config.citySettleSeconds, maxSpeed);
+            cityPan = sweep * CityLookTimeline.Sweep(_shown, config.citySettleSeconds) + x * config.cityLookParallax;
         }
-        // At most a pixel at 1080p a frame on the nearest layer (BUG-69), from where the city first shows.
         if (!_revealed || !moving)
+        {
             _cityPan = cityPan;
+            _panVelocity = 0f;
+        }
         else
-            _cityPan = CityParallax.Step(_cityPan, cityPan, CityParallax.MaxStep(1f - 2f * _crop, ShownWidthPx(), UnityEngine.Screen.height, TrafficDepth));
+            _cityPan = CityParallax.Follow(_cityPan, ref _panVelocity, cityPan, maxSpeed, dt);
         _revealed = true;
         panorama.uvRect = new Rect(_crop + _cityPan, 0f, 1f - 2f * _crop, 1f);
         DrawTraffic(_cityPan, moving, w, reveal);

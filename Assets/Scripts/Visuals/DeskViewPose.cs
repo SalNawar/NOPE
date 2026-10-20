@@ -8,8 +8,9 @@ using System.Collections.Generic;
 /// size": the reading view backs out), held by DeskConfigSO.deskView: the
 /// view looks down at a fixed pitch with its own field of view, and its
 /// distance and aim are solved per aspect (LensFit.Reading) so the mat, the
-/// inner strips of the homes beside it and the deal tray fit inside the
-/// screen's margins; it blends in and out over its seconds.
+/// stamp rack and the intercom whole, the inner strips of the other homes
+/// beside the mat and the deal tray fit inside the screen's margins, below
+/// the overlay's top band of chrome; it blends in and out over its seconds.
 /// </summary>
 [Serializable]
 public sealed class DeskViewTuning
@@ -26,43 +27,47 @@ public sealed class DeskViewTuning
     /// <summary>The fallback pose's aim (metres ahead of the mat's centre, along the office view's level forward) when there is no desk home map to frame.</summary>
     public float aimForward = 0.06f;
 
-    /// <summary>The reading view's vertical field of view in degrees at rest, pushed in (0 or less keeps the office camera's lens).</summary>
-    public float fieldOfView = 50f;
+    /// <summary>The reading view's vertical field of view in degrees at rest, once its push-in has settled (47.5: the lens main's reading view rested at, 50 narrowed by MotionKnobs.readingPushIn, which the desk plan's measured camera used); the pose is solved at it (0 or less keeps the office camera's lens).</summary>
+    public float fieldOfView = 47.5f;
 
     /// <summary>Seconds of the blend into the reading view and back (0 or less cuts).</summary>
     public float seconds = 0.5f;
 
-    /// <summary>The screen kept clear above the framed desk (a share of the half screen: the case HUD's strip and the "▲ Back" control).</summary>
-    public float topMargin = 0.08f;
+    /// <summary>The overlay's top band no framed desk point may enter, in reference pixels of the overlay's 1080 rows (DeskViewPose.TopMargin turns it into a share of the screen at its aspect): the case HUD's compare and verdict strips (16..88) and the "▲ Back" control at the top right (16..60), and a gap (cam.chrome.band checks the builder keeps them in it).</summary>
+    public float topBand = 96f;
 
     /// <summary>The screen kept clear below the framed desk (a share of the half screen).</summary>
     public float bottomMargin = 0.03f;
 
-    /// <summary>The screen kept clear left and right of the framed desk (a share of the half screen).</summary>
+    /// <summary>The screen kept clear left and right of the framed desk (a share of the half screen; the pull tabs hide in the reading view, so no chrome stands in it).</summary>
     public float sideMargin = 0.04f;
 
-    /// <summary>How much of each side home's inner edge the reading view shows (metres; DESK-PLAN's hand-off: "≥ 8 x 8 cm of each"), so a tool by the mat is always in reach.</summary>
+    /// <summary>How much of a framed home beside the mat the reading view shows (metres, its strip along the edge nearest the mat; the desk plan's "≥ 8 x 8 cm of 2, 3, 7, 8 and 9"), unless it is framed whole.</summary>
     public float sideReach = 0.08f;
 
     /// <summary>How high above the desk the papers' stack is framed (metres).</summary>
     public float paperLift = 0.03f;
 
-    /// <summary>The homes the reading view frames (DeskHomeMap ids): the rail's machines and the left column by their inner strips (sideReach), the deal tray whole.</summary>
+    /// <summary>The homes the reading view frames (DeskHomeMap ids): the rail's machines and the left column, by their inner strips beside the mat unless framed whole, and the deal tray whole.</summary>
     public string[] homes =
     {
         DeskHomeMap.ChipReader, DeskHomeMap.Scanner, DeskHomeMap.StampRack,
         DeskHomeMap.Intercom, DeskHomeMap.BabelTuner, DeskHomeMap.RulebookPocket, DeskHomeMap.UvTorch,
         DeskHomeMap.DealTray,
     };
+
+    /// <summary>The framed homes shown whole even beside the mat (the desk plan's §6: "rack and intercom 100% in frame" in the reading view).</summary>
+    public string[] whole = { DeskHomeMap.StampRack, DeskHomeMap.Intercom };
 }
 
 /// <summary>
 /// The reading view's pose (piece 10 section 11, T2; CAM): the knobs' pitch,
-/// what the solved pose must frame (<see cref="Targets"/>), the fallback pose
-/// without a home map (<see cref="Offset"/>), the blend's seconds (a cut under
-/// Reduced Motion) and the controls' fade over a move
-/// (<see cref="ControlAlpha"/>). Engine-free, so it is tested headless;
-/// DeskView applies it.
+/// what the solved pose must frame (<see cref="Targets"/>), the top margin
+/// the overlay's chrome band takes at an aspect (<see cref="TopMargin"/>),
+/// the fallback pose without a home map (<see cref="Offset"/>), the blend's
+/// seconds (a cut when motion is still: Reduced Motion or no intensity) and
+/// the controls' fade over a move (<see cref="ControlAlpha"/>). Engine-free,
+/// so it is tested headless; DeskView applies it.
 /// </summary>
 public static class DeskViewPose
 {
@@ -71,6 +76,19 @@ public static class DeskViewPose
 
     /// <summary>The share of a camera move after which the destination's controls start fading in (BUG-32b: "alpha stays 0 until 2/3 of the blend has elapsed").</summary>
     public const float ControlsFrom = 2f / 3f;
+
+    /// <summary>The office overlay's reference resolution (OfficeSceneUIBuilder.ConfigureScaler: scaled with the screen, Expand; cam.chrome.band checks the builder's is this).</summary>
+    public const float ReferenceWidth = 1920f, ReferenceHeight = 1080f;
+
+    /// <summary>The old reading view the papers' on-screen size is measured against (main before CAM, at rest: 0.8 m from the aim point at a 47.5 degree lens; the desk plan's measured camera, homemap.py's READING).</summary>
+    public const float OldDistance = 0.8f, OldFieldOfView = 47.5f;
+
+    /// <summary>How big a paper shows (its height on the screen) in a pose <paramref name="distance"/> metres back at a <paramref name="fieldOfView"/> degree lens, against the old reading view (1: as big; the text must grow by its inverse to keep its pixels).</summary>
+    public static float PaperShare(float distance, float fieldOfView)
+    {
+        double now = distance * Math.Tan(fieldOfView * Math.PI / 360.0);
+        return now <= 0.0 ? 0f : (float)(OldDistance * Math.Tan(OldFieldOfView * Math.PI / 360.0) / now);
+    }
 
     /// <summary>The knob's pitch kept within 0..MaxPitch.</summary>
     public static float Pitch(DeskViewTuning tuning) => Math.Max(0f, Math.Min(MaxPitch, tuning.pitch));
@@ -89,9 +107,17 @@ public static class DeskViewPose
         return ((float)(distance * Math.Cos(radians)), (float)(distance * Math.Sin(radians)));
     }
 
-    /// <summary>The blend's seconds: the knob's, or 0 (a cut) under Reduced Motion or a knob of 0 or less.</summary>
-    public static float Seconds(DeskViewTuning tuning, bool reducedMotion) =>
-        reducedMotion || tuning.seconds <= 0f ? 0f : tuning.seconds;
+    /// <summary>The blend's seconds: the knob's, or 0 (a cut) when motion is <paramref name="still"/> (Reduced Motion or a Motion intensity of 0: MotionAmount.Still, BUG-64b) or the knob is 0 or less.</summary>
+    public static float Seconds(DeskViewTuning tuning, bool still) =>
+        still || tuning.seconds <= 0f ? 0f : tuning.seconds;
+
+    /// <summary>The overlay canvas' rows at <paramref name="aspect"/> (its scaler expands from the reference: at least 1080 rows, more on a screen narrower than 16:9).</summary>
+    public static float CanvasRows(float aspect) =>
+        aspect > 0f ? Math.Max(ReferenceHeight, ReferenceWidth / aspect) : ReferenceHeight;
+
+    /// <summary>The reading solve's top margin at <paramref name="aspect"/>: the knob's top band of chrome as a share of the half screen (0..1).</summary>
+    public static float TopMargin(DeskViewTuning tuning, float aspect) =>
+        Math.Min(1f, Math.Max(0f, tuning.topBand) / (CanvasRows(aspect) / 2f));
 
     /// <summary>
     /// What the reading pose frames, as points in the desk's frame (x metres
@@ -100,7 +126,8 @@ public static class DeskViewPose
     /// and each of the knobs' homes found in <paramref name="homes"/>, its
     /// footprint's top and bottom corners: a home beside the mat (wholly left
     /// or right of it) only by the strip <see cref="DeskViewTuning.sideReach"/>
-    /// deep along its edge nearest the mat, any other home whole.
+    /// deep along its edge nearest the mat unless the knobs frame it whole
+    /// (<see cref="DeskViewTuning.whole"/>), any other home whole.
     /// </summary>
     public static List<(float x, float y, float z)> Targets(DeskViewTuning tuning, DeskRect mat, IReadOnlyList<DeskHome> homes)
     {
@@ -117,14 +144,20 @@ public static class DeskViewPose
                 continue;
             DeskRect f = home.Footprint;
             float x0 = f.CentreX - f.Width / 2f, x1 = f.CentreX + f.Width / 2f;
-            if (x0 >= matRight)
-                x1 = Math.Min(x1, x0 + reach);
-            else if (x1 <= matLeft)
-                x0 = Math.Max(x0, x1 - reach);
+            if (!IsWhole(tuning, id))
+            {
+                if (x0 >= matRight)
+                    x1 = Math.Min(x1, x0 + reach);
+                else if (x1 <= matLeft)
+                    x0 = Math.Max(x0, x1 - reach);
+            }
             Box(points, x0, x1, f.CentreY - f.Height / 2f, f.CentreY + f.Height / 2f, Math.Max(0f, home.height));
         }
         return points;
     }
+
+    /// <summary>True when the knobs frame the home <paramref name="id"/> whole wherever it stands (<see cref="DeskViewTuning.whole"/>).</summary>
+    public static bool IsWhole(DeskViewTuning tuning, string id) => tuning.whole != null && Array.IndexOf(tuning.whole, id) >= 0;
 
     /// <summary>
     /// A control's opacity <paramref name="elapsed"/> seconds into a camera

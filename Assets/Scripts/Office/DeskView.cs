@@ -26,19 +26,23 @@ using UnityEngine.UI;
 /// The view is a gameplay-owned Cinemachine camera, posed at bind
 /// (OfficeSceneBinder) and again whenever the screen's aspect changes: on
 /// the desk home map, LensFit.Reading backs it out at DeskConfigSO.deskView's
-/// pitch and lens until the big mat, the inner strips of the homes beside it
-/// and the deal tray fit inside the screen's margins, and under the desk is
-/// never shown (BUG-41, 1b, 7b; Saleh's "keep a big mat size": the papers
-/// show about two thirds as big as before); without the map, the knobs'
-/// fallback pose over the mat's centre. It is raised above the art camera's
+/// pitch and lens until the big mat, the stamp rack and the intercom whole,
+/// the inner strips of the other homes beside it and the deal tray fit
+/// inside the screen's margins, under the overlay's top band of chrome, and
+/// under the desk is never shown (BUG-41, 1b, 7b; Saleh's "keep a big mat
+/// size": papers show at about 55% of the old view at 16:9, CAM.md); without
+/// the map, the knobs' fallback pose over the mat's centre. It is raised above the art camera's
 /// priority while on, so the art camera's brain blends. The blend's time and
 /// style come from the one CinemachineCore.GetBlendOverride hook (installed
 /// once, statically, answering for the live reading view only, so no day's
-/// dead view stays chained in it: BUG-73e), a cut under Reduced Motion read
-/// at each blend (BUG-64b). Every move is tagged with its cause for the QA
-/// camera logger (QaSignals.TagCamera: the D1 drop tilt or a view key). The
-/// art camera is never moved. Unbound (no art Cinemachine camera), the mat
-/// never shows.
+/// dead view stays chained in it: BUG-73e), a cut when motion is still
+/// (Reduced Motion or no intensity), read at each blend (BUG-64b). Every
+/// move is tagged with its cause for the QA camera logger
+/// (QaSignals.TagCamera): a view key, or the D1 drop tilt when a paper
+/// landed on the desk that frame (DeskController.PaperExamined); a tilt asked
+/// for with no cause and no paper landing (an older caller: TAB, the guide's
+/// day-start page) stays untagged, so the logger shows it. The art camera is
+/// never moved. Unbound (no art Cinemachine camera), the mat never shows.
 /// </para>
 /// </summary>
 public sealed class DeskView : MonoBehaviour
@@ -73,6 +77,8 @@ public sealed class DeskView : MonoBehaviour
     private float _posedAspect = -1f;
     private float _readingFov;
     private bool _toggleLive;
+    private DeskController _desk;
+    private int _paperLandedFrame = -1;
     private bool _backLive;
     private int _backLiveSince;
     private bool _scrollInLive;
@@ -130,12 +136,17 @@ public sealed class DeskView : MonoBehaviour
         }
     }
 
-    /// <summary>A destroyed view stops being the one the blend hook answers for.</summary>
+    /// <summary>A destroyed view stops being the one the blend hook answers for, and stops listening to the desk.</summary>
     private void OnDestroy()
     {
         if (_hookOwner == this)
             _hookOwner = null;
+        if (_desk != null)
+            _desk.PaperExamined -= HandlePaperLanded;
     }
+
+    /// <summary>A paper landed on the desk (a drop or a click sent it there): a parameterless TiltIn this frame is the D1 drop tilt.</summary>
+    private void HandlePaperLanded(int paper) => _paperLandedFrame = Time.frameCount;
 
     /// <summary>
     /// Poses the reading camera from the art office's camera
@@ -157,6 +168,12 @@ public sealed class DeskView : MonoBehaviour
             level = Vector3.ProjectOnPlane(office.transform.up, Vector3.up);
         LevelForward = level.normalized;
         Pose();
+        if (_desk == null)
+        {
+            _desk = FindAnyObjectByType<DeskController>();
+            if (_desk != null)
+                _desk.PaperExamined += HandlePaperLanded;
+        }
         _onPriority = office.Priority.Value + PriorityAboveOffice;
         deskCamera.Priority = IsOn ? _onPriority : IdlePriority;
         deskCamera.gameObject.SetActive(true);
@@ -167,7 +184,8 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>
     /// The reading pose at the screen's aspect: on the desk home map
     /// (DeskLayout bound), LensFit.Reading framing DeskViewPose.Targets in the
-    /// desk's frame, its bottom row kept on the desk's top
+    /// desk's frame below the overlay's top band of chrome
+    /// (DeskViewPose.TopMargin), its bottom row kept on the desk's top
     /// (DeskLayoutSettings.deskTop); otherwise the knobs' fallback over the
     /// mat's centre. The lens is the office's with the knobs' field of view.
     /// </summary>
@@ -185,7 +203,7 @@ public sealed class DeskView : MonoBehaviour
 
         if (DeskLayout.Bound && config.layout != null &&
             LensFit.Reading(DeskViewPose.Targets(tuning, DeskLayout.Mat.Rect, config.layout.homes), pitch, _readingFov, aspect,
-                            tuning.topMargin, tuning.bottomMargin, tuning.sideMargin, FrontEdge(config.layout.deskTop.Rect), out ReadingPose pose))
+                            DeskViewPose.TopMargin(tuning, aspect), tuning.bottomMargin, tuning.sideMargin, FrontEdge(config.layout.deskTop.Rect), out ReadingPose pose))
         {
             DeskFrame frame = DeskLayout.Frame;
             float p = pitch * Mathf.Deg2Rad;
@@ -230,8 +248,8 @@ public sealed class DeskView : MonoBehaviour
             Set(!IsOn, CameraMoveCause.ViewKey);
     }
 
-    /// <summary>Tilts into the reading view for a document dropped on the desk (D1: the drop tilt; no-op if it is on, or while the desk takes no input).</summary>
-    public void TiltIn() => TiltIn(CameraMoveCause.DeskDropTilt);
+    /// <summary>Tilts into the reading view for a document laid on the desk (D1: the drop tilt, tagged so when a paper landed this frame; from an older caller that names no cause and lands no paper, the move stays untagged so the QA camera logger shows it; no-op if it is on, or while the desk takes no input).</summary>
+    public void TiltIn() => TiltIn(_paperLandedFrame == Time.frameCount ? CameraMoveCause.DeskDropTilt : CameraMoveCause.Untagged);
 
     /// <summary>Tilts into the reading view for <paramref name="cause"/> (the PC's "&lt; Desk" button: a view key; no-op if it is on, or while the desk takes no input).</summary>
     public void TiltIn(CameraMoveCause cause)
@@ -346,7 +364,7 @@ public sealed class DeskView : MonoBehaviour
         return ExecuteEvents.GetEventHandler<IPointerClickHandler>(_hits[0].gameObject);
     }
 
-    /// <summary>Turns the view on or off for <paramref name="cause"/>: never while unbound, and never while the player holds something (BUG-55c); the move is tagged for the QA camera logger over the blend's seconds.</summary>
+    /// <summary>Turns the view on or off for <paramref name="cause"/>: never while unbound, and never while the player holds something (BUG-55c); the move is tagged for the QA camera logger over the blend's seconds (an unknown cause is left untagged, for the logger to show).</summary>
     private void Set(bool on, CameraMoveCause cause)
     {
         if (on == IsOn || (on && _office == null) || HoldRegistry.Desk.IsHolding)
@@ -355,8 +373,9 @@ public sealed class DeskView : MonoBehaviour
         IsOn = on;
         LastCause = cause;
         _movedAt = Time.unscaledTime;
-        _moveSeconds = DeskViewPose.Seconds(config.deskView, MotionPreference.Reduced);
-        QaSignals.TagCamera(cause, _moveSeconds);
+        _moveSeconds = DeskViewPose.Seconds(config.deskView, UiMotion.Amount.Still);
+        if (cause != CameraMoveCause.Untagged)
+            QaSignals.TagCamera(cause, _moveSeconds);
         Hook(this);
         deskCamera.Priority = on ? _onPriority : IdlePriority;
         ShowBack();
@@ -375,14 +394,14 @@ public sealed class DeskView : MonoBehaviour
         CinemachineCore.GetBlendOverride = ours;
     }
 
-    /// <summary>The blend to or from the live reading view's camera: the knob's seconds, eased (a cut under Reduced Motion, read now); any other blend is left to the hook before ours, or the brain's own.</summary>
+    /// <summary>The blend to or from the live reading view's camera: the knob's seconds, eased (a cut when motion is still: Reduced Motion or no intensity, read now); any other blend is left to the hook before ours, or the brain's own.</summary>
     private static CinemachineBlendDefinition OwnersBlend(ICinemachineCamera from, ICinemachineCamera to, CinemachineBlendDefinition fallback, UnityEngine.Object owner)
     {
         DeskView view = _hookOwner;
         if (view == null || view.deskCamera == null || view.config == null || (!ReferenceEquals(from, view.deskCamera) && !ReferenceEquals(to, view.deskCamera)))
             return _before != null ? _before(from, to, fallback, owner) : fallback;
 
-        float seconds = DeskViewPose.Seconds(view.config.deskView, MotionPreference.Reduced);
+        float seconds = DeskViewPose.Seconds(view.config.deskView, UiMotion.Amount.Still);
         return seconds > 0f
             ? new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, seconds)
             : new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
