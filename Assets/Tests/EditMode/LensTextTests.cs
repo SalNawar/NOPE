@@ -112,6 +112,52 @@ public class LensTextTests
     }
 
     [Test]
+    public void Phrase_Compose_RightToLeft_TheOtherWordsNeverMove_WhileAWordFlips()
+    {
+        var phrase = new LensPhrase("سجل المناوبة", "Shift Ledger", true, Glossary("سجل", "Ledger", "المناوبة", "Shift"));
+        string first = ArabicShaper.ToVisual("سجل");
+        StringAssert.EndsWith(first, phrase.Visual, "the first word reads at the line's right end");
+        string rest = phrase.Visual.Substring(0, phrase.Visual.Length - first.Length);
+        float duration = LensFlip.Duration("سجل", "Ledger", Timing);
+        for (float t = 0f; t <= duration + 0.05f; t += 0.05f)
+        {
+            string shown = phrase.Compose(new[] { LensFlip.Frame("سجل", "Ledger", Timing, t), null }, null);
+            StringAssert.StartsWith(rest, shown, $"at {t:0.00} s the rest of the line keeps its place (BUG-52: no reshuffle per letter)");
+        }
+        Assert.AreEqual(phrase.Visual, phrase.Compose(null, null), "nothing replaced: the label as built");
+    }
+
+    [Test]
+    public void Phrase_WholeFrame_RightToLeft_FlipsWordByWordInPlace_ThenReadsAsItsEnglish()
+    {
+        var phrase = new LensPhrase("سجل المناوبة", "Shift Ledger", true, Glossary("سجل", "Ledger", "المناوبة", "Shift"));
+        Assert.AreEqual(phrase.Visual, phrase.WholeFrame(true, Timing, float.NaN, null), "before the start: the label");
+        Assert.AreEqual(phrase.Visual, phrase.WholeFrame(true, Timing, 0f - 0.01f, null));
+        Assert.AreEqual("Shift Ledger", phrase.WholeFrame(true, Timing, float.PositiveInfinity, null), "landed (or reduced motion): the English sentence, left to right");
+        Assert.AreEqual(phrase.Visual, phrase.WholeFrame(false, Timing, float.PositiveInfinity, null), "flipped back: the label");
+
+        string first = ArabicShaper.ToVisual("سجل");
+        string rest = phrase.Visual.Substring(0, phrase.Visual.Length - first.Length);
+        var map = new List<int>();
+        string early = phrase.WholeFrame(true, Timing, 0.15f, map);
+        StringAssert.StartsWith(rest, early, "the second word has not started: it keeps its place while the first flips");
+        Assert.AreNotEqual(phrase.Visual, early);
+        Assert.AreEqual(early.Length, map.Count);
+        Assert.IsTrue(map.TrueForAll(m => m == -1), "a whole flip has no single word under the pointer");
+
+        float duration = LensFlip.Duration(phrase.Logical, phrase.English, Timing);
+        Assert.AreNotEqual("Shift Ledger", phrase.WholeFrame(true, Timing, duration - 0.01f, null), "it reads as the sentence only once landed");
+    }
+
+    [Test]
+    public void Phrase_WholeFrame_LeftToRight_FlipsAsOneText()
+    {
+        var phrase = new LensPhrase("Βάρδια", "Shift", false, Glossary("Βάρδια", "Shift"));
+        Assert.AreEqual(LensFlip.Frame("Βάρδια", "Shift", Timing, 0.25f), phrase.WholeFrame(true, Timing, 0.25f, null));
+        Assert.AreEqual(LensFlip.Frame("Shift", "Βάρδια", Timing, 0.25f), phrase.WholeFrame(false, Timing, 0.25f, null));
+    }
+
+    [Test]
     public void Flip_LettersLandOneByOne_InReadingOrder()
     {
         Assert.AreEqual("البريد", LensFlip.Frame("البريد", "Mail", Timing, float.NaN), "before the start: the native word");

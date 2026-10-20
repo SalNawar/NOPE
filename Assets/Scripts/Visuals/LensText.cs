@@ -44,11 +44,20 @@ public readonly struct LensSegment
 /// 2026-10-06): its text in logical order with its placeholders filled, its
 /// English, its direction, the text as drawn (shaped and reordered when right
 /// to left) and its segments (LensWords.Split). Built once per distinct label
-/// text by UiStrings, never per frame.
+/// text by UiStrings, never per frame. A right-to-left label's order is
+/// worked out once, here (FIX_PLAN TOOLS, BUG-52: "runs bidi ... once per
+/// flip, not per step"): while its words flip, each word changes in its own
+/// place and the others never move (Compose, WholeFrame).
 /// </summary>
 public sealed class LensPhrase
 {
     private readonly List<int> _words = new List<int>();
+
+    /// <summary>Per character of <see cref="Visual"/>, the segment it belongs to (-1: none); empty for a left-to-right label.</summary>
+    private readonly List<int> _visualOwner = new List<int>();
+
+    /// <summary>Per segment, its word rank (-1: not a word).</summary>
+    private readonly List<int> _rankOf = new List<int>();
 
     /// <summary>The phrase <paramref name="logical"/> whose English is <paramref name="english"/>, its words' English from <paramref name="glossary"/> (folded native to English; LensWords.Glossary).</summary>
     public LensPhrase(string logical, string english, bool rightToLeft, IReadOnlyDictionary<string, string> glossary)
@@ -56,11 +65,16 @@ public sealed class LensPhrase
         Logical = logical ?? string.Empty;
         English = english ?? string.Empty;
         RightToLeft = rightToLeft;
-        Visual = rightToLeft ? ArabicShaper.ToVisual(Logical) : Logical;
+        Visual = Logical; // a right-to-left label is laid out below, once its segments are known
         Segments = LensWords.Split(Logical, English, glossary);
         for (int i = 0; i < Segments.Count; i++)
+        {
+            _rankOf.Add(Segments[i].IsWord ? _words.Count : -1);
             if (Segments[i].IsWord)
                 _words.Add(i);
+        }
+        if (RightToLeft)
+            Visual = Laid(_visualOwner);
     }
 
     /// <summary>The label in logical order (placeholders filled).</summary>
@@ -85,7 +99,7 @@ public sealed class LensPhrase
     public int WordSegment(int rank) => _words[rank];
 
     /// <summary>The word rank of segment <paramref name="segment"/>, or -1 when it is not a word.</summary>
-    public int WordRank(int segment) => _words.IndexOf(segment);
+    public int WordRank(int segment) => segment >= 0 && segment < _rankOf.Count ? _rankOf[segment] : -1;
 
     /// <summary>The native text of word <paramref name="rank"/>.</summary>
     public string NativeWord(int rank)
@@ -100,14 +114,20 @@ public sealed class LensPhrase
     /// <summary>
     /// The phrase as drawn with some words shown otherwise:
     /// <paramref name="shown"/>[rank] replaces word rank's native text (null
-    /// keeps it). Composed in logical order, then shaped and reordered when
-    /// right to left. <paramref name="segmentOf"/> (cleared; null skips it)
-    /// receives, per drawn character, the segment it belongs to.
+    /// keeps it). A left-to-right label is composed in logical order. A
+    /// right-to-left one keeps the order worked out when it was built: each
+    /// replaced word is drawn in its own place (shaped and ordered on its own),
+    /// so the rest of the line never reshuffles as its letters flip.
+    /// <paramref name="segmentOf"/> (cleared; null skips it) receives, per
+    /// drawn character, the segment it belongs to.
     /// </summary>
     public string Compose(IReadOnlyList<string> shown, List<int> segmentOf)
     {
+        segmentOf?.Clear();
+        if (RightToLeft)
+            return ComposeLaid(shown, segmentOf);
+
         var logical = new StringBuilder(Logical.Length + 16);
-        var owner = new List<int>(Logical.Length + 16);
         int rank = 0;
         for (int s = 0; s < Segments.Count; s++)
         {
@@ -115,25 +135,100 @@ public sealed class LensPhrase
             string replacement = seg.IsWord && shown != null && rank < shown.Count ? shown[rank] : null;
             if (seg.IsWord)
                 rank++;
-            string text = replacement ?? Logical.Substring(seg.Start, seg.Length);
-            logical.Append(text);
-            for (int k = 0; k < text.Length; k++)
-                owner.Add(s);
+            int before = logical.Length;
+            if (replacement != null)
+                logical.Append(replacement);
+            else
+                logical.Append(Logical, seg.Start, seg.Length);
+            for (int k = before; segmentOf != null && k < logical.Length; k++)
+                segmentOf.Add(s);
         }
+        return logical.ToString();
+    }
 
-        segmentOf?.Clear();
-        string composed = logical.ToString();
+    /// <summary>
+    /// The phrase <paramref name="elapsed"/> seconds into its whole flip
+    /// (levels 2 and 3) towards its English (<paramref name="toEnglish"/>) or
+    /// back, on <paramref name="timing"/>'s clock, cell by cell over the whole
+    /// label. A left-to-right label flips as one text (LensFlip.Frame, then
+    /// ComposeWhole). A right-to-left one flips word by word in each word's
+    /// own place (each word's cells on the same clock, from where it starts in
+    /// the label), and only once the flip lands does it read as its English
+    /// sentence, left to right: one reordering per flip, not one per letter.
+    /// Infinity (reduced motion) is the landed text; NaN or before the start,
+    /// the text it leaves. <paramref name="segmentOf"/> (cleared; null skips
+    /// it) receives -1 per drawn character: no single word is under the pointer.
+    /// </summary>
+    public string WholeFrame(bool toEnglish, FlipTiming timing, float elapsed, List<int> segmentOf)
+    {
+        string from = toEnglish ? Logical : English, to = toEnglish ? English : Logical;
         if (!RightToLeft)
-        {
-            segmentOf?.AddRange(owner);
-            return composed;
-        }
+            return ComposeWhole(LensFlip.Frame(from, to, timing, elapsed), segmentOf);
 
-        var sources = new List<int>(composed.Length);
-        string visual = ArabicShaper.ToVisual(composed, sources);
-        if (segmentOf != null)
-            foreach (int source in sources)
-                segmentOf.Add(source >= 0 && source < owner.Count ? owner[source] : -1);
+        if (elapsed >= LensFlip.Duration(from, to, timing))
+            return toEnglish ? ComposeWhole(English, segmentOf) : Untouched(segmentOf);
+        var shown = new string[WordCount];
+        float interval = timing != null && timing.letterInterval > 0f ? timing.letterInterval : 0f;
+        for (int w = 0; w < shown.Length; w++)
+        {
+            string native = NativeWord(w), english = EnglishWord(w) ?? native;
+            float local = elapsed - Segments[_words[w]].Start * interval;
+            shown[w] = toEnglish ? LensFlip.Frame(native, english, timing, local) : LensFlip.Frame(english, native, timing, local);
+        }
+        string drawn = ComposeLaid(shown, segmentOf);
+        for (int i = 0; segmentOf != null && i < segmentOf.Count; i++)
+            segmentOf[i] = -1;
+        return drawn;
+    }
+
+    /// <summary>The label as drawn with no word replaced; <paramref name="segmentOf"/> (cleared; null skips it) receives -1 per character.</summary>
+    private string Untouched(List<int> segmentOf)
+    {
+        segmentOf?.Clear();
+        for (int i = 0; segmentOf != null && i < Visual.Length; i++)
+            segmentOf.Add(-1);
+        return Visual;
+    }
+
+    /// <summary>The right-to-left label in its built order, each replaced word drawn on its own in its place (see Compose).</summary>
+    private string ComposeLaid(IReadOnlyList<string> shown, List<int> segmentOf)
+    {
+        var sb = new StringBuilder(Visual.Length + 16);
+        bool[] drawn = null;
+        for (int i = 0; i < Visual.Length; i++)
+        {
+            int owner = i < _visualOwner.Count ? _visualOwner[i] : -1;
+            int rank = owner >= 0 ? _rankOf[owner] : -1;
+            string replacement = rank >= 0 && shown != null && rank < shown.Count ? shown[rank] : null;
+            if (replacement == null)
+            {
+                sb.Append(Visual[i]);
+                segmentOf?.Add(owner);
+                continue;
+            }
+            drawn ??= new bool[Segments.Count];
+            if (drawn[owner])
+                continue;
+            drawn[owner] = true;
+            string word = ArabicShaper.ToVisual(replacement);
+            sb.Append(word);
+            for (int k = 0; segmentOf != null && k < word.Length; k++)
+                segmentOf.Add(owner);
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>The right-to-left label in visual order (ArabicShaper, once), <paramref name="owner"/> receiving the segment of each drawn character.</summary>
+    private string Laid(List<int> owner)
+    {
+        var segmentOfLogical = new int[Logical.Length];
+        for (int s = 0; s < Segments.Count; s++)
+            for (int k = 0; k < Segments[s].Length; k++)
+                segmentOfLogical[Segments[s].Start + k] = s;
+        var sources = new List<int>(Logical.Length);
+        string visual = ArabicShaper.ToVisual(Logical, sources);
+        foreach (int source in sources)
+            owner.Add(source >= 0 && source < segmentOfLogical.Length ? segmentOfLogical[source] : -1);
         return visual;
     }
 

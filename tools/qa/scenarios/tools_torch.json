@@ -1,0 +1,173 @@
+{
+  "name": "tools_torch",
+  "owner": "TOOLS",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "TOOLS BUG-2c (FIX_PLAN TOOLS torch; GAME_FEEL_BIBLE C3): the UV torch swept over the handed-over papers on its day (7), at A2 then A1, in the office view and the reading view, P-FAST, P-SLOW and P-WOBBLE. Pass: tools.torch.*.unoccluded (the lit patch >=95% seen past the torch's own meshes on every held frame) and tools.torch.*.poolOnDesk (0 frames of the pool off the desk). The torch_* sequences are for the director's eye (GIF at full size) and seqtools flicker on the paper text."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 7
+    },
+    {
+      "op": "waitOffice",
+      "n": 7
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "track",
+      "name": "torch",
+      "target": "Office/DeskHardware/UvTorch"
+    },
+    {
+      "op": "recStart",
+      "name": "torch_office"
+    },
+    {
+      "op": "toolsTorch",
+      "name": "office_fast",
+      "path": "P-FAST",
+      "x2": 0.45,
+      "y2": 0.42
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "toolsTorch",
+      "name": "office_slow",
+      "path": "P-SLOW",
+      "x2": 0.5,
+      "y2": 0.38
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "toolsTorch",
+      "name": "office_wobble",
+      "path": "P-WOBBLE",
+      "x2": 0.35,
+      "y2": 0.45
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "note",
+      "text": "Into the reading view: a click on the mat tilts the desk view (FEATURES: the room beside the PC, or the desk). If the view does not tilt, press the step's point on a paper instead."
+    },
+    {
+      "op": "click",
+      "x": 0.45,
+      "y": 0.3
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "recStart",
+      "name": "torch_reading"
+    },
+    {
+      "op": "toolsTorch",
+      "name": "reading_fast",
+      "path": "P-FAST",
+      "x2": 0.4,
+      "y2": 0.5
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "toolsTorch",
+      "name": "reading_slow",
+      "path": "P-SLOW",
+      "x2": 0.55,
+      "y2": 0.45
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "toolsTorch",
+      "name": "reading_wobble",
+      "path": "P-WOBBLE",
+      "x2": 0.3,
+      "y2": 0.6
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "toolsTorch",
+      "name": "reading_a1",
+      "path": "P-DIAG",
+      "x2": 0.5,
+      "y2": 0.55
+    },
+    {
+      "op": "key",
+      "key": "Escape"
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "toolsTorch",
+      "name": "office_a1",
+      "path": "Plain",
+      "x2": 0.5,
+      "y2": 0.4
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "name": "tools_lens",
+  "owner": "TOOLS",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "TOOLS BUG-52 (FIX_PLAN TOOLS translation lens + v2: 0 PC texts): day 8 (the lens's day: Word level issued), the PC closed. The pointer sweeps the left two thirds of the screen (where 1019a translated phantom desktop words) and the desk; then a hovered label is left and timed. Pass: tools.lens.*.phantoms 0, tools.lens.*.pc 0, tools.lens.*.revert <=0.2 s; seqtools flicker on lens_sweep's speech and paper text. For the Arabic answer: ask the traveller through the intercom (the wheel) on an Arabic-speaking traveller's case and run toolsLens over the bubble (add its point here once found in Unity)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 8
+    },
+    {
+      "op": "waitOffice",
+      "n": 8
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "recStart",
+      "name": "lens_sweep"
+    },
+    {
+      "op": "toolsLens",
+      "name": "pc_side",
+      "x": 0.05,
+      "y": 0.85,
+      "x2": 0.62,
+      "y2": 0.2,
+      "f": 4
+    },
+    {
+      "op": "toolsLens",
+      "name": "desk",
+      "x": 0.2,
+      "y": 0.25,
+      "x2": 0.8,
+      "y2": 0.45,
+      "f": 4
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "note",
+      "text": "The revert: hover the rulebook folder's cover label (a culture label from day 8), then leave to the empty wall. Retarget to any foreign word found in Unity."
+    },
+    {
+      "op": "toolsRevert",
+      "name": "rulebook",
+      "target": "Office/Rulebook",
+      "x2": 0.95,
+      "y2": 0.95
+    }
+  ]
+}
