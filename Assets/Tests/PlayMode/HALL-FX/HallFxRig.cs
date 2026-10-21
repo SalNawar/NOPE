@@ -1,9 +1,11 @@
 #if UNITY_EDITOR || TIMEDESK_QA
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// HALL-FX's ops for QA-RIG scenarios. BUG-26a ("the circular probe is replaced by the effect-on vs effect-off
@@ -24,7 +26,9 @@ using UnityEngine;
 /// shots measure all five rings: on a day's plan most rings are shut (day 1 opens one), and an effect's placement and
 /// mask do not depend on which day opens it. Each portal shot also writes the hall drawing's own projection (its canvas
 /// corners on screen), where tools/hall/portal_check.py lays the rings' masks; <c>hallDrawing</c> writes it alone (the
-/// crossfade's both-faces mask, tools/hall/slot_mask.py).
+/// crossfade's both-faces mask, tools/hall/slot_mask.py). The two portal stills are taken with LIGHT's office finish
+/// (HallLightingSO.finishProfile's Volume) at weight 0: its bloom glows round each ring by design, and the halo count
+/// is taken before LIGHT's Volume (HALL-FX.md step 10); the weight is put back after the off still.
 /// </summary>
 public static class HallFxRig
 {
@@ -151,13 +155,36 @@ public static class HallFxRig
                                 e.name, e.Showing, e.Night, c.x, c.y, Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
         }
         report.Append(DrawingLine());
+        List<(Volume volume, float weight)> finish = FinishOff();
+        report.AppendFormat(CultureInfo.InvariantCulture, "   office finish off for the stills: {0} volume(s)\n", finish.Count);
         File.AppendAllText(Path.Combine(runner.OutDir, "qa_report.txt"), report.ToString());
+        yield return QaGame.Frames(2);
         runner.Recorder.Still(Path.Combine(dir, $"h{hour:00}_{Screen.width}x{Screen.height}_on.png"));
         yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the on still");
         yield return Show(false);
         runner.Recorder.Still(Path.Combine(dir, $"h{hour:00}_{Screen.width}x{Screen.height}_off.png"));
         yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the off still");
+        foreach ((Volume volume, float weight) in finish)
+            if (volume != null)
+                volume.weight = weight;
         yield return Show(true);
+    }
+
+    /// <summary>Sets LIGHT's office finish Volume(s) (the profile HallLightingRig puts on a global Volume at play) to weight 0; returns each with its weight, to put back.</summary>
+    private static List<(Volume volume, float weight)> FinishOff()
+    {
+        var off = new List<(Volume volume, float weight)>();
+        HallLightingRig rig = Object.FindAnyObjectByType<HallLightingRig>();
+        VolumeProfile profile = rig != null && rig.Settings != null ? rig.Settings.finishProfile : null;
+        if (profile == null)
+            return off;
+        foreach (Volume volume in Object.FindObjectsByType<Volume>(FindObjectsInactive.Exclude))
+            if (volume.sharedProfile == profile)
+            {
+                off.Add((volume, volume.weight));
+                volume.weight = 0f;
+            }
+        return off;
     }
 }
 #endif
