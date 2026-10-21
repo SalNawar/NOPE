@@ -8,9 +8,11 @@ using UnityEngine.Rendering;
 
 /// <summary>
 /// The painted desk's importer (desk v3, DESK-ART; UNITY_PLAN 9.4): the
-/// offline bake (E:\unity\NOPE-tools\design\desk\pipeline\export\v2, copied
-/// into Assets/Art/Office/DeskPainted: Meshes, Textures, Data/anchors.json)
-/// as one prefab. On import it sets the folder's texture settings (paint in
+/// offline bake (E:\unity\NOPE-tools\design\desk\pipeline\export\v2, and
+/// since round 13 export\v3: the enclosed booth, DeskBooth.fbx, its walls,
+/// window frame and teller bars, with every texture regraded; copied into
+/// Assets/Art/Office/DeskPainted: Meshes, Textures, Data/anchors.json) as
+/// one prefab. On import it sets the folder's texture settings (paint in
 /// sRGB, masks linear, BC7 with mips at their own size, clamped, trilinear)
 /// and model settings (metres as baked, no materials, animation, cameras or
 /// lights, normals as baked). Tools > TimeDesk > Import Painted Desk (Build)
@@ -45,8 +47,8 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     private const string LayoutPath = Folder + "/Data/desk_layout_v3.json";
     private const string PaintedShader = "NOPE/Desk Painted", UnlitShader = "Universal Render Pipeline/Unlit";
 
-    /// <summary>The bake's FBX files, in the order their objects are laid.</summary>
-    private static readonly string[] Models = { "DeskShell", "DeskObjects", "Desk_PC" };
+    /// <summary>The bake's FBX files, in the order their objects are laid (DeskBooth: v3's booth, every object at the DeskFrame origin with identity rotation, laid under Shell like DeskShell's and turned Upright the same).</summary>
+    private static readonly string[] Models = { "DeskShell", "DeskBooth", "DeskObjects", "Desk_PC" };
 
     /// <summary>The empty on the PC's screen face in Desk_PC.fbx (its centre; the size and facing are anchors.json's pc_screen).</summary>
     private const string ScreenAnchor = "PC_ScreenAnchor";
@@ -70,7 +72,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     private const float PivotTolerance = 0.001f;
 
     /// <summary>Bumped when the import settings change, so Unity imports the folder again.</summary>
-    public override uint GetVersion() => 2;
+    public override uint GetVersion() => 3;
 
     private void OnPreprocessTexture()
     {
@@ -210,13 +212,17 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     /// <summary>The distance between <paramref name="source"/>'s pivot as imported (turned Upright) and anchors.json's pivot_unity for it (0 when anchors.json does not list it).</summary>
     private static float PivotError(ContentNode anchors, Transform source)
     {
-        ContentNode entry = anchors.Get("objects")?.Get(source.name);
+        ContentNode entry = Entry(anchors, source.name);
         ContentNode pivot = entry?.Get("pivot_unity");
         if (pivot == null || pivot.Items.Count < 3)
             return 0f;
         var want = new Vector3(Num(pivot.Items[0]), Num(pivot.Items[1]), Num(pivot.Items[2]));
         return Vector3.Distance(want, Upright * source.position);
     }
+
+    /// <summary>anchors.json's entry for the bake's <paramref name="name"/>: its objects, else (v3) its booth's objects, or null.</summary>
+    private static ContentNode Entry(ContentNode anchors, string name) =>
+        anchors.Get("objects")?.Get(name) ?? anchors.Get("booth")?.Get("objects")?.Get(name);
 
     private static float Num(ContentNode node) => float.Parse(node.Text, System.Globalization.CultureInfo.InvariantCulture);
 
@@ -299,10 +305,10 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         box.size = b.size + Vector3.one * (2f * ClickPad);
     }
 
-    /// <summary>The material of the bake's <paramref name="name"/>: its texture's (anchors.json; DeskShell and DeskMat their own, the glass the sheen's).</summary>
+    /// <summary>The material of the bake's <paramref name="name"/>: its texture's (anchors.json; DeskShell and DeskMat their own, the glass the sheen's, the booth's walls and frame Desk_Booth's, its bars their own Desk_BoothBars).</summary>
     private static Material MaterialFor(string name, ContentNode anchors, Dictionary<string, Material> materials)
     {
-        string texture = anchors.Get("objects")?.Get(name)?.Get("texture")?.Text;
+        string texture = Entry(anchors, name)?.Get("texture")?.Text;
         string key = texture != null ? Path.GetFileNameWithoutExtension(texture) : null;
         return key != null && materials.TryGetValue(key, out Material m) ? m : null;
     }

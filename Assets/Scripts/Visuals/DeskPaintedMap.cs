@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>What the office install does with one object of the painted desk (DeskPaintedMap.Objects).</summary>
 public enum PaintedRole
 {
-    /// <summary>The desk itself (slab, back step, trays and tracks, rail, wall, mat, glass): it never moves.</summary>
+    /// <summary>The desk itself (slab, back step, trays and tracks, rail, wall, mat, glass) and, since round 13, the booth round it (its walls, the window's frame and the teller bars): it never moves.</summary>
     Shell,
 
     /// <summary>A fixed object on its home (the PC, the AVAILABLE sign, the bell, a pouch, a stand, a locked home's insert): it never moves.</summary>
@@ -157,7 +157,7 @@ public sealed class StandIn
 /// <summary>One object of the painted desk's bake: its name in the FBX files, the home it belongs to and what the install does with it.</summary>
 public sealed class PaintedObject
 {
-    /// <summary>The object's name in DeskShell.fbx, DeskObjects.fbx or Desk_PC.fbx.</summary>
+    /// <summary>The object's name in DeskShell.fbx, DeskBooth.fbx, DeskObjects.fbx or Desk_PC.fbx.</summary>
     public readonly string name;
 
     /// <summary>The home it belongs to (DeskHomeMap's ids; a fixed art id when <see cref="fixedArt"/>); null for the shell and the lamps.</summary>
@@ -199,6 +199,34 @@ public static class DeskPaintedMap
 
     /// <summary>The bake's shell, mat and glass objects (DeskShell.fbx).</summary>
     public const string Shell = "DeskShell", Mat = "DeskMat", Glass = "DeskGlass";
+
+    /// <summary>
+    /// The bake's booth (DeskBooth.fbx, export v3; desk v3 round 13, Saleh's
+    /// concept B, office_bars_v1.png, "where is the left wall"): the dark wood
+    /// left wall the PC stands in front of, the flank of back wall between it
+    /// and the window's left post, the window's frame (both posts, the lintel,
+    /// the header beam with its brass rod, the bars' top and bottom rails),
+    /// the right wall's extension above the switchboard, and the 12 teller
+    /// bars (their own texture, Desk_BoothBars). Every one sits at the
+    /// DeskFrame's origin with no turn, so it is laid with the shell; the
+    /// front (flank, posts, lintel, header, bars) leans back 9 degrees with
+    /// the office camera's up, as painted (the bake's D4, accepted).
+    /// </summary>
+    public const string BoothWallLeft = "Booth_WallLeft", BoothBackWall = "Booth_BackWall", BoothFrame = "Booth_Frame", BoothWallRight = "Booth_WallRight", BoothBars = "Booth_Bars";
+
+    /// <summary>The booth's objects (DeskBooth.fbx), in the bake's order.</summary>
+    public static readonly string[] Booth = { BoothWallLeft, BoothBackWall, BoothFrame, BoothWallRight, BoothBars };
+
+    /// <summary>
+    /// The live hall's layers the booth's left wall closes off (desk v3
+    /// round 13; the v3 bake's README, Unity import step 5, "hide the left
+    /// city panorama"): the anime hall's living city over its left glass
+    /// (AnimeHall.unity, "Deep front city extension": the city in the
+    /// hall's left windows, canvas x 0 to 680). The office binder turns
+    /// their renderers off while the painted desk is installed (the CITY
+    /// view's own panorama is a separate picture and stays).
+    /// </summary>
+    public static readonly string[] HallClosedByBooth = { "Deep front city extension" };
 
     /// <summary>The bake's lamp bezel (one mesh, placed once per lamp of anchors.json).</summary>
     public const string LampBezel = "Desk_LampBezel";
@@ -522,7 +550,12 @@ public static class DeskPaintedMap
     {
         new PaintedObject(Shell, null, PaintedRole.Shell),
         new PaintedObject(Mat, null, PaintedRole.Shell),
-        new PaintedObject(Glass, null, PaintedRole.Hidden), // its sheen's alpha holds the painting's edges, the traveller's outline too (up to 40%): it would ghost over every traveller (art request)
+        new PaintedObject(Glass, null, PaintedRole.Hidden), // its sheen's alpha holds the painting's edges, the traveller's outline too (up to 40%): it would ghost over every traveller (art request); the booth's painting has open bars and no glass, and the quad (y 1.04) would stand in front of the bars' upper half (v3 README, step 4)
+        new PaintedObject(BoothWallLeft, null, PaintedRole.Shell), // the booth (round 13): laid with the shell, never moves
+        new PaintedObject(BoothBackWall, null, PaintedRole.Shell),
+        new PaintedObject(BoothFrame, null, PaintedRole.Shell),
+        new PaintedObject(BoothWallRight, null, PaintedRole.Shell),
+        new PaintedObject(BoothBars, null, PaintedRole.Shell),
         new PaintedObject("Desk_Scanner", DeskHomeMap.Scanner, PaintedRole.Reskin),
         new PaintedObject("Desk_ChipReader", DeskHomeMap.ChipReader, PaintedRole.Reskin),
         new PaintedObject("Desk_Intercom", DeskHomeMap.Intercom, PaintedRole.Reskin),

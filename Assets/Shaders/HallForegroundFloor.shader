@@ -26,6 +26,7 @@ Shader "NOPE/Hall Foreground Floor"
    float4 _HallFloorBackdropSize;
    float _HallFloorHasBackdrop;
    float _HallFloorBackdropBrightness;
+   float4 _HallFloorBackdropGrade;
    struct Attributes { float4 positionOS:POSITION; float2 uv:TEXCOORD0; };
    struct Varyings { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; float4 screen:TEXCOORD1; };
    Varyings vert(Attributes input) {
@@ -60,13 +61,15 @@ Shader "NOPE/Hall Foreground Floor"
      colour=lerp(exact,average/9,smoothstep(0,12,canvas.y-_HallFloorCanvas.y));
      // The lit hall shows at HallBackdrop.Brightness (its sRGB values scaled; set
      // with the texture by HallForegroundFloor): the seam continues it at the same.
+     // And at its grade per channel (HallBackdrop.Grade; set with the texture).
+     float3 scale=_HallFloorBackdropBrightness*_HallFloorBackdropGrade.rgb;
      UNITY_BRANCH
-     if(_HallFloorBackdropBrightness!=1)
+     if(_HallFloorBackdropBrightness!=1 || any(scale!=1))
      {
      #ifdef UNITY_COLORSPACE_GAMMA
-      colour*=_HallFloorBackdropBrightness;
+      colour*=(half3)scale;
      #else
-      colour=(half3)SRGBToLinear(LinearToSRGB((float3)colour)*_HallFloorBackdropBrightness);
+      colour=(half3)SRGBToLinear(LinearToSRGB((float3)colour)*scale);
      #endif
      }
     }

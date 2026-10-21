@@ -452,3 +452,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  paintedBoothGrade: {r: 0.48, g: 0.45, b: 0.37, a: 1}

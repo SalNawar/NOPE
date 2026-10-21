@@ -7,13 +7,16 @@
 // into a texture; the picture is read by screen position. _Brightness scales
 // the picture as it reads on screen (its sRGB values; 1 shows it as lit):
 // HallBackdrop.Brightness, which HallLightingRig sets from the knobs'
-// paintedDeskBrightness while the painted desk is installed (desk v3).
+// paintedDeskBrightness while the painted desk is installed (desk v3), and
+// _Grade scales each channel on top (HallBackdrop.Grade: the booth's
+// paintedBoothGrade, desk v3 round 13; white: none).
 Shader "TimeDesk/HallBackdrop"
 {
     Properties
     {
         [NoScaleOffset] _BackdropTex ("The lit hall", 2D) = "black" {}
         _Brightness ("Brightness on screen (the sRGB values' scale; 1: as lit)", Range(0, 2)) = 1
+        _Grade ("Grade on screen (the sRGB values' scale per channel; white: none)", Color) = (1, 1, 1, 1)
     }
 
     SubShader
@@ -38,6 +41,7 @@ Shader "TimeDesk/HallBackdrop"
 
             CBUFFER_START(UnityPerMaterial)
                 float _Brightness;
+                float4 _Grade;
             CBUFFER_END
 
             struct Attributes
@@ -66,13 +70,14 @@ Shader "TimeDesk/HallBackdrop"
                 // The brightness scales what the screen shows (the sRGB values the
                 // desk v3 review measured against the painting), not the light; at 1
                 // the picture passes untouched.
+                float3 scale = _Brightness * _Grade.rgb;
                 UNITY_BRANCH
-                if (_Brightness != 1.0)
+                if (any(scale != 1.0))
                 {
                 #ifdef UNITY_COLORSPACE_GAMMA
-                    hall *= _Brightness;
+                    hall *= scale;
                 #else
-                    hall = SRGBToLinear(LinearToSRGB(hall) * _Brightness);
+                    hall = SRGBToLinear(LinearToSRGB(hall) * scale);
                 #endif
                 }
                 return half4(hall, 1.0);

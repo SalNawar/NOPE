@@ -113,8 +113,9 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>
     /// True while the painted desk is installed (desk v3; the office binder,
     /// OfficeSceneBinder.BindHall): the lit hall shows at the knobs'
-    /// paintedDeskBrightness for <see cref="Hour"/> (HallBackdrop.Brightness),
-    /// so it reads as one image with the painted desk; false (the art's
+    /// paintedDeskBrightness for <see cref="Hour"/> (HallBackdrop.Brightness)
+    /// and the booth's paintedBoothGrade (HallBackdrop.Grade), so it reads as
+    /// one image with the painted desk and its booth; false (the art's
     /// desk, the hall on its own), as lit.
     /// </summary>
     public bool PaintedDesk { get; set; }
@@ -160,6 +161,7 @@ public sealed class HallLightingRig : MonoBehaviour
             backdrop.SetOn(on, settings.backdropResolution);
             AnimationCurve painted = settings.paintedDeskBrightness;
             backdrop.Brightness = PaintedDesk && painted != null && painted.length > 0 ? painted.Evaluate(Hour) : 1f;
+            backdrop.Grade = PaintedDesk ? settings.paintedBoothGrade : Color.white;
         }
         if (on != _lightsOn || _firstFrame)
             Switch(on);

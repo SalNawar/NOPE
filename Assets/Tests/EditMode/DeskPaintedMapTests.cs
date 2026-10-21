@@ -342,6 +342,30 @@ public class DeskPaintedMapTests
         Assert.AreEqual("Finish_Desk__", DeskPaintedMap.CutParts()[0], "a fresh copy each call");
     }
 
+    [Test]
+    public void TheBooth_IsLaidWithTheShell_ItsBarsOnTheirOwnTexture_AndTheGlassStaysHidden()
+    {
+        // Round 13 (export v3, Saleh's concept B): the left wall, the flank, the frame, the right wall's extension and the teller bars.
+        ContentNode booth = Json(Data + "anchors.json").Get("booth")?.Get("objects");
+        Assert.IsNotNull(booth, "anchors.json has the v3 booth");
+        CollectionAssert.AreEquivalent(booth.Members.Select(m => m.Key), DeskPaintedMap.Booth, "every booth object of the bake is in the map, and only those");
+        foreach (string name in DeskPaintedMap.Booth)
+        {
+            PaintedObject o = DeskPaintedMap.Find(name);
+            Assert.IsNotNull(o, name);
+            Assert.AreEqual(PaintedRole.Shell, o.role, $"{name} never moves");
+            Assert.IsNull(o.home, $"{name} is no home");
+            ContentNode pivot = booth.Get(name).Get("pivot_unity");
+            Assert.That(pivot.Items.Select(Num), Is.All.EqualTo(0f).Within(1e-6f), $"{name} sits at the DeskFrame's origin, like DeskShell");
+            string texture = booth.Get(name).Get("texture").Text;
+            Assert.AreEqual(name == DeskPaintedMap.BoothBars ? "Desk_BoothBars_Paint.png" : "Desk_Booth_Paint.png", texture, $"{name}'s texture");
+            Assert.IsTrue(File.Exists(Path.Combine(ProjectRoot(), "Assets/Art/Office/DeskPainted/Textures", texture)), texture);
+        }
+        Assert.AreEqual(PaintedRole.Hidden, DeskPaintedMap.Find(DeskPaintedMap.Glass).role, "no glass in front of the bars (v3 README, step 4)");
+        Assert.IsTrue(File.Exists(Path.Combine(ProjectRoot(), "Assets/Art/Office/DeskPainted/Meshes/DeskBooth.fbx")), "the booth's mesh is in the project");
+        CollectionAssert.Contains(DeskPaintedMap.HallClosedByBooth, "Deep front city extension", "the hall's left city the left wall closes");
+    }
+
     /// <summary>The project's folder (the tests' working folder, or three up from this file's).</summary>
     private static string ProjectRoot([CallerFilePath] string here = "") => File.Exists(Data + "anchors.json") ? "." : Path.Combine(Path.GetDirectoryName(here), "..", "..", "..");
 }

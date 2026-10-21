@@ -42,6 +42,7 @@ public sealed class HallBackdrop : MonoBehaviour
 
     private static readonly int BackdropTex = Shader.PropertyToID("_BackdropTex");
     private static readonly int BrightnessId = Shader.PropertyToID("_Brightness");
+    private static readonly int GradeId = Shader.PropertyToID("_Grade");
 
     private Camera _camera;
     private RenderTexture _texture;
@@ -52,6 +53,7 @@ public sealed class HallBackdrop : MonoBehaviour
     private bool _want;
     private float _scale = 1f;
     private float _brightness = 1f;
+    private Color _grade = Color.white;
 
     /// <summary>True while the 2D camera draws the hall (false: the office camera draws the layer unlit).</summary>
     public bool Active => _camera != null;
@@ -78,6 +80,28 @@ public sealed class HallBackdrop : MonoBehaviour
             _brightness = brightness;
             if (_material != null)
                 _material.SetFloat(BrightnessId, _brightness);
+        }
+    }
+
+    /// <summary>
+    /// The lit hall's grade on screen, per channel, on top of
+    /// <see cref="Brightness"/>: the scale of its sRGB values' red, green and
+    /// blue (white: none; alpha unused). HallLightingRig sets it from
+    /// HallLightingSO.paintedBoothGrade while the painted desk (and its booth,
+    /// desk v3 round 13) is installed, else white; the full-screen draw
+    /// (_Grade) and the foreground floor's seam apply it with the brightness.
+    /// </summary>
+    public Color Grade
+    {
+        get => _grade;
+        set
+        {
+            var grade = new Color(Mathf.Max(0f, value.r), Mathf.Max(0f, value.g), Mathf.Max(0f, value.b), 1f);
+            if (grade == _grade)
+                return;
+            _grade = grade;
+            if (_material != null)
+                _material.SetColor(GradeId, _grade);
         }
     }
 
@@ -146,6 +170,7 @@ public sealed class HallBackdrop : MonoBehaviour
 
         _material = new Material(composite) { name = "HallBackdrop (runtime)", hideFlags = HideFlags.DontSave };
         _material.SetFloat(BrightnessId, _brightness);
+        _material.SetColor(GradeId, _grade);
         _mesh = new Mesh { name = "HallBackdrop triangle", hideFlags = HideFlags.DontSave };
         _mesh.SetVertices(new[] { new Vector3(-1f, -1f, 0f), new Vector3(3f, -1f, 0f), new Vector3(-1f, 3f, 0f) });
         _mesh.SetTriangles(new[] { 0, 1, 2 }, 0);

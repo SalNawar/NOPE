@@ -203,6 +203,22 @@ public sealed class HallLightingSO : ScriptableObject
     /// </summary>
     public AnimationCurve paintedDeskBrightness = AnimationCurve.Linear(9f, 0.72f, 16f, 0.85f);
 
+    /// <summary>
+    /// The enclosed booth's grade (desk v3 round 13; Saleh's concept B,
+    /// office_bars_v1.png): the painted booth, its teller bars and its darker,
+    /// warmer grade, shows the hall through the bars much darker and warmer
+    /// than the open desk's painting (mock_office.png) did. The v3 bake
+    /// measured the painting's hall against the old one at a linear gain of
+    /// about (0.26, 0.22, 0.15), -2.2 stops (export v3 check_report.json
+    /// hall_grade_target; part of it is the painter's darker city glass, so a
+    /// starting point, then judged by eye against office_bars_v1.png in
+    /// Unity: docs/pending/DESK-V3.md round 13). A per-channel scale of the
+    /// hall's sRGB values on top of paintedDeskBrightness, at every hour,
+    /// while the painted desk is installed (HallLightingRig.PaintedDesk;
+    /// HallBackdrop.Grade); white leaves paintedDeskBrightness as it was.
+    /// </summary>
+    public Color paintedBoothGrade = new Color(0.48f, 0.45f, 0.37f, 1f);
+
     /// <summary>The day-night cycle's knobs for HallDayCycle (fixture threshold, band and stagger included).</summary>
     public HallDayCycle.Settings Cycle => new HallDayCycle.Settings(sunriseHour, sunsetHour, twilightHours, fixturesOnBelow, fixtureFadeBand, fixtureStaggerMinutes);
 

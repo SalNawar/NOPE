@@ -825,6 +825,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             // Under the painted desk the lit hall shows at LIGHT's painted-desk brightness (HallLightingSO.paintedDeskBrightness), so hall and desk read as one image (DESK-V3 round 9).
             if (lights != null)
                 lights.PaintedDesk = _painted;
+            // Under the painted desk the booth's left wall closes the hall's left side (desk v3 round 13): its living city there draws nothing.
+            if (_painted)
+                CloseHallBehindBooth(hall.transform);
             gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay), lights, traveller);
             gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects, lights);
             if (config.hallSlots != null)
@@ -833,6 +836,21 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 cityView.Bind(hall, hall.GetComponentInChildren<HallCityExterior>(false), lights);
             return;
         }
+    }
+
+    /// <summary>
+    /// The hall's layers the painted booth's left wall closes off
+    /// (DeskPaintedMap.HallClosedByBooth, by name under the hall: the living
+    /// city over its left glass; the v3 bake's README, step 5) draw nothing:
+    /// their renderers and their children's turn off. Nothing else of the
+    /// hall changes; the CITY view's panorama is its own picture.
+    /// </summary>
+    private static void CloseHallBehindBooth(Transform hall)
+    {
+        foreach (Transform t in hall.GetComponentsInChildren<Transform>(true))
+            if (Array.IndexOf(DeskPaintedMap.HallClosedByBooth, t.name) >= 0)
+                foreach (Renderer r in t.GetComponentsInChildren<Renderer>(true))
+                    r.enabled = false;
     }
 
     // -----------------------------
