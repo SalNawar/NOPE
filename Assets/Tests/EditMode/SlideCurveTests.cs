@@ -158,6 +158,47 @@ public class SlideCurveTests
     }
 
     [Test]
+    public void WhereTheSlidePutsIt_ATrackAlongItsHomesWay_ALiftUp_AndItsShadowFollowsATrackOnly()
+    {
+        DeskSlides slides = DeskSlides.Approved();
+        DeskSlider scanner = slides.Find(DeskHomeMap.Scanner), torch = slides.Find(DeskHomeMap.UvTorch), detain = slides.Find(DeskHomeMap.Detain);
+        float way = scanner.Way(DeskHomeMap.Find(DeskHomeMap.Approved(), DeskHomeMap.Scanner));
+        Assert.AreEqual(-1f, way, "the scanner's home declares left, toward the mat");
+        Close((-0.041f * 1.2f, 0f), SlideCurve.Offset(scanner, way, 1.2f), "a track along its home's way, never up");
+        Close((0.041f * 1.2f, 0f), SlideCurve.Offset(scanner, 1f, 1.2f), "the other way when its home declares it");
+        Close((0f, 0f), SlideCurve.Offset(scanner, 0f, 1f), "a home that declares no slide keeps it put");
+        Close((0f, 0.015f * 0.5f), SlideCurve.Offset(torch, -1f, 0.5f), "a lift rises, never sideways");
+        Close((0f, 0f), SlideCurve.Offset(detain, 1f, 1f), "a fixed object never moves");
+
+        Close((0.3f - 0.041f, 0.2f), SlideCurve.ShadowCentre(scanner, way, 1f, (0.3f, 0.2f)), "a track's shadow travels with its base");
+        Close((0.3f, 0.2f), SlideCurve.ShadowCentre(torch, way, 1f, (0.3f, 0.2f)), "a lift's stays at its rest footprint");
+        Assert.AreEqual(0.041f / 17.98f, scanner.MetresPerPx, 1e-7f, "the travel's metres per px at 1080p");
+        Assert.AreEqual(0f, new DeskSlider("x", null, SlideKind.Lift, 0.01f).MetresPerPx, "no measured px, no scale");
+    }
+
+    [Test]
+    public void ALiftsSquash_BringsItsTopDown_NeverBelowHalf_AndTheShadowScalesToItsWideningAndBlur()
+    {
+        Assert.AreEqual(1f - 1.5f * 0.002f / 0.06f, SlideCurve.SquashScale(1.5f, 0.002f, 0.06f), 1e-6f, "1.5 px of a 6 cm tool's height");
+        Assert.AreEqual(0.5f, SlideCurve.SquashScale(50f, 0.002f, 0.06f), 1e-6f, "never below half its height");
+        Assert.AreEqual(1f, SlideCurve.SquashScale(0f, 0.002f, 0.06f), "no squash");
+        Assert.AreEqual(1f, SlideCurve.SquashScale(1.5f, 0.002f, 0f), "no measured height: no squash");
+
+        (float x, float y) same = SlideCurve.ShadowScale((0.1f, 0.2f), 0.002f, 0.002f, 1f);
+        Assert.AreEqual(1f, same.x, 1e-6f, "as built");
+        Assert.AreEqual(1f, same.y, 1e-6f);
+        (float x, float y) wide = SlideCurve.ShadowScale((0.1f, 0.2f), 0.002f, 0.004f, 1.1f);
+        Assert.AreEqual((0.1f * 1.1f + 0.008f) / 0.104f, wide.x, 1e-6f, "wider by its widening, its soft edge grown");
+        Assert.AreEqual((0.2f * 1.1f + 0.008f) / 0.204f, wide.y, 1e-6f);
+    }
+
+    private static void Close((float x, float y) expected, (float x, float y) actual, string message = null)
+    {
+        Assert.AreEqual(expected.x, actual.x, 1e-6f, message);
+        Assert.AreEqual(expected.y, actual.y, 1e-6f, message);
+    }
+
+    [Test]
     public void TheGlasses_TipTowardTheChair_InProportionToTheLift()
     {
         DeskSlider glasses = S(DeskHomeMap.Glasses);

@@ -67,8 +67,7 @@ public sealed class SlideShadow : MonoBehaviour
             _mesh.colors = _shown;
         }
         // Its edge grows by the spread over the one it was built with, its footprint by the widening.
-        float kx = (_size.x * widen + 2f * spread) / Mathf.Max(1e-5f, _size.x + 2f * _spread);
-        float ky = (_size.y * widen + 2f * spread) / Mathf.Max(1e-5f, _size.y + 2f * _spread);
+        (float kx, float ky) = SlideCurve.ShadowScale((_size.x, _size.y), _spread, spread, widen);
         // Its local x along the desk's right, y along its forward, z down (PaperDepth's depth); its parent's scale is uniform.
         Transform t = transform;
         t.SetPositionAndRotation(centre, Quaternion.LookRotation(Vector3.down, frame.Forward));

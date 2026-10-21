@@ -14,8 +14,10 @@ using NUnit.Framework;
 /// clack on the arrival frame; a busy machine stays as it is, stopping where
 /// a paper finds it on its way home; a paper let go on a machine holds it
 /// out while it lands; one taken in hand gives way, one gone from the desk is
-/// home; the forced retract; Reduced Motion cuts; a track never passes its
-/// felt gap; nothing pops; a step allocates nothing. Driven at 60 fps.
+/// home; the forced retract once the shift is over; Reduced Motion cuts; a
+/// track never passes its felt gap; nothing pops; a cursor wandering the desk
+/// never moves two at once for more than a frame; the frame's facts and the
+/// silhouette's rank; a step allocates nothing. Driven at 60 fps.
 /// </summary>
 public class ProximityAssistTests
 {
@@ -41,7 +43,7 @@ public class ProximityAssistTests
     {
         public readonly ProximityAssist Assist;
         public readonly DeskSlides Slides;
-        public readonly HashSet<string> Busy = new HashSet<string>(), Taken = new HashSet<string>(), Gone = new HashSet<string>();
+        public readonly HashSet<string> Busy = new HashSet<string>(), Taken = new HashSet<string>(), Gone = new HashSet<string>(), Rides = new HashSet<string>();
         public readonly List<(int frame, SlideCue cue)> Heard = new List<(int, SlideCue)>();
         private readonly string[] _attached;
         public int FrameNo;
@@ -54,7 +56,7 @@ public class ProximityAssistTests
             _attached = attached.Length > 0 ? attached : new[] { Scanner, Chip, Torch };
         }
 
-        /// <summary>One frame with the cursor finding <paramref name="found"/>; every attached slider is listed with its state.</summary>
+        /// <summary>One frame with the cursor finding <paramref name="found"/>; every attached slider is listed with its state (busy, in hand, gone, its docked paper riding it).</summary>
         public void Step(params SlideCandidate[] found)
         {
             FrameNo++;
@@ -62,8 +64,8 @@ public class ProximityAssistTests
             foreach (string id in _attached.Union(found.Select(f => f.Id)))
             {
                 SlideCandidate c = found.FirstOrDefault(f => f.Id == id);
-                bool busy = Busy.Contains(id), taken = Taken.Contains(id), present = !Gone.Contains(id);
-                all.Add(c.Id != null ? new SlideCandidate(id, c.Over, c.OnFootprint, c.Distance, busy, taken, present) : SlideCandidate.Away(id, busy, taken, present));
+                bool busy = Busy.Contains(id), taken = Taken.Contains(id), present = !Gone.Contains(id), rides = Rides.Contains(id);
+                all.Add(c.Id != null ? new SlideCandidate(id, c.Over, c.OnFootprint, c.Distance, busy, taken, present, rides) : SlideCandidate.Away(id, busy, taken, present, rides));
             }
             Assist.Step(FrameNo * Frame, all, Dragging, Still);
             for (int i = 0; i < Assist.Cues.Count; i++)
@@ -135,9 +137,7 @@ public class ProximityAssistTests
         int peak = desk.FirstFrame(Scanner, SlideCueKind.Peak);
         Assert.AreEqual(1 + (int)Math.Ceiling(DeskSlides.Approved().Find(Scanner).peakSeconds / Frame), peak, "the knock at its peak");
         Assert.AreEqual(1f, desk.P(Scanner), 0.03f, "settled at its slid spot");
-        Assert.AreEqual(SlidePhase.Out, desk.Assist.Phase(Scanner));
-        Assert.AreEqual(Scanner, desk.Assist.Picked);
-        Assert.IsTrue(desk.Assist.SlideDone(Scanner), "its slide has finished");
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase);
     }
 
     [Test]
@@ -146,7 +146,7 @@ public class ProximityAssistTests
         var desk = new Desk();
         desk.Hold(40, Near(Scanner, 100f));
         desk.Step();
-        Assert.AreEqual(SlidePhase.Linger, desk.Assist.Phase(Scanner), "the cursor left: it waits");
+        Assert.AreEqual(SlidePhase.Linger, desk.Assist.Pose(Scanner).Phase, "the cursor left: it waits");
         int left = desk.FrameNo;
         desk.Hold(40);
         int back = desk.FirstFrame(Scanner, SlideCueKind.Back);
@@ -166,7 +166,7 @@ public class ProximityAssistTests
         int arrival = path.FindIndex(p => p <= 1e-4f);
         Assert.Greater(path[arrival - 1] - path[arrival], 0.1f, "it arrives fast, not at zero speed");
         Assert.Greater(path[arrival + 1], 0f, "the seat bounce starts on the next frame");
-        Assert.AreEqual(SlidePhase.Rest, assist.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Rest, assist.Assist.Pose(Scanner).Phase);
         Assert.AreEqual(0f, assist.P(Scanner), 1e-6f);
     }
 
@@ -200,7 +200,7 @@ public class ProximityAssistTests
         Assert.GreaterOrEqual(scanner[start - handOff] / travel, slides.winnerBelow, "and not before");
         for (int i = 0; i < scanner.Count; i++)
             Assert.IsFalse(scanner[i] / travel > 0.5f && chip[i] / slides.Find(Chip).travelPx > 0.5f, "two sliders are never both half out");
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Scanner).Phase);
         Assert.AreEqual(1f, desk.P(Chip), 0.03f, "the winner out");
         Assert.IsFalse(desk.Heard.Any(h => h.cue.Id == Scanner && h.cue.Kind == SlideCueKind.Seat), "no seat clack for the loser");
     }
@@ -217,11 +217,11 @@ public class ProximityAssistTests
             var desk = new Desk();
             desk.Hold(40, Near(Scanner, 50f));
             desk.Hold(8);
-            for (int i = 0; i < 3 && desk.Assist.Phase(Scanner) != SlidePhase.Back; i++)
+            for (int i = 0; i < 3 && desk.Assist.Pose(Scanner).Phase != SlidePhase.Back; i++)
                 desk.Step();
-            Assert.AreEqual(SlidePhase.Back, desk.Assist.Phase(Scanner), "the linger is over: it goes home");
+            Assert.AreEqual(SlidePhase.Back, desk.Assist.Pose(Scanner).Phase, "the linger is over: it goes home");
             desk.Hold(backFrames);
-            if (desk.Assist.Phase(Scanner) != SlidePhase.Back)
+            if (desk.Assist.Pose(Scanner).Phase != SlidePhase.Back)
                 continue;
             var scanner = new List<float> { desk.Px(Scanner) };
             var chip = new List<float> { desk.Px(Chip) };
@@ -241,9 +241,168 @@ public class ProximityAssistTests
             Assert.LessOrEqual(BothMoving(scanner, chip), Math.Max(1, handOffBoth), at + ": no more frames with both moving than a plain hand-off");
             for (int i = 0; i < scanner.Count; i++)
                 Assert.IsFalse(scanner[i] / slides.Find(Scanner).travelPx > 0.5f && chip[i] / slides.Find(Chip).travelPx > 0.5f, at + ": two sliders are never both half out");
-            Assert.IsTrue(desk.Heard.Any(h => h.cue.Id == Scanner && h.cue.Kind == SlideCueKind.Seat), at + ": the scanner still clacks home");
+            if ((backFrames + 1) * Frame < slides.backSeconds - Frame / 2f)
+                Assert.IsFalse(desk.Heard.Any(h => h.cue.Id == Scanner && h.cue.Kind == SlideCueKind.Seat && h.frame >= summoned),
+                               at + ": summoned during its ease-in, the scanner was hurried: a loser's way home, no clack (slides.json's hand-off)");
+            else
+                Assert.AreEqual(1, desk.Heard.Count(h => h.cue.Id == Scanner && h.cue.Kind == SlideCueKind.Seat), at + ": it arrived on its own way home: its one clack");
             Assert.AreEqual(1f, desk.P(Chip), 0.03f, at + ": the winner out");
         }
+    }
+
+    [Test]
+    public void HandOff_FromALoserCaughtBehindHomeInItsAnticipation_TheWinnerWaitsUntilItIsNearlySeated_OneMachineMovingAtATime()
+    {
+        // The review's harness: the chip reader summoned 2 frames earlier (backing away, about -3 px), the cursor onto the scanner. The
+        // signed test counted it seated: the scanner sprang out while the chip reader retracted, both moving more than 0.25 px for 6 frames.
+        DeskSlides slides = DeskSlides.Approved();
+        int plain = BothMoving(HandOff().scanner, HandOff().chip);
+        for (int caught = 1; caught <= 2; caught++)
+        {
+            var desk = new Desk();
+            desk.Hold(caught, Near(Chip, 30f));
+            desk.Step(Near(Chip, 30f));
+            Assert.Less(desk.P(Chip), 0f, "caught behind home in its anticipation");
+            var chip = new List<float> { desk.Px(Chip) };
+            var scanner = new List<float> { desk.Px(Scanner) };
+            int summoned = desk.FrameNo + 1;
+            for (int i = 0; i < 40; i++)
+            {
+                desk.Step(On(Scanner));
+                chip.Add(desk.Px(Chip));
+                scanner.Add(desk.Px(Scanner));
+            }
+            int start = desk.FirstFrame(Scanner, SlideCueKind.Unlatch) - summoned;
+            Assert.That(start, Is.InRange(0, (int)Math.Ceiling(slides.winnerAfter / Frame - 1e-4f)), "the winner waits, never longer than winnerAfter");
+            float travel = slides.Find(Chip).travelPx;
+            Assert.Less(Math.Abs(chip[start + 1]) / travel, slides.winnerBelow, $"caught {caught} frames in: the loser is nearly seated (by its distance from home) when the winner starts");
+            Assert.AreEqual(0f, chip[start + 2], 1e-4f, "and home on the winner's first move");
+            if (caught == 2)
+                Assert.GreaterOrEqual(Math.Abs(chip[1]) / travel, slides.winnerBelow, "the review's case: further behind home than winnerBelow, so it is not seated at the hand-off");
+            for (int i = 2; i < chip.Count; i++)
+                Assert.LessOrEqual(Math.Abs(chip[i] - chip[i - 1]), slides.winnerBelow * travel + 1e-3f, $"frame {i}: no step home larger than its last stretch (under winnerBelow of its travel): nothing pops");
+            Assert.LessOrEqual(BothMoving(scanner, chip), Math.Max(1, plain), $"caught {caught} frames in: no more frames with both moving than a plain hand-off");
+            Assert.AreEqual(1f, desk.P(Scanner), 0.03f, "the winner out");
+        }
+    }
+
+    [Test]
+    public void ALingeringMachineThatTurnsBusy_GoesBackOut_AndNeverGoesHomeWhileBusy()
+    {
+        // The review's surviving fault: a lingering machine that turns busy stayed in Linger and went home under its paper.
+        var desk = new Desk();
+        desk.Hold(30, Near(Scanner, 30f));
+        desk.Step();
+        Assert.AreEqual(SlidePhase.Linger, desk.Assist.Pose(Scanner).Phase, "the cursor left: it lingers");
+        desk.Busy.Add(Scanner);
+        desk.Step();
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase, "a paper came onto it: out again");
+        desk.Hold(60);
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase, "it never goes home while busy");
+        Assert.AreEqual(-1, desk.FirstFrame(Scanner, SlideCueKind.Back), "no way home started");
+        Assert.AreEqual(1f, desk.P(Scanner), 0.03f);
+        desk.Busy.Remove(Scanner);
+        desk.Hold(40);
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Scanner).Phase, "empty: home after the linger");
+    }
+
+    [Test]
+    public void ACursorWanderingTheDesk_NeverMovesTwoSlidersAtOnceForMoreThanAFrame_NorHasTwoHalfOut()
+    {
+        // The review's cursor-only fuzz (3 x 20,000 frames, no busy or drag) found both-moving runs of 2 to 6 frames; a plain hand-off
+        // has 1. The chip reader's silhouette overlaps the scanner's home footprint, as on the desk; the cursor wanders, darts and leaves.
+        string[] ids = { Chip, Scanner, Torch };
+        float[] centre = { 300f, 430f, 700f }, half = { 45f, 60f, 30f };
+        DeskSlides slides = DeskSlides.Approved();
+        int worst = 0, episodes = 0;
+        for (int run = 0; run < 3; run++)
+        {
+            var desk = new Desk(null, null, ids);
+            uint seed = 2463534242u + (uint)run * 7919u;
+            float Next()
+            {
+                seed ^= seed << 13;
+                seed ^= seed >> 17;
+                seed ^= seed << 5;
+                return (seed & 0xFFFFFF) / (float)0x1000000;
+            }
+            float x = 500f, v = 0f;
+            var px = new float[ids.Length];
+            int both = 0;
+            for (int f = 0; f < 20000; f++)
+            {
+                float r = Next();
+                v = r < 0.02f ? (Next() - 0.5f) * 120f : r < 0.04f ? 0f : v + (Next() - 0.5f) * 4f;
+                x = Math.Max(0f, Math.Min(1000f, x + v));
+                if (Next() < 0.002f)
+                    x = Next() * 1000f;
+                var found = new List<SlideCandidate>();
+                int rank = 0;
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    float d = Math.Max(0f, Math.Abs(x - centre[i]) - half[i]);
+                    bool onScannerHome = ids[i] == Scanner && Math.Abs(x - 400f) < 70f;
+                    found.Add(new SlideCandidate(ids[i], d <= 0f ? rank++ : -1, onScannerHome, d));
+                }
+                desk.Step(found.ToArray());
+                int moving = 0, halfOut = 0;
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    float now = desk.Px(ids[i]);
+                    if (Math.Abs(now - px[i]) > 0.25f)
+                        moving++;
+                    if (desk.P(ids[i]) > 0.5f)
+                        halfOut++;
+                    px[i] = now;
+                }
+                Assert.LessOrEqual(halfOut, 1, $"run {run}, frame {f}: two sliders half out");
+                if (moving >= 2)
+                {
+                    if (both == 0)
+                        episodes++;
+                    both++;
+                    worst = Math.Max(worst, both);
+                }
+                else
+                {
+                    both = 0;
+                }
+            }
+        }
+        Assert.Greater(episodes, 20, "the walk hands off often");
+        Assert.LessOrEqual(worst, 1, $"never two sliders moving more than 0.25 px for more than 1 frame ({episodes} episodes)");
+    }
+
+    [Test]
+    public void TheFramesFacts_AreTheDesksRule_AndTheRankCountsEachSliderOnceFromTheFront()
+    {
+        SlideCandidate gone = SlideCandidate.Found(Chip, false, true, true, true, true, 0, true, 0f);
+        Assert.IsFalse(gone.Present);
+        Assert.IsFalse(gone.Busy || gone.Taken || gone.Rides, "gone from the desk: nothing else counts");
+        SlideCandidate away = SlideCandidate.Found(Chip, true, true, false, true, false, 0, true, 0f);
+        Assert.AreEqual(-1, away.Over, "the PC open: the cursor is nowhere near");
+        Assert.IsFalse(away.OnFootprint);
+        Assert.AreEqual(float.PositiveInfinity, away.Distance);
+        Assert.IsTrue(away.Busy && away.Rides, "its state still counts");
+        SlideCandidate held = SlideCandidate.Found(Torch, true, false, true, false, true, 0, true, 0f);
+        Assert.IsTrue(held.Taken);
+        Assert.AreEqual(-1, held.Over, "in hand: never under the cursor");
+        SlideCandidate near = SlideCandidate.Found(Scanner, true, false, false, false, true, 1, true, 42f);
+        Assert.AreEqual(1, near.Over);
+        Assert.IsTrue(near.OnFootprint);
+        Assert.AreEqual(42f, near.Distance);
+
+        string[] hits = { null, Chip, Chip, null, Scanner, Chip, Torch };
+        Assert.AreEqual(0, ProximityAssist.Rank(hits, hits.Length, Chip), "the front-most slider, whatever box of no slider lies before it");
+        Assert.AreEqual(1, ProximityAssist.Rank(hits, hits.Length, Scanner), "the chip reader's two boxes count once");
+        Assert.AreEqual(2, ProximityAssist.Rank(hits, hits.Length, Torch), "and its third, behind the scanner, still once");
+        Assert.AreEqual(-1, ProximityAssist.Rank(hits, 4, Scanner), "only the hits there are");
+        Assert.AreEqual(-1, ProximityAssist.Rank(hits, hits.Length, Glasses));
+
+        DeskSlides slides = DeskSlides.Approved();
+        Assert.AreEqual(120f, slides.ToReference(240f, 2160f), 1e-4f, "240 px at 4K is the trigger's 120 px at 1080p");
+        Assert.AreEqual(160f, slides.ToReference(80f, 540f), 1e-4f);
+        Assert.AreEqual(slides.referenceHeight * 5f, slides.ToReference(5f, 0f), 1e-4f, "no screen: one px high, never a division by nothing");
     }
 
     [Test]
@@ -254,7 +413,7 @@ public class ProximityAssistTests
         desk.Hold(30, Near(Intercom, 40f));
         desk.Hold(10);
         desk.Hold(18);
-        Assert.AreEqual(SlidePhase.Back, desk.Assist.Phase(Intercom), "on its way home: the end of its ease-in or its seat bounce (the review: it rose to 0.197 of its travel under the glasses)");
+        Assert.AreEqual(SlidePhase.Back, desk.Assist.Pose(Intercom).Phase, "on its way home: the end of its ease-in or its seat bounce (the review: it rose to 0.197 of its travel under the glasses)");
         var intercom = new List<float> { desk.Px(Intercom) };
         var glasses = new List<float> { desk.Px(Glasses) };
         int summoned = desk.FrameNo + 1;
@@ -279,7 +438,7 @@ public class ProximityAssistTests
         desk.Hold(20);
         Assert.Greater(desk.FirstFrame(Scanner, SlideCueKind.Slide), 3, "the shush after the cursor left");
         Assert.Greater(desk.FirstFrame(Scanner, SlideCueKind.Peak), 3, "and the knock at the peak");
-        Assert.AreEqual(SlidePhase.Back, desk.Assist.Phase(Scanner), "then home after the linger");
+        Assert.AreEqual(SlidePhase.Back, desk.Assist.Pose(Scanner).Phase, "then home after the linger");
     }
 
     [Test]
@@ -289,7 +448,7 @@ public class ProximityAssistTests
         desk.Hold(30, Near(Scanner, 50f));
         desk.Hold(5);
         desk.Hold(5, Near(Scanner, 50f));
-        Assert.AreEqual(SlidePhase.Out, desk.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase);
         Assert.AreEqual(1, desk.Heard.Count(h => h.cue.Kind == SlideCueKind.Unlatch));
         Assert.AreEqual(1f, desk.P(Scanner), 0.03f);
     }
@@ -301,18 +460,18 @@ public class ProximityAssistTests
         desk.Hold(30, Near(Chip, 50f));
         desk.Busy.Add(Chip);
         desk.Hold(30);
-        Assert.AreEqual(SlidePhase.Out, desk.Assist.Phase(Chip), "a passport in it: it stays out after the cursor left");
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Chip).Phase, "a passport in it: it stays out after the cursor left");
         desk.Hold(30, On(Scanner));
-        Assert.AreEqual(SlidePhase.Out, desk.Assist.Phase(Chip), "it never retracts for another");
-        Assert.AreEqual(SlidePhase.Out, desk.Assist.Phase(Scanner), "the other slides at once: only empty machines take turns");
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Chip).Phase, "it never retracts for another");
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase, "the other slides at once: only empty machines take turns");
         desk.Busy.Remove(Chip);
         desk.Hold(60, On(Scanner));
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Chip), "empty again and the cursor gone: home");
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Chip).Phase, "empty again and the cursor gone: home");
 
         var home = new Desk();
         home.Busy.Add(Scanner);
         home.Hold(20, On(Scanner));
-        Assert.AreEqual(SlidePhase.Rest, home.Assist.Phase(Scanner), "a busy machine at home is not summoned");
+        Assert.AreEqual(SlidePhase.Rest, home.Assist.Pose(Scanner).Phase, "a busy machine at home is not summoned");
     }
 
     [Test]
@@ -322,23 +481,22 @@ public class ProximityAssistTests
         var atHome = new Desk();
         atHome.Busy.Add(Scanner);
         atHome.Hold(30, On(Scanner), Near(Chip, 60f));
-        Assert.AreEqual(Scanner, atHome.Assist.Picked, "the busy scanner is the cursor's");
-        Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Phase(Chip), "the chip reader stays home");
-        Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Phase(Scanner), "and the busy scanner is not summoned");
+        Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Pose(Chip).Phase, "the chip reader stays home");
+        Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Pose(Scanner).Phase, "and the busy scanner is not summoned");
 
         var scanning = new Desk();
         scanning.Hold(30, Near(Scanner, 20f));
         scanning.Busy.Add(Scanner);
         scanning.Hold(60, On(Scanner), Near(Chip, 60f));
-        Assert.AreEqual(SlidePhase.Rest, scanning.Assist.Phase(Chip), "a scan watched with the cursor on the scanner never brings the chip reader out");
-        Assert.AreEqual(SlidePhase.Out, scanning.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Rest, scanning.Assist.Pose(Chip).Phase, "a scan watched with the cursor on the scanner never brings the chip reader out");
+        Assert.AreEqual(SlidePhase.Out, scanning.Assist.Pose(Scanner).Phase);
         Assert.AreEqual(-1, scanning.FirstFrame(Chip, SlideCueKind.Unlatch));
 
         var handOff = new Desk();
         handOff.Hold(30, Near(Chip, 40f));
         handOff.Busy.Add(Scanner);
         handOff.Hold(20, On(Scanner), Near(Chip, 60f));
-        Assert.AreEqual(SlidePhase.Rest, handOff.Assist.Phase(Chip), "the chip reader out gives way to the cursor on the busy scanner");
+        Assert.AreEqual(SlidePhase.Rest, handOff.Assist.Pose(Chip).Phase, "the chip reader out gives way to the cursor on the busy scanner");
         Assert.Greater(handOff.FirstFrame(Chip, SlideCueKind.HandOff), 0);
     }
 
@@ -350,29 +508,29 @@ public class ProximityAssistTests
         desk.Hold(30, Near(Scanner, 50f));
         desk.Hold(10);
         desk.Hold(8);
-        Assert.AreEqual(SlidePhase.Back, desk.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Back, desk.Assist.Pose(Scanner).Phase);
         float shown = desk.P(Scanner);
         desk.Busy.Add(Scanner);
         desk.Step();
-        Assert.AreEqual(SlidePhase.Held, desk.Assist.Phase(Scanner), "a paper on its way onto the bed: it stops");
+        Assert.AreEqual(SlidePhase.Held, desk.Assist.Pose(Scanner).Phase, "a paper on its way onto the bed: it stops");
         Assert.AreEqual(shown, desk.P(Scanner), 1e-6f, "where it was shown last frame (where the bed point was taken)");
         desk.Hold(90);
         Assert.AreEqual(shown, desk.P(Scanner), 1e-6f, "it stays while busy");
         desk.Busy.Remove(Scanner);
         desk.Step();
-        Assert.AreEqual(SlidePhase.Back, desk.Assist.Phase(Scanner), "empty: home from there");
+        Assert.AreEqual(SlidePhase.Back, desk.Assist.Pose(Scanner).Phase, "empty: home from there");
         Assert.AreEqual(shown, desk.P(Scanner), 0.02f, "no jump");
         desk.Hold(30);
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Scanner).Phase);
         Assert.Greater(desk.Heard.Count(h => h.cue.Id == Scanner && h.cue.Kind == SlideCueKind.Seat), 0, "it clacks home");
 
         var retracting = new Desk();
         retracting.Hold(30, Near(Scanner, 50f));
         retracting.Hold(3, On(Chip));
-        Assert.AreEqual(SlidePhase.Retract, retracting.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Retract, retracting.Assist.Pose(Scanner).Phase);
         retracting.Busy.Add(Scanner);
         retracting.Step(On(Chip));
-        Assert.AreEqual(SlidePhase.Held, retracting.Assist.Phase(Scanner), "a hand-off loser a paper lands on stops too");
+        Assert.AreEqual(SlidePhase.Held, retracting.Assist.Pose(Scanner).Phase, "a hand-off loser a paper lands on stops too");
         Assert.Greater(retracting.P(Scanner), slides.winnerBelow);
     }
 
@@ -386,16 +544,16 @@ public class ProximityAssistTests
         desk.Dragging = false;
         desk.Step();
         desk.Hold(hold - 3);
-        Assert.AreEqual(SlidePhase.Out, desk.Assist.Phase(Scanner), "drop and go: it stays out while the paper lands");
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase, "drop and go: it stays out while the paper lands");
         desk.Hold(20);
-        Assert.AreNotEqual(SlidePhase.Out, desk.Assist.Phase(Scanner), "then it lingers and goes home");
+        Assert.AreNotEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase, "then it lingers and goes home");
 
         var missed = new Desk { Dragging = true };
         missed.Hold(30, Near(Scanner, 50f));
         missed.Dragging = false;
         missed.Step();
         missed.Hold(12);
-        Assert.AreEqual(SlidePhase.Back, missed.Assist.Phase(Scanner), "a paper let go beside it (not on it) holds nothing");
+        Assert.AreEqual(SlidePhase.Back, missed.Assist.Pose(Scanner).Phase, "a paper let go beside it (not on it) holds nothing");
 
     }
 
@@ -407,14 +565,14 @@ public class ProximityAssistTests
         float before = desk.P(Torch);
         desk.Taken.Add(Torch);
         desk.Step(On(Torch));
-        Assert.AreEqual(SlidePhase.Retract, desk.Assist.Phase(Torch), "it gives way as a hand-off loser does");
+        Assert.AreEqual(SlidePhase.Retract, desk.Assist.Pose(Torch).Phase, "it gives way as a hand-off loser does");
         Assert.AreEqual(before, desk.P(Torch), 0.05f, "no jump on the first frame");
         desk.Hold(10, On(Torch));
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Torch), "home, and not summoned while in hand");
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Torch).Phase, "home, and not summoned while in hand");
         Assert.AreEqual(1, desk.Heard.Count(h => h.cue.Id == Torch && h.cue.Kind == SlideCueKind.Unlatch));
         desk.Taken.Remove(Torch);
         desk.Hold(3, On(Torch));
-        Assert.AreEqual(SlidePhase.Out, desk.Assist.Phase(Torch), "put back: it slides again");
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Torch).Phase, "put back: it slides again");
     }
 
     [Test]
@@ -424,34 +582,82 @@ public class ProximityAssistTests
         desk.Hold(30, Near(Scanner, 50f));
         desk.Gone.Add(Scanner);
         desk.Step(Near(Scanner, 50f));
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Scanner));
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Scanner).Phase);
         Assert.AreEqual(0f, desk.Assist.Pose(Scanner).Shadow, 1e-6f, "nothing left behind");
     }
 
     [Test]
-    public void AForcedRetract_TakesEveryEmptySliderHome_ABusyOneOnlyWithItsPaperRiding()
+    public void AForcedRetract_TakesEverySliderHomeOnTheNextStep_WithItsSound_AndNothingSlidesAgain_WithTheCursorStillOnIt()
     {
+        // The review: Retire then a Step in the same frame summoned it again with the cursor still on it (a 0.65 px dip, an unlatch,
+        // the shush with nothing sliding), and Step cleared the hand-off cue Retire raised, so the retract was silent.
         var desk = new Desk();
-        desk.Hold(30, Near(Chip, 30f));
-        desk.Assist.Retire(Chip, false);
-        Assert.AreEqual(SlidePhase.Retract, desk.Assist.Phase(Chip), "closing time: it retracts at once, no linger");
-        desk.Hold(10);
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Chip));
-        Assert.IsFalse(desk.Heard.Any(h => h.cue.Id == Chip && h.cue.Kind == SlideCueKind.Seat), "no seat");
+        desk.Hold(30, On(Chip));
+        desk.Assist.Close();
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Chip).Phase, "nothing moves before the next step");
+        desk.Step(On(Chip));
+        int closed = desk.FrameNo;
+        Assert.AreEqual(SlidePhase.Retract, desk.Assist.Pose(Chip).Phase, "the shift is over: it retracts at once, the cursor still on it");
+        Assert.AreEqual(closed, desk.FirstFrame(Chip, SlideCueKind.HandOff), "with the hand-off's reversed shush, on that step");
+        float was = desk.P(Chip);
+        for (int i = 0; i < 90; i++)
+        {
+            desk.Step(On(Chip), Near(Scanner, 10f), On(Torch, 1));
+            Assert.LessOrEqual(desk.P(Chip), was + 1e-6f, $"frame {i}: it never comes back out");
+            was = desk.P(Chip);
+        }
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Chip).Phase);
+        Assert.AreEqual(0f, desk.P(Chip), 1e-6f);
+        Assert.IsFalse(desk.Heard.Any(h => h.frame >= closed && (h.cue.Kind == SlideCueKind.Unlatch || h.cue.Kind == SlideCueKind.Slide)), "no unlatch, no shush: nothing slides once the shift is over");
+        Assert.IsFalse(desk.Heard.Any(h => h.cue.Id == Chip && h.cue.Kind == SlideCueKind.Seat), "a loser's way home: no seat clack");
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Scanner).Phase, "a slider at home stays home");
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Torch).Phase);
+    }
 
-        var busy = new Desk();
-        busy.Hold(30, Near(Chip, 30f));
-        busy.Busy.Add(Chip);
-        busy.Step();
-        busy.Assist.Retire(Chip, false);
-        busy.Hold(20);
-        Assert.AreEqual(SlidePhase.Out, busy.Assist.Phase(Chip), "a passport docked that cannot ride: it stays until empty");
-        busy.Assist.Retire(Chip, true);
-        Assert.AreEqual(SlidePhase.Retract, busy.Assist.Phase(Chip), "its docked passport rides it home: one mover");
-        busy.Hold(10);
-        Assert.AreEqual(SlidePhase.Rest, busy.Assist.Phase(Chip), "busy all the way, it is never stopped on its way");
-        busy.Assist.Retire(Torch, false);
-        Assert.AreEqual(SlidePhase.Rest, busy.Assist.Phase(Torch), "one at home stays home");
+    [Test]
+    public void AForcedRetract_TakesABusyOneOnlyWithItsPaperRiding_ElseAsSoonAsItIsEmpty_AndOneHeldForADropOnceItLanded()
+    {
+        var riding = new Desk();
+        riding.Hold(30, Near(Chip, 30f));
+        riding.Busy.Add(Chip);
+        riding.Step();
+        riding.Assist.Close();
+        riding.Hold(20);
+        Assert.AreEqual(SlidePhase.Out, riding.Assist.Pose(Chip).Phase, "a passport docked that cannot ride: it stays until empty");
+        riding.Rides.Add(Chip);
+        riding.Step();
+        Assert.AreEqual(SlidePhase.Retract, riding.Assist.Pose(Chip).Phase, "its docked passport rides it home: one mover");
+        riding.Hold(10);
+        Assert.AreEqual(SlidePhase.Rest, riding.Assist.Pose(Chip).Phase, "busy all the way, it is never stopped on its way");
+
+        var emptied = new Desk();
+        emptied.Hold(30, Near(Chip, 30f));
+        emptied.Busy.Add(Chip);
+        emptied.Assist.Close();
+        emptied.Hold(20, Near(Chip, 30f));
+        Assert.AreEqual(SlidePhase.Out, emptied.Assist.Pose(Chip).Phase);
+        emptied.Busy.Remove(Chip);
+        emptied.Step(Near(Chip, 30f));
+        Assert.AreEqual(SlidePhase.Retract, emptied.Assist.Pose(Chip).Phase, "empty: it goes at once, no linger, the cursor still near");
+
+        // The review: a forced retract during the 1 s drop hold did nothing and was never tried again.
+        var dropped = new Desk { Dragging = true };
+        dropped.Hold(30, On(Scanner));
+        dropped.Dragging = false;
+        dropped.Step(On(Scanner));
+        dropped.Assist.Close();
+        dropped.Hold(20, On(Scanner));
+        Assert.AreEqual(SlidePhase.Out, dropped.Assist.Pose(Scanner).Phase, "the paper still lands: it stays");
+        dropped.Hold((int)Math.Ceiling(dropped.Slides.dropHoldSeconds / Frame), On(Scanner));
+        Assert.AreNotEqual(SlidePhase.Out, dropped.Assist.Pose(Scanner).Phase, "the drop hold over: it goes home");
+        dropped.Hold(10, On(Scanner));
+        Assert.AreEqual(SlidePhase.Rest, dropped.Assist.Pose(Scanner).Phase);
+
+        var still = new Desk { Still = true };
+        still.Hold(5, Near(Scanner, 20f));
+        still.Assist.Close();
+        still.Step(Near(Scanner, 20f));
+        Assert.AreEqual(0f, still.P(Scanner), 1e-6f, "under Reduced Motion: a cut home");
     }
 
     [Test]
@@ -464,7 +670,6 @@ public class ProximityAssistTests
         Assert.AreEqual(1, desk.FirstFrame(Scanner, SlideCueKind.Peak), "the arrival's knock on the cut");
         SlidePose pose = desk.Assist.Pose(Scanner);
         Assert.AreEqual(0f, pose.Squash + pose.Sway, 1e-6f, "no squash, no sway");
-        Assert.IsTrue(desk.Assist.SlideDone(Scanner), "done at once");
         desk.Step(On(Chip));
         Assert.AreEqual(0f, desk.P(Scanner), 1e-6f, "the hand-off loser cuts home");
         Assert.AreEqual(1f, desk.P(Chip), 1e-6f, "and the winner cuts out on the same frame");
@@ -472,7 +677,7 @@ public class ProximityAssistTests
         Assert.AreEqual(1f, desk.P(Chip), 1e-6f, "it lingers");
         desk.Hold(12);
         Assert.AreEqual(0f, desk.P(Chip), 1e-6f, "home after the linger, at once");
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Chip));
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Chip).Phase);
         Assert.IsTrue(desk.Heard.Any(h => h.cue.Id == Chip && h.cue.Kind == SlideCueKind.Seat), "the clack still sounds");
     }
 
@@ -511,11 +716,20 @@ public class ProximityAssistTests
         var track = new Desk();
         track.Hold(3, Near(Scanner, 50f));
         Assert.AreEqual(0f, track.Assist.Pose(Scanner).Shadow, 1e-6f, "in its well during the anticipation");
-        int peak = (int)Math.Round(slides.Find(Scanner).peakSeconds / Frame);
-        track.Hold(peak - 3, Near(Scanner, 50f));
-        SlidePose pressed = track.Assist.Pose(Scanner);
-        Assert.AreEqual(slides.trackShadowBlurPx * slides.peakTightBlur, pressed.ShadowBlur, 1e-5f, "at the peak the base presses the felt: the blur tightens 30 %");
-        Assert.AreEqual(slides.trackShadowAlpha * slides.peakTightDarken, pressed.Shadow, 1e-5f, "and 10 % darker");
+        var pressedFrames = new List<int>();
+        for (int i = 0; i < 20; i++)
+        {
+            track.Step(Near(Scanner, 50f));
+            SlidePose pose = track.Assist.Pose(Scanner);
+            if (Math.Abs(pose.ShadowBlur - slides.trackShadowBlurPx * slides.peakTightBlur) < 1e-5f)
+            {
+                pressedFrames.Add(track.FrameNo);
+                Assert.AreEqual(slides.trackShadowAlpha * slides.peakTightDarken, pose.Shadow, 1e-5f, "pressed: the blur tightens 30 % and it is 10 % darker");
+            }
+        }
+        Assert.AreEqual(2, pressedFrames.Count, "slides.json: the press lasts 2 frames (at 60 fps)");
+        Assert.AreEqual(track.FirstFrame(Scanner, SlideCueKind.Peak), pressedFrames[0], "from the peak's frame, with the knock");
+        Assert.AreEqual(pressedFrames[0] + 1, pressedFrames[1]);
         track.Hold(10, Near(Scanner, 50f));
         Assert.AreEqual(slides.trackShadowAlpha, track.Assist.Pose(Scanner).Shadow, 1e-6f, "it travels with the base");
         Assert.AreEqual(slides.trackShadowBlurPx, track.Assist.Pose(Scanner).ShadowBlur, 1e-6f);
@@ -565,7 +779,7 @@ public class ProximityAssistTests
             torch.Step(On(Chip));
             squashes.Add(torch.Assist.Pose(Torch).Squash);
         }
-        Assert.AreEqual(SlidePhase.Rest, torch.Assist.Phase(Torch));
+        Assert.AreEqual(SlidePhase.Rest, torch.Assist.Pose(Torch).Phase);
         for (int i = 1; i < squashes.Count; i++)
             Assert.LessOrEqual(Math.Abs(squashes[i] - squashes[i - 1]), squashStep, $"squash frame {i}: released, not cut");
 
@@ -578,7 +792,7 @@ public class ProximityAssistTests
             desk.Hold(10, Near(Intercom, 40f));
             twin.Hold(10, Near(Intercom, 40f));
             Assert.Greater(Math.Abs(desk.Assist.Pose(Intercom).Sway), 0.5f, "mid-sway");
-            while (brush && desk.Assist.Phase(Intercom) != SlidePhase.Back)
+            while (brush && desk.Assist.Pose(Intercom).Phase != SlidePhase.Back)
             {
                 desk.Step();
                 twin.Step(Near(Intercom, 40f));
@@ -587,7 +801,7 @@ public class ProximityAssistTests
             {
                 desk.Step(On(Glasses));
                 twin.Step(Near(Intercom, 40f));
-                Assert.AreEqual(SlidePhase.Retract, desk.Assist.Phase(Intercom));
+                Assert.AreEqual(SlidePhase.Retract, desk.Assist.Pose(Intercom).Phase);
             }
             string how = brush ? "brushed past" : "handed off";
             float sway = desk.Assist.Pose(Intercom).Sway;
@@ -634,7 +848,7 @@ public class ProximityAssistTests
         desk.Step(On(Chip));
         desk.Hold(20);
         Assert.AreEqual(-1, desk.FirstFrame(Chip, SlideCueKind.Unlatch), "it never started");
-        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Phase(Chip));
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Chip).Phase);
     }
 
     [Test]

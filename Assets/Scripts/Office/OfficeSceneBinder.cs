@@ -896,19 +896,22 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// The slide-in (desk v3, Saleh: "yes but they need to slide"; DESK-HOMES):
     /// the desk's DeskSlideIn on the office camera with the plan's slides and
     /// homes (nothing near while the PC is open; the forced retract when the
-    /// desk closes: GameManager.Desk.IsClosed; the contact shadows in the
-    /// papers' own shadow material, the rulebook's), today's sliders on their
-    /// homes, each from where it stands: the gameplay scanner (an art office's
-    /// own scanner stays put: its meshes are the art's), busy while its
-    /// outside shows it occupied (Occupied), and the chip reader, busy while it
-    /// reads, each the dock its paper rides home from; the intercom when it is
-    /// the built stand-in and its home declares a slide (the art's phone is
-    /// several parts, open call 1); the BABEL rack, the Rolodex and the
-    /// protocol cards; the UV torch's body, a layer over the pose UvTorch gives
-    /// it, giving way when it is picked up. The daters (STAMP), the glasses
-    /// (GLASSES) and the rulebook (the pocket) attach themselves through
-    /// MachineSlideIn.Attach. Then the D6 framing focus (FramingFocus) on the
-    /// reading view.
+    /// day is over: the DayOrchestrator's OnDayCompleted, never at closing
+    /// time itself, while the last traveller may still be served; the contact
+    /// shadows in the papers' own shadow material, the rulebook's), today's
+    /// sliders on their homes, each from where it stands: the gameplay scanner
+    /// (an art office's own scanner stays put: its meshes are the art's),
+    /// busy while its outside shows it occupied (Occupied), and the chip
+    /// reader, busy while it reads, each the dock its paper rides home from;
+    /// the intercom when it is the built stand-in and its home declares a
+    /// slide (the art office's phone is loose parts with no slide transform:
+    /// it stays put, said in the log, until DESK-PLAN's open call 1 or
+    /// DESK-ART's painted intercom gives it one); the BABEL rack, the Rolodex
+    /// and the protocol cards; the UV torch's body, a layer over the pose
+    /// UvTorch gives it, giving way when it is picked up. Not here: the
+    /// daters (STAMP #7 lifts and tips them itself: their slide waits for its
+    /// merge), the glasses (no object yet: GLASSES) and the rulebook (its
+    /// pocket is not built yet).
     /// </summary>
     private void BindSlideIn(Transform intercomStandIn)
     {
@@ -921,7 +924,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (shadow == null)
             Debug.LogWarning("[OfficeSceneBinder] The rulebook has no Shadow part (Build Office UI's PaperDepth shadow), so the slide-in draws no contact shadows.", this);
         DeskSlides slides = config.layout.slides;
-        slideIn.Bind(_office, slides, config.layout.homes, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked, () => game != null && game.Desk.IsClosed, shadow);
+        slideIn.Bind(_office, slides, config.layout.homes, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked, FindAnyObjectByType<DayOrchestrator>(), shadow);
         if (scanner != null && DeskLayout.ObjectOf(DeskHomeMap.Scanner) == scanner.transform)
             MachineSlideIn.Attach(DeskHomeMap.Scanner, scanner.transform, busy: Occupied(scanner.transform, slides), dock: scanner);
         ChipReader reader = hardware != null ? hardware.Reader : null;
@@ -929,15 +932,14 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             MachineSlideIn.Attach(DeskHomeMap.ChipReader, reader.transform, busy: () => reader.Busy, dock: reader);
         if (intercomStandIn != null)
             MachineSlideIn.Attach(DeskHomeMap.Intercom, intercomStandIn);
+        else if (DeskLayout.ObjectOf(DeskHomeMap.Intercom) != null && slides.Find(DeskHomeMap.Intercom) is DeskSlider intercom && intercom.MovesOn(DeskLayout.HomeOf(DeskHomeMap.Intercom)))
+            Debug.LogWarning("[OfficeSceneBinder] The intercom's home declares a slide, but the intercom is the art's phone (loose parts, no Slide transform): it stays put (DESK-PLAN open call 1, DESK-ART's painted intercom).", this);
         foreach (string id in new[] { DeskHomeMap.BabelTuner, DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing })
             MachineSlideIn.Attach(id, DeskLayout.ObjectOf(id));
         UvTorch torch = hardware != null ? hardware.Torch : null;
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
             MachineSlideIn.Attach(DeskHomeMap.UvTorch, torch.transform, body, layered: true, taken: () => torch.Held);
-        if (!TryGetComponent(out FramingFocus focus))
-            focus = gameObject.AddComponent<FramingFocus>();
-        focus.Bind(slideIn, deskView, _office, desk);
     }
 
     /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
@@ -13,8 +14,9 @@ using NUnit.Framework;
 /// their curves play the gate's frames, every track keeps its felt and every
 /// slider its lamps clear (the chip reader 3 px at its peak), they agree with
 /// the desk home map (a track slides the way its home declares: the map is
-/// the one source of the direction), and a home's obstacle is its footprint
-/// swept by its tracks and raised by its lifts.
+/// the one source of the direction), a home's obstacle is its footprint
+/// swept by its tracks and raised by its lifts, and every cue sounds now,
+/// for every slider (its stand-in a bank clip or a placeholder).
 /// </summary>
 public class DeskSlidesTests
 {
@@ -33,6 +35,20 @@ public class DeskSlidesTests
 
     private static IEnumerable<KeyValuePair<string, ContentNode>> GoldenSliders() => Golden().Get("sliders").Members;
 
+    /// <summary>A file of the project, from the tests' working folder or this file's.</summary>
+    private static string Repo(string relative, [CallerFilePath] string here = "") =>
+        File.ReadAllText(File.Exists(relative) ? relative : Path.Combine(Path.GetDirectoryName(here), "..", "..", "..", relative));
+
+    /// <summary>The gate's felt rule on a measure (UNITY_PLAN 5.1, track_check.py): at least feltGap metres and the gate's felt_gap_px at 1080p.</summary>
+    private static bool FeltHolds(DeskSlides slides, float metres, float px) => metres >= slides.feltGap - 1e-5f && px >= Num(Golden(), "felt_gap_px");
+
+    /// <summary>The gate's lamp rule on a measure (UNITY_PLAN 4.3): lamp_gap_px clear settled and at the peak, or a pair already closer at rest getting no closer; a lamp nearer the camera is an occluder, not a contact.</summary>
+    private static bool LampHolds(float rest, float settled, float peak, bool lampInFront)
+    {
+        float closest = Math.Min(settled, peak);
+        return lampInFront || closest >= Num(Golden(), "lamp_gap_px") || closest >= rest;
+    }
+
     [Test]
     public void TheApprovedSlides_AreThePipelinesSlidesJson()
     {
@@ -49,8 +65,6 @@ public class DeskSlidesTests
         Assert.AreEqual("easeInCubic", golden.Get("back").Get("ease").Text, "the way home arrives at speed (rereview 5)");
         Assert.AreEqual("easeInOutQuad", golden.Get("retract").Get("ease").Text);
         Assert.AreEqual(Num(golden, "felt_gap_m"), slides.feltGap, 1e-6f);
-        Assert.AreEqual(Num(golden, "felt_gap_px"), slides.feltGapPx, 1e-6f);
-        Assert.AreEqual(Num(golden, "lamp_gap_px"), slides.lampGapPx, 1e-6f);
         Assert.AreEqual(Num(golden.Get("lift_squash"), "px"), slides.squashPx, 1e-6f);
         Assert.AreEqual(Num(golden.Get("lift_squash"), "release_s"), slides.squashRelease, 1e-6f);
         Assert.AreEqual(Num(golden.Get("lift_shadow"), "alpha"), slides.liftShadowAlpha, 1e-6f);
@@ -134,11 +148,11 @@ public class DeskSlidesTests
             DeskSlider s = slides.Find(row.Key);
             ContentNode peak = clearance.Get("peak");
             Assert.AreEqual(s.Peak, Num(peak, "f"), 0.002f, row.Key + ": the gate measured the peak the game plays");
-            Assert.IsTrue(slides.FeltHolds(Num(peak, "cm") / 100f, Num(peak, "px")), $"{row.Key}: {Num(peak, "cm")} cm, {Num(peak, "px")} px of felt at its peak");
+            Assert.IsTrue(FeltHolds(slides, Num(peak, "cm") / 100f, Num(peak, "px")), $"{row.Key}: {Num(peak, "cm")} cm, {Num(peak, "px")} px of felt at its peak");
             Assert.LessOrEqual(s.travel * s.Peak, s.Reach(slides.feltGap), row.Key + ": the felt-gap clamp never cuts the approved overshoot");
         }
-        Assert.IsFalse(slides.FeltHolds(0.0046f, 2f), "rereview 4: the scanner at 4.3 cm kept 0.46 cm but only 2 px");
-        Assert.IsFalse(slides.FeltHolds(0.003f, 5f), "under 0.4 cm");
+        Assert.IsFalse(FeltHolds(slides, 0.0046f, 2f), "rereview 4: the scanner at 4.3 cm kept 0.46 cm but only 2 px");
+        Assert.IsFalse(FeltHolds(slides, 0.003f, 5f), "under 0.4 cm");
     }
 
     [Test]
@@ -154,16 +168,17 @@ public class DeskSlidesTests
             foreach (KeyValuePair<string, ContentNode> lamp in lamps.Get("lamps").Members)
             {
                 ContentNode m = lamp.Value;
-                Assert.IsTrue(slides.LampHolds(Num(m, "rest"), Num(m, "settled"), Num(m, "peak"), m.Get("lamp_in_front").Text == "true"),
+                Assert.IsTrue(LampHolds(Num(m, "rest"), Num(m, "settled"), Num(m, "peak"), m.Get("lamp_in_front").Text == "true"),
                               $"{row.Key} against {lamp.Key}: rest {m.Get("rest").Text}, settled {m.Get("settled").Text}, peak {m.Get("peak").Text}");
             }
         }
         ContentNode chip = Golden().Get("sliders").Get(DeskHomeMap.ChipReader).Get("lamp_clearance").Get("lamps").Get("lamp_chip");
-        Assert.GreaterOrEqual(Num(chip, "peak"), slides.lampGapPx, "the chip reader's overshoot stays 3 px clear of its lamp");
+        Assert.AreEqual(3f, Num(Golden(), "lamp_gap_px"), 1e-6f, "the gate's 3 px");
+        Assert.GreaterOrEqual(Num(chip, "peak"), 3f, "the chip reader's overshoot stays 3 px clear of its lamp");
         Assert.AreEqual(0.037f, slides.Find(DeskHomeMap.ChipReader).travel, 1e-6f, "3.7 cm: at 4.5 cm it touched lamp_chip at its peak");
-        Assert.IsFalse(slides.LampHolds(26f, 2f, 1f, false), "the old 4.5 cm: 0-1 px at the peak, 2 px settled");
-        Assert.IsTrue(slides.LampHolds(1f, 0f, 0f, true), "a lamp nearer the camera is an occluder, not a contact (the intercom's)");
-        Assert.IsTrue(slides.LampHolds(0f, 2f, 2f, false), "a pair touching at rest that gets no closer (the APPROVED dater's)");
+        Assert.IsFalse(LampHolds(26f, 2f, 1f, false), "the old 4.5 cm: 0-1 px at the peak, 2 px settled");
+        Assert.IsTrue(LampHolds(1f, 0f, 0f, true), "a lamp nearer the camera is an occluder, not a contact (the intercom's)");
+        Assert.IsTrue(LampHolds(0f, 2f, 2f, false), "a pair touching at rest that gets no closer (the APPROVED dater's)");
     }
 
     [Test]
@@ -210,7 +225,6 @@ public class DeskSlidesTests
             sliders = new[] { Good("left"), Good("left"), far, pastFelt, stiff, new DeskSlider("nowhere", null, SlideKind.Lift, 0.01f) },
             winnerAfter = 0.2f,
             winnerBelow = 0.6f,
-            focusAim = 0.1f,
         };
         string all = string.Join("\n", slides.Problems(homes, 0.06f));
         StringAssert.Contains("'left' is listed twice", all);
@@ -223,7 +237,6 @@ public class DeskSlidesTests
         StringAssert.Contains("'declared' declares a slide but no track slides it", all);
         StringAssert.Contains("waits up to 0.2 s", all);
         StringAssert.Contains("below 0.6 of the loser's travel", all);
-        StringAssert.Contains("aims 0.1 of the view", all);
         StringAssert.DoesNotContain("'pouch' declares", all, "a track resting in a home that declares no slide is no fault: it stays put until the map declares one");
     }
 
@@ -271,6 +284,40 @@ public class DeskSlidesTests
         DeskHome intercomHome = DeskHomeMap.Find(homes, DeskHomeMap.Intercom);
         Assert.AreEqual(intercomHome.Footprint.Width, slides.Obstacle(intercomHome, 0.12f).footprint.Width, 1e-6f, "the intercom stays put until its home declares a slide");
     }
+
+    [Test]
+    public void EveryCue_SoundsForEverySlider_ItsStandInABankClipOrAPlaceholder_UntilTheSoundListDeliversIt()
+    {
+        // The review: the bank has no machine_slide_unlatch, machine_slide_stop or machine_seat, and drawer_close is no bank cue, so the
+        // unlatch tick, the knock and the arrival clack never sounded and lifts were silent. Each now falls back as CueSounds does.
+        DeskSlides slides = DeskSlides.Approved();
+        Assert.AreEqual(("machine_slide_unlatch", SoundCues.RelayClack), Pair(slides.Sound(SlideCueKind.Unlatch)), "the unlatch: the relay's clack, low");
+        Assert.AreEqual(("machine_slide", SoundCues.PaperSlide), Pair(slides.Sound(SlideCueKind.Slide)), "the felt shush: the paper slide");
+        Assert.AreEqual(("machine_slide_stop", SoundCues.CartridgeIn), Pair(slides.Sound(SlideCueKind.Peak)), "the knock: the cartridge's thunk");
+        Assert.AreEqual(("machine_slide_back", SoundCues.PaperSlide), Pair(slides.Sound(SlideCueKind.Back)), "the reversed shush");
+        Assert.AreEqual(("machine_seat", SoundCues.DetainCover), Pair(slides.Sound(SlideCueKind.Seat)), "the seat's clack: the cover's snap");
+        Assert.AreEqual(("machine_slide_back", SoundCues.PaperSlide), Pair(slides.Sound(SlideCueKind.HandOff)), "the hand-off loser: the reversed shush, cut short");
+        Assert.Less(slides.Sound(SlideCueKind.Unlatch).pitch, 1f, "the tick very low");
+        Assert.Less(slides.Sound(SlideCueKind.Peak).pitch, 1f, "the knock muted");
+
+        string bank = Repo("Assets/Data/Config/SoundBank_Default.asset").Replace("\r\n", "\n");
+        string cueSounds = Repo("Assets/Scripts/UI/Motion/CueSounds.cs");
+        Dictionary<string, string> names = typeof(SoundCues).GetFields(BindingFlags.Public | BindingFlags.Static).Where(f => f.IsLiteral)
+                                                           .ToDictionary(f => (string)f.GetRawConstantValue(), f => f.Name);
+        bool Clip(string id) => bank.Split(new[] { "\n  - id: " }, StringSplitOptions.None).Skip(1)
+                                    .Any(block => block.Split('\n')[0].Trim() == id && block.Contains("fileID: 8300000"));
+        foreach (SlideCueKind kind in Enum.GetValues(typeof(SlideCueKind)))
+        {
+            string standIn = slides.Sound(kind).standIn;
+            bool placeholder = names.TryGetValue(standIn, out string name) && cueSounds.Contains($"case SoundCues.{name}:");
+            Assert.IsTrue(Clip(standIn) || placeholder, $"{kind}: its stand-in '{standIn}' has a bank clip or a CueSounds placeholder, so it sounds today");
+        }
+        Assert.IsTrue(Clip(SoundCues.PaperSlide), "the shush is the bank's own clip");
+        Assert.IsFalse(Clip(slides.seatCue) || Clip(slides.unlatchCue) || Clip(slides.stopCue),
+                       "the sound list has not delivered the machines' own clips yet (when it does, retire this line: they play instead of the stand-ins)");
+    }
+
+    private static (string, string) Pair((string id, string standIn, float pitch) sound) => (sound.id, sound.standIn);
 
     [Test]
     public void TheSerializersDefault_IsTheApprovedSlides_AFreshCopyEachTime()

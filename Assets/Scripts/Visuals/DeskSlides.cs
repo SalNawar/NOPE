@@ -86,6 +86,9 @@ public sealed class DeskSlider
     /// <summary>The spring's position at its overshoot peak (1 + the overshoot).</summary>
     public float Peak => 1f + overshoot;
 
+    /// <summary>Metres its travel moves per screen px at 1080p (the px its springs, its squash, its sway and its shadow's blur are set in); 0 without a measured travel.</summary>
+    public float MetresPerPx => travelPx > 0f ? travel / travelPx : 0f;
+
     /// <summary>
     /// A track's direction along the desk's x toward the mat, as its
     /// <paramref name="restsIn"/> home declares it (DeskHome.slide: -1 Left,
@@ -137,11 +140,11 @@ public sealed class DeskSlider
 /// spring; back: after a linger, an ease-in that arrives at speed and the
 /// seat bounce on the arrival frame; the hand-off loser's quick retract and
 /// when the winner may start), the clearances the gate holds (felt and
-/// lamps), a lift's squash, the contact shadows, the cues' sound ids, the D6
-/// framing focus and every slider (Approved: render/slides.json of the desk
-/// pipeline, the numbers as the offline gate passed them). Pure and
-/// serializable: a section of the desk's plan (DeskLayoutSettings.slides);
-/// ProximityAssist runs it, SlideCurve shapes it, SlideFocus frames it.
+/// lamps: the felt gap), a lift's squash, the contact shadows, the cues'
+/// sound ids and their stand-ins, and every slider (Approved:
+/// render/slides.json of the desk pipeline, the numbers as the offline gate
+/// passed them). Pure and serializable: a section of the desk's plan
+/// (DeskLayoutSettings.slides); ProximityAssist runs it, SlideCurve shapes it.
 /// </summary>
 [Serializable]
 public sealed class DeskSlides
@@ -176,11 +179,8 @@ public sealed class DeskSlides
     /// <summary>How far the scanner's lid must stand open (degrees from shut) to hold the scanner as busy: a paper is on its way onto the bed, or a scan just ended and the next queued paper may follow (OfficeSceneBinder's stand-in read, SlideOccupancy).</summary>
     public float lidOpenDegrees = 0.5f;
 
-    /// <summary>The felt a track keeps in front of its inner brass lip at the overshoot peak: metres and screen px at 1080p (both must hold).</summary>
-    public float feltGap = 0.004f, feltGapPx = 3f;
-
-    /// <summary>The px every slider keeps clear of every lamp housing settled and at its peak (a pair already closer at rest must not get closer; a lamp nearer the camera is an occluder, not a contact).</summary>
-    public float lampGapPx = 3f;
+    /// <summary>The felt a track keeps in front of its inner brass lip at the overshoot peak (metres; DeskSlider.Reach clamps the travel to it; the offline gate also held 3 px at 1080p, and the lamps 3 px clear: DeskSlidesTests reads both from slides.json).</summary>
+    public float feltGap = 0.004f;
 
     /// <summary>A lift's anticipation: it squashes up to squashPx of height over the anticipation (its base stays down) and releases over squashRelease seconds as it rises.</summary>
     public float squashPx = 1.5f, squashRelease = 0.06f;
@@ -188,8 +188,8 @@ public sealed class DeskSlides
     /// <summary>A lift's contact shadow left at its rest footprint: its alpha, how much it fades by the top, its blur (px, plus per px of lift) and how much wider it gets per px of lift.</summary>
     public float liftShadowAlpha = 0.85f, liftShadowFade = 0.35f, liftShadowBlurPx = 1f, liftShadowBlurPerPx = 0.3f, liftShadowWidenPerPx = 0.025f;
 
-    /// <summary>A track's contact shadow: it leaves the well with the base, fading in to trackShadowAlpha over trackShadowIn seconds from the anticipation's end, and fades out over trackShadowOut seconds as the base re-enters its well; at the overshoot peak it tightens for peakTightSeconds.</summary>
-    public float trackShadowAlpha = 0.35f, trackShadowIn = 0.08f, trackShadowOut = 0.06f, peakTightSeconds = 0.025f;
+    /// <summary>A track's contact shadow: it leaves the well with the base, fading in to trackShadowAlpha over trackShadowIn seconds from the anticipation's end, and fades out over trackShadowOut seconds as the base re-enters its well; from the overshoot peak's frame it tightens for peakTightSeconds (slides.json: "for 2 frames", two frames at 60 fps).</summary>
+    public float trackShadowAlpha = 0.35f, trackShadowIn = 0.08f, trackShadowOut = 0.06f, peakTightSeconds = 2f / 60f;
 
     /// <summary>A track's contact shadow's blur (px at 1080p; slides.json names none, so the lift's rest blur).</summary>
     public float trackShadowBlurPx = 1f;
@@ -203,11 +203,19 @@ public sealed class DeskSlides
     /// <summary>The cues' sound ids (the sound list; a cue the bank has no clip for plays its stand-in): the unlatch tick on the trigger frame, the felt shush when the base moves, the knock at the peak, the reversed shush going home (and the hand-off loser's), the clack on the seat.</summary>
     public string unlatchCue = "machine_slide_unlatch", slideCue = "machine_slide", stopCue = "machine_slide_stop", backCue = "machine_slide_back", seatCue = "machine_seat";
 
-    /// <summary>The D6 framing focus (DESK-HOMES P3; Q5's default: the reading view only): it starts focusDwellSeconds after the cursor's slider has finished its slide, at most once every focusEverySeconds, and re-aims to the next slider without letting go in between.</summary>
-    public float focusDwellSeconds = 0.15f, focusEverySeconds = 0.8f;
+    /// <summary>
+    /// What each cue plays until the sound list delivers its clip, for every
+    /// slider (DESK-HOMES 7's fallback, through the house fallback: the bank's
+    /// clip of the stand-in, else CueSounds' placeholder of it): the bank's
+    /// paper slide for the shushes, the relay's clack low for the unlatch
+    /// tick, the cartridge's thunk low for the knock at the peak, and the
+    /// cover's snap for the seat's clack (drawer_close is no bank cue: the
+    /// stamp tray plays its own clip).
+    /// </summary>
+    public string shushStandIn = "paper_slide", unlatchStandIn = "relay_clack", stopStandIn = "cartridge_in", seatStandIn = "detain_cover";
 
-    /// <summary>The focus's budgets as shares of the reading view's bound field of view: its narrowing (focusShare, 3 %), the push-in and the focus together (focusCap, 8 %), and its aim toward the machine (focusAim, 3 % of the frame).</summary>
-    public float focusShare = 0.03f, focusCap = 0.08f, focusAim = 0.03f;
+    /// <summary>The pitch each stand-in plays at (the unlatch tick "very low", the knock muted).</summary>
+    public float unlatchPitch = 0.6f, stopPitch = 0.7f, seatPitch = 1f;
 
     /// <summary>Every slider (render/slides.json).</summary>
     public DeskSlider[] sliders;
@@ -257,28 +265,25 @@ public sealed class DeskSlides
         return (swept, top);
     }
 
-    /// <summary>
-    /// The felt-gap clearance on a measure (the gate's rule, UNITY_PLAN 5.1;
-    /// track_check.py offline, the QA rig's slide gate on the real meshes):
-    /// the felt still showing between a track's silhouette and its inner brass
-    /// lip at the overshoot peak, <paramref name="metres"/> and
-    /// <paramref name="px"/> at 1080p, keeps at least feltGap and feltGapPx.
-    /// </summary>
-    public bool FeltHolds(float metres, float px) => metres >= feltGap - 1e-5f && px >= feltGapPx;
+    /// <summary><paramref name="px"/> on a screen <paramref name="screenHeight"/> px high, as px at referenceHeight: the trigger and the hysteresis are set at 1080p and scale with the screen's height (UNITY_PLAN 5.2).</summary>
+    public float ToReference(float px, float screenHeight) => px * referenceHeight / Math.Max(1f, screenHeight);
 
-    /// <summary>
-    /// The lamp clearance on a measure (the gate's rule, UNITY_PLAN 4.3): a
-    /// slider keeps lampGapPx clear px of a lamp's housing settled and at its
-    /// peak (<paramref name="settled"/>, <paramref name="peak"/>), or, for a
-    /// pair already closer than that at <paramref name="rest"/>, gets no
-    /// closer; a lamp nearer the camera than the slider
-    /// (<paramref name="lampInFront"/>) is an occluder the depth test draws
-    /// over it, not a contact.
-    /// </summary>
-    public bool LampHolds(float rest, float settled, float peak, bool lampInFront)
+    /// <summary>The sound of <paramref name="kind"/>: its id in the sound list, the stand-in that sounds until the list delivers that clip, and the stand-in's pitch (the hand-off loser's is the reversed shush, cut short with its retract).</summary>
+    public (string id, string standIn, float pitch) Sound(SlideCueKind kind)
     {
-        float closest = Math.Min(settled, peak);
-        return lampInFront || closest >= lampGapPx || closest >= rest;
+        switch (kind)
+        {
+            case SlideCueKind.Unlatch:
+                return (unlatchCue, unlatchStandIn, unlatchPitch);
+            case SlideCueKind.Slide:
+                return (slideCue, shushStandIn, 1f);
+            case SlideCueKind.Peak:
+                return (stopCue, stopStandIn, stopPitch);
+            case SlideCueKind.Seat:
+                return (seatCue, seatStandIn, seatPitch);
+            default:
+                return (backCue, shushStandIn, 1f);
+        }
     }
 
     /// <summary>
@@ -290,9 +295,8 @@ public sealed class DeskSlides
     /// home that declares a slide no track of it slides; a spring that does
     /// not overshoot once, peaks before its anticipation ends or whose damping
     /// disagrees with its overshoot; the timings' order (the hand-off winner
-    /// may never wait longer than the retract); the focus's budgets (its
-    /// narrowing and aim inside the cap). A track whose home declares no
-    /// slide is not a fault: it stays put until the map declares one.
+    /// may never wait longer than the retract). A track whose home declares
+    /// no slide is not a fault: it stays put until the map declares one.
     /// </summary>
     public List<string> Problems(IReadOnlyList<DeskHome> homes, float slideReach)
     {
@@ -333,8 +337,6 @@ public sealed class DeskSlides
             problems.Add($"The hand-off winner waits up to {winnerAfter} s, longer than the loser's {retractSeconds} s retract.");
         if (winnerBelow <= 0f || winnerBelow >= 0.5f)
             problems.Add($"The hand-off winner starts below {winnerBelow} of the loser's travel: it must be nearly seated (0 < winnerBelow < 0.5), so two sliders are never both half out.");
-        if (focusShare < 0f || focusShare > focusCap || focusAim < 0f || focusAim > focusCap)
-            problems.Add($"The framing focus narrows {focusShare} and aims {focusAim} of the view: each between 0 and its {focusCap} cap.");
         return problems;
     }
 

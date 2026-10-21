@@ -146,5 +146,34 @@ public static class SlideCurve
     /// <summary>A tip of <paramref name="s"/> at position <paramref name="f"/> (degrees): its full tip at the slid spot, in proportion along the way (none for a slider that does not tip).</summary>
     public static float Tip(DeskSlider s, float f) => s.tipDegrees * Math.Max(0f, f);
 
+    /// <summary>
+    /// Where <paramref name="s"/>'s slide puts it at position
+    /// <paramref name="f"/> (MachineSlideIn writes it to its slide transform,
+    /// or as a layer over its owner's pose): metres along the desk frame's
+    /// right and up from its rest. A track moves along x the way its home
+    /// declares (<paramref name="way"/>: DeskSlider.Way, -1 or +1; 0 keeps it
+    /// put), never up; a lift rises, never sideways.
+    /// </summary>
+    public static (float right, float up) Offset(DeskSlider s, float way, float f) =>
+        s.kind == SlideKind.Lift ? (0f, f * s.travel) : s.kind == SlideKind.Track ? (way * f * s.travel, 0f) : (0f, 0f);
+
+    /// <summary>The height factor of a lift squashed by <paramref name="squashPx"/> (px at 1080p, <paramref name="metresPerPx"/> each) over its <paramref name="height"/> (metres): its top comes down, never below half its height; 1 with no squash or no measured height.</summary>
+    public static float SquashScale(float squashPx, float metresPerPx, float height) =>
+        squashPx > 0f && height > 1e-4f ? Math.Max(0.5f, 1f - squashPx * metresPerPx / height) : 1f;
+
+    /// <summary>The centre of <paramref name="s"/>'s contact shadow on the desk (the desk frame's x, y) at position <paramref name="f"/>, its rest footprint centred at <paramref name="rest"/>: a lift's stays at its rest footprint, a track's travels with its base (Offset's x).</summary>
+    public static (float x, float y) ShadowCentre(DeskSlider s, float way, float f, (float x, float y) rest) =>
+        s.kind == SlideKind.Track ? (rest.x + Offset(s, way, f).right, rest.y) : rest;
+
+    /// <summary>
+    /// How much a contact shadow built for a rest footprint of
+    /// <paramref name="size"/> metres with a soft edge of
+    /// <paramref name="builtSpread"/> metres scales along x and y to show
+    /// that footprint <paramref name="widen"/> times as wide with a soft edge
+    /// of <paramref name="spread"/> metres (SlideShadow.Show).
+    /// </summary>
+    public static (float x, float y) ShadowScale((float x, float y) size, float builtSpread, float spread, float widen) =>
+        ((size.x * widen + 2f * spread) / Math.Max(1e-5f, size.x + 2f * builtSpread), (size.y * widen + 2f * spread) / Math.Max(1e-5f, size.y + 2f * builtSpread));
+
     private static float Clamp01(float v) => v < 0f ? 0f : v > 1f ? 1f : v;
 }
