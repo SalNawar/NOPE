@@ -114,7 +114,7 @@ The PlayMode or harness test from §3 ("re-grab mid-stroke does not change the r
 6. **CAM (#6): the rack in the reading pose.** Add the `StampRack` box bounds (the renderer bounds under `Office/StampRack`, or `DeskStampTray.Rack`) to the rect set the reading-pose LensFit solve must contain, at the four aspects, so TAB/STAMPS ends with the whole rack in frame wherever DESK-PLAN's 15b puts its home. Add it to CAM's LensFit EditMode test (the mat, the rulebook, the tools **and the rack** inside the frame). **Gate: R2.3.** Until it lands, 15a's pass line stays open.
 7. **If CAM declines request 6 (or R2.3 fails): TEXT-LANG/CONTENT and CAM.** Per FIX_PLAN's fallback for a fixed rack ("the tab only moves the camera, relabelled"): TEXT-LANG/CONTENT relabel the tab's string to what it does (proposal, ours: "DESK" or "READ"; the FTUE basics line "{stamps} or the grey STAMPS tab: the stamps" and GuideDirector's pointer change with it), or CAM removes the tab as chrome (BUG-59). STAMP then drops `Present`. Either choice is the owners', not this track's.
 
-## FEATURES and cues (for INTEGRATION)
+## FEATURES and cues (for INTEGRATION; folded at the integration, see the end)
 
 Rewrite `docs/FEATURES.md` line 60 (the stamp rack) as follows:
 
@@ -134,7 +134,7 @@ Line 191 (the cues the game plays):
 - `stamp_lift` (pick-up) and `stamp_miss` (bare desk) are now played;
 - `drawer_open` / `drawer_close` are not played (they never were) and go with the cleanup.
 
-## StampChecks (DemoGate) and the stamp scenario: added on top of QA-RIG
+## StampChecks (DemoGate) and the stamp scenario: added on top of QA-RIG (installed at the integration, see the end)
 
 QA-RIG (#2) owns `GateCheck`, `GateResults` and the scenario runner. Its branch (`fix/p0-qa-rig`) is not in this branch's base (`fix/p0-cuts`), so `Assets/Editor/QA/Checks/StampChecks.cs` cannot compile here. When main has QA-RIG, add it with this content:
 
@@ -252,3 +252,17 @@ Each item below is **deferred: Unity**, to run in one batch on the NOPE-p5 edito
 5. **The texture is dropped**, not mipmapped: the flat cel look needs none, and that leaves no import setting to ask DOC-LOOK for.
 6. **The contact shadow reuses the papers' drawn shadow** (`PaperDepth.Shadow`, `Paper_Shadow`, DeskConfigSO's shadow knobs). There is no rack-only shadow system and no light's shadow.
 7. **A dater still needs its cradle locked** before it takes input (~0.2 s after the case opens, now that the slide is gone). Grabbing a dater whose cradle is still turning was not made possible (G1 says animations never gate input; the cradle's turn moves the dater's parent, and a grab mid-turn is untested). Flagged for the feel review.
+
+## INTEGRATION (integrate/a, 2026-10-21)
+
+Merged onto main 4290bd6 (RUN-SAFE landed; HALL-FX, DESK-PLAN, CAM not yet). The full report with every number is `E:\unity\NOPE-tools\reports\INTEGRATE_STAMP.md`.
+
+- **Folded:** the FEATURES lines above (line 60, the rack, and line 191, the cues) are in `docs/FEATURES.md`. `SOUND_LIST.md`'s `drawer_open`/`drawer_close` rows stay until FEEDBACK deletes the cues from `SoundCues` (the importer warns about a cue the list lacks).
+- **Installed now that QA-RIG is on main:** `Assets/Editor/QA/Checks/StampChecks.cs` as above (its `measured` is a string: `bad.Count.ToString()`); the rig ops in `Assets/Tests/PlayMode/STAMP/StampRig.cs` (`stampRackWatch`, `stampCradles`, `stampTab`, `stampPaper`, `stampStack`, `stampView`, `stampFolderOver`, `stampAim`, `stampRegrab`, `stampLetGo`, `stampHold`, `stampHandBack`, `stampDump`; the class doc says what each measures); the scenarios `tools/qa/scenarios/stamp_case.json` (R2, R6), `stamp_aim.json` (R4), `stamp_hold.json` (R5) and `stamp_rack.json` (R3, [BP]). The rack-over-paper test is a ray grid (6 px at 1080p) that counts a pixel when a ray meets a rack part nearer than the paper, not a plain rect overlap: a paper beside the rack, in front of it, overlaps its rect without any rack pixel over it.
+- **Fixed at the integration (R4 d ii):** the chip reader's body has a collider only over its readout, so a let-go over the rest of it stroked down through the machine onto the desk (a thump and a bounce inside the casing). `BareDeskUnder` now also reads the desk machines' casings (`IPaperDock.Casing`, the chip reader and the scanner on the desk); over one, the dater just goes back. Decor without a collider is still the known limit (request 2).
+- **Still open after the integration:**
+  - R4 (d)'s literal line, "no part of the dater below the prop's top in any frame": the carry hangs the die `stampHover` over the desk's plane wherever it is (`DeskDraggable` clamps the aim to the plane), so a dater carried over the rack's box, the chip reader or the scanner passes through them (`stamp_aim`'s `letGoCarry.*`). Keeping carried things over props is request 2 (DOC-HANDLE's `DeskObstacles`); it was so before STAMP.
+  - R5's A: with a dater held in the office view, A turns to the city and the hold goes on, so letting go there presses the passport the pointer last aimed at (in the reading view A does nothing). The control model's treatment of holds is BUG-55a (DOC-HANDLE, #8); it was so before STAMP. Alt+Tab is not driven (55a too).
+  - 15a's pass line for the other aspects: the whole rack is in the reading view's frame at 1920x1080 and 1280x720 (`stamp_case`'s `tab.*.rackInFrame`); 21:9 and 5:4 wait for CAM's LensFit (request 6).
+  - The contact shadow at H5 (22:00) reads lighter than the mat (a halo): `Paper_Shadow` does not darken with the hall's hour. The papers' shadows show the same, so it is the shared material's (DOC-LOOK, LIGHT #11); at H2 it is darker than the mat, as it should be.
+  - R3 [BP], R7 (the feel cards' clips and checks) and the adversarial review were not run at the integration.
