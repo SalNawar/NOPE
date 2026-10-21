@@ -88,15 +88,20 @@ public class SwitchboardLayoutTests
     }
 
     [Test]
-    public void TheBoardsWords_AreUiStrings_EnglishInEveryCulture()
+    public void TheBoardsWords_AreUiStrings_TheWordedOnesInEveryCulture()
     {
+        ContentNode ui = ContentJson.Parse(Repo("Assets/Data/World/world_source.json")).Get("ui");
         var tiers = new Dictionary<string, string>();
-        foreach (ContentNode e in ContentJson.Parse(Repo("Assets/Data/World/world_source.json")).Get("ui").Get("strings").Items)
+        foreach (ContentNode e in ui.Get("strings").Items)
             tiers[e.Get("key").Text] = e.Get("tier").Text;
         foreach (string key in SwitchboardWords.All)
         {
             Assert.IsTrue(tiers.ContainsKey(key), key);
-            Assert.AreEqual("Full", tiers[key], key + ": printed in English until its translations come");
+            Assert.AreEqual(key == SwitchboardWords.Bonus ? "Full" : "Flavour", tiers[key], key + ": the worded ones are translated; the bonus is a number and the wallet's word");
+            if (tiers[key] != "Flavour")
+                continue;
+            foreach (ContentNode language in ui.Get("languages").Items)
+                Assert.IsTrue(language.Get("entries").Items.Any(e => e.Get("key").Text == key), language.Get("language").Text + " translates " + key);
         }
     }
 

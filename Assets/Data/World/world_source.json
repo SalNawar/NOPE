@@ -27158,49 +27158,49 @@
         "key": "switchboard.hint",
         "text": "A lamp blinks: plug a module to it, give it power, pull MASTER",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.display.pull",
         "text": "PULL",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.display.power",
         "text": "POWER",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.display.open",
         "text": "OPEN",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.display.done",
         "text": "DONE",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.display.fuse",
         "text": "FUSE",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.display.closed",
         "text": "CLOSED",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.sent",
         "text": "+{0} SENT",
         "gloss": "None",
-        "tier": "Full"
+        "tier": "Flavour"
       },
       {
         "key": "switchboard.bonus",
@@ -31669,6 +31669,38 @@
           {
             "key": "portals.footer",
             "text": "المديرية تحدد المسارات. حتى إصلاح بوابة العودة, يغادر النازحون عبر البوابة {0}."
+          },
+          {
+            "key": "switchboard.hint",
+            "text": "مصباح يومض: صِل به وحدة، زوّدها بالطاقة، اسحب الذراع الرئيسية"
+          },
+          {
+            "key": "switchboard.display.pull",
+            "text": "اسحب"
+          },
+          {
+            "key": "switchboard.display.power",
+            "text": "طاقة"
+          },
+          {
+            "key": "switchboard.display.open",
+            "text": "مفتوح"
+          },
+          {
+            "key": "switchboard.display.done",
+            "text": "تم"
+          },
+          {
+            "key": "switchboard.display.fuse",
+            "text": "صمامة"
+          },
+          {
+            "key": "switchboard.display.closed",
+            "text": "مغلق"
+          },
+          {
+            "key": "switchboard.sent",
+            "text": "+{0} أُرسلوا"
           },
           {
             "key": "home.title",
@@ -40231,6 +40263,38 @@
             "text": "Τα δρομολόγια ορίζει η Διεύθυνση. Μέχρι να επισκευαστεί η Πύλη Επιστροφής, οι εκτοπισμένοι φεύγουν από την Πύλη {0}."
           },
           {
+            "key": "switchboard.hint",
+            "text": "Μια λάμπα αναβοσβήνει: σύνδεσε μια μονάδα, δώσ' της ρεύμα, τράβηξε το MASTER"
+          },
+          {
+            "key": "switchboard.display.pull",
+            "text": "ΤΡΑΒΑ"
+          },
+          {
+            "key": "switchboard.display.power",
+            "text": "ΡΕΥΜΑ"
+          },
+          {
+            "key": "switchboard.display.open",
+            "text": "ΑΝΟΙΧΤΟ"
+          },
+          {
+            "key": "switchboard.display.done",
+            "text": "ΕΓΙΝΕ"
+          },
+          {
+            "key": "switchboard.display.fuse",
+            "text": "ΑΣΦΑΛΕΙΑ"
+          },
+          {
+            "key": "switchboard.display.closed",
+            "text": "ΚΛΕΙΣΤΟ"
+          },
+          {
+            "key": "switchboard.sent",
+            "text": "+{0} ΕΣΤΑΛΗΣΑΝ"
+          },
+          {
             "key": "home.title",
             "text": "Ημέρα {0} — Σπίτι"
           },
@@ -48237,6 +48301,38 @@
           {
             "key": "portals.footer",
             "text": "Le rotte sono stabilite dalla Direzione. Finché il Varco di ritorno non è riparato, gli sfollati partono dal Portale {0}."
+          },
+          {
+            "key": "switchboard.hint",
+            "text": "Una spia lampeggia: collegaci un modulo, dagli corrente, tira il MASTER"
+          },
+          {
+            "key": "switchboard.display.pull",
+            "text": "TIRA"
+          },
+          {
+            "key": "switchboard.display.power",
+            "text": "CORRENTE"
+          },
+          {
+            "key": "switchboard.display.open",
+            "text": "APERTO"
+          },
+          {
+            "key": "switchboard.display.done",
+            "text": "FATTO"
+          },
+          {
+            "key": "switchboard.display.fuse",
+            "text": "FUSIBILE"
+          },
+          {
+            "key": "switchboard.display.closed",
+            "text": "CHIUSO"
+          },
+          {
+            "key": "switchboard.sent",
+            "text": "+{0} PARTITI"
           },
           {
             "key": "home.title",
@@ -56365,6 +56461,38 @@
           {
             "key": "portals.footer",
             "text": "Die Routen legt die Direktion fest. Bis das Rückkehrtor repariert ist, reisen Vertriebene durch Portal {0} ab."
+          },
+          {
+            "key": "switchboard.hint",
+            "text": "Eine Lampe blinkt: Modul anschließen, Strom geben, MASTER ziehen"
+          },
+          {
+            "key": "switchboard.display.pull",
+            "text": "ZIEHEN"
+          },
+          {
+            "key": "switchboard.display.power",
+            "text": "STROM"
+          },
+          {
+            "key": "switchboard.display.open",
+            "text": "OFFEN"
+          },
+          {
+            "key": "switchboard.display.done",
+            "text": "FERTIG"
+          },
+          {
+            "key": "switchboard.display.fuse",
+            "text": "SICHERUNG"
+          },
+          {
+            "key": "switchboard.display.closed",
+            "text": "GESCHLOSSEN"
+          },
+          {
+            "key": "switchboard.sent",
+            "text": "+{0} GESENDET"
           },
           {
             "key": "home.title",
@@ -64719,6 +64847,38 @@
             "text": "路线由总署设定。返程门修复前，流离者经由 {0} 号传送门离开。"
           },
           {
+            "key": "switchboard.hint",
+            "text": "指示灯闪烁：接上一个模块，接通电源，拉下 MASTER"
+          },
+          {
+            "key": "switchboard.display.pull",
+            "text": "拉下"
+          },
+          {
+            "key": "switchboard.display.power",
+            "text": "电源"
+          },
+          {
+            "key": "switchboard.display.open",
+            "text": "开通"
+          },
+          {
+            "key": "switchboard.display.done",
+            "text": "完成"
+          },
+          {
+            "key": "switchboard.display.fuse",
+            "text": "保险丝"
+          },
+          {
+            "key": "switchboard.display.closed",
+            "text": "关闭"
+          },
+          {
+            "key": "switchboard.sent",
+            "text": "+{0} 已送出"
+          },
+          {
             "key": "home.title",
             "text": "第{0}天 — 家"
           },
@@ -72417,6 +72577,38 @@
           {
             "key": "portals.footer",
             "text": "路線は総局が決めます。帰還ゲートが修理されるまで、漂流者はポータル{0}から出発します。"
+          },
+          {
+            "key": "switchboard.hint",
+            "text": "ランプが点滅したら：モジュールをつなぎ、電源を入れ、MASTERを引く"
+          },
+          {
+            "key": "switchboard.display.pull",
+            "text": "引く"
+          },
+          {
+            "key": "switchboard.display.power",
+            "text": "電源"
+          },
+          {
+            "key": "switchboard.display.open",
+            "text": "開通"
+          },
+          {
+            "key": "switchboard.display.done",
+            "text": "完了"
+          },
+          {
+            "key": "switchboard.display.fuse",
+            "text": "ヒューズ"
+          },
+          {
+            "key": "switchboard.display.closed",
+            "text": "閉鎖"
+          },
+          {
+            "key": "switchboard.sent",
+            "text": "+{0} 送出"
           },
           {
             "key": "home.title",

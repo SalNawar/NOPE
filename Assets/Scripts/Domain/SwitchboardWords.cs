@@ -1,9 +1,10 @@
 /// <summary>
-/// The switchboard's printed words (world_source.json ui.strings, English in
-/// every culture: tier Full): the day-1 hint card, the modules' little
-/// displays and the departure's tally. The view prints a key's words only
-/// once Generate World has put them in the tables (a missing key prints
-/// nothing, never the key).
+/// The switchboard's printed words (world_source.json ui.strings; the worded
+/// ones translated in every culture's table, tier Flavour; the bonus, a
+/// number and the wallet's word, tier Full): the day-1 hint card, the
+/// modules' little displays and the departure's tally. The view prints a
+/// key's words only once Generate World has put them in the tables (a
+/// missing key prints nothing, never the key).
 /// </summary>
 public static class SwitchboardWords
 {

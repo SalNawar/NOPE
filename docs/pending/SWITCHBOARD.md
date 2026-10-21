@@ -83,7 +83,7 @@ A wrong period (another destination's period jack, or a period nobody at that de
 | `Art/UI/Resources/Switchboard/` | the plate (lever-free), the layout JSON, the plug, lamp and lever sprites (1x), imported from the board kit |
 | Tests: `SwitchboardTests`, `SwitchboardDirectoryTests`, `SwitchboardLayoutTests` (layout, cords, snapping, sounds, words), `ControlRulesTests` (keys, back-out, the wall click) | |
 
-Other owners' files touched (small, for the PORTALS lease chain to confirm): `Domain/ControlRules.cs` and `Office/OfficeControls.cs` (DOC-HANDLE → CITY-LIFE → PORTALS in LEASES: the S key, D at the desk, the back-out step, `BindSwitchboard`), `Domain/ArtSlots.cs` (the `Switchboard/` slots), `Editor/ArtSlotImporter.cs` (the plate's high-quality compression, like the hall's), `Domain/SoundSynth.cs` (`Normalise` made internal to reuse it), `Office/OfficeSceneBinder.cs` (DESK-HOMES: the desk's slide-ins pause while the board is open, as they do for the PC frame, so no machine slides in, unseen and heard, behind the board), `Data/World/world_source.json` (9 `switchboard.*` UI strings, tier Full), `docs/FEATURES.md`, `docs/CHEATS.md`. GameManager, BoothCoordinator and the scenes are untouched.
+Other owners' files touched (small, for the PORTALS lease chain to confirm): `Domain/ControlRules.cs` and `Office/OfficeControls.cs` (DOC-HANDLE → CITY-LIFE → PORTALS in LEASES: the S key, D at the desk, the back-out step, `BindSwitchboard`), `Domain/ArtSlots.cs` (the `Switchboard/` slots), `Editor/ArtSlotImporter.cs` (the plate's high-quality compression, like the hall's), `Domain/SoundSynth.cs` (`Normalise` made internal to reuse it), `Office/OfficeSceneBinder.cs` (DESK-HOMES: the desk's slide-ins pause while the board is open, as they do for the PC frame, so no machine slides in, unseen and heard, behind the board), `Data/World/world_source.json` (9 `switchboard.*` UI strings: the 8 worded ones tier Flavour with their translations in the 6 culture tables, the bonus template tier Full), `docs/FEATURES.md`, `docs/CHEATS.md`. GameManager, BoothCoordinator and the scenes are untouched.
 
 ## Checks (outside Unity)
 
@@ -95,7 +95,7 @@ Other owners' files touched (small, for the PORTALS lease chain to confirm): `Do
 ## For the Unity phase (not run: no Unity before it)
 
 1. Import: the `Switchboard/` art imports as sprites (ArtSlotImporter), the plate with high-quality compression; `SwitchboardConfig.asset` loads.
-2. **Run Tools > TimeDesk > Generate World** (the 9 new `switchboard.*` UI strings). Until then the hint card and the module displays' words stay blank (never the keys); the countdown digits still show.
+2. **Run Tools > TimeDesk > Generate World** (the 9 new `switchboard.*` UI strings and their culture translations, ours: a native reader should check the Arabic, Greek, Chinese and Japanese). Until then the hint card and the module displays' words stay blank (never the keys); the countdown digits still show.
 3. Play day 1: approve a traveller; the wall lamp blinks and buzzes; D opens the board; plug 01's PLACE into the destination, PERIOD into its period (01 is powered); pull MASTER; 20 s later the group leaves; Esc returns. Then the cheat **Switchboard: 3 test calls** for the full loop with modules 01 to 03 and both power cords.
 4. Captures at 1920x1080 and 1280x720 (the board, the turn, a held plug with its targets, MASTER pulled, a fuse, a departure flare); the wall click area on the painted board; no console errors.
 5. Feel: the plug snap and MASTER's weight (the director's 7/10 gate).
