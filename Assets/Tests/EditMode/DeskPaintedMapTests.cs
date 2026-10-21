@@ -214,4 +214,114 @@ public class DeskPaintedMapTests
         foreach ((int x, int y) in new[] { (0, mid), (mid, 0), (DeskPaintedMap.StandInCell - 1, mid), (mid, DeskPaintedMap.StandInCell - 1), (1, 1) })
             Assert.AreEqual(DeskPaintedMap.InkLine, DeskPaintedMap.StandInTexel(colour, 1, x, y), $"({x}, {y}): an inked edge");
     }
+    [Test]
+    public void TheRingPanel_ShowsNothing_TheCrateWearsPaintingMatchedBoxes_AndBothStayOnThePaintedMap()
+    {
+        // The code review of round 6 (1): the RING SERVICE panel (the old RingPanel.fbx, 5 breaker boxes) stood on the switchboard's
+        // home and the supply crate (kraft, tape, flaps, tag) on its spot every delivery morning, neither hidden, re-skinned nor stood in for.
+        CollectionAssert.Contains(DeskPaintedMap.Unshown, DeskHomeMap.Switchboard, "the painted booth wall carries the painting's switchboard on its home");
+        CollectionAssert.Contains(DeskPaintedMap.Boxed, DeskHomeMap.Crate, "the crate keeps its moving parts, in painting-matched boxes");
+        DeskHome[] map = DeskPaintedMap.Merge(DeskHomeMap.Approved(), Painted().homes);
+        foreach (string id in DeskPaintedMap.Unshown.Concat(DeskPaintedMap.Boxed))
+            Assert.IsNotNull(DeskHomeMap.Find(map, id), id + ": its home stays on the painted map, so its object is laid and tracked there (the install finds it by its home)");
+
+        foreach (string part in new[] { "Crate", "Flap_Left", "Flap_Right", "Flap_Front", "Flap_Back" })
+        {
+            Assert.AreEqual(PartLook.Box, DeskPaintedMap.LookOf(DeskHomeMap.Crate, part, out var colour, out _), part);
+            Assert.AreEqual(DeskPaintedMap.Kraft, colour, part + ": kraft");
+        }
+        DeskPaintedMap.LookOf(DeskHomeMap.Crate, "Crate", out _, out float inset);
+        Assert.That(inset, Is.InRange(0.0015f, 0.003f), "the body's top under its front and back flaps (1 mm under its walls' top): never two faces in one plane");
+        DeskPaintedMap.LookOf(DeskHomeMap.Crate, "Flap_Front", out _, out float flapInset);
+        Assert.AreEqual(0f, flapInset);
+        Assert.AreEqual(PartLook.Box, DeskPaintedMap.LookOf(DeskHomeMap.Crate, "Label", out var label, out _));
+        Assert.AreEqual(DeskPaintedMap.Cream, label, "its label in the painting's cream");
+        Assert.AreEqual(PartLook.Hide, DeskPaintedMap.LookOf(DeskHomeMap.Crate, "Tape", out _, out _), "its tape (three bent strips) no box draws");
+        Assert.AreEqual(PartLook.Hide, DeskPaintedMap.LookOf(DeskHomeMap.Crate, "AnyOtherPart", out _, out _), "nothing else of the old model");
+        CollectionAssert.AreEqual(new[] { "Tag" }, DeskPaintedMap.Kept(DeskHomeMap.Crate), "its tag, the delivery's live label, stays");
+        Assert.AreEqual(PartLook.Keep, DeskPaintedMap.LookOf(DeskHomeMap.Scanner, "Crate", out _, out _), "only a boxed object's parts are boxed");
+        foreach ((float k, float lo, float hi) in new[] { (DeskPaintedMap.Kraft.r, DeskPaintedMap.Brass.r, DeskPaintedMap.Cream.r), (DeskPaintedMap.Kraft.g, DeskPaintedMap.Brass.g, DeskPaintedMap.Cream.g), (DeskPaintedMap.Kraft.b, DeskPaintedMap.Brass.b, DeskPaintedMap.Cream.b) })
+            Assert.That(k, Is.InRange(Math.Min(lo, hi), Math.Max(lo, hi)), "kraft lies between the painting's brass and cream");
+    }
+
+    [Test]
+    public void ThePaintedDesksAudit_ReadsEveryObjectTheInstallDresses_EachOnce()
+    {
+        // The binder's audit at bind (OfficeSceneBinder.AuditPainted) warns of any old part still drawn or clicked on these.
+        CollectionAssert.AreEquivalent(new[]
+        {
+            DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.Intercom, DeskHomeMap.UvTorch, DeskHomeMap.StampRack, DeskHomeMap.Detain,
+            DeskHomeMap.BabelTuner, DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing, DeskHomeMap.Crate, DeskHomeMap.Switchboard,
+        }, DeskPaintedMap.Dressed());
+    }
+
+    [Test]
+    public void TheOldModelsClickBoxes_ThePaintedLookHasNoPartFor_TakeNoClick()
+    {
+        // The code review of round 6 (2): each dater's side button and the chip reader's readout box stayed live at the old
+        // geometry's spots under the painted daters and the painted chip reader: invisible click areas.
+        CollectionAssert.AreEqual(new[] { "Button" }, DeskPaintedMap.DeadClicks(DeskHomeMap.StampRack), "the daters' side buttons (the painted daters have none)");
+        CollectionAssert.AreEqual(new[] { "ReadoutClick" }, DeskPaintedMap.DeadClicks(DeskHomeMap.ChipReader), "the readout's box (the painted reader has no readout yet)");
+        foreach (string id in new[] { DeskHomeMap.Scanner, DeskHomeMap.Detain, DeskHomeMap.UvTorch, DeskHomeMap.Intercom })
+            CollectionAssert.IsEmpty(DeskPaintedMap.DeadClicks(id), id + ": its boxes are its painted look's (fitted, or its own)");
+    }
+
+    [Test]
+    public void ThePaintedSliders_EachLiftOnItsOwn_TheGlassesAndTheBook_AsTheGatesSlides()
+    {
+        // The review of the Unity capture (S2, 13 and 14): the painting's red book shows in its pocket and peeks up; the glasses lift.
+        DeskSlides slides = DeskSlides.Approved();
+        PaintedObject[] sliders = DeskPaintedMap.Objects.Where(o => o.role == PaintedRole.Slider).ToArray();
+        CollectionAssert.AreEquivalent(new[] { "Desk_Glasses", DeskPaintedMap.RulebookFolded }, sliders.Select(o => o.name));
+        foreach (PaintedObject o in sliders)
+        {
+            DeskSlider lift = slides.Find(DeskPaintedMap.LiftOf(o.name));
+            Assert.IsNotNull(lift, o.name + ": its own lift in slides.json");
+            Assert.AreEqual(SlideKind.Lift, lift.kind, o.name);
+            Assert.AreEqual(o.home, lift.Home, o.name + ": lifting on its own home");
+        }
+        Assert.IsNull(DeskPaintedMap.LiftOf("Desk_Bell"), "a fixed object never lifts");
+    }
+
+    [Test]
+    public void OnlyTheNextToolsLamp_IsLit_NoneAtRest()
+    {
+        // The review of the Unity capture (S1, 8): all six jewels glowed at rest.
+        string[] lamps = Json(Data + "anchors.json").Get("lamps").Members.Select(m => m.Key).ToArray();
+        var homes = new[] { DeskHomeMap.DealTray, DeskHomeMap.Bell, DeskHomeMap.StampRack, DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.Intercom };
+        foreach (string next in homes)
+            CollectionAssert.AreEqual(new[] { DeskPaintedMap.LampOf(next) }, lamps.Where(l => DeskPaintedMap.LampLit(l, next)), next + ": its lamp alone");
+        Assert.IsEmpty(lamps.Where(l => DeskPaintedMap.LampLit(l, null)), "nothing next: every lamp unlit");
+        Assert.IsEmpty(lamps.Where(l => DeskPaintedMap.LampLit(l, DeskHomeMap.Rolodex)), "a home with no lamp: none");
+    }
+
+    [Test]
+    public void TheAvailableSign_GlowsAtAThird_AndItsMaterialSaysSo()
+    {
+        // The review of the Unity capture (S3, 18): the AVAILABLE glow blew the panel out to pale lime.
+        Assert.That(DeskPaintedMap.Glow("Desk_AvailableSign"), Is.InRange(0.2f, 0.5f), "the sign's glow, lowered");
+        Assert.AreEqual(1f, DeskPaintedMap.Glow("Desk_Scanner"), "every other object's glow mask at full strength");
+        string material = File.ReadAllText(Path.Combine(ProjectRoot(), "Assets/Art/Office/DeskPainted/Materials/Desk_AvailableSign.mat"));
+        System.Text.RegularExpressions.Match glow = System.Text.RegularExpressions.Regex.Match(material, @"- _Glow: ([0-9.]+)");
+        Assert.IsTrue(glow.Success, "the sign's material has its glow");
+        Assert.AreEqual(DeskPaintedMap.Glow("Desk_AvailableSign"), float.Parse(glow.Groups[1].Value, CultureInfo.InvariantCulture), 1e-5f, "the imported material is the importer's (DeskPaintedImporter writes DeskPaintedMap.Glow)");
+    }
+
+    [Test]
+    public void ThePaintedDesk_CutsTheArtsDecorations_AndBothCorkboards_ByNameOrByParent()
+    {
+        // The review of the Unity capture (S1, 6): the beige folder sorter and the lavender tray with its paper behind the scanner.
+        string[] cut = DeskPaintedMap.CutParts();
+        foreach (string part in new[] { "Clean_FormSorter__Body", "Clean_Tray__Base", "Clean_PaperBundle__Sheet", "Finish_Desk__Top", "CRT2_Glass", "Office_Stability__Screen" })
+            Assert.IsTrue(DeskPaintedMap.Cuts(part, Array.Empty<string>(), cut), part);
+        Assert.IsTrue(DeskPaintedMap.Cuts("Pin", new[] { "Card", "Left board assembly", "Office" }, cut), "a part under a cut assembly (the corkboards)");
+        Assert.IsTrue(DeskPaintedMap.Cuts("Clock", new[] { "Right board assembly" }, cut));
+        Assert.IsFalse(DeskPaintedMap.Cuts("Clean_Calculator__Body", Array.Empty<string>(), cut), "not the painted desk's (the art's cut props are cutParts')");
+        Assert.IsFalse(DeskPaintedMap.Cuts("Left board", new[] { "Office" }, cut), "an assembly is cut by its exact name only");
+        cut[0] = "changed";
+        Assert.AreEqual("Finish_Desk__", DeskPaintedMap.CutParts()[0], "a fresh copy each call");
+    }
+
+    /// <summary>The project's folder (the tests' working folder, or three up from this file's).</summary>
+    private static string ProjectRoot([CallerFilePath] string here = "") => File.Exists(Data + "anchors.json") ? "." : Path.Combine(Path.GetDirectoryName(here), "..", "..", "..");
 }

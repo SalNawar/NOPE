@@ -300,9 +300,6 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         return key != null && materials.TryGetValue(key, out Material m) ? m : null;
     }
 
-    /// <summary>The glow mask's strength per object where 1 is too much (the review of the Unity capture: the AVAILABLE sign's glow blew its panel out to pale lime and its white word lost the painting's contrast).</summary>
-    private static readonly Dictionary<string, float> Glow = new Dictionary<string, float> { ["Desk_AvailableSign"] = 0.35f };
-
     /// <summary>
     /// One material per paint texture (keyed by the texture's name): NOPE/Desk
     /// Painted with the paint and its mask (when there is one), the locked
@@ -333,7 +330,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
                 else
                     m.DisableKeyword("_MASKMAP");
                 m.SetFloat("_Locked", locked ? 1f : 0f);
-                m.SetFloat("_Glow", Glow.TryGetValue(baseName, out float glow) ? glow : 1f);
+                m.SetFloat("_Glow", DeskPaintedMap.Glow(baseName)); // 1, the AVAILABLE sign's 0.35 (the review of the Unity capture)
             });
         }
         made["Glass_Sheen"] = EnsureMaterial("Desk_Glass", UnlitShader, m => Blended(m, AssetDatabase.LoadAssetAtPath<Texture2D>($"{TextureFolder}/Glass_Sheen.png"), Color.white));

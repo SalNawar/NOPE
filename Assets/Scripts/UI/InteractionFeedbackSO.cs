@@ -28,7 +28,7 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     [Min(0.0005f)]
     public float worldOutlineWidth = 0.006f;
 
-    /// <summary>The outline hull's material (TimeDesk/HoverHull: the mesh again, pushed out along its normals, back faces only, unlit).</summary>
+    /// <summary>The outline hull's material (TimeDesk/HoverHull: the mesh's silhouette into the stencil, then the mesh again pushed out along its normals where it is not, unlit, never depth-tested against the desk: HoverHighlighter makes its mask and hull from it).</summary>
     public Material outlineMaterial;
 
     /// <summary>
@@ -39,10 +39,6 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     /// </summary>
     [Min(0f)]
     public float outlinePx = 2f;
-
-    /// <summary>How far the outline is drawn toward the camera (metres), so the felt or the tray an object rests on never cuts its rim into dashes.</summary>
-    [Min(0f)]
-    public float outlinePull = 0.006f;
 
     /// <summary>How long the outline takes to fade in and to fade out (seconds; a cut under Reduced Motion): it never pops on or off.</summary>
     [Min(0f)]

@@ -946,6 +946,52 @@ public class ProximityAssistTests
     }
 
     [Test]
+    public void ASliderSummonedAgainBeyondItsSlidSpot_SettlesBackInSilence_NoUnlatchShushOrKnock_NorAPressOrASquash()
+    {
+        // The code review of round 6 (its probe of round 3's finding 1): the chip reader summoned again at 1.1368, on its way-home
+        // frame and when held, never rose and dipped to 0.98, yet the assist queued the unlatch on its first frame, the shush on the
+        // 3rd and the peak's knock on the 11th: a knock with no peak, while it moved toward home. A settle back is no slide out.
+        DeskSlides slides = DeskSlides.Approved();
+        foreach ((string id, bool held) in new[] { (Chip, false), (Chip, true), (Torch, false) })
+        {
+            string how = $"{id}, " + (held ? "held near its peak by a landing paper, then summoned" : "summoned on the frame its way home starts");
+            var desk = new Desk();
+            desk.Hold(3, Near(id, 60f));
+            AwayUntilItsWayHome(desk, id);
+            if (held)
+            {
+                desk.Busy.Add(id);
+                desk.Hold(5);
+                desk.Busy.Remove(id);
+            }
+            float stood = desk.P(id);
+            Assert.Greater(stood, 1f, how + ": beyond its slid spot");
+            int summoned = desk.FrameNo + 1;
+            for (int i = 0; i < 40; i++)
+            {
+                desk.Step(Near(id, 60f));
+                SlidePose pose = desk.Assist.Pose(id);
+                Assert.LessOrEqual(pose.Position, stood + 1e-5f, $"{how}, frame {i}: never further out than it stood");
+                Assert.AreEqual(0f, pose.Squash, 1e-6f, $"{how}, frame {i}: no squash of its own (it never anticipates)");
+                if (slides.Find(id).kind == SlideKind.Track)
+                    Assert.AreEqual(slides.trackShadowBlurPx, pose.ShadowBlur, 1e-6f, $"{how}, frame {i}: no press of a peak it never reaches");
+            }
+            foreach (SlideCueKind kind in new[] { SlideCueKind.Unlatch, SlideCueKind.Slide, SlideCueKind.Peak })
+                Assert.IsFalse(desk.Heard.Any(h => h.cue.Id == id && h.cue.Kind == kind && h.frame >= summoned), $"{how}: no {kind} (it never leaves its well nor peaks)");
+            Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(id).Phase, how + ": out, at its slid spot");
+            Assert.AreEqual(1f, desk.P(id), 0.03f, how);
+
+            // Its next slide out of its own (from home) sounds as every slide out does.
+            desk.Hold(60);
+            Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(id).Phase, how + ": home after the linger");
+            int again = desk.FrameNo + 1;
+            desk.Hold(30, Near(id, 60f));
+            Assert.AreEqual(again, desk.Heard.Where(h => h.cue.Id == id && h.cue.Kind == SlideCueKind.Unlatch && h.frame >= again).Select(h => h.frame).DefaultIfEmpty(-1).First(), how + ": a fresh slide out unlatches again");
+            Assert.IsTrue(desk.Heard.Any(h => h.cue.Id == id && h.cue.Kind == SlideCueKind.Peak && h.frame > again), how + ": and knocks at its peak");
+        }
+    }
+
+    [Test]
     public void AHandOff_TakesTheEmptySliderThatIsOut_NeverABusyOne_SoTheOneOutAlwaysGivesWay()
     {
         // The code review (round 3, 2): with the busy chip reader out, a pick that took the first slider out (busy or not) left the

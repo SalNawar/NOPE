@@ -19,8 +19,12 @@ using UnityEngine;
 /// on its own (home root, Slide child, mesh) to MachineSlideIn.Attach; Hide
 /// keeps one off (DeskPaintedMap: PaintedRole). BuildStandIn puts a neutral,
 /// painting-matched stand-in on a gameplay object the bake has no painted
-/// model of (DeskPaintedMap.StandIns), and Light lights only the next-tool
-/// lamp's jewel (DeskLayout.Lamps).
+/// model of (DeskPaintedMap.StandIns); WearBoxes dresses one that keeps its
+/// own moving parts (the supply crate) in painting-matched boxes; Unshow and
+/// Silence keep an old model's object or click boxes off the painted desk
+/// (DeskPaintedMap.Unshown, DeadClicks); EnsureClickable gives a painted
+/// slider no gameplay object stands for its hover outline; and Light lights
+/// only the next-tool lamp's jewel (DeskLayout.Lamps).
 /// </summary>
 public sealed class DeskPainted : MonoBehaviour
 {
@@ -140,10 +144,9 @@ public sealed class DeskPainted : MonoBehaviour
                         _jewels[lamp.name] = r;
                 }
         }
-        string lit = DeskPaintedMap.LampOf(home);
         foreach (KeyValuePair<string, Renderer> jewel in _jewels)
             if (jewel.Value != null)
-                jewel.Value.enabled = jewel.Key == lit;
+                jewel.Value.enabled = DeskPaintedMap.LampLit(jewel.Key, home);
     }
 
     // -----------------------------
@@ -327,6 +330,203 @@ public sealed class DeskPainted : MonoBehaviour
         foreach (Texture2D t in _standInTextures)
             if (t != null)
                 Destroy(t);
+    }
+
+    /// <summary>The name of a box WearBoxes builds over a part.</summary>
+    public const string PartBoxName = "PaintedBox";
+
+    /// <summary>A box's least thickness (world metres): a part with no depth (a label's quad) still makes a box.</summary>
+    private const float MinBox = 0.001f;
+
+    /// <summary>
+    /// The gameplay object <paramref name="gameplay"/> on
+    /// <paramref name="home"/> (DeskPaintedMap.Boxed: the supply crate)
+    /// wears each of its own parts as a painting-matched box
+    /// (DeskPaintedMap.LookOf): a box over the part's own mesh bounds in the
+    /// part's colour, with the painting's light and ink on its faces (the
+    /// stand-ins' look, NOPE/Desk Painted), riding the part (a flap still
+    /// opens, the crate still pops in and shrinks away), casting a shadow as
+    /// everything that moves, with no collider; a part LookOf hides is
+    /// hidden, a kept part (DeskPaintedMap.Kept: the crate's tag, the
+    /// delivery's live label) drawn as it is. Its click boxes stay (the boxes
+    /// fill the old model's bounds they were fitted to) and outline the
+    /// boxes. A second call builds nothing more. Returns the boxes' renderers.
+    /// </summary>
+    public Renderer[] WearBoxes(Transform gameplay, string home)
+    {
+        if (gameplay == null)
+            return Array.Empty<Renderer>();
+        string[] keep = DeskPaintedMap.Kept(home);
+        var made = new List<Renderer>();
+        foreach (Renderer r in gameplay.GetComponentsInChildren<Renderer>(true))
+        {
+            if (r == null || Kept(r.transform, gameplay, keep))
+                continue;
+            if (r.name == PartBoxName)
+            {
+                made.Add(r); // built by an earlier call
+                continue;
+            }
+            PartLook look = DeskPaintedMap.LookOf(home, r.name, out var colour, out float topInset);
+            if (look == PartLook.Keep)
+                continue;
+            r.enabled = false;
+            if (look == PartLook.Box && r.transform.Find(PartBoxName) == null && r.TryGetComponent(out MeshFilter filter) && filter.sharedMesh != null)
+                made.Add(BoxOver(r.transform, filter.sharedMesh.bounds, new Color(colour.r, colour.g, colour.b, 1f), topInset));
+        }
+        Renderer[] boxes = made.ToArray();
+        foreach (Clickable click in gameplay.GetComponentsInChildren<Clickable>(true))
+            click.SetOutline(boxes);
+        return boxes;
+    }
+
+    /// <summary>A painting-matched box (the stand-ins' cube and material) under <paramref name="part"/> over its mesh's local <paramref name="bounds"/>, at least MinBox thick, its top <paramref name="topInset"/> world metres lower (along the part's axis nearest the world's up).</summary>
+    private Renderer BoxOver(Transform part, Bounds bounds, Color colour, float topInset)
+    {
+        var box = new GameObject(PartBoxName, typeof(MeshFilter), typeof(MeshRenderer));
+        box.layer = part.gameObject.layer;
+        box.GetComponent<MeshFilter>().sharedMesh = StandInCube();
+        Vector3 lossy = part.lossyScale, size = bounds.size, centre = bounds.center;
+        int up = 0;
+        float most = -1f;
+        for (int i = 0; i < 3; i++)
+        {
+            size[i] = Mathf.Max(size[i], MinBox / Mathf.Max(1e-6f, Mathf.Abs(lossy[i])));
+            float alongUp = Mathf.Abs(part.TransformDirection(Unit(i)).y);
+            if (alongUp > most)
+            {
+                most = alongUp;
+                up = i;
+            }
+        }
+        if (topInset > 0f && Mathf.Abs(lossy[up]) > 1e-6f)
+        {
+            float local = Mathf.Min(topInset / Mathf.Abs(lossy[up]), size[up] / 2f);
+            size[up] -= local;
+            centre[up] -= Mathf.Sign(part.TransformDirection(Unit(up)).y) * local / 2f;
+        }
+        Transform t = box.transform;
+        t.SetParent(part, false);
+        t.localPosition = centre;
+        t.localRotation = Quaternion.identity;
+        t.localScale = size;
+        var renderer = box.GetComponent<MeshRenderer>();
+        renderer.sharedMaterial = StandInMaterial(colour);
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        return renderer;
+    }
+
+    private static Vector3 Unit(int axis) => axis == 0 ? Vector3.right : axis == 1 ? Vector3.up : Vector3.forward;
+
+    /// <summary>
+    /// What of the gameplay object <paramref name="gameplay"/> on
+    /// <paramref name="home"/> the painted desk still draws or clicks of its
+    /// old model (the binder's audit at bind: a warning names each, so a
+    /// smoke run's console shows it): every renderer still on that is neither
+    /// painted, a stand-in's (under a "StandIn_" root), a part's box
+    /// (PartBoxName) nor under a part the home keeps (DeskPaintedMap.Kept),
+    /// and every click box still on under a part the painted look has no
+    /// part for (DeskPaintedMap.DeadClicks), or anywhere on an unshown
+    /// object (DeskPaintedMap.Unshown). Each as its path under the object;
+    /// empty on a clean desk (Saleh: every object matches the painting).
+    /// </summary>
+    public List<string> OldParts(Transform gameplay, string home)
+    {
+        var old = new List<string>();
+        if (gameplay == null)
+            return old;
+        Find(null); // the painted renderers, gathered once
+        string[] keep = DeskPaintedMap.Kept(home), dead = DeskPaintedMap.DeadClicks(home);
+        bool unshown = Array.IndexOf(DeskPaintedMap.Unshown, home) >= 0;
+        foreach (Renderer r in gameplay.GetComponentsInChildren<Renderer>(true))
+            if (r.enabled && !_painted.Contains(r) && r.name != PartBoxName && !UnderStandIn(r.transform, gameplay) && (unshown || !Kept(r.transform, gameplay, keep)))
+                old.Add(PathOf(r.transform, gameplay));
+        foreach (Collider box in gameplay.GetComponentsInChildren<Collider>(true))
+            if (box.enabled && (unshown || Kept(box.transform, gameplay, dead)))
+                old.Add(PathOf(box.transform, gameplay) + " (click box)");
+        return old;
+    }
+
+    /// <summary>True when <paramref name="part"/> lies under a stand-in's root (BuildStandIn's "StandIn_" object) below <paramref name="top"/>.</summary>
+    private static bool UnderStandIn(Transform part, Transform top)
+    {
+        for (Transform t = part; t != null && t != top; t = t.parent)
+            if (t.name.StartsWith("StandIn_", StringComparison.Ordinal))
+                return true;
+        return false;
+    }
+
+    /// <summary><paramref name="part"/>'s path under <paramref name="top"/> ("." for the object itself).</summary>
+    private static string PathOf(Transform part, Transform top)
+    {
+        string path = null;
+        for (Transform t = part; t != null && t != top; t = t.parent)
+            path = path == null ? t.name : t.name + "/" + path;
+        return path ?? ".";
+    }
+
+    /// <summary>
+    /// Keeps the gameplay object <paramref name="gameplay"/> (DeskPaintedMap.
+    /// Unshown: the RING SERVICE panel) off the painted desk: none of its
+    /// renderers draws (its live texts included) and none of its click boxes
+    /// takes a click or a hover, whatever its owner shows or pops later (a
+    /// renderer's and a collider's enabled flags outlive SetActive); its logic
+    /// runs on unseen.
+    /// </summary>
+    public static void Unshow(Transform gameplay)
+    {
+        if (gameplay == null)
+            return;
+        foreach (Renderer r in gameplay.GetComponentsInChildren<Renderer>(true))
+            r.enabled = false;
+        Silence(gameplay, null);
+    }
+
+    /// <summary>
+    /// Switches off the click boxes under <paramref name="gameplay"/> on a
+    /// part named in <paramref name="parts"/> or under one (every one with
+    /// null): their colliders take no ray (no click, no hover) and their
+    /// Clickables neither click nor outline (DeskPaintedMap.DeadClicks: an
+    /// old model's box the painted look has no part for).
+    /// </summary>
+    public static void Silence(Transform gameplay, string[] parts)
+    {
+        if (gameplay == null)
+            return;
+        foreach (Collider box in gameplay.GetComponentsInChildren<Collider>(true))
+            if (parts == null || Kept(box.transform, gameplay, parts))
+                box.enabled = false;
+        foreach (Clickable click in gameplay.GetComponentsInChildren<Clickable>(true))
+            if (parts == null || Kept(click.transform, gameplay, parts))
+            {
+                click.Interactable = false;
+                click.enabled = false;
+            }
+    }
+
+    /// <summary>
+    /// The hover target of the bake's <paramref name="name"/> (a painted
+    /// slider no gameplay object stands for: the glasses, the folded book;
+    /// the review of the Unity capture: one rim rule for every slider,
+    /// glasses included): its click box (EnsureClickBox) with a Clickable
+    /// that outlines the painted mesh and answers a click with
+    /// <paramref name="onClick"/> (added once). Null without the object.
+    /// </summary>
+    public Clickable EnsureClickable(string name, UnityEngine.Events.UnityAction onClick)
+    {
+        EnsureClickBox(name);
+        Transform mesh = Mesh(name);
+        Collider box = mesh != null ? mesh.GetComponent<Collider>() : null;
+        if (box == null)
+            return null;
+        if (!box.TryGetComponent(out Clickable click))
+        {
+            click = box.gameObject.AddComponent<Clickable>();
+            if (onClick != null)
+                click.onClick.AddListener(onClick);
+        }
+        click.SetOutline(RenderersOf(name));
+        return click;
     }
 
     /// <summary>A click box on the Interactable layer around the bake's <paramref name="name"/> (a painted slider no gameplay object stands for: the slide-in ranks the silhouettes under the cursor by these boxes), riding its slide; the importer makes them for its sliders, and this makes one the prefab lacks.</summary>

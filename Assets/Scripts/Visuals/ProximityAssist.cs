@@ -210,7 +210,8 @@ public readonly struct SlidePose
 /// during the anticipation sends the slider straight home (no linger, no
 /// overshoot).</item>
 /// <item><b>Out:</b> the anticipation and its own spring, with one overshoot,
-/// from wherever it stood. <b>Back:</b> after lingerSeconds outside the
+/// from wherever it stood; from beyond its slid spot only a silent settle
+/// back onto it (no unlatch, shush or knock). <b>Back:</b> after lingerSeconds outside the
 /// trigger, the ease-in home that arrives at speed and the seat bounce on the
 /// arrival frame.</item>
 /// <item><b>Busy or occupied stays as it is:</b> a machine scanning, reading,
@@ -248,6 +249,9 @@ public sealed class ProximityAssist
 
         /// <summary>A loser the winner started on, on its last stretch home (under winnerBelow): home on the first step after this time, so its last stretch takes the one frame of the winner's first move.</summary>
         public float SeatBy = float.PositiveInfinity;
+
+        /// <summary>An out that began beyond its slid spot (summoned again near its overshoot peak: SlideCurve.OutFrom's Release): only a settle back onto the slid spot, so it makes none of a slide out's cues or poses (no unlatch, shush or knock, no squash, sway or press of its own).</summary>
+        public bool Settling;
 
         /// <summary>The squash and sway it had when its last out ended (CarryAt): they release from there on their own clock; and the track shadow it had when its phase last changed, which its phase carries on from.</summary>
         public float SquashFrom, SwayFrom, CarryAt, ShadowFrom;
@@ -460,9 +464,9 @@ public sealed class ProximityAssist
         foreach (State s in _states)
         {
             float t = now - s.T0, before = was - s.T0;
-            if (!still && (s.Phase == SlidePhase.Out || s.Phase == SlidePhase.Linger))
+            if (!still && !s.Settling && (s.Phase == SlidePhase.Out || s.Phase == SlidePhase.Linger))
             {
-                // The out spring runs on through a linger, so its shush and its knock sound on time even if the cursor already left.
+                // The out spring runs on through a linger, so its shush and its knock sound on time even if the cursor already left (a settle back from beyond its slid spot has neither: it never leaves its well nor peaks).
                 if (Crossed(before, t, _slides.anticipationSeconds))
                     _cues.Add(new SlideCue(s.Slider.id, SlideCueKind.Slide));
                 if (Crossed(before, t, s.Slider.peakSeconds))
@@ -473,9 +477,9 @@ public sealed class ProximityAssist
                 case SlidePhase.Out:
                     if (s != _picked && !s.Busy)
                     {
-                        if (!still && _picked == null && t < _slides.anticipationSeconds)
+                        if (!still && !s.Settling && _picked == null && t < _slides.anticipationSeconds)
                         {
-                            Cancel(s); // the cursor left before the base left its well: straight home, no linger, no overshoot
+                            Cancel(s); // the cursor left before the base left its well: straight home, no linger, no overshoot (one settling back is out of its well: it lingers)
                             break;
                         }
                         s.Phase = SlidePhase.Linger;
@@ -545,7 +549,7 @@ public sealed class ProximityAssist
             return new SlidePose(s.Phase, f, squash, sway, alpha, blur, widen);
         }
         float shadowBlur = _slides.trackShadowBlurPx, sincePeak = _now - s.T0 - slider.peakSeconds;
-        bool tight = !_still && (s.Phase == SlidePhase.Out || s.Phase == SlidePhase.Linger) && sincePeak >= 0f && sincePeak < _slides.peakTightSeconds;
+        bool tight = !_still && !s.Settling && (s.Phase == SlidePhase.Out || s.Phase == SlidePhase.Linger) && sincePeak >= 0f && sincePeak < _slides.peakTightSeconds;
         if (tight)
         {
             shadowBlur *= _slides.peakTightBlur;
@@ -786,7 +790,12 @@ public sealed class ProximityAssist
 
     /// <summary>
     /// The slide out starts from <paramref name="from"/>: the unlatch's tick
-    /// (and, as a cut, the peak's). One machine moves at a time: a loser
+    /// (and, as a cut, the peak's). From beyond its slid spot (summoned again
+    /// near its overshoot peak: on the frame its way home starts, or held
+    /// there) it only settles back onto the slid spot (Settling: no unlatch,
+    /// shush or knock, since it never leaves its well nor peaks; the code
+    /// review's probe: the knock sounded with no peak while it moved toward
+    /// home). One machine moves at a time: a loser
     /// still on its last stretch home (under winnerBelow, which let the
     /// winner start) is home on the next step, its last stretch in the one
     /// frame of the winner's first move, never several frames of the two
@@ -795,9 +804,13 @@ public sealed class ProximityAssist
     private void Begin(State s, float from)
     {
         Change(s, SlidePhase.Out, from);
-        _cues.Add(new SlideCue(s.Slider.id, SlideCueKind.Unlatch));
-        if (_still)
-            _cues.Add(new SlideCue(s.Slider.id, SlideCueKind.Peak));
+        s.Settling = from > 1f;
+        if (!s.Settling)
+        {
+            _cues.Add(new SlideCue(s.Slider.id, SlideCueKind.Unlatch));
+            if (_still)
+                _cues.Add(new SlideCue(s.Slider.id, SlideCueKind.Peak));
+        }
         foreach (State other in _states)
             if (other != s && (other.Phase == SlidePhase.Retract || (other.Phase == SlidePhase.Back && other.Hurried)) && NearlySeated(PositionAt(other, _now)))
                 other.SeatBy = Math.Min(other.SeatBy, _now);
@@ -846,6 +859,7 @@ public sealed class ProximityAssist
         s.Loser = null;
         s.Hurried = false;
         s.Forced = false;
+        s.Settling = false;
         s.SeatBy = float.PositiveInfinity;
     }
 
@@ -871,9 +885,11 @@ public sealed class ProximityAssist
         {
             case SlidePhase.Out:
             case SlidePhase.Linger:
-                if (k.kind == SlideKind.Lift)
+                // A settle back from beyond its slid spot has no anticipation and no peak: only what it carried releases.
+                if (k.kind == SlideKind.Lift && !s.Settling)
                     squash = Math.Max(squash, SlideCurve.Squash(_slides, t));
-                sway += SlideCurve.Sway(k, t - k.peakSeconds);
+                if (!s.Settling)
+                    sway += SlideCurve.Sway(k, t - k.peakSeconds);
                 shadow = SlideCurve.TrackShadowOut(_slides, t, s.ShadowFrom);
                 break;
             case SlidePhase.Back:

@@ -50,6 +50,34 @@ public class DeskSlidesTests
     }
 
     [Test]
+    public void TheTips_AreSlidesJsons_TheGlasses7Degrees_TheDaters5TowardTheHand()
+    {
+        // The code review of round 6: the daters' tip test compared SlideCurve.Tip with DeskSlides.DaterTip itself. Here each tip
+        // is held to slides.json: the glasses' TIP row, and the daters' note ("rises 1.2 cm and tips 5 deg toward the hand", STAMP B3;
+        // DENIED "as APPROVED"), at the top of each lift and toward the chair as the glasses'.
+        ContentNode golden = Golden();
+        DeskSlides slides = DeskSlides.Approved();
+        ContentNode glasses = golden.Get("tip").Get("glasses");
+        DeskSlider g = slides.Find(DeskHomeMap.Glasses);
+        Assert.AreEqual(Num(glasses.Items[0]), g.tipDegrees, 1e-5f, "the glasses' tip");
+        Assert.AreEqual(Num(glasses.Items[1].Items[0]), g.tipX, 1e-5f);
+        Assert.AreEqual(Num(glasses.Items[1].Items[1]), g.tipY, 1e-5f);
+        string note = golden.Get("sliders").Get("stamp_approve").Get("note").Text;
+        System.Text.RegularExpressions.Match tip = System.Text.RegularExpressions.Regex.Match(note, @"tips (\d+(?:\.\d+)?) deg toward the hand");
+        Assert.IsTrue(tip.Success, "slides.json's APPROVED note says the dater tips: " + note);
+        float degrees = float.Parse(tip.Groups[1].Value, CultureInfo.InvariantCulture);
+        Assert.AreEqual(5f, degrees, 1e-5f, "5 degrees, as the note says");
+        StringAssert.Contains("as APPROVED", golden.Get("sliders").Get("stamp_deny").Get("note").Text);
+        foreach (string dater in new[] { "stamp_approve", "stamp_deny" })
+        {
+            DeskSlider d = slides.Find(dater);
+            Assert.AreEqual(degrees, SlideCurve.Tip(d, 1f), 1e-5f, dater + ": its full tip at the top of its lift");
+            Assert.AreEqual(degrees / 2f, SlideCurve.Tip(d, 0.5f), 1e-5f, dater + ": in proportion along the way");
+            Assert.AreEqual((g.tipX, g.tipY), (d.tipX, d.tipY), dater + ": toward the chair (the hand), as the glasses");
+        }
+    }
+
+    [Test]
     public void TheApprovedSlides_AreThePipelinesSlidesJson()
     {
         ContentNode golden = Golden();

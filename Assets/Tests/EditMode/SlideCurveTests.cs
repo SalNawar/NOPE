@@ -206,11 +206,7 @@ public class SlideCurveTests
         Assert.AreEqual(3.5f, SlideCurve.Tip(glasses, 0.5f), 1e-6f);
         Assert.AreEqual(0f, SlideCurve.Tip(glasses, -0.1f), 1e-6f);
         Assert.AreEqual(0f, SlideCurve.Tip(S(DeskHomeMap.UvTorch), 1f), 1e-6f, "the torch rises straight");
-        foreach (string dater in new[] { "stamp_approve", "stamp_deny" })
-        {
-            Assert.AreEqual(DeskSlides.DaterTip, SlideCurve.Tip(S(dater), 1f), 1e-6f, dater + ": 5 degrees toward the hand at the top (slides.json's note, STAMP B3)");
-            Assert.AreEqual(-1f, S(dater).tipY, 1e-6f, dater + ": toward the chair");
-        }
+        // The daters' tip against slides.json's own words: DeskSlidesTests.TheTips_AreSlidesJsons_TheGlasses7Degrees_TheDaters5TowardTheHand.
     }
 
     [Test]

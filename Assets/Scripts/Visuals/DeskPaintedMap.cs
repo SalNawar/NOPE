@@ -20,6 +20,19 @@ public enum PaintedRole
     Hidden,
 }
 
+/// <summary>How the painted desk shows one part of a gameplay object that keeps its own moving parts (DeskPaintedMap.LookOf; DeskPainted.WearBoxes).</summary>
+public enum PartLook
+{
+    /// <summary>Drawn as it is (a live label: the crate's tag with what came).</summary>
+    Keep,
+
+    /// <summary>A painting-matched box over the part's own mesh bounds, riding the part (its flaps still open), the old mesh hidden.</summary>
+    Box,
+
+    /// <summary>Hidden, with no box (a part a box cannot draw, or none the painting would show).</summary>
+    Hide,
+}
+
 /// <summary>Where a stand-in stands (DeskPaintedMap.StandIns).</summary>
 public enum StandInAnchor
 {
@@ -276,13 +289,175 @@ public static class DeskPaintedMap
 
     /// <summary>
     /// The parts of a gameplay object that stay drawn under its painted look
-    /// (DeskPainted.Reskin's keep): the scanner's sweep light, raised onto the
-    /// painted bed, while a scan runs (its old lid-edge glow and its readout
-    /// hide with the old model); the UV torch's pool and beam. Nothing else
-    /// of an old model ever shows.
+    /// (DeskPainted.Reskin's and WearBoxes' keep): the scanner's sweep light,
+    /// raised onto the painted bed, while a scan runs (its old lid-edge glow
+    /// and its readout hide with the old model); the UV torch's pool and
+    /// beam; the supply crate's tag (the delivery's live label: what came).
+    /// Nothing else of an old model ever shows.
     /// </summary>
     public static string[] Kept(string home) =>
-        home == DeskHomeMap.Scanner ? new[] { "SweepBar" } : home == DeskHomeMap.UvTorch ? new[] { "UvPool", "BeamFX" } : Array.Empty<string>();
+        home == DeskHomeMap.Scanner ? new[] { "SweepBar" }
+        : home == DeskHomeMap.UvTorch ? new[] { "UvPool", "BeamFX" }
+        : home == DeskHomeMap.Crate ? new[] { "Tag" }
+        : Array.Empty<string>();
+
+    /// <summary>
+    /// The click boxes of a gameplay object's old model that its painted look
+    /// has no part for (by name, under the object): switched off with the
+    /// old model, so the painted desk never takes an invisible click from the
+    /// old geometry (the code review of round 6). STAMP's daters' side
+    /// buttons ("Button", the re-ink: the painted daters have none; STAMP's
+    /// art request) and the chip reader's readout ("ReadoutClick": the
+    /// painted reader has no live readout yet; DESK-PLAN's machines).
+    /// </summary>
+    public static string[] DeadClicks(string home) =>
+        home == DeskHomeMap.StampRack ? new[] { "Button" } : home == DeskHomeMap.ChipReader ? new[] { "ReadoutClick" } : Array.Empty<string>();
+
+    /// <summary>
+    /// The gameplay objects the painted desk draws nothing of and takes no
+    /// click on, by their home: the RING SERVICE panel on the switchboard's
+    /// home at the booth's right end, where the painted booth wall shows the
+    /// painting's own switchboard (round 5: a picture, until PORTALS' Time
+    /// Organ replaces the wall). A panel or a stand-in standing in front of
+    /// it would cover the board the painting draws there (Saleh: every object
+    /// matches the painting). The rings' routes stay on the hall's departure
+    /// board and the PC's Portals window.
+    /// </summary>
+    public static readonly string[] Unshown = { DeskHomeMap.Switchboard };
+
+    /// <summary>
+    /// The gameplay objects that keep their own moving parts and wear each
+    /// one as a painting-matched box (DeskPainted.WearBoxes, LookOf), by
+    /// their home: the supply crate of a delivery morning (the painting, a
+    /// day with no delivery, has none), so its flaps still pop open, its tag
+    /// still springs up and it still shrinks away into its spot.
+    /// </summary>
+    public static readonly string[] Boxed = { DeskHomeMap.Crate };
+
+    /// <summary>
+    /// Every home whose gameplay object the painted desk dresses (the
+    /// binder's audit, OfficeSceneBinder.AuditPainted, reads each one's old
+    /// parts): the homes of the objects it re-skins (PaintedRole.Reskin: the
+    /// scanner, the chip reader, the intercom, the UV torch, STAMP's rack and
+    /// its daters, DETAIN), the inserts its stand-ins stand on, the boxed
+    /// crate and the unshown RING SERVICE panel. Each once, in that order.
+    /// </summary>
+    public static List<string> Dressed()
+    {
+        var homes = new List<string>();
+        foreach (PaintedObject o in Objects)
+            if (o.role == PaintedRole.Reskin && o.home != null && !homes.Contains(o.home))
+                homes.Add(o.home);
+        foreach (string id in Inserts)
+            if (!homes.Contains(id))
+                homes.Add(id);
+        foreach (string id in Boxed)
+            if (!homes.Contains(id))
+                homes.Add(id);
+        foreach (string id in Unshown)
+            if (!homes.Contains(id))
+                homes.Add(id);
+        return homes;
+    }
+
+    /// <summary>The crate's kraft (sRGB): halfway between the painting's brass and its cream (#C4A770), the crate model's own kraft (#C4A070) in the painting's palette.</summary>
+    public static readonly (float r, float g, float b) Kraft = ((Brass.r + Cream.r) / 2f, (Brass.g + Cream.g) / 2f, (Brass.b + Cream.b) / 2f);
+
+    /// <summary>
+    /// How the part named <paramref name="part"/> of the boxed object on
+    /// <paramref name="home"/> shows (Boxed): a box in
+    /// <paramref name="colour"/> over its mesh, its top
+    /// <paramref name="topInset"/> metres lower (the crate's body under its
+    /// front and back flaps, which lie 1 mm under its walls' top: never two
+    /// faces in one plane), or hidden. The crate: its body and its four flaps
+    /// in kraft, its label in cream, its tape hidden (three bent strips no
+    /// box draws). Any other part of a boxed object hides; a kept part (Kept:
+    /// the crate's tag) is drawn as it is.
+    /// </summary>
+    public static PartLook LookOf(string home, string part, out (float r, float g, float b) colour, out float topInset)
+    {
+        colour = default;
+        topInset = 0f;
+        if (home != DeskHomeMap.Crate)
+            return PartLook.Keep;
+        switch (part)
+        {
+            case "Crate":
+                colour = Kraft;
+                topInset = 0.002f;
+                return PartLook.Box;
+            case "Flap_Left":
+            case "Flap_Right":
+            case "Flap_Front":
+            case "Flap_Back":
+                colour = Kraft;
+                return PartLook.Box;
+            case "Label":
+                colour = Cream;
+                return PartLook.Box;
+            default:
+                return PartLook.Hide;
+        }
+    }
+
+    /// <summary>The slider (DeskSlides) of the painted object <paramref name="name"/> that lifts on its own (PaintedRole.Slider: the glasses in their stand, the folded book in its pocket), or null.</summary>
+    public static string LiftOf(string name) => name == "Desk_Glasses" ? DeskHomeMap.Glasses : name == RulebookFolded ? "rulebook" : null;
+
+    /// <summary>
+    /// The glow mask's strength of the painted object <paramref name="name"/>
+    /// (NOPE/Desk Painted's _Glow; DeskPaintedImporter writes it): 1, but
+    /// the AVAILABLE sign's 0.35 (the review of the Unity capture: its glow
+    /// blew its panel out to pale lime and its white word lost the
+    /// painting's contrast).
+    /// </summary>
+    public static float Glow(string name) => name == "Desk_AvailableSign" ? 0.35f : 1f;
+
+    /// <summary>True when the lamp <paramref name="lamp"/> is lit with the next tool on <paramref name="next"/> (DeskLayout.Lamps; null: nothing next): only that home's lamp (LampOf), every other one unlit (slides.json: a lamp is guidance, never lit at rest for nothing).</summary>
+    public static bool LampLit(string lamp, string next)
+    {
+        string lit = LampOf(next);
+        return lit != null && lamp == lit;
+    }
+
+    /// <summary>
+    /// The art office's parts the painted desk replaces (DeskLayoutSettings.
+    /// paintedCutParts' default; Cuts reads it): the desk and its rails, the
+    /// mat, the PC, keyboard and mouse, the phone, the till and its credits,
+    /// the NEXT sign and its caption, the lamp, the old stamp and ink pad,
+    /// the binder, the booth's partitions, the art's own shadow cards, the
+    /// right cork board's stability monitor (the painted booth wall stands in
+    /// front of it: its readouts go to the fallback HUD), the art's
+    /// decorations, the form sorter and the tray with its paper bundle (the
+    /// painting has none: neither drawn, gathered nor dragged; Saleh: a
+    /// clean, organised desk where every object matches the painting), and
+    /// both corkboards whole (an entry naming a parent exactly takes every
+    /// part under it: the painting has no corkboard). A fresh copy each call.
+    /// </summary>
+    public static string[] CutParts() => new[]
+    {
+        "Finish_Desk__", "Finish_DeskRail__", "Clean_Blotter", "CRT2_", "Clean_Keyboard", "Clean_Mouse", "Clean_Phone", "Clean_Till", "CreditsNumber",
+        "Clean_Next", "NextLabel", "Clean_Lamp", "Clean_Stamp", "Clean_Inkpad", "Clean_Binder", "Office_Partition__", "Clean Art",
+        "Office_Stability__", "StabilityPercent", "Finish_RightEphemera__", "Clean_FormSorter__", "Clean_Tray__", "Clean_PaperBundle__",
+        "Left board assembly", "Right board assembly",
+    };
+
+    /// <summary>True when the painted desk replaces the art's part named <paramref name="name"/> under <paramref name="parents"/> (its parents' names, nearest first): its name starts with an entry of <paramref name="parts"/> (CutParts), or a parent is named exactly as one (a whole assembly).</summary>
+    public static bool Cuts(string name, IEnumerable<string> parents, IReadOnlyList<string> parts)
+    {
+        if (parts == null)
+            return false;
+        foreach (string entry in parts)
+        {
+            if (string.IsNullOrEmpty(entry))
+                continue;
+            if (name != null && name.StartsWith(entry, StringComparison.Ordinal))
+                return true;
+            foreach (string parent in parents ?? Array.Empty<string>())
+                if (parent == entry)
+                    return true;
+        }
+        return false;
+    }
 
     /// <summary>
     /// The painted lamp beside the home <paramref name="home"/>

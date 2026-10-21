@@ -12,23 +12,32 @@ using UnityEngine.UI;
 /// System UI module's own raycast) and, when that changes, moves the hover
 /// highlight and swaps the cursor: an outline and hand cursor on any
 /// interactable Clickable (an office object) or Selectable (UI), the arrow
-/// elsewhere. An office object's outline is its meshes drawn again as a hull
-/// (the outline material: pushed out along the normals, back faces only)
-/// through Graphics.RenderMesh, every frame while hovered: no scene objects,
-/// no renderer features, the art's own objects untouched. The rim is the
-/// same screen px for every object (InteractionFeedbackSO.outlinePx), drawn
-/// a little toward the camera so the surface under an object never cuts it,
-/// and it fades in on the new object and out on the old one
-/// (outlineFadeSeconds; a cut under Reduced Motion): it never pops (the
-/// review of the desk v3 capture). A Clickable with no outline renderers (a
-/// hit zone) gets the hand cursor only.
+/// elsewhere. An office object's outline is its meshes drawn again through
+/// Graphics.RenderMesh in two steps, every frame while hovered (no scene
+/// objects, no renderer features, the art's own objects untouched): first
+/// as they are into the stencil (the mask: its whole silhouette), then
+/// pushed out along their normals where the mask is not (the hull:
+/// TimeDesk/HoverHull), so only a rim around the silhouette shows, never
+/// depth-tested against the desk under it (the review of the desk v3
+/// capture: the felt and the shell cut the old rim into dashes) and never
+/// over the object itself, thin parts included. The rim is the same screen
+/// px for every object (InteractionFeedbackSO.outlinePx), and it fades in
+/// on the new object and out on the old one (outlineFadeSeconds, HoverFade;
+/// a cut under Reduced Motion): it never pops. A Clickable with no outline
+/// renderers (a hit zone) gets the hand cursor only.
 /// </summary>
 public sealed class HoverHighlighter : MonoBehaviour
 {
     private static readonly int ColorId = Shader.PropertyToID("_Color");
     private static readonly int WidthId = Shader.PropertyToID("_Width");
     private static readonly int WidthPxId = Shader.PropertyToID("_WidthPx");
-    private static readonly int PullId = Shader.PropertyToID("_Pull");
+    private static readonly int MaskId = Shader.PropertyToID("_Mask");
+    private static readonly int StencilCompId = Shader.PropertyToID("_StencilComp");
+    private static readonly int StencilPassId = Shader.PropertyToID("_StencilPass");
+    private static readonly int ColorMaskId = Shader.PropertyToID("_ColorMask");
+
+    /// <summary>The hull's and the mask's render queues: every mask (Transparent+49) draws before every hull (Transparent+50), whatever the objects' distances.</summary>
+    public const int HullQueue = 3050, MaskQueue = 3049;
 
     /// <summary>Cursor textures and outline look.</summary>
     [SerializeField] private InteractionFeedbackSO settings;
@@ -48,8 +57,11 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>Each outline's colour with its fade (made once; one block each, so neither overwrites the other's draw).</summary>
     private MaterialPropertyBlock _shownBlock, _fadingBlock;
 
-    /// <summary>The outline material with the settings' colour and width (made once).</summary>
+    /// <summary>The outline material with the settings' colour and width (made once): the hull, drawn where the mask is not.</summary>
     private Material _hullMaterial;
+
+    /// <summary>The same shader as the mask (made once): the hovered meshes' silhouette into the stencil, no colour.</summary>
+    private Material _maskMaterial;
 
     /// <summary>Reused pointer data for the fallback raycast.</summary>
     private PointerEventData _pointerData;
@@ -88,7 +100,9 @@ public sealed class HoverHighlighter : MonoBehaviour
             _hullMaterial.SetColor(ColorId, settings.outlineColor);
             _hullMaterial.SetFloat(WidthId, settings.worldOutlineWidth);
             _hullMaterial.SetFloat(WidthPxId, settings.outlinePx);
-            _hullMaterial.SetFloat(PullId, settings.outlinePull);
+            Stencil(_hullMaterial, false);
+            _maskMaterial = new Material(settings.outlineMaterial) { name = settings.outlineMaterial.name + " (hover mask)" };
+            Stencil(_maskMaterial, true);
         }
 
         SceneManager.sceneUnloaded += HandleSceneUnloaded;
@@ -126,6 +140,18 @@ public sealed class HoverHighlighter : MonoBehaviour
     {
         if (_hullMaterial != null)
             Destroy(_hullMaterial);
+        if (_maskMaterial != null)
+            Destroy(_maskMaterial);
+    }
+
+    /// <summary>Sets <paramref name="material"/> (TimeDesk/HoverHull) up as the mask (the silhouette into the stencil bit, no colour, no push, drawn first) or as the hull (the pushed-out rim where the bit is not set, drawn after every mask).</summary>
+    public static void Stencil(Material material, bool mask)
+    {
+        material.SetFloat(MaskId, mask ? 1f : 0f);
+        material.SetFloat(StencilCompId, (float)(mask ? UnityEngine.Rendering.CompareFunction.Always : UnityEngine.Rendering.CompareFunction.NotEqual));
+        material.SetFloat(StencilPassId, (float)(mask ? UnityEngine.Rendering.StencilOp.Replace : UnityEngine.Rendering.StencilOp.Keep));
+        material.SetFloat(ColorMaskId, mask ? 0f : 15f);
+        material.renderQueue = mask ? MaskQueue : HullQueue;
     }
 
     /// <summary>The interactable under the pointer, or null (hierarchy walk only when the hit object changes).</summary>
@@ -241,14 +267,14 @@ public sealed class HoverHighlighter : MonoBehaviour
         }
     }
 
-    /// <summary>Draws this frame's outline hulls (every submesh of every visible outline renderer): the hovered object's fading in, the one left fading out.</summary>
+    /// <summary>Draws this frame's outline hulls (every submesh of every visible outline renderer): the hovered object's fading in, the one left fading out (HoverFade).</summary>
     private void DrawHull()
     {
-        if (_hullMaterial == null)
+        if (_hullMaterial == null || _maskMaterial == null)
             return;
-        float step = settings.outlineFadeSeconds > 0f && !UiMotion.Amount.Still ? Time.unscaledDeltaTime / settings.outlineFadeSeconds : 1f;
-        _shown = _hull.Count > 0 ? Mathf.Min(1f, _shown + step) : 0f;
-        _fadingShown = Mathf.Max(0f, _fadingShown - step);
+        bool still = UiMotion.Amount.Still;
+        _shown = _hull.Count > 0 ? HoverFade.Step(_shown, 1f, Time.unscaledDeltaTime, settings.outlineFadeSeconds, still) : 0f;
+        _fadingShown = HoverFade.Step(_fadingShown, 0f, Time.unscaledDeltaTime, settings.outlineFadeSeconds, still);
         if (_fadingShown <= 0f)
             _fading.Clear();
         _shownBlock ??= new MaterialPropertyBlock();
@@ -257,7 +283,7 @@ public sealed class HoverHighlighter : MonoBehaviour
         Draw(_hull, _shown, _shownBlock);
     }
 
-    /// <summary>Draws <paramref name="hull"/> at <paramref name="shown"/> of the outline's colour (its alpha).</summary>
+    /// <summary>Draws <paramref name="hull"/> at <paramref name="shown"/> of the outline's colour (its alpha): its silhouette into the stencil (the mask), then its rim where the mask is not (the hull).</summary>
     private void Draw(List<(Mesh mesh, Renderer renderer)> hull, float shown, MaterialPropertyBlock block)
     {
         if (hull.Count == 0 || shown <= 0f)
@@ -265,6 +291,7 @@ public sealed class HoverHighlighter : MonoBehaviour
         Color colour = settings.outlineColor;
         colour.a *= shown;
         block.SetColor(ColorId, colour);
+        var mask = new RenderParams(_maskMaterial);
         var parameters = new RenderParams(_hullMaterial) { matProps = block };
         foreach ((Mesh mesh, Renderer renderer) in hull)
         {
@@ -272,7 +299,10 @@ public sealed class HoverHighlighter : MonoBehaviour
                 continue;
             Matrix4x4 matrix = renderer.localToWorldMatrix;
             for (int s = 0; s < mesh.subMeshCount; s++)
+            {
+                Graphics.RenderMesh(mask, mesh, s, matrix);
                 Graphics.RenderMesh(parameters, mesh, s, matrix);
+            }
         }
     }
 
