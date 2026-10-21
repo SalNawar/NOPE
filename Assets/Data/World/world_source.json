@@ -24294,13 +24294,13 @@
       },
       {
         "key": "settings.resolutionDown",
-        "text": "◀",
+        "text": "‹",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "settings.resolutionUp",
-        "text": "▶",
+        "text": "›",
         "gloss": "None",
         "tier": "Full"
       },

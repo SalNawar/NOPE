@@ -1292,11 +1292,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.resolutionDown
-    text: "\u25C0"
+    text: "\u2039"
     gloss: 0
     tier: 0
   - key: settings.resolutionUp
-    text: "\u25B6"
+    text: "\u203A"
     gloss: 0
     tier: 0
   - key: settings.vsync

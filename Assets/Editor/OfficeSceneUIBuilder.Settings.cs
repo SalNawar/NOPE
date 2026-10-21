@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// "Settings has volume, Camera sway, Reduced Motion, Motion intensity,
 /// Reduce flashing"): a Sound group (Master, Music and Effects volume
 /// sliders) and a Display group (Windowed / Borderless / Fullscreen, the
-/// resolution stepped with ◀ ▶, VSync Off / On, the brightness slider and
+/// resolution stepped with ‹ › (glyphs every kit face draws), VSync Off / On, the brightness slider and
 /// Reduce flashing Off / On), in the Settings window's own row, slider and
 /// choice styles, wired to SettingsWindowController. The Settings window
 /// itself is UI-PC's (.Apps.cs BuildSettingsWindow, its size DesktopConfigSO);
