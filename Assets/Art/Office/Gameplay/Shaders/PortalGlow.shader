@@ -103,6 +103,21 @@ Shader "TimeDesk/PortalGlow"
             return Cel(d, hw, w);
         }
 
+        // The hole channel's coverage kept inside its painted edge (the half level the openings are fitted to):
+        // 0 up to the edge, rising to 1 where the mask is whole (about half a mask texel further in), so no pixel whose
+        // centre is on the metal is ever tinted.
+        float InsideEdge(float v)
+        {
+            return saturate(2.0 * v - 1.0);
+        }
+
+        // What stands in front, kept whole up to its painted edge (the half level) and beyond: the vortex is
+        // drawn only where the mask is clear of it, so a rail or a post keeps every pixel it reaches.
+        float ClearOf(float v)
+        {
+            return 1.0 - saturate(2.0 * v);
+        }
+
         // The mask under the quad's uv: (hole, in front, behind glass, edge depth); without a mask the whole
         // ellipse is the hole, nothing stands in front and the edge depth is the iris rim's.
         float4 Aperture(float2 uv, float rr)
@@ -153,7 +168,10 @@ Shader "TimeDesk/PortalGlow"
             col = lerp(col, _Rim.rgb, heart);
 
             // Sparkles: four-point cel stars in polar cells drifting inward, more at night; faded out when the
-            // opening is under about 20 px on screen (they would shimmer on the small rear rings).
+            // opening is under about 20 px on screen (they would shimmer on the small rear rings). Their arms are
+            // at least about a screen pixel across (integration, 2026-10-21: at 1280 x 720 an arm was a third of
+            // a pixel, so a star popped on and off a pixel within a frame or two, 3 times in 10 s under the flicker
+            // check at H5), dimmed a little as they widen.
             float sparkleLod = saturate((1.0 / pixel - 12.0) / 8.0);
             float sparkle = 0;
             [unroll] for (int layer = 0; layer < 2; layer++)
@@ -167,12 +185,16 @@ Shader "TimeDesk/PortalGlow"
                 l.x *= TwoPi * max(rr, 0.15) / n * mRows;
                 float size = 0.6 + 0.6 * Hash(cell + 3.1);
                 l *= 2.2 / size;
-                float star = max(saturate(1.0 - abs(l.x) * 9.0) * saturate(1.0 - abs(l.y) * 2.2),
-                                 saturate(1.0 - abs(l.y) * 9.0) * saturate(1.0 - abs(l.x) * 2.2));
+                // l per screen pixel, the same across and along (the cell's rows and columns are both scaled by it).
+                float lPixel = mRows * pixel / edge * 2.2 / size;
+                float arm = max(1.0 / 9.0, 1.2 * lPixel);
+                float armDim = sqrt((1.0 / 9.0) / arm);
+                float star = max(saturate(1.0 - abs(l.x) / arm) * saturate(1.0 - abs(l.y) * 2.2),
+                                 saturate(1.0 - abs(l.y) / arm) * saturate(1.0 - abs(l.x) * 2.2));
                 float twinkle = 0.75 + 0.25 * sin(_Swirl.w * 9.0 + h * TwoPi);
                 float shown = step(1.0 - (_Glow.y * (0.55 + 0.45 * night)) * 0.5, h);
                 float sw2 = max(fwidth(star * twinkle), 1e-3);
-                sparkle = max(sparkle, shown * smoothstep(0.42 - sw2, 0.42 + sw2, star * twinkle) * Cel(rr, 0.84, pixel / edge));
+                sparkle = max(sparkle, armDim * shown * smoothstep(0.42 - sw2, 0.42 + sw2, star * twinkle) * Cel(rr, 0.84, pixel / edge));
             }
             col = lerp(col, _Rim.rgb, sparkle * sparkleLod);
 
@@ -193,7 +215,11 @@ Shader "TimeDesk/PortalGlow"
             col = lerp(col, _Rim.rgb, springing * (1.0 - Cel(rr, 0.9, pixel / edge)));
 
             float bright = _Glow.z * (1.0 + _Glow.w * night + 0.5 * flare) * (1.0 + _Glow.x * heart);
-            float fill = inside * m.r * (1.0 - m.g) * lerp(1.0, _Shape.y, m.b) * _Shape.z;
+            // The hole and what stands in front of it end at their painted edges, the masks' half level (the edge
+            // the openings are fitted to), the antialiasing kept on the hole's side (integration, 2026-10-21: the
+            // bilinear fringe outside the half level drew the bright rim at 10-50 % on the metal's edge pixels,
+            // half a pixel of halo all round, 3-9 % on a small ring's axes).
+            float fill = inside * InsideEdge(m.r) * ClearOf(m.g) * lerp(1.0, _Shape.y, m.b) * _Shape.z;
             return half4(col * bright * fill, fill);
         }
         ENDHLSL
