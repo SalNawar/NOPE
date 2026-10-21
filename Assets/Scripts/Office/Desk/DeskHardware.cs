@@ -242,12 +242,13 @@ public sealed class DeskHardware : MonoBehaviour
     public void Pick(int document, int field, string value, ScanLayer layer) => Picked?.Invoke(document, field, value, layer);
 
     /// <summary>
-    /// Lays the machines on their bays (the office binder, once the desk is
-    /// placed; the desk layout spec, DeskLayoutSettings in <paramref name="frame"/>):
-    /// the chip reader under the scanner at the mat's right edge, its pad
-    /// inside the reading view (at chipReaderScale), the UV torch's cradle in
-    /// the tool pouch under the papers; the upgrades' objects with them
-    /// (DeskUpgrades.Lay). Returns the laid roots.
+    /// Lays the machines on their homes (the office binder, once the desk is
+    /// placed; the desk home map, DeskLayoutSettings in <paramref name="frame"/>):
+    /// the chip reader at the front of the rail right of the mat (at
+    /// chipReaderScale, its readout facing the chair), the UV torch's cradle
+    /// in its pouch left of the mat; the upgrades' objects with them
+    /// (DeskUpgrades.Lay). Each is tracked on its home (DeskLayout.Track).
+    /// Returns the laid roots.
     /// </summary>
     public List<Transform> Lay(DeskFrame frame)
     {
@@ -255,15 +256,17 @@ public sealed class DeskHardware : MonoBehaviour
         if (config == null)
             return laid;
         DeskLayoutSettings layout = config.layout;
-        if (chipReader != null && frame.Place(chipReader.transform, layout.chipReader, layout.shelfHeight))
+        if (chipReader != null && frame.Place(chipReader.transform, layout.Bay(DeskHomeMap.ChipReader), 0f))
         {
             chipReader.transform.localScale = Vector3.one * layout.chipReaderScale;
             laid.Add(chipReader.transform);
+            DeskLayout.Track(DeskHomeMap.ChipReader, chipReader.transform);
         }
-        if (uvTorch != null && frame.Place(uvTorch.transform, layout.uvTorch, layout.shelfHeight))
+        if (uvTorch != null && frame.Place(uvTorch.transform, layout.Bay(DeskHomeMap.UvTorch), 0f))
         {
             uvTorch.transform.localScale = Vector3.one * config.uvTorchScale;
             laid.Add(uvTorch.transform);
+            DeskLayout.Track(DeskHomeMap.UvTorch, uvTorch.transform);
         }
         if (upgrades != null)
             upgrades.Lay(frame, laid);
