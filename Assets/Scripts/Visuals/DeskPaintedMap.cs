@@ -406,11 +406,13 @@ public static class DeskPaintedMap
     /// <summary>
     /// The glow mask's strength of the painted object <paramref name="name"/>
     /// (NOPE/Desk Painted's _Glow; DeskPaintedImporter writes it): 1, but
-    /// the AVAILABLE sign's 0.35 (the review of the Unity capture: its glow
-    /// blew its panel out to pale lime and its white word lost the
-    /// painting's contrast).
+    /// the AVAILABLE sign's 0.35 and the scanner's 0.15 (the review of the Unity
+    /// capture: the sign's glow blew its panel out to pale lime and its white
+    /// word lost the painting's contrast; the round 8 capture: the scanner's
+    /// bed burned white, RGB 255, 255, 244, where the painting's is a pale
+    /// phosphor green, 228, 241, 198).
     /// </summary>
-    public static float Glow(string name) => name == "Desk_AvailableSign" ? 0.35f : 1f;
+    public static float Glow(string name) => name == "Desk_AvailableSign" ? 0.35f : name == "Desk_Scanner" ? 0.15f : 1f;
 
     /// <summary>True when the lamp <paramref name="lamp"/> is lit with the next tool on <paramref name="next"/> (DeskLayout.Lamps; null: nothing next): only that home's lamp (LampOf), every other one unlit (slides.json: a lamp is guidance, never lit at rest for nothing).</summary>
     public static bool LampLit(string lamp, string next)
@@ -418,6 +420,19 @@ public static class DeskPaintedMap
         string lit = LampOf(next);
         return lit != null && lamp == lit;
     }
+
+    /// <summary>
+    /// The lamps whose bezel the approved painting draws at rest (mock_office.png:
+    /// a glass dome beside the scanner and one beside the chip reader). The
+    /// painting has no lamp beside the deal tray, the bell or the stamp rack,
+    /// and paints a brass knob, not a glass dome, at the intercom's tray: the
+    /// round 8 capture showed those four bezels as grey discs the painting
+    /// does not have.
+    /// </summary>
+    public static readonly string[] PaintedBezels = { "lamp_scanner", "lamp_chip" };
+
+    /// <summary>True when the lamp <paramref name="lamp"/>'s bezel shows with the next tool on <paramref name="next"/>: always where the painting draws it (PaintedBezels), else only while it is lit (the next-tool lamp still guides from every home).</summary>
+    public static bool BezelShown(string lamp, string next) => Array.IndexOf(PaintedBezels, lamp) >= 0 || LampLit(lamp, next);
 
     /// <summary>
     /// The art office's parts the painted desk replaces (DeskLayoutSettings.

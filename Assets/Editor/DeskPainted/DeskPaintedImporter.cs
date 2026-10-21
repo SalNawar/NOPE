@@ -111,7 +111,8 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         importer.importLights = false;
         importer.importBlendShapes = false;
         importer.importVisibility = false;
-        importer.isReadable = false;
+        // The PC's CRT is its own click shape (OfficeSceneBinder.ClickOnMesh: a MeshCollider made at bind needs a readable mesh in a build).
+        importer.isReadable = assetPath.EndsWith("/Desk_PC.fbx", System.StringComparison.Ordinal);
         importer.meshCompression = ModelImporterMeshCompression.Off;
         importer.importNormals = ModelImporterNormals.Import;
         importer.importTangents = ModelImporterTangents.None;

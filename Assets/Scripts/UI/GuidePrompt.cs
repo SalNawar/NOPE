@@ -151,6 +151,16 @@ public sealed class GuidePrompt : MonoBehaviour
         {
             if (arrow.TryGetComponent(out Image backing))
                 backing.enabled = false;
+            // The kit skins the arrow as a slate key (its face, a child image) with a cream glyph (an image too): the face goes, the glyph takes the amber.
+            foreach (Image part in arrow.GetComponentsInChildren<Image>(true))
+            {
+                if (part.transform == arrow)
+                    continue;
+                if (part.name == UiKitSO.FaceName)
+                    part.enabled = false;
+                else
+                    part.color = QuietArrowInk;
+            }
             foreach (TMP_Text glyph in arrow.GetComponentsInChildren<TMP_Text>(true))
                 glyph.color = QuietArrowInk;
             arrow.localScale = Vector3.one * QuietArrowScale;

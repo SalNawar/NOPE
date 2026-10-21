@@ -427,6 +427,36 @@ public class DeskV3InstallTests
         }
     }
 
+    [Test, Category("NeedsEditor")]
+    public void TheQuietGuideArrow_DrawsNoSlateKey_OnlyItsGlyphInTheLampsAmber()
+    {
+        // The round 8 capture: on the painted desk the day-1 arrow still showed the kit's slate key (its face, a child image) with the cream glyph.
+        var host = new GameObject("GuidePrompt", typeof(RectTransform));
+        try
+        {
+            var arrow = new GameObject("Arrow", typeof(RectTransform), typeof(UnityEngine.UI.Image));
+            arrow.transform.SetParent(host.transform, false);
+            var face = new GameObject(UiKitSO.FaceName, typeof(RectTransform), typeof(UnityEngine.UI.Image));
+            face.transform.SetParent(arrow.transform, false);
+            var glyph = new GameObject("KitGlyph", typeof(RectTransform), typeof(UnityEngine.UI.Image));
+            glyph.transform.SetParent(arrow.transform, false);
+            var prompt = host.AddComponent<GuidePrompt>();
+            typeof(GuidePrompt).GetField("arrow", Private).SetValue(prompt, (RectTransform)arrow.transform);
+
+            prompt.Quiet();
+
+            Assert.IsFalse(arrow.GetComponent<UnityEngine.UI.Image>().enabled, "the arrow's own backing");
+            Assert.IsFalse(face.GetComponent<UnityEngine.UI.Image>().enabled, "the kit's slate key");
+            Color ink = glyph.GetComponent<UnityEngine.UI.Image>().color;
+            Assert.IsTrue(glyph.GetComponent<UnityEngine.UI.Image>().enabled, "the glyph still draws");
+            Assert.Greater(ink.r, ink.b + 0.5f, "the glyph takes the lamps' amber");
+        }
+        finally
+        {
+            Object.DestroyImmediate(host);
+        }
+    }
+
     /// <summary>A cube named <paramref name="name"/> under <paramref name="parent"/> (world space when none) at <paramref name="at"/>, <paramref name="size"/> metres.</summary>
     private static GameObject Cube(string name, Transform parent, Vector3 at, Vector3 size)
     {

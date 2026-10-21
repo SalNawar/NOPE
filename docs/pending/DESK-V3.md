@@ -11,6 +11,45 @@ Branch `feat/desk-v3`, cut from `fix/a-desk-plan` (DESK-PLAN #5, the desk home m
 - **D6:** "when they slide in, we subtly zoom in a bit not too hard just a small focus to frame the shot".
 - On the 2D work: "why are you still working on the mock?" (so this builds the real thing). Nothing pops (his standing rule for motion).
 
+## Round 8: Unity run, the clean desk checked against the painting, and what the captures found
+
+Unity was run on NOPE-art (driven by the job runner and the QA harness; ended on an empty scene and closed). Rounds 6 and 7, which had never been run in Unity, were built and checked: `DeskPaintedImporter.Build` (the prefab had been built before round 6: it gained the hidden inserts' home roots and lost three cast-shadow flags; fileIDs regenerated), Build Office UI (OfficeGameplay rebuilt: same 12,774 objects, fileID churn from the prefab), the EditMode suite, the smoke and a capture. Captures (1920x1080, office camera): `E:\unity\NOPE-tools\reports\desk_v3_unity\desk_rest_day1_v2.png`, `desk_rest_day12_v2.png` (every item), `desk_v3_slide_tour_v2.mp4` (60 fps, 2,010 frames, the cursor parked 1 s on each of the 11 sliders, then 1 s on empty desk), its frames and `poses.tsv` in `slide_tour_v2\`, and `r8\` (comparison crops, `slide_out_sheet.jpg`, the scenario).
+
+**Registration:** 0 px on 16 patches against `mock_office.png` (the PC, keyboard, pocket, intercom, bell, AVAILABLE, daters, scanner, chip reader, torch, the mat's four corners, the glasses, DETAIN). The old props are gone: no old daters, easel, readout box, navy BABEL box, red drum, ring on a stick, form sorter or lavender tray; the audit logs nothing (0 warnings in the smoke).
+
+### Found in the captures and fixed
+
+| What the still or tour showed | Fix | Owner, file |
+|---|---|---|
+| The Rolodex oval and the cards square half covered by a dark-brown blob (day 1): hiding the locked inserts (round 6) bared shell texels the bake had left as fill | The shell's texels the office camera sees there repainted from the registered empty plate (`layers/office/plate.png`), ray-cast for visibility (the hidden inserts and the movable objects left out). New tool: `E:\unity\NOPE-tools\design\desk\pipeline\scripts\repaint_visible_from_plate.py` | DESK-ART, `DeskShell_Paint.png` |
+| The mat's back edge: a wide smeared brass band, a hairline and the gold corners 10 px low (OPEN S3 16); the intercom tray's brass knob drawn as a stick | The same repaint on the mat's back border band (screen y 752 to 818, both back corners) and the left step lip; the reading view now shows the office paint there (lower density), the rest of the mat keeps the reading paint | DESK-ART, `Desk_Mat_Paint.png`, `DeskShell_Paint.png` |
+| Four grey glass discs the painting does not have: beside the deal tray, the bell, the stamp rack, and over the intercom's brass knob | A bezel shows at rest only where the painting draws one (the scanner's and the chip reader's); the others show only while their lamp is lit. The shell under them repainted from the plate. Test: `DeskPaintedMapTests.AtRest_OnlyTheBezelsThePaintingDraws_Show_AndALitLampShowsItsOwn` | DESK-HOMES `DeskPaintedMap.BezelShown`; DESK-ART `DeskPainted.Light` |
+| The guide's arrow still a blue key over AVAILABLE (round 5's `Quiet` missed the kit's face, a child image) | `Quiet` hides the kit's face and tints the glyph the lamps' amber. Test: `DeskV3InstallTests.TheQuietGuideArrow_DrawsNoSlateKey_OnlyItsGlyphInTheLampsAmber` (NeedsEditor) | CONTENT, `GuidePrompt.cs` (smallest change) |
+| The scanner's bed burned white (RGB 255, 255, 244; the painting 228, 241, 198) | Its glow 0.15 (`DeskPaintedMap.Glow`, the material held to it by the test); now 243, 255, 206 at 16:00 | DESK-HOMES map, DESK-ART `Desk_Scanner.mat` |
+| The cursor on the red book raised and outlined the UV torch; the book never lifted: the torch's old box stood about 20 cm toward the eye over the pocket | The torch's box fitted to the painted torch (`FitBox` after `Wear`) | DESK-HOMES, `OfficeSceneBinder.cs` |
+| The cursor on the Rolodex outlined the PC (its world box, then even a turned box, stood in front of the Rolodex's home) | The PC takes its clicks on the CRT mesh itself (`ClickOnMesh`: a MeshCollider, the box off); the PC mesh imports readable (`DeskPaintedImporter`, `Desk_PC.fbx.meta`) so this works in a build. Checked: a click on the CRT opens the PC | DESK-HOMES binder, DESK-ART importer |
+| The click-box gate (`deskclickboxes`, BUG-4a): the protocol cards' padded box 8 mm into the painted glasses' | Stand-in boxes padded 1 mm (`StandInPad`), not 1 cm. Day 1 and day 12: 0 clashes | DESK-HOMES, `OfficeSceneBinder.cs` |
+
+Also committed: `InteractionFeedback_Default.asset` (FEEDBACK) gains the two fields round 6 added (`outlinePx` 2, `outlineFadeSeconds` 0.07), as Unity serialized them; values unchanged.
+
+### The slide-in on the tour (60 fps, `poses.tsv`)
+
+Every slider comes out when the cursor parks on it and goes home when it leaves: scanner 1.177 peak, chip reader 1.163, intercom 1.200, UV torch 1.200, BABEL 1.197, Rolodex 1.199, cards 1.199, glasses 1.198, APPROVED 1.200, DENIED 1.200, the book 1.075 (it lifts now). 0 frames with two sliders more than half out. The corrected return (R6-1, OPEN S1 9) is on the frames: the scanner lingers 10 frames, then the 300 ms ease-in (frames 150 to 168) arrives at full speed (the last step 0.158 of the travel, the largest) and the seat bounce follows (peak 0.12 of 19.2 px, about 2.3 px), then rest at frame 174. A move across the intercom on the way to BABEL, the Rolodex or the cards brings the intercom out while the cursor is on its silhouette (by design: a silhouette wins at once).
+
+### Checks
+
+Compile 0 errors; offline runner 3838 passed, 0 failed; QA editor runner 66 passed, 0 failed, 4 ignored (QA_PROJECT), 27 NeedsEditor skipped; `tools/qa` unittest 35 OK; Unity EditMode 4063 passed, 2 failed (the two known third-party UnitySkills tests, as in round 4); smoke ok (console 0 errors, 0 warnings; the known TEXT-LANG reds); the capture run's own assertions all pass (click boxes 0 clashes on day 1 and day 12, camera, presses, quality).
+
+### What still differs from the painting (after this round)
+
+1. **The upgrade stand-ins** (day 12): the BABEL tuner, the Rolodex and the protocol cards are plain painting-coloured boxes in homes the painting shows empty, and the Auto-Feed slot plate on the scanner's front. Open call for Saleh (round 7): keep them (usable upgrades, my default) or empty homes until DESK-ART paints them (art requests 1 to 3).
+2. **The PC screen** shows the neutral theme's green-hill wallpaper; the painting's CRT is dark phosphor green (UI-PC with CONTENT, round 5 item 3).
+3. **The hall:** cream marble against the painting's teal hall (OPEN 19); through the gap behind the deal tray the hall's bright floor shows as a 4 px pale strip where the painting shows the traveller's robe (a traveller there covers it).
+4. **The pocket's flap** back strip is red, the painting's brown (art request 6).
+5. **No hover rim** on the chip reader and the Rolodex: neither has a Clickable (they take drops and drags); the daters' rim shows only while they can stamp. FEEDBACK's call if every slider should rim.
+6. **AVAILABLE** at 09:00 is about 13% brighter than the painting (matches at 16:00).
+7. The day-12 still carries the dev "CHEATS ON" label (GiveAllItems).
+
 ## Round 7: the code review of round 6 (old props still shown, old click boxes, tests that caught too little, the outline, the settle back)
 
 Source: the code verifier's review of 5d6cf81 (six findings). Round 6's commit message said "no old model is drawn or clicked": that was not true of the RING SERVICE panel, the supply crate, the daters' side buttons and the chip reader's readout box. This round fixes those, makes the fixes' tests fail when a fix is reverted, finishes the outline and silences the settle back. As before, everything applies only while the painted desk is installed (DeskArt.Painted on).

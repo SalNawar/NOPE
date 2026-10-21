@@ -37,7 +37,7 @@ Material:
     - _BandSoftness: 0.08
     - _BandThreshold: 0.05
     - _Cull: 2
-    - _Glow: 1
+    - _Glow: 0.15
     - _Locked: 0
     - _LockedDim: 0.8
     - _Relight: 0.7

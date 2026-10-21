@@ -1127,17 +1127,24 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     }
 
     /// <summary>
+    /// A stand-in's click box pad (metres; DeskHomeMap.ClickPad's 1 cm elsewhere): the stand-ins sit in the
+    /// painting's tight slots, and the round 8 capture's click-box gate found the protocol cards' padded box
+    /// 8 mm into the painted glasses' (BUG-4a: no two desk objects' boxes go into each other).
+    /// </summary>
+    private const float StandInPad = 0.001f;
+
+    /// <summary>
     /// Fits <paramref name="box"/> (a click box of the host, on the host itself
     /// or a direct child of it) around <paramref name="spec"/>'s stand-in
     /// <paramref name="standIn"/> (a direct child of the host), padded by
-    /// DeskHomeMap.ClickPad, from the stand-in's own measures rather than its
-    /// world bounds (the host may wait at zero scale for the crate).
+    /// StandInPad, from the stand-in's own measures rather than its world
+    /// bounds (the host may wait at zero scale for the crate).
     /// </summary>
     private static void FitStandInBox(BoxCollider box, Transform standIn, StandIn spec)
     {
         (float x0, float y0, float x1, float y1) e = spec.Extent;
         var centre = new Vector3((e.x0 + e.x1) / 2f, spec.Top / 2f, (e.y0 + e.y1) / 2f);
-        Vector3 size = new Vector3(e.x1 - e.x0, spec.Top, e.y1 - e.y0) + Vector3.one * (2f * DeskHomeMap.ClickPad);
+        Vector3 size = new Vector3(e.x1 - e.x0, spec.Top, e.y1 - e.y0) + Vector3.one * (2f * StandInPad);
         Transform host = standIn.parent;
         if (box.transform == host)
         {
@@ -1198,7 +1205,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         UvTorch torch = hardware != null ? hardware.Torch : null;
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
-            Wear(PaintedTorch, DeskHomeMap.UvTorch, torch.transform, body);
+        {
+            // Its click box fitted to the painted torch (the round 8 capture: the old model's box stood 20 cm toward the eye over the
+            // pocket, so the cursor on the red book took and raised the torch and the book never lifted).
+            Renderer[] look = Wear(PaintedTorch, DeskHomeMap.UvTorch, torch.transform, body);
+            FitBox(torch.transform, look);
+        }
         if (detainButton != null)
         {
             StandOnPainted(DeskHomeMap.Detain, detainButton.transform);
@@ -1342,7 +1354,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         bool crt = paintedDesk.TryBounds(PaintedPc, out Bounds box);
         if (pc != null && crt)
         {
-            PlaceBox(pc.transform, box.center, box.size);
+            // The CRT's own shape, not a box: the painted PC is turned 35 degrees, and its box (world or turned) stood in front of
+            // the Rolodex's home from the office eye (the round 8 tour: the cursor on the Rolodex outlined the PC).
+            if (!ClickOnMesh(pc.transform, paintedDesk.Mesh(PaintedPc)))
+                PlaceBox(pc.transform, box.center, box.size);
             pc.SetOutline(paintedDesk.RenderersOf(PaintedPc));
         }
         if (pcPower == null)
@@ -1542,6 +1557,30 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
         point.position = new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
         return point;
+    }
+
+    /// <summary>
+    /// Makes <paramref name="click"/> take its clicks on <paramref name="mesh"/>'s
+    /// own triangles (a MeshCollider of its mesh, at its pose; the BoxCollider
+    /// off): a turned object no bigger than it is. False without a mesh (the
+    /// caller places a box).
+    /// </summary>
+    private static bool ClickOnMesh(Transform click, Transform mesh)
+    {
+        if (mesh == null || !mesh.TryGetComponent(out MeshFilter filter) || filter.sharedMesh == null)
+            return false;
+        click.SetPositionAndRotation(mesh.position, mesh.rotation);
+        Vector3 parent = click.parent != null ? click.parent.lossyScale : Vector3.one;
+        Vector3 scale = mesh.lossyScale;
+        click.localScale = new Vector3(scale.x / parent.x, scale.y / parent.y, scale.z / parent.z);
+        if (click.TryGetComponent(out BoxCollider box))
+            box.enabled = false;
+        if (!click.TryGetComponent(out MeshCollider shape))
+            shape = click.gameObject.AddComponent<MeshCollider>();
+        shape.sharedMesh = filter.sharedMesh;
+        shape.convex = false;
+        shape.enabled = true;
+        return true;
     }
 
     /// <summary>A world-aligned box of <paramref name="size"/> centred on <paramref name="centre"/> (the object's BoxCollider).</summary>

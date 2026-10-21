@@ -147,6 +147,18 @@ public sealed class DeskPainted : MonoBehaviour
         foreach (KeyValuePair<string, Renderer> jewel in _jewels)
             if (jewel.Value != null)
                 jewel.Value.enabled = DeskPaintedMap.LampLit(jewel.Key, home);
+        // A bezel the painting does not draw shows only while its lamp is lit (DeskPaintedMap.BezelShown).
+        Transform all = transform.Find("Lamps");
+        if (all != null)
+            foreach (Transform lamp in all)
+            {
+                Transform bezel = lamp.Find(DeskPaintedMap.LampBezel);
+                if (bezel == null)
+                    continue;
+                bool shown = DeskPaintedMap.BezelShown(lamp.name, home);
+                foreach (Renderer r in bezel.GetComponentsInChildren<Renderer>(true))
+                    r.enabled = shown;
+            }
     }
 
     // -----------------------------

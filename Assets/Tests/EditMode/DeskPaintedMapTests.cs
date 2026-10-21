@@ -296,15 +296,35 @@ public class DeskPaintedMapTests
     }
 
     [Test]
+    public void AtRest_OnlyTheBezelsThePaintingDraws_Show_AndALitLampShowsItsOwn()
+    {
+        // The round 8 capture: grey glass discs beside the deal tray, the bell and the stamp rack, and over the intercom's brass knob; mock_office.png draws a dome only beside the scanner and the chip reader.
+        string[] lamps = Json(Data + "anchors.json").Get("lamps").Members.Select(m => m.Key).ToArray();
+        CollectionAssert.AreEquivalent(new[] { "lamp_scanner", "lamp_chip" }, lamps.Where(l => DeskPaintedMap.BezelShown(l, null)), "at rest");
+        var homes = new[] { DeskHomeMap.DealTray, DeskHomeMap.Bell, DeskHomeMap.StampRack, DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.Intercom };
+        foreach (string next in homes)
+        {
+            string lit = DeskPaintedMap.LampOf(next);
+            Assert.IsTrue(DeskPaintedMap.BezelShown(lit, next), next + ": its lit lamp's bezel");
+            CollectionAssert.AreEquivalent(new[] { "lamp_scanner", "lamp_chip", lit }.Distinct(), lamps.Where(l => DeskPaintedMap.BezelShown(l, next)), next);
+        }
+    }
+
+    [Test]
     public void TheAvailableSign_GlowsAtAThird_AndItsMaterialSaysSo()
     {
         // The review of the Unity capture (S3, 18): the AVAILABLE glow blew the panel out to pale lime.
         Assert.That(DeskPaintedMap.Glow("Desk_AvailableSign"), Is.InRange(0.2f, 0.5f), "the sign's glow, lowered");
-        Assert.AreEqual(1f, DeskPaintedMap.Glow("Desk_Scanner"), "every other object's glow mask at full strength");
-        string material = File.ReadAllText(Path.Combine(ProjectRoot(), "Assets/Art/Office/DeskPainted/Materials/Desk_AvailableSign.mat"));
-        System.Text.RegularExpressions.Match glow = System.Text.RegularExpressions.Regex.Match(material, @"- _Glow: ([0-9.]+)");
-        Assert.IsTrue(glow.Success, "the sign's material has its glow");
-        Assert.AreEqual(DeskPaintedMap.Glow("Desk_AvailableSign"), float.Parse(glow.Groups[1].Value, CultureInfo.InvariantCulture), 1e-5f, "the imported material is the importer's (DeskPaintedImporter writes DeskPaintedMap.Glow)");
+        // The round 8 capture: the scanner's bed burned white where the painting's is a pale phosphor green.
+        Assert.That(DeskPaintedMap.Glow("Desk_Scanner"), Is.InRange(0.1f, 0.3f), "the scanner's bed glow, lowered");
+        Assert.AreEqual(1f, DeskPaintedMap.Glow("Desk_ChipReader"), "every other object's glow mask at full strength");
+        foreach (string name in new[] { "Desk_AvailableSign", "Desk_Scanner" })
+        {
+            string material = File.ReadAllText(Path.Combine(ProjectRoot(), $"Assets/Art/Office/DeskPainted/Materials/{name}.mat"));
+            System.Text.RegularExpressions.Match glow = System.Text.RegularExpressions.Regex.Match(material, @"- _Glow: ([0-9.]+)");
+            Assert.IsTrue(glow.Success, name + ": its material has its glow");
+            Assert.AreEqual(DeskPaintedMap.Glow(name), float.Parse(glow.Groups[1].Value, CultureInfo.InvariantCulture), 1e-5f, name + ": the imported material is the importer's (DeskPaintedImporter writes DeskPaintedMap.Glow)");
+        }
     }
 
     [Test]
