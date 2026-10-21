@@ -18,13 +18,16 @@ using UnityEngine.UI;
 /// <item><c>camres</c> (w, h): the rig's own resolution change, as <c>res</c>,
 /// its frames tagged as the view change the rig asked for (a resize is not a
 /// game move; QA-RIG hand-off: a frame whose aspect changed is a cut).</item>
-/// <item><c>camframe</c> (name): home by home through the live camera, the
-/// share of each footprint on screen (<c>frame.&lt;name&gt;</c>). The reading
+/// <item><c>camframe</c> (target "office" or "reading", the view the leg
+/// frames; name): home by home through the live camera, the share of each
+/// footprint on screen (<c>frame.&lt;name&gt;</c>). The reading
 /// view: the mat and the deal tray whole, the stamp rack and the intercom
 /// whole (the desk plan's §6), the strip of each other in-use side home the
 /// pose frames (at least 8 x 8 cm); the office view: the mat whole and every
 /// shown home ≥98% (FIX_PLAN v1). Every home's real share is reported. The
-/// reading view's bottom row on the desk (<c>frame.&lt;name&gt;.bottom</c>).</item>
+/// reading view's bottom row on the desk (<c>frame.&lt;name&gt;.bottom</c>).
+/// A leg whose view is not the one on is red "not measured", both lines of a
+/// reading leg (<see cref="ReadingLeg"/>).</item>
 /// <item><c>camfade</c> (target "reading" or "city"; name): the destination's
 /// control's alpha per frame of a move and back (<c>fade.&lt;name&gt;</c>: 0
 /// on frame 0 and until 2/3 of the move, 1 by its end; 1 at once when motion
@@ -83,7 +86,8 @@ using UnityEngine.UI;
 /// <item><c>camcap</c> (name): in the reading view, the cap height in pixels
 /// at 1080p of the text printed on the desk's papers; a report of the margin
 /// to DOC-LOOK's floor (<c>capreport.&lt;name&gt;</c>; the pass is DOC-LOOK's at
-/// #9); red "not measured" with no paper on the desk, so cam_views runs it
+/// #9); red "not measured" outside the reading view (CAM's pose), and with
+/// no paper on the desk, so cam_views runs it
 /// only after camplay has laid the day's papers there (a handed paper waits
 /// on the counter).</item>
 /// <item><c>camcycle</c> (n = cycles, 2 when 0): in the background, the
@@ -194,15 +198,53 @@ public static class CamOps
         return shown;
     }
 
+    /// <summary>A camframe step's target naming the office view (the reading view's is <see cref="ShowsReading"/>).</summary>
+    public const string FramesOffice = "office";
+
+    /// <summary>
+    /// The view a camframe step's leg names (pure; its target): true for the
+    /// reading view (<see cref="ShowsReading"/>), false for the office view
+    /// (<see cref="FramesOffice"/>). The op judges a leg only while that view
+    /// is the one on (DeskView.Toggle does nothing unless its toggle is live,
+    /// BoothRules.DeskViewAllowed), so a reading leg is never judged on the
+    /// office view's criteria without its bottom line. A missing or unknown
+    /// view throws: no leg is judged on whichever view happens to be on.
+    /// </summary>
+    public static bool ReadingLeg(string target)
+    {
+        string view = (target ?? string.Empty).Trim();
+        if (view == ShowsReading)
+            return true;
+        if (view == FramesOffice)
+            return false;
+        throw new InvalidOperationException($"camframe: a leg names the view it frames in its target, {FramesOffice} or {ShowsReading} (not '{target}').");
+    }
+
+    /// <summary>A framing leg that could not be measured: its line red, and a reading leg's bottom line too, so neither goes missing in silence.</summary>
+    private static void NotMeasured(QaRunner runner, string name, bool reading, string why)
+    {
+        runner.Assert("frame." + name, Owner, false, "not measured", why);
+        if (reading)
+            runner.Assert("frame." + name + ".bottom", Owner, false, "not measured", why);
+    }
+
     private static IEnumerator Frame(QaRunner runner, QaStep step)
     {
+        bool reading = ReadingLeg(step.target);
         yield return null;
         string name = Name(step, "view");
         DeskView view = QaGame.Find<DeskView>();
         Camera cam = Camera.main;
         if (view == null || cam == null || !DeskLayout.Bound || !(QaGame.Field(view, "config") is DeskConfigSO config))
         {
-            runner.Assert("frame." + name, Owner, false, "not measured", "no reading view, camera or bound desk");
+            NotMeasured(runner, name, reading, "no reading view, camera or bound desk");
+            yield break;
+        }
+        if (view.IsOn != reading)
+        {
+            NotMeasured(runner, name, reading, reading
+                ? "the leg frames the reading view, but the office view is on (DeskView.Toggle does nothing unless its toggle is live: BoothRules.DeskViewAllowed, the PC closed and no newsletter up)"
+                : "the leg frames the office view, but the reading view is on (it never returned: nothing turns the view while something is held)");
             yield break;
         }
         DeskFrame frame = DeskLayout.Frame;
@@ -226,7 +268,7 @@ public static class CamOps
             float x0 = f.CentreX - f.Width / 2f, x1 = f.CentreX + f.Width / 2f, y0 = f.CentreY - f.Height / 2f, y1 = f.CentreY + f.Height / 2f;
             float share = Share(cam, frame, x0, y0, x1, y1, home.height);
             report.Add($"{home.id} {share:P0}");
-            if (!view.IsOn)
+            if (!reading)
             {
                 if (share < 0.98f && Array.IndexOf(NotTools, home.id) < 0)
                     failures.Add($"{home.id} {share:P0} on screen (≥98% in the office view)");
@@ -248,9 +290,9 @@ public static class CamOps
             if (strip < Whole)
                 failures.Add($"{home.id}'s inner {Mathf.RoundToInt((sx1 - sx0) * 100f)} cm strip {strip:P0} on screen (≥8 x 8 cm)");
         }
-        runner.Assert("frame." + name, Owner, failures.Count == 0, $"view {(view.IsOn ? "reading" : "office")}, {Screen.width}x{Screen.height}: {string.Join(", ", report)}",
-                      failures.Count > 0 ? string.Join("; ", failures) : view.IsOn ? "the mat, the tray, the rack and the intercom whole; 8 cm of every other in-use side home" : "the mat whole; every shown home ≥98%");
-        if (!view.IsOn)
+        runner.Assert("frame." + name, Owner, failures.Count == 0, $"view {(reading ? "reading" : "office")}, {Screen.width}x{Screen.height}: {string.Join(", ", report)}",
+                      failures.Count > 0 ? string.Join("; ", failures) : reading ? "the mat, the tray, the rack and the intercom whole; 8 cm of every other in-use side home" : "the mat whole; every shown home ≥98%");
+        if (!reading)
             yield break;
         Ray bottom = cam.ViewportPointToRay(new Vector3(0.5f, 0f, 0f));
         float front = config.layout.deskTop.Rect.CentreY - config.layout.deskTop.Rect.Height / 2f;
@@ -1587,19 +1629,24 @@ public static class CamOps
         Camera cam = Camera.main;
         DeskView view = QaGame.Find<DeskView>();
         float floor = Screen.height >= 1000 ? 10f : 7f;
+        if (cam == null || view == null || !view.IsOn)
+        {
+            runner.Assert("capreport." + name, Owner, false, "not measured",
+                          cam == null || view == null ? "no camera or reading view" : "not in the reading view: the report is at CAM's reading pose (DeskView.Toggle does nothing unless its toggle is live)");
+            yield break;
+        }
         var caps = new List<(float px, string what)>();
-        if (cam != null)
-            foreach (DeskDocument paper in UnityEngine.Object.FindObjectsByType<DeskDocument>())
-            {
-                if (!paper.isActiveAndEnabled || paper.Zone != DeskZone.Desk)
-                    continue;
-                foreach (TMP_Text text in paper.GetComponentsInChildren<TMP_Text>(false))
-                    if (CapPixels(cam, text) is float px)
-                        caps.Add((px, $"{paper.Index}/{text.name}"));
-            }
+        foreach (DeskDocument paper in UnityEngine.Object.FindObjectsByType<DeskDocument>())
+        {
+            if (!paper.isActiveAndEnabled || paper.Zone != DeskZone.Desk)
+                continue;
+            foreach (TMP_Text text in paper.GetComponentsInChildren<TMP_Text>(false))
+                if (CapPixels(cam, text) is float px)
+                    caps.Add((px, $"{paper.Index}/{text.name}"));
+        }
         if (caps.Count == 0)
         {
-            runner.Assert("capreport." + name, Owner, false, "not measured", view != null && view.IsOn ? "no printed text on a desk paper" : "not in the reading view");
+            runner.Assert("capreport." + name, Owner, false, "not measured", "no printed text on a desk paper");
             yield break;
         }
         caps.Sort((a, b) => a.px.CompareTo(b.px));
