@@ -143,6 +143,23 @@ public partial class FormLayoutTests
         return spec;
     }
 
+    /// <summary>FakeMeasure's sizes, and the role each word was measured in (one entry per measure of a word in a place: CutWords measures it twice there, wrapped and not).</summary>
+    private sealed class RoleMeasure : ITextMeasure
+    {
+        private readonly FakeMeasure _sizes = new FakeMeasure();
+        private readonly System.Collections.Generic.List<(string Text, FormTextRole Role, float Width)> _calls = new System.Collections.Generic.List<(string Text, FormTextRole Role, float Width)>();
+
+        public float Height(string text, FormTextRole role, float size, float width)
+        {
+            _calls.Add((text, role, width));
+            return _sizes.Height(text, role, size, width);
+        }
+
+        /// <summary>The roles <paramref name="text"/> was measured in, one per place (its wrapped measure, the one at the place's width).</summary>
+        public System.Collections.Generic.List<FormTextRole> Of(string text) =>
+            _calls.Where(c => c.Text == text && c.Width < 1e5f).Select(c => c.Role).ToList();
+    }
+
     [Test]
     public void CutWords_ANameReprintedAsASignatureOrACopy_IsMeasuredInThePrintsOwnPlace()
     {
@@ -156,10 +173,18 @@ public partial class FormLayoutTests
         Assert.AreEqual(1, problems.Count, string.Join("; ", problems));
         StringAssert.Contains("field 0's Signature print word '" + new string('W', 30) + "'", problems[0], "the paper would cut the signed name in the hand's place");
 
+        // in the print's own style: the signature in a hand (TextMeshPro sets it in italics, wider than a value), the name's field and a copy as a value
+        var roles = new RoleMeasure();
+        ArtLayout.CutWords(spec, words, roles);
+        CollectionAssert.AreEquivalent(new[] { FormTextRole.Value, FormTextRole.Hand }, roles.Of(new string('W', 30)), "the name's place as a value, the signature's as a hand");
+
         spec.look.art.prints[0].kind = ArtPrintKind.Copy;
         problems = ArtLayout.CutWords(spec, words, new FakeMeasure());
         Assert.AreEqual(1, problems.Count, string.Join("; ", problems));
         StringAssert.Contains("field 0's Copy print word", problems[0], "a copy of the name is measured in its own place too");
+        roles = new RoleMeasure();
+        ArtLayout.CutWords(spec, words, roles);
+        CollectionAssert.AreEquivalent(new[] { FormTextRole.Value, FormTextRole.Value }, roles.Of(new string('W', 30)), "a copy prints as a value");
 
         words[0] = null;
         Assert.IsEmpty(ArtLayout.CutWords(spec, words, new FakeMeasure()), "a print of a field with none of the content's words (TC-230's date stub) is not measured here");

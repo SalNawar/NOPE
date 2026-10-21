@@ -10,6 +10,7 @@ The commits:
 - The fixes for the re-verify of 460c564 (the wave-2 close). See "Re-verify of 460c564" below.
 - The fixes for the re-verify of ce69276. See "Re-verify of ce69276" below.
 - The fixes for the re-verify of 5f80371 (WAVE2_OPEN2.md, DOC-LOOK). See "Re-verify of 5f80371" below.
+- The fixes for the re-verify of cbbe2e3. See "Re-verify of cbbe2e3" below.
 
 Sources: FIX_PLAN §3 DOC-LOOK, FIX_PLAN_v2 §3 "DOC-LOOK: delta" (D3 and D15 decided; v2 wins), BUGLIST, DECISIONS_1019a (D3, D15, "keep a big mat size", DESK APPROVED), GAME_FEEL_BIBLE rows A1-A6 and A9, QA-RIG §4 and §8.
 
@@ -118,7 +119,7 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
   - The rig op `coverHits` (`DocLookOps`) uses the event system's own raycast at the middle of each half of every booklet and of the folder. A shut booklet's visa page and a shut folder's left board must meet nothing of theirs, and the shown half must meet them. Open, both halves must meet them.
   - Each step says the state it checks in its text ("booklet=shut folder=shut", `DocLookOps.Expects`). It fails when a booklet or the folder is in the other state, when no booklet or no folder is shown to probe, or when the text does not say both states (the re-verify of ce69276, point 1).
   - `doclook_print` runs `coverHits` three times: `shut` at the start (both shut), `folder_reshut` after the folder is shut again (both shut), and `open` once both lie open (both open).
-  - The merge gate reads it: `doclook.play.coverHits`, a Play check at merge level (it was demo only until the re-verify of 460c564). Every merge from this one on needs `doclook_print` results taken at HEAD on a clean tree (recipe R7b).
+  - The merge gate reads it: `doclook.play.coverHits`, a Play check at merge level (it was demo only until the re-verify of 460c564). Every merge from this one on needs `doclook_print` results taken at HEAD on a clean tree (recipe R7b). Since the re-verify of cbbe2e3 it needs all three results by their exact ids (`DocLookChecks.CoverHitsResults`), so a run that stopped after `shut` is red.
 - **A side effect on the rig:** the rig's `click` op aims at a target's collider centre, so clicks on a shut passport now land on its cover.
 
 **The bow (6).**
@@ -150,6 +151,7 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 | Names (Name fields, and Signature fields since the re-verify) and origins (Destination fields) | `CutWords`: the content's 12 longest words per field, in the field's place | Yes |
 | The same names reprinted as Signature prints (TC-101's and TC-620's signatures; a Copy print of a name or an origin alike, none today) | `CutWords`, since the re-verify of 5f80371: the field's words, in the print's own place and style (a hand) | Yes. TC-101's signature is the tightest place a name prints: 0.232 of the page wide (its Name field's place is 0.370). "GIOVANFRANCESCO" takes about 79% of it at the least size, and about 20% of TC-620's |
 | TC-230's stub, a Copy print of its Departure date ("28 Sep 2150": words of 4) | nothing: `Problems` measures only the fields' own places, `CutWords` only names and origins | **No** (its words take about 24% of the stub's width at the least size) |
+| The other prints: TC-520's and TC-630's Office prints (the issuing office's name in a hand, in the reading language), TC-630's Serial ("TC-630/123456": one word of 13), TC-101's NationCode (3 letters) and TC-230's Text ("DESK 3") | nothing (the re-verify of cbbe2e3, point 5) | **No**, with wide margins at the least size, by the assets' geometry: the Office prints hold about 42 and 48 characters a line (the content's longest office word is 12, "Displacement", in English), the Serial about 65, the NationCode about 26 and the stub's text about 17 |
 | 7-character IDs (a Citizen ID or a Displacement No.: "ZZZ-999", "DP-9999") and transponder classes (7) | the probe "Middlee": one word of 7 | Yes (the value face is monospaced) |
 | Transponders (26 characters, words up to 9), employers (25, words up to 9), waiver numbers (7, probed at a book row's 28) | probe words of 9, 9 and 11 | Yes |
 | Statuses ("STANDARD", "ELIGIBLE": one word of 8; TC-101's Travel Class) | the probe "Middle E": words of 6 | **No** |
@@ -219,6 +221,26 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 
 **Mutations** (offline runner, each alone, the file restored after): without the print measure, `CutWords_ANameReprinted*` and `CutWords_AContentWord*` fail; with Copy prints skipped, `CutWords_ANameReprinted*` fails.
 
+## Re-verify of cbbe2e3: what changed
+
+| # | Finding | Change |
+|---|---|---|
+| 1 (S4) | `doclook.play.coverHits` required only the pattern `doclook_print.coverHits.*`. A click whose target is gone throws, the runner stops, and the results written so far are still imported, so a run that stopped after its first step passed on `shut` alone. `doclook.play.capHeight` passed on `a1` alone the same way | **Fixed (resubmission paths 1 to 3).** Each play check names every result it needs by its exact id: `DocLookChecks.CoverHitsResults` (`doclook_print.coverHits.shut`, `.folder_reshut`, `.open`) and `CapHeightResults` (`doclook_cap.capHeight.a1`, `.a2`). A pure `DocLookChecks.Verdict` judges each id alone through `GateResults.Judge` (present, green, at HEAD, on a clean tree) over what `DocLookChecks.Measured` gives (the results folder and HEAD), as FLOW's checks do; an id with a `*` is refused. New `DocLookGateTests` (QA editor runner, offline) run the registered checks themselves on given results (see Tests): red with any one result missing, red, stale or dirty, and green with all of them; and each check's list equals its scenario's own steps in order, so a renamed or added step fails the test instead of dropping out of the gate. |
+| 2 (S4) | `DeskPaperDepth.ShowShadow` rebuilt the shadow through `PaperDepth.Shadow` every frame of an ease, allocating a new mesh, its lists, a scaled outline and an `int[3]` per triangle (the reviewer measured 18,608 B a call on a 28-point outline). New on this branch: every hover on and off a paper, the folder or a tab eases too (D15). The field comment and BUG-65g claimed more than the code did | **Fixed (the first path).** `PaperDepth.Shadow` builds into a given mesh (`into`; a new one without it), empties it first (`DepthMesh.Clear`, which keeps the lists' room) and reads the outline where it lies (`At`); `DepthMesh.Tri` adds three ints with no array. `DeskPaperDepth` keeps one `DepthMesh`. New test `DocLookTests.Shadow_ARebuildIntoTheSameMesh_AllocatesNothing_AndMatchesAFreshOne`. The field comment and BUG-65g below now say what is measured and what is not. |
+| 3 (minor) | `ShowBend`'s `PrintPartCount` and `DeskRulebook.RidePrints` walked children with `foreach (Transform ...)`, whose enumerator is a class: an allocation every frame of a drag and its settle, and 1 + the active pages every frame of a page-turn flick | **Fixed.** Both, and `ShowBend`'s rebuild of its rest poses, loop over `childCount` with `GetChild(i)`. |
+| 4 (nit) | The print measure's role was untested offline: a Signature print measured as a value passed every test | **Fixed.** `CutWords_ANameReprintedAsASignatureOrACopy_*` records the role of each measure (`RoleMeasure`, over FakeMeasure's sizes): the 30-letter word is measured once as a value (the name's place) and once as a hand (the signature), and as two values when the print is a Copy. The italic width itself is TextMeshPro's, which only R1 sees. |
+| 5 (nit) | The limit table left out the art's other prints, which no check measures | **Fixed.** A row for them under "The words (7)", with each one's room at the least size (from the assets' geometry, in the value face's 0.6 em advance): about 42 and 48 characters a line for the Office prints, 65 for the Serial, 26 for the NationCode and 17 for "DESK 3". Nothing is cut today. |
+| 6 (process) | `docs/pending/QA-RIG.md`'s gate template shows a single wildcard (`GateResults.Require("doc.drops", "DOC-HANDLE", "doc_drops.drop.*")`), and DOC-LOOK followed it | **For the orchestrator** (QA-RIG.md is not DOC-LOOK's file): the template could name each result by its exact id or a run's end marker, as RUN-SAFE, CAM, UI-PC, FLOW and now DOC-LOOK do, so later tracks (DOC-HANDLE's `doc.drops` among them) do not repeat the finding. |
+| 7 (process) | The second-brain vault sync | Left to the orchestrator, as in earlier rounds. |
+
+**Mutations** (offline runners, each alone, the file restored byte for byte after), each caught:
+- `PaperDepth`: `Tri` back to `AddRange(new[] { a, b, c })` (5,600 B a rebuild of the 28-point outline), no `Clear` before the rebuild (12,360 B, and the corners differ from a fresh build), a scaled copy of the outline again (248 B). Each fails `Shadow_ARebuildIntoTheSameMesh_*`.
+- `DocLookChecks`: `coverHits` or `capHeight` back to their pattern, judged over the same given results (`GateResults.Judge` on `doclook_print.coverHits.*` or `doclook_cap.capHeight.*`): `shut` alone passes, `a1` alone passes, and a red neighbour the pattern reads turns the check red; three `DocLookGateTests` fail each time. `GateResults.Require` itself (the old code) throws offline (it reads `Application.dataPath`), so it also fails them. `CoverHitsResults` without `folder_reshut`, `Verdict` reading a `*`, and `Verdict` passing on any one id each fail one to three of them.
+- `doclook_print.json` with the `folder_reshut` step renamed fails `EachCheck_NeedsExactlyItsScenariosSteps_InOrder`.
+- `ArtLayout.Print` with a Signature print as a value fails `CutWords_ANameReprinted*` (the role assert).
+
+**Re-checked** (2026-10-21, on this commit over 4290bd6; `git fetch` and `ls-remote`: origin/main has not moved): compile_check 0 errors (Assembly-CSharp-Editor, TimeDeskEditMode); runner `passed 3780, failed 0`; QA editor runner `passed 89, failed 0` (36 NeedsEditor skipped); tools/qa 35 OK.
+
 ## Ownership
 
 Every file is DOC-LOOK's by FIX_PLAN §3 "Owns", FIX_PLAN_v2 §3 delta (D3: the passport **and the folder** open and close), CARVE.md (`.DeskPaper.cs`, `DeskDocument.Render.cs`, `DeskRulebook.cs`) or QA-RIG §2 (`Checks/DocLookChecks.cs`, `Tests/PlayMode/DocLook/**`, `tools/qa/scenarios/doclook_*.json`). Notes for the verifier:
@@ -232,6 +254,7 @@ Every file is DOC-LOOK's by FIX_PLAN §3 "Owns", FIX_PLAN_v2 §3 delta (D3: the 
 | `docs/pending/FORMS-REDESIGN.md` (new) | The hand-off the orchestrator asked for (decision 2). Named for another track: ruled on 2026-10-21 (DECISIONS_1019a.md, "Orchestrator rulings (mine), 2026-10-21", item 5), DOC-LOOK writes it and the FORMS-REDESIGN track takes the file over. |
 | `Assets/Scripts/Domain/FieldWords.cs` (new) | The validator's word sources for `ArtLayout.CutWords`, moved out of `ContentLibraryValidator.Forms` (DOC-LOOK's change) into Domain so they are tested (the re-verify of ce69276, point 2). It has no other reader. |
 | `Assets/Tests/PlayMode/DocLook/Editor/DocLookOpsTests.cs` (new) | QA-RIG §2: `Tests/PlayMode/DocLook/**` is DOC-LOOK's. It compiles into Assembly-CSharp-Editor (an `Editor` folder, as `QaRig/Editor`), so the QA editor runner runs it offline. |
+| `Assets/Tests/PlayMode/DocLook/Editor/DocLookGateTests.cs` (new) | The same folder (QA-RIG §2); it tests `Checks/DocLookChecks.cs` (DOC-LOOK's) through the gate registry, offline (the re-verify of cbbe2e3, point 1). |
 | `DeskDocument.Render.cs` declares `IPointerDownHandler` | The partial is DOC-LOOK's. If DOC-HANDLE (#8) adds an `OnPointerDown` to the logic partial for the press-frame pick-up, the two are a compile clash at the rebase: merge the bodies (`cover.Press()` plus DOC-HANDLE's). |
 
 Not committed: `NOPE-feat-clock.sln` (IDE churn).
@@ -262,7 +285,7 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
 - **The cap-height gate.**
   - `CapHeight` (pure): pixels of cap height from the size, the page, the face's cap per em and the view scale; `Needed` gives the growth still missing. The floors are 10/7 px for data and 6 px for labels at A2.
   - `doclook.forms.capModel` (**merge**): modelled at the big mat's reading view, data and labels. It is red today.
-  - `doclook.play.capHeight` (demo): measured on screen by the rig's `capHeight` op (`DocLookOps`, scenario `doclook_cap.json`).
+  - `doclook.play.capHeight` (demo): measured on screen by the rig's `capHeight` op (`DocLookOps`, scenario `doclook_cap.json`). It needs both `doclook_cap.capHeight.a1` and `.a2` by their exact ids (since the re-verify of cbbe2e3).
   - `doclook.forms.regrown` (merge): every clean-faced art form prints its labels, and its smallest data grew ≥1.15x.
 
 ### BUG-10a: the hover hull shattered (D15 decided: papers lift, props get an outline; notes 3, 8, 9)
@@ -362,15 +385,21 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
 - Gate: `doclook.import.office`.
 
 ### BUG-65g: form text and depth setup cost
-- `DeskPaperDepth.ShowShadow` no longer allocates two lists through `ConvertAll` on every shadow update during a lift or hover. It reuses its vertex and colour lists.
+- **The contact shadow's rebuild allocates nothing** (the re-verify of cbbe2e3). `DeskPaperDepth.ShowShadow` runs every frame a hold, its drop or a hover lift eases (D15: every hover on and off a paper, the folder or a tab eases, 0.3 of a hold at the 0.09 s pace).
+  - It rebuilds one kept `DepthMesh` in place (`PaperDepth.Shadow(..., into)`: `DepthMesh.Clear` keeps the lists' room, the outline is read where it lies with no scaled copy, and `Tri` adds its three corners with no array), then its kept vertex and colour lists, then the Unity mesh.
+  - Before: wave 1 dropped the two `ConvertAll` lists, but each call still made a new mesh, its three lists, a scaled outline and an `int[3]` per triangle (the reviewer measured 18,608 B a call on a 28-point rounded outline and 2,648 B on a rectangle). The old field comment ("a lift rebuilds it without allocating") claimed more than the code did.
+  - Test: `DocLookTests.Shadow_ARebuildIntoTheSameMesh_AllocatesNothing_AndMatchesAFreshOne` (0 B on the offline runner, on a 28-point rounded card outline and on a rectangle; the rebuilt mesh equals a fresh one). A runtime whose allocation counter reads 0 over a 256-byte array (Unity's Mono may be one) ignores the test and says why; the offline runner (CoreCLR) is its gate.
+  - Not tested offline: that `DeskPaperDepth` hands `PaperDepth.Shadow` its kept mesh (Assembly-CSharp), and that Unity's list overloads of `Mesh.SetVertices`, `SetColors` and `SetTriangles` allocate nothing. A 0 B GC window over a hover change in play would show both.
+- **The bend's per-frame walks allocate nothing** (the re-verify of cbbe2e3, point 3). `ShowBend` counts the print parts every frame a bend changes (a drag and its settle), and `DeskRulebook.RidePrints` walks the open pages every frame of a flick. Both loop by index (`childCount`, `GetChild`): a `foreach` over a Transform allocates its enumerator, a class.
 - The renderer lookup is cached once (`Flexed()`).
 - The flick rider reuses its renderer list.
+- **Still allocating, off the per-frame path:** `RestFlatPrints` (once a paper is printed) and `ShowShut` (when a cover opens or shuts) walk the sheet with `foreach` and `GetComponentsInChildren`, and each `Build` of a shadow takes a new outline (`ConvertAll`).
 - **Not reduced: `TmpFormText`'s per-paper setup.**
   - `Unbreak` and `ArtFit`'s word check add a few `GetPreferredValues` calls per printed text.
   - `Subdivide` runs once per print. It makes at most 24 x 24 cells for a page-sized fill, usually 24 x 1 for a rule.
   - Pooling and pre-building are DOC-HANDLE's; measure on its call-next recipe.
 
-## Tests (offline: compile 0 errors; runner `passed 3779, failed 0` and QA editor runner `passed 83, failed 0` on 4290bd6, after the re-verify of 5f80371)
+## Tests (offline: compile 0 errors; runner `passed 3780, failed 0` and QA editor runner `passed 89, failed 0` on 4290bd6, after the re-verify of cbbe2e3)
 
 | Test | Covers | Fails without the fix because |
 |---|---|---|
@@ -387,7 +416,7 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
 | `DocLookTests.SheetRelief_*`, `RankStrength_*` | BUG-12a corner, BUG-40c | new |
 | `FormLayoutTests.PrintLabels_*`, `Growth_*` (4), `FitFloorOf_*`, `CapHeight_Smallest_*` | BUG-9 re-layout | before, labels printed only when translated and sizes did not grow |
 | `FormLayoutTests.CutWords_*` | review 7: a content word wider than its place at the least size is a problem; a short one is not; no art, no problem | new |
-| `FormLayoutTests.CutWords_ANameReprintedAsASignatureOrACopy_IsMeasuredInThePrintsOwnPlace` | the re-verify of 5f80371, point 3: a name reprinted as TC-101's signature is measured in the print's own place, as a Signature and as a Copy print | `CutWords` skipped every print (slot -1): the 30-letter word gave no problem |
+| `FormLayoutTests.CutWords_ANameReprintedAsASignatureOrACopy_IsMeasuredInThePrintsOwnPlace` | the re-verify of 5f80371, point 3: a name reprinted as TC-101's signature is measured in the print's own place, as a Signature and as a Copy print; since the re-verify of cbbe2e3 (point 4), in the print's own style: a hand for a Signature, a value for a Copy (`RoleMeasure`) | `CutWords` skipped every print (slot -1): the 30-letter word gave no problem; a Signature print measured as a value fails the role assert |
 | `FormLayoutTests.FieldWords_NameAndSignatureFieldsMeasureThePlacesAndThePremadesNames_ADestinationTheOrigins` | the re-verify of ce69276, point 2: a Name and a Signature field measure the places' and the premades' names, a Destination field the origins, other fields none; through `CutWords`, a premade's too-wide word is a cut on its field | `FieldWords` is new; each of five mutations (no premades, no Signature, no Destination, no capitals, whole texts) fails it |
 | `ArtSlotsTests.Mipmapped_AndTrilinear_*`, `OfficeImports_*` | BUG-29, 63; the AnimeHallLayers early return | new |
 | `DocLookTests.ShutBox_KeepsOnlyTheSideOfTheSpineThatShows` | wave 2, S3: a shut booklet's and folder's box keeps the shown side | `ShutBox` is new; the boxes were whole |
@@ -396,10 +425,12 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
 | `DocLookTests.CoverBow_Ride_UnderTheBow_EveryMarkClearsItsBoardByItsRestGap`, `CoverBow_Ride_Flat_*`, `CoverBow_Ride_AMarkOffCentre_*` | wave 2, point 8; the re-verify of 460c564, point 1 (they replace `CoverMarks_RideTheShuttingBow_ClearOfTheBoard`, which tested only `PaperBend`) | unridden, the board rose up to 0.25 mm (seal) and 0.7 mm (emblem) under marks 0.05 and 0.1 mm over it, at the builder's sizes; each of eight mutations of `CoverBow` fails two of the three |
 | `FormLayoutTests.Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit` | wave 2, point 7b | the height check passed a broken single-token value |
 | `DocLookOpsTests.Expects_*`, `DocLookOpsTests.DocLookPrint_*` (QA editor runner) | the re-verify of ce69276, point 1: a `coverHits` step reads the state it checks; every `doclook_print` step says both, `open` the open one | `Expects` is new; a swapped or loose reading, a step without its state or with the wrong one, each fails |
+| `DocLookTests.Shadow_ARebuildIntoTheSameMesh_AllocatesNothing_AndMatchesAFreshOne` | the re-verify of cbbe2e3, point 2 (BUG-65g): a rebuild of the contact shadow into the same mesh allocates 0 B, returns that mesh and equals a fresh build, on a 28-point rounded outline and a rectangle | each call allocated a new mesh, its lists, a scaled outline and an `int[3]` per triangle |
+| `DocLookGateTests` (6, QA editor runner) | the re-verify of cbbe2e3, point 1: the registered `doclook.play.coverHits` and `doclook.play.capHeight` are green on their exact results alone, a red neighbour that a pattern would read is ignored; red with any one result missing, red, stale or dirty; `shut` alone red, all three green; `Verdict` refuses a pattern and a check that names nothing; each check's list equals its scenario's own steps in order | the wildcard passed on `doclook_print.coverHits.shut` alone |
 | rig `coverHits` in `doclook_print` (gate `doclook.play.coverHits`, merge level) | wave 2, S3, in the game; it fails a step whose booklet or folder is in the other state, or with no booklet or folder to probe | needs Unity (R7b) |
 
 `python -m unittest discover -s tools/qa -p "test_*.py"`: 35 OK (the edited `doclook_print.json` still parses, with its three `coverHits` steps).
-`QA_PROJECT=<worktree> dotnet run --project tools/qa/editor_runner -c Release -- <cc>\Temp\Bin\Debug`: `passed 83, failed 0` (36 NeedsEditor skipped), `DocLookOpsTests` among them.
+`QA_PROJECT=<worktree> dotnet run --project tools/qa/editor_runner -c Release -- <cc>\Temp\Bin\Debug`: `passed 89, failed 0` (36 NeedsEditor skipped), `DocLookOpsTests` and `DocLookGateTests` among them.
 
 ## Open (not in this commit)
 1. **BUG-9's floor:** decided (decision 2). FORMS-REDESIGN does the redesign (`docs/pending/FORMS-REDESIGN.md`). Until it lands, `doclook.forms.capModel` stays red on INTEGRATION's known-red line, and **no demo** ships.
@@ -430,8 +461,8 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
 
 **Offline:**
 - compile_check: 0 errors (Assembly-CSharp-Editor, TimeDeskEditMode).
-- runner: `passed 3779, failed 0` after the re-verify of 5f80371 (3778 after the re-verify of ce69276; 3777 after the re-verify of 460c564; 3775 after wave 2; 3770 after the rebase onto 4290bd6; 3741 before it).
-- QA editor runner (`QA_PROJECT` set): `passed 83, failed 0`, 36 NeedsEditor skipped.
+- runner: `passed 3780, failed 0` after the re-verify of cbbe2e3 (3779 after the re-verify of 5f80371; 3778 after the re-verify of ce69276; 3777 after the re-verify of 460c564; 3775 after wave 2; 3770 after the rebase onto 4290bd6; 3741 before it).
+- QA editor runner (`QA_PROJECT` set): `passed 89, failed 0`, 36 NeedsEditor skipped (83 before the re-verify of cbbe2e3).
 - QA python tests: 35 OK.
 
 **deferred: Unity.** Run these in the NOPE-feat-clock editor through its job runner, in the order given.
@@ -480,7 +511,7 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - Copy the line into NOTES_RECHECK for note 25.
 - **R7b Shut boxes** (wave 2, S3; run it right after R2, it does not depend on the final framing).
   - Steps: `QaJobs.Scenario` with `doclook_print`.
-  - **Pass:** `doclook_print.coverHits.shut`, `.folder_reshut` and `.open` are all ok. Each line reads "booklet shut, folder shut: 1 booklet(s), 4 probes, 0 wrong" (`open`: "booklet open, folder open: ...").
+  - **Pass:** `doclook_print.coverHits.shut`, `.folder_reshut` and `.open` are all ok. Each line reads "booklet shut, folder shut: 1 booklet(s), 4 probes, 0 wrong" (`open`: "booklet open, folder open: ..."). `QaJobs.Gate`'s `doclook.play.coverHits` line names all three ids, each "1 result(s): 1 pass"; it is red while any one is missing (a run that stopped early), red or taken before HEAD.
   - **If one fails**, its detail says why:
     - "no booklet is shown": day 1 at seed 12345 has no passport on the counter at that step. Change the scenario (a later step, or `jumpDay`), not the check.
     - "is shut, the step checks it open" (or the other way): the click before it missed. `click` targets the first active `PaperTemplate(Clone)`, which can be another paper when two lie on the counter. Aim the click at the passport, then run again.
@@ -490,7 +521,7 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
   - Steps: write `doclook_cap` to `Library/QA/job_scenario.txt` and run `QaJobs.Scenario`.
   - **Pass (after the decision):**
     - `doclook_cap.capHeight.a1` ok with data ≥10 px;
-    - `doclook_cap.capHeight.a2` ok with data ≥7 px and labels ≥6 px;
+    - `doclook_cap.capHeight.a2` ok with data ≥7 px and labels ≥6 px (the demo gate's `doclook.play.capHeight` needs both by id);
     - `console` 0 errors, `presses` ok.
   - **Expected today:** both capHeight assertions fail, with measured px close to R4's model. Record them.
   - Stills: `stills/doclook_a1_reading_1920x1080.png` and `doclook_a2_reading_1280x720.png`.

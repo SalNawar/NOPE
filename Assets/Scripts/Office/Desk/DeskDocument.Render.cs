@@ -266,9 +266,12 @@ public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
         if (_printRest.Count == 0 || _printRest.Count != PrintPartCount())
         {
             RestorePrints();
-            foreach (Transform part in sheet)
+            for (int i = 0; i < sheet.childCount; i++)
+            {
+                Transform part = sheet.GetChild(i);
                 if (IsPrintPart(part))
                     _printRest.Add((part, part.localPosition, part.localRotation, new Vector2(part.localPosition.x, part.localPosition.y)));
+            }
         }
         float w = Mathf.Max(Size.x, 1e-4f), h = Mathf.Max(Size.y, 1e-4f);
         foreach ((Transform part, Vector3 position, Quaternion rotation, Vector2 centre) in _printRest)
@@ -306,12 +309,12 @@ public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
         part != null && (paperQuad == null || part != paperQuad.transform) && (fills == null || part != fills.transform)
         && (lines == null || part != lines.transform) && (cover == null || part != cover.transform);
 
-    /// <summary>How many of the sheet's children ride the bend as one piece (IsPrintPart).</summary>
+    /// <summary>How many of the sheet's children ride the bend as one piece (IsPrintPart). ShowBend counts them every frame a bend changes (a drag, its settle), so it walks the children by index: a Transform's enumerator is a class, allocated per loop.</summary>
     private int PrintPartCount()
     {
         int count = 0;
-        foreach (Transform part in sheet)
-            if (IsPrintPart(part))
+        for (int i = 0; i < sheet.childCount; i++)
+            if (IsPrintPart(sheet.GetChild(i)))
                 count++;
         return count;
     }

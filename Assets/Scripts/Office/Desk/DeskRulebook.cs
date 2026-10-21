@@ -533,7 +533,9 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// face under their centre, turned to its slope and lifted by how far the
     /// curl rises past their flat piece (PaperBend.Bulge), as a paper's prints
     /// do (BUG-12a); flat, they stay where they were printed. A part a layout
-    /// moved meanwhile keeps its new place.
+    /// moved meanwhile keeps its new place. It runs every frame of a flick, so
+    /// it walks the pages and their parts by index (a Transform's enumerator
+    /// is a class, allocated per loop).
     /// </summary>
     private void RidePrints(PaperBend bend)
     {
@@ -549,11 +551,18 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         Transform face = folderFace.transform;
         Vector2 size = depth.BendSize;
         float w = Mathf.Max(size.x, 1e-4f), h = Mathf.Max(size.y, 1e-4f);
-        foreach (Transform page in _pages)
-            if (page.gameObject.activeSelf)
-                foreach (Transform part in page)
-                    if (part.gameObject.activeSelf)
-                        Ride(part, bend, face, w, h);
+        for (int p = 0; p < _pages.childCount; p++)
+        {
+            Transform page = _pages.GetChild(p);
+            if (!page.gameObject.activeSelf)
+                continue;
+            for (int i = 0; i < page.childCount; i++)
+            {
+                Transform part = page.GetChild(i);
+                if (part.gameObject.activeSelf)
+                    Ride(part, bend, face, w, h);
+            }
+        }
         foreach (TMP_Text word in coverWords)
             if (word != null && word.gameObject.activeSelf)
                 Ride(word.transform, bend, face, w, h);

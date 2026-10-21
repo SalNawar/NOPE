@@ -9,7 +9,8 @@ using NUnit.Framework;
 /// the cap height on screen, the passport's cover (its swing, its bow, the
 /// box a shut booklet or folder keeps and the marks that ride the bow), a
 /// card that never bends, print that rides the curl and the sheet's lifted
-/// corner, and the contact shadow by stack rank.
+/// corner, the contact shadow by stack rank, and its rebuild in place with no
+/// allocation.
 /// </summary>
 public class DocLookTests
 {
@@ -607,5 +608,34 @@ public class DocLookTests
         Assert.Greater(PaperDepth.RankStrength(2), PaperDepth.RankStrength(1));
         Assert.AreEqual(PaperDepth.MostRankStrength, PaperDepth.RankStrength(50), Eps);
         Assert.AreEqual(1f, PaperDepth.RankStrength(-3), Eps);
+    }
+
+    /// <summary>An allocation the counter must see (a static field, so no compiler can keep it off the heap).</summary>
+    private static object _countedProbe;
+
+    [Test]
+    public void Shadow_ARebuildIntoTheSameMesh_AllocatesNothing_AndMatchesAFreshOne()
+    {
+        // BUG-65g (the re-verify of cbbe2e3): DeskPaperDepth rebuilds its shadow every frame a hold or a hover eases, into the one DepthMesh it keeps
+        long probe = GC.GetAllocatedBytesForCurrentThread();
+        _countedProbe = new byte[256];
+        if (GC.GetAllocatedBytesForCurrentThread() - probe <= 0)
+            Assert.Ignore("This runtime counts no allocations (the counter read 0 over a 256-byte array): the offline runner (CoreCLR) measures it.");
+        List<(float x, float y)> rounded = PaperSilhouette.Outline(0.14f, 0.22f, 0.003f).ConvertAll(q => (q.x / 0.14f, q.y / 0.22f));
+        foreach (List<(float x, float y)> outline in new[] { rounded, PaperEdge.Rectangle(1f, 1f) })
+        {
+            var mesh = new DepthMesh();
+            PaperDepth.Shadow(outline, 0.14f, 0.22f, 0.001f, 0.008f, 0.002f, -0.003f, 0.5f, mesh); // lying: the first build gives the lists their room
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            DepthMesh again = PaperDepth.Shadow(outline, 0.14f, 0.22f, 0.001f, 0.026f, 0.01f, -0.017f, 0.3f, mesh); // a later frame of the lift
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.AreEqual(0L, allocated, $"a rebuild of a {outline.Count}-point outline into the same mesh allocated {allocated} B");
+            Assert.AreSame(mesh, again, "built into the mesh given");
+            DepthMesh fresh = PaperDepth.Shadow(outline, 0.14f, 0.22f, 0.001f, 0.026f, 0.01f, -0.017f, 0.3f);
+            CollectionAssert.AreEqual(fresh.Vertices, mesh.Vertices, "emptied first: the corners a fresh mesh gets, none left from the first build");
+            CollectionAssert.AreEqual(fresh.Colours, mesh.Colours);
+            CollectionAssert.AreEqual(fresh.Triangles, mesh.Triangles);
+        }
+        Assert.Greater(rounded.Count, 4, "a rounded card's outline, as DeskDocument hands a card's");
     }
 }

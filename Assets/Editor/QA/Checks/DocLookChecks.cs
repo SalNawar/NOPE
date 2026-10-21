@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -25,7 +26,11 @@ using UnityEngine;
 /// HEAD). Demo only: the
 /// measured cap height on screen (doclook.play.capHeight, the doclook_cap
 /// scenario's capHeight op), which counts only at the final paper size and
-/// framing.
+/// framing. Each play check names every result it needs by its exact id
+/// (one per step of its scenario) and needs each present, green and taken
+/// at HEAD on a clean tree, so a run that stopped after its first step is
+/// red (the re-verify of cbbe2e3: a pattern passed on whichever results
+/// existed).
 /// </summary>
 public static class DocLookChecks
 {
@@ -94,13 +99,50 @@ public static class DocLookChecks
         return GateResult.Of("doclook.forms.capModel", Owner, problems.Count == 0, string.Join(", ", lines), string.Join("; ", problems));
     }
 
-    /// <summary>The on-screen cap height of every printed value and label at A1 and A2 passed (the doclook_cap scenario's capHeight op).</summary>
+    /// <summary>The on-screen cap height of every printed value and label passed at A1 and at A2 (the doclook_cap scenario's capHeight op): both of <see cref="CapHeightResults"/>, each by its exact id.</summary>
     [GateCheck("doclook.play.capHeight", Owner, GateKind.Play, DemoOnly = true)]
-    public static GateResult PlayCapHeight() => GateResults.Require("doclook.play.capHeight", Owner, "doclook_cap.capHeight.*");
+    public static GateResult PlayCapHeight() => Each("doclook.play.capHeight", CapHeightResults);
 
-    /// <summary>The hidden half of a shut passport and of the shut folder takes no pointer, the shown half does, and both halves do once open (the doclook_print scenario's coverHits op; DOC-LOOK review, S3): each step finds a booklet and the folder in the state it names, or fails. Merge level: the fix depends on no later track, so a merge gate needs these results taken at HEAD (recipe R7b).</summary>
+    /// <summary>The hidden half of a shut passport and of the shut folder takes no pointer, the shown half does, and both halves do once open (the doclook_print scenario's coverHits op; DOC-LOOK review, S3): each step finds a booklet and the folder in the state it names, or fails, and all three of <see cref="CoverHitsResults"/> (shut, folder_reshut, open) are needed, each by its exact id, so a run that stopped before the folder shut again or before both lay open is red. Merge level: the fix depends on no later track, so a merge gate needs these results taken at HEAD (recipe R7b).</summary>
     [GateCheck("doclook.play.coverHits", Owner, GateKind.Play)]
-    public static GateResult PlayCoverHits() => GateResults.Require("doclook.play.coverHits", Owner, "doclook_print.coverHits.*");
+    public static GateResult PlayCoverHits() => Each("doclook.play.coverHits", CoverHitsResults);
+
+    /// <summary>The results doclook.play.coverHits needs, one per coverHits step of the doclook_print scenario (the rig names each &lt;scenario&gt;.coverHits.&lt;step&gt;): both shut at the start, both shut again once the folder is shut again, both open. DocLookGateTests holds the list to the scenario's own steps, so a renamed or added step cannot drop out of the gate.</summary>
+    internal static readonly string[] CoverHitsResults = { "doclook_print.coverHits.shut", "doclook_print.coverHits.folder_reshut", "doclook_print.coverHits.open" };
+
+    /// <summary>The results doclook.play.capHeight needs, one per capHeight step of the doclook_cap scenario: at A1 and at A2 (held to the scenario's steps by DocLookGateTests).</summary>
+    internal static readonly string[] CapHeightResults = { "doclook_cap.capHeight.a1", "doclook_cap.capHeight.a2" };
+
+    /// <summary>The results and HEAD the play checks judge (<see cref="Each"/>): every result in Library/QA/results and the checkout's commit. DocLookGateTests put given ones in their place, to run the registered checks outside Unity.</summary>
+    internal static Func<(IEnumerable<QaGateResult> Results, string Head)> Measured = () => (GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot));
+
+    /// <summary>Check <paramref name="id"/> over its results, each named by its exact id: the <see cref="Verdict"/> on what <see cref="Measured"/> gives.</summary>
+    private static GateResult Each(string id, IReadOnlyList<string> ids)
+    {
+        (IEnumerable<QaGateResult> results, string head) = Measured();
+        return Verdict(id, results, head, ids);
+    }
+
+    /// <summary>
+    /// The verdict of check <paramref name="id"/> over <paramref name="results"/>
+    /// at <paramref name="head"/> (pure; DocLookGateTests): it passes only when
+    /// each of <paramref name="ids"/> has a result and every one of them passed,
+    /// measured at HEAD on a clean tree (GateResults.Judge on each id alone).
+    /// An id is exact: one with a '*' is refused, never read as a pattern,
+    /// since a pattern passes on whichever results exist (the re-verify of
+    /// cbbe2e3: "doclook_print.coverHits.*" passed on the shut step alone).
+    /// </summary>
+    internal static GateResult Verdict(string id, IEnumerable<QaGateResult> results, string head, IReadOnlyList<string> ids)
+    {
+        if (ids == null || ids.Count == 0)
+            return GateResult.Fail(id, Owner, "no result named", "A check that reads results names each by its exact id.");
+        List<QaGateResult> all = (results ?? Enumerable.Empty<QaGateResult>()).ToList();
+        List<GateResult> parts = ids.Select(r => string.IsNullOrEmpty(r) || r.IndexOf('*') >= 0
+            ? GateResult.Fail(id, Owner, "not an id", $"'{r}' is not an exact result id: a pattern passes on whichever results exist")
+            : GateResults.Judge(id, Owner, r, all, head, false)).ToList();
+        return GateResult.Of(id, Owner, parts.All(g => g.Pass), string.Join("; ", ids.Zip(parts, (r, g) => $"{r}: {g.Measured}")),
+                             string.Join("; ", parts.Where(g => !g.Pass).Select(g => g.Detail)));
+    }
 
     /// <summary>Every texture of the office's art (ArtSlots.OfficeImports: never the art side's hall layers) imports with mipmaps, trilinear and the high-quality compression (OfficeArtImporter; BUG-63).</summary>
     [GateCheck("doclook.import.office", Owner)]

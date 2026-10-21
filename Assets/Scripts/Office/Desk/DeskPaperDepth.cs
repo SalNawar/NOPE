@@ -80,7 +80,8 @@ public sealed class DeskPaperDepth : MonoBehaviour
     private bool _built;
     private Mesh _shadowMesh;
 
-    /// <summary>The shadow mesh's corners and colours (reused: a lift rebuilds it without allocating, BUG-65g).</summary>
+    /// <summary>The shadow's mesh as PaperDepth.Shadow builds it, then its corners and colours as Unity takes them: all three kept and rebuilt in place, so a hold's or a hover's ease, which rebuilds the shadow every frame, allocates nothing here (BUG-65g; DocLookTests.Shadow_ARebuildIntoTheSameMesh_AllocatesNothing_AndMatchesAFreshOne).</summary>
+    private readonly DepthMesh _shadowDepth = new DepthMesh();
     private readonly List<Vector3> _shadowVertices = new List<Vector3>();
     private readonly List<Color> _shadowColours = new List<Color>();
 
@@ -280,7 +281,7 @@ public sealed class DeskPaperDepth : MonoBehaviour
         float offset = Mathf.Lerp(_config.shadowOffset, _config.shadowHeldOffset, eased);
         float alpha = Mathf.Clamp01(Mathf.Lerp(_config.shadowAlpha, _config.shadowHeldAlpha, eased) * _strength * _rank);
         DepthMesh mesh = PaperDepth.Shadow(_outline, _size.x, _size.y, _thickness + ShadowGap, spread,
-                                           offset * PaperDepth.LeanRight, -offset * PaperDepth.LeanNear, alpha);
+                                           offset * PaperDepth.LeanRight, -offset * PaperDepth.LeanNear, alpha, _shadowDepth);
         _shadowVertices.Clear();
         foreach ((float x, float y, float z) v in mesh.Vertices)
             _shadowVertices.Add(new Vector3(v.x, v.y, v.z));
