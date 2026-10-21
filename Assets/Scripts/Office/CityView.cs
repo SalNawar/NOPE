@@ -51,6 +51,12 @@ using UnityEngine.UI;
 /// traveller steps up or the PC, the wheel or the reading view take over.
 /// OfficeSceneBinder binds it to the hall; an art office without the hall's
 /// living city leaves it off (its buttons hidden).
+/// With the r17 city live (CITY-R17, CityR17's Resources config), the
+/// panorama is that city instead: the r17 look-dev ported whole (planes,
+/// clouds, 3D traffic, train, ads, fire and smoke), drawn into a render
+/// texture shown letterboxed on the matte, with its own pointer parallax,
+/// and the hall's windows look out on the same city. The timeline, the matte,
+/// the fade and the controls are unchanged.
 /// </summary>
 public sealed class CityView : MonoBehaviour
 {
@@ -117,6 +123,7 @@ public sealed class CityView : MonoBehaviour
     private HallLightingRig _lights;
     private Material _material;
     private bool _live;
+    private CityR17 _r17;
     private float _clock;
     private float _pan = -1f;
     private float _deskControls = 1f;
@@ -160,6 +167,11 @@ public sealed class CityView : MonoBehaviour
         _hall = hall;
         _exterior = exterior;
         _lights = lights;
+        if (panorama != null && (_r17 = CityR17.Attach(gameObject)) != null)
+        {
+            BindR17(exterior, hall);
+            return;
+        }
         Material living = LivingMaterial(exterior);
         if (living == null || panorama == null)
             return;
@@ -184,6 +196,23 @@ public sealed class CityView : MonoBehaviour
         if (matte != null && config != null)
             matte.color = config.cityMatte;
         BuildTraffic(exterior);
+    }
+
+    /// <summary>
+    /// The r17 city (CITY-R17: CityR17, switched by its Resources config) instead of the living-city painting: the
+    /// panorama shows its render texture whole on the matte (decoded by its own UI material), the hall's windows look
+    /// out on the same city, and the painting's flyers are not built. With the switch off this is never called.
+    /// </summary>
+    private void BindR17(HallCityExterior exterior, AnimeHallPresentation hall)
+    {
+        _r17.SetHall(exterior, hall);
+        panorama.material = _r17.PresentMaterial;
+        panorama.texture = _r17.Output;
+        panorama.uvRect = new Rect(0f, 0f, 1f, 1f);
+        if (fitter != null)
+            fitter.aspectRatio = _r17.Aspect;
+        if (matte != null && config != null)
+            matte.color = config.cityMatte;
     }
 
     /// <summary>The hall window's flying traffic over the panorama: one image per lane's vehicle (its sprite, untinted but by the hour), the smaller (farther) drawn first, placed each frame (DrawTraffic).</summary>
@@ -219,7 +248,7 @@ public sealed class CityView : MonoBehaviour
     /// <summary>Lets the view turn to the city (BoothCoordinator: BoothRules.NormalViewLive); false returns it.</summary>
     public void SetLive(bool live)
     {
-        live &= _material != null;
+        live &= _material != null || _r17 != null;
         _live = live;
         if (!live)
             Return();
@@ -234,7 +263,7 @@ public sealed class CityView : MonoBehaviour
 
     private void Set(bool on)
     {
-        if (on == IsOn || (on && (_material == null || !_live)))
+        if (on == IsOn || (on && ((_material == null && _r17 == null) || !_live)))
             return;
         IsOn = on;
         Show();
@@ -288,6 +317,14 @@ public sealed class CityView : MonoBehaviour
             foreach (Vehicle v in _traffic)
                 if (reveal <= 0f && v.Image != null)
                     v.Image.color = Color.clear;
+        }
+        if (_r17 != null)
+        {
+            // the r17 city draws itself while the view shows (its own clock, look and Reduced Motion)
+            _r17.ViewShown = reveal > 0f;
+            if (fitter != null && !Mathf.Approximately(fitter.aspectRatio, _r17.Aspect))
+                fitter.aspectRatio = _r17.Aspect;
+            return;
         }
         if (_material == null || reveal <= 0f)
         {

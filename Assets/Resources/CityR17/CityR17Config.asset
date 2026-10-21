@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19fcd14abca4491889118b3a605c79dc, type: 3}
+  m_Name: CityR17Config
+  m_EditorClassIdentifier: Assembly-CSharp::CityR17ConfigSO
+  live: 1
+  sceneJson: {fileID: 4900000, guid: 5081068eeec74c7a9af5435c0b4cd137, type: 3}
+  trafficJson: {fileID: 4900000, guid: 635ae7eca9354984a234a082833e45e7, type: 3}
+  vehiclesJson: {fileID: 4900000, guid: 8f5d3d27864c41fb8f9e03a897e461cd, type: 3}
+  artJson: {fileID: 4900000, guid: d3c482e1d2474212a49e43dd8d377001, type: 3}
+  art:
+  - {fileID: 2800000, guid: de0574b15cbb407a8f7508cc130882e0, type: 3}
+  - {fileID: 2800000, guid: 5f212b56dcfe4124b3ad30765ccb3262, type: 3}
+  - {fileID: 2800000, guid: 2237e3f3260141858580819cea7598ec, type: 3}
+  - {fileID: 2800000, guid: e525bce38f004ddb8d98977ec368037d, type: 3}
+  - {fileID: 2800000, guid: e9d34cde20644dfea630ac47c5f1cf20, type: 3}
+  - {fileID: 2800000, guid: 155f86ae9d8a4944885f5fbacd5a00c5, type: 3}
+  - {fileID: 2800000, guid: 6480fc623de743b4a038e9ef13f57cd8, type: 3}
+  - {fileID: 2800000, guid: d92af09b49844ef9a0e750c99ac6b94c, type: 3}
+  - {fileID: 2800000, guid: c0e225c0eb5f43e3be7a404a3889b821, type: 3}
+  - {fileID: 2800000, guid: 9e3fc337dc32408085536f4e8eb68a9d, type: 3}
+  - {fileID: 2800000, guid: 8d92723868eb4fa4ae4db42cf09d3fdd, type: 3}
+  - {fileID: 2800000, guid: 045a1855e2c54242a3d7879ae290a585, type: 3}
+  - {fileID: 2800000, guid: d9c7782d50d44b2eb9404b59f4bfca86, type: 3}
+  - {fileID: 2800000, guid: b2110487e5ca43dcab9d1b5bacb58454, type: 3}
+  - {fileID: 2800000, guid: ac132801a2ef4072ad44da9bb3084e87, type: 3}
+  - {fileID: 2800000, guid: 1af495ce36f741a1bec5e2b9c9e7ac40, type: 3}
+  - {fileID: 2800000, guid: 1e3308ada84a41f08ba125ad7f1584d1, type: 3}
+  - {fileID: 2800000, guid: 6411e1a842934b4cb1d3460247075a6f, type: 3}
+  - {fileID: 2800000, guid: 9efc1f06efee4a17a5f527574de2630e, type: 3}
+  - {fileID: 2800000, guid: e43316f7407545f497f8f179d65d9b5e, type: 3}
+  - {fileID: 2800000, guid: fc1f1cfb77754f0cbe8a1b6c476d18ce, type: 3}
+  - {fileID: 2800000, guid: fd5389b3f5f24f51b60094315ffe5296, type: 3}
+  - {fileID: 2800000, guid: 21ea46e32e404594b12dcad7e8408956, type: 3}
+  - {fileID: 2800000, guid: 9c2f7b47b0bd43daa55f8f13c9d8bb66, type: 3}
+  - {fileID: 2800000, guid: c25dd9024df548bb876287a5e05c4f78, type: 3}
+  - {fileID: 2800000, guid: 1e66b14a4b934573a4cbf653eedc5eb4, type: 3}
+  - {fileID: 2800000, guid: e30e06a0bbd94d34965b6c85f84c930e, type: 3}
+  - {fileID: 2800000, guid: 51cbcc8c659e47d6bd6a93076a459cde, type: 3}
+  - {fileID: 2800000, guid: e12e79f1ea64466db901d93b296ca797, type: 3}
+  - {fileID: 2800000, guid: 49c7ec322ef34e9fa4f7a5b70af5d737, type: 3}
+  - {fileID: 2800000, guid: 95ed3b754d0f47978261c4f442ca1f74, type: 3}
+  - {fileID: 2800000, guid: e33ad86b4ad84bcd975953f8f85d18f4, type: 3}
+  - {fileID: 2800000, guid: 7e02bb50cb7f4b319267684334486551, type: 3}
+  - {fileID: 2800000, guid: d8ecedefdb6f4d08a79803f1d86fb1c8, type: 3}
+  - {fileID: 2800000, guid: 1c4079eea344454387a64f0cc99e5ed6, type: 3}
+  - {fileID: 2800000, guid: b9a0ec511ebb45efaf5735ad6586577d, type: 3}
+  - {fileID: 2800000, guid: d7be598663904fb295bf6c739ff9ef37, type: 3}
+  - {fileID: 2800000, guid: d5f7fc5a0db34850b190472c3bba6fb8, type: 3}
+  spriteShader: {fileID: 4800000, guid: fe8426bf0a174ba58ec44f698e5a72d1, type: 3}
+  vehicleShader: {fileID: 4800000, guid: 5e7759db05b44d73aff40524e8ad5645, type: 3}
+  lampShader: {fileID: 4800000, guid: f8dcd1792c334c439bfe9eea61c52807, type: 3}
+  windowShader: {fileID: 4800000, guid: 5c1afe2d56034af59beae716ba6eca30, type: 3}
+  presentShader: {fileID: 4800000, guid: a8fb004c29284e3494e0b7831b75fcaf, type: 3}
+  fillScreen: 0
+  renderScale: 1
+  msaa: 4
+  parallaxRateCap: 30
+  idleSeconds: 4
+  hullPush: 0.8
+  glint: 1
+  windowCity: 1
+  windowParallax: 0.6
+  windowFps: 30
+  windowHourTint: 1
+  leftWindowsBox: {x: 0, y: 0, z: 0.3131, w: 0.6809}
+  leftWindowsPlate: {x: 300, y: 20, z: 1500, w: 1086}
+  frontWindowsBox: {x: 0.4503, y: 0.2942, z: 0.1156, w: 0.1671}
+  frontWindowsPlate: {x: 1280, y: 60, z: 1000, w: 480}
+  budgetMs: 2
