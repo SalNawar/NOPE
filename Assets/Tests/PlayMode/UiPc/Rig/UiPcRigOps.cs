@@ -20,7 +20,7 @@ using UnityEngine.UI;
 /// <list type="bullet">
 /// <item><c>uipcEsc</c>: Esc on the PC brings Settings to the front and the PC stays open (R3/R4).</item>
 /// <item><c>uipcEscDark</c>: with the screen turned off by the frame's power button, Esc turns it on and brings Settings forward, a right-click does nothing, and the PC stays open (R3/R4).</item>
-/// <item><c>uipcGate</c>: with the cheat panel opened over the PC by its key (F9; it holds the InputGate), a right-click and Esc reach nothing on the PC: neither is taken by the desktop, Settings does not come forward and the PC stays open; F9 closes the panel and frees the gate (RUN-SAFE's BUG-68a contract).</item>
+/// <item><c>uipcGate</c>: with Notes' field focused, the cheat panel opened over the PC by its key (F9; it holds the InputGate) leaves the field with its text kept, and a right-click and Esc, each delivered, reach nothing on the PC: neither is taken by the desktop, Settings does not come forward and the PC stays open; F9 closes the panel and frees the gate (RUN-SAFE's BUG-68a contract).</item>
 /// <item><c>uipcRoom</c>: a click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</item>
 /// <item><c>uipcBezel</c>: a click on the bezel leaves the PC (R3/R4: "press Q or click the bezel").</item>
 /// <item><c>uipcPowerOn</c>: a right-click and Esc a few frames after Q, while the picture still powers on (the desktop's clicks wait for it): each is taken by the desktop, the PC stays open and Esc brings Settings forward, with full motion and with Reduced Motion, and the player's motion choice is put back whatever the passes did (R3/R4: "Esc = Settings everywhere").</item>
@@ -114,53 +114,99 @@ public static class UiPcRigOps
     }
 
     /// <summary>
-    /// The cheat panel over the PC (asserts <c>gate</c>): with the PC open and
-    /// Settings closed, F9 opens the panel, which holds the InputGate
-    /// (DebugPanelController); a right-click and then Esc are pressed under
-    /// it. Neither may be taken by the desktop in its frame
-    /// (<see cref="DesktopKeyboard.EscapeTakenFrame"/>), Settings must not come
-    /// forward behind the panel and the PC must stay open: while the gate is
-    /// held, "the PC's input handlers stand still" (RUN-SAFE's BUG-68a
-    /// contract; the review of 83a53e8 found DesktopKeyboard's main path never
-    /// read the gate). F9 then closes the panel, and the gate must be free.
-    /// No wait here can throw, so the panel is always closed again when F9
-    /// opened it: a panel left open would hold the gate over every later step.
+    /// The cheat panel over the PC (asserts <c>gate</c>). With the PC open and
+    /// Settings closed, Notes is opened from Start and its notes field takes
+    /// the keyboard by a click (setup: the field the review of f6396c8 found
+    /// reverted). F9 then opens the panel, which holds the InputGate
+    /// (DebugPanelController). The field must lose the keyboard at once, with
+    /// its text kept (<see cref="PcPoller.Gated"/>: the EventSystem still
+    /// updates the selected field under the gate, and TMP's own Esc would
+    /// cancel the edit and put back the text from when it was focused); it is
+    /// measured before the right-click, which lands on the panel's blocker and
+    /// would take the selection off by itself. The rig's keyboard makes no
+    /// IMGUI events, so TMP's cancel cannot happen here: this measures its
+    /// cause, and recipe 4's real-keyboard step measures the kept text. A
+    /// right-click and then Esc are pressed under the panel. Each must reach
+    /// the game in its own frame (the virtual mouse's right button and the
+    /// keyboard's Esc read pressed in that frame, so a press the rig never
+    /// delivered fails instead of passing as "not taken"), neither may be
+    /// taken by the desktop in that frame
+    /// (<see cref="DesktopKeyboard.EscapeTakenFrame"/>), Settings must not
+    /// come forward behind the panel and the PC must stay open: while the gate
+    /// is held, "the PC's input handlers stand still" (RUN-SAFE's BUG-68a
+    /// contract). F9 then closes the panel, and the gate must be free. No wait
+    /// here can throw, so the closing F9 always runs when F9 opened the panel.
+    /// When it does not free the gate (the panel missed the toggle), a second
+    /// F9 is tried, and the assert fails either way; if that one misses too,
+    /// the gate stays held over every later step of the run, which then fail
+    /// on their own (the line says so). Notes is closed again when this op
+    /// opened it.
     /// </summary>
     private static IEnumerator Gate(QaRunner runner, QaStep step)
     {
         OfficeViewController view = QaGame.Find<OfficeViewController>();
         DesktopKeyboard keys = QaGame.Find<DesktopKeyboard>();
         DesktopWindow settings = Window<SettingsWindowController>();
-        if (view == null || keys == null || settings == null || !PcOpen(view) || InputGate.Blocked)
+        NotesWindow notes = QaGame.Find<NotesWindow>();
+        DesktopWindow notesWindow = notes != null ? notes.GetComponent<DesktopWindow>() : null;
+        var field = notes != null ? (TMP_InputField)QaGame.Field(notes, "notesField") : null;
+        DesktopShell shell = QaGame.Find<DesktopShell>();
+        Transform start = shell != null ? FindDeep(shell.transform, "StartButton") : null;
+        Transform entry = shell != null ? FindDeep(shell.transform, "App_" + DesktopAppIds.Notes) : null;
+        if (view == null || keys == null || settings == null || notesWindow == null || field == null || start == null || entry == null || !PcOpen(view) || InputGate.Blocked)
         {
-            runner.Assert("gate", Owner, false, "no open PC, desktop keys or Settings, or the gate already held", "run it with the PC open in the office and no overlay open");
+            runner.Assert("gate", Owner, false, "no open PC, desktop keys, Settings, Notes' field or Start menu, or the gate already held", "run it with the PC open in the office and no overlay open");
             yield break;
         }
         if (settings.IsOpen)
             settings.Close(); // a press that reached the PC would bring it back
-        yield return QaGame.Frames(2);
+        bool notesWasOpen = notesWindow.IsOpen;
+        yield return ClickObject(runner, start);
+        yield return QaGame.Frames(3);
+        yield return ClickObject(runner, entry); // Notes, from Start
+        yield return QaGame.Frames(6);
+        yield return ClickObject(runner, field.transform); // its notes field takes the keyboard
+        yield return QaGame.Frames(3);
+        bool typing = field.isFocused;
+        string before = field.text ?? string.Empty;
+
         yield return runner.Input.Tap(Key.F9); // the cheat panel opens over the PC and holds the InputGate
         bool held = InputGate.Blocked;
+        UnityEngine.EventSystems.EventSystem events = UnityEngine.EventSystems.EventSystem.current;
+        bool left = !field.isFocused && (events == null || events.currentSelectedGameObject != field.gameObject);
 
         InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position }.WithButton(MouseButton.Right));
         yield return null; // the game sees the right-click this frame
+        bool rightSent = runner.Input.Mouse.rightButton.wasPressedThisFrame;
         bool rightTaken = keys.EscapeTakenFrame == Time.frameCount;
         InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position });
         yield return null;
 
         InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState(Key.Escape));
         yield return null; // the game sees the Esc this frame
+        bool escSent = runner.Input.Keyboard.escapeKey.wasPressedThisFrame;
         bool escTaken = keys.EscapeTakenFrame == Time.frameCount;
         InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState());
         yield return QaGame.Frames(3);
-        bool shown = settings.IsOpen && !settings.IsMinimised, open = PcOpen(view);
+        string after = field.text ?? string.Empty;
+        bool kept = after == before, shown = settings.IsOpen && !settings.IsMinimised, open = PcOpen(view);
 
         if (held)
             yield return runner.Input.Tap(Key.F9); // the panel closes and lets the gate go
-        bool released = !InputGate.Blocked;
-        runner.Assert("gate", Owner, held && !rightTaken && !escTaken && !shown && open && released,
-            $"cheat panel {(held ? "open, gate held" : "not opened by F9")}; right-click {(rightTaken ? "taken by the desktop" : "not taken")}; Esc {(escTaken ? "taken by the desktop" : "not taken")}: settings {(shown ? "brought forward" : "not shown")}, pc {(open ? "open" : "closed")}; panel closed: gate {(released ? "free" : "still held")}",
-            "while the cheat panel holds the InputGate the PC's input handlers stand still (RUN-SAFE BUG-68a): an Esc must not bring Settings forward behind the panel, and nothing leaves the PC");
+        bool released = !InputGate.Blocked, freedLate = false;
+        if (!released)
+        {
+            yield return runner.Input.Tap(Key.F9); // a missed toggle must not hold the gate over every later step
+            freedLate = !InputGate.Blocked;
+        }
+        if (!notesWasOpen && notesWindow.IsOpen)
+            notesWindow.Close(); // as the session had it
+        yield return QaGame.Frames(2);
+
+        string gate = released ? "free" : freedLate ? "still held, freed by a second F9" : "still held after a second F9: every later step runs under the gate";
+        runner.Assert("gate", Owner, typing && held && left && kept && rightSent && !rightTaken && escSent && !escTaken && !shown && open && released,
+            $"notes field {(typing ? "had the keyboard" : "never took the keyboard (measured nothing)")}; cheat panel {(held ? "open, gate held" : "not opened by F9")}: field {(left ? "left" : "still has the keyboard")}; right-click {(rightSent ? "delivered" : "not delivered")}, {(rightTaken ? "taken by the desktop" : "not taken")}; Esc {(escSent ? "delivered" : "not delivered")}, {(escTaken ? "taken by the desktop" : "not taken")}: field text {(kept ? "kept" : "changed")} ({before.Length} -> {after.Length} chars), settings {(shown ? "brought forward" : "not shown")}, pc {(open ? "open" : "closed")}; panel closed: gate {gate}",
+            "while the cheat panel holds the InputGate the PC's input handlers stand still (RUN-SAFE BUG-68a): a focused desktop field is left with its text kept, an Esc must not bring Settings forward behind the panel, and nothing leaves the PC");
     }
 
     /// <summary>

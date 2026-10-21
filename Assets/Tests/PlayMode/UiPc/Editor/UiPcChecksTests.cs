@@ -217,7 +217,10 @@ public class UiPcChecksTests
             Assert.AreEqual(check.Id, g.Id, "the result is the check's own");
             Assert.AreEqual("UI-PC", g.Owner, check.Id);
             foreach (string id in ids)
+            {
                 StringAssert.Contains(id + ": 1 result(s): 1 pass", g.Measured, $"{check.Id} judges {id} by its own id");
+                StringAssert.Contains(id + " m", g.Detail, $"{check.Id}: a passing check keeps {id}'s own measurement (what the run saw)");
+            }
         }
     }
 

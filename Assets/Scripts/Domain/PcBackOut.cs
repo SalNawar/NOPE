@@ -17,14 +17,27 @@ public enum PcBackOutStep
 /// <summary>Which of the PC keyboard's pollers runs in a frame (DesktopKeyboard, <see cref="PcBackOut.Poller"/>). Not serialized.</summary>
 public enum PcPoller
 {
-    /// <summary>Neither: the PC takes no key and no back-out (the PC closed, the desktop taking no input with the screen on, or the InputGate held).</summary>
+    /// <summary>Neither: the PC takes no key and no back-out (the PC closed, or the desktop taking no input with the screen on).</summary>
     None,
 
     /// <summary>The desktop's keys and back-out: it takes input (the frame open, the screen on), from the press frame.</summary>
     Desktop,
 
     /// <summary>The back-out alone, on the PC open with its screen off (<see cref="PcBackOut.ScreenOff"/>).</summary>
-    ScreenOff
+    ScreenOff,
+
+    /// <summary>
+    /// An overlay holds the InputGate (the cheat panel over the PC): the PC
+    /// takes no key and no back-out, and a desktop text field that has the
+    /// keyboard is left, its text kept. The EventSystem still updates the
+    /// selected field under the gate, so TMP would read the keys there itself:
+    /// the typing would land under the panel, and its own Esc would cancel the
+    /// edit and put back the text the field had when it was focused (Notes
+    /// keeps every change on the day's page, so the notes typed since would be
+    /// lost). Taking the selection off ends the edit without a cancel, as the
+    /// screen going dark does (MonitorScreen.SetInteractive).
+    /// </summary>
+    Gated
 }
 
 /// <summary>
@@ -39,16 +52,19 @@ public enum PcPoller
 /// turns the screen on and brings Settings forward, a right-click does
 /// nothing (<see cref="ScreenOff"/>). While an overlay holds the InputGate
 /// (the cheat panel; RUN-SAFE's BUG-68a contract: "the PC's input handlers
-/// stand still"), the PC takes neither a key nor a back-out
-/// (<see cref="Poller"/>). Pure; DesktopKeyboard applies it.
+/// stand still"), the PC takes neither a key nor a back-out, and a desktop
+/// text field that has the keyboard is left with its text kept
+/// (<see cref="Poller"/>, <see cref="PcPoller.Gated"/>). Pure; DesktopKeyboard
+/// applies it.
 /// </summary>
 public static class PcBackOut
 {
     /// <summary>
     /// What the PC's keyboard polls this frame: nothing while
     /// <paramref name="gateHeld"/> (InputGate.Blocked: the cheat panel over
-    /// the PC, so an Esc never brings Settings forward behind it), the
-    /// desktop's keys and back-out while it takes input
+    /// the PC, so an Esc never brings Settings forward behind it), when it
+    /// leaves a focused desktop field instead (<see cref="PcPoller.Gated"/>);
+    /// the desktop's keys and back-out while it takes input
     /// (<paramref name="desktopInteractive"/>: BoothRules.DesktopInteractive),
     /// the screen-off back-out while the PC is open
     /// (<paramref name="pcOpen"/>) with its screen off
@@ -57,7 +73,7 @@ public static class PcBackOut
     public static PcPoller Poller(bool gateHeld, bool desktopInteractive, bool pcOpen, bool screenOn)
     {
         if (gateHeld)
-            return PcPoller.None;
+            return PcPoller.Gated;
         if (desktopInteractive)
             return PcPoller.Desktop;
         return pcOpen && !screenOn ? PcPoller.ScreenOff : PcPoller.None;

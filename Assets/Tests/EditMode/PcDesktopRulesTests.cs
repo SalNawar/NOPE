@@ -506,13 +506,16 @@ public class PcDesktopRulesTests
     // --- What the PC's keyboard polls in a frame (RUN-SAFE's BUG-68a contract: while the cheat panel holds the InputGate, "the PC's input handlers stand still") ---
 
     [Test]
-    public void Poller_GateHeld_NothingRuns_InEveryPcState()
+    public void Poller_GateHeld_GatedInEveryPcState_NoKeyRuns_AndAFocusedFieldIsLeft()
     {
+        // Gated, not None: no key or back-out runs, and a desktop field that has the keyboard is left with its text kept
+        // (the review of f6396c8: the EventSystem still updates the selected field under the gate, so TMP's own Esc
+        // cancelled the edit and put back the text the field had when it was focused).
         foreach (bool interactive in new[] { false, true })
         foreach (bool open in new[] { false, true })
         foreach (bool lit in new[] { false, true })
-            Assert.AreEqual(PcPoller.None, PcBackOut.Poller(true, interactive, open, lit),
-                $"interactive {interactive}, open {open}, screen on {lit}: an Esc under the cheat panel must not bring Settings forward behind it");
+            Assert.AreEqual(PcPoller.Gated, PcBackOut.Poller(true, interactive, open, lit),
+                $"interactive {interactive}, open {open}, screen on {lit}: an Esc under the cheat panel must not bring Settings forward behind it, nor reach a focused field");
     }
 
     [Test]

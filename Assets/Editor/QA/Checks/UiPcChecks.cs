@@ -134,7 +134,7 @@ public static class UiPcChecks
     [GateCheck("uipc.bezel", Owner, GateKind.Play)]
     public static GateResult Bezel() => RequireEach("uipc.bezel", Session + ".bezel");
 
-    /// <summary>With the cheat panel open over the PC (it holds the InputGate), Esc and a right-click reach nothing on the PC: neither is taken by the desktop, Settings does not come forward and the PC stays open; the panel closed, the gate is free (RUN-SAFE's BUG-68a contract: "the PC's input handlers stand still").</summary>
+    /// <summary>With the cheat panel open over the PC (it holds the InputGate), a focused desktop field (Notes') is left with its text kept, and Esc and a right-click, each delivered, reach nothing on the PC: neither is taken by the desktop, Settings does not come forward and the PC stays open; the panel closed, the gate is free (RUN-SAFE's BUG-68a contract: "the PC's input handlers stand still").</summary>
     [GateCheck("uipc.gate", Owner, GateKind.Play)]
     public static GateResult Gate() => RequireEach("uipc.gate", Session + ".gate");
 

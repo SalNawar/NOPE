@@ -27,8 +27,12 @@ using UnityEngine.InputSystem;
 /// opens the same Settings window everywhere"). While an overlay holds the
 /// InputGate (the cheat panel over the PC; RUN-SAFE's BUG-68a contract) it
 /// polls nothing at all: no key, no right-click, no screen-off back-out, so
-/// an Esc there never brings Settings forward behind the panel
-/// (PcBackOut.Poller). F1 (and the app's Keys button) shows or hides the shortcut card; the
+/// an Esc there never brings Settings forward behind the panel; and it takes
+/// the EventSystem's selection off a desktop text field that has the
+/// keyboard (PcBackOut.Poller's Gated): the EventSystem still updates the
+/// selected field under the gate, so TMP would take the typing there and its
+/// own Esc would cancel the edit, putting back the text the field had when it
+/// was focused; the deselect ends the edit and keeps the text. F1 (and the app's Keys button) shows or hides the shortcut card; the
 /// icons take the arrows and Enter while no window has the focus; Ctrl+V
 /// with Notes focused adds the clip as a clipping; with Orders focused the
 /// arrows walk its tree, Enter acts on the selected node and Ctrl+=, Ctrl+-
@@ -130,11 +134,13 @@ public sealed class DesktopKeyboard : MonoBehaviour
             card.Open();
     }
 
-    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input, from the press frame (never gated on the raycaster, which the picture's power-on holds off: an Esc or a right-click then must still be the PC's, never the office's way out); nothing while the InputGate is held (PcBackOut.Poller).</summary>
+    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input, from the press frame (never gated on the raycaster, which the picture's power-on holds off: an Esc or a right-click then must still be the PC's, never the office's way out); while the InputGate is held, no key, and a focused desktop field is left (PcBackOut.Poller).</summary>
     private void Update()
     {
-        // Nothing while the cheat panel holds the InputGate (BUG-68a); the screen-off back-out on a dark PC; else the desktop's keys while it takes input.
+        // Under the cheat panel (the InputGate, BUG-68a): no key, and a focused field is left; the screen-off back-out on a dark PC; else the desktop's keys while it takes input.
         PcPoller poller = PcBackOut.Poller(InputGate.Blocked, screen != null && screen.IsInteractive, frame != null && frame.IsOpen, screen == null || screen.IsOn);
+        if (poller == PcPoller.Gated)
+            LeaveFieldUnderGate();
         if (poller == PcPoller.ScreenOff)
             BackOutScreenOff();
         if (poller != PcPoller.Desktop)
@@ -169,6 +175,23 @@ public sealed class DesktopKeyboard : MonoBehaviour
             if (apps != null)
                 apps.OpenApp(DesktopAppIds.Settings);
         }
+    }
+
+    /// <summary>
+    /// The InputGate held (PcBackOut.Poller's Gated: the cheat panel over the
+    /// PC): a desktop text field that has the keyboard loses the EventSystem's
+    /// selection, before the EventSystem runs, so TMP reads no key there under
+    /// the panel: no typing, and no Esc of its own, which would cancel the edit
+    /// and put back the text the field had when it was focused
+    /// (restoreOriginalTextOnEscape is on in each of OfficeGameplay's six
+    /// fields). The deselect ends the edit without a cancel, so
+    /// the text is kept, as MonitorScreen.SetInteractive(false) does; the
+    /// player's next click on the field gives it the keyboard again.
+    /// </summary>
+    private void LeaveFieldUnderGate()
+    {
+        if (FocusedField() != null)
+            EventSystem.current.SetSelectedGameObject(null);
     }
 
     /// <summary>The PC open with its screen off (PcBackOut.Poller's ScreenOff: the frame open, the screen off, the InputGate free): the back-out is still the PC's (stamped, so the office's never closes it); Esc turns the screen on and brings Settings forward, a right-click does nothing (PcBackOut.ScreenOff).</summary>
