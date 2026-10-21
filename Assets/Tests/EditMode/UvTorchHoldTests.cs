@@ -88,6 +88,28 @@ public class UvTorchHoldTests
     }
 
     [Test]
+    public void ALiftThatSwingsTheBodyAcrossThePatch_Covers_TheSolvedHoldDoesNot()
+    {
+        var eye = new TorchPoint(0f, 1f, 0f);
+        var lit = new TorchPoint(0f, 0f, 0f);
+        Assert.IsTrue(UvTorchHold.DrawnCovers(eye, new TorchPoint(0f, 0.1f, 0f), new TorchPoint(1f, 0f, 0f), lit, 0.05f, 0.05f, 0.02f, ConeRadius, 1f),
+                      "half-way out of a cradle that lays it on its side: the body lies across the patch, so the lift goes straight to the hold");
+        Assert.IsFalse(UvTorchHold.DrawnCovers(eye, new TorchPoint(0.25f, 0.1f, 0f), new TorchPoint(-1f, 0f, 0f), lit, 0.05f, 0.05f, 0.02f, ConeRadius, 1f),
+                       "a body well to the side of the patch hides nothing");
+        foreach (TorchPoint view in Eyes)
+        {
+            TorchAim solved = HoldFor(view);
+            double radians = solved.Yaw * System.Math.PI / 180.0;
+            (float x, float z) = UvCone.Ahead(0f, 0f, (float)System.Math.Sin(radians), (float)System.Math.Cos(radians), Height, solved.Tilt);
+            var grip = new TorchPoint(0f, Height, 0f);
+            float dx = x, dy = -Height, dz = z, length = (float)System.Math.Sqrt(dx * dx + dy * dy + dz * dz);
+            Assert.IsFalse(UvTorchHold.DrawnCovers(view, grip, new TorchPoint(dx / length, dy / length, dz / length), new TorchPoint(x, 0f, z),
+                                                   TailLength, LensLength, BodyRadius, ConeRadius, solved.Unoccluded),
+                           $"the torch drawn at its solved hold is kept (eye {view.X},{view.Y},{view.Z})");
+        }
+    }
+
+    [Test]
     public void Hold_KeepsTheBuiltAim_WhenTheEyeAlreadySeesThePatch()
     {
         var eyeBeside = new TorchPoint(0.9f, 0.3f, 0.15f);

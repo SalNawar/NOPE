@@ -253,6 +253,16 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                                  _tailLength, _lensLength, _bodyRadius, ConeRadius);
     }
 
+    /// <summary>True when the torch drawn at <paramref name="at"/>, turned <paramref name="rotation"/> (its lens along local -z), hides more of the lit patch from the view's camera than the solved aim does (UvTorchHold.DrawnCovers, the measured capsule).</summary>
+    private bool LiftCovers(Vector3 at, Quaternion rotation)
+    {
+        Camera cam = ViewCamera;
+        Vector3 eye = cam != null ? cam.transform.position : _grip + Vector3.up;
+        Vector3 lens = rotation * Vector3.back;
+        return UvTorchHold.DrawnCovers(new TorchPoint(eye.x, eye.y, eye.z), new TorchPoint(at.x, at.y, at.z), new TorchPoint(lens.x, lens.y, lens.z),
+                                       new TorchPoint(_lit.x, _lit.y, _lit.z), _tailLength, _lensLength, _bodyRadius, ConeRadius, _solved.Unoccluded);
+    }
+
     /// <summary>The cone's radius on the desk (DeskConfigSO.uvConeRadius).</summary>
     private float ConeRadius => _hardware != null && _hardware.Config != null ? _hardware.Config.uvConeRadius : 0.075f;
 
@@ -382,7 +392,18 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         Vector3 dir = _lit - _grip;
         dir = dir.sqrMagnitude > 1e-8f ? dir.normalized : Vector3.down;
         Quaternion heldRot = Quaternion.LookRotation(-dir, Vector3.up);
-        torch.SetPositionAndRotation(Vector3.Lerp(restWorld, _grip, t), Quaternion.Slerp(restRot, heldRot, t));
+        Vector3 drawnAt = Vector3.Lerp(restWorld, _grip, t);
+        Quaternion drawnRot = Quaternion.Slerp(restRot, heldRot, t);
+        // BUG-2c on the way up too: a lift out of a cradle that lays the torch on its side (the desk home map's pouch) swings
+        // its body across the patch, so such a frame goes straight to the hold, as a swing does (UvTorchHold.DrawnCovers).
+        if (_held && t < 1f && LiftCovers(drawnAt, drawnRot))
+        {
+            _lift.Snap(_lift.Target);
+            t = 1f;
+            drawnAt = _grip;
+            drawnRot = heldRot;
+        }
+        torch.SetPositionAndRotation(drawnAt, drawnRot);
 
         bool lit = _held && t > 0.6f;
         Vector3 onDesk = Surface != null ? Surface.Clamp(_lit) : _lit;

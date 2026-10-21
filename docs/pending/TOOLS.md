@@ -286,3 +286,8 @@ Everything below runs in the NOPE-p5 editor lane by job, after INTEGRATION's reb
      - checks 1, 2, 4, 7, 8, 9, 10, 11 and 12 yes (press-frame lift, ≤8 mm lag, 10° hover tip, 120 ms fluoresce, 2-frame spot lag, cues);
      - check 5 (particles) **no** until FEEL-KIT/FEEDBACK provides the emitter (the gap is recorded above);
      - Reduced Motion: no tip, lag, fluoresce or swing.
+
+## The six tracks' landing (integrate/six, 2026-10-21)
+
+- **The lift out of the cradle goes straight to the hold when it would cover the patch** (`UvTorchHold.DrawnCovers`, `UvTorch.LiftCovers`; test `ALiftThatSwingsTheBodyAcrossThePatch_Covers_TheSolvedHoldDoesNot`). DESK-PLAN's home map lays the torch on its side in its pouch (left of the mat, turned 90 degrees), and the drawn pose blends from the rest pose to the hold while the beam is already lit (lift above 0.6), so on the combined tree the body crossed the lit patch on the first three held frames of every office sweep (`tools_torch` 86.9 % worst, under the 95 % line). Such a frame now skips the rest of the lift, as the swing guard does for a swing.
+- **Still open (CAM #6):** the reading-view sweeps stop at `toolsTorch` with "The torch is not on the screen": the torch's home (-0.84, -0.44) is outside main's reading pose, which frames the mat alone. CAM's reading pose frames the side columns (DESK-PLAN.md, For CAM).

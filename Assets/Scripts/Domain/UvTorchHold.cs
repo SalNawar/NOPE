@@ -167,6 +167,24 @@ public static class UvTorchHold
     public static bool SwingCovers(float shown, float solvedShare) => shown < Math.Min(TargetShare, solvedShare) - 1e-4f;
 
     /// <summary>
+    /// True when the torch as it is drawn (its grip at <paramref name="at"/>,
+    /// its lens end along the unit <paramref name="lensDirection"/>) lets the
+    /// body cover more of the patch round <paramref name="lit"/> than the
+    /// solved aim does (<see cref="SwingCovers"/>). As the torch lifts out of
+    /// its cradle its drawn pose blends from the rest pose to the hold, and a
+    /// cradle that lays it on its side (the desk home map's pouch, turned 90
+    /// degrees) swings the body across the patch on the way up: such a frame
+    /// goes straight to the hold (BUG-2c).
+    /// </summary>
+    public static bool DrawnCovers(TorchPoint eye, TorchPoint at, TorchPoint lensDirection, TorchPoint lit, float tailLength, float lensLength,
+                                   float bodyRadius, float coneRadius, float solvedShare)
+    {
+        var tail = new TorchPoint(at.X - lensDirection.X * tailLength, at.Y - lensDirection.Y * tailLength, at.Z - lensDirection.Z * tailLength);
+        var lens = new TorchPoint(at.X + lensDirection.X * lensLength, at.Y + lensDirection.Y * lensLength, at.Z + lensDirection.Z * lensLength);
+        return SwingCovers(Unoccluded(eye, tail, lens, bodyRadius, lit, coneRadius), solvedShare);
+    }
+
+    /// <summary>
     /// How to hold the torch for the eye at <paramref name="eye"/>: the grip
     /// at (<paramref name="gripX"/>, <paramref name="deskY"/> + <paramref name="height"/>,
     /// <paramref name="gripZ"/>), the beam pointing away from the chair along
