@@ -104,7 +104,68 @@ public sealed class DeskPainted : MonoBehaviour
     /// frame's height (the papers lie there; the office binder raises the
     /// frame onto the pad: DeskLayoutSettings.paintedLift).
     /// </summary>
-    public void Align(DeskFrame frame) => transform.SetPositionAndRotation(frame.Point(Vector2.zero, -paperPlane), frame.Facing(0f));
+    public void Align(DeskFrame frame)
+    {
+        transform.SetPositionAndRotation(frame.Point(Vector2.zero, -paperPlane), frame.Facing(0f));
+        CastNoShadows();
+        CloseDealTraySlot();
+    }
+
+    /// <summary>The back of the deal tray's slot (the prefab's frame: centre and size, metres; a quad facing the chair).</summary>
+    private static readonly Vector3 SlotBackCentre = new Vector3(0f, 1.12f, 1.21f), SlotBackSize = new Vector3(0.5f, 0.1f, 1f);
+
+    /// <summary>The slot back's colour: the counter's dark band over it (sRGB 58, 34, 20).</summary>
+    private static readonly Color SlotBackColour = new Color(58f / 255f, 34f / 255f, 20f / 255f, 1f);
+
+    /// <summary>
+    /// Closes the slot behind the deal tray (desk v3 round 12; the
+    /// concept-vs-game review, item 7, "a light grey bar along the top edge of
+    /// the deal tray"): the bake's tray runs under the counter's face and its
+    /// floor ends 2 cm short of it, so four rows of screen (y 693 to 696 at
+    /// 1080p) met no desk mesh and showed the hall's foreground floor, pale, as
+    /// a bar. A quad in the counter's dark brown stands at the slot's back.
+    /// (The painting shows the traveller's robe there; a traveller at the
+    /// desk no longer shows through those 4 px.) Idempotent.
+    /// </summary>
+    private void CloseDealTraySlot()
+    {
+        if (transform.Find("DealTraySlotBack") != null || screen == null || screen.sharedMaterial == null)
+            return;
+        var back = new GameObject("DealTraySlotBack", typeof(MeshFilter), typeof(MeshRenderer));
+        back.layer = gameObject.layer;
+        back.transform.SetParent(transform, false);
+        back.transform.localPosition = SlotBackCentre;
+        back.transform.localRotation = Quaternion.identity;
+        back.transform.localScale = SlotBackSize;
+        back.GetComponent<MeshFilter>().sharedMesh = Resources.GetBuiltinResource<Mesh>("Quad.fbx");
+        var renderer = back.GetComponent<MeshRenderer>();
+        // The PC screen's art material (URP Unlit), in the counter's brown.
+        var material = new Material(screen.sharedMaterial) { name = "Deal tray slot back (runtime)" };
+        if (material.HasProperty("_BaseColor"))
+            material.SetColor("_BaseColor", SlotBackColour);
+        renderer.sharedMaterial = material;
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        renderer.receiveShadows = false;
+    }
+
+    /// <summary>
+    /// No painted object casts a real-time shadow (desk v3 round 12; the
+    /// concept-vs-game review, items 6 and 11): the paint already holds each
+    /// object's shadow, and the hall's daylight cast them the other way (light
+    /// from the left, the painting's from the upper right) as pale blue
+    /// wedges, the "ghost square" right of the chip reader among them. A
+    /// moving object's contact shadow is SlideShadow's. The bake's prefab
+    /// still marks the movers to cast (DeskPaintedImporter, which round 12
+    /// changes too, for its next import); this puts every painted renderer
+    /// off at install.
+    /// </summary>
+    public void CastNoShadows()
+    {
+        foreach (Part p in parts)
+            if (p != null && p.mesh != null)
+                foreach (Renderer r in p.mesh.GetComponentsInChildren<Renderer>(true))
+                    r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+    }
 
     /// <summary>The height of the painted mat's pad over the bake's floor (metres): the bake's floor is the world's, so the papers lie this high (the office binder's paintedLift).</summary>
     public float PaperPlane => paperPlane;
@@ -209,7 +270,7 @@ public sealed class DeskPainted : MonoBehaviour
             part.transform.localScale = new Vector3(box.width, box.height, box.depth);
             var renderer = part.GetComponent<Renderer>();
             renderer.sharedMaterial = StandInMaterial(new Color(box.r, box.g, box.b, 1f));
-            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; // round 12: the paint holds the shadows (CastNoShadows)
             made.Add(renderer);
         }
         return made.ToArray();
@@ -424,7 +485,7 @@ public sealed class DeskPainted : MonoBehaviour
         t.localScale = size;
         var renderer = box.GetComponent<MeshRenderer>();
         renderer.sharedMaterial = StandInMaterial(colour);
-        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; // round 12: the paint holds the shadows (CastNoShadows)
         return renderer;
     }
 

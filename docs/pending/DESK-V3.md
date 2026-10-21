@@ -32,6 +32,192 @@ Saleh's two open items from "So many visual problems" (the XP-style wallpaper, t
 - **No "CHEATS ON":** `v3.nobadge` passes on every still (day 12 is cheated); the badge's rectangle (8, 1058 to 128, 1078) holds 0 text pixels in the four rest stills (the PC still's rectangle is the PC's cream bezel).
 - **Still open (unchanged, owners as round 10):** the city window 0.85x and 0.81x (LIGHT, round 10 item 5); the hall floor about 1.3x (the art, OPEN.md 19); the other 24 wallpapers (round 10 item 6). New in the captures: day 1 shows the FTUE's "TUTORIAL 1/7" card top right (the game's tutorial, not a dev label).
 
+## Round 12: the CRT, its desk view, and the concept-vs-game review
+
+Three asks after round 10 (round 11 re-ran rounds 9 and 10 in Unity, docs only). Each is fixed here, or recorded with its owner, and R12 was run in Unity (NOPE-art's editor through the job runner and the QA harness; it ended on an empty scene and closed, with no dialog left):
+- Saleh's crop of the desk PC's screen. He saw the XP-style wallpaper. The icons and the "WAITING FOR THE NEXT TRAVELLER" banner were too small to read from the chair. The 09:00 and date clock sat in a floating dark box. The picture was blurry, had no CRT feel, and sat small inside a double bezel.
+- Saleh's crop of the monitor's top: the hall showed through between the casing and the inner bezel.
+- The orchestrator's honest concept-vs-game review (`E:\unity\NOPE-tools\reports\desk_v3_unity\CONCEPT_VS_GAME.md`). Its items 1, 2, 5 to 11 and 14 are covered here; item 13 if in reach. Items 3 (the hall) and 12 (the switchboard picture) wait for Saleh.
+
+### 1. The PC model: a solid casing, and a curved CRT set into it (review item 1; the monitor-top crop)
+
+**Cause (measured on `Desk_PC.fbx` in Blender, in the screen's own frame).** The casing (`PC_Crt`: base, casing, bezel and drive merged) is an open box:
+- Its front is a 46 x 40 cm hole (x +-0.23 m, y -0.205 to 0.195 m), 2.5 cm behind the screen face.
+- The inner bezel is a separate 44 x 37 cm slab (0.5 to 2.2 cm behind the screen face) standing in that hole.
+- The office camera saw through the 1 to 2 cm gap into the hollow casing. The casing's insides are back faces, culled, so the hall behind the PC showed through.
+
+So it was real see-through, not a baked colour: the casing's own texels match the painting. The screen was a flat 36 x 29 cm quad 2 mm in front of the bezel. Its picture was fitted at 4:3 and 92%, leaving a thick black border: the "tablet".
+
+**Fix (`PaintedCrt.Fit`, at bind, before the desktop's clone measures the glass; the bake is unchanged):**
+- **The CRT face.** The screen quad becomes a curved glass (`CrtFace.Dome`):
+  - 38 x 30.6 cm to its rim, with rounded corners of 2.8 cm.
+  - Its rim 0.9 cm behind the screen face, inside the bezel slab, so the bezel's face meets the dome 94% of the way out. The visible glass is the painting's 36 x 29 cm, set into the casing.
+  - Its centre 1.8 cm proud of the rim: a CRT's curve.
+- **The picture fills the glass.** The glass's submesh reports 4:3 bounds sized so the clone's fitted picture (`fill` 0.92, `PcScreenClone`, unchanged) covers the visible glass with a 2% overscan (`CrtFace.PictureBounds`). There is no black border.
+- **The recess.** A plate in the casing's shadowed beige closes the casing's opening behind the bezel (x +-0.245, y -0.215 to 0.205, 2.6 cm back, between the bezel slab's back and the casing's rim).
+- **The CRT glass.** `NOPE/Desk CRT Glass` (new, DESK-ART; its material `Resources/DeskCrtGlass`, so a build has it) draws on a copy of the dome 1.2 mm in front of the picture:
+  - a multiply pass: a faint phosphor tint, 72 scanlines and the tube's edge falloff;
+  - an add pass: a soft sheen at the top right, where the painting draws it.
+  - The scanlines fade out with `fwidth` wherever one would span under about two screen pixels, so they never moire or shimmer at a lower resolution.
+  - With the screen off, the glass reads as a dark curved tube with its sheen.
+
+**Checked in Unity (R12):**
+- `ShaderUtil.ShaderHasError` false for `NOPE/Desk CRT Glass` (2 passes) and for `TimeDesk/PlanarScreen`.
+- The monitor's top at 3x against round 9's (`r12\crops\`): the hall strip between the casing and the bezel is gone, and so is the right-hand strip. The casing reads solid from the office camera.
+- The reading view (`DeskView.TiltIn`, `desk_reading_day1_r11.png`) looks down at the mat, and the PC is not in its frame. Only the office view shows the PC.
+
+### 2. What the CRT shows from the chair (review item 2; the screen crop)
+
+The desk PC's screen is the desktop's live clone at about a sixth of its size. From the chair its icons, its banner (80 of the desktop's 1080) and its taskbar read as noise. `PaintedCrtReadout` (new, DESK-HOMES) is the CRT's desk view. It is a world-space canvas on the desktop's layer, in front of the desktop, so the clone camera draws it onto the glass. It shows:
+- **The wallpaper:** the desktop's own wallpaper (round 9's cel dusk city; the theme's, as it changes), filling the glass.
+- **One status line:** a dark band with amber rules carrying the desktop's own idle line ("WAITING FOR THE NEXT TRAVELLER") at up to 132 of 1080 (about 20 px on the 1080p glass; it wraps to two lines). With a traveller at the desk it carries the investigation's status line (who is at the desk).
+- **A readout strip:** along the bottom, like the taskbar's tray: the shift clock in phosphor green (up to 190), today's date in cream and the day in amber.
+
+The old floating clock plate (`CrtClock`, which UI-PC retires on `fix/a-ui-pc`) is kept hidden. The calendar's click now lies on the readout's date: `BindCalendarOnReadout` maps the date's rectangle onto the glass through the clone's picture. The content keeps inside the glass's visible share of the picture (`CrtFace.VisibleShare`: the bezel and the overscan hide the rest).
+
+**The full desktop is unchanged.** The readout is off while the PC is open (`PcFrame.IsOpen`), so Q shows the same desktop as before, apart from round 9's wallpaper. Nothing of UI-PC's is edited: the readout reads the desktop (the wallpaper, the idle line, the investigation's line) and the game (the shift clock, the day). Each text is written only when its source changes, so nothing is allocated per frame.
+
+**Checked in Unity (R12):** the 1:1 crop of the PC screen against the painting's (`r12\crops\d1r11_pc_screen_1to1.png`, `painting_pc_screen_1to1.png`, side by side in `compare_r11.jpg`):
+- The status line reads from the chair on two lines.
+- 09:00, "14 MAR 2150" and "DAY 1" read in the strip (16:00, "25 MAR 2150" and "DAY 12" on day 12).
+- The picture fills the curved glass inside the bezel.
+- The PC open (`pc_day1_r11.png`, `pc_day12_r11.png`): the full desktop as before.
+
+**Hand-off (UI-PC):** UI-PC owns the desktop. Once its tray clock lands, it can take the desk view over (move `PaintedCrtReadout` into the desktop, or make the desktop's own idle state this large), and then this file goes.
+
+### 3. The homes the painting shows empty, and the scanner's front (review items 5 and 8)
+
+The white blocks on the Rolodex's and the protocol cards' homes and on the BABEL slats, and the white slot plate on the scanner's front, were round 6's stand-ins: neutral boxes for upgrades the bake has no painted model of. Round 8 left "keep them or empty homes" as an open call, and the review answers it: "The concept shows those homes empty. Show them empty." So:
+- `DeskPaintedMap.DrawnStandIns` is now empty. Each stand-in is still built, so its click box is fitted on its home or face and its upgrade keeps its use, but it draws nothing and does not slide (an invisible lift would rise and sound).
+- The scanner's two add-ons' clicks outline the painted scanner.
+
+**Checked in Unity (R12):** day 12 with every item shows the three homes empty and the scanner's front plain. The click-box gate: 15 boxes, 0 clashes. The tour's `v3moveto` to the three hidden lifts reports "not found": expected, as they no longer slide.
+
+**Caveat, a hand-off:** the three upgrades and the Auto-Feed tray now have clicks on empty homes. That is usable, but not discoverable until DESK-ART paints them (art requests 1 to 3, plus a painted feeder slot; round 6's rule: no invisible click). Each comes back by adding its id to `DrawnStandIns`.
+
+### 4. The ghost square and the weak shadows (review items 6 and 11)
+
+**Cause.**
+- **The ghost square.** The "ghost square" right of the chip reader was the hall daylight's real-time shadow of the painted chip reader on the brass plate, and the scanner cast a second wedge:
+  - Every painted mover cast shadows (the importer marked them).
+  - The hall's daylight comes from the left (`HallBakedLighting.DaylightDirection`), the painting's from the upper right (`_RefLightDir`), so the shadows fell the wrong way.
+  - They showed as pale blue wedges (`_ShadowTint`), at most a 9% darkening.
+  - The DETAIN guard's cut across AVAILABLE and the deal tray.
+- **The weak contact shadows.** The painting's contact shadows are a dark line painted into each object's base. The shell and mat are baked from the empty plate (UNITY_PLAN's no-ghost rule), so only the weak, misdirected shadow map added any.
+
+**Fix:**
+- No painted object casts a real-time shadow (`DeskPainted.CastNoShadows` at install; the stand-ins and the crate's boxes too). The importer now marks none to cast, for its next import.
+- A moving object's contact shadow stays `SlideShadow`'s.
+
+**Checked in Unity (R12):** the brass plate right of the chip reader and the wood right of the scanner are clean on day 12 (`r12\crops\d12r11_right_machines.png`).
+
+**Recorded, not fixed here:**
+- **Two bases weaker than the painting.** Measured in the base line (the painting against the game, a share of the plate): the scanner 0.47 and 0.39, the chip reader 0.39 and 0.37, the bell 0.37 and 0.33, the glasses 0.56 and 0.55, all close. The intercom (0.52 against 0.69) and the UV torch (0.34 against 0.47) are weaker. That is a DESK-ART paint touch-up (a darker base line), or the footprint contact decal UNITY_PLAN asks for on lifts.
+- **LIGHT:**
+  - the daylight's shadow strength is 0.68;
+  - the light comes from the opposite side to the painting's;
+  - the URP shadow distance and bias (8 m, 1 and 1) are wide;
+  - `OfficeContactShading`'s SSAO never reaches the desk shader (no DepthNormals pass).
+
+### 5. The grey bar along the deal tray (review item 7)
+
+**Cause (a ray probe of the bake from the office camera).** The deal tray runs under the counter's face, and its floor ends 2 cm short of it. Screen rows 693 to 696 met no desk mesh at all, so the hall's foreground floor showed through as a flat pale bar (luma 133 to 139, against the painting's 74 to 83, where the painting draws the traveller's robe). The slot has no texels, so a shell repaint cannot reach it.
+
+**Fix:** `DeskPainted.CloseDealTraySlot` stands a quad in the counter's dark brown (sRGB 58, 34, 20) at the slot's back at install.
+
+**Checked in Unity (R12):** rows 692 to 695 now read luma 38 on both days (round 9: 133 to 139). The cost: a traveller at the desk no longer shows through those 4 px.
+
+### 6. The mat and the desk's sharpness (review item 10)
+
+**Cause (measured).**
+- The import settings are not the cause: BC7, 4096 limit, no downscale, trilinear, aniso 8; Ultra runs at full mip.
+- The shader is not the cause: at the painting's hour the relight is exactly 1, and the game matches a texture-only render within 0.2 luma.
+- The mat gets 4.1 texels per screen pixel, so its resolution is not the limit either.
+- **Most of the loss is the bake's compose step.** The mat takes the reading paint as its primary, with only the office paint's low frequencies (`bake_v2_compose.py`, line 240 and following), so the office painting's 1 to 2 px stitching and edge lines never reach the texture.
+- The GPU's filtering costs 3 to 14% more.
+
+**Fix here (DESK-ART, import).**
+- `Desk_Mat_Paint` and `DeskShell_Paint` take Kaiser mips and a -0.5 mip bias. The importer sets this (`GetVersion` 2) and their `.meta`s carry it.
+- R12, against round 9: the mat corners' Laplacian rose from 8.1 to 9.5 (painting 13.4), the left stack's from 15.0 to 16.2 (painting 21.7) and the right machines' from 10.7 to 11.6 (painting 17.0). The tour's still frames show no frame-to-frame change on the mat (the camera holds). Shimmer under a camera move (the tilt, the reading view) is not measured: it is part of R12b below.
+
+**Tried and not taken (a call for DESK-ART and Saleh).** Recomposing the mat with the office plate as its primary (`scratchpad\r10\matbake`, 50 s) lifts the office view's mat leather further: local contrast 4.0 to 4.6 (painting 5.9), Laplacian 4.8 to 5.6 (painting 9.2), in a texture-only render. But it magnifies the office paint 2 to 3x in the reading view, where the mat is read up close. Not installed: the reading view would get softer to make the office view a little sharper.
+
+### 7. The amber lamp left of the scanner (review item 9)
+
+**Not a bug: a design call, recorded.** The painting shows `lamp_scanner` lit: its moment is a traveller at the desk with a scan owed. The game lights only the next tool's lamp (`NextToolLamp`):
+- at rest no lamp is lit (the R12 dumps: lamp lit '');
+- with the booth open and no traveller, it lights the bell's.
+- `BoothCoordinator` never passes `scanOwed` or `chipOwed` ("FEEDBACK fills it"), so the scanner's and the chip reader's lamps cannot light in play yet.
+
+Two ways on:
+- **FEEDBACK and DESK-PLAN** pass `scanOwed` and `chipOwed`, so the scanner's lamp lights exactly when the painting's moment comes (the "never lit at rest" rule kept).
+- **Saleh's call:** the scanner's lamp lit at rest, as painted (`DeskPaintedMapTests` and `DeskV3InstallTests` pin "none lit at rest").
+
+When it lights, the jewel is a 4 cm quad (an orange disc). DESK-ART is to give it the painting's hot core and halo (a larger quad).
+
+### 8. The departure board (review item 13)
+
+The board is DESK-PLAN's `DepartureBoardView`: the day's portal rows in a world-space TMP on the hall art's dark display, in `DeskConfigSO`'s cream and orange inks. The painting's board is a dark screen with a lit strip, its lower half behind the booth's top rail. Not changed here: the board serves the art's desk as well as the painted one, and its style (an LED or split-flap face) needs a font and art. **Hand-off:** DESK-PLAN, with CONTENT for the face.
+
+### 9. CHEATS ON (review item 14)
+
+Done in round 10 (the local capture op). R12's six stills all pass `v3.nobadge`.
+
+### R12 in Unity (done)
+
+Captures are in `E:\unity\NOPE-tools\reports\desk_v3_unity\r12\` (the files keep the run's working tag, `_r11`, from before round 11's capture commit took that number):
+- the rest stills `desk_rest_day1_r11.png` (09:00) and `desk_rest_day12_r11.png` (16:00, every item);
+- the reading view `desk_reading_day1_r11.png`, the night still `desk_night_day12_r11.png`, and the PC open, `pc_day1_r11.png` and `pc_day12_r11.png`;
+- the tour, `slide_tour_r12\`;
+- **the concept-vs-game crop set**, `crops\` (`crop_set.py <capture> <out> <tag>`, repeatable): the painting over the game at 1:1 for the PC, the left stack, the right machines, the top rail and the mat, a sheet per day, and the PC screen's 1:1 crop beside the painting's;
+- `compare_r11.jpg`, `shaders.txt`, `editmode_result.txt`, `qa_results\`, the scenarios and the local ops in `rig\`.
+
+Results:
+- **Shaders:** `ShaderHasError` false for `TimeDesk/HallBackdrop`, `NOPE/Hall Foreground Floor`, `NOPE/Desk CRT Glass` and `TimeDesk/PlanarScreen`.
+- **The run's own checks:**
+  - console 0 errors (3 known warnings);
+  - click boxes day 1 (10) and day 12 (15), 0 clashes;
+  - presses 4, 0 blocked; quality Ultra;
+  - `v3.nobadge` on all six stills.
+- **The camera check reads 227 untagged frames** (round 9: 0). All of them are the scenario's own `call DeskView.TiltIn` and `DeskView.Return` (frames 721 to 1211), added in this round for the reading-view still. They are a direct call, not the player's path; the PC run's camera reads 0 untagged.
+- **The hall:** as round 10: the centre 1.07x and 1.05x, the window 0.85x and 0.81x, the mat 0.99x, the left stack 1.00x and 0.97x.
+- **The slide-in:** every remaining slider's tour as round 8's. The three hidden lifts no longer slide (`v3moveto` "not found", item 3).
+- **EditMode suite in Unity:** 4082 passed, 1 failed (the known third-party `UnitySkills ... SceneSummarize_CountsObjectsCorrectly`; its pair passed this time).
+
+### Still to run in Unity (R12b)
+
+1. A 10 s sequence of the tilt into the reading view and back (the flicker pass on the mat and the shell): no new shimmer from the -0.5 mip bias.
+2. The PC screen off (the power knob): the curved glass reads as a dark tube with its sheen.
+3. A traveller at the desk: the CRT's status line shows who is at the desk, legible at 1080p and at 720p.
+
+### Checks (round 12)
+
+- Compile: 0 errors (167 warnings, as before).
+- Offline runner: **3856** passed, 0 failed (13 new: `PaintedCrtTests` 8, `PaintedDeskConceptTests` 5).
+- `tools/qa/editor_runner` (QA_PROJECT set): 70 passed, 0 failed, 27 NeedsEditor skipped.
+- `tools/qa`: 35 OK.
+- **Trial merges:**
+  - with `integrate/a`: only the known `OfficeGameplay.unity` conflict. On the merged tree: 0 errors, 3900 passed, 0 failed, and the editor runner 82 passed, 0 failed (RUN-SAFE's `DevToolsStateTests` included);
+  - with `integrate/a-light`: clean;
+  - with `fix/a-ui-pc`: clean, 0 errors, 3932 passed, 0 failed. UI-PC's retired `CrtClock` is still found and kept hidden, and the calendar uses the readout's date.
+
+### Other owners' files (round 12; the smallest owner-correct change, each)
+
+- **UI-PC:** none edited. The desk view reads the desktop from its own new file (hand-off above).
+- **DESK-PLAN** (on DESK-HOMES' lease of `OfficeSceneBinder.cs`): `BindPaintedPc` (the CRT and the readout), `BindPaintedCalendar` (the readout's date first), `PaintStandIn` and `PaintAddOns` (the stand-ins not drawn), `BindSlideIn` (they do not slide).
+- **DESK-ART:** `DeskPaintedImporter.cs` (no casting; the mat's and shell's mips; version 2), the two textures' `.meta`s, the new shader and material. `DeskPainted.cs`: `CastNoShadows`, `CloseDealTraySlot`, and the stand-ins no longer cast.
+- **DESK-HOMES:** `DeskPaintedMap.DrawnStandIns`, `CrtFace` (Visuals, pure), `PaintedCrt`, `PaintedCrtReadout`.
+
+### What still differs from the painting (after this round)
+
+1. **The hall** (item 3, Saleh's call; "we will generate another hall with better waiting area"), and round 10's window (0.85x and 0.81x, LIGHT).
+2. **The switchboard picture** (item 12, Saleh's call).
+3. **The mat's and the desk's finest line work:** about 70% of the painting's Laplacian. The bake's compose choice is open (item 6).
+4. **The intercom's and the UV torch's base lines** (item 4) and **the lit scanner lamp** (item 7).
+5. **The three upgrades and the feeder** show as empty homes until painted (item 3).
+6. **The departure board's face** (item 8).
+7. **The 4 px behind the deal tray** read dark where the painting shows the traveller's robe (item 5).
+
 ## Round 10: the review of round 9, and R9 run in Unity
 
 The review of round 9 (96291a5) found six things. Each is fixed or recorded here, and R9 was run in Unity (NOPE-art's editor through the job runner and the QA harness; it ended on an empty scene and closed, with no dialog left).
@@ -548,6 +734,7 @@ Round 2 (daff612) made a step allocate nothing; let busy sliders take part in th
 - `DeskLayout.cs` (DESK-HOMES' lease): round 7 moves the swept boxes into `DeskSweeps` (Visuals, pure) and `paintedCutParts`' default into `DeskPaintedMap.CutParts`.
 - `HallLightingSO.cs`, `HallLighting_Default.asset`, `HallLightingRig.cs`, `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs`, `HallForegroundFloor.shader` (all **LIGHT**'s; round 10 corrected the owner of the last four, which round 9 gave HALL-FX): round 9's painted-desk brightness, a data knob (`paintedDeskBrightness`) and the draw that applies it. Round 10 moved two of round 9's insertions (the `PaintedDesk` property, the `RenderedTexture` summary) off the lines LIGHT's branch changes, so they merge cleanly with `integrate/a-light`.
 - `DevToolsState.cs`, `DebugPanelController.cs` (RUN-SAFE) and `QaRunner.cs` (QA-RIG): untouched (round 9's `HideCheatBadge` was taken out in round 10; they are ecf86b9's).
+- `DeskPaintedImporter.cs`, the two paint textures' `.meta`s, `DeskCrtGlass.shader` and `Resources/DeskCrtGlass.mat` (DESK-ART), `DeskPainted.cs` (`CastNoShadows`, `CloseDealTraySlot`): round 12's CRT glass, no painted casting, the deal tray's slot, the mat's and shell's mips. `OfficeSceneBinder.cs` (DESK-HOMES' lease): round 12's CRT, its desk view, the calendar on its date, the stand-ins not drawn. UI-PC's files (`PcScreenClone.cs`, `CrtClock.cs`, the desktop and its builders) are not edited: the CRT's bounds trick and the desk view work around them, and both trial merges with `fix/a-ui-pc` are clean.
 - `Assets/Art/Generated/xp_bliss.png` (UI-PC, CONTENT): round 9's neutral wallpaper, replaced in place.
 - `DeskHomeMap.cs` and DESK-PLAN's tests are untouched (as `fdde9f9`).
 - `CueSounds.cs` is called, not edited (its existing placeholders are the stand-ins).
@@ -590,6 +777,12 @@ EditMode tests of the slide-in now:
 - **DESK-ART:** done in round 4 (the bake imported, `DeskPaintedImporter`, the prefab with home root, `Slide` child, mesh). Open: the glass sheen without the hall and the traveller; object sheet B; the BABEL track repaint; the riser smear; a lighter shell texture if Unity's density gate allows 2048. The bake's README says Unity reads the FBX as (x, z, y) of the DeskFrame: Unity reads it half a turn round, and the importer turns it back. The contact shadow is drawn by `SlideShadow` in the papers' shadow look; a painted decal may replace its material later.
 - **The re-skins after the painted install** (round 4, "What does not work yet"): STAMP #7 (the painted daters and rack), DESK-PLAN's machines (the chip reader's readout and LEDs on the painted reader, the scanner's add-ons), DETAIN B4 (the guard's hinge), BELL-SIGN B1 (the AVAILABLE glow), BABEL-TUNER B7 (its object's size), GLASSES B8 (the glasses' click).
 - **LIGHT (#11):** `DeskLight.hlsl`'s header still says nothing includes it; `NOPE/Desk Painted` now does.
+- **UI-PC, the CRT's desk view** (round 12, item 2): `PaintedCrtReadout` shows the desk PC's screen from the chair (the wallpaper, one large status line, the clock, the date and the day in a readout strip) while the PC is closed, reading the desktop without editing it. UI-PC owns the desktop: when its tray clock lands, take this view over (into the desktop, or the desktop's own idle state at this size), then delete the file and its binder line. Its retired `CrtClock` plate stays hidden under it.
+- **DESK-ART** (round 12): paint the BABEL tuner, the Rolodex, the protocol cards and the scanner's feeder slot (the homes show empty and their clicks are invisible until then: `DeskPaintedMap.DrawnStandIns`); darken the intercom's and the UV torch's base lines (0.69 and 0.47 of the plate against the painting's 0.52 and 0.34); give the lamp jewel the painting's hot core and halo; decide the mat's compose (the office plate as the primary sharpens the office view and softens the reading view; item 6).
+- **LIGHT, the desk's real-time light** (round 12, item 4): the hall daylight's shadow strength 0.68 and its direction opposite the painting's; the URP shadow distance and bias (8 m, 1 and 1); `OfficeContactShading`'s SSAO never reaches the desk shader. No painted object casts any more, so this matters only for the papers and the hands.
+- **FEEDBACK and DESK-PLAN, the next-tool lamp** (round 12, item 7): pass `scanOwed` and `chipOwed` to `NextToolLamp` from `BoothCoordinator`, so the scanner's lamp lights at the painting's moment. Saleh's call if it should be lit at rest, as painted.
+- **DESK-PLAN, the departure board** (round 12, item 8): an LED or split-flap face for `DepartureBoardView`'s rows (with CONTENT), matching the painting's dark lit board.
+- **QA-RIG** (round 12, a finding): `ProjectSettings/QualitySettings.asset` `m_CurrentQuality: 0` (Very Low) makes plain editor play use half-size textures and no shadows; the harness sets Ultra for its runs, so the captures are valid.
 - **LIGHT (#11), the painted desk's hall brightness** (rounds 9 and 10; all seven files are LIGHT's: `HallLightingSO.cs`, `HallLighting_Default.asset`, `HallLightingRig.cs`, `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs`, `HallForegroundFloor.shader`): (1) take the knob `paintedDeskBrightness` and its draw as yours at the merge; (2) **the window request** (round 10, item 5): keep the city window out of the scale (a window mask in `TimeDesk/HallBackdrop` or a sky share in the knob) so the window reads 0.95 to 1.05x the painting at 09:00 and 16:00 (now 0.85x and 0.81x); (3) **after your HDR finish lands** (round 10, item 3): decide whether the scale moves after the tonemapped finish or leaves the glows (values past 1) alone, then re-measure (R9 steps 2 and 7) and retune the knob; (4) the merge with `integrate/a-light` is clean as of round 10 (keep both sides if a conflict comes back).
 - **UI-PC and CONTENT, the other wallpapers** (round 10, item 6; an art request): the 8 culture wallpapers and the 16 world-outcome wallpapers are still bright, photo-like stock pictures in the XP look Saleh rejected; give them the neutral one's treatment (80s/90s cel anime, dark, low contrast, no text, the subject in the 4:3 middle; replaced in place, `.meta` kept; 2 credits each at `nano_banana_2_1`, 48 in all: Saleh's budget call).
 - **RUN-SAFE and QA-RIG, optional** (round 10, item 1): if every QA capture (not only desk v3's local op) should hide the cheat badge, RUN-SAFE gives `CheatBadge` the hide (a member of the component, or a `DevToolsState` switch placed in exactly one scope, so `EverySwitch_HasExactlyOneScope` and `runsafe.switch.scopes` stay green) and QA-RIG's `QaRunner` sets it while a run plays. This branch changes neither.
@@ -609,7 +802,7 @@ Per CARVE's and DESK-PLAN's rule, `docs/FEATURES.md` is not edited here. Add aft
 
 **Done in Unity (round 4):** the painted desk imported, installed and captured (round 4: its still, its 60 fps clip, the smoke run, the EditMode suite, the rebuilt OfficeGameplay). Recipe 1 (import and compile: `NOPE/Desk Painted` renders with its mask in the game) and part of recipe 3 (the five sliders the clip visits, at A1 in the office view: the first slide frame on the frame the cursor arrives, the anticipation, one overshoot, the hand-offs, one machine at a time, the way home at speed with the seat bounce) are covered by it.
 
-**Open before merge:** the focus patch after CAM; the carry floor and DOC-HANDLE's registry (item 9); round 7's Unity checks (R7); round 9's R9 was run in round 10 (the hall centre 1.07x and 1.05x, the wallpaper on the CRT and in the PC, no dev label, both shaders compile), leaving LIGHT's window request, the re-measure after LIGHT's HDR finish (R9 step 7) and the toggle-off check (R9 step 3); the 24 other wallpapers (art request); and the calls for Saleh (the RING SERVICE panel hidden, the stand-ins).
+**Open before merge:** round 12's R12b (the tilt's flicker pass with the new mip bias, the screen off, a traveller's status line on the CRT); the focus patch after CAM; the carry floor and DOC-HANDLE's registry (item 9); round 7's Unity checks (R7); round 9's R9 was run in round 10 (the hall centre 1.07x and 1.05x, the wallpaper on the CRT and in the PC, no dev label, both shaders compile), leaving LIGHT's window request, the re-measure after LIGHT's HDR finish (R9 step 7) and the toggle-off check (R9 step 3); the 24 other wallpapers (art request); and the calls for Saleh (the RING SERVICE panel hidden, the stand-ins).
 
 **Deferred: Unity** (round 4 ran the install, the clip, the smoke and the suite; these remain). Run in NOPE-art's editor through the job runner, in order, once the patch is applied. Each pass line is a QA-rig result or a frame sequence reviewed by eye (memory: "review motion myself").
 1. **Import and compile.** `NOPE/Desk Painted` compiles with no error (`ShaderUtil.ShaderHasError` false), with and without `_MASKMAP`. The EditMode suite is green except the known `UnitySkills...SceneSummarize_CountsObjectsCorrectly`; `AStep_AllocatesNothing_EveryFrameOfTheOffice` passes under Unity's Mono too.

@@ -1001,8 +1001,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             MachineSlideIn.Attach(DeskHomeMap.Intercom, intercomStandIn);
         else if (DeskLayout.ObjectOf(DeskHomeMap.Intercom) != null && slides.Find(DeskHomeMap.Intercom) is DeskSlider intercom && intercom.MovesOn(DeskLayout.HomeOf(DeskHomeMap.Intercom)))
             Debug.LogWarning("[OfficeSceneBinder] The intercom's home declares a slide, but the intercom is the art's phone (loose parts, no Slide transform): it stays put (DESK-PLAN open call 1, DESK-ART's painted intercom).", this);
+        // A stand-in the painted desk does not draw (DeskPaintedMap.DrawnStandIns: its home shows empty) does not slide: an invisible lift would rise and sound.
         foreach (string id in new[] { DeskHomeMap.BabelTuner, DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing })
-            MachineSlideIn.Attach(id, DeskLayout.ObjectOf(id));
+            if (!_painted || DeskPaintedMap.StandInDrawn(id))
+                MachineSlideIn.Attach(id, DeskLayout.ObjectOf(id));
         UvTorch torch = hardware != null ? hardware.Torch : null;
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
@@ -1099,6 +1101,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         float floor = body.min.y - _frame.Origin.y;
         PaintStandIn(DeskPaintedMap.AutoFeed, addOns.Tray, front, floor);
         PaintStandIn(DeskPaintedMap.AnalysisBeacon, addOns.Beacon, front, floor);
+        // Not drawn (DeskPaintedMap.DrawnStandIns): their clicks on the scanner's face outline the painted scanner.
+        Renderer[] scannerLook = paintedDesk.RenderersOf(PaintedScanner);
+        foreach ((string id, Transform host) in new[] { (DeskPaintedMap.AutoFeed, addOns.Tray), (DeskPaintedMap.AnalysisBeacon, addOns.Beacon) })
+            if (host != null && !DeskPaintedMap.StandInDrawn(id))
+                foreach (Clickable c in host.GetComponentsInChildren<Clickable>(true))
+                    c.SetOutline(scannerLook);
     }
 
     /// <summary>
@@ -1124,6 +1132,13 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (standIn != null)
             foreach (BoxCollider box in host.GetComponentsInChildren<BoxCollider>(true))
                 FitStandInBox(box, standIn, spec);
+        if (!DeskPaintedMap.StandInDrawn(spec.id))
+        {
+            // The painting's homes show empty (desk v3 round 12): built for its click box, drawn by nothing.
+            foreach (Renderer r in look)
+                r.enabled = false;
+            look = Array.Empty<Renderer>();
+        }
         foreach (Clickable click in host.GetComponentsInChildren<Clickable>(true))
             click.SetOutline(look);
         return look;
@@ -1352,8 +1367,14 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The painted PC (the painted desk shows): the desktop's clone on its screen quad, its click box on the CRT, the power knob's where the clone's frame puts it, in front of the CRT's box.</summary>
     private void BindPaintedPc(Camera office)
     {
+        // The CRT face, the casing's recess and the glass's scanlines (desk v3 round 12), before the clone measures the glass.
+        Vector2 visible = PaintedCrt.Fit(paintedDesk.Screen, config != null ? config.cloneFill : 1f);
         if (screenClone != null)
+        {
             screenClone.Bind(paintedDesk.Screen, 0, office);
+            // What the CRT shows from the chair (the PC closed): the wallpaper, one status line and the clock (desk v3 round 12).
+            _crtReadout = PaintedCrtReadout.Create(DesktopCanvas(), frame, visible);
+        }
         bool crt = paintedDesk.TryBounds(PaintedPc, out Bounds box);
         if (pc != null && crt)
         {
@@ -1409,6 +1430,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     {
         PropBinding calendar = Array.Find(props ?? Array.Empty<PropBinding>(), p => p != null && p.anchor == OfficeAnchorId.Calendar && p.click != null);
         if (calendar == null)
+            return;
+        if (BindCalendarOnReadout(calendar, viewer))
             return;
         CrtClock clock = FindAnyObjectByType<CrtClock>(FindObjectsInactive.Include);
         if (clock == null || !DeskLayout.TryMeshBounds(clock.transform, out Bounds plate) || plate.size.sqrMagnitude < 1e-8f)
@@ -1468,6 +1491,57 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     /// <summary>The share of the CRT clock's plate its clock takes (CrtClock.TimeShare): the date line is the rest, below it.</summary>
     private const float DateShare = 0.58f;
+
+    /// <summary>The painted CRT's desk view (PaintedCrtReadout), once the painted PC is bound.</summary>
+    private PaintedCrtReadout _crtReadout;
+
+    /// <summary>The desktop canvas (PcDesktop's World Space canvas, beside the screen clone), or null.</summary>
+    private Canvas DesktopCanvas()
+    {
+        if (screenClone == null)
+            return null;
+        foreach (Transform child in screenClone.transform)
+            if (child.TryGetComponent(out Canvas canvas) && !child.TryGetComponent(out PaintedCrtReadout _))
+                return canvas;
+        return null;
+    }
+
+    /// <summary>
+    /// The calendar's click on the painted CRT's date line (desk v3 round 12:
+    /// the CRT's desk view shows the date in its readout strip, PaintedCrtReadout,
+    /// and the old clock plate is hidden): the date's rectangle on the desktop
+    /// mapped onto the glass through the clone's picture (PcScreenClone's fitted
+    /// rectangle), in front of the PC's box. False when there is no readout.
+    /// </summary>
+    private bool BindCalendarOnReadout(PropBinding calendar, Vector3 viewer)
+    {
+        if (_crtReadout == null || screenClone == null || !screenClone.IsBound)
+            return false;
+        GlassFrame glass = screenClone.Frame;
+        (float fitU, float fitV) = ScreenMapping.Fit(glass.Size.x, glass.Size.y, CrtFace.DesktopAspect);
+        float fill = config != null ? config.cloneFill : 1f;
+        Vector3 right = glass.Right * (fitU * fill), up = glass.Up * (fitV * fill);
+        Rect date = _crtReadout.DateRect;
+        Vector3 centre = glass.Centre + right * (2f * date.center.x - 1f) + up * (2f * date.center.y - 1f);
+        var size = new Vector3(right.magnitude * 2f * date.width, up.magnitude * 2f * date.height, 0.02f);
+        calendar.click.gameObject.SetActive(true);
+        calendar.click.transform.SetPositionAndRotation(centre, Quaternion.LookRotation(-Vector3.Cross(glass.Up, glass.Right).normalized, glass.Up.normalized));
+        if (calendar.click.TryGetComponent(out BoxCollider box))
+        {
+            calendar.click.transform.localScale = Vector3.one;
+            box.center = Vector3.zero;
+            box.size = size;
+        }
+        if (paintedDesk.TryBounds(PaintedPc, out Bounds crt))
+            InFrontOf(calendar.click.transform, crt, viewer);
+        calendar.click.SetOutline(Array.Empty<Renderer>());
+        if (calendar.click.TryGetComponent(out DeskReaction reaction))
+        {
+            reaction.SetTarget(_crtReadout.DateText);
+            reaction.SetTooltipPoint(TopOf(calendar.click.transform, new Bounds(centre, new Vector3(size.x, size.y, size.x * 0.1f))));
+        }
+        return true;
+    }
 
     /// <summary>The office overlay's edge tabs (paths under it): the PC tab, the CITY tab and the STAMPS tab.</summary>
     private static readonly string[] ScreenTabs = { "PcTab", "CityLook", "StampBar/Tab" };

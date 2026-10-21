@@ -70,7 +70,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     private const float PivotTolerance = 0.001f;
 
     /// <summary>Bumped when the import settings change, so Unity imports the folder again.</summary>
-    public override uint GetVersion() => 1;
+    public override uint GetVersion() => 2;
 
     private void OnPreprocessTexture()
     {
@@ -88,6 +88,11 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.filterMode = FilterMode.Trilinear;
         importer.anisoLevel = 8;
+        // Round 12 (the concept-vs-game review, item 10: the mat and the desk read softer than the painting): the two big static
+        // surfaces, seen 3 to 6 texels to a screen pixel, keep more of their line work with Kaiser mips and a -0.5 bias.
+        bool sharp = name == "Desk_Mat_Paint" || name == "DeskShell_Paint";
+        importer.mipmapFilter = sharp ? TextureImporterMipFilter.KaiserFilter : TextureImporterMipFilter.BoxFilter;
+        importer.mipMapBias = sharp ? -0.5f : 0f;
         importer.maxTextureSize = 4096;
         importer.textureCompression = TextureImporterCompression.CompressedHQ;
         TextureImporterPlatformSettings standalone = importer.GetPlatformTextureSettings("Standalone");
@@ -255,7 +260,8 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         {
             if (material != null)
                 r.sharedMaterials = Enumerable.Repeat(material, Mathf.Max(1, r.sharedMaterials.Length)).ToArray();
-            r.shadowCastingMode = painted.role == PaintedRole.Shell || painted.role == PaintedRole.Fixed ? ShadowCastingMode.Off : ShadowCastingMode.On;
+            // Round 12: nothing painted casts (the paint holds every object's shadow; the hall's daylight cast them the wrong way). DeskPainted.CastNoShadows does the same at install.
+            r.shadowCastingMode = ShadowCastingMode.Off;
             r.receiveShadows = true;
             r.lightProbeUsage = LightProbeUsage.Off;
             r.reflectionProbeUsage = ReflectionProbeUsage.Off;

@@ -278,6 +278,22 @@ public static class DeskPaintedMap
         return (colour.r * shade, colour.g * shade, colour.b * shade);
     }
 
+    /// <summary>
+    /// The stand-ins the painted desk draws: none (desk v3 round 12, the
+    /// concept-vs-game review, items 5 and 8: "the concept shows those homes
+    /// empty. Show them empty", and no extra slot plate on the scanner's
+    /// front). A stand-in not drawn is still built, so its click box is fitted
+    /// on its home or face (FitStandInBox) and its upgrade keeps its use; it
+    /// draws nothing, its click outlines the painted object it sits on (the
+    /// scanner's add-ons) or nothing (a home), and it does not slide. Each
+    /// comes back by adding its id here, or by DESK-ART's painted model
+    /// (art requests 1 to 3 and the feeder slot).
+    /// </summary>
+    public static readonly string[] DrawnStandIns = Array.Empty<string>();
+
+    /// <summary>True when the stand-in <paramref name="id"/> is drawn (DrawnStandIns).</summary>
+    public static bool StandInDrawn(string id) => Array.IndexOf(DrawnStandIns, id) >= 0;
+
     /// <summary>The stand-in for <paramref name="id"/>, or null.</summary>
     public static StandIn StandInFor(string id)
     {
