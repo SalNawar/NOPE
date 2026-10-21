@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -37,7 +38,10 @@ internal static class SceneUiKit
     /// face, its bold face when the text is bold (BUG-38a: "the kit pass
     /// re-fonts every remaining default-font text"); the office's kit pass
     /// calls it on every root of the office's scene, a Home or Title builder on
-    /// its canvas. Returns how many it re-fonted; none without the kit's fonts.
+    /// its canvas. A text's own material preset (not its font's own material:
+    /// the paper's ink weight, a note's outline) is kept, re-based on the kit
+    /// face (<see cref="Rebase"/>). Returns how many it re-fonted; none without
+    /// the kit's fonts.
     /// </summary>
     public static int Refont(Transform root)
     {
@@ -48,13 +52,100 @@ internal static class SceneUiKit
         {
             if (!IsDefaultFace(text))
                 continue;
+            Material preset = text.font != null && IsPreset(text.fontSharedMaterial, text.font) ? text.fontSharedMaterial : null;
             TMP_FontAsset face = (text.fontStyle & FontStyles.Bold) != 0 && BodyBoldFace != null ? BodyBoldFace : BodyFace;
             text.font = face;
-            text.fontSharedMaterial = face.material;
+            text.fontSharedMaterial = preset != null ? Rebase(preset, face) : face.material;
             EditorUtility.SetDirty(text);
             changed++;
         }
         return changed;
+    }
+
+    /// <summary>
+    /// Re-bases every text's material preset made on another font's atlas
+    /// (a builder caching a preset of the old default face, then setting it on
+    /// a text now built in a kit face: the PC forms' Paper_Text) on the text's
+    /// own face (<see cref="Rebase"/>), so its look is kept and its glyphs are
+    /// read from its own atlas. Another font's own material is replaced by the
+    /// face's. Returns how many it changed.
+    /// </summary>
+    public static int RebasePresets(Transform root)
+    {
+        if (root == null)
+            return 0;
+        int changed = 0;
+        foreach (TMP_Text text in root.GetComponentsInChildren<TMP_Text>(true))
+        {
+            Material material = text.fontSharedMaterial;
+            if (text.font == null || material == null || material == text.font.material || !material.HasProperty(ShaderUtilities.ID_MainTex))
+                continue;
+            Texture atlas = material.GetTexture(ShaderUtilities.ID_MainTex);
+            if (atlas == null || text.font.atlasTextures != null && text.font.atlasTextures.Contains(atlas))
+                continue;
+            text.fontSharedMaterial = IsFontsOwn(material) ? text.font.material : Rebase(material, text.font);
+            EditorUtility.SetDirty(text);
+            changed++;
+        }
+        return changed;
+    }
+
+    /// <summary>The TMP material properties bound to a font asset's atlas: a preset re-based on another face takes these from the face's own material.</summary>
+    private static readonly string[] AtlasBound = { "_MainTex", "_TextureWidth", "_TextureHeight", "_GradientScale", "_WeightNormal", "_WeightBold" };
+
+    /// <summary>True when <paramref name="material"/> is a preset made on <paramref name="font"/>'s atlas: not the font's own material, and drawing from its atlas.</summary>
+    private static bool IsPreset(Material material, TMP_FontAsset font) =>
+        material != null && material != font.material && material.HasProperty(ShaderUtilities.ID_MainTex)
+        && material.GetTexture(ShaderUtilities.ID_MainTex) == font.atlasTexture && !IsFontsOwn(material);
+
+    /// <summary>True when <paramref name="material"/> is some font asset's own material (a sub-asset of a TMP font asset).</summary>
+    private static bool IsFontsOwn(Material material)
+    {
+        string path = AssetDatabase.GetAssetPath(material);
+        return !string.IsNullOrEmpty(path) && AssetDatabase.LoadMainAssetAtPath(path) is TMP_FontAsset;
+    }
+
+    /// <summary>
+    /// <paramref name="preset"/> re-based on <paramref name="face"/>: the
+    /// preset (its shader, its look: face dilate, outline, underlay, keywords)
+    /// with the face's atlas-bound properties and its shader ratios updated
+    /// (BUG-38a: the sweep keeps a text's look). A preset saved as a .mat gets
+    /// a sibling asset "&lt;preset&gt; (&lt;face&gt;).mat", rewritten on every
+    /// build so the preset's own knobs (the form style's ink weight) still
+    /// reach it; an unsaved preset gets an unsaved copy.
+    /// </summary>
+    public static Material Rebase(Material preset, TMP_FontAsset face)
+    {
+        var rebased = new Material(preset) { name = $"{preset.name} ({face.name})" };
+        Material own = face.material;
+        foreach (string property in AtlasBound)
+        {
+            if (!own.HasProperty(property) || !rebased.HasProperty(property))
+                continue;
+            if (property == "_MainTex")
+                rebased.SetTexture(property, own.GetTexture(property));
+            else
+                rebased.SetFloat(property, own.GetFloat(property));
+        }
+        ShaderUtilities.UpdateShaderRatios(rebased);
+
+        string path = AssetDatabase.GetAssetPath(preset);
+        if (string.IsNullOrEmpty(path) || !path.EndsWith(".mat", System.StringComparison.OrdinalIgnoreCase))
+            return rebased;
+        string target = $"{System.IO.Path.GetDirectoryName(path).Replace('\\', '/')}/{rebased.name}.mat";
+        Material saved = AssetDatabase.LoadAssetAtPath<Material>(target);
+        if (saved == null)
+        {
+            AssetDatabase.CreateAsset(rebased, target);
+            return rebased;
+        }
+        saved.shader = rebased.shader;
+        saved.CopyPropertiesFromMaterial(rebased);
+        saved.shaderKeywords = rebased.shaderKeywords;
+        EditorUtility.SetDirty(saved);
+        AssetDatabase.SaveAssetIfDirty(saved);
+        Object.DestroyImmediate(rebased);
+        return saved;
     }
     /// <summary>
     /// Stamps (or re-stamps) a graphic's theme tag (piece 6): its role and part,

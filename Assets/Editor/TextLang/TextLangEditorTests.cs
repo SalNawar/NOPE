@@ -39,6 +39,49 @@ public class TextLangEditorTests
         Assert.IsFalse(charset.Contains('Z') || charset.Contains(' '), "ASCII and spaces are the atlas's already");
     }
 
+    /// <summary>The sweep keeps a text's own material preset (the paper's ink weight, a note's outline), re-based on the kit face's atlas; a preset of another font on a kit text is re-based on that text's face.</summary>
+    [Test, Category("NeedsEditor")]
+    public void Refont_AndRebasePresets_KeepATextsOwnLook_OnItsOwnAtlas()
+    {
+        TMP_FontAsset liberation = TMP_Settings.defaultFontAsset;
+        Assert.IsNotNull(SceneUiKit.BodyFace, "the kit's body face (UiKitFonts.Body)");
+        var root = new GameObject("PresetRoot");
+        var preset = new Material(liberation.material) { name = "Inked" };
+        try
+        {
+            preset.SetFloat(ShaderUtilities.ID_FaceDilate, 0.3f);
+            preset.EnableKeyword(ShaderUtilities.Keyword_Outline);
+            preset.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.25f);
+
+            TextMeshProUGUI old = new GameObject("Old", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
+            old.transform.SetParent(root.transform);
+            old.font = liberation;
+            old.fontSharedMaterial = preset;
+            TextMeshProUGUI kit = new GameObject("Kit", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
+            kit.transform.SetParent(root.transform);
+            kit.font = SceneUiKit.BodyFace;
+            kit.fontSharedMaterial = preset;
+
+            Assert.AreEqual(1, SceneUiKit.Refont(root.transform));
+            Assert.AreEqual(SceneUiKit.BodyFace, old.font);
+            Assert.AreEqual(1, SceneUiKit.RebasePresets(root.transform), "the kit text's preset of another atlas");
+            foreach (TextMeshProUGUI text in new[] { old, kit })
+            {
+                Material m = text.fontSharedMaterial;
+                Assert.AreEqual(SceneUiKit.BodyFace.atlasTexture, m.GetTexture(ShaderUtilities.ID_MainTex), text.name + ": its own face's atlas");
+                Assert.AreEqual(0.3f, m.GetFloat(ShaderUtilities.ID_FaceDilate), 1e-4f, text.name + ": the ink weight kept");
+                Assert.IsTrue(m.IsKeywordEnabled(ShaderUtilities.Keyword_Outline), text.name + ": the outline kept");
+                Assert.AreEqual(SceneUiKit.BodyFace.material.GetFloat(ShaderUtilities.ID_GradientScale), m.GetFloat(ShaderUtilities.ID_GradientScale), 1e-4f, text.name);
+            }
+            Assert.AreEqual(0, SceneUiKit.RebasePresets(root.transform), "nothing left on another atlas");
+        }
+        finally
+        {
+            Object.DestroyImmediate(root);
+            Object.DestroyImmediate(preset);
+        }
+    }
+
     [Test, Category("NeedsEditor")]
     public void Refont_SetsADefaultFaceText_InTheKitsBodyFace_AndLeavesTheOthers()
     {

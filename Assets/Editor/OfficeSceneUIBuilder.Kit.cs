@@ -96,18 +96,25 @@ public static partial class OfficeSceneUIBuilder
     /// The font sweep (BUG-38a: "the kit pass re-fonts every remaining
     /// default-font text"): every text on every root of the office's scene
     /// (the canvases, the desk's 3D words, the templates) still in TMP's
-    /// default LiberationSans is set in the kit's body face (SceneUiKit.Refont);
-    /// the number is logged so a build shows what it changed.
+    /// default LiberationSans is set in the kit's body face (SceneUiKit.Refont,
+    /// its own material preset kept), then every material preset made on
+    /// another font's atlas is re-based on its text's face
+    /// (SceneUiKit.RebasePresets: the PC forms' Paper_Text); the numbers are
+    /// logged so a build shows what it changed.
     /// </summary>
     private static void KitRefont(UnityEngine.SceneManagement.Scene scene)
     {
         if (!scene.IsValid())
             return;
-        int changed = 0;
+        int changed = 0, rebased = 0;
         foreach (GameObject root in scene.GetRootGameObjects())
             changed += SceneUiKit.Refont(root.transform);
+        foreach (GameObject root in scene.GetRootGameObjects())
+            rebased += SceneUiKit.RebasePresets(root.transform);
         if (changed > 0)
             Debug.Log($"[TimeDesk] The kit pass set {changed} text(s) still in LiberationSans in the kit's body face (BUG-38a).");
+        if (rebased > 0)
+            Debug.Log($"[TimeDesk] The kit pass re-based {rebased} text material preset(s) made on another font's atlas on the text's own face (BUG-38a).");
     }
 
     /// <summary>Skins a host and remembers it (the role pass leaves it); returns the face.</summary>
