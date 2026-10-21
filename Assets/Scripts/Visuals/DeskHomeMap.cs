@@ -179,7 +179,7 @@ public static class DeskHomeMap
         new DeskHome(DealTray, 0f, 0.545f, 0.44f, 0.06f, 0f, 0.01f, HomeShow.Always),
         new DeskHome(Detain, -0.51f, 0.74f, 0.26f, 0.28f, 0f, 0.09f, HomeShow.Always),
         new DeskHome(Bell, 0.43f, 0.67f, 0.14f, 0.14f, 0f, 0.08f, HomeShow.Reserved),
-        new DeskHome(Rolodex, -0.91f, 0.595f, 0.16f, 0.16f, 0f, 0.17f, HomeShow.WhenOwned), // 16 cm: its click box (+1 cm) clears the intercom's and the till's by 5 mm
+        new DeskHome(Rolodex, 0.91f, 0.71f, 0.16f, 0.16f, 0f, 0.17f, HomeShow.WhenOwned), // right of the bell, behind the stamp rack: left, behind the intercom, the office camera saw 60% of it (DESK-PLAN recipe 4's fallback)
         new DeskHome(Glasses, -0.73f, 0.575f, 0.14f, 0.09f, 0f, 0.03f, HomeShow.Reserved),
         new DeskHome(ProtocolRing, -0.74f, 0.74f, 0.12f, 0.12f, 0f, 0.21f, HomeShow.WhenOwned),
         // Left of the mat, beside the PC: ask and look up. The intercom is the art's phone moved here, which waits for Saleh's OK (he said "cut the phone"; docs/pending/DESK-PLAN.md, open call 1).

@@ -31,7 +31,7 @@ The desk frame is metres right of (x) and away from the chair (y), measured from
 | `dealTray` | 0, 0.545 | 0.44 x 0.06 | 0 | 0.01 | always | - | counter, right above the mat |
 | `detain` | -0.51, 0.74 | 0.26 x 0.28 | 0 | 0.09 | always | - | counter row |
 | `bell` | 0.43, 0.67 | 0.14 x 0.14 | 0 | 0.08 | reserved (BELL-SIGN) | - | counter row |
-| `rolodex` | -0.91, 0.595 | 0.16 x 0.16 | 0 | 0.17 | when owned | - | counter row, left |
+| `rolodex` | 0.91, 0.71 | 0.16 x 0.16 | 0 | 0.17 | when owned | - | counter row, right of the bell, behind the stamp rack |
 | `glasses` | -0.73, 0.575 | 0.14 x 0.09 | 0 | 0.03 | reserved (GLASSES) | - | counter row, left |
 | `protocolRing` | -0.74, 0.74 | 0.12 x 0.12 | 0 | 0.21 | when owned | - | counter row, left |
 | `intercom` | -0.88, 0.40 | 0.24 x 0.20 | 0 | 0.12 | always (the art's `Clean_Phone`, **pending open call 1**) | - | left: ask |
@@ -51,7 +51,7 @@ Fixed art the homes keep clear of (`DeskHomeMap.FixedArt()`, measured on the R7 
 
 **Choices that are ours (proposals, data in `DeskHomeMap`; a change is a data change):**
 - **The positions.** They follow desk_simple_1.png and concept B around the big mat. SPEC.md's numbers were drawn for the 1.00 x 0.72 mat Saleh turned down.
-- **The Rolodex's 16 cm home** (was 18 cm at y 0.60). The click-box check found that its box (+1 cm) reached into the till's. At 16 cm, centred at y 0.595, it clears the intercom's box and the till's by 5 mm each. Its model is shrunk to fit, about 11% smaller.
+- **The Rolodex's 16 cm home** (was 18 cm at y 0.60). The click-box check found that its box (+1 cm) reached into the till's. At 16 cm it clears every other box. Its model is shrunk to fit, about 11% smaller. **Integration (recipe 4):** at (-0.91, 0.595), behind the intercom, the ID buffer saw 60-63% of it at day 12 (the phone in front of it hid 40%), so it moved to recipe 4's fallback, (0.91, 0.71): the counter row right of the bell, behind the stamp rack. There it is 100% seen at A1 and A2, and recipe 3 stays green.
 - **The phone as the intercom.** Not decided: see open call 1.
 - **The rail order, front to back:** chip reader, scanner, stamp rack. The rack ends beside the deal tray (`DeskHomeMap.Rail`), as concept B's "ending beside the deal tray".
 - **Slide axes sideways toward the mat** (SPEC P8, the declared change to Bible C6's "toward the chair"). Each sweep is checked to stay off the mat, other homes and the fixed art. The slide-in motion itself is DESK-HOMES'; only the axis is data here.
@@ -156,7 +156,7 @@ Per CARVE's and CUTS' rule, `docs/FEATURES.md` is not edited here. Rewrite these
 **Line 53 ("The desk's plan ..."): replace the whole line with:**
 - [ ] The desk home map (Saleh 2026-10-20, DESK APPROVED: "Yes, build it"; "Mix: B + A rail + C lamps"; "keep a big mat size"; the stamp rack's daters front-to-back; "we will cut all but decor objects later will go on clear places like restory"). Every object has exactly one home in the desk's own frame: `DeskHomeMap.Approved()` in `DeskLayoutSettings.homes`, read by id through `DeskLayout.HomeOf`, `TryPose` and `TryLampPoint`, placed by the office binder at load. The homes:
   - the big art mat (1.46 x 1.03 m) in the middle holds papers and the open rulebook only (`DeskLayout.Mat`);
-  - the counter row: the deal tray right above the mat (the papers come in and go back over it), DETAIN, the bell's home, and the Rolodex, glasses and protocol cards left of them;
+  - the counter row: the deal tray right above the mat (the papers come in and go back over it), DETAIN, the bell's home and the Rolodex right of it (behind the stamp rack), and the glasses and protocol cards left of DETAIN;
   - left of the mat: the intercom (the art's phone, moved, until Saleh's open call 1; else the stand-in console), the BABEL tuner's home (the BABEL rack until then), the rulebook pocket's home and the UV torch's pouch;
   - right of the mat: A's rail in the order of use, front to back: the chip reader, the scanner, then the stamp rack with its daters standing front to back beside the deal tray;
   - the four later machines' homes and the switchboard's (the RING SERVICE panel stands there);
