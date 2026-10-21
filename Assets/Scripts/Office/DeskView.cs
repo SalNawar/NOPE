@@ -35,7 +35,8 @@ using UnityEngine.UI;
 /// priority while on, so the art camera's brain blends. The blend's time and
 /// style come from the one CinemachineCore.GetBlendOverride hook (installed
 /// once, statically, answering for the live reading view only, so no day's
-/// dead view stays chained in it: BUG-73e), a cut when motion is still
+/// dead view stays chained in it: BUG-73e; its one delegate made once, so a
+/// view change allocates nothing: BUG-65e), a cut when motion is still
 /// (Reduced Motion or no intensity), read at each blend (BUG-64b). Every
 /// move is tagged with its cause for the QA camera logger
 /// (QaSignals.TagCamera): a view key, or the D1 drop tilt when a paper
@@ -70,6 +71,9 @@ public sealed class DeskView : MonoBehaviour
 
     /// <summary>The blend hook that was there before ours (another system's; none today), asked for every other blend.</summary>
     private static CinemachineCore.GetBlendOverrideDelegate _before;
+
+    /// <summary>Our blend hook, made once (BUG-65e/73e): Unity compiles C# 9, which caches no delegate made from a static method group, so converting <see cref="OwnersBlend"/> in <see cref="Hook"/> made a new delegate on every view change.</summary>
+    private static readonly CinemachineCore.GetBlendOverrideDelegate Ours = OwnersBlend;
 
     private CinemachineCamera _office;
     private int _onPriority;
@@ -382,16 +386,15 @@ public sealed class DeskView : MonoBehaviour
         Changed?.Invoke();
     }
 
-    /// <summary>Makes <paramref name="owner"/> the view the blend hook answers for, installing the static hook once (a hook that was there before it is kept and asked for every other blend).</summary>
+    /// <summary>Makes <paramref name="owner"/> the view the blend hook answers for, installing the static hook once (a hook that was there before it is kept and asked for every other blend). Allocates nothing: it runs on every view change (the one delegate is <see cref="Ours"/>).</summary>
     private static void Hook(DeskView owner)
     {
         _hookOwner = owner;
-        CinemachineCore.GetBlendOverrideDelegate ours = OwnersBlend;
         CinemachineCore.GetBlendOverrideDelegate current = CinemachineCore.GetBlendOverride;
-        if (current == ours)
+        if (ReferenceEquals(current, Ours))
             return;
         _before = current;
-        CinemachineCore.GetBlendOverride = ours;
+        CinemachineCore.GetBlendOverride = Ours;
     }
 
     /// <summary>The blend to or from the live reading view's camera: the knob's seconds, eased (a cut when motion is still: Reduced Motion or no intensity, read now); any other blend is left to the hook before ours, or the brain's own.</summary>
