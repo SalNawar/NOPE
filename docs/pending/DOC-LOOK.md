@@ -15,7 +15,7 @@ Sources: FIX_PLAN §3 DOC-LOOK, FIX_PLAN_v2 §3 "DOC-LOOK: delta" (D3 and D15 de
 
 ## Decided by the orchestrator (2026-10-20)
 
-These calls answer the re-verify's two blocking points (WAVE2_OPEN.md DOC-LOOK 3 and 4) and its new S3 bug (5). They are quoted here as given.
+These calls answer the re-verify's two blocking points (WAVE2_OPEN.md DOC-LOOK 3 and 4) and its new S3 bug (5). They are quoted here as given to DOC-LOOK. The decisions log (DECISIONS_1019a.md, "Orchestrator calls, wave 2 close") records 1 and 2 in short: the ownership, the interim, the FORMS-REDESIGN track and the known red. It does not record decision 2's hand-off bullet (DOC-LOOK writes `docs/pending/FORMS-REDESIGN.md`); that bullet is from the orchestrator's instructions to this track.
 
 1. **Ownership approved.** DOC-LOOK may edit `FormArt.cs` (`printLabels`, `labelGrowth`, `valueGrowth`, `Worded`) and add the one `cardFlex` line to `tools/qa/so_reader_allowlist.txt`.
 2. **BUG-9 interim approved.**
@@ -181,6 +181,9 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 | 2 | The new word check measures the probe's words, so the docs claimed more than the code | **Path a, and one gap closed in code.** The full limit is the table under "The words (7)" above. The lines that over-claimed are corrected: BUG-9 below, R1, the FEATURES line, `ArtLayout.Problems`' and `ContentWords`' comments, and FORMS-REDESIGN.md (section 1; its section 7 now asks for each field's real widest word). Signature fields now get the names in `CutWords`. |
 | 3 | Stale lines: "Needs a decision", "awaiting approval", and R4's x2.1 and x3.8 | Fixed (BUG-9 below, R4). |
 | 4 | `doclook.play.coverHits` was demo only, so the merge gate never checked the S3 fix | **Fixed.** `DemoOnly` is dropped: the check is merge level, so the merge gate needs R7b's results taken at HEAD. |
+| (state) | The decisions log names FORMS-REDESIGN but not that DOC-LOOK writes its hand-off; only this file's quote of decision 2 said so | The quote now says which bullet is not in the log ("Decided by the orchestrator" above). |
+
+**Re-checked** (the second run of this re-verify, 2026-10-21, on 46911b9 over 4290bd6; origin/main has not moved): compile_check 0 errors; runner `passed 3777, failed 0`; tools/qa 35 OK. The seven `CoverBow` mutations were run again on the offline runner, each alone, and the file restored: each fails two of the three `CoverBow_*` tests (the bow's travel turned toward the free edge fails `Flat_*` and `AMarkOffCentre_*`; the other six fail `UnderTheBow_*` and `AMarkOffCentre_*`).
 
 ## Ownership
 
