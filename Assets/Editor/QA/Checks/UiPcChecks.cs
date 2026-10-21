@@ -19,11 +19,31 @@ using UnityEngine.Experimental.Rendering;
 /// with no single-frame full-screen jump, also when turned back under way
 /// (BUG-32c; seqtools cuts on pc_open, pc_close, pc_reverse_open and
 /// pc_reverse_close, all recorded with full motion, and the glass on each
-/// reversing frame).
+/// reversing frame). A check that judges more than one result requires each
+/// by its own id (<see cref="JudgeEach"/>), so a result never written fails
+/// by name instead of the measured ones passing for it.
 /// </summary>
 public static class UiPcChecks
 {
     private const string Owner = "UI-PC";
+
+    /// <summary>The PC session's scenario name, the prefix of its result ids.</summary>
+    private const string Session = "ui_pc_session";
+
+    /// <summary>The PC session's recordings of the PC's moves, in its order: ui_pc_session.json's recStart names, each right after a uipcFullMotion of the same name (UiPcChecksTests keeps the two in step).</summary>
+    public static readonly string[] Recordings = { "pc_open", "pc_close", "pc_reverse_open", "pc_reverse_close" };
+
+    /// <summary>The results <c>uipc.transitions</c> requires: seqtools cuts on each of <see cref="Recordings"/> (recipe 3), each by its own id.</summary>
+    public static IEnumerable<string> TransitionIds => Recordings.Select(r => $"{Session}.seq.{r}.cuts");
+
+    /// <summary>The results <c>uipc.fullmotion</c> requires: uipcFullMotion's assert before each of <see cref="Recordings"/>.</summary>
+    public static IEnumerable<string> FullMotionIds => Recordings.Select(r => $"{Session}.fullmotion.{r}");
+
+    /// <summary>The results <c>uipc.reverse</c> requires: both moves turned back under way (uipcReverseOpen, uipcReverseClose).</summary>
+    public static readonly string[] ReverseIds = { Session + ".reverse.open", Session + ".reverse.close" };
+
+    /// <summary>The results <c>uipc.poweron</c> requires: uipcPowerOn's two passes (full motion, Reduced Motion).</summary>
+    public static readonly string[] PowerOnIds = { Session + ".poweron.full", Session + ".poweron.reduced" };
 
     /// <summary>Every kit texture is block-compressed for desktop (BC7) and keeps its mips (BUG-65i: the kit was about 92 MB uncompressed; the mips stop the shimmer).</summary>
     [GateCheck("uipc.kit.compressed", Owner)]
@@ -105,7 +125,7 @@ public static class UiPcChecks
 
     /// <summary>A right-click and Esc during the power-on (full motion and Reduced Motion): the PC stays open and Settings comes forward (R3/R4: the keys and the back-out are the PC's from the press frame).</summary>
     [GateCheck("uipc.poweron", Owner, GateKind.Play)]
-    public static GateResult PowerOn() => GateResults.Require("uipc.poweron", Owner, "ui_pc_session.poweron.*");
+    public static GateResult PowerOn() => RequireEach("uipc.poweron", PowerOnIds);
 
     /// <summary>A click on the bezel leaves the PC (R3/R4).</summary>
     [GateCheck("uipc.bezel", Owner, GateKind.Play)]
@@ -123,15 +143,36 @@ public static class UiPcChecks
     [GateCheck("uipc.restore", Owner, GateKind.Play)]
     public static GateResult Restore() => GateResults.Require("uipc.restore", Owner, "ui_pc_session.restore");
 
-    /// <summary>The PC's open and close have no single-frame full-screen jump, also when turned back under way (seqtools cuts on the session's pc_open, pc_close, pc_reverse_open and pc_reverse_close sequences).</summary>
+    /// <summary>The PC's open and close have no single-frame full-screen jump, also when turned back under way (seqtools cuts on each of the session's sequences pc_open, pc_close, pc_reverse_open and pc_reverse_close; one not judged fails by name).</summary>
     [GateCheck("uipc.transitions", Owner, GateKind.Play)]
-    public static GateResult Transitions() => GateResults.Require("uipc.transitions", Owner, "ui_pc_session.seq.pc_*.cuts");
+    public static GateResult Transitions() => RequireEach("uipc.transitions", TransitionIds);
 
     /// <summary>The session recorded the PC's moves (pc_open, pc_close, pc_reverse_open, pc_reverse_close) with full motion, so <c>uipc.transitions</c> judged the CRT line and not the Reduced fade (Reduced Motion is a saved preference: set by hand, or left on by a run stopped during uipcPowerOn's reduced pass).</summary>
     [GateCheck("uipc.fullmotion", Owner, GateKind.Play)]
-    public static GateResult FullMotion() => GateResults.Require("uipc.fullmotion", Owner, "ui_pc_session.fullmotion.*");
+    public static GateResult FullMotion() => RequireEach("uipc.fullmotion", FullMotionIds);
 
     /// <summary>A move turned back under way (Q 2 frames into the power-on; a click on the office's PC during the collapse, which the closing frame lets through) picks up where the glass is: on the reversing frame the glass is the frame before's, no step of the frame's alpha is a cut's, and it ends where the new move goes (BUG-32c, F1; CrtPower.Resume as PcFrame draws it).</summary>
     [GateCheck("uipc.reverse", Owner, GateKind.Play)]
-    public static GateResult Reverse() => GateResults.Require("uipc.reverse", Owner, "ui_pc_session.reverse.*");
+    public static GateResult Reverse() => RequireEach("uipc.reverse", ReverseIds);
+
+    /// <summary><see cref="JudgeEach"/> on the results folder at HEAD (GateResults.Require's sources).</summary>
+    private static GateResult RequireEach(string checkId, IEnumerable<string> ids) =>
+        JudgeEach(checkId, ids, GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot));
+
+    /// <summary>
+    /// The verdict of check <paramref name="checkId"/> that requires every one
+    /// of <paramref name="ids"/>: it passes only when each id has its own
+    /// result, green and measured at <paramref name="head"/> on a clean tree
+    /// (GateResults.Judge on each). A single wildcard goes green on any subset
+    /// of its matches, so a result never written (cuts not run on one
+    /// recording) would pass unseen; here it fails by name. Pure; UiPcChecksTests.
+    /// </summary>
+    public static GateResult JudgeEach(string checkId, IEnumerable<string> ids, IEnumerable<QaGateResult> results, string head)
+    {
+        List<QaGateResult> all = results.ToList();
+        List<string> list = ids.ToList();
+        List<GateResult> parts = list.Select(id => GateResults.Judge(checkId, Owner, id, all, head, false)).ToList();
+        return GateResult.Of(checkId, Owner, list.Count > 0 && parts.All(r => r.Pass), string.Join("; ", list.Zip(parts, (id, r) => $"{id}: {r.Measured}")),
+            string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
+    }
 }
