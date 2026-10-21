@@ -1,0 +1,769 @@
+{
+ "frame": "DeskFrame: x m right of the mat centre, y m away from the chair, z m above the floor. Unity = (x, z, y).",
+ "objects": {
+  "Desk_Scanner": {
+   "pivot_frame": [
+    1.19248,
+    -0.01812,
+    1.101
+   ],
+   "pivot_unity": [
+    1.19248,
+    1.101,
+    -0.01812
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 418,
+   "texture": "Desk_Scanner_Paint.png"
+  },
+  "Desk_Scanner.Lid": {
+   "pivot_frame": [
+    1.3,
+    -0.02,
+    1.211
+   ],
+   "pivot_unity": [
+    1.3,
+    1.211,
+    -0.02
+   ],
+   "rest_rotation_frame_axis_angle": [
+    108.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": "Desk_Scanner",
+   "tris": 108,
+   "texture": "Desk_Scanner_Paint.png"
+  },
+  "Desk_ChipReader": {
+   "pivot_frame": [
+    0.99375,
+    -0.42625,
+    1.101
+   ],
+   "pivot_unity": [
+    0.99375,
+    1.101,
+    -0.42625
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 550,
+   "texture": "Desk_ChipReader_Paint.png"
+  },
+  "Desk_Intercom": {
+   "pivot_frame": [
+    -0.94782,
+    0.37542,
+    1.068
+   ],
+   "pivot_unity": [
+    -0.94782,
+    1.068,
+    0.37542
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 240,
+   "texture": "Desk_Intercom_Paint.png"
+  },
+  "Desk_Intercom.Mic": {
+   "pivot_frame": [
+    -0.85,
+    0.42,
+    1.164
+   ],
+   "pivot_unity": [
+    -0.85,
+    1.164,
+    0.42
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": "Desk_Intercom",
+   "tris": 1008,
+   "texture": "Desk_Intercom_Paint.png"
+  },
+  "Desk_UvTorch": {
+   "pivot_frame": [
+    -0.945,
+    -0.4415,
+    1.056
+   ],
+   "pivot_unity": [
+    -0.945,
+    1.056,
+    -0.4415
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 152,
+   "texture": "Desk_UvTorch_Paint.png"
+  },
+  "Desk_Glasses": {
+   "pivot_frame": [
+    -0.84,
+    0.75286,
+    1.141
+   ],
+   "pivot_unity": [
+    -0.84,
+    1.141,
+    0.75286
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 532,
+   "texture": "Desk_Glasses_Paint.png"
+  },
+  "Desk_RulebookFolded": {
+   "pivot_frame": [
+    -0.945,
+    -0.242,
+    1.102
+   ],
+   "pivot_unity": [
+    -0.945,
+    1.102,
+    -0.242
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 120,
+   "texture": "Desk_RulebookFolded_Paint.png"
+  },
+  "Desk_StampApprove": {
+   "pivot_frame": [
+    0.88478,
+    0.38219,
+    1.133
+   ],
+   "pivot_unity": [
+    0.88478,
+    1.133,
+    0.38219
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 1208,
+   "texture": "Desk_StampApprove_Paint.png"
+  },
+  "Desk_StampDeny": {
+   "pivot_frame": [
+    1.04981,
+    0.49219,
+    1.173
+   ],
+   "pivot_unity": [
+    1.04981,
+    1.173,
+    0.49219
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 1208,
+   "texture": "Desk_StampDeny_Paint.png"
+  },
+  "Desk_Bell": {
+   "pivot_frame": [
+    0.35,
+    0.74,
+    1.0815
+   ],
+   "pivot_unity": [
+    0.35,
+    1.0815,
+    0.74
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 1480,
+   "texture": "Desk_Bell_Paint.png"
+  },
+  "Desk_DetainGuard": {
+   "pivot_frame": [
+    -0.58,
+    0.855,
+    1.179
+   ],
+   "pivot_unity": [
+    -0.58,
+    1.179,
+    0.855
+   ],
+   "rest_rotation_frame_axis_angle": [
+    70.0,
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 168,
+   "texture": "Desk_DetainGuard_Paint.png"
+  },
+  "Desk_AvailableSign": {
+   "pivot_frame": [
+    -0.34512,
+    0.621,
+    1.129
+   ],
+   "pivot_unity": [
+    -0.34512,
+    1.129,
+    0.621
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 122,
+   "texture": "Desk_AvailableSign_Paint.png"
+  },
+  "Desk_Detain": {
+   "pivot_frame": [
+    -0.58,
+    0.66338,
+    1.129
+   ],
+   "pivot_unity": [
+    -0.58,
+    1.129,
+    0.66338
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 324,
+   "texture": "Desk_Detain_Paint.png"
+  },
+  "Desk_StampRack": {
+   "pivot_frame": [
+    0.9625,
+    0.42805,
+    1.101
+   ],
+   "pivot_unity": [
+    0.9625,
+    1.101,
+    0.42805
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 272,
+   "texture": "Desk_StampRack_Paint.png"
+  },
+  "Desk_Pocket": {
+   "pivot_frame": [
+    -0.945,
+    -0.18175,
+    1.094
+   ],
+   "pivot_unity": [
+    -0.945,
+    1.094,
+    -0.18175
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 108,
+   "texture": "Desk_Pocket_Paint.png"
+  },
+  "Desk_Pocket.Flap": {
+   "pivot_frame": [
+    -0.945,
+    -0.09,
+    1.124
+   ],
+   "pivot_unity": [
+    -0.945,
+    1.124,
+    -0.09
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": "Desk_Pocket",
+   "tris": 120,
+   "texture": "Desk_Pocket_Paint.png"
+  },
+  "Desk_UvPouch": {
+   "pivot_frame": [
+    -0.9225,
+    -0.47,
+    1.064
+   ],
+   "pivot_unity": [
+    -0.9225,
+    1.064,
+    -0.47
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 146,
+   "texture": "Desk_UvPouch_Paint.png"
+  },
+  "Desk_GlassesStand": {
+   "pivot_frame": [
+    -0.84,
+    0.725,
+    1.099
+   ],
+   "pivot_unity": [
+    -0.84,
+    1.099,
+    0.725
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 58,
+   "texture": "Desk_GlassesStand_Paint.png"
+  },
+  "Desk_BabelHome": {
+   "pivot_frame": [
+    -0.9315,
+    0.105,
+    1.064
+   ],
+   "pivot_unity": [
+    -0.9315,
+    1.064,
+    0.105
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 216,
+   "texture": "Desk_BabelHome_Paint.png"
+  },
+  "Desk_RolodexHome": {
+   "pivot_frame": [
+    -1.34,
+    0.73709,
+    1.094
+   ],
+   "pivot_unity": [
+    -1.34,
+    1.094,
+    0.73709
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 246,
+   "texture": "Desk_RolodexHome_Paint.png"
+  },
+  "Desk_CardsHome": {
+   "pivot_frame": [
+    -1.08954,
+    0.73208,
+    1.094
+   ],
+   "pivot_unity": [
+    -1.08954,
+    1.094,
+    0.73208
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 192,
+   "texture": "Desk_CardsHome_Paint.png"
+  },
+  "PC_Crt": {
+   "pivot_frame": [
+    -1.51426,
+    0.14181,
+    1.069
+   ],
+   "pivot_unity": [
+    -1.51426,
+    1.069,
+    0.14181
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 238,
+   "texture": "Desk_PC_Paint.png"
+  },
+  "PC_Keyboard": {
+   "pivot_frame": [
+    -1.51879,
+    -0.40485,
+    1.069
+   ],
+   "pivot_unity": [
+    -1.51879,
+    1.069,
+    -0.40485
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 3080,
+   "texture": "Desk_PC_Paint.png"
+  },
+  "PC_Mouse": {
+   "pivot_frame": [
+    -1.22542,
+    -0.27656,
+    1.06375
+   ],
+   "pivot_unity": [
+    -1.22542,
+    1.06375,
+    -0.27656
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 574,
+   "texture": "Desk_PC_Paint.png"
+  },
+  "DeskShell": {
+   "pivot_frame": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "pivot_unity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 5285,
+   "texture": "DeskShell_Paint.png"
+  },
+  "DeskMat": {
+   "pivot_frame": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "pivot_unity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 594,
+   "texture": "Desk_Mat_Paint.png"
+  },
+  "DeskGlass": {
+   "pivot_frame": [
+    -0.225,
+    1.04,
+    1.194
+   ],
+   "pivot_unity": [
+    -0.225,
+    1.194,
+    1.04
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 2,
+   "texture": "Glass_Sheen.png"
+  },
+  "Desk_LampBezel": {
+   "pivot_frame": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "pivot_unity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "rest_rotation_frame_axis_angle": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "parent": null,
+   "tris": 24,
+   "texture": "Desk_LampBezel_Paint.png"
+  }
+ },
+ "lamps": {
+  "lamp_bell": {
+   "bezel_base_frame": [
+    0.5,
+    0.74,
+    1.129
+   ],
+   "bezel_base_unity": [
+    0.5,
+    1.129,
+    0.74
+   ],
+   "jewel_centre_frame": [
+    0.5,
+    0.74,
+    1.141
+   ],
+   "jewel_centre_unity": [
+    0.5,
+    1.141,
+    0.74
+   ],
+   "jewel_radius_m": 0.02
+  },
+  "lamp_tray": {
+   "bezel_base_frame": [
+    0.235,
+    0.7,
+    1.129
+   ],
+   "bezel_base_unity": [
+    0.235,
+    1.129,
+    0.7
+   ],
+   "jewel_centre_frame": [
+    0.235,
+    0.7,
+    1.141
+   ],
+   "jewel_centre_unity": [
+    0.235,
+    1.141,
+    0.7
+   ],
+   "jewel_radius_m": 0.02
+  },
+  "lamp_stamp": {
+   "bezel_base_frame": [
+    0.815,
+    0.44,
+    1.101
+   ],
+   "bezel_base_unity": [
+    0.815,
+    1.101,
+    0.44
+   ],
+   "jewel_centre_frame": [
+    0.815,
+    0.44,
+    1.113
+   ],
+   "jewel_centre_unity": [
+    0.815,
+    1.113,
+    0.44
+   ],
+   "jewel_radius_m": 0.02
+  },
+  "lamp_scanner": {
+   "bezel_base_frame": [
+    0.765,
+    0.15,
+    1.103
+   ],
+   "bezel_base_unity": [
+    0.765,
+    1.103,
+    0.15
+   ],
+   "jewel_centre_frame": [
+    0.765,
+    0.15,
+    1.115
+   ],
+   "jewel_centre_unity": [
+    0.765,
+    1.115,
+    0.15
+   ],
+   "jewel_radius_m": 0.02
+  },
+  "lamp_chip": {
+   "bezel_base_frame": [
+    0.79,
+    -0.205,
+    1.103
+   ],
+   "bezel_base_unity": [
+    0.79,
+    1.103,
+    -0.205
+   ],
+   "jewel_centre_frame": [
+    0.79,
+    -0.205,
+    1.115
+   ],
+   "jewel_centre_unity": [
+    0.79,
+    1.115,
+    -0.205
+   ],
+   "jewel_radius_m": 0.02
+  },
+  "lamp_intercom": {
+   "bezel_base_frame": [
+    -0.762,
+    0.195,
+    1.091
+   ],
+   "bezel_base_unity": [
+    -0.762,
+    1.091,
+    0.195
+   ],
+   "jewel_centre_frame": [
+    -0.762,
+    0.195,
+    1.103
+   ],
+   "jewel_centre_unity": [
+    -0.762,
+    1.103,
+    0.195
+   ],
+   "jewel_radius_m": 0.02
+  }
+ },
+ "pc_screen": {
+  "centre_frame": [
+   -1.39095,
+   -0.03431,
+   1.424
+  ],
+  "centre_unity": [
+   -1.39095,
+   1.424,
+   -0.03431
+  ],
+  "width_m": 0.36,
+  "height_m": 0.29,
+  "faces": "local -Y (frame), toward the chair; turned 35 degrees about z with the PC"
+ }
+}
