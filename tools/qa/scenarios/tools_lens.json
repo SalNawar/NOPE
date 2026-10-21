@@ -90,7 +90,7 @@
     },
     {
       "op": "note",
-      "text": "The documents: in the office view the handed-over papers lie about 10 px tall on the counter strip, so a sweep crosses their texts without landing on a word. The first paper (day 8: the Work Permit, TC-520) is dragged to the mat, which tilts the reading view in (DeskController.Read), and the sweep crosses its title and rows."
+      "text": "The documents: in the office view the handed-over papers lie about 10 px tall on the counter strip, so a sweep crosses their texts without landing on a word. The first paper (day 8: the Work Permit, TC-520) is dragged to the mat, which tilts the reading view in (DeskController.Read), and the sweep runs along its title's first line (at 0.428 of the screen's height), so the pointer stays on its words."
     },
     {
       "op": "drag",
@@ -107,10 +107,10 @@
     {
       "op": "toolsLens",
       "name": "documents",
-      "x": 0.38,
-      "y": 0.45,
-      "x2": 0.54,
-      "y2": 0.22,
+      "x": 0.39,
+      "y": 0.428,
+      "x2": 0.52,
+      "y2": 0.428,
       "f": 4,
       "text": "reach"
     },
