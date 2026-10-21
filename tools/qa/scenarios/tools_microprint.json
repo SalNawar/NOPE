@@ -35,6 +35,10 @@
       "op": "startShift"
     },
     {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
       "op": "sign"
     },
     {

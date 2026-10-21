@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-2c (FIX_PLAN TOOLS torch; GAME_FEEL_BIBLE C3): the UV torch swept over the handed-over papers on its day (7), at A2 then A1, in the office view and the reading view, P-FAST, P-SLOW and P-WOBBLE. Pass: tools.torch.*.unoccluded (the lit patch >=95% seen past the torch's own meshes on every held frame) and tools.torch.*.poolOnDesk (0 frames of the pool off the desk). The torch_* sequences are for the director's eye (GIF at full size) and seqtools flicker on the paper text."
+      "text": "TOOLS BUG-2c (FIX_PLAN TOOLS torch; GAME_FEEL_BIBLE C3): the UV torch swept over the handed-over papers on its day (7), at A2 then A1, in the office view (over the counter strip where they arrive) and the reading view (over the passport dragged to the mat), P-FAST, P-SLOW and P-WOBBLE. Pass: tools.torch.*.unoccluded (the lit patch >=95% seen past the torch's own meshes on every held frame) and tools.torch.*.poolOnDesk (0 frames of the pool off the desk). The torch_* sequences are for the director's eye (GIF at full size) and seqtools flicker on the paper text."
     },
     {
       "op": "title"
@@ -35,6 +35,22 @@
       "op": "startShift"
     },
     {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "note",
+      "text": "Day 7 opens the NEW TODAY prompt (the Stranding Waiver) with the rulebook's GUIDE page in the reading view: acknowledge it, as a player would, before the sign"
+    },
+    {
+      "op": "button",
+      "target": "GuidePrompt.okButton"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
       "op": "sign"
     },
     {
@@ -62,7 +78,7 @@
       "name": "office_fast",
       "path": "P-FAST",
       "x2": 0.45,
-      "y2": 0.42
+      "y2": 0.2
     },
     {
       "op": "wait",
@@ -73,7 +89,7 @@
       "name": "office_slow",
       "path": "P-SLOW",
       "x2": 0.5,
-      "y2": 0.38
+      "y2": 0.15
     },
     {
       "op": "wait",
@@ -83,24 +99,27 @@
       "op": "toolsTorch",
       "name": "office_wobble",
       "path": "P-WOBBLE",
-      "x2": 0.35,
-      "y2": 0.45
+      "x2": 0.4,
+      "y2": 0.22
     },
     {
       "op": "recStop"
     },
     {
       "op": "note",
-      "text": "Into the reading view: a click on the mat tilts the desk view (FEATURES: the room beside the PC, or the desk). If the view does not tilt, press the step's point on a paper instead."
+      "text": "Into the reading view: a click on the mat does not tilt the desk view; a paper landing on the desk full size does (DeskController.Read, DeskView.TiltIn). The first handed-over paper (the passport) is dragged from the counter to the mat; the reading sweeps then cross it."
     },
     {
-      "op": "click",
-      "x": 0.45,
-      "y": 0.3
+      "op": "drag",
+      "path": "P-SLOW",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)",
+      "x2": 0.5,
+      "y2": 0.17,
+      "name": "passport"
     },
     {
       "op": "wait",
-      "f": 1.0
+      "f": 1.5
     },
     {
       "op": "recStart",
@@ -167,7 +186,7 @@
       "name": "office_a1",
       "path": "Plain",
       "x2": 0.5,
-      "y2": 0.4
+      "y2": 0.18
     }
   ]
 }
