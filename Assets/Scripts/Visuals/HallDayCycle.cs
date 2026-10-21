@@ -16,7 +16,37 @@ public static class HallDayCycle
     /// <summary>Hours in a day.</summary>
     public const float HoursPerDay = 24f;
 
-    /// <summary>The hour dusk starts (P0-A seam; owner LIGHT, consumed by RUN-SAFE). The P0 stub: 18.5, the cheat menu's Dusk (DevCheats.TimesOfDay).</summary>
+    /// <summary>
+    /// The cycle's default knobs, the one source of them: HallLightingSO's
+    /// field defaults read these, and <see cref="Active"/> starts from them
+    /// (sunrise 07:00, sunset 16:30, 1.5 h twilights, fixtures on below 0.6
+    /// daylight over a 0.1 band, 4 minutes apart). The shipped asset
+    /// (HallLighting_Default) tunes its own values (fixtures on below 0.8);
+    /// they reach every reader once the rig publishes them, each frame.
+    /// </summary>
+    public static readonly Settings Defaults = new Settings(7f, 16.5f, 1.5f, 0.6f, 0.1f, 4f);
+
+    /// <summary>
+    /// The cycle's knobs every reader of the one day cycle shares (BUG-25b):
+    /// the hall rig publishes its HallLightingSO's (<see cref="Publish"/>), so
+    /// the hall's four painted states (HallBakedCycle), the lamps, the city's
+    /// windows, the calendar and the desk light all read the same day. Until
+    /// a rig publishes (a scene without the hall): <see cref="Defaults"/>.
+    /// </summary>
+    public static Settings Active { get; private set; } = Defaults;
+
+    /// <summary>Makes <paramref name="settings"/> the cycle every reader shares (HallLightingRig, from its knobs, each frame).</summary>
+    public static void Publish(in Settings settings) => Active = settings;
+
+    /// <summary>
+    /// The hour the cheat menu's Dusk sets (P0-A seam; owner LIGHT, read by
+    /// RUN-SAFE's DevCheats): 18:30, the plan's H4 and the value the seam was
+    /// stubbed with, so the LIGHT pass compares cheat Dusk with a natural
+    /// 18:30 (FIX_PLAN LIGHT). On the one cycle with the shipped knobs 18:30
+    /// is already full night; moving it to the cycle's sunset
+    /// (<see cref="HourAtEvening"/> of 0.5, 16:30) is a proposal waiting
+    /// for the orchestrator (docs/pending/LIGHT.md), not done here.
+    /// </summary>
     public static float DuskHour => 18.5f;
 
     /// <summary>How long a fixture's switch-on flicker lasts (real seconds).</summary>
@@ -69,6 +99,40 @@ public static class HallDayCycle
 
     /// <summary>The complement of the daylight: the art presentation's evening (AnimeHallPresentation.SetTime), 0 by day to 1 at night.</summary>
     public static float Evening(float hour, in Settings s) => 1f - Daylight(hour, s);
+
+    /// <summary>
+    /// The afternoon hour (0 to 24) at which the evening reaches
+    /// <paramref name="evening"/> (clamped to 0..1): the inverse of
+    /// <see cref="Evening"/> through the dusk, from the dusk's start (0) to
+    /// night (1), the sunset at a half. The desk lamp's switch-on hour
+    /// (DeskLighting.LampOnHour) reads it.
+    /// </summary>
+    public static float HourAtEvening(float evening, in Settings s)
+    {
+        Day(s, out float length, out float twilight);
+        double e = Clamp01(evening);
+        // Through the dusk the evening is a smoothstep of the hours since its start; this is its inverse.
+        double x = 0.5 - Math.Sin(Math.Asin(1.0 - 2.0 * e) / 3.0);
+        return Wrap(s.SunriseHour + (length - twilight * 0.5f) + (float)x * twilight);
+    }
+
+    /// <summary>
+    /// The hour the hall shows (BUG-25c: never noon before the clock exists):
+    /// the cheat menu's forced hour, else the preview hour while it is on,
+    /// else the shift clock's minute, else (in play, before the clock exists)
+    /// today's opening minute, else the edit-mode hour. A null minute or
+    /// forced hour is one that does not exist yet.
+    /// </summary>
+    public static float ShownHour(float? forcedHour, bool previewOn, float previewHour, float? clockMinute, float? openingMinute, float editModeHour)
+    {
+        if (forcedHour.HasValue)
+            return forcedHour.Value;
+        if (previewOn)
+            return previewHour;
+        if (clockMinute.HasValue)
+            return Hour(clockMinute.Value);
+        return openingMinute.HasValue ? Hour(openingMinute.Value) : editModeHour;
+    }
 
     /// <summary>
     /// Where <paramref name="hour"/> stands on a canonical solar day, 0 to 1:
