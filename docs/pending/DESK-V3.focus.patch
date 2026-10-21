@@ -1,0 +1,808 @@
+diff --git a/Assets/Scripts/Office/CameraFeel.cs b/Assets/Scripts/Office/CameraFeel.cs
+index b4dd2121f42fe72e16840301f8cc31171ff7c85c..21c3fb54bbb94b6b178061bf828a297b4fa22d52 100644
+--- a/Assets/Scripts/Office/CameraFeel.cs
++++ b/Assets/Scripts/Office/CameraFeel.cs
+@@ -23,9 +23,17 @@ using UnityEngine;
+ /// As the reading view comes in, its lens pushes in softly to the solved
+ /// reading pose (DeskView.ReadingFov: it starts readingPushIn wider and
+ /// narrows on the Heavy spring), tagged with the view's cause while it moves.
++/// On top of it, DESK-HOMES' D6 framing focus (Focus: FramingFocus picks the
++/// machine; CAM.md's hand-off, one lens writer) narrows the reading view a
++/// little more from that rest lens, push-in and focus together never past
++/// their cap of the lens the view entered at, and turns it a little toward
++/// the machine (a CinemachineRecomposer on the reading camera, applied after
++/// its body so the impulses still add on top), on the same spring, each move
++/// tagged SlideInFocus; it is refused out of the reading view and when
++/// motion is still.
+ /// The Motion intensity scales every amplitude, live; Reduced Motion and no
+-/// intensity (MotionAmount.Still) turn the breathing, the impulses and the
+-/// push-in off, live.
++/// intensity (MotionAmount.Still) turn the breathing, the impulses, the
++/// push-in and the focus off, live.
+ /// </para>
+ /// </summary>
+ public sealed class CameraFeel : MonoBehaviour, IMotionTick
+@@ -37,10 +45,11 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
+ 
+     private CinemachineCamera _office, _desk;
+     private CinemachineImpulseSource _source;
++    private CinemachineRecomposer _turn;
+     private DeskView _view;
+-    private Spring _push;
+-    private float _pushIn;
+-    private float _taggedUntil;
++    private Spring _push, _focus, _pan, _tilt;
++    private float _pushIn, _focusCap;
++    private float _taggedUntil, _focusTaggedUntil;
+ 
+     /// <summary>
+     /// Gives the reading view's object the cameras' feel: the impulse source,
+@@ -100,6 +109,34 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
+         _current._source.GenerateImpulseWithVelocity(new Vector3(row.X, row.Y, 0f) * velocity);
+     }
+ 
++    /// <summary>
++    /// DESK-HOMES' D6 framing focus (DESK-HOMES P3; CAM.md's hand-off: a
++    /// second push target next to the reading push-in, one lens writer): the
++    /// reading view narrows from its rest lens (DeskView.ReadingFov) by
++    /// <paramref name="share"/> of the lens it entered at (the rest lens plus
++    /// the push-in), push-in and focus together never past
++    /// <paramref name="cap"/> of it (SlideFocus.Narrowing, SlideFocus.Total),
++    /// and turns toward <paramref name="aim"/> (shares of the frame from its
++    /// centre, x right, y up: SlideFocus.Turn), on the push-in's spring, each
++    /// move tagged SlideInFocus for the QA camera logger. Refused (let go) out
++    /// of the reading view and when motion is still; FramingFocus also
++    /// refuses it while anything is held and while a blend runs. The caller
++    /// scales the share by the Motion intensity. Nothing without the office's
++    /// cameras.
++    /// </summary>
++    public static void Focus(float share, Vector2 aim, float cap)
++    {
++        if (_current != null)
++            _current.SetFocus(share, aim, cap);
++    }
++
++    /// <summary>The D6 framing focus lets go: the narrowing and the turn ease back out (tagged SlideInFocus while they move).</summary>
++    public static void ReleaseFocus()
++    {
++        if (_current != null)
++            _current.SetFocus(0f, Vector2.zero, _current._focusCap);
++    }
++
+     /// <summary>How far ahead of <paramref name="live"/> the nearest corner of the paper mat lies (where the eye is: the papers), at most the QA logger's reference depth; the reference depth without a bound desk or camera.</summary>
+     private static float WorkDepth(Camera live)
+     {
+@@ -136,6 +173,18 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
+         {
+             _push = Spring.At(0f);
+             _pushIn = 0f;
++            _focus = Spring.At(0f);
++            _pan = Spring.At(0f);
++            _tilt = Spring.At(0f);
++        }
++        if (!desk.TryGetComponent(out _turn))
++        {
++            // Set up as its Reset would (a runtime add skips Reset: a zoom scale of 0 would collapse the lens), applied after the body so the impulses compose on top.
++            _turn = desk.gameObject.AddComponent<CinemachineRecomposer>();
++            _turn.ApplyAfter = CinemachineCore.Stage.Body;
++            _turn.ZoomScale = 1f;
++            _turn.FollowAttachment = 1f;
++            _turn.LookAtAttachment = 1f;
+         }
+         if (_source == null && !TryGetComponent(out _source))
+         {
+@@ -181,6 +230,7 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
+             return;
+         _pushIn = 0f;
+         _push.Snap(0f);
++        SnapFocus();
+         Apply();
+     }
+ 
+@@ -221,34 +271,85 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
+         else
+             _push.Target = target;
+         _taggedUntil = 0f;
++        if (!_view.IsOn)
++            SetFocusTargets(0f, Vector2.zero);
+         Apply();
+         UiMotion.Run(this);
+     }
+ 
+-    /// <summary>Steps the push-in (tagging it while it moves); false once it settled.</summary>
++    /// <summary>The focus's targets (Focus), refused out of the reading view and when motion is still; a snap when motion is still.</summary>
++    private void SetFocus(float share, Vector2 aim, float cap)
++    {
++        if (_desk == null || _view == null)
++            return;
++        _focusCap = cap;
++        bool still = UiMotion.Amount.Still;
++        SetFocusTargets(_view.IsOn && !still ? share : 0f, aim);
++        if (still)
++            SnapFocus();
++        Apply();
++        UiMotion.Run(this);
++    }
++
++    /// <summary>The narrowing's target (SlideFocus.Narrowing, from the lens the reading view entered at, against the push-in's target) and the turn's (SlideFocus.Turn at the reading camera's aspect).</summary>
++    private void SetFocusTargets(float share, Vector2 aim)
++    {
++        _focus.Target = share > 0f ? SlideFocus.Narrowing(_view.ReadingFov + _pushIn, _push.Target, share, _focusCap) : 0f;
++        (float pan, float tilt) turn = share > 0f ? SlideFocus.Turn((aim.x, aim.y), _view.ReadingFov, _desk.Lens.Aspect) : (0f, 0f);
++        _pan.Target = turn.pan;
++        _tilt.Target = turn.tilt;
++        _focusTaggedUntil = 0f;
++    }
++
++    /// <summary>The focus cut to its targets (motion is still): a one-frame move, tagged SlideInFocus when it moves the lens at all.</summary>
++    private void SnapFocus()
++    {
++        if (Mathf.Abs(_focus.Value - _focus.Target) + Mathf.Abs(_pan.Value - _pan.Target) + Mathf.Abs(_tilt.Value - _tilt.Target) > 1e-4f)
++            QaSignals.TagCamera(CameraMoveCause.SlideInFocus, PushTagSeconds);
++        _focus.Snap(_focus.Target);
++        _pan.Snap(_pan.Target);
++        _tilt.Snap(_tilt.Target);
++    }
++
++    /// <summary>Steps the push-in (tagging it with the view's cause while it moves) and the focus (tagging it SlideInFocus while it moves); false once both settled.</summary>
+     public bool TickMotion(float dt)
+     {
+         if (this == null || _desk == null)
+             return false;
+         MotionKnobs knobs = UiMotion.Knobs;
+-        bool moving = _push.Step(dt, knobs.Get(knobs.cameraFeel), 1e-3f, 1e-2f);
++        SpringTuning feel = knobs.Get(knobs.cameraFeel);
++        bool moving = _push.Step(dt, feel, 1e-3f, 1e-2f);
+         CameraMoveCause cause = _view != null ? _view.LastCause : CameraMoveCause.ViewKey;
+         if (moving && cause != CameraMoveCause.Untagged && Time.unscaledTime >= _taggedUntil - 0.05f)
+         {
+             QaSignals.TagCamera(cause, PushTagSeconds);
+             _taggedUntil = Time.unscaledTime + PushTagSeconds;
+         }
++        bool focusing = _focus.Step(dt, feel, 1e-3f, 1e-2f);
++        focusing |= _pan.Step(dt, feel, 1e-3f, 1e-2f);
++        focusing |= _tilt.Step(dt, feel, 1e-3f, 1e-2f);
++        if (focusing && Time.unscaledTime >= _focusTaggedUntil - 0.05f)
++        {
++            QaSignals.TagCamera(CameraMoveCause.SlideInFocus, PushTagSeconds);
++            _focusTaggedUntil = Time.unscaledTime + PushTagSeconds;
++        }
+         Apply();
+-        return moving;
++        return moving || focusing;
+     }
+ 
+-    /// <summary>The reading camera's field of view: the solved reading lens, wider by what is left of the push-in.</summary>
++    /// <summary>The reading camera's field of view: the solved reading lens, wider by what is left of the push-in, narrowed by the focus (SlideFocus.Total: the two never past the focus's cap of the lens the view entered at); its turn toward the focused machine.</summary>
+     private void Apply()
+     {
+         if (_desk == null || _view == null)
+             return;
+         LensSettings lens = _desk.Lens;
+-        lens.FieldOfView = _view.ReadingFov + _pushIn - _push.Value;
++        float entered = _view.ReadingFov + _pushIn;
++        lens.FieldOfView = entered - SlideFocus.Total(entered, _push.Value, _focus.Value, _focusCap);
+         _desk.Lens = lens;
++        if (_turn != null)
++        {
++            _turn.Pan = _pan.Value;
++            _turn.Tilt = _tilt.Value;
++        }
+     }
+ }
+diff --git a/Assets/Scripts/Office/Desk/DeskSlideIn.cs b/Assets/Scripts/Office/Desk/DeskSlideIn.cs
+index 935a27e749f301f8fab5dc55208a31dd2596e23d..e37708e76baf237b82f62efff2d46b2bf9d5a1bf 100644
+--- a/Assets/Scripts/Office/Desk/DeskSlideIn.cs
++++ b/Assets/Scripts/Office/Desk/DeskSlideIn.cs
+@@ -59,6 +59,9 @@ public sealed class DeskSlideIn : MonoBehaviour
+     /// <summary>The slide-in's data (the bound plan's DeskLayoutSettings.slides).</summary>
+     public DeskSlides Slides => _slides;
+ 
++    /// <summary>The assist deciding the slides (FramingFocus follows its pick).</summary>
++    public ProximityAssist Assist => _assist;
++
+     /// <summary>The material of the sliders' contact shadows (the papers' Paper_Shadow; null: no shadows).</summary>
+     public Material ShadowMaterial { get; private set; }
+ 
+@@ -99,6 +102,15 @@ public sealed class DeskSlideIn : MonoBehaviour
+             _sliders.Add(slider);
+     }
+ 
++    /// <summary>The attached slider <paramref name="id"/>, or null (FramingFocus aims at it).</summary>
++    public MachineSlideIn Find(string id)
++    {
++        for (int i = 0; i < _sliders.Count; i++)
++            if (_sliders[i] != null && _sliders[i].Id == id)
++                return _sliders[i];
++        return null;
++    }
++
+     /// <summary>Listens to <paramref name="day"/>'s end (the forced retract), and no longer to the day bound before.</summary>
+     private void Hear(DayOrchestrator day)
+     {
+diff --git a/Assets/Scripts/Office/Desk/FramingFocus.cs b/Assets/Scripts/Office/Desk/FramingFocus.cs
+new file mode 100644
+index 0000000000000000000000000000000000000000..e57ff3a4e82efefc900181dfe4d6f4dbd499f609
+--- /dev/null
++++ b/Assets/Scripts/Office/Desk/FramingFocus.cs
+@@ -0,0 +1,83 @@
++using Unity.Cinemachine;
++using UnityEngine;
++
++/// <summary>
++/// The D6 framing focus (Saleh, D6: "when they slide in, we subtly zoom in a
++/// bit not too hard just a small focus to frame the shot"; DESK-HOMES P3,
++/// UNITY_PLAN 5.2): after a machine has slid in for the cursor plus a 150 ms
++/// dwell, the reading view narrows by at most 3 % of its bound field of view
++/// (8 % with the push-in) and turns at most 3 % of the frame toward it,
++/// re-aiming to the next machine without letting go and letting go when the
++/// cursor leaves (SlideFocus decides, from the slide-in's assist). Only in
++/// the reading view (DESK-HOMES Q5's default), never while a paper or a tool
++/// is held, while a camera blend (the drop tilt) runs, under Reduced Motion
++/// or at Motion intensity 0 (SlideFocus.Allowed; it scales with the
++/// intensity). It picks the target only: CameraFeel is the one lens writer
++/// (CameraFeel.Focus, which tags each move SlideInFocus).
++/// </summary>
++public sealed class FramingFocus : MonoBehaviour
++{
++    private DeskSlideIn _slideIn;
++    private DeskView _view;
++    private DeskController _papers;
++    private SlideFocus _focus;
++    private Camera _camera;
++    private string _shown;
++
++    /// <summary>Binds the focus to <paramref name="slideIn"/>'s assist, the reading <paramref name="view"/>, the office's output <paramref name="camera"/> (where the machine shows) and the desk's <paramref name="papers"/> (a held paper turns it off).</summary>
++    public void Bind(DeskSlideIn slideIn, DeskView view, Camera camera, DeskController papers)
++    {
++        _slideIn = slideIn;
++        _view = view;
++        _camera = camera;
++        _papers = papers;
++        _focus = slideIn != null && slideIn.Slides != null ? new SlideFocus(slideIn.Slides) : null;
++        Let();
++    }
++
++    /// <summary>After the slide-in's Update: the target for this frame, handed to CameraFeel when it changes (its aim taken from where the machine shows then).</summary>
++    private void LateUpdate()
++    {
++        if (_focus == null || _slideIn == null || _slideIn.Assist == null)
++            return;
++        MotionAmount amount = UiMotion.Amount;
++        bool held = HoldRegistry.Desk.IsHolding || (_papers != null && _papers.IsDragging);
++        _focus.Step(UiMotion.Now, _slideIn.Assist, SlideFocus.Allowed(_view != null && _view.IsOn, held, Blending(), amount.Still));
++        string target = _focus.Target;
++        if (target == _shown)
++            return;
++        MachineSlideIn machine = target != null ? _slideIn.Find(target) : null;
++        if (machine == null || _camera == null || !machine.TryCentre(out Vector3 centre))
++        {
++            Let();
++            return;
++        }
++        DeskSlides slides = _slideIn.Slides;
++        Vector3 at = _camera.WorldToViewportPoint(centre);
++        (float x, float y) aim = SlideFocus.Aim(at.x, at.y, slides.focusAim);
++        CameraFeel.Focus(slides.focusShare * amount.Share, new Vector2(aim.x, aim.y), slides.focusCap);
++        _shown = target;
++    }
++
++    private void OnDisable() => Let();
++
++    /// <summary>No focus: CameraFeel eases it out.</summary>
++    private void Let()
++    {
++        if (_shown != null)
++            CameraFeel.ReleaseFocus();
++        _shown = null;
++    }
++
++    /// <summary>True while any Cinemachine brain blends (the drop tilt in or out of the reading view).</summary>
++    private static bool Blending()
++    {
++        for (int i = 0; i < CinemachineBrain.ActiveBrainCount; i++)
++        {
++            CinemachineBrain brain = CinemachineBrain.GetActiveBrain(i);
++            if (brain != null && brain.IsBlending)
++                return true;
++        }
++        return false;
++    }
++}
+diff --git a/Assets/Scripts/Office/Desk/FramingFocus.cs.meta b/Assets/Scripts/Office/Desk/FramingFocus.cs.meta
+new file mode 100644
+index 0000000000000000000000000000000000000000..5dfe057be7fb444f38e7150d56cefc9516470e9b
+--- /dev/null
++++ b/Assets/Scripts/Office/Desk/FramingFocus.cs.meta
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: 3f14d218ed36421f897bcdc478d56ac3
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+diff --git a/Assets/Scripts/Office/Desk/MachineSlideIn.cs b/Assets/Scripts/Office/Desk/MachineSlideIn.cs
+index cad98eec9c288a801d069b6f6e65ee2fca421a56..f618f4d127d81afd5930f61999967ce5fa96ec79 100644
+--- a/Assets/Scripts/Office/Desk/MachineSlideIn.cs
++++ b/Assets/Scripts/Office/Desk/MachineSlideIn.cs
+@@ -133,6 +133,17 @@ public sealed class MachineSlideIn : MonoBehaviour
+         return Mathf.Sqrt(dx * dx + dy * dy);
+     }
+ 
++    /// <summary>Its middle now (world: its rest footprint's centre moved by its slide, halfway up it); false before its rest is measured (FramingFocus aims at it).</summary>
++    public bool TryCentre(out Vector3 centre)
++    {
++        centre = default;
++        if (!_measured || _slider == null || !DeskLayout.Bound)
++            return false;
++        (float x, float y) at = SlideCurve.ShadowCentre(_slider, _way, Pose.Position, (_restCentre.x, _restCentre.y));
++        centre = DeskLayout.Frame.Point(new Vector2(at.x, at.y), _restBase + _height / 2f);
++        return true;
++    }
++
+     /// <summary>
+     /// True while the paper docked in it rides it home (the shift is over:
+     /// DeskSlideIn asks only then, for a busy slider): the first ask finds
+diff --git a/Assets/Scripts/Office/OfficeSceneBinder.cs b/Assets/Scripts/Office/OfficeSceneBinder.cs
+index a5746277c4b7787529df9a34dd0a95c9c1f5134f..f5e5e8aef810b06bbd8cadc2a8519945f8a5a4f3 100644
+--- a/Assets/Scripts/Office/OfficeSceneBinder.cs
++++ b/Assets/Scripts/Office/OfficeSceneBinder.cs
+@@ -911,7 +911,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
+     /// UvTorch gives it, giving way when it is picked up. Not here: the
+     /// daters (STAMP #7 lifts and tips them itself: their slide waits for its
+     /// merge), the glasses (no object yet: GLASSES) and the rulebook (its
+-    /// pocket is not built yet).
++    /// pocket is not built yet). Then the D6 framing focus (FramingFocus) on
++    /// the reading view.
+     /// </summary>
+     private void BindSlideIn(Transform intercomStandIn)
+     {
+@@ -940,6 +941,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
+         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
+         if (body != null)
+             MachineSlideIn.Attach(DeskHomeMap.UvTorch, torch.transform, body, layered: true, taken: () => torch.Held);
++        if (!TryGetComponent(out FramingFocus focus))
++            focus = gameObject.AddComponent<FramingFocus>();
++        focus.Bind(slideIn, deskView, _office, desk);
+     }
+ 
+     /// <summary>
+diff --git a/Assets/Scripts/Visuals/DeskSlides.cs b/Assets/Scripts/Visuals/DeskSlides.cs
+index e957ed80bb0931b9fac784827925237ff487dabd..a9f9bcfc548ba605a8b53256c3af9069530e70f5 100644
+--- a/Assets/Scripts/Visuals/DeskSlides.cs
++++ b/Assets/Scripts/Visuals/DeskSlides.cs
+@@ -141,10 +141,11 @@ public sealed class DeskSlider
+ /// seat bounce on the arrival frame; the hand-off loser's quick retract and
+ /// when the winner may start), the clearances the gate holds (felt and
+ /// lamps: the felt gap), a lift's squash, the contact shadows, the cues'
+-/// sound ids and their stand-ins, and every slider (Approved:
+-/// render/slides.json of the desk pipeline, the numbers as the offline gate
+-/// passed them). Pure and serializable: a section of the desk's plan
+-/// (DeskLayoutSettings.slides); ProximityAssist runs it, SlideCurve shapes it.
++/// sound ids and their stand-ins, the D6 framing focus and every slider
++/// (Approved: render/slides.json of the desk pipeline, the numbers as the
++/// offline gate passed them). Pure and serializable: a section of the desk's
++/// plan (DeskLayoutSettings.slides); ProximityAssist runs it, SlideCurve
++/// shapes it, SlideFocus frames it.
+ /// </summary>
+ [Serializable]
+ public sealed class DeskSlides
+@@ -217,6 +218,12 @@ public sealed class DeskSlides
+     /// <summary>The pitch each stand-in plays at (the unlatch tick "very low", the knock muted).</summary>
+     public float unlatchPitch = 0.6f, stopPitch = 0.7f, seatPitch = 1f;
+ 
++    /// <summary>The D6 framing focus (DESK-HOMES P3; Q5's default: the reading view only): it starts focusDwellSeconds after the cursor's slider has finished its slide, at most once every focusEverySeconds, and re-aims to the next slider without letting go in between.</summary>
++    public float focusDwellSeconds = 0.15f, focusEverySeconds = 0.8f;
++
++    /// <summary>The focus's budgets as shares of the lens the reading view enters at (its rest lens, DeskView.ReadingFov, plus the push-in): its narrowing (focusShare, 3 %), the push-in and the focus together (focusCap, 8 %), and its aim toward the machine (focusAim, 3 % of the frame).</summary>
++    public float focusShare = 0.03f, focusCap = 0.08f, focusAim = 0.03f;
++
+     /// <summary>Every slider (render/slides.json).</summary>
+     public DeskSlider[] sliders;
+ 
+@@ -295,8 +302,9 @@ public sealed class DeskSlides
+     /// home that declares a slide no track of it slides; a spring that does
+     /// not overshoot once, peaks before its anticipation ends or whose damping
+     /// disagrees with its overshoot; the timings' order (the hand-off winner
+-    /// may never wait longer than the retract). A track whose home declares
+-    /// no slide is not a fault: it stays put until the map declares one.
++    /// may never wait longer than the retract); the focus's budgets (its
++    /// narrowing and aim inside the cap). A track whose home declares no
++    /// slide is not a fault: it stays put until the map declares one.
+     /// </summary>
+     public List<string> Problems(IReadOnlyList<DeskHome> homes, float slideReach)
+     {
+@@ -337,6 +345,8 @@ public sealed class DeskSlides
+             problems.Add($"The hand-off winner waits up to {winnerAfter} s, longer than the loser's {retractSeconds} s retract.");
+         if (winnerBelow <= 0f || winnerBelow >= 0.5f)
+             problems.Add($"The hand-off winner starts below {winnerBelow} of the loser's travel: it must be nearly seated (0 < winnerBelow < 0.5), so two sliders are never both half out.");
++        if (focusShare < 0f || focusShare > focusCap || focusAim < 0f || focusAim > focusCap)
++            problems.Add($"The framing focus narrows {focusShare} and aims {focusAim} of the view: each between 0 and its {focusCap} cap.");
+         return problems;
+     }
+ 
+diff --git a/Assets/Scripts/Visuals/ProximityAssist.cs b/Assets/Scripts/Visuals/ProximityAssist.cs
+index ff9545c5740f721d57742e939cf6d73d08cdd416..b58e5ce2d3501505bf86386e5d4e8de709896a0b 100644
+--- a/Assets/Scripts/Visuals/ProximityAssist.cs
++++ b/Assets/Scripts/Visuals/ProximityAssist.cs
+@@ -277,6 +277,12 @@ public sealed class ProximityAssist
+     /// <summary>The cues the last Step raised, in order.</summary>
+     public IReadOnlyList<SlideCue> Cues => _cues;
+ 
++    /// <summary>The slider the last Step picked for the cursor (null: none), a busy one too: the D6 framing focus follows it (SlideFocus).</summary>
++    public string Picked => _picked?.Slider.id;
++
++    /// <summary>True when <paramref name="id"/> is out for the cursor and its slide has finished (outSeconds after its trigger; at once under Reduced Motion): the D6 framing focus may start on it.</summary>
++    public bool SlideDone(string id) => id != null && _byId.TryGetValue(id, out State s) && s.Phase == SlidePhase.Out && (_still || _now - s.T0 >= _slides.outSeconds);
++
+     /// <summary>
+     /// The shift is over (DeskSlideIn hears DayOrchestrator.OnDayCompleted:
+     /// the last traveller was finished, or the booth shut with nobody at the
+diff --git a/Assets/Scripts/Visuals/SlideFocus.cs b/Assets/Scripts/Visuals/SlideFocus.cs
+new file mode 100644
+index 0000000000000000000000000000000000000000..fb09447c0de46c3aa64beeef2d56957f90d5f497
+--- /dev/null
++++ b/Assets/Scripts/Visuals/SlideFocus.cs
+@@ -0,0 +1,103 @@
++using System;
++
++/// <summary>
++/// The D6 framing focus's target (Saleh, D6: "when they slide in, we subtly
++/// zoom in a bit not too hard just a small focus to frame the shot";
++/// DESK-HOMES P3 and UNITY_PLAN 5.2): which slider the reading view frames
++/// now. It starts focusDwellSeconds after the cursor's slider has finished
++/// its slide, at most once every focusEverySeconds; moving to the next slider
++/// re-aims it once that one has settled, never out and back in; the cursor
++/// leaving, or a slider that will not come (busy at home), lets it go. Off
++/// whenever it is not allowed (Allowed: the reading view on, nothing held,
++/// no tilt blend running, motion not still). It only picks: FramingFocus
++/// hands the target to CameraFeel, the one lens writer, which narrows the
++/// lens by Total. Pure.
++/// </summary>
++public sealed class SlideFocus
++{
++    private readonly DeskSlides _slides;
++    private string _candidate;
++    private float _candidateSince, _lastStart = float.NegativeInfinity;
++
++    /// <summary>The focus over <paramref name="slides"/>' timings and budgets, framing nothing.</summary>
++    public SlideFocus(DeskSlides slides)
++    {
++        _slides = slides ?? throw new ArgumentNullException(nameof(slides));
++    }
++
++    /// <summary>The slider framed now (null: none).</summary>
++    public string Target { get; private set; }
++
++    /// <summary>Advances to <paramref name="now"/> (seconds, the game feel's clock) with <paramref name="assist"/>'s pick and whether a focus may show at all (<paramref name="allowed"/>).</summary>
++    public void Step(float now, ProximityAssist assist, bool allowed)
++    {
++        string pick = allowed && assist != null ? assist.Picked : null;
++        if (pick == null)
++        {
++            Target = null;
++            _candidate = null;
++            return;
++        }
++        if (pick == Target)
++        {
++            _candidate = null;
++            return;
++        }
++        if (!assist.SlideDone(pick))
++        {
++            // Still coming (waiting on a hand-off, or sliding): the focus holds where it is; one that will not come lets it go.
++            SlidePhase phase = assist.Pose(pick).Phase;
++            if (phase != SlidePhase.Out && phase != SlidePhase.Wait)
++                Target = null;
++            _candidate = null;
++            return;
++        }
++        if (pick != _candidate)
++        {
++            _candidate = pick;
++            _candidateSince = now;
++        }
++        if (now - _candidateSince < _slides.focusDwellSeconds - 1e-5f)
++            return;
++        if (Target == null)
++        {
++            if (now - _lastStart < _slides.focusEverySeconds - 1e-5f)
++                return;
++            _lastStart = now;
++        }
++        Target = pick;
++        _candidate = null;
++    }
++
++    /// <summary>The aim toward a machine at viewport (<paramref name="x"/>, <paramref name="y"/>) (0 to 1, the frame's centre at 0.5): the way to it, at most <paramref name="limit"/> of the frame.</summary>
++    public static (float x, float y) Aim(float x, float y, float limit)
++    {
++        float dx = x - 0.5f, dy = y - 0.5f;
++        float length = (float)Math.Sqrt(dx * dx + dy * dy);
++        if (length <= limit || length < 1e-6f)
++            return (dx, dy);
++        return (dx * limit / length, dy * limit / length);
++    }
++
++    /// <summary>The turn (degrees: a pan right, a tilt that is positive downward, as Cinemachine's recomposer takes them) that brings the frame's centre <paramref name="aim"/> of the frame toward a point, for a view <paramref name="verticalFov"/> degrees high at <paramref name="aspect"/>.</summary>
++    public static (float pan, float tilt) Turn((float x, float y) aim, float verticalFov, float aspect)
++    {
++        double halfV = verticalFov * Math.PI / 360.0, tanV = Math.Tan(halfV), tanH = tanV * Math.Max(1e-3f, aspect);
++        float pan = (float)(Math.Atan(2.0 * aim.x * tanH) * 180.0 / Math.PI);
++        float tilt = (float)(-Math.Atan(2.0 * aim.y * tanV) * 180.0 / Math.PI);
++        return (pan, tilt);
++    }
++
++    /// <summary>How many degrees the focus narrows a view that entered at <paramref name="baseFov"/> (the reading view's rest lens plus its push-in), on top of a push-in of <paramref name="push"/> degrees: <paramref name="share"/> of it, the two together never past <paramref name="cap"/> of it (and never below nothing).</summary>
++    public static float Narrowing(float baseFov, float push, float share, float cap) => Math.Max(0f, Math.Min(share * baseFov, cap * baseFov - push));
++
++    /// <summary>How many degrees the reading view narrows in all from the lens it entered at (<paramref name="baseFov"/>), as CameraFeel shows it: the push-in's <paramref name="push"/> and the focus's <paramref name="focus"/> (its spring's value, which may overshoot), the two never past <paramref name="cap"/> of it; the focus gives way, the push-in never does; no cap at 0.</summary>
++    public static float Total(float baseFov, float push, float focus, float cap)
++    {
++        float narrow = push + Math.Max(0f, focus);
++        return cap > 0f ? Math.Min(narrow, Math.Max(push, cap * baseFov)) : narrow;
++    }
++
++    /// <summary>True when a focus may show at all (FramingFocus's rule; DESK-HOMES P3, Q5's default; CAM's hand-off: refused while holding and when motion is still, never while the reading blend runs): the <paramref name="readingView"/> on, nothing <paramref name="held"/> (a tool, a decoration or a dragged paper), no camera <paramref name="blending"/> (the drop tilt) and motion not <paramref name="still"/> (Reduced Motion or Motion intensity 0).</summary>
++    public static bool Allowed(bool readingView, bool held, bool blending, bool still) => readingView && !held && !blending && !still;
++}
+diff --git a/Assets/Scripts/Visuals/SlideFocus.cs.meta b/Assets/Scripts/Visuals/SlideFocus.cs.meta
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ba64f4a23b09bef026c157628c73221f66d8810
+--- /dev/null
++++ b/Assets/Scripts/Visuals/SlideFocus.cs.meta
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: 1881dc10b3ca4b18a16879fe21f7185d
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+diff --git a/Assets/Tests/EditMode/DeskSlidesTests.cs b/Assets/Tests/EditMode/DeskSlidesTests.cs
+index fb6a9ed8a4824e067c907e47cdda28542c46960b..2f4cb08cc68e618bdb170c5eb3d7b009d4146ad4 100644
+--- a/Assets/Tests/EditMode/DeskSlidesTests.cs
++++ b/Assets/Tests/EditMode/DeskSlidesTests.cs
+@@ -225,6 +225,7 @@ public class DeskSlidesTests
+             sliders = new[] { Good("left"), Good("left"), far, pastFelt, stiff, new DeskSlider("nowhere", null, SlideKind.Lift, 0.01f) },
+             winnerAfter = 0.2f,
+             winnerBelow = 0.6f,
++            focusAim = 0.1f,
+         };
+         string all = string.Join("\n", slides.Problems(homes, 0.06f));
+         StringAssert.Contains("'left' is listed twice", all);
+@@ -237,6 +238,7 @@ public class DeskSlidesTests
+         StringAssert.Contains("'declared' declares a slide but no track slides it", all);
+         StringAssert.Contains("waits up to 0.2 s", all);
+         StringAssert.Contains("below 0.6 of the loser's travel", all);
++        StringAssert.Contains("aims 0.1 of the view", all);
+         StringAssert.DoesNotContain("'pouch' declares", all, "a track resting in a home that declares no slide is no fault: it stays put until the map declares one");
+     }
+ 
+diff --git a/Assets/Tests/EditMode/ProximityAssistTests.cs b/Assets/Tests/EditMode/ProximityAssistTests.cs
+index 0983fa4f64234e05d5363f8bd905353e1fad2f33..b4bae93c6468cff1568b0c6aaf08231ea3f150d3 100644
+--- a/Assets/Tests/EditMode/ProximityAssistTests.cs
++++ b/Assets/Tests/EditMode/ProximityAssistTests.cs
+@@ -138,6 +138,8 @@ public class ProximityAssistTests
+         Assert.AreEqual(1 + (int)Math.Ceiling(DeskSlides.Approved().Find(Scanner).peakSeconds / Frame), peak, "the knock at its peak");
+         Assert.AreEqual(1f, desk.P(Scanner), 0.03f, "settled at its slid spot");
+         Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase);
++        Assert.AreEqual(Scanner, desk.Assist.Picked);
++        Assert.IsTrue(desk.Assist.SlideDone(Scanner), "its slide has finished");
+     }
+ 
+     [Test]
+@@ -481,6 +483,7 @@ public class ProximityAssistTests
+         var atHome = new Desk();
+         atHome.Busy.Add(Scanner);
+         atHome.Hold(30, On(Scanner), Near(Chip, 60f));
++        Assert.AreEqual(Scanner, atHome.Assist.Picked, "the busy scanner is the cursor's");
+         Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Pose(Chip).Phase, "the chip reader stays home");
+         Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Pose(Scanner).Phase, "and the busy scanner is not summoned");
+ 
+@@ -670,6 +673,7 @@ public class ProximityAssistTests
+         Assert.AreEqual(1, desk.FirstFrame(Scanner, SlideCueKind.Peak), "the arrival's knock on the cut");
+         SlidePose pose = desk.Assist.Pose(Scanner);
+         Assert.AreEqual(0f, pose.Squash + pose.Sway, 1e-6f, "no squash, no sway");
++        Assert.IsTrue(desk.Assist.SlideDone(Scanner), "done at once");
+         desk.Step(On(Chip));
+         Assert.AreEqual(0f, desk.P(Scanner), 1e-6f, "the hand-off loser cuts home");
+         Assert.AreEqual(1f, desk.P(Chip), 1e-6f, "and the winner cuts out on the same frame");
+diff --git a/Assets/Tests/EditMode/SlideFocusTests.cs b/Assets/Tests/EditMode/SlideFocusTests.cs
+new file mode 100644
+index 0000000000000000000000000000000000000000..f479f50cb6abfe6f2b9de3015f9f6f4ce6acc609
+--- /dev/null
++++ b/Assets/Tests/EditMode/SlideFocusTests.cs
+@@ -0,0 +1,165 @@
++using System;
++using System.Collections.Generic;
++using NUnit.Framework;
++
++/// <summary>
++/// The D6 framing focus's target (Saleh, D6: "when they slide in, we subtly
++/// zoom in a bit not too hard just a small focus to frame the shot";
++/// DESK-HOMES P3): it starts after the slide plus a 150 ms dwell, lets go
++/// when the cursor leaves, re-aims to the next machine without going out and
++/// back in, starts at most once every 0.8 s, never shows while it is not
++/// allowed (the reading view only, nothing held, no blend, motion not
++/// still), and keeps its narrowing and aim inside their budgets, the lens's
++/// total never past the cap. Driven at 60 fps with the real assist.
++/// </summary>
++public class SlideFocusTests
++{
++    private const float Frame = 1f / 60f;
++    private const string Scanner = DeskHomeMap.Scanner, Chip = DeskHomeMap.ChipReader;
++
++    private sealed class Rig
++    {
++        public readonly DeskSlides Slides = DeskSlides.Approved();
++        public readonly ProximityAssist Assist;
++        public readonly SlideFocus Focus;
++        public readonly HashSet<string> Busy = new HashSet<string>();
++        public readonly List<string> Targets = new List<string>();
++        public bool Allowed = true;
++        public int FrameNo;
++
++        public Rig()
++        {
++            Assist = new ProximityAssist(Slides, DeskHomeMap.Approved());
++            Focus = new SlideFocus(Slides);
++        }
++
++        public void Step(string near = null, bool on = false)
++        {
++            FrameNo++;
++            var all = new List<SlideCandidate>();
++            foreach (string id in new[] { Scanner, Chip })
++                all.Add(id == near ? new SlideCandidate(id, on ? 0 : -1, false, on ? 0f : 40f, Busy.Contains(id)) : SlideCandidate.Away(id, Busy.Contains(id)));
++            Assist.Step(FrameNo * Frame, all, false, false);
++            Focus.Step(FrameNo * Frame, Assist, Allowed);
++            Targets.Add(Focus.Target);
++        }
++
++        public void Hold(int frames, string near = null, bool on = false)
++        {
++            for (int i = 0; i < frames; i++)
++                Step(near, on);
++        }
++
++        public int FirstFrame(string target) => Targets.IndexOf(target) + 1;
++    }
++
++    [Test]
++    public void TheFocus_StartsAfterTheSlidePlusADwell_AndLetsGoWhenTheCursorLeaves()
++    {
++        var rig = new Rig();
++        rig.Hold(40, Scanner);
++        float expected = (rig.Slides.outSeconds + rig.Slides.focusDwellSeconds) / Frame;
++        Assert.That(rig.FirstFrame(Scanner), Is.InRange((int)expected, (int)expected + 2), "250 ms of slide, then 150 ms of dwell");
++        rig.Step();
++        Assert.IsNull(rig.Focus.Target, "the cursor left: it lets go at once (CameraFeel eases it out)");
++    }
++
++    [Test]
++    public void MovingToTheNextMachine_ReAimsIt_NeverOutAndBackIn()
++    {
++        var rig = new Rig();
++        rig.Hold(40, Scanner);
++        Assert.AreEqual(Scanner, rig.Focus.Target);
++        int moved = rig.FrameNo;
++        rig.Hold(50, Chip, true);
++        for (int i = moved; i < rig.Targets.Count; i++)
++            Assert.IsNotNull(rig.Targets[i], $"frame {i + 1}: the focus holds through the hand-off");
++        Assert.AreEqual(Chip, rig.Focus.Target, "and re-aims once the chip reader has settled");
++        int reaimed = rig.FirstFrame(Chip) - moved;
++        Assert.Greater(reaimed * Frame, rig.Slides.outSeconds + rig.Slides.focusDwellSeconds, "after its own slide and dwell");
++    }
++
++    [Test]
++    public void AFocus_StartsAtMostOnceEvery800ms()
++    {
++        var rig = new Rig();
++        rig.Hold(30, Scanner);
++        int first = rig.FirstFrame(Scanner);
++        rig.Step();
++        Assert.IsNull(rig.Focus.Target);
++        rig.Hold(5, Scanner);
++        int again = first;
++        for (int i = 0; i < 60; i++)
++        {
++            rig.Step(Scanner);
++            if (rig.Focus.Target != null)
++            {
++                again = rig.FrameNo;
++                break;
++            }
++        }
++        Assert.GreaterOrEqual((again - first) * Frame, rig.Slides.focusEverySeconds - 1e-4f, "BUG-17: no pumping");
++    }
++
++    [Test]
++    public void NotAllowed_NoFocus_AndABusyMachineAtHomeLetsItGo()
++    {
++        var rig = new Rig { Allowed = false };
++        rig.Hold(40, Scanner);
++        Assert.IsNull(rig.Focus.Target, "held, tilting, out of the reading view or still: no focus");
++        rig.Allowed = true;
++        rig.Hold(5, Scanner);
++        Assert.IsNull(rig.Focus.Target, "allowed again: the dwell starts over");
++        rig.Hold(10, Scanner);
++        Assert.AreEqual(Scanner, rig.Focus.Target);
++
++        rig.Busy.Add(Chip);
++        rig.Hold(3, Chip, true);
++        Assert.IsNull(rig.Focus.Target, "the cursor on a busy machine at home: nothing comes, the focus lets go");
++    }
++
++    [Test]
++    public void TheBudgets_TheNarrowingInsideTheCap_TheAimAtMost3PercentOfTheFrame()
++    {
++        DeskSlides slides = DeskSlides.Approved();
++        Assert.AreEqual(1.5f, SlideFocus.Narrowing(50f, 0f, slides.focusShare, slides.focusCap), 1e-5f, "3 % of the 50 degree reading view");
++        Assert.AreEqual(1.5f, SlideFocus.Narrowing(50f, 2.5f, slides.focusShare, slides.focusCap), 1e-5f, "on top of the 2.5 degree push-in: 8 % in all, 46 degrees");
++        Assert.AreEqual(0.5f, SlideFocus.Narrowing(50f, 3.5f, slides.focusShare, slides.focusCap), 1e-5f, "a bigger push-in leaves less: the cap holds");
++        Assert.AreEqual(0f, SlideFocus.Narrowing(50f, 5f, slides.focusShare, slides.focusCap), 1e-5f);
++        (float x, float y) far = SlideFocus.Aim(0.9f, 0.2f, slides.focusAim);
++        Assert.AreEqual(slides.focusAim, Math.Sqrt(far.x * far.x + far.y * far.y), 1e-5f, "at most 3 % of the frame");
++        Assert.Greater(far.x, 0f);
++        Assert.Less(far.y, 0f, "toward the machine");
++        (float x, float y) close = SlideFocus.Aim(0.51f, 0.49f, slides.focusAim);
++        Assert.AreEqual(0.01f, close.x, 1e-5f, "a machine near the centre: straight to it");
++        Assert.AreEqual(-0.01f, close.y, 1e-5f);
++        (float pan, float tilt) = SlideFocus.Turn((0.03f, 0.03f), 50f, 16f / 9f);
++        Assert.Greater(pan, 0f, "pans right toward it");
++        Assert.Less(tilt, 0f, "tilts up toward it (the recomposer's tilt is positive downward)");
++        Assert.Less(Math.Abs(pan), 3f);
++        DeskSlides bad = DeskSlides.Approved();
++        bad.focusShare = 0.2f;
++        StringAssert.Contains("The framing focus narrows 0.2", string.Join("\n", bad.Problems(DeskHomeMap.Approved(), DeskHomeMap.SlideReach)));
++    }
++
++    [Test]
++    public void TheFocusShows_OnlyInTheReadingView_NothingHeld_NoBlend_MotionNotStill()
++    {
++        Assert.IsTrue(SlideFocus.Allowed(true, false, false, false), "the reading view, empty-handed, settled, motion on");
++        Assert.IsFalse(SlideFocus.Allowed(false, false, false, false), "the office view (Q5's default: the reading view only)");
++        Assert.IsFalse(SlideFocus.Allowed(true, true, false, false), "something held (CAM: refused while holding)");
++        Assert.IsFalse(SlideFocus.Allowed(true, false, true, false), "the drop tilt's blend (CAM: never while the reading blend runs)");
++        Assert.IsFalse(SlideFocus.Allowed(true, false, false, true), "Reduced Motion or no intensity (CAM: refused when motion is still)");
++    }
++
++    [Test]
++    public void TheLensNarrows_ByThePushInAndTheFocus_NeverPastTheCap_TheFocusGivingWay()
++    {
++        DeskSlides slides = DeskSlides.Approved();
++        Assert.AreEqual(4f, SlideFocus.Total(50f, 2.5f, 1.5f, slides.focusCap), 1e-5f, "the push-in's 2.5 and the focus's 1.5 degrees: 46 of the 50 the view entered at");
++        Assert.AreEqual(4f, SlideFocus.Total(50f, 2.5f, 2.2f, slides.focusCap), 1e-5f, "the focus's spring overshooting: still 8 % in all");
++        Assert.AreEqual(5f, SlideFocus.Total(50f, 5f, 1.5f, slides.focusCap), 1e-5f, "a push-in past the cap keeps its own: the focus gives way");
++        Assert.AreEqual(2.5f, SlideFocus.Total(50f, 2.5f, -0.3f, slides.focusCap), 1e-5f, "a focus easing out below nothing never widens the lens");
++        Assert.AreEqual(6f, SlideFocus.Total(50f, 2.5f, 3.5f, 0f), 1e-5f, "no cap");
++    }
++}
+diff --git a/Assets/Tests/EditMode/SlideFocusTests.cs.meta b/Assets/Tests/EditMode/SlideFocusTests.cs.meta
+new file mode 100644
+index 0000000000000000000000000000000000000000..a41c8e3fbe8962a828f0e67eb983f88dc102de11
+--- /dev/null
++++ b/Assets/Tests/EditMode/SlideFocusTests.cs.meta
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: 5d1426dbd8be42a18e39b825a6588be4
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
