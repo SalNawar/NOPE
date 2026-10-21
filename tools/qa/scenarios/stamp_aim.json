@@ -1,0 +1,917 @@
+{
+  "name": "stamp_aim",
+  "owner": "STAMP",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "STAMP R4 (docs/pending/STAMP.md) with the virtual mouse (P-SLOW, P-FAST, P-WOBBLE): day 12 (by the cheat jump, every item given), ten travellers. Each lays its papers in a pile on the mat in the office view, the passport last (on top), then works in the reading view: (b) on a 3-paper pile, an accepted stroke with a re-grab 2 frames after the let-go (c<k>) and three refused tries on the pile (b<k>_i); with fewer papers, the rulebook is dragged over part of the passport and the accepted stroke with the re-grab lands at its edge (c<k>); (a) every traveller: the rulebook over the passport and a try 5-8 mm inside its edge (a<k>), within the 1 cm the recipe names. Pass, every aim.*: the stamp lands on the aimed document within 3 mm of the pointer's spot on it; an accepted stroke prints once in its verdict's ink and the die stops within 0.5 mm of the surface; a refused one prints nothing; a re-grab carries nothing mid-stroke. Then (d) on the eleventh traveller in the office view, ten let-gos each over the rack's box, the chip reader, the scanner and the bare desk (letGo.*: over a prop no stroke, no cue, the dater seats; over the desk the thump, the die on the plane, the 6 mm bounce; letGoCarry.*: the recipe's literal per-frame line). Needs StampRig's ops."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "stampDump",
+      "name": "d12",
+      "text": "cases"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t1"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t1"
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "name": "c1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "f": 0.005,
+      "path": "Fast",
+      "name": "a1"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t1"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t2"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t2"
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "name": "c2"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "f": 0.005,
+      "path": "Wobble",
+      "name": "a2"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t2"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t3"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t3"
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "name": "c3"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "f": 0.005,
+      "path": "Slow",
+      "name": "a3"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t3"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t4"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "name": "c4"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.4,
+      "y": 0.6,
+      "path": "Slow",
+      "name": "b4_1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.6,
+      "y": 0.4,
+      "path": "Fast",
+      "name": "b4_2"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.5,
+      "y": 0.3,
+      "path": "Wobble",
+      "name": "b4_3"
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t4"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "path": "Fast",
+      "name": "a4"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t4"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t5"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "name": "c5"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.4,
+      "y": 0.6,
+      "path": "Slow",
+      "name": "b5_1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.6,
+      "y": 0.4,
+      "path": "Fast",
+      "name": "b5_2"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.5,
+      "y": 0.3,
+      "path": "Wobble",
+      "name": "b5_3"
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t5"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "path": "Wobble",
+      "name": "a5"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t5"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t6"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "name": "c6"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.4,
+      "y": 0.6,
+      "path": "Slow",
+      "name": "b6_1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.6,
+      "y": 0.4,
+      "path": "Fast",
+      "name": "b6_2"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.5,
+      "y": 0.3,
+      "path": "Wobble",
+      "name": "b6_3"
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t6"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "path": "Slow",
+      "name": "a6"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t6"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t7"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t7"
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "name": "c7"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "f": 0.005,
+      "path": "Fast",
+      "name": "a7"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t7"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t8"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t8"
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "name": "c8"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "f": 0.005,
+      "path": "Wobble",
+      "name": "a8"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t8"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t9"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "name": "c9"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.4,
+      "y": 0.6,
+      "path": "Slow",
+      "name": "b9_1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.6,
+      "y": 0.4,
+      "path": "Fast",
+      "name": "b9_2"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.5,
+      "y": 0.3,
+      "path": "Wobble",
+      "name": "b9_3"
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t9"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "path": "Slow",
+      "name": "a9"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t9"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampStack",
+      "x2": 0.45,
+      "y2": 0.1,
+      "name": "t10"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t10"
+    },
+    {
+      "op": "stampRegrab",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "name": "c10"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "f": 0.005,
+      "path": "Fast",
+      "name": "a10"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "t10"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampDump",
+      "name": "letgo"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "rack",
+      "path": "Plain",
+      "name": "rack1"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "chip",
+      "path": "Plain",
+      "name": "chip1"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "scanner",
+      "path": "Plain",
+      "name": "scanner1"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "desk",
+      "x": 0.4,
+      "y": 0.12,
+      "path": "Plain",
+      "name": "desk1"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "rack",
+      "path": "Fast",
+      "name": "rack2"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "chip",
+      "path": "Fast",
+      "name": "chip2"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "scanner",
+      "path": "Fast",
+      "name": "scanner2"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "desk",
+      "x": 0.35,
+      "y": 0.1,
+      "path": "Fast",
+      "name": "desk2"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "rack",
+      "path": "Slow",
+      "name": "rack3"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "chip",
+      "path": "Slow",
+      "name": "chip3"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "scanner",
+      "path": "Slow",
+      "name": "scanner3"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "desk",
+      "x": 0.55,
+      "y": 0.09,
+      "path": "Slow",
+      "name": "desk3"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "rack",
+      "path": "Wobble",
+      "name": "rack4"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "chip",
+      "path": "Wobble",
+      "name": "chip4"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "scanner",
+      "path": "Wobble",
+      "name": "scanner4"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "desk",
+      "x": 0.33,
+      "y": 0.13,
+      "path": "Wobble",
+      "name": "desk4"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "rack",
+      "path": "Plain",
+      "name": "rack5"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "chip",
+      "path": "Plain",
+      "name": "chip5"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "scanner",
+      "path": "Plain",
+      "name": "scanner5"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "desk",
+      "x": 0.45,
+      "y": 0.07,
+      "path": "Plain",
+      "name": "desk5"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "rack",
+      "path": "Fast",
+      "name": "rack6"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "chip",
+      "path": "Fast",
+      "name": "chip6"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "scanner",
+      "path": "Fast",
+      "name": "scanner6"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "desk",
+      "x": 0.38,
+      "y": 0.06,
+      "path": "Fast",
+      "name": "desk6"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "rack",
+      "path": "Slow",
+      "name": "rack7"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "chip",
+      "path": "Slow",
+      "name": "chip7"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "scanner",
+      "path": "Slow",
+      "name": "scanner7"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "desk",
+      "x": 0.47,
+      "y": 0.14,
+      "path": "Slow",
+      "name": "desk7"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "rack",
+      "path": "Wobble",
+      "name": "rack8"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "chip",
+      "path": "Wobble",
+      "name": "chip8"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "scanner",
+      "path": "Wobble",
+      "name": "scanner8"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "desk",
+      "x": 0.42,
+      "y": 0.15,
+      "path": "Wobble",
+      "name": "desk8"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "rack",
+      "path": "Plain",
+      "name": "rack9"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "chip",
+      "path": "Plain",
+      "name": "chip9"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "scanner",
+      "path": "Plain",
+      "name": "scanner9"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Approved",
+      "target": "desk",
+      "x": 0.58,
+      "y": 0.07,
+      "path": "Plain",
+      "name": "desk9"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "rack",
+      "path": "Fast",
+      "name": "rack10"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "chip",
+      "path": "Fast",
+      "name": "chip10"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "scanner",
+      "path": "Fast",
+      "name": "scanner10"
+    },
+    {
+      "op": "stampLetGo",
+      "text": "Denied",
+      "target": "desk",
+      "x": 0.48,
+      "y": 0.11,
+      "path": "Fast",
+      "name": "desk10"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "letgo"
+    }
+  ]
+}

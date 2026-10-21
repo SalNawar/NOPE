@@ -1,0 +1,96 @@
+{
+  "name": "stamp_rack",
+  "owner": "STAMP",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "STAMP R3 (docs/pending/STAMP.md) [BP]: 10 s at 30 fps on the rack in the reading view at H2 (12:00) and H5 (22:00), a case open (the daters stand), nothing moving; seqtools flicker on each (bp.stamp_rack.seq.rack*.flicker, the stamp.rackNoise gate, demo only) and the per-pixel luma std-dev over the tracked rack (< 2/255 while static; both need LIGHT's 16b). Run with tools/qa/run_player.py on the QA player; in the editor the numbers are indicative."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "move",
+      "x": 0.05,
+      "y": 0.95,
+      "n": 6
+    },
+    {
+      "op": "stampRackWatch",
+      "n": 1,
+      "name": "rack"
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "rack_h2",
+      "f": 10
+    },
+    {
+      "op": "hour",
+      "f": 22
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "record",
+      "name": "rack_h5",
+      "f": 10
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "stampRackWatch",
+      "n": 0,
+      "name": "rack"
+    }
+  ]
+}

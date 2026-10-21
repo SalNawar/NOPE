@@ -1,0 +1,173 @@
+{
+  "name": "stamp_case",
+  "owner": "STAMP",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "STAMP R2 and R6 (docs/pending/STAMP.md): golden seed 12345, day 1, one full case at A1 and one at A2 (hand-over, the reading view, a stamp with the correct dater, the hand-back onto the counter; a citation slip, if the call costs one, acknowledged), as a 30 fps SEQ. rackOverPaper.<aspect>: rack pixels over any paper = 0 in every frame (StampRig's ray grid). cradles.<aspect>: the DENIED cradle starts on the case's first frame and locks in under 0.3 s. tab.<aspect>: TAB takes the office view to the reading view with the whole rack in frame (CAM's request 6) and the daters lift and settle within 0.5 s; TAB again goes back. Needs StampRig's ops (Assets/Tests/PlayMode/STAMP)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "stampRackWatch",
+      "n": 1,
+      "name": "a1"
+    },
+    {
+      "op": "stampCradles",
+      "n": 1,
+      "name": "a1"
+    },
+    {
+      "op": "recStart",
+      "name": "case_a1"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "stampCradles",
+      "n": 0,
+      "name": "a1"
+    },
+    {
+      "op": "stampTab",
+      "name": "a1"
+    },
+    {
+      "op": "stampPaper",
+      "n": -1,
+      "x2": 0.5,
+      "y2": 0.12,
+      "name": "read_a1"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "read_a1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "case_a1"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "a1"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "stampRackWatch",
+      "n": 0,
+      "name": "a1"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "stampRackWatch",
+      "n": 1,
+      "name": "a2"
+    },
+    {
+      "op": "stampCradles",
+      "n": 1,
+      "name": "a2"
+    },
+    {
+      "op": "recStart",
+      "name": "case_a2"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "stampCradles",
+      "n": 0,
+      "name": "a2"
+    },
+    {
+      "op": "stampTab",
+      "name": "a2"
+    },
+    {
+      "op": "stampPaper",
+      "n": -1,
+      "x2": 0.5,
+      "y2": 0.12,
+      "name": "read_a2"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "read_a2"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "case_a2"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "a2"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "stampRackWatch",
+      "n": 0,
+      "name": "a2"
+    }
+  ]
+}
