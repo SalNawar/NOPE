@@ -3,10 +3,8 @@ using UnityEngine;
 [ExecuteAlways,DefaultExecutionOrder(210)]
 public sealed class HallMountedFixture : MonoBehaviour
 {
-    /// <summary>The lamp's light pool on the floor (the four-state baker's).</summary>
+    /// <summary>The lamp's light pool on the floor (uv centre xy, radii zw on the registered canvas): HallBakedLighting lights it by the lamp's lit share at night.</summary>
     public Vector4 floorPool;
-    /// <summary>The hall's lighting rig (the baker reads it).</summary>
-    public HallLightingRig rig;
     /// <summary>The housing drawing (NOPE/Hall Mounted Fixture), whose diffuser takes the light's level.</summary>
     public SpriteRenderer drawing;
     MaterialPropertyBlock properties;
