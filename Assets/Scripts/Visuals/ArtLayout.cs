@@ -207,11 +207,8 @@ public static class ArtLayout
             if (p == null || !p.rect.IsSet || (p.field >= 0 && Hidden(data, p.field)))
                 continue;
             string words = PrintText(p, data);
-            if (string.IsNullOrEmpty(words))
-                continue;
-            FaceRect place = On(p.rect);
-            bool hand = p.kind == ArtPrintKind.Signature || p.kind == ArtPrintKind.Office;
-            items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, -1, words, Grown(art.valueShare * place.Height, art.valueGrowth, ValueFill * place.Height), FormTextAlign.Left));
+            if (!string.IsNullOrEmpty(words))
+                items.Add(Print(p, On(p.rect), words, art));
         }
         return new PlacedForm(width, height, height, items, slots, new List<float> { 0f }, FormLayout.PrintUnit(spec, width, m));
     }
@@ -231,8 +228,10 @@ public static class ArtLayout
     /// long: a 7-character value (a Citizen ID) is one probe word as long as
     /// the longest, but a value of 8 to 12 characters is probed by words of 6
     /// at most and a 28-character one by words of 11 (CutWords measures the
-    /// names and origins whole; DOC-LOOK.md, "The words"). Empty when the art
-    /// fits.
+    /// names and origins whole; DOC-LOOK.md, "The words"). The prints are
+    /// not measured here: a Signature or Copy print of a name or an origin is
+    /// CutWords', a copy of any other field (TC-230's date stub) no check's.
+    /// Empty when the art fits.
     /// </summary>
     public static List<string> Problems(FormSpec spec, FormData probe, ITextMeasure measure)
     {
@@ -305,9 +304,12 @@ public static class ArtLayout
     /// against another paper): for each field, each of
     /// <paramref name="words"/>[field] (the content's longest words that field
     /// prints: its names' or its origins'), measured alone in the field's
-    /// value or hand style at the least size its place lets it shrink to; a
-    /// problem for each field one of whose words breaks there. Empty off the
-    /// art, without a measure, or when every word fits.
+    /// value or hand style at the least size its place lets it shrink to, and
+    /// again in each Signature or Copy print that reprints the field, in that
+    /// print's own place and style (a passport's signature is its name, in a
+    /// hand, in a narrower place: TC-101's, TC-620's); a problem for each
+    /// place (a field's, a print's) one of whose words breaks there. Empty
+    /// off the art, without a measure, or when every word fits.
     /// </summary>
     public static List<string> CutWords(FormSpec spec, IReadOnlyList<IReadOnlyList<string>> words, ITextMeasure measure)
     {
@@ -325,19 +327,31 @@ public static class ArtLayout
             if (item.Kind != FormItemKind.Text || item.Slot < 0 || (item.Role != FormTextRole.Value && item.Role != FormTextRole.Hand))
                 continue;
             int field = form.Slots[item.Slot].Field;
-            if (field < 0 || field >= words.Count || words[field] == null || reported.Contains(field))
+            if (reported.Contains(field) || !(Cut(art, item, WordsOf(words, field), measure) is string word))
                 continue;
-            float size = item.Size * FitFloorOf(art, item.Role);
-            foreach (string word in words[field])
-            {
-                if (string.IsNullOrEmpty(word) || !Breaks(measure, word, item.Role, size, item.Rect.Width))
-                    continue;
-                problems.Add($"field {field}'s value word '{word}' is wider than its place on the art even at its least size: the paper would cut it (re-lay the place, or shorten the content)");
-                reported.Add(field);
-                break;
-            }
+            problems.Add($"field {field}'s value word '{word}' is wider than its place on the art even at its least size: the paper would cut it (re-lay the place, or shorten the content)");
+            reported.Add(field);
+        }
+        foreach (ArtPrint p in art.prints ?? new ArtPrint[0])
+        {
+            if (p == null || !p.rect.IsSet || (p.kind != ArtPrintKind.Signature && p.kind != ArtPrintKind.Copy))
+                continue;
+            FormItem item = Print(p, p.rect.On(form.Width, form.PageHeight), PrintText(p, data), art);
+            if (Cut(art, item, WordsOf(words, p.field), measure) is string word)
+                problems.Add($"field {p.field}'s {p.kind} print word '{word}' is wider than the print's place on the art even at its least size: the paper would cut it (re-lay the print's place, or shorten the content)");
         }
         return problems;
+    }
+
+    /// <summary><paramref name="words"/>[<paramref name="field"/>], or null past them.</summary>
+    private static IReadOnlyList<string> WordsOf(IReadOnlyList<IReadOnlyList<string>> words, int field) =>
+        field >= 0 && field < words.Count ? words[field] : null;
+
+    /// <summary>The first of <paramref name="words"/> (null: none) that breaks in <paramref name="item"/>'s place, measured alone in its style at the least size its place lets it shrink to (FitFloorOf), or null when each fits.</summary>
+    private static string Cut(FormArt art, FormItem item, IReadOnlyList<string> words, ITextMeasure measure)
+    {
+        float size = item.Size * FitFloorOf(art, item.Role);
+        return words?.FirstOrDefault(w => !string.IsNullOrEmpty(w) && Breaks(measure, w, item.Role, size, item.Rect.Width));
     }
 
     /// <summary>The <paramref name="count"/> longest distinct words of <paramref name="texts"/> (TextFit.Words; blank texts skipped), in capitals as a printed form sets them (Capitals), the longest first: a field's words for CutWords, from the texts FieldWords.Of picks for it.</summary>
@@ -398,6 +412,13 @@ public static class ArtLayout
         float w = Math.Min(window.Width, window.Height * LookCanvas.PhotoAspect);
         float h = w / LookCanvas.PhotoAspect;
         return FaceRect.FromTop(window.CentreX - w / 2f, window.CentreY - h / 2f, w, h);
+    }
+
+    /// <summary>Print <paramref name="p"/> showing <paramref name="words"/> at <paramref name="place"/>, never picked: a Signature or an Office print in a hand, the rest as a value, each sized as a value of its place (valueShare, grown by valueGrowth, never past ValueFill of it). Place prints it; CutWords measures a Signature or Copy print's words in it.</summary>
+    private static FormItem Print(ArtPrint p, FaceRect place, string words, FormArt art)
+    {
+        bool hand = p.kind == ArtPrintKind.Signature || p.kind == ArtPrintKind.Office;
+        return new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, -1, words, Grown(art.valueShare * place.Height, art.valueGrowth, ValueFill * place.Height), FormTextAlign.Left);
     }
 
     /// <summary>The words a print shows from <paramref name="data"/> (empty: nothing to print).</summary>

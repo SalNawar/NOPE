@@ -118,9 +118,51 @@ public partial class FormLayoutTests
 
         words[0] = new[] { "OMAR", new string('W', 90) };
         var problems = ArtLayout.CutWords(spec, words, new FakeMeasure());
-        Assert.AreEqual(1, problems.Count, string.Join("; ", problems));
-        StringAssert.Contains("field 0", problems[0], "the paper would cut the name: a false discrepancy");
+        Assert.AreEqual(2, problems.Count, string.Join("; ", problems));
+        StringAssert.Contains("field 0's value word", problems[0], "the paper would cut the name: a false discrepancy");
+        StringAssert.Contains("field 0's Signature print word", problems[1], "and the signature that reprints it");
         Assert.IsEmpty(ArtLayout.CutWords(Booklet(), words, new FakeMeasure()), "a form off the art prints no cut words");
+    }
+
+    /// <summary>TC-101's name field and the Signature print that reprints it, placed as DocTemplate_TC101.asset places them (aspect 0.65435, valueShare 0.56, labelShare 0.6, the clean face printing its labels, grown x1.3 and x1.5; Booklet's blocks): the print is the tightest place a name prints, 0.232 of the page wide against the Name field's 0.370 (the re-verify of 5f80371, point 3).</summary>
+    private static FormSpec Tc101Name()
+    {
+        FormSpec spec = Booklet();
+        spec.look.aspect = 0.65435f;
+        spec.look.art = new FormArt
+        {
+            valueShare = 0.56f,
+            labelShare = 0.6f,
+            clean = true,
+            printLabels = true,
+            labelGrowth = 1.3f,
+            valueGrowth = 1.5f,
+            fields = new[] { new ArtField { field = 0, value = Box(0.5f, 0.63245f, 0.87016f, 0.66095f), label = Box(0.49597f, 0.61847f, 0.675f, 0.63113f), labelText = "SURNAME / GIVEN NAMES" } },
+            prints = new[] { new ArtPrint { kind = ArtPrintKind.Signature, field = 0, rect = Box(0.5f, 0.84828f, 0.73226f, 0.90264f) } }
+        };
+        return spec;
+    }
+
+    [Test]
+    public void CutWords_ANameReprintedAsASignatureOrACopy_IsMeasuredInThePrintsOwnPlace()
+    {
+        FormSpec spec = Tc101Name();
+        var words = new System.Collections.Generic.List<System.Collections.Generic.IReadOnlyList<string>> { new[] { "GIOVANFRANCESCO" } };
+        Assert.IsEmpty(ArtLayout.CutWords(spec, words, new FakeMeasure()), "the longest drawn name fits TC-101's signature at its least size");
+
+        // 30 letters fit the Name field's place at its least size (65 to a line here) but not the signature's (22): only the print cuts it
+        words[0] = new[] { "GIOVANFRANCESCO", new string('W', 30) };
+        var problems = ArtLayout.CutWords(spec, words, new FakeMeasure());
+        Assert.AreEqual(1, problems.Count, string.Join("; ", problems));
+        StringAssert.Contains("field 0's Signature print word '" + new string('W', 30) + "'", problems[0], "the paper would cut the signed name in the hand's place");
+
+        spec.look.art.prints[0].kind = ArtPrintKind.Copy;
+        problems = ArtLayout.CutWords(spec, words, new FakeMeasure());
+        Assert.AreEqual(1, problems.Count, string.Join("; ", problems));
+        StringAssert.Contains("field 0's Copy print word", problems[0], "a copy of the name is measured in its own place too");
+
+        words[0] = null;
+        Assert.IsEmpty(ArtLayout.CutWords(spec, words, new FakeMeasure()), "a print of a field with none of the content's words (TC-230's date stub) is not measured here");
     }
 
     [Test]

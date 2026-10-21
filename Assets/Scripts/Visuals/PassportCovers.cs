@@ -303,7 +303,7 @@ public static class ShutBox
 /// board: PaperCover.Bow) and a flat mark printed on it (the passport's
 /// emblem, the folder's seal) riding that bow, as a paper's prints ride its
 /// bend (DOC-LOOK re-verify, wave 2 point 8: shutting, the board rose up to
-/// 0.25 mm under the seal and 0.8 mm under the emblem, more than their 0.05
+/// 0.25 mm under the seal and 0.7 mm under the emblem, more than their 0.05
 /// and 0.1 mm gaps, so it came up through them). Pure, so the ride's
 /// arithmetic is tested headless (DocLookTests.CoverBow_*); PaperCover.Ride
 /// only puts its numbers on the mark's transform.

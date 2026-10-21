@@ -16,7 +16,8 @@ using UnityEngine;
 /// value face (FormStyleSO.artValueFont), the face its values print in
 /// (BUG-9: the check measured them in LiberationSans, so a value that fit the
 /// check overflowed its place on the paper), and none of the content's names
-/// or origins has a word wider than its place there even at the least size
+/// or origins has a word wider than its place there even at the least size,
+/// its field's place or a Signature or Copy print's that reprints it
 /// (ArtLayout.CutWords: the paper would cut it with a full stop, and a cut
 /// value reads as a false discrepancy against another paper).
 /// </summary>

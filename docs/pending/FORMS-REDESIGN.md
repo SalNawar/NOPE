@@ -1,6 +1,6 @@
 # FORMS-REDESIGN: the eight art forms read at the big mat (hand-off from DOC-LOOK)
 
-**Status:** a new track, not started. Written by DOC-LOOK (#9) on `fix/a-doc-look` as the hand-off the orchestrator asked for on 2026-10-20.
+**Status:** a new track, not started. Written by DOC-LOOK (#9) on `fix/a-doc-look` as the hand-off the orchestrator asked for on 2026-10-20. Ruled on 2026-10-21 (DECISIONS_1019a.md, "Orchestrator rulings (mine), 2026-10-21", item 5): DOC-LOOK writes this file, and the FORMS-REDESIGN track takes it over.
 
 **Why it exists.** The orchestrator's decision of 2026-10-20 on BUG-9 (Saleh's note 25, "tiny font"):
 - DOC-LOOK keeps its interim: the fit floor stays at 0.5 of the art's size, and labels grow x1.3.
@@ -24,7 +24,8 @@ These numbers come from the gate's own model (`DocLookChecks.CapModel`, `CapHeig
 - **Labels:** at least 6 px cap at A2, which is 9 px at A1. A label line is about **13 px** tall.
 - **Whole values:**
   - The paper never breaks a word across lines (`TextFit`, `TmpFormText.ArtFit`). It shrinks a value until its widest word fits its place, down to the least size; a word still too wide there is cut with a full stop, so every place must hold its value's widest word at the least size.
-  - The validator proves this for the content's names (on name and signature fields) and origins (`ArtLayout.CutWords`).
+  - The validator checks this for the content's names and origins (`ArtLayout.CutWords`): in their fields' places (name, signature and destination fields) and in the Signature or Copy prints that reprint them (TC-101's and TC-620's signatures, each in its own place). TC-101's signature is the tightest place a name prints today: 0.232 of the page wide, where "GIOVANFRANCESCO" takes about 79% at the least size.
+  - A Copy print of any other field is measured by no check: TC-230's stub repeats its Departure date (words of 4, about 24% of the stub's width at the least size). Section 5 moves Departure into that box, which makes it the field's own place.
   - Every other value is checked only through its probe (`ArtLayout.Problems`' word check). The probe's words are cut from "Middle Egyptian, hieroglyphs and a reed brush" and can be shorter than the value's own. So a status (8 characters, one word), an incident number (9), a credits figure (9) and a fact's word (13 or 14) are not measured whole today (DOC-LOOK.md, "The words (7)"). Each fits its place today; section 7 asks this track to prove it.
   - A value may wrap onto more lines at word breaks, if its place has the room for those lines.
 
@@ -230,7 +231,8 @@ Each form needs: new art (clean face), new `ArtField` places in its `DocTemplate
   - A place drawn for 2 or 3 lines needs an `ArtField.lines` (default 1). The value's size then comes from the place's height over its lines, and `ArtFit` wraps it there.
   - It needs tests in `FormLayoutTests` (one line by default; 2 lines fit a 43-character origin at the floor).
 - **Code needed: the validator measures every field's real widest word.**
-  - Today `ArtLayout.Problems` measures the probe's words (section 1), and only names and origins are measured whole (`ArtLayout.CutWords`).
+  - Today `ArtLayout.Problems` measures the probe's words (section 1), and only names and origins are measured whole (`ArtLayout.CutWords`, in their fields' places and in the Signature or Copy prints that reprint them).
+  - **The prints:** every `ArtPrint` that reprints a field is a place of its own. Keep each Signature print wide enough for the longest name at the least size (TC-101's signature is the tightest today), and if a Copy print of a field other than a name or an origin stays (TC-230's date stub, unless Departure moves into it), measure its widest word there too: `ArtLayout.Problems` measures only the fields' own places.
   - Give `CutWords` each field's real widest words: the facts' words for the fact categories, and each single-token category's widest value (a Citizen ID and a Displacement No. from `FieldLengths`' widest source, `AgencyNumbers.IncidentNumber` on the widest day, the longest `CitizenStatus` name, the number of `AccountMaker.Credits(AccountRanges.MaxDebt)`).
   - `FieldLengths` is Domain: expose the widest value itself there (agreed with its owner), not a second copy of its widest source.
   - Test it in `FormLayoutTests` through `FormLayout.Probe`, so the check is on the values production feeds it.

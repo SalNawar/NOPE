@@ -9,6 +9,7 @@ The commits:
 - The wave-2 fixes: they answer the re-verify (`reverify:DOC-LOOK:1`, WAVE2_OPEN.md) and record the orchestrator's three decisions of 2026-10-20. See "Wave 2" below.
 - The fixes for the re-verify of 460c564 (the wave-2 close). See "Re-verify of 460c564" below.
 - The fixes for the re-verify of ce69276. See "Re-verify of ce69276" below.
+- The fixes for the re-verify of 5f80371 (WAVE2_OPEN2.md, DOC-LOOK). See "Re-verify of 5f80371" below.
 
 Sources: FIX_PLAN §3 DOC-LOOK, FIX_PLAN_v2 §3 "DOC-LOOK: delta" (D3 and D15 decided; v2 wins), BUGLIST, DECISIONS_1019a (D3, D15, "keep a big mat size", DESK APPROVED), GAME_FEEL_BIBLE rows A1-A6 and A9, QA-RIG §4 and §8.
 
@@ -16,7 +17,7 @@ Sources: FIX_PLAN §3 DOC-LOOK, FIX_PLAN_v2 §3 "DOC-LOOK: delta" (D3 and D15 de
 
 ## Decided by the orchestrator (2026-10-20)
 
-These calls answer the re-verify's two blocking points (WAVE2_OPEN.md DOC-LOOK 3 and 4) and its new S3 bug (5). They are quoted here as given to DOC-LOOK. The decisions log (DECISIONS_1019a.md, "Orchestrator calls, wave 2 close") records 1 and 2 in short: the ownership, the interim, the FORMS-REDESIGN track and the known red. It does not record decision 2's hand-off bullet (DOC-LOOK writes `docs/pending/FORMS-REDESIGN.md`); that bullet is from the orchestrator's instructions to this track.
+These calls answer the re-verify's two blocking points (WAVE2_OPEN.md DOC-LOOK 3 and 4) and its new S3 bug (5). They are quoted here as given to DOC-LOOK. The decisions log (DECISIONS_1019a.md, "Orchestrator calls, wave 2 close") records 1 and 2 in short: the ownership, the interim, the FORMS-REDESIGN track and the known red. Decision 2's hand-off bullet (DOC-LOOK writes `docs/pending/FORMS-REDESIGN.md`) came from the orchestrator's instructions to this track, and the log records it since 2026-10-21 ("Orchestrator rulings (mine), 2026-10-21", item 5: DOC-LOOK writes the file as the hand-off, and the FORMS-REDESIGN track takes it over).
 
 1. **Ownership approved.** DOC-LOOK may edit `FormArt.cs` (`printLabels`, `labelGrowth`, `valueGrowth`, `Worded`) and add the one `cardFlex` line to `tools/qa/so_reader_allowlist.txt`.
 2. **BUG-9 interim approved.**
@@ -146,7 +147,9 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 
 | Values | Measured by | Whole? |
 |---|---|---|
-| Names (Name fields, and Signature fields since the re-verify) and origins (Destination fields) | `CutWords`: the content's 12 longest words per field | Yes |
+| Names (Name fields, and Signature fields since the re-verify) and origins (Destination fields) | `CutWords`: the content's 12 longest words per field, in the field's place | Yes |
+| The same names reprinted as Signature prints (TC-101's and TC-620's signatures; a Copy print of a name or an origin alike, none today) | `CutWords`, since the re-verify of 5f80371: the field's words, in the print's own place and style (a hand) | Yes. TC-101's signature is the tightest place a name prints: 0.232 of the page wide (its Name field's place is 0.370). "GIOVANFRANCESCO" takes about 79% of it at the least size, and about 20% of TC-620's |
+| TC-230's stub, a Copy print of its Departure date ("28 Sep 2150": words of 4) | nothing: `Problems` measures only the fields' own places, `CutWords` only names and origins | **No** (its words take about 24% of the stub's width at the least size) |
 | 7-character IDs (a Citizen ID or a Displacement No.: "ZZZ-999", "DP-9999") and transponder classes (7) | the probe "Middlee": one word of 7 | Yes (the value face is monospaced) |
 | Transponders (26 characters, words up to 9), employers (25, words up to 9), waiver numbers (7, probed at a book row's 28) | probe words of 9, 9 and 11 | Yes |
 | Statuses ("STANDARD", "ELIGIBLE": one word of 8; TC-101's Travel Class) | the probe "Middle E": words of 6 | **No** |
@@ -157,6 +160,7 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 
 - **Nothing is cut today.** From FORMS-REDESIGN's place widths, every word in a **No** row fits its place at the least size: Travel Class is 33 px wide at A1 against about 12 px for its 8 characters; Incident is 61 and 95 px against 44 px even at today's full size; the credits places are about 100 px against under 20 px; the facts' places are 73 to 90 px against about 23 px for 14 characters. No check proves it, offline or in the validator: only these figures do.
 - **Who closes it.** FORMS-REDESIGN re-lays every place, so its hand-off (section 7) asks it to measure each field's real widest word. Doing it here needs `FieldLengths`' widest values (Domain, not DOC-LOOK's file) and the facts' words.
+- **Signature prints** (closed in code by the re-verify of 5f80371): TC-101 and TC-620 reprint the name field as a Signature print (`ArtPrintKind.Signature`), which `Place` adds with no slot. `CutWords` now measures the field's words again in each Signature or Copy print that reprints it, in the print's own place and style (`ArtLayout.Print`, shared with `Place`). Test: `FormLayoutTests.CutWords_ANameReprintedAsASignatureOrACopy_IsMeasuredInThePrintsOwnPlace`, on TC-101's name field and signature as its asset places them. It fails without the change, and with Copy prints skipped.
 - **Signature fields** (closed in code by the re-verify of 460c564): `FieldWords.Of` gives them the names, since a holder signs with their given name (`CaseFactory`; "Giovanfrancesco" is 15). So `CutWords` measures them whole. `FormLayoutTests.FieldWords_*` tests the choice offline (it fails without the premades, without the Signature fields or without the origins). Only the validator's handing over of the library's lists is untested offline; R1 runs it.
 
 **The marks (8).**
@@ -196,7 +200,7 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 | 2 (S4) | `ContentWords`' premades and Signature additions had no test, and the FEATURES line attributed them to `CutWords_*` | **Fixed (path a).** The choice moved into a pure Domain helper, `FieldWords.Of`, with `ArtLayout.LongestWords` (Visuals) for the words. The validator's `ContentWords` only hands it the library's lists. New test `FormLayoutTests.FieldWords_NameAndSignatureFieldsMeasureThePlacesAndThePremadesNames_ADestinationTheOrigins`, also run through `CutWords`. The FEATURES line now names it. |
 | 3 (S4) | The `CoverBow` tests used a 0.12 x 0.25 m board and a 0.088 x 0.0625 m front, not the builder's, and the "0.8 mm (emblem)" came from the test's geometry | **Fixed (the first path).** All three `CoverBow_*` tests now use the builder's and TC-101's sizes, copied with their sources named (see "The marks (8)"). The unridden rise is 0.25 mm (seal) and 0.7 mm (emblem) at those sizes, and the doc says so. Two asserts were loosened to fit the real sizes: the seal turned more than 0.1 degrees (it turns about 0.35 and 0.16 degrees), the emblem tipped more than 0.5 degrees (about 1.1). |
 | 4 (nit) | `DocLookChecks`' comment said capModel is red until Saleh's call | Fixed: it points at the orchestrator's decision 2 and FORMS-REDESIGN. |
-| 5 (process) | `docs/pending/FORMS-REDESIGN.md` is a file named for another track; the decisions log does not record that DOC-LOOK writes it | **For the orchestrator** (no code change): confirm the hand-off bullet of decision 2 and that FORMS-REDESIGN takes the file over, or have INTEGRATION record it in the log. |
+| 5 (process) | `docs/pending/FORMS-REDESIGN.md` is a file named for another track; the decisions log does not record that DOC-LOOK writes it | **For the orchestrator** (no code change): confirm the hand-off bullet of decision 2 and that FORMS-REDESIGN takes the file over, or have INTEGRATION record it in the log. **Ruled** on 2026-10-21 (see "Re-verify of 5f80371", point 5). |
 
 **Re-checked** (2026-10-21, on this commit over 4290bd6; origin/main has not moved): compile_check 0 errors; runner `passed 3778, failed 0`; QA editor runner `passed 83, failed 0` (36 NeedsEditor skipped); tools/qa 35 OK.
 
@@ -204,6 +208,16 @@ DOC-LOOK recommended **1 + 2**. The orchestrator chose call 2, as the FORMS-REDE
 - `FieldWords.Of`: no premades, no Signature, Destination mapped off; `LongestWords`: no capitals, whole texts. Each fails `FieldWords_*`.
 - The eight `CoverBow` mutations at the as-built sizes: the bow's travel turned toward the free edge fails `Flat_*` and `AMarkOffCentre_*`; no ride, no bulge, half the bulge, the yaw's sign, the pitch's sign, no angles and the sheet's place ignored each fail `UnderTheBow_*` and `AMarkOffCentre_*`.
 - `DocLookOps.Expects` with shut and open swapped fails both `DocLookOpsTests`; matching any word that starts with the name fails `Expects_*`. `doclook_print` with the `open` step's text dropped, or with `folder_reshut` saying the folder is open, fails `DocLookPrint_*`.
+
+## Re-verify of 5f80371: what changed
+
+| # | Finding (WAVE2_OPEN2.md, DOC-LOOK) | Change |
+|---|---|---|
+| 3 (S4) | TC-101 and TC-620 reprint the name as a Signature print, which `Place` adds with slot -1; `CutWords` and `Problems` skip slot -1, so no check measured a name there, and four doc lines claimed none is ever cut | **Fixed (path a).** `CutWords` also measures each Signature or Copy print's field words in that print's own place and style: a new private `ArtLayout.Print` builds the print's item for both `Place` and `CutWords`, so the size is computed once. Its problem line names the print ("field 0's Signature print word ..."). New test `FormLayoutTests.CutWords_ANameReprintedAsASignatureOrACopy_IsMeasuredInThePrintsOwnPlace`, on TC-101's name field and signature as `DocTemplate_TC101.asset` places them: "GIOVANFRANCESCO" fits; a 30-letter word fits the name's place but not the signature's, and is one problem on the print; the same as a Copy print; a field with no content words is not measured. `CutWords_AContentWordWiderThanItsPlace*` now expects two problems, the name's place and its signature. The lines are corrected: the limit table (a row for the prints and one for TC-230's date stub, which no check measures), BUG-9's `CutWords` bullet, the FEATURES line, R1, `ArtLayout`'s and the validator's comments, and FORMS-REDESIGN.md (section 1; section 7 now names the prints). |
+| 4 (nit) | `CoverBow`'s summary still said 0.8 mm under the emblem | Fixed: 0.7 mm, the rise at the builder's sizes (`PassportCovers.cs`). |
+| 5 (process) | The decisions log did not record decision 2's hand-off bullet | **Ruled** by the orchestrator on 2026-10-21 (DECISIONS_1019a.md, "Orchestrator rulings (mine), 2026-10-21", item 5): DOC-LOOK writes `docs/pending/FORMS-REDESIGN.md` as the hand-off, and the FORMS-REDESIGN track takes the file over. Recorded in "Decided by the orchestrator", the ownership table and FORMS-REDESIGN.md's status line. |
+
+**Mutations** (offline runner, each alone, the file restored after): without the print measure, `CutWords_ANameReprinted*` and `CutWords_AContentWord*` fail; with Copy prints skipped, `CutWords_ANameReprinted*` fails.
 
 ## Ownership
 
@@ -215,7 +229,7 @@ Every file is DOC-LOOK's by FIX_PLAN §3 "Owns", FIX_PLAN_v2 §3 delta (D3: the 
 | `Assets/Scripts/Office/Desk/FolderCover.cs` (new) | D3's folder open and close, assigned to DOC-LOOK in Phase A (v2 decision table). It is built by `.DeskPaper.cs` and driven by `DeskRulebook.cs`, both DOC-LOOK's. |
 | `Assets/Scripts/Visuals/FormArt.cs` | **Approved** (orchestrator, 2026-10-20, decision 1). It is the serialized art-form type that the DocTemplate assets (DOC-LOOK's) hold, read only by `ArtLayout` (DOC-LOOK's) and the two `Worded` callers. Three fields are added (`printLabels`, `labelGrowth`, `valueGrowth`), and `Worded` changes. |
 | `tools/qa/so_reader_allowlist.txt` (one line) | **Approved** (orchestrator, 2026-10-20, decision 1). Cards are now rigid by rule (`PaperBend.FlexOf`, D3), so `MotionKnobs.cardFlex` has no reader left and `qa.so.readers` would refuse the merge. The line names BUG-11b / D3 and its owner, DOC-HANDLE, who deletes the knob with its 11a work; the line goes with it. |
-| `docs/pending/FORMS-REDESIGN.md` (new) | The hand-off the orchestrator asked for (decision 2). Named for another track: the orchestrator confirms that FORMS-REDESIGN takes it over (the re-verify of ce69276, point 5). |
+| `docs/pending/FORMS-REDESIGN.md` (new) | The hand-off the orchestrator asked for (decision 2). Named for another track: ruled on 2026-10-21 (DECISIONS_1019a.md, "Orchestrator rulings (mine), 2026-10-21", item 5), DOC-LOOK writes it and the FORMS-REDESIGN track takes the file over. |
 | `Assets/Scripts/Domain/FieldWords.cs` (new) | The validator's word sources for `ArtLayout.CutWords`, moved out of `ContentLibraryValidator.Forms` (DOC-LOOK's change) into Domain so they are tested (the re-verify of ce69276, point 2). It has no other reader. |
 | `Assets/Tests/PlayMode/DocLook/Editor/DocLookOpsTests.cs` (new) | QA-RIG §2: `Tests/PlayMode/DocLook/**` is DOC-LOOK's. It compiles into Assembly-CSharp-Editor (an `Editor` folder, as `QaRig/Editor`), so the QA editor runner runs it offline. |
 | `DeskDocument.Render.cs` declares `IPointerDownHandler` | The partial is DOC-LOOK's. If DOC-HANDLE (#8) adds an `OnPointerDown` to the logic partial for the press-frame pick-up, the two are a compile clash at the rebase: merge the bodies (`cover.Press()` plus DOC-HANDLE's). |
@@ -240,8 +254,8 @@ Not committed: `NOPE-feat-clock.sln` (IDE churn).
   - The rulebook's rows are only cut, never shrunk, because `LayRows` sets their size again afterwards.
 - **No value is cut by the fit, and the validator proves it for names and origins** (resubmission; the rest is the limit below):
   - `TmpFormText.ArtFit` picks the largest size at which the text fits its place **and** its widest word fits the place's width.
-  - `ArtLayout.CutWords` (in the validator) proves that the content's longest name words (every place's lists and every premade's name, on Name and Signature fields) and origin words fit at the least size. Together they mean `Unbreak` never cuts a name or an origin on an art document.
-  - Other fields keep the probe check (`ArtLayout.Problems`). Since wave 2 it also fails a probe word wider than its place at the least size. That covers a 7-character ID whole, but not a status, an incident number, a credits figure or a fact's word, whose probe words are shorter than their own. The full limit is the table under "Wave 2", point 7. Nothing is cut today, but for those fields no check proves it.
+  - `ArtLayout.CutWords` (in the validator) fails any of the content's longest name words (every place's lists and every premade's name, on Name and Signature fields) and origin words that does not fit at the least size, in its field's place and, since the re-verify of 5f80371, in each Signature or Copy print that reprints the field (TC-101's and TC-620's signatures). So when the validator reports no `CutWords` line (R1), `Unbreak` cuts no name or origin anywhere an art document prints one.
+  - Other fields keep the probe check (`ArtLayout.Problems`). Since wave 2 it also fails a probe word wider than its place at the least size. That covers a 7-character ID whole, but not a status, an incident number, a credits figure or a fact's word, whose probe words are shorter than their own. The full limit is the table under "Wave 2", point 7. A Copy print of any other field (TC-230's date stub) is measured by neither check. Nothing is cut today, but for those fields and that stub no check proves it.
 - **The 0.85 floor (a deviation, approved as the interim by decision 2).** `TextFit.Floor` = 0.85 marks a text fitted below it as shrunk (`TextFit.Shrunk`). The least size stays `TextFit.Least` 0.5 of the art's own size (`ArtLayout.FitFloorOf` = 0.5 / growth).
 - **The rulebook paginates before it shrinks** (`DeskRulebook.RowTextFloor` 0.6 → 1). Only a rule alone on its sheet shrinks: it stops at `TextFit.Floor` first and goes down to `RowTextLeast` only as a last resort.
 - **The validator measures in the art's value face.** `ContentLibraryValidator.Forms` measures an art form in `FormStyleSO.artValueFont`, not LiberationSans.
@@ -356,7 +370,7 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
   - `Subdivide` runs once per print. It makes at most 24 x 24 cells for a page-sized fill, usually 24 x 1 for a rule.
   - Pooling and pre-building are DOC-HANDLE's; measure on its call-next recipe.
 
-## Tests (offline: compile 0 errors; runner `passed 3778, failed 0` and QA editor runner `passed 83, failed 0` on 4290bd6, after the re-verify of ce69276)
+## Tests (offline: compile 0 errors; runner `passed 3779, failed 0` and QA editor runner `passed 83, failed 0` on 4290bd6, after the re-verify of 5f80371)
 
 | Test | Covers | Fails without the fix because |
 |---|---|---|
@@ -373,6 +387,7 @@ The tab plates sit on the folder's back board (`RulebookTabPlateLift` = `Ruleboo
 | `DocLookTests.SheetRelief_*`, `RankStrength_*` | BUG-12a corner, BUG-40c | new |
 | `FormLayoutTests.PrintLabels_*`, `Growth_*` (4), `FitFloorOf_*`, `CapHeight_Smallest_*` | BUG-9 re-layout | before, labels printed only when translated and sizes did not grow |
 | `FormLayoutTests.CutWords_*` | review 7: a content word wider than its place at the least size is a problem; a short one is not; no art, no problem | new |
+| `FormLayoutTests.CutWords_ANameReprintedAsASignatureOrACopy_IsMeasuredInThePrintsOwnPlace` | the re-verify of 5f80371, point 3: a name reprinted as TC-101's signature is measured in the print's own place, as a Signature and as a Copy print | `CutWords` skipped every print (slot -1): the 30-letter word gave no problem |
 | `FormLayoutTests.FieldWords_NameAndSignatureFieldsMeasureThePlacesAndThePremadesNames_ADestinationTheOrigins` | the re-verify of ce69276, point 2: a Name and a Signature field measure the places' and the premades' names, a Destination field the origins, other fields none; through `CutWords`, a premade's too-wide word is a cut on its field | `FieldWords` is new; each of five mutations (no premades, no Signature, no Destination, no capitals, whole texts) fails it |
 | `ArtSlotsTests.Mipmapped_AndTrilinear_*`, `OfficeImports_*` | BUG-29, 63; the AnimeHallLayers early return | new |
 | `DocLookTests.ShutBox_KeepsOnlyTheSideOfTheSpineThatShows` | wave 2, S3: a shut booklet's and folder's box keeps the shown side | `ShutBox` is new; the boxes were whole |
@@ -408,14 +423,14 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
   - Add: "the contact shadow darkens with stack rank (`PaperDepth.RankStrength`, once DOC-HANDLE raises `DeskEvents.StackChanged`)".
 - **63 (NEW badge):** "A red NEW badge over the rulebook's GUIDE tab" → "A red NEW sticker on the rulebook's GUIDE tab".
 - **194 (hover):** rewrite: "Hover: a paper, the rulebook folder and its tabs lift (Papers, Please-style; `IHoverLift`, `InteractionFeedbackSO.paperHoverLift`) with the hand cursor; a prop gets a 2 px rim round its silhouette on the office camera only (`HoverHull` stencil mask + screen-space push, `outlinePixels`); nothing hovers while something is held (Saleh's D15, BUG-10a); the traveller's hit zone gets the hand cursor only; desktop UI as before".
-- **New line (document text):** "Documents drawn on their art print every label over the clean face in the art's ink and grow their text as far as the art's places allow (`FormArt.printLabels`, `labelGrowth` 1.3, `valueGrowth` 1.5; a label over its value is re-laid as a band at the cell's top); no word ever breaks across lines (the fit keeps every word inside its place; a word that still does not fit is cut with a full stop); the validator proves no name (premades' included, on name and signature fields) or origin is ever cut (`ArtLayout.CutWords`) and checks every other value's probe words (`ArtLayout.Problems`; a probe's words can be shorter than a status's, an incident number's, a credits figure's or a fact's own); an Arabic text is laid line by line (`TmpFormText.Unbreak`, `TextFit`); the rulebook paginates before it shrinks and its lines sit on the ruled lines (`RuledLines`); the cap-height gate (`doclook.forms.capModel`, merge level; `doclook_cap`) holds data to ≥10 px cap at 1080p and ≥7 px at 720p, labels ≥6 px at 720p, and is red until FORMS-REDESIGN redesigns the 8 art forms (the orchestrator's decision of 2026-10-20) (tested: `DocLookTests`, `FormLayoutTests.Growth_*`, `CutWords_*`, `FieldWords_*`, `Problems_*`)".
+- **New line (document text):** "Documents drawn on their art print every label over the clean face in the art's ink and grow their text as far as the art's places allow (`FormArt.printLabels`, `labelGrowth` 1.3, `valueGrowth` 1.5; a label over its value is re-laid as a band at the cell's top); no word ever breaks across lines (the fit keeps every word inside its place; a word that still does not fit is cut with a full stop); the validator fails any name word (premades' included, on name and signature fields and the signature or copy prints that reprint them, each in its own place) or origin word wider than its place at the least size (`ArtLayout.CutWords`) and checks every other field's probe words (`ArtLayout.Problems`; a probe's words can be shorter than a status's, an incident number's, a credits figure's or a fact's own, and a copy print of another field, the entry ticket's date stub, is measured by neither); an Arabic text is laid line by line (`TmpFormText.Unbreak`, `TextFit`); the rulebook paginates before it shrinks and its lines sit on the ruled lines (`RuledLines`); the cap-height gate (`doclook.forms.capModel`, merge level; `doclook_cap`) holds data to ≥10 px cap at 1080p and ≥7 px at 720p, labels ≥6 px at 720p, and is red until FORMS-REDESIGN redesigns the 8 art forms (the orchestrator's decision of 2026-10-20) (tested: `DocLookTests`, `FormLayoutTests.Growth_*`, `CutWords_*`, `FieldWords_*`, `Problems_*`)".
 - **New line (import):** "Every texture under `Assets/Art/Office/` (never `AnimeHallLayers/`) imports with mipmaps, trilinear and BC7 (`OfficeArtImporter`; tested: `ArtSlotsTests.OfficeImports_*`; gate `doclook.import.office`)".
 
 ## RESULT
 
 **Offline:**
 - compile_check: 0 errors (Assembly-CSharp-Editor, TimeDeskEditMode).
-- runner: `passed 3778, failed 0` after the re-verify of ce69276 (3777 after the re-verify of 460c564; 3775 after wave 2; 3770 after the rebase onto 4290bd6; 3741 before it).
+- runner: `passed 3779, failed 0` after the re-verify of 5f80371 (3778 after the re-verify of ce69276; 3777 after the re-verify of 460c564; 3775 after wave 2; 3770 after the rebase onto 4290bd6; 3741 before it).
 - QA editor runner (`QA_PROJECT` set): `passed 83, failed 0`, 36 NeedsEditor skipped.
 - QA python tests: 35 OK.
 
@@ -430,7 +445,7 @@ Line numbers as of 4290bd6 (the same as at 9b8ab5f):
     - Run the EditMode suite.
   - **Pass:**
     - 0 compile errors.
-    - The validator reports no `would cut it` problem (`ArtLayout.CutWords`) and no new form-fit problem. `CutWords` now also measures Signature fields' names: TC-310's Signature place is about 53 px wide at A1, and "GIOVANFRANCESCO" needs about 23 px at the least size, so no line is expected.
+    - The validator reports no `would cut it` problem (`ArtLayout.CutWords`) and no new form-fit problem. `CutWords` now also measures Signature fields' names: TC-310's Signature place is about 53 px wide at A1, and "GIOVANFRANCESCO" needs about 23 px at the least size, so no line is expected. Since the re-verify of 5f80371 it also measures the names in TC-101's and TC-620's Signature prints; TC-101's is the tightest, and "GIOVANFRANCESCO" takes about 79% of its width at the least size, so no line is expected there either.
     - Wave 2's word check (`ArtLayout.Problems`: "has a word ... wider than its place") is new, and it measures the probe's words. Before acting on a line from it, measure the field's real widest word (the table under "Wave 2", point 7): a line on a date or a term can be a false alarm from the probe alone. A real cut is re-laid (FORMS-REDESIGN) or listed with the decision.
     - Every test passes except the known `UnitySkills ... SceneSummarize_CountsObjectsCorrectly`.
     - `QaEditorGateTests.EveryScenario_Reads_WithKnownOps` passes with `doclook_cap`, `doclook_print` and `doclook_hover` (the `capHeight` op is registered).
