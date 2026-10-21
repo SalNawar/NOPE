@@ -386,28 +386,63 @@ public static class FlowOps
         yield break;
     }
 
-    /// <summary>The armed load recording follows the scene change's marks: its sequence starts on the start mark and stops on the up mark.</summary>
+    /// <summary>The armed load recording follows the scene change's marks (<see cref="LoadMarkStepFor"/>): its sequence starts on the start mark and stops on the up mark.</summary>
     private static void OnLoadSignal(string channel, string name)
     {
-        if (channel != TransitRunner.TransitSignal || string.IsNullOrEmpty(name))
-            return;
         if (_loadRunner == null)
         {
             DisarmLoadRecording();
             return;
         }
-        if (!_loadRecording && name.StartsWith("start:"))
+        switch (LoadMarkStepFor(channel, name, _loadRecording))
         {
-            _loadRunner.Recorder.Begin(_loadSeq);
-            // The recorder heard this mark before its sequence began: it is written as the sequence's first event.
-            _loadRunner.Recorder.Mark(channel, name);
-            _loadRecording = true;
+            case LoadMarkStep.Begin:
+                _loadRunner.Recorder.Begin(_loadSeq);
+                // The recorder heard this mark before its sequence began: it is written as the sequence's first event.
+                _loadRunner.Recorder.Mark(channel, name);
+                _loadRecording = true;
+                break;
+            case LoadMarkStep.Stop:
+                _loadRunner.Recorder.Stop();
+                DisarmLoadRecording();
+                break;
         }
-        else if (_loadRecording && name.StartsWith("up:"))
-        {
-            _loadRunner.Recorder.Stop();
-            DisarmLoadRecording();
-        }
+    }
+
+    /// <summary>What an armed load recording (<c>flowRecLoad</c>) does on a QaSignals mark.</summary>
+    public enum LoadMarkStep
+    {
+        /// <summary>Not the recording's mark: nothing changes.</summary>
+        Ignore,
+
+        /// <summary>The load's start mark (the click's frame): the sequence begins.</summary>
+        Begin,
+
+        /// <summary>The load's up mark (the shutter off): the sequence stops.</summary>
+        Stop,
+    }
+
+    /// <summary>
+    /// The armed load recording's step on the mark <paramref name="name"/> of
+    /// <paramref name="channel"/> (pure, FLOW round 8; FlowSeamTests pin it):
+    /// it begins on the transit channel's <c>start:</c> mark while not
+    /// <paramref name="recording"/>, and stops on its <c>up:</c> mark while
+    /// recording. It ignores everything else: the <c>rise:</c> mark (the
+    /// shutter only starting up), another channel's marks, a nameless mark, a
+    /// second <c>start:</c> while recording (a load queued over one not yet
+    /// loaded: the sequence runs on to the first up mark), and an <c>up:</c>
+    /// before any start (a change already under way when the recording was
+    /// armed).
+    /// </summary>
+    public static LoadMarkStep LoadMarkStepFor(string channel, string name, bool recording)
+    {
+        if (channel != TransitRunner.TransitSignal || string.IsNullOrEmpty(name))
+            return LoadMarkStep.Ignore;
+        if (!recording && name.StartsWith("start:", System.StringComparison.Ordinal))
+            return LoadMarkStep.Begin;
+        if (recording && name.StartsWith("up:", System.StringComparison.Ordinal))
+            return LoadMarkStep.Stop;
+        return LoadMarkStep.Ignore;
     }
 
     /// <summary>Forgets the armed load recording (a sequence it started and did not stop ends with the run).</summary>

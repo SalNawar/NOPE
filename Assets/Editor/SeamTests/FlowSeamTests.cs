@@ -19,7 +19,10 @@ using UnityEngine.TestTools;
 /// checks that read results (round 7): each registered check passes on its
 /// exact results alone and is red with any one missing or (for flow.bp.load)
 /// measured in the editor, and FLOW's recipes produce every result id, each
-/// frozen one from a load recorded alone. Tests in the "NeedsEditor"
+/// frozen one from a load recorded alone. Round 8: only flow.bp.load is
+/// DemoOnly, so DemoGate's merge level runs every other FLOW check, and
+/// flowRecLoad's sequence begins on the load's start mark and stops on its up
+/// mark (FlowOps.LoadMarkStepFor). Tests in the "NeedsEditor"
 /// category create Unity objects or load scenes and run only inside Unity;
 /// the recipes' test reads the project (QA_PROJECT outside Unity).
 /// </summary>
@@ -82,12 +85,55 @@ public class FlowSeamTests
         new Lazy<List<RegisteredCheck>>(() => GateChecks.All(new[] { typeof(FlowChecks).Assembly }).Where(c => c.Info.Owner == "FLOW").ToList());
 
     [Test]
-    public void EveryFlowCheckThatReadsResults_IsListedWithItsResults()
+    public void EveryFlowCheckThatReadsResults_IsListedWithItsResults_AndOnlyTheBuiltPlayersIsDemoOnly()
     {
         List<RegisteredCheck> reading = FlowRegistered.Value.Where(c => c.Info.Kind != GateKind.Static).ToList();
         CollectionAssert.AreEquivalent(ResultChecks.Select(c => c.Check), reading.Select(c => c.Info.Id));
         foreach (RegisteredCheck c in reading)
             Assert.AreEqual(c.Info.Kind == GateKind.BuiltPlayer, Spec(c.Info.Id).BuiltPlayer, $"{c.Info.Id}: a built-player check exactly when it requires a built player's results");
+        // Round 8: DemoGate's merge level skips a DemoOnly check unread, so a check marked DemoOnly by mistake passes every merge.
+        // Every FLOW check, the static ones included, is DemoOnly exactly when it is the built player's (flow.bp.load).
+        Assert.IsTrue(FlowRegistered.Value.Any(c => c.Info.Kind == GateKind.Static), "FLOW's static checks are read too");
+        foreach (RegisteredCheck c in FlowRegistered.Value)
+            Assert.AreEqual(c.Info.Kind == GateKind.BuiltPlayer, c.Info.DemoOnly, $"{c.Info.Id}: DemoOnly exactly when it is a built-player check (only flow.bp.load waits for the demo gate)");
+    }
+
+    [Test]
+    public void ALoadRecording_BeginsOnTheStartMark_AndStopsOnTheUpMark_ReadingNoOtherMark()
+    {
+        // Round 8: flowRecLoad's sequence is the load alone, from the start mark (the click's frame) to the up mark (the shutter off).
+        // A sequence begun on the rise would hold only the rise (no lowered-shutter frame read), and one never stopped runs on over the settled scene.
+        const string T = TransitRunner.TransitSignal;
+        Assert.AreEqual("start:TitleScene .. up:TitleScene", Recorded((T, "start:TitleScene"), (T, "rise:TitleScene"), (T, "up:TitleScene")));
+        // Another channel's marks, and nameless ones, are not the load's.
+        Assert.AreEqual("none", Recorded(("other", "start:TitleScene"), (T, null), (T, string.Empty), ("other", "up:TitleScene")));
+        Assert.AreEqual("start:TitleScene .. not stopped", Recorded((T, "start:TitleScene"), (T, "rise:TitleScene"), ("other", "up:TitleScene")));
+        // A queued load (flowQueue's marks): the second start does not begin again, the sequence runs on to the first up mark, and the recording is disarmed after it.
+        Assert.AreEqual("start:A .. up:B", Recorded((T, "start:A"), (T, "start:B"), (T, "rise:B"), (T, "up:B"), (T, "start:C"), (T, "up:C")));
+        // Armed during a change: its rise and up begin nothing, and the next load's start does.
+        Assert.AreEqual("start:B .. up:B", Recorded((T, "rise:A"), (T, "up:A"), (T, "start:B"), (T, "rise:B"), (T, "up:B")));
+        Assert.AreEqual(FlowOps.LoadMarkStep.Ignore, FlowOps.LoadMarkStepFor(T, "rise:A", true), "the rise neither begins nor stops a sequence");
+        Assert.AreEqual(FlowOps.LoadMarkStep.Ignore, FlowOps.LoadMarkStepFor(T, "up:A", false), "an up mark before any start stops nothing");
+    }
+
+    /// <summary>
+    /// The span an armed load recording records over <paramref name="marks"/>,
+    /// as FlowOps steps it (FlowOps.LoadMarkStepFor; the recording is disarmed
+    /// once it stops): "&lt;begin mark&gt; .. &lt;stop mark&gt;", ".. not stopped", or "none".
+    /// </summary>
+    private static string Recorded(params (string Channel, string Name)[] marks)
+    {
+        string begin = null;
+        foreach ((string channel, string name) in marks)
+            switch (FlowOps.LoadMarkStepFor(channel, name, begin != null))
+            {
+                case FlowOps.LoadMarkStep.Begin:
+                    begin = name;
+                    break;
+                case FlowOps.LoadMarkStep.Stop:
+                    return $"{begin} .. {name}";
+            }
+        return begin == null ? "none" : $"{begin} .. not stopped";
     }
 
     [Test]
