@@ -19,9 +19,12 @@ using UnityEngine.Experimental.Rendering;
 /// with no single-frame full-screen jump, also when turned back under way
 /// (BUG-32c; seqtools cuts on pc_open, pc_close, pc_reverse_open and
 /// pc_reverse_close, all recorded with full motion, and the glass on each
-/// reversing frame). A check that judges more than one result requires each
-/// by its own id (<see cref="JudgeEach"/>), so a result never written fails
-/// by name instead of the measured ones passing for it.
+/// reversing frame), and nothing on the PC under the cheat panel (the
+/// InputGate, BUG-68a). Every play check requires each of its results by its
+/// own id (<see cref="JudgeEach"/>), so a result never written fails by name
+/// instead of the measured ones passing for it; each reads them through
+/// <see cref="Source"/>, so UiPcChecksTests runs every [GateCheck] method
+/// itself on given results against the exact ids it must require.
 /// </summary>
 public static class UiPcChecks
 {
@@ -34,10 +37,10 @@ public static class UiPcChecks
     public static readonly string[] Recordings = { "pc_open", "pc_close", "pc_reverse_open", "pc_reverse_close" };
 
     /// <summary>The results <c>uipc.transitions</c> requires: seqtools cuts on each of <see cref="Recordings"/> (recipe 3), each by its own id.</summary>
-    public static IEnumerable<string> TransitionIds => Recordings.Select(r => $"{Session}.seq.{r}.cuts");
+    public static readonly string[] TransitionIds = Recordings.Select(r => $"{Session}.seq.{r}.cuts").ToArray();
 
     /// <summary>The results <c>uipc.fullmotion</c> requires: uipcFullMotion's assert before each of <see cref="Recordings"/>.</summary>
-    public static IEnumerable<string> FullMotionIds => Recordings.Select(r => $"{Session}.fullmotion.{r}");
+    public static readonly string[] FullMotionIds = Recordings.Select(r => $"{Session}.fullmotion.{r}").ToArray();
 
     /// <summary>The results <c>uipc.reverse</c> requires: both moves turned back under way (uipcReverseOpen, uipcReverseClose).</summary>
     public static readonly string[] ReverseIds = { Session + ".reverse.open", Session + ".reverse.close" };
@@ -97,31 +100,31 @@ public static class UiPcChecks
 
     /// <summary>Esc on the PC brings Settings to the front and the PC stays open (R3/R4).</summary>
     [GateCheck("uipc.esc", Owner, GateKind.Play)]
-    public static GateResult Esc() => GateResults.Require("uipc.esc", Owner, "ui_pc_session.esc");
+    public static GateResult Esc() => RequireEach("uipc.esc", Session + ".esc");
 
     /// <summary>With the screen off, Esc turns it on and brings Settings forward; a right-click does nothing; the PC stays open (R3/R4).</summary>
     [GateCheck("uipc.escdark", Owner, GateKind.Play)]
-    public static GateResult EscDark() => GateResults.Require("uipc.escdark", Owner, "ui_pc_session.escdark");
+    public static GateResult EscDark() => RequireEach("uipc.escdark", Session + ".escdark");
 
     /// <summary>A click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</summary>
     [GateCheck("uipc.room", Owner, GateKind.Play)]
-    public static GateResult Room() => GateResults.Require("uipc.room", Owner, "ui_pc_session.room");
+    public static GateResult Room() => RequireEach("uipc.room", Session + ".room");
 
     /// <summary>8+ windows: a labelled button or a place behind the chevron for each, nothing over the tray, the chevron brings each forward (BUG-21a).</summary>
     [GateCheck("uipc.windows", Owner, GateKind.Play)]
-    public static GateResult Windows() => GateResults.Require("uipc.windows", Owner, "ui_pc_session.windows");
+    public static GateResult Windows() => RequireEach("uipc.windows", Session + ".windows");
 
     /// <summary>One action per Enter, and two quick Enters act once (BUG-58a, CODE-117).</summary>
     [GateCheck("uipc.enter", Owner, GateKind.Play)]
-    public static GateResult Enter() => GateResults.Require("uipc.enter", Owner, "ui_pc_session.enter");
+    public static GateResult Enter() => RequireEach("uipc.enter", Session + ".enter");
 
     /// <summary>Ctrl+= zooms the Orders tree to 150 %.</summary>
     [GateCheck("uipc.zoom", Owner, GateKind.Play)]
-    public static GateResult Zoom() => GateResults.Require("uipc.zoom", Owner, "ui_pc_session.zoom");
+    public static GateResult Zoom() => RequireEach("uipc.zoom", Session + ".zoom");
 
     /// <summary>The balance is the same in the Account, Orders and the office's readout, and the Account follows it live in place (BUG-58a).</summary>
     [GateCheck("uipc.balance", Owner, GateKind.Play)]
-    public static GateResult Balance() => GateResults.Require("uipc.balance", Owner, "ui_pc_session.balance");
+    public static GateResult Balance() => RequireEach("uipc.balance", Session + ".balance");
 
     /// <summary>A right-click and Esc during the power-on (full motion and Reduced Motion): the PC stays open and Settings comes forward (R3/R4: the keys and the back-out are the PC's from the press frame).</summary>
     [GateCheck("uipc.poweron", Owner, GateKind.Play)]
@@ -129,19 +132,23 @@ public static class UiPcChecks
 
     /// <summary>A click on the bezel leaves the PC (R3/R4).</summary>
     [GateCheck("uipc.bezel", Owner, GateKind.Play)]
-    public static GateResult Bezel() => GateResults.Require("uipc.bezel", Owner, "ui_pc_session.bezel");
+    public static GateResult Bezel() => RequireEach("uipc.bezel", Session + ".bezel");
+
+    /// <summary>With the cheat panel open over the PC (it holds the InputGate), Esc and a right-click reach nothing on the PC: neither is taken by the desktop, Settings does not come forward and the PC stays open; the panel closed, the gate is free (RUN-SAFE's BUG-68a contract: "the PC's input handlers stand still").</summary>
+    [GateCheck("uipc.gate", Owner, GateKind.Play)]
+    public static GateResult Gate() => RequireEach("uipc.gate", Session + ".gate");
 
     /// <summary>The tray clock reads the shift clock over today's date; no CRT box; no credits in the tray.</summary>
     [GateCheck("uipc.tray", Owner, GateKind.Play)]
-    public static GateResult Tray() => GateResults.Require("uipc.tray", Owner, "ui_pc_session.tray");
+    public static GateResult Tray() => RequireEach("uipc.tray", Session + ".tray");
 
     /// <summary>A double-click on an orderable card places exactly one order, charged once.</summary>
     [GateCheck("uipc.order", Owner, GateKind.Play)]
-    public static GateResult Order() => GateResults.Require("uipc.order", Owner, "ui_pc_session.order");
+    public static GateResult Order() => RequireEach("uipc.order", Session + ".order");
 
     /// <summary>Orders keeps its scroll, its chosen card and its zoom across minimise and restore by its own buttons.</summary>
     [GateCheck("uipc.restore", Owner, GateKind.Play)]
-    public static GateResult Restore() => GateResults.Require("uipc.restore", Owner, "ui_pc_session.restore");
+    public static GateResult Restore() => RequireEach("uipc.restore", Session + ".restore");
 
     /// <summary>The PC's open and close have no single-frame full-screen jump, also when turned back under way (seqtools cuts on each of the session's sequences pc_open, pc_close, pc_reverse_open and pc_reverse_close; one not judged fails by name).</summary>
     [GateCheck("uipc.transitions", Owner, GateKind.Play)]
@@ -155,9 +162,21 @@ public static class UiPcChecks
     [GateCheck("uipc.reverse", Owner, GateKind.Play)]
     public static GateResult Reverse() => RequireEach("uipc.reverse", ReverseIds);
 
-    /// <summary><see cref="JudgeEach"/> on the results folder at HEAD (GateResults.Require's sources).</summary>
-    private static GateResult RequireEach(string checkId, IEnumerable<string> ids) =>
-        JudgeEach(checkId, ids, GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot));
+    /// <summary>
+    /// Where the play checks read their results and the commit those must be
+    /// measured at: the results folder and HEAD (GateResults.Require's
+    /// sources). UiPcChecksTests points it at given results to run each
+    /// [GateCheck] method itself, as DemoGate does, offline (the folder's path
+    /// reads Application.dataPath), and puts it back.
+    /// </summary>
+    internal static System.Func<(List<QaGateResult> results, string head)> Source = () => (GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot));
+
+    /// <summary><see cref="JudgeEach"/> of check <paramref name="checkId"/> on each of <paramref name="ids"/>, on <see cref="Source"/>'s results at its HEAD.</summary>
+    private static GateResult RequireEach(string checkId, params string[] ids)
+    {
+        (List<QaGateResult> results, string head) = Source();
+        return JudgeEach(checkId, ids, results, head);
+    }
 
     /// <summary>
     /// The verdict of check <paramref name="checkId"/> that requires every one
@@ -172,7 +191,9 @@ public static class UiPcChecks
         List<QaGateResult> all = results.ToList();
         List<string> list = ids.ToList();
         List<GateResult> parts = list.Select(id => GateResults.Judge(checkId, Owner, id, all, head, false)).ToList();
-        return GateResult.Of(checkId, Owner, list.Count > 0 && parts.All(r => r.Pass), string.Join("; ", list.Zip(parts, (id, r) => $"{id}: {r.Measured}")),
-            string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
+        bool pass = list.Count > 0 && parts.All(r => r.Pass);
+        // Passing, each result's own measurement (what the run saw); failing, only what failed.
+        return GateResult.Of(checkId, Owner, pass, string.Join("; ", list.Zip(parts, (id, r) => $"{id}: {r.Measured}")),
+            string.Join("; ", parts.Where(r => pass || !r.Pass).Select(r => r.Detail)));
     }
 }

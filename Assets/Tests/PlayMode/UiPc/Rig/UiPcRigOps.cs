@@ -20,6 +20,7 @@ using UnityEngine.UI;
 /// <list type="bullet">
 /// <item><c>uipcEsc</c>: Esc on the PC brings Settings to the front and the PC stays open (R3/R4).</item>
 /// <item><c>uipcEscDark</c>: with the screen turned off by the frame's power button, Esc turns it on and brings Settings forward, a right-click does nothing, and the PC stays open (R3/R4).</item>
+/// <item><c>uipcGate</c>: with the cheat panel opened over the PC by its key (F9; it holds the InputGate), a right-click and Esc reach nothing on the PC: neither is taken by the desktop, Settings does not come forward and the PC stays open; F9 closes the panel and frees the gate (RUN-SAFE's BUG-68a contract).</item>
 /// <item><c>uipcRoom</c>: a click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</item>
 /// <item><c>uipcBezel</c>: a click on the bezel leaves the PC (R3/R4: "press Q or click the bezel").</item>
 /// <item><c>uipcPowerOn</c>: a right-click and Esc a few frames after Q, while the picture still powers on (the desktop's clicks wait for it): each is taken by the desktop, the PC stays open and Esc brings Settings forward, with full motion and with Reduced Motion, and the player's motion choice is put back whatever the passes did (R3/R4: "Esc = Settings everywhere").</item>
@@ -48,6 +49,7 @@ public static class UiPcRigOps
     {
         QaRunner.RegisterOp("uipcEsc", Esc);
         QaRunner.RegisterOp("uipcEscDark", EscDark);
+        QaRunner.RegisterOp("uipcGate", Gate);
         QaRunner.RegisterOp("uipcRoom", Room);
         QaRunner.RegisterOp("uipcBezel", Bezel);
         QaRunner.RegisterOp("uipcPowerOn", PowerOn);
@@ -109,6 +111,56 @@ public static class UiPcRigOps
         runner.Assert("escdark", Owner, dark && afterRight && lit && front && open,
             $"power button: screen {(dark ? "off" : "still on")}; right-click: {(afterRight ? "nothing" : "changed something")}; Esc: screen {(lit ? "on" : "off")}, settings {(front ? "in front" : "not shown")}, pc {(open ? "open" : "closed")}",
             "with the screen off, Esc still opens Settings (and turns the screen on) and nothing but Q and the bezel leaves the PC (R3/R4)");
+    }
+
+    /// <summary>
+    /// The cheat panel over the PC (asserts <c>gate</c>): with the PC open and
+    /// Settings closed, F9 opens the panel, which holds the InputGate
+    /// (DebugPanelController); a right-click and then Esc are pressed under
+    /// it. Neither may be taken by the desktop in its frame
+    /// (<see cref="DesktopKeyboard.EscapeTakenFrame"/>), Settings must not come
+    /// forward behind the panel and the PC must stay open: while the gate is
+    /// held, "the PC's input handlers stand still" (RUN-SAFE's BUG-68a
+    /// contract; the review of 83a53e8 found DesktopKeyboard's main path never
+    /// read the gate). F9 then closes the panel, and the gate must be free.
+    /// No wait here can throw, so the panel is always closed again when F9
+    /// opened it: a panel left open would hold the gate over every later step.
+    /// </summary>
+    private static IEnumerator Gate(QaRunner runner, QaStep step)
+    {
+        OfficeViewController view = QaGame.Find<OfficeViewController>();
+        DesktopKeyboard keys = QaGame.Find<DesktopKeyboard>();
+        DesktopWindow settings = Window<SettingsWindowController>();
+        if (view == null || keys == null || settings == null || !PcOpen(view) || InputGate.Blocked)
+        {
+            runner.Assert("gate", Owner, false, "no open PC, desktop keys or Settings, or the gate already held", "run it with the PC open in the office and no overlay open");
+            yield break;
+        }
+        if (settings.IsOpen)
+            settings.Close(); // a press that reached the PC would bring it back
+        yield return QaGame.Frames(2);
+        yield return runner.Input.Tap(Key.F9); // the cheat panel opens over the PC and holds the InputGate
+        bool held = InputGate.Blocked;
+
+        InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position }.WithButton(MouseButton.Right));
+        yield return null; // the game sees the right-click this frame
+        bool rightTaken = keys.EscapeTakenFrame == Time.frameCount;
+        InputSystem.QueueStateEvent(runner.Input.Mouse, new MouseState { position = runner.Input.Position });
+        yield return null;
+
+        InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState(Key.Escape));
+        yield return null; // the game sees the Esc this frame
+        bool escTaken = keys.EscapeTakenFrame == Time.frameCount;
+        InputSystem.QueueStateEvent(runner.Input.Keyboard, new KeyboardState());
+        yield return QaGame.Frames(3);
+        bool shown = settings.IsOpen && !settings.IsMinimised, open = PcOpen(view);
+
+        if (held)
+            yield return runner.Input.Tap(Key.F9); // the panel closes and lets the gate go
+        bool released = !InputGate.Blocked;
+        runner.Assert("gate", Owner, held && !rightTaken && !escTaken && !shown && open && released,
+            $"cheat panel {(held ? "open, gate held" : "not opened by F9")}; right-click {(rightTaken ? "taken by the desktop" : "not taken")}; Esc {(escTaken ? "taken by the desktop" : "not taken")}: settings {(shown ? "brought forward" : "not shown")}, pc {(open ? "open" : "closed")}; panel closed: gate {(released ? "free" : "still held")}",
+            "while the cheat panel holds the InputGate the PC's input handlers stand still (RUN-SAFE BUG-68a): an Esc must not bring Settings forward behind the panel, and nothing leaves the PC");
     }
 
     /// <summary>

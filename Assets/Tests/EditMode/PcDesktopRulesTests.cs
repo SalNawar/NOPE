@@ -4,8 +4,8 @@ using NUnit.Framework;
 
 /// <summary>
 /// UI-PC's pure rules (FIX_PLAN v1 §3 UI-PC "Tests", v2 delta): the PC's
-/// back-out (Esc brings Settings forward, a right-click never leaves the PC),
-/// one action per input (the Order debounce), the mid-shift quit warning,
+/// back-out (Esc brings Settings forward, a right-click never leaves the PC)
+/// and what its keyboard polls (nothing while the InputGate is held), one action per input (the Order debounce), the mid-shift quit warning,
 /// the inbox without its automatic copies, the flash budget (G3), the CRT's
 /// power-on line, a scanned page's fit under the text zoom (CODE-111), Orders'
 /// inputs, and the tray clock's date (24:00 is the shift clock's own).
@@ -501,6 +501,28 @@ public class PcDesktopRulesTests
     public void BackOut_ScreenOff_ARightClickIsSwallowed_NeverLeaves()
     {
         Assert.AreEqual(PcBackOutStep.Swallow, PcBackOut.ScreenOff(false));
+    }
+
+    // --- What the PC's keyboard polls in a frame (RUN-SAFE's BUG-68a contract: while the cheat panel holds the InputGate, "the PC's input handlers stand still") ---
+
+    [Test]
+    public void Poller_GateHeld_NothingRuns_InEveryPcState()
+    {
+        foreach (bool interactive in new[] { false, true })
+        foreach (bool open in new[] { false, true })
+        foreach (bool lit in new[] { false, true })
+            Assert.AreEqual(PcPoller.None, PcBackOut.Poller(true, interactive, open, lit),
+                $"interactive {interactive}, open {open}, screen on {lit}: an Esc under the cheat panel must not bring Settings forward behind it");
+    }
+
+    [Test]
+    public void Poller_GateFree_TheDesktopWhileItTakesInput_TheScreenOffBackOutWhileDark_ElseNothing()
+    {
+        Assert.AreEqual(PcPoller.Desktop, PcBackOut.Poller(false, true, true, true), "the desktop takes input (from the press frame)");
+        Assert.AreEqual(PcPoller.ScreenOff, PcBackOut.Poller(false, false, true, false), "the PC open with its screen off");
+        Assert.AreEqual(PcPoller.None, PcBackOut.Poller(false, false, true, true), "open and lit but taking no input (under a newsletter)");
+        Assert.AreEqual(PcPoller.None, PcBackOut.Poller(false, false, false, false), "the PC closed, its screen off");
+        Assert.AreEqual(PcPoller.None, PcBackOut.Poller(false, false, false, true), "the PC closed");
     }
 
     // --- One press, one sound (BUG-21c, F2), and a switch's own cue (F3: "ui_toggle on each switch") ---

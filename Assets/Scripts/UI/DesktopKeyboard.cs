@@ -24,7 +24,11 @@ using UnityEngine.InputSystem;
 /// With the PC open and its screen off (the desktop takes no input) it
 /// still takes the back-out: Esc turns the screen on and brings Settings
 /// forward, a right-click does nothing (PcBackOut.ScreenOff; R3/R4: "Esc
-/// opens the same Settings window everywhere"). F1 (and the app's Keys button) shows or hides the shortcut card; the
+/// opens the same Settings window everywhere"). While an overlay holds the
+/// InputGate (the cheat panel over the PC; RUN-SAFE's BUG-68a contract) it
+/// polls nothing at all: no key, no right-click, no screen-off back-out, so
+/// an Esc there never brings Settings forward behind the panel
+/// (PcBackOut.Poller). F1 (and the app's Keys button) shows or hides the shortcut card; the
 /// icons take the arrows and Enter while no window has the focus; Ctrl+V
 /// with Notes focused adds the clip as a clipping; with Orders focused the
 /// arrows walk its tree, Enter acts on the selected node and Ctrl+=, Ctrl+-
@@ -126,14 +130,15 @@ public sealed class DesktopKeyboard : MonoBehaviour
             card.Open();
     }
 
-    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input, from the press frame (never gated on the raycaster, which the picture's power-on holds off: an Esc or a right-click then must still be the PC's, never the office's way out).</summary>
+    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input, from the press frame (never gated on the raycaster, which the picture's power-on holds off: an Esc or a right-click then must still be the PC's, never the office's way out); nothing while the InputGate is held (PcBackOut.Poller).</summary>
     private void Update()
     {
-        if (screen == null || !screen.IsInteractive)
-        {
+        // Nothing while the cheat panel holds the InputGate (BUG-68a); the screen-off back-out on a dark PC; else the desktop's keys while it takes input.
+        PcPoller poller = PcBackOut.Poller(InputGate.Blocked, screen != null && screen.IsInteractive, frame != null && frame.IsOpen, screen == null || screen.IsOn);
+        if (poller == PcPoller.ScreenOff)
             BackOutScreenOff();
+        if (poller != PcPoller.Desktop)
             return;
-        }
 
         Mouse mouse = Mouse.current;
         if (mouse != null && app != null && (mouse.leftButton.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame))
@@ -166,11 +171,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
         }
     }
 
-    /// <summary>The PC open with its screen off: the back-out is still the PC's (stamped, so the office's never closes it); Esc turns the screen on and brings Settings forward, a right-click does nothing (PcBackOut.ScreenOff).</summary>
+    /// <summary>The PC open with its screen off (PcBackOut.Poller's ScreenOff: the frame open, the screen off, the InputGate free): the back-out is still the PC's (stamped, so the office's never closes it); Esc turns the screen on and brings Settings forward, a right-click does nothing (PcBackOut.ScreenOff).</summary>
     private void BackOutScreenOff()
     {
-        if (frame == null || !frame.IsOpen || screen == null || screen.IsOn || InputGate.Blocked)
-            return;
         Keyboard keyboard = Keyboard.current;
         Mouse mouse = Mouse.current;
         bool esc = keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
