@@ -14,7 +14,7 @@ public enum ScanLayer
     /// <summary>The chip's stored data, in the print's layout so differences line up.</summary>
     Chip,
 
-    /// <summary>The microprint line along a paper's foot (the desk machines spec §10): the holder's Citizen ID, repeated too fine to read by eye; the lens stand's magnifiers that read it were cut by P0-C, 2026-10-20: until the scanner shows the microprint, FIX_PLAN_v2 #17, nothing reads it.</summary>
+    /// <summary>The microprint line along a paper's foot (the desk machines spec §10): the holder's Citizen ID, repeated too fine to read by eye at the desk; the scan view's hidden layer prints it large enough to read (ScanMicroprint; Saleh D5), and a read is credited only once it rendered there (MicroLens.Readable).</summary>
     Micro
 }
 
@@ -71,6 +71,58 @@ public static class ScanLayers
                 differ.Add(i);
         return differ;
     }
+}
+
+/// <summary>
+/// The microprint in the scanner's hidden-layer view (FIX_PLAN_v2 TOOLS,
+/// BUG-2b; Saleh D5: "the scanner's hidden-layer view reveals the microprint
+/// of the ReprintedPaper lie. The physical magnifiers are cut."): what the
+/// layer prints for a paper's line (one repeat of it: the Bureau's mark, the
+/// form and the Citizen ID the player holds against the ID box) and the size
+/// it prints at, so its capitals reach <see cref="MinCapPx"/> on the screen
+/// with <see cref="Headroom"/> however the view is drawn (the PC's window at
+/// 1280x720, the reading view's tilt). The scan view measures how many screen
+/// pixels one unit of its text covers as it draws and asks for the size; the
+/// read is credited on the measured capitals (MicroLens.Readable). Pure
+/// (MicroLensTests).
+/// </summary>
+public static class ScanMicroprint
+{
+    /// <summary>The smallest capital height on the screen at which the microprint counts as legible (FIX_PLAN: "≥12 px cap at A2", 1280x720).</summary>
+    public const float MinCapPx = 12f;
+
+    /// <summary>The view prints the line this much over the cap (15 px), so rounding, a font's own cap or a window dragged a little smaller never drop it under.</summary>
+    public const float Headroom = 1.25f;
+
+    /// <summary>The largest size the view prints the line at (its text's units): a guard for a view not measured yet.</summary>
+    public const float MaxFontSize = 96f;
+
+    /// <summary>The text the hidden layer prints for <paramref name="line"/> on form <paramref name="formNumber"/>: the line as the paper prints it, once, without its trailing separator.</summary>
+    public static string Text(MicroLine line, string formNumber)
+    {
+        string once = line.Printed(formNumber, 1);
+        return once.TrimEnd(' ', '·');
+    }
+
+    /// <summary>
+    /// The font size (the text's own units) at which capitals reach
+    /// MinCapPx × Headroom on the screen: <paramref name="capShare"/> is the
+    /// font's capital height per unit of size (its face's cap line over its
+    /// point size), <paramref name="pixelsPerUnit"/> the screen pixels one unit
+    /// of the text covers where it is drawn. Never above MaxFontSize (nothing
+    /// measured yet: no metrics, no pixels).
+    /// </summary>
+    public static float FontSize(float capShare, float pixelsPerUnit)
+    {
+        float perSize = capShare * pixelsPerUnit;
+        if (!(perSize > 1e-6f))
+            return MaxFontSize;
+        float size = MinCapPx * Headroom / perSize;
+        return size < MaxFontSize ? size : MaxFontSize;
+    }
+
+    /// <summary>The capital height in screen pixels of text at <paramref name="fontSize"/> (FontSize's inverse).</summary>
+    public static float CapPx(float fontSize, float capShare, float pixelsPerUnit) => fontSize * capShare * pixelsPerUnit;
 }
 
 /// <summary>One value of an overlay source: its detail, its issuing office (a seal's), its label and value.</summary>
