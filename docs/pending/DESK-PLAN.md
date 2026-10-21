@@ -153,6 +153,8 @@ Nothing below is built here: the code uses the existing models plus the deal-tra
 
 ## FEATURES and shared docs (for INTEGRATION)
 
+**Folded** into `docs/FEATURES.md` and `docs/SCENE_CONTRACT_GAMEPLAY.md` by INTEGRATION on integrate/a (2026-10-21), as written below, the line-53 homes listed inline and its "Waits for its Unity check" replaced by the integration's result. `Assets/Data/Config/OfficeSceneContract.asset`: the three cut specs' removal (ids 20-22) is confirmed by the steward (`desk.plan.cutProps` green; the binder neither binds nor warns about them).
+
 Per CARVE's and CUTS' rule, `docs/FEATURES.md` is not edited here. Rewrite these lines (numbers as of main 9b8ab5f).
 
 **Line 53 ("The desk's plan ..."): replace the whole line with:**
