@@ -1,6 +1,6 @@
 # UI-PC: a clean desktop with a real taskbar clock
 
-Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase, `8eccae8` on the branch), fix round 1 (`d6fd65b`, `3996e95`: the review of `60fe324`), fix round 2 (`4e2445a`: the review of `d6fd65b`), fix round 3 (`e85d9bd`: the reverify of `4e2445a`, WAVE2_OPEN "UI-PC"), fix round 4 (`1eab563`: the reverify of `e85d9bd`), fix round 5 (`9df4287`: the reverify of `1eab563`) and fix round 6 (the reverify of `40a27b8`, below).
+Branch `fix/a-ui-pc`, cut from main `9b8ab5f` (P0: CARVE, CUTS, QA-RIG), then rebased onto main `4290bd6` (RUN-SAFE merged; no file in common). Commits: the track (`60fe324` before the rebase, `8eccae8` on the branch), fix round 1 (`d6fd65b`, `3996e95`: the review of `60fe324`), fix round 2 (`4e2445a`: the review of `d6fd65b`), fix round 3 (`e85d9bd`: the reverify of `4e2445a`, WAVE2_OPEN "UI-PC"), fix round 4 (`1eab563`: the reverify of `e85d9bd`), fix round 5 (`9df4287`: the reverify of `1eab563`) and fix round 6 (`2003df8`: the reverify of `40a27b8`, below).
 
 **Sources:**
 - FIX_PLAN.md §3 "UI-PC" and FIX_PLAN_v2.md "UI-PC: delta" (v2 wins);
@@ -76,7 +76,7 @@ The reverify found WAVE2 items 1 to 5 and fix round 4 fixed, and no new bug in t
 | 3 | **Minor, test strength: no run exercised a pass that throws** (fix round 4's S4). Removing the inner `QaRunner.Guard` or the `finally` failed nothing. | **The pass loop is now pure and tested offline.** `UiPcRigOps.EachMotion(read, write, pass, stopped)` runs the two passes; the preference and the asserts are the caller's, and `uipcPowerOn` passes `MotionPreference.Reduced` and `runner.Assert`. **`UiPcRigTests`** (`Assets/Tests/PlayMode/UiPc/Editor/`, run offline by `tools/qa/editor_runner`) drives it as the runner does, under `QaRunner.Guard`, with passes that throw: a timed-out wait in each pass (both stops recorded with the exception's text, nothing escapes, the choice put back); a pass that throws at once (the other still runs, and a Reduced choice stays Reduced); passes that finish; and the op disposed during a pass (the `finally` puts the choice back). They were written first and seen red (CS0117: no `EachMotion`). **Mutation check:** without the inner Guard, 2 of the 4 fail; with the restore moved out of the `finally`, the disposal test fails. **In Unity:** recipe 2 records both `poweron.*` asserts on every run, and `fullmotion.pc_close` after it shows the restore. The one-off forced-timeout run is recipe 18: the op now reads its step's `f` as its waits' timeout (3 s otherwise, as QaRunner's waiting ops read `f`), so `"f": 0.01` forces both timeouts with no code change. |
 | 4 | **Doc: line 3 named the track's first commit only as `60fe324`**, which is not on the branch (its rebased hash is `8eccae8`). | Line 3 now names both. |
 
-## Fix round 6: the reverify of 40a27b8
+## Fix round 6: the reverify of 40a27b8 (`2003df8`)
 
 The reverify found WAVE2 items 1 to 5 and fix rounds 4 and 5 fixed, and every count in this doc as measured. It raised the same blocking item (the rulings) and one new test-strength item. Only UI-PC's files change: the gate checks, a new rig test file and this doc.
 
