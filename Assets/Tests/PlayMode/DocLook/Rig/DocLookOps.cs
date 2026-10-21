@@ -21,9 +21,13 @@ using UnityEngine.TextCore;
 /// <c>coverHits.&lt;name&gt;</c> (DOC-LOOK review, S3): what a click, a hover
 /// or a drag would meet (QaGame.TopAt, the event system's own raycast) at the
 /// middle of each half of every booklet and of the rulebook folder shown now.
-/// A shut booklet's visa page and a shut folder's left board, hidden, meet
-/// nothing of theirs, and the half that shows meets them; open, both halves
-/// meet them.
+/// The step's text says the state it checks ("booklet=shut folder=open",
+/// Expects): every booklet and the folder must be in it, a shut booklet's visa
+/// page and a shut folder's left board, hidden, meet nothing of theirs, and
+/// the half that shows meets them; open, both halves meet them. A step that
+/// does not say both states, or finds no booklet or no folder to probe, fails
+/// (the re-verify of ce69276, point 1: a missed open or shut, or a day with no
+/// passport on the counter, is red, never a second look at the state before).
 /// </summary>
 public static class DocLookOps
 {
@@ -40,37 +44,78 @@ public static class DocLookOps
     private static IEnumerator CoverHitsOp(QaRunner runner, QaStep step)
     {
         yield return null;
-        string name = string.IsNullOrEmpty(step.name) ? "covers" : step.name;
+        string id = "coverHits." + (string.IsNullOrEmpty(step.name) ? "covers" : step.name);
+        bool? bookletShut = Expects(step.text, "booklet"), folderShut = Expects(step.text, "folder");
+        if (bookletShut == null || folderShut == null)
+        {
+            runner.Assert(id, "DOC-LOOK", false, "no expected state",
+                          $"The step's text must say the state it checks of both, as \"booklet=shut folder=open\" (it says '{step.text}').");
+            yield break;
+        }
         Camera camera = QaGame.PointerCamera();
         if (camera == null)
         {
-            runner.Assert("coverHits." + name, "DOC-LOOK", false, "no camera", "No pointer camera to probe through.");
+            runner.Assert(id, "DOC-LOOK", false, "no camera", "No pointer camera to probe through.");
             yield break;
         }
         var wrong = new List<string>();
-        int probes = 0;
+        int probes = 0, booklets = 0;
         foreach (DeskDocument paper in Object.FindObjectsByType<DeskDocument>(FindObjectsInactive.Exclude))
         {
             PaperCover cover = paper.Sheet != null ? paper.Sheet.GetComponentInChildren<PaperCover>(false) : null;
             if (cover == null)
                 continue; // no booklet
+            booklets++;
             bool shut = (bool)QaGame.Field(cover, "_shut");
+            if (shut != bookletShut.Value)
+                wrong.Add($"{paper.name} is {State(shut)}, the step checks it {State(bookletShut.Value)}");
             float spine = (float)QaGame.Field(cover, "_spine");
             float bottom = -paper.Size.y / 2f, top = paper.Size.y / 2f;
-            Probe(paper.name + " visa page", paper.Sheet.TransformPoint(new Vector3(0f, (spine + top) / 2f, 0f)), paper.transform, !shut, camera, wrong, ref probes);
+            Probe(paper.name + " visa page", paper.Sheet.TransformPoint(new Vector3(0f, (spine + top) / 2f, 0f)), paper.transform, !bookletShut.Value, camera, wrong, ref probes);
             Probe(paper.name + " data page", paper.Sheet.TransformPoint(new Vector3(0f, (bottom + spine) / 2f, 0f)), paper.transform, true, camera, wrong, ref probes);
         }
+        if (booklets == 0)
+            wrong.Add("no booklet is shown, so no passport's halves were probed");
         DeskRulebook folder = Object.FindAnyObjectByType<DeskRulebook>(FindObjectsInactive.Exclude);
         FolderCover board = folder != null ? folder.GetComponentInChildren<FolderCover>(true) : null;
         if (board != null && QaGame.Field(folder, "folderFace") is Renderer face && face != null)
         {
+            if (folder.Shut != folderShut.Value)
+                wrong.Add($"the folder is {State(folder.Shut)}, the step checks it {State(folderShut.Value)}");
             float left = DeskRulebook.BodyCentreX - DeskRulebook.BodyWidth / 2f, right = DeskRulebook.BodyCentreX + DeskRulebook.BodyWidth / 2f;
-            Probe("folder left board", face.transform.TransformPoint(new Vector3((left + board.Spine) / 2f, DeskRulebook.BodyCentreY, 0f)), folder.transform, !folder.Shut, camera, wrong, ref probes);
+            Probe("folder left board", face.transform.TransformPoint(new Vector3((left + board.Spine) / 2f, DeskRulebook.BodyCentreY, 0f)), folder.transform, !folderShut.Value, camera, wrong, ref probes);
             Probe("folder right sheet", face.transform.TransformPoint(new Vector3((board.Spine + right) / 2f, DeskRulebook.BodyCentreY, 0f)), folder.transform, true, camera, wrong, ref probes);
         }
-        runner.Assert("coverHits." + name, "DOC-LOOK", probes > 0 && wrong.Count == 0, $"{probes} probes, {wrong.Count} wrong",
-                      probes == 0 ? "No booklet or folder shown to probe." : string.Join("; ", wrong));
+        else
+            wrong.Add("no rulebook folder with its cover is shown, so its halves were not probed");
+        runner.Assert(id, "DOC-LOOK", wrong.Count == 0,
+                      $"booklet {State(bookletShut.Value)}, folder {State(folderShut.Value)}: {booklets} booklet(s), {probes} probes, {wrong.Count} wrong", string.Join("; ", wrong));
     }
+
+    /// <summary>
+    /// What a coverHits step's <paramref name="text"/> says it checks of
+    /// <paramref name="what"/> ("booklet" or "folder"): pairs such as
+    /// "booklet=shut folder=open", in any order and case, a space, a comma or a
+    /// semicolon between. True for shut, false for open, null when the text
+    /// does not say (or says neither word), which fails the step.
+    /// </summary>
+    public static bool? Expects(string text, string what)
+    {
+        foreach (string pair in (text ?? string.Empty).Split(new[] { ' ', ',', ';' }, System.StringSplitOptions.RemoveEmptyEntries))
+        {
+            int eq = pair.IndexOf('=');
+            if (eq <= 0 || !string.Equals(pair.Substring(0, eq), what, System.StringComparison.OrdinalIgnoreCase))
+                continue;
+            string state = pair.Substring(eq + 1);
+            if (string.Equals(state, "shut", System.StringComparison.OrdinalIgnoreCase))
+                return true;
+            return string.Equals(state, "open", System.StringComparison.OrdinalIgnoreCase) ? false : (bool?)null;
+        }
+        return null;
+    }
+
+    /// <summary>"shut" or "open".</summary>
+    private static string State(bool shut) => shut ? "shut" : "open";
 
     /// <summary>
     /// What the pointer meets at <paramref name="world"/> (through

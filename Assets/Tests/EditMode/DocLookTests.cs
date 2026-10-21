@@ -360,18 +360,39 @@ public class DocLookTests
     // ---------------- CoverBow (wave 2, point 8: the cover's marks ride its bow) ----------------
 
     /// <summary>
-    /// The two covers' sheets and marks, in their hinge's space as the builder
-    /// lays them: the folder's board (0.12 by 0.25 m, centred half a board
-    /// right of the hinge, its free edge to its right, a 1 mm bow, its seal
-    /// 0.05 mm over it) and the passport's front (0.088 by 0.0625 m, the data
-    /// page, centred half a page under the spine, its free edge at its foot,
-    /// a 1.5 mm bow, its emblem 0.1 mm over it); each mark a square 0.42 of
-    /// its sheet's width.
+    /// The folder's front board as OfficeSceneUIBuilder.BuildFolderCover lays
+    /// it, in metres (the re-verify of ce69276, point 3: the builder's own
+    /// numbers, copied here because Assembly-CSharp is out of this assembly's
+    /// reach, so a change to them needs these changed too). The folder's face
+    /// is RulebookFolderSize, 0.46 by 0.25875; the board runs from the spine
+    /// (FolderCover.spine, 0.011 of the face's width right of its middle) to
+    /// the body's left edge (DeskRulebook.BodyCentreX 0.003 less half its
+    /// BodyWidth 0.957), 0.224 wide, and is BodyHeight (0.917) of the face
+    /// tall, 0.237, centred BodyCentreY (-0.0275) of it up. In the hinge's
+    /// space it lies centred half a board right of the hinge, its free edge to
+    /// its right; it bows FolderCover.FlipBow (1 mm), and the seal, a square
+    /// 0.42 of the board wide, lies 0.05 mm over it.
     /// </summary>
+    private const float BoardWidth = (0.011f - (0.003f - 0.957f / 2f)) * 0.46f, BoardHeight = 0.917f * 0.25875f, BoardMiddle = -0.0275f * 0.25875f;
+    private const float BoardBow = 0.001f, SealGap = 0.00005f, SealHalf = 0.42f * BoardWidth / 2f;
+
+    /// <summary>
+    /// The passport's front as PaperCover.Arrive lays it on TC-101 (copied as
+    /// the board's are): the booklet is Desk_Default's paperSize.y (0.34)
+    /// times TC-101's look scale (0.64) tall, 0.2176, and its aspect (0.65435)
+    /// of that wide, 0.142 (DeskDocument.Bind); its spine is at the art's
+    /// middle, so the front covers the data page, the lower half, 0.109 tall,
+    /// centred half a page under the spine, its free edge at its foot. It bows
+    /// PaperCover.FlipBow (1.5 mm), and the emblem, a square 0.42 of its width,
+    /// lies PaperLayers.Seal (0.1 mm) over it.
+    /// </summary>
+    private const float FrontWidth = 0.34f * 0.64f * 0.65435f, FrontHeight = 0.34f * 0.64f / 2f, FrontBow = 0.0015f, EmblemHalf = 0.42f * FrontWidth / 2f;
+
+    /// <summary>The two covers' sheets and marks in their hinge's space, as built (BoardWidth, FrontWidth): each mark a square 0.42 of its sheet's width, centred on it.</summary>
     private static readonly (string name, float w, float h, float sheetX, float sheetY, float freeX, float freeY, float bow, float gap)[] CoverSheets =
     {
-        ("the folder's seal", 0.12f, 0.25f, 0.06f, 0.01f, 1f, 0f, 0.001f, 0.00005f),
-        ("the passport's emblem", 0.088f, 0.0625f, 0f, -0.03125f, 0f, -1f, 0.0015f, 0.0001f)
+        ("the folder's seal", BoardWidth, BoardHeight, BoardWidth / 2f, BoardMiddle, 1f, 0f, BoardBow, SealGap),
+        ("the passport's emblem", FrontWidth, FrontHeight, 0f, -FrontHeight / 2f, 0f, -1f, FrontBow, PaperLayers.Seal)
     };
 
     /// <summary>
@@ -432,45 +453,46 @@ public class DocLookTests
     {
         foreach (PaperBend flat in new[] { PaperBend.Flat, CoverBow.Of(1f, 0f, 0f), CoverBow.Of(0f, -1f, 0f) })
         {
-            (float depth, float pitch, float yaw) = CoverBow.Ride(0.075f, 0.02f, 0.0252f, 0.0252f, 0.06f, 0.01f, 0.12f, 0.25f, flat);
+            (float depth, float pitch, float yaw) = CoverBow.Ride(BoardWidth / 2f + 0.015f, BoardMiddle + 0.01f, SealHalf, SealHalf, BoardWidth / 2f, BoardMiddle, BoardWidth, BoardHeight, flat);
             Assert.AreEqual(0f, depth, 0f, "flat, an off-centre mark stays at rest");
             Assert.AreEqual(0f, pitch, 0f);
             Assert.AreEqual(0f, yaw, 0f);
         }
         // the one bow the shader draws (PaperCover.Bow) and the marks ride: the hinge end flat, the free edge curled twice the bow
-        PaperBend folder = CoverBow.Of(1f, 0f, 0.001f);
-        Assert.AreEqual(0f, folder.Depth(-1f, 0.3f, 0.12f, 0.25f), 1e-7f, "the folder board's hinge (its left) stays flat");
-        Assert.AreEqual(0.002f, folder.Depth(1f, 0.3f, 0.12f, 0.25f), 1e-7f, "its free edge (its right) curls 2 mm");
-        PaperBend passport = CoverBow.Of(0f, -1f, 0.0015f);
-        Assert.AreEqual(0f, passport.Depth(0.4f, 1f, 0.088f, 0.0625f), 1e-7f, "the passport front's spine (its top) stays flat");
-        Assert.AreEqual(0.003f, passport.Depth(0.4f, -1f, 0.088f, 0.0625f), 1e-7f, "its free edge (its foot) curls 3 mm");
+        PaperBend folder = CoverBow.Of(1f, 0f, BoardBow);
+        Assert.AreEqual(0f, folder.Depth(-1f, 0.3f, BoardWidth, BoardHeight), 1e-7f, "the folder board's hinge (its left) stays flat");
+        Assert.AreEqual(0.002f, folder.Depth(1f, 0.3f, BoardWidth, BoardHeight), 1e-7f, "its free edge (its right) curls 2 mm");
+        PaperBend passport = CoverBow.Of(0f, -1f, FrontBow);
+        Assert.AreEqual(0f, passport.Depth(0.4f, 1f, FrontWidth, FrontHeight), 1e-7f, "the passport front's spine (its top) stays flat");
+        Assert.AreEqual(0.003f, passport.Depth(0.4f, -1f, FrontWidth, FrontHeight), 1e-7f, "its free edge (its foot) curls 3 mm");
     }
 
     [Test]
     public void CoverBow_Ride_AMarkOffCentre_TakesTheSlopeAndDepthOfTheFaceUnderIt()
     {
-        // the folder's seal 15 mm from its board's centre toward the free edge, then toward the hinge, the board shutting at its full bow
-        float w = 0.12f, h = 0.25f, half = 0.0252f;
-        PaperBend shutting = CoverBow.Of(1f, 0f, -0.001f);
+        // the folder's seal a quarter of the way from its board's centre toward the free edge (28 mm), then toward the hinge, the board shutting at its full bow
+        float w = BoardWidth, h = BoardHeight, cx = BoardWidth / 2f, cy = BoardMiddle;
+        PaperBend shutting = CoverBow.Of(1f, 0f, -BoardBow);
         foreach ((float x, string way) in new[] { (0.25f, "toward the free edge"), (-0.25f, "toward the hinge") })
         {
-            (float depth, float pitch, float yaw) = CoverBow.Ride(0.06f + x * w / 2f, 0.01f, half, half, 0.06f, 0.01f, w, h, shutting);
+            (float depth, float pitch, float yaw) = CoverBow.Ride(cx + x * w / 2f, cy, SealHalf, SealHalf, cx, cy, w, h, shutting);
             (float dx, float dy) = shutting.Slope(x, 0f, w, h);
             Assert.AreEqual(0f, dy, 1e-9f);
             Assert.AreEqual(0f, pitch, 1e-6f, way + ": the bow runs across the board, so the seal does not tip up the page");
             Assert.AreEqual(-Math.Atan(dx) * 180.0 / Math.PI, yaw, 1e-4, way + ": turned to the face's slope under the seal's own centre (flat under the board's)");
-            Assert.Greater(Math.Abs(yaw), 0.25f, way + ": turned, not flat");
-            Assert.AreEqual(shutting.Depth(x, 0f, w, h) - shutting.Bulge(x, 0f, half, half, w, h), depth, 1e-9f, way + ": on the face under its centre, lifted by how far the curl rises past it");
+            Assert.Greater(Math.Abs(yaw), 0.1f, way + ": turned, not flat (about 0.35 and 0.16 degrees)");
+            Assert.AreEqual(shutting.Depth(x, 0f, w, h) - shutting.Bulge(x, 0f, SealHalf, SealHalf, w, h), depth, 1e-9f, way + ": on the face under its centre, lifted by how far the curl rises past it");
         }
-        Assert.Greater(CoverBow.Ride(0.075f, 0.01f, half, half, 0.06f, 0.01f, w, h, shutting).yaw, 0f, "toward the free edge the curl rises toward the viewer: the seal's edge on that side comes toward the viewer with it");
-        Assert.Less(CoverBow.Ride(0.045f, 0.01f, half, half, 0.06f, 0.01f, w, h, shutting).yaw, 0f, "toward the hinge the bow's hump lies on the hinge's side of the seal: it turns the other way");
+        Assert.Greater(CoverBow.Ride(cx + 0.015f, cy, SealHalf, SealHalf, cx, cy, w, h, shutting).yaw, 0f, "toward the free edge the curl rises toward the viewer: the seal's edge on that side comes toward the viewer with it");
+        Assert.Less(CoverBow.Ride(cx - 0.015f, cy, SealHalf, SealHalf, cx, cy, w, h, shutting).yaw, 0f, "toward the hinge the bow's hump lies on the hinge's side of the seal: it turns the other way");
 
-        // the passport's emblem 7.8 mm toward its foot (the free edge): the bow runs up the page, so it tips about its x
-        PaperBend passport = CoverBow.Of(0f, -1f, -0.0015f);
-        var (_, tip, turn) = CoverBow.Ride(0f, -0.03125f - 0.0078125f, 0.0185f, 0.0185f, 0f, -0.03125f, 0.088f, 0.0625f, passport);
-        var (_, up) = passport.Slope(0f, -0.25f, 0.088f, 0.0625f);
+        // the passport's emblem a quarter of the way from its front's centre toward its foot (the free edge, 13.6 mm): the bow runs up the page, so it tips about its x
+        PaperBend passport = CoverBow.Of(0f, -1f, -FrontBow);
+        float py = -FrontHeight / 2f;
+        var (_, tip, turn) = CoverBow.Ride(0f, py - 0.25f * FrontHeight / 2f, EmblemHalf, EmblemHalf, 0f, py, FrontWidth, FrontHeight, passport);
+        var (_, up) = passport.Slope(0f, -0.25f, FrontWidth, FrontHeight);
         Assert.AreEqual(Math.Atan(up) * 180.0 / Math.PI, tip, 1e-4, "tipped to the slope up the page");
-        Assert.Greater(tip, 1f, "its top tips away as its foot comes toward the viewer with the curling edge (about 1.9 degrees)");
+        Assert.Greater(tip, 0.5f, "its top tips away as its foot comes toward the viewer with the curling edge (about 1.1 degrees)");
         Assert.AreEqual(0f, turn, 1e-6f);
     }
 

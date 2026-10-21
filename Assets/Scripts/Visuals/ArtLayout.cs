@@ -340,6 +340,11 @@ public static class ArtLayout
         return problems;
     }
 
+    /// <summary>The <paramref name="count"/> longest distinct words of <paramref name="texts"/> (TextFit.Words; blank texts skipped), in capitals as a printed form sets them (Capitals), the longest first: a field's words for CutWords, from the texts FieldWords.Of picks for it.</summary>
+    public static List<string> LongestWords(IEnumerable<string> texts, int count) =>
+        (texts ?? Enumerable.Empty<string>()).Where(t => !string.IsNullOrWhiteSpace(t)).SelectMany(TextFit.Words).Select(Capitals)
+            .Distinct().OrderByDescending(w => w.Length).Take(count).ToList();
+
     /// <summary>True when <paramref name="word"/> alone, in <paramref name="role"/>'s style at <paramref name="size"/>, wraps at <paramref name="width"/> onto more than one line: wider than its place, so TextMeshPro would break it mid-word (the paper cuts it instead, TmpFormText.Unbreak).</summary>
     private static bool Breaks(ITextMeasure measure, string word, FormTextRole role, float size, float width) =>
         measure.Height(word, role, size, width) > measure.Height(word, role, size, Unwrapped) * OneLine;

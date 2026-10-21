@@ -124,6 +124,31 @@ public partial class FormLayoutTests
     }
 
     [Test]
+    public void FieldWords_NameAndSignatureFieldsMeasureThePlacesAndThePremadesNames_ADestinationTheOrigins()
+    {
+        // the validator's word sources (ContentLibraryValidator.Forms.ContentWords; the re-verify of ce69276, point 2)
+        var fields = new[]
+        {
+            new DocumentFieldSpec { category = ClueCategory.Name }, new DocumentFieldSpec { category = ClueCategory.Signature },
+            new DocumentFieldSpec { category = ClueCategory.Destination }, new DocumentFieldSpec { category = ClueCategory.CitizenId }, null
+        };
+        var words = FieldWords.Of(fields, new[] { "Omar", "Konstantinos", "  " }, new[] { "Giovanfrancesco Rossi" }, new[] { "Middle Egypt", "Athens" },
+                                  texts => ArtLayout.LongestWords(texts, 2));
+
+        Assert.AreEqual(5, words.Count, "one list a field, in the fields' order");
+        CollectionAssert.AreEqual(new[] { "GIOVANFRANCESCO", "KONSTANTINOS" }, words[0], "a premade's own name is measured with the places' given names, word by word, in capitals, the longest first");
+        Assert.IsNotNull(words[1], "a holder signs with the given name: a Signature field measures the names");
+        CollectionAssert.AreEqual(words[0], words[1], "the same names as a Name field");
+        CollectionAssert.AreEqual(new[] { "MIDDLE", "ATHENS" }, words[2], "a Destination field the places' origins (the first of two words as long kept first)");
+        Assert.IsNull(words[3], "an ID is the probe's (ArtLayout.Problems)");
+        Assert.IsNull(words[4]);
+
+        // through CutWords: a premade's word too wide for the passport's Name place is the paper's cut, on its name field
+        var cut = FieldWords.Of(fields, new[] { "Omar" }, new[] { new string('W', 90) }, new[] { "Athens" }, texts => ArtLayout.LongestWords(texts, 2));
+        StringAssert.Contains("field 0", string.Join("; ", ArtLayout.CutWords(GrownPassport(1.3f, 1.5f), cut, new FakeMeasure())));
+    }
+
+    [Test]
     public void Problems_AValueWordWiderThanItsPlaceAtTheLeastSize_IsAProblem_EvenWhenItsLinesFit()
     {
         FormData single = BookletData();

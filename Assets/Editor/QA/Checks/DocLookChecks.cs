@@ -13,12 +13,16 @@ using UnityEngine;
 /// document's smallest data and label at the big mat's reading view against
 /// BUG-9's floors (doclook.forms.capModel: 10 px data at A1, 7 px at A2,
 /// labels 6 px at A2), at merge level so the merge gate shows the shortfall
-/// (it is red until the papers read: Saleh's call on the mat, the reading
-/// view and the floors, docs/pending/DOC-LOOK.md). Played, at merge level:
-/// the pointer on a shut passport's and the shut folder's hidden halves
-/// (doclook.play.coverHits, the doclook_print scenario's coverHits op: they
-/// take no hover, click or drag; it needs no later track's framing, so every
-/// merge from DOC-LOOK's on needs its results taken at HEAD). Demo only: the
+/// (known red until FORMS-REDESIGN redesigns the 8 art forms with larger
+/// places: the orchestrator's decision 2 of 2026-10-20, which approved the
+/// 0.5 fit floor and labels x1.3 as the interim; docs/pending/DOC-LOOK.md,
+/// "Decided by the orchestrator", and docs/pending/FORMS-REDESIGN.md).
+/// Played, at merge level: the pointer on a shut passport's and the shut
+/// folder's hidden halves (doclook.play.coverHits, the doclook_print
+/// scenario's coverHits op: they take no hover, click or drag, and each step
+/// checks the open or shut state it names; it needs no later track's
+/// framing, so every merge from DOC-LOOK's on needs its results taken at
+/// HEAD). Demo only: the
 /// measured cap height on screen (doclook.play.capHeight, the doclook_cap
 /// scenario's capHeight op), which counts only at the final paper size and
 /// framing.
@@ -94,7 +98,7 @@ public static class DocLookChecks
     [GateCheck("doclook.play.capHeight", Owner, GateKind.Play, DemoOnly = true)]
     public static GateResult PlayCapHeight() => GateResults.Require("doclook.play.capHeight", Owner, "doclook_cap.capHeight.*");
 
-    /// <summary>The hidden half of a shut passport and of the shut folder takes no pointer, the shown half does, and both halves do once open (the doclook_print scenario's coverHits op; DOC-LOOK review, S3). Merge level: the fix depends on no later track, so a merge gate needs these results taken at HEAD (recipe R7b).</summary>
+    /// <summary>The hidden half of a shut passport and of the shut folder takes no pointer, the shown half does, and both halves do once open (the doclook_print scenario's coverHits op; DOC-LOOK review, S3): each step finds a booklet and the folder in the state it names, or fails. Merge level: the fix depends on no later track, so a merge gate needs these results taken at HEAD (recipe R7b).</summary>
     [GateCheck("doclook.play.coverHits", Owner, GateKind.Play)]
     public static GateResult PlayCoverHits() => GateResults.Require("doclook.play.coverHits", Owner, "doclook_print.coverHits.*");
 
