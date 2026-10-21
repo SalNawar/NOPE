@@ -15,3 +15,4 @@ qa.bp.flicker             bp.*.seq.*.flicker   # BUG-13 / BUG-26a / BUG-54, HALL
 qa.play.camera            *.camera *.camera.*  # BUG-17 / G9, CAM (#6) and DOC-HANDLE (#8): no camera move is tagged with its cause until CAM tags the view keys and DOC-HANDLE the D1 drop tilt
 qa.play.liberationSans    *.liberationSans.*   # BUG-3 / BUG-37, TEXT-LANG (#12): labels still fall back to LiberationSans
 qa.scenes.liberationSans                       # BUG-3 / BUG-37, TEXT-LANG (#12): texts set in LiberationSans in the shipped scenes
+tools.micro               tools_microprint.*   # BUG-2b, UI-PC (#13): the scan view that draws the microprint is UI-PC's (FIX_PLAN_v2 deferred criterion: TOOLS #10 gives the content and the rule, full at #13)

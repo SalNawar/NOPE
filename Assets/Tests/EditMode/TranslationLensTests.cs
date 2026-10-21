@@ -133,6 +133,28 @@ public class TranslationLensTests
     }
 
     [Test]
+    public void Candidate_OnlyTextThePlayerCanSee_AndNeverThePc()
+    {
+        Assert.IsTrue(TranslationLens.Candidate(false, true, true, 1f), "a paper's word, drawn");
+        Assert.IsFalse(TranslationLens.Candidate(true, true, true, 1f), "the PC never shows foreign text (D7): its texts are never candidates, open or closed");
+        Assert.IsFalse(TranslationLens.Candidate(false, false, true, 1f), "inactive, or a desk word whose renderer is off");
+        Assert.IsFalse(TranslationLens.Candidate(false, true, false, 1f), "on a canvas no camera draws (BUG-52: the closed PC's desktop through its disabled frame camera)");
+        Assert.IsFalse(TranslationLens.Candidate(false, true, true, 0f), "faded out to nothing (a hidden panel's canvas group)");
+        Assert.IsTrue(TranslationLens.Candidate(false, true, true, 0.2f), "fading in: seen");
+    }
+
+    [Test]
+    public void RevertSpeed_EveryWordIsBackWithinTheRevertTime()
+    {
+        Assert.AreEqual(1f, TranslationLens.RevertSpeed(0.15f), "a short word flips back at its own pace");
+        Assert.AreEqual(1f, TranslationLens.RevertSpeed(TranslationLens.RevertSeconds));
+        float speed = TranslationLens.RevertSpeed(0.6f);
+        Assert.AreEqual(0.6f / TranslationLens.RevertSeconds, speed, 1e-5f, "a long label plays its flip back faster");
+        Assert.LessOrEqual(0.6f / speed, TranslationLens.RevertSeconds + 1e-6f);
+        Assert.AreEqual(1f, TranslationLens.RevertSpeed(0f), "nothing to flip");
+    }
+
+    [Test]
     public void Feature_Lens_IsANamedKey()
     {
         Assert.IsTrue(Introductions.IsNamedKey(Feature.Lens));

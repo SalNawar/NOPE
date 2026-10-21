@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -25,27 +26,47 @@ using UnityEngine.SceneManagement;
 /// is over (the top paper of a stack). Reduced
 /// motion swaps at once. While a label is translated its auto-size is held and
 /// its size eases to fit the English (TranslationLensSettings.resizeSeconds), so nothing
-/// around it moves. Nothing runs while the pointer rests and nothing flips:
-/// no allocation per idle frame. The rules are TranslationLens's; this class
-/// only finds texts under the pointer and writes them.
+/// around it moves; a right-to-left label keeps the order it was built with
+/// while its words flip (LensPhrase.Compose, WholeFrame). Only texts the
+/// player can see are read (TranslationLens.Candidate, FIX_PLAN TOOLS,
+/// BUG-52): never the PC's (Saleh D7: the PC never shows foreign text), never
+/// a text on a canvas no camera draws (1019a read the closed PC's desktop
+/// words through its disabled frame camera), never a faded one; and only the
+/// texts of the object under the pointer (its window or panel, its desk
+/// object) are looked at, never every text of the scenes. A UI text is
+/// reached only through that object: the window or top panel the
+/// GraphicRaycaster hits, so its panel needs a raycast-target graphic under
+/// the text (the morning paper's page and the speech bubble's panel have
+/// one); a text drawn over no raycast target is not read (docs/pending/TOOLS.md
+/// names it; tools_lens checks the newspaper and the documents). While anything is
+/// translated the hover is checked every frame, the pointer still or not, so
+/// a word whose object moves away flips back; a flip back always lands within
+/// TranslationLens.RevertSeconds. Nothing runs while the pointer rests and
+/// nothing is translated: no allocation per idle frame. The rules are
+/// TranslationLens's; this class only finds texts under the pointer and
+/// writes them. GLASSES (Phase B) reuses it as its engine.
 /// </summary>
 public sealed class TranslationLensPresenter : MonoBehaviour
 {
-    /// <summary>Seconds between two rescans of the scenes' texts while the pointer moves (runtime-built UI).</summary>
-    private const float RescanSeconds = 5f;
+    /// <summary>The profiler's mark round one hover (GLASSES' budget: at most 0.5 ms per mouse move).</summary>
+    private static readonly ProfilerMarker HoverMarker = new ProfilerMarker("TranslationLens.Hover");
 
-    /// <summary>One flip, a word's or a whole label's: towards English or back, and when it started (NaN: native and at rest).</summary>
+    /// <summary>One flip, a word's or a whole label's: towards English or back, when it started (NaN: native and at rest) and how much faster than its own pace it plays (a flip back: TranslationLens.RevertSpeed).</summary>
     private struct Flip
     {
         public bool ToEnglish;
         public float Started;
+        public float Speed;
 
         public bool Resting => float.IsNaN(Started);
 
-        public static Flip Rest => new Flip { Started = float.NaN };
+        public static Flip Rest => new Flip { Started = float.NaN, Speed = 1f };
+
+        /// <summary>Seconds of its own flip played by <paramref name="now"/> (infinity: landed at once, reduced motion).</summary>
+        public float Elapsed(float now) => (now - Started) * (Speed > 0f ? Speed : 1f);
     }
 
-    /// <summary>A culture label inside a text: its words' flips (level 1) and its whole flip (levels 2 and 3).</summary>
+    /// <summary>A culture label inside a text: its words' flips (level 1) and its whole flip (levels 2 and 3; WholeShown is the label as drawn now).</summary>
     private sealed class Occurrence
     {
         public readonly LensPhrase Phrase;
@@ -88,11 +109,12 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         public bool Settled;
     }
 
+    private readonly List<TMP_Text> _rootTexts = new List<TMP_Text>();
     private readonly List<TMP_Text> _candidates = new List<TMP_Text>();
+    private readonly List<TMP_Text> _gone = new List<TMP_Text>();
     private readonly Dictionary<TMP_Text, TextState> _states = new Dictionary<TMP_Text, TextState>();
     private readonly List<TextState> _active = new List<TextState>();
     private readonly List<RaycastResult> _hits = new List<RaycastResult>();
-    private readonly List<TMP_Text> _objectTexts = new List<TMP_Text>();
     private readonly List<(TextState state, Occurrence occurrence)> _objectPhrases = new List<(TextState, Occurrence)>();
     private readonly List<int> _wordsPerPhrase = new List<int>();
     private readonly List<LensWordRef> _covered = new List<LensWordRef>();
@@ -111,7 +133,6 @@ public sealed class TranslationLensPresenter : MonoBehaviour
     private int _phraseCount;
     private Vector2 _lastPosition = new Vector2(float.NaN, float.NaN);
     private bool _stale = true;
-    private float _lastScan = float.NegativeInfinity;
     private LensReach _reach;
 
     /// <summary>The one presenter (on the culture host), or null.</summary>
@@ -149,8 +170,54 @@ public sealed class TranslationLensPresenter : MonoBehaviour
             Instance = null;
     }
 
-    /// <summary>A new scene: its texts are found again on the next pointer move.</summary>
+    /// <summary>A new scene: the texts the lens knows are pruned on the next hover.</summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => _stale = true;
+
+    /// <summary>
+    /// The texts the lens has turned towards English now (a word or a label
+    /// of them; with <paramref name="reverting"/>, also those still flipping
+    /// back), into <paramref name="into"/> (cleared first). TOOLS' QA ops read
+    /// it: every text turned is drawn, under the pointer and never the PC's;
+    /// none still shows the lens's frame RevertSeconds after the pointer left.
+    /// </summary>
+    public void Translated(List<TMP_Text> into, bool reverting = false)
+    {
+        into.Clear();
+        foreach (TextState state in _active)
+            if (state.Text != null && (reverting || TurnedToEnglish(state)))
+                into.Add(state.Text);
+    }
+
+    /// <summary>
+    /// The candidate set of the last hover, into <paramref name="into"/>
+    /// (cleared first): every text the lens was allowed to read there, the
+    /// object under the pointer's texts that passed Eligible
+    /// (TranslationLens.Candidate), whether or not they hold a known label.
+    /// TOOLS' QA op logs it to prove the set excludes the PC entirely
+    /// (FIX_PLAN_v2 TOOLS: "0 PC texts in the candidate log"), the PC open
+    /// and under the pointer.
+    /// </summary>
+    public void Candidates(List<TMP_Text> into)
+    {
+        into.Clear();
+        foreach (TMP_Text text in _candidates)
+            if (text != null)
+                into.Add(text);
+    }
+
+    /// <summary>True when any label of the text, or any word of one, is turned towards English (not merely flipping back).</summary>
+    private static bool TurnedToEnglish(TextState state)
+    {
+        foreach (Occurrence occurrence in state.Occurrences)
+        {
+            if (occurrence.Whole.ToEnglish && !occurrence.Whole.Resting)
+                return true;
+            foreach (Flip word in occurrence.Words)
+                if (word.ToEnglish && !word.Resting)
+                    return true;
+        }
+        return false;
+    }
 
     private void Update()
     {
@@ -160,30 +227,29 @@ public sealed class TranslationLensPresenter : MonoBehaviour
             Forget(strings);
 
         float now = Time.unscaledTime;
-        if (_active.Count > 0)
-            Animate(now);
-
-        Vector2 position;
-        if (PointerOverride.HasValue)
-            position = PointerOverride.Value;
-        else if (Pointer.current != null)
-            position = Pointer.current.position.ReadValue();
-        else
-            return;
-        if (position == _lastPosition)
-            return;
-        _lastPosition = position;
-
-        _reach = CurrentReach;
-        if (_reach == LensReach.None || strings == null || strings.Phrases.Count == 0)
+        Vector2? pointer = PointerOverride ?? (Pointer.current != null ? Pointer.current.position.ReadValue() : (Vector2?)null);
+        // The pointer moved, or something is translated (the object under a still pointer may have moved away: CODE-163).
+        if (pointer.HasValue && (pointer.Value != _lastPosition || _active.Count > 0))
         {
-            Release(now);
-            return;
+            _lastPosition = pointer.Value;
+            _reach = CurrentReach;
+            if (_reach == LensReach.None || strings == null || strings.Phrases.Count == 0)
+            {
+                _candidates.Clear();
+                Release(now);
+            }
+            else
+            {
+                if (_stale || strings.Phrases.Count != _phraseCount)
+                    Refresh(strings);
+                using (HoverMarker.Auto())
+                    Hover(pointer.Value, now);
+            }
         }
 
-        if (_stale || strings.Phrases.Count != _phraseCount || now - _lastScan > RescanSeconds)
-            Rescan(strings, now);
-        Hover(position, now);
+        // After the hover, so a word under the pointer changes on this frame.
+        if (_active.Count > 0)
+            Animate(now);
     }
 
     /// <summary>
@@ -207,50 +273,88 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         _stale = true;
     }
 
-    /// <summary>Finds the scenes' UI texts again and orders the known labels longest first (a long label wins over a short one inside it).</summary>
-    private void Rescan(UiStrings strings, float now)
+    /// <summary>Orders the known labels longest first (a long label wins over a short one inside it) and forgets the texts that are gone (a new scene).</summary>
+    private void Refresh(UiStrings strings)
     {
-        _candidates.Clear();
-        _candidates.AddRange(FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None));
         _byLength.Clear();
         _byLength.AddRange(strings.Phrases);
         _byLength.Sort((a, b) => b.Visual.Length.CompareTo(a.Visual.Length));
         _phraseCount = strings.Phrases.Count;
-        foreach (TextState state in _states.Values)
-            if (!_active.Contains(state))
-                state.Source = null; // labels may be new: they are found again on use
+        _gone.Clear();
+        foreach (KeyValuePair<TMP_Text, TextState> pair in _states)
+        {
+            if (pair.Key == null)
+                _gone.Add(pair.Key);
+            else if (!_active.Contains(pair.Value))
+                pair.Value.Source = null; // labels may be new: they are found again on use
+        }
+        foreach (TMP_Text text in _gone)
+            _states.Remove(text);
         _stale = false;
-        _lastScan = now;
     }
 
-    /// <summary>What the pointer is over and what the lens covers there.</summary>
+    /// <summary>
+    /// True when the lens may read <paramref name="text"/>
+    /// (TranslationLens.Candidate): not the PC's (UiText.SurfaceOf), shown,
+    /// drawn (a desk word under the camera the pointer's hit came from; a UI
+    /// text on an enabled canvas that is an overlay or is drawn by an enabled
+    /// camera) and not faded out.
+    /// </summary>
+    private bool Eligible(TMP_Text text)
+    {
+        if (text == null)
+            return false;
+        bool onPc = UiText.SurfaceOf(text) == TextSurface.Pc;
+        if (text is TextMeshPro desk)
+            return TranslationLens.Candidate(onPc, text.isActiveAndEnabled && desk.renderer.enabled, _deskCamera != null && _deskCamera.isActiveAndEnabled, 1f);
+        Canvas canvas = text.canvas;
+        bool drawn = canvas != null && canvas.isActiveAndEnabled && CanvasDrawn(canvas.rootCanvas);
+        float alpha = text.canvasRenderer != null ? text.canvasRenderer.GetInheritedAlpha() : 0f;
+        return TranslationLens.Candidate(onPc, text.isActiveAndEnabled, drawn, alpha);
+    }
+
+    /// <summary>True when a camera draws the root canvas: an overlay (a camera canvas with no camera draws as one), else its camera enabled; a world canvas with no camera, by the main camera.</summary>
+    private static bool CanvasDrawn(Canvas root)
+    {
+        if (!root.isActiveAndEnabled)
+            return false;
+        Camera cam = root.worldCamera;
+        switch (root.renderMode)
+        {
+            case RenderMode.ScreenSpaceOverlay:
+                return true;
+            case RenderMode.ScreenSpaceCamera:
+                return cam == null || cam.isActiveAndEnabled;
+            default:
+                cam = cam != null ? cam : Camera.main;
+                return cam != null && cam.isActiveAndEnabled;
+        }
+    }
+
+    /// <summary>What the pointer is over and what the lens covers there: only the texts of the object under it (its window or top panel, else the desk object its physics hit is part of).</summary>
     private void Hover(Vector2 position, float now)
     {
         Transform top = TopHit(position);
         Transform topRoot = top != null ? ObjectRoot(top) : null;
         Transform deskRoot = topRoot == null && _deskHit != null ? ObjectRoot(_deskHit) : null;
+        Transform root = topRoot != null ? topRoot : deskRoot;
+        _rootTexts.Clear();
+        _candidates.Clear();
+        if (root != null)
+            root.GetComponentsInChildren(false, _rootTexts);
 
         TextState hoveredState = null;
         Occurrence hovered = null;
         int hoveredWord = -1;
-        foreach (TMP_Text text in _candidates)
+        foreach (TMP_Text text in _rootTexts)
         {
-            if (text == null || !text.isActiveAndEnabled)
+            // Only the object's own texts (a window open over a panel is an object of its own), and only those the player can see.
+            if (ObjectRoot(text.transform) != root || !Eligible(text))
                 continue;
-            Camera cam;
-            if (text is TextMeshPro desk)
-            {
-                // A desk word: never under the UI, only on the desk object the pointer is over, and only when drawn.
-                if (deskRoot == null || !desk.renderer.enabled || ObjectRoot(text.transform) != deskRoot)
-                    continue;
-                cam = _deskCamera;
-            }
-            else
-            {
-                if (topRoot != null && ObjectRoot(text.transform) != topRoot)
-                    continue; // under another window
-                cam = CameraOf(text);
-            }
+            _candidates.Add(text);
+            if (hovered != null)
+                continue; // the word is found; the rest of the object's texts are only logged as candidates
+            Camera cam = text is TextMeshPro ? _deskCamera : CameraOf(text);
             // A printed paper word may overflow its box (it shrinks to fit only so far): a desk word is found by its letters alone.
             if (!(text is TextMeshPro) && !RectTransformUtility.RectangleContainsScreenPoint(text.rectTransform, position, cam))
                 continue;
@@ -272,8 +376,6 @@ public sealed class TranslationLensPresenter : MonoBehaviour
                 hoveredWord = segment >= 0 ? occurrence.Phrase.WordRank(segment) : -1;
                 break;
             }
-            if (hovered != null)
-                break;
         }
 
         _objectPhrases.Clear();
@@ -282,15 +384,13 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         bool overObject = false;
         if (_reach == LensReach.Object)
         {
-            Transform root = topRoot != null ? topRoot : deskRoot != null ? deskRoot : hoveredState != null ? ObjectRoot(hoveredState.Text.transform) : null;
             overObject = root != null;
             if (root != null)
             {
-                root.GetComponentsInChildren(false, _objectTexts);
-                foreach (TMP_Text text in _objectTexts)
+                foreach (TMP_Text text in _rootTexts)
                 {
-                    if (ObjectRoot(text.transform) != root)
-                        continue; // a window open over a panel is an object of its own
+                    if (ObjectRoot(text.transform) != root || !Eligible(text))
+                        continue; // a window open over a panel is an object of its own; an unseen text is never read
                     TextState state = StateOf(text);
                     foreach (Occurrence occurrence in state.Occurrences)
                     {
@@ -363,7 +463,8 @@ public sealed class TranslationLensPresenter : MonoBehaviour
     /// Turns a flip towards English (<paramref name="toEnglish"/>) or back: from
     /// rest it starts after <paramref name="delay"/>; one already turning the
     /// other way continues from about where it is (as far into the new flip as
-    /// the old one had left to run). Reduced motion lands it at once.
+    /// the old one had left to run). A flip back plays fast enough to land
+    /// within TranslationLens.RevertSeconds (BUG-52). Reduced motion lands it at once.
     /// </summary>
     private void Turn(ref Flip flip, bool toEnglish, string native, string english, float delay, TranslationLensSettings knobs, bool reduced, float now, TextState state)
     {
@@ -372,6 +473,9 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         if (!toEnglish && flip.Resting)
             return;
 
+        string newFrom = toEnglish ? native : english, newTo = toEnglish ? english : native;
+        float newDuration = LensFlip.Duration(newFrom, newTo, knobs.flip);
+        float speed = toEnglish ? 1f : TranslationLens.RevertSpeed(newDuration);
         float started;
         if (reduced)
         {
@@ -383,13 +487,13 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         }
         else
         {
-            string from = flip.ToEnglish ? native : english, to = flip.ToEnglish ? english : native;
-            float old = LensFlip.Duration(from, to, knobs.flip);
-            float elapsed = float.IsNegativeInfinity(flip.Started) ? old : Mathf.Clamp(now - flip.Started, 0f, old);
-            started = now - Mathf.Clamp(old - elapsed, 0f, LensFlip.Duration(to, from, knobs.flip));
+            float old = LensFlip.Duration(newTo, newFrom, knobs.flip);
+            float elapsed = float.IsNegativeInfinity(flip.Started) ? old : Mathf.Clamp(flip.Elapsed(now), 0f, old);
+            started = now - Mathf.Clamp(old - elapsed, 0f, newDuration) / speed;
         }
         flip.ToEnglish = toEnglish;
         flip.Started = started;
+        flip.Speed = speed;
         if (toEnglish)
             Activate(state, now);
         state.Settled = false;
@@ -464,11 +568,17 @@ public sealed class TranslationLensPresenter : MonoBehaviour
             bool translated = false, moving = false;
             foreach (Occurrence occurrence in state.Occurrences)
             {
-                occurrence.WholeShown = Frame(ref occurrence.Whole, occurrence.Phrase.Logical, occurrence.Phrase.English, knobs, now, ref translated, ref moving);
+                LensPhrase phrase = occurrence.Phrase;
+                occurrence.WholeShown = Advance(ref occurrence.Whole, phrase.Logical, phrase.English, knobs, now, ref translated, ref moving, out float wholeElapsed)
+                    ? phrase.WholeFrame(occurrence.Whole.ToEnglish, knobs.flip, wholeElapsed, null)
+                    : null;
                 for (int i = 0; i < occurrence.Words.Length; i++)
                 {
-                    string native = occurrence.Phrase.NativeWord(i);
-                    occurrence.Shown[i] = Frame(ref occurrence.Words[i], native, occurrence.Phrase.EnglishWord(i) ?? native, knobs, now, ref translated, ref moving);
+                    string native = phrase.NativeWord(i), english = phrase.EnglishWord(i) ?? native;
+                    ref Flip word = ref occurrence.Words[i];
+                    occurrence.Shown[i] = Advance(ref word, native, english, knobs, now, ref translated, ref moving, out float elapsed)
+                        ? LensFlip.Frame(word.ToEnglish ? native : english, word.ToEnglish ? english : native, knobs.flip, elapsed)
+                        : null;
                 }
             }
 
@@ -486,22 +596,23 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         }
     }
 
-    /// <summary>One flip's text now (null when native and at rest; a reverse that lands comes to rest).</summary>
-    private static string Frame(ref Flip flip, string native, string english, TranslationLensSettings knobs, float now, ref bool translated, ref bool moving)
+    /// <summary>Where one flip is now: false when it is native and at rest (a reverse that lands comes to rest); else true with how far into its own flip it is (<paramref name="elapsed"/>: past its duration once landed).</summary>
+    private static bool Advance(ref Flip flip, string native, string english, TranslationLensSettings knobs, float now, ref bool translated, ref bool moving, out float elapsed)
     {
+        elapsed = 0f;
         if (flip.Resting)
-            return null;
-        float elapsed = now - flip.Started;
+            return false;
+        elapsed = flip.Elapsed(now);
         string from = flip.ToEnglish ? native : english, to = flip.ToEnglish ? english : native;
         bool landed = elapsed >= LensFlip.Duration(from, to, knobs.flip);
         if (landed && !flip.ToEnglish)
         {
             flip = Flip.Rest;
-            return null;
+            return false;
         }
         translated = true;
         moving |= !landed;
-        return landed ? to : LensFlip.Frame(from, to, knobs.flip, elapsed);
+        return true;
     }
 
     /// <summary>The text with each label as it is shown now (or, with <paramref name="allEnglish"/>, every covered label as its English); updates each label's place in it.</summary>
@@ -531,7 +642,7 @@ public sealed class TranslationLensPresenter : MonoBehaviour
             else
             {
                 label = occurrence.WholeShown != null
-                    ? occurrence.Phrase.ComposeWhole(occurrence.WholeShown, occurrence.SegmentOf)
+                    ? Whole(occurrence)
                     : occurrence.Phrase.Compose(occurrence.Shown, occurrence.SegmentOf);
                 occurrence.ShownStart = _builder.Length;
                 occurrence.ShownLength = label.Length;
@@ -541,6 +652,15 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         }
         _builder.Append(state.Source, cursor, state.Source.Length - cursor);
         return _builder.ToString();
+    }
+
+    /// <summary>A label shown whole (WholeShown, as drawn): no single word of it is under the pointer.</summary>
+    private static string Whole(Occurrence occurrence)
+    {
+        occurrence.SegmentOf.Clear();
+        for (int i = 0; i < occurrence.WholeShown.Length; i++)
+            occurrence.SegmentOf.Add(-1);
+        return occurrence.WholeShown;
     }
 
     /// <summary>Sets the text (remembering it, so a change by the game is noticed); the game's own text puts each label back at its place.</summary>

@@ -3,7 +3,8 @@
 // and symbols"): a mark's quad (the Bureau's watermark, a seal's microprint
 // ring, a found mark's tick) drawn only inside the torch's cone. The cone is a
 // circle on the desk the torch sets every frame (_UvCone: its centre xyz and
-// radius w; _UvConeOn: 1 while switched on); its rim fades over _UvConeSoft of
+// radius w; _UvConeOn: 0 off .. 1 fully lit, rising over 120 ms as the marks
+// fluoresce in; the mark is multiplied by it); its rim fades over _UvConeSoft of
 // the radius, so the reveal follows the light pixel by pixel. Unlit and
 // additive-glowing (a fluorescent ink), never lit by the hall. Outside the cone
 // (or with the torch off) nothing draws. _Always 1 draws regardless of the
