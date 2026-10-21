@@ -29878,7 +29878,7 @@
           },
           {
             "key": "settings.languageDesk",
-            "text": "للأوراق والصحيفة فقط: بقية اللعبة والحاسوب بلغتك دائما. لا يقفل أبدا، والأوراق التي على مكتبك تحتفظ بطباعتها."
+            "text": "للأوراق والصحيفة فقط: بقية اللعبة والحاسوب بلغتك دائما. لا يقفل أبدا, والأوراق التي على مكتبك تحتفظ بطباعتها."
           },
           {
             "key": "settings.motion",
@@ -29990,7 +29990,7 @@
           },
           {
             "key": "settings.note",
-            "text": "الألوان والخلفية تتبع التاريخ دائما، أما خط الحاسوب ولغته فيبقيان كما اخترت. الحركة المخففة تعرض الترجمات فورا."
+            "text": "الألوان والخلفية تتبع التاريخ دائما, أما خط الحاسوب ولغته فيبقيان كما اخترت. الحركة المخففة تعرض الترجمات فورا."
           },
           {
             "key": "startmenu.mail",
@@ -37365,6 +37365,102 @@
           {
             "native": "الطباعة",
             "english": "the printing"
+          },
+          {
+            "native": "للأوراق",
+            "english": "for the papers"
+          },
+          {
+            "native": "والصحيفة",
+            "english": "and the newspaper"
+          },
+          {
+            "native": "بقية",
+            "english": "rest"
+          },
+          {
+            "native": "والحاسوب",
+            "english": "and the PC"
+          },
+          {
+            "native": "بلغتك",
+            "english": "in your language"
+          },
+          {
+            "native": "يقفل",
+            "english": "locks"
+          },
+          {
+            "native": "والأوراق",
+            "english": "and the papers"
+          },
+          {
+            "native": "مكتبك",
+            "english": "your desk"
+          },
+          {
+            "native": "تحتفظ",
+            "english": "keep"
+          },
+          {
+            "native": "بطباعتها",
+            "english": "their print"
+          },
+          {
+            "native": "مستوى",
+            "english": "level"
+          },
+          {
+            "native": "الصوت",
+            "english": "sound"
+          },
+          {
+            "native": "العام",
+            "english": "master"
+          },
+          {
+            "native": "إطار",
+            "english": "frame"
+          },
+          {
+            "native": "ملء",
+            "english": "full"
+          },
+          {
+            "native": "المزامنة",
+            "english": "sync"
+          },
+          {
+            "native": "الرأسية",
+            "english": "vertical"
+          },
+          {
+            "native": "تخفيف",
+            "english": "reduce"
+          },
+          {
+            "native": "الوميض",
+            "english": "flashing"
+          },
+          {
+            "native": "أما",
+            "english": "as for"
+          },
+          {
+            "native": "خط",
+            "english": "type"
+          },
+          {
+            "native": "ولغته",
+            "english": "and its language"
+          },
+          {
+            "native": "فيبقيان",
+            "english": "stay"
+          },
+          {
+            "native": "اخترت",
+            "english": "you chose"
           }
         ]
       },
@@ -45429,6 +45525,74 @@
           {
             "native": "δίπλα",
             "english": "beside"
+          },
+          {
+            "native": "υπολογιστής",
+            "english": "PC"
+          },
+          {
+            "native": "σας",
+            "english": "your"
+          },
+          {
+            "native": "κλειδώνει",
+            "english": "locks"
+          },
+          {
+            "native": "κρατούν",
+            "english": "keep"
+          },
+          {
+            "native": "εκτύπωσή",
+            "english": "print"
+          },
+          {
+            "native": "Γενική",
+            "english": "Master"
+          },
+          {
+            "native": "ένταση",
+            "english": "volume"
+          },
+          {
+            "native": "παράθυρο",
+            "english": "window"
+          },
+          {
+            "native": "Πλήρης",
+            "english": "Full"
+          },
+          {
+            "native": "οθόνη",
+            "english": "screen"
+          },
+          {
+            "native": "Κάθετος",
+            "english": "Vertical"
+          },
+          {
+            "native": "συγχρονισμός",
+            "english": "sync"
+          },
+          {
+            "native": "Λιγότερες",
+            "english": "Fewer"
+          },
+          {
+            "native": "αναλαμπές",
+            "english": "flashes"
+          },
+          {
+            "native": "γραμματοσειρά",
+            "english": "type"
+          },
+          {
+            "native": "μένουν",
+            "english": "stay"
+          },
+          {
+            "native": "δικές",
+            "english": "own"
           }
         ]
       },
@@ -53613,6 +53777,54 @@
           {
             "native": "accanto",
             "english": "beside"
+          },
+          {
+            "native": "resto",
+            "english": "rest"
+          },
+          {
+            "native": "tua",
+            "english": "your"
+          },
+          {
+            "native": "restano",
+            "english": "stay"
+          },
+          {
+            "native": "stampati",
+            "english": "printed"
+          },
+          {
+            "native": "Volume",
+            "english": "Volume"
+          },
+          {
+            "native": "generale",
+            "english": "master"
+          },
+          {
+            "native": "finestra",
+            "english": "window"
+          },
+          {
+            "native": "bordi",
+            "english": "borders"
+          },
+          {
+            "native": "intero",
+            "english": "full"
+          },
+          {
+            "native": "Sincronia",
+            "english": "Sync"
+          },
+          {
+            "native": "verticale",
+            "english": "vertical"
+          },
+          {
+            "native": "lampeggi",
+            "english": "flashes"
           }
         ]
       },
@@ -62021,6 +62233,42 @@
           {
             "native": "neben",
             "english": "beside"
+          },
+          {
+            "native": "Rest",
+            "english": "rest"
+          },
+          {
+            "native": "Spiels",
+            "english": "game"
+          },
+          {
+            "native": "bleiben",
+            "english": "stay"
+          },
+          {
+            "native": "liegen",
+            "english": "lie"
+          },
+          {
+            "native": "behalten",
+            "english": "keep"
+          },
+          {
+            "native": "Weniger",
+            "english": "Less"
+          },
+          {
+            "native": "Blitzen",
+            "english": "flashing"
+          },
+          {
+            "native": "Schrift",
+            "english": "type"
+          },
+          {
+            "native": "PCs",
+            "english": "PC"
           }
         ]
       },
@@ -69777,6 +70025,38 @@
           {
             "native": "旁",
             "english": "beside"
+          },
+          {
+            "native": "仅限",
+            "english": "only"
+          },
+          {
+            "native": "其余",
+            "english": "rest"
+          },
+          {
+            "native": "部分",
+            "english": "part"
+          },
+          {
+            "native": "保留",
+            "english": "keep"
+          },
+          {
+            "native": "原来",
+            "english": "original"
+          },
+          {
+            "native": "边框",
+            "english": "border"
+          },
+          {
+            "native": "垂直同步",
+            "english": "vertical sync"
+          },
+          {
+            "native": "减少",
+            "english": "reduce"
           }
         ]
       },
@@ -77589,6 +77869,34 @@
           {
             "native": "いなければならない",
             "english": "must"
+          },
+          {
+            "native": "ほか",
+            "english": "other"
+          },
+          {
+            "native": "なく",
+            "english": "never"
+          },
+          {
+            "native": "机",
+            "english": "desk"
+          },
+          {
+            "native": "スクリーン",
+            "english": "screen"
+          },
+          {
+            "native": "点滅",
+            "english": "flashing"
+          },
+          {
+            "native": "抑える",
+            "english": "reduce"
+          },
+          {
+            "native": "従い",
+            "english": "follow"
           }
         ]
       }

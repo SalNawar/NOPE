@@ -266,18 +266,46 @@ public class UiStringsTests
 
     // TEXT-LANG (BUG-3a, D7): surfaces. Only a paper and a sign read the culture's labels; the chrome and the PC never do.
 
+    /// <summary>A table's entries as Generate World reads them (key, text, gloss, tier).</summary>
+    private static UiStringEntry[] Entries(IEnumerable<ContentNode> items) => items.Select(e => new UiStringEntry
+    {
+        key = e.Get("key").Text,
+        text = e.Get("text").Text,
+        gloss = e.Get("gloss") != null && e.Get("gloss").Text == "Below" ? GlossStyle.Below : e.Get("gloss") != null && e.Get("gloss").Text == "Inline" ? GlossStyle.Inline : GlossStyle.None,
+        tier = e.Get("tier") != null && e.Get("tier").Text == "Flavour" ? StringTier.Flavour : StringTier.Full
+    }).ToArray();
+
     /// <summary>A culture table of today's content as the theme service builds it (its entries, its direction, its words).</summary>
     private static UiStrings TodaysStrings(ContentNode ui, string language)
     {
-        UiStringEntry[] Entries(IEnumerable<ContentNode> items) => items.Select(e => new UiStringEntry
-        {
-            key = e.Get("key").Text,
-            text = e.Get("text").Text,
-            gloss = e.Get("gloss") != null && e.Get("gloss").Text == "Below" ? GlossStyle.Below : e.Get("gloss") != null && e.Get("gloss").Text == "Inline" ? GlossStyle.Inline : GlossStyle.None,
-            tier = e.Get("tier") != null && e.Get("tier").Text == "Flavour" ? StringTier.Flavour : StringTier.Full
-        }).ToArray();
         ContentNode table = ui.Get("languages").Items.First(l => l.Get("language").Text == language);
         return new UiStrings(Entries(ui.Get("strings").Items), Entries(table.Get("entries").Items), table.Get("rtl").Text == "true", 60);
+    }
+
+    /// <summary>
+    /// Every culture table of today's content passes Generate World's own
+    /// table checks (WorldContentGenerator.Culture: UiStrings.TableProblems,
+    /// the placeholders, tags and the Arabic shaper's characters, and
+    /// LensWords.TableProblems, a glossary word for every word of a label), so
+    /// a new row cannot make the generation abort. The TEXT-LANG integration
+    /// found 35 such errors in the new Settings rows, which only Unity's
+    /// Generate World had reported.
+    /// </summary>
+    [Test]
+    public void EveryCultureTable_PassesGenerateWorldsTableChecks()
+    {
+        ContentNode ui = TodaysUi();
+        UiStringEntry[] reading = Entries(ui.Get("strings").Items);
+        Assert.IsEmpty(UiStrings.TableProblems(reading, null, false), "the reading table");
+        foreach (ContentNode table in ui.Get("languages").Items)
+        {
+            string language = table.Get("language").Text;
+            UiStringEntry[] entries = table.Get("entries").Items.Select(e => new UiStringEntry { key = e.Get("key").Text, text = e.Get("text").Text }).ToArray();
+            List<LensWord> words = table.Get("words").Items.Select(w => new LensWord { native = w.Get("native").Text, english = w.Get("english").Text }).ToList();
+            List<string> problems = UiStrings.TableProblems(reading, entries, table.Get("rtl").Text == "true")
+                                             .Concat(LensWords.TableProblems(reading, entries, words)).ToList();
+            Assert.IsEmpty(problems, language + ": " + string.Join(" | ", problems));
+        }
     }
 
     /// <summary>Surface routing for every UI key of today's content, in a left-to-right and a right-to-left culture: the chrome and the PC read the reading text, a paper and a sign the culture's label.</summary>
