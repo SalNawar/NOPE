@@ -1144,9 +1144,10 @@ MonoBehaviour:
     text: Immer Englisch
     gloss: 0
     tier: 0
-  - key: settings.languageLocked
-    text: "Gesperrt seit Tag {0}: Das Amt spricht jetzt die Sprache der Welt. Fahre
-      \xFCber ein Wort, um es zu \xFCbersetzen (die \xDCbersetzungslupe)."
+  - key: settings.languageDesk
+    text: "Nur f\xFCr die Papiere und die Zeitung: Der Rest des Spiels und der PC
+      bleiben immer in deiner Sprache. Nie gesperrt; Papiere, die schon auf deinem
+      Schreibtisch liegen, behalten ihren Druck."
     gloss: 0
     tier: 0
   - key: settings.motion
@@ -1177,6 +1178,62 @@ MonoBehaviour:
     text: An
     gloss: 0
     tier: 0
+  - key: settings.sound
+    text: Ton
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMaster
+    text: "Gesamtlautst\xE4rke"
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMusic
+    text: Musik
+    gloss: 0
+    tier: 0
+  - key: settings.volumeEffects
+    text: Effekte
+    gloss: 0
+    tier: 0
+  - key: settings.display
+    text: Anzeige
+    gloss: 0
+    tier: 0
+  - key: settings.windowed
+    text: Fenster
+    gloss: 0
+    tier: 0
+  - key: settings.borderless
+    text: Rahmenlos
+    gloss: 0
+    tier: 0
+  - key: settings.fullscreen
+    text: Vollbild
+    gloss: 0
+    tier: 0
+  - key: settings.resolution
+    text: "Aufl\xF6sung"
+    gloss: 0
+    tier: 0
+  - key: settings.vsync
+    text: VSync
+    gloss: 0
+    tier: 0
+  - key: settings.off
+    text: Aus
+    gloss: 0
+    tier: 0
+  - key: settings.on
+    text: An
+    gloss: 0
+    tier: 0
+  - key: settings.brightness
+    text: Helligkeit
+    gloss: 0
+    tier: 0
+  - key: settings.reduceFlashing
+    text: Weniger Blitzen
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "Desktop-Symbole \xF6ffnen mit"
     gloss: 0
@@ -1202,9 +1259,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.note
-    text: "Farben, Schriften und das Hintergrundbild folgen immer der Geschichte.
-      Ein Sprachwechsel gilt ab dem n\xE4chsten \xD6ffnen des Amts. Reduzierte Bewegung
-      zeigt \xDCbersetzungen sofort."
+    text: "Farben und das Hintergrundbild folgen immer der Geschichte; Schrift und
+      Sprache des PCs bleiben deine. Reduzierte Bewegung zeigt \xDCbersetzungen sofort."
     gloss: 0
     tier: 0
   - key: startmenu.mail
@@ -6230,3 +6286,21 @@ MonoBehaviour:
     english: stamp rack
   - native: neben
     english: beside
+  - native: Rest
+    english: rest
+  - native: Spiels
+    english: game
+  - native: bleiben
+    english: stay
+  - native: liegen
+    english: lie
+  - native: behalten
+    english: keep
+  - native: Weniger
+    english: Less
+  - native: Blitzen
+    english: flashing
+  - native: Schrift
+    english: type
+  - native: PCs
+    english: PC

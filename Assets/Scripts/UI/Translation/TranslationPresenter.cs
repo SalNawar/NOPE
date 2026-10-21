@@ -39,7 +39,7 @@ public sealed class TranslationPresenter
         Tongue tongue = _day.TongueOf(id);
         TranslatorPack pack = _day.PackOf(tongue);
         (ForeignText text, TMP_FontAsset font) = Look(tongue);
-        string placeholder = UiText.Format("compare.untranslated", tongue.displayName, pack != null ? pack.displayName : tongue.pack);
+        string placeholder = UiText.Format("compare.untranslated", tongue.displayName, pack != null ? pack.displayName : tongue.pack); // the player's language on the desk and the PC alike (CODE-79)
         return new CaseTranslation(new SpeechTranslation(text, _day.Translated(id), _settings.flip, MotionPreference.Reduced, placeholder), font,
                                    tongue.id, tongue.displayName);
     }

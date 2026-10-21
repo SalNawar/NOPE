@@ -263,4 +263,203 @@ public class UiStringsTests
         s.English("ok");
         Assert.AreEqual(0, s.Phrases.Count);
     }
+
+    // TEXT-LANG (BUG-3a, D7): surfaces. Only a paper and a sign read the culture's labels; the chrome and the PC never do.
+
+    /// <summary>A table's entries as Generate World reads them (key, text, gloss, tier).</summary>
+    private static UiStringEntry[] Entries(IEnumerable<ContentNode> items) => items.Select(e => new UiStringEntry
+    {
+        key = e.Get("key").Text,
+        text = e.Get("text").Text,
+        gloss = e.Get("gloss") != null && e.Get("gloss").Text == "Below" ? GlossStyle.Below : e.Get("gloss") != null && e.Get("gloss").Text == "Inline" ? GlossStyle.Inline : GlossStyle.None,
+        tier = e.Get("tier") != null && e.Get("tier").Text == "Flavour" ? StringTier.Flavour : StringTier.Full
+    }).ToArray();
+
+    /// <summary>A culture table of today's content as the theme service builds it (its entries, its direction, its words).</summary>
+    private static UiStrings TodaysStrings(ContentNode ui, string language)
+    {
+        ContentNode table = ui.Get("languages").Items.First(l => l.Get("language").Text == language);
+        return new UiStrings(Entries(ui.Get("strings").Items), Entries(table.Get("entries").Items), table.Get("rtl").Text == "true", 60);
+    }
+
+    /// <summary>
+    /// Every culture table of today's content passes Generate World's own
+    /// table checks (WorldContentGenerator.Culture: UiStrings.TableProblems,
+    /// the placeholders, tags and the Arabic shaper's characters, and
+    /// LensWords.TableProblems, a glossary word for every word of a label), so
+    /// a new row cannot make the generation abort. The TEXT-LANG integration
+    /// found 35 such errors in the new Settings rows, which only Unity's
+    /// Generate World had reported.
+    /// </summary>
+    [Test]
+    public void EveryCultureTable_PassesGenerateWorldsTableChecks()
+    {
+        ContentNode ui = TodaysUi();
+        UiStringEntry[] reading = Entries(ui.Get("strings").Items);
+        Assert.IsEmpty(UiStrings.TableProblems(reading, null, false), "the reading table");
+        foreach (ContentNode table in ui.Get("languages").Items)
+        {
+            string language = table.Get("language").Text;
+            UiStringEntry[] entries = table.Get("entries").Items.Select(e => new UiStringEntry { key = e.Get("key").Text, text = e.Get("text").Text }).ToArray();
+            List<LensWord> words = table.Get("words").Items.Select(w => new LensWord { native = w.Get("native").Text, english = w.Get("english").Text }).ToList();
+            List<string> problems = UiStrings.TableProblems(reading, entries, table.Get("rtl").Text == "true")
+                                             .Concat(LensWords.TableProblems(reading, entries, words)).ToList();
+            Assert.IsEmpty(problems, language + ": " + string.Join(" | ", problems));
+        }
+    }
+
+    /// <summary>Surface routing for every UI key of today's content, in a left-to-right and a right-to-left culture: the chrome and the PC read the reading text, a paper and a sign the culture's label.</summary>
+    [TestCase("el")]
+    [TestCase("ar")]
+    public void ForSurface_EveryKey_OnlyAPaperOrASignReadsTheCulture(string language)
+    {
+        ContentNode ui = TodaysUi();
+        UiStrings s = TodaysStrings(ui, language);
+        UiStrings reading = Strings();
+        int cultured = 0;
+        foreach (ContentNode e in ui.Get("strings").Items)
+        {
+            string key = e.Get("key").Text;
+            object[] args = { "A", "B", "C", "D" };
+            string english = s.English(key, args);
+            Assert.AreEqual(english, s.ForSurface(TextSurface.Desk, key, args), key + " on the chrome");
+            Assert.AreEqual(english, s.ForSurface(TextSurface.Pc, key, args), key + " on the PC");
+            Assert.AreEqual(s.Format(key, args), s.ForSurface(TextSurface.Paper, key, args), key + " on a paper");
+            Assert.AreEqual(s.Format(key, args), s.ForSurface(TextSurface.Sign, key, args), key + " on a sign");
+            if (s.ForSurface(TextSurface.Paper, key, args) != english)
+                cultured++;
+        }
+        Assert.Greater(cultured, 900, "the papers do read the culture's labels");
+        Assert.AreEqual("nope.key", reading.ForSurface(TextSurface.Desk, "nope.key"), "a missing key is the key on any surface");
+    }
+
+    /// <summary>CODE-44: an argument already shaped is turned back into logical text, so a right-to-left label is shaped once, at the outermost format, and reads the same as with the logical argument.</summary>
+    [Test]
+    public void Format_RightToLeft_AShapedArgument_IsShapedOnce()
+    {
+        UiStrings s = Strings(new[] { E("day", "اليوم {0}"), E("pair", "{0} مقابل {1}") }, rtl: true);
+        string word = "الأدلة";
+        Assert.AreEqual(s.Format("day", word), s.Format("day", ArabicShaper.ToVisual(word)));
+        Assert.AreEqual(s.Format("pair", word, "سجل"), s.Format("pair", ArabicShaper.ToVisual(word), ArabicShaper.ToVisual("سجل")));
+        Assert.AreEqual(ArabicShaper.ToVisual("اليوم " + word), s.Format("day", ArabicShaper.ToVisual(word)), "the whole label in visual order, the argument read in place");
+    }
+
+    // TEXT-LANG (BUG-3a; CODE-45, CODE-79; FIX_PLAN TEXT-LANG Tests: "records ... a round trip in another language
+    // renders correctly"): a citation, Mail's copy and the visit record are built on the chrome from a paper's word
+    // (CaseFactory: "{0} on the {1}" with UiText.DocumentWord). On the culture day the word on the paper is the
+    // culture's; the record must still hold none of the world's language.
+
+    /// <summary>The culture labels a lookup has printed so far, as the takeover grep reads them (TextLangAudit).</summary>
+    private static IEnumerable<(string, string)> Shown(UiStrings s) =>
+        s.Phrases.SelectMany(p => new[] { (p.Visual, p.English), (p.Logical, p.English) });
+
+    /// <summary>
+    /// Every paper word of today's content, printed on the culture day (UiText.FormWords: PaperWord) and then quoted in
+    /// a citation's value label as CaseFactory builds it (citation.label.onPaper, citation.label.book) on the chrome and
+    /// on the PC: the label is exactly the English one, and the takeover grep finds no culture label in it, while the
+    /// same label on a paper keeps the culture's word.
+    /// </summary>
+    [TestCase("el")]
+    [TestCase("ar")]
+    [TestCase("zh-Hans")]
+    public void ACitationBuiltFromAPapersWord_HoldsNoWorldLanguage_OnTheCultureDay(string language)
+    {
+        ContentNode ui = TodaysUi();
+        UiStrings s = TodaysStrings(ui, language);
+        var records = new List<(string, TextSurface)>();
+        int cultured = 0;
+        foreach (ContentNode e in ui.Get("strings").Items.Where(e => e.Get("key").Text.StartsWith(DocumentWords.Prefix)))
+        {
+            string english = e.Get("text").Text; // as the content prints it (a paper's label, an office's name)
+            string word = s.PaperWord(DocumentWords.Key(english), english);
+            if (word != english)
+                cultured++;
+            string onPaper = s.ForSurface(TextSurface.Desk, "citation.label.onPaper", word, "Passport");
+            Assert.AreEqual(s.English("citation.label.onPaper", english, "Passport"), onPaper, e.Get("key").Text + " in a citation");
+            string book = s.ForSurface(TextSurface.Pc, "citation.label.book", s.English("category.Seal"), word);
+            Assert.AreEqual(s.English("citation.label.book", s.English("category.Seal"), english), book, e.Get("key").Text + " in Mail's copy");
+            records.Add((onPaper, TextSurface.Desk));
+            records.Add((book, TextSurface.Pc));
+            StringAssert.Contains(word, s.ForSurface(TextSurface.Paper, "citation.label.onPaper", word, "Passport"), "a paper keeps the culture's word");
+        }
+        Assert.Greater(cultured, 150, "the papers do print the culture's words");
+        CollectionAssert.IsEmpty(TextAudit.CultureOnPlayerSurfaces(records, Shown(s)), "the takeover grep over the records");
+    }
+
+    /// <summary>A record built on the culture day reads the same as one built before it (the round trip: it holds the player's language, whatever the papers printed).</summary>
+    [Test]
+    public void ACitationRecord_ReadsTheSame_BeforeAndOnTheCultureDay()
+    {
+        UiStrings s = TodaysStrings(TodaysUi(), "el");
+        const string label = "SURNAME / GIVEN NAMES";
+        string week1 = s.ForSurface(TextSurface.Desk, "citation.label.onPaper", label, "Passport"); // before the culture day the paper prints its own English
+        string word = s.PaperWord(DocumentWords.Key(label), label);
+        Assert.AreNotEqual(label, word, "the paper reads Greek on the culture day");
+        Assert.AreEqual(week1, s.ForSurface(TextSurface.Desk, "citation.label.onPaper", word, "Passport"));
+        Assert.AreEqual("SURNAME / GIVEN NAMES on the Passport", week1);
+    }
+
+    /// <summary>A culture label (not only a paper word) passed into a chrome or PC string prints as its English; other arguments, numbers and canonical values pass verbatim.</summary>
+    [Test]
+    public void English_ACultureLabelArgument_PrintsItsEnglish()
+    {
+        UiStrings s = Strings(Culture);
+        string culture = s.Format("plain");
+        Assert.AreEqual("Simple", culture);
+        Assert.AreEqual("Plain vs Babylon (Babili)", s.English("pair", culture, "Babylon (Babili)"));
+        Assert.AreEqual("Plain vs 3", s.ForSurface(TextSurface.Pc, "pair", culture, 3));
+        Assert.AreEqual("Simple vs x", s.ForSurface(TextSurface.Paper, "pair", culture, "x"), "a paper keeps it");
+    }
+
+    /// <summary>FIX_PLAN_v2 ("Paper: documents and the newspaper"): the newspaper's own words, looked up the chrome's way (UiText.Get on the Desk surface, as CultureThemeService resolves the masthead's, edition line's and price's theme tags), read the culture's language on the culture day; the Bureau memo's line stays the chrome's.</summary>
+    [TestCase("el")]
+    [TestCase("ar")]
+    [TestCase("it")]
+    [TestCase("de")]
+    [TestCase("zh-Hans")]
+    [TestCase("ja")]
+    public void TheNewspapersWords_ReadTheCulture_TheMemoDoesNot(string language)
+    {
+        ContentNode ui = TodaysUi();
+        UiStrings s = TodaysStrings(ui, language);
+        foreach (string key in new[] { "briefing.masthead", "paper.edition", "paper.price" })
+            CollectionAssert.Contains(CultureChoice.NewspaperKeys, key, "the masthead, the edition line and the price are the newspaper's words");
+        foreach (string key in CultureChoice.NewspaperKeys)
+        {
+            string shown = s.ForSurface(CultureChoice.SurfaceOfKey(key, TextSurface.Desk), key, 8);
+            Assert.AreEqual(s.Format(key, 8), shown, key);
+            Assert.AreNotEqual(s.English(key, 8), shown, key + " is translated");
+        }
+        Assert.AreEqual(s.English("briefing.newHours", "08:00", "17:00"),
+                        s.ForSurface(CultureChoice.SurfaceOfKey("briefing.newHours", TextSurface.Desk), "briefing.newHours", "08:00", "17:00"));
+    }
+
+    /// <summary>The verifier's case: on a Greek culture day the paper's masthead, edition line and price read Greek (not "The Temporal Times", "MORNING EDITION", "ONE CREDIT") under the Greek dateline; Settings' note beside it stays the PC's (the reading language).</summary>
+    [Test]
+    public void TheNewspapersMasthead_ReadsGreek_OnAGreekCultureDay()
+    {
+        UiStrings s = TodaysStrings(TodaysUi(), "el");
+        string Paper(string key) => s.ForSurface(CultureChoice.SurfaceOfKey(key, TextSurface.Desk), key);
+        Assert.AreEqual("Η ΧΡΟΝΙΚΗ ΕΦΗΜΕΡΙΔΑ", Paper("briefing.masthead"));
+        Assert.AreEqual("ΠΡΩΙΝΗ ΕΚΔΟΣΗ", Paper("paper.edition"));
+        Assert.AreEqual("ΜΙΑ ΜΟΝΑΔΑ", Paper("paper.price"));
+        Assert.AreEqual(s.English("settings.note"), s.ForSurface(CultureChoice.SurfaceOfKey("settings.note", TextSurface.Pc), "settings.note"));
+    }
+
+    /// <summary>Settings' note (under the language pair) no longer claims what TEXT-LANG undid: fonts do not follow history (BUG-38a: the PC keeps its kit face) and a language change does not wait for the office to reopen (it applies at once). No culture's note says so either.</summary>
+    [Test]
+    public void SettingsNote_ClaimsNoFontFollowingOrLanguageWait()
+    {
+        ContentNode ui = TodaysUi();
+        string note = ui.Get("strings").Items.First(e => e.Get("key").Text == "settings.note").Get("text").Text;
+        StringAssert.DoesNotContain("fonts", note);
+        StringAssert.DoesNotContain("next time the office opens", note);
+        foreach (ContentNode table in ui.Get("languages").Items)
+        {
+            string language = table.Get("language").Text;
+            ContentNode entry = table.Get("entries").Items.FirstOrDefault(e => e.Get("key").Text == "settings.note");
+            Assert.IsNotNull(entry, language);
+            Assert.AreEqual(2, entry.Get("text").Text.Split(new[] { '.', '\u3002' }, System.StringSplitOptions.RemoveEmptyEntries).Length, language + ": two sentences, as the English (no language-change sentence)");
+        }
+    }
 }

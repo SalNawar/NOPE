@@ -1,13 +1,14 @@
 using UnityEngine;
 
 /// <summary>
-/// The player's UI language choice (piece 6 U12): follow history (the
-/// culture's labels) or always English, the default (CultureChoice.ChoseEnglish:
-/// a player who never chose reads English until the Translation Lens's day).
-/// A per-player preference kept in PlayerPrefs, outside the run save, so New
-/// Run keeps it. Colours, fonts and the wallpaper follow history either way;
-/// the choice applies at the next scene load; from the lens's day the labels
-/// follow history whatever it holds (CultureChoice.EnglishBySetting).
+/// The player's language choice for the papers (piece 6 U12; D7: only the
+/// papers' printed words and the newspaper's own words take the world's
+/// language, the PC and the chrome never do): "Follow history" (the culture's
+/// labels from the culture day) or "Always English". A per-player preference
+/// kept in PlayerPrefs, outside the run save, so New Run keeps it. It never
+/// locks and applies at once (BUG-3a): with Follow history, as with no
+/// choice, the papers read English until the culture day and the world's
+/// language from then on (D7, R2; CultureChoice.EnglishBySetting).
 /// </summary>
 public static class UiLanguagePreference
 {
@@ -17,14 +18,10 @@ public static class UiLanguagePreference
     /// <summary>The stored choice (CultureChoice.AlwaysEnglishChoice or FollowHistoryChoice), or null when the player never chose.</summary>
     public static string Stored => PlayerPrefs.HasKey(PlayerPrefKeys.For(Key)) ? PlayerPrefs.GetString(PlayerPrefKeys.For(Key)) : null;
 
-    /// <summary>True when the choice is "Always English" (the default; CultureChoice.ChoseEnglish); setting it stores the choice.</summary>
-    public static bool AlwaysEnglish
+    /// <summary>Stores the choice: "Always English" when <paramref name="alwaysEnglish"/>, else "Follow history".</summary>
+    public static void Choose(bool alwaysEnglish)
     {
-        get => CultureChoice.ChoseEnglish(Stored);
-        set
-        {
-            PlayerPrefs.SetString(PlayerPrefKeys.For(Key), value ? CultureChoice.AlwaysEnglishChoice : CultureChoice.FollowHistoryChoice);
-            PlayerPrefs.Save();
-        }
+        PlayerPrefs.SetString(PlayerPrefKeys.For(Key), alwaysEnglish ? CultureChoice.AlwaysEnglishChoice : CultureChoice.FollowHistoryChoice);
+        PlayerPrefs.Save();
     }
 }
