@@ -107,7 +107,10 @@ public static class TextLangAudit
     /// on a paper and a text of the morning newspaper (FIX_PLAN_v2: "Paper:
     /// documents and the newspaper"; the Bureau memo on it is chrome) are
     /// Paper texts; a citation, Mail's copy or any other chrome text quoting a
-    /// paper's word in the culture's language is a hit.
+    /// paper's word in the culture's language is a hit. The rulebook folder's
+    /// cover words are the folder's print, a Paper text as DeskRulebook prints
+    /// them (UiText.DocumentWord over the folder's clean face); its pages,
+    /// tabs and GUIDE are chrome (TEXT-LANG decision 1).
     /// </summary>
     public static List<string> CultureOnPlayerSurfaces()
     {
@@ -116,7 +119,8 @@ public static class TextLangAudit
             return new List<string>();
         IEnumerable<(string, string)> labels = service.Strings.Phrases.SelectMany(p => new[] { (p.Visual, p.English), (p.Logical, p.English) });
         List<(Transform paper, Transform memo)> newspapers = Newspapers();
-        IEnumerable<(string, TextSurface)> shown = ShownTexts().Select(t => (t.text, SurfaceOf(t, newspapers)));
+        HashSet<Transform> covers = RulebookCovers();
+        IEnumerable<(string, TextSurface)> shown = ShownTexts().Select(t => (t.text, covers.Contains(t.transform) ? TextSurface.Paper : SurfaceOf(t, newspapers)));
         return TextAudit.CultureOnPlayerSurfaces(shown, labels);
     }
 
@@ -142,6 +146,20 @@ public static class TextLangAudit
             var memo = so.FindProperty("briefingMemo")?.objectReferenceValue as GameObject;
             if (paper != null)
                 found.Add((paper.transform, memo != null ? memo.transform : null));
+        }
+        return found;
+    }
+
+    /// <summary>Every loaded rulebook folder's cover words (DeskRulebook's coverWords, DOC-LOOK's file, read only through SerializedObject).</summary>
+    private static HashSet<Transform> RulebookCovers()
+    {
+        var found = new HashSet<Transform>();
+        foreach (DeskRulebook rulebook in Object.FindObjectsByType<DeskRulebook>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            SerializedProperty words = new SerializedObject(rulebook).FindProperty("coverWords");
+            for (int i = 0; words != null && i < words.arraySize; i++)
+                if (words.GetArrayElementAtIndex(i).objectReferenceValue is TMP_Text word)
+                    found.Add(word.transform);
         }
         return found;
     }
