@@ -1209,16 +1209,12 @@ MonoBehaviour:
     text: Always English
     gloss: 0
     tier: 1
-  - key: settings.languageLocked
-    text: 'Locked from day {0}: the papers and labels on your desk read the world''s
-      language now; hover a word to translate it (the Translation Lens). The PC always
-      reads English: scan a paper to read its copy cleanly.'
+  - key: settings.languageDesk
+    text: 'For the papers and the newspaper only: the rest of the game and the PC
+      always read your language. Never locked; papers already on your desk keep their
+      print.'
     gloss: 0
     tier: 1
-  - key: settings.languageDesk
-    text: For the papers and labels on your desk. The PC always reads English.
-    gloss: 0
-    tier: 0
   - key: settings.motion
     text: Motion
     gloss: 0
@@ -1251,6 +1247,82 @@ MonoBehaviour:
     text: On
     gloss: 0
     tier: 1
+  - key: settings.sound
+    text: Sound
+    gloss: 0
+    tier: 1
+  - key: settings.volumeMaster
+    text: Master volume
+    gloss: 0
+    tier: 1
+  - key: settings.volumeMusic
+    text: Music
+    gloss: 0
+    tier: 1
+  - key: settings.volumeEffects
+    text: Effects
+    gloss: 0
+    tier: 1
+  - key: settings.volumeValue
+    text: '{0} %'
+    gloss: 0
+    tier: 0
+  - key: settings.display
+    text: Display
+    gloss: 0
+    tier: 1
+  - key: settings.windowed
+    text: Windowed
+    gloss: 0
+    tier: 1
+  - key: settings.borderless
+    text: Borderless
+    gloss: 0
+    tier: 1
+  - key: settings.fullscreen
+    text: Fullscreen
+    gloss: 0
+    tier: 1
+  - key: settings.resolution
+    text: Resolution
+    gloss: 0
+    tier: 1
+  - key: settings.resolutionValue
+    text: "{0} \xD7 {1}"
+    gloss: 0
+    tier: 0
+  - key: settings.resolutionDown
+    text: "\u25C0"
+    gloss: 0
+    tier: 0
+  - key: settings.resolutionUp
+    text: "\u25B6"
+    gloss: 0
+    tier: 0
+  - key: settings.vsync
+    text: VSync
+    gloss: 0
+    tier: 1
+  - key: settings.off
+    text: Off
+    gloss: 0
+    tier: 1
+  - key: settings.on
+    text: On
+    gloss: 0
+    tier: 1
+  - key: settings.brightness
+    text: Brightness
+    gloss: 0
+    tier: 1
+  - key: settings.brightnessValue
+    text: '{0} %'
+    gloss: 0
+    tier: 0
+  - key: settings.reduceFlashing
+    text: Reduce flashing
+    gloss: 0
+    tier: 1
   - key: settings.desktop
     text: Desktop icons open with
     gloss: 0
@@ -1276,9 +1348,8 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: settings.note
-    text: Colours, fonts and the wallpaper always follow history. A language change
-      applies the next time the office opens. Reduced motion shows translations at
-      once.
+    text: Colours and the wallpaper always follow history; the PC's type and language
+      stay yours. Reduced motion shows translations at once.
     gloss: 0
     tier: 1
   - key: startmenu.mail
@@ -2441,7 +2512,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: case.roleUnknown
-    text: Traveler
+    text: Traveller
     gloss: 0
     tier: 1
   - key: case.unlistedLand
@@ -2494,7 +2565,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: citation.deniedWrong
-    text: Denied a legitimate, permitted traveler.
+    text: Denied a legitimate, permitted traveller.
     gloss: 0
     tier: 1
   - key: citation.detainedWrong

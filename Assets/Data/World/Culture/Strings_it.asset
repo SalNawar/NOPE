@@ -1145,9 +1145,10 @@ MonoBehaviour:
     text: Sempre inglese
     gloss: 0
     tier: 0
-  - key: settings.languageLocked
-    text: 'Bloccata dal giorno {0}: ora l''ufficio legge la lingua del mondo. Passa
-      sopra una parola per tradurla (la Lente di traduzione).'
+  - key: settings.languageDesk
+    text: "Solo per i documenti e il giornale: il resto del gioco e il PC sono sempre
+      nella tua lingua. Mai bloccata; i documenti gi\xE0 sulla scrivania restano
+      come sono stampati."
     gloss: 0
     tier: 0
   - key: settings.motion
@@ -1178,6 +1179,62 @@ MonoBehaviour:
     text: Attivata
     gloss: 0
     tier: 0
+  - key: settings.sound
+    text: Audio
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMaster
+    text: Volume generale
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMusic
+    text: Musica
+    gloss: 0
+    tier: 0
+  - key: settings.volumeEffects
+    text: Effetti
+    gloss: 0
+    tier: 0
+  - key: settings.display
+    text: Schermo
+    gloss: 0
+    tier: 0
+  - key: settings.windowed
+    text: In finestra
+    gloss: 0
+    tier: 0
+  - key: settings.borderless
+    text: Senza bordi
+    gloss: 0
+    tier: 0
+  - key: settings.fullscreen
+    text: Schermo intero
+    gloss: 0
+    tier: 0
+  - key: settings.resolution
+    text: Risoluzione
+    gloss: 0
+    tier: 0
+  - key: settings.vsync
+    text: Sincronia verticale
+    gloss: 0
+    tier: 0
+  - key: settings.off
+    text: Disattivato
+    gloss: 0
+    tier: 0
+  - key: settings.on
+    text: Attivato
+    gloss: 0
+    tier: 0
+  - key: settings.brightness
+    text: "Luminosit\xE0"
+    gloss: 0
+    tier: 0
+  - key: settings.reduceFlashing
+    text: Riduci i lampeggi
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: Le icone del desktop si aprono con
     gloss: 0
@@ -1203,9 +1260,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.note
-    text: Colori, caratteri e sfondo seguono sempre la storia. Un cambio di lingua
-      vale dalla prossima apertura dell'ufficio. Il movimento ridotto mostra subito
-      le traduzioni.
+    text: Colori e sfondo seguono sempre la storia; caratteri e lingua del PC restano
+      i tuoi. Il movimento ridotto mostra subito le traduzioni.
     gloss: 0
     tier: 0
   - key: startmenu.mail
@@ -6125,3 +6181,27 @@ MonoBehaviour:
     english: stamp rack
   - native: accanto
     english: beside
+  - native: resto
+    english: rest
+  - native: tua
+    english: your
+  - native: restano
+    english: stay
+  - native: stampati
+    english: printed
+  - native: Volume
+    english: Volume
+  - native: generale
+    english: master
+  - native: finestra
+    english: window
+  - native: bordi
+    english: borders
+  - native: intero
+    english: full
+  - native: Sincronia
+    english: Sync
+  - native: verticale
+    english: vertical
+  - native: lampeggi
+    english: flashes
