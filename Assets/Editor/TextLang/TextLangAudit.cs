@@ -67,14 +67,19 @@ public static class TextLangAudit
         return text.ToString();
     }
 
-    /// <summary>Each kit face's missing characters for today's reading strings (<see cref="TodaysLatinText"/>), "face: U+00C9 …"; empty when every face covers them.</summary>
-    public static List<string> KitAtlasGaps(ContentLibrarySO library)
+    /// <summary>Each kit face's missing letters, digits and punctuation for today's reading strings (<see cref="TodaysLatinText"/>, <see cref="KitFontAtlases.Missing"/>), "face: U+00C9 …"; empty when every face covers them.</summary>
+    public static List<string> KitAtlasGaps(ContentLibrarySO library) => FaceGaps(library, KitFontAtlases.Missing);
+
+    /// <summary>Each kit face's missing symbols for today's reading strings (<see cref="KitFontAtlases.MissingSymbols"/>), outside the kit-atlas check: CONTENT's follow-up.</summary>
+    public static List<string> KitSymbolGaps(ContentLibrarySO library) => FaceGaps(library, KitFontAtlases.MissingSymbols);
+
+    private static List<string> FaceGaps(ContentLibrarySO library, System.Func<TMP_FontAsset, string, string> lacking)
     {
         string text = TodaysLatinText(library);
         var gaps = new List<string>();
         foreach (string path in KitFontAtlases.Faces)
         {
-            string missing = KitFontAtlases.Missing(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path), text);
+            string missing = lacking(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path), text);
             if (missing.Length > 0)
                 gaps.Add($"{Path.GetFileNameWithoutExtension(path)}: {missing}");
         }
@@ -93,6 +98,8 @@ public static class TextLangAudit
         {
             List<string> gaps = KitAtlasGaps(config.contentLibrary);
             Debug.Log($"[TextLang] Kit atlas gaps for today's strings: {(gaps.Count == 0 ? "none" : string.Join(" | ", gaps))}");
+            List<string> symbols = KitSymbolGaps(config.contentLibrary);
+            Debug.Log($"[TextLang] Symbols the kit faces leave to the fallback: {(symbols.Count == 0 ? "none" : string.Join(" | ", symbols))}");
         }
     }
 

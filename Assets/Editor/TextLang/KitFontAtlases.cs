@@ -79,13 +79,26 @@ public static class KitFontAtlases
         AssetDatabase.SaveAssets();
     }
 
-    /// <summary>The characters of <paramref name="text"/> (letters, digits, punctuation; tags and placeholders aside) a kit face's atlas lacks, distinct, as U+XXXX codes.</summary>
-    public static string Missing(TMP_FontAsset face, string text)
+    /// <summary>The characters of <paramref name="text"/> (letters, digits, punctuation; tags and placeholders aside) a kit face's atlas lacks, distinct, as U+XXXX codes. Symbols are not read (<see cref="IsChecked"/>).</summary>
+    public static string Missing(TMP_FontAsset face, string text) => Lacking(face, text, IsChecked);
+
+    /// <summary>The symbols of <paramref name="text"/> (<see cref="char.IsSymbol(char)"/>: math, currency, modifiers, arrows and shapes) a kit face's atlas lacks, distinct, as U+XXXX codes: the kit-atlas check leaves them to the fallback, so they are listed apart.</summary>
+    public static string MissingSymbols(TMP_FontAsset face, string text) => Lacking(face, text, char.IsSymbol);
+
+    /// <summary>
+    /// What the kit-atlas check reads: a letter, a digit or punctuation (the
+    /// orchestrator's ruling of 2026-10-21). A symbol (U+2212 −, U+25BA ►,
+    /// U+25CF ●, U+25B2 ▲) is left to the fallback, as Greek is; CONTENT swaps
+    /// those glyphs or a symbol face joins the kit (<see cref="MissingSymbols"/>).
+    /// </summary>
+    public static bool IsChecked(char c) => char.IsLetterOrDigit(c) || char.IsPunctuation(c);
+
+    private static string Lacking(TMP_FontAsset face, string text, System.Func<char, bool> read)
     {
         if (face == null)
             return "(no face)";
         var lookup = face.characterLookupTable;
-        return Codes(new string((text ?? string.Empty).Where(c => !char.IsControl(c) && !char.IsWhiteSpace(c) && !lookup.ContainsKey(c)).Distinct().ToArray()));
+        return Codes(new string((text ?? string.Empty).Where(c => !char.IsControl(c) && !char.IsWhiteSpace(c) && read(c) && !lookup.ContainsKey(c)).Distinct().ToArray()));
     }
 
     /// <summary>Characters as U+XXXX codes.</summary>

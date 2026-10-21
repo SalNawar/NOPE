@@ -39,6 +39,30 @@ public class TextLangEditorTests
         Assert.IsFalse(charset.Contains('Z') || charset.Contains(' '), "ASCII and spaces are the atlas's already");
     }
 
+    /// <summary>The kit-atlas check reads letters, digits and punctuation only (the orchestrator's ruling of 2026-10-21): the four symbols no kit font file draws (► ● ▲ −) and every other symbol are left to the fallback and read apart (textlang.kitSymbols).</summary>
+    [Test]
+    public void KitAtlasCheck_ReadsLettersDigitsAndPunctuation_NotSymbols()
+    {
+        foreach (char c in "aZÉéßŁΩ09.,;:!?'\"-()„“”’«»·")
+            Assert.IsTrue(KitFontAtlases.IsChecked(c), $"U+{(int)c:X4} is read");
+        foreach (char c in "►●▲−+=<>|~$^`°")
+            Assert.IsFalse(KitFontAtlases.IsChecked(c), $"U+{(int)c:X4} is a symbol, left to the fallback");
+    }
+
+    /// <summary>On the kit's own faces: a symbol is never a kit-atlas gap and only a symbol is a symbol gap; a letter no face carries (Cyrillic) is still a gap.</summary>
+    [Test, Category("NeedsEditor")]
+    public void KitFaces_Missing_LeavesSymbols_ToMissingSymbols()
+    {
+        foreach (string path in KitFontAtlases.Faces)
+        {
+            TMP_FontAsset face = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path);
+            Assert.IsNotNull(face, path);
+            Assert.AreEqual(string.Empty, KitFontAtlases.Missing(face, "►●▲−"), path);
+            Assert.AreEqual(string.Empty, KitFontAtlases.MissingSymbols(face, "Ab1.,„Ж"), path);
+            Assert.AreEqual("U+0416", KitFontAtlases.Missing(face, "AЖ"), path);
+        }
+    }
+
     /// <summary>The sweep keeps a text's own material preset (the paper's ink weight, a note's outline), re-based on the kit face's atlas; a preset of another font on a kit text is re-based on that text's face.</summary>
     [Test, Category("NeedsEditor")]
     public void Refont_AndRebasePresets_KeepATextsOwnLook_OnItsOwnAtlas()
