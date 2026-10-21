@@ -332,11 +332,23 @@ public static class CamChecks
     public static GateResult BuiltPlayerRunGc() =>
         All("cam.bp.run.gc", Owner, true, "bp.cam_gc.console", "bp.cam_gc.presses", "bp.cam_gc.missingScripts.end", "bp.cam_gc.materials.end");
 
-    /// <summary>One check over several result patterns, under <paramref name="owner"/> (built-player results only with <paramref name="builtPlayer"/>): each must be measured, green and current (GateResults.Require for each).</summary>
-    private static GateResult All(string id, string owner, bool builtPlayer, params string[] patterns)
+    /// <summary>One check over several result patterns, under <paramref name="owner"/> (built-player results only with <paramref name="builtPlayer"/>): the results and HEAD read once, judged by <see cref="Verdict"/>.</summary>
+    private static GateResult All(string id, string owner, bool builtPlayer, params string[] patterns) =>
+        Verdict(id, owner, builtPlayer, GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot), patterns);
+
+    /// <summary>
+    /// The verdict of a check over several result patterns on given results
+    /// and HEAD (pure; CamRigTests): each pattern judged as GateResults.Judge
+    /// judges it (measured, green, current, clean, and on a built player with
+    /// <paramref name="builtPlayer"/>), and the check green only when there is
+    /// a pattern and every one is (round 7's run ends depend on that: a check
+    /// whose first patterns are green still fails on a run that stopped
+    /// early).
+    /// </summary>
+    internal static GateResult Verdict(string id, string owner, bool builtPlayer, IReadOnlyList<QaGateResult> results, string head, params string[] patterns)
     {
-        List<GateResult> parts = patterns.Select(p => GateResults.Require(id, owner, p, builtPlayer)).ToList();
-        return GateResult.Of(id, owner, parts.All(r => r.Pass), string.Join("; ", patterns.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
-                             string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
+        List<GateResult> parts = patterns.Select(p => GateResults.Judge(id, owner, p, results, head, builtPlayer)).ToList();
+        return GateResult.Of(id, owner, parts.Count > 0 && parts.All(r => r.Pass), string.Join("; ", patterns.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
+                             parts.Count > 0 ? string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)) : "no pattern to judge");
     }
 }

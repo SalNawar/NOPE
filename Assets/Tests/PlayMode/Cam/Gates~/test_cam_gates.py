@@ -158,6 +158,16 @@ def _read(path):
         return f.read()
 
 
+# A C# string or char literal (kept), or a comment (dropped), leftmost first.
+_CS_TOKENS = re.compile(r'"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])\'|//[^\n]*|/\*.*?\*/', re.S)
+
+
+def _code(path):
+    """A C# source with its comments dropped and its strings kept (round 8): a commented-out [GateCheck], call or guard
+    reads as gone, so no test here passes on code that does not run."""
+    return _CS_TOKENS.sub(lambda m: m.group(0) if m.group(0)[0] in '"\'' else '', _read(path))
+
+
 def _safe(name):
     # QaRunner.Safe: anything but a letter, digit, '_' or '-' becomes '_'.
     return re.sub(r'[^A-Za-z0-9_-]', '_', name)
@@ -176,7 +186,7 @@ def _scenarios():
 
 def _plates():
     """CamOps.Plates: (key, owner) of each overlay plate camchrome reports, its key a literal or a const."""
-    src = _read(CAM_OPS)
+    src = _code(CAM_OPS)
     table = re.search(r'\bPlates\s*=\s*\{(.*?)\};', src, re.S).group(1)
     plates = []
     for key, owner in re.findall(r'\(\s*"[^"]+"\s*,\s*("[^"]+"|\w+)\s*,\s*"([^"]+)"\s*\)', table):
@@ -194,7 +204,7 @@ def _on_player(scenario):
 def _checks():
     """CamChecks' play and built-player checks, each with every result pattern it requires (GateResults.Require, or
     the local All over several patterns, with the check's owner and whether it reads built-player results)."""
-    src = _read(CAM_CHECKS)
+    src = _code(CAM_CHECKS)
     cam = re.search(r'const\s+string\s+Owner\s*=\s*"([^"]+)"', src).group(1)
     owner = lambda o: cam if o == 'Owner' else o.strip('"')
     kinds = {cid: (kind or 'Static', bool(demo)) for cid, kind, demo in re.findall(
@@ -221,7 +231,7 @@ def _knob_seconds(name, source, block=None):
         found = re.search(r'^  ' + name + r': ([0-9.]+)', asset, re.M)
     if found:
         return float(found.group(1))
-    return float(re.search(r'\b' + name + r' = ([0-9.]+)f;', _read(source)).group(1))
+    return float(re.search(r'\b' + name + r' = ([0-9.]+)f;', _code(source)).group(1))
 
 
 def run_lines(scenario, plates):
@@ -278,7 +288,7 @@ def _reads(check, line):
 class CamGateCoverageTests(unittest.TestCase):
 
     def test_the_table_names_every_op_and_family_camops_has(self):
-        src = _read(CAM_OPS)
+        src = _code(CAM_OPS)
         ops = {op.lower() for op in re.findall(r'RegisterOp\(\s*"([A-Za-z]+)"', src)}
         self.assertEqual(set(OP_FAMILIES), ops, 'a CamOps op added or gone: place it in OP_FAMILIES')
         families = set(re.findall(r'(?:runner\.Assert|new ChromeLine)\(\s*\$?"([a-z]+(?:\.[a-z0-9]+)*\.)', src))
@@ -290,7 +300,7 @@ class CamGateCoverageTests(unittest.TestCase):
         # owner), a probe's three (QA-RIG's scripts and materials, TEXT-LANG's LiberationSans), the self-test's and the
         # run's console, presses and quality (QA-RIG's). Every other op of QaRunner writes none, the sequences' analyses
         # aside (tools/qa).
-        src = _read(QA_RUNNER)
+        src = _code(QA_RUNNER)
         self.assertRegex(src, r'case "cameracheck":\s*AssertCamera\("camera\." \+ Safe\(s\.name\)\)')
         self.assertRegex(src, r'AssertCamera\("camera"\);')
         self.assertRegex(src, r'Assert\(id, "CAM", r\.Pass')
@@ -315,7 +325,7 @@ class CamGateCoverageTests(unittest.TestCase):
 
     def test_the_other_writers_tables_match_their_sources(self):
         # DESK-PLAN's ops a CAM scenario runs, and the analyses tools/qa writes a result for.
-        src = _read(DESK_PLAN_OPS)
+        src = _code(DESK_PLAN_OPS)
         self.assertRegex(src, r'const string Owner = "DESK-PLAN";')
         self.assertEqual(set(FOREIGN_OPS), set(re.findall(r'RegisterOp\("(\w+)"', src)))
         for family, _, _ in FOREIGN_OPS.values():
@@ -327,7 +337,7 @@ class CamGateCoverageTests(unittest.TestCase):
     def test_every_cam_scenario_op_is_known(self):
         # Each op of a CAM scenario is placed: CamOps', a built-in one with or without lines, a sequence, DESK-PLAN's.
         known_ops = set(re.findall(r'"([a-z]+)"', re.search(r'public static readonly string\[\] Ops =\s*\{(.*?)\};',
-                                                                _read(QA_RUNNER), re.S).group(1)))
+                                                                _code(QA_RUNNER), re.S).group(1)))
         for file, s in _scenarios():
             for step in s['steps']:
                 op = step['op'].lower()
@@ -398,11 +408,31 @@ class CamGateCoverageTests(unittest.TestCase):
         self.assertEqual({'cam.bp.gc', 'cam.bp.camera', 'cam.bp.run.gc'}, {c.id for c in bp})
         for c in bp:
             self.assertTrue(c.built_player and c.demo and all(p.startswith('bp.') for p in c.patterns), c.id)
+        # Round 8 (WAVE2_OPEN2 CAM #3): every other check runs with the merge gate; a Play check marked DemoOnly would be
+        # skipped there in silence.
+        attributes = re.findall(r'\[GateCheck\(([^\]]*)\)\]', _code(CAM_CHECKS))
+        self.assertGreater(len(attributes), len(bp))
+        for attribute in attributes:
+            if 'GateKind.BuiltPlayer' not in attribute:
+                self.assertNotIn('DemoOnly', attribute, f'a merge-gate check marked DemoOnly: {attribute}')
+
+    def test_every_check_requires_every_pattern_through_the_tested_verdict(self):
+        # Round 8 (WAVE2_OPEN2 CAM #3): round 7's run ends hold only while a check requires every pattern it names, with
+        # its built-player flag; CamRigTests proves the pure Verdict does, and All hands it every pattern and the flag as
+        # given, with every result and HEAD.
+        src = _code(CAM_CHECKS)
+        forward = re.search(r'private static GateResult All\(string id, string owner, bool builtPlayer, params string\[\] patterns\) =>\s*(.*?);', src, re.S)
+        self.assertIsNotNone(forward, 'All is the one-line hand-off to Verdict')
+        self.assertEqual('Verdict(id, owner, builtPlayer, GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot), patterns)',
+                         ' '.join(forward.group(1).split()))
+        self.assertNotIn('GateResults.Require(', src, 'every check goes through All and its tested Verdict')
+        verdict = _body(src, 'internal static GateResult Verdict(string id, string owner, bool builtPlayer, IReadOnlyList<QaGateResult> results, string head, params string[] patterns)')
+        self.assertIn('patterns.Select(p => GateResults.Judge(id, owner, p, results, head, builtPlayer))', verdict)
 
     def test_every_play_and_built_player_check_is_read_by_these_tests(self):
         # A check whose patterns the parser above cannot see would escape every test here.
         ids = set(re.findall(r'\[GateCheck\(\s*"([^"]+)"\s*,\s*(?:Owner|"[^"]+")\s*,\s*GateKind\.(?:Play|BuiltPlayer)\b',
-                             _read(CAM_CHECKS)))
+                             _code(CAM_CHECKS)))
         self.assertEqual(ids, {c.id for c in _checks()})
         self.assertEqual(ids, set(READS) | set(RUN_CHECKS), 'a check added or gone: place it in READS or RUN_CHECKS')
 
@@ -480,10 +510,14 @@ class CamGateCoverageTests(unittest.TestCase):
     def test_the_chrome_op_reports_what_its_steps_show_through_the_pure_report(self):
         # The wiring CamRigTests cannot reach (the op itself needs the editor): each camchrome step's expectations come
         # from ShownBy, and the leg's end asserts every line LegLines returns, as is.
-        src = _read(CAM_OPS)
+        src = _code(CAM_OPS)
         body = _body(src, 'private static IEnumerator Chrome(QaRunner runner, QaStep step)')
         self.assertRegex(body, r'List<string> shows = ShownBy\(step\.n, step\.target\);')
-        self.assertRegex(body, r'_chrome\.Shows\.UnionWith\(shows\);')
+        # Round 8 (WAVE2_OPEN2 CAM #3): what any n > 0 step shows is due, the stamp hint's n = 2 included: the union comes
+        # right after the start-or-refuse branches, under no condition of its own.
+        self.assertRegex(body, r'\}\s*else if \(_chrome == null \|\| !_chrome\.Running\)\s*\{\s*throw new InvalidOperationException\([^;]*\);\s*\}\s*'
+                               r'_chrome\.Shows\.UnionWith\(shows\);\s*if \(step\.n == 2\)')
+        self.assertEqual(1, body.count('UnionWith'))
         self.assertRegex(body, r'UnplacedFrames = done\.UnplacedFrames,')
         self.assertRegex(body, r'Missing = string\.Join\(", ", ChromeNames\.Where\(c => done\.Controls\.All\(w => w\.Path != c\)\)\),')
         self.assertRegex(body, r'foreach \(ChromeLine line in LegLines\(name, done\.Shows, tally, ')
@@ -492,7 +526,7 @@ class CamGateCoverageTests(unittest.TestCase):
     def test_the_chrome_watch_places_a_held_thing_that_is_no_component(self):
         # Round 6: a dragged decoration registers DeskDecor's plain Item, no Component, so a watch that placed only
         # Components counted 0 holding frames on every day-12 leg (CamRigTests pins HeldMember on the real type).
-        src = _read(CAM_OPS)
+        src = _code(CAM_OPS)
         watch = _body(src, 'private static IEnumerator Watch(ChromeWatch watch)')
         self.assertRegex(watch, r'HoldRegistry\.Desk\.Current is IHoldable holding')
         self.assertRegex(watch, r'HeldObject\(holding\) is GameObject held && QaGame\.ScreenRect\(held\) is Rect heldRect')
@@ -504,7 +538,7 @@ class CamGateCoverageTests(unittest.TestCase):
     def test_a_chip_read_counts_once_its_paper_is_out(self):
         # Round 5's fix, in camplay's coroutine: the attempt's end comes from the pure ChipReadOf (CamRigTests), a stuck
         # read ends the reads before any count, and reads grows in one place, after both.
-        play = _body(_read(CAM_OPS), 'private static IEnumerator Play(QaRunner runner, QaStep step)')
+        play = _body(_code(CAM_OPS), 'private static IEnumerator Play(QaRunner runner, QaStep step)')
         self.assertTrue(re.search(r'ChipRead read = ChipReadOf\(began, back\);', play), 'camplay reads each attempt through ChipReadOf')
         self.assertTrue(re.search(r'if \(read == ChipRead\.Stuck\)\s*\{\s*notes\.Add\([^;]*\);\s*break;\s*\}\s*reads\+\+;', play),
                         'a stuck read is noted and ends the reads, and only then does a read count')
@@ -552,10 +586,10 @@ class CamGateCoverageTests(unittest.TestCase):
         # The window (QaRunner.Gc: at least 10 frames, f x 30) holds the longest cycle these knobs make (CityLookTimeline's
         # total is at most the turn plus the fade), its first turn at most two frames in (the window's uncounted opening
         # frame, or the next, is the frame the cycle sees it open on) and its last check one frame after its end.
-        src = _read(CAM_OPS)
+        src = _code(CAM_OPS)
         const = lambda name: int(re.search(r'const int ' + name + r' = (\d+);', src).group(1))
-        fps = int(re.search(r'public const int Fps = (\d+);', _read(SEQ_RECORDER)).group(1))
-        runner = _read(QA_RUNNER)
+        fps = int(re.search(r'public const int Fps = (\d+);', _code(SEQ_RECORDER)).group(1))
+        runner = _code(QA_RUNNER)
         self.assertRegex(_body(runner, 'private IEnumerator Gc(QaStep s)'),
                          r'int frames = Mathf\.Max\(10, Mathf\.CeilToInt\(\(s\.f > 0f \? s\.f : 3f\) \* SeqRecorder\.Fps\)\);')
         window = max(10, math.ceil(gc[1].get('f', 3) * fps))
@@ -608,10 +642,17 @@ class CamGateCoverageTests(unittest.TestCase):
                     self.assertTrue(step.get('name', '').endswith('_' + view), f'{file}: camframe {step.get("name")} names the {view} view')
                     legs[view] += 1
         self.assertTrue(legs['office'] > 0 and legs['reading'] > 0, legs)
-        src = _read(CAM_OPS)
+        src = _code(CAM_OPS)
         frame = _body(src, 'private static IEnumerator Frame(QaRunner runner, QaStep step)')
         self.assertRegex(frame, r'^\s*bool reading = ReadingLeg\(step\.target\);', 'the leg\'s view is read before anything is measured')
         self.assertRegex(frame, r'if \(view\.IsOn != reading\)\s*\{\s*NotMeasured\(')
+        # Round 8 (WAVE2_OPEN2 CAM #3): each guard ends the op; a guard that only yields would measure on, and a later
+        # green frame.<name> would overwrite the red 'not measured' (one result file per id, the last write wins).
+        call = r'(?:[^;"]|"(?:\\.|[^"\\])*")*\);\s*([^\n]*)'
+        guards = re.findall(r'NotMeasured\(' + call, frame)
+        self.assertEqual(2, len(guards), 'camframe refuses an unbound desk and the wrong view')
+        for after in guards:
+            self.assertEqual('yield break;', after.strip(), 'camframe goes on after a not-measured guard')
         self.assertEqual(1, frame.count('view.IsOn'), 'once the views agree, the leg is judged on its own view (reading), never on IsOn')
         self.assertRegex(frame, r'if \(!reading\)\s*yield break;\s*Ray bottom')
         not_measured = _body(src, 'private static void NotMeasured(QaRunner runner, string name, bool reading, string why)')
@@ -619,6 +660,8 @@ class CamGateCoverageTests(unittest.TestCase):
         self.assertRegex(not_measured, r'if \(reading\)\s*runner\.Assert\("frame\." \+ name \+ "\.bottom", Owner, false, "not measured", why\);')
         cap = _body(src, 'private static IEnumerator Cap(QaRunner runner, QaStep step)')
         self.assertRegex(cap, r'if \(cam == null \|\| view == null \|\| !view\.IsOn\)\s*\{\s*runner\.Assert\("capreport\." \+ name, Owner, false, "not measured"')
+        for after in re.findall(r'runner\.Assert\("capreport\." \+ name, Owner, false, "not measured",' + call, cap):
+            self.assertEqual('yield break;', after.strip(), 'camcap goes on after a not-measured guard')
         self.assertLess(cap.index('!view.IsOn'), cap.index('FindObjectsByType<DeskDocument>'), 'camcap measures nothing outside the reading view')
 
 
