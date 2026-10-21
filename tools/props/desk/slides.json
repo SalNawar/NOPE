@@ -1,0 +1,1551 @@
+{
+ "rule": "nearest wins: only the nearest present slider within trigger_m (desk plane) slides; a cursor ON a slider (its home footprint or its silhouette on screen; the front-most silhouette under the cursor wins first) takes it at once; otherwise the one out keeps it unless another is nearer by more than hysteresis_m; on a hand-off the loser retracts in retract.seconds (ease-in-out, no linger, no seat) and the winner starts once the loser is under retract.winner_below of its travel (nearly seated) or after retract.winner_after s (the retract's length), so one machine moves at a time",
+ "trigger_m": 0.07,
+ "hysteresis_m": 0.02,
+ "retract": {
+  "seconds": 0.13,
+  "ease": "easeInOutQuad",
+  "winner_after": 0.13,
+  "winner_below": 0.1
+ },
+ "felt_gap_m": 0.004,
+ "felt_gap_px": 3,
+ "lamp_gap_px": 3,
+ "lift_squash": {
+  "px": 1.5,
+  "release_s": 0.06
+ },
+ "lift_shadow": {
+  "alpha": 0.85,
+  "fade": 0.35,
+  "blur_px": 1.0,
+  "blur_per_px": 0.3,
+  "widen_per_px": 0.025
+ },
+ "locked_today": [
+  "babelTuner",
+  "rolodex",
+  "protocolRing"
+ ],
+ "screen_px_minimums": {
+  "anticipation": 3.3,
+  "overshoot": 3.3,
+  "seat": 2.2,
+  "settle": 0.5
+ },
+ "overshoot_max": 0.2,
+ "out": {
+  "seconds": 0.25,
+  "ease": "spring",
+  "anticipation": 0.04,
+  "anticipation_s": 0.04,
+  "overshoot": 0.04,
+  "note": "timing and the % floors only, no damping: each slider has its own spring (sliders.<id>.curve: its damping ratio, anticipation, overshoot and seat, solved from the screen-px minimums); lifts have no positional anticipation (lift_squash)"
+ },
+ "back": {
+  "linger": 0.15,
+  "seconds": 0.3,
+  "ease": "easeInCubic",
+  "seat": 0.012,
+  "seat_s": 0.09
+ },
+ "secondary": {
+  "intercom": {
+   "kind": "mic_sway",
+   "px": 4.0,
+   "hz": 7.0,
+   "decay": 0.16
+  }
+ },
+ "tip": {
+  "glasses": [
+   7.0,
+   [
+    0,
+    -1
+   ]
+  ]
+ },
+ "cues": [
+  {
+   "phase": "out",
+   "t": 0.0,
+   "channel": "sound",
+   "what": "machine_slide_unlatch: a soft relay tick, very low, on the trigger frame (under the anticipation)"
+  },
+  {
+   "phase": "out",
+   "t": 0.04,
+   "channel": "sound",
+   "what": "machine_slide: a felt-on-wood shush, 160 ms, panned to the object, about -18 dB"
+  },
+  {
+   "phase": "out",
+   "t": 0.04,
+   "channel": "shadow",
+   "what": "the contact shadow leaves the well with the base: it fades in on the open felt (0 to 0.35 over 80 ms) and travels with it"
+  },
+  {
+   "phase": "out",
+   "t": 0.04,
+   "channel": "felt",
+   "what": "the vacated felt track shows behind the base (designed felt in the plate; a touch brighter where the base covered it)"
+  },
+  {
+   "phase": "out",
+   "t": "peak",
+   "channel": "shadow",
+   "what": "at the overshoot peak the shadow tightens (blur -30%, 10% darker) for 2 frames: the base presses the felt"
+  },
+  {
+   "phase": "out",
+   "t": "peak",
+   "channel": "sound",
+   "what": "machine_slide_stop: a muted wooden knock at the peak, about -22 dB"
+  },
+  {
+   "phase": "out",
+   "t": "peak",
+   "channel": "motion",
+   "what": "secondary: the intercom mic sways about 4 px toward the mat on its gooseneck and settles in about 0.3 s"
+  },
+  {
+   "phase": "out",
+   "t": "peak",
+   "channel": "lamp",
+   "what": "the slider's own next-tool lamp, if lit, pulses +40% for 100 ms; an unlit lamp stays unlit (lamps are guidance, not hover)"
+  },
+  {
+   "phase": "back",
+   "t": 0.0,
+   "channel": "sound",
+   "what": "machine_slide reversed (the shush), 250 ms"
+  },
+  {
+   "phase": "back",
+   "t": 0.3,
+   "channel": "sound",
+   "what": "machine_seat: a firm clack as the base hits its home stop at full speed, on the frame the seat bounce starts (the rack_seat family)"
+  },
+  {
+   "phase": "back",
+   "t": 0.3,
+   "channel": "shadow",
+   "what": "the contact shadow fades out over 60 ms as the base re-enters its well"
+  },
+  {
+   "phase": "handoff",
+   "t": 0.0,
+   "channel": "sound",
+   "what": "the loser: machine_slide reversed, cut to 130 ms, no seat clack (the winner's unlatch tick covers it)"
+  },
+  {
+   "phase": "lift",
+   "t": 0.0,
+   "channel": "motion",
+   "what": "a lift squashes up to 1.5 px over the 40 ms anticipation (its base stays down) and releases as it rises; it never dips into the felt"
+  },
+  {
+   "phase": "lift",
+   "t": 0.04,
+   "channel": "shadow",
+   "what": "a lift leaves its contact shadow at the rest footprint (the felt, or the glasses stand): it fades and widens as the object rises"
+  }
+ ],
+ "sliders": {
+  "scanner": {
+   "group": "scanner",
+   "dir": [
+    -1,
+    0
+   ],
+   "travel": 0.041,
+   "track_cut": 0.06,
+   "kind": "track",
+   "note": "machine: slides left along its well track, readout still facing the chair (4.1 cm: at 5 cm its 3 px overshoot reached the painted end lip; at 4.3 cm only 2 px of felt showed at the peak, under FELT_GAP_PX)",
+   "curve": {
+    "travel_px": 17.98,
+    "anticipation": 0.1836,
+    "overshoot": 0.1836,
+    "seat": 0.1224,
+    "damping": 0.51,
+    "peak_s": 0.1419,
+    "peak": 1.1836,
+    "anticipation_px": 3.3,
+    "overshoot_px": 3.3,
+    "seat_px": 2.2,
+    "out_60fps": [
+     0.0,
+     -0.068,
+     -0.1713,
+     -0.1167,
+     0.1896,
+     0.5664,
+     0.8837,
+     1.0863,
+     1.1741,
+     1.1766,
+     1.1321,
+     1.0737,
+     1.0228,
+     0.9892,
+     0.9738,
+     0.9722,
+     0.9785,
+     0.9876,
+     0.9957,
+     1.0012,
+     1.0039,
+     1.0044,
+     1.0035,
+     1.0021,
+     1.0008
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.0673,
+     0.1124,
+     0.1205,
+     0.089,
+     0.0282,
+     0.0
+    ]
+   },
+   "clearance": {
+    "rest": {
+     "px": 24,
+     "row": 831,
+     "cm": 5.47,
+     "f": 0.0
+    },
+    "settled": {
+     "px": 6,
+     "row": 831,
+     "cm": 1.37,
+     "f": 1.0
+    },
+    "peak": {
+     "px": 3,
+     "row": 831,
+     "cm": 0.68,
+     "f": 1.184
+    }
+   },
+   "lamp_clearance": {
+    "peak_f": 1.1836,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 49,
+      "settled": 31,
+      "peak": 28,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -58.1
+     },
+     "lamp_scanner": {
+      "rest": 24,
+      "settled": 6,
+      "peak": 3,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -29.8
+     },
+     "lamp_chip": {
+      "rest": 8,
+      "settled": 3,
+      "peak": 3,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 5.3
+     },
+     "lamp_intercom": {
+      "rest": 642,
+      "settled": 624,
+      "peak": 621,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -34.4
+     },
+     "lamp_bell": {
+      "rest": 193,
+      "settled": 175,
+      "peak": 171,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -87.3
+     },
+     "lamp_tray": {
+      "rest": 277,
+      "settled": 259,
+      "peak": 256,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -83.3
+     }
+    },
+    "worst": "lamp_scanner",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "chipReader": {
+   "group": "chip_reader",
+   "dir": [
+    -1,
+    0
+   ],
+   "travel": 0.037,
+   "track_cut": 0.06,
+   "kind": "track",
+   "note": "machine: slides left along its well track (3.7 cm: at 4.5 cm its back-left top edge came within 0-1 px of lamp_chip at the overshoot peak and 2 px settled; at 3.7 cm it keeps 3 px at the peak and 6 px settled, LAMP_GAP_PX, with its full 3.3 px overshoot)",
+   "curve": {
+    "travel_px": 19.82,
+    "anticipation": 0.1665,
+    "overshoot": 0.1665,
+    "seat": 0.111,
+    "damping": 0.527,
+    "peak_s": 0.1752,
+    "peak": 1.1665,
+    "anticipation_px": 3.3,
+    "overshoot_px": 3.3,
+    "seat_px": 2.2,
+    "out_60fps": [
+     0.0,
+     -0.0617,
+     -0.1554,
+     -0.1271,
+     0.0672,
+     0.3385,
+     0.6136,
+     0.8465,
+     1.0154,
+     1.1175,
+     1.1616,
+     1.1627,
+     1.1371,
+     1.099,
+     1.0594,
+     1.0252,
+     1.0,
+     0.9844,
+     0.9773,
+     0.9766,
+     0.9799,
+     0.9852,
+     0.9909,
+     0.9959,
+     0.9997
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.061,
+     0.1019,
+     0.1093,
+     0.0807,
+     0.0256,
+     0.0
+    ]
+   },
+   "clearance": {
+    "rest": {
+     "px": 30,
+     "row": 913,
+     "cm": 5.6,
+     "f": 0.0
+    },
+    "settled": {
+     "px": 10,
+     "row": 913,
+     "cm": 1.87,
+     "f": 1.0
+    },
+    "peak": {
+     "px": 7,
+     "row": 913,
+     "cm": 1.31,
+     "f": 1.167
+    }
+   },
+   "lamp_clearance": {
+    "peak_f": 1.1665,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 152,
+      "settled": 138,
+      "peak": 136,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -96.3
+     },
+     "lamp_scanner": {
+      "rest": 111,
+      "settled": 95,
+      "peak": 92,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -68.0
+     },
+     "lamp_chip": {
+      "rest": 26,
+      "settled": 6,
+      "peak": 3,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -32.9
+     },
+     "lamp_intercom": {
+      "rest": 725,
+      "settled": 705,
+      "peak": 702,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -72.6
+     },
+     "lamp_bell": {
+      "rest": 288,
+      "settled": 272,
+      "peak": 270,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -125.5
+     },
+     "lamp_tray": {
+      "rest": 361,
+      "settled": 341,
+      "peak": 338,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -121.6
+     }
+    },
+    "worst": "lamp_chip",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "intercom": {
+   "group": "intercom",
+   "dir": [
+    1,
+    0
+   ],
+   "travel": 0.025,
+   "track_cut": 0.045,
+   "kind": "track",
+   "note": "slides right toward the mat; the mic rides with it and sways at the stop (2.5 cm: at 3 cm the box silhouette left 3 px of felt before the end lip)",
+   "curve": {
+    "travel_px": 9.31,
+    "anticipation": 0.2,
+    "overshoot": 0.2,
+    "seat": 0.2,
+    "damping": 0.495,
+    "peak_s": 0.182,
+    "peak": 1.2,
+    "anticipation_px": 1.86,
+    "overshoot_px": 1.86,
+    "seat_px": 1.86,
+    "out_60fps": [
+     0.0,
+     -0.0741,
+     -0.1866,
+     -0.1643,
+     0.0159,
+     0.2769,
+     0.5532,
+     0.7993,
+     0.99,
+     1.1167,
+     1.1829,
+     1.1999,
+     1.182,
+     1.1439,
+     1.098,
+     1.0537,
+     1.0168,
+     0.9901,
+     0.9741,
+     0.9673,
+     0.9676,
+     0.9724,
+     0.9797,
+     0.9873,
+     0.9942
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": {
+    "rest": {
+     "px": 14,
+     "row": 786,
+     "cm": 3.76,
+     "f": 0.0
+    },
+    "settled": {
+     "px": 5,
+     "row": 786,
+     "cm": 1.34,
+     "f": 1.0
+    },
+    "peak": {
+     "px": 3,
+     "row": 786,
+     "cm": 0.81,
+     "f": 1.2
+    }
+   },
+   "lamp_clearance": {
+    "peak_f": 1.2,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 582,
+      "settled": 573,
+      "peak": 571,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -18.9
+     },
+     "lamp_scanner": {
+      "rest": 602,
+      "settled": 593,
+      "peak": 591,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 9.4
+     },
+     "lamp_chip": {
+      "rest": 680,
+      "settled": 671,
+      "peak": 669,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 44.5
+     },
+     "lamp_intercom": {
+      "rest": 1,
+      "settled": 0,
+      "peak": 0,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 4.8
+     },
+     "lamp_bell": {
+      "rest": 456,
+      "settled": 447,
+      "peak": 445,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -48.1
+     },
+     "lamp_tray": {
+      "rest": 370,
+      "settled": 361,
+      "peak": 359,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -44.2
+     }
+    },
+    "worst": "lamp_intercom",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "babelTuner": {
+   "group": "home_babel",
+   "dir": [
+    1,
+    0
+   ],
+   "travel": 0.035,
+   "track_cut": 0.045,
+   "kind": "track",
+   "note": "when owned (day 5-8): the tuner slides right",
+   "curve": {
+    "travel_px": 14.51,
+    "anticipation": 0.2,
+    "overshoot": 0.2,
+    "seat": 0.1516,
+    "damping": 0.495,
+    "peak_s": 0.1766,
+    "peak": 1.2,
+    "anticipation_px": 2.9,
+    "overshoot_px": 2.9,
+    "seat_px": 2.2,
+    "out_60fps": [
+     0.0,
+     -0.0741,
+     -0.1866,
+     -0.1616,
+     0.0306,
+     0.3051,
+     0.5902,
+     0.8379,
+     1.0231,
+     1.1391,
+     1.1924,
+     1.197,
+     1.1695,
+     1.1254,
+     1.0774,
+     1.0345,
+     1.0014,
+     0.9798,
+     0.969,
+     0.9668,
+     0.9705,
+     0.9775,
+     0.9855,
+     0.993,
+     0.9988
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.0833,
+     0.1392,
+     0.1493,
+     0.1103,
+     0.035,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": null
+  },
+  "uvTorch": {
+   "group": "uv_torch",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.015,
+   "track_cut": null,
+   "kind": "lift",
+   "note": "rises 1.5 cm in its pouch, ready to grab (a lift: the pouch is closed on all four sides)",
+   "curve": {
+    "travel_px": 7.43,
+    "anticipation": 0.0,
+    "overshoot": 0.2,
+    "seat": 0.2,
+    "damping": 0.456,
+    "peak_s": 0.1856,
+    "peak": 1.2,
+    "anticipation_px": 0.0,
+    "overshoot_px": 1.49,
+    "seat_px": 1.49,
+    "out_60fps": [
+     0.0,
+     -0.0,
+     -0.0,
+     0.0272,
+     0.1675,
+     0.3767,
+     0.6054,
+     0.8167,
+     0.9876,
+     1.1075,
+     1.176,
+     1.1997,
+     1.1892,
+     1.1564,
+     1.1127,
+     1.0673,
+     1.0268,
+     0.9952,
+     0.974,
+     0.9628,
+     0.96,
+     0.9635,
+     0.9709,
+     0.9799,
+     0.9888
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": {
+    "peak_f": 1.2,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 798,
+      "settled": 797,
+      "peak": 797,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -97.0
+     },
+     "lamp_scanner": {
+      "rest": 803,
+      "settled": 802,
+      "peak": 802,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -68.7
+     },
+     "lamp_chip": {
+      "rest": 851,
+      "settled": 851,
+      "peak": 850,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -33.7
+     },
+     "lamp_intercom": {
+      "rest": 204,
+      "settled": 200,
+      "peak": 199,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -73.4
+     },
+     "lamp_bell": {
+      "rest": 675,
+      "settled": 674,
+      "peak": 674,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -126.2
+     },
+     "lamp_tray": {
+      "rest": 588,
+      "settled": 588,
+      "peak": 587,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -122.3
+     }
+    },
+    "worst": "lamp_intercom",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "glasses": {
+   "group": "glasses",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.02,
+   "track_cut": null,
+   "kind": "lift",
+   "note": "rises 2 cm in its stand (6.3 px at 1080p; 1.5 cm was 4.7 px) and tips 7 deg toward the chair in Unity (TIP)",
+   "curve": {
+    "travel_px": 6.28,
+    "anticipation": 0.0,
+    "overshoot": 0.2,
+    "seat": 0.2,
+    "damping": 0.456,
+    "peak_s": 0.1889,
+    "peak": 1.2,
+    "anticipation_px": 0.0,
+    "overshoot_px": 1.26,
+    "seat_px": 1.26,
+    "out_60fps": [
+     0.0,
+     -0.0,
+     -0.0,
+     0.0261,
+     0.1611,
+     0.3639,
+     0.5876,
+     0.797,
+     0.9693,
+     1.0935,
+     1.168,
+     1.1982,
+     1.1936,
+     1.1654,
+     1.1243,
+     1.0796,
+     1.0381,
+     1.0042,
+     0.98,
+     0.9658,
+     0.9602,
+     0.9615,
+     0.9674,
+     0.9757,
+     0.9847
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": {
+    "peak_f": 1.2,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 533,
+      "settled": 534,
+      "peak": 534,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 27.7
+     },
+     "lamp_scanner": {
+      "rest": 555,
+      "settled": 557,
+      "peak": 557,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 56.0
+     },
+     "lamp_chip": {
+      "rest": 633,
+      "settled": 634,
+      "peak": 635,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 91.1
+     },
+     "lamp_intercom": {
+      "rest": 82,
+      "settled": 88,
+      "peak": 90,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 51.4
+     },
+     "lamp_bell": {
+      "rest": 391,
+      "settled": 393,
+      "peak": 393,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -1.5
+     },
+     "lamp_tray": {
+      "rest": 306,
+      "settled": 308,
+      "peak": 308,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 2.5
+     }
+    },
+    "worst": "lamp_intercom",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "rolodex": {
+   "group": "home_rolodex",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.015,
+   "track_cut": null,
+   "kind": "lift",
+   "note": "when owned: rises 1.5 cm in its home (a forward track would hide behind the intercom)",
+   "curve": {
+    "travel_px": 4.72,
+    "anticipation": 0.0,
+    "overshoot": 0.2,
+    "seat": 0.2,
+    "damping": 0.456,
+    "peak_s": 0.1962,
+    "peak": 1.2,
+    "anticipation_px": 0.0,
+    "overshoot_px": 0.94,
+    "seat_px": 0.94,
+    "out_60fps": [
+     0.0,
+     -0.0,
+     -0.0,
+     0.0238,
+     0.148,
+     0.3373,
+     0.5501,
+     0.7545,
+     0.9285,
+     1.0605,
+     1.1469,
+     1.1908,
+     1.1993,
+     1.1817,
+     1.1476,
+     1.1059,
+     1.0638,
+     1.0264,
+     0.9967,
+     0.976,
+     0.9642,
+     0.9601,
+     0.9619,
+     0.9677,
+     0.9756
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": null
+  },
+  "protocolRing": {
+   "group": "home_cards",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.015,
+   "track_cut": null,
+   "kind": "lift",
+   "note": "when owned: the card ring rises 1.5 cm",
+   "curve": {
+    "travel_px": 4.72,
+    "anticipation": 0.0,
+    "overshoot": 0.2,
+    "seat": 0.2,
+    "damping": 0.456,
+    "peak_s": 0.1962,
+    "peak": 1.2,
+    "anticipation_px": 0.0,
+    "overshoot_px": 0.94,
+    "seat_px": 0.94,
+    "out_60fps": [
+     0.0,
+     -0.0,
+     -0.0,
+     0.0238,
+     0.1481,
+     0.3373,
+     0.5502,
+     0.7546,
+     0.9287,
+     1.0606,
+     1.147,
+     1.1908,
+     1.1993,
+     1.1816,
+     1.1475,
+     1.1059,
+     1.0637,
+     1.0263,
+     0.9966,
+     0.976,
+     0.9642,
+     0.9601,
+     0.9619,
+     0.9677,
+     0.9757
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": null
+  },
+  "stamp_approve": {
+   "group": "stamp_approve",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.012,
+   "track_cut": null,
+   "kind": "lift",
+   "note": "the dater rises 1.2 cm and tips 5 deg toward the hand (STAMP B3); the rack is fixed (D4)",
+   "curve": {
+    "travel_px": 4.26,
+    "anticipation": 0.0,
+    "overshoot": 0.2,
+    "seat": 0.2,
+    "damping": 0.456,
+    "peak_s": 0.1996,
+    "peak": 1.2,
+    "anticipation_px": 0.0,
+    "overshoot_px": 0.85,
+    "seat_px": 0.85,
+    "out_60fps": [
+     0.0,
+     -0.0,
+     -0.0,
+     0.0228,
+     0.1425,
+     0.3259,
+     0.5339,
+     0.7357,
+     0.91,
+     1.0449,
+     1.1361,
+     1.1857,
+     1.2,
+     1.1874,
+     1.157,
+     1.1173,
+     1.0756,
+     1.0372,
+     1.0055,
+     0.9822,
+     0.9676,
+     0.9609,
+     0.9605,
+     0.9648,
+     0.9718
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": {
+    "peak_f": 1.2,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 0,
+      "settled": 2,
+      "peak": 2,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -11.4
+     },
+     "lamp_scanner": {
+      "rest": 32,
+      "settled": 36,
+      "peak": 37,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 17.0
+     },
+     "lamp_chip": {
+      "rest": 109,
+      "settled": 113,
+      "peak": 114,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 52.0
+     },
+     "lamp_intercom": {
+      "rest": 604,
+      "settled": 605,
+      "peak": 605,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 12.3
+     },
+     "lamp_bell": {
+      "rest": 129,
+      "settled": 129,
+      "peak": 129,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -40.5
+     },
+     "lamp_tray": {
+      "rest": 215,
+      "settled": 214,
+      "peak": 214,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -36.6
+     }
+    },
+    "worst": "lamp_stamp",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "stamp_deny": {
+   "group": "stamp_deny",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.012,
+   "track_cut": null,
+   "kind": "lift",
+   "note": "as APPROVED",
+   "curve": {
+    "travel_px": 4.12,
+    "anticipation": 0.0,
+    "overshoot": 0.2,
+    "seat": 0.2,
+    "damping": 0.456,
+    "peak_s": 0.2008,
+    "peak": 1.2,
+    "anticipation_px": 0.0,
+    "overshoot_px": 0.82,
+    "seat_px": 0.82,
+    "out_60fps": [
+     0.0,
+     -0.0,
+     -0.0,
+     0.0225,
+     0.1406,
+     0.322,
+     0.5282,
+     0.7291,
+     0.9034,
+     1.0392,
+     1.132,
+     1.1837,
+     1.2,
+     1.1891,
+     1.1601,
+     1.1213,
+     1.0798,
+     1.0411,
+     1.0088,
+     0.9846,
+     0.9691,
+     0.9614,
+     0.9602,
+     0.9639,
+     0.9706
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": {
+    "peak_f": 1.2,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 55,
+      "settled": 57,
+      "peak": 58,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -1.1
+     },
+     "lamp_scanner": {
+      "rest": 75,
+      "settled": 78,
+      "peak": 79,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 27.2
+     },
+     "lamp_chip": {
+      "rest": 135,
+      "settled": 139,
+      "peak": 140,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 62.3
+     },
+     "lamp_intercom": {
+      "rest": 660,
+      "settled": 662,
+      "peak": 662,
+      "lamp_in_front": true,
+      "lamp_nearer_cm": 22.6
+     },
+     "lamp_bell": {
+      "rest": 175,
+      "settled": 177,
+      "peak": 177,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -30.3
+     },
+     "lamp_tray": {
+      "rest": 262,
+      "settled": 264,
+      "peak": 264,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -26.3
+     }
+    },
+    "worst": "lamp_stamp",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "rulebook": {
+   "group": "rulebook",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.02,
+   "track_cut": null,
+   "kind": "lift",
+   "note": "the book peeks 2 cm out of its pocket; the pocket is fixed",
+   "curve": {
+    "travel_px": 9.09,
+    "anticipation": 0.0,
+    "overshoot": 0.075,
+    "seat": 0.2,
+    "damping": 0.636,
+    "peak_s": 0.2122,
+    "peak": 1.075,
+    "anticipation_px": 0.0,
+    "overshoot_px": 0.68,
+    "seat_px": 1.82,
+    "out_60fps": [
+     0.0,
+     -0.0,
+     -0.0,
+     0.0252,
+     0.1501,
+     0.3281,
+     0.517,
+     0.6897,
+     0.8317,
+     0.938,
+     1.0098,
+     1.0522,
+     1.0715,
+     1.0746,
+     1.0675,
+     1.055,
+     1.0408,
+     1.0273,
+     1.0159,
+     1.007,
+     1.0008,
+     0.9969,
+     0.995,
+     0.9944,
+     0.9947
+    ],
+    "back_60fps": [
+     1.0,
+     0.9998,
+     0.9986,
+     0.9954,
+     0.989,
+     0.9786,
+     0.963,
+     0.9412,
+     0.9122,
+     0.875,
+     0.8285,
+     0.7718,
+     0.7037,
+     0.6233,
+     0.5295,
+     0.4213,
+     0.2977,
+     0.1576,
+     0.0,
+     0.1099,
+     0.1836,
+     0.197,
+     0.1455,
+     0.0461,
+     0.0
+    ]
+   },
+   "clearance": null,
+   "lamp_clearance": {
+    "peak_f": 1.075,
+    "lamps": {
+     "lamp_stamp": {
+      "rest": 682,
+      "settled": 681,
+      "peak": 681,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -72.0
+     },
+     "lamp_scanner": {
+      "rest": 687,
+      "settled": 686,
+      "peak": 686,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -43.7
+     },
+     "lamp_chip": {
+      "rest": 742,
+      "settled": 745,
+      "peak": 745,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -8.6
+     },
+     "lamp_intercom": {
+      "rest": 79,
+      "settled": 74,
+      "peak": 74,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -48.3
+     },
+     "lamp_bell": {
+      "rest": 559,
+      "settled": 558,
+      "peak": 558,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -101.2
+     },
+     "lamp_tray": {
+      "rest": 472,
+      "settled": 471,
+      "peak": 471,
+      "lamp_in_front": false,
+      "lamp_nearer_cm": -97.3
+     }
+    },
+    "worst": "lamp_intercom",
+    "ok": true,
+    "fail": []
+   }
+  },
+  "detain": {
+   "group": "detain",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.0,
+   "track_cut": null,
+   "kind": "fixed",
+   "note": "decision object: the guard flips, nothing slides",
+   "curve": null,
+   "clearance": null,
+   "lamp_clearance": null
+  },
+  "available": {
+   "group": "available",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.0,
+   "track_cut": null,
+   "kind": "fixed",
+   "note": "decision object",
+   "curve": null,
+   "clearance": null,
+   "lamp_clearance": null
+  },
+  "bell": {
+   "group": "bell",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.0,
+   "track_cut": null,
+   "kind": "fixed",
+   "note": "rung in place (D20)",
+   "curve": null,
+   "clearance": null,
+   "lamp_clearance": null
+  },
+  "dealTray": {
+   "group": "deal_tray",
+   "dir": [
+    0,
+    0
+   ],
+   "travel": 0.0,
+   "track_cut": null,
+   "kind": "fixed",
+   "note": "part of the counter",
+   "curve": null,
+   "clearance": null,
+   "lamp_clearance": null
+  }
+ },
+ "gate": [
+  "REST           worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "scanner        worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "chipReader     worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "intercom       worst home_rolodex     8.7%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "uvTorch        worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "glasses        worst home_cards       9.0%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "stamp_approve  worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "stamp_deny     worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "rulebook       worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "scanner@peak   worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "chipReader@peak worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "intercom@peak  worst home_rolodex     8.7%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "uvTorch@peak   worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "glasses@peak   worst home_cards       8.8%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "stamp_approve@peak worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "stamp_deny@peak worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "rulebook@peak  worst home_cards       9.4%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok",
+  "ALL            worst home_rolodex     8.7%  objects/homes hidden>10%: 0  lamps worse than rest: 0  illegible: 0  ok"
+ ]
+}

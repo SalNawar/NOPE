@@ -152,7 +152,7 @@ public class DeskArrangementTests
     public void TheApprovedMap_HasNoProblem_OffTheMat_ApartAndSeen()
     {
         List<string> problems = DeskArrangement.HomeProblems(DeskHomeMap.Approved(), DeskHomeMap.FixedArt(), DeskHomeMap.Mat, DeskHomeMap.DeskTop,
-                                                             DeskHomeMap.SlideReach, DeskHomeMap.OfficeEye, 0.9f);
+                                                             DeskHomeMap.SlideReach, DeskHomeMap.OfficeEye, 0.9f, DeskSlides.Approved().TrackTravel());
         CollectionAssert.IsEmpty(problems, string.Join("\n", problems));
     }
 
@@ -273,7 +273,7 @@ public class DeskArrangementTests
     {
         foreach (DeskHome home in DeskHomeMap.Approved())
         {
-            bool machine = home.id == DeskHomeMap.Scanner || home.id == DeskHomeMap.ChipReader || home.id == DeskHomeMap.BabelTuner;
+            bool machine = home.id == DeskHomeMap.Scanner || home.id == DeskHomeMap.ChipReader || home.id == DeskHomeMap.BabelTuner || home.id == DeskHomeMap.Intercom; // desk v3: the intercom slides too
             Assert.AreEqual(machine, home.slide != HomeSlide.None, home.id);
             if (!machine)
                 continue;
@@ -281,6 +281,19 @@ public class DeskArrangementTests
             Assert.AreEqual(right ? HomeSlide.Left : HomeSlide.Right, home.slide, home.id + " slides toward the mat");
             Assert.AreEqual(home.Footprint.Width + DeskHomeMap.SlideReach, home.Swept(DeskHomeMap.SlideReach).Width, 1e-4f);
         }
+    }
+
+    [Test]
+    public void ASweep_IsEachTracksOwnTravel_NeverPastTheReach()
+    {
+        var desk = new DeskRect(0f, 0f, 4f, 2f);
+        var mat = new DeskRect(0f, 0f, 1f, 0.6f);
+        var homes = new[] { new DeskHome("near", -0.62f, 0f, 0.2f, 0.2f, 0f, 0.05f, HomeShow.Always, HomeSlide.Right) };
+        StringAssert.Contains("'near' slides onto the paper mat", string.Join("\n", DeskArrangement.HomeProblems(homes, null, mat, desk, 0.06f, (0f, -3f, 1f), 0f)), "the 6 cm reach");
+        var travel = new Dictionary<string, float> { ["near"] = 0.015f };
+        CollectionAssert.IsEmpty(DeskArrangement.HomeProblems(homes, null, mat, desk, 0.06f, (0f, -3f, 1f), 0f, travel), "its own 1.5 cm stops short of the mat");
+        travel["near"] = 0.08f;
+        StringAssert.Contains("'near' slides 8.0 cm, further than 6.0 cm", string.Join("\n", DeskArrangement.HomeProblems(homes, null, mat, desk, 0.06f, (0f, -3f, 1f), 0f, travel)));
     }
 
     [Test]

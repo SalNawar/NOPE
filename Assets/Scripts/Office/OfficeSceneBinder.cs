@@ -15,7 +15,8 @@ using UnityEngine.SceneManagement;
 /// props' renderers to their outlines and reactions, puts the desktop's clone
 /// on the PC's glass, sizes the desk, the mat and the scanner, poses the desk
 /// view from the art's Cinemachine camera and the mat, lays the counter and
-/// the rulebook and the 3D stamp bar's rack, stands the traveller,
+/// the rulebook and the 3D stamp bar's rack, binds the desk's slide-in to
+/// the machines and tools on their homes (DeskSlideIn, BindSlideIn), stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), lays the
 /// Helix River over the stability monitor's text (HelixRiverMonitor.Cover; the
 /// fallback HUD's river when the art has none), has the
@@ -524,6 +525,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (counter != null && _office != null)
             counter.Bind(_office.transform.forward);
         // Everything else stands on its home (the desk home map, DeskLayoutSettings): the stamp rack at the back of the rail by the counter, its daters front to back; DETAIN left of the AVAILABLE sign; the machines and the upgrades' objects, each first-day note over its machine; the deal tray right above the mat; the intercom is the art's phone on its home (a stand-in is built when the art has none).
+        Transform standIn = null;
         if (_hasFrame)
         {
             DeskLayoutSettings layout = config.layout;
@@ -537,7 +539,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 _frame.Place(detainButton.transform, layout.Bay(DeskHomeMap.Detain), 0f);
                 DeskLayout.Track(DeskHomeMap.Detain, detainButton.transform);
             }
-            Transform standIn = DeskFurniture.Build(transform, _frame, layout, MaterialNamed, OpenWheel, At(OfficeAnchorId.Intercom).HasBounds);
+            standIn = DeskFurniture.Build(transform, _frame, layout, MaterialNamed, OpenWheel, At(OfficeAnchorId.Intercom).HasBounds);
             if (guide != null && standIn != null)
                 guide.SetIntercom(standIn);
         }
@@ -550,6 +552,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 FaceCamera(hardware.ChipNote, hardware.Reader.transform.position + Vector3.up * HintHeight, viewer);
         }
         DeskLayout.RefreshObstacles();
+        BindSlideIn(standIn);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
@@ -887,6 +890,62 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         foreach (Transform part in tops)
             part.position += by;
         return true;
+    }
+
+    /// <summary>
+    /// The slide-in (desk v3, Saleh: "yes but they need to slide"; DESK-HOMES):
+    /// the desk's DeskSlideIn on the office camera with the plan's slides, and
+    /// today's sliders on their homes, each from where it stands: the gameplay
+    /// scanner (an art office's own scanner stays put: its meshes are the
+    /// art's) and the chip reader, busy while they scan or read; the intercom
+    /// when it is the built stand-in (the art's phone is several parts, open
+    /// call 1); the BABEL rack, the Rolodex and the protocol cards; the UV
+    /// torch's body, a layer over the pose UvTorch gives it, giving way when
+    /// it is picked up. The daters (STAMP), the glasses (GLASSES) and the
+    /// rulebook (the pocket) attach themselves through MachineSlideIn.Attach.
+    /// </summary>
+    private void BindSlideIn(Transform intercomStandIn)
+    {
+        if (!_hasFrame || config == null || _office == null)
+            return;
+        if (!TryGetComponent(out DeskSlideIn slideIn))
+            slideIn = gameObject.AddComponent<DeskSlideIn>();
+        slideIn.Bind(_office, config.layout.slides, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked);
+        if (scanner != null && DeskLayout.ObjectOf(DeskHomeMap.Scanner) == scanner.transform)
+            MachineSlideIn.Attach(DeskHomeMap.Scanner, scanner.transform, busy: ScanRunning(scanner.transform));
+        ChipReader reader = hardware != null ? hardware.Reader : null;
+        if (reader != null)
+            MachineSlideIn.Attach(DeskHomeMap.ChipReader, reader.transform, busy: () => reader.Busy);
+        if (intercomStandIn != null)
+            MachineSlideIn.Attach(DeskHomeMap.Intercom, intercomStandIn);
+        foreach (string id in new[] { DeskHomeMap.BabelTuner, DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing })
+            MachineSlideIn.Attach(id, DeskLayout.ObjectOf(id));
+        UvTorch torch = hardware != null ? hardware.Torch : null;
+        Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
+        if (body != null)
+            MachineSlideIn.Attach(DeskHomeMap.UvTorch, torch.transform, body, layered: true, taken: () => torch.Held);
+    }
+
+    /// <summary>
+    /// True while the scanner runs a scan: its sweep bar or its lid's light
+    /// shows (DeskScanner.Sweep shows them only then; the scanner art's
+    /// "SweepBar" and the builder's "Spill"). A stand-in read of the scan's
+    /// own light until DOC-HANDLE exposes the scanner's state (DeskScanner
+    /// keeps it private); docs/pending/DESK-V3.md hands it over.
+    /// </summary>
+    private static Func<bool> ScanRunning(Transform scanner)
+    {
+        Transform bar = Descendant(scanner, "SweepBar"), spill = Descendant(scanner, "Spill");
+        return () => (bar != null && bar.gameObject.activeInHierarchy) || (spill != null && spill.gameObject.activeInHierarchy);
+    }
+
+    /// <summary>The first descendant of <paramref name="root"/> (not itself) named <paramref name="name"/>, or null.</summary>
+    private static Transform Descendant(Transform root, string name)
+    {
+        foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
+            if (t != root && t.name == name)
+                return t;
+        return null;
     }
 
     /// <summary>The decorations made draggable once the props are bound: a prop's click box (its reaction) goes with its decoration (DeskDecor.MakeHandles).</summary>

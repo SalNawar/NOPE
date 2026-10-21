@@ -99,6 +99,10 @@ public sealed class DeskLayoutSettings
     /// <summary>The fixed art the homes keep clear of (the PC island, the till, the AVAILABLE sign, the lamp), with their heights.</summary>
     public DeskHome[] fixedArt = DeskHomeMap.FixedArt();
 
+    [Header("The slide-in (desk v3, Saleh: \"yes but they need to slide\"; DESK-HOMES)")]
+    /// <summary>The slide-in: the trigger, the timings, the clearances and every slider (DeskSlides.Approved: the desk pipeline's render/slides.json); each track's travel is the plan's sweep.</summary>
+    public DeskSlides slides = DeskSlides.Approved();
+
     /// <summary>The chip reader's size against its model's life size.</summary>
     [Min(0.1f)] public float chipReaderScale = 0.9f;
 
@@ -146,10 +150,13 @@ public sealed class DeskLayoutSettings
         return home != null ? new DeskBay(home) : null;
     }
 
-    /// <summary>What is wrong with the plan (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
+    /// <summary>What is wrong with the plan (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, each track's travel within the slide reach and the office camera's sight; DeskSlides.Problems: the sliders against the homes; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
     public List<string> Problems()
     {
-        List<string> problems = DeskArrangement.HomeProblems(homes, fixedArt, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), minVisible);
+        List<string> problems = DeskArrangement.HomeProblems(homes, fixedArt, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), minVisible,
+                                                             slides?.TrackTravel());
+        if (slides != null)
+            problems.AddRange(slides.Problems(homes, DeskHomeMap.SlideReach));
         problems.AddRange(DeskArrangement.ClickBoxProblems(homes, fixedArt, DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox));
         return problems;
     }
@@ -330,6 +337,9 @@ public static class DeskLayout
         Objects[id] = target;
     }
 
+    /// <summary>The object standing on the home <paramref name="id"/> (DeskLayout.Track), or null: the slide-in binds to it (OfficeSceneBinder.BindSlideIn).</summary>
+    public static Transform ObjectOf(string id) => id != null && Objects.TryGetValue(id, out Transform target) ? target : null;
+
     /// <summary>The home id of the tracked object <paramref name="t"/> stands under (itself or a part of it: one desk object's click boxes), or null (the QA rig's click-box check, BUG-4a).</summary>
     public static string HomeIdOf(Transform t)
     {
@@ -344,7 +354,10 @@ public static class DeskLayout
     /// <summary>
     /// Registers every tracked object that shows as an obstacle on its home's
     /// footprint, as tall as its renderers stand over the desk (its home's
-    /// height when it has none showing), and forgets those that do not show.
+    /// height when it has none showing), swept by its own slide-in (a track's
+    /// footprint to its overshoot peak toward the mat, a lift's top raised by
+    /// its peak: DeskSlides.Obstacle, so a carried thing never needs a live
+    /// read), and forgets those that do not show.
     /// </summary>
     public static void RefreshObstacles()
     {
@@ -369,7 +382,8 @@ public static class DeskLayout
                 top = any ? Mathf.Max(top, over) : over;
                 any = true;
             }
-            Register(tracked.Key, home.Footprint, top);
+            (DeskRect footprint, float height) = _settings.slides != null ? _settings.slides.Obstacle(tracked.Key, home.Footprint, top) : (home.Footprint, top);
+            Register(tracked.Key, footprint, height);
         }
     }
 
