@@ -13,3 +13,7 @@ MotionKnobs.stampSquash         # BUG-73b, STAMP
 MotionKnobs.inkBloomSeconds     # BUG-73b, STAMP
 MotionKnobs.stampFeel           # BUG-73b, STAMP
 MotionKnobs.drawerStopHit       # BUG-73b, STAMP: a drawer knob with no reader
+DeskConfigSO.hallPortalDrawing      # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO holds the drawing); delete with class HallPortalLayers, move PortalVortexTuning to HallPortalsSO.cs
+DeskConfigSO.hallPortalLayers       # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.rings)
+DeskConfigSO.hallPortalVortex       # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.vortex)
+DeskConfigSO.hallPortalPulseSeconds # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.pulseSeconds)
