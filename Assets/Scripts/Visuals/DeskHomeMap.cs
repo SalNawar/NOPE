@@ -173,7 +173,7 @@ public static class DeskHomeMap
     {
         // The machine rail, right of the mat, in the order of use (chip reader, scanner, stamp rack by the counter).
         new DeskHome(ChipReader, 0.895f, -0.375f, 0.21f, 0.21f, 0f, 0.07f, HomeShow.WhenOwned, HomeSlide.Left),
-        new DeskHome(Scanner, 1.02f, -0.07f, 0.46f, 0.34f, 0f, 0.13f, HomeShow.WhenOwned, HomeSlide.Left),
+        new DeskHome(Scanner, 1.10f, -0.07f, 0.46f, 0.34f, 0f, 0.13f, HomeShow.WhenOwned, HomeSlide.Left), // 8 cm right of the chip reader: the Auto-Feed tray stands 13 cm out of the scanner's left side, and from 1.02 it lay 6 cm on the mat
         new DeskHome(StampRack, 0.83f, 0.35f, 0.32f, 0.12f, 90f, 0.08f, HomeShow.Always),
         // The counter row: the deal tray over the mat, DETAIN left of the AVAILABLE sign, the bell right of it.
         new DeskHome(DealTray, 0f, 0.545f, 0.44f, 0.06f, 0f, 0.01f, HomeShow.Always),
@@ -196,7 +196,7 @@ public static class DeskHomeMap
         // The booth's right end: the portals' switchboard (Saleh: "on the booth wall, right of the desk"); the RING SERVICE panel stands there in Phase A.
         new DeskHome(Switchboard, 2.22f, 1.30f, 0.56f, 0.45f, -20f, 0.40f, HomeShow.WhenOwned),
         // Deliveries and decorations, right of the rail. The decor zone stands left of the office camera's line to the switchboard's home (the form sorter, 36 cm tall, hid 80% of the RING SERVICE panel from 1.80, 0.55), deep enough for the sorter behind the tray, and clear of the crate.
-        new DeskHome(Crate, 1.56f, 0f, 0.48f, 0.34f, 8f, 0.30f, HomeShow.Delivery),
+        new DeskHome(Crate, 1.64f, 0f, 0.48f, 0.34f, 8f, 0.30f, HomeShow.Delivery),
         new DeskHome(Decor, 1.28f, 0.545f, 0.56f, 0.65f, 0f, 0f, HomeShow.Decor),
     };
 

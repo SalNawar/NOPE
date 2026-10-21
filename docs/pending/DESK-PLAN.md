@@ -26,7 +26,7 @@ The desk frame is metres right of (x) and away from the chair (y), measured from
 | Id | Centre (x, y) | Size | Yaw | Height | Shows | Slides | Group |
 |---|---|---|---|---|---|---|---|
 | `chipReader` | 0.895, -0.375 | 0.21 x 0.21 | 0 | 0.07 | when owned | left 6 cm | rail, front (1st use) |
-| `scanner` | 1.02, -0.07 | 0.46 x 0.34 | 0 | 0.13 | when owned | left 6 cm | rail, middle |
+| `scanner` | 1.10, -0.07 | 0.46 x 0.34 | 0 | 0.13 | when owned | left 6 cm | rail, middle (8 cm right of the others: its Auto-Feed tray) |
 | `stampRack` | 0.83, 0.35 | 0.32 x 0.12 | **90** (daters front to back) | 0.08 | always | - | rail, back, by the counter |
 | `dealTray` | 0, 0.545 | 0.44 x 0.06 | 0 | 0.01 | always | - | counter, right above the mat |
 | `detain` | -0.51, 0.74 | 0.26 x 0.28 | 0 | 0.09 | always | - | counter row |
@@ -44,7 +44,7 @@ The desk frame is metres right of (x) and away from the chair (y), measured from
 | `boothCamera` | 1.08, 1.225 | 0.36 x 0.45 | 0 | 0.30 | later | - | back right |
 | `xray` | 1.57, 1.225 | 0.50 x 0.45 | 0 | 0.30 | later | - | back right |
 | `switchboard` | 2.22, 1.30 | 0.56 x 0.45 | -20 | 0.40 | when owned (the RING SERVICE panel until PORTALS) | - | booth's right end |
-| `crate` | 1.56, 0 | 0.48 x 0.34 | 8 | 0.30 | delivery mornings | - | right of the rail |
+| `crate` | 1.64, 0 | 0.48 x 0.34 | 8 | 0.30 | delivery mornings | - | right of the rail |
 | `decor` | 1.28, 0.545 | 0.56 x 0.65 | 0 | - | decor start zone (the form sorter behind the tray) | - | right of the rail, left of the camera's line to the switchboard |
 
 Fixed art the homes keep clear of (`DeskHomeMap.FixedArt()`, measured on the R7 day-12 top-down capture, rounded out): `pc` (-1.57, 0.26; 1.10 x 1.16; 0.62 tall), `till` (-1.085, 0.90; 0.49 x 0.42; 0.30), `sign` (0, 0.685; 0.56 x 0.21; 0.23), `lamp` (0.46, 1.25; 0.52 x 0.50; 0.50).
@@ -54,6 +54,7 @@ Fixed art the homes keep clear of (`DeskHomeMap.FixedArt()`, measured on the R7 
 - **The Rolodex's 16 cm home** (was 18 cm at y 0.60). The click-box check found that its box (+1 cm) reached into the till's. At 16 cm it clears every other box. Its model is shrunk to fit, about 11% smaller. **Integration (recipe 4):** at (-0.91, 0.595), behind the intercom, the ID buffer saw 60-63% of it at day 12 (the phone in front of it hid 40%), so it moved to recipe 4's fallback, (0.91, 0.71): the counter row right of the bell, behind the stamp rack. There it is 100% seen at A1 and A2, and recipe 3 stays green.
 - **The phone as the intercom.** Not decided: see open call 1.
 - **The rail order, front to back:** chip reader, scanner, stamp rack. The rack ends beside the deal tray (`DeskHomeMap.Rail`), as concept B's "ending beside the deal tray".
+- **The scanner 8 cm right of the rail's line** (1.10; the crate follows to 1.64). **Integration (recipe 6):** the Auto-Feed tray is part of the scanner's art and stands 13 cm out of its left side, outside the scanner's home footprint. From 1.02 it lay 6.4 cm over the mat (x 0.659..0.819 against the mat's 0.723), 105 prop pixels inside the mat at A1 on days 5, 12 and 15. Now its left edge is at about 0.74. Hand-off to DESK-HOMES: the scanner's 6 cm slide toward the mat would carry the tray back onto it, so its slide must stop short (or the tray must move to another side of the scanner, an art change).
 - **Slide axes sideways toward the mat** (SPEC P8, the declared change to Bible C6's "toward the chair"). Each sweep is checked to stay off the mat, other homes and the fixed art. The slide-in motion itself is DESK-HOMES'; only the axis is data here.
 - **The RING SERVICE panel stands on the switchboard's home.** One home serves the board's id now, and PORTALS swaps the switchboard in (Saleh: "on the booth wall, right of the desk").
 - **The decor zone** at (1.28, 0.545), 0.56 x 0.65 m. **Integration (recipe 4):** from (1.80, 0.55), 0.80 x 0.60, the form sorter (36 cm tall, the decorations' start) stood on the office camera's line to the switchboard's home and hid 80% of the RING SERVICE panel (20% seen at A1 and A2), and its handle covered the panel's breaker. The zone now stands left of that line, deep enough for the sorter behind the tray (each settles nearest its art spot), and clear of the crate. The panel is 100% seen. The plan's sight check cannot see this (a decoration's height is not a home's); the ID buffer is the measure.
