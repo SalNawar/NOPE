@@ -279,7 +279,7 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>
     /// In play: the desk's one light (DeskLightLevel, its lamp pool on the
     /// mat: the art's DeskSurface anchor) and the office finish (a global
-    /// Volume with the knobs' profile; the office camera's post-processing on),
+    /// Volume with the knobs' profile; the office camera's post-processing and HDR on),
     /// made at run time under the rig and never saved. They live here, not in
     /// the gameplay layer's builder, because the builder's root has no
     /// registration seam LIGHT may use (docs/pending/LIGHT.md).
@@ -313,6 +313,10 @@ public sealed class HallLightingRig : MonoBehaviour
             {
                 UniversalAdditionalCameraData data = office.GetUniversalAdditionalCameraData();
                 data.renderPostProcessing = true;
+                // The office camera draws the HDR hall (HallBackdrop) in HDR too, or every value past white clamps
+                // before the bloom (threshold 1) sees it and nothing glows (BUG-51/26b); the scene's own value is left as it is.
+                if (SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf))
+                    office.allowHDR = true;
                 // The camera must see the Volume's layer, or the finish never applies (its mask is the scene's to set).
                 if ((data.volumeLayerMask.value & (1 << _made.layer)) == 0)
                     data.volumeLayerMask |= 1 << _made.layer;
