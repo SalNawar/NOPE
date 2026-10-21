@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// TOOLS' scenario ops (FIX_PLAN TOOLS and its v2 delta; docs/pending/TOOLS.md
@@ -80,7 +81,7 @@ public static class ToolsOps
         QaPath path = QaPaths.Drag(QaRunner.ParseKind(s.path), from, to, new Vector2(Screen.width, Screen.height));
         string name = Name(s, "torch");
 
-        int held = 0, under = 0, poolFrames = 0, offDesk = 0;
+        int held = 0, under = 0, unmeasured = 0, poolFrames = 0, offDesk = 0;
         float worst = 1f;
         string worstAt = string.Empty;
         int restore = Time.captureFramerate;
@@ -94,6 +95,11 @@ public static class ToolsOps
                     return;
                 held++;
                 float share = Share(torch, radius);
+                if (float.IsNaN(share))
+                {
+                    unmeasured++; // no body outline: the frame proves nothing, so it fails
+                    return;
+                }
                 if (share < UvTorchHold.UnoccludedShare)
                     under++;
                 if (share < worst)
@@ -113,20 +119,22 @@ public static class ToolsOps
         {
             Time.captureFramerate = restore;
         }
-        runner.Assert($"tools.torch.{name}.unoccluded", Owner, held > 0 && under == 0,
-            $"held {held} frames; worst {F(worst * 100f)}% of the lit patch seen past the body ({worstAt}); {under} frames under {F(UvTorchHold.UnoccludedShare * 100f)}%",
+        runner.Assert($"tools.torch.{name}.unoccluded", Owner, held > 0 && under == 0 && unmeasured == 0,
+            $"held {held} frames; worst {F(worst * 100f)}% of the lit patch seen past the body ({worstAt}); {under} frames under {F(UvTorchHold.UnoccludedShare * 100f)}%; {unmeasured} frames with no body outline; body points: {PointSources(torch)}",
             "BUG-2c: the reveal is ≥95% unoccluded by the torch body on every held frame (its own meshes projected, the patch sampled on 61 points)");
         runner.Assert($"tools.torch.{name}.poolOnDesk", Owner, held > 0 && offDesk == 0, $"pool drawn {poolFrames} frames, {offDesk} off the desk",
             "BUG-2c: 0 frames of the pool drawn off the surface (on the desk plane, inside its corners)");
     }
 
-    /// <summary>The share of the lit patch round torch.Aim the main camera sees outside the outline of the torch's own meshes (the beam left out).</summary>
+    /// <summary>The share of the lit patch round torch.Aim the main camera sees outside the outline of the torch's own meshes (the beam left out); NaN when there is no camera or no outline to measure against (never a lenient 1).</summary>
     private static float Share(UvTorch torch, float radius)
     {
         Camera cam = Camera.main;
         if (cam == null)
-            return 1f;
+            return float.NaN;
         List<Vector2> outline = Hull(BodyPoints(torch, cam));
+        if (outline.Count < 3)
+            return float.NaN;
         Vector3 centre = torch.Aim;
         int total = 0, hidden = 0;
         foreach (Vector3 p in PatchPoints(centre, radius))
@@ -150,7 +158,7 @@ public static class ToolsOps
             }
     }
 
-    /// <summary>The torch's body on the screen (the art's UvTorch under the host, the one that lifts out of the cradle): its meshes' vertices (their boxes' corners for a mesh a QA player cannot read), the beam's cone left out.</summary>
+    /// <summary>The torch's body on the screen (the art's UvTorch under the host, the one that lifts out of the cradle): its meshes' vertices (<see cref="LocalPoints"/>), the beam's cone left out.</summary>
     private static List<Vector2> BodyPoints(UvTorch torch, Camera cam)
     {
         var points = new List<Vector2>();
@@ -164,9 +172,7 @@ public static class ToolsOps
             Renderer r = f.GetComponent<Renderer>();
             if (r == null || !r.enabled)
                 continue;
-            // The editor reads any mesh; a QA player only a readable one (else its box: a slightly larger outline, so the measure errs strict).
-            IEnumerable<Vector3> local = f.sharedMesh.isReadable || Application.isEditor ? f.sharedMesh.vertices : Corners(f.sharedMesh.bounds);
-            foreach (Vector3 v in local)
+            foreach (Vector3 v in LocalPoints(f.sharedMesh))
             {
                 Vector3 sp = cam.WorldToScreenPoint(f.transform.TransformPoint(v));
                 if (sp.z > 0f)
@@ -174,6 +180,87 @@ public static class ToolsOps
             }
         }
         return points;
+    }
+
+    /// <summary>Each mesh's own-space points, read once per mesh.</summary>
+    private static readonly Dictionary<Mesh, Vector3[]> MeshPoints = new Dictionary<Mesh, Vector3[]>();
+
+    /// <summary>Where each mesh's points came from: "vertices", "gpu" or "box".</summary>
+    private static readonly Dictionary<Mesh, string> MeshSource = new Dictionary<Mesh, string>();
+
+    /// <summary>
+    /// A mesh's points in its own space. A readable mesh gives Mesh.vertices.
+    /// The torch's art (UvTorch.fbx) is imported without Read/Write, and play
+    /// mode refuses its CPU vertex data even in the editor (Mesh.vertices logs
+    /// an error and returns none; Mesh.AcquireReadOnlyMeshData throws), so its
+    /// positions are read back from the GPU vertex buffer the renderer draws
+    /// (<see cref="GpuPositions"/>). Only when that fails does it fall back to
+    /// the mesh's box corners (a larger outline, so the measure errs strict).
+    /// </summary>
+    private static Vector3[] LocalPoints(Mesh mesh)
+    {
+        if (MeshPoints.TryGetValue(mesh, out Vector3[] cached))
+            return cached;
+        Vector3[] points = mesh.isReadable ? mesh.vertices : GpuPositions(mesh);
+        string source = mesh.isReadable ? "vertices" : "gpu";
+        if (points == null || points.Length == 0)
+        {
+            points = Corners(mesh.bounds).ToArray();
+            source = "box";
+        }
+        MeshPoints[mesh] = points;
+        MeshSource[mesh] = source;
+        return points;
+    }
+
+    /// <summary>
+    /// The mesh's vertex positions read back from its GPU vertex buffer (float3
+    /// positions only), or null. The read-back is trusted only when its points
+    /// span the mesh's own bounds (within 1 mm on every side), so a wrong
+    /// layout or an empty buffer can never shrink the outline.
+    /// </summary>
+    private static Vector3[] GpuPositions(Mesh mesh)
+    {
+        if (!mesh.HasVertexAttribute(VertexAttribute.Position) || mesh.GetVertexAttributeFormat(VertexAttribute.Position) != VertexAttributeFormat.Float32
+            || mesh.GetVertexAttributeDimension(VertexAttribute.Position) < 3)
+            return null;
+        int stream = mesh.GetVertexAttributeStream(VertexAttribute.Position);
+        int offset = mesh.GetVertexAttributeOffset(VertexAttribute.Position);
+        int stride = mesh.GetVertexBufferStride(stream);
+        int count = mesh.vertexCount;
+        using (GraphicsBuffer buffer = mesh.GetVertexBuffer(stream))
+        {
+            if (buffer == null || count == 0 || (long)buffer.count * buffer.stride < (long)count * stride)
+                return null;
+            var raw = new byte[buffer.count * buffer.stride];
+            buffer.GetData(raw);
+            var points = new Vector3[count];
+            for (int i = 0; i < count; i++)
+            {
+                int at = i * stride + offset;
+                points[i] = new Vector3(BitConverter.ToSingle(raw, at), BitConverter.ToSingle(raw, at + 4), BitConverter.ToSingle(raw, at + 8));
+            }
+            Vector3 min = points[0], max = points[0];
+            foreach (Vector3 v in points)
+            {
+                min = Vector3.Min(min, v);
+                max = Vector3.Max(max, v);
+            }
+            Bounds b = mesh.bounds;
+            bool spans = (min - b.min).magnitude <= 1e-3f && (max - b.max).magnitude <= 1e-3f;
+            return spans ? points : null;
+        }
+    }
+
+    /// <summary>Where each body mesh's points came from ("vertices", "gpu" or "box") and how many, for the measured line.</summary>
+    private static string PointSources(UvTorch torch)
+    {
+        Transform body = torch.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t != torch.transform && t.name == "UvTorch");
+        if (body == null)
+            return "no body";
+        return string.Join(", ", body.GetComponentsInChildren<MeshFilter>(false)
+            .Where(f => f.sharedMesh != null && !IsUnder(f.transform, "BeamFX") && MeshSource.ContainsKey(f.sharedMesh))
+            .Select(f => $"{f.sharedMesh.name} {MeshSource[f.sharedMesh]} {MeshPoints[f.sharedMesh].Length}"));
     }
 
     private static bool IsUnder(Transform t, string name)
