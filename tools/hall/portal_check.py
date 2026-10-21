@@ -26,8 +26,13 @@ For each showing ring:
      cover     the share of the hole the vortex changes (reported; a dark swirl tone may match the painting)
      match     the crop registration's correlation (reported; under 0.6 the frame did not find the ring: look by eye).
 
-A ring whose hole lies wholly off the frame (ring 5 at 1280x1024: its quad starts past the screen's right edge) is
-reported as off screen and not measured; a ring the frame's edge cuts is measured on the part both sides show.
+The check fails closed (the orchestrator's ruling at the six tracks' landing, 2026-10-21, on the verifier's finding
+that it failed open). A ring whose hole lies wholly off the frame FAILS, unless it is declared with --allow-off
+RING@WxH (ring 5 at 1280x1024: its quad starts past the screen's right edge, so hall_fx_portals runs with
+--allow-off 5@1280x1024) and a ring of the same frame was measured with its painting check passing, which proves
+the projection that put it off screen. A block with no ring measured FAILS, a ring of HallPortals.asset the block
+does not report FAILS, and a report with no portal block FAILS. A ring the frame's edge cuts is measured on the
+part both sides show.
 
 It also prints, for reference, the audit's ray rule (R7 AUDIT VIS scripts/portals.py) on the off frame: rays from the
 effect's centre to the first run of 3 px under luma 105, an ellipse fitted to where they stop. That rule counts lit
@@ -278,11 +283,52 @@ def ray_hole(L, cx, cy, rx, ry):
     return -D / (2 * A), -E / (2 * C), math.sqrt(abs(G / A)), math.sqrt(abs(G / C))
 
 
-def main():
+def allowed_off(specs):
+    """--allow-off's RING@WxH values as {(ring, w, h)}."""
+    out = set()
+    for s in specs or []:
+        m = re.fullmatch(r'(\d+)@(\d+)x(\d+)', s.strip())
+        if not m:
+            raise SystemExit(f'--allow-off {s!r}: expected RING@WxH, e.g. 5@1280x1024')
+        out.add((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    return out
+
+
+def block_verdict(w, h, measured, off, allowed, expected=(), reported=()):
+    """
+    One frame's fail-closed rules. measured: [(ring, painting check passed)] for each ring measured (its own
+    pass is judged where it is measured); off: [(ring, why)] for each ring wholly off the frame; allowed: {(ring, w,
+    h)} from --allow-off; expected and reported: the asset's rings and the block's. A ring off the frame FAILS unless
+    it is declared for this size and a measured ring of this frame passed its painting check (the projection that
+    put it off screen is proven on this frame); no ring measured FAILS; a ring of the asset the block does not report
+    FAILS. Returns (ok, lines).
+    """
+    ok, lines = True, []
+    proof = [n for n, painted in measured if painted]
+    for n, why in off:
+        if (n, w, h) in allowed and proof:
+            lines.append(f'   portal {n}: off screen at {w}x{h} ({why}), declared with --allow-off; the projection is checked on portal {proof[0]}')
+        else:
+            ok = False
+            reason = 'and not declared with --allow-off' if (n, w, h) not in allowed else 'declared, but no ring of this frame passed its painting check'
+            lines.append(f'   portal {n}: off screen at {w}x{h} ({why}) {reason}: FAIL')
+    if not measured:
+        ok = False
+        lines.append(f'   no ring measured at {w}x{h}: FAIL')
+    for n in sorted(set(expected) - set(reported)):
+        ok = False
+        lines.append(f'   portal {n}: not reported at {w}x{h} (HallPortals.asset has it): FAIL')
+    return ok, lines
+
+
+def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('run')
     ap.add_argument('--out', default=None)
-    args = ap.parse_args()
+    ap.add_argument('--allow-off', action='append', default=[], metavar='RING@WxH',
+                    help='a ring expected wholly off the frame at that size (repeatable); still FAILS unless a ring of the same frame passed its painting check')
+    args = ap.parse_args(argv)
+    allowed = allowed_off(args.allow_off)
     out = args.out or os.path.join(args.run, 'portal_check')
     os.makedirs(out, exist_ok=True)
 
@@ -295,7 +341,11 @@ def main():
     AH, AW = atlas.shape[:2]
     lines, ok = [], True
     drawings = drawings_of(os.path.join(args.run, 'qa_report.txt'))
-    for (hour, w, h), effects in sorted(blocks_of(os.path.join(args.run, 'qa_report.txt')).items()):
+    blocks = blocks_of(os.path.join(args.run, 'qa_report.txt'))
+    if not blocks:
+        lines.append('no "== portals at" block in qa_report.txt: FAIL')
+        ok = False
+    for (hour, w, h), effects in sorted(blocks.items()):
         stem = os.path.join(args.run, 'shots', 'portals', f'h{hour:02d}_{w}x{h}')
         on = np.asarray(Image.open(stem + '_on.png').convert('RGB')).astype(np.int16)
         off = np.asarray(Image.open(stem + '_off.png').convert('RGB')).astype(np.int16)
@@ -306,6 +356,7 @@ def main():
         vis = Image.fromarray(on.astype(np.uint8))
         dr = ImageDraw.Draw(vis)
         lines.append(f'== {hour:02d}:00 {w}x{h}')
+        measured, offs = [], []
         for e in effects:
             n = e['n']
             if not e['showing']:
@@ -323,7 +374,7 @@ def main():
                 # The crop's corners by the painting's own projection: the box the ring is measured in.
                 ex, ey = warp(proj[0], np.array([kx, kx + kw, kx, kx + kw]), np.array([ky, ky, ky + kh, ky + kh]))
                 if ex.max() <= 0 or ey.max() <= 0 or ex.min() >= W or ey.min() >= H:
-                    lines.append(f'   portal {n}: off screen at {w}x{h} (its painted crop projects to x {ex.min():.0f}-{ex.max():.0f}, y {ey.min():.0f}-{ey.max():.0f}): not measured')
+                    offs.append((n, f'its painted crop projects to x {ex.min():.0f}-{ex.max():.0f}, y {ey.min():.0f}-{ey.max():.0f}'))
                     continue
                 bx0, by0 = max(0, int(math.floor(ex.min()))), max(0, int(math.floor(ey.min())))
                 bx1, by1 = min(W, int(math.ceil(ex.max()))), min(H, int(math.ceil(ey.max())))
@@ -360,7 +411,7 @@ def main():
             front = inside & (atlas[ay, ax, 1] >= 128)
             hole = aperture & ~front
             if not hole.any():
-                lines.append(f'   portal {n}: off screen at {w}x{h} (no pixel of its hole is on the frame): not measured')
+                offs.append((n, 'no pixel of its hole is on the frame'))
                 continue
             clipped = bx0 == 0 or by0 == 0 or bx1 == W or by1 == H
             sub = nd.binary_fill_holes(changed[by0:by1, bx0:bx1])
@@ -376,6 +427,7 @@ def main():
             cover = (vortex & hole).sum() / max(1, hole.sum())
             passed = painted and math.hypot(dx, dy) <= CENTRE_PX and abs(ratio_x - 1) <= AXES and abs(ratio_y - 1) <= AXES and halo.sum() == 0
             ok &= passed
+            measured.append((n, proj is not None and painted))
             ref = ray_hole(L, (qx0 + qx1) / 2, (qy0 + qy1) / 2, (qx1 - qx0) / 2 / MARGIN, (qy1 - qy0) / 2 / MARGIN)
             ref_text = (f'ray rule (reference) centre ({ref[0]:.1f},{ref[1]:.1f}) radii {ref[2]:.1f}x{ref[3]:.1f}, hole/ray {mh[2] / ref[2]:.2f} {mh[3] / ref[3]:.2f}'
                         if ref else 'ray rule (reference) not measurable')
@@ -386,6 +438,9 @@ def main():
             for (yy, xx), colour in ((np.nonzero(hole & ~vortex), (0, 255, 0)), (np.nonzero(vortex & ~hole), (255, 0, 255)), (np.nonzero(halo), (255, 255, 0))):
                 for y, x in zip(yy, xx):
                     dr.point((bx0 + x, by0 + y), fill=colour)
+        block_ok, block_lines = block_verdict(w, h, measured, offs, allowed, rings.keys(), [e['n'] for e in effects])
+        lines += block_lines
+        ok &= block_ok
         vis.save(os.path.join(out, f'portal_check_h{hour:02d}_{w}x{h}.png'))
     lines.append('PASS' if ok else 'FAIL')
     open(os.path.join(out, 'portal_check.txt'), 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
