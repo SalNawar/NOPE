@@ -1,5 +1,5 @@
 diff --git a/Assets/Scripts/Office/CameraFeel.cs b/Assets/Scripts/Office/CameraFeel.cs
-index b4dd2121f42fe72e16840301f8cc31171ff7c85c..21c3fb54bbb94b6b178061bf828a297b4fa22d52 100644
+index f34741fe0c4b5dca680e5ae43fad36cb6c9b17ca..cf5ad8c45df8cf52acf1a3cffa6857708d1adae5 100644
 --- a/Assets/Scripts/Office/CameraFeel.cs
 +++ b/Assets/Scripts/Office/CameraFeel.cs
 @@ -23,9 +23,17 @@ using UnityEngine;
@@ -191,7 +191,7 @@ index b4dd2121f42fe72e16840301f8cc31171ff7c85c..21c3fb54bbb94b6b178061bf828a297b
      }
  }
 diff --git a/Assets/Scripts/Office/Desk/DeskSlideIn.cs b/Assets/Scripts/Office/Desk/DeskSlideIn.cs
-index 935a27e749f301f8fab5dc55208a31dd2596e23d..e37708e76baf237b82f62efff2d46b2bf9d5a1bf 100644
+index 5ef4310b2843048486ed67b6c1760db877f3190c..8ac2bc64bb14b2cde952944834fa2e88a93debdd 100644
 --- a/Assets/Scripts/Office/Desk/DeskSlideIn.cs
 +++ b/Assets/Scripts/Office/Desk/DeskSlideIn.cs
 @@ -59,6 +59,9 @@ public sealed class DeskSlideIn : MonoBehaviour
@@ -327,7 +327,7 @@ index 0000000000000000000000000000000000000000..5dfe057be7fb444f38e7150d56cefc95
 +  assetBundleName: 
 +  assetBundleVariant: 
 diff --git a/Assets/Scripts/Office/Desk/MachineSlideIn.cs b/Assets/Scripts/Office/Desk/MachineSlideIn.cs
-index cad98eec9c288a801d069b6f6e65ee2fca421a56..f618f4d127d81afd5930f61999967ce5fa96ec79 100644
+index 1bc89e4ad03ebc0255c56960771568cfa4a06929..7a43c9787a0248d1ac3db36afb87b4a812c1b2ba 100644
 --- a/Assets/Scripts/Office/Desk/MachineSlideIn.cs
 +++ b/Assets/Scripts/Office/Desk/MachineSlideIn.cs
 @@ -133,6 +133,17 @@ public sealed class MachineSlideIn : MonoBehaviour
@@ -349,7 +349,7 @@ index cad98eec9c288a801d069b6f6e65ee2fca421a56..f618f4d127d81afd5930f61999967ce5
      /// True while the paper docked in it rides it home (the shift is over:
      /// DeskSlideIn asks only then, for a busy slider): the first ask finds
 diff --git a/Assets/Scripts/Office/OfficeSceneBinder.cs b/Assets/Scripts/Office/OfficeSceneBinder.cs
-index a5746277c4b7787529df9a34dd0a95c9c1f5134f..f5e5e8aef810b06bbd8cadc2a8519945f8a5a4f3 100644
+index 5392f0dab2a2a23ec9f771728f00ad62fe39315a..f91424ca8c10b2e99f33c98b701f251be0bc9cb8 100644
 --- a/Assets/Scripts/Office/OfficeSceneBinder.cs
 +++ b/Assets/Scripts/Office/OfficeSceneBinder.cs
 @@ -911,7 +911,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
@@ -373,7 +373,7 @@ index a5746277c4b7787529df9a34dd0a95c9c1f5134f..f5e5e8aef810b06bbd8cadc2a8519945
  
      /// <summary>
 diff --git a/Assets/Scripts/Visuals/DeskSlides.cs b/Assets/Scripts/Visuals/DeskSlides.cs
-index e957ed80bb0931b9fac784827925237ff487dabd..a9f9bcfc548ba605a8b53256c3af9069530e70f5 100644
+index 44d2ffea8c0480ec2d18944752b14fe7320cf468..532ec3516b42f8de74a05856eadcff656126143f 100644
 --- a/Assets/Scripts/Visuals/DeskSlides.cs
 +++ b/Assets/Scripts/Visuals/DeskSlides.cs
 @@ -141,10 +141,11 @@ public sealed class DeskSlider
@@ -427,7 +427,7 @@ index e957ed80bb0931b9fac784827925237ff487dabd..a9f9bcfc548ba605a8b53256c3af9069
      }
  
 diff --git a/Assets/Scripts/Visuals/ProximityAssist.cs b/Assets/Scripts/Visuals/ProximityAssist.cs
-index ff9545c5740f721d57742e939cf6d73d08cdd416..b58e5ce2d3501505bf86386e5d4e8de709896a0b 100644
+index 9cb97ce50a69981c40a2b636bba01f2a60d5ad21..36b44f33f442ceb1e6046eb19bbe0f515bdc7248 100644
 --- a/Assets/Scripts/Visuals/ProximityAssist.cs
 +++ b/Assets/Scripts/Visuals/ProximityAssist.cs
 @@ -277,6 +277,12 @@ public sealed class ProximityAssist
@@ -570,7 +570,7 @@ index 0000000000000000000000000000000000000000..8ba64f4a23b09bef026c157628c73221
 +  assetBundleName: 
 +  assetBundleVariant: 
 diff --git a/Assets/Tests/EditMode/DeskSlidesTests.cs b/Assets/Tests/EditMode/DeskSlidesTests.cs
-index fb6a9ed8a4824e067c907e47cdda28542c46960b..2f4cb08cc68e618bdb170c5eb3d7b009d4146ad4 100644
+index f4d619870d6e5debba4ac3f025fcd169f99c6ca7..d3368218e3e80b408c94b9897bed6ae6d650af33 100644
 --- a/Assets/Tests/EditMode/DeskSlidesTests.cs
 +++ b/Assets/Tests/EditMode/DeskSlidesTests.cs
 @@ -225,6 +225,7 @@ public class DeskSlidesTests
@@ -590,7 +590,7 @@ index fb6a9ed8a4824e067c907e47cdda28542c46960b..2f4cb08cc68e618bdb170c5eb3d7b009
      }
  
 diff --git a/Assets/Tests/EditMode/ProximityAssistTests.cs b/Assets/Tests/EditMode/ProximityAssistTests.cs
-index 0983fa4f64234e05d5363f8bd905353e1fad2f33..b4bae93c6468cff1568b0c6aaf08231ea3f150d3 100644
+index 9561fdb9d998567d11458e12c8b71910eba81def..b3a43f80ba99191345bb84a5ce3ae39cb5c8b494 100644
 --- a/Assets/Tests/EditMode/ProximityAssistTests.cs
 +++ b/Assets/Tests/EditMode/ProximityAssistTests.cs
 @@ -138,6 +138,8 @@ public class ProximityAssistTests
