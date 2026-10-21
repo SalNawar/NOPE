@@ -11,6 +11,27 @@ Branch `feat/desk-v3`, cut from `fix/a-desk-plan` (DESK-PLAN #5, the desk home m
 - **D6:** "when they slide in, we subtly zoom in a bit not too hard just a small focus to frame the shot".
 - On the 2D work: "why are you still working on the mock?" (so this builds the real thing). Nothing pops (his standing rule for motion).
 
+## Round 11: the v3 review captures (no code change)
+
+Saleh's two open items from "So many visual problems" (the XP-style wallpaper, the hall too bright) were already fixed by rounds 9 and 10 (adcdf6a): the cel wallpaper over `xp_bliss.png` (2 credits, logged in `SPEND.tsv`; no new spend this round) and the knob `paintedDeskBrightness` (LIGHT's data, 0.72 at 09:00 and 0.85 at 16:00). This round re-ran them in Unity on adcdf6a and took the review set. OfficeGameplay was not rebuilt (no code or builder change since round 10's run).
+
+- **Run:** NOPE-art's editor through the job runner (empty scene first, the local capture op `_DeskV3CaptureOps` put in and taken out after, ended on an empty scene, closed with no dialog). Scenario `E:\unity\NOPE-tools\reports\desk_v3_unity\v3\desk_v3_capture_v3.json`: 0 errors, every step ok. Smoke day: harness ok (the 3 known reds of `gate_known_red.txt` only).
+- **Captures** (`E:\unity\NOPE-tools\reports\desk_v3_unity\v3\`): `desk_rest_day1_v3.png` (day 1, 09:00), `desk_rest_day12_v3.png` (day 12, its shift hour 16:00), `desk_rest_day12_0900_v3.png` and `desk_rest_day12_1600_v3.png` (day 12, the hour forced), `pc_day12_v3.png` (the PC open), `compare_v3.jpg` (the painting and all five). The dumps (`r9\dump_v3_*.txt`): knob and `HallBackdrop.Brightness` 0.7200 at 09:00 and 0.8500 at 16:00, `PaintedDesk` True, no badge drawer on.
+- **The hall against the painting** (`r9\measure_r9.py`, mean Rec. 709 luma of the sRGB values):
+
+| Region | day 1 09:00 | day 12 16:00 | day 12 09:00 | day 12 16:00 forced |
+|---|---|---|---|---|
+| Hall centre | 1.07x | 1.05x | 1.07x | 1.05x |
+| Hall right strip | 1.07x | 1.04x | 1.07x | 1.04x |
+| Hall floor | 1.33x | 1.28x | 1.33x | 1.28x |
+| City window | 0.85x | 0.81x | 0.85x | 0.81x |
+| Mat | 0.99x | 0.99x | 1.00x | 0.99x |
+| Left stack | 0.99x | 0.98x | 1.03x | 0.98x |
+
+  Against the v2 stills (before the knob) the hall centre is **0.72x at 09:00** (92.0 over 127.5) and **0.85x at 16:00** (89.9 over 105.6): round 5's target exactly, and the hall centre is within 0.9 to 1.1x of the painting at both hours while the desk is unchanged.
+- **No "CHEATS ON":** `v3.nobadge` passes on every still (day 12 is cheated); the badge's rectangle (8, 1058 to 128, 1078) holds 0 text pixels in the four rest stills (the PC still's rectangle is the PC's cream bezel).
+- **Still open (unchanged, owners as round 10):** the city window 0.85x and 0.81x (LIGHT, round 10 item 5); the hall floor about 1.3x (the art, OPEN.md 19); the other 24 wallpapers (round 10 item 6). New in the captures: day 1 shows the FTUE's "TUTORIAL 1/7" card top right (the game's tutorial, not a dev label).
+
 ## Round 10: the review of round 9, and R9 run in Unity
 
 The review of round 9 (96291a5) found six things. Each is fixed or recorded here, and R9 was run in Unity (NOPE-art's editor through the job runner and the QA harness; it ended on an empty scene and closed, with no dialog left).
