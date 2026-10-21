@@ -12,7 +12,8 @@ using UnityEngine.TestTools;
 /// play mode they ease over the kit's 0.2-0.3 s (TransitCurve, tested in
 /// FlowRulesTests; the transitions' recordings are FLOW's QA recipes);
 /// outside play mode they cut at once (the end state, then done) and load a
-/// scene as SceneManager.LoadScene does, which these tests pin. Tests in the
+/// scene as SceneManager.LoadScene does, which these tests pin, as they pin
+/// the scene change's shutter under the save notice. Tests in the
 /// "NeedsEditor" category create Unity objects or load scenes and run only
 /// inside Unity.
 /// </summary>
@@ -27,6 +28,15 @@ public class FlowSeamTests
         Assert.AreEqual(2, done);
         Assert.DoesNotThrow(() => Transit.Fade(null, 1f, 0.5f));
         Assert.DoesNotThrow(() => Transit.Slide(null, Vector2.zero, 0.5f));
+    }
+
+    [Test]
+    public void TheSceneChangeShutter_SortsUnderTheSaveNotice()
+    {
+        // Round 4: at the same order the two overlay canvases fell back to hierarchy order, so a failed-save strip raised just before a load (RUN-SAFE's SaveNotice) could sit under the shutter.
+        int veil = PrivateConstant(typeof(TransitRunner), "VeilOrder");
+        int notice = PrivateConstant(typeof(SaveNotice), "SortingOrder");
+        Assert.Less(veil, notice, "the shutter sorts under the save notice's strip");
     }
 
     [Test, Category("NeedsEditor")]
@@ -168,6 +178,15 @@ public class FlowSeamTests
         FieldInfo field = typeof(DaterImpressionArt).GetField(name, BindingFlags.NonPublic | BindingFlags.Static);
         Assert.IsNotNull(field, name);
         return (IDictionary)field.GetValue(null);
+    }
+
+    /// <summary>The private int constant <paramref name="name"/> of <paramref name="type"/> (the tests read it; nothing else does).</summary>
+    private static int PrivateConstant(Type type, string name)
+    {
+        FieldInfo field = type.GetField(name, BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(field, $"{type.Name}.{name}");
+        Assert.IsTrue(field.IsLiteral, $"{type.Name}.{name} is a constant");
+        return (int)field.GetRawConstantValue();
     }
 
     /// <summary>The only value of <paramref name="cache"/>.</summary>

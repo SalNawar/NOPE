@@ -17,8 +17,11 @@ using System.Text.RegularExpressions;
 /// (BUG-32a); an ending is the evening edition with Title and Quit (BUG-56a);
 /// the night shift closes at 24:00 and an early finish rings the bell (BUG-72);
 /// a Skip day from the office mid-shift lands as one from the briefing, the
-/// day closed once (round 4). Built player: the loads hold no frame over 0.25 s, in real time and in the
-/// captures, and the office shows within 1.0 s (BUG-31a).
+/// day closed once (round 4), and a second one under the shutter as one after
+/// it lifted (round 5). Built player: the loads hold no frame over 0.25 s, in real time and in the
+/// captures, and the office shows within 1.0 s (BUG-31a). A check that reads
+/// several results names each by its exact id (<see cref="All"/>), so a run
+/// that stopped part-way, its later results missing, is red (round 6).
 /// </summary>
 public static class FlowChecks
 {
@@ -90,13 +93,23 @@ public static class FlowChecks
     [GateCheck("flow.payoff", Owner, GateKind.Play)]
     public static GateResult Payoff() => GateResults.Require("flow.payoff", Owner, "flow_transitions.payoff");
 
-    /// <summary>No single-frame full-screen change at the day's end, Go Home and Sleep (seqtools cuts on flow_transitions' sequences).</summary>
+    /// <summary>No single-frame full-screen change at the day's end, Go Home and Sleep: seqtools cuts on each of flow_transitions' three sequences (FLOW recipe 4 writes their results).</summary>
     [GateCheck("flow.transitions.cuts", Owner, GateKind.Play)]
-    public static GateResult TransitionCuts() => GateResults.Require("flow.transitions.cuts", Owner, "flow_transitions.seq.*.cuts");
+    public static GateResult TransitionCuts() => All("flow.transitions.cuts", false,
+        "flow_transitions.seq.dayend.cuts", "flow_transitions.seq.gohome.cuts", "flow_transitions.seq.sleep.cuts");
 
-    /// <summary>A scene change through SceneTransit brings the booth's shutter down, loads behind it and lifts it, and a load asked for during a change (while the shutter comes down, while it rises) loads next, the last asked for winning (flow_shutter's transit.* and transit.queue.*; its frozen and cuts analyses by seqtools).</summary>
+    /// <summary>
+    /// A scene change through SceneTransit brings the booth's shutter down,
+    /// loads behind it and lifts it (office to Title, Title to office), and a
+    /// load asked for during a change (while the shutter comes down, while it
+    /// rises) loads next, the last asked for winning: flow_shutter's three
+    /// results, the queue leg's included. The seqtools frozen and cuts
+    /// analyses of its two sequences are not read here: FLOW recipe 5 reads
+    /// their output.
+    /// </summary>
     [GateCheck("flow.transit.shutter", Owner, GateKind.Play)]
-    public static GateResult SceneChangeShutter() => GateResults.Require("flow.transit.shutter", Owner, "flow_shutter.transit.*");
+    public static GateResult SceneChangeShutter() => All("flow.transit.shutter", false,
+        "flow_shutter.transit.TitleScene", "flow_shutter.transit.office", "flow_shutter.transit.queue.titleOfficeTitle");
 
     /// <summary>An ending is the evening edition, with Title and Quit, after the report.</summary>
     [GateCheck("flow.endings", Owner, GateKind.Play)]
@@ -118,32 +131,41 @@ public static class FlowChecks
     /// the shutter handles no day's end of its own (flow_skip; FLOW round 4).
     /// A second Skip day under the shutter lands as one after it lifted: the
     /// office being replaced is no longer the live shift, so its ledger is
-    /// never closed again on the landing day (FLOW round 5).
+    /// never closed again on the landing day (FLOW round 5). Both legs'
+    /// results are required: a run that stopped in the double skip (a
+    /// flowSettled or waitOffice timeout) is red.
     /// </summary>
     [GateCheck("flow.skip.midshift", Owner, GateKind.Play)]
-    public static GateResult SkipMidShift()
-    {
-        GateResult same = GateResults.Require("flow.skip.midshift", Owner, "flow_skip.same.*");
-        GateResult once = GateResults.Require("flow.skip.midshift", Owner, "flow_skip.dayEnds.*");
-        return GateResult.Of("flow.skip.midshift", Owner, same.Pass && once.Pass,
-            $"same: {same.Measured}; day ends: {once.Measured}",
-            string.Join("; ", new[] { same.Detail, once.Detail }.Where(d => !string.IsNullOrEmpty(d))));
-    }
+    public static GateResult SkipMidShift() => All("flow.skip.midshift", false,
+        "flow_skip.same.midshift", "flow_skip.dayEnds.midshift", "flow_skip.same.doubleskip", "flow_skip.dayEnds.doubleskip");
 
     /// <summary>
     /// The loads, on the QA player: in real time (flow_load, FlowLoadWatch) no
     /// frame from the click to the shutter off is over 250 ms and the office
     /// shows within 1.0 s; in the captures (flow_load_seq, seqtools frozen) the
     /// shutter's light never stands still over 0.25 s. Both halves are needed:
-    /// a fixed-step capture cannot see a long activation frame.
+    /// a fixed-step capture cannot see a long activation frame. Every load's
+    /// frames, the timed loads' times (title to office, Home to office; office
+    /// to Home's time is reported only) and both captures' frozen.
     /// </summary>
     [GateCheck("flow.bp.load", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
-    public static GateResult Load()
+    public static GateResult Load() => All("flow.bp.load", true,
+        "bp.flow_load.load.title_office.frames", "bp.flow_load.load.office_home.frames", "bp.flow_load.load.home_office.frames",
+        "bp.flow_load.load.title_office.time", "bp.flow_load.load.home_office.time",
+        "bp.flow_load_seq.seq.title_office.frozen", "bp.flow_load_seq.seq.home_office.frozen");
+
+    /// <summary>
+    /// One check over several results, each named by its exact id: it passes
+    /// when every id has a result and all of them passed at HEAD on a clean
+    /// tree (and, when <paramref name="builtPlayer"/>, on a built player;
+    /// GateResults.Require for each). A pattern such as "flow_skip.same.*"
+    /// passes on whichever results exist, so a run that stopped before its
+    /// last leg would pass on its first.
+    /// </summary>
+    private static GateResult All(string id, bool builtPlayer, params string[] ids)
     {
-        GateResult realTime = GateResults.Require("flow.bp.load", Owner, "bp.flow_load.load.*", true);
-        GateResult captured = GateResults.Require("flow.bp.load", Owner, "bp.flow_load_seq.seq.*.frozen", true);
-        return GateResult.Of("flow.bp.load", Owner, realTime.Pass && captured.Pass,
-            $"real time: {realTime.Measured}; captures: {captured.Measured}",
-            string.Join("; ", new[] { realTime.Detail, captured.Detail }.Where(d => !string.IsNullOrEmpty(d))));
+        List<GateResult> parts = ids.Select(r => GateResults.Require(id, Owner, r, builtPlayer)).ToList();
+        return GateResult.Of(id, Owner, parts.All(r => r.Pass), string.Join("; ", ids.Zip(parts, (r, g) => $"{r}: {g.Measured}")),
+            string.Join("; ", parts.Where(g => !g.Pass).Select(g => g.Detail)));
     }
 }
