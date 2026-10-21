@@ -16,3 +16,7 @@ MotionKnobs.drawerRaiseFrom     # BUG-73c, DOC-HANDLE (the drawer's slide, cut b
 MotionKnobs.drawerShoveSeconds  # BUG-73c, DOC-HANDLE (the drawer's shove, cut by STAMP)
 MotionKnobs.drawerShoveKick     # BUG-73c, DOC-HANDLE (the drawer's shove, cut by STAMP)
 MotionKnobs.drawerFeel          # BUG-73c, DOC-HANDLE (the drawer's stop, cut by STAMP; MotionFeel.Drawer stays: serialized enums are append-only)
+DeskConfigSO.hallPortalDrawing      # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO holds the drawing); delete with class HallPortalLayers, move PortalVortexTuning to HallPortalsSO.cs
+DeskConfigSO.hallPortalLayers       # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.rings)
+DeskConfigSO.hallPortalVortex       # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.vortex)
+DeskConfigSO.hallPortalPulseSeconds # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.pulseSeconds)

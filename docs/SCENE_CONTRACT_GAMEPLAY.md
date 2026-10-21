@@ -174,10 +174,12 @@ so a tint greys that whole disc; every ring keeps the art's colour. The effects 
 gameplay drawing on the art's **Default** sorting layer: sorting order = the
 ring's secure-bay order − 1 (read from the bay's renderer, `FindLayer`), so they
 draw under the bay's front fence and panels, the metal ring (the gate frame) and
-the painted glass, over the floor and walls seen through the ring; each is
-placed on its ring's opaque pixels (its diameter `hallPortalGlowSize` × the
-ring's width) and follows them if the art pans. A renamed or renumbered layer
-is a `DeskConfigSO.hallPortalLayers` edit; the art side keeps each ring's
+the painted glass, over the floor and walls seen through the ring; each fills
+its ring's painted hole, fitted to the ring's mask (`HallPortalsSO`,
+`Assets/Data/Config/HallPortals.asset`: the drawing, each ring's layers, its
+opening and its mask crop; HALL-FX, BUG-26a), and follows the drawing if the
+art pans. A renamed or renumbered layer is a `HallPortals.asset` edit (and a
+re-run of `tools/hall/portal_masks.py` when the drawing changes); the art side keeps each ring's
 centre free of other layers at the bay's order − 1 (at art c75e1fe the orders
 the effects share, the stone bust's 37 and each lower ring's order, have no
 pixel inside any ring's centre). With the hall's lights the effects move to the
