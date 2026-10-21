@@ -36,11 +36,14 @@ public class CityR17SceneTests
         List<CityR17Order.Step> steps = CityR17Order.Steps(s);
         string order = string.Join(" ", steps);
         StringAssert.StartsWith("P00 clouds@0 traffic@0 P01 lights@1 traffic@1 P02 lights@2 traffic@2 P03 traffic@3 P04 lights@4 traffic@4 " +
-                                "P05 traffic@5 ads@5 P06 traffic@6 P07 train@7 lights@7 traffic@7 P08 traffic@8 smoke@8 " +
+                                "P05 traffic@5 ads@5 P06 traffic@6 P07 train@7 lights@7 traffic@7 P08 laundry@8 traffic@8 smoke@8 " +
                                 "P09 fire@9 smokeMouth@9 traffic@9 P10 traffic@10", order);
         for (int p = 0; p < s.Planes.Length; p++)
             Assert.IsTrue(CityR17Order.Has(s, "traffic", p), "every plane's slot carries traffic: " + p);
-        CollectionAssert.AreEqual(new[] { "laundry@8" }, CityR17Order.Unported(s), "only the r12 laundry sway is left out, and named");
+        CollectionAssert.IsEmpty(CityR17Order.Unported(s), "every drawer of the page is ported");
+        Assert.IsNotNull(s.Laundry, "the laundry sway");
+        Assert.AreEqual(8, s.Laundry.Plane, "on the tenements");
+        Assert.AreEqual(44, s.Laundry.Blobs.Length, "44 cloth panels");
     }
 
     [Test]
@@ -84,6 +87,8 @@ public class CityR17SceneTests
         }
         Assert.IsNotNull(art.Get("Train/" + s.Train.ParapetFile));
         Assert.IsTrue(art.Get("Train/" + s.Train.PaintFile).HasPlate, "the viaduct paint is cropped and placed");
+        Assert.IsTrue(art.Get("Hive/" + s.Laundry.Clean).HasPlate, "the laundry's clean patch is cropped and placed");
+        Assert.IsTrue(art.Get("Hive/" + s.Laundry.Cloth).HasPlate, "the laundry's cloth is cropped and placed");
         foreach (KeyValuePair<string, CityR17Art.Entry> kv in art.Files)
         {
             Assert.AreEqual(0, kv.Value.SizeW % 4, kv.Key + " pads to a multiple of 4 (BC7)");

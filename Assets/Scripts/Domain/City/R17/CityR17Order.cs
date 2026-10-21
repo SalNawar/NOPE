@@ -4,13 +4,13 @@ using System.Collections.Generic;
 /// <summary>
 /// The r17 city's draw order (CITY-R17), from the page's own drawers (<c>city_r17_scene.json</c> "order", read from
 /// App.drawers by the exporter): plane 0, then what the page draws in the slot after plane 0 (in drawer order),
-/// plane 1, its slot, and so on. A system the port does not draw (the r12 laundry sway) is listed by
-/// <see cref="Unported"/>, never silently dropped. Pure; tested in EditMode.
+/// plane 1, its slot, and so on. A system the port does not draw would be listed by <see cref="Unported"/>, never
+/// silently dropped (every drawer of the r17 page is ported). Pure; tested in EditMode.
 /// </summary>
 public static class CityR17Order
 {
     /// <summary>The systems the port draws.</summary>
-    public static readonly string[] Ported = { "clouds", "traffic", "lights", "ads", "train", "smoke", "fire", "smokeMouth" };
+    public static readonly string[] Ported = { "clouds", "traffic", "lights", "ads", "train", "smoke", "fire", "smokeMouth", "laundry" };
 
     /// <summary>One step of the frame: a plane, or a system in the slot after a plane.</summary>
     public readonly struct Step

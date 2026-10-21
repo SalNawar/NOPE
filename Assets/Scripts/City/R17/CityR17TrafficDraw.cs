@@ -236,7 +236,7 @@ public sealed class CityR17TrafficDraw : IDisposable
     {
         foreach (Mesh m in _meshes)
             if (m != null)
-                UnityEngine.Object.Destroy(m);
-        UnityEngine.Object.Destroy(_mat);
+                CityR17.Release(m);
+        CityR17.Release(_mat);
     }
 }

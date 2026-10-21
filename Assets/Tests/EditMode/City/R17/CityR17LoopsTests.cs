@@ -163,6 +163,22 @@ public class CityR17LoopsTests
     }
 
     [Test]
+    public void TheLaundry_SwaysInGusts_MoreAtTheHem()
+    {
+        for (double t = 0; t < 60; t += 0.37)
+        {
+            double g = CityR17Loops.LaundryGust(t);
+            Assert.That(g, Is.InRange(0.45, 1.0));
+            Assert.LessOrEqual(Math.Abs(CityR17Loops.LaundryRow(3, 0, 30, t, g)), 0.8 + 1e-9, "the line end barely moves");
+            Assert.LessOrEqual(Math.Abs(CityR17Loops.LaundryRow(3, 29, 30, t, g)), 4.4 + 1e-9, "the hem swings at most 4.4 px");
+        }
+        // continuous: a frame at 60 fps moves a row a fraction of a pixel
+        double a = CityR17Loops.LaundryRow(5, 20, 30, 10, CityR17Loops.LaundryGust(10));
+        double b = CityR17Loops.LaundryRow(5, 20, 30, 10 + 1.0 / 60, CityR17Loops.LaundryGust(10 + 1.0 / 60));
+        Assert.Less(Math.Abs(a - b), 0.5);
+    }
+
+    [Test]
     public void TheNoonLamps_EaseInAndOut_NeverBlink()
     {
         CityR17LightsData L = CityR17Fixture.Scene.Lights;

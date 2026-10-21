@@ -4,8 +4,8 @@
 // boots, installs every r17 part and prefills the traffic exactly as it does in a browser, then reads the data the
 // page actually draws from (after the r17 load-time lane edits, the K skyway, the soft clouds, the r17 ads and
 // train, the r16 fire and smoke) and writes three JSON files plus a golden traffic record for the C# tests:
-//   city_r17_scene.json     camera, planes, clouds, train, ads (tiles, sequences, holds), fire, smoke, noon lights and
-//                           the draw order the page runs (every drawer as [system, plane, order])
+//   city_r17_scene.json     camera, planes, clouds, train, ads (tiles, sequences, holds), fire, smoke, noon lights, the
+//                           laundry sway and the draw order the page runs (every drawer as [system, plane, order])
 //   city_r17_traffic.json   the lanes as the page runs them, the slot rules, types, liveries, sim constants
 //   city_r17_vehicles.json  the four toon meshes (taxi, bus, truck, coupe), base64 typed arrays as data/r17veh.js
 //   city_r17_golden.json    every vehicle after the prefill and after 48 frames at 1/24 s (the C# sim must match),
@@ -109,6 +109,9 @@ function check_rules() {
         hallSeam: LG.hallSeam || [], hallBand: LG.hallBand || [], ringLamps: LG.ringLamps || [], exTop: LG.exTop || [],
         warn: (LG.warn || []).filter(a => a[1] === Math.min.apply(null, LG.warn.map(b => b[1])))
       },
+      // the r12 laundry sway on the tenements (js/fx.js drawHive): the clean patch and the cloth (assets/hive_clean.png,
+      // hive_cloth.png, plate-sized) and the cloth panels [x, y, w, h] whose rows sway (data/laundry.js); no lantern swing
+      laundry: { plane: App.tierSlot.tenements, clean: 'hive_clean.png', cloth: 'hive_cloth.png', blobs: window.SCENE_LAUNDRY || [] },
       // the draw order the page actually runs: every installed drawer as [system, plane index, order], read from
       // App.drawers (the slot after plane i is tier 'tr' + i; the r11 tier names resolve through App.tierSlot)
       order: App.drawers.map(d => {

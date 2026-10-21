@@ -36,6 +36,9 @@ public sealed class CityR17Scene
     public CityR17SmokeData Smoke;
     public CityR17LightsData Lights;
 
+    /// <summary>The r12 laundry sway on the tenements (null when the export has none).</summary>
+    public CityR17LaundryData Laundry;
+
     /// <summary>The page's drawers in order: (system, plane index, order).</summary>
     public CityR17OrderEntry[] Order;
 
@@ -83,6 +86,20 @@ public sealed class CityR17Scene
         s.Fire = ParseFire(CityR17Json.Req(root, "fire"));
         s.Smoke = ParseSmoke(CityR17Json.Req(root, "smoke"));
         s.Lights = ParseLights(CityR17Json.Req(root, "lights"));
+        ContentNode laundry = root.Get("laundry");
+        if (laundry != null && laundry.Kind == ContentNodeKind.Object)
+        {
+            IReadOnlyList<ContentNode> blobs = CityR17Json.Items(laundry, "blobs");
+            s.Laundry = new CityR17LaundryData
+            {
+                Plane = CityR17Json.Int(laundry, "plane"),
+                Clean = CityR17Json.ReqStr(laundry, "clean"),
+                Cloth = CityR17Json.ReqStr(laundry, "cloth"),
+                Blobs = new CityR17Rect[blobs.Count],
+            };
+            for (int i = 0; i < blobs.Count; i++)
+                s.Laundry.Blobs[i] = CityR17Json.Rect(blobs[i]);
+        }
 
         IReadOnlyList<ContentNode> order = CityR17Json.Items(root, "order");
         s.Order = new CityR17OrderEntry[order.Count];
@@ -470,6 +487,18 @@ public sealed class CityR17Lamp
 public sealed class CityR17LightsData
 {
     public CityR17Lamp[] Lamps;
+}
+
+/// <summary>
+/// The laundry sway (js/fx.js drawHive): a clean patch over the painted cloth and lanterns, then the cloth redrawn in
+/// 2 px rows that sway from the line in gusts, each panel (x, y, w, h on the plate) its own phase. Both images are
+/// plate-sized in the look-dev (cropped on import).
+/// </summary>
+public sealed class CityR17LaundryData
+{
+    public int Plane;
+    public string Clean, Cloth;
+    public CityR17Rect[] Blobs;
 }
 
 /// <summary>One of the page's drawers: which system, after which plane, at which order within that plane's slot.</summary>

@@ -9,12 +9,13 @@ Reads E:/unity/NOPE-tools/city/live (the r17 page's own files) and writes Assets
   Smoke/   the two stacks' body and mouth sheets (assets/r16/smoke)
   Train/   the three cars and their glows (assets/r17/train), the r9 parapet (assets/r15/train) and the r12 viaduct
            paint (assets/r12/viaduct_paint.png), cropped to its painted pixels
+  Hive/    the laundry sway's clean patch and cloth (assets/hive_clean.png, hive_cloth.png), cropped to their pixels
 Pixels are never resampled. Every texture is padded with transparent pixels on the right and bottom to a multiple of 4
 (BC7 needs it); the data's pixel rects still point at the same pixels, so uv = px / the padded size.
 Writes Assets/Data/City/R17/city_r17_art.json (each file's padded size, and where each cropped image sits on the
 plate) and a .meta for every new file (the import settings CityR17Import enforces: no sRGB decode, because the city
-composites in the look-dev's gamma space; alpha is transparency; no mips; clamp; bilinear; BC7). An existing meta keeps
-its GUID.
+composites in the look-dev's gamma space; alpha is transparency; no mips; clamp; bilinear; BC7). An existing meta is kept
+as it is. Never run it while a Unity editor has the project open (it rewrites the PNGs under the importer).
 
 usage: python -I tools/art/city_r17/import_r17_art.py [--live E:/unity/NOPE-tools/city/live] [--repo .]
 """
@@ -38,6 +39,7 @@ SOURCES = {
     'Train': [('assets/r17/train/%s.png' % s, '%s.png' % s, 'sheet') for s in ('car_lead', 'car_mid', 'car_tail', 'glow_lead', 'glow_mid', 'glow_tail')]
              + [('assets/r15/train/viaduct_parapet.png', 'viaduct_parapet.png', 'sheet'),
                 ('assets/r12/viaduct_paint.png', 'viaduct_paint.png', 'paint')],
+    'Hive': [('assets/hive_clean.png', 'hive_clean.png', 'paint'), ('assets/hive_cloth.png', 'hive_cloth.png', 'paint')],
 }
 
 FOLDER_META = "folderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n"
@@ -164,17 +166,11 @@ TextureImporter:
 """
 
 
-def guid_of(meta):
-    if meta.exists():
-        for line in meta.read_text(encoding='utf-8').splitlines():
-            if line.startswith('guid: '):
-                return line[6:].strip()
-    return uuid.uuid4().hex
-
-
 def write_meta(path, body_fn):
     meta = Path(str(path) + '.meta')
-    meta.write_text(body_fn(guid_of(meta)), encoding='utf-8', newline='\n')
+    if meta.exists():
+        return   # keep it (and its GUID): Unity may have normalised it, and CityR17Import enforces the settings anyway
+    meta.write_text(body_fn(uuid.uuid4().hex), encoding='utf-8', newline='\n')
 
 
 def folder_meta(path):

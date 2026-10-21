@@ -32,6 +32,7 @@ public sealed class CityR17Stage : IDisposable
     private readonly CityR17Scene _scene;
     private readonly CityR17Art _art;
     private readonly List<CityR17Order.Step> _steps;
+    private readonly StepKind[] _stepKinds;
     private readonly Material _sprite, _lamp;
     private readonly Mesh _quad;
     private readonly Mesh[] _lampMeshes;
@@ -45,6 +46,12 @@ public sealed class CityR17Stage : IDisposable
     private readonly Texture2D[] _cloudTex, _adTex, _trainCars, _trainGlows;
     private readonly Texture2D _fireTex, _spillBase, _spill, _parapet, _paint;
     private readonly Texture2D[] _smokeTex, _mouthTex;
+    private readonly Texture2D _hiveClean, _hiveCloth;
+    private readonly Mesh _clothMesh;
+    private readonly Vector3[] _clothVerts;
+    private readonly float[] _clothRestX;
+    private readonly int[] _clothBlob, _clothRow;
+    private readonly float[] _clothRows;
     private int _blocksUsed;
     private RenderTexture _target, _output;
 
@@ -58,6 +65,9 @@ public sealed class CityR17Stage : IDisposable
         _scene = scene;
         _art = art;
         _steps = CityR17Order.Steps(scene);
+        _stepKinds = new StepKind[_steps.Count];
+        for (int i = 0; i < _steps.Count; i++)
+            _stepKinds[i] = KindOf(_steps[i].System);
         _sprite = NewMaterial(config.spriteShader, "City R17 sprites");
         _lamp = NewMaterial(config.lampShader, "City R17 lamps");
         _quad = UnitQuad();
@@ -98,6 +108,14 @@ public sealed class CityR17Stage : IDisposable
         }
         _parapet = Tex(scene.Train.ParapetFile);
         _paint = Tex(scene.Train.PaintFile);
+        if (scene.Laundry != null)
+        {
+            _hiveClean = Tex(scene.Laundry.Clean);
+            _hiveCloth = Tex(scene.Laundry.Cloth);
+            CityR17Art.Entry ce = Entry("Hive/" + scene.Laundry.Cloth);
+            if (_hiveCloth != null && ce != null && ce.HasPlate)
+                _clothMesh = ClothMesh(scene.Laundry, ce, out _clothVerts, out _clothRestX, out _clothBlob, out _clothRow, out _clothRows);
+        }
 
         _lampsByPlane = new List<CityR17Lamp>[scene.Planes.Length];
         foreach (CityR17Lamp lamp in scene.Lights.Lamps)
@@ -138,7 +156,7 @@ public sealed class CityR17Stage : IDisposable
             if (_target != null)
             {
                 _target.Release();
-                UnityEngine.Object.Destroy(_target);
+                CityR17.Release(_target);
             }
             var desc = new RenderTextureDescriptor(w, h, GraphicsFormat.R8G8B8A8_UNorm, GraphicsFormat.D24_UNorm_S8_UInt)
             {
@@ -206,6 +224,7 @@ public sealed class CityR17Stage : IDisposable
         Matrix4x4 proj = Matrix4x4.Ortho((float)_x0, (float)(_x0 + fr.W), (float)-(_y0 + fr.H), (float)-_y0, -100f, 100f);
         Matrix4x4 vp = GL.GetGPUProjectionMatrix(proj, true);
 
+        long t0 = System.Diagnostics.Stopwatch.GetTimestamp();
         CommandBuffer cmd = _cmd;
         cmd.Clear();
         cmd.SetRenderTarget(_target);
@@ -214,24 +233,65 @@ public sealed class CityR17Stage : IDisposable
         Traffic?.Begin(cmd, this, state.ShiftX, state.ShiftY, _sc);
         for (int i = 0; i < _steps.Count; i++)
         {
-            CityR17Order.Step s = _steps[i];
-            switch (s.System)
+            int plane = _steps[i].Plane;
+            switch (_stepKinds[i])
             {
-                case "plane": DrawPlane(cmd, s.Plane); break;
-                case "clouds": DrawClouds(cmd); break;
-                case "traffic": Traffic?.Draw(cmd, s.Plane); break;
-                case "lights": DrawLamps(cmd, s.Plane); break;
-                case "ads": DrawAds(cmd); break;
-                case "train": DrawTrain(cmd); break;
-                case "smoke": DrawSmoke(cmd, false); break;
-                case "fire": DrawFire(cmd); break;
-                case "smokeMouth": DrawSmoke(cmd, true); break;
+                case StepKind.Plane: DrawPlane(cmd, plane); break;
+                case StepKind.Clouds: DrawClouds(cmd); break;
+                case StepKind.Traffic: Traffic?.Draw(cmd, plane); break;
+                case StepKind.Lights: DrawLamps(cmd, plane); break;
+                case StepKind.Ads: DrawAds(cmd); break;
+                case StepKind.Train: DrawTrain(cmd); break;
+                case StepKind.Smoke: DrawSmoke(cmd, false); break;
+                case StepKind.Fire: DrawFire(cmd); break;
+                case StepKind.SmokeMouth: DrawSmoke(cmd, true); break;
+                case StepKind.Laundry: DrawLaundry(cmd); break;
             }
         }
         cmd.Blit(_target, _output);
         cmd.GenerateMips(_output);
+        long t1 = System.Diagnostics.Stopwatch.GetTimestamp();
         Graphics.ExecuteCommandBuffer(cmd);
+        long t2 = System.Diagnostics.Stopwatch.GetTimestamp();
+        RecordMs = (t1 - t0) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+        SubmitMs = (t2 - t1) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
     }
+
+    /// <summary>The last frame's recording time on the main thread (ms).</summary>
+    public double RecordMs { get; private set; }
+
+    /// <summary>The last frame's submit time (ms): queueing the command buffer (with a render thread) or running it.</summary>
+    public double SubmitMs { get; private set; }
+
+    private enum StepKind
+    {
+        None,
+        Plane,
+        Clouds,
+        Traffic,
+        Lights,
+        Ads,
+        Train,
+        Smoke,
+        Fire,
+        SmokeMouth,
+        Laundry,
+    }
+
+    private static StepKind KindOf(string system) => system switch
+    {
+        "plane" => StepKind.Plane,
+        "clouds" => StepKind.Clouds,
+        "traffic" => StepKind.Traffic,
+        "lights" => StepKind.Lights,
+        "ads" => StepKind.Ads,
+        "train" => StepKind.Train,
+        "smoke" => StepKind.Smoke,
+        "fire" => StepKind.Fire,
+        "smokeMouth" => StepKind.SmokeMouth,
+        "laundry" => StepKind.Laundry,
+        _ => StepKind.None,
+    };
 
     // ------------------------------------------------------------------ placement (the page's setDepth)
 
@@ -451,6 +511,96 @@ public sealed class CityR17Stage : IDisposable
         Flip(cmd, fire.Seq, fire.Sheets, _fireTex, fire.Rect, f, par, "Fire");
     }
 
+    /// <summary>
+    /// The laundry sway (js/fx.js drawHive): the clean patch over the painted cloth, then the cloth in 2 px rows (3 px
+    /// strips, 1 px overlap), each shifted by its panel's sway this frame. Reduced Motion: the cloth hangs still.
+    /// </summary>
+    private void DrawLaundry(CommandBuffer cmd)
+    {
+        CityR17LaundryData l = _scene.Laundry;
+        if (l == null)
+            return;
+        double f = _scene.ParallaxOf(l.Plane);
+        CityR17Art.Entry pe = Entry("Hive/" + l.Clean);
+        if (_hiveClean != null && pe != null && pe.HasPlate)
+        {
+            CityR17Rect pr = CityR17Art.PaddedPlate(pe);
+            Sprite(cmd, PassAlpha, _hiveClean, pe.SizeW, pe.SizeH, new CityR17Rect(0, 0, pe.SizeW, pe.SizeH), Placed(pr.X, pr.Y, pr.W, pr.H, f), White, NoHaze);
+        }
+        if (_clothMesh == null)
+            return;
+        double t = _f.Seconds, gust = CityR17Loops.LaundryGust(t);
+        for (int q = 0; q < _clothBlob.Length; q++)
+        {
+            float off = _f.Reduced ? 0f : (float)CityR17Loops.LaundryRow(_clothBlob[q], _clothRow[q], _clothRows[q], t, gust);
+            int v = q * 4;
+            float x0 = _clothRestX[q * 2] + off, x1 = _clothRestX[q * 2 + 1] + off;
+            _clothVerts[v].x = x0;
+            _clothVerts[v + 1].x = x1;
+            _clothVerts[v + 2].x = x0;
+            _clothVerts[v + 3].x = x1;
+        }
+        _clothMesh.vertices = _clothVerts;
+        MaterialPropertyBlock b = Block();
+        b.SetTexture(MainTexId, _hiveCloth);
+        b.SetVector(UvId, new Vector4(0, 0, 1, 1));
+        b.SetVector(TintId, White);
+        b.SetVector(HazeId, NoHaze);
+        b.SetVector(ClipXId, new Vector4(-1e9f, 1e9f, 0, 0));
+        cmd.DrawMesh(_clothMesh, Glue(f), _sprite, 0, PassAlpha, b);
+    }
+
+    /// <summary>The cloth's rows as one mesh at rest (plate (x, -y)), uv into the cropped cloth texture; x moves per frame.</summary>
+    private static Mesh ClothMesh(CityR17LaundryData l, CityR17Art.Entry e, out Vector3[] verts, out float[] restX, out int[] blob, out int[] row, out float[] rows)
+    {
+        var quads = new List<(int bi, int r, double x, double y, double w, double h)>();
+        for (int bi = 0; bi < l.Blobs.Length; bi++)
+        {
+            CityR17Rect B = l.Blobs[bi];
+            double x = B.X - 1, y = B.Y - 1, w = B.W + 2, h = B.H + 2;
+            for (int r = 0; r < h; r += 2)
+                quads.Add((bi, r, x, y + r, w, h));
+        }
+        int n = quads.Count;
+        verts = new Vector3[n * 4];
+        var uvs = new Vector2[n * 4];
+        var tris = new int[n * 6];
+        restX = new float[n * 2];
+        blob = new int[n];
+        row = new int[n];
+        rows = new float[n];
+        double ox = e.Plate.X, oy = e.Plate.Y;
+        for (int i = 0; i < n; i++)
+        {
+            (int bi, int r, double x, double y, double w, double h) = quads[i];
+            int v = i * 4;
+            verts[v] = new Vector3((float)x, (float)-(y + 3), 0);
+            verts[v + 1] = new Vector3((float)(x + w), (float)-(y + 3), 0);
+            verts[v + 2] = new Vector3((float)x, (float)-y, 0);
+            verts[v + 3] = new Vector3((float)(x + w), (float)-y, 0);
+            float u0 = (float)((x - ox) / e.SizeW), u1 = (float)((x + w - ox) / e.SizeW);
+            float vTop = (float)(1 - (y - oy) / e.SizeH), vBottom = (float)(1 - (y + 3 - oy) / e.SizeH);
+            uvs[v] = new Vector2(u0, vBottom);
+            uvs[v + 1] = new Vector2(u1, vBottom);
+            uvs[v + 2] = new Vector2(u0, vTop);
+            uvs[v + 3] = new Vector2(u1, vTop);
+            int t = i * 6;
+            tris[t] = v; tris[t + 1] = v + 2; tris[t + 2] = v + 1; tris[t + 3] = v + 2; tris[t + 4] = v + 3; tris[t + 5] = v + 1;
+            restX[i * 2] = (float)x;
+            restX[i * 2 + 1] = (float)(x + w);
+            blob[i] = bi;
+            row[i] = r;
+            rows[i] = (float)h;
+        }
+        var mesh = new Mesh { name = "City R17 laundry", hideFlags = HideFlags.DontSave };
+        mesh.vertices = verts;
+        mesh.uv = uvs;
+        mesh.triangles = tris;
+        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 1e6f);
+        mesh.MarkDynamic();
+        return mesh;
+    }
+
     private void DrawTrain(CommandBuffer cmd)
     {
         CityR17TrainData d = _scene.Train;
@@ -622,14 +772,16 @@ public sealed class CityR17Stage : IDisposable
             if (rt != null)
             {
                 rt.Release();
-                UnityEngine.Object.Destroy(rt);
+                CityR17.Release(rt);
             }
         _target = _output = null;
-        UnityEngine.Object.Destroy(_sprite);
-        UnityEngine.Object.Destroy(_lamp);
-        UnityEngine.Object.Destroy(_quad);
+        CityR17.Release(_sprite);
+        CityR17.Release(_lamp);
+        CityR17.Release(_quad);
         foreach (Mesh m in _lampMeshes)
             if (m != null)
-                UnityEngine.Object.Destroy(m);
+                CityR17.Release(m);
+        if (_clothMesh != null)
+            CityR17.Release(_clothMesh);
     }
 }

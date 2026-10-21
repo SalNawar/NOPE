@@ -239,10 +239,21 @@ public sealed class CityR17 : MonoBehaviour
     private void OnDestroy()
     {
         if (_windows != null)
-            Destroy(_windows);
+            Release(_windows);
         _stage?.Dispose();
         _stage = null;
         if (_present != null)
-            Destroy(_present);
+            Release(_present);
+    }
+
+    /// <summary>Destroys an object the city made (at once outside play mode, where Destroy is refused).</summary>
+    public static void Release(UnityEngine.Object o)
+    {
+        if (o == null)
+            return;
+        if (Application.isPlaying)
+            Destroy(o);
+        else
+            DestroyImmediate(o);
     }
 }

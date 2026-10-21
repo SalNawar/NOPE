@@ -220,6 +220,35 @@ public static class CityR17Loops
     /// <summary>The furnace spill's additive gain at frame f (it flickers with the fire's brightness).</summary>
     public static double SpillGain(CityR17FireData fire, long f) => fire.Gain[(int)CityR17Json.Mod(CityR17Json.Mod(f, fire.N), fire.Gain.Length)];
 
+    // ------------------------------------------------------------------ laundry (js/fx.js drawHive)
+
+    private static double FxHash(double n)
+    {
+        double x = Math.Sin(n * 127.1) * 43758.5453;
+        return x - Math.Floor(x);
+    }
+
+    /// <summary>js/fx.js's value noise (smooth, 0..1).</summary>
+    public static double FxNoise(double x)
+    {
+        double i = Math.Floor(x), f = x - i;
+        f = f * f * (3 - 2 * f);
+        return FxHash(i) * (1 - f) + FxHash(i + 1) * f;
+    }
+
+    /// <summary>The wind's gust at t seconds (0.45..1).</summary>
+    public static double LaundryGust(double t) => 0.45 + 0.55 * FxNoise(t * 0.35);
+
+    /// <summary>
+    /// How far (plate px) row r of panel bi (h rows tall) sways at t: whole panels swing from the line, rows travel
+    /// more toward the free hem, in gusts.
+    /// </summary>
+    public static double LaundryRow(int bi, int r, double h, double t, double gust)
+    {
+        double u = r / h;
+        return (0.8 + 3.6 * Math.Pow(u, 1.2)) * gust * Math.Sin(t * 3.4 + bi * 1.7 - r * 0.14);
+    }
+
     // ------------------------------------------------------------------ noon lamps (js/r16lights.js)
 
     private static double Ss(double a, double b, double x)

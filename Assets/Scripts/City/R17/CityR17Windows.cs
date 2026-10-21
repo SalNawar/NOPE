@@ -127,7 +127,7 @@ public sealed class CityR17Windows : MonoBehaviour
             if (s.Renderer != null && s.Renderer.sharedMaterial == s.City)
                 s.Renderer.sharedMaterial = s.Original;
             if (s.City != null)
-                Destroy(s.City);
+                CityR17.Release(s.City);
         }
         _swaps.Clear();
         foreach (SpriteRenderer f in _flyers)
