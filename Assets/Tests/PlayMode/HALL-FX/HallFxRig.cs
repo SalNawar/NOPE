@@ -22,7 +22,9 @@ using UnityEngine;
 /// hall_fx_crossfade's flicker check on their motion, not on the crossfade's. BUG-26a: <c>hallPortalsOpen</c> opens every
 /// ring's vortex (PortalEffect.Show, the departure look, on the asset's tuning) and waits for the irises, so the portal
 /// shots measure all five rings: on a day's plan most rings are shut (day 1 opens one), and an effect's placement and
-/// mask do not depend on which day opens it.
+/// mask do not depend on which day opens it. Each portal shot also writes the hall drawing's own projection (its canvas
+/// corners on screen), where tools/hall/portal_check.py lays the rings' masks; <c>hallDrawing</c> writes it alone (the
+/// crossfade's both-faces mask, tools/hall/slot_mask.py).
 /// </summary>
 public static class HallFxRig
 {
@@ -42,6 +44,53 @@ public static class HallFxRig
         QaRunner.RegisterOp("hallClock", Clock);
         QaRunner.RegisterOp("hallHitStop", (runner, step) => HitStop());
         QaRunner.RegisterOp("hallPortalsOpen", (runner, step) => OpenAll());
+        QaRunner.RegisterOp("hallDrawing", Drawing);
+    }
+
+    /// <summary>
+    /// <c>hallDrawing</c>: appends the hall drawing's projection to qa_report.txt (<see cref="DrawingLine"/>), so an
+    /// offline tool can lay canvas-space art (a slot's faces: tools/hall/slot_mask.py) on the frames of the screen
+    /// size it was taken at.
+    /// </summary>
+    private static IEnumerator Drawing(QaRunner runner, QaStep step)
+    {
+        File.AppendAllText(Path.Combine(runner.OutDir, "qa_report.txt"),
+                           $"== drawing at {Screen.width}x{Screen.height}\n" + DrawingLine());
+        yield return null;
+    }
+
+    /// <summary>
+    /// The hall drawing's own projection (the painting the rings and slots are drawn on, HallPortalsSO.drawing):
+    /// its canvas corners top-left, top-right, bottom-left and bottom-right as the office camera projects its sprite
+    /// (screen px, y up; HallBackdrop's camera copies that camera's pose, lens and screen). The sprite is flat, so the
+    /// four corners give the exact canvas-to-screen map (a homography) the GPU draws the painting with, independent of
+    /// how PortalEffect or HallSlotsLink place their own quads. Empty when the hall or the drawing is missing.
+    /// </summary>
+    private static string DrawingLine()
+    {
+        Camera camera = Camera.main;
+        AnimeHallPresentation hall = Object.FindAnyObjectByType<AnimeHallPresentation>();
+        HallPortalsSO portals = null;
+        foreach (PortalEffect e in Object.FindObjectsByType<PortalEffect>(FindObjectsInactive.Include))
+            if (e.Portals != null)
+            {
+                portals = e.Portals;
+                break;
+            }
+        SpriteRenderer drawing = hall != null && portals != null ? hall.FindLayer(portals.drawing) : null;
+        if (camera == null || drawing == null || drawing.sprite == null)
+            return "   drawing missing\n";
+        Sprite s = drawing.sprite;
+        float ppu = s.pixelsPerUnit, w = s.rect.width, h = s.rect.height;
+        Vector2 pivot = s.pivot;
+        var line = new StringBuilder($"   drawing canvas {portals.canvas.x:0}x{portals.canvas.y:0} corners");
+        foreach (Vector2 corner in new[] { new Vector2(0f, h), new Vector2(w, h), new Vector2(0f, 0f), new Vector2(w, 0f) })
+        {
+            Vector3 world = drawing.transform.TransformPoint(new Vector3((corner.x - pivot.x) / ppu, (corner.y - pivot.y) / ppu, 0f));
+            Vector3 p = camera.WorldToScreenPoint(world);
+            line.AppendFormat(CultureInfo.InvariantCulture, " ({0:0.000},{1:0.000})", p.x, p.y);
+        }
+        return line.Append('\n').ToString();
     }
 
     private static IEnumerator Clock(QaRunner runner, QaStep step)
@@ -101,6 +150,7 @@ public static class HallFxRig
             report.AppendFormat(CultureInfo.InvariantCulture, "   {0} showing {1} night {2:0.00} centre ({3:0.0},{4:0.0}) quad ({5:0.0},{6:0.0})-({7:0.0},{8:0.0})\n",
                                 e.name, e.Showing, e.Night, c.x, c.y, Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
         }
+        report.Append(DrawingLine());
         File.AppendAllText(Path.Combine(runner.OutDir, "qa_report.txt"), report.ToString());
         runner.Recorder.Still(Path.Combine(dir, $"h{hour:00}_{Screen.width}x{Screen.height}_on.png"));
         yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the on still");

@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "HALL-FX BUG-26a: per ring, the vortex against the painted hole (effect on vs off; tools/hall/portal_check.py on the run folder registers the ring's painted crop on the off frame and lays its aperture mask there): centre within 2 px, axes within 3 % at A1, A3 and A4 and 0 effect pixels outside the hole; 10 s sequences per aspect and hour for the 3x crops by eye. Needs HallFxRig's ops. The shots are taken before the AVAILABLE sign is pressed (no traveller stands in front of ring 1), with the tutorial skipped (its hint plate covered ring 1) and every ring opened (hallPortalsOpen: day 1 opens ring 1 only)."
+      "text": "HALL-FX BUG-26a: per ring, the vortex against the painted hole (effect on vs off; tools/hall/portal_check.py on the run folder registers the ring's painted crop on the off frame and lays its aperture mask there): centre within 2 px, axes within 3 % at A1, A3 and A4 and 0 effect pixels outside the hole; 10 s sequences per aspect and hour for the 3x crops by eye. Needs HallFxRig's ops. The shots are taken before the AVAILABLE sign is pressed (no traveller stands in front of ring 1), with the tutorial skipped (its hint plate covered ring 1) and every ring opened (hallPortalsOpen: day 1 opens ring 1 only). LIGHT's dust is hidden for the run ('Hall FX: dust', toggled back at the end; a mote drifting between the on and off shots counted as effect pixels on the metal), and the hall's flyers are tracked, as in every HALL-FX scenario."
     },
     {
       "op": "title"
@@ -38,6 +38,51 @@
       "op": "track",
       "name": "guide_arrow",
       "target": "OfficeOverlayCanvas/GuidePrompt/Arrow"
+    },
+    {
+      "op": "track",
+      "name": "car0",
+      "target": "Exterior flying vehicle 0"
+    },
+    {
+      "op": "track",
+      "name": "car1",
+      "target": "Exterior flying vehicle 1"
+    },
+    {
+      "op": "track",
+      "name": "car2",
+      "target": "Exterior flying vehicle 2"
+    },
+    {
+      "op": "track",
+      "name": "car3",
+      "target": "Exterior flying vehicle 3"
+    },
+    {
+      "op": "track",
+      "name": "car4",
+      "target": "Exterior flying vehicle 4"
+    },
+    {
+      "op": "track",
+      "name": "car5",
+      "target": "Exterior flying vehicle 5"
+    },
+    {
+      "op": "track",
+      "name": "car6",
+      "target": "Exterior flying vehicle 6"
+    },
+    {
+      "op": "track",
+      "name": "car7",
+      "target": "Exterior flying vehicle 7"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
     },
     {
       "op": "res",
@@ -203,6 +248,11 @@
     {
       "op": "hour",
       "f": -1
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
     },
     {
       "op": "probe",
