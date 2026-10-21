@@ -283,6 +283,14 @@ public class DeskSlidesTests
         Assert.AreEqual(0.09f, slides.Obstacle(DeskHomeMap.Find(homes, DeskHomeMap.Detain), 0.09f).height, 1e-6f, "DETAIN never moves");
         DeskHome intercomHome = DeskHomeMap.Find(homes, DeskHomeMap.Intercom);
         Assert.AreEqual(intercomHome.Footprint.Width, slides.Obstacle(intercomHome, 0.12f).footprint.Width, 1e-6f, "the intercom stays put until its home declares a slide");
+
+        // Only a home something slides or lifts in has a swept box (DeskLayout keeps those for the carry and the drop: the code review's
+        // round 3, 5, DESK-HOMES section 6's precondition).
+        foreach (string id in new[] { DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.UvTorch, DeskHomeMap.StampRack, DeskHomeMap.RulebookPocket, DeskHomeMap.Rolodex })
+            Assert.IsTrue(slides.Sweeps(DeskHomeMap.Find(homes, id)), id + " sweeps");
+        foreach (string id in new[] { DeskHomeMap.Detain, DeskHomeMap.Bell, DeskHomeMap.DealTray, DeskHomeMap.Intercom })
+            Assert.IsFalse(slides.Sweeps(DeskHomeMap.Find(homes, id)), id + " does not (the intercom: its home declares no slide on DESK-PLAN's map)");
+        Assert.IsFalse(slides.Sweeps(null));
     }
 
     [Test]

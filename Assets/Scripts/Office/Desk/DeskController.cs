@@ -941,7 +941,7 @@ public sealed class DeskController : MonoBehaviour
         return found;
     }
 
-    /// <summary>The machines' casings today, measured at the start of a drag (the machines stand still while it runs) and for every way across the desk.</summary>
+    /// <summary>The machines' casings today, measured at the start of a drag and for every way across the desk (a machine the desk's slide-in moves during the drag is kept clear by its swept box instead: CarryFloor).</summary>
     private readonly List<MachineBox> _casings = new List<MachineBox>();
 
     /// <summary>Measures the machines' casings now (Docks).</summary>
@@ -959,13 +959,16 @@ public sealed class DeskController : MonoBehaviour
         return _casings;
     }
 
-    /// <summary>How high over its place (metres: its face's lift) a thing <paramref name="thickness"/> thick dragged with its root at <paramref name="root"/> keeps, its edges reaching <paramref name="grow"/> from it: its bottom over each casing under it by the clearance; 0 over none.</summary>
+    /// <summary>How high over its place (metres: its face's lift) a thing <paramref name="thickness"/> thick dragged with its root at <paramref name="root"/> keeps, its edges reaching <paramref name="grow"/> from it: its bottom over each casing under it, and over each swept box of the desk's slide-in under it (DeskLayout.TrySweptTop), by the clearance; 0 over none.</summary>
     private float CarryFloor(Vector3 root, float grow, float thickness)
     {
         float floor = 0f;
         foreach (MachineBox box in _casings)
             if (box.Over(root.x, root.z, grow))
                 floor = Mathf.Max(floor, box.Top + config.dockClearance + thickness - root.y);
+        // Where the desk's slide-in may move a machine or a tool (DESK-V3, DESK-HOMES 6): its swept box, at its overshoot peak, so one that slides out under the paper after the drag began never passes through it.
+        if (DeskLayout.TrySweptTop(root, grow, out float swept))
+            floor = Mathf.Max(floor, swept + config.dockClearance + thickness - root.y);
         return floor;
     }
 
@@ -1098,16 +1101,24 @@ public sealed class DeskController : MonoBehaviour
     /// (ScannerClearance.Clear, in the office view's frame on the desk: its
     /// footprint and the shadow its body casts away from the camera) while it
     /// is on the desk; it moves the shortest way out to the left, right or
-    /// front, or to the eject spot. <paramref name="at"/> itself when nothing
-    /// is in the way.
+    /// front, or to the eject spot. Nor where the desk's slide-in moves a
+    /// machine (each track's swept box, DeskLayout.SweptStrips), the UV
+    /// torch's cradle or the chip reader's casing, on every day (also before
+    /// the scanner's day). <paramref name="at"/> itself when nothing is in
+    /// the way.
     /// </summary>
     private Vector3 ClearOfBlockers(DeskDocument paper, Vector3 at)
     {
-        if (surface == null || scanner == null || !scanner.gameObject.activeInHierarchy)
+        if (surface == null)
             return at;
         DeskRect desk = InViewFrame(surface.Corners());
         DeskRect sheet = InViewFrame(Footprint(paper, at));
-        (float x, float y) = ScannerClearance.Clear(sheet, InViewFrame(scanner.Corners()), _scannerShadow, desk);
+        (float x, float y) = (sheet.CentreX, sheet.CentreY);
+        if (scanner != null && scanner.gameObject.activeInHierarchy)
+            (x, y) = ScannerClearance.Clear(sheet, InViewFrame(scanner.Corners()), _scannerShadow, desk);
+        // Nor where the desk's slide-in moves a machine (DESK-V3, DESK-HOMES 6: 0 px over a resting paper): each track's swept box.
+        foreach (Vector3[] strip in DeskLayout.SweptStrips())
+            (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(strip), desk);
         // The UV torch's cradle on the mat's corner (the desk machines spec §1): no paper lies over it either.
         if (hardware != null && hardware.TryTorchFootprint(out Vector3[] cradle))
             (x, y) = ScannerClearance.ClearProp(new DeskRect(x, y, sheet.Width, sheet.Height), InViewFrame(cradle), desk);

@@ -17,7 +17,10 @@ using UnityEngine;
 /// the gameplay object it stands for (the object's own meshes hide, the
 /// painted one rides its slide); SliderOf gives a painted object that slides
 /// on its own (home root, Slide child, mesh) to MachineSlideIn.Attach; Hide
-/// keeps one off (DeskPaintedMap: PaintedRole).
+/// keeps one off (DeskPaintedMap: PaintedRole). BuildStandIn puts a neutral,
+/// painting-matched stand-in on a gameplay object the bake has no painted
+/// model of (DeskPaintedMap.StandIns), and Light lights only the next-tool
+/// lamp's jewel (DeskLayout.Lamps).
 /// </summary>
 public sealed class DeskPainted : MonoBehaviour
 {
@@ -94,9 +97,260 @@ public sealed class DeskPainted : MonoBehaviour
     /// Puts the desk on <paramref name="frame"/>: the bake's origin on the
     /// frame's origin across the desk (the bake's frame is the game's: the art
     /// mat's centre), square to its axes, and the painted mat's pad on the
-    /// frame's height (the papers lie there).
+    /// frame's height (the papers lie there; the office binder raises the
+    /// frame onto the pad: DeskLayoutSettings.paintedLift).
     /// </summary>
     public void Align(DeskFrame frame) => transform.SetPositionAndRotation(frame.Point(Vector2.zero, -paperPlane), frame.Facing(0f));
+
+    /// <summary>The height of the painted mat's pad over the bake's floor (metres): the bake's floor is the world's, so the papers lie this high (the office binder's paintedLift).</summary>
+    public float PaperPlane => paperPlane;
+
+    // -----------------------------
+    // The lamps (C's next-tool lamp; UNITY_PLAN 4.3)
+    // -----------------------------
+
+    /// <summary>The lamps' jewels by lamp name (anchors.json's lamps: Lamps/lamp_*/Jewel), found once.</summary>
+    private readonly Dictionary<string, Renderer> _jewels = new Dictionary<string, Renderer>();
+
+    private void OnEnable()
+    {
+        DeskLayout.Lamps.Changed += Light;
+        Light(DeskLayout.Lamps.Lit);
+    }
+
+    private void OnDisable() => DeskLayout.Lamps.Changed -= Light;
+
+    /// <summary>
+    /// Lights the lamp beside the home <paramref name="home"/> (DeskLayout.Lamps:
+    /// the next tool, NextToolLamp; null: none) and leaves every other lamp
+    /// unlit (its jewel off, its painted bezel showing; slides.json: a lamp is
+    /// guidance, never lit at rest for nothing). FEEDBACK's renderer may take
+    /// over the jewels later (its pulse).
+    /// </summary>
+    public void Light(string home)
+    {
+        if (_jewels.Count == 0)
+        {
+            Transform lamps = transform.Find("Lamps");
+            if (lamps != null)
+                foreach (Transform lamp in lamps)
+                {
+                    Transform jewel = lamp.Find("Jewel");
+                    if (jewel != null && jewel.TryGetComponent(out Renderer r))
+                        _jewels[lamp.name] = r;
+                }
+        }
+        string lit = DeskPaintedMap.LampOf(home);
+        foreach (KeyValuePair<string, Renderer> jewel in _jewels)
+            if (jewel.Value != null)
+                jewel.Value.enabled = jewel.Key == lit;
+    }
+
+    // -----------------------------
+    // Stand-ins (DeskPaintedMap.StandIns)
+    // -----------------------------
+
+    /// <summary>The stand-ins' materials by colour (the painted shader on the colour's painted cells, no mask), made once, and their textures.</summary>
+    private readonly Dictionary<Color, Material> _standInMaterials = new Dictionary<Color, Material>();
+    private readonly List<Texture2D> _standInTextures = new List<Texture2D>();
+
+    /// <summary>The stand-ins' box: a unit cube whose six faces map into their own cells of a stand-in texture (DeskPaintedMap.StandInTexel), made once.</summary>
+    private static Mesh _standInCube;
+
+    /// <summary>
+    /// Builds <paramref name="standIn"/> under <paramref name="parent"/> (the
+    /// gameplay object it stands for, or its add-on's root: it rides that
+    /// object's slide, shows and pops with it) on the desk's
+    /// <paramref name="frame"/>, its anchor at the desk point
+    /// <paramref name="at"/> (the frame's x, y) <paramref name="floor"/>
+    /// metres over the frame: each box a cube in its painting-matched colour
+    /// with the painting's light and ink painted on its faces (the painted
+    /// shader adds no light of its own at the painting's hour: the bake's
+    /// objects carry theirs in their paint), lit by NOPE/Desk Painted with no
+    /// mask, casting a shadow as everything that moves, with no collider. The parent may wait
+    /// at zero scale for the crate: it is built at <paramref name="restScale"/>
+    /// (the scale it pops to, DeskUpgrades.RestScale). Replaced when built
+    /// again. Returns its renderers (the click boxes' outline).
+    /// </summary>
+    public Renderer[] BuildStandIn(StandIn standIn, Transform parent, Vector3 restScale, DeskFrame frame, Vector2 at, float floor)
+    {
+        if (standIn == null || parent == null)
+            return Array.Empty<Renderer>();
+        string name = "StandIn_" + standIn.id;
+        Transform old = parent.Find(name);
+        if (old != null)
+            Destroy(old.gameObject);
+        // The stand-in's root at its anchor, square to the desk's frame and at the world's scale once its parent stands at rest: its boxes lie in the frame's axes (x right, y up, z away from the chair) under it.
+        var root = new GameObject(name).transform;
+        PlaceUnder(root, parent, restScale, frame.Point(at, floor), frame.Facing(0f), Vector3.one);
+        var made = new List<Renderer>();
+        foreach (StandInBox box in standIn.boxes)
+        {
+            var part = new GameObject(box.name, typeof(MeshFilter), typeof(MeshRenderer));
+            part.GetComponent<MeshFilter>().sharedMesh = StandInCube();
+            part.transform.SetParent(root, false);
+            part.transform.localPosition = new Vector3(box.x, box.z + box.height / 2f, box.y);
+            part.transform.localRotation = Quaternion.identity;
+            part.transform.localScale = new Vector3(box.width, box.height, box.depth);
+            var renderer = part.GetComponent<Renderer>();
+            renderer.sharedMaterial = StandInMaterial(new Color(box.r, box.g, box.b, 1f));
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            made.Add(renderer);
+        }
+        return made.ToArray();
+    }
+
+    /// <summary>
+    /// Puts <paramref name="child"/> under <paramref name="parent"/> at the world
+    /// pose <paramref name="position"/>, <paramref name="rotation"/> and world size
+    /// <paramref name="size"/>, as if <paramref name="parent"/> stood at
+    /// <paramref name="restScale"/> (it may wait at zero scale for the crate).
+    /// </summary>
+    private static void PlaceUnder(Transform child, Transform parent, Vector3 restScale, Vector3 position, Quaternion rotation, Vector3 size)
+    {
+        Transform up = parent.parent;
+        Matrix4x4 rest = (up != null ? up.localToWorldMatrix : Matrix4x4.identity) * Matrix4x4.TRS(parent.localPosition, parent.localRotation, restScale);
+        Quaternion restRotation = (up != null ? up.rotation : Quaternion.identity) * parent.localRotation;
+        Vector3 lossy = Vector3.Scale(up != null ? up.lossyScale : Vector3.one, restScale);
+        child.SetParent(parent, false);
+        child.localPosition = rest.inverse.MultiplyPoint3x4(position);
+        child.localRotation = Quaternion.Inverse(restRotation) * rotation;
+        child.localScale = new Vector3(size.x / Safe(lossy.x), size.y / Safe(lossy.y), size.z / Safe(lossy.z));
+    }
+
+    private static float Safe(float v) => Mathf.Abs(v) > 1e-6f ? v : 1f;
+
+    /// <summary>The stand-ins' unit cube: each face (DeskPaintedMap.FaceShade's order: top, front, right, left, back, bottom) on its own cell of the texture, inset by half a texel, front-facing outward.</summary>
+    private static Mesh StandInCube()
+    {
+        if (_standInCube != null)
+            return _standInCube;
+        var faces = new (Vector3 n, Vector3 a, Vector3 b)[]
+        {
+            (Vector3.up, Vector3.right, Vector3.forward), (Vector3.back, Vector3.right, Vector3.up), (Vector3.right, Vector3.forward, Vector3.up),
+            (Vector3.left, Vector3.back, Vector3.up), (Vector3.forward, Vector3.left, Vector3.up), (Vector3.down, Vector3.right, Vector3.back),
+        };
+        var vertices = new List<Vector3>();
+        var normals = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        var triangles = new List<int>();
+        int cell = DeskPaintedMap.StandInCell;
+        float insetU = 0.5f / (3f * cell), insetV = 0.5f / (2f * cell);
+        for (int f = 0; f < faces.Length; f++)
+        {
+            (Vector3 n, Vector3 a, Vector3 b) = faces[f];
+            float u0 = f % 3 / 3f + insetU, u1 = (f % 3 + 1) / 3f - insetU, v0 = f / 3 / 2f + insetV, v1 = (f / 3 + 1) / 2f - insetV;
+            int at = vertices.Count;
+            vertices.Add((n - a - b) * 0.5f);
+            vertices.Add((n + a - b) * 0.5f);
+            vertices.Add((n + a + b) * 0.5f);
+            vertices.Add((n - a + b) * 0.5f);
+            uvs.Add(new Vector2(u0, v0));
+            uvs.Add(new Vector2(u1, v0));
+            uvs.Add(new Vector2(u1, v1));
+            uvs.Add(new Vector2(u0, v1));
+            for (int i = 0; i < 4; i++)
+                normals.Add(n);
+            bool outward = Vector3.Dot(Vector3.Cross(vertices[at + 1] - vertices[at], vertices[at + 2] - vertices[at]), n) > 0f;
+            triangles.AddRange(outward ? new[] { at, at + 1, at + 2, at, at + 2, at + 3 } : new[] { at, at + 2, at + 1, at, at + 3, at + 2 });
+        }
+        _standInCube = new Mesh { name = "DeskPainted_StandInCube" };
+        _standInCube.SetVertices(vertices);
+        _standInCube.SetNormals(normals);
+        _standInCube.SetUVs(0, uvs);
+        _standInCube.SetTriangles(triangles, 0);
+        _standInCube.RecalculateBounds();
+        return _standInCube;
+    }
+
+    /// <summary>The stand-ins' painted cells of <paramref name="colour"/> (sRGB, mipmapped): each face its share of the painting's light, its edges inked (DeskPaintedMap.StandInTexel).</summary>
+    private Texture2D StandInTexture(Color colour)
+    {
+        int cell = DeskPaintedMap.StandInCell;
+        var texture = new Texture2D(3 * cell, 2 * cell, TextureFormat.RGBA32, true, false)
+        {
+            name = $"DeskPainted_StandIn_{ColorUtility.ToHtmlStringRGB(colour)}",
+            wrapMode = TextureWrapMode.Clamp,
+            filterMode = FilterMode.Bilinear,
+        };
+        var pixels = new Color32[3 * cell * 2 * cell];
+        for (int f = 0; f < 6; f++)
+            for (int y = 0; y < cell; y++)
+                for (int x = 0; x < cell; x++)
+                {
+                    (float r, float g, float b) t = DeskPaintedMap.StandInTexel((colour.r, colour.g, colour.b), f, x, y);
+                    pixels[(f / 3 * cell + y) * 3 * cell + f % 3 * cell + x] = new Color(t.r, t.g, t.b, 1f);
+                }
+        texture.SetPixels32(pixels);
+        texture.Apply(true, true);
+        _standInTextures.Add(texture);
+        return texture;
+    }
+
+    /// <summary>The stand-ins' material of <paramref name="colour"/>: a copy of a painted material (NOPE/Desk Painted, so it takes the desk's light and shadow) on the colour's painted cells (StandInTexture), no mask.</summary>
+    private Material StandInMaterial(Color colour)
+    {
+        if (_standInMaterials.TryGetValue(colour, out Material made))
+            return made;
+        Material template = null;
+        foreach (Part p in parts)
+            if (p != null && p.mesh != null && p.mesh.TryGetComponent(out Renderer r) && r.sharedMaterial != null && r.sharedMaterial.HasProperty("_BaseColor") && r.sharedMaterial.HasProperty("_Locked"))
+            {
+                template = r.sharedMaterial;
+                break;
+            }
+        made = template != null ? new Material(template) : new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        made.name = $"DeskPainted_StandIn_{ColorUtility.ToHtmlStringRGB(colour)}";
+        if (made.HasProperty("_BaseMap"))
+        {
+            made.SetTexture("_BaseMap", StandInTexture(colour));
+            made.SetTextureScale("_BaseMap", Vector2.one);
+            made.SetTextureOffset("_BaseMap", Vector2.zero);
+            made.SetColor("_BaseColor", Color.white);
+        }
+        else
+            made.SetColor("_BaseColor", colour);
+        made.DisableKeyword("_MASKMAP");
+        if (made.HasProperty("_UseMask"))
+            made.SetFloat("_UseMask", 0f);
+        if (made.HasProperty("_Locked"))
+            made.SetFloat("_Locked", 0f);
+        _standInMaterials[colour] = made;
+        return made;
+    }
+
+    private void OnDestroy()
+    {
+        foreach (Material m in _standInMaterials.Values)
+            if (m != null)
+                Destroy(m);
+        foreach (Texture2D t in _standInTextures)
+            if (t != null)
+                Destroy(t);
+    }
+
+    /// <summary>A click box on the Interactable layer around the bake's <paramref name="name"/> (a painted slider no gameplay object stands for: the slide-in ranks the silhouettes under the cursor by these boxes), riding its slide; the importer makes them for its sliders, and this makes one the prefab lacks.</summary>
+    public void EnsureClickBox(string name)
+    {
+        Transform mesh = Mesh(name);
+        if (mesh == null || mesh.GetComponent<Collider>() != null || !mesh.TryGetComponent(out MeshFilter filter) || filter.sharedMesh == null)
+            return;
+        int layer = LayerMask.NameToLayer(OfficeLayers.Interactable);
+        if (layer >= 0)
+            mesh.gameObject.layer = layer;
+        var box = mesh.gameObject.AddComponent<BoxCollider>();
+        Bounds b = filter.sharedMesh.bounds;
+        box.center = b.center;
+        box.size = b.size + Vector3.one * (2f * DeskHomeMap.ClickPad);
+    }
+
+    /// <summary>Shows the bake's <paramref name="name"/> (a part the prefab was built with hidden, or hidden before).</summary>
+    public void Show(string name)
+    {
+        Transform mesh = Mesh(name);
+        if (mesh != null)
+            mesh.gameObject.SetActive(true);
+    }
 
     /// <summary>The world bounds of the bake's <paramref name="name"/> (its mesh and children: every renderer, shown or not); false without it.</summary>
     public bool TryBounds(string name, out Bounds bounds)

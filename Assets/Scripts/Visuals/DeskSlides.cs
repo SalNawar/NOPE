@@ -158,6 +158,22 @@ public sealed class DeskSlides
     /// <summary>The screen height the px are measured at (1080p).</summary>
     public float referenceHeight = 1080f;
 
+    /// <summary>
+    /// The drive-by guard (the slide review of the Unity capture: one sweep
+    /// across the desk slid three machines in turn, which reads as popping;
+    /// decision mine, not Saleh's rule): a slider the cursor is only near
+    /// (inside its trigger, not on its silhouette or its home's footprint)
+    /// takes over from one already out only after the cursor has stayed near
+    /// it, slower than sweepPxPerSecond, for dwellSeconds; none is summoned
+    /// by nearness alone while the cursor sweeps faster than that. On it, it
+    /// still wins at once, and from a quiet desk the first one near a slow
+    /// cursor still starts on the trigger frame.
+    /// </summary>
+    public float dwellSeconds = 0.07f;
+
+    /// <inheritdoc cref="dwellSeconds"/>
+    public float sweepPxPerSecond = 1200f;
+
     /// <summary>Out: the slide's time (seconds; bible C6: 250 ms) and its anticipation's (the base unlatches and backs away from the mat; a lift squashes instead).</summary>
     public float outSeconds = 0.25f, anticipationSeconds = 0.04f;
 
@@ -237,14 +253,28 @@ public sealed class DeskSlides
         return null;
     }
 
+    /// <summary>True when something rests in <paramref name="restsIn"/> that slides or lifts there (DeskSlider.MovesOn): its obstacle is a swept box (Obstacle).</summary>
+    public bool Sweeps(DeskHome restsIn)
+    {
+        if (restsIn == null)
+            return false;
+        foreach (DeskSlider slider in sliders ?? Array.Empty<DeskSlider>())
+            if (slider != null && slider.Home == restsIn.id && slider.MovesOn(restsIn))
+                return true;
+        return false;
+    }
+
     /// <summary>
     /// The obstacle <paramref name="restsIn"/>'s objects make while they may
-    /// be out (DeskObstacles: a carried thing rises over it and never needs a
-    /// live read; UNITY_PLAN 5.3, each slider's swept box): the home's
-    /// footprint swept to each of its tracks' overshoot peak the way the home
-    /// declares, and <paramref name="height"/> raised by the highest peak of
-    /// the lifts resting in it (the stamp rack by its daters, the pocket by
-    /// the rulebook, a pouch by its torch).
+    /// be out (UNITY_PLAN 5.3, each slider's swept box; DESK-HOMES section 6):
+    /// the home's footprint swept to each of its tracks' overshoot peak the
+    /// way the home declares, and <paramref name="height"/> (its objects'
+    /// height at rest) raised by the highest peak of the lifts resting in it
+    /// (the stamp rack by its daters, the pocket by the rulebook, a pouch by
+    /// its torch). DeskLayout registers it (RefreshObstacles); a dragged paper
+    /// keeps over it and a paper let go clears a track's swept strip
+    /// (DeskLayout.TrySweptTop, SweptStrips, read by DeskController), so the
+    /// carry never needs a live read of a machine that slides out under it.
     /// </summary>
     public (DeskRect footprint, float height) Obstacle(DeskHome restsIn, float height)
     {
@@ -358,8 +388,9 @@ public sealed class DeskSlides
     /// along their 6 cm tracks (the chip reader's overshoot keeps 3 px clear
     /// of its lamp), the intercom 2.5 cm and the BABEL tuner 3.5 cm, each the
     /// way its home declares; the UV torch, the glasses (tipping 7 degrees
-    /// toward the chair), the Rolodex, the protocol cards, both daters and the
-    /// rulebook rise in place; DETAIN, AVAILABLE, the bell and the deal tray
+    /// toward the chair), the Rolodex, the protocol cards, both daters (tipping
+    /// 5 degrees toward the hand: DaterTip) and the rulebook rise in place;
+    /// DETAIN, AVAILABLE, the bell and the deal tray
     /// never move. A fresh copy each call.
     /// </summary>
     public static DeskSlider[] ApprovedSliders() => new[]
@@ -372,14 +403,17 @@ public sealed class DeskSlides
         Tip(Lift(DeskHomeMap.Glasses, null, 0.020f, 6.28f, 0.2f, 0.2f, 0.456f, 0.1889f), 7f, 0f, -1f),
         Lift(DeskHomeMap.Rolodex, null, 0.015f, 4.72f, 0.2f, 0.2f, 0.456f, 0.1962f),
         Lift(DeskHomeMap.ProtocolRing, null, 0.015f, 4.72f, 0.2f, 0.2f, 0.456f, 0.1962f),
-        Lift("stamp_approve", DeskHomeMap.StampRack, 0.012f, 4.26f, 0.2f, 0.2f, 0.456f, 0.1996f),
-        Lift("stamp_deny", DeskHomeMap.StampRack, 0.012f, 4.12f, 0.2f, 0.2f, 0.456f, 0.2008f),
+        Tip(Lift("stamp_approve", DeskHomeMap.StampRack, 0.012f, 4.26f, 0.2f, 0.2f, 0.456f, 0.1996f), DaterTip, 0f, -1f),
+        Tip(Lift("stamp_deny", DeskHomeMap.StampRack, 0.012f, 4.12f, 0.2f, 0.2f, 0.456f, 0.2008f), DaterTip, 0f, -1f),
         Lift("rulebook", DeskHomeMap.RulebookPocket, 0.020f, 9.09f, 0.075f, 0.2f, 0.636f, 0.2122f),
         new DeskSlider(DeskHomeMap.Detain, null, SlideKind.Fixed, 0f),
         new DeskSlider("available", null, SlideKind.Fixed, 0f),
         new DeskSlider(DeskHomeMap.Bell, null, SlideKind.Fixed, 0f),
         new DeskSlider(DeskHomeMap.DealTray, null, SlideKind.Fixed, 0f),
     };
+
+    /// <summary>The daters' tip toward the hand as they rise (degrees; slides.json's note on stamp_approve: "the dater rises 1.2 cm and tips 5 deg toward the hand", STAMP B3), toward the chair as the glasses'.</summary>
+    public const float DaterTip = 5f;
 
     private static DeskSlider Track(string id, float travel, float cut, float felt, float px, float a, float ov, float seat, float damping, float peak) =>
         new DeskSlider(id, null, SlideKind.Track, travel)

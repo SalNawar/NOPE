@@ -198,9 +198,17 @@ public readonly struct SlidePose
 /// home in its anticipation counts by how far it is from home), never
 /// longer than winnerAfter; as the winner starts, the loser's last stretch
 /// home takes the one frame of the winner's first move. A slider still on its ease-in home is hurried
-/// (it arrives within winnerAfter, at speed, with no clack and no seat
-/// bounce: a loser's way home) and one in its seat bounce rests first, so
-/// one machine moves at a time.</item>
+/// (it carries on at the speed it had and eases into home at rest within
+/// winnerAfter, with no clack and no seat bounce: a loser's way home,
+/// SlideCurve.Hurry) and one in its seat bounce rests first, so one machine
+/// moves at a time.</item>
+/// <item><b>Drive-by guard</b> (DeskSlides.dwellSeconds): a slider the
+/// cursor is only near takes over from one already out only after the
+/// cursor stayed near it, slow, for dwellSeconds, and nothing is summoned by
+/// nearness alone while the cursor sweeps faster than sweepPxPerSecond; on
+/// a silhouette or a footprint it still wins at once. A cursor that leaves
+/// during the anticipation sends the slider straight home (no linger, no
+/// overshoot).</item>
 /// <item><b>Out:</b> the anticipation and its own spring, with one overshoot,
 /// from wherever it stood. <b>Back:</b> after lingerSeconds outside the
 /// trigger, the ease-in home that arrives at speed and the seat bounce on the
@@ -234,9 +242,9 @@ public sealed class ProximityAssist
         public float T0, Start, LingerFrom;
         public State Loser;
 
-        /// <summary>A way home hurried by a summoned winner: the ease-in's share at HurryFrom, finishing in HurryOver seconds, with no seat bounce.</summary>
+        /// <summary>A way home hurried by a summoned winner (SlideCurve.Hurry): from HurryStart at HurrySpeed when it was hurried (HurryFrom), home at rest in HurryOver seconds, with no seat bounce.</summary>
         public bool Hurried;
-        public float HurryFrom, HurryU, HurryOver;
+        public float HurryFrom, HurryStart, HurrySpeed, HurryOver;
 
         /// <summary>A loser the winner started on, on its last stretch home (under winnerBelow): home on the first step after this time, so its last stretch takes the one frame of the winner's first move.</summary>
         public float SeatBy = float.PositiveInfinity;
@@ -256,6 +264,10 @@ public sealed class ProximityAssist
     private float _now;
     private bool _still, _dragging, _closed;
     private State _under, _picked;
+
+    /// <summary>The slider the cursor is only near (the drive-by guard's candidate) and since when it has been near it, slow.</summary>
+    private string _near;
+    private float _nearSince;
 
     /// <summary>The assist over <paramref name="slides"/>' sliders that move where they rest on <paramref name="homes"/> (DeskSlider.MovesOn: a track whose home declares no slide stays put), every one at home.</summary>
     public ProximityAssist(DeskSlides slides, IReadOnlyList<DeskHome> homes)
@@ -389,11 +401,14 @@ public sealed class ProximityAssist
     /// clock) with every attached slider as the frame finds it
     /// (<paramref name="sliders"/>; one not listed is never summoned), whether
     /// the player drags a paper (<paramref name="dragging"/>: a paper let go
-    /// over a slider holds it out while it lands) and whether every move is a
-    /// cut (<paramref name="still"/>: Reduced Motion or Motion intensity 0).
-    /// The frame's cues are in Cues. Allocates nothing.
+    /// over a slider holds it out while it lands), whether every move is a
+    /// cut (<paramref name="still"/>: Reduced Motion or Motion intensity 0)
+    /// and how fast the cursor moves (<paramref name="cursorSpeed"/>: px a
+    /// second at the reference height; 0 when unknown: the drive-by guard
+    /// then waits only for the dwell). The frame's cues are in Cues.
+    /// Allocates nothing.
     /// </summary>
-    public void Step(float now, IReadOnlyList<SlideCandidate> sliders, bool dragging, bool still)
+    public void Step(float now, IReadOnlyList<SlideCandidate> sliders, bool dragging, bool still, float cursorSpeed = 0f)
     {
         float was = _now;
         _now = now;
@@ -430,7 +445,7 @@ public sealed class ProximityAssist
         else
         {
             State current = Current();
-            string target = Pick(_eligible, current?.Slider.id, _slides.triggerPx, _slides.hysteresisPx);
+            string target = Guard(Pick(_eligible, current?.Slider.id, _slides.triggerPx, _slides.hysteresisPx), current, cursorSpeed);
             _picked = target != null ? _byId[target] : null;
             if (_picked != current)
             {
@@ -458,6 +473,11 @@ public sealed class ProximityAssist
                 case SlidePhase.Out:
                     if (s != _picked && !s.Busy)
                     {
+                        if (!still && _picked == null && t < _slides.anticipationSeconds)
+                        {
+                            Cancel(s); // the cursor left before the base left its well: straight home, no linger, no overshoot
+                            break;
+                        }
                         s.Phase = SlidePhase.Linger;
                         s.LingerFrom = now;
                     }
@@ -599,6 +619,54 @@ public sealed class ProximityAssist
         }
     }
 
+    /// <summary>
+    /// The drive-by guard (DeskSlides.dwellSeconds): the pick
+    /// <paramref name="target"/> as it is when the cursor is on it (its
+    /// silhouette or its home's footprint), when it is the one out
+    /// (<paramref name="current"/>), or when it is only near a slow cursor
+    /// with nothing else out; null while it is only near and the cursor
+    /// sweeps faster than sweepPxPerSecond (<paramref name="cursorSpeed"/>),
+    /// or, another being out, until the cursor has stayed near it, slow, for
+    /// dwellSeconds (the one out lingers meanwhile; a sweep restarts the
+    /// dwell). Allocates nothing.
+    /// </summary>
+    private string Guard(string target, State current, float cursorSpeed)
+    {
+        if (target == null || (current != null && current.Slider.id == target) || !OnlyNear(target))
+        {
+            _near = null;
+            return target;
+        }
+        bool sweeping = cursorSpeed > _slides.sweepPxPerSecond;
+        if (_near != target || sweeping)
+        {
+            _near = target;
+            _nearSince = _now;
+        }
+        if (sweeping)
+            return null;
+        return current == null || _now - _nearSince >= _slides.dwellSeconds - 1e-5f ? target : null;
+    }
+
+    /// <summary>True when the cursor is only near <paramref name="id"/> this frame (within its trigger, but on neither its silhouette nor its home's footprint).</summary>
+    private bool OnlyNear(string id)
+    {
+        for (int i = 0; i < _eligible.Count; i++)
+            if (_eligible[i].Id == id)
+                return _eligible[i].Over < 0 && !_eligible[i].OnFootprint;
+        return false;
+    }
+
+    /// <summary>The cursor left during the anticipation (the base still in its well): straight home from where it stands, an ease-in-out retract with no linger, no overshoot and no sound; nothing to do at home.</summary>
+    private void Cancel(State s)
+    {
+        float from = PositionAt(s, _now);
+        if (Math.Abs(from) < 1e-4f)
+            Settle(s);
+        else
+            Change(s, SlidePhase.Retract, from);
+    }
+
     /// <summary>The slider the assist has out for the cursor: the first, in the data's order, that is out, lingering or waiting and not busy; else a busy one that is out (it keeps the cursor by the hysteresis as any other).</summary>
     private State Current()
     {
@@ -682,14 +750,22 @@ public sealed class ProximityAssist
         s.Loser = blocker ?? finishing;
     }
 
-    /// <summary>A slider on its ease-in home gives way to a summoned winner: what is left of its way home is played within winnerAfter (only ever faster), it arrives at speed and rests with no seat bounce and no clack (a hand-off loser's way home).</summary>
+    /// <summary>
+    /// A slider on its ease-in home gives way to a summoned winner (a hand-off
+    /// loser's way home, slides.json): from where it stands and at the speed
+    /// it has, it eases into home at rest within winnerAfter (SlideCurve.Hurry,
+    /// HurryTime), with no seat bounce and no clack. It never stops dead at
+    /// full speed (the review: the old hurried way home slammed into its stop
+    /// 4.74 px in its last frame, silently).
+    /// </summary>
     private void Hurry(State s)
     {
-        float t = _now - s.T0, tb = _slides.backSeconds;
+        float tb = _slides.backSeconds, u = Clamp01((_now - s.T0) / tb);
         s.Hurried = true;
         s.HurryFrom = _now;
-        s.HurryU = Clamp01(t / tb);
-        s.HurryOver = Math.Max(1e-4f, Math.Min(tb - t, _slides.winnerAfter));
+        s.HurryStart = SlideCurve.WayHome(s.Start, u);
+        s.HurrySpeed = SlideCurve.WayHomeSpeed(s.Start, u, tb);
+        s.HurryOver = SlideCurve.HurryTime(s.HurryStart, s.HurrySpeed, _slides.winnerAfter);
     }
 
     /// <summary>True when the winner <paramref name="waiter"/> may start: its loser is home or out again, nearly seated (NearlySeated; one already taking its last stretch once it is home; one in its seat bounce once it rests), or the winner has waited winnerAfter.</summary>
@@ -836,7 +912,7 @@ public sealed class ProximityAssist
                 if (_still)
                     f = 0f;
                 else if (s.Hurried)
-                    f = SlideCurve.WayHome(s.Start, s.HurryU + (1f - s.HurryU) * Clamp01((at - s.HurryFrom) / s.HurryOver));
+                    f = SlideCurve.Hurry(s.HurryStart, s.HurrySpeed, s.HurryOver, at - s.HurryFrom);
                 else
                     f = SlideCurve.Back(_slides, s.Slider, t, s.Start);
                 break;

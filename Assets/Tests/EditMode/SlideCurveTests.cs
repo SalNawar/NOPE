@@ -205,6 +205,93 @@ public class SlideCurveTests
         Assert.AreEqual(7f, SlideCurve.Tip(glasses, 1f), 1e-6f);
         Assert.AreEqual(3.5f, SlideCurve.Tip(glasses, 0.5f), 1e-6f);
         Assert.AreEqual(0f, SlideCurve.Tip(glasses, -0.1f), 1e-6f);
-        Assert.AreEqual(0f, SlideCurve.Tip(S(DeskHomeMap.UvTorch), 1f), 1e-6f, "only the glasses tip");
+        Assert.AreEqual(0f, SlideCurve.Tip(S(DeskHomeMap.UvTorch), 1f), 1e-6f, "the torch rises straight");
+        foreach (string dater in new[] { "stamp_approve", "stamp_deny" })
+        {
+            Assert.AreEqual(DeskSlides.DaterTip, SlideCurve.Tip(S(dater), 1f), 1e-6f, dater + ": 5 degrees toward the hand at the top (slides.json's note, STAMP B3)");
+            Assert.AreEqual(-1f, S(dater).tipY, 1e-6f, dater + ": toward the chair");
+        }
+    }
+
+    [Test]
+    public void ASlideOut_FromBeyondItsSlidSpot_SettlesBack_NeverPastWhereItStood_NorThePeakTheGatePassed()
+    {
+        // The code review (round 3, 1): summoned again at 1.1625 (on the frame its way home starts, or held there by a landing paper),
+        // the old curve turned its anticipation toward the mat and peaked at 1.1875 against the gated 1.1665.
+        float frame = 1f / 60f;
+        foreach (DeskSlider s in Slides.sliders)
+        {
+            if (!s.Moves)
+                continue;
+            foreach (float start in new[] { 1.02f, 1f + s.overshoot * 0.7f, s.Peak })
+            {
+                string at = $"{s.id} from {start:0.0000}";
+                Assert.AreEqual(start, SlideCurve.OutFrom(Slides, s, 0f, start), 1e-6f, at + ": no pop on its first frame");
+                float before = start, highest = start;
+                for (int i = 1; i < 60; i++)
+                {
+                    float f = SlideCurve.OutFrom(Slides, s, i * frame, start);
+                    highest = Math.Max(highest, f);
+                    if (i == 1)
+                        Assert.LessOrEqual(f, start + 1e-6f, at + ": its first move is back toward its slid spot, never toward the mat");
+                    Assert.Less(Math.Abs(f - before) * s.travelPx, 7f, at + ": no frame faster than the slide out's own");
+                    before = f;
+                }
+                Assert.LessOrEqual(highest, start + 1e-6f, at + ": never further out than it stood");
+                Assert.LessOrEqual(highest, s.Peak + 1e-6f, at + ": never past the peak the gate passed");
+                Assert.AreEqual(1f, SlideCurve.OutFrom(Slides, s, 0.6f, start), Math.Max(0.02f, 0.5f / s.travelPx) + 0.002f, at + ": settled at its slid spot");
+            }
+        }
+        Assert.AreEqual(1f, SlideCurve.Release(Slides, S(DeskHomeMap.Scanner), 0f), 1e-6f);
+        Assert.AreEqual(1f, SlideCurve.OutFrom(Slides, S(DeskHomeMap.Scanner), 0.05f, 1f), 1e-6f, "at its slid spot it stays there");
+    }
+
+    [Test]
+    public void AHurriedWayHome_CarriesOnAtItsSpeed_EasesIntoHomeAtRest_NeverPastIt_WithinWinnerAfter()
+    {
+        // The code review (round 3, 3): hurried, the old way home stopped dead at full speed, 4.74 px in its last frame, with no seat
+        // bounce and no clack. slides.json's hand-off loser arrives slowly: a hurried one now carries on at the speed it had and eases in.
+        DeskSlider scanner = S(DeskHomeMap.Scanner);
+        float tb = Slides.backSeconds, frame = 1f / 60f, fastest = 4.1f + 0.05f;
+        for (float u = 0f; u < 1f; u += 0.05f)
+        {
+            float start = SlideCurve.WayHome(1f, u), speed = SlideCurve.WayHomeSpeed(1f, u, tb);
+            float over = SlideCurve.HurryTime(start, speed, Slides.winnerAfter);
+            string at = $"hurried {u:0.00} of the way home";
+            Assert.LessOrEqual(over, Slides.winnerAfter + 1e-6f, at + ": home within winnerAfter");
+            Assert.AreEqual(start, SlideCurve.Hurry(start, speed, over, 0f), 1e-6f, at + ": no pop where it was hurried");
+            float early = (SlideCurve.Hurry(start, speed, over, 1e-4f) - start) / 1e-4f;
+            Assert.AreEqual(speed, early, Math.Abs(speed) * 0.02f + 0.05f, at + ": it carries on at the speed it had (no jolt)");
+            float late = (SlideCurve.Hurry(start, speed, over, over) - SlideCurve.Hurry(start, speed, over, over - 1e-4f)) / 1e-4f;
+            Assert.AreEqual(0f, late, 0.05f, at + ": it arrives at rest (no slam into the stop, no clack)");
+            float before = start;
+            for (float t = frame; t < over + frame; t += frame)
+            {
+                float f = SlideCurve.Hurry(start, speed, over, t);
+                Assert.GreaterOrEqual(f, -1e-6f, at + ": never past home");
+                Assert.LessOrEqual(f, before + 1e-6f, at + ": only ever toward home");
+                Assert.LessOrEqual((before - f) * scanner.travelPx, fastest, at + ": no frame faster than the hand-off retract's fastest (slides.json: 4.1 px)");
+                before = f;
+            }
+            Assert.AreEqual(0f, SlideCurve.Hurry(start, speed, over, over), 1e-6f, at + ": home");
+        }
+        Assert.AreEqual(0f, SlideCurve.Hurry(0.5f, 2f, 0.1f, 0.1f), 1e-6f, "a speed away from home counts as none");
+        Assert.LessOrEqual(SlideCurve.Hurry(0.5f, 2f, 0.1f, 0.01f), 0.5f + 1e-6f, "and never takes it further out");
+    }
+
+    [Test]
+    public void ALiftsSquash_IsAboutItsBase_TheBaseStaysDown_AndTheTopComesDownBySquashPx()
+    {
+        // The code review (round 3, 4): the UV torch's pivot is its grip axis, 3.4 cm up, so a squash about it lifted its underside off
+        // the cradle by about 0.75 px and brought its top down only about 0.75 px. UNITY_PLAN 5.1: "base down", the top 1.5 px down.
+        DeskSlider torch = S(DeskHomeMap.UvTorch);
+        float metresPerPx = torch.MetresPerPx, height = 0.068f, pivotAboveBase = 0.034f, pivot = 1f;
+        float scale = SlideCurve.SquashScale(Slides.squashPx, metresPerPx, height);
+        float drop = SlideCurve.SquashDrop(scale, pivotAboveBase);
+        float baseNow = pivot - drop - scale * pivotAboveBase, topNow = pivot - drop + scale * (height - pivotAboveBase);
+        Assert.AreEqual(pivot - pivotAboveBase, baseNow, 1e-6f, "the base stays on its cradle");
+        Assert.AreEqual(Slides.squashPx, (pivot - pivotAboveBase + height - topNow) / metresPerPx, 1e-3f, "the top comes down by the squash's px");
+        Assert.AreEqual(0f, SlideCurve.SquashDrop(scale, 0f), "a pivot at the base needs no drop");
+        Assert.AreEqual(0f, SlideCurve.SquashDrop(1f, pivotAboveBase), "no squash, no drop");
     }
 }

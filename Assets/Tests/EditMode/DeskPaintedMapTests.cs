@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -127,5 +128,90 @@ public class DeskPaintedMapTests
         Assert.AreSame(DeskHomeMap.Find(classic, DeskHomeMap.Decor), DeskHomeMap.Find(map, DeskHomeMap.Decor));
         Assert.AreSame(extra, map.Last());
         Assert.AreEqual(classic.Length - 2 + 1, map.Length);
+    }
+    [Test]
+    public void TheOldModels_NeverShow_EveryGameplayObjectWearsItsPaintedModel_TheInsertsAndTheSheenStayHidden()
+    {
+        // The review of the Unity capture (S1, 2-7): STAMP's old drawer and daters, the scanner's add-ons, the upgrades' old models.
+        Assert.AreEqual(PaintedRole.Reskin, DeskPaintedMap.Find(DeskPaintedMap.StampRack).role, "the painted two-step rack is STAMP's rack");
+        Assert.AreEqual(PaintedRole.Reskin, DeskPaintedMap.Find(DeskPaintedMap.StampApprove).role, "the painted APPROVED dater is STAMP's");
+        Assert.AreEqual(PaintedRole.Reskin, DeskPaintedMap.Find(DeskPaintedMap.StampDeny).role, "the painted DENIED dater is STAMP's");
+        Assert.AreEqual(PaintedRole.Slider, DeskPaintedMap.Find(DeskPaintedMap.RulebookFolded).role, "the painting's red book shows in its pocket and peeks up");
+        foreach (string insert in new[] { "Desk_BabelHome", "Desk_RolodexHome", "Desk_CardsHome", DeskPaintedMap.Glass })
+            Assert.AreEqual(PaintedRole.Hidden, DeskPaintedMap.Find(insert).role, insert + ": the shell already carries it as painted (drawn too, it doubled)");
+        CollectionAssert.AreEquivalent(new[] { "SweepBar" }, DeskPaintedMap.Kept(DeskHomeMap.Scanner), "only the scanner's sweep light stays: its add-ons, its lid glow and its readout were the old model");
+        CollectionAssert.AreEquivalent(new[] { "UvPool", "BeamFX" }, DeskPaintedMap.Kept(DeskHomeMap.UvTorch), "the torch's light");
+        CollectionAssert.IsEmpty(DeskPaintedMap.Kept(DeskHomeMap.ChipReader));
+        foreach (string id in DeskPaintedMap.Inserts)
+            Assert.IsNotNull(DeskPaintedMap.StandInFor(id), id + ": no painted model yet, so a stand-in, never the old one");
+        Assert.IsNotNull(DeskPaintedMap.StandInFor(DeskPaintedMap.AutoFeed));
+        Assert.IsNotNull(DeskPaintedMap.StandInFor(DeskPaintedMap.AnalysisBeacon));
+    }
+
+    [Test]
+    public void EveryStandIn_FitsThePaintedSlotItStandsIn_InThePaintingsPalette()
+    {
+        foreach (StandIn s in DeskPaintedMap.StandIns)
+        {
+            Assert.IsNotEmpty(s.boxes, s.id);
+            foreach (StandInBox b in s.boxes)
+            {
+                Assert.Greater(b.width, 0f, $"{s.id}/{b.name}");
+                Assert.Greater(b.depth, 0f, $"{s.id}/{b.name}");
+                Assert.Greater(b.height, 0f, $"{s.id}/{b.name}");
+                Assert.GreaterOrEqual(b.z, 0f, $"{s.id}/{b.name}: on its anchor, never under it");
+                foreach (float c in new[] { b.r, b.g, b.b })
+                    Assert.That(c, Is.InRange(0f, 1f), $"{s.id}/{b.name}");
+            }
+            (float x0, float y0, float x1, float y1) e = s.Extent;
+            (float x0, float y0, float x1, float y1)? rect = LayoutRect(s.home);
+            Assert.IsNotNull(rect, s.home);
+            float halfW = (rect.Value.x1 - rect.Value.x0) / 2f, halfD = (rect.Value.y1 - rect.Value.y0) / 2f;
+            Assert.That(e.x0, Is.GreaterThanOrEqualTo(-halfW), s.id + ": inside its home across");
+            Assert.That(e.x1, Is.LessThanOrEqualTo(halfW), s.id + ": inside its home across");
+            if (s.anchor == StandInAnchor.Home)
+            {
+                Assert.That(e.y0, Is.GreaterThanOrEqualTo(-halfD), s.id + ": inside its painted slot along");
+                Assert.That(e.y1, Is.LessThanOrEqualTo(halfD), s.id + ": inside its painted slot along");
+                Assert.LessOrEqual(s.Top, s.maxHeight + 1e-6f, s.id + ": no taller than its painted home (the review: the BABEL box was 3x its 2.5 cm, the Rolodex drum 2x its 6 cm)");
+                Assert.LessOrEqual(Math.Abs(s.offsetX), 0.08f, s.id + ": its painted slot lies within 8 cm of its layout home");
+                Assert.LessOrEqual(Math.Abs(s.offsetY), 0.08f, s.id);
+                Assert.That(s.floorDrop, Is.InRange(0f, 0.04f), s.id + ": the slot's surface at or under its insert's top");
+            }
+            else
+            {
+                Assert.LessOrEqual(e.y1, 0f, s.id + ": on the front face, never into the machine");
+                Assert.Greater(e.y0, -0.02f, s.id + ": flat on the face (under 2 cm proud)");
+                Assert.LessOrEqual(s.Top, 0.12f, s.id + ": below the painted scanner's top (its bed)");
+            }
+        }
+        Assert.LessOrEqual(DeskPaintedMap.StandInFor(DeskHomeMap.BabelTuner).Top, 0.025f, "BABEL: a low tuner inside its 31 x 15 cm slats");
+    }
+
+    [Test]
+    public void TheNextToolLamp_LightsItsHomesLampOnly_EveryLampHasAHome()
+    {
+        ContentNode lamps = Json(Data + "anchors.json").Get("lamps");
+        var named = new HashSet<string>(lamps.Members.Select(m => m.Key));
+        var homes = new[] { DeskHomeMap.DealTray, DeskHomeMap.Bell, DeskHomeMap.StampRack, DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.Intercom };
+        CollectionAssert.AreEquivalent(named, homes.Select(DeskPaintedMap.LampOf), "one lamp per home that has one, each in anchors.json");
+        foreach (CaseLampState state in new[] { new CaseLampState(false, true, false), new CaseLampState(true, true, true), new CaseLampState(true, true, false, chipOwed: true), new CaseLampState(true, true, false, scanOwed: true) })
+            Assert.IsNotNull(DeskPaintedMap.LampOf(NextToolLamp.For(state)), "every next tool has its lamp");
+        Assert.IsNull(DeskPaintedMap.LampOf(null), "nothing next: every lamp unlit (slides.json: a lamp is guidance)");
+        Assert.IsNull(DeskPaintedMap.LampOf(DeskHomeMap.Rolodex));
+    }
+    [Test]
+    public void AStandInsFaces_CarryThePaintingsLight_AndItsEdgesAreInked()
+    {
+        var colour = (r: 0.8f, g: 0.7f, b: 0.6f);
+        int mid = DeskPaintedMap.StandInCell / 2;
+        float Lum(int face) => DeskPaintedMap.StandInTexel(colour, face, mid, mid).r;
+        Assert.AreEqual(0.8f, Lum(0), 1e-6f, "the top in full light");
+        for (int face = 1; face < 6; face++)
+            Assert.Less(Lum(face), Lum(0), $"face {face}: darker than the top");
+        Assert.Less(Lum(3), Lum(2), "the left side in shade, the light from the right (the shader's _RefLightDir)");
+        Assert.AreEqual(DeskPaintedMap.FaceShade.Min(), DeskPaintedMap.FaceShade[5], "the bottom the darkest");
+        foreach ((int x, int y) in new[] { (0, mid), (mid, 0), (DeskPaintedMap.StandInCell - 1, mid), (mid, DeskPaintedMap.StandInCell - 1), (1, 1) })
+            Assert.AreEqual(DeskPaintedMap.InkLine, DeskPaintedMap.StandInTexel(colour, 1, x, y), $"({x}, {y}): an inked edge");
     }
 }

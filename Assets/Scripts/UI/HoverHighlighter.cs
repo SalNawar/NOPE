@@ -15,13 +15,20 @@ using UnityEngine.UI;
 /// elsewhere. An office object's outline is its meshes drawn again as a hull
 /// (the outline material: pushed out along the normals, back faces only)
 /// through Graphics.RenderMesh, every frame while hovered: no scene objects,
-/// no renderer features, the art's own objects untouched. A Clickable with no
-/// outline renderers (a hit zone) gets the hand cursor only.
+/// no renderer features, the art's own objects untouched. The rim is the
+/// same screen px for every object (InteractionFeedbackSO.outlinePx), drawn
+/// a little toward the camera so the surface under an object never cuts it,
+/// and it fades in on the new object and out on the old one
+/// (outlineFadeSeconds; a cut under Reduced Motion): it never pops (the
+/// review of the desk v3 capture). A Clickable with no outline renderers (a
+/// hit zone) gets the hand cursor only.
 /// </summary>
 public sealed class HoverHighlighter : MonoBehaviour
 {
     private static readonly int ColorId = Shader.PropertyToID("_Color");
     private static readonly int WidthId = Shader.PropertyToID("_Width");
+    private static readonly int WidthPxId = Shader.PropertyToID("_WidthPx");
+    private static readonly int PullId = Shader.PropertyToID("_Pull");
 
     /// <summary>Cursor textures and outline look.</summary>
     [SerializeField] private InteractionFeedbackSO settings;
@@ -31,6 +38,15 @@ public sealed class HoverHighlighter : MonoBehaviour
 
     /// <summary>The hovered object's meshes and their renderers (rebuilt when the target changes).</summary>
     private readonly List<(Mesh mesh, Renderer renderer)> _hull = new List<(Mesh, Renderer)>();
+
+    /// <summary>The object left last, its outline fading out.</summary>
+    private readonly List<(Mesh mesh, Renderer renderer)> _fading = new List<(Mesh, Renderer)>();
+
+    /// <summary>How far the hovered object's outline and the left one's have faded in (0 to 1).</summary>
+    private float _shown, _fadingShown;
+
+    /// <summary>Each outline's colour with its fade (made once; one block each, so neither overwrites the other's draw).</summary>
+    private MaterialPropertyBlock _shownBlock, _fadingBlock;
 
     /// <summary>The outline material with the settings' colour and width (made once).</summary>
     private Material _hullMaterial;
@@ -71,6 +87,8 @@ public sealed class HoverHighlighter : MonoBehaviour
             _hullMaterial = new Material(settings.outlineMaterial) { name = settings.outlineMaterial.name + " (hover)" };
             _hullMaterial.SetColor(ColorId, settings.outlineColor);
             _hullMaterial.SetFloat(WidthId, settings.worldOutlineWidth);
+            _hullMaterial.SetFloat(WidthPxId, settings.outlinePx);
+            _hullMaterial.SetFloat(PullId, settings.outlinePull);
         }
 
         SceneManager.sceneUnloaded += HandleSceneUnloaded;
@@ -179,8 +197,19 @@ public sealed class HoverHighlighter : MonoBehaviour
     {
         if (target is Clickable clickable)
         {
+            if (!on)
+            {
+                // The object left: its outline fades out from where it was while the next one's fades in.
+                _fading.Clear();
+                _fading.AddRange(_hull);
+                _fadingShown = _shown;
+                _hull.Clear();
+                _shown = 0f;
+                return;
+            }
             _hull.Clear();
-            if (!on || clickable == null)
+            _shown = 0f;
+            if (clickable == null)
                 return;
 
             foreach (Renderer r in clickable.Outline)
@@ -212,14 +241,32 @@ public sealed class HoverHighlighter : MonoBehaviour
         }
     }
 
-    /// <summary>Draws the hovered office object's outline hull this frame (every submesh of every visible outline renderer).</summary>
+    /// <summary>Draws this frame's outline hulls (every submesh of every visible outline renderer): the hovered object's fading in, the one left fading out.</summary>
     private void DrawHull()
     {
-        if (_hullMaterial == null || _hull.Count == 0)
+        if (_hullMaterial == null)
             return;
+        float step = settings.outlineFadeSeconds > 0f && !UiMotion.Amount.Still ? Time.unscaledDeltaTime / settings.outlineFadeSeconds : 1f;
+        _shown = _hull.Count > 0 ? Mathf.Min(1f, _shown + step) : 0f;
+        _fadingShown = Mathf.Max(0f, _fadingShown - step);
+        if (_fadingShown <= 0f)
+            _fading.Clear();
+        _shownBlock ??= new MaterialPropertyBlock();
+        _fadingBlock ??= new MaterialPropertyBlock();
+        Draw(_fading, _fadingShown, _fadingBlock);
+        Draw(_hull, _shown, _shownBlock);
+    }
 
-        var parameters = new RenderParams(_hullMaterial);
-        foreach ((Mesh mesh, Renderer renderer) in _hull)
+    /// <summary>Draws <paramref name="hull"/> at <paramref name="shown"/> of the outline's colour (its alpha).</summary>
+    private void Draw(List<(Mesh mesh, Renderer renderer)> hull, float shown, MaterialPropertyBlock block)
+    {
+        if (hull.Count == 0 || shown <= 0f)
+            return;
+        Color colour = settings.outlineColor;
+        colour.a *= shown;
+        block.SetColor(ColorId, colour);
+        var parameters = new RenderParams(_hullMaterial) { matProps = block };
+        foreach ((Mesh mesh, Renderer renderer) in hull)
         {
             if (renderer == null || !renderer.enabled || !renderer.gameObject.activeInHierarchy)
                 continue;
@@ -247,6 +294,7 @@ public sealed class HoverHighlighter : MonoBehaviour
     private void HandleSceneUnloaded(Scene scene)
     {
         _hull.Clear();
+        _fading.Clear();
         _lastHitObject = null;
         _lastCandidate = null;
         _hovered = null;

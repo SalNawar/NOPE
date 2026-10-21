@@ -32,6 +32,23 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     public Material outlineMaterial;
 
     /// <summary>
+    /// The office objects' outline as screen px at 1080p (scaled by the
+    /// screen's height; 0 uses worldOutlineWidth): one rim for every object,
+    /// near or far, big or small (the review of the desk v3 capture: 3-4 px
+    /// on BABEL against 1 px on the intercom).
+    /// </summary>
+    [Min(0f)]
+    public float outlinePx = 2f;
+
+    /// <summary>How far the outline is drawn toward the camera (metres), so the felt or the tray an object rests on never cuts its rim into dashes.</summary>
+    [Min(0f)]
+    public float outlinePull = 0.006f;
+
+    /// <summary>How long the outline takes to fade in and to fade out (seconds; a cut under Reduced Motion): it never pops on or off.</summary>
+    [Min(0f)]
+    public float outlineFadeSeconds = 0.07f;
+
+    /// <summary>
     /// Outline colour for desktop UI that carries no theme tag (the Title and
     /// Home scenes); themed UI uses its theme's two rings (piece 6 R7).
     /// </summary>

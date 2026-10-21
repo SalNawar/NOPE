@@ -13,11 +13,132 @@ public enum PaintedRole
     /// <summary>A painted object that slides on its own (no gameplay object stands for it yet): the slide-in moves its home root's Slide child.</summary>
     Slider,
 
-    /// <summary>The look of a gameplay object (the scanner, the chip reader, the intercom, the UV torch, DETAIN): it rides that object's slide and the object's own meshes hide.</summary>
+    /// <summary>The look of a gameplay object (the scanner, the chip reader, the intercom, the UV torch, DETAIN, STAMP's rack and its two daters): it rides that object's slide and the object's own meshes hide.</summary>
     Reskin,
 
-    /// <summary>Not shown yet: its owner's object stands there (STAMP's rack and daters) or it waits for its home (the folded rulebook waits for DESK-HOMES' pocket).</summary>
+    /// <summary>Not shown: the glass's sheen (its alpha holds the painted traveller) and the locked homes' inserts (the shell's plate already carries those homes as painted: drawn too, they doubled; until DESK-ART bakes the shell from the empty plate under them).</summary>
     Hidden,
+}
+
+/// <summary>Where a stand-in stands (DeskPaintedMap.StandIns).</summary>
+public enum StandInAnchor
+{
+    /// <summary>On its home's floor (DeskPainted.TryFloor), at the home's centre.</summary>
+    Home,
+
+    /// <summary>On the front face (toward the chair) of its home's painted object, from that object's base (the scanner's add-ons ride the scanner).</summary>
+    Front,
+}
+
+/// <summary>One box of a stand-in: its part's name, its centre across and along its anchor (metres: x to the right, y away from the chair), its base over the anchor, its size and its colour (sRGB, painting-matched).</summary>
+public readonly struct StandInBox
+{
+    public readonly string name;
+    public readonly float x, y, z, width, depth, height, r, g, b;
+
+    /// <summary>The box <paramref name="name"/> of <paramref name="size"/> (width, depth, height) centred at (<paramref name="x"/>, <paramref name="y"/>) from its anchor, its base <paramref name="z"/> over it, in <paramref name="colour"/>.</summary>
+    public StandInBox(string name, float x, float y, float z, (float w, float d, float h) size, (float r, float g, float b) colour)
+    {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        width = size.w;
+        depth = size.d;
+        height = size.h;
+        r = colour.r;
+        g = colour.g;
+        b = colour.b;
+    }
+
+    /// <summary>Its top over its anchor.</summary>
+    public float Top => z + height;
+}
+
+/// <summary>
+/// A neutral, painting-matched stand-in for a gameplay object the painted
+/// desk has no painted model of yet (Saleh: a clean, organised desk where
+/// every object matches the painting; never the old model): a few plain
+/// boxes in the painting's palette, lit by the painted desk's own shader,
+/// sized to the painted slot it stands in, until DESK-ART's painted model
+/// (its art request, DESK-V3.md) replaces it.
+/// </summary>
+public sealed class StandIn
+{
+    /// <summary>What it stands for: the gameplay object's home id, or an add-on's id (DeskPaintedMap.AutoFeed, AnalysisBeacon).</summary>
+    public readonly string id;
+
+    /// <summary>The home it stands on (DeskHomeMap's ids).</summary>
+    public readonly string home;
+
+    /// <summary>Where it stands on that home.</summary>
+    public readonly StandInAnchor anchor;
+
+    /// <summary>How tall the painted slot lets it stand (metres over its floor; 0: no cap): the BABEL slats 2.5 cm, the Rolodex's and the protocol cards' homes 6 cm.</summary>
+    public readonly float maxHeight;
+
+    /// <summary>Its boxes.</summary>
+    public readonly StandInBox[] boxes;
+
+    /// <summary>
+    /// Where the painting draws its home's slot from the home's centre in
+    /// desk v3's layout (metres: x to the right, y away from the chair, at its
+    /// floor) and how far below the floor DeskPainted.TryFloor gives (the
+    /// locked insert's top) the slot's own surface lies: the shell carries the
+    /// slots as painted, and seen from the office camera the Rolodex's oval
+    /// and the cards' square sit 6 to 7 cm right of the layout's homes at the
+    /// inserts' top, the BABEL slats on the shell itself (3.1 cm under its
+    /// insert's top). Measured on the bake (DESK-V3.md, round 5). Home anchors only.
+    /// </summary>
+    public readonly float offsetX, offsetY, floorDrop;
+
+    /// <summary>The stand-in for <paramref name="id"/> on <paramref name="home"/>.</summary>
+    public StandIn(string id, string home, StandInAnchor anchor, float maxHeight, params StandInBox[] boxes)
+        : this(id, home, anchor, maxHeight, (0f, 0f, 0f), boxes)
+    {
+    }
+
+    /// <summary>The stand-in for <paramref name="id"/> on <paramref name="home"/>, in its painted <paramref name="slot"/> (offsetX, offsetY, floorDrop).</summary>
+    public StandIn(string id, string home, StandInAnchor anchor, float maxHeight, (float x, float y, float drop) slot, params StandInBox[] boxes)
+    {
+        this.id = id;
+        this.home = home;
+        this.anchor = anchor;
+        this.maxHeight = maxHeight;
+        offsetX = slot.x;
+        offsetY = slot.y;
+        floorDrop = slot.drop;
+        this.boxes = boxes ?? Array.Empty<StandInBox>();
+    }
+
+    /// <summary>Its top over its anchor (metres).</summary>
+    public float Top
+    {
+        get
+        {
+            float top = 0f;
+            foreach (StandInBox b in boxes)
+                top = Math.Max(top, b.Top);
+            return top;
+        }
+    }
+
+    /// <summary>The rectangle its boxes cover across and along its anchor (metres).</summary>
+    public (float x0, float y0, float x1, float y1) Extent
+    {
+        get
+        {
+            float x0 = float.MaxValue, y0 = float.MaxValue, x1 = float.MinValue, y1 = float.MinValue;
+            foreach (StandInBox b in boxes)
+            {
+                x0 = Math.Min(x0, b.x - b.width / 2f);
+                x1 = Math.Max(x1, b.x + b.width / 2f);
+                y0 = Math.Min(y0, b.y - b.depth / 2f);
+                y1 = Math.Max(y1, b.y + b.depth / 2f);
+            }
+            return boxes.Length > 0 ? (x0, y0, x1, y1) : (0f, 0f, 0f, 0f);
+        }
+    }
 }
 
 /// <summary>One object of the painted desk's bake: its name in the FBX files, the home it belongs to and what the install does with it.</summary>
@@ -75,6 +196,121 @@ public static class DeskPaintedMap
     /// <summary>The painted scanner's lid as the install renames it, so nothing that looks for the gameplay scanner's own "Lid" finds the painted one.</summary>
     public const string PaintedLid = "PaintedLid";
 
+    /// <summary>The bake's stamp rack, its two daters and the folded rulebook.</summary>
+    public const string StampRack = "Desk_StampRack", StampApprove = "Desk_StampApprove", StampDeny = "Desk_StampDeny", RulebookFolded = "Desk_RulebookFolded";
+
+    /// <summary>The scanner's two upgrades' add-ons (ScannerAddOns: the Auto-Feed tray, the Analysis beacon), as their stand-ins name them.</summary>
+    public const string AutoFeed = "autoFeed", AnalysisBeacon = "analysisBeacon";
+
+    /// <summary>The painting's palette for the stand-ins (sRGB, sampled from mock_office.png): the machines' cream, the trays' brass, the desk's dark wood, the felt's green, the dials' ink, the lamps' amber and the oxblood of the red accents.</summary>
+    public static readonly (float r, float g, float b) Cream = (0.80f, 0.73f, 0.58f), Brass = (0.74f, 0.58f, 0.30f), Wood = (0.27f, 0.15f, 0.08f),
+                                                       Felt = (0.19f, 0.33f, 0.21f), Ink = (0.12f, 0.09f, 0.07f), Amber = (0.95f, 0.64f, 0.24f), Oxblood = (0.55f, 0.18f, 0.15f);
+
+    /// <summary>
+    /// The neutral, painting-matched stand-ins of the gameplay objects the
+    /// bake has no painted model of yet (each an art request in DESK-V3.md):
+    /// the BABEL rack as a low cream tuner inside its slats' slot (31 x 15
+    /// cm, at most 2.5 cm tall; BABEL-TUNER's own object replaces it), the
+    /// Rolodex as a card file and the protocol cards as a card stack on their
+    /// back-step homes (under 6 cm), and the scanner's Auto-Feed tray and
+    /// Analysis beacon as two small plates on the painted scanner's front
+    /// face (they ride its slide). Their old models never show.
+    /// </summary>
+    public static readonly StandIn[] StandIns =
+    {
+        new StandIn(DeskHomeMap.BabelTuner, DeskHomeMap.BabelTuner, StandInAnchor.Home, 0.025f, (0f, 0f, 0.031f),
+                    new StandInBox("Body", 0f, 0f, 0f, (0.25f, 0.11f, 0.016f), Cream),
+                    new StandInBox("Dial", -0.04f, -0.03f, 0.016f, (0.12f, 0.035f, 0.004f), Ink),
+                    new StandInBox("Knob", 0.085f, -0.025f, 0.016f, (0.03f, 0.03f, 0.007f), Brass)),
+        new StandIn(DeskHomeMap.Rolodex, DeskHomeMap.Rolodex, StandInAnchor.Home, 0.06f, (0.064f, -0.007f, 0f),
+                    new StandInBox("Base", 0f, 0f, 0f, (0.15f, 0.10f, 0.008f), Brass),
+                    new StandInBox("Cards", 0f, 0f, 0.008f, (0.12f, 0.07f, 0.038f), Cream),
+                    new StandInBox("Band", 0f, 0f, 0.046f, (0.124f, 0.006f, 0.004f), Oxblood)),
+        new StandIn(DeskHomeMap.ProtocolRing, DeskHomeMap.ProtocolRing, StandInAnchor.Home, 0.06f, (0.07f, -0.026f, 0f),
+                    new StandInBox("Base", 0f, 0f, 0f, (0.10f, 0.15f, 0.008f), Wood),
+                    new StandInBox("Cards", 0f, 0f, 0.008f, (0.08f, 0.12f, 0.024f), Cream),
+                    new StandInBox("Ring", 0f, 0.04f, 0.032f, (0.086f, 0.012f, 0.006f), Brass)),
+        new StandIn(AutoFeed, DeskHomeMap.Scanner, StandInAnchor.Front, 0f,
+                    new StandInBox("Plate", -0.09f, -0.006f, 0.05f, (0.12f, 0.012f, 0.03f), Cream),
+                    new StandInBox("Slot", -0.09f, -0.013f, 0.062f, (0.10f, 0.002f, 0.005f), Ink)),
+        new StandIn(AnalysisBeacon, DeskHomeMap.Scanner, StandInAnchor.Front, 0f,
+                    new StandInBox("Plate", 0.12f, -0.006f, 0.05f, (0.05f, 0.012f, 0.03f), Brass),
+                    new StandInBox("Lamp", 0.12f, -0.013f, 0.058f, (0.025f, 0.002f, 0.014f), Amber)),
+    };
+
+    /// <summary>
+    /// The stand-ins' painted light (NOPE/Desk Painted adds none at the
+    /// painting's hour: the bake's objects carry theirs in their paint, so a
+    /// box of one flat colour would read as a cut-out): each face's share of
+    /// its colour, in the order top, front (toward the chair), right, left,
+    /// back, bottom; the painting's light falls from above, to the right and
+    /// toward the camera (the shader's _RefLightDir), as on its scanner and
+    /// intercom: their tops lightest, their left sides in shade.
+    /// </summary>
+    public static readonly float[] FaceShade = { 1f, 0.84f, 0.92f, 0.7f, 0.62f, 0.5f };
+
+    /// <summary>The ink of the stand-ins' edges (sRGB): the painting's dark brown line work.</summary>
+    public static readonly (float r, float g, float b) InkLine = (0.16f, 0.09f, 0.06f);
+
+    /// <summary>The texels of one face's cell of a stand-in's texture, and how many of them from its edge are ink.</summary>
+    public const int StandInCell = 64, InkTexels = 2;
+
+    /// <summary>The colour (sRGB) of the texel (<paramref name="x"/>, <paramref name="y"/>) of a stand-in's face <paramref name="face"/> (FaceShade's order) in <paramref name="colour"/>: ink along its cell's edge (so every box's edges are drawn as the painting's), else the colour in that face's light.</summary>
+    public static (float r, float g, float b) StandInTexel((float r, float g, float b) colour, int face, int x, int y)
+    {
+        int edge = Math.Min(Math.Min(x, y), Math.Min(StandInCell - 1 - x, StandInCell - 1 - y));
+        if (edge < InkTexels)
+            return InkLine;
+        float shade = FaceShade[Math.Max(0, Math.Min(FaceShade.Length - 1, face))];
+        return (colour.r * shade, colour.g * shade, colour.b * shade);
+    }
+
+    /// <summary>The stand-in for <paramref name="id"/>, or null.</summary>
+    public static StandIn StandInFor(string id)
+    {
+        foreach (StandIn s in StandIns)
+            if (s.id == id)
+                return s;
+        return null;
+    }
+
+    /// <summary>
+    /// The parts of a gameplay object that stay drawn under its painted look
+    /// (DeskPainted.Reskin's keep): the scanner's sweep light, raised onto the
+    /// painted bed, while a scan runs (its old lid-edge glow and its readout
+    /// hide with the old model); the UV torch's pool and beam. Nothing else
+    /// of an old model ever shows.
+    /// </summary>
+    public static string[] Kept(string home) =>
+        home == DeskHomeMap.Scanner ? new[] { "SweepBar" } : home == DeskHomeMap.UvTorch ? new[] { "UvPool", "BeamFX" } : Array.Empty<string>();
+
+    /// <summary>
+    /// The painted lamp beside the home <paramref name="home"/>
+    /// (anchors.json's lamps), or null: the next-tool lamp (DeskLayout.Lamps,
+    /// NextToolLamp) lights it; every other lamp stays unlit (slides.json: a
+    /// lamp is guidance).
+    /// </summary>
+    public static string LampOf(string home)
+    {
+        switch (home)
+        {
+            case DeskHomeMap.DealTray:
+                return "lamp_tray";
+            case DeskHomeMap.Bell:
+                return "lamp_bell";
+            case DeskHomeMap.StampRack:
+                return "lamp_stamp";
+            case DeskHomeMap.Scanner:
+                return "lamp_scanner";
+            case DeskHomeMap.ChipReader:
+                return "lamp_chip";
+            case DeskHomeMap.Intercom:
+                return "lamp_intercom";
+            default:
+                return null;
+        }
+    }
+
     /// <summary>Every object of the bake (but the lamps), its home and its role.</summary>
     public static readonly PaintedObject[] Objects =
     {
@@ -89,16 +325,16 @@ public static class DeskPaintedMap
         new PaintedObject("Desk_Glasses", DeskHomeMap.Glasses, PaintedRole.Slider),
         new PaintedObject("Desk_GlassesStand", DeskHomeMap.Glasses, PaintedRole.Fixed),
         new PaintedObject("Desk_Pocket", DeskHomeMap.RulebookPocket, PaintedRole.Fixed),
-        new PaintedObject("Desk_RulebookFolded", DeskHomeMap.RulebookPocket, PaintedRole.Hidden),
-        new PaintedObject("Desk_StampRack", DeskHomeMap.StampRack, PaintedRole.Hidden),
-        new PaintedObject("Desk_StampApprove", DeskHomeMap.StampRack, PaintedRole.Hidden),
-        new PaintedObject("Desk_StampDeny", DeskHomeMap.StampRack, PaintedRole.Hidden),
+        new PaintedObject(RulebookFolded, DeskHomeMap.RulebookPocket, PaintedRole.Slider), // the painting's red book in its pocket, peeking up on the cursor (the "rulebook" lift)
+        new PaintedObject(StampRack, DeskHomeMap.StampRack, PaintedRole.Reskin), // STAMP's rack (its old drawer hides)
+        new PaintedObject(StampApprove, DeskHomeMap.StampRack, PaintedRole.Reskin), // STAMP's APPROVED dater, upright on the rack's front step
+        new PaintedObject(StampDeny, DeskHomeMap.StampRack, PaintedRole.Reskin), // STAMP's DENIED dater, on the back step
         new PaintedObject("Desk_Detain", DeskHomeMap.Detain, PaintedRole.Reskin),
         new PaintedObject("Desk_DetainGuard", DeskHomeMap.Detain, PaintedRole.Reskin),
         new PaintedObject("Desk_Bell", DeskHomeMap.Bell, PaintedRole.Fixed),
-        new PaintedObject("Desk_BabelHome", DeskHomeMap.BabelTuner, PaintedRole.Fixed),
-        new PaintedObject("Desk_RolodexHome", DeskHomeMap.Rolodex, PaintedRole.Fixed),
-        new PaintedObject("Desk_CardsHome", DeskHomeMap.ProtocolRing, PaintedRole.Fixed),
+        new PaintedObject("Desk_BabelHome", DeskHomeMap.BabelTuner, PaintedRole.Hidden), // the inserts: the shell carries these homes as painted (art request: bake it from the empty plate under them)
+        new PaintedObject("Desk_RolodexHome", DeskHomeMap.Rolodex, PaintedRole.Hidden),
+        new PaintedObject("Desk_CardsHome", DeskHomeMap.ProtocolRing, PaintedRole.Hidden),
         new PaintedObject("Desk_AvailableSign", DeskHomeMap.Sign, PaintedRole.Fixed, true),
         new PaintedObject("PC_Crt", DeskHomeMap.Pc, PaintedRole.Fixed, true),
         new PaintedObject("PC_Keyboard", Keyboard, PaintedRole.Fixed, true),

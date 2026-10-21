@@ -331,6 +331,35 @@ public sealed class DeskStampTray : MonoBehaviour
         rack.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// The painted desk's daters (desk v3; DESK-HOMES' install, the office
+    /// binder): the dater <paramref name="kind"/> stands at
+    /// <paramref name="position"/> turned <paramref name="rotation"/> under
+    /// <paramref name="parent"/> (the rack), out of the brass drawer's
+    /// cradle, so the drawer's fold no longer turns it (the painted rack holds
+    /// its daters upright all the time, as the built rack does; its cradle
+    /// still locks before it takes input), and its place in the rack is
+    /// there from now on (a stroke and the way back end there). Works before
+    /// and after this tray's Awake. Returns the dater's root (its click box,
+    /// pivot at its foot), or null without that dater.
+    /// </summary>
+    public Transform StandDater(DeskStamp kind, Transform parent, Vector3 position, Quaternion rotation)
+    {
+        Clickable click = kind == DeskStamp.Approved ? approvedStamp : kind == DeskStamp.Denied ? deniedStamp : null;
+        if (click == null || parent == null)
+            return null;
+        Transform root = click.transform;
+        root.SetParent(parent, true);
+        root.SetPositionAndRotation(position, rotation);
+        foreach (Handle handle in _handles)
+            if (handle.Click == click)
+            {
+                handle.Returning = false;
+                handle.Home = root.localPosition;
+            }
+        return root;
+    }
+
     /// <summary>How far below the rack's origin its box reaches (metres, as laid): the drawer's Tray part or, for the built rack, every part, from the meshes' own bounds.</summary>
     private float Underside()
     {

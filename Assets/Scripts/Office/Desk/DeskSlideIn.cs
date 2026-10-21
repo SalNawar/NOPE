@@ -11,7 +11,8 @@ using UnityEngine.InputSystem;
 /// silhouette among the Interactable click boxes, the cursor's point on the
 /// desk inside a home's footprint, the px to each silhouette at 1080p,
 /// whether it stands on the desk, is in the player's hand or busy, and
-/// whether its docked paper can ride it) and whether a paper is dragged;
+/// whether its docked paper can ride it), whether a paper is dragged and how
+/// fast the cursor moves (px a second at 1080p: the drive-by guard);
 /// ProximityAssist decides everything (nearest wins, one at a time, the
 /// hand-off, the springs, the linger and the way home, busy machines left as
 /// they are, the drop hold, the forced retract, Reduced Motion as a cut); it
@@ -52,6 +53,14 @@ public sealed class DeskSlideIn : MonoBehaviour
     private Func<bool> _paused;
     private bool _shiftOver;
     private int _mask;
+
+    /// <summary>The cursor's screen point and time last frame (the drive-by guard's speed), and whether there was one.</summary>
+    private Vector2 _lastPointer;
+    private float _lastPointerAt;
+    private bool _hadPointer;
+
+    /// <summary>How fast the cursor moved this frame (px a second at DeskSlides.referenceHeight; 0 without a pointer): ProximityAssist's drive-by guard.</summary>
+    private float _cursorSpeed;
 
     /// <summary>The desk being played (null when none is bound): MachineSlideIn.Attach binds to it.</summary>
     public static DeskSlideIn Current => _current;
@@ -169,7 +178,7 @@ public sealed class DeskSlideIn : MonoBehaviour
         if (_assist == null || _camera == null || !DeskLayout.Bound)
             return;
         Gather();
-        _assist.Step(UiMotion.Now, _candidates, _papers != null && _papers.IsDragging, UiMotion.Amount.Still);
+        _assist.Step(UiMotion.Now, _candidates, _papers != null && _papers.IsDragging, UiMotion.Amount.Still, _cursorSpeed);
         IReadOnlyList<SlideCue> cues = _assist.Cues;
         for (int i = 0; i < cues.Count; i++)
             Sound(cues[i]);
@@ -194,6 +203,11 @@ public sealed class DeskSlideIn : MonoBehaviour
         Pointer pointer = Pointer.current;
         bool near = pointer != null && (_paused == null || !_paused());
         Vector2 at = near ? pointer.position.ReadValue() : Vector2.zero;
+        float now = UiMotion.Now, dt = now - _lastPointerAt;
+        _cursorSpeed = near && _hadPointer && dt > 1e-4f ? _slides.ToReference((at - _lastPointer).magnitude, _camera.pixelHeight) / dt : 0f;
+        _lastPointer = at;
+        _lastPointerAt = now;
+        _hadPointer = near;
         Ray ray = _camera.ScreenPointToRay(at);
         int hits = near ? Physics.RaycastNonAlloc(ray, _hits, 50f, _mask, QueryTriggerInteraction.Collide) : 0;
         SortByDistance(hits);

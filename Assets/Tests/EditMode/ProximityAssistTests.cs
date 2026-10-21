@@ -49,6 +49,9 @@ public class ProximityAssistTests
         public int FrameNo;
         public bool Still, Dragging;
 
+        /// <summary>How fast the cursor moves this frame (px a second at 1080p: the drive-by guard; 0 unknown).</summary>
+        public float Speed;
+
         public Desk(DeskSlides slides = null, IReadOnlyList<DeskHome> homes = null, params string[] attached)
         {
             Slides = slides ?? DeskSlides.Approved();
@@ -67,7 +70,7 @@ public class ProximityAssistTests
                 bool busy = Busy.Contains(id), taken = Taken.Contains(id), present = !Gone.Contains(id), rides = Rides.Contains(id);
                 all.Add(c.Id != null ? new SlideCandidate(id, c.Over, c.OnFootprint, c.Distance, busy, taken, present, rides) : SlideCandidate.Away(id, busy, taken, present, rides));
             }
-            Assist.Step(FrameNo * Frame, all, Dragging, Still);
+            Assist.Step(FrameNo * Frame, all, Dragging, Still, Speed);
             for (int i = 0; i < Assist.Cues.Count; i++)
                 Heard.Add((FrameNo, Assist.Cues[i]));
         }
@@ -894,5 +897,225 @@ public class ProximityAssistTests
         Run(2400);
         long allocated = GC.GetAllocatedBytesForCurrentThread() - start;
         Assert.AreEqual(0L, allocated, $"2400 frames of the slide-in allocated {allocated} B (sink {sink})");
+    }
+
+    // ---------------- Round 5: the code review of round 3 (max) and the review of the Unity capture ----------------
+
+    /// <summary>Steps <paramref name="desk"/> with the cursor away until <paramref name="id"/>'s way home has started (the frame it begins).</summary>
+    private static void AwayUntilItsWayHome(Desk desk, string id)
+    {
+        for (int i = 0; i < 90 && desk.Assist.Pose(id).Phase != SlidePhase.Back; i++)
+            desk.Step();
+        Assert.AreEqual(SlidePhase.Back, desk.Assist.Pose(id).Phase, id + ": the linger is over, its way home has started");
+    }
+
+    [Test]
+    public void ASliderSummonedAgainBeyondItsSlidSpot_NeverGoesFurtherOut_NorPastThePeakTheGatePassed()
+    {
+        // The code review (round 3, 1): the cursor near the chip reader, gone for the linger, back on the frame its way home starts
+        // (position about 1.16), or a paper landing on it there and then the cursor: the new slide out turned its anticipation
+        // toward the mat (to 1.1875 against the gated 1.1665: 0.42 px nearer lamp_chip, 0.42 px into the scanner's felt).
+        DeskSlides slides = DeskSlides.Approved();
+        DeskSlider chip = slides.Find(Chip);
+        foreach (bool held in new[] { false, true })
+        {
+            string how = held ? "held near its peak by a landing paper, then summoned" : "summoned on the frame its way home starts";
+            var desk = new Desk();
+            desk.Hold(3, Near(Chip, 60f));
+            AwayUntilItsWayHome(desk, Chip);
+            if (held)
+            {
+                desk.Busy.Add(Chip);
+                desk.Hold(5);
+                Assert.AreEqual(SlidePhase.Held, desk.Assist.Pose(Chip).Phase, how + ": it stopped where the paper found it");
+                desk.Busy.Remove(Chip);
+            }
+            float stood = desk.P(Chip);
+            Assert.Greater(stood, 1f, how + ": beyond its slid spot");
+            float highest = float.NegativeInfinity;
+            for (int i = 0; i < 40; i++)
+            {
+                desk.Step(Near(Chip, 60f));
+                highest = Math.Max(highest, desk.P(Chip));
+            }
+            Assert.LessOrEqual(highest, stood + 1e-5f, how + ": never further out than it stood (no anticipation toward the mat)");
+            Assert.LessOrEqual(highest, chip.Peak + 1e-5f, how + ": never past the peak the gate passed (lamp_chip 3 px clear)");
+            Assert.AreEqual(1f, desk.P(Chip), 0.03f, how + ": settled at its slid spot");
+            Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Chip).Phase, how);
+        }
+    }
+
+    [Test]
+    public void AHandOff_TakesTheEmptySliderThatIsOut_NeverABusyOne_SoTheOneOutAlwaysGivesWay()
+    {
+        // The code review (round 3, 2): with the busy chip reader out, a pick that took the first slider out (busy or not) left the
+        // UV torch raised while the scanner sprang out under the cursor: 19 frames with both more than half out. The chip reader
+        // comes before the torch in the data, so only the preference for the empty one keeps the torch the hand-off's loser.
+        var desk = new Desk();
+        desk.Hold(30, On(Chip));
+        desk.Busy.Add(Chip);
+        desk.Hold(30, On(Torch));
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Chip).Phase, "the busy chip reader stays out");
+        Assert.AreEqual(1f, desk.P(Torch), 0.03f, "the torch raised beside it");
+        int handOff = desk.FrameNo + 1, both = 0;
+        for (int i = 0; i < 40; i++)
+        {
+            desk.Step(On(Scanner));
+            if (desk.P(Torch) > 0.5f && desk.P(Scanner) > 0.5f)
+                both++;
+        }
+        Assert.AreEqual(0, both, "never the torch and the scanner both half out");
+        Assert.AreEqual(handOff, desk.FirstFrame(Torch, SlideCueKind.HandOff), "the torch, the empty one out, gives way at once");
+        Assert.AreEqual(1f, desk.P(Scanner), 0.03f, "the scanner out");
+        Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Chip).Phase, "the busy chip reader still out");
+    }
+
+    [Test]
+    public void AWaitingWinnerThatTurnsBusy_StaysWhereItStood_AndComesOutOnlyOnceEmpty()
+    {
+        // The code review (round 3, 2a): without the busy wait-to-held rule, a winner waiting on its loser that turned busy slid out
+        // anyway once the loser was seated.
+        var desk = new Desk();
+        desk.Hold(30, On(Scanner));
+        desk.Step(On(Chip));
+        Assert.AreEqual(SlidePhase.Wait, desk.Assist.Pose(Chip).Phase, "the winner waits for the scanner to be nearly seated");
+        desk.Busy.Add(Chip);
+        for (int i = 0; i < 30; i++)
+        {
+            desk.Step(On(Chip));
+            Assert.AreEqual(0f, desk.P(Chip), 1e-6f, $"busy frame {i}: it stays where it stood, at home");
+        }
+        Assert.AreEqual(-1, desk.FirstFrame(Chip, SlideCueKind.Unlatch), "never summoned while busy");
+        int empty = desk.FrameNo + 1;
+        desk.Busy.Remove(Chip);
+        desk.Hold(30, On(Chip));
+        Assert.AreEqual(empty, desk.FirstFrame(Chip, SlideCueKind.Unlatch), "empty again with the cursor on it: out at once");
+        Assert.AreEqual(1f, desk.P(Chip), 0.03f);
+    }
+
+    [Test]
+    public void AHeldSliderThatEmptiesAfterTheShiftEnds_GoesHomeAsTheForcedRetract_WithNoClack()
+    {
+        // The code review (round 3, 2b): without Held in the forced retract, it went home on a clacking way home.
+        var desk = new Desk();
+        desk.Hold(30, Near(Scanner, 50f));
+        AwayUntilItsWayHome(desk, Scanner);
+        desk.Hold(3);
+        desk.Busy.Add(Scanner);
+        desk.Step();
+        Assert.AreEqual(SlidePhase.Held, desk.Assist.Pose(Scanner).Phase, "a paper found it on its way home");
+        Assert.Greater(desk.P(Scanner), 0.1f);
+        desk.Assist.Close();
+        desk.Hold(10);
+        Assert.AreEqual(SlidePhase.Held, desk.Assist.Pose(Scanner).Phase, "busy with no paper riding it: it stays");
+        int empty = desk.FrameNo + 1;
+        desk.Busy.Remove(Scanner);
+        desk.Hold(20);
+        Assert.AreEqual(empty, desk.Heard.Where(h => h.cue.Id == Scanner && h.cue.Kind == SlideCueKind.HandOff && h.frame >= empty).Select(h => h.frame).DefaultIfEmpty(-1).First(),
+                        "emptied: the forced retract at once, with the hand-off's sound");
+        Assert.IsFalse(desk.Heard.Any(h => h.cue.Id == Scanner && h.frame >= empty && (h.cue.Kind == SlideCueKind.Back || h.cue.Kind == SlideCueKind.Seat)), "no way home of its own, no clack");
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Scanner).Phase);
+    }
+
+    [Test]
+    public void AWayHomeHurriedByAWinner_EasesIntoHome_NeverSlammingIntoItsStop()
+    {
+        // The code review (round 3, 3): the cursor reaching the chip reader just as the scanner's way home starts; the hurried way home
+        // moved 4.74 px in its last frame (its own way home 2.83 px) and stopped dead, silently. Now it eases in, as a hand-off loser.
+        DeskSlides slides = DeskSlides.Approved();
+        float travel = slides.Find(Scanner).travelPx;
+        var desk = new Desk();
+        desk.Hold(40, Near(Scanner, 50f));
+        AwayUntilItsWayHome(desk, Scanner);
+        int summoned = desk.FrameNo + 1;
+        float before = desk.Px(Scanner);
+        var steps = new List<float>();
+        for (int i = 0; i < 30 && before > 0f; i++)
+        {
+            desk.Step(On(Chip));
+            float now = desk.Px(Scanner);
+            steps.Add(before - now);
+            before = now;
+        }
+        Assert.AreEqual(0f, before, 1e-4f, "home");
+        Assert.LessOrEqual(steps.Max(), 4.1f + 0.05f, "no frame faster than the hand-off retract's fastest (slides.json: 4.1 px)");
+        Assert.LessOrEqual(steps[steps.Count - 1], slides.winnerBelow * travel + 1e-3f, "its frame into home is at most its last stretch");
+        Assert.Less(steps[steps.Count - 1], steps.Max(), "it arrives slowly: its last frame is not its fastest");
+        for (int i = 0; i < steps.Count; i++)
+            Assert.GreaterOrEqual(steps[i], -1e-4f, $"frame {i}: only ever toward home");
+        Assert.IsFalse(desk.Heard.Any(h => h.cue.Id == Scanner && h.cue.Kind == SlideCueKind.Seat && h.frame >= summoned), "a loser's way home: no clack");
+        desk.Hold(30, On(Chip));
+        Assert.AreEqual(1f, desk.P(Chip), 0.03f, "the winner out");
+    }
+
+    [Test]
+    public void ACursorLeavingDuringTheAnticipation_SendsItStraightHome_NoLingerNoOvershootNoKnock()
+    {
+        // The review of the Unity capture (S2, 10): a cursor brushing past a machine let it run its whole spring.
+        var desk = new Desk();
+        desk.Hold(2, Near(Scanner, 40f));
+        Assert.Less(desk.P(Scanner), 0f, "it began to back away");
+        var path = new List<float>();
+        for (int i = 0; i < 20; i++)
+        {
+            desk.Step();
+            path.Add(desk.P(Scanner));
+        }
+        Assert.AreEqual(-1, desk.FirstFrame(Scanner, SlideCueKind.Slide), "its base never left its well: no shush");
+        Assert.AreEqual(-1, desk.FirstFrame(Scanner, SlideCueKind.Peak), "no overshoot, no knock");
+        Assert.AreEqual(-1, desk.FirstFrame(Scanner, SlideCueKind.Back), "no linger, no way home of its own");
+        Assert.LessOrEqual(path.Max(), 1e-6f, "never toward the mat");
+        for (int i = 1; i < path.Count; i++)
+            Assert.GreaterOrEqual(path[i], path[i - 1] - 1e-6f, $"frame {i}: straight home");
+        Assert.AreEqual(SlidePhase.Rest, desk.Assist.Pose(Scanner).Phase);
+
+        var lift = new Desk();
+        lift.Hold(1, On(Torch));
+        lift.Hold(10);
+        Assert.AreEqual(SlidePhase.Rest, lift.Assist.Pose(Torch).Phase, "a lift brushed past is home at once");
+        Assert.AreEqual(0f, lift.P(Torch), 1e-6f);
+    }
+
+    [Test]
+    public void ADriveBy_ACursorSweepingPast_SummonsNothingByNearness_ButOnASilhouetteItWinsAtOnce()
+    {
+        // The review of the Unity capture (S2, 10): one sweep from the chip reader to the intercom slid the scanner, then BABEL.
+        var sweep = new Desk { Speed = 2000f };
+        sweep.Hold(8, Near(Scanner, 40f));
+        Assert.AreEqual(-1, sweep.FirstFrame(Scanner, SlideCueKind.Unlatch), "a sweep past it, faster than sweepPxPerSecond, summons nothing");
+        Assert.AreEqual(0f, sweep.P(Scanner), 1e-6f);
+        sweep.Step(On(Scanner));
+        Assert.AreEqual(sweep.FrameNo, sweep.FirstFrame(Scanner, SlideCueKind.Unlatch), "on its silhouette it wins at once, however fast");
+
+        var slow = new Desk { Speed = 300f };
+        slow.Step(Near(Scanner, 40f));
+        Assert.AreEqual(1, slow.FirstFrame(Scanner, SlideCueKind.Unlatch), "from a quiet desk a slow cursor near it starts it on the trigger frame (DESK-HOMES 6)");
+    }
+
+    [Test]
+    public void AHandOffByNearness_WaitsForTheCursorToDwell_TheOneOutLingersMeanwhile_ASweepNeverTakesIt()
+    {
+        DeskSlides slides = DeskSlides.Approved();
+        int dwell = (int)Math.Ceiling(slides.dwellSeconds / Frame - 1e-4f);
+        var desk = new Desk();
+        desk.Hold(30, On(Scanner));
+        int near = desk.FrameNo + 1;
+        desk.Hold(dwell - 1, Near(Chip, 30f));
+        Assert.AreEqual(-1, desk.FirstFrame(Scanner, SlideCueKind.HandOff), "the cursor only passing near the chip reader: no hand-off yet");
+        Assert.AreEqual(SlidePhase.Linger, desk.Assist.Pose(Scanner).Phase, "the scanner lingers meanwhile");
+        desk.Hold(30, Near(Chip, 30f));
+        Assert.AreEqual(near + dwell, desk.FirstFrame(Scanner, SlideCueKind.HandOff), "the hand-off once the cursor dwelt near it");
+        Assert.AreEqual(1f, desk.P(Chip), 0.03f, "the chip reader out");
+
+        var sweep = new Desk();
+        sweep.Hold(30, On(Scanner));
+        sweep.Speed = 2000f;
+        sweep.Hold(40, Near(Chip, 30f));
+        Assert.AreEqual(-1, sweep.FirstFrame(Chip, SlideCueKind.Unlatch), "a sweep near the chip reader never takes it");
+        Assert.AreEqual(SlidePhase.Rest, sweep.Assist.Pose(Scanner).Phase, "the scanner went home after its linger, on its own way");
+        sweep.Speed = 0f;
+        int slowed = sweep.FrameNo + 1;
+        sweep.Hold(30, Near(Chip, 30f));
+        Assert.AreEqual(slowed, sweep.FirstFrame(Chip, SlideCueKind.Unlatch), "the cursor slowing near it on a quiet desk: out at once");
     }
 }

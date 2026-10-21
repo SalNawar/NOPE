@@ -43,17 +43,42 @@ public static class SlideCurve
     /// left of the travel; from behind home (a track caught in its
     /// anticipation, retracting from it), it eases from there into this out's
     /// anticipation over the anticipation's time, never deeper than the
-    /// deeper of the two, then springs on as a fresh out. Equal to
-    /// <paramref name="start"/> on its first frame: no pop.
+    /// deeper of the two, then springs on as a fresh out; from beyond its
+    /// slid spot (summoned again near its overshoot peak: on the frame its
+    /// way home starts, or held there by a landing paper), its own spring
+    /// let go from where it stands (Release): it settles back onto the slid
+    /// spot and never goes further out than it already stood, so it never
+    /// passes the peak the gate passed (no anticipation toward the mat).
+    /// Equal to <paramref name="start"/> on its first frame: no pop.
     /// </summary>
     public static float OutFrom(DeskSlides slides, DeskSlider s, float t, float start)
     {
+        if (start > 1f)
+            return 1f + (start - 1f) * Release(slides, s, t);
         float o = Out(slides, s, t);
         if (start >= 0f)
             return start + (1f - start) * o;
         float ta = slides.anticipationSeconds;
         float w = t <= 0f ? 0f : t >= ta ? 1f : (1f - (float)Math.Cos(Math.PI * t / ta)) / 2f;
         return o + start * (1f - w);
+    }
+
+    /// <summary>
+    /// <paramref name="s"/>'s own spring let go at rest from a displacement
+    /// of 1, <paramref name="t"/> seconds later: 1 on its first frame,
+    /// falling (it only ever moves toward its rest first), past it once by
+    /// its overshoot and settling to 0; never above 1. A slider summoned
+    /// beyond its slid spot settles from there (OutFrom).
+    /// </summary>
+    public static float Release(DeskSlides slides, DeskSlider s, float t)
+    {
+        if (t <= 0f)
+            return 1f;
+        double z = s.damping, wd = s.DampedFrequency(slides.anticipationSeconds);
+        if (wd <= 0.0 || z <= 0.0 || z >= 1.0)
+            return 0f;
+        double root = Math.Sqrt(1.0 - z * z), wn = wd / root;
+        return (float)(Math.Exp(-z * wn * t) * (Math.Cos(wd * t) + z / root * Math.Sin(wd * t)));
     }
 
     /// <summary>
@@ -79,6 +104,51 @@ public static class SlideCurve
     {
         u = Clamp01(u);
         return start * (1f - u * u * u);
+    }
+
+    /// <summary>The way home's speed (share of the travel a second, toward home negative) from <paramref name="start"/> at <paramref name="u"/> of its way, over <paramref name="backSeconds"/>.</summary>
+    public static float WayHomeSpeed(float start, float u, float backSeconds)
+    {
+        u = Clamp01(u);
+        return -3f * start * u * u / Math.Max(1e-4f, backSeconds);
+    }
+
+    /// <summary>
+    /// A way home hurried by a summoned winner (a hand-off loser's way home,
+    /// slides.json's hand-off: it arrives slowly, so no clack and no seat):
+    /// <paramref name="t"/> seconds after it was hurried from
+    /// <paramref name="start"/>, moving at <paramref name="speed"/> (share of
+    /// the travel a second) then, home in <paramref name="over"/> seconds. A
+    /// cubic that carries on at the speed it had (no stop and no jolt where it
+    /// was hurried) and eases into home at rest (never a slam into the stop at
+    /// full speed). A speed away from home counts as none. With HurryTime's
+    /// time it never passes home.
+    /// </summary>
+    public static float Hurry(float start, float speed, float over, float t)
+    {
+        if (t <= 0f)
+            return start;
+        if (over <= 0f || t >= over)
+            return 0f;
+        if (speed * start > 0f)
+            speed = 0f;
+        float u = t / over, u2 = u * u, u3 = u2 * u;
+        return (2f * u3 - 3f * u2 + 1f) * start + (u3 - 2f * u2 + u) * over * speed;
+    }
+
+    /// <summary>
+    /// How long a way home hurried from <paramref name="start"/> at
+    /// <paramref name="speed"/> takes (Hurry): within
+    /// <paramref name="winnerAfter"/> (the winner never waits longer), and
+    /// never so long that the speed it keeps would carry it past home (a cubic
+    /// that arrives at rest stays on its side of home while over times the
+    /// speed is at most three times the way left).
+    /// </summary>
+    public static float HurryTime(float start, float speed, float winnerAfter)
+    {
+        float toward = speed * start < 0f ? Math.Abs(speed) : 0f;
+        float limit = toward > 1e-6f ? 3f * Math.Abs(start) / toward : float.PositiveInfinity;
+        return Math.Max(1e-4f, Math.Min(winnerAfter, limit));
     }
 
     /// <summary>The hand-off loser's position <paramref name="t"/> seconds into its retract from <paramref name="start"/>: an ease-in-out (quad) home over DeskSlides.retractSeconds, no seat.</summary>
@@ -157,9 +227,19 @@ public static class SlideCurve
     public static (float right, float up) Offset(DeskSlider s, float way, float f) =>
         s.kind == SlideKind.Lift ? (0f, f * s.travel) : s.kind == SlideKind.Track ? (way * f * s.travel, 0f) : (0f, 0f);
 
-    /// <summary>The height factor of a lift squashed by <paramref name="squashPx"/> (px at 1080p, <paramref name="metresPerPx"/> each) over its <paramref name="height"/> (metres): its top comes down, never below half its height; 1 with no squash or no measured height.</summary>
+    /// <summary>The height factor of a lift squashed by <paramref name="squashPx"/> (px at 1080p, <paramref name="metresPerPx"/> each) over its <paramref name="height"/> (metres): scaled by it about its base (SquashDrop), its top comes down by the squash, never below half its height; 1 with no squash or no measured height.</summary>
     public static float SquashScale(float squashPx, float metresPerPx, float height) =>
         squashPx > 0f && height > 1e-4f ? Math.Max(0.5f, 1f - squashPx * metresPerPx / height) : 1f;
+
+    /// <summary>
+    /// How far (metres) a lift's slide transform comes down while its height
+    /// is scaled by <paramref name="scale"/> (SquashScale) about its pivot,
+    /// <paramref name="pivotAboveBase"/> over its base (the UV torch's grip
+    /// axis 3.4 cm up), so the squash is about its base: the base stays on
+    /// its cradle and only the top comes down (UNITY_PLAN 5.1: "base down").
+    /// 0 for a pivot at the base or no squash.
+    /// </summary>
+    public static float SquashDrop(float scale, float pivotAboveBase) => scale < 1f && pivotAboveBase > 0f ? (1f - scale) * pivotAboveBase : 0f;
 
     /// <summary>The centre of <paramref name="s"/>'s contact shadow on the desk (the desk frame's x, y) at position <paramref name="f"/>, its rest footprint centred at <paramref name="rest"/>: a lift's stays at its rest footprint, a track's travels with its base (Offset's x).</summary>
     public static (float x, float y) ShadowCentre(DeskSlider s, float way, float f, (float x, float y) rest) =>

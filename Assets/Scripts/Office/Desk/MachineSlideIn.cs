@@ -13,7 +13,9 @@ using UnityEngine;
 /// one (the painted desk's prefabs: home root, slide child, mesh), else the
 /// object itself. Where the slide puts it is SlideCurve.Offset (a track
 /// along its axis in the desk's frame, DeskLayout.Frame; a lift up); a lift
-/// also squashes over its anticipation (SlideCurve.SquashScale) and tips as
+/// also squashes over its anticipation about its base, whatever its pivot
+/// (SlideCurve.SquashScale and SquashDrop: the base stays down, the top
+/// comes down), and tips as
 /// it rises (the glasses); a "Mic" under the slide sways at the stop (the
 /// intercom's prefab). Under it lies its contact shadow (SlideShadow): a
 /// lift's at its rest footprint, a track's travelling with its base
@@ -52,8 +54,12 @@ public sealed class MachineSlideIn : MonoBehaviour
     private Vector3 _restLocal, _secondaryRest, _prePos, _preScale, _moved, _lastScale, _measuredScale;
     private Quaternion _preRot;
     private Vector2 _restCentre;
-    private float _height, _restBase;
+    private float _height, _restBase, _pivotAboveBase;
     private int _stillFrames;
+
+    /// <summary>The squash's drop is on the slide's position (TakeBack takes it off), and what the pose last put on: the lift's rise and how far the squash brought the top down (metres; Raised).</summary>
+    private bool _dropped;
+    private float _shownUp, _shownSquash;
 
     /// <summary>The slider's id (DeskSlides).</summary>
     public string Id => _slider != null ? _slider.id : null;
@@ -69,6 +75,16 @@ public sealed class MachineSlideIn : MonoBehaviour
 
     /// <summary>True while it stands on the desk: bound, active and not waiting at zero scale (for the crate).</summary>
     public bool Present => _slider != null && _slide != null && isActiveAndEnabled && _slide.gameObject.activeInHierarchy && _slide.lossyScale.sqrMagnitude > 1e-8f;
+
+    /// <summary>
+    /// How far its top stands over where it stands at rest at this moment
+    /// (metres; a lift risen, less what its squash brought the top down):
+    /// what is on its transforms now, the layers counted only while they are
+    /// on (between LateUpdate and the next early Update). DeskLayout's
+    /// RefreshObstacles takes it off a measured top, so a lift raised when the
+    /// obstacles are measured (a crate's pop) is not counted twice.
+    /// </summary>
+    public float Raised => (_layered && !_laid ? 0f : _shownUp) - (_laid ? _shownSquash : 0f);
 
     /// <summary>
     /// Binds the object <paramref name="root"/> on the desk as the slider
@@ -246,6 +262,7 @@ public sealed class MachineSlideIn : MonoBehaviour
         _restCentre = new Vector2(footprint.CentreX, footprint.CentreY);
         _restBase = world.min.y - frame.Origin.y;
         _height = world.size.y;
+        _pivotAboveBase = _slide.position.y - world.min.y;
         if (_shadowMaterial == null || _slides == null)
             return;
         float blur = _slider.kind == SlideKind.Lift ? _slides.liftShadowBlurPx : _slides.trackShadowBlurPx;
@@ -302,8 +319,9 @@ public sealed class MachineSlideIn : MonoBehaviour
         _laid = false;
         _slide.localRotation = _preRot;
         _slide.localScale = _preScale;
-        if (_layered)
+        if (_layered || _dropped)
             _slide.localPosition = _prePos;
+        _dropped = false;
     }
 
     /// <summary>Puts this frame's pose on the slide: measured first once it stands still at home (again if its scale settled elsewhere); the travel (SlideCurve.Offset: a track's along its home's way in the desk's frame, a lift's up), never past its felt gap (ProximityAssist); a riding paper by the same move; the tip, the squash, the mic's sway and the contact shadow.</summary>
@@ -346,9 +364,20 @@ public sealed class MachineSlideIn : MonoBehaviour
             if (toward.sqrMagnitude > 1e-8f)
                 _slide.rotation = Quaternion.AngleAxis(tip, Vector3.Cross(Vector3.up, toward.normalized)) * _slide.rotation;
         }
+        // The squash about its base (UNITY_PLAN 5.1: base down, the top comes down): the height scales about the pivot, and the pivot comes down by what that lifts the base.
         float squash = SlideCurve.SquashScale(pose.Squash, metresPerPx, _height);
+        _shownUp = offset.up;
+        _shownSquash = (1f - squash) * _height;
         if (squash < 1f)
+        {
             _slide.localScale = new Vector3(_preScale.x, _preScale.y * squash, _preScale.z);
+            float drop = SlideCurve.SquashDrop(squash, _pivotAboveBase);
+            if (drop > 0f)
+            {
+                _slide.localPosition += ToParent(Vector3.down * drop);
+                _dropped = true;
+            }
+        }
         if (_secondary != null)
             _secondary.localPosition = _secondaryRest + ToParent(frame.Right * (_way * pose.Sway * metresPerPx), _secondary);
         if (_shadow != null)

@@ -126,18 +126,21 @@ public sealed class DeskLayoutSettings
     /// lamp, the old stamp and ink pad, the binder, the booth's partitions,
     /// the art's own shadow cards, and the right cork board's stability
     /// monitor, which the painted booth wall stands in front of: its readouts
-    /// go to the fallback HUD), and both corkboards whole (an entry naming a
-    /// parent exactly takes every part under it: the painting has no
-    /// corkboard; the left one's clock card and calendar hung over the city
-    /// window; the clock and the date are the PC's CRT clock's, the
-    /// calendar's click lies on its date line:
-    /// OfficeSceneBinder.BindPaintedCalendar).
+    /// go to the fallback HUD), and the art's decorations, the form sorter and
+    /// the tray with its paper bundle (the painting has none: on the painted
+    /// desk they are neither drawn, gathered nor dragged: DeskDecor never
+    /// sees them; Saleh: a clean, organised desk where every object matches
+    /// the painting), and both corkboards whole (an entry naming a parent
+    /// exactly takes every part under it: the painting has no corkboard; the
+    /// left one's clock card and calendar hung over the city window; the
+    /// clock and the date are the PC's CRT clock's, the calendar's click lies
+    /// on its date line: OfficeSceneBinder.BindPaintedCalendar).
     /// </summary>
     public string[] paintedCutParts =
     {
         "Finish_Desk__", "Finish_DeskRail__", "Clean_Blotter", "CRT2_", "Clean_Keyboard", "Clean_Mouse", "Clean_Phone", "Clean_Till", "CreditsNumber",
         "Clean_Next", "NextLabel", "Clean_Lamp", "Clean_Stamp", "Clean_Inkpad", "Clean_Binder", "Office_Partition__", "Clean Art",
-        "Office_Stability__", "StabilityPercent", "Finish_RightEphemera__",
+        "Office_Stability__", "StabilityPercent", "Finish_RightEphemera__", "Clean_FormSorter__", "Clean_Tray__", "Clean_PaperBundle__",
         "Left board assembly", "Right board assembly",
     };
 
@@ -369,6 +372,7 @@ public static class DeskLayout
         foreach (string id in Registered)
             Obstacles.Unregister(id);
         Registered.Clear();
+        SweptBoxes.Clear();
         Objects.Clear();
         _settings = null;
         Bound = false;
@@ -427,17 +431,23 @@ public static class DeskLayout
 
     /// <summary>
     /// Registers every tracked object that shows as an obstacle on its home's
-    /// footprint, as tall as its renderers stand over the desk (its home's
-    /// height when it has none showing), swept by the slide-in of what rests
+    /// footprint, as tall as its renderers stand over the desk at rest (its
+    /// home's height when it has none showing; a part of a slider counted at
+    /// its rest height, MachineSlideIn.Raised taken off, so a lift raised when
+    /// this runs is not counted twice), swept by the slide-in of what rests
     /// in it (a track's footprint to its overshoot peak toward the mat, the
     /// top raised by its lifts' peak, the stamp rack by its daters':
-    /// DeskSlides.Obstacle, so a carried thing never needs a live read), and
-    /// forgets those that do not show.
+    /// DeskSlides.Obstacle), and forgets those that do not show. The swept
+    /// boxes of the homes something slides or lifts in are also kept apart
+    /// (SweptTopAt, SweptStrips): the carry and the drop read them, so a paper
+    /// is never covered or passed through by a machine that slides out after
+    /// the drag began.
     /// </summary>
     public static void RefreshObstacles()
     {
         if (!Bound)
             return;
+        SweptBoxes.Clear();
         foreach (KeyValuePair<string, Transform> tracked in Objects)
         {
             DeskHome home = HomeOf(tracked.Key);
@@ -453,13 +463,68 @@ public static class DeskLayout
             {
                 if (!r.enabled)
                     continue;
-                float over = r.bounds.max.y - Frame.Origin.y;
+                MachineSlideIn slider = r.GetComponentInParent<MachineSlideIn>();
+                float over = r.bounds.max.y - Frame.Origin.y - (slider != null ? slider.Raised : 0f);
                 top = any ? Mathf.Max(top, over) : over;
                 any = true;
             }
             (DeskRect footprint, float height) = _settings.slides != null ? _settings.slides.Obstacle(home, top) : (home.Footprint, top);
             Register(tracked.Key, footprint, height);
+            if (_settings.slides != null && _settings.slides.Sweeps(home))
+                SweptBoxes.Add((home, footprint, height));
         }
+    }
+
+    /// <summary>The swept boxes of the homes something slides or lifts in (RefreshObstacles): the home, its swept footprint in the frame and its height over the desk (metres).</summary>
+    private static readonly List<(DeskHome home, DeskRect footprint, float height)> SweptBoxes = new List<(DeskHome, DeskRect, float)>();
+
+    /// <summary>
+    /// The world height of the tallest swept box (a home something slides or
+    /// lifts in, at its overshoot peak) under <paramref name="world"/>, with
+    /// its footprint grown by <paramref name="grow"/> metres (a carried
+    /// paper's corners); false over none or unbound. A dragged paper keeps over
+    /// it (DeskController's carry floor), so a machine that slides out under
+    /// it after the drag began never passes through it, with no live read.
+    /// Allocates nothing.
+    /// </summary>
+    public static bool TrySweptTop(Vector3 world, float grow, out float top)
+    {
+        top = float.NegativeInfinity;
+        if (!Bound)
+            return false;
+        Vector2 at = Frame.Local(world);
+        bool any = false;
+        for (int i = 0; i < SweptBoxes.Count; i++)
+        {
+            DeskRect f = SweptBoxes[i].footprint;
+            if (Mathf.Abs(at.x - f.CentreX) > f.Width / 2f + grow || Mathf.Abs(at.y - f.CentreY) > f.Height / 2f + grow)
+                continue;
+            top = Mathf.Max(top, Frame.Origin.y + SweptBoxes[i].height);
+            any = true;
+        }
+        return any;
+    }
+
+    /// <summary>
+    /// The world corners (on the desk) of each track's swept box: its home's
+    /// footprint and the strip its slide reaches past it toward the mat
+    /// (DESK-HOMES 6: 0 px over a resting paper). A paper let go keeps clear
+    /// of each (DeskController.ClearOfBlockers). A fresh list.
+    /// </summary>
+    public static List<Vector3[]> SweptStrips()
+    {
+        var strips = new List<Vector3[]>();
+        if (!Bound)
+            return strips;
+        for (int i = 0; i < SweptBoxes.Count; i++)
+        {
+            DeskRect rest = SweptBoxes[i].home.Footprint, swept = SweptBoxes[i].footprint;
+            if (swept.Width <= rest.Width + 1e-4f)
+                continue;
+            float x0 = swept.CentreX - swept.Width / 2f, x1 = swept.CentreX + swept.Width / 2f, y0 = swept.CentreY - swept.Height / 2f, y1 = swept.CentreY + swept.Height / 2f;
+            strips.Add(new[] { Frame.Point(new Vector2(x0, y0)), Frame.Point(new Vector2(x1, y0)), Frame.Point(new Vector2(x0, y1)), Frame.Point(new Vector2(x1, y1)) });
+        }
+        return strips;
     }
 
     /// <summary>
