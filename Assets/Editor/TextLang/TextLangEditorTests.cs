@@ -28,6 +28,17 @@ public class TextLangEditorTests
         Assert.AreEqual(charset.Length, charset.Distinct().Count(), "each character once");
     }
 
+    [Test]
+    public void KitCharsetFor_AddsTodaysOtherCharacters_EachOnce()
+    {
+        string charset = KitFontAtlases.CharsetFor("Zoom − „Ja“ ▲ Back ● ● É");
+        foreach (char c in "−„“▲●")
+            StringAssert.Contains(c.ToString(), charset);
+        Assert.AreEqual(charset.Length, charset.Distinct().Count(), "each character once");
+        StringAssert.StartsWith(KitFontAtlases.Charset(), charset, "the ranges first");
+        Assert.IsFalse(charset.Contains('Z') || charset.Contains(' '), "ASCII and spaces are the atlas's already");
+    }
+
     [Test, Category("NeedsEditor")]
     public void Refont_SetsADefaultFaceText_InTheKitsBodyFace_AndLeavesTheOthers()
     {

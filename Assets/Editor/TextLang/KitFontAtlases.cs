@@ -10,7 +10,9 @@ using UnityEngine.TextCore.LowLevel;
 /// The UI kit's font atlases cover what the game prints (BUG-38a, CODE-83:
 /// the kit's SDF assets were static 120-glyph ASCII atlases, so "VISAS
 /// D'ENTRÉE" drew its É in LiberationSans): Tools &gt; TimeDesk &gt; Text &gt;
-/// Extend Kit Font Atlases adds Latin-1, Latin Extended-A and Greek to each
+/// Extend Kit Font Atlases adds Latin-1, Latin Extended-A and Greek, and
+/// every other character today's strings print (the minus sign, German
+/// quotes, arrows, bullets: TextLangAudit.TodaysLatinText), to each
 /// kit face (UiKitFonts) in place, keeping each asset (its GUID, the scenes'
 /// references) and its static atlas (a play never rewrites it); a glyph a
 /// face's font file lacks (the kit's fonts have no Greek) stays its
@@ -34,10 +36,20 @@ public static class KitFontAtlases
         return sb.ToString();
     }
 
-    /// <summary>Adds the charset to each kit face's static atlas (more atlas pages when one is full), saved in place; logs what each face's font file lacks.</summary>
+    /// <summary>The charset plus every character beyond ASCII that <paramref name="todaysText"/> prints, each once.</summary>
+    public static string CharsetFor(string todaysText)
+    {
+        string charset = Charset();
+        string extra = new string((todaysText ?? string.Empty).Where(c => c > '~' && !char.IsControl(c) && !char.IsWhiteSpace(c) && charset.IndexOf(c) < 0).Distinct().ToArray());
+        return charset + extra;
+    }
+
+    /// <summary>Adds the charset and today's strings' characters (<see cref="CharsetFor"/>) to each kit face's static atlas (more atlas pages when one is full), saved in place; logs what each face's font file lacks.</summary>
     [MenuItem("Tools/TimeDesk/Text/Extend Kit Font Atlases")]
     public static void Extend()
     {
+        var config = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
+        string characters = CharsetFor(config != null && config.contentLibrary != null ? TextLangAudit.TodaysLatinText(config.contentLibrary) : string.Empty);
         foreach (string path in Faces)
         {
             TMP_FontAsset face = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path);
@@ -49,7 +61,7 @@ public static class KitFontAtlases
             int before = face.characterTable.Count;
             face.isMultiAtlasTexturesEnabled = true;
             face.atlasPopulationMode = AtlasPopulationMode.Dynamic;
-            face.TryAddCharacters(Charset(), out string lacking);
+            face.TryAddCharacters(characters, out string lacking);
             face.atlasPopulationMode = AtlasPopulationMode.Static;
             int page = 0;
             foreach (Texture2D atlas in face.atlasTextures)

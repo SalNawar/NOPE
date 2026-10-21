@@ -53,8 +53,8 @@ public static class TextLangAudit
         return found;
     }
 
-    /// <summary>Each kit face's missing characters for today's reading strings (the English table and the culture tables printed in Latin: German, Italian), "face: U+00C9 …"; empty when every face covers them.</summary>
-    public static List<string> KitAtlasGaps(ContentLibrarySO library)
+    /// <summary>Today's reading strings and the culture tables printed in Latin (German, Italian), tags and placeholders removed: the text every kit face must draw itself (the kit atlases' bake and their gap check read the same text).</summary>
+    public static string TodaysLatinText(ContentLibrarySO library)
     {
         var text = new System.Text.StringBuilder();
         foreach (string language in new[] { library.CultureUi.readingLanguage, "de", "it" })
@@ -64,10 +64,17 @@ public static class TextLangAudit
                 foreach (UiStringEntry e in table.entries)
                     text.Append(Regex.Replace(e.text ?? string.Empty, @"</?[A-Za-z#][^<>]*>|\{[^{}]*\}", string.Empty));
         }
+        return text.ToString();
+    }
+
+    /// <summary>Each kit face's missing characters for today's reading strings (<see cref="TodaysLatinText"/>), "face: U+00C9 …"; empty when every face covers them.</summary>
+    public static List<string> KitAtlasGaps(ContentLibrarySO library)
+    {
+        string text = TodaysLatinText(library);
         var gaps = new List<string>();
         foreach (string path in KitFontAtlases.Faces)
         {
-            string missing = KitFontAtlases.Missing(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path), text.ToString());
+            string missing = KitFontAtlases.Missing(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path), text);
             if (missing.Length > 0)
                 gaps.Add($"{Path.GetFileNameWithoutExtension(path)}: {missing}");
         }
