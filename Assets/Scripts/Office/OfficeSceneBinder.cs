@@ -991,7 +991,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (shadow == null)
             Debug.LogWarning("[OfficeSceneBinder] The rulebook has no Shadow part (Build Office UI's PaperDepth shadow), so the slide-in draws no contact shadows.", this);
         DeskSlides slides = config.layout.slides;
-        slideIn.Bind(_office, slides, config.layout.Homes, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked, FindAnyObjectByType<DayOrchestrator>(), shadow);
+        slideIn.Bind(_office, slides, config.layout.Homes, desk,
+                     () => (frame != null && frame.IsOpen) || InputGate.Blocked || (SwitchboardView.Current != null && SwitchboardView.Current.IsOpen),
+                     FindAnyObjectByType<DayOrchestrator>(), shadow);
         if (scanner != null && DeskLayout.ObjectOf(DeskHomeMap.Scanner) == scanner.transform)
             MachineSlideIn.Attach(DeskHomeMap.Scanner, scanner.transform, busy: Occupied(scanner.transform, slides), dock: scanner);
         ChipReader reader = hardware != null ? hardware.Reader : null;

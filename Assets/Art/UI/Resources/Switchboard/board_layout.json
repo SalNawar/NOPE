@@ -1,0 +1,1084 @@
+{
+ "version": 1,
+ "image_size": [
+  1920,
+  1080
+ ],
+ "coords": "pixels, origin top-left, y down; c = centre [x,y]; rects = [x,y,w,h]",
+ "plates": {
+  "with_lever": "board_plate.png",
+  "no_lever": "board_plate_nolever.png"
+ },
+ "board_rect": [
+  278,
+  80,
+  1366,
+  872
+ ],
+ "headers": {
+  "destinations_periods": [
+   581,
+   94,
+   518,
+   50
+  ],
+  "power": [
+   1268,
+   497,
+   134,
+   40
+  ],
+  "portals": [
+   1222,
+   580,
+   175,
+   40
+  ],
+  "master": [
+   1487,
+   152,
+   132,
+   46
+  ],
+  "instruction_strip": [
+   553,
+   904,
+   637,
+   38
+  ]
+ },
+ "text_style": {
+  "name_plate": {
+   "ink": "#28190f",
+   "case": "upper",
+   "font_hint": "geometric sans caps like the v3 plates (Futura/Century Gothic family), cap height about 16 px"
+  },
+  "period_tag": {
+   "ink": "#3e1f0e",
+   "font_hint": "same family, about 12 px cap height"
+  }
+ },
+ "destinations": [
+  {
+   "slot": 0,
+   "name_plate_rect": [
+    366,
+    152,
+    138,
+    32
+   ],
+   "name_text_box": [
+    374,
+    156,
+    122,
+    24
+   ],
+   "place_jack": {
+    "c": [
+     401.1,
+     222.9
+    ],
+    "hole_r": 9.5,
+    "ring_r": 22.5,
+    "hit_r": 26
+   },
+   "call_lamp": {
+    "c": [
+     476.5,
+     222.5
+    ],
+    "glass_r": 12,
+    "bezel_r": 15
+   },
+   "periods": [
+    {
+     "row": 0,
+     "jack": {
+      "c": [
+       403.6,
+       292.2
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      442,
+      283,
+      81,
+      25
+     ],
+     "tag_text_box": [
+      447,
+      286,
+      71,
+      19
+     ]
+    },
+    {
+     "row": 1,
+     "jack": {
+      "c": [
+       406.0,
+       352.4
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      445,
+      342,
+      82,
+      25
+     ],
+     "tag_text_box": [
+      450,
+      345,
+      72,
+      19
+     ]
+    },
+    {
+     "row": 2,
+     "jack": {
+      "c": [
+       408.8,
+       410.2
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      449,
+      399,
+      81,
+      25
+     ],
+     "tag_text_box": [
+      454,
+      402,
+      71,
+      19
+     ]
+    }
+   ]
+  },
+  {
+   "slot": 1,
+   "name_plate_rect": [
+    613,
+    153,
+    138,
+    30
+   ],
+   "name_text_box": [
+    621,
+    157,
+    122,
+    22
+   ],
+   "place_jack": {
+    "c": [
+     652.4,
+     223.3
+    ],
+    "hole_r": 9.5,
+    "ring_r": 22.5,
+    "hit_r": 26
+   },
+   "call_lamp": {
+    "c": [
+     724.5,
+     222.5
+    ],
+    "glass_r": 12,
+    "bezel_r": 15
+   },
+   "periods": [
+    {
+     "row": 0,
+     "jack": {
+      "c": [
+       653.0,
+       292.8
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      686,
+      283,
+      80,
+      25
+     ],
+     "tag_text_box": [
+      691,
+      286,
+      70,
+      19
+     ]
+    },
+    {
+     "row": 1,
+     "jack": {
+      "c": [
+       653.9,
+       352.6
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      688,
+      342,
+      80,
+      25
+     ],
+     "tag_text_box": [
+      693,
+      345,
+      70,
+      19
+     ]
+    },
+    {
+     "row": 2,
+     "jack": {
+      "c": [
+       655.3,
+       410.4
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      689,
+      399,
+      80,
+      25
+     ],
+     "tag_text_box": [
+      694,
+      402,
+      70,
+      19
+     ]
+    }
+   ]
+  },
+  {
+   "slot": 2,
+   "name_plate_rect": [
+    872,
+    153,
+    137,
+    31
+   ],
+   "name_text_box": [
+    880,
+    157,
+    121,
+    23
+   ],
+   "place_jack": {
+    "c": [
+     910.6,
+     223.7
+    ],
+    "hole_r": 9.5,
+    "ring_r": 22.5,
+    "hit_r": 26
+   },
+   "call_lamp": {
+    "c": [
+     979.5,
+     223.5
+    ],
+    "glass_r": 12,
+    "bezel_r": 15
+   },
+   "periods": [
+    {
+     "row": 0,
+     "jack": {
+      "c": [
+       910.2,
+       293.7
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      941,
+      284,
+      79,
+      25
+     ],
+     "tag_text_box": [
+      946,
+      287,
+      69,
+      19
+     ]
+    },
+    {
+     "row": 1,
+     "jack": {
+      "c": [
+       909.8,
+       353.7
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      941,
+      342,
+      79,
+      26
+     ],
+     "tag_text_box": [
+      946,
+      345,
+      69,
+      20
+     ]
+    },
+    {
+     "row": 2,
+     "jack": {
+      "c": [
+       910.3,
+       411.0
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      942,
+      400,
+      78,
+      25
+     ],
+     "tag_text_box": [
+      947,
+      403,
+      68,
+      19
+     ]
+    }
+   ]
+  },
+  {
+   "slot": 3,
+   "name_plate_rect": [
+    1129,
+    153,
+    139,
+    33
+   ],
+   "name_text_box": [
+    1137,
+    157,
+    123,
+    25
+   ],
+   "place_jack": {
+    "c": [
+     1166.2,
+     224.2
+    ],
+    "hole_r": 9.5,
+    "ring_r": 22.5,
+    "hit_r": 26
+   },
+   "call_lamp": {
+    "c": [
+     1235.5,
+     223.5
+    ],
+    "glass_r": 12,
+    "bezel_r": 15
+   },
+   "periods": [
+    {
+     "row": 0,
+     "jack": {
+      "c": [
+       1163.7,
+       294.9
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      1193,
+      284,
+      80,
+      26
+     ],
+     "tag_text_box": [
+      1198,
+      287,
+      70,
+      20
+     ]
+    },
+    {
+     "row": 1,
+     "jack": {
+      "c": [
+       1162.4,
+       354.3
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      1191,
+      343,
+      79,
+      25
+     ],
+     "tag_text_box": [
+      1196,
+      346,
+      69,
+      19
+     ]
+    },
+    {
+     "row": 2,
+     "jack": {
+      "c": [
+       1161.5,
+       411.3
+      ],
+      "hole_r": 9.5,
+      "ring_r": 22.5,
+      "hit_r": 26
+     },
+     "tag_rect": [
+      1191,
+      400,
+      78,
+      25
+     ],
+     "tag_text_box": [
+      1196,
+      403,
+      68,
+      19
+     ]
+    }
+   ]
+  }
+ ],
+ "power_row": [
+  {
+   "index": 0,
+   "c": [
+    367.3,
+    517.8
+   ],
+   "hole_r": 10,
+   "ring_r": 23,
+   "hit_r": 27
+  },
+  {
+   "index": 1,
+   "c": [
+    583.5,
+    517.9
+   ],
+   "hole_r": 10,
+   "ring_r": 23,
+   "hit_r": 27
+  },
+  {
+   "index": 2,
+   "c": [
+    798.5,
+    517.9
+   ],
+   "hole_r": 10,
+   "ring_r": 23,
+   "hit_r": 27
+  },
+  {
+   "index": 3,
+   "c": [
+    1011.7,
+    517.6
+   ],
+   "hole_r": 10,
+   "ring_r": 23,
+   "hit_r": 27
+  },
+  {
+   "index": 4,
+   "c": [
+    1224.9,
+    517.4
+   ],
+   "hole_r": 10,
+   "ring_r": 23,
+   "hit_r": 27
+  }
+ ],
+ "modules": [
+  {
+   "id": "01",
+   "rect": [
+    338,
+    654,
+    209,
+    219
+   ],
+   "number_plate_rect": [
+    351,
+    676,
+    56,
+    27
+   ],
+   "lamp": {
+    "c": [
+     483.5,
+     691.5
+    ],
+    "glass_r": 10.5,
+    "bezel_r": 14.5
+   },
+   "sockets": {
+    "power": {
+     "c": [
+      374.5,
+      785.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    },
+    "place": {
+     "c": [
+      433.5,
+      786.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    },
+    "period": {
+     "c": [
+      491.5,
+      787.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    }
+   },
+   "socket_label_rects": [
+    [
+     360,
+     823,
+     50,
+     17
+    ],
+    [
+     415,
+     823,
+     51,
+     17
+    ],
+    [
+     470,
+     823,
+     52,
+     17
+    ]
+   ],
+   "plate_state": "free",
+   "placard_rect": null
+  },
+  {
+   "id": "02",
+   "rect": [
+    551,
+    654,
+    198,
+    219
+   ],
+   "number_plate_rect": [
+    565,
+    676,
+    56,
+    27
+   ],
+   "lamp": {
+    "c": [
+     691.5,
+     692.5
+    ],
+    "glass_r": 10.5,
+    "bezel_r": 14.5
+   },
+   "sockets": {
+    "power": {
+     "c": [
+      586.5,
+      786.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    },
+    "place": {
+     "c": [
+      642.5,
+      786.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    },
+    "period": {
+     "c": [
+      699.5,
+      788.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    }
+   },
+   "socket_label_rects": [
+    [
+     568,
+     824,
+     51,
+     17
+    ],
+    [
+     623,
+     824,
+     52,
+     17
+    ],
+    [
+     679,
+     824,
+     51,
+     17
+    ]
+   ],
+   "plate_state": "free",
+   "placard_rect": null
+  },
+  {
+   "id": "03",
+   "rect": [
+    763,
+    654,
+    188,
+    219
+   ],
+   "number_plate_rect": [
+    776,
+    676,
+    56,
+    27
+   ],
+   "lamp": {
+    "c": [
+     902.5,
+     691.5
+    ],
+    "glass_r": 10.5,
+    "bezel_r": 14.5
+   },
+   "sockets": {
+    "power": {
+     "c": [
+      800.5,
+      786.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    },
+    "place": {
+     "c": [
+      856.5,
+      788.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    },
+    "period": {
+     "c": [
+      911.5,
+      787.5
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": false
+    }
+   },
+   "socket_label_rects": [
+    [
+     777,
+     824,
+     51,
+     17
+    ],
+    [
+     833,
+     824,
+     51,
+     17
+    ],
+    [
+     889,
+     824,
+     50,
+     17
+    ]
+   ],
+   "plate_state": "free",
+   "placard_rect": null
+  },
+  {
+   "id": "04",
+   "rect": [
+    973,
+    654,
+    190,
+    219
+   ],
+   "number_plate_rect": [
+    988,
+    676,
+    57,
+    27
+   ],
+   "lamp": {
+    "c": [
+     1116.5,
+     692.5
+    ],
+    "glass_r": 10.5,
+    "bezel_r": 14.5
+   },
+   "sockets": {
+    "power": {
+     "c": [
+      1012.0,
+      788.0
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": true
+    },
+    "place": {
+     "c": [
+      1068.0,
+      788.0
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": true
+    },
+    "period": {
+     "c": [
+      1124.0,
+      788.0
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": true
+    }
+   },
+   "socket_label_rects": [
+    [
+     986,
+     826,
+     51,
+     16
+    ],
+    [
+     1041,
+     826,
+     51,
+     16
+    ],
+    [
+     1097,
+     826,
+     51,
+     16
+    ]
+   ],
+   "plate_state": "locked",
+   "placard_rect": [
+    987,
+    747,
+    164,
+    83
+   ]
+  },
+  {
+   "id": "05",
+   "rect": [
+    1182,
+    654,
+    193,
+    219
+   ],
+   "number_plate_rect": [
+    1200,
+    676,
+    57,
+    27
+   ],
+   "lamp": {
+    "c": [
+     1330.5,
+     692.5
+    ],
+    "glass_r": 10.5,
+    "bezel_r": 14.5
+   },
+   "sockets": {
+    "power": {
+     "c": [
+      1222.0,
+      788.0
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": true
+    },
+    "place": {
+     "c": [
+      1279.0,
+      788.0
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": true
+    },
+    "period": {
+     "c": [
+      1335.0,
+      788.0
+     ],
+     "hole_r": 7.5,
+     "ring_r": 17.5,
+     "hit_r": 22,
+     "covered": true
+    }
+   },
+   "socket_label_rects": [
+    [
+     1194,
+     826,
+     51,
+     16
+    ],
+    [
+     1249,
+     826,
+     51,
+     16
+    ],
+    [
+     1305,
+     826,
+     51,
+     16
+    ]
+   ],
+   "plate_state": "out_of_service",
+   "placard_rect": [
+    1200,
+    747,
+    163,
+    83
+   ]
+  }
+ ],
+ "master": {
+  "panel_rect": [
+   1418,
+   143,
+   208,
+   723
+  ],
+  "lamp": {
+   "c": [
+    1547.5,
+    244.5
+   ],
+   "glass_r": 17,
+   "bezel_r": 21.5
+  },
+  "handle_sprite": "sprites/master_handle.png",
+  "handle_sprite_pivot_px": [
+   80,
+   36.5
+  ],
+  "handle_sprite_note": "pivot = pixel in the sprite that sits on the handle centre; the sprite carries its own soft shadow",
+  "handle_rest_c": [
+   1548.0,
+   332.5
+  ],
+  "handle_rest_rect": [
+   1484,
+   305,
+   128,
+   55
+  ],
+  "handle_path": {
+   "from": [
+    1548.0,
+    332.5
+   ],
+   "to": [
+    1520.0,
+    700.0
+   ],
+   "note": "pull = move the handle centre from `from` (rest, top) to `to` (pulled, low) along this straight segment; hit area = handle_rest_rect grown by 12 px, drag down"
+  },
+  "rod_sprite": "sprites/master_rod.png",
+  "rod_sprite_axis": {
+   "x": 22,
+   "top_y": 0,
+   "pivot_y": 348,
+   "note": "stretch along the axis so top_y lands on the handle end and pivot_y on the pivot; rows below pivot_y are the end cap and its shadow"
+  },
+  "rod_pivots": [
+   [
+    1464.5,
+    818.0
+   ],
+   [
+    1551.0,
+    818.0
+   ]
+  ],
+  "rod_top_offsets_from_handle_c": [
+   [
+    -52,
+    20
+   ],
+   [
+    42,
+    20
+   ]
+  ],
+  "note": "on board_plate_nolever.png draw both rods (stretched, rotated) from each pivot to handle_c + offset, then the handle on top. board_plate.png has the lever baked at rest."
+ },
+ "sprites": {
+  "plugs": "sprites/plug_<kind>.png and @2x; kinds power, period, place_blue, place_green, place_pink, place_brass, tint_white. Sprite centre = socket centre at 1x.",
+  "plug_meta": {
+   "plug_power": {
+    "cord_anchor_px": [
+     -5.5,
+     3.3
+    ],
+    "tip_px": [
+     -18.7,
+     23.9
+    ]
+   },
+   "plug_period": {
+    "cord_anchor_px": [
+     -5.5,
+     3.3
+    ],
+    "tip_px": [
+     -18.7,
+     23.9
+    ]
+   },
+   "plug_place_blue": {
+    "cord_anchor_px": [
+     -5.5,
+     3.3
+    ],
+    "tip_px": [
+     -18.7,
+     23.9
+    ]
+   },
+   "plug_place_green": {
+    "cord_anchor_px": [
+     -5.5,
+     3.3
+    ],
+    "tip_px": [
+     -18.7,
+     23.9
+    ]
+   },
+   "plug_place_pink": {
+    "cord_anchor_px": [
+     -5.5,
+     3.3
+    ],
+    "tip_px": [
+     -18.7,
+     23.9
+    ]
+   },
+   "plug_place_brass": {
+    "cord_anchor_px": [
+     -5.5,
+     3.3
+    ],
+    "tip_px": [
+     -18.7,
+     23.9
+    ]
+   },
+   "plug_tint_white": {
+    "cord_anchor_px": [
+     -5.5,
+     3.3
+    ],
+    "tip_px": [
+     -18.7,
+     23.9
+    ]
+   }
+  },
+  "lamps": "sprites/lamp_lit_<colour>.png (+@2x), colours green amber red blue pink white; drawn at glass_r 12 (scale glass_r/12 for modules and MASTER), normal blend over the dark dome",
+  "glow": "sprites/lamp_glow.png (+@2x), white, additive, tint to the lamp colour; sized for glass_r 12 (radius 48)"
+ }
+}

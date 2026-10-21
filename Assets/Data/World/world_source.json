@@ -27155,6 +27155,60 @@
         "tier": "Flavour"
       },
       {
+        "key": "switchboard.hint",
+        "text": "A lamp blinks: plug a module to it, give it power, pull MASTER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.display.pull",
+        "text": "PULL",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.display.power",
+        "text": "POWER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.display.open",
+        "text": "OPEN",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.display.done",
+        "text": "DONE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.display.fuse",
+        "text": "FUSE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.display.closed",
+        "text": "CLOSED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.sent",
+        "text": "+{0} SENT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "switchboard.bonus",
+        "text": "+{0} {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "home.title",
         "text": "Day {0} — Home",
         "gloss": "None",

@@ -127,6 +127,18 @@ public static class ArtSlots
     /// <summary>The folder of the anime hall's swappable slots' art (HallSlotsSO; the hall slots spec): one folder per slot.</summary>
     public const string HallSlotsFolder = "Hall/Slots/";
 
+    /// <summary>The folder of the portal switchboard's art (the design folder switchboard_v4/board: the plate, its measured layout and the live parts' sprites); its paintings take the high-quality compression, like the hall's.</summary>
+    public const string SwitchboardFolder = "Switchboard/";
+
+    /// <summary>The switchboard's empty plate with its MASTER lever painted out (the game draws the lever, the cords, the plugs, the lamps and the words).</summary>
+    public const string SwitchboardPlate = SwitchboardFolder + "board_plate_nolever";
+
+    /// <summary>The plate's measured layout (a JSON text asset, SwitchboardLayout): every socket, lamp, text box and module, MASTER's pull and rods.</summary>
+    public const string SwitchboardLayout = SwitchboardFolder + "board_layout";
+
+    /// <summary>One of the switchboard's live-part sprites by its file name ("plug_power", "lamp_lit_amber", "master_handle").</summary>
+    public static string SwitchboardSprite(string name) => SwitchboardFolder + name;
+
     /// <summary>A hall slot variant's art by the slot's id and the variant's file ("13-flag-left-cloth", "egypt" gives Hall/Slots/13-flag-left-cloth/egypt): a painting on the hall's whole source canvas (HallSlotPick names the file).</summary>
     public static string HallSlot(string slotId, string file) => HallSlotsFolder + slotId + "/" + file;
 

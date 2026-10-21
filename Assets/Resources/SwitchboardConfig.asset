@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b8fa9b4db1d4135aa613b5eab366c45, type: 3}
+  m_Name: SwitchboardConfig
+  m_EditorClassIdentifier: Assembly-CSharp::SwitchboardConfigSO
+  calibrationSeconds: 20
+  fuseSeconds: 2
+  bonusPerExtraTraveller: 5
+  powerCords: 2
+  blinkHz: 1.2
+  blinkHzMax: 4
+  blinkRampSeconds: 90
+  moduleFromDay: 0100000003000000050000000000000000000000
+  hintUntilDay: 1
+  easeSeconds: 0.45
+  wallRect:
+    serializedVersion: 2
+    x: 0.867
+    y: 0.324
+    width: 0.133
+    height: 0.296
+  wallLamp: {x: 0.889, y: 0.574}
+  reminderBuzzSeconds: 25
+  tickLastSeconds: 3
+  cordSlack: 40
+  cordReach: 0.3
+  cordReachMax: 120
+  cordWidth: 8
+  cordSegments: 28
+  snapMagnet: 1.5
+  moduleScale: 0.85
+  heldScale: 1.12
+  masterCommitAt: 0.8
+  leverStiffness: 260
+  leverDamping: 0.55
+  leverMass: 1.6
+  clunkShake: 4
+  fuseShake: 7

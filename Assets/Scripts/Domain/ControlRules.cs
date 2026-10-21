@@ -33,10 +33,13 @@ public readonly struct ControlState
     /// <summary>A text field on the PC has the keyboard (the PC key is typed there).</summary>
     public readonly bool TextFieldFocused;
 
+    /// <summary>The view is turned to the switchboard on the right wall.</summary>
+    public readonly bool Switchboard;
+
     /// <summary>A state; every flag defaults to false.</summary>
     public ControlState(bool pcOpen = false, bool newsletter = false, bool travellerAtDesk = false, bool wheelOpen = false, bool valueHeld = false,
                         bool inspecting = false, bool cityView = false, bool deskView = false, bool dragging = false,
-                        bool textFieldFocused = false)
+                        bool textFieldFocused = false, bool switchboard = false)
     {
         PcOpen = pcOpen;
         Newsletter = newsletter;
@@ -48,6 +51,7 @@ public readonly struct ControlState
         DeskView = deskView;
         Dragging = dragging;
         TextFieldFocused = textFieldFocused;
+        Switchboard = switchboard;
     }
 }
 
@@ -63,14 +67,17 @@ public enum ControlKey
     /// <summary>Q: to the PC and back.</summary>
     Pc,
 
-    /// <summary>A or the left arrow: look at the city.</summary>
+    /// <summary>A or the left arrow: look at the city (or back from the switchboard).</summary>
     CityLeft,
 
-    /// <summary>D or the right arrow: back from the city.</summary>
+    /// <summary>D or the right arrow: back from the city (or, at the desk, to the switchboard on the right wall).</summary>
     CityRight,
 
     /// <summary>F1: the keys (the PC's shortcut card).</summary>
-    Help
+    Help,
+
+    /// <summary>S: to the switchboard and back.</summary>
+    Switchboard
 }
 
 /// <summary>What an office key does (ControlRules.Resolve). Not serialized.</summary>
@@ -98,7 +105,13 @@ public enum ControlAction
     LeaveCity,
 
     /// <summary>Show the keys: the PC with its shortcut card.</summary>
-    ShowKeys
+    ShowKeys,
+
+    /// <summary>Turn to the switchboard on the right wall.</summary>
+    OpenSwitchboard,
+
+    /// <summary>Turn back from the switchboard.</summary>
+    LeaveSwitchboard
 }
 
 /// <summary>What one right-click or Esc backs out of (ControlRules.BackOut). Not serialized.</summary>
@@ -126,7 +139,10 @@ public enum BackOutStep
     LeaveCity,
 
     /// <summary>The view tilts back up from the desk.</summary>
-    LeaveDeskView
+    LeaveDeskView,
+
+    /// <summary>The view turns back from the switchboard.</summary>
+    LeaveSwitchboard
 }
 
 /// <summary>
@@ -141,7 +157,10 @@ public enum BackOutStep
 /// the reading view. The keys (Resolve): SPACE toggles inspect mode and TAB
 /// the reading view over the stamp rack from every desk state (the PC keeps them for
 /// its own rows and regions), Q switches to the PC and back (not while a PC
-/// text field types it), A/D look at the city and back, F1 shows the keys.
+/// text field types it), A/D look at the city and back, and D (or S, both
+/// ways) turns to the switchboard on the right wall, A back (the left and
+/// right walls; the switchboard backs out after inspect mode, before the
+/// city), F1 shows the keys.
 /// DeskCard is the F1 card's desk section, printed from the same constants
 /// as the tabs' hints. Pure; tested headless; OfficeControls applies it.
 /// </summary>
@@ -176,7 +195,7 @@ public static class ControlRules
         new ShortcutCardRow(CityKey + ", " + CityBackKey, "keys.desk.city"),
     };
 
-    /// <summary>What <paramref name="key"/> does in <paramref name="s"/>: nothing under a newsletter; on the PC only Q (back to the desk, unless a text field types it); at the desk SPACE and TAB with a traveller there, Q to the PC, A/D the city, F1 the keys.</summary>
+    /// <summary>What <paramref name="key"/> does in <paramref name="s"/>: nothing under a newsletter; on the PC only Q (back to the desk, unless a text field types it); at the desk SPACE and TAB with a traveller there, Q to the PC, A/D the city, D or S the switchboard (A, or S again, back; never with a paper or stamp in the hand), F1 the keys.</summary>
     public static ControlAction Resolve(ControlKey key, ControlState s)
     {
         if (s.Newsletter)
@@ -188,14 +207,15 @@ public static class ControlRules
             case ControlKey.Inspect: return s.TravellerAtDesk ? ControlAction.ToggleInspect : ControlAction.None;
             case ControlKey.Stamps: return s.TravellerAtDesk ? ControlAction.ToggleStamps : ControlAction.None;
             case ControlKey.Pc: return ControlAction.OpenPc;
-            case ControlKey.CityLeft: return s.CityView ? ControlAction.None : ControlAction.LookAtCity;
-            case ControlKey.CityRight: return s.CityView ? ControlAction.LeaveCity : ControlAction.None;
+            case ControlKey.CityLeft: return s.Switchboard ? ControlAction.LeaveSwitchboard : s.CityView ? ControlAction.None : ControlAction.LookAtCity;
+            case ControlKey.CityRight: return s.CityView ? ControlAction.LeaveCity : s.Switchboard ? ControlAction.None : ToTheBoard(s);
+            case ControlKey.Switchboard: return s.Switchboard ? ControlAction.LeaveSwitchboard : ToTheBoard(s);
             case ControlKey.Help: return ControlAction.ShowKeys;
             default: return ControlAction.None;
         }
     }
 
-    /// <summary>The one thing a right-click or Esc backs out of in <paramref name="s"/>: the innermost mode first (a drag, the wheel, the PC, the held value, inspect mode, the city, the reading view); nothing under a newsletter.</summary>
+    /// <summary>The one thing a right-click or Esc backs out of in <paramref name="s"/>: the innermost mode first (a drag, the wheel, the PC, the held value, inspect mode, the switchboard, the city, the reading view); nothing under a newsletter.</summary>
     public static BackOutStep BackOut(ControlState s)
     {
         if (s.Newsletter)
@@ -210,10 +230,25 @@ public static class ControlRules
             return BackOutStep.DropValue;
         if (s.Inspecting)
             return BackOutStep.LeaveInspect;
+        if (s.Switchboard)
+            return BackOutStep.LeaveSwitchboard;
         if (s.CityView)
             return BackOutStep.LeaveCity;
         if (s.DeskView)
             return BackOutStep.LeaveDeskView;
         return BackOutStep.None;
     }
+
+    /// <summary>
+    /// True when the painted switchboard on the office view's right wall takes
+    /// a click (its click area, its hover and its call glow): only in the
+    /// plain office view, where the painting shows it there (no newsletter,
+    /// PC, wheel, inspect mode, city, reading view or switchboard, nothing in
+    /// the hand).
+    /// </summary>
+    public static bool BoardOnTheWall(ControlState s) =>
+        !s.Newsletter && !s.PcOpen && !s.WheelOpen && !s.Inspecting && !s.CityView && !s.DeskView && !s.Dragging && !s.Switchboard;
+
+    /// <summary>The way to the switchboard from the desk: open, unless a paper or a stamp is in the hand.</summary>
+    private static ControlAction ToTheBoard(ControlState s) => s.Dragging ? ControlAction.None : ControlAction.OpenSwitchboard;
 }

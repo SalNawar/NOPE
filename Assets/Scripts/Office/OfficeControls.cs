@@ -17,10 +17,12 @@ using UnityEngine.UI;
 /// a menu, the card, the search, a field, a held value on the PC). SPACE
 /// toggles inspect mode, TAB the reading view over the stamp rack, Q the PC (its grey tab on the
 /// overlay's left edge does the same: TogglePc), A and D (or the arrows) look
-/// at the city and back, F1 shows the keys (the PC's shortcut card, whose
+/// at the city and back, D (or S) turns to the switchboard on the right wall
+/// and A (or S) back (SwitchboardView binds itself here at load: BindSwitchboard),
+/// F1 shows the keys (the PC's shortcut card, whose
 /// desk section is ControlRules.DeskCard); each closes what is in its way
-/// first (the wheel, the city), so a key does the same from every desk
-/// state. Left-clicks act where they land (the documents, the stamps, the
+/// first (the wheel, the city, the switchboard), so a key does the same from
+/// every desk state. Left-clicks act where they land (the documents, the stamps, the
 /// tabs, the buttons). It runs after the desktop's poller and before the
 /// EventSystem; Build Office UI builds it and the PC's tab; BoothCoordinator
 /// says when the tab is live.
@@ -63,6 +65,10 @@ public sealed class OfficeControls : MonoBehaviour
 
     private bool _pcLive;
     private bool _pcShownOpen;
+    private SwitchboardView _switchboard;
+
+    /// <summary>The switchboard bound to these controls (null until it installs itself).</summary>
+    public SwitchboardView Switchboard => _switchboard;
 
     /// <summary>What the last right-click or Esc backed out of (the probes read it).</summary>
     public BackOutStep LastBackOut { get; private set; }
@@ -84,8 +90,9 @@ public sealed class OfficeControls : MonoBehaviour
         inspecting: inspect != null && inspect.IsOn,
         cityView: cityView != null && cityView.IsOn,
         deskView: deskView != null && deskView.IsOn,
-        dragging: (desk != null && desk.IsDragging) || (stamps != null && stamps.IsCarrying),
-        textFieldFocused: keyboard != null && keyboard.TextFieldFocused);
+        dragging: (desk != null && desk.IsDragging) || (stamps != null && stamps.IsCarrying) || (_switchboard != null && _switchboard.IsDragging),
+        textFieldFocused: keyboard != null && keyboard.TextFieldFocused,
+        switchboard: _switchboard != null && _switchboard.IsOpen);
 
     /// <summary>Polls the back-out (Esc, the right mouse button) and the office's keys, once per press.</summary>
     private void Update()
@@ -111,7 +118,12 @@ public sealed class OfficeControls : MonoBehaviour
             Press(ControlKey.CityRight);
         if (kb.f1Key.wasPressedThisFrame)
             Press(ControlKey.Help);
+        if (kb.sKey.wasPressedThisFrame)
+            Press(ControlKey.Switchboard);
     }
+
+    /// <summary>Binds the switchboard (SwitchboardView installs itself into the office at load): its keys and back-out come through here.</summary>
+    public void BindSwitchboard(SwitchboardView switchboard) => _switchboard = switchboard;
 
     /// <summary>One office key: what ControlRules says it does here, done.</summary>
     public void Press(ControlKey key) => Do(ControlRules.Resolve(key, State()));
@@ -123,6 +135,8 @@ public sealed class OfficeControls : MonoBehaviour
         switch (LastBackOut)
         {
             case BackOutStep.CancelDrag:
+                if (_switchboard != null && _switchboard.CancelDrag())
+                    break;
                 if (desk == null || !desk.CancelDrag())
                     stamps.CancelCarry();
                 break;
@@ -143,6 +157,9 @@ public sealed class OfficeControls : MonoBehaviour
                 break;
             case BackOutStep.LeaveDeskView:
                 deskView.Return();
+                break;
+            case BackOutStep.LeaveSwitchboard:
+                _switchboard.Close();
                 break;
         }
         return LastBackOut;
@@ -189,6 +206,8 @@ public sealed class OfficeControls : MonoBehaviour
             case ControlAction.OpenPc:
                 if (wheel != null)
                     wheel.Close();
+                if (_switchboard != null)
+                    _switchboard.Close();
                 if (view != null)
                     view.FocusMonitor();
                 break;
@@ -209,21 +228,39 @@ public sealed class OfficeControls : MonoBehaviour
                     break;
                 if (wheel != null)
                     wheel.Close();
+                if (_switchboard != null)
+                    _switchboard.Close();
                 if (view != null)
                     view.FocusMonitor();
                 if (keyboard != null && !keyboard.CardOpen)
                     keyboard.ToggleCard();
                 break;
+            case ControlAction.OpenSwitchboard:
+                if (_switchboard == null)
+                    break;
+                ClearTheDesk();
+                if (inspect != null && inspect.IsOn)
+                    inspect.SetOn(false);
+                if (deskView != null)
+                    deskView.Return();
+                _switchboard.Open();
+                break;
+            case ControlAction.LeaveSwitchboard:
+                if (_switchboard != null)
+                    _switchboard.Close();
+                break;
         }
     }
 
-    /// <summary>The desk's tools need the desk: the wheel closes and the view turns back from the city.</summary>
+    /// <summary>The desk's tools need the desk: the wheel closes and the view turns back from the city or the switchboard.</summary>
     private void ClearTheDesk()
     {
         if (wheel != null)
             wheel.Close();
         if (cityView != null)
             cityView.Return();
+        if (_switchboard != null)
+            _switchboard.Close();
     }
 
     /// <summary>The PC's tab reads "PC · Q" at the desk and "DESK · Q" on the PC.</summary>

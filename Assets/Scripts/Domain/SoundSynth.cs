@@ -144,7 +144,7 @@ public static class SoundSynth
     }
 
     /// <summary>Scales the samples so the loudest is <see cref="Level"/>.</summary>
-    private static void Normalise(float[] s)
+    internal static void Normalise(float[] s)
     {
         float peak = 0f;
         foreach (float v in s)
