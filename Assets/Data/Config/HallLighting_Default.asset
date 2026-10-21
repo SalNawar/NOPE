@@ -428,3 +428,27 @@ MonoBehaviour:
   dustReducedMotionShare: 0
   shaftShadows: 1
   backdropResolution: 1
+  paintedDeskBrightness:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 9
+      value: 0.72
+      inSlope: 0.018571429
+      outSlope: 0.018571429
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 16
+      value: 0.85
+      inSlope: 0.018571429
+      outSlope: 0.018571429
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

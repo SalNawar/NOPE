@@ -10,6 +10,7 @@ Shader "NOPE/Hall Foreground Floor"
    #pragma vertex vert
    #pragma fragment frag
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+   #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
    TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
    TEXTURE2D(_PaintedReference); SAMPLER(sampler_PaintedReference);
    CBUFFER_START(UnityPerMaterial)
@@ -24,6 +25,7 @@ Shader "NOPE/Hall Foreground Floor"
    TEXTURE2D(_HallFloorBackdrop); SAMPLER(sampler_HallFloorBackdrop);
    float4 _HallFloorBackdropSize;
    float _HallFloorHasBackdrop;
+   float _HallFloorBackdropBrightness;
    struct Attributes { float4 positionOS:POSITION; float2 uv:TEXCOORD0; };
    struct Varyings { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; float4 screen:TEXCOORD1; };
    Varyings vert(Attributes input) {
@@ -56,6 +58,17 @@ Shader "NOPE/Hall Foreground Floor"
      half3 average=0;
      [unroll] for(int j=0;j<9;j++) average+=SAMPLE_TEXTURE2D(_HallFloorBackdrop,sampler_HallFloorBackdrop,float2(.1+j*.1,saturate(uv.y))).rgb;
      colour=lerp(exact,average/9,smoothstep(0,12,canvas.y-_HallFloorCanvas.y));
+     // The lit hall shows at HallBackdrop.Brightness (its sRGB values scaled; set
+     // with the texture by HallForegroundFloor): the seam continues it at the same.
+     UNITY_BRANCH
+     if(_HallFloorBackdropBrightness!=1)
+     {
+     #ifdef UNITY_COLORSPACE_GAMMA
+      colour*=_HallFloorBackdropBrightness;
+     #else
+      colour=(half3)SRGBToLinear(LinearToSRGB((float3)colour)*_HallFloorBackdropBrightness);
+     #endif
+     }
     }
     // Perspective spacing continues the final painted row (approximately
     // 36 canvas pixels deep). Keep its grout dark and fine, never white.

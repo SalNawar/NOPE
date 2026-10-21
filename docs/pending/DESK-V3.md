@@ -11,6 +11,62 @@ Branch `feat/desk-v3`, cut from `fix/a-desk-plan` (DESK-PLAN #5, the desk home m
 - **D6:** "when they slide in, we subtly zoom in a bit not too hard just a small focus to frame the shot".
 - On the 2D work: "why are you still working on the mock?" (so this builds the real thing). Nothing pops (his standing rule for motion).
 
+## Round 9: the PC's wallpaper, the hall's brightness, no dev label in the captures
+
+Saleh on the round 8 stills: "So many visual problems". Two were left from round 8's list ("What still differs from the painting", items 2 and 3) and one more was in the captures (item 7). Everything was done outside Unity; the Unity step is R9 below.
+
+### 1. The PC's wallpaper (round 8, item 2; round 5, item 3)
+
+The monitor showed the neutral theme's XP-style green hill (`Assets/Art/Generated/xp_bliss.png`, an hourglass tower on a hill). It is now an 80s/90s cel anime desktop picture in the game's look: a dusk city of art deco towers and megablocks along the bottom third, under a deep teal sky going to dusty amber at the horizon, with the bureau's emblem (an hourglass in a gear ring, two wings, a laurel arc) faint and translucent above the skyline. It is dark and low in contrast (mean 70 of 255, the 4:3 middle 73), so the desktop's icons and the CRT clock read over it and the CRT reads close to the painting's dark phosphor glass. No text, no letters.
+
+- **Made with:** Higgsfield `nano_banana_2_1`, 2k, 16:9, text only, one single-line prompt, **one job, 2 credits** (job `6840448c-8bb1-4f5c-bac1-20899a76ea44`; logged in `E:\unity\NOPE-tools\design\desk\pipeline\paint\SPEND.tsv`; the prompt and the job in `paint\prompt_pc_wallpaper_v1.txt` and `paint\pc_wallpaper_v1.json`; the 2752 x 1536 original in `paint\pc_wallpaper_v1.png`).
+- **Installed:** resized to 1920 x 1080 (Lanczos, RGB) and written over `xp_bliss.png` **in place, its `.meta` (guid) kept**, as the generator's own rule says ("Replace the PNG in place (keep its .meta) with final text-free art"). `Theme_neutral.asset`, `world_source.json` (`neutral.wallpaper`) and Generate World keep pointing at it, so nothing else changes. **Decision (mine):** the file keeps its legacy name (Production-v2's README already keeps it "for mapping"); renaming it means editing CONTENT's `world_source.json` for no visible gain. The 4:3 desktop shows the middle 1440 x 1080: the emblem and the skyline sit inside it.
+- **Still XP-style (not changed, art request):** the eight culture wallpapers (`Assets/Art/Culture/<id>/wallpaper.png`) and the sixteen world-outcome wallpapers (`Assets/Art/Wallpapers/*.png`, commit aa296de) show once a culture leads or the world changes. Each needs the same treatment (2 credits each at this model) under UI-PC and CONTENT.
+
+### 2. The hall's brightness (round 8, item 3; round 5, item 8)
+
+Round 5 measured the lit hall about 1.4x the painting's at 09:00 and 1.15 to 1.3x at 16:00 while the desk matched it within 3%, and handed LIGHT and HALL-FX a target of about 0.72x at 09:00 and 0.85x at 16:00. Measured again on the round 8 stills (Rec. 709 luma of the sRGB values, against `mock_office.png`): hall centre 1.36x at 09:00 and 1.12x at 16:00, hall floor 1.76x and 1.47x, city window 1.18x and 0.95x; the mat 1.02x, the left stack 0.99x.
+
+**What changed (only under the painted desk; the art's desk keeps the hall as lit):**
+
+| Part | Change | Owner, file |
+|---|---|---|
+| The knob (data) | `paintedDeskBrightness`: an AnimationCurve over the clock's hour, 0.72 at 09:00 and 0.85 at 16:00, a line between, the end values outside (`HallLighting_Default.asset` carries it; the C# default is the same line) | **LIGHT**, `HallLightingSO.cs`, `Assets/Data/Config/HallLighting_Default.asset` |
+| Applying it | `HallLightingRig.PaintedDesk` (a property); each frame the rig sets `HallBackdrop.Brightness` to the knob at `Hour` (the cheat's forced hour and the preview hour included) while it is on, else 1 | **LIGHT**, `HallLightingRig.cs` |
+| Drawing it | `HallBackdrop.Brightness` sets `_Brightness` on its runtime material; the full-screen draw `TimeDesk/HallBackdrop` scales the lit hall's **sRGB values** by it (linear colour space: `SRGBToLinear(LinearToSRGB(c) * b)`); at 1 the picture passes untouched (a branch, no round trip) | **HALL-FX**, `HallBackdrop.cs`, `HallBackdrop.shader` |
+| The seam | The foreground floor that continues the painted platform samples the lit hall's texture: `HallForegroundFloor` sets `_HallFloorBackdropBrightness` with that texture, and `NOPE/Hall Foreground Floor` applies the same scale where it samples it, so the seam keeps matching (the pale strip at the left of the PC, behind the deal tray) | **HALL-FX**, `HallForegroundFloor.cs`, `HallForegroundFloor.shader` |
+| When | `OfficeSceneBinder.BindHall` sets `lights.PaintedDesk = _painted` (the painted desk installed: `DeskLayoutSettings.paintedDesk` and a painted desk in the scene) | DESK-HOMES, `OfficeSceneBinder.cs` |
+
+**Why the sRGB values, not the light:** the project is in linear colour space and round 5 measured what the screen shows (the PNGs' sRGB values). A linear 0.72 would only bring the hall to about 0.86x on screen (still 1.2x the painting). Scaling the sRGB values makes the knob the measured ratio: a region's mean luma moves by exactly the knob. **Why the full-screen draw:** it is one place for everything the hall draws (the painted layers, the crowds, the portal effects, the dust); a per-layer change in `NOPE/Hall Four State` would leave the crowds and the effects bright.
+
+**Predicted on the round 8 stills** (the knob applied to the hall's pixels offline; `E:\unity\NOPE-tools\reports\desk_v3_unity\r9\*_predicted_hall72.png`, `*_hall85.png`, `*_before_after.jpg`): hall centre 0.98x at 09:00 and 0.95x at 16:00; hall floor 1.30x and 1.26x (the hall art differs: cream marble against the painting's dark grey floor, OPEN.md 19); **city window 0.85x and 0.81x**: it is in the same lit picture, so it darkens with the hall and ends below the painting. Keeping the window as it was needs a window mask in the full-screen draw or a sky share in the knob: LIGHT's call, not done here. The traveller is drawn by the office camera, not in the lit hall, so the figure keeps its brightness (the painting's traveller is the brightest thing in the hall too).
+
+### 3. No "CHEATS ON" in a review capture (round 8, item 7)
+
+The day-12 still carried the cheat badge: the scenario's `cheat GiveAllItems` marks the run cheated and `DebugPanelController` draws "CHEATS ON" in IMGUI, which `ScreenCapture` takes into every still and sequence. Now `DevToolsState.HideCheatBadge` (a session flag, not a cheat: `ResetAll` keeps it, so a scenario's `newRun` does not bring the badge back) hides the badge; `QaRunner.Run` sets it before the first step and `CleanUp` puts it back. The run is still marked cheated (saves, the demo's mark) and the open overlay still draws. The game never reads the rig (QA-RIG's rule): the rig writes the game's flag.
+
+### Other owners' files (round 9; the smallest owner-correct change, each)
+
+- **LIGHT:** `HallLightingSO.cs` (one knob, data), `HallLighting_Default.asset` (its value), `HallLightingRig.cs` (`PaintedDesk` and one line that applies the knob).
+- **HALL-FX:** `HallBackdrop.cs` (`Brightness`), `HallBackdrop.shader` (`_Brightness`, in UnityPerMaterial), `HallForegroundFloor.cs` and `HallForegroundFloor.shader` (the seam at the same brightness).
+- **RUN-SAFE** (the cheat overlay): `DevToolsState.cs` (`HideCheatBadge`), `DebugPanelController.cs` (the badge obeys it).
+- **QA-RIG:** `QaRunner.cs` (sets it while a run plays, puts it back).
+- **UI-PC and CONTENT:** `Assets/Art/Generated/xp_bliss.png` (the neutral wallpaper's pixels; its `.meta` and every reference unchanged).
+- Also: `CulturePlaceholders.cs`' comment and `docs/ART_ASSET_LIST.md`'s neutral wallpaper row now say what the file is.
+
+### Checks (round 9)
+
+Compile 0 errors (167 warnings, as before); offline runner **3843** passed, 0 failed (5 new: `HallPaintedDeskBrightnessTests`); `tools/qa/editor_runner` with QA_PROJECT set: 72 passed, 0 failed, 27 NeedsEditor skipped (2 new: `QaCheatBadgeTests`); `python -m unittest discover -s tools/qa`: 35 OK. Each new test fails when its part is reverted (the knob's value in the asset, the default, the rig's line, the binder's line, the shader's scale, the seam, the badge's rule, the rig's set and put back). Unity was not run in this round.
+
+### For the Unity step (R9)
+
+1. Both shaders compile (`TimeDesk/HallBackdrop`, `NOPE/Hall Foreground Floor`; `ShaderUtil.ShaderHasError` false).
+2. Re-run `desk_v3_capture` (day 1 at 09:00, day 12 at 16:00, 1920 x 1080, office pose) and measure as above against `mock_office.png`. Pass: hall centre within 0.9 to 1.1x at both hours; the desk regions unchanged (mat 1.02x, left stack 0.99x); no "CHEATS ON" in either still or in the tour's frames; the seam at the left of the PC and behind the deal tray no brighter than the hall over it.
+3. The toggle off (`DeskLayoutSettings.paintedDesk` false): the hall exactly as before (brightness 1).
+4. The CRT: the wallpaper reads as a dark teal dusk with the emblem; the icons, the banner and the CRT clock read over it; open the PC (Q): the full desktop at 1440 x 1080 shows the skyline and the emblem, no stretch.
+5. The cheat menu's time of day (morning, dusk, night): the hall follows the knob's end values; look at night (the knob holds 0.85; if the night hall reads too dark, LIGHT adds a key).
+6. My own look before Saleh.
+
 ## Round 8: Unity run, the clean desk checked against the painting, and what the captures found
 
 Unity was run on NOPE-art (driven by the job runner and the QA harness; ended on an empty scene and closed). Rounds 6 and 7, which had never been run in Unity, were built and checked: `DeskPaintedImporter.Build` (the prefab had been built before round 6: it gained the hidden inserts' home roots and lost three cast-shadow flags; fileIDs regenerated), Build Office UI (OfficeGameplay rebuilt: same 12,774 objects, fileID churn from the prefab), the EditMode suite, the smoke and a capture. Captures (1920x1080, office camera): `E:\unity\NOPE-tools\reports\desk_v3_unity\desk_rest_day1_v2.png`, `desk_rest_day12_v2.png` (every item), `desk_v3_slide_tour_v2.mp4` (60 fps, 2,010 frames, the cursor parked 1 s on each of the 11 sliders, then 1 s on empty desk), its frames and `poses.tsv` in `slide_tour_v2\`, and `r8\` (comparison crops, `slide_out_sheet.jpg`, the scenario).
@@ -395,6 +451,9 @@ Round 2 (daff612) made a step allocate nothing; let busy sliders take part in th
 - `HoverHighlighter.cs`, `InteractionFeedbackSO.cs`, `HoverHull.shader` (FEEDBACK): round 6's outline (OPEN S2 11); round 7's stencil mask, no depth test, no pull (`outlinePull` removed).
 - `DeskPaintedImporter.cs` (DESK-ART): round 7 reads the glow from `DeskPaintedMap.Glow`.
 - `DeskLayout.cs` (DESK-HOMES' lease): round 7 moves the swept boxes into `DeskSweeps` (Visuals, pure) and `paintedCutParts`' default into `DeskPaintedMap.CutParts`.
+- `HallLightingSO.cs`, `HallLighting_Default.asset`, `HallLightingRig.cs` (LIGHT) and `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs`, `HallForegroundFloor.shader` (HALL-FX): round 9's painted-desk brightness, a data knob (`paintedDeskBrightness`) and the draw that applies it.
+- `DevToolsState.cs`, `DebugPanelController.cs` (RUN-SAFE) and `QaRunner.cs` (QA-RIG): round 9's `HideCheatBadge`.
+- `Assets/Art/Generated/xp_bliss.png` (UI-PC, CONTENT): round 9's neutral wallpaper, replaced in place.
 - `DeskHomeMap.cs` and DESK-PLAN's tests are untouched (as `fdde9f9`).
 - `CueSounds.cs` is called, not edited (its existing placeholders are the stand-ins).
 - `docs/FEATURES.md` is not edited (CARVE's and DESK-PLAN's rule): the line is below for INTEGRATION.
@@ -452,7 +511,7 @@ Per CARVE's and DESK-PLAN's rule, `docs/FEATURES.md` is not edited here. Add aft
 
 **Done in Unity (round 4):** the painted desk imported, installed and captured (round 4: its still, its 60 fps clip, the smoke run, the EditMode suite, the rebuilt OfficeGameplay). Recipe 1 (import and compile: `NOPE/Desk Painted` renders with its mask in the game) and part of recipe 3 (the five sliders the clip visits, at A1 in the office view: the first slide frame on the frame the cursor arrives, the anticipation, one overshoot, the hand-offs, one machine at a time, the way home at speed with the seat bounce) are covered by it.
 
-**Open before merge:** the focus patch after CAM; the carry floor and DOC-HANDLE's registry (item 9); round 7's Unity checks (R7) and the calls for Saleh (the RING SERVICE panel hidden, the stand-ins).
+**Open before merge:** the focus patch after CAM; the carry floor and DOC-HANDLE's registry (item 9); round 7's Unity checks (R7), round 9's (R9: the hall's brightness against the painting, the wallpaper on the CRT, no dev label) and the calls for Saleh (the RING SERVICE panel hidden, the stand-ins).
 
 **Deferred: Unity** (round 4 ran the install, the clip, the smoke and the suite; these remain). Run in NOPE-art's editor through the job runner, in order, once the patch is applied. Each pass line is a QA-rig result or a frame sequence reviewed by eye (memory: "review motion myself").
 1. **Import and compile.** `NOPE/Desk Painted` compiles with no error (`ShaderUtil.ShaderHasError` false), with and without `_MASKMAP`. The EditMode suite is green except the known `UnitySkills...SceneSummarize_CountsObjectsCorrectly`; `AStep_AllocatesNothing_EveryFrameOfTheOffice` passes under Unity's Mono too.

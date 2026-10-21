@@ -41,6 +41,7 @@ public sealed class HallBackdrop : MonoBehaviour
     [SerializeField] private ScriptableRendererData renderer2D;
 
     private static readonly int BackdropTex = Shader.PropertyToID("_BackdropTex");
+    private static readonly int BrightnessId = Shader.PropertyToID("_Brightness");
 
     private Camera _camera;
     private RenderTexture _texture;
@@ -50,12 +51,35 @@ public sealed class HallBackdrop : MonoBehaviour
     private Mesh _mesh;
     private bool _want;
     private float _scale = 1f;
+    private float _brightness = 1f;
 
     /// <summary>True while the 2D camera draws the hall (false: the office camera draws the layer unlit).</summary>
     public bool Active => _camera != null;
 
-    /// <summary>The current lit painting, for the art's foreground seam colour match.</summary>
+    /// <summary>The current lit painting, for the art's foreground seam colour match (drawn at <see cref="Brightness"/>, which the seam applies too).</summary>
     public RenderTexture RenderedTexture => _texture;
+
+    /// <summary>
+    /// How bright the lit hall shows on screen: the scale of its sRGB values
+    /// (1: as lit; never below 0). HallLightingRig sets it each frame from
+    /// its knobs (HallLightingSO.paintedDeskBrightness while the painted desk
+    /// is installed, else 1); the full-screen draw (TimeDesk/HallBackdrop
+    /// _Brightness) and the foreground floor's seam (HallForegroundFloor)
+    /// apply it. It applies only while the 2D pass draws the hall (<see cref="Active"/>).
+    /// </summary>
+    public float Brightness
+    {
+        get => _brightness;
+        set
+        {
+            float brightness = Mathf.Max(0f, value);
+            if (brightness == _brightness)
+                return;
+            _brightness = brightness;
+            if (_material != null)
+                _material.SetFloat(BrightnessId, _brightness);
+        }
+    }
 
     /// <summary>The layer the painted hall lives on (OfficeLayers.HallBackdrop; -1 when the project lacks it).</summary>
     public int Layer => OfficeLayers.HallBackdropLayer;
@@ -121,6 +145,7 @@ public sealed class HallBackdrop : MonoBehaviour
         data.renderShadows = true;
 
         _material = new Material(composite) { name = "HallBackdrop (runtime)", hideFlags = HideFlags.DontSave };
+        _material.SetFloat(BrightnessId, _brightness);
         _mesh = new Mesh { name = "HallBackdrop triangle", hideFlags = HideFlags.DontSave };
         _mesh.SetVertices(new[] { new Vector3(-1f, -1f, 0f), new Vector3(3f, -1f, 0f), new Vector3(-1f, 3f, 0f) });
         _mesh.SetTriangles(new[] { 0, 1, 2 }, 0);

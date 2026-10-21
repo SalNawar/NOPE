@@ -69,6 +69,7 @@ public sealed class QaRunner : MonoBehaviour
     private StreamWriter _drags;
     private int? _oldSeed;
     private bool _hourForced;
+    private bool _badgeWasHidden;
     private string _started;
     private bool _measuringGc;
     private int? _dragRestoreRate;
@@ -194,6 +195,9 @@ public sealed class QaRunner : MonoBehaviour
         _drags.WriteLine("name\tpath\tpressX\tpressY\tendX\tendY\tpressFrame\treleaseFrame\tscreenW\tscreenH");
         Application.logMessageReceived += OnLog;
         Application.runInBackground = true;
+        // A scenario's cheat steps (GiveAllItems and the like) mark the run cheated: the dev badge stays out of the review's stills and sequences.
+        _badgeWasHidden = DevToolsState.HideCheatBadge;
+        DevToolsState.HideCheatBadge = true;
         Input = new QaInput();
         Recorder = gameObject.AddComponent<SeqRecorder>();
         Cameras = gameObject.AddComponent<CameraMoveLog>();
@@ -680,7 +684,7 @@ public sealed class QaRunner : MonoBehaviour
         }
     }
 
-    /// <summary>Puts back what the run changed (once): stops the recorder (its frame rate), a drag's frame rate, the log hook and files, the seed, the hour, and the virtual input (the real devices come back).</summary>
+    /// <summary>Puts back what the run changed (once): stops the recorder (its frame rate), a drag's frame rate, the log hook and files, the seed, the hour, the cheat badge (DevToolsState.HideCheatBadge, hidden while the run plays), and the virtual input (the real devices come back).</summary>
     private void CleanUp()
     {
         if (_cleanedUp)
@@ -701,6 +705,7 @@ public sealed class QaRunner : MonoBehaviour
             RunManager.Instance.Config.fixedRunSeed = _oldSeed.Value;
         if (_hourForced)
             DevToolsState.ForcedHour = null;
+        DevToolsState.HideCheatBadge = _badgeWasHidden;
         Input?.Dispose();
     }
 

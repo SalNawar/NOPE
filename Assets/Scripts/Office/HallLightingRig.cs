@@ -21,7 +21,9 @@ using UnityEngine;
 /// (the global _HallCityLights the living city's shader reads); no
 /// flicker with reduced motion. The screens and the PC's glow stay on,
 /// fainter by day, and each portal ring's light follows its state
-/// (<see cref="SetPortal"/>, from AnimeHallPortalLink). Its Plane child (the
+/// (<see cref="SetPortal"/>, from AnimeHallPortalLink). Under the painted
+/// desk (<see cref="PaintedDesk"/>) it sets the lit hall's brightness on
+/// screen from the knobs (HallBackdrop.Brightness). Its Plane child (the
 /// Light2Ds, the pier shadows, the dust) follows the art's presentation, so
 /// the lights stay on the painted fixtures if the art pans. The dust's knobs
 /// are applied each frame too; with reduced motion the dust is off (or thinned
@@ -68,6 +70,15 @@ public sealed class HallLightingRig : MonoBehaviour
 
     /// <summary>The knobs (null when unassigned).</summary>
     public HallLightingSO Settings => settings;
+
+    /// <summary>
+    /// True while the painted desk is installed (desk v3; the office binder,
+    /// OfficeSceneBinder.BindHall): the lit hall shows at the knobs'
+    /// paintedDeskBrightness for <see cref="Hour"/> (HallBackdrop.Brightness),
+    /// so it reads as one image with the painted desk; false (the art's
+    /// desk, the hall on its own), as lit.
+    /// </summary>
+    public bool PaintedDesk { get; set; }
 
     /// <summary>The hour the hall shows now: the cheat menu's forced hour (DevToolsState.ForcedHour), else the preview hour, else the shift clock's, else the edit-mode hour.</summary>
     public float Hour => settings == null ? 12f
@@ -145,7 +156,11 @@ public sealed class HallLightingRig : MonoBehaviour
         FollowArt();
         bool on = settings.lightingOn;
         if (backdrop != null)
+        {
             backdrop.SetOn(on, settings.backdropResolution);
+            AnimationCurve painted = settings.paintedDeskBrightness;
+            backdrop.Brightness = PaintedDesk && painted != null && painted.length > 0 ? painted.Evaluate(Hour) : 1f;
+        }
         if (on != _lightsOn || _firstFrame)
             Switch(on);
         if (!on)

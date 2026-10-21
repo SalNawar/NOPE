@@ -14,6 +14,7 @@ public sealed class HallForegroundFloor : MonoBehaviour
     [SerializeField] Vector3 referenceCameraPosition=new Vector3(0,2.16f,-2.62f);
     static readonly int Edge=Shader.PropertyToID("_HallFloorEdge");
     static readonly int Shade=Shader.PropertyToID("_HallFloorShade");
+    static readonly int BackdropBrightness=Shader.PropertyToID("_HallFloorBackdropBrightness");
     public void Configure(AnimeHallPresentation art, HallLightingRig rig, SpriteRenderer layer)
     { presentation=art; lighting=rig; registeredLayer=layer; backdrop=rig!=null?rig.GetComponent<HallBackdrop>():null; Apply(); }
     void OnEnable(){RenderPipelineManager.beginCameraRendering+=BeforeCamera;Apply();}
@@ -28,6 +29,8 @@ public sealed class HallForegroundFloor : MonoBehaviour
         {
             Shader.SetGlobalTexture("_HallFloorBackdrop",texture);
             Shader.SetGlobalVector("_HallFloorBackdropSize",new Vector4(1f/texture.width,1f/texture.height,texture.width,texture.height));
+            // The lit hall shows at the backdrop's brightness (the painted desk's, HallLightingSO.paintedDeskBrightness): the seam continues it at the same.
+            Shader.SetGlobalFloat(BackdropBrightness,backdrop.Brightness);
         }
     }
     void LateUpdate()=>Apply();

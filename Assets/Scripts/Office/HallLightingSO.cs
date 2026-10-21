@@ -189,6 +189,20 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>The lit hall's render size as a share of the screen's (1: pixel for pixel).</summary>
     [Range(0.5f, 1f)] public float backdropResolution = 1f;
 
+    [Header("The painted desk (desk v3: the hall and the painted desk read as one image)")]
+    /// <summary>
+    /// While the painted desk is installed (HallLightingRig.PaintedDesk, set
+    /// by the office binder), how bright the lit hall shows on screen along
+    /// the clock (x: the hour, 0 to 24; y: the scale of its sRGB values, 1
+    /// shows it as lit; HallBackdrop.Brightness). Measured against the
+    /// approved painting (mock_office.png) with the desk matching it within
+    /// 3%: the hall read about 1.4x the painting's at 09:00 and 1.15 to 1.3x
+    /// at 16:00 (docs/pending/DESK-V3.md, rounds 5 and 9), so 0.72 and 0.85;
+    /// the hours between follow the line, the hours outside keep the nearer
+    /// end's value. The art's desk (the painted desk off) keeps the hall as lit.
+    /// </summary>
+    public AnimationCurve paintedDeskBrightness = AnimationCurve.Linear(9f, 0.72f, 16f, 0.85f);
+
     /// <summary>The day-night cycle's knobs for HallDayCycle (fixture threshold, band and stagger included).</summary>
     public HallDayCycle.Settings Cycle => new HallDayCycle.Settings(sunriseHour, sunsetHour, twilightHours, fixturesOnBelow, fixtureFadeBand, fixtureStaggerMinutes);
 
