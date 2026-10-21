@@ -33,8 +33,22 @@ using UnityEngine.SceneManagement;
 /// SceneTransit.Load, as RunManager's loads do (RUN-SAFE)
 /// (BUG-31a, the bible's J5): the booth's shutter is seen down, the scene
 /// (and the office's gameplay layer) loads behind it, and the shutter is up
-/// and off again: <c>transit.&lt;name&gt;</c>. Record it (recStart/recStop)
-/// for seqtools' frozen and cuts analyses.</item>
+/// and off again: <c>transit.&lt;name&gt;</c>. Record it with
+/// <c>flowRecLoad</c> for seqtools' frozen and cuts analyses.</item>
+/// <item><c>flowRecLoad</c> (name): records the next scene change alone
+/// (FLOW round 7), for seqtools' frozen and cuts analyses: the sequence
+/// seq/&lt;name&gt; starts on the frame the load is accepted (SceneTransit's
+/// start mark: the click's frame, or the call's) and stops on the frame its
+/// shutter is off (the up mark). A Title or a settled scene that holds still
+/// before the click or after the shutter is not in it, so seqtools frozen
+/// reads the load alone. Put it before the step that starts the scene change,
+/// and wait for the shutter after that step (<c>flowSettled</c>;
+/// <c>flowTransit</c> waits by itself). It asserts nothing: a load that
+/// never went through the shutter leaves no sequence, so the analyses'
+/// results are missing and a check that requires them is "not measured".
+/// The frame before the click is not in the sequence either: a cut on the
+/// click's own frame needs a recording that starts earlier (recStart, as
+/// flow_transitions' do).</item>
 /// <item><c>flowQueue</c> (name; text: three scenes, comma-separated, each a
 /// scene's name or <c>office</c>; f timeout, default 120 s): TransitRunner's
 /// queue in play (FLOW round 5). It loads the first scene through
@@ -119,6 +133,8 @@ public static class FlowOps
             QaRunner.RegisterOp("flowTransit", SceneChange);
         if (!QaRunner.IsKnownOp("flowQueue"))
             QaRunner.RegisterOp("flowQueue", Queue);
+        if (!QaRunner.IsKnownOp("flowRecLoad"))
+            QaRunner.RegisterOp("flowRecLoad", RecordLoad);
         if (!QaRunner.IsKnownOp("flowLoadClock"))
             QaRunner.RegisterOp("flowLoadClock", LoadClock);
         if (!QaRunner.IsKnownOp("flowLoadTime"))
@@ -131,9 +147,10 @@ public static class FlowOps
             QaRunner.RegisterOp("flowWatchDayEnds", WatchDayEnds);
         if (!QaRunner.IsKnownOp("flowDayEnds"))
             QaRunner.RegisterOp("flowDayEnds", DayEndsOp);
-        // A new play session starts with no records and no count (the editor without a domain reload keeps statics).
+        // A new play session starts with no records, no count and no load recording armed (the editor without a domain reload keeps statics).
         States.Clear();
         StopDayEnds();
+        DisarmLoadRecording();
     }
 
     private static IEnumerator Settled(QaRunner runner, QaStep step)
@@ -346,6 +363,60 @@ public static class FlowOps
         watch.End();
         if (_loadWatch == watch)
             _loadWatch = null;
+    }
+
+    /// <summary>The runner whose recorder flowRecLoad drives (null when no load recording is armed).</summary>
+    private static QaRunner _loadRunner;
+
+    /// <summary>The armed load recording's sequence folder.</summary>
+    private static string _loadSeq;
+
+    /// <summary>True from the armed load's start mark until its up mark: its sequence records.</summary>
+    private static bool _loadRecording;
+
+    private static IEnumerator RecordLoad(QaRunner runner, QaStep step)
+    {
+        // An earlier load recording still waiting for its up mark ends here.
+        if (_loadRecording && _loadRunner != null)
+            _loadRunner.Recorder.Stop();
+        DisarmLoadRecording();
+        _loadRunner = runner;
+        _loadSeq = Path.Combine(runner.OutDir, "seq", QaRunner.Safe(string.IsNullOrEmpty(step.name) ? "load" : step.name));
+        QaSignals.Raised += OnLoadSignal;
+        yield break;
+    }
+
+    /// <summary>The armed load recording follows the scene change's marks: its sequence starts on the start mark and stops on the up mark.</summary>
+    private static void OnLoadSignal(string channel, string name)
+    {
+        if (channel != TransitRunner.TransitSignal || string.IsNullOrEmpty(name))
+            return;
+        if (_loadRunner == null)
+        {
+            DisarmLoadRecording();
+            return;
+        }
+        if (!_loadRecording && name.StartsWith("start:"))
+        {
+            _loadRunner.Recorder.Begin(_loadSeq);
+            // The recorder heard this mark before its sequence began: it is written as the sequence's first event.
+            _loadRunner.Recorder.Mark(channel, name);
+            _loadRecording = true;
+        }
+        else if (_loadRecording && name.StartsWith("up:"))
+        {
+            _loadRunner.Recorder.Stop();
+            DisarmLoadRecording();
+        }
+    }
+
+    /// <summary>Forgets the armed load recording (a sequence it started and did not stop ends with the run).</summary>
+    private static void DisarmLoadRecording()
+    {
+        QaSignals.Raised -= OnLoadSignal;
+        _loadRunner = null;
+        _loadSeq = null;
+        _loadRecording = false;
     }
 
     /// <summary>The shift clock's minute now (NaN without a shift).</summary>

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
@@ -13,9 +15,13 @@ using UnityEngine.TestTools;
 /// FlowRulesTests; the transitions' recordings are FLOW's QA recipes);
 /// outside play mode they cut at once (the end state, then done) and load a
 /// scene as SceneManager.LoadScene does, which these tests pin, as they pin
-/// the scene change's shutter under the save notice. Tests in the
-/// "NeedsEditor" category create Unity objects or load scenes and run only
-/// inside Unity.
+/// the scene change's shutter under the save notice. They also pin FLOW's
+/// checks that read results (round 7): each registered check passes on its
+/// exact results alone and is red with any one missing or (for flow.bp.load)
+/// measured in the editor, and FLOW's recipes produce every result id, each
+/// frozen one from a load recorded alone. Tests in the "NeedsEditor"
+/// category create Unity objects or load scenes and run only inside Unity;
+/// the recipes' test reads the project (QA_PROJECT outside Unity).
 /// </summary>
 public class FlowSeamTests
 {
@@ -37,6 +43,215 @@ public class FlowSeamTests
         int veil = PrivateConstant(typeof(TransitRunner), "VeilOrder");
         int notice = PrivateConstant(typeof(SaveNotice), "SortingOrder");
         Assert.Less(veil, notice, "the shutter sorts under the save notice's strip");
+    }
+
+    /// <summary>
+    /// FLOW's checks that read results, each with the exact results it requires
+    /// (docs/pending/FLOW.md §1, Gate checks). The tests below run the
+    /// registered checks themselves on given results (FlowChecks.Measured), so
+    /// a check that goes back to a pattern or loses an id fails here, and they
+    /// check that FLOW's recipes produce every id (round 7).
+    /// </summary>
+    private static readonly (string Check, bool BuiltPlayer, string[] Ids)[] ResultChecks =
+    {
+        ("flow.esc.office", false, new[] { "flow_pause.settings.office" }),
+        ("flow.esc.pc", false, new[] { "flow_pause.settings.pcEsc" }),
+        ("flow.esc.home", false, new[] { "flow_pause.settings.home" }),
+        ("flow.esc.title", false, new[] { "flow_pause.settings.title" }),
+        ("flow.focus", false, new[] { "flow_pause.focus" }),
+        ("flow.payoff", false, new[] { "flow_transitions.payoff" }),
+        ("flow.transitions.cuts", false, new[] { "flow_transitions.seq.dayend.cuts", "flow_transitions.seq.gohome.cuts", "flow_transitions.seq.sleep.cuts" }),
+        ("flow.transit.shutter", false, new[] { "flow_shutter.transit.TitleScene", "flow_shutter.transit.office", "flow_shutter.transit.queue.titleOfficeTitle" }),
+        ("flow.endings", false, new[] { "flow_endings.edition" }),
+        ("flow.night.close", false, new[] { "flow_night.closed.midnight" }),
+        ("flow.night.bell", false, new[] { "flow_night.bell.early" }),
+        ("flow.skip.midshift", false, new[] { "flow_skip.same.midshift", "flow_skip.dayEnds.midshift", "flow_skip.same.doubleskip", "flow_skip.dayEnds.doubleskip" }),
+        ("flow.bp.load", true, new[]
+        {
+            "bp.flow_load.load.title_office.frames", "bp.flow_load.load.office_home.frames", "bp.flow_load.load.home_office.frames",
+            "bp.flow_load.load.title_office.time", "bp.flow_load.load.home_office.time",
+            "bp.flow_load_seq.seq.title_office.frozen", "bp.flow_load_seq.seq.office_home.frozen", "bp.flow_load_seq.seq.home_office.frozen",
+        }),
+    };
+
+    /// <summary>The commit the given results were measured at, and HEAD for the checks.</summary>
+    private const string Head = "c0ffee";
+
+    /// <summary>FLOW's registered checks (read once).</summary>
+    private static readonly Lazy<List<RegisteredCheck>> FlowRegistered =
+        new Lazy<List<RegisteredCheck>>(() => GateChecks.All(new[] { typeof(FlowChecks).Assembly }).Where(c => c.Info.Owner == "FLOW").ToList());
+
+    [Test]
+    public void EveryFlowCheckThatReadsResults_IsListedWithItsResults()
+    {
+        List<RegisteredCheck> reading = FlowRegistered.Value.Where(c => c.Info.Kind != GateKind.Static).ToList();
+        CollectionAssert.AreEquivalent(ResultChecks.Select(c => c.Check), reading.Select(c => c.Info.Id));
+        foreach (RegisteredCheck c in reading)
+            Assert.AreEqual(c.Info.Kind == GateKind.BuiltPlayer, Spec(c.Info.Id).BuiltPlayer, $"{c.Info.Id}: a built-player check exactly when it requires a built player's results");
+    }
+
+    [Test]
+    public void EachResultCheck_PassesOnItsResults_AndReadsNoneItDoesNotName()
+    {
+        foreach ((string check, bool bp, string[] ids) in ResultChecks)
+        {
+            List<QaGateResult> results = ids.Select(id => Result(id, true, bp)).ToList();
+            GateResult green = RunCheck(check, results);
+            Assert.IsTrue(green.Pass, $"{check}: {green}");
+            // A failing result beside each id, which a pattern over the ids would read too: a check of exact ids ignores it.
+            List<QaGateResult> beside = results.Concat(ids.Select(id => Result(id.Substring(0, id.LastIndexOf('.') + 1) + "other", false, bp)))
+                                               .Concat(ids.Select(id => Result(id + ".more", false, bp))).ToList();
+            GateResult still = RunCheck(check, beside);
+            Assert.IsTrue(still.Pass, $"{check} read a result it does not name (a pattern?): {still}");
+        }
+    }
+
+    [Test]
+    public void EachResultCheck_IsRed_WithAnyOneOfItsResultsMissing()
+    {
+        foreach ((string check, bool bp, string[] ids) in ResultChecks)
+            foreach (string missing in ids)
+            {
+                GateResult g = RunCheck(check, ids.Where(id => id != missing).Select(id => Result(id, true, bp)));
+                Assert.IsFalse(g.Pass, $"{check} passed without {missing}");
+                StringAssert.Contains($"{missing}: not measured", g.Measured, check);
+            }
+    }
+
+    [Test]
+    public void SkipMidShift_WithOnlyTheMidshiftPair_IsNotMeasured_WithAllFour_Passes()
+    {
+        // Round 6: a flow_skip run that stopped in the double skip leaves only the midshift pair.
+        var pair = new List<QaGateResult> { Result("flow_skip.same.midshift", true, false), Result("flow_skip.dayEnds.midshift", true, false) };
+        GateResult stopped = RunCheck("flow.skip.midshift", pair);
+        Assert.IsFalse(stopped.Pass);
+        StringAssert.Contains("flow_skip.same.doubleskip: not measured", stopped.Measured);
+        StringAssert.Contains("flow_skip.dayEnds.doubleskip: not measured", stopped.Measured);
+        pair.Add(Result("flow_skip.same.doubleskip", true, false));
+        pair.Add(Result("flow_skip.dayEnds.doubleskip", true, false));
+        Assert.IsTrue(RunCheck("flow.skip.midshift", pair).Pass);
+    }
+
+    [Test]
+    public void BpLoad_IsRed_WhenOneOfItsResultsWasMeasuredInTheEditor()
+    {
+        string[] ids = Spec("flow.bp.load").Ids;
+        foreach (string inEditor in ids)
+        {
+            GateResult g = RunCheck("flow.bp.load", ids.Select(id => Result(id, true, id != inEditor)));
+            Assert.IsFalse(g.Pass, inEditor);
+            StringAssert.Contains($"NOT-BP {inEditor} was measured in the editor", g.Detail);
+        }
+    }
+
+    [Test]
+    public void Verdict_RefusesAPattern_AndANamelessCheck_AndJudgesByCommit()
+    {
+        var results = new[] { Result("flow_skip.same.midshift", true, false) };
+        GateResult pattern = FlowChecks.Verdict("t.check", false, results, Head, "flow_skip.same.*");
+        Assert.IsFalse(pattern.Pass, "a pattern is never read, even when results match it");
+        StringAssert.Contains("not an exact result id", pattern.Detail);
+        Assert.IsTrue(FlowChecks.Verdict("t.check", false, results, Head, "flow_skip.same.midshift").Pass);
+        Assert.IsFalse(FlowChecks.Verdict("t.check", false, results, Head).Pass, "a check that names no result never passes");
+        GateResult stale = FlowChecks.Verdict("t.check", false, results, "beef", "flow_skip.same.midshift");
+        Assert.IsFalse(stale.Pass);
+        StringAssert.Contains("STALE flow_skip.same.midshift", stale.Detail);
+    }
+
+    [Test]
+    public void EachResultTheChecksRequire_IsProducedByFlowsRecipes_EveryFrozenOneOverALoadAlone()
+    {
+        // The result ids each step of FLOW's recipes produces (Produced); a built player's run adds "bp." (run_player).
+        string folder = Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "scenarios");
+        var produced = new HashSet<string>(StringComparer.Ordinal);
+        foreach (string file in Directory.GetFiles(folder, "flow_*.json"))
+            produced.UnionWith(Produced(ContentJson.Parse(File.ReadAllText(file))));
+        Assert.IsNotEmpty(produced, "FLOW's recipes are read");
+        foreach ((string check, bool bp, string[] ids) in ResultChecks)
+            foreach (string id in ids)
+            {
+                Assert.AreEqual(bp, id.StartsWith("bp.", StringComparison.Ordinal), $"{check}: {id} is a built player's result exactly when the check is a built-player one");
+                Assert.IsTrue(produced.Contains(bp ? id.Substring(3) : id),
+                    $"{check} requires {id}, which no step of FLOW's recipes produces (a frozen result comes only from a flowRecLoad sequence: the load alone)");
+            }
+    }
+
+    /// <summary>
+    /// The result ids a FLOW recipe produces: each FLOW op's assertion as
+    /// FlowOps names it, prefixed by QaRunner with the scenario's name; and for
+    /// each recorded sequence the seqtools results its recipe writes
+    /// (default_id "&lt;scenario&gt;.seq.&lt;name&gt;.&lt;analysis&gt;"): cuts for every
+    /// sequence, frozen only for a load recorded alone (flowRecLoad, round 7),
+    /// since a recStart sequence keeps a lead before the click and a tail on
+    /// the settled scene that may hold still.
+    /// </summary>
+    private static IEnumerable<string> Produced(ContentNode scenario)
+    {
+        string name = Text(scenario, "name");
+        foreach (ContentNode step in scenario.Get("steps").Items)
+        {
+            string n = Text(step, "name");
+            switch (Text(step, "op").ToLowerInvariant())
+            {
+                case "flowsettings": yield return $"{name}.settings.{n}"; break;
+                case "flowfocus": yield return $"{name}.focus"; break;
+                case "flowpayoff": yield return $"{name}.payoff"; break;
+                case "flowedition": yield return $"{name}.edition"; break;
+                case "flowclosed": yield return $"{name}.closed.{n}"; break;
+                case "flowearlyfinish": yield return $"{name}.bell.{n}"; break;
+                case "flowtransit": yield return $"{name}.transit.{n}"; break;
+                case "flowqueue": yield return $"{name}.transit.queue.{n}"; break;
+                case "flowloadtime":
+                    yield return $"{name}.load.{n}.frames";
+                    yield return $"{name}.load.{n}.time";
+                    break;
+                case "flowrunstate":
+                    // Only a record compared with an earlier one asserts.
+                    if (Text(step, "text").Length > 0)
+                        yield return $"{name}.same.{n}";
+                    break;
+                case "flowdayends": yield return $"{name}.dayEnds.{n}"; break;
+                case "recstart":
+                case "record":
+                    yield return $"{name}.seq.{n}.cuts";
+                    break;
+                case "flowrecload":
+                    yield return $"{name}.seq.{n}.cuts";
+                    yield return $"{name}.seq.{n}.frozen";
+                    break;
+            }
+        }
+    }
+
+    /// <summary>The string member <paramref name="key"/> of a scenario's JSON object, or "".</summary>
+    private static string Text(ContentNode node, string key)
+    {
+        ContentNode value = node.Get(key);
+        return value != null && value.Kind == ContentNodeKind.String ? value.Text : string.Empty;
+    }
+
+    /// <summary>The listed check <paramref name="check"/>.</summary>
+    private static (string Check, bool BuiltPlayer, string[] Ids) Spec(string check) => ResultChecks.Single(c => c.Check == check);
+
+    /// <summary>A result measured at <see cref="Head"/> on a clean tree.</summary>
+    private static QaGateResult Result(string id, bool pass, bool builtPlayer) =>
+        new QaGateResult { id = id, owner = "FLOW", pass = pass, measured = pass ? "ok" : "red", commit = Head, builtPlayer = builtPlayer };
+
+    /// <summary>Runs the registered check <paramref name="check"/> on <paramref name="results"/> at <see cref="Head"/> (FlowChecks.Measured swapped in for the call).</summary>
+    private static GateResult RunCheck(string check, IEnumerable<QaGateResult> results)
+    {
+        RegisteredCheck registered = FlowRegistered.Value.Single(c => c.Info.Id == check);
+        List<QaGateResult> given = results.ToList();
+        Func<(IEnumerable<QaGateResult> Results, string Head)> measured = FlowChecks.Measured;
+        FlowChecks.Measured = () => (given, Head);
+        try
+        {
+            return registered.Run().Single();
+        }
+        finally
+        {
+            FlowChecks.Measured = measured;
+        }
     }
 
     [Test, Category("NeedsEditor")]

@@ -3,23 +3,23 @@
   "owner": "FLOW",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "BUG-31a [BP], the captured half: title -> office and home -> office as fixed-step captures for seqtools 'frozen' (the shutter's light keeps moving: no still run over 0.25 s) and 'cuts' (none). A capture steps 1/30 s per frame whatever the real frame cost, so it cannot see a long frame: flow_load times the same loads in real time" },
+    { "op": "note", "text": "BUG-31a [BP], the captured half: title -> office, office -> home and home -> office as fixed-step captures for seqtools 'frozen' (the shutter's light keeps moving: no still run over 0.25 s) and 'cuts' (none). Each capture is the load alone (flowRecLoad, FLOW round 7): from the click's frame (the load's start mark) to the shutter off (its up mark), so the Title before the click and the settled scene after the shutter, which may hold still, are not in it. A capture steps 1/30 s per frame whatever the real frame cost, so it cannot see a long frame: flow_load times the same loads in real time" },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "recStart", "name": "title_office" },
+    { "op": "flowRecLoad", "name": "title_office" },
     { "op": "newRun", "text": "Biscuit" },
+    { "op": "flowSettled" },
     { "op": "waitOffice", "n": 1, "f": 120 },
-    { "op": "wait", "f": 1 },
-    { "op": "recStop" },
     { "op": "startShift" },
     { "op": "cheat", "name": "EndShift" },
     { "op": "waitActive", "target": "DayFlowUIController.resultsPanel", "f": 60 },
+    { "op": "flowRecLoad", "name": "office_home" },
     { "op": "button", "target": "DayFlowUIController.goHomeButton" },
+    { "op": "flowSettled" },
     { "op": "waitScene", "name": "HomeScene", "f": 120 },
-    { "op": "recStart", "name": "home_office" },
+    { "op": "flowRecLoad", "name": "home_office" },
     { "op": "call", "target": "RunManager.Sleep" },
-    { "op": "waitOffice", "n": 2, "f": 120 },
-    { "op": "wait", "f": 1 },
-    { "op": "recStop" }
+    { "op": "flowSettled" },
+    { "op": "waitOffice", "n": 2, "f": 120 }
   ]
 }

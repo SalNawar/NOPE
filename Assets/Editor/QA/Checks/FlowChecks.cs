@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,9 +20,12 @@ using System.Text.RegularExpressions;
 /// a Skip day from the office mid-shift lands as one from the briefing, the
 /// day closed once (round 4), and a second one under the shutter as one after
 /// it lifted (round 5). Built player: the loads hold no frame over 0.25 s, in real time and in the
-/// captures, and the office shows within 1.0 s (BUG-31a). A check that reads
-/// several results names each by its exact id (<see cref="All"/>), so a run
-/// that stopped part-way, its later results missing, is red (round 6).
+/// captures, and the office shows within 1.0 s (BUG-31a). Every check that
+/// reads results names each by its exact id (<see cref="All"/>), so a run
+/// that stopped part-way, its later results missing, is red (round 6). Its
+/// verdict is the pure <see cref="Verdict"/>, on the results and HEAD that
+/// <see cref="Measured"/> gives (round 7: FlowSeamTests run the registered
+/// checks on given results, and check that FLOW's recipes produce each id).
 /// </summary>
 public static class FlowChecks
 {
@@ -71,29 +75,29 @@ public static class FlowChecks
 
     /// <summary>Esc in the office opens the PC's Settings, and the clock holds while it shows.</summary>
     [GateCheck("flow.esc.office", Owner, GateKind.Play)]
-    public static GateResult EscOffice() => GateResults.Require("flow.esc.office", Owner, "flow_pause.settings.office");
+    public static GateResult EscOffice() => All("flow.esc.office", false, "flow_pause.settings.office");
 
     /// <summary>Esc with the PC open (Settings in front) keeps the PC open and Settings showing: only Q or the bezel leave the PC (R3).</summary>
     [GateCheck("flow.esc.pc", Owner, GateKind.Play)]
-    public static GateResult EscPc() => GateResults.Require("flow.esc.pc", Owner, "flow_pause.settings.pcEsc");
+    public static GateResult EscPc() => All("flow.esc.pc", false, "flow_pause.settings.pcEsc");
 
     /// <summary>Esc at Home opens Settings (red until Home has a Settings window: HOME, then HOME-3D's tablet).</summary>
     [GateCheck("flow.esc.home", Owner, GateKind.Play)]
-    public static GateResult EscHome() => GateResults.Require("flow.esc.home", Owner, "flow_pause.settings.home");
+    public static GateResult EscHome() => All("flow.esc.home", false, "flow_pause.settings.home");
 
     /// <summary>Esc on the title opens Settings (red until the title has a Settings window: HOME).</summary>
     [GateCheck("flow.esc.title", Owner, GateKind.Play)]
-    public static GateResult EscTitle() => GateResults.Require("flow.esc.title", Owner, "flow_pause.settings.title");
+    public static GateResult EscTitle() => All("flow.esc.title", false, "flow_pause.settings.title");
 
     /// <summary>The focus lost holds the clock and pauses the audio; its return lets both go.</summary>
     [GateCheck("flow.focus", Owner, GateKind.Play)]
-    public static GateResult Focus() => GateResults.Require("flow.focus", Owner, "flow_pause.focus");
+    public static GateResult Focus() => All("flow.focus", false, "flow_pause.focus");
 
     /// <summary>The last traveller's reaction and walk-off play before the report.</summary>
     [GateCheck("flow.payoff", Owner, GateKind.Play)]
-    public static GateResult Payoff() => GateResults.Require("flow.payoff", Owner, "flow_transitions.payoff");
+    public static GateResult Payoff() => All("flow.payoff", false, "flow_transitions.payoff");
 
-    /// <summary>No single-frame full-screen change at the day's end, Go Home and Sleep: seqtools cuts on each of flow_transitions' three sequences (FLOW recipe 4 writes their results).</summary>
+    /// <summary>No single-frame full-screen change at the day's end, Go Home and Sleep: seqtools cuts on each of flow_transitions' three sequences (FLOW recipe 4 writes their results). Each starts before the click and ends on the settled scene, so a cut on the click's own frame, or as the new scene's panels come in, is seen; frozen is not read on them (the loads' frozen is flow_load_seq's, over each load alone).</summary>
     [GateCheck("flow.transitions.cuts", Owner, GateKind.Play)]
     public static GateResult TransitionCuts() => All("flow.transitions.cuts", false,
         "flow_transitions.seq.dayend.cuts", "flow_transitions.seq.gohome.cuts", "flow_transitions.seq.sleep.cuts");
@@ -105,7 +109,9 @@ public static class FlowChecks
     /// rises) loads next, the last asked for winning: flow_shutter's three
     /// results, the queue leg's included. The seqtools frozen and cuts
     /// analyses of its two sequences are not read here: FLOW recipe 5 reads
-    /// their output.
+    /// their output (since round 7 each sequence covers its load alone, from
+    /// the load's frame to the shutter off; the [BP] frozen line is
+    /// flow.bp.load's).
     /// </summary>
     [GateCheck("flow.transit.shutter", Owner, GateKind.Play)]
     public static GateResult SceneChangeShutter() => All("flow.transit.shutter", false,
@@ -113,15 +119,15 @@ public static class FlowChecks
 
     /// <summary>An ending is the evening edition, with Title and Quit, after the report.</summary>
     [GateCheck("flow.endings", Owner, GateKind.Play)]
-    public static GateResult Endings() => GateResults.Require("flow.endings", Owner, "flow_endings.edition");
+    public static GateResult Endings() => All("flow.endings", false, "flow_endings.edition");
 
     /// <summary>The night shift's closing reads 24:00.</summary>
     [GateCheck("flow.night.close", Owner, GateKind.Play)]
-    public static GateResult NightClose() => GateResults.Require("flow.night.close", Owner, "flow_night.closed.midnight");
+    public static GateResult NightClose() => All("flow.night.close", false, "flow_night.closed.midnight");
 
     /// <summary>An early finish (End Shift) raises the clock's Closed once, so the closing bell rings.</summary>
     [GateCheck("flow.night.bell", Owner, GateKind.Play)]
-    public static GateResult EarlyBell() => GateResults.Require("flow.night.bell", Owner, "flow_night.bell.early");
+    public static GateResult EarlyBell() => All("flow.night.bell", false, "flow_night.bell.early");
 
     /// <summary>
     /// A Skip day from the office mid-shift lands as a skip of the same day
@@ -146,26 +152,52 @@ public static class FlowChecks
     /// shutter's light never stands still over 0.25 s. Both halves are needed:
     /// a fixed-step capture cannot see a long activation frame. Every load's
     /// frames, the timed loads' times (title to office, Home to office; office
-    /// to Home's time is reported only) and both captures' frozen.
+    /// to Home's time is reported only) and every load's frozen (round 7: the
+    /// office to Home capture too). Each capture covers its load alone, from
+    /// the click's frame to the shutter off (FlowOps' flowRecLoad, round 7), so
+    /// a Title or a settled scene that holds still before the click or after
+    /// the shutter is never read as a frozen load.
     /// </summary>
     [GateCheck("flow.bp.load", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
     public static GateResult Load() => All("flow.bp.load", true,
         "bp.flow_load.load.title_office.frames", "bp.flow_load.load.office_home.frames", "bp.flow_load.load.home_office.frames",
         "bp.flow_load.load.title_office.time", "bp.flow_load.load.home_office.time",
-        "bp.flow_load_seq.seq.title_office.frozen", "bp.flow_load_seq.seq.home_office.frozen");
+        "bp.flow_load_seq.seq.title_office.frozen", "bp.flow_load_seq.seq.office_home.frozen", "bp.flow_load_seq.seq.home_office.frozen");
 
     /// <summary>
-    /// One check over several results, each named by its exact id: it passes
-    /// when every id has a result and all of them passed at HEAD on a clean
-    /// tree (and, when <paramref name="builtPlayer"/>, on a built player;
-    /// GateResults.Require for each). A pattern such as "flow_skip.same.*"
-    /// passes on whichever results exist, so a run that stopped before its
-    /// last leg would pass on its first.
+    /// The results and HEAD that the checks reading results judge (<see cref="All"/>):
+    /// every result in Library/QA/results and the checkout's commit.
+    /// FlowSeamTests put given ones in their place, to run the registered
+    /// checks themselves outside Unity and pin each to its exact ids.
     /// </summary>
+    internal static Func<(IEnumerable<QaGateResult> Results, string Head)> Measured = () => (GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot));
+
+    /// <summary>One check over its results, each named by its exact id: the <see cref="Verdict"/> on what <see cref="Measured"/> gives.</summary>
     private static GateResult All(string id, bool builtPlayer, params string[] ids)
     {
-        List<GateResult> parts = ids.Select(r => GateResults.Require(id, Owner, r, builtPlayer)).ToList();
-        return GateResult.Of(id, Owner, parts.All(r => r.Pass), string.Join("; ", ids.Zip(parts, (r, g) => $"{r}: {g.Measured}")),
+        (IEnumerable<QaGateResult> results, string head) = Measured();
+        return Verdict(id, builtPlayer, results, head, ids);
+    }
+
+    /// <summary>
+    /// The verdict of check <paramref name="id"/> over <paramref name="results"/>
+    /// at <paramref name="head"/> (pure; FlowSeamTests): it passes when each of
+    /// <paramref name="ids"/> has a result and all of them passed at HEAD on a
+    /// clean tree (and, when <paramref name="builtPlayer"/>, on a built player;
+    /// GateResults.Judge for each). An id is exact: one with a '*' is refused,
+    /// never read as a pattern, because a pattern such as "flow_skip.same.*"
+    /// passes on whichever results exist, so a run that stopped before its
+    /// last leg would pass on its first (round 6).
+    /// </summary>
+    internal static GateResult Verdict(string id, bool builtPlayer, IEnumerable<QaGateResult> results, string head, params string[] ids)
+    {
+        if (ids == null || ids.Length == 0)
+            return GateResult.Fail(id, Owner, "no result named", "A check that reads results names each by its exact id.");
+        List<QaGateResult> all = (results ?? Enumerable.Empty<QaGateResult>()).ToList();
+        List<GateResult> parts = ids.Select(r => string.IsNullOrEmpty(r) || r.IndexOf('*') >= 0
+            ? GateResult.Fail(id, Owner, "not an id", $"'{r}' is not an exact result id: a pattern passes on whichever results exist (round 6)")
+            : GateResults.Judge(id, Owner, r, all, head, builtPlayer)).ToList();
+        return GateResult.Of(id, Owner, parts.All(g => g.Pass), string.Join("; ", ids.Zip(parts, (r, g) => $"{r}: {g.Measured}")),
             string.Join("; ", parts.Where(g => !g.Pass).Select(g => g.Detail)));
     }
 }

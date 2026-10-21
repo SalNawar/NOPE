@@ -24,7 +24,7 @@ public class FlowPlayTests : QaPlayTest
         AssertRun(Finish());
     }
 
-    /// <summary>The last traveller's payoff plays before the report; the day's end, Go Home and Sleep are recorded for the cuts and frozen-frame analyses (BUG-32a, BUG-72).</summary>
+    /// <summary>The last traveller's payoff plays before the report; the day's end, Go Home and Sleep are recorded for the cuts analysis, each from before the click to the settled scene (BUG-32a, BUG-72; the loads' frozen is read over each load alone, in flow_shutter and flow_load_seq).</summary>
     [UnityTest, Explicit, Category("QaPlay")]
     public IEnumerator Transitions_ThePayoffBeforeTheReport_AndNoHardCut()
     {
@@ -46,7 +46,7 @@ public class FlowPlayTests : QaPlayTest
         AssertRun(Finish());
     }
 
-    /// <summary>A scene change through SceneTransit (office to Title, Title to office): the booth's shutter comes down, the scenes load behind it and it goes up; recorded for the frozen and cuts analyses (BUG-31a, the bible's J5). Then the queue in play: loads asked for while the shutter comes down and while it rises load next, the last asked for winning (FLOW round 5).</summary>
+    /// <summary>A scene change through SceneTransit (office to Title, Title to office): the booth's shutter comes down, the scenes load behind it and it goes up; each load recorded alone, from its frame to the shutter off, for the frozen and cuts analyses (BUG-31a, the bible's J5; flowRecLoad, FLOW round 7). Then the queue in play: loads asked for while the shutter comes down and while it rises load next, the last asked for winning (FLOW round 5).</summary>
     [UnityTest, Explicit, Category("QaPlay")]
     public IEnumerator Shutter_ASceneChangeLoadsBehindTheShutter()
     {
