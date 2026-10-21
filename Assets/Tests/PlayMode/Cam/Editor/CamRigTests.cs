@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using NUnit.Framework;
+using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
 /// CAM's rig verdicts that need no Unity (CamOps; docs/pending/CAM.md,
-/// rounds 4 to 7): a private collection is counted whatever its type (a
+/// rounds 4 to 8): a private collection is counted whatever its type (a
 /// HashSet is no non-generic ICollection, so the chip read's "came back out"
 /// wait never saw the reader's set), and a chip read counts only once its
 /// paper is out (ChipReadOf); a chrome leg's whole report, from what its
@@ -18,9 +20,12 @@ using UnityEngine;
 /// reading view never at rest) or a control not found fails CAM's line; and
 /// how the watch places a held thing that is no Component (HeldMember: a
 /// dragged decoration by its Root); and the view a framing leg names
-/// (ReadingLeg: camframe judges a leg only on that view). Pure (types and
-/// values only, no Unity object made); in CAM's own Editor folder
-/// (Assembly-CSharp-Editor, the editor runner's).
+/// (ReadingLeg: camframe judges a leg only on that view); and DeskView's
+/// blend hook, which runs on every view change, allocating nothing (Hook,
+/// measured per thread and read in its IL: BUG-65e/73e, round 8). Pure
+/// (types and values only, no Unity object made; the hook test puts
+/// Cinemachine's static blend hook back as it found it); in CAM's own Editor
+/// folder (Assembly-CSharp-Editor, the editor runner's).
 /// </summary>
 public class CamRigTests
 {
@@ -191,6 +196,47 @@ public class CamRigTests
     }
 
     [Test]
+    public void DeskViewHook_AllocatesNothing_OnceInstalled()
+    {
+        // BUG-65e/73e (WAVE2_OPEN2 CAM #1): Hook runs at bind and on every view change (DeskView.Set: each tilt in, each
+        // Return). A static method group converted to a delegate there made a new delegate on every call (Unity compiles
+        // C# 9; only C# 11 caches such a delegate), so every reading toggle allocated inside cam_gc's 0 B window.
+        var hook = (Action<DeskView>)Delegate.CreateDelegate(typeof(Action<DeskView>), HookMethod());
+        FieldInfo owner = DeskViewStatic("_hookOwner"), before = DeskViewStatic("_before");
+        object ownerWas = owner.GetValue(null), beforeWas = before.GetValue(null);
+        CinemachineCore.GetBlendOverrideDelegate installed = CinemachineCore.GetBlendOverride;
+        try
+        {
+            hook(null); // installs the hook (once) and compiles the call
+            CinemachineCore.GetBlendOverrideDelegate ours = CinemachineCore.GetBlendOverride;
+            Assert.IsNotNull(ours, "the hook is installed");
+            long start = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 64; i++)
+                hook(null);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - start;
+            Assert.AreEqual(0L, allocated, "64 view changes allocated in DeskView.Hook: make our blend delegate once and compare against it");
+            Assert.AreSame(ours, CinemachineCore.GetBlendOverride, "installed once: a later view change keeps the same hook");
+        }
+        finally
+        {
+            CinemachineCore.GetBlendOverride = installed;
+            owner.SetValue(null, ownerWas);
+            before.SetValue(null, beforeWas);
+        }
+    }
+
+    [Test]
+    public void DeskViewHook_MakesNoObject_InItsIL()
+    {
+        // The same, whatever a runtime reports per thread (Unity's Mono may report no bytes): Hook's own code makes no
+        // object, array, box or delegate (the old body's 'ldftn; newobj' made a delegate on every call).
+        List<OpCode> ops = OpCodesOf(HookMethod());
+        CollectionAssert.IsNotEmpty(ops);
+        foreach (OpCode op in new[] { OpCodes.Newobj, OpCodes.Newarr, OpCodes.Box, OpCodes.Ldftn })
+            CollectionAssert.DoesNotContain(ops, op, $"DeskView.Hook's IL has {op.Name}: Hook runs on every view change and must allocate nothing");
+    }
+
+    [Test]
     public void ReadingLeg_ReadsTheViewTheFramingLegNames_AndRefusesAMissingOrUnknownView()
     {
         Assert.IsTrue(CamOps.ReadingLeg("reading"), "a *_reading leg is judged on the reading view's criteria, with its .bottom line");
@@ -241,6 +287,64 @@ public class CamRigTests
         public void CancelHold()
         {
         }
+    }
+
+    /// <summary>DeskView's static blend hook installer (private).</summary>
+    private static MethodInfo HookMethod()
+    {
+        MethodInfo hook = typeof(DeskView).GetMethod("Hook", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(hook, "DeskView.Hook(DeskView)");
+        return hook;
+    }
+
+    /// <summary>A private static field of DeskView's blend hook.</summary>
+    private static FieldInfo DeskViewStatic(string name)
+    {
+        FieldInfo field = typeof(DeskView).GetField(name, BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(field, $"DeskView.{name}");
+        return field;
+    }
+
+    /// <summary>The op codes of <paramref name="method"/>'s IL, in order (each operand stepped over by its size).</summary>
+    private static List<OpCode> OpCodesOf(MethodInfo method)
+    {
+        var table = new Dictionary<short, OpCode>();
+        foreach (FieldInfo f in typeof(OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
+            if (f.GetValue(null) is OpCode code)
+                table[code.Value] = code;
+        byte[] il = method.GetMethodBody().GetILAsByteArray();
+        var ops = new List<OpCode>();
+        for (int i = 0; i < il.Length;)
+        {
+            short value = il[i] == 0xFE ? unchecked((short)(0xFE00 | il[i + 1])) : il[i];
+            i += il[i] == 0xFE ? 2 : 1;
+            OpCode op = table[value];
+            ops.Add(op);
+            switch (op.OperandType)
+            {
+                case OperandType.InlineNone:
+                    break;
+                case OperandType.ShortInlineBrTarget:
+                case OperandType.ShortInlineI:
+                case OperandType.ShortInlineVar:
+                    i += 1;
+                    break;
+                case OperandType.InlineVar:
+                    i += 2;
+                    break;
+                case OperandType.InlineI8:
+                case OperandType.InlineR:
+                    i += 8;
+                    break;
+                case OperandType.InlineSwitch:
+                    i += 4 + 4 * BitConverter.ToInt32(il, i);
+                    break;
+                default:
+                    i += 4;
+                    break;
+            }
+        }
+        return ops;
     }
 
     /// <summary>What a leg shows after its camchrome steps (n, target), gathered as the op gathers it.</summary>
