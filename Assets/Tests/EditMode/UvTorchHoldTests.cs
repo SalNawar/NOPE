@@ -74,6 +74,20 @@ public class UvTorchHoldTests
     }
 
     [Test]
+    public void ASwingThroughTheBuiltHold_FromTheReadingView_GoesStraightToTheSolvedAim()
+    {
+        TorchAim solved = HoldFor(ReadingEye);
+        var grip = new TorchPoint(0f, Height, 0f);
+        (float x, float z) = UvCone.Ahead(0f, 0f, 0f, 1f, Height, Tilt);
+        float midSwing = UvTorchHold.Shown(ReadingEye, grip, new TorchPoint(x, 0f, z), TailLength, LensLength, BodyRadius, ConeRadius);
+        Assert.AreEqual(ShareAt(ReadingEye, Tilt, 0f, out _), midSwing, 1e-5f, "Shown is the drawn pose's share: the body held from the grip toward the lit spot");
+        Assert.IsTrue(UvTorchHold.SwingCovers(midSwing, solved.Unoccluded), "a pose on the way through straight ahead shows the lens end over the patch: no swing through it");
+        float atSolve = ShareAt(ReadingEye, solved.Tilt, solved.Yaw, out _);
+        Assert.IsFalse(UvTorchHold.SwingCovers(atSolve, solved.Unoccluded), "the solved aim itself is kept");
+        Assert.IsFalse(UvTorchHold.SwingCovers(0.9f, 0.9f), "an eye no aim clears (the best shows 90%): the drawn pose at that share is not forced to jump");
+    }
+
+    [Test]
     public void Hold_KeepsTheBuiltAim_WhenTheEyeAlreadySeesThePatch()
     {
         var eyeBeside = new TorchPoint(0.9f, 0.3f, 0.15f);

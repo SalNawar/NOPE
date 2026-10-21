@@ -244,6 +244,15 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         _aim = new Vector3(x, DeskY, z);
     }
 
+    /// <summary>The share of the patch round <paramref name="lit"/> the view's camera sees past the body held from the grip toward it (UvTorchHold.Shown, the torch's measured capsule).</summary>
+    private float ShownAt(Vector3 lit)
+    {
+        Camera cam = ViewCamera;
+        Vector3 eye = cam != null ? cam.transform.position : _grip + Vector3.up;
+        return UvTorchHold.Shown(new TorchPoint(eye.x, eye.y, eye.z), new TorchPoint(_grip.x, _grip.y, _grip.z), new TorchPoint(lit.x, lit.y, lit.z),
+                                 _tailLength, _lensLength, _bodyRadius, ConeRadius);
+    }
+
     /// <summary>The cone's radius on the desk (DeskConfigSO.uvConeRadius).</summary>
     private float ConeRadius => _hardware != null && _hardware.Config != null ? _hardware.Config.uvConeRadius : 0.075f;
 
@@ -361,6 +370,12 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             _grip = new Vector3(gx, DeskY + HoldHeight, gz);
             AimBeam(false, dt);
             _lit = still ? _aim : Vector3.Lerp(_lit, _aim, UvTorchHold.Ease(dt, UvTorchHold.TrailSeconds));
+            // BUG-2c between two aims too: a swing or the cone's lag that would show the body over the patch goes straight to the solved aim.
+            if (!still && UvTorchHold.SwingCovers(ShownAt(_lit), _solved.Unoccluded))
+            {
+                AimBeam(true);
+                _lit = _aim;
+            }
         }
 
         // Held by its grip under the pointer (its origin is the grip), the lens pointing down along the line to the lit spot.

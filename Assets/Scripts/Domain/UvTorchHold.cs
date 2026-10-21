@@ -144,6 +144,29 @@ public static class UvTorchHold
         1f - Hidden(eye, tail, lens, bodyRadius, centre, radius, Samples) / (float)Samples;
 
     /// <summary>
+    /// The share of the lit patch round <paramref name="lit"/> the eye sees
+    /// past the body as it is drawn: held by its grip at <paramref name="grip"/>,
+    /// its lens pointing at <paramref name="lit"/> (<see cref="Body"/>, then
+    /// <see cref="Unoccluded"/>). Between two of <see cref="Hold"/>'s aims (a
+    /// swing, the cone's soft lag) this is the pose the camera sees.
+    /// </summary>
+    public static float Shown(TorchPoint eye, TorchPoint grip, TorchPoint lit, float tailLength, float lensLength, float bodyRadius, float coneRadius)
+    {
+        Body(grip, lit, tailLength, lensLength, out TorchPoint tail, out TorchPoint lens);
+        return Unoccluded(eye, tail, lens, bodyRadius, lit, coneRadius);
+    }
+
+    /// <summary>
+    /// True when the drawn pose (<paramref name="shown"/>, from <see cref="Shown"/>)
+    /// lets the body cover more of the patch than the solved aim does (its
+    /// <paramref name="solvedShare"/>, never asking more than <see cref="TargetShare"/>):
+    /// a swing toward a new aim, or the cone's lag behind it, passing over the
+    /// body's shadow line. The torch then goes straight to its solved aim, so
+    /// the body never covers the patch between two aims either (BUG-2c).
+    /// </summary>
+    public static bool SwingCovers(float shown, float solvedShare) => shown < Math.Min(TargetShare, solvedShare) - 1e-4f;
+
+    /// <summary>
     /// How to hold the torch for the eye at <paramref name="eye"/>: the grip
     /// at (<paramref name="gripX"/>, <paramref name="deskY"/> + <paramref name="height"/>,
     /// <paramref name="gripZ"/>), the beam pointing away from the chair along
