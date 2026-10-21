@@ -195,9 +195,9 @@ public static class DeskHomeMap
         new DeskHome(Xray, 1.57f, 1.225f, 0.50f, 0.45f, 0f, 0.30f, HomeShow.Later),
         // The booth's right end: the portals' switchboard (Saleh: "on the booth wall, right of the desk"); the RING SERVICE panel stands there in Phase A.
         new DeskHome(Switchboard, 2.22f, 1.30f, 0.56f, 0.45f, -20f, 0.40f, HomeShow.WhenOwned),
-        // Deliveries and decorations, right of the rail.
+        // Deliveries and decorations, right of the rail. The decor zone stands left of the office camera's line to the switchboard's home (the form sorter, 36 cm tall, hid 80% of the RING SERVICE panel from 1.80, 0.55), deep enough for the sorter behind the tray, and clear of the crate.
         new DeskHome(Crate, 1.56f, 0f, 0.48f, 0.34f, 8f, 0.30f, HomeShow.Delivery),
-        new DeskHome(Decor, 1.80f, 0.55f, 0.80f, 0.60f, 0f, 0f, HomeShow.Decor),
+        new DeskHome(Decor, 1.28f, 0.545f, 0.56f, 0.65f, 0f, 0f, HomeShow.Decor),
     };
 
     /// <summary>The fixed art's footprints and heights in the frame (measured on the day-12 top-down capture, R7 AUDIT DESK; rounded out), as homes the plan keeps clear of.</summary>

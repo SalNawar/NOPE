@@ -45,7 +45,7 @@ The desk frame is metres right of (x) and away from the chair (y), measured from
 | `xray` | 1.57, 1.225 | 0.50 x 0.45 | 0 | 0.30 | later | - | back right |
 | `switchboard` | 2.22, 1.30 | 0.56 x 0.45 | -20 | 0.40 | when owned (the RING SERVICE panel until PORTALS) | - | booth's right end |
 | `crate` | 1.56, 0 | 0.48 x 0.34 | 8 | 0.30 | delivery mornings | - | right of the rail |
-| `decor` | 1.80, 0.55 | 0.80 x 0.60 | 0 | - | decor start zone | - | right |
+| `decor` | 1.28, 0.545 | 0.56 x 0.65 | 0 | - | decor start zone (the form sorter behind the tray) | - | right of the rail, left of the camera's line to the switchboard |
 
 Fixed art the homes keep clear of (`DeskHomeMap.FixedArt()`, measured on the R7 day-12 top-down capture, rounded out): `pc` (-1.57, 0.26; 1.10 x 1.16; 0.62 tall), `till` (-1.085, 0.90; 0.49 x 0.42; 0.30), `sign` (0, 0.685; 0.56 x 0.21; 0.23), `lamp` (0.46, 1.25; 0.52 x 0.50; 0.50).
 
@@ -56,6 +56,7 @@ Fixed art the homes keep clear of (`DeskHomeMap.FixedArt()`, measured on the R7 
 - **The rail order, front to back:** chip reader, scanner, stamp rack. The rack ends beside the deal tray (`DeskHomeMap.Rail`), as concept B's "ending beside the deal tray".
 - **Slide axes sideways toward the mat** (SPEC P8, the declared change to Bible C6's "toward the chair"). Each sweep is checked to stay off the mat, other homes and the fixed art. The slide-in motion itself is DESK-HOMES'; only the axis is data here.
 - **The RING SERVICE panel stands on the switchboard's home.** One home serves the board's id now, and PORTALS swaps the switchboard in (Saleh: "on the booth wall, right of the desk").
+- **The decor zone** at (1.28, 0.545), 0.56 x 0.65 m. **Integration (recipe 4):** from (1.80, 0.55), 0.80 x 0.60, the form sorter (36 cm tall, the decorations' start) stood on the office camera's line to the switchboard's home and hid 80% of the RING SERVICE panel (20% seen at A1 and A2), and its handle covered the panel's breaker. The zone now stands left of that line, deep enough for the sorter behind the tray (each settles nearest its art spot), and clear of the crate. The panel is 100% seen. The plan's sight check cannot see this (a decoration's height is not a home's); the ID buffer is the measure.
 - **The BABEL rack stands on the tuner's home** (SPEC P6). BABEL-TUNER swaps the object in place.
 - **The C lamp hook.** `NextToolLamp.For(CaseLampState)` picks the home that lights:
   - between travellers while the booth is open, the bell;
