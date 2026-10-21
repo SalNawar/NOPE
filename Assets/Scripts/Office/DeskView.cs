@@ -87,7 +87,8 @@ public sealed class DeskView : MonoBehaviour
     private int _backLiveSince;
     private bool _scrollInLive;
     private int _scrollInLiveSince;
-    private float _movedAt;
+    private float _sinceMove;
+    private int _sinceMoveFrame = -1;
     private float _moveSeconds;
     private CanvasGroup _backGroup;
     private readonly List<RaycastResult> _hits = new List<RaycastResult>();
@@ -108,7 +109,7 @@ public sealed class DeskView : MonoBehaviour
     public float ReadingFov => _readingFov;
 
     /// <summary>The office view's controls' opacity (BUG-32b): 0 while the reading view is on, fading in over the last third of the move back (CityView's pull tabs).</summary>
-    public float OfficeControlsAlpha => IsOn ? 0f : DeskViewPose.ControlAlpha(Time.unscaledTime - _movedAt, _moveSeconds);
+    public float OfficeControlsAlpha => IsOn ? 0f : DeskViewPose.ControlAlpha(MoveClock(), _moveSeconds);
 
     /// <summary>The "▲ Back" control (the guide points at it for a thing only the office view shows), or null.</summary>
     public RectTransform BackControl => backButton != null ? (RectTransform)backButton.transform : null;
@@ -305,6 +306,7 @@ public sealed class DeskView : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        MoveClock(); // the move's clock steps every frame, read or not
         if (_office != null && Screen.height > 0 && !Mathf.Approximately((float)Screen.width / Screen.height, _posedAspect))
         {
             Pose();
@@ -330,12 +332,31 @@ public sealed class DeskView : MonoBehaviour
     {
         if (_backGroup == null || !backButton.gameObject.activeSelf)
             return;
-        float alpha = IsOn && !HoldRegistry.Desk.IsHolding ? DeskViewPose.ControlAlpha(Time.unscaledTime - _movedAt, _moveSeconds) : 0f;
+        float alpha = IsOn && !HoldRegistry.Desk.IsHolding ? DeskViewPose.ControlAlpha(MoveClock(), _moveSeconds) : 0f;
         if (_backGroup.alpha != alpha)
         {
             _backGroup.alpha = alpha;
             _backGroup.blocksRaycasts = _backGroup.interactable = alpha > 0f;
         }
+    }
+
+    /// <summary>
+    /// The seconds since the view last turned (Set), on the game feel's
+    /// clock: UiMotion.Delta, real time or a fixed-rate capture's step
+    /// (Unity's unscaled time ignores a capture). The blend's game time
+    /// takes the same step at a time scale of 1, so the controls' fade keeps
+    /// to the blend in a recording too (CAM round 9). Stepped once a frame by
+    /// its first reader (this view's Update, or CityView's pull tabs before
+    /// it).
+    /// </summary>
+    private float MoveClock()
+    {
+        if (_sinceMoveFrame != Time.frameCount)
+        {
+            _sinceMoveFrame = Time.frameCount;
+            _sinceMove += UiMotion.Delta(Time.unscaledDeltaTime);
+        }
+        return _sinceMove;
     }
 
     /// <summary>The Back control's click (only while it is live).</summary>
@@ -376,7 +397,8 @@ public sealed class DeskView : MonoBehaviour
 
         IsOn = on;
         LastCause = cause;
-        _movedAt = Time.unscaledTime;
+        _sinceMove = 0f;
+        _sinceMoveFrame = Time.frameCount;
         _moveSeconds = DeskViewPose.Seconds(config.deskView, UiMotion.Amount.Still);
         if (cause != CameraMoveCause.Untagged)
             QaSignals.TagCamera(cause, _moveSeconds);

@@ -31,13 +31,18 @@ using UnityEngine.UI;
 /// <item><c>camfade</c> (target "reading" or "city"; name): the destination's
 /// control's alpha per frame of a move and back (<c>fade.&lt;name&gt;</c>: 0
 /// on frame 0 and until 2/3 of the move, 1 by its end; 1 at once when motion
-/// is still).</item>
+/// is still), the move's seconds counted on the game feel's clock
+/// (UiMotion.Delta), the clock the controls' fade steps on and, in the
+/// recording camfade runs in, the blend's game step too (round 9).</item>
 /// <item><c>camhold</c> (name): holds a stand-in on the desk's hold registry
 /// and makes every view change one at a time (the mat, the drop tilt, a view
 /// key's tilt, Return, the city's look and return, the PC), asserting after
 /// each that nothing changed (<c>hold.&lt;name&gt;</c>, BUG-55c).</item>
 /// <item><c>camparallax</c> (name; n = pointer frames, 90 when 0): at the
-/// recorder's 30 fps step, A turns to the city (its sweep measured), the
+/// recorder's 30 fps step, which the city's clock follows (CityView steps by
+/// UiMotion.Delta; its turn must land within its frames at 30 fps, else both
+/// lines below are red, so a measured frame holds one 30 fps frame of motion
+/// at any display rate: round 9), A turns to the city (its sweep measured), the
 /// pointer jumps edge to edge, and every frame's move of the nearest layer is
 /// at most 1 px at 1080p (<c>city.parallax.&lt;name&gt;</c>, BUG-69); held at
 /// the other edge, the look lands within 2 s (<c>city.look</c>: no crawl);
@@ -94,15 +99,23 @@ using UnityEngine.UI;
 /// name): n = 1 starts, in the background, the reading view turned in and
 /// back and the city looked at and back, for the <c>gc</c> step that
 /// follows: the cycle waits for that window to open (the camera log is quiet
-/// only while it measures) and turns one frame later, runs on frames at the
-/// recorder's 30 fps game step (each move's knob seconds and a settle, so it
-/// is the same cycle at any display rate, as the window is the same frame
-/// count) and allocates nothing itself once it runs. n = 0, after the gc
-/// step, reports <c>cycle.&lt;name&gt;</c> through the pure
-/// <see cref="CycleVerdict"/>: every turn taken (a refused one leaves an idle
-/// window that measures 0 B), the window open before the first and still
-/// open after the cycle's last frame, so the gc number covers the whole
-/// cycle (WAVE2_OPEN2 CAM #2).</item>
+/// only while it measures) and turns one frame later, holds each move for its
+/// knob's seconds and a settle in frames at the recorder's 30 fps game step,
+/// and allocates nothing itself once it runs. The step reaches both views'
+/// clocks: the reading blend runs on game time, and the city's turn, fade and
+/// parallax on the game feel's clock (UiMotion.Delta: a capture's fixed
+/// step), so each move is the same frames and the same seconds of motion at
+/// any display rate, as the window is the same frame count (round 9: until
+/// then the city stepped by Unity's unscaled time, which a capture does not
+/// reach, so above 45 Hz its look was cut short and above about 69 Hz its
+/// panorama never showed inside the window). A city move whose own clock
+/// (CityView.Landed) had not landed with the settle to spare is cut short.
+/// n = 0, after the gc step, reports <c>cycle.&lt;name&gt;</c> through the
+/// pure <see cref="CycleVerdict"/>: every turn taken (a refused one leaves an
+/// idle window that measures 0 B), every city move whole, the window open
+/// before the first and still open after the cycle's last frame, so the gc
+/// number covers the whole cycle (WAVE2_OPEN2 CAM #2). A run that ends before
+/// camcycle n = 0 puts the frame rate back at its end (<see cref="RunEnded"/>).</item>
 /// </list>
 /// Registered at load in the editor and at play start in the QA player.
 /// </summary>
@@ -127,7 +140,20 @@ public static class CamOps
 
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
-    private static void RegisterInEditor() => Register();
+    private static void RegisterInEditor()
+    {
+        Register();
+        // Play mode left (a run's deadline, a harness reset, by hand) ends a run without QaRunner.Finished.
+        UnityEditor.EditorApplication.playModeStateChanged -= PlayModeChanged;
+        UnityEditor.EditorApplication.playModeStateChanged += PlayModeChanged;
+    }
+
+    /// <summary>Play mode left: the run's end (<see cref="RunEnded"/>), finished or not.</summary>
+    private static void PlayModeChanged(UnityEditor.PlayModeStateChange change)
+    {
+        if (change == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+            RunEnded();
+    }
 #endif
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -145,9 +171,63 @@ public static class CamOps
         QaRunner.RegisterOp("camplay", Play);
         QaRunner.RegisterOp("camcap", Cap);
         QaRunner.RegisterOp("camcycle", Cycle);
+        QaRunner.Finished -= RunFinished;
+        QaRunner.Finished += RunFinished;
     }
 
     private static string Name(QaStep step, string fallback) => string.IsNullOrEmpty(step.name) ? fallback : step.name;
+
+    // ------------------------------------------------------------------ the 30 fps step
+
+    /// <summary>CamOps' ops holding the recorder's 30 fps game step now (camparallax, camplay's drags, the cycle).</summary>
+    private static int _stepHolders;
+
+    /// <summary>Time.captureFramerate before the first holder set the step, put back when the last lets go.</summary>
+    private static int _stepWas;
+
+    /// <summary>Holds the recorder's 30 fps game step (Time.captureFramerate, as a drag and a recording run it) until <see cref="LetGoStep"/>; allocates nothing (the cycle takes it inside the gc window).</summary>
+    private static void HoldStep()
+    {
+        if (_stepHolders++ == 0)
+            _stepWas = Time.captureFramerate;
+        Time.captureFramerate = SeqRecorder.Fps;
+    }
+
+    /// <summary>Lets go of the 30 fps step: the last holder puts the frame rate back (<see cref="PutStepBack"/>).</summary>
+    private static void LetGoStep()
+    {
+        if (_stepHolders > 0 && --_stepHolders == 0)
+            PutStepBack();
+    }
+
+    /// <summary>Puts back the frame rate the first holder found, while the step is still the one CamOps set (at a run's end the recorder, stopped first, may have put its own rate back already: that one stays).</summary>
+    private static void PutStepBack()
+    {
+        if (Time.captureFramerate == SeqRecorder.Fps)
+            Time.captureFramerate = _stepWas;
+    }
+
+    /// <summary>
+    /// The run's end (QaRunner.Finished, or play mode left in the editor: a
+    /// deadline, a harness reset, by hand). A run stopped inside an op skips
+    /// the op's own let-go (Unity runs no finally of a stopped coroutine, and
+    /// the cycle lets go only at its end or at camcycle n = 0), and
+    /// QaRunner.CleanUp puts back only its own drags' and the recorder's
+    /// rates: so the cycle stops here and every hold on the 30 fps step ends,
+    /// the frame rate put back.
+    /// </summary>
+    private static void RunEnded()
+    {
+        Stop(_cycle);
+        _cycle = null;
+        if (_stepHolders == 0)
+            return;
+        _stepHolders = 0;
+        PutStepBack();
+    }
+
+    /// <summary>A run wrote its report (QaRunner.Finished): the run's end.</summary>
+    private static void RunFinished(QaRunReport report) => RunEnded();
 
     // ------------------------------------------------------------------ camres, cammotion
 
@@ -349,14 +429,13 @@ public static class CamOps
                       failures.Count > 0 ? string.Join("; ", failures) : "0 until 2/3 of each move, 1 by its end (a cut: 1 at once)");
     }
 
-    /// <summary>Samples <paramref name="group"/>'s alpha each frame of a move of <paramref name="seconds"/> (plus a settle), noting each breach of the 2/3 rule.</summary>
+    /// <summary>Samples <paramref name="group"/>'s alpha each frame of a move of <paramref name="seconds"/> (plus a settle), noting each breach of the 2/3 rule. The move's seconds are counted on the game feel's clock (UiMotion.Delta), as the controls' fade counts them and, in the capture camfade runs in, as the blend's game step runs (round 9: Unity's unscaled time ignores a capture, so the old count ran on real time beside a blend on the 30 fps step).</summary>
     private static IEnumerator Sample(CanvasGroup group, float seconds, string leg, List<string> failures, Action<int> count)
     {
-        float start = Time.unscaledTime;
+        float elapsed = 0f;
         int frame = 0;
         while (true)
         {
-            float elapsed = Time.unscaledTime - start;
             float alpha = group != null && group.gameObject.activeInHierarchy ? group.alpha : -1f;
             if (alpha >= 0f)
             {
@@ -374,6 +453,7 @@ public static class CamOps
             if (elapsed > seconds + 0.2f && frame > 2)
                 break;
             yield return null;
+            elapsed += UiMotion.Delta(Time.unscaledDeltaTime);
         }
         if (group == null && failures.Count < 12)
             failures.Add($"{leg}: no control to sample");
@@ -451,8 +531,7 @@ public static class CamOps
             runner.Assert("city.parallax." + name, Owner, false, "not measured", "no city view, panorama or virtual pointer");
             yield break;
         }
-        int restore = Time.captureFramerate;
-        Time.captureFramerate = SeqRecorder.Fps;
+        HoldStep();
         try
         {
             if (city.IsOn)
@@ -465,6 +544,10 @@ public static class CamOps
             Canvas canvas = panorama.canvas;
             float worst = 0f, last = float.NaN;
             int frames = 0;
+            // The turn's frames (looking at the city, its clock short of its end): at most its seconds at the 30 fps step while
+            // the city's clock follows the step (CityView: UiMotion.Delta), so each frame measured holds a 30 fps frame of motion
+            // (round 9: on Unity's unscaled time a frame held 1/R s at R Hz). A frame or two of the turn pass inside the tap.
+            int turning = 0, turnMost = Mathf.CeilToInt(CityTotal(city) * SeqRecorder.Fps) + 1;
             // The sweep as the city comes into view, then the pointer jumping edge to edge.
             int sweepFrames = SeqRecorder.Fps * 3, pointerFrames = step.n > 0 ? step.n : 90;
             for (int i = 0; i < sweepFrames + pointerFrames; i++)
@@ -472,6 +555,8 @@ public static class CamOps
                 if (i >= sweepFrames)
                     input.Set(new Vector2(((i - sweepFrames) / 15) % 2 == 0 ? 2f : Screen.width - 2f, Screen.height * 0.5f), false);
                 yield return null;
+                if (city.IsOn && !city.Landed)
+                    turning++;
                 if (!panorama.gameObject.activeInHierarchy || panorama.color.a <= 0f)
                 {
                     last = float.NaN;
@@ -508,11 +593,15 @@ public static class CamOps
                     settled = (i - 2) / (float)SeqRecorder.Fps;
             }
             float lookPx = TrafficPx(panorama.uvRect.x - lookFrom);
-            runner.Assert("city.parallax." + name, Owner, frames > 0 && worst <= CityParallax.MaxPixelsPerFrame + 1e-3f,
-                          $"worst {worst:0.000} px a 30 fps frame at 1080p over {frames} frames (the sweep, the pointer edge to edge, the look settling)",
+            bool onStep = turning <= turnMost;
+            string clock = onStep
+                ? $"the turn {turning} frames (at most {turnMost} at 30 fps)"
+                : $"the turn took {turning} frames, over its {turnMost} at the 30 fps step: the city's clock is off the capture's step (CityView steps by UiMotion.Delta), so a frame here holds less than a 30 fps frame of motion";
+            runner.Assert("city.parallax." + name, Owner, onStep && frames > 0 && worst <= CityParallax.MaxPixelsPerFrame + 1e-3f,
+                          $"worst {worst:0.000} px a 30 fps frame at 1080p over {frames} frames (the sweep, the pointer edge to edge, the look settling); {clock}",
                           "the nearest layer (traffic at 1.25x the painting) moves at most 1 px a frame (BUG-69)");
-            runner.Assert("city.look." + name, Owner, settled >= 0f && settled <= LookSettleSeconds,
-                          settled >= 0f ? $"the look landed {settled:0.00} s after the pointer crossed the screen, the traffic moving {lookPx:0.0} px" : $"the look still moving after 4 s ({lookPx:0.0} px so far)",
+            runner.Assert("city.look." + name, Owner, onStep && settled >= 0f && settled <= LookSettleSeconds,
+                          (settled >= 0f ? $"the look landed {settled:0.00} s after the pointer crossed the screen, the traffic moving {lookPx:0.0} px" : $"the look still moving after 4 s ({lookPx:0.0} px so far)") + "; " + clock,
                           $"an edge-to-edge pointer move eases in within {LookSettleSeconds:0.0} s, never a crawl at the limit (CityParallax.LookShare; the knob's own range took about 7 s: Needs Saleh 4)");
             Rect r = panorama.rectTransform.rect;
             float k = canvas != null ? canvas.rootCanvas.scaleFactor : 1f;
@@ -556,7 +645,7 @@ public static class CamOps
         }
         finally
         {
-            Time.captureFramerate = restore;
+            LetGoStep();
         }
     }
 
@@ -1267,15 +1356,14 @@ public static class CamOps
     /// <summary>A plain drag with the virtual mouse from <paramref name="from"/> to <paramref name="to"/> (screen pixels) at the recorder's 30 fps step, as the runner's <c>drag</c> plays it.</summary>
     private static IEnumerator DragAt(QaInput input, Vector2 from, Vector2 to)
     {
-        int restore = Time.captureFramerate;
-        Time.captureFramerate = SeqRecorder.Fps;
+        HoldStep();
         try
         {
             yield return input.Play(QaPaths.Drag(QaPathKind.Plain, from, to, new Vector2(Screen.width, Screen.height)));
         }
         finally
         {
-            Time.captureFramerate = restore;
+            LetGoStep();
         }
     }
 
@@ -1699,7 +1787,7 @@ public static class CamOps
     /// <summary>The frames a started cycle waits for the gc window to open (the gc step follows camcycle n = 1 at once).</summary>
     private const int WindowWaitFrames = 30;
 
-    /// <summary>The frames each move is held past its knob's seconds, at the 30 fps step (the push-in's spring and the controls' fade settle).</summary>
+    /// <summary>The frames each move is held past its knob's seconds, at the 30 fps step (the push-in's spring and the controls' fade settle); a city move is whole only when its own clock landed at least this many frames before its hold ended.</summary>
     private const int SettleFrames = 15;
 
     /// <summary>What a background camcycle did (the input of <see cref="CycleVerdict"/>): the turns it asked for and made, and where its frames fell against the gc window.</summary>
@@ -1716,6 +1804,9 @@ public static class CamOps
 
         /// <summary>Turns asked for that changed nothing (the toggle or the city not live, something held).</summary>
         public int Refused;
+
+        /// <summary>City moves whose own clock (CityView.Landed) had not landed <see cref="SettleFrames"/> frames before their hold ended: the look cut short, its revealed frames (the material, the traffic, the parallax's spring) not all inside the window (round 9: the city's clock off the 30 fps step, or a hold shorter than its timeline and settle).</summary>
+        public int CutShort;
 
         /// <summary>The cycle's frames from its first turn to its end (each move's, at the 30 fps step).</summary>
         public int Frames;
@@ -1735,22 +1826,24 @@ public static class CamOps
         /// <summary>True while the cycle runs.</summary>
         public bool Running;
 
-        /// <summary>The frame rate to put back (Time.captureFramerate before the cycle set the 30 fps step), or -1 while none is to restore.</summary>
-        public int RestoreRate = -1;
+        /// <summary>True while the cycle holds the 30 fps step (<see cref="HoldStep"/>); <see cref="Stop"/> lets go of it once.</summary>
+        public bool HoldsStep;
     }
 
     /// <summary>
     /// A camcycle's line (pure; camcycle n = 0, after the gc step): green only
     /// when every turn the cycles ask for took (two of the reading view and
     /// two of the city a cycle: a refused TiltIn or Look leaves an idle window
-    /// that measures 0 B), every view was found, the gc window was open before
-    /// the first turn and still open after the cycle's last frame, and the
-    /// cycle ran to its end, so the gc step's number covers the whole cycle.
+    /// that measures 0 B), every city move landed on its own clock with its
+    /// settle to spare (a look cut short leaves its revealed frames out of the
+    /// window), every view was found, the gc window was open before the first
+    /// turn and still open after the cycle's last frame, and the cycle ran to
+    /// its end, so the gc step's number covers the whole cycle.
     /// </summary>
     public static bool CycleVerdict(CycleTally tally, out string measured, out string detail)
     {
         int asked = 2 * tally.Cycles;
-        measured = $"{tally.DeskTurns}/{asked} reading view turns, {tally.CityTurns}/{asked} city turns, {tally.Refused} refused, {tally.Ran}/{tally.Frames} frames, " +
+        measured = $"{tally.DeskTurns}/{asked} reading view turns, {tally.CityTurns}/{asked} city turns, {tally.CutShort} cut short, {tally.Refused} refused, {tally.Ran}/{tally.Frames} frames, " +
                    (!tally.Opened ? "the gc window never opened" : tally.ShutAt > 0 ? $"the gc window shut after frame {tally.ShutAt}" : "inside the gc window");
         var failures = new List<string>();
         if (!string.IsNullOrEmpty(tally.Missing))
@@ -1761,13 +1854,15 @@ public static class CamOps
             failures.Add("the gc window never opened: a gc step must follow camcycle n = 1");
         if (tally.Refused > 0 || tally.DeskTurns != asked || tally.CityTurns != asked)
             failures.Add("a turn did not take: the reading toggle and the city must be live (a traveller at the desk, the PC closed, nothing held)");
+        if (tally.CutShort > 0)
+            failures.Add($"a city move was cut short: the city's own clock had not landed {SettleFrames} frames before its hold ended (CityView steps by UiMotion.Delta, so the 30 fps step reaches it; each city move is held for its timeline at 30 fps and the settle)");
         if (tally.Frames <= 0 || tally.Ran < tally.Frames)
             failures.Add("the cycle did not run to its end (camcycle n = 0 came first)");
         if (tally.ShutAt > 0)
             failures.Add($"the gc window shut after the cycle's frame {tally.ShutAt} of {tally.Frames}: lengthen the gc step (f seconds at 30 frames each)");
         detail = failures.Count > 0
             ? string.Join("; ", failures)
-            : "the reading view turned in and back and the city looked at and back, every turn inside the gc window, which stayed open to the cycle's last frame (BUG-65e, 73e)";
+            : "the reading view turned in and back and the city looked at and back, every city look landed on its own clock, every turn inside the gc window, which stayed open to the cycle's last frame (BUG-65e, 73e)";
         return failures.Count == 0;
     }
 
@@ -1825,10 +1920,12 @@ public static class CamOps
     /// later (the window's opening frame is not counted: QaRunner.Gc), turns
     /// the reading view in and back and the city to and back,
     /// <see cref="CycleTally.Cycles"/> times, holding each move for its frames
-    /// at the recorder's 30 fps game step (Time.captureFramerate, as a drag
-    /// and a recording run it) and watching the window after every frame.
-    /// Nothing here allocates once the window is open: plain frame yields, no
-    /// wait objects, no text.
+    /// at the recorder's 30 fps game step (<see cref="HoldStep"/>: the reading
+    /// blend's game time and the city's clock, UiMotion.Delta, both follow it)
+    /// and watching the window after every frame. A city move counts the
+    /// frames its own clock has landed (CityView.Landed); fewer than
+    /// <see cref="SettleFrames"/> is a move cut short. Nothing here allocates
+    /// once the window is open: plain frame yields, no wait objects, no text.
     /// </summary>
     private static IEnumerator Cycling(QaRunner runner, CycleTally tally, DeskView desk, CityView city, int deskFrames, int cityFrames)
     {
@@ -1842,8 +1939,8 @@ public static class CamOps
             yield return null;
         }
         tally.Opened = true;
-        tally.RestoreRate = Time.captureFramerate;
-        Time.captureFramerate = SeqRecorder.Fps;
+        tally.HoldsStep = true;
+        HoldStep();
         yield return null;
         for (int turn = 0; turn < 4 * tally.Cycles && tally.Running; turn++)
         {
@@ -1854,14 +1951,18 @@ public static class CamOps
                 tally.DeskTurns++;
             else
                 tally.CityTurns++;
-            int frames = phase < 2 ? deskFrames : cityFrames;
+            int frames = phase < 2 ? deskFrames : cityFrames, landed = 0;
             for (int f = 0; f < frames && tally.Running; f++)
             {
                 yield return null;
                 tally.Ran++;
                 if (tally.ShutAt == 0 && !GcWindowOpen(runner))
                     tally.ShutAt = tally.Ran;
+                if (phase >= 2 && city.Landed)
+                    landed++;
             }
+            if (phase >= 2 && landed < SettleFrames)
+                tally.CutShort++;
         }
         Stop(tally);
     }
@@ -1886,16 +1987,16 @@ public static class CamOps
         return city.IsOn != looked;
     }
 
-    /// <summary>Ends a cycle (after its last frame, or at camcycle n = 0 before that): it stops, and the frame rate it set goes back once.</summary>
+    /// <summary>Ends a cycle (after its last frame, at camcycle n = 0 before that, or at the run's end): it stops, and lets go of the 30 fps step once.</summary>
     private static void Stop(CycleTally tally)
     {
         if (tally == null)
             return;
         tally.Running = false;
-        if (tally.RestoreRate >= 0)
+        if (tally.HoldsStep)
         {
-            Time.captureFramerate = tally.RestoreRate;
-            tally.RestoreRate = -1;
+            tally.HoldsStep = false;
+            LetGoStep();
         }
     }
 }

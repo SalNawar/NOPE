@@ -42,7 +42,12 @@ using UnityEngine.UI;
 /// the screen's shape, never shown with bars: Saleh's call, CAM.md), and its
 /// parallax (the sweep and the pointer's look) eases on a spring that never
 /// moves its nearest layer more than one pixel at 1080p a frame of a 30 fps
-/// capture, the same seconds at any frame rate (BUG-69; CityParallax). A
+/// capture, the same seconds at any frame rate (BUG-69; CityParallax).
+/// Its clock (the turn, the fade and the parallax) is the game feel's
+/// (UiMotion.Delta): real time, or a capture's fixed step while frames are
+/// captured at a fixed rate (Unity's unscaled time ignores a capture), so
+/// a recording and the QA rig's 30 fps step see the city's own seconds
+/// at any display rate (CAM round 9). A
 /// click on the city, Q (OfficeViewController: Q leaves the city as it
 /// leaves the PC), D, the right arrow, a right-click, Esc (ControlRules) or
 /// the "Desk ▶" button at the right edge runs the same timeline back
@@ -147,6 +152,9 @@ public sealed class CityView : MonoBehaviour
     /// <summary>True while the view turns (or has turned) toward the city.</summary>
     public bool IsOn { get; private set; }
 
+    /// <summary>True once the turn has run its whole timeline on its clock: at its end looking at the city, at 0 back at the desk (always, without a config). The QA rig's cam_gc cycle refuses a city move that did not land with its settle to spare (CamOps).</summary>
+    public bool Landed => config == null || (IsOn ? _clock >= Total : _clock <= 0f);
+
     /// <summary>Raised after the view turns to the city or back.</summary>
     public event Action Changed;
 
@@ -177,7 +185,7 @@ public sealed class CityView : MonoBehaviour
             Track(group, false);
         foreach (CanvasGroup group in chrome ?? Array.Empty<CanvasGroup>())
             Track(group, true);
-        Draw(0f);
+        Draw(0f, 0f);
     }
 
     /// <summary>The CanvasGroup on <paramref name="go"/> (added when it has none).</summary>
@@ -306,14 +314,15 @@ public sealed class CityView : MonoBehaviour
     /// <summary>The timeline's length in seconds (0 without a config).</summary>
     private float Total => config != null ? CityLookTimeline.Total(config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
 
-    /// <summary>Advances the timeline (unscaled time) and draws it: the hall's pan, the panorama's fade, and the living city's hour, rain and motion while it shows; then the controls' opacity.</summary>
+    /// <summary>Advances the timeline on the game feel's clock (UiMotion.Delta: real time, or a fixed-rate capture's step) and draws it: the hall's pan, the panorama's fade, and the living city's hour, rain and motion while it shows; then the controls' opacity.</summary>
     private void Update()
     {
         if (config == null)
             return;
         float total = Total;
-        _clock = CityLookTimeline.Step(_clock, IsOn, Time.unscaledDeltaTime, total, UiMotion.Amount.Still);
-        Draw(_clock);
+        float dt = UiMotion.Delta(Time.unscaledDeltaTime);
+        _clock = CityLookTimeline.Step(_clock, IsOn, dt, total, UiMotion.Amount.Still);
+        Draw(_clock, dt);
         ShowControls(total);
     }
 
@@ -356,7 +365,8 @@ public sealed class CityView : MonoBehaviour
         group.blocksRaycasts = group.interactable = alpha > 0f;
     }
 
-    private void Draw(float clock)
+    /// <summary>Draws the timeline at <paramref name="clock"/>, the parallax's spring stepped by <paramref name="dt"/> (the frame's seconds on the game feel's clock).</summary>
+    private void Draw(float clock, float dt)
     {
         float veil = config != null ? CityLookTimeline.Veil(clock, config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
         float reveal = config != null ? CityLookTimeline.Reveal(clock, config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
@@ -401,8 +411,7 @@ public sealed class CityView : MonoBehaviour
 
         // The depth parallax: the sweep as it comes into view, then the pointer's look (each kept small enough to ease within
         // the speed limit: no crawl at it); the pan follows them on a spring that never moves the nearest layer more than a
-        // pixel at 1080p a frame of a 30 fps capture (BUG-69), from where the city first shows.
-        float dt = Time.unscaledDeltaTime;
+        // pixel at 1080p a frame of a 30 fps capture (BUG-69), from where the city first shows; both on the frame's dt.
         _shown += IsOn ? dt : 0f;
         float cityPan = 0f;
         float maxSpeed = CityParallax.MaxSpeed(1f - 2f * _crop, ShownWidthPx(), UnityEngine.Screen.height, TrafficDepth);

@@ -9,7 +9,7 @@ using UnityEngine;
 
 /// <summary>
 /// CAM's rig verdicts that need no Unity (CamOps; docs/pending/CAM.md,
-/// rounds 4 to 8): a private collection is counted whatever its type (a
+/// rounds 4 to 9): a private collection is counted whatever its type (a
 /// HashSet is no non-generic ICollection, so the chip read's "came back out"
 /// wait never saw the reader's set), and a chip read counts only once its
 /// paper is out (ChipReadOf); a chrome leg's whole report, from what its
@@ -22,9 +22,11 @@ using UnityEngine;
 /// dragged decoration by its Root); and the view a framing leg names
 /// (ReadingLeg: camframe judges a leg only on that view); and DeskView's
 /// blend hook, which runs on every view change, allocating nothing (Hook,
-/// measured per thread and read in its IL: BUG-65e/73e, round 8); and
-/// the cam_gc cycle's line (CycleVerdict): green only when every turn took
-/// and the whole cycle ran inside the gc window (round 8); and CamChecks'
+/// measured per thread and read in its IL: BUG-65e/73e, round 8) and
+/// installing itself once, the hook it found kept (round 9); and the cam_gc
+/// cycle's line (CycleVerdict): green only when every turn took, every city
+/// move landed on its own clock (round 9) and the whole cycle ran inside the
+/// gc window (round 8); and CamChecks'
 /// verdict over several patterns (every pattern required, on the built
 /// player when the check says so: round 8). Pure
 /// (types and values only, no Unity object made; the hook test puts
@@ -209,17 +211,25 @@ public class CamRigTests
         FieldInfo owner = DeskViewStatic("_hookOwner"), before = DeskViewStatic("_before");
         object ownerWas = owner.GetValue(null), beforeWas = before.GetValue(null);
         CinemachineCore.GetBlendOverrideDelegate installed = CinemachineCore.GetBlendOverride;
+        // Another system's hook, there before the first call (none today): ours keeps it and asks it for every other blend.
+        CinemachineCore.GetBlendOverrideDelegate theirs = (a, b, blend, source) => blend;
         try
         {
+            CinemachineCore.GetBlendOverride = theirs;
             hook(null); // installs the hook (once) and compiles the call
             CinemachineCore.GetBlendOverrideDelegate ours = CinemachineCore.GetBlendOverride;
             Assert.IsNotNull(ours, "the hook is installed");
+            Assert.AreNotSame(theirs, ours, "ours is installed over the hook found");
+            Assert.AreSame(theirs, before.GetValue(null), "the hook found before the first call is kept, to ask for every other blend");
             long start = GC.GetAllocatedBytesForCurrentThread();
             for (int i = 0; i < 64; i++)
                 hook(null);
             long allocated = GC.GetAllocatedBytesForCurrentThread() - start;
             Assert.AreEqual(0L, allocated, "64 view changes allocated in DeskView.Hook: make our blend delegate once and compare against it");
             Assert.AreSame(ours, CinemachineCore.GetBlendOverride, "installed once: a later view change keeps the same hook");
+            // Round 9: a Hook that installed itself again on every call would keep its own delegate as the hook before it,
+            // so OwnersBlend would ask itself without end for every blend that does not involve the reading camera.
+            Assert.AreSame(theirs, before.GetValue(null), "installed once: after 64 view changes the hook kept is still the one found before the first call, never ours");
         }
         finally
         {
@@ -246,7 +256,16 @@ public class CamRigTests
         // WAVE2_OPEN2 CAM #2: the gc window counted frames while the cycle waited real seconds, its first tilt ran before
         // the window opened, and a refused TiltIn or Look measured an idle window at 0 B and passed.
         Assert.IsTrue(CamOps.CycleVerdict(WholeCycle(), out string measured, out string detail), detail);
-        StringAssert.Contains("4/4 reading view turns, 4/4 city turns, 0 refused, 300/300 frames, inside the gc window", measured);
+        StringAssert.Contains("4/4 reading view turns, 4/4 city turns, 0 cut short, 0 refused, 300/300 frames, inside the gc window", measured);
+
+        // Round 9 (the city half of WAVE2_OPEN2 CAM #2): the city's clock ran on Unity's unscaled time, which the cycle's
+        // 30 fps step never reached, so above 45 Hz each city move's hold ended before its look did. A city move whose own
+        // clock had not landed with the settle to spare refuses the cycle on its own, every turn taken.
+        CamOps.CycleTally cutShort = WholeCycle();
+        cutShort.CutShort = 1;
+        Assert.IsFalse(CamOps.CycleVerdict(cutShort, out measured, out detail), "a city move cut short: its revealed frames were not all measured");
+        StringAssert.Contains("4/4 city turns, 1 cut short", measured);
+        StringAssert.Contains("a city move was cut short", detail);
 
         CamOps.CycleTally refused = WholeCycle();
         refused.DeskTurns = 3;
