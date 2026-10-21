@@ -259,6 +259,18 @@ public class CamRigTests
         noCity.Refused = 4;
         Assert.IsFalse(CamOps.CycleVerdict(noCity, out _, out _), "the city not live: no look measured");
 
+        // Each count on its own refuses the cycle (a whole cycle has every turn taken and none refused).
+        CamOps.CycleTally cityShort = WholeCycle();
+        cityShort.CityTurns = 2;
+        Assert.IsFalse(CamOps.CycleVerdict(cityShort, out _, out _), "two city turns of four");
+        CamOps.CycleTally deskShort = WholeCycle();
+        deskShort.DeskTurns = 2;
+        Assert.IsFalse(CamOps.CycleVerdict(deskShort, out _, out _), "two reading view turns of four");
+        CamOps.CycleTally oneRefused = WholeCycle();
+        oneRefused.Refused = 1;
+        Assert.IsFalse(CamOps.CycleVerdict(oneRefused, out _, out detail), "a refused turn");
+        StringAssert.Contains("a turn did not take", detail);
+
         CamOps.CycleTally neverOpened = WholeCycle();
         neverOpened.Opened = false;
         neverOpened.DeskTurns = neverOpened.CityTurns = neverOpened.Ran = 0;
