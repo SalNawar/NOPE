@@ -2,7 +2,7 @@
 
     python tools/hall/region_luma.py <seq folder> (--roi x0,y0,x1,y1 | --track NAME[,NAME...]) [--stat mean|p90]
                                      [--max-range R] [--from S] [--to S] [--fps 30]
-    python tools/hall/region_luma.py <seq folder> (--roi ... | --track ...) --monotonic [--tolerance 0.05]
+    python tools/hall/region_luma.py <seq folder> (--roi ... | --track ... | --mask PNG) --monotonic [--tolerance 0.05]
     python tools/hall/region_luma.py <seq folder> (--roi ... | --track ...) --dips N [--min-depth 10]
     python tools/hall/region_luma.py --compare <seqA> <seqB> (--roi ... | --track ...) [--stat ...] [--max-ratio Q]
 
@@ -11,7 +11,10 @@ The region is either
   --track  the rects the scenario tracked (QA-RIG's "track" op: frames.tsv's tracked column, capture px, per frame),
            so the region follows the object at every aspect and as it moves; several names: the mean of each
            one's statistic (each car on its own, not the sky between them). A frame where none of them is on screen
-           is skipped.
+           is skipped; or
+  --mask   a mask image of the frames' size (white: measured), alone or inside --roi / --track: the crossfade's
+           pixels where both of a slot's faces are opaque (tools/hall/slot_mask.py), where SlotCrossfade promises
+           a one-way blend; at an art's soft edge, or where one face is transparent, the blend may turn.
 Frames are the sequence's f0000.png ... (SeqRecorder, 30 fps). Luma is Rec. 601 on 0-255. The statistic over the
 region is its mean, or with --stat p90 the 90th percentile (a small lit object in a tracked rect: the car's body and
 lights, not the sky behind it).
@@ -20,7 +23,11 @@ lights, not the sky behind it).
                     seconds; exit 0 when the range is at most --max-range (the AVAILABLE sign's +-3: --max-range 6).
   --monotonic:      the hall slot crossfade (BUG-71): from its first frames' level to its last frames', the series
                     never leaves that span by more than --tolerance of it, and never turns back by more than that
-                    (a dip toward the painting fails); prints the per-frame values.
+                    (a dip toward the painting fails); prints the per-frame values. Two faces of about the same
+                    luma leave a span of 1-2, where 5 % of it is a tenth of a luma: the crossfade's pass is then
+                    tools/hall/slot_fade.py, which measures the painting showing through in colour.
+  --decode:         every mode reads the frames with QA-RIG's extra sRGB encode undone (decode below): the screen's
+                    own luma, not the washed-out sequence's.
   --dips N:         the AVAILABLE sign's invitation (BUG-67): exactly N dips, each at least --min-depth luma under
                     the levels either side of it, then steady; prints the per-frame values and each dip's time.
   --compare:        the statistic of A's region over B's (the traffic tint: H5 over H2, pass at most --max-ratio 0.5).
@@ -65,9 +72,19 @@ def tracked(seq):
     return out
 
 
-def region_stat(path, box, stat, fractions):
-    """The statistic of the luma inside box (x0, y0, x1, y1): fractions of the frame, else capture px."""
+def decode(img):
+    """Undoes one sRGB encode (0-255 in, 0-255 out): QA-RIG's sequence frames are sRGB-encoded twice (SeqRecorder blits the
+    sRGB screenshot, read as linear, into an sRGB texture; integration 2026-10-21, a finding for QA-RIG), so they read
+    washed out: a frame's 11, 92, 166 shows as 59, 162, 211. A still (stills/, full resolution) is encoded once."""
+    v = img / 255.0
+    return np.where(v <= 0.04045, v / 12.92, ((v + 0.055) / 1.055) ** 2.4) * 255.0
+
+
+def region_stat(path, box, stat, fractions, mask=None, decoded=False):
+    """The statistic of the luma inside box (x0, y0, x1, y1): fractions of the frame, else capture px; only the mask's white pixels when one is given; with decoded, on the frame with the recorder's extra sRGB encode undone."""
     img = np.asarray(Image.open(path).convert('RGB'), np.float32)
+    if decoded:
+        img = decode(img)
     h, w = img.shape[:2]
     x0, y0, x1, y1 = box
     if fractions:
@@ -77,6 +94,12 @@ def region_stat(path, box, stat, fractions):
     if x1 <= x0 or y1 <= y0:
         return None
     luma = img[y0:y1, x0:x1] @ np.array([0.299, 0.587, 0.114], np.float32)
+    if mask is not None:
+        if mask.shape != (h, w):
+            raise SystemExit(f'the mask is {mask.shape[1]}x{mask.shape[0]}, the frames {w}x{h}')
+        luma = luma[mask[y0:y1, x0:x1]]
+        if luma.size == 0:
+            return None
     return float(np.percentile(luma, 90)) if stat == 'p90' else float(luma.mean())
 
 
@@ -86,13 +109,14 @@ def series(seq, args, start, end):
     b = len(files) if end is None else min(len(files), int(round(end * args.fps)))
     rects = tracked(seq) if args.track else None
     names = args.track.split(',') if args.track else []
+    mask = np.asarray(Image.open(args.mask).convert('L')) >= 128 if args.mask else None
     values = []
     for i in range(a, b):
         if rects is not None:
             boxes = [r for n, r in rects.get(i, {}).items() if n in names]
         else:
-            boxes = [args.roi]
-        stats = [v for v in (region_stat(files[i], box, args.stat, rects is None) for box in boxes) if v is not None]
+            boxes = [args.roi or (0.0, 0.0, 1.0, 1.0)]
+        stats = [v for v in (region_stat(files[i], box, args.stat, rects is None, mask, args.decode) for box in boxes) if v is not None]
         if stats:
             values.append(float(np.mean(stats)))
     if not values:
@@ -106,6 +130,8 @@ def main():
     ap.add_argument('--compare', nargs=2)
     ap.add_argument('--roi', type=lambda s: tuple(float(v) for v in s.split(',')))
     ap.add_argument('--track')
+    ap.add_argument('--mask')
+    ap.add_argument('--decode', action='store_true')
     ap.add_argument('--stat', choices=['mean', 'p90'], default='mean')
     ap.add_argument('--max-range', type=float, default=6.0)
     ap.add_argument('--max-ratio', type=float, default=0.5)
@@ -117,8 +143,10 @@ def main():
     ap.add_argument('--to', dest='end', type=float, default=None)
     ap.add_argument('--fps', type=float, default=30.0)
     args = ap.parse_args()
-    if (args.roi is None) == (args.track is None):
-        ap.error('one of --roi or --track')
+    if args.roi is not None and args.track is not None:
+        ap.error('--roi or --track, not both')
+    if args.roi is None and args.track is None and args.mask is None:
+        ap.error('one of --roi, --track or --mask')
     if args.compare:
         a = np.mean(series(args.compare[0], args, args.start, args.end))
         b = np.mean(series(args.compare[1], args, args.start, args.end))

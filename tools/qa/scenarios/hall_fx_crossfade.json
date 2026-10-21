@@ -115,6 +115,9 @@
       "f": 1.5
     },
     {
+      "op": "hallDrawing"
+    },
+    {
       "op": "still",
       "name": "crossfade_before"
     },
