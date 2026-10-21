@@ -162,6 +162,9 @@ public static class ShiftScoring
     /// Directive Memo row and the exact values involved (Citations), the
     /// warning or penalty), and returned as one text for Mail's copy: the
     /// title and those lines (no stability number: the Helix River shows the damage).
+    /// Every line is the chrome's (UiText.Get, UiText.Format): the player's
+    /// language on any day, so the slip, Mail's copy and the visit record
+    /// carry no world-language text (BUG-3a, CODE-45; D7).
     /// </summary>
     private static string Citation(CaseVerdict v, string mistake, CitationFacts facts, string consequence)
     {

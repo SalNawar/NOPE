@@ -24173,16 +24173,10 @@
         "tier": "Flavour"
       },
       {
-        "key": "settings.languageLocked",
-        "text": "Locked from day {0}: the papers and labels on your desk read the world's language now; hover a word to translate it (the Translation Lens). The PC always reads English: scan a paper to read its copy cleanly.",
+        "key": "settings.languageDesk",
+        "text": "For the papers and the newspaper only: the rest of the game and the PC always read your language. Never locked; papers already on your desk keep their print.",
         "gloss": "None",
         "tier": "Flavour"
-      },
-      {
-        "key": "settings.languageDesk",
-        "text": "For the papers and labels on your desk. The PC always reads English.",
-        "gloss": "None",
-        "tier": "Full"
       },
       {
         "key": "settings.motion",
@@ -24233,6 +24227,120 @@
         "tier": "Flavour"
       },
       {
+        "key": "settings.sound",
+        "text": "Sound",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.volumeMaster",
+        "text": "Master volume",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.volumeMusic",
+        "text": "Music",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.volumeEffects",
+        "text": "Effects",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.volumeValue",
+        "text": "{0} %",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.display",
+        "text": "Display",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.windowed",
+        "text": "Windowed",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.borderless",
+        "text": "Borderless",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.fullscreen",
+        "text": "Fullscreen",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.resolution",
+        "text": "Resolution",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.resolutionValue",
+        "text": "{0} × {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resolutionDown",
+        "text": "◀",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resolutionUp",
+        "text": "▶",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.vsync",
+        "text": "VSync",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.off",
+        "text": "Off",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.on",
+        "text": "On",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.brightness",
+        "text": "Brightness",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "settings.brightnessValue",
+        "text": "{0} %",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.reduceFlashing",
+        "text": "Reduce flashing",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "settings.desktop",
         "text": "Desktop icons open with",
         "gloss": "None",
@@ -24270,7 +24378,7 @@
       },
       {
         "key": "settings.note",
-        "text": "Colours, fonts and the wallpaper always follow history. A language change applies the next time the office opens. Reduced motion shows translations at once.",
+        "text": "Colours and the wallpaper always follow history; the PC's type and language stay yours. Reduced motion shows translations at once.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -25986,7 +26094,7 @@
       },
       {
         "key": "case.roleUnknown",
-        "text": "Traveler",
+        "text": "Traveller",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -26064,7 +26172,7 @@
       },
       {
         "key": "citation.deniedWrong",
-        "text": "Denied a legitimate, permitted traveler.",
+        "text": "Denied a legitimate, permitted traveller.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -29769,8 +29877,8 @@
             "text": "الإنجليزية دائما"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "مقفلة منذ اليوم {0}: المكتب يقرأ لغة العالم الآن.\nمرر المؤشر فوق كلمة لترجمتها (عدسة الترجمة)."
+            "key": "settings.languageDesk",
+            "text": "للأوراق والصحيفة فقط: بقية اللعبة والحاسوب بلغتك دائما. لا يقفل أبدا، والأوراق التي على مكتبك تحتفظ بطباعتها."
           },
           {
             "key": "settings.motion",
@@ -29801,6 +29909,62 @@
             "text": "تشغيل"
           },
           {
+            "key": "settings.sound",
+            "text": "الصوت"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "مستوى الصوت العام"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "الموسيقى"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "المؤثرات"
+          },
+          {
+            "key": "settings.display",
+            "text": "العرض"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "نافذة"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "بلا إطار"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "ملء الشاشة"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "الدقة"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "المزامنة الرأسية"
+          },
+          {
+            "key": "settings.off",
+            "text": "إيقاف"
+          },
+          {
+            "key": "settings.on",
+            "text": "تشغيل"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "السطوع"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "تخفيف الوميض"
+          },
+          {
             "key": "settings.desktop",
             "text": "فتح أيقونات سطح المكتب بواسطة"
           },
@@ -29826,7 +29990,7 @@
           },
           {
             "key": "settings.note",
-            "text": "الألوان والخطوط والخلفية تتبع التاريخ دائما. تغيير اللغة يسري في المرة القادمة التي يفتح فيها المكتب. الحركة المخففة تعرض الترجمات فورا."
+            "text": "الألوان والخلفية تتبع التاريخ دائما، أما خط الحاسوب ولغته فيبقيان كما اخترت. الحركة المخففة تعرض الترجمات فورا."
           },
           {
             "key": "startmenu.mail",
@@ -38329,8 +38493,8 @@
             "text": "Πάντα αγγλικά"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "Κλειδωμένο από την ημέρα {0}: το γραφείο διαβάζει πλέον τη γλώσσα του κόσμου. Πέρασε τον δείκτη πάνω από μια λέξη για να τη μεταφράσεις (ο Φακός Μετάφρασης)."
+            "key": "settings.languageDesk",
+            "text": "Μόνο για τα έγγραφα και την εφημερίδα: το υπόλοιπο παιχνίδι και ο υπολογιστής είναι πάντα στη γλώσσα σας. Δεν κλειδώνει ποτέ· τα έγγραφα που είναι ήδη στο γραφείο σας κρατούν την εκτύπωσή τους."
           },
           {
             "key": "settings.motion",
@@ -38361,6 +38525,62 @@
             "text": "Ενεργό"
           },
           {
+            "key": "settings.sound",
+            "text": "Ήχος"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "Γενική ένταση"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "Μουσική"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "Εφέ"
+          },
+          {
+            "key": "settings.display",
+            "text": "Οθόνη"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "Σε παράθυρο"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "Χωρίς πλαίσιο"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "Πλήρης οθόνη"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "Ανάλυση"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "Κάθετος συγχρονισμός"
+          },
+          {
+            "key": "settings.off",
+            "text": "Ανενεργό"
+          },
+          {
+            "key": "settings.on",
+            "text": "Ενεργό"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "Φωτεινότητα"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "Λιγότερες αναλαμπές"
+          },
+          {
             "key": "settings.desktop",
             "text": "Τα εικονίδια ανοίγουν με"
           },
@@ -38386,7 +38606,7 @@
           },
           {
             "key": "settings.note",
-            "text": "Τα χρώματα, οι γραμματοσειρές και η ταπετσαρία ακολουθούν πάντα την ιστορία. Μια αλλαγή γλώσσας ισχύει την επόμενη φορά που ανοίγει το γραφείο. Με μειωμένη κίνηση οι μεταφράσεις εμφανίζονται αμέσως."
+            "text": "Τα χρώματα και η ταπετσαρία ακολουθούν πάντα την ιστορία, ενώ η γραμματοσειρά και η γλώσσα του υπολογιστή μένουν δικές σας. Με μειωμένη κίνηση οι μεταφράσεις εμφανίζονται αμέσως."
           },
           {
             "key": "startmenu.mail",
@@ -46337,8 +46557,8 @@
             "text": "Sempre inglese"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "Bloccata dal giorno {0}: ora l'ufficio legge la lingua del mondo. Passa sopra una parola per tradurla (la Lente di traduzione)."
+            "key": "settings.languageDesk",
+            "text": "Solo per i documenti e il giornale: il resto del gioco e il PC sono sempre nella tua lingua. Mai bloccata; i documenti già sulla scrivania restano come sono stampati."
           },
           {
             "key": "settings.motion",
@@ -46369,6 +46589,62 @@
             "text": "Attivata"
           },
           {
+            "key": "settings.sound",
+            "text": "Audio"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "Volume generale"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "Musica"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "Effetti"
+          },
+          {
+            "key": "settings.display",
+            "text": "Schermo"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "In finestra"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "Senza bordi"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "Schermo intero"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "Risoluzione"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "Sincronia verticale"
+          },
+          {
+            "key": "settings.off",
+            "text": "Disattivato"
+          },
+          {
+            "key": "settings.on",
+            "text": "Attivato"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "Luminosità"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "Riduci i lampeggi"
+          },
+          {
             "key": "settings.desktop",
             "text": "Le icone del desktop si aprono con"
           },
@@ -46394,7 +46670,7 @@
           },
           {
             "key": "settings.note",
-            "text": "Colori, caratteri e sfondo seguono sempre la storia. Un cambio di lingua vale dalla prossima apertura dell'ufficio. Il movimento ridotto mostra subito le traduzioni."
+            "text": "Colori e sfondo seguono sempre la storia; caratteri e lingua del PC restano i tuoi. Il movimento ridotto mostra subito le traduzioni."
           },
           {
             "key": "startmenu.mail",
@@ -54465,8 +54741,8 @@
             "text": "Immer Englisch"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "Gesperrt seit Tag {0}: Das Amt spricht jetzt die Sprache der Welt. Fahre über ein Wort, um es zu übersetzen (die Übersetzungslupe)."
+            "key": "settings.languageDesk",
+            "text": "Nur für die Papiere und die Zeitung: Der Rest des Spiels und der PC bleiben immer in deiner Sprache. Nie gesperrt; Papiere, die schon auf deinem Schreibtisch liegen, behalten ihren Druck."
           },
           {
             "key": "settings.motion",
@@ -54497,6 +54773,62 @@
             "text": "An"
           },
           {
+            "key": "settings.sound",
+            "text": "Ton"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "Gesamtlautstärke"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "Musik"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "Effekte"
+          },
+          {
+            "key": "settings.display",
+            "text": "Anzeige"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "Fenster"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "Rahmenlos"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "Vollbild"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "Auflösung"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "VSync"
+          },
+          {
+            "key": "settings.off",
+            "text": "Aus"
+          },
+          {
+            "key": "settings.on",
+            "text": "An"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "Helligkeit"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "Weniger Blitzen"
+          },
+          {
             "key": "settings.desktop",
             "text": "Desktop-Symbole öffnen mit"
           },
@@ -54522,7 +54854,7 @@
           },
           {
             "key": "settings.note",
-            "text": "Farben, Schriften und das Hintergrundbild folgen immer der Geschichte. Ein Sprachwechsel gilt ab dem nächsten Öffnen des Amts. Reduzierte Bewegung zeigt Übersetzungen sofort."
+            "text": "Farben und das Hintergrundbild folgen immer der Geschichte; Schrift und Sprache des PCs bleiben deine. Reduzierte Bewegung zeigt Übersetzungen sofort."
           },
           {
             "key": "startmenu.mail",
@@ -62817,8 +63149,8 @@
             "text": "始终英语"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "自第{0}天起锁定：办公室现在使用世界的语言。将鼠标悬停在词语上即可翻译（翻译透镜）。"
+            "key": "settings.languageDesk",
+            "text": "仅限文件和报纸：游戏的其余部分和电脑始终使用你的语言。从不锁定；桌上已有的文件保留原来的印刷。"
           },
           {
             "key": "settings.motion",
@@ -62849,6 +63181,62 @@
             "text": "开"
           },
           {
+            "key": "settings.sound",
+            "text": "声音"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "主音量"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "音乐"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "音效"
+          },
+          {
+            "key": "settings.display",
+            "text": "显示"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "窗口"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "无边框"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "全屏"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "分辨率"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "垂直同步"
+          },
+          {
+            "key": "settings.off",
+            "text": "关"
+          },
+          {
+            "key": "settings.on",
+            "text": "开"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "亮度"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "减少闪烁"
+          },
+          {
             "key": "settings.desktop",
             "text": "桌面图标打开方式"
           },
@@ -62874,7 +63262,7 @@
           },
           {
             "key": "settings.note",
-            "text": "颜色、字体和壁纸始终跟随历史。语言更改在下次打开办公室时生效。减弱动效会立即显示译文。"
+            "text": "颜色和壁纸始终跟随历史；电脑的字体和语言保持你的选择。减弱动效会立即显示译文。"
           },
           {
             "key": "startmenu.mail",
@@ -70517,8 +70905,8 @@
             "text": "常に英語"
           },
           {
-            "key": "settings.languageLocked",
-            "text": "{0}日目から固定: 局は今や世界の言語を使います。単語にカーソルを合わせると翻訳されます (翻訳レンズ)。"
+            "key": "settings.languageDesk",
+            "text": "書類と新聞のみ：ゲームのほかの部分とPCは常にあなたの言語のままです。ロックされることはなく、机の上にある書類は印刷されたままです。"
           },
           {
             "key": "settings.motion",
@@ -70549,6 +70937,62 @@
             "text": "オン"
           },
           {
+            "key": "settings.sound",
+            "text": "サウンド"
+          },
+          {
+            "key": "settings.volumeMaster",
+            "text": "マスター音量"
+          },
+          {
+            "key": "settings.volumeMusic",
+            "text": "音楽"
+          },
+          {
+            "key": "settings.volumeEffects",
+            "text": "効果音"
+          },
+          {
+            "key": "settings.display",
+            "text": "画面"
+          },
+          {
+            "key": "settings.windowed",
+            "text": "ウィンドウ"
+          },
+          {
+            "key": "settings.borderless",
+            "text": "ボーダーレス"
+          },
+          {
+            "key": "settings.fullscreen",
+            "text": "フルスクリーン"
+          },
+          {
+            "key": "settings.resolution",
+            "text": "解像度"
+          },
+          {
+            "key": "settings.vsync",
+            "text": "垂直同期"
+          },
+          {
+            "key": "settings.off",
+            "text": "オフ"
+          },
+          {
+            "key": "settings.on",
+            "text": "オン"
+          },
+          {
+            "key": "settings.brightness",
+            "text": "明るさ"
+          },
+          {
+            "key": "settings.reduceFlashing",
+            "text": "点滅を抑える"
+          },
+          {
             "key": "settings.desktop",
             "text": "デスクトップアイコンを開く操作"
           },
@@ -70574,7 +71018,7 @@
           },
           {
             "key": "settings.note",
-            "text": "色、フォント、壁紙は常に歴史に従います。言語の変更は次に局を開いた時に反映されます。動きを控えめにすると翻訳がすぐ表示されます。"
+            "text": "色と壁紙は常に歴史に従い、PCのフォントと言語はあなたの設定のままです。動きを控えめにすると翻訳がすぐ表示されます。"
           },
           {
             "key": "startmenu.mail",

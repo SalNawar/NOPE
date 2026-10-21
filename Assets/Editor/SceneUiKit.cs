@@ -12,10 +12,50 @@ using UnityEngine.UI;
 /// parent or created with the given layout. An object that already exists is
 /// returned as it is, never re-laid out (the two builders' create-only policy).
 /// The art slots (redesign phase 27, ArtSlotImage) are the one exception: a
-/// slot's configuration is re-applied on every build.
+/// slot's configuration is re-applied on every build. Every text it creates
+/// is set in the kit's body face (<see cref="BodyFace"/>), never TMP's default
+/// LiberationSans, and <see cref="Refont"/> re-fonts the texts a scene still
+/// has in it (BUG-38a: the builders' zero-LiberationSans rule).
 /// </summary>
 internal static class SceneUiKit
 {
+    /// <summary>The kit's body face (Outfit Regular: UiKitFonts.Body), loaded once; null without the kit's fonts.</summary>
+    public static TMP_FontAsset BodyFace => _body != null ? _body : _body = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(UiKitFonts.Body);
+
+    /// <summary>The kit's bold body face (Outfit Bold: UiKitFonts.BodyBold), loaded once; null without the kit's fonts.</summary>
+    public static TMP_FontAsset BodyBoldFace => _bodyBold != null ? _bodyBold : _bodyBold = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(UiKitFonts.BodyBold);
+
+    private static TMP_FontAsset _body, _bodyBold;
+
+    /// <summary>True for a text set in a LiberationSans asset (TMP's default, its fallback) or in no font at all: what the zero-LiberationSans rule forbids (BUG-38a).</summary>
+    public static bool IsDefaultFace(TMP_Text text) =>
+        text != null && (text.font == null || text.font.name.StartsWith("LiberationSans", System.StringComparison.Ordinal));
+
+    /// <summary>
+    /// Sets every text under <paramref name="root"/> (inactive ones included)
+    /// still in a default face (<see cref="IsDefaultFace"/>) in the kit's body
+    /// face, its bold face when the text is bold (BUG-38a: "the kit pass
+    /// re-fonts every remaining default-font text"); the office's kit pass
+    /// calls it on every root of the office's scene, a Home or Title builder on
+    /// its canvas. Returns how many it re-fonted; none without the kit's fonts.
+    /// </summary>
+    public static int Refont(Transform root)
+    {
+        if (root == null || BodyFace == null)
+            return 0;
+        int changed = 0;
+        foreach (TMP_Text text in root.GetComponentsInChildren<TMP_Text>(true))
+        {
+            if (!IsDefaultFace(text))
+                continue;
+            TMP_FontAsset face = (text.fontStyle & FontStyles.Bold) != 0 && BodyBoldFace != null ? BodyBoldFace : BodyFace;
+            text.font = face;
+            text.fontSharedMaterial = face.material;
+            EditorUtility.SetDirty(text);
+            changed++;
+        }
+        return changed;
+    }
     /// <summary>
     /// Stamps (or re-stamps) a graphic's theme tag (piece 6): its role and part,
     /// and for a text its label key, built style, kind and shrink-to-fit. The
@@ -141,6 +181,7 @@ internal static class SceneUiKit
         Stretch((RectTransform)go.transform, anchorMin, anchorMax);
 
         var text = go.AddComponent<TextMeshProUGUI>();
+        SetBodyFace(text);
         text.text = content;
         text.fontSize = fontSize;
         text.alignment = alignment;
@@ -174,6 +215,7 @@ internal static class SceneUiKit
         Stretch((RectTransform)labelGo.transform, Vector2.zero, Vector2.one);
 
         var labelText = labelGo.AddComponent<TextMeshProUGUI>();
+        SetBodyFace(labelText);
         labelText.text = label;
         labelText.fontSize = 26;
         labelText.alignment = TextAlignmentOptions.Center;
@@ -216,6 +258,7 @@ internal static class SceneUiKit
             t.transform.SetParent(area.transform, false);
             Stretch((RectTransform)t.transform, Vector2.zero, Vector2.one);
             var text = t.AddComponent<TextMeshProUGUI>();
+            SetBodyFace(text);
             text.fontSize = fontSize;
             text.color = colour;
             text.fontStyle = style;
@@ -474,6 +517,15 @@ internal static class SceneUiKit
             return;
         tag.Configure(tag.Role, ThemePart.Kit, tag.LabelKey, tag.BaseStyle | style, tag.TextKind, tag.ShrinkToFit);
         tag.SetFace(face);
+    }
+
+    /// <summary>Sets a new text in the kit's body face (BUG-38a; nothing without the kit's fonts).</summary>
+    public static void SetBodyFace(TMP_Text text)
+    {
+        if (text == null || BodyFace == null)
+            return;
+        text.font = BodyFace;
+        text.fontSharedMaterial = BodyFace.material;
     }
 
     /// <summary>Anchors a rect to the given relative corners with no offsets, so it fills them.</summary>
