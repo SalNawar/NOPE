@@ -187,6 +187,12 @@ TDD note: the Domain tests and the APIs were written together in this session. `
 
 ## 4. For INTEGRATION
 
+**Integration status (integrate/a, 2026-10-21; `E:\unity\NOPE-tools\reports\INTEGRATE_TOOLS.md`):**
+- **FEATURES: folded** into `docs/FEATURES.md` as written below. Line 51 also carries the integration's swing guard (`UvTorchHold.Shown`, `SwingCovers`), and lines 51 and 156 name their Unity checks (`tools_torch`, `tools_clicks`, `tools_lens`). Line 51's microprint sentence and line 52's microprint read were folded together with CUTS' lines 51 and 52, which they rewrite.
+- **Known red: added** `tools.micro` (deferred to #13 by FIX_PLAN_v2's deferred criteria). `tools.torch.clickBox` needs no entry: OfficeGameplay was rebuilt and the check is green.
+- **UvReveal.shader header: reworded** (`_UvConeOn` is 0..1, fluorescing in).
+- **Cleanup list: still open.** `DeskHardware.TrackLens` is DESK-PLAN's file; it goes with DESK-PLAN's integration, then `MicroPaperLayer.Track` and `LensShape`.
+
 **Cleanup list (dead after this track, in files TOOLS does not own):**
 - `DeskHardware.TrackLens` (DESK-PLAN's file) has no caller since P0-C. Deleting it frees `MicroPaperLayer.Track` (now an empty shim) and the `LensShape` enum in `MicroLens.cs`, which TOOLS then deletes in the same merge.
 - `UvReveal.shader` header (see §2).

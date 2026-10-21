@@ -185,6 +185,8 @@ These still name cut items. They are not edited here; each owner fixes its own w
 
 ## FEATURES and CHEATS (for INTEGRATION)
 
+**Partly folded** by INTEGRATION on integrate/a (2026-10-21, with TOOLS): lines 51 and 52 below, because TOOLS' microprint lines rewrite them. The other lines (53, 24, 55 and 62, 59/63/64/71, 58, 121, 189) and the CHEATS "Lens" row are still to fold.
+
 Rewrite these `docs/FEATURES.md` lines (line numbers as of f347060):
 - **51 (the desk machines):** the microprint line is printed but cannot be read until #17, and `LieKind.ReprintedPaper` is dormant (`LieKinds.IsDormant`, tested: `LieKindsTests.For_NeverDrawsTheDormantReprintedPaper_UntilTheScannerShowsTheMicroprint`).
 - **52 (the upgrades' desk objects):** drop the Translation Lens's stand, LensKit, its magnifiers, `TryLensFootprint`, loupe_tick and `WordTurned`.
