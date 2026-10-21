@@ -234,6 +234,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The decorations the player moves (ArrangeArt, BindDecor), or null.</summary>
     private DeskDecor _decor;
 
+    /// <summary>The art objects the desk home map moved onto their homes (MoveArtProp), each grouped under one root, by home id: the intercom's click box, hover outline and reaction take the whole object (BindIntercom).</summary>
+    private readonly Dictionary<string, Transform> _artHomes = new Dictionary<string, Transform>();
+
     private void Awake()
     {
         Scene art = OfficeScenes.ArtScene;
@@ -629,8 +632,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
 
             PlaceBox(prop.click, anchor, Vector3.zero);
-            if (prop.anchor == OfficeAnchorId.Intercom)
-                BindIntercom(prop.click);
             if (prop.click.TryGetComponent(out DeskReaction reaction))
             {
                 reaction.SetTarget(anchor.Transform);
@@ -638,6 +639,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 if (prop.hasReadout)
                     reaction.SetReadout(TextOf(prop.readout));
             }
+            if (prop.anchor == OfficeAnchorId.Intercom)
+                BindIntercom(prop.click);
         }
     }
 
@@ -855,7 +858,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         return cut;
     }
 
-    /// <summary>Moves the art's object made of the parts named "<paramref name="home"/>.artParts__…" (as one) onto its home: its footprint's centre on the home's, its base on the desk, shrunk about its base to fit the home's footprint when bigger; true when it was found.</summary>
+    /// <summary>Moves the art's object made of the parts named "<paramref name="home"/>.artParts__…" (as one, grouped under one root: GroupArt) onto its home: its footprint's centre on the home's, its base on the desk, shrunk about its base to fit the home's footprint when bigger; true when it was found.</summary>
     private bool MoveArtProp(DeskHome home)
     {
         string prefix = home.artParts;
@@ -866,7 +869,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Bounds b = parts[0].GetComponent<Renderer>().bounds;
         foreach (Transform part in parts)
             b.Encapsulate(part.GetComponent<Renderer>().bounds);
-        List<Transform> tops = parts.Where(part => !parts.Exists(other => other != part && part.IsChildOf(other))).ToList();
 
         DeskRect have = _frame.Footprint(b), room = home.Footprint;
         float k = 1f;
@@ -875,18 +877,39 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (have.Height > room.Height && have.Height > 1e-5f)
             k = Mathf.Min(k, room.Height / have.Height);
         var pivot = new Vector3(b.center.x, b.min.y, b.center.z);
+        Transform root = GroupArt(home.id, parts, pivot);
         if (k < 1f)
-            foreach (Transform part in tops)
-            {
-                part.position = pivot + (part.position - pivot) * k;
-                part.localScale *= k;
-            }
+        {
+            root.position = pivot + (root.position - pivot) * k;
+            root.localScale *= k;
+        }
 
-        Vector3 to = _frame.Point(new Vector2(home.x, home.y));
-        Vector3 by = new Vector3(to.x - pivot.x, to.y - pivot.y, to.z - pivot.z);
-        foreach (Transform part in tops)
-            part.position += by;
+        root.position += _frame.Point(new Vector2(home.x, home.y)) - pivot;
+        _artHomes[home.id] = root;
         return true;
+    }
+
+    /// <summary>
+    /// The one root an art object's <paramref name="parts"/> move, shrink and
+    /// react as (the phone's body, dial, handset and cord are separate meshes
+    /// in the art), for home <paramref name="homeId"/>: made once at
+    /// <paramref name="pivot"/> under the parts' parent, the topmost parts
+    /// moved under it where they stand; the root already made when they
+    /// stand under it.
+    /// </summary>
+    private static Transform GroupArt(string homeId, List<Transform> parts, Vector3 pivot)
+    {
+        string name = "Art_" + homeId;
+        List<Transform> tops = parts.Where(part => !parts.Exists(other => other != part && part.IsChildOf(other))).ToList();
+        Transform parent = tops[0].parent;
+        if (parent != null && parent.name == name && tops.TrueForAll(top => top.parent == parent))
+            return parent;
+        Transform root = new GameObject(name).transform;
+        root.SetParent(parent, false);
+        root.SetPositionAndRotation(pivot, Quaternion.identity);
+        foreach (Transform top in tops)
+            top.SetParent(root, true);
+        return root;
     }
 
     /// <summary>The decorations made draggable once the props are bound: a prop's click box (its reaction) goes with its decoration (DeskDecor.MakeHandles).</summary>
@@ -920,9 +943,34 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             wheel.Open();
     }
 
-    /// <summary>The art's phone, moved onto the intercom's home, is the intercom (Saleh's D5: "intercom to bring out dialogue options"; FIX_PLAN_v2: the art-scene model is the intercom's fallback art): its click box asks the traveller where the player is, and the guide points at it.</summary>
+    /// <summary>
+    /// The art's phone, moved onto the intercom's home, is the intercom
+    /// (Saleh's D5: "intercom to bring out dialogue options"; FIX_PLAN_v2: the
+    /// art-scene model is the intercom's fallback art): its click box asks the
+    /// traveller where the player is, and the guide points at it. The whole
+    /// moved object is the intercom (MoveArtProp's root): the click box spans
+    /// all of its parts, the hover outlines all of them and the reaction
+    /// moves them as one, not only the body the anchor names.
+    /// </summary>
     private void BindIntercom(Clickable click)
     {
+        if (_artHomes.TryGetValue(DeskHomeMap.Intercom, out Transform art) && art != null)
+        {
+            Renderer[] parts = art.GetComponentsInChildren<Renderer>(false);
+            if (parts.Length > 0)
+            {
+                Bounds b = parts[0].bounds;
+                foreach (Renderer r in parts)
+                    b.Encapsulate(r.bounds);
+                PlaceBox(click.transform, b.center, b.size);
+                click.SetOutline(parts);
+                if (click.TryGetComponent(out DeskReaction reaction))
+                {
+                    reaction.SetTarget(art);
+                    reaction.SetTooltipPoint(TopOf(click.transform, b));
+                }
+            }
+        }
         click.onClick.RemoveListener(OpenWheel);
         click.onClick.AddListener(OpenWheel);
         if (guide != null)
