@@ -174,12 +174,15 @@ public static class HallFxRig
     private static List<(Volume volume, float weight)> FinishOff()
     {
         var off = new List<(Volume volume, float weight)>();
-        HallLightingRig rig = Object.FindAnyObjectByType<HallLightingRig>();
-        VolumeProfile profile = rig != null && rig.Settings != null ? rig.Settings.finishProfile : null;
-        if (profile == null)
+        var profiles = new HashSet<VolumeProfile>();
+        foreach (HallLightingRig rig in Object.FindObjectsByType<HallLightingRig>(FindObjectsInactive.Include))
+            if (rig.Settings != null && rig.Settings.finishProfile != null)
+                profiles.Add(rig.Settings.finishProfile);
+        if (profiles.Count == 0)
             return off;
-        foreach (Volume volume in Object.FindObjectsByType<Volume>(FindObjectsInactive.Exclude))
-            if (volume.sharedProfile == profile)
+        // The rig's Volume sits on a runtime object (HideFlags.DontSave), so it is looked up where URP keeps every live Volume.
+        foreach (Volume volume in VolumeManager.instance.GetVolumes(~0))
+            if (volume != null && volume.sharedProfile != null && profiles.Contains(volume.sharedProfile))
             {
                 off.Add((volume, volume.weight));
                 volume.weight = 0f;
