@@ -24,7 +24,9 @@ using UnityEngine;
 /// blend hook, which runs on every view change, allocating nothing (Hook,
 /// measured per thread and read in its IL: BUG-65e/73e, round 8); and
 /// the cam_gc cycle's line (CycleVerdict): green only when every turn took
-/// and the whole cycle ran inside the gc window (round 8). Pure
+/// and the whole cycle ran inside the gc window (round 8); and CamChecks'
+/// verdict over several patterns (every pattern required, on the built
+/// player when the check says so: round 8). Pure
 /// (types and values only, no Unity object made; the hook test puts
 /// Cinemachine's static blend hook back as it found it); in CAM's own Editor
 /// folder (Assembly-CSharp-Editor, the editor runner's).
@@ -262,6 +264,10 @@ public class CamRigTests
         neverOpened.DeskTurns = neverOpened.CityTurns = neverOpened.Ran = 0;
         Assert.IsFalse(CamOps.CycleVerdict(neverOpened, out measured, out detail), "no gc step after camcycle n = 1: nothing was measured");
         StringAssert.Contains("never opened", measured);
+        CamOps.CycleTally unopened = WholeCycle();
+        unopened.Opened = false;
+        Assert.IsFalse(CamOps.CycleVerdict(unopened, out _, out detail), "turns made with no window seen open were not measured");
+        StringAssert.Contains("never opened", detail);
 
         CamOps.CycleTally shut = WholeCycle();
         shut.ShutAt = 220;
@@ -291,6 +297,36 @@ public class CamRigTests
         none.Cycles = 0;
         none.DeskTurns = none.CityTurns = 0;
         Assert.IsFalse(CamOps.CycleVerdict(none, out _, out _), "no cycle asked for");
+    }
+
+    [Test]
+    public void CamChecksVerdict_RequiresEveryPattern_GreenCurrentAndOnThePlayerWhenAsked()
+    {
+        // WAVE2_OPEN2 CAM #3 (1): round 7's run ends hold only while the check requires every pattern; a verdict on any
+        // pattern, or on the first, or one that ignores the built-player flag, would go green on a run that stopped early
+        // or on an editor measurement.
+        const string head = "e225517";
+        string[] cycle = { "cam_gc.cycle.*", "cam_gc.missingScripts.end" };
+        Assert.IsTrue(CamChecks.Verdict("cam.play.cycle", "CAM", false, Results(head, ("cam_gc.cycle.cam_cycle", true), ("cam_gc.missingScripts.end", true)), head, cycle).Pass);
+
+        GateResult early = CamChecks.Verdict("cam.play.cycle", "CAM", false, Results(head, ("cam_gc.cycle.cam_cycle", true)), head, cycle);
+        Assert.IsFalse(early.Pass, "the run's end not written (a run that stopped early): red though the first pattern is green");
+        StringAssert.Contains("not measured", early.Measured);
+
+        Assert.IsFalse(CamChecks.Verdict("cam.play.cycle", "CAM", false, Results(head, ("cam_gc.cycle.cam_cycle", false), ("cam_gc.missingScripts.end", true)), head, cycle).Pass,
+                       "a red first pattern fails the check though the end is green");
+        Assert.IsFalse(CamChecks.Verdict("cam.play.cycle", "CAM", false, Results("4290bd6", ("cam_gc.cycle.cam_cycle", true), ("cam_gc.missingScripts.end", true)), head, cycle).Pass,
+                       "a result of another commit is stale");
+        Assert.IsFalse(CamChecks.Verdict("cam.play.cycle", "CAM", false, Results(head), head).Pass, "a check with no pattern judges nothing");
+
+        string[] gc = { "bp.cam_gc.gc.*", "bp.cam_gc.cycle.*", "bp.cam_gc.missingScripts.end" };
+        (string, bool)[] lines = { ("bp.cam_gc.gc.cam_cycle", true), ("bp.cam_gc.cycle.cam_cycle", true), ("bp.cam_gc.missingScripts.end", true) };
+        Assert.IsTrue(CamChecks.Verdict("cam.bp.gc", "CAM", true, Results(head, true, lines), head, gc).Pass);
+        GateResult editor = CamChecks.Verdict("cam.bp.gc", "CAM", true, Results(head, false, lines), head, gc);
+        Assert.IsFalse(editor.Pass, "a [BP] check refuses results measured in the editor");
+        StringAssert.Contains("NOT-BP", editor.Detail);
+        Assert.IsTrue(CamChecks.Verdict("cam.play.cycle", "CAM", false, Results(head, true, ("cam_gc.cycle.cam_cycle", true), ("cam_gc.missingScripts.end", true)), head, cycle).Pass,
+                      "a play check takes any green result of HEAD");
     }
 
     [Test]
@@ -345,6 +381,13 @@ public class CamRigTests
         {
         }
     }
+
+    /// <summary>Gate results measured at <paramref name="commit"/> in the editor, each (id, pass), clean.</summary>
+    private static List<QaGateResult> Results(string commit, params (string id, bool pass)[] lines) => Results(commit, false, lines);
+
+    /// <summary>Gate results measured at <paramref name="commit"/>, on a built player or not, each (id, pass), clean.</summary>
+    private static List<QaGateResult> Results(string commit, bool builtPlayer, params (string id, bool pass)[] lines) =>
+        lines.Select(l => new QaGateResult { id = l.id, owner = "CAM", pass = l.pass, measured = l.pass ? "ok" : "red", detail = string.Empty, commit = commit, builtPlayer = builtPlayer }).ToList();
 
     /// <summary>Two whole cycles at the code's knobs (300 frames), every turn taken, all inside the gc window.</summary>
     private static CamOps.CycleTally WholeCycle() =>
