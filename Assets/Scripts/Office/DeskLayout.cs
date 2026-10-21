@@ -133,8 +133,8 @@ public sealed class DeskLayoutSettings
     /// <summary>How far a decoration let go on a taken spot is nudged at most (metres; BUG-23: "nudged at most 3 cm"), on a 5 mm grid; further, it goes back.</summary>
     [Min(0f)] public float decorNudge = 0.03f;
 
-    /// <summary>How high a dragged decoration lifts off the desk (metres), over whatever lies under it.</summary>
-    [Min(0f)] public float decorLift = 0.03f;
+    /// <summary>How high a dragged decoration lifts off the desk (metres), over whatever lies under it: a paper's carry lift (DeskConfigSO.dragLift), so the drop onto its spot stays inside the QA rig's 8 px at 1080p (3 cm read about 10 px at the decor's distance).</summary>
+    [Min(0f)] public float decorLift = 0.02f;
 
     /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants), or null.</summary>
     public DeskHome HomeOf(string id) => DeskHomeMap.Find(homes, id);
