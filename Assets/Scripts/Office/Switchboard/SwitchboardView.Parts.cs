@@ -18,6 +18,12 @@ public sealed partial class SwitchboardView
     /// <summary>The overlay canvas's order: over the office's overlay (10: the PC frame, the newsletters), under the cheat menu (IMGUI).</summary>
     private const int SortingOrder = 20;
 
+    /// <summary>Seconds a plug let go flies home (or back where it was).</summary>
+    private const float HomeSeconds = 0.22f;
+
+    /// <summary>Seconds a plug let go over a jack takes for the last of the way in: a snap.</summary>
+    private const float SnapSeconds = 0.07f;
+
     private static readonly Vector2 ReferenceResolution = new Vector2(1920f, 1080f);
     private static readonly Color MatteColor = new Color(0.055f, 0.035f, 0.025f, 1f);
     private static readonly Color NameInk = new Color32(0x28, 0x19, 0x0f, 0xff);
@@ -69,6 +75,7 @@ public sealed partial class SwitchboardView
         public int Snap = -1;
         public bool Returning;
         public float ReturnT;
+        public float ReturnSeconds = HomeSeconds;
         public BoardPoint ReturnFrom;
         public float ReturnFromScale;
         public bool OnTop;
@@ -686,7 +693,7 @@ public sealed partial class SwitchboardView
             }
             if (c.Returning)
             {
-                c.ReturnT = MotionPreference.Reduced ? 1f : c.ReturnT + dt / 0.22f;
+                c.ReturnT = MotionPreference.Reduced ? 1f : c.ReturnT + dt / Mathf.Max(0.01f, c.ReturnSeconds);
                 if (c.ReturnT >= 1f)
                 {
                     c.Returning = false;

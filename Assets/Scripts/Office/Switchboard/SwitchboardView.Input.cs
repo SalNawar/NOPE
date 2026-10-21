@@ -121,18 +121,19 @@ public sealed partial class SwitchboardView
         c.ReturnFrom = c.Drawn;
         c.ReturnFromScale = c.DrawnScale;
         c.Returning = true;
+        c.ReturnT = 0f;
         if (to >= 0)
         {
             Apply(c, to);
             c.Seat = to;
-            c.ReturnT = 0.55f; // the last of the way in: a quick snap
+            c.ReturnSeconds = SnapSeconds; // the last of the way in: a snap
         }
         else
         {
             if (c.Seat >= 0)
                 Apply(c, -1);
             c.Seat = -1;
-            c.ReturnT = 0f;
+            c.ReturnSeconds = HomeSeconds;
         }
     }
 
@@ -149,6 +150,7 @@ public sealed partial class SwitchboardView
         c.ReturnFromScale = c.DrawnScale;
         c.Returning = true;
         c.ReturnT = 0f;
+        c.ReturnSeconds = HomeSeconds;
     }
 
     /// <summary>A plug landed (in a jack, or home): its click, a bounce and a swing of its cord.</summary>

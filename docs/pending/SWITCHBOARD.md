@@ -83,13 +83,13 @@ A wrong period (another destination's period jack, or a period nobody at that de
 | `Art/UI/Resources/Switchboard/` | the plate (lever-free), the layout JSON, the plug, lamp and lever sprites (1x), imported from the board kit |
 | Tests: `SwitchboardTests`, `SwitchboardDirectoryTests`, `SwitchboardLayoutTests` (layout, cords, snapping, sounds, words), `ControlRulesTests` (keys, back-out, the wall click) | |
 
-Other owners' files touched (small, for the PORTALS lease chain to confirm): `Domain/ControlRules.cs` and `Office/OfficeControls.cs` (DOC-HANDLE → CITY-LIFE → PORTALS in LEASES: the S key, D at the desk, the back-out step, `BindSwitchboard`), `Domain/ArtSlots.cs` (the `Switchboard/` slots), `Editor/ArtSlotImporter.cs` (the plate's high-quality compression, like the hall's), `Domain/SoundSynth.cs` (`Normalise` made internal to reuse it), `Data/World/world_source.json` (9 `switchboard.*` UI strings, tier Full), `docs/FEATURES.md`, `docs/CHEATS.md`. GameManager, BoothCoordinator and the scenes are untouched.
+Other owners' files touched (small, for the PORTALS lease chain to confirm): `Domain/ControlRules.cs` and `Office/OfficeControls.cs` (DOC-HANDLE → CITY-LIFE → PORTALS in LEASES: the S key, D at the desk, the back-out step, `BindSwitchboard`), `Domain/ArtSlots.cs` (the `Switchboard/` slots), `Editor/ArtSlotImporter.cs` (the plate's high-quality compression, like the hall's), `Domain/SoundSynth.cs` (`Normalise` made internal to reuse it), `Office/OfficeSceneBinder.cs` (DESK-HOMES: the desk's slide-ins pause while the board is open, as they do for the PC frame, so no machine slides in, unseen and heard, behind the board), `Data/World/world_source.json` (9 `switchboard.*` UI strings, tier Full), `docs/FEATURES.md`, `docs/CHEATS.md`. GameManager, BoothCoordinator and the scenes are untouched.
 
 ## Checks (outside Unity)
 
 - `compile_check_any.py E:\unity\NOPE-p5`: 0 errors; no new warnings in the new or edited files.
 - Offline runner: passed 3873, failed 0 (the baseline on `adcdf6a` was 3843: 30 new tests).
-- QA python tests (`tools/qa/test_seqlib.py`, `tools/characters/test_processing_stencils.py`): see the commit's report.
+- QA python tests (`tools/qa/test_seqlib.py`, `tools/characters/test_processing_stencils.py`): 38 passed.
 - An offline render of the board's live parts with the same geometry rules (`design\switchboard_v4\board\preview_live_parts_v5.png`) shows the cords, plugs, lamps, labels, displays, lever and hint card landing on the plate.
 
 ## For the Unity phase (not run: no Unity before it)
