@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "CAM BUG-65e/73e: no per-frame allocation from DeskView, CameraFeel or CityView over two reading toggles and city looks on day 12 (camcycle runs them in the background under the gc window; gc_sites.tsv names the call sites). The 0 B gate is [BP]: run it with run_player.py on the QA player; in the editor the number includes the editor's own allocations."
+      "text": "CAM BUG-65e/73e: no per-frame allocation from DeskView, CameraFeel or CityView over two cycles of the reading view turned in and back and the city looked at and back on day 12. camcycle n = 1 starts the cycle in the background: it waits for the gc window to open, turns one frame later, runs on frames at the 30 fps game step (300 frames at the code's knobs, inside the window's 360 at any display rate) and allocates nothing itself; camcycle n = 0 reports cycle.cam_cycle: every turn taken, the window open before the first and still open after the cycle's last frame (gate cam.bp.gc with the gc line; cam.play.cycle in the editor). gc_sites.tsv names the call sites. The 0 B gate is [BP]: run it with run_player.py on the QA player; in the editor the number includes the editor's own allocations."
     },
     {
       "op": "title"
@@ -54,17 +54,24 @@
     },
     {
       "op": "camcycle",
-      "n": 2
+      "name": "cam_cycle",
+      "n": 1,
+      "f": 2
     },
     {
       "op": "gc",
       "name": "cam_cycle",
-      "f": 11,
+      "f": 12,
       "n": 0
     },
     {
       "op": "mark",
       "name": "gcsites.stop"
+    },
+    {
+      "op": "camcycle",
+      "name": "cam_cycle",
+      "n": 0
     },
     {
       "op": "probe",

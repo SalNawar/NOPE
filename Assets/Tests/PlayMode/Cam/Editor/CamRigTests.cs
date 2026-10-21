@@ -22,7 +22,9 @@ using UnityEngine;
 /// dragged decoration by its Root); and the view a framing leg names
 /// (ReadingLeg: camframe judges a leg only on that view); and DeskView's
 /// blend hook, which runs on every view change, allocating nothing (Hook,
-/// measured per thread and read in its IL: BUG-65e/73e, round 8). Pure
+/// measured per thread and read in its IL: BUG-65e/73e, round 8); and
+/// the cam_gc cycle's line (CycleVerdict): green only when every turn took
+/// and the whole cycle ran inside the gc window (round 8). Pure
 /// (types and values only, no Unity object made; the hook test puts
 /// Cinemachine's static blend hook back as it found it); in CAM's own Editor
 /// folder (Assembly-CSharp-Editor, the editor runner's).
@@ -237,6 +239,61 @@ public class CamRigTests
     }
 
     [Test]
+    public void CycleVerdict_PassesOnlyAWholeCycleInsideTheWindow_EveryTurnTaken()
+    {
+        // WAVE2_OPEN2 CAM #2: the gc window counted frames while the cycle waited real seconds, its first tilt ran before
+        // the window opened, and a refused TiltIn or Look measured an idle window at 0 B and passed.
+        Assert.IsTrue(CamOps.CycleVerdict(WholeCycle(), out string measured, out string detail), detail);
+        StringAssert.Contains("4/4 reading view turns, 4/4 city turns, 0 refused, 300/300 frames, inside the gc window", measured);
+
+        CamOps.CycleTally refused = WholeCycle();
+        refused.DeskTurns = 3;
+        refused.Refused = 1;
+        Assert.IsFalse(CamOps.CycleVerdict(refused, out _, out detail), "a TiltIn the toggle refused leaves an idle window at 0 B");
+        StringAssert.Contains("a turn did not take", detail);
+
+        CamOps.CycleTally noCity = WholeCycle();
+        noCity.CityTurns = 0;
+        noCity.Refused = 4;
+        Assert.IsFalse(CamOps.CycleVerdict(noCity, out _, out _), "the city not live: no look measured");
+
+        CamOps.CycleTally neverOpened = WholeCycle();
+        neverOpened.Opened = false;
+        neverOpened.DeskTurns = neverOpened.CityTurns = neverOpened.Ran = 0;
+        Assert.IsFalse(CamOps.CycleVerdict(neverOpened, out measured, out detail), "no gc step after camcycle n = 1: nothing was measured");
+        StringAssert.Contains("never opened", measured);
+
+        CamOps.CycleTally shut = WholeCycle();
+        shut.ShutAt = 220;
+        Assert.IsFalse(CamOps.CycleVerdict(shut, out measured, out detail), "the window shut before the cycle's end: the rest ran unmeasured");
+        StringAssert.Contains("shut after frame 220", measured);
+        StringAssert.Contains("lengthen the gc step", detail);
+
+        CamOps.CycleTally shutAtTheEnd = WholeCycle();
+        shutAtTheEnd.ShutAt = 300;
+        Assert.IsFalse(CamOps.CycleVerdict(shutAtTheEnd, out _, out _), "seen shut after the last frame: that frame may be uncounted");
+
+        CamOps.CycleTally stopped = WholeCycle();
+        stopped.Ran = 180;
+        Assert.IsFalse(CamOps.CycleVerdict(stopped, out _, out detail), "reported before its end");
+        StringAssert.Contains("did not run to its end", detail);
+
+        CamOps.CycleTally unsized = WholeCycle();
+        unsized.Frames = unsized.Ran = 0;
+        Assert.IsFalse(CamOps.CycleVerdict(unsized, out _, out _), "a cycle of no frames measures nothing");
+
+        CamOps.CycleTally missing = WholeCycle();
+        missing.Missing = "the city view";
+        Assert.IsFalse(CamOps.CycleVerdict(missing, out _, out detail));
+        StringAssert.Contains("not found: the city view", detail);
+
+        CamOps.CycleTally none = WholeCycle();
+        none.Cycles = 0;
+        none.DeskTurns = none.CityTurns = 0;
+        Assert.IsFalse(CamOps.CycleVerdict(none, out _, out _), "no cycle asked for");
+    }
+
+    [Test]
     public void ReadingLeg_ReadsTheViewTheFramingLegNames_AndRefusesAMissingOrUnknownView()
     {
         Assert.IsTrue(CamOps.ReadingLeg("reading"), "a *_reading leg is judged on the reading view's criteria, with its .bottom line");
@@ -288,6 +345,10 @@ public class CamRigTests
         {
         }
     }
+
+    /// <summary>Two whole cycles at the code's knobs (300 frames), every turn taken, all inside the gc window.</summary>
+    private static CamOps.CycleTally WholeCycle() =>
+        new CamOps.CycleTally { Cycles = 2, DeskTurns = 4, CityTurns = 4, Refused = 0, Frames = 300, Ran = 300, Opened = true, ShutAt = 0 };
 
     /// <summary>DeskView's static blend hook installer (private).</summary>
     private static MethodInfo HookMethod()

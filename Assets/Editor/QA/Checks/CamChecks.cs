@@ -32,7 +32,9 @@ using UnityEngine;
 /// still writes the lines of the steps that ran, so without it a check would
 /// go green on the legs that ran. Built player [BP] (with the demo gate, as
 /// QA-RIG's qa.bp.*): no per-frame allocation over the reading toggle and the
-/// city look, that run's camera moves tagged, the run whole and clean.
+/// city look, with the cycle proven whole inside the gc window (camcycle's
+/// line; the editor's twin is cam.play.cycle), that run's camera moves
+/// tagged, the run whole and clean.
 /// Assets/Tests/PlayMode/Cam/Gates~/test_cam_gates.py checks offline that
 /// every line CAM's scenarios write that CAM measures (its ops' lines and the
 /// built-in ops' CAM lines: gc, cameraCheck, the run's camera) sits under one
@@ -290,6 +292,18 @@ public static class CamChecks
     public static GateResult RunDesk() =>
         All("cam.play.run.desk", Owner, false, "cam_desk.console", "cam_desk.presses", "cam_desk.quality", "cam_desk.missingScripts.end", "cam_desk.materials.end");
 
+    /// <summary>
+    /// The cam_gc cycle ran whole inside its gc window in the editor (camcycle:
+    /// every turn of the reading view and the city taken, the first after the
+    /// window opened, the window still open after the cycle's last frame; the
+    /// cycle runs on frames at the 30 fps game step, as the window counts
+    /// frames), the run whole. The editor's gc number itself is no verdict
+    /// (it counts the editor's allocations): cam.bp.gc reads the QA player's,
+    /// with that run's cycle line.
+    /// </summary>
+    [GateCheck("cam.play.cycle", Owner, GateKind.Play)]
+    public static GateResult Cycle() => All("cam.play.cycle", Owner, false, "cam_gc.cycle.*", "cam_gc.missingScripts.end");
+
     /// <summary>The cam_gc run in the editor ran whole and clean: its console, presses, quality and last probe, as <see cref="RunViews"/> (its gc line counts the editor's own allocations and is no verdict: cam.bp.gc's).</summary>
     [GateCheck("cam.play.run.gc", Owner, GateKind.Play)]
     public static GateResult RunGc() =>
@@ -299,13 +313,15 @@ public static class CamChecks
     /// [BP] No per-frame allocation from DeskView, CameraFeel or CityView: the
     /// reading toggle and the city look cycled under cam_gc's gc window on the
     /// QA player, 0 B a frame (BUG-65e, 73e; FIX_PLAN's "0 B/frame from ...
-    /// DeskView [BP]"; recipe 10, run_player.py), the run whole. The editor
-    /// run's own gc line counts the editor's allocations and is no verdict.
-    /// With the demo gate, as QA-RIG's qa.bp.* ([BP] gates run on the scratch
-    /// build, not at each merge).
+    /// DeskView [BP]"; recipe 10, run_player.py), and that run's cycle line
+    /// green: every turn taken and the whole cycle inside the window (a
+    /// refused turn, or a cycle the window does not cover, measures an idle
+    /// window at 0 B), the run whole. The editor run's own gc line counts the
+    /// editor's allocations and is no verdict. With the demo gate, as QA-RIG's
+    /// qa.bp.* ([BP] gates run on the scratch build, not at each merge).
     /// </summary>
     [GateCheck("cam.bp.gc", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
-    public static GateResult BuiltPlayerGc() => All("cam.bp.gc", Owner, true, "bp.cam_gc.gc.*", "bp.cam_gc.missingScripts.end");
+    public static GateResult BuiltPlayerGc() => All("cam.bp.gc", Owner, true, "bp.cam_gc.gc.*", "bp.cam_gc.cycle.*", "bp.cam_gc.missingScripts.end");
 
     /// <summary>[BP] The cam_gc run on the QA player tagged every camera move (its run's camera line; the editor runs' are cam.play.tags), the run whole.</summary>
     [GateCheck("cam.bp.camera", Owner, GateKind.BuiltPlayer, DemoOnly = true)]

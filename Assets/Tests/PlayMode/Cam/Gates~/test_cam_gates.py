@@ -1,4 +1,4 @@
-"""CAM's gate coverage (docs/pending/CAM.md, rounds 4 to 7), both ways, over every line a run of CAM's scenarios
+"""CAM's gate coverage (docs/pending/CAM.md, rounds 4 to 8), both ways, over every line a run of CAM's scenarios
 writes. Forward: every line CAM measures sits under one of the gate checks in CamChecks, under the line's owner, so the
 merge gate cannot go green while such a line is red or missing: the lines CamOps' ops write (round 3's verifier found
 cam_views.play.d12 under no gate) and the CAM lines the rig's built-in ops write (gc under the scenario's owner,
@@ -10,7 +10,8 @@ their runs'. Reverse (round 6): no CamChecks pattern reads a line of another own
 and frame analyses, TEXT-LANG's LiberationSans probe, a plate owner's verdict) but the listed deliberate inclusions, so
 a CAM check never refuses the merge gate on another track's known red (round 6's cam_desk.* read TEXT-LANG's
 liberationSans.end). Also: every check's pattern names lines a run writes, the cap report runs with papers on the desk,
-each framing leg names its view, and the wiring of the rig fixes that live in coroutines.
+each framing leg names its view, and the wiring of the rig fixes that live in coroutines; and (round 8) cam_gc's gc
+window holds its whole cycle, which proves it ran there.
 Reads the C# sources and the scenario files; needs no Unity. CAM's own file (round 7: moved out of QA-RIG's tools/qa
 into CAM's Assets/Tests/PlayMode/Cam/, in a folder whose name ends in '~' so Unity imports nothing from it). Run it
 from the repository's root with:
@@ -18,6 +19,7 @@ from the repository's root with:
 """
 import collections
 import json
+import math
 import os
 import re
 import sys
@@ -33,6 +35,10 @@ import seqlib  # noqa: E402 (QA-RIG's twin of GateResults.Matches, read from too
 CAM_OPS = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'Cam', 'Rig', 'CamOps.cs')
 CAM_CHECKS = os.path.join(ROOT, 'Assets', 'Editor', 'QA', 'Checks', 'CamChecks.cs')
 QA_RUNNER = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'Rig', 'QaRunner.cs')
+SEQ_RECORDER = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'Rig', 'SeqRecorder.cs')
+DESK_VIEW_POSE = os.path.join(ROOT, 'Assets', 'Scripts', 'Visuals', 'DeskViewPose.cs')
+DESK_CONFIG = os.path.join(ROOT, 'Assets', 'Scripts', 'Office', 'DeskConfigSO.cs')
+DESK_ASSET = os.path.join(ROOT, 'Assets', 'Data', 'Config', 'Desk_Default.asset')
 DESK_PLAN_OPS = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'DeskPlan', 'Rig', 'DeskPlanOps.cs')
 SEQTOOLS = os.path.join(QA, 'seqtools.py')
 SCENARIOS = os.path.join(QA, 'scenarios')
@@ -41,7 +47,7 @@ SCENARIOS = os.path.join(QA, 'scenarios')
 OP_FAMILIES = {
     'camres': [],
     'cammotion': [],
-    'camcycle': [],
+    'camcycle': ['cycle.'],
     'camframe': ['frame.'],
     'camfade': ['fade.'],
     'camhold': ['hold.'],
@@ -106,6 +112,7 @@ READS = {
     'cam.play.stampHint': ('cam_chrome',),
     'cam.play.capreport': ('cam_views',),
     'cam.play.deskplan': ('cam_desk',),
+    'cam.play.cycle': ('cam_gc',),
     'cam.bp.gc': ('bp.cam_gc',),
     'cam.bp.camera': ('bp.cam_gc',),
 }
@@ -202,6 +209,19 @@ def _checks():
         kind, demo = kinds[cid]
         checks.setdefault(cid, Check(cid, owner(o), [], bp == 'true', kind, demo)).patterns.extend(re.findall(r'"([^"]+)"', args))
     return list(checks.values())
+
+
+def _knob_seconds(name, source, block=None):
+    """A seconds knob's live value: the asset's (Desk_Default.asset, under its block when the knob sits in one), else
+    the code's default in its source."""
+    asset = _read(DESK_ASSET)
+    if block:
+        found = re.search(r'^  ' + block + r':\n(?:    .*\n)*?    ' + name + r': ([0-9.]+)', asset, re.M)
+    else:
+        found = re.search(r'^  ' + name + r': ([0-9.]+)', asset, re.M)
+    if found:
+        return float(found.group(1))
+    return float(re.search(r'\b' + name + r' = ([0-9.]+)f;', _read(source)).group(1))
 
 
 def run_lines(scenario, plates):
@@ -503,6 +523,75 @@ class CamGateCoverageTests(unittest.TestCase):
             self.assertEqual(['held', 'reading'], shows, leg)
         hints = [st for st in s['steps'] if st['op'] == 'camchrome' and st.get('n') == 2]
         self.assertEqual(4, len(hints), 'each day-12 leg (A1-A4) shows the stamp hint')
+
+    def test_the_gc_window_holds_the_whole_cycle_and_the_cycle_proves_it_ran_there(self):
+        # Round 8 (WAVE2_OPEN2 CAM #2): QaRunner.Gc counts frames (f x 30) while camcycle waited real seconds, so the
+        # window held a frame-rate-dependent slice of the cycle (5.5 s of its 11.2 at 60 Hz, no tilt in measured), its
+        # first tilt ran before the window opened, and a refused turn measured an idle window at 0 B. Now the cycle waits
+        # for the window, turns a frame after it opens, runs on frames at the 30 fps game step, allocates nothing once it
+        # runs, and reports a line the [BP] gc check requires with the gc number; the window holds the longest cycle the
+        # knobs allow.
+        s = json.loads(_read(os.path.join(SCENARIOS, 'cam_gc.json')))
+        ops = [(st['op'].lower(), st) for st in s['steps']]
+        starts = [i for i, (op, st) in enumerate(ops) if op == 'camcycle' and st.get('n', 0) > 0]
+        self.assertEqual(1, len(starts), 'cam_gc starts one cycle (camcycle n = 1)')
+        start = ops[starts[0]][1]
+        gc = ops[starts[0] + 1]
+        self.assertEqual('gc', gc[0], 'the gc step follows camcycle n = 1 at once: the cycle waits only briefly for its window')
+        reports = [i for i, (op, st) in enumerate(ops) if op == 'camcycle' and st.get('n', 0) == 0]
+        self.assertEqual(1, len(reports), 'cam_gc reports its cycle once (camcycle n = 0)')
+        self.assertGreater(reports[0], starts[0] + 1, 'the cycle is reported after the gc window closed (its text allocates)')
+        self.assertTrue(all(op == 'mark' for op, _ in ops[starts[0] + 2:reports[0]]), 'nothing but the sites mark runs between')
+        self.assertEqual(start.get('name'), ops[reports[0]][1].get('name'))
+        self.assertEqual(start.get('name'), gc[1].get('name'))
+        self.assertEqual(0, gc[1].get('n', 0), 'the [BP] budget is 0 B a frame')
+        bp = next(c for c in _checks() if c.id == 'cam.bp.gc')
+        self.assertIn('bp.cam_gc.gc.*', bp.patterns)
+        self.assertIn('bp.cam_gc.cycle.*', bp.patterns, 'the 0 B number counts only with the proof that the cycle ran inside it')
+
+        # The window (QaRunner.Gc: at least 10 frames, f x 30) holds the longest cycle these knobs make (CityLookTimeline's
+        # total is at most the turn plus the fade), its first turn at most two frames in (the window's uncounted opening
+        # frame, or the next, is the frame the cycle sees it open on) and its last check one frame after its end.
+        src = _read(CAM_OPS)
+        const = lambda name: int(re.search(r'const int ' + name + r' = (\d+);', src).group(1))
+        fps = int(re.search(r'public const int Fps = (\d+);', _read(SEQ_RECORDER)).group(1))
+        runner = _read(QA_RUNNER)
+        self.assertRegex(_body(runner, 'private IEnumerator Gc(QaStep s)'),
+                         r'int frames = Mathf\.Max\(10, Mathf\.CeilToInt\(\(s\.f > 0f \? s\.f : 3f\) \* SeqRecorder\.Fps\)\);')
+        window = max(10, math.ceil(gc[1].get('f', 3) * fps))
+        desk = _knob_seconds('seconds', DESK_VIEW_POSE, 'deskView')
+        city = _knob_seconds('citySeconds', DESK_CONFIG) + _knob_seconds('cityFadeSeconds', DESK_CONFIG)
+        move = lambda seconds: math.ceil(seconds * fps) + const('SettleFrames')
+        cycles = round(start.get('f', 0)) or 2
+        longest = cycles * 2 * (move(desk) + move(city)) + 2
+        self.assertLessEqual(longest, window, f'the gc window ({window} frames) cannot hold the cycle ({longest} frames at most): lengthen it')
+
+        # The window is open exactly while the camera log is quiet outside a timing sequence (QaRunner), and it opens
+        # before Gc's uncounted first frame.
+        self.assertIn('Cameras.QuietWhen = () => _measuringGc || Recorder != null && Recorder.Timing;', runner)
+        self.assertRegex(_body(runner, 'private IEnumerator Gc(QaStep s)'),
+                         r'(?s)_measuringGc = true;.*?yield return null;\s*for \(int i = 0; i < frames; i\+\+\)\s*\{\s*yield return null;\s*if \(gc\.Valid\)\s*samples\.Add\(gc\.LastValue\);\s*\}.*?_measuringGc = false;')
+        self.assertRegex(src, r'private static bool GcWindowOpen\(QaRunner runner\) =>\s*runner != null && runner\.Cameras != null && runner\.Cameras\.QuietWhen != null && runner\.Cameras\.QuietWhen\(\) &&\s*\(runner\.Recorder == null \|\| !runner\.Recorder\.Timing\);')
+
+        # The cycle: waits for the window, sets the 30 fps step, turns one frame later, checks the window after every
+        # frame, and makes nothing while it runs (no wait objects, no text, no collections).
+        cycling = _body(src, 'private static IEnumerator Cycling(QaRunner runner, CycleTally tally, DeskView desk, CityView city, int deskFrames, int cityFrames)')
+        self.assertRegex(cycling, r'^\s*for \(int wait = 0; !GcWindowOpen\(runner\); wait\+\+\)')
+        self.assertRegex(cycling, r'tally\.Opened = true;\s*tally\.RestoreRate = Time\.captureFramerate;\s*Time\.captureFramerate = SeqRecorder\.Fps;\s*yield return null;\s*for \(int turn = 0;')
+        self.assertRegex(cycling, r'yield return null;\s*tally\.Ran\+\+;\s*if \(tally\.ShutAt == 0 && !GcWindowOpen\(runner\)\)\s*tally\.ShutAt = tally\.Ran;')
+        self.assertRegex(cycling, r'Stop\(tally\);\s*$')
+        for name, body in (('Cycling', cycling),
+                           ('Turn', _body(src, 'private static bool Turn(DeskView desk, CityView city, int phase)')),
+                           ('Stop', _body(src, 'private static void Stop(CycleTally tally)'))):
+            for made in (r'\bnew\b', r'WaitFor', r'\$"', r'"', r'=>', r'\.Where\(|\.Select\(|\.ToList\(', r'string\.'):
+                self.assertNotRegex(body, made, f'{name} runs inside the gc window and must allocate nothing ({made})')
+        turn = _body(src, 'private static bool Turn(DeskView desk, CityView city, int phase)')
+        self.assertRegex(turn, r'desk\.TiltIn\(CameraMoveCause\.ViewKey\);')
+        self.assertIn('return desk.IsOn != was;', turn)
+        self.assertIn('return city.IsOn != looked;', turn)
+        cycle = _body(src, 'private static IEnumerator Cycle(QaRunner runner, QaStep step)')
+        self.assertRegex(cycle, r'runner\.StartCoroutine\(Cycling\(runner, tally, desk, city, deskFrames, cityFrames\)\);\s*yield break;')
+        self.assertRegex(cycle, r'Stop\(done\);\s*bool pass = CycleVerdict\(done, out string measured, out string detail\);\s*runner\.Assert\("cycle\." \+ name, Owner, pass, measured, detail\);')
 
     def test_every_framing_leg_is_judged_on_the_view_it_names(self):
         # Round 7: camframe judged whichever view was on and camcap measured from any view, but DeskView.Toggle does
