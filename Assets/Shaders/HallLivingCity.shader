@@ -5,7 +5,9 @@
 // clock's hour) passes its moment, over the fade band HallCityExterior sizes to ~0.4 s at the clock's
 // pace (_CityWindowFade; HallCity.WindowLevel mirrors it), and holds still while the clock does; the
 // cell hash is never 0 (HallCity.WindowHash); headlights are at least ~2.7 px across (widened by the
-// pixel's size) and fade at their lanes' ends, and the flyers cross from off one edge to off the other.
+// pixel's size), spread along their lane over 2.5 frames' travel (a 30 fps frame's motion blur, so a fast light
+// in the city view glides over a pixel instead of blinking it on and off), and fade at their lanes' ends, and the
+// flyers cross from off one edge to off the other.
 // The rain path is gone (it was always dry: BUG-73d).
 Shader "NOPE/Hall Living City"
 {
@@ -148,6 +150,20 @@ Shader "NOPE/Hall Living City"
    // viaduct between its two towers).
    a=lerp(a,lane==0?float2(-.01,.537):lane==1?float2(.152,.17):float2(.414,.395),_CityView);
    b=lerp(b,lane==0?float2(.239,.406):lane==1?float2(.33,-.02):float2(.594,.435),_CityView);
+   // Motion spread (integration, 2026-10-21: in the city view, at 8 times the window's pace, a light crossed a
+   // capture pixel in about 5 frames and the flicker check read its rise and fall as a toggle, up to 3 a pixel in
+   // 10 s at H5): the light's spread along its lane covers 2.5 frames' travel at 30 fps (its covariance gains that
+   // length along the lane), dimmed by the same ratio so it keeps its weight. A step of the light between two
+   // frames is then under half its spread; the hall window's slow cars are barely touched, and a still city
+   // (Reduced Motion, _CityMotion 0) not at all.
+   float2 lane2=(b-a)*float2(3,1);
+   float laneLength=max(length(lane2),1e-5);
+   float2 along=lane2/laneLength;
+   float blur=2.5*laneLength*(.007+lane*.002)*_AtmospherePace*_CityMotion/30.0;
+   float2 s2=sigma*sigma;
+   float sxx=s2.x+blur*blur*along.x*along.x,syy=s2.y+blur*blur*along.y*along.y,sxy=blur*blur*along.x*along.y;
+   float det=max(sxx*syy-sxy*sxy,1e-20);
+   half keep=sqrt(s2.x*s2.y/det);
    [unroll] for(int car=0;car<5;car++)
    {
     float travel=frac(tf*(.007+lane*.002)+car*.19+lane*.27);
@@ -155,8 +171,8 @@ Shader "NOPE/Hall Living City"
     // ...and come out from behind the building and go behind the next one (a short fade at the ends,
     // HallCity.LaneEndFade), in the hall window as in the city view: a lane's wrap never pops a light.
     half emerge=smoothstep(0,.06,travel)*(1-smoothstep(.94,1,travel));
-    float2 z=d/sigma;
-    rgb+=half3(1,.74,.38)*exp(-.5*dot(z,z))*spreadDim*(.25+.55*w.w)*emerge;
+    float q=(syy*d.x*d.x-2*sxy*d.x*d.y+sxx*d.y*d.y)/det;
+    rgb+=half3(1,.74,.38)*exp(-.5*q)*spreadDim*keep*(.25+.55*w.w)*emerge;
    }
   }
   return half4(rgb*v.color.rgb,aperture*v.color.a);
