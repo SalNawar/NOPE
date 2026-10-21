@@ -90,8 +90,19 @@ using UnityEngine.UI;
 /// no paper on the desk, so cam_views runs it
 /// only after camplay has laid the day's papers there (a handed paper waits
 /// on the counter).</item>
-/// <item><c>camcycle</c> (n = cycles, 2 when 0): in the background, the
-/// reading toggle and the city look and back, for a <c>gc</c> window.</item>
+/// <item><c>camcycle</c> (n = 1 starts, 0 reports; f = cycles, 2 when 0;
+/// name): n = 1 starts, in the background, the reading view turned in and
+/// back and the city looked at and back, for the <c>gc</c> step that
+/// follows: the cycle waits for that window to open (the camera log is quiet
+/// only while it measures) and turns one frame later, runs on frames at the
+/// recorder's 30 fps game step (each move's knob seconds and a settle, so it
+/// is the same cycle at any display rate, as the window is the same frame
+/// count) and allocates nothing itself once it runs. n = 0, after the gc
+/// step, reports <c>cycle.&lt;name&gt;</c> through the pure
+/// <see cref="CycleVerdict"/>: every turn taken (a refused one leaves an idle
+/// window that measures 0 B), the window open before the first and still
+/// open after the cycle's last frame, so the gc number covers the whole
+/// cycle (WAVE2_OPEN2 CAM #2).</item>
 /// </list>
 /// Registered at load in the editor and at play start in the QA player.
 /// </summary>
@@ -1685,34 +1696,206 @@ public static class CamOps
 
     // ------------------------------------------------------------------ camcycle
 
-    /// <summary>Starts the background cycle and returns at once, so a following <c>gc</c> step measures it.</summary>
-    private static IEnumerator Cycle(QaRunner runner, QaStep step)
+    /// <summary>The frames a started cycle waits for the gc window to open (the gc step follows camcycle n = 1 at once).</summary>
+    private const int WindowWaitFrames = 30;
+
+    /// <summary>The frames each move is held past its knob's seconds, at the 30 fps step (the push-in's spring and the controls' fade settle).</summary>
+    private const int SettleFrames = 15;
+
+    /// <summary>What a background camcycle did (the input of <see cref="CycleVerdict"/>): the turns it asked for and made, and where its frames fell against the gc window.</summary>
+    public sealed class CycleTally
     {
-        runner.StartCoroutine(Cycling(step.n > 0 ? step.n : 2));
-        yield break;
+        /// <summary>Cycles asked for (each: the reading view turned in and back, the city looked at and back).</summary>
+        public int Cycles;
+
+        /// <summary>The reading view's turns that took (in, and back).</summary>
+        public int DeskTurns;
+
+        /// <summary>The city's turns that took (to it, and back).</summary>
+        public int CityTurns;
+
+        /// <summary>Turns asked for that changed nothing (the toggle or the city not live, something held).</summary>
+        public int Refused;
+
+        /// <summary>The cycle's frames from its first turn to its end (each move's, at the 30 fps step).</summary>
+        public int Frames;
+
+        /// <summary>Of those, the frames that ran.</summary>
+        public int Ran;
+
+        /// <summary>True once the gc window was seen open, before the first turn.</summary>
+        public bool Opened;
+
+        /// <summary>The cycle's frame (1-based) after which the gc window was first seen shut (0: open to the end).</summary>
+        public int ShutAt;
+
+        /// <summary>What was not found (the reading view, the city view, a view's config), comma-separated (empty: none).</summary>
+        public string Missing = string.Empty;
+
+        /// <summary>True while the cycle runs.</summary>
+        public bool Running;
+
+        /// <summary>The frame rate to put back (Time.captureFramerate before the cycle set the 30 fps step), or -1 while none is to restore.</summary>
+        public int RestoreRate = -1;
     }
 
-    /// <summary>The reading view toggled in and out, then the city looked at and back, <paramref name="cycles"/> times.</summary>
-    private static IEnumerator Cycling(int cycles)
+    /// <summary>
+    /// A camcycle's line (pure; camcycle n = 0, after the gc step): green only
+    /// when every turn the cycles ask for took (two of the reading view and
+    /// two of the city a cycle: a refused TiltIn or Look leaves an idle window
+    /// that measures 0 B), every view was found, the gc window was open before
+    /// the first turn and still open after the cycle's last frame, and the
+    /// cycle ran to its end, so the gc step's number covers the whole cycle.
+    /// </summary>
+    public static bool CycleVerdict(CycleTally tally, out string measured, out string detail)
     {
-        DeskView desk = QaGame.Find<DeskView>();
-        CityView city = QaGame.Find<CityView>();
-        for (int i = 0; i < cycles; i++)
+        int asked = 2 * tally.Cycles;
+        measured = $"{tally.DeskTurns}/{asked} reading view turns, {tally.CityTurns}/{asked} city turns, {tally.Refused} refused, {tally.Ran}/{tally.Frames} frames, " +
+                   (!tally.Opened ? "the gc window never opened" : tally.ShutAt > 0 ? $"the gc window shut after frame {tally.ShutAt}" : "inside the gc window");
+        var failures = new List<string>();
+        if (!string.IsNullOrEmpty(tally.Missing))
+            failures.Add($"not found: {tally.Missing}");
+        if (tally.Cycles <= 0)
+            failures.Add("no cycle asked for");
+        if (!tally.Opened)
+            failures.Add("the gc window never opened: a gc step must follow camcycle n = 1");
+        if (tally.Refused > 0 || tally.DeskTurns != asked || tally.CityTurns != asked)
+            failures.Add("a turn did not take: the reading toggle and the city must be live (a traveller at the desk, the PC closed, nothing held)");
+        if (tally.Frames <= 0 || tally.Ran < tally.Frames)
+            failures.Add("the cycle did not run to its end (camcycle n = 0 came first)");
+        if (tally.ShutAt > 0)
+            failures.Add($"the gc window shut after the cycle's frame {tally.ShutAt} of {tally.Frames}: lengthen the gc step (f seconds at 30 frames each)");
+        detail = failures.Count > 0
+            ? string.Join("; ", failures)
+            : "the reading view turned in and back and the city looked at and back, every turn inside the gc window, which stayed open to the cycle's last frame (BUG-65e, 73e)";
+        return failures.Count == 0;
+    }
+
+    private static CycleTally _cycle;
+
+    /// <summary>camcycle n = 1: starts the background cycle and returns at once, so the gc step that follows measures it (the views and moves are found and sized now, before the window); n = 0: ends it and reports <c>cycle.&lt;name&gt;</c>.</summary>
+    private static IEnumerator Cycle(QaRunner runner, QaStep step)
+    {
+        string name = Name(step, "cycle");
+        if (step.n > 0)
         {
-            if (desk != null)
+            Stop(_cycle);
+            DeskView desk = QaGame.Find<DeskView>();
+            CityView city = QaGame.Find<CityView>();
+            DeskConfigSO deskConfig = desk != null ? QaGame.Field(desk, "config") as DeskConfigSO : null;
+            DeskConfigSO cityConfig = city != null ? QaGame.Field(city, "config") as DeskConfigSO : null;
+            var missing = new List<string>();
+            if (desk == null || deskConfig == null)
+                missing.Add(desk == null ? "the reading view" : "the reading view's config");
+            if (city == null || cityConfig == null)
+                missing.Add(city == null ? "the city view" : "the city view's config");
+            var tally = new CycleTally { Cycles = step.f > 0f ? Mathf.RoundToInt(step.f) : 2, Missing = string.Join(", ", missing) };
+            _cycle = tally;
+            if (missing.Count > 0)
+                yield break;
+            int deskFrames = MoveFrames(DeskViewPose.Seconds(deskConfig.deskView, false));
+            int cityFrames = MoveFrames(CityLookTimeline.Total(cityConfig.citySeconds, cityConfig.cityFadeFrom, cityConfig.cityFadeSeconds));
+            tally.Frames = tally.Cycles * 2 * (deskFrames + cityFrames);
+            tally.Running = true;
+            runner.StartCoroutine(Cycling(runner, tally, desk, city, deskFrames, cityFrames));
+            yield break;
+        }
+        CycleTally done = _cycle;
+        _cycle = null;
+        if (done == null)
+        {
+            runner.Assert("cycle." + name, Owner, false, "not measured", "no camcycle was started (n = 1)");
+            yield break;
+        }
+        Stop(done);
+        bool pass = CycleVerdict(done, out string measured, out string detail);
+        runner.Assert("cycle." + name, Owner, pass, measured, detail);
+    }
+
+    /// <summary>A move of <paramref name="seconds"/> and its settle, in frames at the recorder's 30 fps step.</summary>
+    private static int MoveFrames(float seconds) => Mathf.CeilToInt(Mathf.Max(0f, seconds) * SeqRecorder.Fps) + SettleFrames;
+
+    /// <summary>True while the runner's gc step measures: the camera log is quiet then (QaRunner: its gc window, or a timing sequence, which a cycle's run does not record).</summary>
+    private static bool GcWindowOpen(QaRunner runner) =>
+        runner != null && runner.Cameras != null && runner.Cameras.QuietWhen != null && runner.Cameras.QuietWhen() &&
+        (runner.Recorder == null || !runner.Recorder.Timing);
+
+    /// <summary>
+    /// The background cycle: waits for the gc window to open, then, one frame
+    /// later (the window's opening frame is not counted: QaRunner.Gc), turns
+    /// the reading view in and back and the city to and back,
+    /// <see cref="CycleTally.Cycles"/> times, holding each move for its frames
+    /// at the recorder's 30 fps game step (Time.captureFramerate, as a drag
+    /// and a recording run it) and watching the window after every frame.
+    /// Nothing here allocates once the window is open: plain frame yields, no
+    /// wait objects, no text.
+    /// </summary>
+    private static IEnumerator Cycling(QaRunner runner, CycleTally tally, DeskView desk, CityView city, int deskFrames, int cityFrames)
+    {
+        for (int wait = 0; !GcWindowOpen(runner); wait++)
+        {
+            if (!tally.Running || wait >= WindowWaitFrames)
             {
+                Stop(tally);
+                yield break;
+            }
+            yield return null;
+        }
+        tally.Opened = true;
+        tally.RestoreRate = Time.captureFramerate;
+        Time.captureFramerate = SeqRecorder.Fps;
+        yield return null;
+        for (int turn = 0; turn < 4 * tally.Cycles && tally.Running; turn++)
+        {
+            int phase = turn % 4;
+            if (!Turn(desk, city, phase))
+                tally.Refused++;
+            else if (phase < 2)
+                tally.DeskTurns++;
+            else
+                tally.CityTurns++;
+            int frames = phase < 2 ? deskFrames : cityFrames;
+            for (int f = 0; f < frames && tally.Running; f++)
+            {
+                yield return null;
+                tally.Ran++;
+                if (tally.ShutAt == 0 && !GcWindowOpen(runner))
+                    tally.ShutAt = tally.Ran;
+            }
+        }
+        Stop(tally);
+    }
+
+    /// <summary>One turn of the cycle (phase 0: the reading view in, 1: back, 2: the city looked at, 3: back); true when the view changed.</summary>
+    private static bool Turn(DeskView desk, CityView city, int phase)
+    {
+        if (phase < 2)
+        {
+            bool was = desk.IsOn;
+            if (phase == 0)
                 desk.TiltIn(CameraMoveCause.ViewKey);
-                yield return new WaitForSecondsRealtime(0.8f);
+            else
                 desk.Return();
-                yield return new WaitForSecondsRealtime(0.8f);
-            }
-            if (city != null)
-            {
-                city.Look();
-                yield return new WaitForSecondsRealtime(2f);
-                city.Return();
-                yield return new WaitForSecondsRealtime(2f);
-            }
+            return desk.IsOn != was;
+        }
+        bool looked = city.IsOn;
+        if (phase == 2)
+            city.Look();
+        else
+            city.Return();
+        return city.IsOn != looked;
+    }
+
+    /// <summary>Ends a cycle (after its last frame, or at camcycle n = 0 before that): it stops, and the frame rate it set goes back once.</summary>
+    private static void Stop(CycleTally tally)
+    {
+        if (tally == null)
+            return;
+        tally.Running = false;
+        if (tally.RestoreRate >= 0)
+        {
+            Time.captureFramerate = tally.RestoreRate;
+            tally.RestoreRate = -1;
         }
     }
 }
