@@ -1,4 +1,4 @@
-"""CAM's gate coverage (docs/pending/CAM.md, rounds 4 to 8), both ways, over every line a run of CAM's scenarios
+"""CAM's gate coverage (docs/pending/CAM.md, rounds 4 to 9), both ways, over every line a run of CAM's scenarios
 writes. Forward: every line CAM measures sits under one of the gate checks in CamChecks, under the line's owner, so the
 merge gate cannot go green while such a line is red or missing: the lines CamOps' ops write (round 3's verifier found
 cam_views.play.d12 under no gate) and the CAM lines the rig's built-in ops write (gc under the scenario's owner,
@@ -11,7 +11,9 @@ and frame analyses, TEXT-LANG's LiberationSans probe, a plate owner's verdict) b
 a CAM check never refuses the merge gate on another track's known red (round 6's cam_desk.* read TEXT-LANG's
 liberationSans.end). Also: every check's pattern names lines a run writes, the cap report runs with papers on the desk,
 each framing leg names its view, and the wiring of the rig fixes that live in coroutines; and (round 8) cam_gc's gc
-window holds its whole cycle, which proves it ran there.
+window holds its whole cycle, which proves it ran there; and (round 9) each city move is held until its own clock lands,
+every motion a CAM op measures steps on the clock its measurement counts (a capture's 30 fps step), a run that ends
+inside an op puts the frame rate back, and every CamChecks id is pinned, the static ones too.
 Reads the C# sources and the scenario files; needs no Unity. CAM's own file (round 7: moved out of QA-RIG's tools/qa
 into CAM's Assets/Tests/PlayMode/Cam/, in a folder whose name ends in '~' so Unity imports nothing from it). Run it
 from the repository's root with:
@@ -22,6 +24,7 @@ import json
 import math
 import os
 import re
+import struct
 import sys
 import unittest
 
@@ -40,6 +43,10 @@ DESK_VIEW_POSE = os.path.join(ROOT, 'Assets', 'Scripts', 'Visuals', 'DeskViewPos
 DESK_CONFIG = os.path.join(ROOT, 'Assets', 'Scripts', 'Office', 'DeskConfigSO.cs')
 DESK_ASSET = os.path.join(ROOT, 'Assets', 'Data', 'Config', 'Desk_Default.asset')
 DESK_PLAN_OPS = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'DeskPlan', 'Rig', 'DeskPlanOps.cs')
+CITY_VIEW = os.path.join(ROOT, 'Assets', 'Scripts', 'Office', 'CityView.cs')
+DESK_VIEW = os.path.join(ROOT, 'Assets', 'Scripts', 'Office', 'DeskView.cs')
+CITY_TIMELINE = os.path.join(ROOT, 'Assets', 'Scripts', 'Visuals', 'CityLookTimeline.cs')
+UI_MOTION = os.path.join(ROOT, 'Assets', 'Scripts', 'UI', 'Motion', 'UiMotion.cs')
 SEQTOOLS = os.path.join(QA, 'seqtools.py')
 SCENARIOS = os.path.join(QA, 'scenarios')
 
@@ -129,6 +136,9 @@ RUN_CHECKS = {
     'cam.bp.run.gc': 'bp.cam_gc',
 }
 RUN_LINES = ('console', 'presses', 'quality', END, 'materials.end')
+
+# CamChecks' static checks (the live config and code, read in the editor; round 9 pins them with the rest).
+STATIC_CHECKS = {'cam.closeups.none', 'cam.lens.reading', 'cam.chrome.band', 'cam.lens.office'}
 
 
 def _run_lines_of(run):
@@ -232,6 +242,32 @@ def _knob_seconds(name, source, block=None):
     if found:
         return float(found.group(1))
     return float(re.search(r'\b' + name + r' = ([0-9.]+)f;', _code(source)).group(1))
+
+
+def _f32(x):
+    """x rounded to a C# float."""
+    return struct.unpack('f', struct.pack('f', x))[0]
+
+
+def _city_total():
+    """CityLookTimeline.Total at the live knobs, in C# floats: the turn's end or the fade's, whichever is later."""
+    turn = _f32(max(0.0, _knob_seconds('citySeconds', DESK_CONFIG)))
+    fade_from = _f32(min(1.0, max(0.0, _knob_seconds('cityFadeFrom', DESK_CONFIG))))
+    fade = _f32(max(0.0, _knob_seconds('cityFadeSeconds', DESK_CONFIG)))
+    return _f32(max(turn, _f32(_f32(turn * fade_from) + fade)))
+
+
+def _landing_frame(total, fps, to_city):
+    """The frame of a hold on which the city's clock (CityLookTimeline.Step, by a capture's 1/fps s a frame: UiMotion.Delta)
+    reaches its end, in C# floats: the turn is made after its frame's Update, so a hold's first frame steps it once."""
+    dt = _f32(1.0 / fps)
+    clock, frame = (0.0 if to_city else total), 0
+    while (clock < total) if to_city else (clock > 0.0):
+        frame += 1
+        clock = _f32(min(total, max(0.0, _f32(clock + dt if to_city else clock - dt))))
+        if frame > 100 * fps:
+            raise AssertionError("the city's clock never lands")
+    return frame
 
 
 def run_lines(scenario, plates):
@@ -607,16 +643,19 @@ class CamGateCoverageTests(unittest.TestCase):
                          r'(?s)_measuringGc = true;.*?yield return null;\s*for \(int i = 0; i < frames; i\+\+\)\s*\{\s*yield return null;\s*if \(gc\.Valid\)\s*samples\.Add\(gc\.LastValue\);\s*\}.*?_measuringGc = false;')
         self.assertRegex(src, r'private static bool GcWindowOpen\(QaRunner runner\) =>\s*runner != null && runner\.Cameras != null && runner\.Cameras\.QuietWhen != null && runner\.Cameras\.QuietWhen\(\) &&\s*\(runner\.Recorder == null \|\| !runner\.Recorder\.Timing\);')
 
-        # The cycle: waits for the window, sets the 30 fps step, turns one frame later, checks the window after every
+        # The cycle: waits for the window, holds the 30 fps step, turns one frame later, checks the window after every
         # frame, and makes nothing while it runs (no wait objects, no text, no collections).
         cycling = _body(src, 'private static IEnumerator Cycling(QaRunner runner, CycleTally tally, DeskView desk, CityView city, int deskFrames, int cityFrames)')
         self.assertRegex(cycling, r'^\s*for \(int wait = 0; !GcWindowOpen\(runner\); wait\+\+\)')
-        self.assertRegex(cycling, r'tally\.Opened = true;\s*tally\.RestoreRate = Time\.captureFramerate;\s*Time\.captureFramerate = SeqRecorder\.Fps;\s*yield return null;\s*for \(int turn = 0;')
+        self.assertRegex(cycling, r'tally\.Opened = true;\s*tally\.HoldsStep = true;\s*HoldStep\(\);\s*yield return null;\s*for \(int turn = 0;')
         self.assertRegex(cycling, r'yield return null;\s*tally\.Ran\+\+;\s*if \(tally\.ShutAt == 0 && !GcWindowOpen\(runner\)\)\s*tally\.ShutAt = tally\.Ran;')
         self.assertRegex(cycling, r'Stop\(tally\);\s*$')
         for name, body in (('Cycling', cycling),
                            ('Turn', _body(src, 'private static bool Turn(DeskView desk, CityView city, int phase)')),
-                           ('Stop', _body(src, 'private static void Stop(CycleTally tally)'))):
+                           ('Stop', _body(src, 'private static void Stop(CycleTally tally)')),
+                           ('HoldStep', _body(src, 'private static void HoldStep()')),
+                           ('LetGoStep', _body(src, 'private static void LetGoStep()')),
+                           ('PutStepBack', _body(src, 'private static void PutStepBack()'))):
             for made in (r'\bnew\b', r'WaitFor', r'\$"', r'"', r'=>', r'\.Where\(|\.Select\(|\.ToList\(', r'string\.'):
                 self.assertNotRegex(body, made, f'{name} runs inside the gc window and must allocate nothing ({made})')
         turn = _body(src, 'private static bool Turn(DeskView desk, CityView city, int phase)')
@@ -663,6 +702,146 @@ class CamGateCoverageTests(unittest.TestCase):
         for after in re.findall(r'runner\.Assert\("capreport\." \+ name, Owner, false, "not measured",' + call, cap):
             self.assertEqual('yield break;', after.strip(), 'camcap goes on after a not-measured guard')
         self.assertLess(cap.index('!view.IsOn'), cap.index('FindObjectsByType<DeskDocument>'), 'camcap measures nothing outside the reading view')
+
+    def test_each_city_move_is_held_until_its_own_clock_lands_with_the_settle_to_spare(self):
+        # Round 9 (the city half of WAVE2_OPEN2 CAM #2): CityView stepped by Unity's unscaled time, which the cycle's
+        # 30 fps step (a capture) never reaches, so at R Hz a 45-frame hold gave the city 45/R s: its 1.0 s look never
+        # finished above 45 Hz and its panorama (revealed from 0.65 s) never showed inside the window above about 69 Hz,
+        # and a mutant holding the city for the desk's 30 frames passed every offline test. Now the city's clock is the
+        # game feel's (UiMotion.Delta: the capture's step), each move's hold is sized from its own view's timeline, and a
+        # city move whose clock had not landed SettleFrames frames before its hold ended refuses the cycle. This plays each
+        # city move's hold, as the cycle sizes it, against the city's clock at the 30 fps step in C# floats.
+        src = _code(CAM_OPS)
+        fps = int(re.search(r'public const int Fps = (\d+);', _code(SEQ_RECORDER)).group(1))
+        settle = int(re.search(r'const int SettleFrames = (\d+);', src).group(1))
+        self.assertGreaterEqual(settle, 1, 'the settle holds the landed look for some frames')
+        self.assertIn('private static int MoveFrames(float seconds) => Mathf.CeilToInt(Mathf.Max(0f, seconds) * SeqRecorder.Fps) + SettleFrames;', src)
+        cycle = _body(src, 'private static IEnumerator Cycle(QaRunner runner, QaStep step)')
+        sized = dict(re.findall(r'int (\w+) = MoveFrames\(((?:[^;()]|\([^;()]*\))*)\);', cycle))
+        cycling = _body(src, 'private static IEnumerator Cycling(QaRunner runner, CycleTally tally, DeskView desk, CityView city, int deskFrames, int cityFrames)')
+        held = re.search(r'int frames = phase < 2 \? (\w+) : (\w+), landed = 0;', cycling)
+        self.assertIsNotNone(held, 'each move holds its own frames, counting the frames the city has landed')
+        self.assertRegex(cycle, r'runner\.StartCoroutine\(Cycling\(runner, tally, desk, city, deskFrames, cityFrames\)\);')
+        knobs = {
+            'DeskViewPose.Seconds(deskConfig.deskView, false)': ('the reading view', _f32(_knob_seconds('seconds', DESK_VIEW_POSE, 'deskView'))),
+            'CityLookTimeline.Total(cityConfig.citySeconds, cityConfig.cityFadeFrom, cityConfig.cityFadeSeconds)': ('the city', _city_total()),
+        }
+        desk_var, city_var = held.groups()
+        for var in (desk_var, city_var):
+            self.assertIn(var, sized, f'{var} is a hold sized by MoveFrames in Cycle')
+            self.assertIn(sized[var], knobs, f'{var} is sized from a view\'s own seconds: {sized[var]}')
+        self.assertEqual('the reading view', knobs[sized[desk_var]][0], 'a reading view move is held for the reading view\'s seconds')
+
+        # The city's own timeline, as CityLookTimeline steps it (pinned: the simulation follows these lines).
+        timeline = _code(CITY_TIMELINE)
+        self.assertIn('return Math.Max(turn, FadeStart(turn, fadeFrom) + Math.Max(0f, fadeSeconds));', timeline)
+        self.assertIn('private static float FadeStart(float turnSeconds, float fadeFrom) => turnSeconds * Math.Min(1f, Math.Max(0f, fadeFrom));', timeline)
+        self.assertIn('return Math.Min(total, Math.Max(0f, seconds + (toCity ? delta : -delta)));', timeline)
+        total = _city_total()
+        what, seconds = knobs[sized[city_var]]
+        hold = math.ceil(_f32(_f32(max(0.0, seconds)) * fps)) + settle
+        for to_city in (True, False):
+            landing = _landing_frame(total, fps, to_city)
+            spare = hold - landing + 1
+            self.assertGreaterEqual(spare, settle,
+                                    f'a city move {"to the city" if to_city else "back"} is held {hold} frames (sized from {what}\'s seconds) and the '
+                                    f'city\'s clock lands on frame {landing}: {spare} landed frames, under the {settle}-frame settle (a look cut short)')
+
+        # The cycle counts the frames the city has landed and refuses a move cut short; the city says when it landed.
+        self.assertRegex(cycling, r'if \(phase >= 2 && city\.Landed\)\s*landed\+\+;\s*\}\s*if \(phase >= 2 && landed < SettleFrames\)\s*tally\.CutShort\+\+;')
+        self.assertIn('public bool Landed => config == null || (IsOn ? _clock >= Total : _clock <= 0f);', _code(CITY_VIEW))
+        verdict = _body(src, 'public static bool CycleVerdict(CycleTally tally, out string measured, out string detail)')
+        self.assertRegex(verdict, r'if \(tally\.CutShort > 0\)\s*failures\.Add\(')
+
+    def test_each_measurement_runs_on_the_clock_of_the_motion_it_measures(self):
+        # Round 9 (the PLAUSIBLE finding beside WAVE2_OPEN2 CAM #2): a capture's fixed step (Time.captureFramerate: the
+        # recorder's, camparallax's, the cycle's) reaches game time and UiMotion.Delta, never Unity's unscaled time. The
+        # city's turn, fade and parallax stepped on unscaled time, so camparallax read about 30/R of a 30 fps frame at R Hz
+        # and its look's settle R/30 times its seconds, and DeskView's Back control faded on unscaled time beside a blend
+        # on the 30 fps game step inside camfade's recordings. Every motion a CAM op measures now steps on the game feel's
+        # clock (UiMotion.Delta), and so does each CAM count of it.
+        self.assertIn('public static float Delta(float dt) => Time.captureDeltaTime > 0f ? Time.captureDeltaTime : dt;', _code(UI_MOTION))
+        city = _code(CITY_VIEW)
+        update = _body(city, 'private void Update()')
+        self.assertRegex(update, r'float dt = UiMotion\.Delta\(Time\.unscaledDeltaTime\);\s*_clock = CityLookTimeline\.Step\(_clock, IsOn, dt, total, UiMotion\.Amount\.Still\);\s*Draw\(_clock, dt\);')
+        draw = _body(city, 'private void Draw(float clock, float dt)')
+        self.assertIn('_shown += IsOn ? dt : 0f;', draw)
+        self.assertIn('CityParallax.Follow(_cityPan, ref _panVelocity, cityPan, maxSpeed, dt)', draw)
+        self.assertNotRegex(draw, r'\bdt\s*=[^=]', 'Draw steps by the frame\'s dt it is given')
+        desk = _code(DESK_VIEW)
+        for name, src in (('CityView', city), ('DeskView', desk)):
+            self.assertGreater(src.count('UiMotion.Delta(Time.unscaledDeltaTime)'), 0, name)
+            self.assertEqual(src.count('UiMotion.Delta(Time.unscaledDeltaTime)'), src.count('Time.unscaled'),
+                             f'{name} reads Unity\'s unscaled time outside UiMotion.Delta: a capture\'s step does not reach that clock')
+        clock = _body(desk, 'private float MoveClock()')
+        self.assertRegex(clock, r'if \(_sinceMoveFrame != Time\.frameCount\)\s*\{\s*_sinceMoveFrame = Time\.frameCount;\s*_sinceMove \+= UiMotion\.Delta\(Time\.unscaledDeltaTime\);\s*\}\s*return _sinceMove;')
+        self.assertIn('public float OfficeControlsAlpha => IsOn ? 0f : DeskViewPose.ControlAlpha(MoveClock(), _moveSeconds);', desk)
+        self.assertIn('DeskViewPose.ControlAlpha(MoveClock(), _moveSeconds)', _body(desk, 'private void ShowBack()'))
+        self.assertRegex(_body(desk, 'private void Update()'), r'^\s*MoveClock\(\);')
+        self.assertRegex(_body(desk, 'private void Set(bool on, CameraMoveCause cause)'), r'_sinceMove = 0f;\s*_sinceMoveFrame = Time\.frameCount;')
+        ops = _code(CAM_OPS)
+        sample = _body(ops, 'private static IEnumerator Sample(CanvasGroup group, float seconds, string leg, List<string> failures, Action<int> count)')
+        self.assertRegex(sample, r'^\s*float elapsed = 0f;')
+        self.assertRegex(sample, r'yield return null;\s*elapsed \+= UiMotion\.Delta\(Time\.unscaledDeltaTime\);\s*\}')
+        self.assertEqual(1, sample.count('elapsed +='))
+        self.assertNotIn('Time.unscaledTime', sample)
+        parallax = _body(ops, 'private static IEnumerator Parallax(QaRunner runner, QaStep step)')
+        self.assertRegex(parallax, r'int turning = 0, turnMost = Mathf\.CeilToInt\(CityTotal\(city\) \* SeqRecorder\.Fps\) \+ 1;')
+        self.assertRegex(parallax, r'yield return null;\s*if \(city\.IsOn && !city\.Landed\)\s*turning\+\+;')
+        self.assertIn('bool onStep = turning <= turnMost;', parallax)
+        self.assertRegex(parallax, r'runner\.Assert\("city\.parallax\." \+ name, Owner, onStep && ')
+        self.assertRegex(parallax, r'runner\.Assert\("city\.look\." \+ name, Owner, onStep && ')
+
+    def test_a_run_that_ends_inside_an_op_puts_the_frame_rate_back(self):
+        # Round 9 (WAVE2_OPEN2 robustness): the cycle sets the 30 fps step inside the gc window and only its Stop put it
+        # back; a run stopped in the window (its deadline, a harness reset, play mode left) destroys the runner and its
+        # coroutine (no finally runs), and QaRunner.CleanUp restores only its drags' and the recorder's rates. Every CamOps
+        # op now holds the step through HoldStep/LetGoStep, and the run's end (QaRunner.Finished, or play mode left in the
+        # editor) stops the cycle and ends every hold.
+        ops = _code(CAM_OPS)
+        writes = re.findall(r'Time\.captureFramerate = [^;]+;', ops)
+        self.assertEqual(['Time.captureFramerate = SeqRecorder.Fps;', 'Time.captureFramerate = _stepWas;'], writes,
+                         'CamOps sets the frame rate only in HoldStep and puts it back only in PutStepBack')
+        self.assertRegex(_body(ops, 'private static void HoldStep()'), r'if \(_stepHolders\+\+ == 0\)\s*_stepWas = Time\.captureFramerate;\s*Time\.captureFramerate = SeqRecorder\.Fps;')
+        self.assertRegex(_body(ops, 'private static void LetGoStep()'), r'if \(_stepHolders > 0 && --_stepHolders == 0\)\s*PutStepBack\(\);')
+        # Only while the step is still CamOps': at a run's end the recorder, stopped first, may have put its own rate back.
+        self.assertRegex(_body(ops, 'private static void PutStepBack()'), r'^\s*if \(Time\.captureFramerate == SeqRecorder\.Fps\)\s*Time\.captureFramerate = _stepWas;\s*$')
+        ended = _body(ops, 'private static void RunEnded()')
+        self.assertRegex(ended, r'^\s*Stop\(_cycle\);\s*_cycle = null;\s*if \(_stepHolders == 0\)\s*return;\s*_stepHolders = 0;\s*PutStepBack\(\);\s*$')
+        self.assertIn('private static void RunFinished(QaRunReport report) => RunEnded();', ops)
+        register = _body(ops, 'private static void Register()')
+        self.assertRegex(register, r'QaRunner\.Finished -= RunFinished;\s*QaRunner\.Finished \+= RunFinished;')
+        editor = _body(ops, 'private static void RegisterInEditor()')
+        self.assertRegex(editor, r'Register\(\);\s*UnityEditor\.EditorApplication\.playModeStateChanged -= PlayModeChanged;\s*UnityEditor\.EditorApplication\.playModeStateChanged \+= PlayModeChanged;')
+        self.assertRegex(_body(ops, 'private static void PlayModeChanged(UnityEditor.PlayModeStateChange change)'),
+                         r'if \(change == UnityEditor\.PlayModeStateChange\.ExitingPlayMode\)\s*RunEnded\(\);')
+        # Each op's hold is let go in its finally (or by the cycle's Stop), once.
+        for name, signature in (('camparallax', 'private static IEnumerator Parallax(QaRunner runner, QaStep step)'),
+                                ('camplay\'s drag', 'private static IEnumerator DragAt(QaInput input, Vector2 from, Vector2 to)')):
+            body = _body(ops, signature)
+            self.assertRegex(body, r'HoldStep\(\);\s*try\s*\{', name)
+            self.assertRegex(body, r'finally\s*\{\s*LetGoStep\(\);\s*\}\s*$', name)
+            self.assertEqual((1, 1), (body.count('HoldStep()'), body.count('LetGoStep()')), name)
+        stop = _body(ops, 'private static void Stop(CycleTally tally)')
+        self.assertRegex(stop, r'tally\.Running = false;\s*if \(tally\.HoldsStep\)\s*\{\s*tally\.HoldsStep = false;\s*LetGoStep\(\);\s*\}')
+        # QaRunner raises Finished once its report is written, a failed run's too.
+        runner = _code(QA_RUNNER)
+        self.assertIn('public static event Action<QaRunReport> Finished;', runner)
+        self.assertRegex(_body(runner, 'private void Finish()'), r'Finished\?\.Invoke\(Report\);')
+
+    def test_every_cam_check_is_pinned_by_id_the_static_ones_too(self):
+        # Round 9 (residual of WAVE2_OPEN2 CAM #3 (3)): dropping comments protected only the checks _checks() parses (Play
+        # and BuiltPlayer); a static check with its [GateCheck] commented out (cam.lens.reading) passed every test here
+        # and the editor runner. The whole set of CamChecks' ids is pinned, each registered once, of its kind, on a method.
+        src = _code(CAM_CHECKS)
+        found = re.findall(r'\[GateCheck\(\s*"([^"]+)"\s*,\s*(?:Owner|"[^"]+")\s*(?:,\s*GateKind\.(\w+))?', src)
+        ids = [cid for cid, _ in found]
+        self.assertEqual(len(ids), len(set(ids)), 'a check registered twice')
+        self.assertEqual(STATIC_CHECKS, {cid for cid, kind in found if not kind}, 'the static checks')
+        self.assertEqual(set(READS) | set(RUN_CHECKS), {cid for cid, kind in found if kind}, 'the play and built-player checks')
+        self.assertEqual(STATIC_CHECKS | set(READS) | set(RUN_CHECKS), set(ids))
+        for cid in STATIC_CHECKS:
+            self.assertRegex(src, r'\[GateCheck\(\s*"' + re.escape(cid) + r'"\s*,\s*Owner\s*\)\]\s*public static GateResult \w+\(\)', cid)
 
 
 if __name__ == '__main__':
