@@ -475,6 +475,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "detainButton", BuildDetainButton(office, stampTray));
         SetRef(soBinder, "hardware", hardware);
         SetRef(soBinder, "counter", counter);
+        SetRef(soBinder, "paintedDesk", BuildPaintedDesk(office));
         SetRef(soBinder, "deskInspect", inspect);
         SetRef(soBinder, "rulebook", rulebook);
         SetRef(soBinder, "matCatcher", desk.transform.Find("ViewCatcher").GetComponent<BoxCollider>());

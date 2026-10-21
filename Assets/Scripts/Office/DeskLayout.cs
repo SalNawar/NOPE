@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -106,6 +107,34 @@ public sealed class DeskLayoutSettings
     /// <summary>The chip reader's size against its model's life size.</summary>
     [Min(0.1f)] public float chipReaderScale = 0.9f;
 
+    [Header("The painted desk (desk v3, Saleh: \"yes but they need to slide\"; UNITY_PLAN 8: the DeskArt.Painted toggle)")]
+    /// <summary>
+    /// DeskArt.Painted: when on and the gameplay scene holds the painted desk
+    /// (DeskPainted, put there by Build Office UI), it replaces the art's desk
+    /// when the office binds: its homes take over the map (UsePainted), the
+    /// art desk's parts hide (paintedCutParts) and the gameplay objects take
+    /// its look; off, the art's desk as before (A/B and rollback for one
+    /// integration cycle).
+    /// </summary>
+    public bool paintedDesk = true;
+
+    /// <summary>
+    /// The art desk's parts the painted desk replaces: every renderer of the
+    /// art office whose name starts with one hides once the office is bound
+    /// (the desk and its rails, the mat, the PC, keyboard and mouse, the
+    /// phone, the till and its credits, the NEXT sign and its caption, the
+    /// lamp, the old stamp and ink pad, the binder, the booth's partitions,
+    /// the art's own shadow cards, and the right cork board's stability
+    /// monitor, which the painted booth wall stands in front of: its readouts
+    /// go to the fallback HUD).
+    /// </summary>
+    public string[] paintedCutParts =
+    {
+        "Finish_Desk__", "Finish_DeskRail__", "Clean_Blotter", "CRT2_", "Clean_Keyboard", "Clean_Mouse", "Clean_Phone", "Clean_Till", "CreditsNumber",
+        "Clean_Next", "NextLabel", "Clean_Lamp", "Clean_Stamp", "Clean_Inkpad", "Clean_Binder", "Office_Partition__", "Clean Art",
+        "Office_Stability__", "StabilityPercent", "Finish_RightEphemera__",
+    };
+
     [Header("Cut (Saleh 2026-10-20: \"we will cut all but decor objects later will go on clear places like restory\")")]
     /// <summary>The art's props cut from the desk: their parts ("prefix__*") are switched off when the art office binds.</summary>
     public string[] cutParts = { "Clean_Calculator", "Clean_Binder", "Clean_PenPot", "Clean_Stapler", "Clean_Inkpad" };
@@ -140,8 +169,33 @@ public sealed class DeskLayoutSettings
     /// <summary>How high a dragged decoration lifts off the desk (metres), over whatever lies under it.</summary>
     [Min(0f)] public float decorLift = 0.03f;
 
-    /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants), or null.</summary>
-    public DeskHome HomeOf(string id) => DeskHomeMap.Find(homes, id);
+    /// <summary>The map while the painted desk shows (UsePainted), else null.</summary>
+    [NonSerialized] private DeskHome[] _paintedHomes;
+
+    /// <summary>The painted desk's fixed art while it shows, else null.</summary>
+    [NonSerialized] private DeskHome[] _paintedFixedArt;
+
+    /// <summary>The homes in use: the painted desk's map while it shows (UsePainted), else <see cref="homes"/>.</summary>
+    public DeskHome[] Homes => _paintedHomes ?? homes;
+
+    /// <summary>The fixed art in use: the painted desk's while it shows, else <see cref="fixedArt"/>.</summary>
+    public DeskHome[] FixedArt => _paintedFixedArt ?? fixedArt;
+
+    /// <summary>
+    /// The painted desk's homes <paramref name="painted"/> take over the map
+    /// (DeskPaintedMap.Merge over <see cref="homes"/>) with its
+    /// <paramref name="paintedFixedArt"/>, until called with null (the
+    /// office binder: at bind, and when the office goes). Kept off the asset
+    /// (never serialized).
+    /// </summary>
+    public void UsePainted(IReadOnlyList<DeskHome> painted, IReadOnlyList<DeskHome> paintedFixedArt)
+    {
+        _paintedHomes = painted != null ? DeskPaintedMap.Merge(homes, painted) : null;
+        _paintedFixedArt = painted != null ? (paintedFixedArt ?? Array.Empty<DeskHome>()).ToArray() : null;
+    }
+
+    /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants) in the map in use, or null.</summary>
+    public DeskHome HomeOf(string id) => DeskHomeMap.Find(Homes, id);
 
     /// <summary>The placement the home <paramref name="id"/> gives its object, or null without that home.</summary>
     public DeskBay Bay(string id)
@@ -150,13 +204,28 @@ public sealed class DeskLayoutSettings
         return home != null ? new DeskBay(home) : null;
     }
 
-    /// <summary>What is wrong with the plan (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight; DeskSlides.Problems: the sliders against the homes; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
-    public List<string> Problems()
+    /// <summary>What is wrong with the plan in use (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight; DeskSlides.Problems: the sliders against the homes; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
+    public List<string> Problems() => Problems(Homes, FixedArt, minVisible);
+
+    /// <summary>
+    /// What is wrong with the painted desk's plan: its homes
+    /// <paramref name="painted"/> merged over <see cref="homes"/>
+    /// (DeskPaintedMap.Merge), against its <paramref name="paintedFixedArt"/>,
+    /// by the same checks as Problems but the office camera's box sight check:
+    /// desk v3's sight was gated on its real render with the real occlusion
+    /// (the pipeline's render/legibility_office.txt and its slid states), where
+    /// the boxes miss that the turned PC leaves the back step's homes in view;
+    /// UNITY_PLAN 10.1 gates it again on Unity's ID render.
+    /// </summary>
+    public List<string> PaintedProblems(IReadOnlyList<DeskHome> painted, IReadOnlyList<DeskHome> paintedFixedArt) =>
+        Problems(DeskPaintedMap.Merge(homes, painted), (paintedFixedArt ?? Array.Empty<DeskHome>()).ToArray(), 0f);
+
+    private List<string> Problems(DeskHome[] map, DeskHome[] art, float sight)
     {
-        List<string> problems = DeskArrangement.HomeProblems(homes, fixedArt, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), minVisible);
+        List<string> problems = DeskArrangement.HomeProblems(map, art, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), sight);
         if (slides != null)
-            problems.AddRange(slides.Problems(homes, DeskHomeMap.SlideReach));
-        problems.AddRange(DeskArrangement.ClickBoxProblems(homes, fixedArt, DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox));
+            problems.AddRange(slides.Problems(map, DeskHomeMap.SlideReach));
+        problems.AddRange(DeskArrangement.ClickBoxProblems(map, art, DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox));
         return problems;
     }
 }
@@ -282,7 +351,7 @@ public static class DeskLayout
         Frame = frame;
         Mat = new DeskMat(mat);
         _settings = settings;
-        foreach (DeskHome art in settings != null && settings.fixedArt != null ? settings.fixedArt : Array.Empty<DeskHome>())
+        foreach (DeskHome art in settings != null && settings.FixedArt != null ? settings.FixedArt : Array.Empty<DeskHome>())
             if (art != null)
                 Register(art.id, art.Footprint, art.height);
         Bound = settings != null;

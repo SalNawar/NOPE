@@ -16,7 +16,10 @@ using UnityEngine.SceneManagement;
 /// on the PC's glass, sizes the desk, the mat and the scanner, poses the desk
 /// view from the art's Cinemachine camera and the mat, lays the counter and
 /// the rulebook and the 3D stamp bar's rack, binds the desk's slide-in to
-/// the machines and tools on their homes (DeskSlideIn, BindSlideIn), stands the traveller,
+/// the machines and tools on their homes (DeskSlideIn, BindSlideIn), installs
+/// the painted desk over the art's when the plan's DeskArt.Painted toggle is on
+/// (DeskPainted: its homes, its look on the gameplay objects, the art desk
+/// hidden; InstallPainted), stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), lays the
 /// Helix River over the stability monitor's text (HelixRiverMonitor.Cover; the
 /// fallback HUD's river when the art has none), has the
@@ -90,6 +93,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     /// <summary>The counter (optional): laid along the desk's far edge in the office view's frame, once the desk view is posed.</summary>
     [SerializeField] private DeskCounter counter;
+
+    /// <summary>The painted desk (desk v3, DESK-ART; optional): installed over the art's desk when DeskLayoutSettings.paintedDesk is on, else hidden (InstallPainted).</summary>
+    [SerializeField] private DeskPainted paintedDesk;
 
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
@@ -235,6 +241,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The decorations the player moves (ArrangeArt, BindDecor), or null.</summary>
     private DeskDecor _decor;
 
+    /// <summary>True while the painted desk replaces the art's (ArrangeArt: DeskLayoutSettings.paintedDesk and a painted desk in the scene).</summary>
+    private bool _painted;
+
+    /// <summary>The art desk's renderers the painted desk replaces (DeskLayoutSettings.paintedCutParts): hidden once everything is bound (anchors were measured on them).</summary>
+    private readonly List<Renderer> _paintedCut = new List<Renderer>();
+
     private void Awake()
     {
         Scene art = OfficeScenes.ArtScene;
@@ -248,6 +260,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     {
         SceneManager.sceneLoaded -= HandleLoaded;
         DeskLayout.Unbind();
+        if (config != null)
+            config.layout.UsePainted(null, null);
     }
 
     /// <summary>The gameplay layer loaded first (played alone in the editor): bind when the art office arrives.</summary>
@@ -303,6 +317,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         BindDecor();
         BindBoard();
         BindHall(art);
+        HidePaintedCut();
         Report();
     }
 
@@ -391,9 +406,14 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // PC
     // -----------------------------
 
-    /// <summary>The desktop's clone on the PC's glass (drawn before <paramref name="office"/>, the office camera), the PC's click box and the power knob's.</summary>
+    /// <summary>The desktop's clone on the PC's glass (drawn before <paramref name="office"/>, the office camera), the PC's click box and the power knob's; the painted PC's when the painted desk shows (BindPaintedPc).</summary>
     private void BindPc(Camera office)
     {
+        if (_painted && paintedDesk.Screen != null)
+        {
+            BindPaintedPc(office);
+            return;
+        }
         ResolvedAnchor anchor = At(OfficeAnchorId.PCScreen);
         (Renderer glass, int submesh) = anchor.Transform != null ? OfficeAnchors.FindGlass(anchor.Transform) : (null, 0);
         if (glass != null && screenClone != null)
@@ -473,6 +493,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 _frame.Place(s, config.layout.Bay(DeskHomeMap.Scanner), 0f);
                 DeskLayout.Track(DeskHomeMap.Scanner, s);
             }
+            Renderer[] painted = !artScanner && _painted ? PaintScanner(s) : null;
+            if (artScanner && _painted)
+                paintedDesk.Hide(PaintedScanner);
 
             if (scanner.TryGetComponent(out BoxCollider box))
             {
@@ -480,7 +503,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 box.size = new Vector3(scanner.DropSize.x, DeskScanner.BoxHeight, scanner.DropSize.y);
             }
             if (scanner.TryGetComponent(out Clickable scannerClick))
-                scannerClick.SetOutline(artScanner ? spot.Transform.GetComponentsInChildren<Renderer>(false) : RenderersOf(scannerPlaceholder));
+                scannerClick.SetOutline(artScanner ? spot.Transform.GetComponentsInChildren<Renderer>(false) : painted ?? RenderersOf(scannerPlaceholder));
 
             // Every corner of the drop area, so a marker scanner yawed off the desk's axes is covered whole (audit R5-010).
             Vector2 half = scanner.DropSize / 2f;
@@ -539,7 +562,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 _frame.Place(detainButton.transform, layout.Bay(DeskHomeMap.Detain), 0f);
                 DeskLayout.Track(DeskHomeMap.Detain, detainButton.transform);
             }
-            standIn = DeskFurniture.Build(transform, _frame, layout, MaterialNamed, OpenWheel, At(OfficeAnchorId.Intercom).HasBounds);
+            standIn = DeskFurniture.Build(transform, _frame, layout, MaterialNamed, OpenWheel, !_painted && At(OfficeAnchorId.Intercom).HasBounds);
             if (guide != null && standIn != null)
                 guide.SetIntercom(standIn);
         }
@@ -551,6 +574,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (hardware.ChipNote != null && hardware.Reader != null)
                 FaceCamera(hardware.ChipNote, hardware.Reader.transform.position + Vector3.up * HintHeight, viewer);
         }
+        if (_painted && _hasFrame)
+            InstallPainted(standIn);
         DeskLayout.RefreshObstacles();
         BindSlideIn(standIn);
         if (rulebook != null && config != null && _office != null)
@@ -602,6 +627,15 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (readySign == null)
             return;
 
+        if (_painted && paintedDesk.TryBounds(PaintedSign, out Bounds painted))
+        {
+            // The painted desk's AVAILABLE sign (its word is painted; DeskPaintedMap: the sign's fixed art).
+            if (readyPlaceholder != null)
+                readyPlaceholder.SetActive(false);
+            PlaceBox(readySign.transform, painted.center, painted.size);
+            readySign.SetOutline(paintedDesk.RenderersOf(PaintedSign));
+            return;
+        }
         ResolvedAnchor sign = At(OfficeAnchorId.NextSign);
         bool art = sign.HasBounds;
         if (readyPlaceholder != null)
@@ -625,7 +659,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 continue;
 
             ResolvedAnchor anchor = At(prop.anchor);
-            if (!anchor.HasBounds)
+            if (!anchor.HasBounds || IsCut(anchor.Transform))
             {
                 prop.click.gameObject.SetActive(false);
                 continue;
@@ -825,9 +859,21 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         _artRenderers = art.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<Renderer>(true)).ToArray();
 
         DeskLayoutSettings layout = config.layout;
+        _painted = layout.paintedDesk && paintedDesk != null;
+        if (paintedDesk != null)
+            paintedDesk.gameObject.SetActive(_painted);
+        layout.UsePainted(_painted ? paintedDesk.Homes : null, _painted ? paintedDesk.FixedArt : null);
+        _paintedCut.Clear();
+        if (_painted)
+        {
+            paintedDesk.Align(_frame);
+            foreach (Renderer r in _artRenderers)
+                if (r != null && layout.paintedCutParts.Any(prefix => !string.IsNullOrEmpty(prefix) && r.name.StartsWith(prefix, StringComparison.Ordinal)))
+                    _paintedCut.Add(r);
+        }
         bool moved = CutArtProps(layout.cutParts);
         DeskLayout.Bind(_frame, mat.HasBounds ? _frame.Footprint(mat.Bounds) : layout.mat.Rect, layout);
-        foreach (DeskHome home in layout.homes ?? Array.Empty<DeskHome>())
+        foreach (DeskHome home in layout.Homes ?? Array.Empty<DeskHome>())
             if (home != null && !string.IsNullOrEmpty(home.artParts) && MoveArtProp(home))
             {
                 moved = true;
@@ -904,14 +950,15 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// busy while its outside shows it occupied (Occupied), and the chip
     /// reader, busy while it reads, each the dock its paper rides home from;
     /// the intercom when it is the built stand-in and its home declares a
-    /// slide (the art office's phone is loose parts with no slide transform:
-    /// it stays put, said in the log, until DESK-PLAN's open call 1 or
-    /// DESK-ART's painted intercom gives it one); the BABEL rack, the Rolodex
+    /// slide (the painted desk's map declares it, and the painted intercom
+    /// rides the stand-in; the art office's phone is loose parts with no slide
+    /// transform: it stays put, said in the log); the BABEL rack, the Rolodex
     /// and the protocol cards; the UV torch's body, a layer over the pose
-    /// UvTorch gives it, giving way when it is picked up. Not here: the
-    /// daters (STAMP #7 lifts and tips them itself: their slide waits for its
-    /// merge), the glasses (no object yet: GLASSES) and the rulebook (its
-    /// pocket is not built yet).
+    /// UvTorch gives it, giving way when it is picked up; with the painted
+    /// desk, its glasses in their stand (they slide on their own until
+    /// GLASSES gives them an object). Not here: the daters (STAMP #7 lifts and
+    /// tips them itself: their slide waits for its merge) and the rulebook
+    /// (its pocket is not built yet).
     /// </summary>
     private void BindSlideIn(Transform intercomStandIn)
     {
@@ -924,7 +971,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (shadow == null)
             Debug.LogWarning("[OfficeSceneBinder] The rulebook has no Shadow part (Build Office UI's PaperDepth shadow), so the slide-in draws no contact shadows.", this);
         DeskSlides slides = config.layout.slides;
-        slideIn.Bind(_office, slides, config.layout.homes, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked, FindAnyObjectByType<DayOrchestrator>(), shadow);
+        slideIn.Bind(_office, slides, config.layout.Homes, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked, FindAnyObjectByType<DayOrchestrator>(), shadow);
         if (scanner != null && DeskLayout.ObjectOf(DeskHomeMap.Scanner) == scanner.transform)
             MachineSlideIn.Attach(DeskHomeMap.Scanner, scanner.transform, busy: Occupied(scanner.transform, slides), dock: scanner);
         ChipReader reader = hardware != null ? hardware.Reader : null;
@@ -940,6 +987,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
             MachineSlideIn.Attach(DeskHomeMap.UvTorch, torch.transform, body, layered: true, taken: () => torch.Held);
+        if (_painted)
+            MachineSlideIn.Attach(DeskHomeMap.Glasses, paintedDesk.SliderOf(PaintedGlasses));
     }
 
     /// <summary>
@@ -961,6 +1010,149 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         return () => occupancy.Step((bar != null && bar.gameObject.activeInHierarchy) || (spill != null && spill.gameObject.activeInHierarchy),
                                     lid != null && Quaternion.Angle(lid.localRotation, shut) > slides.lidOpenDegrees,
                                     desk != null && desk.IsDragging);
+    }
+
+    // -----------------------------
+    // The painted desk (desk v3, Saleh: "yes but they need to slide"; UNITY_PLAN 4 and 8)
+    // -----------------------------
+
+    /// <summary>The bake's objects the install hands to the gameplay objects or binds itself.</summary>
+    private const string PaintedScanner = "Desk_Scanner", PaintedReader = "Desk_ChipReader", PaintedIntercom = "Desk_Intercom", PaintedTorch = "Desk_UvTorch",
+                         PaintedDetain = "Desk_Detain", PaintedGuard = "Desk_DetainGuard", PaintedGlasses = "Desk_Glasses", PaintedBell = "Desk_Bell",
+                         PaintedPocket = "Desk_Pocket", PaintedPc = "PC_Crt", PaintedSign = "Desk_AvailableSign";
+
+    /// <summary>The gameplay parts that stay drawn under a painted look: the scanner's scan light and its upgrades' add-ons, the UV torch's pool and beam.</summary>
+    private static readonly string[] ScannerKept = { "Spill", "SweepBar", "AutoFeed", "AnalysisBeacon" }, TorchKept = { "UvPool", "BeamFX" };
+
+    /// <summary>
+    /// The painted scanner on the gameplay scanner <paramref name="s"/> (laid
+    /// on its painted home): it stands on the painted one's base, takes its
+    /// look (DeskPainted.Reskin: the stand-in machine hides, the painted one
+    /// rides it; its scan light and add-ons stay) and its bed on the painted
+    /// body's top, over the body's centre. Returns the painted renderers.
+    /// </summary>
+    private Renderer[] PaintScanner(Transform s)
+    {
+        StandOnPainted(DeskHomeMap.Scanner, s);
+        Renderer[] look = paintedDesk.Reskin(PaintedScanner, s, s, ScannerKept);
+        Transform body = paintedDesk.Mesh(PaintedScanner);
+        if (body != null && body.TryGetComponent(out Renderer shell))
+        {
+            Bounds b = shell.bounds;
+            scanner.Configure(scanner.DropSize, s.InverseTransformPoint(new Vector3(b.center.x, b.max.y + ScannerBedLift, b.center.z)));
+        }
+        return look;
+    }
+
+    /// <summary>
+    /// The painted desk takes over the laid desk (its homes are the map
+    /// already: ArrangeArt). What it does not show yet hides (PaintedRole.Hidden:
+    /// STAMP's own rack and daters stand on the painted tray, the folded
+    /// rulebook waits for DESK-HOMES' pocket, the glass's sheen for its
+    /// repaint). Each gameplay object stands on its painted home's floor
+    /// (StandOnPainted) and the painted look rides it: the chip reader, DETAIN
+    /// and its guard, the stand-in intercom (its mic a direct child, so the
+    /// slide sways it; its click box fitted to the painted intercom), the UV
+    /// torch's body (its pool and beam kept). STAMP's rack stands on its
+    /// painted tray and the upgrades' objects in their locked homes; the
+    /// built deal tray's plate hides (the painted desk has its tray). The
+    /// painted objects no gameplay object stands for (the glasses, the bell,
+    /// the rulebook's pocket) are tracked on their homes (obstacles; the
+    /// glasses slide: BindSlideIn).
+    /// </summary>
+    private void InstallPainted(Transform intercomStandIn)
+    {
+        foreach (PaintedObject o in DeskPaintedMap.Objects)
+            if (o.role == PaintedRole.Hidden)
+                paintedDesk.Hide(o.name);
+        ChipReader reader = hardware != null ? hardware.Reader : null;
+        if (reader != null)
+        {
+            StandOnPainted(DeskHomeMap.ChipReader, reader.transform);
+            paintedDesk.Reskin(PaintedReader, reader.transform, reader.transform);
+        }
+        UvTorch torch = hardware != null ? hardware.Torch : null;
+        Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
+        if (body != null)
+            paintedDesk.Reskin(PaintedTorch, torch.transform, body, TorchKept);
+        if (detainButton != null)
+        {
+            StandOnPainted(DeskHomeMap.Detain, detainButton.transform);
+            paintedDesk.Reskin(PaintedDetain, detainButton.transform, detainButton.transform);
+            paintedDesk.Reskin(PaintedGuard, detainButton.transform, detainButton.transform);
+        }
+        if (intercomStandIn != null)
+        {
+            StandOnPainted(DeskHomeMap.Intercom, intercomStandIn);
+            Renderer[] look = paintedDesk.Reskin(PaintedIntercom, intercomStandIn, intercomStandIn);
+            paintedDesk.MoveChild(PaintedIntercom, DeskPaintedMap.Mic, intercomStandIn);
+            FitBox(intercomStandIn, look);
+        }
+        if (stampTray != null)
+            StandOnPainted(DeskHomeMap.StampRack, stampTray.Rack);
+        foreach (string id in DeskPaintedMap.Inserts)
+            StandOnPainted(id, DeskLayout.ObjectOf(id));
+        Transform tray = transform.Find("DeskFurniture/DealTray");
+        if (tray != null)
+            foreach (Renderer r in tray.GetComponentsInChildren<Renderer>(true))
+                r.enabled = false;
+        DeskLayout.Track(DeskHomeMap.Glasses, paintedDesk.SliderOf(PaintedGlasses));
+        DeskLayout.Track(DeskHomeMap.Bell, paintedDesk.Mesh(PaintedBell));
+        DeskLayout.Track(DeskHomeMap.RulebookPocket, paintedDesk.Mesh(PaintedPocket));
+    }
+
+    /// <summary>Lifts the gameplay object <paramref name="t"/>, laid on the desk's top, onto the painted home <paramref name="home"/>'s floor (DeskPainted.TryFloor: its painted object's base, or its locked insert's top).</summary>
+    private void StandOnPainted(string home, Transform t)
+    {
+        if (t != null && paintedDesk.TryFloor(home, out float floor))
+            t.position += Vector3.up * (floor - _frame.Origin.y);
+    }
+
+    /// <summary>Fits <paramref name="host"/>'s click box (its BoxCollider) around <paramref name="look"/>'s renderers.</summary>
+    private static void FitBox(Transform host, Renderer[] look)
+    {
+        if (look == null || look.Length == 0 || !host.TryGetComponent(out BoxCollider box))
+            return;
+        Bounds b = look[0].bounds;
+        foreach (Renderer r in look)
+            b.Encapsulate(r.bounds);
+        Vector3 size = host.InverseTransformVector(b.size);
+        box.center = host.InverseTransformPoint(b.center);
+        box.size = new Vector3(Mathf.Abs(size.x), Mathf.Abs(size.y), Mathf.Abs(size.z));
+    }
+
+    /// <summary>The painted PC (the painted desk shows): the desktop's clone on its screen quad, its click box on the CRT, the power knob's where the clone's frame puts it, in front of the CRT's box.</summary>
+    private void BindPaintedPc(Camera office)
+    {
+        if (screenClone != null)
+            screenClone.Bind(paintedDesk.Screen, 0, office);
+        bool crt = paintedDesk.TryBounds(PaintedPc, out Bounds box);
+        if (pc != null && crt)
+        {
+            PlaceBox(pc.transform, box.center, box.size);
+            pc.SetOutline(paintedDesk.RenderersOf(PaintedPc));
+        }
+        if (pcPower == null)
+            return;
+        if (screenClone == null || !screenClone.IsBound)
+        {
+            pcPower.gameObject.SetActive(false);
+            return;
+        }
+        PlaceBox(pcPower.transform, screenClone.Frame.PowerKnob, Vector3.one * PowerKnobSize);
+        if (crt)
+            InFrontOf(pcPower.transform, box, office.transform.position);
+    }
+
+    /// <summary>True when the painted desk shows and <paramref name="t"/> is (or holds) an art desk part it replaces (DeskLayoutSettings.paintedCutParts): its click box, tooltip and readout go.</summary>
+    private bool IsCut(Transform t) => _painted && t != null && _paintedCut.Exists(r => r != null && r.transform.IsChildOf(t));
+
+    /// <summary>Hides the art desk's parts the painted desk replaces (last, once every anchor was measured on them).</summary>
+    private void HidePaintedCut()
+    {
+        foreach (Renderer r in _paintedCut)
+            if (r != null)
+                r.enabled = false;
     }
 
     /// <summary>The first descendant of <paramref name="root"/> (not itself) named <paramref name="name"/>, or null.</summary>
@@ -1013,10 +1205,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         DeskLayout.Track(DeskHomeMap.Intercom, click.transform);
     }
 
+    /// <summary>The art's text at the anchor <paramref name="id"/>, or null (none, or a part the painted desk replaces: its readout goes to the fallback HUD).</summary>
     private TMP_Text TextOf(OfficeAnchorId id)
     {
         Transform t = At(id).Transform;
-        return t != null ? t.GetComponent<TMP_Text>() : null;
+        return t != null && !IsCut(t) ? t.GetComponent<TMP_Text>() : null;
     }
 
     private static Camera CameraOf(ResolvedAnchor anchor) =>
