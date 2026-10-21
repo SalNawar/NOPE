@@ -1,7 +1,9 @@
 /// <summary>
 /// The desk's work mat (P0-A seam; owner DESK-PLAN): its rectangle in the
-/// desk's plane (a DeskRect, metres) and whether a desk point lies on it. The
-/// P0 stub holds the rectangle it is given; DESK-PLAN gives it the mat.
+/// desk's plane (a DeskRect, metres) and whether a desk point lies on it.
+/// DESK-PLAN gives it the art's big mat (Saleh: "keep a big mat size"), in
+/// the desk's frame, when the office binds (DeskLayout.Mat): papers and the
+/// open rulebook only, no home on it (DeskHomeMap).
 /// </summary>
 public readonly struct DeskMat
 {

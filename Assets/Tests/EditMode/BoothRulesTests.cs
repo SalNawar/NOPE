@@ -33,13 +33,13 @@ public class BoothRulesTests
         R("newsletter, frame open",                 true,   true,  BoothPhase.Newsletter,      false, false, "0000000 000 0000"),
         R("office, no traveller",                   false,  true,  BoothPhase.NoTraveller,     false, false, "0111000 000 1011"),
         R("office, traveller at the desk",          false,  true,  BoothPhase.TravellerAtDesk, false, false, "0111111 111 1011"),
-        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, "0000010 001 0000"),
+        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, "0000010 001 1000"),
         R("frame open, screen on",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, "1010000 000 0001"),
         R("frame open, screen off",                 true,   false, BoothPhase.TravellerAtDesk, false, false, "0010000 000 0001"),
         R("frame open, no traveller",               true,   true,  BoothPhase.NoTraveller,     false, false, "1010000 000 0001"),
         R("desk view, traveller at the desk",       false,  true,  BoothPhase.TravellerAtDesk, false, true,  "0111111 111 1101"),
         R("desk view, no traveller",                false,  true,  BoothPhase.NoTraveller,     false, true,  "0111000 000 1101"),
-        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  true,  "0000010 001 0000"),
+        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  true,  "0000010 001 1000"),
         R("desk view, frame open",                  true,   true,  BoothPhase.TravellerAtDesk, false, true,  "1010000 000 0001"),
         R("desk view, newsletter",                  false,  true,  BoothPhase.Newsletter,      false, true,  "0000000 000 0000"),
     };
@@ -97,7 +97,7 @@ public class BoothRulesTests
     public void CaseHudVisible_NotWhileFocused() => CheckColumn(9, "CaseHudVisible");
 
     [Test]
-    public void DeskViewAllowed_UnlessANewsletterTheWheelOrTheFrameIsUp() => CheckColumn(10, "DeskViewAllowed");
+    public void DeskViewAllowed_UnlessANewsletterOrTheFrameIsUp_TheWheelOpenOrNot() => CheckColumn(10, "DeskViewAllowed");
 
     [Test]
     public void DeskViewBackLive_InTheDeskView_WhenThePropsAreLive() => CheckColumn(11, "DeskViewBackLive");
@@ -147,6 +147,17 @@ public class BoothRulesTests
         BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, true, false, false));
         Assert.IsTrue(open.WheelAllowed);
         Assert.IsFalse(open.TravellerLive);
+    }
+
+    /// <summary>The intercom opens the wheel where the player is (the desk home map; Saleh's D5): opening it in the reading view neither leaves nor forbids the reading view.</summary>
+    [Test]
+    public void TheWheelOpenedInTheReadingView_KeepsTheReadingViewAllowed()
+    {
+        BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, true, false, true));
+        Assert.IsTrue(open.WheelAllowed, "the wheel stays open");
+        Assert.IsTrue(open.DeskViewAllowed, "the reading view stays (BoothCoordinator returns it only when this is false)");
+        BoothInput closed = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, false, false, true));
+        Assert.IsTrue(closed.WheelAllowed, "the intercom may open the wheel from the reading view");
     }
 
     [Test]

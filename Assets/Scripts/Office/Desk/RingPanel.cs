@@ -40,6 +40,7 @@ public sealed class RingPanel : MonoBehaviour
                                   Blue = new Color(0.36f, 0.72f, 1f), Dark = new Color(0.07f, 0.2f, 0.12f), LampFlash = new Color(0.85f, 1f, 0.9f);
 
     private Quaternion[] _rest;
+    private Vector3[] _stickerScale;
     private Spring[] _breaker;
     private RingLamp[] _lamp;
     private string[] _lines;
@@ -50,6 +51,9 @@ public sealed class RingPanel : MonoBehaviour
 
     /// <summary>Each module's lamp today, 01 to 05 (the probes read them).</summary>
     public IReadOnlyList<RingLamp> Lamps => _lamp;
+
+    /// <summary>Module <paramref name="i"/>'s SERVICED sticker (0-based), or null: one delivered this morning to a panel already on the desk waits for the supply crate (DeskUpgrades, DeskDeliveries.StickersToWait; BUG-60a).</summary>
+    public Transform Sticker(int i) => i >= 0 && i < stickers.Length ? stickers[i] : null;
 
     private void Awake()
     {
@@ -77,6 +81,9 @@ public sealed class RingPanel : MonoBehaviour
         _flash = new float[lamps.Length];
         _blink = new float[lamps.Length];
         _block = new MaterialPropertyBlock();
+        _stickerScale = new Vector3[stickers.Length];
+        for (int i = 0; i < stickers.Length; i++)
+            _stickerScale[i] = stickers[i] != null ? stickers[i].localScale : Vector3.one;
     }
 
     /// <summary>Wires the read-out of a module (DeskUpgrades: the overlay's tooltip over the breaker).</summary>
@@ -86,7 +93,8 @@ public sealed class RingPanel : MonoBehaviour
     /// The day's modules (UpgradeObjects.Modules, 01 to 05) and each one's
     /// line (PortalText.TooltipLine of its portal; null: none): each lamp
     /// shows its ring's route, each breaker stands up while its ring is in
-    /// service, each sticker once its repair is owned.
+    /// service, each sticker once its repair is owned, at its own size (one
+    /// left waiting for a crate that never opened is not left at zero).
     /// </summary>
     public void SetDay(IReadOnlyList<UpgradeObjects.Module> modules, IReadOnlyList<string> lines)
     {
@@ -97,7 +105,10 @@ public sealed class RingPanel : MonoBehaviour
             _lamp[i] = m.Lamp;
             _lines[i] = lines != null && i < lines.Count ? lines[i] : null;
             if (i < stickers.Length && stickers[i] != null)
+            {
+                stickers[i].localScale = _stickerScale[i];
                 stickers[i].gameObject.SetActive(m.Serviced);
+            }
             if (i < _breaker.Length)
                 _breaker[i] = Spring.At(m.InService ? 1f : -1f);
             _flash[i] = _blink[i] = 0f;
@@ -123,7 +134,7 @@ public sealed class RingPanel : MonoBehaviour
         float home = i < _lamp.Length && _lamp[i] != RingLamp.Dark ? 1f : -1f;
         _breaker[i].Snap(-home);
         DeskProps.Aim(ref _breaker[i], home);
-        _breaker[i].Kick(home * 2f);
+        _breaker[i].Kick(home * 2f, UiMotion.Amount);
         if (i < _blink.Length)
             _blink[i] = 0.45f;
         if (_say != null && i < _lines.Length && !string.IsNullOrEmpty(_lines[i]))
