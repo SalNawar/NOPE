@@ -19,8 +19,7 @@ using UnityEngine.SceneManagement;
 /// DemoBuild.DemoCheats (the DEMO_CHEATS define), so it's available from any
 /// scene with no scene wiring and absent from any other release build. A run
 /// any cheat touched (WorldState.cheated) shows a small "CHEATS ON" at the
-/// screen's bottom left, the overlay closed or open (not while the QA rig
-/// drives the game: DevToolsState.HideCheatBadge). The component is enabled
+/// screen's bottom left, the overlay closed or open. The component is enabled
 /// only while the overlay is open or that badge shows: otherwise it runs no
 /// OnGUI, so IMGUI costs nothing per frame (audit R2-012, R3-030); the key is
 /// an input action, heard while the component is off. A cheat clicked in a
@@ -203,7 +202,7 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>Draws the badge and the open overlay, then applies what a click in this pass changed (the badge stays from the first cheat on).</summary>
     private void OnGUI()
     {
-        if (Cheated && !DevToolsState.HideCheatBadge)
+        if (Cheated)
             DrawBadge();
         if (!_open)
         {

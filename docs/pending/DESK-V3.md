@@ -11,9 +11,83 @@ Branch `feat/desk-v3`, cut from `fix/a-desk-plan` (DESK-PLAN #5, the desk home m
 - **D6:** "when they slide in, we subtly zoom in a bit not too hard just a small focus to frame the shot".
 - On the 2D work: "why are you still working on the mock?" (so this builds the real thing). Nothing pops (his standing rule for motion).
 
+## Round 10: the review of round 9, and R9 run in Unity
+
+The review of round 9 (96291a5) found six things. Each is fixed or recorded here, and R9 was run in Unity (NOPE-art's editor through the job runner and the QA harness; it ended on an empty scene and closed, with no dialog left).
+
+### 1. The "CHEATS ON" hide broke RUN-SAFE's work on a merge (fixed)
+
+On `integrate/a` (b404cb0) RUN-SAFE has already removed the IMGUI badge from `DebugPanelController` (`DrawBadge` and `BadgeText` are gone; the badge is the uGUI `Assets/Scripts/DevTools/CheatBadge.cs`), and two RUN-SAFE checks there, `DevToolsStateTests.EverySwitch_HasExactlyOneScope` (a plain [Test] in `Assets/Editor/RunSafeTests`) and the gate `runsafe.switch.scopes`, need every public static `DevToolsState` field in `DayScoped`, `RunScoped` or `NextGeneration`. Round 9's `DevToolsState.HideCheatBadge` (kept by `ResetAll`) fits none, so merging turned that test and that gate red; the hide never reached the uGUI badge, so CHEATS ON would have come back in the captures; and `QaCheatBadgeTests` expected an IMGUI line `integrate/a` removed.
+
+- **Fix:** the QA-only switch is out of RUN-SAFE's files. `DevToolsState.cs`, `DebugPanelController.cs` (RUN-SAFE) and `QaRunner.cs` (QA-RIG) are back to ecf86b9's (DESK-PLAN's, untouched by this branch); `QaCheatBadgeTests` is deleted. The hide lives in the local, never committed capture op `_DeskV3CaptureOps` (`Assets/Tests/PlayMode/DeskV3/Rig/`, put in for the Unity step and taken out after; its copy: `E:\unity\NOPE-tools\reports\desk_v3_unity\r9\rig\_DeskV3CaptureOps.cs.txt`): `V3NoBadge`, from the op `v3nobadge` (and from `v3still` and `v3rec`), turns off in each LateUpdate (after a scene load's re-enable, before the frame's OnGUI) the cheat panel's component while its overlay is closed (this branch's IMGUI badge) and the canvases under RUN-SAFE's `CheatBadge` (`integrate/a`'s uGUI badge, found by name, so the op works on either side of the merge). The run stays cheated; `v3still` asserts `v3.nobadge.<still>` (nothing that could draw the badge is on).
+- **If every QA capture should hide it** (not needed for desk v3's review, so not done; a hand-off, below): RUN-SAFE gives `CheatBadge` the hide (a member of the component, or a `DevToolsState` switch placed in one scope) and QA-RIG's `QaRunner` sets it while a run plays.
+- **Gate (passed), a trial merge with `integrate/a`** (`git merge-tree` of this commit's tree with b404cb0, exported to a scratch folder): compile 0 errors (164 warnings); `DevToolsStateTests` 9 passed, 0 failed (2 NeedsEditor skipped), `EverySwitch_HasExactlyOneScope` among them; `RunSafeChecks.SwitchScopes` run as a throwaway test: **PASS** "11 switches, 0 unscoped, 0 in two scopes"; the offline runner 3887 passed, 0 failed; the editor runner 82 passed, 0 failed (47 NeedsEditor skipped). **Negative control:** with round 9's `public static bool HideCheatBadge;` put back into the merged `DevToolsState.cs`, `EverySwitch_HasExactlyOneScope` fails and the gate reads "FAIL ... 12 switches, 1 unscoped - Unscoped: HideCheatBadge".
+
+**The conflicts with `integrate/a` (b404cb0) and how they resolve.** 96291a5 conflicted in `Assets/Scenes/OfficeGameplay.unity` (as ecf86b9 did), `Assets/Scripts/DevTools/DebugPanelController.cs` and `Assets/Scripts/DevTools/DevToolsState.cs` (new in round 9: RUN-SAFE rewrote both). Now only `OfficeGameplay.unity` conflicts (`git merge-tree --write-tree --name-only HEAD integrate/a`): the scene is Build Office UI's output, so INTEGRATION takes `integrate/a`'s side, runs Build Office UI on the merged code (the painted desk under the office root, desk v3's plan gate included) and compares the result with `scene_dump.py`; the two DevTools files merge as RUN-SAFE's (this branch no longer changes them).
+
+### 2. Four files had the wrong owner (fixed)
+
+Round 9 gave `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs` and `HallForegroundFloor.shader` to HALL-FX in its change table, its "Other owners' files" and the owners list ("Leases and ownership"), and 96291a5's commit subject names HALL-FX. They are **LIGHT**'s: FIX_PLAN's LIGHT "Owns" lists `Office/HallBackdrop.cs` and `Office/HallForegroundFloor.cs` (the shaders go with their components), HALL-FX's "Owns" lists none of these files, `Assets/Editor/QA/QaGcSites.cs` maps HallBackdrop to LIGHT, and `HallBackdrop.cs` came from LIGHT's hall-lighting commit 742727b. All three places now say LIGHT, and HALL-FX is not among round 9's owners: every round 9 hall file (`HallLightingSO.cs`, `HallLighting_Default.asset`, `HallLightingRig.cs`, `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs`, `HallForegroundFloor.shader`) is LIGHT's, and LIGHT's hand-off (below) lists all seven. The commit subject of 96291a5 stays as written (a local commit is not rewritten); this note corrects it.
+
+### 3. The clash with LIGHT's branch (recorded; the text conflicts removed)
+
+Against `integrate/a-light` (bc01e44), 96291a5 added conflicts in `HallBackdrop.cs` and `HallLightingRig.cs` (ecf86b9 merged cleanly). Both were round 9's insertions next to lines LIGHT rewrote: the reworded `RenderedTexture` summary under LIGHT's new `Source` property, and the `PaintedDesk` property right above `Hour`'s summary, which LIGHT rewrote. Round 10 puts `RenderedTexture`'s summary back to the base text (the `Brightness` summary already says the seam applies it) and moves `PaintedDesk` below `PortalNight`, so the trial merge with `integrate/a-light` is **clean** (0 conflicts): compile 0 errors, the offline runner 3888 passed, 0 failed, the editor runner 86 passed, 0 failed (55 NeedsEditor skipped). If either comes back after LIGHT changes more, keep both sides.
+
+What the code merge does not settle: that branch makes the lit hall's texture HDR (`ARGBHalf`, linear, when the device can) and turns on the tonemapped office finish (a global Volume: Neutral tonemapping, bloom at threshold 1.0, intensity 0.6). Once it lands:
+- the knob scales the hall **before** tonemapping, so `paintedDeskBrightness` no longer equals the on-screen ratio round 5 measured (0.72 and 0.85 were measured on an LDR hall with no finish);
+- under the painted desk the knob also scales the HDR glows the bloom picks up, and it scales them in sRGB terms: 0.72 in sRGB is about 0.49 in linear light, so lit diffusers and portals past white lose about half their light (0.85: about 0.70).
+
+**Recorded for LIGHT and in R9 (step 7):** after LIGHT lands, re-measure on the merged branch and retune the knob; LIGHT decides first whether the scale moves after the finish (on the tonemapped picture, the hall's pixels only) or leaves the glows alone (scales only values up to 1).
+
+### 4. R9, run in Unity (done)
+
+Captures in `E:\unity\NOPE-tools\reports\desk_v3_unity\r9\`: `desk_rest_day1_r9.png` (day 1, 09:00), `desk_rest_day12_r9.png` (day 12, 16:00, every item, cheated), `desk_night_day12_r9.png` (day 12, the hour forced to 22:00), `pc_day1_r9.png` and `pc_day12_r9.png` (the PC open), `slide_tour_r9\` (60 fps, 2,011 frames, `poses.tsv`), `compare_r9.jpg` (the painting, both rests, the PC), the dumps (`dump_*.txt`: the rig's hour, `PaintedDesk`, the knob and `HallBackdrop.Brightness`), `measure_r9.py`, `qa_results\`, `shaders.txt`, `editmode_result.txt`, the scenarios `desk_v3_capture_r9.json` and `desk_v3_pc_day1_r9.json`, `editor_r9.log` and `rig\` (the local ops).
+
+- **Shaders:** `ShaderUtil.ShaderHasError` **false** for `TimeDesk/HallBackdrop` and `NOPE/Hall Foreground Floor` (each re-imported first; no shader message); the runs' consoles: 0 errors.
+- **The knob in play:** day 1 hour 9.000, `PaintedDesk` True, knob and `Brightness` 0.7200; day 12 hour 16.000, 0.8500; the forced 22:00, 0.8500 (the knob holds its end value).
+- **The hall on screen** (`measure_r9.py`: mean Rec. 709 luma of the sRGB values against `mock_office.png`, regions clear of the painting's traveller; round 8's stills measured with the same regions):
+
+| Region | 09:00, round 8 | 09:00, R9 | 16:00, round 8 | 16:00, R9 |
+|---|---|---|---|---|
+| Hall centre | 1.49x | **1.07x** | 1.23x | **1.05x** |
+| Hall right strip (the doors) | 1.48x | 1.07x | 1.23x | 1.04x |
+| Hall floor | 1.78x | 1.33x | 1.48x | 1.28x |
+| City window (left glass) | 1.17x | **0.85x** | 0.95x | **0.81x** |
+| Mat | 1.00x | 0.99x | 0.99x | 0.99x |
+| Left stack | 0.99x | 0.99x | 0.98x | 0.98x |
+
+  The hall drops by exactly the knob (R9 over round 8: 0.72 and 0.85), so the knob is the on-screen ratio here, and the hall centre passes (0.9 to 1.1x) at both hours; the desk is unchanged. The floor stays about 1.3x (the art: cream marble against the painting's dark grey floor, OPEN.md 19). The window is the new mismatch (item 5).
+- **The seam:** at the left of the PC the foreground floor stays below the hall's floor over it (rows x 0 to 170: 131 down to 105 under the hall's 138 at 09:00; 128 to 102 under 135 at 16:00; the same 0.95 relation as round 8, so it took the same scale). Behind the deal tray the 4 px strip darkened with the hall (luma 193 to 139 at 09:00, 160 to 136 at 16:00) but is still pale where the painting draws the traveller's robe (74 to 81): open, as round 8's item 3 (a traveller there covers it).
+- **The wallpaper:** on the CRT (both rests) a dark teal dusk with the emblem; the icons, the WAITING banner and the CRT clock read over it. The PC open (day 1 and day 12): the full desktop shows the skyline and the emblem, not stretched, the icons and the taskbar readable. Day 12 still shows the neutral wallpaper.
+- **No "CHEATS ON":** `v3.nobadge` passes on all five stills (the run cheated on day 12); the badge's rectangle (8, 1058 to 128, 1078) holds 0 text pixels (luma over 140) in every R9 still and in every 10th of the tour's 2,011 frames, against 79 to 81 in round 8's day-12 still and tour.
+- **Night** (22:00 forced on day 12, the knob at 0.85): the hall reads (centre 0.75x the painting's day hall, the window 0.61x); not too dark by eye, so no night key is asked for.
+- **Unchanged:** click boxes day 1 (10) and day 12 (15), 0 clashes; camera 0 untagged; presses 4, 0 blocked; quality Ultra; every slider's peak as round 8's (scanner 1.177 to the book 1.075).
+- **EditMode suite in Unity:** 4068 passed, 2 failed (the two known third-party UnitySkills tests, as in rounds 4 and 8).
+- **Not run:** R9 step 3 (the painted desk toggled off: the hall at 1; held by `HallPaintedDeskBrightnessTests`' source check) and step 7 (after LIGHT lands).
+
+### 5. The city window gets darker than the painting (recorded as a request to LIGHT)
+
+Scaling the whole lit picture also darkens the window: 1.17x to 0.85x at 09:00 and 0.95x (nearly matching) to 0.81x at 16:00, measured above (the review's own measurement and round 9's prediction agree). It is a new, visible mismatch at 16:00. **Request to LIGHT** (hand-off, below): keep the city window out of the scale, either a window mask in the full-screen draw (`TimeDesk/HallBackdrop`: the window's pixels at brightness 1 or at their own knob) or a sky share in the knob (the city and sky layers exempt). Target: the window 0.95 to 1.05x the painting at 09:00 and 16:00, with the hall centre kept at 0.9 to 1.1x. R9 now checks the window (step 2).
+
+### 6. The other wallpapers still look like XP (recorded as an art request)
+
+The 4-credit budget covered the neutral wallpaper only. The eight culture wallpapers (`Assets/Art/Culture/<britain, china, egypt, germany, greece, iraq, italy, japan>/wallpaper.png`) and the sixteen world-outcome wallpapers (`Assets/Art/Wallpapers/*.png`: `future_*` 5, `government_*` 7, `money_*` 4) are bright, photo-like stock pictures (Big Ben, the Great Wall, green hills under blue skies). They replace the neutral one as soon as a culture leads or a world factor changes, so the review stills (both neutral) are fine but Saleh will meet the same complaint later in a real run. **Art request to UI-PC and CONTENT** (hand-off, below): the same treatment for all 24 (80s/90s cel anime, dark and low in contrast, no text, the subject inside the 4:3 middle; replaced in place, `.meta` kept); at `nano_banana_2_1` 2k that is 2 credits each, 48 in all, which needs Saleh's budget.
+
+### Checks (round 10)
+
+On this commit: compile 0 errors (167 warnings, as before); offline runner **3843** passed, 0 failed; `tools/qa/editor_runner` (QA_PROJECT set) 70 passed, 0 failed, 27 NeedsEditor skipped (round 9's 2 `QaCheatBadgeTests` deleted); `python -m unittest discover -s tools/qa` 35 OK; Unity: the EditMode suite and R9 as above. Trial merges: with `integrate/a`, only the known `OfficeGameplay.unity` conflict, and RUN-SAFE's tests and gate green (item 1); with `integrate/a-light`, clean (item 3).
+
+### What still differs from the painting (after this round)
+
+1. The city window, 0.85x and 0.81x (item 5, LIGHT).
+2. The hall floor, about 1.3x, and the hall art (cream marble against the painting's teal hall, OPEN.md 19).
+3. The 4 px pale strip behind the deal tray (darker now; round 8, item 3).
+4. The other 24 wallpapers (item 6), shown once a culture leads or the world changes.
+5. Round 8's items 1, 4, 5 and 6 (the upgrade stand-ins, the pocket's flap, the hover rims, AVAILABLE at 09:00) are unchanged.
+
 ## Round 9: the PC's wallpaper, the hall's brightness, no dev label in the captures
 
-Saleh on the round 8 stills: "So many visual problems". Two were left from round 8's list ("What still differs from the painting", items 2 and 3) and one more was in the captures (item 7). Everything was done outside Unity; the Unity step is R9 below.
+Saleh on the round 8 stills: "So many visual problems". Two were left from round 8's list ("What still differs from the painting", items 2 and 3) and one more was in the captures (item 7). Everything was done outside Unity; the Unity step is R9 below (run in round 10). **Round 10 corrects this section** where the review of round 9 found it wrong: every hall file here is **LIGHT**'s (96291a5's commit subject and this section named HALL-FX for four of them), and the "CHEATS ON" hide no longer lives in RUN-SAFE's `DevToolsState` (item 3).
 
 ### 1. The PC's wallpaper (round 8, item 2; round 5, item 3)
 
@@ -25,7 +99,7 @@ The monitor showed the neutral theme's XP-style green hill (`Assets/Art/Generate
 
 ### 2. The hall's brightness (round 8, item 3; round 5, item 8)
 
-Round 5 measured the lit hall about 1.4x the painting's at 09:00 and 1.15 to 1.3x at 16:00 while the desk matched it within 3%, and handed LIGHT and HALL-FX a target of about 0.72x at 09:00 and 0.85x at 16:00. Measured again on the round 8 stills (Rec. 709 luma of the sRGB values, against `mock_office.png`): hall centre 1.36x at 09:00 and 1.12x at 16:00, hall floor 1.76x and 1.47x, city window 1.18x and 0.95x; the mat 1.02x, the left stack 0.99x.
+Round 5 measured the lit hall about 1.4x the painting's at 09:00 and 1.15 to 1.3x at 16:00 while the desk matched it within 3%, and handed a target (to LIGHT and HALL-FX then; every file this round changes for it is LIGHT's, round 10) of about 0.72x at 09:00 and 0.85x at 16:00. Measured again on the round 8 stills (Rec. 709 luma of the sRGB values, against `mock_office.png`): hall centre 1.36x at 09:00 and 1.12x at 16:00, hall floor 1.76x and 1.47x, city window 1.18x and 0.95x; the mat 1.02x, the left stack 0.99x.
 
 **What changed (only under the painted desk; the art's desk keeps the hall as lit):**
 
@@ -33,39 +107,39 @@ Round 5 measured the lit hall about 1.4x the painting's at 09:00 and 1.15 to 1.3
 |---|---|---|
 | The knob (data) | `paintedDeskBrightness`: an AnimationCurve over the clock's hour, 0.72 at 09:00 and 0.85 at 16:00, a line between, the end values outside (`HallLighting_Default.asset` carries it; the C# default is the same line) | **LIGHT**, `HallLightingSO.cs`, `Assets/Data/Config/HallLighting_Default.asset` |
 | Applying it | `HallLightingRig.PaintedDesk` (a property); each frame the rig sets `HallBackdrop.Brightness` to the knob at `Hour` (the cheat's forced hour and the preview hour included) while it is on, else 1 | **LIGHT**, `HallLightingRig.cs` |
-| Drawing it | `HallBackdrop.Brightness` sets `_Brightness` on its runtime material; the full-screen draw `TimeDesk/HallBackdrop` scales the lit hall's **sRGB values** by it (linear colour space: `SRGBToLinear(LinearToSRGB(c) * b)`); at 1 the picture passes untouched (a branch, no round trip) | **HALL-FX**, `HallBackdrop.cs`, `HallBackdrop.shader` |
-| The seam | The foreground floor that continues the painted platform samples the lit hall's texture: `HallForegroundFloor` sets `_HallFloorBackdropBrightness` with that texture, and `NOPE/Hall Foreground Floor` applies the same scale where it samples it, so the seam keeps matching (the pale strip at the left of the PC, behind the deal tray) | **HALL-FX**, `HallForegroundFloor.cs`, `HallForegroundFloor.shader` |
+| Drawing it | `HallBackdrop.Brightness` sets `_Brightness` on its runtime material; the full-screen draw `TimeDesk/HallBackdrop` scales the lit hall's **sRGB values** by it (linear colour space: `SRGBToLinear(LinearToSRGB(c) * b)`); at 1 the picture passes untouched (a branch, no round trip) | **LIGHT**, `HallBackdrop.cs`, `HallBackdrop.shader` |
+| The seam | The foreground floor that continues the painted platform samples the lit hall's texture: `HallForegroundFloor` sets `_HallFloorBackdropBrightness` with that texture, and `NOPE/Hall Foreground Floor` applies the same scale where it samples it, so the seam keeps matching (the pale strip at the left of the PC, behind the deal tray) | **LIGHT**, `HallForegroundFloor.cs`, `HallForegroundFloor.shader` |
 | When | `OfficeSceneBinder.BindHall` sets `lights.PaintedDesk = _painted` (the painted desk installed: `DeskLayoutSettings.paintedDesk` and a painted desk in the scene) | DESK-HOMES, `OfficeSceneBinder.cs` |
 
 **Why the sRGB values, not the light:** the project is in linear colour space and round 5 measured what the screen shows (the PNGs' sRGB values). A linear 0.72 would only bring the hall to about 0.86x on screen (still 1.2x the painting). Scaling the sRGB values makes the knob the measured ratio: a region's mean luma moves by exactly the knob. **Why the full-screen draw:** it is one place for everything the hall draws (the painted layers, the crowds, the portal effects, the dust); a per-layer change in `NOPE/Hall Four State` would leave the crowds and the effects bright.
 
-**Predicted on the round 8 stills** (the knob applied to the hall's pixels offline; `E:\unity\NOPE-tools\reports\desk_v3_unity\r9\*_predicted_hall72.png`, `*_hall85.png`, `*_before_after.jpg`): hall centre 0.98x at 09:00 and 0.95x at 16:00; hall floor 1.30x and 1.26x (the hall art differs: cream marble against the painting's dark grey floor, OPEN.md 19); **city window 0.85x and 0.81x**: it is in the same lit picture, so it darkens with the hall and ends below the painting. Keeping the window as it was needs a window mask in the full-screen draw or a sky share in the knob: LIGHT's call, not done here. The traveller is drawn by the office camera, not in the lit hall, so the figure keeps its brightness (the painting's traveller is the brightest thing in the hall too).
+**Predicted on the round 8 stills** (the knob applied to the hall's pixels offline; `E:\unity\NOPE-tools\reports\desk_v3_unity\r9\*_predicted_hall72.png`, `*_hall85.png`, `*_before_after.jpg`): hall centre 0.98x at 09:00 and 0.95x at 16:00; hall floor 1.30x and 1.26x (the hall art differs: cream marble against the painting's dark grey floor, OPEN.md 19); **city window 0.85x and 0.81x**: it is in the same lit picture, so it darkens with the hall and ends below the painting. Keeping the window as it was needs a window mask in the full-screen draw or a sky share in the knob: not done here; round 10 files it as an explicit request in LIGHT's hand-off (measured in Unity: 0.85x and 0.81x, as predicted). The traveller is drawn by the office camera, not in the lit hall, so the figure keeps its brightness (the painting's traveller is the brightest thing in the hall too).
 
 ### 3. No "CHEATS ON" in a review capture (round 8, item 7)
 
-The day-12 still carried the cheat badge: the scenario's `cheat GiveAllItems` marks the run cheated and `DebugPanelController` draws "CHEATS ON" in IMGUI, which `ScreenCapture` takes into every still and sequence. Now `DevToolsState.HideCheatBadge` (a session flag, not a cheat: `ResetAll` keeps it, so a scenario's `newRun` does not bring the badge back) hides the badge; `QaRunner.Run` sets it before the first step and `CleanUp` puts it back. The run is still marked cheated (saves, the demo's mark) and the open overlay still draws. The game never reads the rig (QA-RIG's rule): the rig writes the game's flag.
+The day-12 still carried the cheat badge: the scenario's `cheat GiveAllItems` marks the run cheated and `DebugPanelController` draws "CHEATS ON" in IMGUI, which `ScreenCapture` takes into every still and sequence. Round 9 added `DevToolsState.HideCheatBadge` (kept by `ResetAll`), set by `QaRunner` while a run played. **Taken out in round 10** (it broke RUN-SAFE's work on a merge: round 10, item 1): `DevToolsState.cs`, `DebugPanelController.cs` and `QaRunner.cs` are back to ecf86b9's, `QaCheatBadgeTests` is deleted, and the hide lives in the local capture op (`_DeskV3CaptureOps`, never committed).
 
 ### Other owners' files (round 9; the smallest owner-correct change, each)
 
-- **LIGHT:** `HallLightingSO.cs` (one knob, data), `HallLighting_Default.asset` (its value), `HallLightingRig.cs` (`PaintedDesk` and one line that applies the knob).
-- **HALL-FX:** `HallBackdrop.cs` (`Brightness`), `HallBackdrop.shader` (`_Brightness`, in UnityPerMaterial), `HallForegroundFloor.cs` and `HallForegroundFloor.shader` (the seam at the same brightness).
-- **RUN-SAFE** (the cheat overlay): `DevToolsState.cs` (`HideCheatBadge`), `DebugPanelController.cs` (the badge obeys it).
-- **QA-RIG:** `QaRunner.cs` (sets it while a run plays, puts it back).
+- **LIGHT** (all seven hall files: FIX_PLAN's LIGHT "Owns" lists `Office/HallBackdrop.cs`, `HallForegroundFloor.cs`, `HallLightingRig.cs`, `HallLightingSO.cs` and `HallLighting_Default.asset`; the two shaders go with their components; HALL-FX's "Owns" lists none of these files, and `QaGcSites` maps HallBackdrop to LIGHT): `HallLightingSO.cs` (one knob, data), `HallLighting_Default.asset` (its value), `HallLightingRig.cs` (`PaintedDesk` and one line that applies the knob), `HallBackdrop.cs` (`Brightness`), `HallBackdrop.shader` (`_Brightness`, in UnityPerMaterial), `HallForegroundFloor.cs` and `HallForegroundFloor.shader` (the seam at the same brightness).
+- Round 9's badge hide in RUN-SAFE's `DevToolsState.cs` and `DebugPanelController.cs` and QA-RIG's `QaRunner.cs` was taken out in round 10: those three files are ecf86b9's again.
 - **UI-PC and CONTENT:** `Assets/Art/Generated/xp_bliss.png` (the neutral wallpaper's pixels; its `.meta` and every reference unchanged).
 - Also: `CulturePlaceholders.cs`' comment and `docs/ART_ASSET_LIST.md`'s neutral wallpaper row now say what the file is.
 
 ### Checks (round 9)
 
-Compile 0 errors (167 warnings, as before); offline runner **3843** passed, 0 failed (5 new: `HallPaintedDeskBrightnessTests`); `tools/qa/editor_runner` with QA_PROJECT set: 72 passed, 0 failed, 27 NeedsEditor skipped (2 new: `QaCheatBadgeTests`); `python -m unittest discover -s tools/qa`: 35 OK. Each new test fails when its part is reverted (the knob's value in the asset, the default, the rig's line, the binder's line, the shader's scale, the seam, the badge's rule, the rig's set and put back). Unity was not run in this round.
+Compile 0 errors (167 warnings, as before); offline runner **3843** passed, 0 failed (5 new: `HallPaintedDeskBrightnessTests`); `tools/qa/editor_runner` with QA_PROJECT set: 72 passed, 0 failed, 27 NeedsEditor skipped (2 new: `QaCheatBadgeTests`, deleted in round 10); `python -m unittest discover -s tools/qa`: 35 OK. Each new test fails when its part is reverted (the knob's value in the asset, the default, the rig's line, the binder's line, the shader's scale, the seam, the badge's rule, the rig's set and put back). Unity was not run in this round (round 10 ran R9).
 
-### For the Unity step (R9)
+### For the Unity step (R9; run in round 10, results there)
 
 1. Both shaders compile (`TimeDesk/HallBackdrop`, `NOPE/Hall Foreground Floor`; `ShaderUtil.ShaderHasError` false).
 2. Re-run `desk_v3_capture` (day 1 at 09:00, day 12 at 16:00, 1920 x 1080, office pose) and measure as above against `mock_office.png`. Pass: hall centre within 0.9 to 1.1x at both hours; the desk regions unchanged (mat 1.02x, left stack 0.99x); no "CHEATS ON" in either still or in the tour's frames; the seam at the left of the PC and behind the deal tray no brighter than the hall over it.
+   - **The city window** (added in round 10): measure the left glass's city (sky and towers) against the painting at both hours. Pass, once LIGHT has answered the window request (round 10, item 5): 0.95 to 1.05x at 09:00 and 16:00. Until then it is recorded, not passed: it darkens with the hall (0.85x and 0.81x).
 3. The toggle off (`DeskLayoutSettings.paintedDesk` false): the hall exactly as before (brightness 1).
 4. The CRT: the wallpaper reads as a dark teal dusk with the emblem; the icons, the banner and the CRT clock read over it; open the PC (Q): the full desktop at 1440 x 1080 shows the skyline and the emblem, no stretch.
 5. The cheat menu's time of day (morning, dusk, night): the hall follows the knob's end values; look at night (the knob holds 0.85; if the night hall reads too dark, LIGHT adds a key).
 6. My own look before Saleh.
+7. **After LIGHT lands** (added in round 10, item 3; `integrate/a-light` makes the lit hall HDR and adds the tonemapped office finish with bloom at threshold 1.0): the knob then scales the hall before tonemapping, so it no longer equals the on-screen ratio round 5 measured, and under the painted desk it cuts the HDR glows the bloom picks up to about half in linear light. Re-measure step 2 (the window included) on the merged branch and retune `paintedDeskBrightness`; LIGHT decides first whether the scale moves after the finish or leaves the glows (values past 1) alone.
 
 ## Round 8: Unity run, the clean desk checked against the painting, and what the captures found
 
@@ -451,8 +525,8 @@ Round 2 (daff612) made a step allocate nothing; let busy sliders take part in th
 - `HoverHighlighter.cs`, `InteractionFeedbackSO.cs`, `HoverHull.shader` (FEEDBACK): round 6's outline (OPEN S2 11); round 7's stencil mask, no depth test, no pull (`outlinePull` removed).
 - `DeskPaintedImporter.cs` (DESK-ART): round 7 reads the glow from `DeskPaintedMap.Glow`.
 - `DeskLayout.cs` (DESK-HOMES' lease): round 7 moves the swept boxes into `DeskSweeps` (Visuals, pure) and `paintedCutParts`' default into `DeskPaintedMap.CutParts`.
-- `HallLightingSO.cs`, `HallLighting_Default.asset`, `HallLightingRig.cs` (LIGHT) and `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs`, `HallForegroundFloor.shader` (HALL-FX): round 9's painted-desk brightness, a data knob (`paintedDeskBrightness`) and the draw that applies it.
-- `DevToolsState.cs`, `DebugPanelController.cs` (RUN-SAFE) and `QaRunner.cs` (QA-RIG): round 9's `HideCheatBadge`.
+- `HallLightingSO.cs`, `HallLighting_Default.asset`, `HallLightingRig.cs`, `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs`, `HallForegroundFloor.shader` (all **LIGHT**'s; round 10 corrected the owner of the last four, which round 9 gave HALL-FX): round 9's painted-desk brightness, a data knob (`paintedDeskBrightness`) and the draw that applies it. Round 10 moved two of round 9's insertions (the `PaintedDesk` property, the `RenderedTexture` summary) off the lines LIGHT's branch changes, so they merge cleanly with `integrate/a-light`.
+- `DevToolsState.cs`, `DebugPanelController.cs` (RUN-SAFE) and `QaRunner.cs` (QA-RIG): untouched (round 9's `HideCheatBadge` was taken out in round 10; they are ecf86b9's).
 - `Assets/Art/Generated/xp_bliss.png` (UI-PC, CONTENT): round 9's neutral wallpaper, replaced in place.
 - `DeskHomeMap.cs` and DESK-PLAN's tests are untouched (as `fdde9f9`).
 - `CueSounds.cs` is called, not edited (its existing placeholders are the stand-ins).
@@ -495,6 +569,9 @@ EditMode tests of the slide-in now:
 - **DESK-ART:** done in round 4 (the bake imported, `DeskPaintedImporter`, the prefab with home root, `Slide` child, mesh). Open: the glass sheen without the hall and the traveller; object sheet B; the BABEL track repaint; the riser smear; a lighter shell texture if Unity's density gate allows 2048. The bake's README says Unity reads the FBX as (x, z, y) of the DeskFrame: Unity reads it half a turn round, and the importer turns it back. The contact shadow is drawn by `SlideShadow` in the papers' shadow look; a painted decal may replace its material later.
 - **The re-skins after the painted install** (round 4, "What does not work yet"): STAMP #7 (the painted daters and rack), DESK-PLAN's machines (the chip reader's readout and LEDs on the painted reader, the scanner's add-ons), DETAIN B4 (the guard's hinge), BELL-SIGN B1 (the AVAILABLE glow), BABEL-TUNER B7 (its object's size), GLASSES B8 (the glasses' click).
 - **LIGHT (#11):** `DeskLight.hlsl`'s header still says nothing includes it; `NOPE/Desk Painted` now does.
+- **LIGHT (#11), the painted desk's hall brightness** (rounds 9 and 10; all seven files are LIGHT's: `HallLightingSO.cs`, `HallLighting_Default.asset`, `HallLightingRig.cs`, `HallBackdrop.cs`, `HallBackdrop.shader`, `HallForegroundFloor.cs`, `HallForegroundFloor.shader`): (1) take the knob `paintedDeskBrightness` and its draw as yours at the merge; (2) **the window request** (round 10, item 5): keep the city window out of the scale (a window mask in `TimeDesk/HallBackdrop` or a sky share in the knob) so the window reads 0.95 to 1.05x the painting at 09:00 and 16:00 (now 0.85x and 0.81x); (3) **after your HDR finish lands** (round 10, item 3): decide whether the scale moves after the tonemapped finish or leaves the glows (values past 1) alone, then re-measure (R9 steps 2 and 7) and retune the knob; (4) the merge with `integrate/a-light` is clean as of round 10 (keep both sides if a conflict comes back).
+- **UI-PC and CONTENT, the other wallpapers** (round 10, item 6; an art request): the 8 culture wallpapers and the 16 world-outcome wallpapers are still bright, photo-like stock pictures in the XP look Saleh rejected; give them the neutral one's treatment (80s/90s cel anime, dark, low contrast, no text, the subject in the 4:3 middle; replaced in place, `.meta` kept; 2 credits each at `nano_banana_2_1`, 48 in all: Saleh's budget call).
+- **RUN-SAFE and QA-RIG, optional** (round 10, item 1): if every QA capture (not only desk v3's local op) should hide the cheat badge, RUN-SAFE gives `CheatBadge` the hide (a member of the component, or a `DevToolsState` switch placed in exactly one scope, so `EverySwitch_HasExactlyOneScope` and `runsafe.switch.scopes` stay green) and QA-RIG's `QaRunner` sets it while a run plays. This branch changes neither.
 - **GLASSES (B8), BABEL-TUNER (B7):** attach the glasses and the tuner on their homes (`MachineSlideIn.Attach`); the BABEL rack slides until then.
 - **The rulebook pocket** (DESK-HOMES P4): round 6 shows the painted book and its 2 cm peek; P4 makes the painted book and DOC-LOOK's open folder one book (the open call in round 6).
 
@@ -511,7 +588,7 @@ Per CARVE's and DESK-PLAN's rule, `docs/FEATURES.md` is not edited here. Add aft
 
 **Done in Unity (round 4):** the painted desk imported, installed and captured (round 4: its still, its 60 fps clip, the smoke run, the EditMode suite, the rebuilt OfficeGameplay). Recipe 1 (import and compile: `NOPE/Desk Painted` renders with its mask in the game) and part of recipe 3 (the five sliders the clip visits, at A1 in the office view: the first slide frame on the frame the cursor arrives, the anticipation, one overshoot, the hand-offs, one machine at a time, the way home at speed with the seat bounce) are covered by it.
 
-**Open before merge:** the focus patch after CAM; the carry floor and DOC-HANDLE's registry (item 9); round 7's Unity checks (R7), round 9's (R9: the hall's brightness against the painting, the wallpaper on the CRT, no dev label) and the calls for Saleh (the RING SERVICE panel hidden, the stand-ins).
+**Open before merge:** the focus patch after CAM; the carry floor and DOC-HANDLE's registry (item 9); round 7's Unity checks (R7); round 9's R9 was run in round 10 (the hall centre 1.07x and 1.05x, the wallpaper on the CRT and in the PC, no dev label, both shaders compile), leaving LIGHT's window request, the re-measure after LIGHT's HDR finish (R9 step 7) and the toggle-off check (R9 step 3); the 24 other wallpapers (art request); and the calls for Saleh (the RING SERVICE panel hidden, the stand-ins).
 
 **Deferred: Unity** (round 4 ran the install, the clip, the smoke and the suite; these remain). Run in NOPE-art's editor through the job runner, in order, once the patch is applied. Each pass line is a QA-rig result or a frame sequence reviewed by eye (memory: "review motion myself").
 1. **Import and compile.** `NOPE/Desk Painted` compiles with no error (`ShaderUtil.ShaderHasError` false), with and without `_MASKMAP`. The EditMode suite is green except the known `UnitySkills...SceneSummarize_CountsObjectsCorrectly`; `AStep_AllocatesNothing_EveryFrameOfTheOffice` passes under Unity's Mono too.

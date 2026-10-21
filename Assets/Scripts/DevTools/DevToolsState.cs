@@ -100,19 +100,8 @@ public static class DevToolsState
     public static float? ForcedHour;
 
     /// <summary>
-    /// While true, a cheated run's "CHEATS ON" badge is not drawn
-    /// (DebugPanelController): the QA rig sets it for as long as it drives the
-    /// game (QaRunner), so review captures (its stills and sequences) carry no
-    /// dev label. The run is still marked cheated (WorldState.cheated) and the
-    /// open overlay still draws. Not a cheat: <see cref="ResetAll"/> keeps it,
-    /// so a scenario's New Run does not bring the badge back.
-    /// </summary>
-    public static bool HideCheatBadge;
-
-    /// <summary>
     /// Resets all dev cheat state. Called by RunManager.NewRun()/ContinueRun()
-    /// so leftover toggles from a previous run don't bleed into a new one
-    /// (<see cref="HideCheatBadge"/>, the QA rig's, is kept).
+    /// so leftover toggles from a previous run don't bleed into a new one.
     /// </summary>
     public static void ResetAll()
     {

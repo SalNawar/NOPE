@@ -71,15 +71,6 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>The knobs (null when unassigned).</summary>
     public HallLightingSO Settings => settings;
 
-    /// <summary>
-    /// True while the painted desk is installed (desk v3; the office binder,
-    /// OfficeSceneBinder.BindHall): the lit hall shows at the knobs'
-    /// paintedDeskBrightness for <see cref="Hour"/> (HallBackdrop.Brightness),
-    /// so it reads as one image with the painted desk; false (the art's
-    /// desk, the hall on its own), as lit.
-    /// </summary>
-    public bool PaintedDesk { get; set; }
-
     /// <summary>The hour the hall shows now: the cheat menu's forced hour (DevToolsState.ForcedHour), else the preview hour, else the shift clock's, else the edit-mode hour.</summary>
     public float Hour => settings == null ? 12f
         : DevToolsState.ForcedHour.HasValue ? DevToolsState.ForcedHour.Value
@@ -118,6 +109,15 @@ public sealed class HallLightingRig : MonoBehaviour
 
     /// <summary>How far portal <paramref name="portal"/>'s night has come (0 by day; its surge past 1 once its night stage comes, then 1; 0 with the lighting off).</summary>
     public float PortalNight(int portal) => portal >= 0 && portal <= MaxPortal ? _portalNight[portal] : 0f;
+
+    /// <summary>
+    /// True while the painted desk is installed (desk v3; the office binder,
+    /// OfficeSceneBinder.BindHall): the lit hall shows at the knobs'
+    /// paintedDeskBrightness for <see cref="Hour"/> (HallBackdrop.Brightness),
+    /// so it reads as one image with the painted desk; false (the art's
+    /// desk, the hall on its own), as lit.
+    /// </summary>
+    public bool PaintedDesk { get; set; }
 
     /// <summary>Portal <paramref name="portal"/>'s ring state (AnimeHallPortalLink): open (its light on), and whether it is the Return Gate (its colour).</summary>
     public void SetPortal(int portal, bool open, bool returnGate)
