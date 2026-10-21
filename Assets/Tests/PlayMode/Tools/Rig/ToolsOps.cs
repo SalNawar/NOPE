@@ -45,8 +45,11 @@ public static class ToolsOps
     /// <summary>The patch's samples for the occlusion count: its centre and four rings.</summary>
     private static readonly (float ring, int count)[] PatchRings = { (0.25f, 8), (0.5f, 12), (0.75f, 16), (1f, 24) };
 
-    /// <summary>Registers the ops before the first scene loads (editor and QA player alike).</summary>
+    /// <summary>Registers the ops before the first scene loads (editor and QA player alike), and in the editor also on every domain load, so the edit-mode scenario test (QaEditorGateTests) knows them without a play run. Registering twice just replaces the same bodies.</summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+#if UNITY_EDITOR
+    [UnityEditor.InitializeOnLoadMethod]
+#endif
     private static void Register()
     {
         QaRunner.RegisterOp("toolsTorch", Torch);
