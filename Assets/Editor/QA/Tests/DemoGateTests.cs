@@ -149,6 +149,25 @@ public class DemoGateTests
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
+    /// <summary>The entries ruled at the six tracks' landing (2026-10-21) spare only the result their check reads: tools.micro's own assertions and desk_plan_homes' presses, never QA-RIG's other assertions in those scenarios.</summary>
+    [Test]
+    public void TheRuledKnownRedEntries_SpareOnlyWhatTheirChecksRead()
+    {
+        string file = Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt");
+        string text = File.ReadAllText(file);
+        List<string> patterns = DemoGate.KnownRedRunPatterns(text);
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        foreach (string id in new[] { "tools.micro", "desk.play.clicks", "textlang.kitSymbols" })
+            Assert.IsTrue(known.ContainsKey(id), $"{id} is on the list");
+        StringAssert.Contains("CAM", known["desk.play.clicks"]);
+        StringAssert.Contains("CONTENT", known["textlang.kitSymbols"]);
+        StringAssert.Contains("UI-PC", known["tools.micro"]);
+        foreach (string id in new[] { "tools_microprint.tools.micro.read", "desk_plan_homes.presses" })
+            Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
+        foreach (string id in new[] { "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses" })
+            Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
+    }
+
     [Test]
     public void Judge_AResultMeasuredOnUncommittedChanges_FailsAsDirty()
     {
