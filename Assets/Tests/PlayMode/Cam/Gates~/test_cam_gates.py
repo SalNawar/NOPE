@@ -1,31 +1,41 @@
-"""CAM's gate coverage (docs/pending/CAM.md, rounds 4 to 6), both ways, over every line a run of CAM's scenarios
+"""CAM's gate coverage (docs/pending/CAM.md, rounds 4 to 7), both ways, over every line a run of CAM's scenarios
 writes. Forward: every line CAM measures sits under one of the gate checks in CamChecks, under the line's owner, so the
 merge gate cannot go green while such a line is red or missing: the lines CamOps' ops write (round 3's verifier found
 cam_views.play.d12 under no gate) and the CAM lines the rig's built-in ops write (gc under the scenario's owner,
 cameraCheck and the run's own camera line under CAM); a scenario with a gc step also runs on the QA player (the gc
-verdict is [BP]), its CAM lines' bp. twins under a CAM BuiltPlayer check. Reverse (round 6): no CamChecks pattern reads
-a line of another owner (QA-RIG's console, presses, probes and frame analyses, TEXT-LANG's LiberationSans probe, a
-plate owner's verdict) but the listed deliberate inclusions, so a CAM check never refuses the merge gate on another
-track's known red (round 6's cam_desk.* read TEXT-LANG's liberationSans.end). Also: every check's pattern names lines a
-run writes, the cap report runs with papers on the desk, and the wiring of the two rig fixes that live in coroutines.
-Reads the C# sources and the scenario files; needs no Unity. CAM's file in QA-RIG's tools/qa (discover finds it here;
-the orchestrator's approval is pending, CAM.md)."""
+verdict is [BP]), its CAM lines' bp. twins under a CAM BuiltPlayer check. Whole runs (round 7): every check that reads
+a run requires the run's last probe (QaRunner.Run stops at a step that throws and still writes the lines of the steps
+that ran), and each run's console, presses, quality and last probe refuse its CAM run check, as RUN-SAFE's checks read
+their runs'. Reverse (round 6): no CamChecks pattern reads a line of another owner (QA-RIG's console, presses, probes
+and frame analyses, TEXT-LANG's LiberationSans probe, a plate owner's verdict) but the listed deliberate inclusions, so
+a CAM check never refuses the merge gate on another track's known red (round 6's cam_desk.* read TEXT-LANG's
+liberationSans.end). Also: every check's pattern names lines a run writes, the cap report runs with papers on the desk,
+each framing leg names its view, and the wiring of the rig fixes that live in coroutines.
+Reads the C# sources and the scenario files; needs no Unity. CAM's own file (round 7: moved out of QA-RIG's tools/qa
+into CAM's Assets/Tests/PlayMode/Cam/, in a folder whose name ends in '~' so Unity imports nothing from it). Run it
+from the repository's root with:
+    python -m unittest discover -s "Assets/Tests/PlayMode/Cam/Gates~" -p "test_*.py"
+"""
 import collections
 import json
 import os
 import re
+import sys
 import unittest
 
-import seqlib
-
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.join(HERE, '..', '..')
+ROOT = os.path.normpath(os.path.join(HERE, '..', '..', '..', '..', '..'))
+QA = os.path.join(ROOT, 'tools', 'qa')
+sys.path.insert(0, QA)
+
+import seqlib  # noqa: E402 (QA-RIG's twin of GateResults.Matches, read from tools/qa)
+
 CAM_OPS = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'Cam', 'Rig', 'CamOps.cs')
 CAM_CHECKS = os.path.join(ROOT, 'Assets', 'Editor', 'QA', 'Checks', 'CamChecks.cs')
 QA_RUNNER = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'Rig', 'QaRunner.cs')
 DESK_PLAN_OPS = os.path.join(ROOT, 'Assets', 'Tests', 'PlayMode', 'DeskPlan', 'Rig', 'DeskPlanOps.cs')
-SEQTOOLS = os.path.join(HERE, 'seqtools.py')
-SCENARIOS = os.path.join(HERE, 'scenarios')
+SEQTOOLS = os.path.join(QA, 'seqtools.py')
+SCENARIOS = os.path.join(QA, 'scenarios')
 
 # CamOps' ops and the assertion families each writes ('<family><name>...'); ops with none write no line.
 OP_FAMILIES = {
@@ -56,6 +66,10 @@ BUILT_IN = {
 # The lines every run writes at its end (QaRunner.Finish; quality when the harness set the level): id -> owner.
 RUN_END = {'console': 'QA-RIG', 'camera': 'CAM', 'presses': 'QA-RIG', 'quality': 'QA-RIG'}
 
+# The run-end lines a QA player's run does not write: QaRunner.FromCommandLine names no quality level (run_player.py
+# checks the build's level from run.json itself).
+PLAYER_SKIPS = {'quality'}
+
 # The built-in ops that record a sequence (QaRunner: <run>/seq/<name>); tools/qa's analyses write a result for it.
 SEQ_OPS = {'recstart', 'record'}
 
@@ -70,20 +84,66 @@ FOREIGN_OPS = {
     'deskclickboxes': ('clickboxes.', 'desk', 'DESK-PLAN'),
 }
 
+# A CAM run's last probe (each CAM scenario ends on the probe "end"): its line says the run reached its end. QaRunner.Run
+# stops at the first step that throws (a drag whose target is off the screen, a resize or a wait timing out) and still
+# calls Finish, so the lines of the steps that ran are all written: a check reading them alone goes green on the legs
+# that ran (round 7, the class of round 4's cam_views.play.d12). QA-RIG's line, read on purpose.
+END = 'missingScripts.end'
+
+# The runs each check reads (the runs whose lines its patterns match; pinned against CamChecks below): each check
+# requires the last probe of every one, so none goes green on a run that stopped early. A [BP] run is 'bp.<scenario>'.
+READS = {
+    'cam.play.tags': ('cam_views', 'cam_chrome', 'cam_desk', 'cam_gc'),
+    'cam.play.tilts': ('cam_views',),
+    'cam.play.day12': ('cam_views',),
+    'cam.play.framing': ('cam_views',),
+    'cam.play.fade': ('cam_views',),
+    'cam.play.hold': ('cam_views',),
+    'cam.play.city': ('cam_views',),
+    'cam.play.shakes': ('cam_views',),
+    'cam.play.chrome': ('cam_chrome',),
+    'cam.play.guidePlate': ('cam_chrome',),
+    'cam.play.stampHint': ('cam_chrome',),
+    'cam.play.capreport': ('cam_views',),
+    'cam.play.deskplan': ('cam_desk',),
+    'cam.bp.gc': ('bp.cam_gc',),
+    'cam.bp.camera': ('bp.cam_gc',),
+}
+
+# One run check per CAM run (round 7): the run ran whole and clean, its own lines read as RUN-SAFE's checks read their
+# runs' (RunSafeChecks.RunPatterns): its console (an error or exception logged during it, from CameraFeel, CityView,
+# DeskView or the rig, refused no gate before), its presses, its quality level and its last probe's scripts and
+# materials, all QA-RIG's. A player's run writes no quality line (PLAYER_SKIPS), as QA-RIG's qa.bp.smoke reads none.
+RUN_CHECKS = {
+    'cam.play.run.views': 'cam_views',
+    'cam.play.run.chrome': 'cam_chrome',
+    'cam.play.run.desk': 'cam_desk',
+    'cam.play.run.gc': 'cam_gc',
+    'cam.bp.run.gc': 'bp.cam_gc',
+}
+RUN_LINES = ('console', 'presses', 'quality', END, 'materials.end')
+
+
+def _run_lines_of(run):
+    """The run's own lines its run check reads (a player's run has no quality line)."""
+    return [f'{run}.{line}' for line in RUN_LINES if not (run.startswith('bp.') and line in PLAYER_SKIPS)]
+
+
 # The other owners' lines a CAM check reads on purpose: (check, pattern) -> the lines' owner. cam.play.deskplan judges
 # DESK-PLAN's homes at A3 and A4 (FIX_PLAN v1 deferred them to CAM): each home seen and the intercom's wheel from the
-# reading view (DESK-PLAN's lines), every click delivered and the run's last probe reached (QA-RIG's), as qa.play.smoke
-# and RUN-SAFE's checks read a run's own lines. Nothing else of another owner.
+# reading view (DESK-PLAN's lines) and every centre click delivered (QA-RIG's presses). Every check requires the last
+# probe of each run it reads (READS), and each run check reads its run's own lines (RUN_CHECKS), QA-RIG's. Nothing else
+# of another owner: a run's LiberationSans probe stays TEXT-LANG's, its sequences' analyses QA-RIG's.
 DELIBERATE = {
     ('cam.play.deskplan', 'cam_desk.visible.*'): 'DESK-PLAN',
     ('cam.play.deskplan', 'cam_desk.expect.*'): 'DESK-PLAN',
     ('cam.play.deskplan', 'cam_desk.presses'): 'QA-RIG',
-    ('cam.play.deskplan', 'cam_desk.missingScripts.end'): 'QA-RIG',
-    ('cam.play.deskplan', 'cam_desk.materials.end'): 'QA-RIG',
 }
+DELIBERATE.update({(cid, f'{run}.{END}'): 'QA-RIG' for cid, runs in READS.items() for run in runs})
+DELIBERATE.update({(cid, line): 'QA-RIG' for cid, run in RUN_CHECKS.items() for line in _run_lines_of(run)})
 
 Check = collections.namedtuple('Check', 'id owner patterns built_player kind demo')
-Line = collections.namedtuple('Line', 'id owner how cam')
+Line = collections.namedtuple('Line', 'id owner how cam run')
 
 
 def _read(path):
@@ -119,9 +179,14 @@ def _plates():
     return plates
 
 
+def _on_player(scenario):
+    """True when the scenario also runs on the QA player: a gc step's verdict is [BP] (run_player.py)."""
+    return any(s['op'].lower() == 'gc' for s in scenario['steps'])
+
+
 def _checks():
     """CamChecks' play and built-player checks, each with every result pattern it requires (GateResults.Require, or
-    the local All over several patterns, which reads them under CAM)."""
+    the local All over several patterns, with the check's owner and whether it reads built-player results)."""
     src = _read(CAM_CHECKS)
     cam = re.search(r'const\s+string\s+Owner\s*=\s*"([^"]+)"', src).group(1)
     owner = lambda o: cam if o == 'Owner' else o.strip('"')
@@ -132,9 +197,10 @@ def _checks():
             r'GateResults\.Require\(\s*"([^"]+)"\s*,\s*(Owner|"[^"]+")\s*,\s*"([^"]+)"\s*(?:,\s*(true)\s*)?\)', src):
         kind, demo = kinds[cid]
         checks.setdefault(cid, Check(cid, owner(o), [], bp == 'true', kind, demo)).patterns.append(pattern)
-    for cid, args in re.findall(r'\bAll\(\s*"([^"]+)"\s*,((?:\s*"[^"]+"\s*,?)+)\)', src):
+    for cid, o, bp, args in re.findall(
+            r'\bAll\(\s*"([^"]+)"\s*,\s*(Owner|"[^"]+")\s*,\s*(true|false)\s*,((?:\s*"[^"]+"\s*,?)+)\)', src):
         kind, demo = kinds[cid]
-        checks.setdefault(cid, Check(cid, cam, [], False, kind, demo)).patterns.extend(re.findall(r'"([^"]+)"', args))
+        checks.setdefault(cid, Check(cid, owner(o), [], bp == 'true', kind, demo)).patterns.extend(re.findall(r'"([^"]+)"', args))
     return list(checks.values())
 
 
@@ -142,7 +208,8 @@ def run_lines(scenario, plates):
     """Every line a run of the scenario writes, with its owner, how it is judged ('play', 'bp' or 'editor-gc') and
     whether CAM measures it (CamOps' lines, and the built-in lines under CAM): the run's own lines at its end, each
     step's (CamOps' ops, the built-in ops, DESK-PLAN's ops), and the frame analyses of each recorded sequence; with a gc
-    step the run is also played on the QA player, every line again with a bp. prefix."""
+    step the run is also played on the QA player, every line again with a bp. prefix but the quality line the player's
+    run does not write. Each line names its run ('<scenario>', or 'bp.<scenario>' on the player)."""
     name, owner = scenario['name'], scenario.get('owner', 'QA-RIG')
     lines = [(rid, line_owner, line_owner == 'CAM') for rid, line_owner in RUN_END.items()]
     for i, step in enumerate(scenario['steps']):
@@ -168,13 +235,13 @@ def run_lines(scenario, plates):
             lines.append((f'{family}{step_name or (target if fallback == "target" else fallback)}', line_owner, False))
         if op in SEQ_OPS:
             lines.extend((f'seq.{_safe(step_name or "")}.{analysis}', 'QA-RIG', False) for analysis in sorted(ANALYSES))
-    on_player = any(s['op'].lower() == 'gc' for s in scenario['steps'])
+    on_player = _on_player(scenario)
     judged = []
     for rid, line_owner, cam in lines:
         # The editor's gc number includes the editor's own allocations (QaRunner.Gc's detail): its verdict is the [BP] twin's.
-        judged.append(Line(f'{name}.{rid}', line_owner, 'editor-gc' if rid.startswith('gc.') else 'play', cam))
-        if on_player:
-            judged.append(Line(f'bp.{name}.{rid}', line_owner, 'bp', cam))
+        judged.append(Line(f'{name}.{rid}', line_owner, 'editor-gc' if rid.startswith('gc.') else 'play', cam, name))
+        if on_player and rid not in PLAYER_SKIPS:
+            judged.append(Line(f'bp.{name}.{rid}', line_owner, 'bp', cam, f'bp.{name}'))
     return judged
 
 
@@ -215,6 +282,12 @@ class CamGateCoverageTests(unittest.TestCase):
         finish = _body(src, 'private void Finish()')
         self.assertEqual(set(RUN_END), set(re.findall(r'Assert(?:Camera)?\("([a-z]+)"', finish)) | {'presses'})
         self.assertIn('AssertPresses();', finish)
+        # PLAYER_SKIPS: the quality line only with a level to expect, which the QA player's run is never given.
+        self.assertRegex(finish, r'if \(!string\.IsNullOrEmpty\(_expectedQuality\)\)\s*\{\s*string end = QualityName\(\);\s*Assert\("quality"')
+        self.assertRegex(_body(src, 'private static void FromCommandLine()'), r'\bBegin\(scenario, outDir, true\);')
+        # Run: a step that throws ends the run, and Finish still writes the run's lines (the reason for END).
+        run = _body(src, 'private IEnumerator Run()')
+        self.assertRegex(run, r'if \(!result\.ok \|\| quit\)\s*break;\s*\}\s*Finish\(\);')
         owners = set(re.findall(r'\bAssert\([^;]*?,\s*("[A-Z-]+"|Scenario\.owner)\s*,', src))
         self.assertEqual({'"QA-RIG"', '"TEXT-LANG"', '"CAM"', 'Scenario.owner'}, owners, 'a built-in line with a new owner: place it in BUILT_IN')
         ops = set(re.findall(r'"([a-z]+)"', re.search(r'public static readonly string\[\] Ops =\s*\{(.*?)\};', src, re.S).group(1)))
@@ -302,9 +375,69 @@ class CamGateCoverageTests(unittest.TestCase):
         # QA-RIG's convention (qa.bp.*; FIX_PLAN: "[BP] gates run on the nightly scratch build"), and they read
         # built-player results only.
         bp = [c for c in _checks() if c.kind == 'BuiltPlayer']
-        self.assertEqual({'cam.bp.gc', 'cam.bp.camera'}, {c.id for c in bp})
+        self.assertEqual({'cam.bp.gc', 'cam.bp.camera', 'cam.bp.run.gc'}, {c.id for c in bp})
         for c in bp:
             self.assertTrue(c.built_player and c.demo and all(p.startswith('bp.') for p in c.patterns), c.id)
+
+    def test_every_play_and_built_player_check_is_read_by_these_tests(self):
+        # A check whose patterns the parser above cannot see would escape every test here.
+        ids = set(re.findall(r'\[GateCheck\(\s*"([^"]+)"\s*,\s*(?:Owner|"[^"]+")\s*,\s*GateKind\.(?:Play|BuiltPlayer)\b',
+                             _read(CAM_CHECKS)))
+        self.assertEqual(ids, {c.id for c in _checks()})
+        self.assertEqual(ids, set(READS) | set(RUN_CHECKS), 'a check added or gone: place it in READS or RUN_CHECKS')
+
+    def test_every_check_requires_the_end_of_every_run_it_reads(self):
+        # Round 7: QaRunner.Run stops at the first step that throws (cam_chrome's drag of a decoration that is not on the
+        # screen, a camres or a QaGame.Until timing out) and still calls Finish, so every line of the steps that ran is
+        # written: cam.play.chrome and cam.play.stampHint went green on the legs that ran with chrome.a4 and
+        # plate.a4.stamphint never written, and cam.play.framing on a cam_views run that stopped before the day-12 16:10,
+        # A3 and A4 legs. Each CAM run ends on its probe "end"; a check reading any line of a run requires that probe's
+        # line, so a run that stopped early fails every check that reads it.
+        checks = _checks()
+        plates = _plates()
+        scenarios = _scenarios()
+        runs_written = set()
+        for file, s in scenarios:
+            last = s['steps'][-1]
+            self.assertEqual(('probe', 'end'), (last['op'].lower(), last.get('name')), f'{file}: a CAM run ends on its probe "end" ({END})')
+            self.assertEqual(1, sum(1 for st in s['steps'] if st['op'].lower() == 'probe' and st.get('name') == 'end'), file)
+            runs_written.add(s['name'])
+            if _on_player(s):
+                runs_written.add('bp.' + s['name'])
+        lines = [line for _, s in scenarios for line in run_lines(s, plates)]
+        required = set()
+        for c in checks:
+            runs = {line.run for line in lines if _reads(c, line)}
+            listed = set(READS.get(c.id, ())) | ({RUN_CHECKS[c.id]} if c.id in RUN_CHECKS else set())
+            self.assertEqual(listed, runs, f'{c.id} reads the runs {sorted(runs)}: name them in READS (or RUN_CHECKS)')
+            for run in runs:
+                self.assertIn(f'{run}.{END}', c.patterns, f'{c.id} reads {run} but would go green on a run that stopped early: require {run}.{END}')
+                required.add(run)
+        self.assertEqual(runs_written, required, 'every CAM run, in the editor and on the QA player, needs its completion required')
+
+    def test_every_cam_runs_console_presses_quality_and_end_refuse_its_run_check(self):
+        # Round 7: an error or exception logged during a CAM run (CameraFeel, CityView, DeskView, the rig) refused no gate,
+        # only harness.txt said "failed"; round 6 had narrowed cam.play.deskplan off cam_desk.console and .quality. Each
+        # run's own lines refuse its CAM run check, as RUN-SAFE's checks read theirs (RunSafeChecks.RunPatterns): console,
+        # presses, quality (in the editor) and the last probe's scripts and materials.
+        checks = {c.id: c for c in _checks()}
+        plates = _plates()
+        seen = 0
+        for file, s in _scenarios():
+            runs = [s['name']] + (['bp.' + s['name']] if _on_player(s) else [])
+            owned = {RUN_CHECKS[cid]: checks[cid] for cid in RUN_CHECKS}
+            for run in runs:
+                self.assertIn(run, owned, f'{file}: the run {run} has no run check')
+                check = owned[run]
+                self.assertEqual(('CAM', run.startswith('bp.')), (check.owner, check.built_player), check.id)
+                self.assertEqual('BuiltPlayer' if run.startswith('bp.') else 'Play', check.kind, check.id)
+                own = _run_lines_of(run)
+                self.assertEqual(set(own), set(check.patterns), f'{check.id} reads exactly its run\'s own lines')
+                written = {line.id for line in run_lines(s, plates) if line.run == run}
+                for rid in own:
+                    self.assertIn(rid, written, f'{file}: {rid} is a line the run writes')
+                    seen += 1
+        self.assertGreater(seen, 0)
 
     def test_every_cap_leg_runs_with_the_days_papers_on_the_desk(self):
         # camcap measures the printed text of the papers on the desk, red 'not measured' with none, and a handed paper
@@ -370,6 +503,34 @@ class CamGateCoverageTests(unittest.TestCase):
             self.assertEqual(['held', 'reading'], shows, leg)
         hints = [st for st in s['steps'] if st['op'] == 'camchrome' and st.get('n') == 2]
         self.assertEqual(4, len(hints), 'each day-12 leg (A1-A4) shows the stamp hint')
+
+    def test_every_framing_leg_is_judged_on_the_view_it_names(self):
+        # Round 7: camframe judged whichever view was on and camcap measured from any view, but DeskView.Toggle does
+        # nothing unless its toggle is live, so a *_reading leg could be judged on the office view's criteria with no
+        # .bottom line, and a cap report taken at the office pose. Each camframe step names its view in its target
+        # (CamOps.ReadingLeg, CamRigTests), its name agrees, and the op refuses a leg whose view is not on (both of a
+        # reading leg's lines red); camcap refuses unless the reading view is on.
+        legs = {'office': 0, 'reading': 0}
+        for file, s in _scenarios():
+            for step in s['steps']:
+                if step['op'].lower() == 'camframe':
+                    view = step.get('target')
+                    self.assertIn(view, legs, f'{file}: camframe {step.get("name")} names no view ("office" or "reading")')
+                    self.assertTrue(step.get('name', '').endswith('_' + view), f'{file}: camframe {step.get("name")} names the {view} view')
+                    legs[view] += 1
+        self.assertTrue(legs['office'] > 0 and legs['reading'] > 0, legs)
+        src = _read(CAM_OPS)
+        frame = _body(src, 'private static IEnumerator Frame(QaRunner runner, QaStep step)')
+        self.assertRegex(frame, r'^\s*bool reading = ReadingLeg\(step\.target\);', 'the leg\'s view is read before anything is measured')
+        self.assertRegex(frame, r'if \(view\.IsOn != reading\)\s*\{\s*NotMeasured\(')
+        self.assertEqual(1, frame.count('view.IsOn'), 'once the views agree, the leg is judged on its own view (reading), never on IsOn')
+        self.assertRegex(frame, r'if \(!reading\)\s*yield break;\s*Ray bottom')
+        not_measured = _body(src, 'private static void NotMeasured(QaRunner runner, string name, bool reading, string why)')
+        self.assertRegex(not_measured, r'runner\.Assert\("frame\." \+ name, Owner, false, "not measured", why\);')
+        self.assertRegex(not_measured, r'if \(reading\)\s*runner\.Assert\("frame\." \+ name \+ "\.bottom", Owner, false, "not measured", why\);')
+        cap = _body(src, 'private static IEnumerator Cap(QaRunner runner, QaStep step)')
+        self.assertRegex(cap, r'if \(cam == null \|\| view == null \|\| !view\.IsOn\)\s*\{\s*runner\.Assert\("capreport\." \+ name, Owner, false, "not measured"')
+        self.assertLess(cap.index('!view.IsOn'), cap.index('FindObjectsByType<DeskDocument>'), 'camcap measures nothing outside the reading view')
 
 
 if __name__ == '__main__':

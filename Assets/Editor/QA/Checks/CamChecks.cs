@@ -25,15 +25,23 @@ using UnityEngine;
 /// rows; no chrome over a held thing or the reading view's work, and the two
 /// overlay plates CAM measured over it, each under its owner (CONTENT's guide
 /// plate, STAMP's stamp hint); the cap heights measured at CAM's pose;
-/// DESK-PLAN's homes at A3 and A4. Built player [BP] (with the demo gate, as
+/// DESK-PLAN's homes at A3 and A4; and each CAM run whole and clean (one run
+/// check per run: its console, presses, quality and last probe, as RUN-SAFE's
+/// checks read their runs'). Every play check also requires the last probe of
+/// each run it reads: QaRunner.Run stops at the first step that throws and
+/// still writes the lines of the steps that ran, so without it a check would
+/// go green on the legs that ran. Built player [BP] (with the demo gate, as
 /// QA-RIG's qa.bp.*): no per-frame allocation over the reading toggle and the
-/// city look, and that run's camera moves tagged. tools/qa/test_cam_gates.py
-/// checks offline that every line CAM's scenarios write that CAM measures
-/// (its ops' lines and the built-in ops' CAM lines: gc, cameraCheck, the
-/// run's camera) sits under one of these checks, under the line's owner, and
+/// city look, that run's camera moves tagged, the run whole and clean.
+/// Assets/Tests/PlayMode/Cam/Gates~/test_cam_gates.py checks offline that
+/// every line CAM's scenarios write that CAM measures (its ops' lines and the
+/// built-in ops' CAM lines: gc, cameraCheck, the run's camera) sits under one
+/// of these checks, under the line's owner; that every check requires the end
+/// of every run it reads and every run's own lines refuse its run check; and
 /// the reverse: no check here reads a line of another owner (QA-RIG's,
-/// TEXT-LANG's, a plate owner's) but cam.play.deskplan's listed DESK-PLAN and
-/// QA-RIG lines.
+/// TEXT-LANG's, a plate owner's) but the listed ones (each run's last probe
+/// and, in its run check, its own lines; cam.play.deskplan's DESK-PLAN lines
+/// and presses).
 /// </summary>
 public static class CamChecks
 {
@@ -160,14 +168,16 @@ public static class CamChecks
     /// Every camera move of every CAM run is tagged with its cause, and every
     /// impulse stays under its cap (G9; the QA camera logger): each run's own
     /// camera line and each cameraCheck's, in cam_views, cam_chrome, cam_desk
-    /// and cam_gc (the editor runs; the [BP] run's is cam.bp.camera).
+    /// and cam_gc (the editor runs; the [BP] run's is cam.bp.camera), each run
+    /// whole (its last probe).
     /// </summary>
     [GateCheck("cam.play.tags", Owner, GateKind.Play)]
-    public static GateResult Tags() => GateResults.Require("cam.play.tags", Owner, "cam_*.camera*");
+    public static GateResult Tags() =>
+        All("cam.play.tags", Owner, false, "cam_*.camera*", "cam_views.missingScripts.end", "cam_chrome.missingScripts.end", "cam_desk.missingScripts.end", "cam_gc.missingScripts.end");
 
     /// <summary>The scripted day 12 (drops, scans, chip reads, the intercom): the drop tilt at most once per paper landing, never while holding (v2's CAM pass at #6).</summary>
     [GateCheck("cam.play.tilts", Owner, GateKind.Play)]
-    public static GateResult Tilts() => GateResults.Require("cam.play.tilts", Owner, "cam_views.tilts.*");
+    public static GateResult Tilts() => All("cam.play.tilts", Owner, false, "cam_views.tilts.*", "cam_views.missingScripts.end");
 
     /// <summary>
     /// The scripted day 12 ran whole (camplay, v2's CAM pass at #6): every
@@ -178,27 +188,27 @@ public static class CamChecks
     /// QaInput has no right button).
     /// </summary>
     [GateCheck("cam.play.day12", Owner, GateKind.Play)]
-    public static GateResult Day12() => GateResults.Require("cam.play.day12", Owner, "cam_views.play.*");
+    public static GateResult Day12() => All("cam.play.day12", Owner, false, "cam_views.play.*", "cam_views.missingScripts.end");
 
-    /// <summary>Both poses frame what they must at A1-A4, home by home (the reading view: the mat and the deal tray whole, the stamp rack and the intercom 100%, at least 8 x 8 cm of the other in-use side homes; the office view: every shown home ≥98%; the reading view's bottom row on the desk).</summary>
+    /// <summary>Both poses frame what they must at A1-A4, home by home, each leg judged on the view it names (the reading view: the mat and the deal tray whole, the stamp rack and the intercom 100%, at least 8 x 8 cm of the other in-use side homes; the office view: every shown home ≥98%; the reading view's bottom row on the desk).</summary>
     [GateCheck("cam.play.framing", Owner, GateKind.Play)]
-    public static GateResult Framing() => GateResults.Require("cam.play.framing", Owner, "cam_views.frame.*");
+    public static GateResult Framing() => All("cam.play.framing", Owner, false, "cam_views.frame.*", "cam_views.missingScripts.end");
 
     /// <summary>The controls of a view appear only over the last third of the move into it, and at once when motion is still (BUG-32b, 64b).</summary>
     [GateCheck("cam.play.fade", Owner, GateKind.Play)]
-    public static GateResult ControlFade() => GateResults.Require("cam.play.fade", Owner, "cam_views.fade.*");
+    public static GateResult ControlFade() => All("cam.play.fade", Owner, false, "cam_views.fade.*", "cam_views.missingScripts.end");
 
     /// <summary>No view changes while something is held, each view change refused on its own (BUG-55c).</summary>
     [GateCheck("cam.play.hold", Owner, GateKind.Play)]
-    public static GateResult Hold() => GateResults.Require("cam.play.hold", Owner, "cam_views.hold.*");
+    public static GateResult Hold() => All("cam.play.hold", Owner, false, "cam_views.hold.*", "cam_views.missingScripts.end");
 
     /// <summary>The city fills the screen, its parallax moves at most 1 px at 1080p a 30 fps frame, a click and Q return (BUG-42, BUG-69, v2's city exits).</summary>
     [GateCheck("cam.play.city", Owner, GateKind.Play)]
-    public static GateResult City() => GateResults.Require("cam.play.city", Owner, "cam_views.city.*");
+    public static GateResult City() => All("cam.play.city", Owner, false, "cam_views.city.*", "cam_views.missingScripts.end");
 
     /// <summary>Each shake moment draws its own row of the shake table and nothing else shakes; no shake when motion is still; the papers move no more than the cap (GAME_FEEL_BIBLE §1.3).</summary>
     [GateCheck("cam.play.shakes", Owner, GateKind.Play)]
-    public static GateResult Shakes() => GateResults.Require("cam.play.shakes", Owner, "cam_views.shake.*");
+    public static GateResult Shakes() => All("cam.play.shakes", Owner, false, "cam_views.shake.*", "cam_views.missingScripts.end");
 
     /// <summary>
     /// No chrome of CAM's (the pull tabs, the Back control, "◀ City") is drawn
@@ -206,71 +216,111 @@ public static class CamChecks
     /// (BUG-59), with both halves seen in each leg (a held thing, a dragged
     /// decoration placed by its Root; the reading view at rest), every one of
     /// CAM's controls found, and every overlay plate a leg shows was drawn and
-    /// measured (a plate never drawn is a red "not measured" line here). The
-    /// plates' own verdicts are their owners' checks below, so this one goes
-    /// green on CAM's work while they are red.
+    /// measured (a plate never drawn is a red "not measured" line here); every
+    /// leg ran (the run's last probe). The plates' own verdicts are their
+    /// owners' checks below, so this one goes green on CAM's work while they
+    /// are red.
     /// </summary>
     [GateCheck("cam.play.chrome", Owner, GateKind.Play)]
-    public static GateResult Chrome() => GateResults.Require("cam.play.chrome", Owner, "cam_chrome.chrome.*");
+    public static GateResult Chrome() => All("cam.play.chrome", Owner, false, "cam_chrome.chrome.*", "cam_chrome.missingScripts.end");
 
     /// <summary>
     /// CONTENT's guide prompt plate (day 1) covers neither a held thing nor the
     /// reading view's framed work (BUG-59; measured by CAM's camchrome: CAM.md's
-    /// hand-off, the plate over the intercom's top). Red until CONTENT moves it
-    /// (#17): INTEGRATION carries it on the known-red list until then.
+    /// hand-off, the plate over the intercom's top), the cam_chrome run whole.
+    /// Red until CONTENT moves it (#17): INTEGRATION carries it on the
+    /// known-red list until then.
     /// </summary>
     [GateCheck("cam.play.guidePlate", "CONTENT", GateKind.Play)]
-    public static GateResult GuidePlate() => GateResults.Require("cam.play.guidePlate", "CONTENT", "cam_chrome.plate.*.guide");
+    public static GateResult GuidePlate() => All("cam.play.guidePlate", "CONTENT", false, "cam_chrome.plate.*.guide", "cam_chrome.missingScripts.end");
 
     /// <summary>
     /// STAMP's stamp hint plate covers neither a held thing nor the reading
     /// view's framed work (BUG-59; measured by CAM's camchrome in each day-12
-    /// leg: CAM.md's hand-off, the plate over the rack). Red until STAMP moves
-    /// it (#7): INTEGRATION carries it on the known-red list until then.
+    /// leg: CAM.md's hand-off, the plate over the rack), the cam_chrome run
+    /// whole, so a run that stopped before A4 is no pass on the legs that ran.
+    /// Red until STAMP moves it (#7): INTEGRATION carries it on the known-red
+    /// list until then.
     /// </summary>
     [GateCheck("cam.play.stampHint", "STAMP", GateKind.Play)]
-    public static GateResult StampHintPlate() => GateResults.Require("cam.play.stampHint", "STAMP", "cam_chrome.plate.*.stamphint");
+    public static GateResult StampHintPlate() => All("cam.play.stampHint", "STAMP", false, "cam_chrome.plate.*.stamphint", "cam_chrome.missingScripts.end");
 
-    /// <summary>The cap heights of the desk's printed text were measured at CAM's reading pose, A1 and A2 on day 12, once the scripted day has laid its papers on the desk (the desk plan's §6 smoke; a report: the pass on the heights is DOC-LOOK's at #9; red only when nothing could be measured).</summary>
+    /// <summary>The cap heights of the desk's printed text were measured at CAM's reading pose (camcap refuses any other view), A1 and A2 on day 12, once the scripted day has laid its papers on the desk (the desk plan's §6 smoke; a report: the pass on the heights is DOC-LOOK's at #9; red only when nothing could be measured).</summary>
     [GateCheck("cam.play.capreport", Owner, GateKind.Play)]
-    public static GateResult CapReport() => GateResults.Require("cam.play.capreport", Owner, "cam_views.capreport.*");
+    public static GateResult CapReport() => All("cam.play.capreport", Owner, false, "cam_views.capreport.*", "cam_views.missingScripts.end");
 
     /// <summary>
     /// DESK-PLAN's homes at A3 and A4 (FIX_PLAN v1: "DESK-PLAN at A3 and A4
     /// (deferred to here)"): every kept object ≥90% seen (DESK-PLAN's
     /// visible lines) and its centre click reaching it (QA-RIG's presses), the
     /// intercom opening the wheel from the reading view with the view kept
-    /// (DESK-PLAN's expect lines), and the run reaching its last probe (its
-    /// scripts and materials, QA-RIG's), so a run that stops early fails. Only
-    /// these: the run's other lines are their owners' (its camera lines
-    /// cam.play.tags; its LiberationSans probe TEXT-LANG's, known red until
-    /// #12), as qa.play.smoke and RUN-SAFE's checks (fa5a045) read theirs.
+    /// (DESK-PLAN's expect lines), and the run reaching its last probe, so a
+    /// run that stops early fails. The run's console, quality and materials
+    /// are <see cref="RunDesk"/>'s, its camera lines cam.play.tags', and its
+    /// LiberationSans probe TEXT-LANG's (known red until #12): no CAM check
+    /// reads that one.
     /// </summary>
     [GateCheck("cam.play.deskplan", Owner, GateKind.Play)]
     public static GateResult DeskPlanWide() =>
-        All("cam.play.deskplan", "cam_desk.visible.*", "cam_desk.expect.*", "cam_desk.presses", "cam_desk.missingScripts.end", "cam_desk.materials.end");
+        All("cam.play.deskplan", Owner, false, "cam_desk.visible.*", "cam_desk.expect.*", "cam_desk.presses", "cam_desk.missingScripts.end");
+
+    /// <summary>
+    /// The cam_views run ran whole and clean, its own lines read as RUN-SAFE's
+    /// checks read their runs' (RunSafeChecks.RunPatterns) and qa.play.smoke
+    /// the smoke day's: its console (no error or exception logged during it,
+    /// from CameraFeel, CityView, DeskView or the rig), every press reaching
+    /// its target under the pointer, the player's quality level (BUG-53), and
+    /// its last probe reached with no missing script or broken material. These
+    /// lines are QA-RIG's, read on purpose (before round 7 an error logged in a
+    /// CAM run refused no gate). Every other check that reads this run also
+    /// requires its last probe: QaRunner.Run stops at the first step that
+    /// throws and still writes the lines of the steps that ran.
+    /// </summary>
+    [GateCheck("cam.play.run.views", Owner, GateKind.Play)]
+    public static GateResult RunViews() =>
+        All("cam.play.run.views", Owner, false, "cam_views.console", "cam_views.presses", "cam_views.quality", "cam_views.missingScripts.end", "cam_views.materials.end");
+
+    /// <summary>The cam_chrome run ran whole and clean: its console, presses, quality and last probe, as <see cref="RunViews"/>.</summary>
+    [GateCheck("cam.play.run.chrome", Owner, GateKind.Play)]
+    public static GateResult RunChrome() =>
+        All("cam.play.run.chrome", Owner, false, "cam_chrome.console", "cam_chrome.presses", "cam_chrome.quality", "cam_chrome.missingScripts.end", "cam_chrome.materials.end");
+
+    /// <summary>The cam_desk run ran whole and clean: its console, presses, quality and last probe, as <see cref="RunViews"/>.</summary>
+    [GateCheck("cam.play.run.desk", Owner, GateKind.Play)]
+    public static GateResult RunDesk() =>
+        All("cam.play.run.desk", Owner, false, "cam_desk.console", "cam_desk.presses", "cam_desk.quality", "cam_desk.missingScripts.end", "cam_desk.materials.end");
+
+    /// <summary>The cam_gc run in the editor ran whole and clean: its console, presses, quality and last probe, as <see cref="RunViews"/> (its gc line counts the editor's own allocations and is no verdict: cam.bp.gc's).</summary>
+    [GateCheck("cam.play.run.gc", Owner, GateKind.Play)]
+    public static GateResult RunGc() =>
+        All("cam.play.run.gc", Owner, false, "cam_gc.console", "cam_gc.presses", "cam_gc.quality", "cam_gc.missingScripts.end", "cam_gc.materials.end");
 
     /// <summary>
     /// [BP] No per-frame allocation from DeskView, CameraFeel or CityView: the
     /// reading toggle and the city look cycled under cam_gc's gc window on the
     /// QA player, 0 B a frame (BUG-65e, 73e; FIX_PLAN's "0 B/frame from ...
-    /// DeskView [BP]"; recipe 10, run_player.py). The editor run's own gc line
-    /// counts the editor's allocations and is no verdict. With the demo gate,
-    /// as QA-RIG's qa.bp.* ([BP] gates run on the scratch build, not at each
-    /// merge).
+    /// DeskView [BP]"; recipe 10, run_player.py), the run whole. The editor
+    /// run's own gc line counts the editor's allocations and is no verdict.
+    /// With the demo gate, as QA-RIG's qa.bp.* ([BP] gates run on the scratch
+    /// build, not at each merge).
     /// </summary>
     [GateCheck("cam.bp.gc", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
-    public static GateResult BuiltPlayerGc() => GateResults.Require("cam.bp.gc", Owner, "bp.cam_gc.gc.*", true);
+    public static GateResult BuiltPlayerGc() => All("cam.bp.gc", Owner, true, "bp.cam_gc.gc.*", "bp.cam_gc.missingScripts.end");
 
-    /// <summary>[BP] The cam_gc run on the QA player tagged every camera move (its run's camera line; the editor runs' are cam.play.tags).</summary>
+    /// <summary>[BP] The cam_gc run on the QA player tagged every camera move (its run's camera line; the editor runs' are cam.play.tags), the run whole.</summary>
     [GateCheck("cam.bp.camera", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
-    public static GateResult BuiltPlayerCamera() => GateResults.Require("cam.bp.camera", Owner, "bp.cam_*.camera*", true);
+    public static GateResult BuiltPlayerCamera() => All("cam.bp.camera", Owner, true, "bp.cam_*.camera*", "bp.cam_gc.missingScripts.end");
 
-    /// <summary>One play check over several result patterns: each must be measured, green and current (GateResults.Require for each).</summary>
-    private static GateResult All(string id, params string[] patterns)
+    /// <summary>[BP] The cam_gc run on the QA player ran whole and clean: its console, presses and last probe, as QA-RIG's qa.bp.smoke reads its run's (a player's run asserts no quality level: run_player.py checks the build's).</summary>
+    [GateCheck("cam.bp.run.gc", Owner, GateKind.BuiltPlayer, DemoOnly = true)]
+    public static GateResult BuiltPlayerRunGc() =>
+        All("cam.bp.run.gc", Owner, true, "bp.cam_gc.console", "bp.cam_gc.presses", "bp.cam_gc.missingScripts.end", "bp.cam_gc.materials.end");
+
+    /// <summary>One check over several result patterns, under <paramref name="owner"/> (built-player results only with <paramref name="builtPlayer"/>): each must be measured, green and current (GateResults.Require for each).</summary>
+    private static GateResult All(string id, string owner, bool builtPlayer, params string[] patterns)
     {
-        List<GateResult> parts = patterns.Select(p => GateResults.Require(id, Owner, p)).ToList();
-        return GateResult.Of(id, Owner, parts.All(r => r.Pass), string.Join("; ", patterns.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
+        List<GateResult> parts = patterns.Select(p => GateResults.Require(id, owner, p, builtPlayer)).ToList();
+        return GateResult.Of(id, owner, parts.All(r => r.Pass), string.Join("; ", patterns.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
                              string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
     }
 }

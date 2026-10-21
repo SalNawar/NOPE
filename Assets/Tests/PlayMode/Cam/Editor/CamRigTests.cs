@@ -7,7 +7,7 @@ using UnityEngine;
 
 /// <summary>
 /// CAM's rig verdicts that need no Unity (CamOps; docs/pending/CAM.md,
-/// rounds 4 to 6): a private collection is counted whatever its type (a
+/// rounds 4 to 7): a private collection is counted whatever its type (a
 /// HashSet is no non-generic ICollection, so the chip read's "came back out"
 /// wait never saw the reader's set), and a chip read counts only once its
 /// paper is out (ChipReadOf); a chrome leg's whole report, from what its
@@ -17,9 +17,10 @@ using UnityEngine;
 /// gate, and a half of the leg that was never seen (nothing held, the
 /// reading view never at rest) or a control not found fails CAM's line; and
 /// how the watch places a held thing that is no Component (HeldMember: a
-/// dragged decoration by its Root). Pure (types and values only, no Unity
-/// object made); in CAM's own Editor folder (Assembly-CSharp-Editor, the
-/// editor runner's).
+/// dragged decoration by its Root); and the view a framing leg names
+/// (ReadingLeg: camframe judges a leg only on that view). Pure (types and
+/// values only, no Unity object made); in CAM's own Editor folder
+/// (Assembly-CSharp-Editor, the editor runner's).
 /// </summary>
 public class CamRigTests
 {
@@ -187,6 +188,19 @@ public class CamRigTests
         Assert.AreEqual(CamOps.ChipRead.Refused, CamOps.ChipReadOf(false, true));
         Assert.AreEqual(CamOps.ChipRead.Stuck, CamOps.ChipReadOf(true, false), "a read whose paper never came out is no read (play.<name> red: reads < f)");
         Assert.AreEqual(CamOps.ChipRead.Read, CamOps.ChipReadOf(true, true));
+    }
+
+    [Test]
+    public void ReadingLeg_ReadsTheViewTheFramingLegNames_AndRefusesAMissingOrUnknownView()
+    {
+        Assert.IsTrue(CamOps.ReadingLeg("reading"), "a *_reading leg is judged on the reading view's criteria, with its .bottom line");
+        Assert.IsFalse(CamOps.ReadingLeg("office"));
+        Assert.IsTrue(CamOps.ReadingLeg(" reading "));
+        Assert.AreEqual(CamOps.ShowsReading, "reading", "the same word as a chrome leg's reading half");
+        Assert.Throws<InvalidOperationException>(() => CamOps.ReadingLeg(null), "a leg that names no view would be judged on whichever view is on");
+        Assert.Throws<InvalidOperationException>(() => CamOps.ReadingLeg(string.Empty));
+        Assert.Throws<InvalidOperationException>(() => CamOps.ReadingLeg("city"), "camframe frames the desk's two poses only");
+        Assert.Throws<InvalidOperationException>(() => CamOps.ReadingLeg("Reading"), "a typo must not pick a view silently");
     }
 
     private sealed class OwnerFirst : IHoldable
