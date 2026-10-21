@@ -994,10 +994,11 @@ public sealed class DeskStampTray : MonoBehaviour
     /// desk's plane straight under the die: nothing stands under the die's
     /// footprint (its dater's click box across, DieHalf without one) higher
     /// than DeskClear, neither the rack's box (StampTarget.Overlaps on its
-    /// meshes' bounds; it has no collider) nor any collider but the dater's
-    /// own (a machine, a prop, the other dater). False without a die.
-    /// DOC-HANDLE's DeskObstacles may replace the collider look once it has
-    /// a desk instance.
+    /// meshes' bounds; it has no collider), nor a machine's casing (the chip
+    /// reader's and the scanner's IPaperDock.Casing: the reader's body has a
+    /// collider only over its readout), nor any collider but the dater's own
+    /// (a prop, the other dater). False without a die. DOC-HANDLE's
+    /// DeskObstacles may replace these looks once it has a desk instance.
     /// </summary>
     private bool BareDeskUnder(Handle handle, out Vector3 floor)
     {
@@ -1015,6 +1016,12 @@ public sealed class DeskStampTray : MonoBehaviour
             if (StampTarget.Overlaps(local.x, local.z, half / scale, box.min.x, box.max.x, box.min.z, box.max.z))
                 return false;
         }
+        foreach (IPaperDock machine in Machines())
+        {
+            MachineBox casing = machine.Casing;
+            if (Height(new Vector3(floor.x, casing.Top, floor.z)) > DeskClear && casing.Over(floor.x, floor.z, half))
+                return false;
+        }
         float column = dieHeight - DeskClear;
         if (column <= 0f)
             return true;
@@ -1025,6 +1032,17 @@ public sealed class DeskStampTray : MonoBehaviour
             if (own == null || !_standing[i].transform.IsChildOf(own))
                 return false;
         return true;
+    }
+
+    /// <summary>The desk's machines standing on it now (the chip reader and the scanner, as IPaperDock), looked up at a let-go: a rare moment, and the day's upgrades bring machines and take them away, so no list is kept.</summary>
+    private static IEnumerable<IPaperDock> Machines()
+    {
+        foreach (ChipReader reader in FindObjectsByType<ChipReader>(FindObjectsSortMode.None))
+            if (reader.OnDesk)
+                yield return reader;
+        foreach (DeskScanner scanner in FindObjectsByType<DeskScanner>(FindObjectsSortMode.None))
+            if (scanner.OnDesk)
+                yield return scanner;
     }
 
     /// <summary>The half-width of <paramref name="handle"/>'s footprint on the desk (metres): its click box's wider side, or DieHalf without one.</summary>
