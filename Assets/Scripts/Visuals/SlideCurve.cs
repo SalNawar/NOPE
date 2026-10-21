@@ -13,8 +13,9 @@ using System;
 /// bounce off the home stop starting on that arrival frame.</item>
 /// <item>Retract (the hand-off loser): an ease-in-out (quad) home, no seat.</item>
 /// <item>A lift's squash (px of height over the anticipation, released as it
-/// rises), the secondary sway at the stop (px), the contact shadows and the
-/// lamp's pulse.</item>
+/// rises), the secondary sway at the stop (px) and the contact shadows, each
+/// shadow carrying on from the alpha it had when its phase began, so nothing
+/// pops (Saleh: everything animated, nothing pops).</item>
 /// </list>
 /// Pure; ProximityAssist evaluates it per slider and phase.
 /// </summary>
@@ -36,6 +37,26 @@ public static class SlideCurve
     }
 
     /// <summary>
+    /// The position <paramref name="t"/> seconds after a slide out that
+    /// starts from <paramref name="start"/> (where the slider stood when it
+    /// was summoned): from home or on its way, the out spring over what is
+    /// left of the travel; from behind home (a track caught in its
+    /// anticipation, retracting from it), it eases from there into this out's
+    /// anticipation over the anticipation's time, never deeper than the
+    /// deeper of the two, then springs on as a fresh out. Equal to
+    /// <paramref name="start"/> on its first frame: no pop.
+    /// </summary>
+    public static float OutFrom(DeskSlides slides, DeskSlider s, float t, float start)
+    {
+        float o = Out(slides, s, t);
+        if (start >= 0f)
+            return start + (1f - start) * o;
+        float ta = slides.anticipationSeconds;
+        float w = t <= 0f ? 0f : t >= ta ? 1f : (1f - (float)Math.Cos(Math.PI * t / ta)) / 2f;
+        return o + start * (1f - w);
+    }
+
+    /// <summary>
     /// The position <paramref name="t"/> seconds into <paramref name="s"/>'s way
     /// home from <paramref name="start"/>: an ease-in (cubic) that arrives at
     /// full speed (three times the mean) at DeskSlides.backSeconds, then the
@@ -47,13 +68,17 @@ public static class SlideCurve
         if (t <= 0f)
             return start;
         if (t < tb)
-        {
-            float u = t / tb;
-            return start * (1f - u * u * u);
-        }
+            return WayHome(start, t / tb);
         if (t < tb + seat)
             return s.seat * (float)Math.Sin(Math.PI * (t - tb) / seat);
         return 0f;
+    }
+
+    /// <summary>The way home's ease-in (cubic) from <paramref name="start"/> at <paramref name="u"/> of its way (0 to 1): it leaves gently and arrives at three times its mean speed.</summary>
+    public static float WayHome(float start, float u)
+    {
+        u = Clamp01(u);
+        return start * (1f - u * u * u);
     }
 
     /// <summary>The hand-off loser's position <paramref name="t"/> seconds into its retract from <paramref name="start"/>: an ease-in-out (quad) home over DeskSlides.retractSeconds, no seat.</summary>
@@ -104,17 +129,19 @@ public static class SlideCurve
         return (alpha, slides.liftShadowBlurPx + slides.liftShadowBlurPerPx * px, 1f + slides.liftShadowWidenPerPx * px);
     }
 
-    /// <summary>A track's contact shadow <paramref name="t"/> seconds after its trigger: it leaves the well with the base as the anticipation ends, fading in to trackShadowAlpha over trackShadowIn.</summary>
-    public static float TrackShadowOut(DeskSlides slides, float t) =>
-        slides.trackShadowAlpha * Clamp01((t - slides.anticipationSeconds) / Math.Max(1e-4f, slides.trackShadowIn));
+    /// <summary>A track's contact shadow <paramref name="t"/> seconds after its trigger, from the alpha it had then (<paramref name="from"/>; 0 from home): it leaves the well with the base as the anticipation ends, fading in to trackShadowAlpha over trackShadowIn.</summary>
+    public static float TrackShadowOut(DeskSlides slides, float t, float from) =>
+        from + (slides.trackShadowAlpha - from) * Clamp01((t - slides.anticipationSeconds) / Math.Max(1e-4f, slides.trackShadowIn));
 
-    /// <summary>A track's contact shadow <paramref name="t"/> seconds into its way home: full until it arrives, then fading out over trackShadowOut as the base re-enters its well.</summary>
-    public static float TrackShadowBack(DeskSlides slides, float t) =>
-        t < slides.backSeconds ? slides.trackShadowAlpha : slides.trackShadowAlpha * Math.Max(0f, 1f - (t - slides.backSeconds) / Math.Max(1e-4f, slides.trackShadowOut));
+    /// <summary>A track's contact shadow <paramref name="t"/> seconds into its way home, from the alpha it had then (<paramref name="from"/>): held until it arrives, then fading out over trackShadowOut as the base re-enters its well.</summary>
+    public static float TrackShadowBack(DeskSlides slides, float t, float from) =>
+        t < slides.backSeconds ? from : Fade(from, t - slides.backSeconds, slides.trackShadowOut);
 
-    /// <summary>A track's contact shadow <paramref name="t"/> seconds into a hand-off retract: fading out over the retract.</summary>
-    public static float TrackShadowRetract(DeskSlides slides, float t) =>
-        slides.trackShadowAlpha * Math.Max(0f, 1f - t / Math.Max(1e-4f, slides.retractSeconds));
+    /// <summary>A track's contact shadow <paramref name="t"/> seconds into a hand-off retract, from the alpha it had then (<paramref name="from"/>): fading out over the retract.</summary>
+    public static float TrackShadowRetract(DeskSlides slides, float t, float from) => Fade(from, t, slides.retractSeconds);
+
+    /// <summary><paramref name="from"/> released to nothing linearly over <paramref name="over"/> seconds, <paramref name="t"/> seconds on (a squash, a sway or a shadow carried over a change of phase, so it never pops).</summary>
+    public static float Fade(float from, float t, float over) => t <= 0f ? from : from * Math.Max(0f, 1f - t / Math.Max(1e-4f, over));
 
     /// <summary>A tip of <paramref name="s"/> at position <paramref name="f"/> (degrees): its full tip at the slid spot, in proportion along the way (none for a slider that does not tip).</summary>
     public static float Tip(DeskSlider s, float f) => s.tipDegrees * Math.Max(0f, f);

@@ -8,7 +8,9 @@ using NUnit.Framework;
 /// bounce starts on that frame; the hand-off loser eases home gently in 130 ms
 /// and is nearly seated before then; a lift squashes over the anticipation;
 /// the intercom's mic sways at the stop; a lift's shadow stays at its rest
-/// footprint, fading and widening.
+/// footprint, fading and widening; a slide out from where a slider stands
+/// (behind home too) starts there, and every shadow carries on from the alpha
+/// it had.
 /// </summary>
 public class SlideCurveTests
 {
@@ -115,13 +117,44 @@ public class SlideCurveTests
     }
 
     [Test]
-    public void ATracksShadow_LeavesTheWellWithTheBase_AndFadesAsItReentersIt()
+    public void ATracksShadow_LeavesTheWellWithTheBase_AndFadesAsItReentersIt_FromTheAlphaItHad()
     {
-        Assert.AreEqual(0f, SlideCurve.TrackShadowOut(Slides, Slides.anticipationSeconds), 1e-6f, "the base still in its well");
-        Assert.AreEqual(Slides.trackShadowAlpha, SlideCurve.TrackShadowOut(Slides, Slides.anticipationSeconds + Slides.trackShadowIn), 1e-6f);
-        Assert.AreEqual(Slides.trackShadowAlpha, SlideCurve.TrackShadowBack(Slides, Slides.backSeconds - 0.01f), 1e-6f);
-        Assert.AreEqual(0f, SlideCurve.TrackShadowBack(Slides, Slides.backSeconds + Slides.trackShadowOut), 1e-6f, "gone 60 ms after the seat");
-        Assert.AreEqual(0f, SlideCurve.TrackShadowRetract(Slides, Slides.retractSeconds), 1e-6f);
+        Assert.AreEqual(0f, SlideCurve.TrackShadowOut(Slides, Slides.anticipationSeconds, 0f), 1e-6f, "the base still in its well");
+        Assert.AreEqual(Slides.trackShadowAlpha, SlideCurve.TrackShadowOut(Slides, Slides.anticipationSeconds + Slides.trackShadowIn, 0f), 1e-6f);
+        Assert.AreEqual(Slides.trackShadowAlpha, SlideCurve.TrackShadowBack(Slides, Slides.backSeconds - 0.01f, Slides.trackShadowAlpha), 1e-6f);
+        Assert.AreEqual(0f, SlideCurve.TrackShadowBack(Slides, Slides.backSeconds + Slides.trackShadowOut, Slides.trackShadowAlpha), 1e-6f, "gone 60 ms after the seat");
+        Assert.AreEqual(0f, SlideCurve.TrackShadowRetract(Slides, Slides.retractSeconds, Slides.trackShadowAlpha), 1e-6f);
+        Assert.AreEqual(0.044f, SlideCurve.TrackShadowRetract(Slides, 0f, 0.044f), 1e-6f, "a hand-off on the fade-in's second frame starts from that frame's alpha (the review: 0.044 to 0.35)");
+        Assert.AreEqual(Slides.trackShadowAlpha, SlideCurve.TrackShadowOut(Slides, 0f, Slides.trackShadowAlpha), 1e-6f, "summoned again on its way home: it stays (the review: 0.35 to 0)");
+        Assert.AreEqual(0.5f, SlideCurve.Fade(1f, 0.03f, 0.06f), 1e-6f, "a carried channel releases linearly");
+        Assert.AreEqual(0f, SlideCurve.Fade(1f, 0.07f, 0.06f), 1e-6f);
+    }
+
+    [Test]
+    public void ASlideOut_StartsWhereTheSliderStands_AndFromBehindHomeNeverDipsDeeperThanItsAnticipation()
+    {
+        DeskSlider scanner = S(DeskHomeMap.Scanner);
+        float frame = 1f / 60f;
+        foreach (float start in new[] { 0f, 0.4f, -0.05f, -0.117f, -scanner.anticipation })
+        {
+            Assert.AreEqual(start, SlideCurve.OutFrom(Slides, scanner, 0f, start), 1e-6f, $"from {start}: no pop on its first frame");
+            float deepest = 0f, step = 0f;
+            for (int i = 1; i < 40; i++)
+            {
+                float a = SlideCurve.OutFrom(Slides, scanner, (i - 1) * frame, start), b = SlideCurve.OutFrom(Slides, scanner, i * frame, start);
+                deepest = Math.Min(deepest, b);
+                step = Math.Max(step, Math.Abs(b - a) * scanner.travelPx);
+            }
+            Assert.GreaterOrEqual(deepest, Math.Min(start, 0f) - scanner.anticipation - 1e-5f, $"from {start}");
+            if (start < 0f)
+                Assert.GreaterOrEqual(deepest, -scanner.anticipation - 1e-5f, $"from {start}: behind home it eases into this out's anticipation, never deeper");
+            Assert.AreEqual(1f, SlideCurve.OutFrom(Slides, scanner, 0.6f, start), 0.02f, $"from {start}: out at its slid spot");
+            Assert.Less(step, 7f, $"from {start}: no frame faster than the slide out's own");
+        }
+        Assert.AreEqual(SlideCurve.Out(Slides, scanner, 0.1f), SlideCurve.OutFrom(Slides, scanner, 0.1f, 0f), 1e-6f, "from home it is the slide out");
+        Assert.AreEqual(1f, SlideCurve.WayHome(1f, 0f), 1e-6f);
+        Assert.AreEqual(0f, SlideCurve.WayHome(1f, 1f), 1e-6f);
+        Assert.AreEqual(1f - 0.125f, SlideCurve.WayHome(1f, 0.5f), 1e-6f, "the way home's ease-in (cubic)");
     }
 
     [Test]

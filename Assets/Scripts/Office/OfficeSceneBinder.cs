@@ -894,15 +894,21 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     /// <summary>
     /// The slide-in (desk v3, Saleh: "yes but they need to slide"; DESK-HOMES):
-    /// the desk's DeskSlideIn on the office camera with the plan's slides, and
-    /// today's sliders on their homes, each from where it stands: the gameplay
-    /// scanner (an art office's own scanner stays put: its meshes are the
-    /// art's) and the chip reader, busy while they scan or read; the intercom
-    /// when it is the built stand-in (the art's phone is several parts, open
-    /// call 1); the BABEL rack, the Rolodex and the protocol cards; the UV
-    /// torch's body, a layer over the pose UvTorch gives it, giving way when
-    /// it is picked up. The daters (STAMP), the glasses (GLASSES) and the
-    /// rulebook (the pocket) attach themselves through MachineSlideIn.Attach.
+    /// the desk's DeskSlideIn on the office camera with the plan's slides and
+    /// homes (nothing near while the PC is open; the forced retract when the
+    /// desk closes: GameManager.Desk.IsClosed; the contact shadows in the
+    /// papers' own shadow material, the rulebook's), today's sliders on their
+    /// homes, each from where it stands: the gameplay scanner (an art office's
+    /// own scanner stays put: its meshes are the art's), busy while its
+    /// outside shows it occupied (Occupied), and the chip reader, busy while it
+    /// reads, each the dock its paper rides home from; the intercom when it is
+    /// the built stand-in and its home declares a slide (the art's phone is
+    /// several parts, open call 1); the BABEL rack, the Rolodex and the
+    /// protocol cards; the UV torch's body, a layer over the pose UvTorch gives
+    /// it, giving way when it is picked up. The daters (STAMP), the glasses
+    /// (GLASSES) and the rulebook (the pocket) attach themselves through
+    /// MachineSlideIn.Attach. Then the D6 framing focus (FramingFocus) on the
+    /// reading view.
     /// </summary>
     private void BindSlideIn(Transform intercomStandIn)
     {
@@ -910,12 +916,17 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             return;
         if (!TryGetComponent(out DeskSlideIn slideIn))
             slideIn = gameObject.AddComponent<DeskSlideIn>();
-        slideIn.Bind(_office, config.layout.slides, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked);
+        Transform paperShadow = rulebook != null ? Descendant(rulebook.transform, "Shadow") : null;
+        Material shadow = paperShadow != null && paperShadow.TryGetComponent(out Renderer shade) ? shade.sharedMaterial : null;
+        if (shadow == null)
+            Debug.LogWarning("[OfficeSceneBinder] The rulebook has no Shadow part (Build Office UI's PaperDepth shadow), so the slide-in draws no contact shadows.", this);
+        DeskSlides slides = config.layout.slides;
+        slideIn.Bind(_office, slides, config.layout.homes, desk, () => (frame != null && frame.IsOpen) || InputGate.Blocked, () => game != null && game.Desk.IsClosed, shadow);
         if (scanner != null && DeskLayout.ObjectOf(DeskHomeMap.Scanner) == scanner.transform)
-            MachineSlideIn.Attach(DeskHomeMap.Scanner, scanner.transform, busy: ScanRunning(scanner.transform));
+            MachineSlideIn.Attach(DeskHomeMap.Scanner, scanner.transform, busy: Occupied(scanner.transform, slides), dock: scanner);
         ChipReader reader = hardware != null ? hardware.Reader : null;
         if (reader != null)
-            MachineSlideIn.Attach(DeskHomeMap.ChipReader, reader.transform, busy: () => reader.Busy);
+            MachineSlideIn.Attach(DeskHomeMap.ChipReader, reader.transform, busy: () => reader.Busy, dock: reader);
         if (intercomStandIn != null)
             MachineSlideIn.Attach(DeskHomeMap.Intercom, intercomStandIn);
         foreach (string id in new[] { DeskHomeMap.BabelTuner, DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing })
@@ -924,19 +935,30 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
             MachineSlideIn.Attach(DeskHomeMap.UvTorch, torch.transform, body, layered: true, taken: () => torch.Held);
+        if (!TryGetComponent(out FramingFocus focus))
+            focus = gameObject.AddComponent<FramingFocus>();
+        focus.Bind(slideIn, deskView, _office, desk);
     }
 
     /// <summary>
-    /// True while the scanner runs a scan: its sweep bar or its lid's light
-    /// shows (DeskScanner.Sweep shows them only then; the scanner art's
-    /// "SweepBar" and the builder's "Spill"). A stand-in read of the scan's
-    /// own light until DOC-HANDLE exposes the scanner's state (DeskScanner
-    /// keeps it private); docs/pending/DESK-V3.md hands it over.
+    /// The scanner's occupancy as its outside shows it (SlideOccupancy): its
+    /// scan light (the art's "SweepBar", the builder's "Spill": DeskScanner
+    /// shows them only while a scan runs) and its "Lid" standing open past
+    /// DeskSlides.lidOpenDegrees from where it rests now (shut), while no
+    /// paper is held: a queued or Auto-Fed paper carried onto the bed (the
+    /// sweep hides while it slides) and the moments after a scan when the next
+    /// may follow. A stand-in read until DOC-HANDLE exposes the scanner's own
+    /// state (DeskScanner keeps it private); docs/pending/DESK-V3.md hands it
+    /// over.
     /// </summary>
-    private static Func<bool> ScanRunning(Transform scanner)
+    private Func<bool> Occupied(Transform scanner, DeskSlides slides)
     {
-        Transform bar = Descendant(scanner, "SweepBar"), spill = Descendant(scanner, "Spill");
-        return () => (bar != null && bar.gameObject.activeInHierarchy) || (spill != null && spill.gameObject.activeInHierarchy);
+        Transform bar = Descendant(scanner, "SweepBar"), spill = Descendant(scanner, "Spill"), lid = Descendant(scanner, "Lid");
+        Quaternion shut = lid != null ? lid.localRotation : Quaternion.identity;
+        var occupancy = new SlideOccupancy();
+        return () => occupancy.Step((bar != null && bar.gameObject.activeInHierarchy) || (spill != null && spill.gameObject.activeInHierarchy),
+                                    lid != null && Quaternion.Angle(lid.localRotation, shut) > slides.lidOpenDegrees,
+                                    desk != null && desk.IsDragging);
     }
 
     /// <summary>The first descendant of <paramref name="root"/> (not itself) named <paramref name="name"/>, or null.</summary>

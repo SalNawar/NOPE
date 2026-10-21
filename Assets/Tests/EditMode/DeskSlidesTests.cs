@@ -12,7 +12,9 @@ using NUnit.Framework;
 /// in tools/props/desk/slides.json, so the tests hold the gate's own numbers),
 /// their curves play the gate's frames, every track keeps its felt and every
 /// slider its lamps clear (the chip reader 3 px at its peak), they agree with
-/// the desk home map, and a slider's obstacle is its swept footprint.
+/// the desk home map (a track slides the way its home declares: the map is
+/// the one source of the direction), and a home's obstacle is its footprint
+/// swept by its tracks and raised by its lifts.
 /// </summary>
 public class DeskSlidesTests
 {
@@ -67,8 +69,12 @@ public class DeskSlidesTests
             Assert.AreEqual(Num(g, "travel"), s.travel, 1e-6f, id);
             if (s.kind == SlideKind.Track)
             {
-                Assert.AreEqual(Num(g.Get("dir").Items[0]), s.dirX, 1e-6f, id);
-                Assert.AreEqual(Num(g.Get("dir").Items[1]), s.dirY, 1e-6f, id);
+                Assert.AreEqual(0f, Num(g.Get("dir").Items[1]), 1e-6f, id + ": sideways along the desk");
+                float way = s.Way(DeskHomeMap.Find(DeskHomeMap.Approved(), s.Home));
+                if (way != 0f)
+                    Assert.AreEqual(Num(g.Get("dir").Items[0]), way, 1e-6f, id + ": the home map declares the way the pipeline slides it");
+                else
+                    Assert.AreEqual(DeskHomeMap.Intercom, id, "only the intercom waits for its home to declare its slide (DESK-PLAN's open call)");
                 Assert.AreEqual(Num(g, "track_cut"), s.trackCut, 1e-6f, id);
                 ContentNode clearance = g.Get("clearance");
                 float felt = clearance.Kind == ContentNodeKind.Null ? 0f : Num(clearance.Get("rest"), "cm") / 100f;
@@ -188,27 +194,26 @@ public class DeskSlidesTests
             new DeskHome("declared", -1f, 0f, 0.2f, 0.2f, 0f, 0.1f, HomeShow.Always, HomeSlide.Right),
             new DeskHome("pouch", -1f, -0.5f, 0.2f, 0.2f, 0f, 0.1f, HomeShow.Always),
         };
-        DeskSlider Good(string id, float dirX) => new DeskSlider(id, null, SlideKind.Track, dirX, 0f, 0.03f)
+        DeskSlider Good(string id) => new DeskSlider(id, null, SlideKind.Track, 0.03f)
         {
             trackCut = 0.045f, feltAtRest = 0.05f, travelPx = 15f, anticipation = 0.2f, overshoot = 0.2f, seat = 0.15f, damping = 0.495f, peakSeconds = 0.18f,
         };
-        DeskSlider wrongWay = Good("left", 1f);
-        DeskSlider far = Good("pouch", -1f);
+        DeskSlider far = Good("pouch");
         far.travel = 0.08f;
         far.trackCut = 0.06f;
-        DeskSlider pastFelt = Good("pastFelt", -1f);
+        DeskSlider pastFelt = Good("pastFelt");
         pastFelt.home = "left";
         pastFelt.feltAtRest = 0.03f;
-        DeskSlider stiff = new DeskSlider("stiff", "pouch", SlideKind.Lift, 0f, 0f, 0.01f) { travelPx = 4f, overshoot = 0.2f, damping = 1.2f, peakSeconds = 0.3f };
+        DeskSlider stiff = new DeskSlider("stiff", "pouch", SlideKind.Lift, 0.01f) { travelPx = 4f, overshoot = 0.2f, damping = 1.2f, peakSeconds = 0.3f };
         var slides = new DeskSlides
         {
-            sliders = new[] { wrongWay, Good("left", -1f), far, pastFelt, stiff, new DeskSlider("nowhere", null, SlideKind.Lift, 0f, 0f, 0.01f) },
+            sliders = new[] { Good("left"), Good("left"), far, pastFelt, stiff, new DeskSlider("nowhere", null, SlideKind.Lift, 0.01f) },
             winnerAfter = 0.2f,
             winnerBelow = 0.6f,
+            focusAim = 0.1f,
         };
         string all = string.Join("\n", slides.Problems(homes, 0.06f));
         StringAssert.Contains("'left' is listed twice", all);
-        StringAssert.Contains("'left' slides Right but its home declares Left", all);
         StringAssert.Contains("'pouch' slides 8.0 cm, further than 6.0 cm", all);
         StringAssert.Contains("'pouch' overshoots to 9.60 cm, out of its 6.0 cm painted track", all);
         StringAssert.Contains("'pastFelt' overshoots to 3.60 cm, past its felt gap at 2.60 cm", all);
@@ -218,25 +223,53 @@ public class DeskSlidesTests
         StringAssert.Contains("'declared' declares a slide but no track slides it", all);
         StringAssert.Contains("waits up to 0.2 s", all);
         StringAssert.Contains("below 0.6 of the loser's travel", all);
+        StringAssert.Contains("aims 0.1 of the view", all);
+        StringAssert.DoesNotContain("'pouch' declares", all, "a track resting in a home that declares no slide is no fault: it stays put until the map declares one");
     }
 
     [Test]
-    public void AnObstacle_IsTheFootprintSweptToThePeak_OrALiftsRaisedTop()
+    public void ATrack_SlidesTheWayItsHomeDeclares_AndStaysPutWhileItsHomeDeclaresNone()
     {
         DeskSlides slides = DeskSlides.Approved();
-        var foot = new DeskRect(1f, 0f, 0.4f, 0.3f);
+        DeskHome[] homes = DeskHomeMap.Approved();
+        DeskSlider scanner = slides.Find(DeskHomeMap.Scanner), tuner = slides.Find(DeskHomeMap.BabelTuner), intercom = slides.Find(DeskHomeMap.Intercom);
+        Assert.AreEqual(-1f, scanner.Way(DeskHomeMap.Find(homes, DeskHomeMap.Scanner)), "right of the mat: left toward it");
+        Assert.AreEqual(1f, tuner.Way(DeskHomeMap.Find(homes, DeskHomeMap.BabelTuner)), "left of the mat: right toward it");
+        DeskHome intercomHome = DeskHomeMap.Find(homes, DeskHomeMap.Intercom);
+        Assert.AreEqual(0f, intercom.Way(intercomHome));
+        Assert.IsFalse(intercom.MovesOn(intercomHome), "the intercom's home declares no slide on today's map: it waits for DESK-PLAN");
+        intercomHome.slide = HomeSlide.Right;
+        Assert.IsTrue(intercom.MovesOn(intercomHome), "the day the map declares it, it slides with no change here");
+        Assert.AreEqual(1f, intercom.Way(intercomHome));
+        Assert.IsTrue(slides.Find(DeskHomeMap.UvTorch).MovesOn(DeskHomeMap.Find(homes, DeskHomeMap.UvTorch)), "a lift needs only its home");
+        Assert.IsFalse(slides.Find("stamp_approve").MovesOn(null), "no home, no move");
+        Assert.AreEqual(0f, slides.Find(DeskHomeMap.UvTorch).Way(DeskHomeMap.Find(homes, DeskHomeMap.UvTorch)), "a lift has no way");
+    }
+
+    [Test]
+    public void AHomesObstacle_IsItsFootprintSweptByItsTracks_AndRaisedByItsLifts()
+    {
+        DeskSlides slides = DeskSlides.Approved();
+        DeskHome[] homes = DeskHomeMap.Approved();
+        DeskHome scannerHome = DeskHomeMap.Find(homes, DeskHomeMap.Scanner);
         DeskSlider scanner = slides.Find(DeskHomeMap.Scanner);
-        (DeskRect swept, float h) = slides.Obstacle(DeskHomeMap.Scanner, foot, 0.13f);
-        Assert.AreEqual(0.4f + scanner.travel * scanner.Peak, swept.Width, 1e-5f, "swept to its overshoot peak toward the mat");
-        Assert.AreEqual(1f - scanner.travel * scanner.Peak / 2f, swept.CentreX, 1e-5f, "it slides left");
+        (DeskRect swept, float h) = slides.Obstacle(scannerHome, 0.13f);
+        Assert.AreEqual(scannerHome.Footprint.Width + scanner.travel * scanner.Peak, swept.Width, 1e-5f, "swept to its overshoot peak toward the mat");
+        Assert.AreEqual(scannerHome.Footprint.CentreX - scanner.travel * scanner.Peak / 2f, swept.CentreX, 1e-5f, "the way its home declares: left");
         Assert.AreEqual(0.13f, h, 1e-6f);
+        DeskHome torchHome = DeskHomeMap.Find(homes, DeskHomeMap.UvTorch);
         DeskSlider torch = slides.Find(DeskHomeMap.UvTorch);
-        (DeskRect same, float top) = slides.Obstacle(DeskHomeMap.UvTorch, foot, 0.06f);
-        Assert.AreEqual(foot.Width, same.Width, 1e-6f);
+        (DeskRect same, float top) = slides.Obstacle(torchHome, 0.06f);
+        Assert.AreEqual(torchHome.Footprint.Width, same.Width, 1e-6f);
         Assert.AreEqual(0.06f + torch.travel * torch.Peak, top, 1e-6f, "a lift raises its top");
-        Assert.AreEqual(0.08f, slides.Obstacle(DeskHomeMap.StampRack, foot, 0.08f).height, 1e-6f, "the daters are their own sliders: the rack itself stays");
-        Assert.AreEqual(0.09f, slides.Obstacle(DeskHomeMap.Detain, foot, 0.09f).height, 1e-6f, "DETAIN never moves");
-        CollectionAssert.AreEquivalent(new[] { DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.Intercom, DeskHomeMap.BabelTuner }, slides.TrackTravel().Keys);
+        DeskSlider dater = slides.Find("stamp_approve");
+        Assert.AreEqual(0.08f + dater.travel * dater.Peak, slides.Obstacle(DeskHomeMap.Find(homes, DeskHomeMap.StampRack), 0.08f).height, 1e-6f,
+                        "the rack rises by a dater at its 1.44 cm peak: a paper carried over it clears it");
+        DeskSlider book = slides.Find("rulebook");
+        Assert.AreEqual(0.03f + book.travel * book.Peak, slides.Obstacle(DeskHomeMap.Find(homes, DeskHomeMap.RulebookPocket), 0.03f).height, 1e-6f, "the pocket by the rulebook's 2.15 cm");
+        Assert.AreEqual(0.09f, slides.Obstacle(DeskHomeMap.Find(homes, DeskHomeMap.Detain), 0.09f).height, 1e-6f, "DETAIN never moves");
+        DeskHome intercomHome = DeskHomeMap.Find(homes, DeskHomeMap.Intercom);
+        Assert.AreEqual(intercomHome.Footprint.Width, slides.Obstacle(intercomHome, 0.12f).footprint.Width, 1e-6f, "the intercom stays put until its home declares a slide");
     }
 
     [Test]

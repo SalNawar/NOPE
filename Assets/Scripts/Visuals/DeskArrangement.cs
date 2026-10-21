@@ -91,16 +91,14 @@ public static class DeskArrangement
     /// holds): a home without an id or an id with two homes; a home off
     /// <paramref name="desk"/>, on the <paramref name="mat"/> (papers only),
     /// over another home or over the <paramref name="fixedArt"/>; a machine
-    /// whose slide-in (its <paramref name="travel"/> sideways, the desk's
-    /// slide data, else <paramref name="slideReach"/> metres) would reach the
-    /// mat, another home or the fixed art, or that slides further than
-    /// <paramref name="slideReach"/>; a shown home (DeskHome.Shown) the office
-    /// camera at <paramref name="eye"/> sees less than
-    /// <paramref name="minVisible"/> of past the other shown homes and the
-    /// fixed art.
+    /// whose slide-in (<paramref name="slideReach"/> metres sideways) would
+    /// reach the mat, another home or the fixed art; a shown home
+    /// (DeskHome.Shown) the office camera at <paramref name="eye"/> sees less
+    /// than <paramref name="minVisible"/> of past the other shown homes and
+    /// the fixed art.
     /// </summary>
     public static List<string> HomeProblems(IReadOnlyList<DeskHome> homes, IReadOnlyList<DeskHome> fixedArt, DeskRect mat, DeskRect desk, float slideReach,
-                                            (float x, float y, float h) eye, float minVisible, IReadOnlyDictionary<string, float> travel = null)
+                                            (float x, float y, float h) eye, float minVisible)
     {
         var problems = new List<string>();
         if (homes == null)
@@ -129,14 +127,7 @@ public static class DeskArrangement
                     problems.Add($"The home '{home.id}' lies on the fixed art '{fixedPiece.id}'.");
             if (home.slide == HomeSlide.None)
                 continue;
-            float reach = slideReach;
-            if (travel != null && travel.TryGetValue(home.id, out float slides))
-            {
-                if (slides > slideReach + Epsilon)
-                    problems.Add($"The home '{home.id}' slides {slides * 100f:0.0} cm, further than {slideReach * 100f:0.0} cm.");
-                reach = slides;
-            }
-            DeskRect swept = home.Swept(reach);
+            DeskRect swept = home.Swept(slideReach);
             if (Overlap(swept, mat))
                 problems.Add($"The home '{home.id}' slides onto the paper mat.");
             foreach (DeskHome other in homes)

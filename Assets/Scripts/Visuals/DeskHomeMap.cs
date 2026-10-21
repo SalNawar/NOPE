@@ -66,7 +66,7 @@ public sealed class DeskHome
     /// <summary>When the object shows.</summary>
     public HomeShow show;
 
-    /// <summary>Which way it slides in (its track's travel in DeskSlides, DeskHomeMap.SlideReach at most).</summary>
+    /// <summary>Which way it slides in (DeskHomeMap.SlideReach at most).</summary>
     public HomeSlide slide;
 
     /// <summary>The art's part prefix moved onto this home at bind ("Clean_Mouse" takes every "Clean_Mouse__*" mesh); empty for an object the gameplay builds.</summary>
@@ -147,7 +147,7 @@ public static class DeskHomeMap
     /// <summary>The fixed art the plan keeps clear of (never moved): the PC island, the till, the AVAILABLE sign and the lamp.</summary>
     public const string Pc = "pc", Till = "till", Sign = "sign", Lamp = "lamp";
 
-    /// <summary>How far a machine may slide in at most (metres; the Game Feel Bible's C6: "≤6 cm"); each track's own travel is DeskSlides'.</summary>
+    /// <summary>How far a machine slides in (metres; the Game Feel Bible's C6: "≤6 cm").</summary>
     public const float SlideReach = 0.06f;
 
     /// <summary>How far a built object's click box reaches past its mesh on every side (metres; the builder's PropClick): the plan keeps every two shown objects' boxes apart with it (DeskArrangement.ClickBoxProblems, BUG-4a).</summary>
@@ -183,7 +183,7 @@ public static class DeskHomeMap
         new DeskHome(Glasses, -0.73f, 0.575f, 0.14f, 0.09f, 0f, 0.03f, HomeShow.Reserved),
         new DeskHome(ProtocolRing, -0.74f, 0.74f, 0.12f, 0.12f, 0f, 0.21f, HomeShow.WhenOwned),
         // Left of the mat, beside the PC: ask and look up. The intercom is the art's phone moved here, which waits for Saleh's OK (he said "cut the phone"; docs/pending/DESK-PLAN.md, open call 1).
-        new DeskHome(Intercom, -0.88f, 0.40f, 0.24f, 0.20f, 0f, 0.12f, HomeShow.Always, HomeSlide.Right, "Clean_Phone"), // desk v3: it slides 2.5 cm right (DeskSlides)
+        new DeskHome(Intercom, -0.88f, 0.40f, 0.24f, 0.20f, 0f, 0.12f, HomeShow.Always, HomeSlide.None, "Clean_Phone"),
         new DeskHome(BabelTuner, -0.90f, 0.12f, 0.18f, 0.20f, 0f, 0.15f, HomeShow.WhenOwned, HomeSlide.Right),
         new DeskHome(RulebookPocket, -0.88f, -0.12f, 0.24f, 0.26f, 0f, 0.03f, HomeShow.Reserved),
         new DeskHome(UvTorch, -0.84f, -0.44f, 0.24f, 0.12f, -90f, 0.06f, HomeShow.WhenOwned),

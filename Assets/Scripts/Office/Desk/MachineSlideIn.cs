@@ -4,47 +4,54 @@ using UnityEngine;
 /// <summary>
 /// One slider of the desk's slide-in (desk v3, Saleh: "yes but they need to
 /// slide"; UNITY_PLAN 5.3, DESK-HOMES): the object on a home that slides
-/// toward the mat or rises in place when the cursor nears it. It writes only
-/// its slide transform: the object's "Slide" child when it has one (the
-/// painted desk's prefabs: home root, slide child, mesh), else the object
-/// itself. A track moves along its axis in the desk's frame (DeskLayout.Frame),
-/// a lift rises; a lift also squashes over its anticipation and tips as it
-/// rises (the glasses); a secondary part sways at the stop (the intercom's
-/// mic); a paper docked on it rides along (Rider: one mover carries both).
-/// For an object whose owner poses it every frame (the UV torch's body, which
-/// UvTorch sets each Update), the offset is a layer: put on after the owner
-/// (LateUpdate), taken off before it (an early Update), so the two never
-/// fight. The tip and the squash are always such a layer. The desk's
-/// DeskSlideIn decides every slider's pose each frame (ProximityAssist);
-/// Attach is the hook every owner binds through (the binder for today's
-/// machines; BABEL-TUNER and GLASSES for theirs).
+/// toward the mat or rises in place when the cursor nears it. Its kind and
+/// travel are its row of DeskSlides; its axis is its home's
+/// (DeskLayout.HomeOf: DeskHome.slide, the map's one source of the
+/// direction), so a track whose home declares no slide is never attached. It
+/// writes only its slide transform: the object's "Slide" child when it has
+/// one (the painted desk's prefabs: home root, slide child, mesh), else the
+/// object itself. A track moves along its axis in the desk's frame
+/// (DeskLayout.Frame), a lift rises; a lift also squashes over its
+/// anticipation and tips as it rises (the glasses); a "Mic" under the slide
+/// sways at the stop (the intercom's prefab). Under it lies its contact
+/// shadow (SlideShadow): a lift's at its rest footprint, a track's travelling
+/// with its base. For an object whose owner poses it every frame (the UV
+/// torch's body, which UvTorch sets each Update), the offset is a layer: put
+/// on after the owner (LateUpdate), taken off before it (an early Update), so
+/// the two never fight. The tip and the squash are always such a layer. In a
+/// forced retract the paper docked in it rides it home (TakeRider: one mover
+/// carries both). The desk's DeskSlideIn decides every slider's pose each
+/// frame (ProximityAssist); Attach is the hook every owner binds through (the
+/// binder for today's machines; BABEL-TUNER and GLASSES for theirs).
 /// </summary>
 [DefaultExecutionOrder(-200)]
 public sealed class MachineSlideIn : MonoBehaviour
 {
     private DeskSlider _slider;
-    private Transform _slide, _secondary;
-    private bool _layered, _laid;
+    private DeskSlides _slides;
+    private DeskHome _home;
+    private float _way;
+    private Transform _slide, _secondary, _shadowParent;
+    private bool _layered, _laid, _measured;
     private Func<bool> _busy, _taken;
+    private IPaperDock _dock;
+    private DeskDocument _rider;
+    private Material _shadowMaterial;
+    private SlideShadow _shadow;
     private Renderer[] _renderers = Array.Empty<Renderer>();
     private Vector3 _restLocal, _secondaryRest, _prePos, _preScale, _moved;
     private Quaternion _preRot;
-    private float _height;
+    private Vector2 _restCentre;
+    private float _height, _restBase;
 
     /// <summary>The slider's id (DeskSlides).</summary>
     public string Id => _slider != null ? _slider.id : null;
 
-    /// <summary>The slider's data.</summary>
-    public DeskSlider Slider => _slider;
-
-    /// <summary>The pose DeskSlideIn gave it this frame (its position, squash, sway, shadow and lamp): the shadow decal under it reads it (DESK-ART).</summary>
+    /// <summary>The pose DeskSlideIn gave it this frame (its position, squash, sway and contact shadow): put on in LateUpdate.</summary>
     public SlidePose Pose { get; set; }
 
-    /// <summary>A paper docked on it (DOC-HANDLE sets it while one lies in its bed, pad or slot; null: none): it moves with the slide, and the slider counts as busy.</summary>
-    public Transform Rider { get; set; }
-
-    /// <summary>True while it is busy (scanning, reading, or holding a paper): it stays as it is (ProximityAssist).</summary>
-    public bool Busy => Rider != null || (_busy != null && _busy());
+    /// <summary>True while it is busy (scanning, reading, receiving a paper): it stays as it is (ProximityAssist).</summary>
+    public bool Busy => _busy != null && _busy();
 
     /// <summary>True while its object is in the player's hand (the UV torch picked up): it gives way at once and is not summoned.</summary>
     public bool Taken => _taken != null && _taken();
@@ -55,31 +62,37 @@ public sealed class MachineSlideIn : MonoBehaviour
     /// <summary>
     /// Binds the object <paramref name="root"/> on the desk as the slider
     /// <paramref name="id"/> of the bound desk (DeskSlideIn.Current; nothing
-    /// without one, an unknown id or a slider that never moves). It slides
-    /// <paramref name="slide"/> (default: root's "Slide" child, else root);
-    /// <paramref name="busy"/> says when it is scanning or reading;
-    /// <paramref name="layered"/>: its owner poses the slide every frame, so the
-    /// offset is a layer over it; <paramref name="taken"/> says when it is in
-    /// the player's hand; <paramref name="secondary"/> sways at the stop. Its
-    /// rest is where it stands now. Returns the slider, or null.
+    /// without one, an unknown id, or a slider that does not move where it
+    /// rests: DeskSlider.MovesOn its home). It slides <paramref name="slide"/>
+    /// (default: root's "Slide" child, else root); <paramref name="busy"/>
+    /// says when it is scanning, reading or receiving a paper;
+    /// <paramref name="layered"/>: its owner poses the slide every frame, so
+    /// the offset is a layer over it; <paramref name="taken"/> says when it is
+    /// in the player's hand; <paramref name="dock"/> is the machine a paper
+    /// docks in (a forced retract carries that paper). Its rest is where it
+    /// stands now. Returns the slider, or null.
     /// </summary>
     public static MachineSlideIn Attach(string id, Transform root, Transform slide = null, Func<bool> busy = null, bool layered = false, Func<bool> taken = null,
-                                        Transform secondary = null)
+                                        IPaperDock dock = null)
     {
         DeskSlideIn desk = DeskSlideIn.Current;
         DeskSlider slider = desk != null && desk.Slides != null ? desk.Slides.Find(id) : null;
-        if (root == null || slider == null || !slider.Moves)
+        DeskHome home = slider != null ? DeskLayout.HomeOf(slider.Home) : null;
+        if (root == null || slider == null || !slider.MovesOn(home))
             return null;
         if (!root.TryGetComponent(out MachineSlideIn machine))
             machine = root.gameObject.AddComponent<MachineSlideIn>();
         Transform child = root.Find("Slide");
-        machine.Bind(slider, slide != null ? slide : child != null ? child : root, busy, layered, taken, secondary);
+        machine.Bind(desk, slider, home, slide != null ? slide : child != null ? child : root, busy, layered, taken, dock);
         desk.Add(machine);
         return machine;
     }
 
     /// <summary>True when <paramref name="part"/> belongs to this object (one of its click boxes).</summary>
     public bool Owns(Component part) => part != null && part.transform.IsChildOf(transform);
+
+    /// <summary>True when the desk point <paramref name="deskPoint"/> (DeskLayout.Frame's x, y) lies in its home's footprint.</summary>
+    public bool RestsOn(Vector2 deskPoint) => _home != null && _home.Footprint.Contains(deskPoint.x, deskPoint.y);
 
     /// <summary>The px from <paramref name="pointer"/> to its silhouette on <paramref name="camera"/>'s screen (its renderers' bounds as they stand now; 0 on it, infinite when none shows).</summary>
     public float ScreenDistance(Camera camera, Vector2 pointer)
@@ -109,8 +122,39 @@ public sealed class MachineSlideIn : MonoBehaviour
         return Mathf.Sqrt(dx * dx + dy * dy);
     }
 
-    /// <summary>Binds it (see Attach): bound before and still where it put it (nobody laid it again), it comes home first; then where it stands is its rest.</summary>
-    private void Bind(DeskSlider slider, Transform slide, Func<bool> busy, bool layered, Func<bool> taken, Transform secondary)
+    /// <summary>Its middle now (world: its rest footprint's centre moved by its slide, halfway up it); false before it has shown at rest (FramingFocus aims at it).</summary>
+    public bool TryCentre(out Vector3 centre)
+    {
+        centre = default;
+        if (!_measured || !DeskLayout.Bound)
+            return false;
+        centre = DeskLayout.Frame.Point(RestCentreNow(), _restBase + _height / 2f);
+        return true;
+    }
+
+    /// <summary>
+    /// A forced retract (closing time): finds the paper docked in it now, one
+    /// lying still where its dock takes papers, to ride the slide home with
+    /// it (one mover; DESK-HOMES P2). False when none can ride: no dock,
+    /// nothing docked, or the paper still moving on its own (its carry is its
+    /// only mover). Run once per forced retract, not per frame.
+    /// </summary>
+    public bool TakeRider()
+    {
+        _rider = null;
+        if (_dock == null)
+            return false;
+        foreach (DeskDocument paper in FindObjectsByType<DeskDocument>())
+            if (paper != null && paper.isActiveAndEnabled && !paper.IsSliding && _dock.Contains(paper.transform.position))
+            {
+                _rider = paper;
+                return true;
+            }
+        return false;
+    }
+
+    /// <summary>Binds it (see Attach): bound before and still where it put it (nobody laid it again), it comes home first; then where it stands is its rest, measured (its footprint, height and shadow) once it shows at rest.</summary>
+    private void Bind(DeskSlideIn desk, DeskSlider slider, DeskHome home, Transform slide, Func<bool> busy, bool layered, Func<bool> taken, IPaperDock dock)
     {
         TakeBack();
         if (_slide != null && !_layered && (_slide.localPosition - (_restLocal + _moved)).sqrMagnitude < 1e-10f)
@@ -119,27 +163,67 @@ public sealed class MachineSlideIn : MonoBehaviour
         if (_secondary != null)
             _secondary.localPosition = _secondaryRest;
         _slider = slider;
+        _slides = desk.Slides;
+        _home = home;
+        _way = slider.Way(home);
         _slide = slide;
         _busy = busy;
         _layered = layered;
         _taken = taken;
-        _secondary = secondary;
+        _dock = dock;
+        _rider = null;
+        _secondary = slide.Find("Mic");
         _restLocal = slide.localPosition;
-        if (secondary != null)
-            _secondaryRest = secondary.localPosition;
+        if (_secondary != null)
+            _secondaryRest = _secondary.localPosition;
+        _shadowMaterial = desk.ShadowMaterial;
+        _shadowParent = desk.transform;
+        if (_shadow != null)
+            Destroy(_shadow.gameObject);
+        _shadow = null;
+        _measured = false;
         Pose = default;
         _renderers = GetComponentsInChildren<Renderer>(true);
-        _height = 0f;
     }
 
-    /// <summary>How tall the slide stands (metres; the squash's base), measured once it shows (one waiting for the crate stands at zero scale until then).</summary>
-    private float Height()
+    /// <summary>
+    /// Its rest, once it shows there (one waiting for the crate stands at zero
+    /// scale until then): the footprint and base of its slide's showing
+    /// renderers in the desk's frame, its height (the squash's base), and its
+    /// contact shadow made for that footprint. Measured once.
+    /// </summary>
+    private void Measure(DeskFrame frame)
     {
-        if (_height <= 1e-4f)
-            foreach (Renderer r in _slide.GetComponentsInChildren<Renderer>(false))
-                _height = Mathf.Max(_height, r.bounds.size.y);
-        return _height;
+        bool any = false;
+        Bounds world = default;
+        foreach (Renderer r in _slide.GetComponentsInChildren<Renderer>(false))
+        {
+            if (!r.enabled)
+                continue;
+            if (any)
+                world.Encapsulate(r.bounds);
+            else
+                world = r.bounds;
+            any = true;
+        }
+        _measured = true;
+        if (!any)
+            return;
+        DeskRect footprint = frame.Footprint(world);
+        _restCentre = new Vector2(footprint.CentreX, footprint.CentreY);
+        _restBase = world.min.y - frame.Origin.y;
+        _height = world.size.y;
+        if (_shadowMaterial == null || _slides == null)
+            return;
+        float blur = _slider.kind == SlideKind.Lift ? _slides.liftShadowBlurPx : _slides.trackShadowBlurPx;
+        _shadow = SlideShadow.Make(_shadowParent, $"{_slider.id}Shadow", _shadowMaterial, new Vector2(footprint.Width, footprint.Height), blur * MetresPerPx);
     }
+
+    /// <summary>Metres its travel moves per screen px at 1080p (the px the springs and the shadow's blur are set in).</summary>
+    private float MetresPerPx => _slider.travelPx > 0f ? _slider.travel / _slider.travelPx : 0f;
+
+    /// <summary>Its rest footprint's centre on the desk, moved by a track's slide now (a lift's stays).</summary>
+    private Vector2 RestCentreNow() => _slider.kind == SlideKind.Lift ? _restCentre : _restCentre + new Vector2(_way * Pose.Position * _slider.travel, 0f);
 
     /// <summary>Early in the frame (before the owners move it): the tip, the squash and a layered offset come off.</summary>
     private void Update() => TakeBack();
@@ -154,6 +238,15 @@ public sealed class MachineSlideIn : MonoBehaviour
             _slide.localPosition = _restLocal;
         if (_secondary != null)
             _secondary.localPosition = _secondaryRest;
+        _rider = null;
+        if (_shadow != null)
+            _shadow.Hide();
+    }
+
+    private void OnDestroy()
+    {
+        if (_shadow != null)
+            Destroy(_shadow.gameObject);
     }
 
     /// <summary>Takes off what Show put on as a layer.</summary>
@@ -168,26 +261,32 @@ public sealed class MachineSlideIn : MonoBehaviour
             _slide.localPosition = _prePos;
     }
 
-    /// <summary>Puts this frame's pose on the slide: the travel along its axis (a track's in the desk's frame, a lift's up), never past its felt gap (ProximityAssist); the rider by the same move; the tip, the squash and the secondary sway.</summary>
+    /// <summary>Puts this frame's pose on the slide: the travel along its axis (a track's in the desk's frame, the way its home declares; a lift's up), never past its felt gap (ProximityAssist); a riding paper by the same move; the tip, the squash, the mic's sway and the contact shadow.</summary>
     private void Show()
     {
         if (_slide == null || _slider == null || !DeskLayout.Bound)
             return;
         DeskFrame frame = DeskLayout.Frame;
         SlidePose pose = Pose;
+        if (!_measured && pose.Phase == SlidePhase.Rest && Mathf.Abs(pose.Position) < 1e-6f && Present)
+            Measure(frame);
         bool lift = _slider.kind == SlideKind.Lift;
-        Vector3 axis = lift ? Vector3.up : frame.Right * _slider.dirX + frame.Forward * _slider.dirY;
+        Vector3 axis = lift ? Vector3.up : frame.Right * _way;
         Vector3 move = ToParent(axis * (pose.Position * _slider.travel));
-        float metresPerPx = _slider.travelPx > 0f ? _slider.travel / _slider.travelPx : 0f;
+        float metresPerPx = MetresPerPx;
 
         if (!_layered)
         {
             Vector3 was = _slide.position;
             _slide.localPosition = _restLocal + move;
             _moved = move;
-            if (Rider != null)
-                Rider.position += _slide.position - was;
+            if (_rider != null && (!_rider.isActiveAndEnabled || _rider.IsSliding))
+                _rider = null; // its own carry took it: never two movers
+            if (_rider != null)
+                _rider.transform.position += _slide.position - was;
         }
+        if (pose.Phase == SlidePhase.Rest)
+            _rider = null;
 
         _preRot = _slide.localRotation;
         _preScale = _slide.localScale;
@@ -202,10 +301,12 @@ public sealed class MachineSlideIn : MonoBehaviour
             if (toward.sqrMagnitude > 1e-8f)
                 _slide.rotation = Quaternion.AngleAxis(tip, Vector3.Cross(Vector3.up, toward.normalized)) * _slide.rotation;
         }
-        if (pose.Squash > 0f && Height() > 1e-4f)
+        if (pose.Squash > 0f && _height > 1e-4f)
             _slide.localScale = new Vector3(_preScale.x, _preScale.y * Mathf.Max(0.5f, 1f - pose.Squash * metresPerPx / _height), _preScale.z);
         if (_secondary != null)
-            _secondary.localPosition = _secondaryRest + ToParent(axis * (pose.Sway * metresPerPx), _secondary);
+            _secondary.localPosition = _secondaryRest + ToParent(frame.Right * (_way * pose.Sway * metresPerPx), _secondary);
+        if (_shadow != null)
+            _shadow.Show(frame, frame.Point(RestCentreNow(), _restBase + (_slides != null ? _slides.shadowLift : 0f)), pose.Shadow, pose.ShadowBlur * metresPerPx, pose.ShadowWiden);
     }
 
     /// <summary>A world move in the slide's parent's space.</summary>

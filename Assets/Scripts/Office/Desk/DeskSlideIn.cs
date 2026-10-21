@@ -6,22 +6,24 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// The desk's slide-in (desk v3, Saleh 2026-10-20: "yes but they need to
 /// slide"; D2: "the machine will slide in a little bit to help the player";
-/// UNITY_PLAN section 5, DESK-HOMES): each frame it finds every present
-/// slider (MachineSlideIn) under the cursor on the office camera (the
-/// front-most silhouette among the Interactable click boxes, the cursor's
-/// point on the desk inside a home's footprint, the px to each silhouette at
-/// 1080p), lets ProximityAssist decide (nearest wins, one at a time, the
-/// hand-off, the springs, the linger and the way home, busy machines left as
-/// they are, Reduced Motion as a cut), gives each slider its pose and sounds
-/// the cues: the unlatch tick, the felt shush, the knock at the peak, the
-/// reversed shush, the seat's clack (DeskSlides' sound ids; a machine without
-/// its clip yet plays the paper slide and the drawer's close as stand-ins;
-/// Cued tells every listener, FEEDBACK's lamp and DESK-ART's shadow among
-/// them). A machine a paper was let go on stays out while the paper lands
-/// (DeskSlides.dropHoldSeconds). While the PC is open nothing is near.
-/// The office binder adds and binds it once the desk is laid
+/// UNITY_PLAN section 5, DESK-HOMES): each frame it gathers every attached
+/// slider (MachineSlideIn) as the office camera finds it (the front-most
+/// silhouette among the Interactable click boxes, the cursor's point on the
+/// desk inside a home's footprint, the px to each silhouette at 1080p,
+/// whether it stands on the desk, is in the player's hand or busy) and
+/// whether a paper is dragged; ProximityAssist decides everything (nearest
+/// wins, one at a time, the hand-off, the springs, the linger and the way
+/// home, busy machines left as they are, the drop hold, Reduced Motion as a
+/// cut); it gives each slider its pose and sounds the cues: the unlatch tick,
+/// the felt shush, the knock at the peak, the reversed shush, the seat's clack
+/// (DeskSlides' sound ids; a machine without its clip yet plays the paper
+/// slide and the drawer's close as stand-ins). At closing time
+/// (<c>closed</c>) every slider is retracted at once, a busy one with its
+/// docked paper riding it (the forced retract). While the PC is open nothing
+/// is near. The office binder adds and binds it once the desk is laid
 /// (OfficeSceneBinder.BindSlideIn) and attaches today's sliders; owners attach
 /// theirs (MachineSlideIn.Attach). Unbound or disabled, every slider is home.
+/// A frame allocates nothing.
 /// </summary>
 public sealed class DeskSlideIn : MonoBehaviour
 {
@@ -31,47 +33,53 @@ public sealed class DeskSlideIn : MonoBehaviour
 
     private readonly List<MachineSlideIn> _sliders = new List<MachineSlideIn>();
     private readonly List<SlideCandidate> _candidates = new List<SlideCandidate>();
-    private readonly HashSet<string> _busy = new HashSet<string>();
-    private readonly HashSet<string> _taken = new HashSet<string>();
-    private readonly Dictionary<string, float> _droppedAt = new Dictionary<string, float>();
     private readonly RaycastHit[] _hits = new RaycastHit[MaxHits];
     private ProximityAssist _assist;
     private DeskSlides _slides;
+    private IReadOnlyList<DeskHome> _homes;
     private Camera _camera;
     private DeskController _papers;
-    private Func<bool> _paused;
-    private string _under;
-    private bool _wasDragging;
+    private Func<bool> _paused, _closed;
+    private bool _wasClosed;
     private int _mask;
 
     /// <summary>The desk being played (null when none is bound): MachineSlideIn.Attach binds to it.</summary>
     public static DeskSlideIn Current => _current;
 
-    /// <summary>Raised for every cue of the slide-in as it happens (its slider and sync point; render/slides.json cues): the sound is played here, the lamp's pulse and the shadow's press follow it.</summary>
-    public static event Action<SlideCue> Cued;
-
     /// <summary>The slide-in's data (the bound plan's DeskLayoutSettings.slides).</summary>
     public DeskSlides Slides => _slides;
 
+    /// <summary>The assist deciding the slides (FramingFocus follows its pick).</summary>
+    public ProximityAssist Assist => _assist;
+
+    /// <summary>The material of the sliders' contact shadows (the papers' Paper_Shadow; null: no shadows).</summary>
+    public Material ShadowMaterial { get; private set; }
+
     /// <summary>
     /// Binds the slide-in to the office <paramref name="camera"/> with the
-    /// plan's <paramref name="slides"/>, the desk's <paramref name="papers"/>
-    /// (a paper let go on a machine keeps it out while it lands) and when
-    /// nothing is near (<paramref name="paused"/>: the PC open); every slider
-    /// attached before is let go (the binder attaches today's again).
+    /// plan's <paramref name="slides"/> on its <paramref name="homes"/>, the
+    /// desk's <paramref name="papers"/> (a paper let go on a machine keeps it
+    /// out while it lands), when nothing is near (<paramref name="paused"/>:
+    /// the PC open), when the desk closes (<paramref name="closed"/>: the
+    /// forced retract) and the contact shadows' <paramref name="shadow"/>
+    /// material; every slider attached before is let go (the binder attaches
+    /// today's again).
     /// </summary>
-    public void Bind(Camera camera, DeskSlides slides, DeskController papers, Func<bool> paused)
+    public void Bind(Camera camera, DeskSlides slides, IReadOnlyList<DeskHome> homes, DeskController papers, Func<bool> paused, Func<bool> closed, Material shadow)
     {
         foreach (MachineSlideIn slider in _sliders)
             if (slider != null)
                 slider.Pose = default;
         _sliders.Clear();
-        _droppedAt.Clear();
         _camera = camera;
         _slides = slides;
+        _homes = homes;
         _papers = papers;
         _paused = paused;
-        _assist = slides != null ? new ProximityAssist(slides) : null;
+        _closed = closed;
+        _wasClosed = false;
+        ShadowMaterial = shadow;
+        _assist = slides != null ? new ProximityAssist(slides, homes) : null;
         _mask = LayerMask.GetMask(OfficeLayers.Interactable);
         _current = this;
     }
@@ -79,28 +87,17 @@ public sealed class DeskSlideIn : MonoBehaviour
     /// <summary>Adds an attached slider (MachineSlideIn.Attach), at home.</summary>
     public void Add(MachineSlideIn slider)
     {
-        if (slider == null || _assist == null)
-            return;
-        if (!_sliders.Contains(slider))
+        if (slider != null && _assist != null && !_sliders.Contains(slider))
             _sliders.Add(slider);
-        _assist.Home(slider.Id);
     }
 
-    /// <summary>The gain on the home <paramref name="homeId"/>'s own lamp now (FEEDBACK draws the lamp): DeskSlides.lampPulse for 100 ms after its slider's peak when DeskLayout.Lamps lights it, else 1.</summary>
-    public float LampGain(string homeId)
+    /// <summary>The attached slider <paramref name="id"/>, or null (FramingFocus aims at it).</summary>
+    public MachineSlideIn Find(string id)
     {
-        if (_assist == null || string.IsNullOrEmpty(homeId))
-            return 1f;
-        return _assist.Pose(homeId, DeskLayout.Lamps.Lit == homeId).Lamp;
-    }
-
-    /// <summary>Every slider home at once (a forced retract: a load, a new day); a docked paper rides home with its machine (MachineSlideIn.Rider).</summary>
-    public void ForceHome()
-    {
-        _assist?.Home(null);
-        foreach (MachineSlideIn slider in _sliders)
-            if (slider != null)
-                slider.Pose = default;
+        for (int i = 0; i < _sliders.Count; i++)
+            if (_sliders[i] != null && _sliders[i].Id == id)
+                return _sliders[i];
+        return null;
     }
 
     private void OnEnable()
@@ -109,50 +106,59 @@ public sealed class DeskSlideIn : MonoBehaviour
             _current = this;
     }
 
+    /// <summary>Off: every slider home at once (a new assist, nothing out).</summary>
     private void OnDisable()
     {
-        ForceHome();
+        if (_slides != null)
+            _assist = new ProximityAssist(_slides, _homes);
+        foreach (MachineSlideIn slider in _sliders)
+            if (slider != null)
+                slider.Pose = default;
         if (_current == this)
             _current = null;
     }
 
-    /// <summary>Finds the sliders under the cursor, steps the assist, sounds its cues and poses every slider (each puts its pose on in its LateUpdate).</summary>
+    /// <summary>Gathers the sliders, steps the assist, sounds its cues and poses every slider (each puts its pose on in its LateUpdate); the forced retract when the desk closes.</summary>
     private void Update()
     {
         if (_assist == null || _camera == null || !DeskLayout.Bound)
             return;
-        float now = UiMotion.Now;
-        Find(now);
-        _assist.Step(now, _candidates, _busy, UiMotion.Amount.Still);
-        foreach (SlideCue cue in _assist.Cues)
+        bool closed = _closed != null && _closed();
+        if (closed && !_wasClosed)
+            Retire();
+        _wasClosed = closed;
+        Gather();
+        _assist.Step(UiMotion.Now, _candidates, _papers != null && _papers.IsDragging, UiMotion.Amount.Still);
+        IReadOnlyList<SlideCue> cues = _assist.Cues;
+        for (int i = 0; i < cues.Count; i++)
+            Sound(cues[i]);
+        for (int i = 0; i < _sliders.Count; i++)
+            if (_sliders[i] != null)
+                _sliders[i].Pose = _assist.Pose(_sliders[i].Id);
+    }
+
+    /// <summary>The forced retract (closing time; DESK-HOMES P2): every slider out goes home at once, a busy one only when the paper docked in it can ride it (MachineSlideIn.TakeRider: one mover).</summary>
+    private void Retire()
+    {
+        for (int i = 0; i < _sliders.Count; i++)
         {
-            Sound(cue);
-            Cued?.Invoke(cue);
-        }
-        string lit = DeskLayout.Lamps.Lit;
-        foreach (MachineSlideIn slider in _sliders)
+            MachineSlideIn slider = _sliders[i];
             if (slider != null)
-                slider.Pose = _assist.Pose(slider.Id, lit != null && lit == slider.Slider.Home);
+                _assist.Retire(slider.Id, slider.Busy && slider.TakeRider());
+        }
     }
 
     /// <summary>
-    /// This frame's candidates: every present slider not in the player's hand,
-    /// with its silhouette's rank under the cursor (the office camera's ray
+    /// This frame's facts, one per attached slider: whether it stands on the
+    /// desk, is in the player's hand or busy, and, while the cursor is on the
+    /// desk, its silhouette's rank under the cursor (the office camera's ray
     /// through the Interactable click boxes, nearest first), whether the
     /// cursor's point on the desk lies in its home's footprint and its px to
-    /// its silhouette at the reference height; the busy ones; a slider that
-    /// left the desk goes home, one taken in hand gives way.
+    /// its silhouette at the reference height.
     /// </summary>
-    private void Find(float now)
+    private void Gather()
     {
         _candidates.Clear();
-        _busy.Clear();
-        bool dragging = _papers != null && _papers.IsDragging;
-        if (_wasDragging && !dragging && _under != null)
-            _droppedAt[_under] = now;
-        _wasDragging = dragging;
-        _under = null;
-
         Pointer pointer = Pointer.current;
         bool near = pointer != null && (_paused == null || !_paused());
         Vector2 at = near ? pointer.position.ReadValue() : Vector2.zero;
@@ -165,34 +171,24 @@ public sealed class DeskSlideIn : MonoBehaviour
         Vector2 deskPoint = onDesk ? frame.Local(ray.GetPoint(enter)) : Vector2.zero;
         float toReference = _slides.referenceHeight / Mathf.Max(1f, _camera.pixelHeight);
 
-        foreach (MachineSlideIn slider in _sliders)
+        for (int i = 0; i < _sliders.Count; i++)
         {
+            MachineSlideIn slider = _sliders[i];
             if (slider == null)
                 continue;
             string id = slider.Id;
             if (!slider.Present)
             {
-                if (_assist.Phase(id) != SlidePhase.Rest)
-                    _assist.Home(id);
+                _candidates.Add(SlideCandidate.Away(id, present: false));
                 continue;
             }
-            if (slider.Taken)
+            bool busy = slider.Busy, taken = slider.Taken;
+            if (!near || taken)
             {
-                if (_taken.Add(id))
-                    _assist.Release(id);
+                _candidates.Add(SlideCandidate.Away(id, busy, taken));
                 continue;
             }
-            _taken.Remove(id);
-            if (slider.Busy || (_droppedAt.TryGetValue(id, out float dropped) && now - dropped < _slides.dropHoldSeconds))
-                _busy.Add(id);
-            if (!near)
-                continue;
-            int rank = Rank(slider, hits);
-            DeskHome home = DeskLayout.HomeOf(slider.Slider.Home);
-            bool onFootprint = onDesk && home != null && home.Footprint.Contains(deskPoint.x, deskPoint.y);
-            _candidates.Add(new SlideCandidate(id, rank, onFootprint, slider.ScreenDistance(_camera, at) * toReference));
-            if (rank >= 0 && (_under == null || rank == 0))
-                _under = id;
+            _candidates.Add(new SlideCandidate(id, Rank(slider, hits), onDesk && slider.RestsOn(deskPoint), slider.ScreenDistance(_camera, at) * toReference, busy));
         }
     }
 
@@ -217,9 +213,9 @@ public sealed class DeskSlideIn : MonoBehaviour
     /// <summary>The slider a click box belongs to, or null.</summary>
     private MachineSlideIn OwnerOf(Collider collider)
     {
-        foreach (MachineSlideIn slider in _sliders)
-            if (slider != null && slider.Owns(collider))
-                return slider;
+        for (int i = 0; i < _sliders.Count; i++)
+            if (_sliders[i] != null && _sliders[i].Owns(collider))
+                return _sliders[i];
         return null;
     }
 
@@ -274,9 +270,5 @@ public sealed class DeskSlideIn : MonoBehaviour
 
     /// <summary>Forgets the bound desk when play starts (the editor without a domain reload keeps statics).</summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    private static void ResetStatics()
-    {
-        _current = null;
-        Cued = null;
-    }
+    private static void ResetStatics() => _current = null;
 }
