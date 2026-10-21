@@ -21,7 +21,8 @@ using UnityEngine;
 /// special of the day plans' rules, the famous travellers let through of the
 /// verdict flags) whenever an input changes, applies the dev overrides
 /// (HallSlotsDev), and when the state changes picks each slot's variant
-/// (HallSlotPick) and crossfades to its art on unscaled time, the outgoing
+/// (HallSlotPick) and crossfades to its art on unscaled time (UiMotion.Delta:
+/// the capture's frame while a recording captures at a fixed rate), the outgoing
 /// face opaque while the incoming one comes in (SlotCrossfade: the painting
 /// never shows through, HALL-FX BUG-71), Resources
 /// Hall/Slots/&lt;slot&gt;/&lt;file&gt; (ArtSlots.HallSlot; Reduced Motion cuts). A
@@ -154,10 +155,13 @@ public sealed class HallSlotsLink : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_painting == null)
+        // No property blocks after the editor reloaded scripts in play (they are not serialized): nothing to draw with.
+        if (_painting == null || _read == null)
             return;
         ReadState();
-        float dt = Time.unscaledDeltaTime;
+        // Unscaled time (a hit-stop never freezes the fade), or the capture's frame while frames are captured at a
+        // fixed rate (UiMotion.Delta), so a recording shows the fade at its true pace.
+        float dt = UiMotion.Delta(Time.unscaledDeltaTime);
         // The painting's lighting values as the art wrote them this frame (only those it holds: the material's own stand for the rest).
         _painting.GetPropertyBlock(_read);
         _write.Clear();
