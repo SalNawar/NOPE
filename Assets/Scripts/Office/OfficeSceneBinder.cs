@@ -318,6 +318,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         BindBoard();
         BindHall(art);
         HidePaintedCut();
+        if (_painted)
+        {
+            BindPaintedCalendar(viewer);
+            HideScreenChrome();
+        }
         Report();
     }
 
@@ -868,7 +873,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         {
             paintedDesk.Align(_frame);
             foreach (Renderer r in _artRenderers)
-                if (r != null && layout.paintedCutParts.Any(prefix => !string.IsNullOrEmpty(prefix) && r.name.StartsWith(prefix, StringComparison.Ordinal)))
+                if (r != null && PaintedCuts(r.transform, layout.paintedCutParts))
                     _paintedCut.Add(r);
         }
         bool moved = CutArtProps(layout.cutParts);
@@ -1154,6 +1159,98 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (r != null)
                 r.enabled = false;
     }
+
+    /// <summary>True when the painted desk replaces the art's part <paramref name="part"/> (DeskLayoutSettings.paintedCutParts): its name starts with an entry, or one of its parents is named exactly as one (a whole assembly: the corkboards).</summary>
+    private static bool PaintedCuts(Transform part, IReadOnlyList<string> parts)
+    {
+        foreach (string entry in parts ?? Array.Empty<string>())
+        {
+            if (string.IsNullOrEmpty(entry))
+                continue;
+            if (part.name.StartsWith(entry, StringComparison.Ordinal))
+                return true;
+            for (Transform t = part.parent; t != null; t = t.parent)
+                if (t.name == entry)
+                    return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// The calendar under the painted desk (the painting has no corkboard:
+    /// the art's boards are cut, DeskLayoutSettings.paintedCutParts): today's
+    /// date is the one the PC's CRT shows under its clock (CrtClock), so the
+    /// calendar's click box (DeskInspect: in inspect mode it holds today's date;
+    /// the guide's "calendar" target) lies over that date line, in front of
+    /// the PC's box so it is hit first (only that line: the rest of the screen
+    /// still opens the PC). Off when the CRT has no clock.
+    /// </summary>
+    private void BindPaintedCalendar(Vector3 viewer)
+    {
+        PropBinding calendar = Array.Find(props ?? Array.Empty<PropBinding>(), p => p != null && p.anchor == OfficeAnchorId.Calendar && p.click != null);
+        if (calendar == null)
+            return;
+        CrtClock clock = FindAnyObjectByType<CrtClock>(FindObjectsInactive.Include);
+        if (clock == null || !DeskLayout.TryMeshBounds(clock.transform, out Bounds plate) || plate.size.sqrMagnitude < 1e-8f)
+        {
+            calendar.click.gameObject.SetActive(false);
+            return;
+        }
+        // The date is the plate's lower part (CrtClock: the clock takes its upper 58%; the glass stands about upright, so the plate's world height is its own).
+        float height = plate.size.y, dateHeight = height * (1f - DateShare);
+        Vector3 centre = new Vector3(plate.center.x, plate.min.y + dateHeight / 2f, plate.center.z);
+        calendar.click.gameObject.SetActive(true);
+        PlaceBox(calendar.click.transform, centre, new Vector3(plate.size.x, dateHeight, Mathf.Max(plate.size.z, 0.004f)));
+        if (paintedDesk.TryBounds(PaintedPc, out Bounds crt))
+            InFrontOf(calendar.click.transform, crt, viewer);
+        calendar.click.SetOutline(Array.Empty<Renderer>());
+        if (calendar.click.TryGetComponent(out DeskReaction reaction))
+        {
+            reaction.SetTarget(clock.transform);
+            reaction.SetTooltipPoint(TopOf(calendar.click.transform, new Bounds(centre, new Vector3(plate.size.x, dateHeight, plate.size.z))));
+        }
+    }
+
+    /// <summary>
+    /// The office view's screen-space chrome under the painted desk (Saleh's
+    /// rule: everything diegetic, actions are in-world desk objects, never UI
+    /// buttons): in the office view the CITY, PC and STAMPS edge tabs draw
+    /// nothing and take no clicks (PaintedChrome; their keys, A, Q and TAB,
+    /// still work through OfficeControls; with the PC open or the city view on
+    /// they show again as their way back; their owners, CAM and STAMP, keep
+    /// them for the art's desk), and the fallback HUD's bar (the credits, the
+    /// day, the clock and the Helix River) hides: the PC's taskbar and its CRT
+    /// clock show the credits, the day and the time (the Helix River's
+    /// in-world home is a hand-off, DESK-V3.md). The guide's plate docks small
+    /// in the top-right corner and its arrow is a small warm chevron
+    /// (GuidePrompt.Quiet).
+    /// </summary>
+    private void HideScreenChrome()
+    {
+        Transform overlay = stampTray != null ? stampTray.transform.parent : null;
+        OfficeViewController view = FindAnyObjectByType<OfficeViewController>(FindObjectsInactive.Include);
+        if (overlay != null)
+            foreach (string path in ScreenTabs)
+            {
+                Transform tab = overlay.Find(path);
+                if (tab == null)
+                    continue;
+                if (!tab.TryGetComponent(out PaintedChrome chrome))
+                    chrome = tab.gameObject.AddComponent<PaintedChrome>();
+                chrome.Bind(view, cityView);
+            }
+        if (fallbackHud != null)
+            fallbackHud.SetActive(false);
+        GuidePrompt prompt = FindAnyObjectByType<GuidePrompt>(FindObjectsInactive.Include);
+        if (prompt != null)
+            prompt.Quiet();
+    }
+
+    /// <summary>The share of the CRT clock's plate its clock takes (CrtClock.TimeShare): the date line is the rest, below it.</summary>
+    private const float DateShare = 0.58f;
+
+    /// <summary>The office overlay's edge tabs (paths under it): the PC tab, the CITY tab and the STAMPS tab.</summary>
+    private static readonly string[] ScreenTabs = { "PcTab", "CityLook", "StampBar/Tab" };
 
     /// <summary>The first descendant of <paramref name="root"/> (not itself) named <paramref name="name"/>, or null.</summary>
     private static Transform Descendant(Transform root, string name)

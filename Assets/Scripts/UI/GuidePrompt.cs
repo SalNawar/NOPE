@@ -129,10 +129,45 @@ public sealed class GuidePrompt : MonoBehaviour
             HideArrow();
     }
 
-    /// <summary>Points the arrow down at the top of the overlay control <paramref name="target"/> (up at it from under it when it lies on the screen's top edge or the arrow would cover the plate); hidden while it is hidden.</summary>
+    /// <summary>
+    /// The painted desk's look (desk v3; Saleh's rule: everything diegetic,
+    /// and the review of the day-1 still: the plate covered the hall and the
+    /// city, the arrow floated over the desk as a blue button): the plate
+    /// docks small in the top-right corner, over the hall's ceiling, under the
+    /// screen's top edge and above the stamp hint, covering neither the city
+    /// window nor the desk; the arrow is a small warm chevron with no plate,
+    /// bobbing less. Called by the office binder when the painted desk is
+    /// installed (DESK-HOMES; the owner, CONTENT, may restyle it).
+    /// </summary>
+    public void Quiet()
+    {
+        if (plate != null)
+        {
+            plate.anchorMin = plate.anchorMax = plate.pivot = Vector2.one;
+            plate.anchoredPosition = new Vector2(-QuietMargin, -QuietMargin);
+            plate.localScale = Vector3.one * QuietPlateScale;
+        }
+        if (arrow != null)
+        {
+            if (arrow.TryGetComponent(out Image backing))
+                backing.enabled = false;
+            foreach (TMP_Text glyph in arrow.GetComponentsInChildren<TMP_Text>(true))
+                glyph.color = QuietArrowInk;
+            arrow.localScale = Vector3.one * QuietArrowScale;
+        }
+        arrowBob = Mathf.Min(arrowBob, QuietBob);
+    }
+
+    /// <summary>The quiet look's plate scale and margin (canvas reference px), the arrow's scale, ink (the painting's lamp amber) and bob.</summary>
+    private const float QuietPlateScale = 0.8f, QuietMargin = 16f, QuietArrowScale = 0.7f, QuietBob = 3f;
+
+    /// <inheritdoc cref="QuietPlateScale"/>
+    private static readonly Color QuietArrowInk = new Color(0.95f, 0.64f, 0.24f, 0.9f);
+
+    /// <summary>Points the arrow down at the top of the overlay control <paramref name="target"/> (up at it from under it when it lies on the screen's top edge or the arrow would cover the plate); hidden while it is hidden, or while it draws nothing (the painted desk hides the screen's edge tabs: their keys still work).</summary>
     public void PointAt(RectTransform target)
     {
-        if (arrow == null || _canvasRect == null || target == null || !target.gameObject.activeInHierarchy)
+        if (arrow == null || _canvasRect == null || target == null || !target.gameObject.activeInHierarchy || (target.TryGetComponent(out Graphic drawn) && !drawn.enabled))
         {
             HideArrow();
             return;

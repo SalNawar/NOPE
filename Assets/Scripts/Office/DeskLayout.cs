@@ -126,13 +126,19 @@ public sealed class DeskLayoutSettings
     /// lamp, the old stamp and ink pad, the binder, the booth's partitions,
     /// the art's own shadow cards, and the right cork board's stability
     /// monitor, which the painted booth wall stands in front of: its readouts
-    /// go to the fallback HUD).
+    /// go to the fallback HUD), and both corkboards whole (an entry naming a
+    /// parent exactly takes every part under it: the painting has no
+    /// corkboard; the left one's clock card and calendar hung over the city
+    /// window; the clock and the date are the PC's CRT clock's, the
+    /// calendar's click lies on its date line:
+    /// OfficeSceneBinder.BindPaintedCalendar).
     /// </summary>
     public string[] paintedCutParts =
     {
         "Finish_Desk__", "Finish_DeskRail__", "Clean_Blotter", "CRT2_", "Clean_Keyboard", "Clean_Mouse", "Clean_Phone", "Clean_Till", "CreditsNumber",
         "Clean_Next", "NextLabel", "Clean_Lamp", "Clean_Stamp", "Clean_Inkpad", "Clean_Binder", "Office_Partition__", "Clean Art",
         "Office_Stability__", "StabilityPercent", "Finish_RightEphemera__",
+        "Left board assembly", "Right board assembly",
     };
 
     [Header("Cut (Saleh 2026-10-20: \"we will cut all but decor objects later will go on clear places like restory\")")]
