@@ -405,7 +405,7 @@ public static class ToolsOps
                     pcNames.Add("translated " + QaGame.Where(t.gameObject));
                     continue;
                 }
-                Rect? rect = QaGame.ScreenRect(t.gameObject);
+                Rect? rect = TextRect(t);
                 bool drawn = t.isActiveAndEnabled && (!(t is TextMeshPro desk) || desk.renderer.isVisible);
                 // At the Object level the whole hovered object turns, far from the pointer too: only drawn is asked there.
                 bool near = TranslationLensPresenter.CurrentReach == LensReach.Object || (rect != null && Grown(rect.Value, 24f).Contains(runner.Input.Position));
@@ -436,6 +436,39 @@ public static class ToolsOps
     }
 
     private static Rect Grown(Rect r, float by) => Rect.MinMaxRect(r.xMin - by, r.yMin - by, r.xMax + by, r.yMax + by);
+
+    /// <summary>
+    /// A text's rect on the screen (pixels). A UI text: its RectTransform through
+    /// its canvas (QaGame.ScreenRect). A desk word (a world TextMeshPro with no
+    /// canvas, like a paper's printed title): its laid-out text bounds through
+    /// the camera the office's pointer raycasts through. QaGame.ScreenRect
+    /// projects a canvas-less RectTransform with no camera, which gives world
+    /// units, not pixels, so every translated desk word would count as far from
+    /// the pointer.
+    /// </summary>
+    private static Rect? TextRect(TMP_Text t)
+    {
+        if (!(t is TextMeshPro) || t.GetComponentInParent<Canvas>() != null)
+            return QaGame.ScreenRect(t.gameObject);
+        Camera cam = QaGame.PointerCamera();
+        if (cam == null || !t.gameObject.activeInHierarchy)
+            return null;
+        Bounds b = t.textBounds;
+        if (b.size.sqrMagnitude <= 0f)
+            b = new Bounds(t.rectTransform.rect.center, t.rectTransform.rect.size);
+        float x0 = float.MaxValue, y0 = float.MaxValue, x1 = float.MinValue, y1 = float.MinValue;
+        foreach (Vector3 corner in Corners(b))
+        {
+            Vector3 s = cam.WorldToScreenPoint(t.transform.TransformPoint(corner));
+            if (s.z <= 0f)
+                return null;
+            x0 = Mathf.Min(x0, s.x);
+            y0 = Mathf.Min(y0, s.y);
+            x1 = Mathf.Max(x1, s.x);
+            y1 = Mathf.Max(y1, s.y);
+        }
+        return Rect.MinMaxRect(x0, y0, x1, y1);
+    }
 
     /// <summary>From (x, y) (a word to hover, screen fractions): waits until something is translated, moves to (x2, y2) in one frame and times how long until nothing is.</summary>
     private static IEnumerator Revert(QaRunner runner, QaStep s)
