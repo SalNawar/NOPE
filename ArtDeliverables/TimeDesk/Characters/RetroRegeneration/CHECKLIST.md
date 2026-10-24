@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 946. Full regeneration is NOT complete.
+Saved: 971. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -950,3 +950,28 @@ Saved: 946. Full regeneration is NOT complete.
 | outfit_f_britain_earlymodern__thinking_b | visually reviewed; registration pending |
 | outfit_f_britain_earlymodern__objecting_c | visually reviewed; registration pending |
 | hair_f_britain_earlymodern | visually reviewed; registration pending |
+| headwear_f_britain_earlymodern | visually reviewed; registration pending |
+| outfit_m_britain_industrial | visually reviewed; registration pending |
+| outfit_m_britain_industrial__explaining_a | visually reviewed; registration pending |
+| outfit_m_britain_industrial__thinking_b | visually reviewed; registration pending |
+| outfit_m_britain_industrial__objecting_c | visually reviewed; registration pending |
+| hair_m_britain_industrial | visually reviewed; registration pending |
+| facialhair_m_britain_industrial | visually reviewed; registration pending |
+| headwear_m_britain_industrial | visually reviewed; registration pending |
+| accessory_m_britain_industrial | visually reviewed; registration pending |
+| outfit_f_britain_industrial | visually reviewed; registration pending |
+| outfit_f_britain_industrial__explaining_b | visually reviewed; registration pending |
+| outfit_f_britain_industrial__thinking_c | visually reviewed; registration pending |
+| outfit_f_britain_industrial__objecting_a | visually reviewed; registration pending |
+| hair_f_britain_industrial | visually reviewed; registration pending |
+| headwear_f_britain_industrial | visually reviewed; registration pending |
+| accessory_f_britain_industrial | visually reviewed; registration pending |
+| accessory_f_britain_industrial__explaining_b | visually reviewed; registration pending |
+| accessory_f_britain_industrial__thinking_c | visually reviewed; registration pending |
+| accessory_f_britain_industrial__objecting_a | visually reviewed; registration pending |
+| outfit_m_britain_modern | visually reviewed; registration pending |
+| outfit_m_britain_modern__explaining_b | visually reviewed; registration pending |
+| outfit_m_britain_modern__thinking_c | visually reviewed; registration pending |
+| outfit_m_britain_modern__objecting_a | visually reviewed; registration pending |
+| hair_m_britain_modern | visually reviewed; registration pending |
+| headwear_m_britain_modern | visually reviewed; registration pending |

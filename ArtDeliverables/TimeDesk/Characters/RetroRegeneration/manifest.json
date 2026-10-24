@@ -24859,6 +24859,763 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "hat over coif",
+      "details": "Subject: woman of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Tall-crowned black felt hat with a narrow brim, worn over a close white linen coif whose edge frames the face (the London citizen's wife's hat)\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw headwear_f_britain_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "hat over coif",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_britain_earlymodern",
+      "prompt": "Separateheadwearlayer. Exactreferencefemalehead scalp164chin324center512. Tallblackfeltcapotain plainblackhatband narrowbrim NO BUCKLE over CLOSE WHITE LINEN COIF whose narrow edge frames temples and ears. Hatcrown top70 brim205, face fullyvisible. Coifclose againsthead tinyplainunderthechin ties no shouldershawl, no hairvisible. HeadwearONLYcoloredobjects. RemoveALL gownruffcuffsshoes replaceopaqueplainmagenta#FF00FFlongsleevecalibrationshirt fulltrouserssocks facehandsmagenta. Exactheadscaleandpositionneutralpose1024x1536flatgreen#00FF00. Handinkedtexturedlate80sanime felt/linenpigmentgraincelshadows no textcastshadowprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-db9c713a-4e3f-4b1d-89af-b1cf465b6b94.png",
+      "path": "Raw/headwear_f_britain_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b231f9f07c8444a39337d70f6aadf3732113ff8b625582e6bf0fee68d8ca58a3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "frock coat and stock",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Knee-length black or bottle-green wool frock coat with a nipped waist and full skirt, over a patterned silk waistcoat and narrow fawn or checked trousers. A white shirt with collar points kept below the chin, wrapped with a wide black silk neck-stock or cravat.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_m_britain_industrial.",
+      "flags": {
+        "label": "frock coat and stock"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_britain_industrial",
+      "prompt": "Image1 exactmale registrationposehead239/400center512soles1421. Image2 ONLYtexturedlate80sanime style notcostume. VictorianLondon1843civilian outfit: BOTTLEGREEN knee-length woolfrockcoat nippedwaistfullskirts hem1005, darklapels, openfrontshowing mutedochresilk waistcoat smallrepeatingmaroon geometricpattern narrowrowbuttons; fawn narrowtrousers andblackleatherankleboots. WhiteshirtcollarpointsBELOWchin blacksilkneckstock wrappedaroundthroat simply. No hat hair beard jewelrywatchbagsprops. SameexactneutralhandheadandfeetpositionsImage1. Exposedskinmagenta#FF00FF flatgreen#00FF00 1024x1536. Handinked texturedlate80sanime pigmentgrain woolcelshadows notphotoreal. Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Knee-length black or bottle-green wool frock coat with a nipped waist and full skirt, over a patterned silk waistcoat and narrow fawn or checked trousers. A white shirt with collar points kept below the chin, wrapped with a wide black silk neck-stock or cravat.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_m_britain_industrial.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d9bba291-4072-4e07-bb48-df8faac2c6ce.png",
+      "path": "Raw/outfit_m_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "624db629176ad880b0e2198f58d923173412f86cd3a6f0a01651c2e581474409",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_industrial__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "frock coat and stock",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Knee-length black or bottle-green wool frock coat with a nipped waist and full skirt, over a patterned silk waistcoat and narrow fawn or checked trousers. A white shirt with collar points kept below the chin, wrapped with a wide black silk neck-stock or cravat.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_m_britain_industrial.",
+      "flags": {
+        "label": "frock coat and stock"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_britain_industrial",
+      "prompt": "Image1 exactposeheadhandguide, Image2 exactcostumeidentity. DressImage1 bottlegreenfrockcoatblacklapelshem1030 ochremaroonpatternedwaistcoat blackneckstockwhiteshirt fawntrousersblackboots1419. RIGHTpalmup x413–516y609–675 exactlyImage1 oppositearmdown. Keephead239/400center512lowerbody legs coatbuttons andwaistcoatdetailsunchanged. Sameinkedtextured80sanimepigmentgraincelshadows1024x1536flatgreen#00FF00skinmagenta#FF00FF no hair hatsprops textshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0b66fa62-37c7-4ffd-a284-1dad661de2f3.png",
+      "path": "Raw/outfit_m_britain_industrial__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "caa7af3878c8fa1dd0b89b7e83769b5297f39327bc88b21733977d39631f6834",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_industrial__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "frock coat and stock",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Knee-length black or bottle-green wool frock coat with a nipped waist and full skirt, over a patterned silk waistcoat and narrow fawn or checked trousers. A white shirt with collar points kept below the chin, wrapped with a wide black silk neck-stock or cravat.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_m_britain_industrial.",
+      "flags": {
+        "label": "frock coat and stock"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_britain_industrial",
+      "prompt": "Create one registered modular historical costume sprite, 1024x1536, flat pure green #00FF00 background. Reference 1 is the exact pose and framing; reference 2 is the exact costume and textured late-1980s hand-inked anime style. Dress reference 1 in reference 2's identical bottle-green wool frock coat, black lapels, gold patterned waistcoat, white collar, black neck-stock, fawn trousers and black ankle boots. Change ONLY sleeves and cloth folds needed for pose: wearer LEFT fingertips touch cheek, right forearm supports left elbow. Preserve all head/hand coordinates from reference 1: bald head top239 chin400, feet baseline1421, centered512. Face and exposed hands remain flat magenta #FF00FF guide shapes, not skin colors. Preserve reference2 coat hem1030, waistcoat hem740, width and boots location. No hair, hat, jewelry, background objects or text. Pigment grain and woven cloth texture, cel shading, no glossy digital airbrush. Fully clothed adult tailoring asset.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-79e931d7-c0e9-4627-9cd7-8b424e48d885.png",
+      "path": "Raw/outfit_m_britain_industrial__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ee0c4ab671a731ac3c8361cf0be7cdb41ada93eb66e2711fe4212cc652a104bd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_industrial__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "frock coat and stock",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Knee-length black or bottle-green wool frock coat with a nipped waist and full skirt, over a patterned silk waistcoat and narrow fawn or checked trousers. A white shirt with collar points kept below the chin, wrapped with a wide black silk neck-stock or cravat.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_m_britain_industrial.",
+      "flags": {
+        "label": "frock coat and stock"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_britain_industrial",
+      "prompt": "One modular costume sprite 1024x1536 pure #00FF00 green background. Reference1 EXACT pose coordinates, reference2 EXACT Victorian costume design, palette, textile grain and hand-inked late1980s anime style. Fully dress reference1 in bottle-green wool frock coat black lapels, ochre patterned silk waistcoat, black neck-stock and white collar, fawn trousers black boots from reference2. Pose wearer RIGHT hand lies on upper chest, LEFT palm extends low sideways. Keep hand coordinates precisely reference1, head top239/chin400 feet1421 center512. Retain reference2 lower body, coat hem1030 waistcoat hem740 unchanged. Exposed face/hands flat magenta #FF00FF. No hair or hat or accessories. Preserve fine cloth grain, avoid adding floral patterns to plain coat. No text/no shadows on background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b4c072df-b58a-4ad9-8638-1d46e3c3c9b9.png",
+      "path": "Raw/outfit_m_britain_industrial__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "58ed51df8eda29c926d5041213225628a7ff80ac607cab1d5c8e2219f4b7d34d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "curled side parting",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Side-parted hair, full and curled over the ears\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw hair_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "curled side parting"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_britain_industrial",
+      "prompt": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Side-parted hair, full and curled over the ears\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw hair_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse attached costume solely as exact head/body registration reference. Output1024x1536, pure green#00FF00. REPLACE ALL costume and shoes with plain opaque flat MAGENTA long sleeved shirt, full trousers and socks; face/hands magenta too. Only HAIR has natural color. Side-parted medium chestnut brown full soft curls swept over ears, short neat nape, London1843 civilian hair. No beard/no hat. Head scalp guide239 chin400 unchanged; hair volume extends to215, ear curls to370. Feet1421 unchanged. Textured late1980s anime handinked fine linework restrained cel shading subtle pigment grain. No anatomy lines on opaque magenta support clothing, no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-67275a6a-2ab2-489c-b605-11710292408a.png",
+      "path": "Raw/hair_m_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "904121d1c96be06cfe0bc09629ced3793518cecd1eff356fa2f208c0a8726057",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "mutton-chop whiskers",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Mutton-chop side-whiskers running down the jaw, with the upper lip and chin clean-shaven\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw facialhair_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "mutton-chop whiskers"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_britain_industrial",
+      "prompt": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Mutton-chop side-whiskers running down the jaw, with the upper lip and chin clean-shaven\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw facialhair_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 flat green#00FF00. Use attached as EXACT registration guide for head239/chin400 body feet1421. Replace ALL costume/shoes with opaque flat magenta long-sleeved plain shirt, full length trousers and socks; face/hands also magenta. ONLY requested FACIAL HAIR non-magenta. Brown chestnut MUTTON CHOP side whiskers from temples beside ears running down each jaw to either side of chin. UPPER LIP AND CENTRAL CHIN CLEAN SHAVEN, no mustache, no beard connecting across mouth or chin, no scalp hair. Fine textured late1980s anime ink strands cel-shaded restrained brown. No text. Only two side-whisker shapes, no other accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-51edbeb3-adac-4d24-a204-757e30368260.png",
+      "path": "Raw/facialhair_m_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "110636f60f7a7bb5338cd4242ae5ee3ade0e6b7e4874bb9b68f0588f5060c6a9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "top hat",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Tall black silk top hat (stovepipe) with a slightly curled brim\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw headwear_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "top hat",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_britain_industrial",
+      "prompt": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Tall black silk top hat (stovepipe) with a slightly curled brim\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw headwear_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 pure green background#00FF00. Use reference solely for exact body/head registration, head239/chin400feet1421center512. Replace all outfit and shoes with flat opaque MAGENTA shirt trousers socks; face/hands flat magenta. Only non-magenta item is tall BLACK SILK STOVEPIPE TOP HAT, crown from y110 to270 with gently curled brim y270–294 widthx419–605. No hair, no beard. Plain black ribbon band, no buckle/feathers/goggles. Hand inked late1980s anime subtle painted pigment grain and cel highlights, match reference linework. Face fully open unchanged, no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bbc9d1fc-d595-4c64-89ac-46214664cf1c.png",
+      "path": "Raw/headwear_m_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7bcc923650af6db648ed7d06b57576450c70faf70ada40f8214546feb6e94eb1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "watch chain",
+      "details": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Gold pocket-watch chain hanging in a clear loop across the front of the chest\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "watch chain"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_britain_industrial",
+      "prompt": "Subject: man of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Gold pocket-watch chain hanging in a clear loop across the front of the chest\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_m_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 green#00FF00. Reference exact head/body registration. Replace ALL costume/boots with opaque flat MAGENTA plain shirt full trousers socks, face hands magenta too. Only non-magenta element is fine gold pocket watch CHAIN. Chain attaches center waistcoat button position x515 y585 and viewerRIGHT pocket x555 y625, hangs in a single U loop lowest point x540 y655; small T-bar at center attachment. NO watch body visible, it is inside pocket. Fine clear gold linked chain with thin dark anime ink outlines, understated gold cel highlights. Head239/chin400 feet1421 bodycenter512 same. No hair/hat/jewelry elsewhere/no text. Late1980s ink and grain style.\nCorrection: Edit ONLY gold chain. It is too large and low. Move top T-bar UP from y633 to y585 at x515. Move right attachment LEFT from x606 to x555 and UP to y620. Make entire chain narrow between x508 and560, lowest loop y655. Its total bounding box must be x493–564,y580–660. Keep figure and green/magenta and canvas exactly unchanged. Tiny fine linked gold watch chain on upper torso, no extra objects.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1cbecb10-a8cc-4ca6-8da4-f8b8f0f6f47f.png",
+      "path": "Raw/accessory_m_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "12d9a795510fd4262e05403aeb233c506e60b14b77e75df50fcd41da3f3ef98a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "plaid day dress",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Day dress with a tight bodice that comes to a point at the waist, low sloping shoulders, narrow long sleeves and a full bell-shaped skirt over layered petticoats. It is made in dark plaid silk or printed cotton, with a small white lace collar.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_f_britain_industrial.",
+      "flags": {
+        "label": "plaid day dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_britain_industrial",
+      "prompt": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Day dress with a tight bodice that comes to a point at the waist, low sloping shoulders, narrow long sleeves and a full bell-shaped skirt over layered petticoats. It is made in dark plaid silk or printed cotton, with a small white lace collar.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_f_britain_industrial.\nCreate fully clothed modular costume sprite1024x1536 flat puregreen#00FF00. Firstreference is exact pose registration adult mannequin; secondreference textile/inkstyle only not gender/costume. Dress woman in1843 dark plum/ochre/forest-green fine PLAID day dress, small white lace collar at neck, low sloping shoulders narrow long sleeves fitted pointed bodice tip y650 and full bell skirt tohem1358. Flat simple black leather ankle boots at exact footpositions x348–449 and575–675 soles1440. Modest daily middleclass clothing not fancy princess ballgown, no bustle/crinolinecage/no hat/no hair/no jewelry. Exposed face hands puremagenta#FF00FF. Baldheadtop164 chin324 bodycenter512, hands exactlyguide, no scale/crop changes. Handinked late1980s anime earthy pigment grain, visible woven cloth, restrained cel shadows, not photoreal. Skirt dark plaid pattern follows folds, hem width about650px, shoes visible below.\nCorrection: Edit lower skirt and boots ONLY. Keep head, collar, torso, arms, hands, plaid design and texture unchanged. Reduce skirt exaggerated width: hem LEFT edge x185 RIGHT edge839, not x85/940. Keep natural full petticoat bell shape, 1843 pre-crinoline day dress. Hem bottom1355 rather than1380. Make boots smaller black flat women's ankle boots with LEFT footprint x348–449 RIGHT x575–675 soles1440; currently too wide and low. 1024x1536 unchanged green. Do not move head or waist. Preserve textured anime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-97b02b0d-2caf-4c00-94b9-a2306a0232fc.png",
+      "path": "Raw/outfit_f_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "48845a0cfb2da1d4066ef1ff5c2f7baf6d35af1c145ff58316596205b48462b6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "plaid day dress",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Day dress with a tight bodice that comes to a point at the waist, low sloping shoulders, narrow long sleeves and a full bell-shaped skirt over layered petticoats. It is made in dark plaid silk or printed cotton, with a small white lace collar.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_f_britain_industrial.",
+      "flags": {
+        "label": "plaid day dress"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_britain_industrial",
+      "prompt": "One fullcanvas1024x1536 costume sprite green#00FF00. Reference1 is EXACT pose/hand/head registration. Reference2 exact1843 plaid dress costume/textured anime style. Fully dress reference1 in reference2 identical dark plum ochre green plaid long sleeve pointed bodice day dress, small white lace collar cuffs black ankle boots. BOTH elbows bent both palms open asymmetrical, viewerLEFT hand low x174–280y675–774, viewerRIGHT x720–845y557–646. Keep those exact hand coordinates and head164/chin324. Preserve costume skirt shape,width,hem1360 and boot positioning unchanged; no widening or scaling. Change sleeves/folds only for pose. Magenta#FF00FF face/hands, no hair/hat/accessories/text. Fine ink lines textile pigment grain cel shades.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3ff167fd-78dd-4281-9de8-bb9338c0771d.png",
+      "path": "Raw/outfit_f_britain_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "34b20ba361f11fd1e949cd9f7ec27b35f770f69cccf09020f05eefa1bccb8137",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "plaid day dress",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Day dress with a tight bodice that comes to a point at the waist, low sloping shoulders, narrow long sleeves and a full bell-shaped skirt over layered petticoats. It is made in dark plaid silk or printed cotton, with a small white lace collar.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_f_britain_industrial.",
+      "flags": {
+        "label": "plaid day dress"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_britain_industrial",
+      "prompt": "Create1024x1536 registered fullcostume sprite. Ref1 EXACT pose, ref2 EXACT outfitandtexture. Put identical1843 plum ochre forest plaid daydress white lace collar cuffs pointedbodice on ref1. Hands loosely linked low in front, exact boundsx457–562y681–771. Sleevesfollow ref1 arms and anatomy, no hand relocation. Head164chin324unchanged. Preserve ref2 skirt width x144–880 hem1360, bootlocations soles1445, plaid design/color. Only change sleeves folds required by pose. Flat green#00FF00 background magenta#FF00FF exposed face hands. No hair hat jewelry text. Late1980s handinkedanime visible fabric/pigment texture, celshade.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a3621c75-4359-4de9-a398-7828debd92d8.png",
+      "path": "Raw/outfit_f_britain_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "454812ac4ca65f2dbc85b6f39fa0d3c05e0a4a46e9ac18c60738aba6b8ba5076",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "plaid day dress",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Day dress with a tight bodice that comes to a point at the waist, low sloping shoulders, narrow long sleeves and a full bell-shaped skirt over layered petticoats. It is made in dark plaid silk or printed cotton, with a small white lace collar.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw outfit_f_britain_industrial.",
+      "flags": {
+        "label": "plaid day dress"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_britain_industrial",
+      "prompt": "1024x1536 modular costume sprite. Ref1 EXACT pose/head/hands coordinates; ref2 exact1843 plaid dress, texture andboots. Fully dress ref1 in identical plum ochre forestgreen plaid daydress pointedbodice white lacecollar cuffs. WearerRIGHT palmforward nearshoulder, viewerLEFT x285–390 y297–432; otherhand relaxed down. Keep head164chin324center512. Preserve ref2 skirtshape width hem1360 bootspositionssole1445, only sleeves change for raised arm. NO scaling widening or new accessories. Exposedface hands puremagenta#FF00FF greenbackground#00FF00. Fine late1980sanime handinkedlines clothpigment texture, no text/hair/hat.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bdc23cb2-88e7-4e7c-8ae5-76bdee52c4da.png",
+      "path": "Raw/outfit_f_britain_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2adc73f8e0e3aa3927dc99ea1d324f5e9e1a6f5df325a6d242bba1695a8ace00",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "ringlets and bun",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Early-Victorian centre parting: hair smoothed flat over the crown, with clusters of ringlets over each ear and a bun at the back\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw hair_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "ringlets and bun"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_britain_industrial",
+      "prompt": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Early-Victorian centre parting: hair smoothed flat over the crown, with clusters of ringlets over each ear and a bun at the back\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw hair_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 flat green#00FF00 background. Use exact head alignment of reference (scalp164 chin324), but replace ENTIRE DRESS and BOOTS with plain opaque flat magenta long-sleeved shirt, full straight trousers and socks. Face/hands magenta. ONLY hair is colored. Dark chestnut brown earlyVictorian centerpart smooth flat crown, structured small ringletclusters over each ear down to jaw y330, compact nape bun behind head. No jewelry/no ribbons/no hat. Fine handinked late1980s anime brown cel shadows and pigmentgrain. Preserve pose/body scale footbaseline1440. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2b4ad975-aa35-4883-8aba-acca18c044cf.png",
+      "path": "Raw/hair_f_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6598a11b4208effc043b634413041f52ccc3de7ef5bd40e3c73262ea6c105175",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "poke bonnet",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Deep straw poke ('coal-scuttle') bonnet that frames the face, tied under the chin with a wide ribbon. The face stays fully visible.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw headwear_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "poke bonnet",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_britain_industrial",
+      "prompt": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Deep straw poke ('coal-scuttle') bonnet that frames the face, tied under the chin with a wide ribbon. The face stays fully visible.\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw headwear_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nFullcanvas1024x1536 green#00FF00. Reference head164chin324 exact alignment. Replace entire dress and boots with plain opaque flatmagenta shirt full trousers socks, facehands magenta. ONLY bonnet colored. Golden straw deep poke bonnet coal-scuttle profile rendered FRONTALLY, open oval face fully visible, brim encloses head but no eyes obstruction. Plum silk wide ribbon tied directly under chin at y340 short tails end400. No hair anywhere,no flowers, no other accessory. Detailed straw inktexture restrained celshade pigmentgrain late1980s anime matching reference. Head stays exact place no resize; feet1440. No text.\nCorrection: Correct ONLY the bonnet orientation. It currently tilts diagonally and looks like a sideways sunhat. Make proper1843 poke bonnet worn straight, bilaterally symmetrical FRONT VIEW centered x512, oval arch framing face both sides equally, straw crown behind arch, no brim extended to one side. Outer boundingx390–634 top90 bottom315, forehead open at164. Keep exact face/head/body and magenta green unchanged. Retain plum underchinbow but shorten tails to400. Handdrawn straw celshade inktexture.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ff3ed68a-3802-4e73-89d1-218987058ca8.png",
+      "path": "Raw/headwear_f_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ede75bff6de17ca3fad0bd53823cd335fa6987863066f5f2c7178f1388002c33",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_britain_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "Paisley shawl",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Paisley shawl"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_britain_industrial",
+      "prompt": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 green#00FF00. Use exact reference head/body/pose registration, scalp164chin324. Replace full dress and boots with plain opaque flatmagenta shirt full trousers socks; facehands magenta. ONLY shawl is colored: soft rust orange ochre plum finewoven PAISLEY wool large repeated teardrop boteh motifs, around shoulders open atcenter, frontlapels descend either side chest, fringed ends tohip y850. Arms remain recognizable under drape, no huge blanket, no pin/no hair/hat/necklace. Shawl shoulder outerwidthx315–708 fits dress, no handscovered. Modest civilian historical wrap. Textured late1980s anime handinked woven grain, celshadow. Exact head unchanged feet1440. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-52d57a28-b186-4f5b-b3dc-1184e26824b3.png",
+      "path": "Raw/accessory_f_britain_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "df572ca1f0e878e253e3f447f119ec0d04f2fb5c594625b195ef3aa78922ce61",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_britain_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "Paisley shawl",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific shawl drape: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "flags": {
+        "label": "Paisley shawl"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "accessory_f_britain_industrial",
+      "prompt": "Generate1024x1536 posevariant of reference2 Paisley shawl. Reference1 gives EXACT head/hand pose and dress-fitting location; replace entire dress boots with plain flat MAGENTA opaque shirt full trousers socks, exposedface hands magenta. ONLY SHAWL colored rust gold plum woven boteh paisley identical reference2. Drape shawl around shoulders over upperarms and open chest, maintain approxfringedfrontendsy930, bend folds so BOTH arms extend explanation: viewerLEFT palm x174–280y675–774 viewerRIGHT x720–845y557–646. Hands empty unobstructed. Backfabric natural behind upperarms, no disconnected fabric. Exacthead164chin324 feet1440. Puregreen#00FF00 no props/hair/hat/text. Match inktextilegrain late80sanime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-19c2ae52-018e-4978-b952-c1e1af100452.png",
+      "path": "Raw/accessory_f_britain_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4da636e74ed8e0a24453c5b57166ac4be7b5df388e72fe1c64795435d7c02820",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_britain_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "Paisley shawl",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific shawl drape: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "flags": {
+        "label": "Paisley shawl"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "accessory_f_britain_industrial",
+      "prompt": "1024x1536 modular shawlpose. Ref1 exact head/arms/hands pose; ref2 exact rustgoldplum woven Paisley shawl. Replace ref1 ENTIRE dressboots with flatmagenta opaque long sleeve shirt full trousers socks, facehandsmagenta. Only shawl colored. Drapeshawl around shoulders with open center and longfringedends~930 like ref2, folds around bent upperarms, forearms and hands lie IN FRONT of shawl. Linked hands exact x457–562y681–771. Do not let cloth bridge over hands or change pose. Scalp164chin324 same, green#00FF00. Detailed teardropboteh textilegrain ink late1980sanime. No hairhatpropsjewelrytext.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4c3cee40-a7bc-400d-b094-8eadb75f2008.png",
+      "path": "Raw/accessory_f_britain_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e7c19077904caa919aba1782c1e39abb7e8f6f1f707f74d87fa6dcc436ddb120",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_britain_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "country": "britain",
+      "era": "industrial",
+      "label": "Paisley shawl",
+      "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific shawl drape: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "flags": {
+        "label": "Paisley shawl"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "accessory_f_britain_industrial",
+      "prompt": "1024x1536 shawlvariant. Ref1 EXACT objectingpose and headposition, ref2 exact rustgoldplum Paisley shawl. Replace all dress/boots with flatmagenta opaque long sleeve shirt fulltrousers socks, facehandsmagenta. Only SHAWL naturallycolored. Shawl around shoulders open center drapes over upperarms, wearerRIGHT arm raised palm forward viewerLEFT x285–390y297–432. Adapt shawl folds to raisedarm without covering hand, forearm infront. Other arm relaxed. Longfringedends approx930same design. Head164chin324feet1440same, no hat/hair/props/text. Flat green#00FF00. Textured late1980sanime inkgrain detailed woven boteh motifs.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5c315146-bc62-4e9e-bfe7-232e3cec5885.png",
+      "path": "Raw/accessory_f_britain_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "835ad32e5566d917302b446879a39c65ee53839b50e15b8f2cd6cb3530e42df5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "tweed and Fair Isle",
+      "details": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Brown herringbone tweed sports jacket with leather elbow patches over a Fair Isle-patterned sleeveless knitted pullover, a white shirt and a knitted wool tie. Baggy grey flannel trousers and brown brogues.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_m_britain_modern.",
+      "flags": {
+        "label": "tweed and Fair Isle"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_britain_modern",
+      "prompt": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Brown herringbone tweed sports jacket with leather elbow patches over a Fair Isle-patterned sleeveless knitted pullover, a white shirt and a knitted wool tie. Baggy grey flannel trousers and brown brogues.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_m_britain_modern.\n1024x1536 flatgreen#00FF00 fullfigure modularcostume. Ref1 exact bodyposeheadhands alignment, ref2 textilegrain/late1980sanime renderingstyle ONLY, not costume. Fully clothe ref1 in1950 civilian brown herringbone tweed sportsjacket with leather elbowpatches, FairIsle knitted sleevelessVneckpullover ivoryrustolive motifbands whitecollar knittedburgundywooltie. Baggy greyflannel highwaisttrousers brown brogues. Ordinary practical everyday clothing no model fashionstance/no propshairhat. Head239chin400 hands exactreference feet1421. Magenta#FF00FF face/hands. Jacketupperthighhem850, sweater waist730. Handinked celshadows richwoven pigment texture not photoreal. Keepfit moderatelyloose. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-377317c7-b018-4d89-af67-c3e46279f511.png",
+      "path": "Raw/outfit_m_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8925ec023957658711290b5ef0704b97b6d23b3f93baaf60d35c8a2a72440402",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_modern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "tweed and Fair Isle",
+      "details": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Brown herringbone tweed sports jacket with leather elbow patches over a Fair Isle-patterned sleeveless knitted pullover, a white shirt and a knitted wool tie. Baggy grey flannel trousers and brown brogues.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_m_britain_modern.",
+      "flags": {
+        "label": "tweed and Fair Isle"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_britain_modern",
+      "prompt": "1024x1536 costume sprite. Ref1 exact explanationpose, ref2 exact1950 brown herringbone tweed leatherelbowpatch sportsjacket FairIsle sweater whitecollar burgundytie greyflannelbaggytrousers brownbrogues. Fully clothe ref1 identically, changingonlysleeves for pose BOTH palmsopen asymmetric, viewerLEFT x177–292y562–642 viewerRIGHT x731–846y689–777. Keephead239chin400feet1421center512. Keep ref2jackethem870sweaterhem725lowerbodyunchanged. Facehandsmagenta#FF00FF greenbackground#00FF00. Preserve textilegrain late80sanimeinkcelshadows. No hairhatpropsortext.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1ec4aee4-8005-4940-967e-f7018086d295.png",
+      "path": "Raw/outfit_m_britain_modern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "de66e38bb1121ff49edb3b915d7059220759c4a83b3ea29ff3f24192d08422fd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_modern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "tweed and Fair Isle",
+      "details": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Brown herringbone tweed sports jacket with leather elbow patches over a Fair Isle-patterned sleeveless knitted pullover, a white shirt and a knitted wool tie. Baggy grey flannel trousers and brown brogues.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_m_britain_modern.",
+      "flags": {
+        "label": "tweed and Fair Isle"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_britain_modern",
+      "prompt": "One1024x1536 costume sprite, ref1 EXACT pose head hands, ref2 EXACT1950 tweedFairIsleoutfit. Dress ref1 in identical brown herringbone sportsjacket leatherelbowpatches FairIslesweaterwhitecollarburgundytie greyflanneltrousersbrownbrogues. Pose handslooselylinked exact x438–586y725–805. Keephead239chin400feet1421 and ref2jackethem870sweater725bodywidth/lowerbody fixed. Only sleevesfolds adapt. Facehandspuremagenta#FF00FF flatgreen#00FF00. Richfineink wovenpigment late1980sanime, nohairhatpropsletters.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-905035c6-5b04-42c2-af68-137458868e8a.png",
+      "path": "Raw/outfit_m_britain_modern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "78f7dcbd5e236608fb475320f93c040e084f7aed617f7e111c1a8615ad5b05ff",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_modern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "tweed and Fair Isle",
+      "details": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Brown herringbone tweed sports jacket with leather elbow patches over a Fair Isle-patterned sleeveless knitted pullover, a white shirt and a knitted wool tie. Baggy grey flannel trousers and brown brogues.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_m_britain_modern.",
+      "flags": {
+        "label": "tweed and Fair Isle"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_britain_modern",
+      "prompt": "1024x1536registeredcostume. Ref1 EXACT pose, ref2 EXACTbrown tweedFairIsle1950civilian outfit. Fullydress ref1 identically ref2, only sleeves adapt rightpalm raisedforwardviewerLEFT x298–408y367–502 otherarmdown. Head239chin400feet1421center512 unchanged. Preserve jackethem870sweater725trousersshoeplacement, herringboneleatherelbowpatcheswhitecollarburgundytie. Facehandsmagenta#FF00FF flatgreen#00FF00. Same textilegrainhandink late80sanime celshadows notphotoreal. No hairhatpropsortext.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-07658f69-b8d1-46d2-a9aa-e981445dc86d.png",
+      "path": "Raw/outfit_m_britain_modern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fa7058d89ff76daa2fe49bdba7c6d27ea1fd19abbcf447d2413658347ade396f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "short back and sides",
+      "details": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Short back and sides: neatly cut, side-parted and slicked with hair cream\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw hair_m_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short back and sides"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_britain_modern",
+      "prompt": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Short back and sides: neatly cut, side-parted and slicked with hair cream\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw hair_m_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 green#00FF00. Exact reference head239chin400center512posefeet1421. Replace entire outfit/shoes with plainopaque magenta long sleeveshirtfulltrouserssocks, facehandsmagenta. Only HAIR colored: darkashbrown modest shortbackandsides, neat sidepart slickedwithhaircream, slightlyrecedingtemples, lowvolume crown225, no hugequiff no beard or hat. Fine late80sanime inkedhairstrands pigmentgraincelshade. No text. Head must not change.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2afac159-3db1-4bb4-8140-2589bc299bbc.png",
+      "path": "Raw/hair_m_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "360e4a716ed2814d26ffe002451b807afb63d035aaed51e8c7a94df056c6a2f8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "flat cap",
+      "details": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Tweed flat cap: low, flat crown sloping forward onto a short peak\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw headwear_m_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "flat cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_britain_modern",
+      "prompt": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Tweed flat cap: low, flat crown sloping forward onto a short peak\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw headwear_m_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 green#00FF00. Headbody exact refposition scalp239chin400feet1421. Replace ALL costume/shoes with opaque flatmagenta plainlongsleeveshirtfulltrouserssocks, facehandsmagenta. ONLY hatcolored: brown tweed flatcap low flat crown gentlyslopesforward shortpeak centered front, snug x438–586 crown217brim280. No hair/beard, no topbuttonballoonnewsboy shape/no logos. Modest1950civilian cap. Fineinkwovenherringbonetexture late80sanime celshade notphoto. No text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7babc92f-9732-4b1e-87a8-8f6470104a81.png",
+      "path": "Raw/headwear_m_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "163676821715ae4b57a77365cd897eb6d4ef49cc93b2553bc593b52c57c8c34f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

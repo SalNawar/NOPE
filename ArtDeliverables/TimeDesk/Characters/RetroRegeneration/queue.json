@@ -13404,6 +13404,63 @@
     "base_key": "accessory_f_britain_industrial"
   },
   {
+    "name": "accessory_f_britain_industrial__explaining_b",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "accessory",
+    "place": "Victorian Britain",
+    "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+    "country": "britain",
+    "era": "industrial",
+    "label": "Paisley shawl",
+    "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific shawl drape: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+    "flags": {
+      "label": "Paisley shawl"
+    },
+    "pose": "explaining_b",
+    "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+    "base_key": "accessory_f_britain_industrial"
+  },
+  {
+    "name": "accessory_f_britain_industrial__thinking_c",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "accessory",
+    "place": "Victorian Britain",
+    "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+    "country": "britain",
+    "era": "industrial",
+    "label": "Paisley shawl",
+    "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific shawl drape: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+    "flags": {
+      "label": "Paisley shawl"
+    },
+    "pose": "thinking_c",
+    "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+    "base_key": "accessory_f_britain_industrial"
+  },
+  {
+    "name": "accessory_f_britain_industrial__objecting_a",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "accessory",
+    "place": "Victorian Britain",
+    "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+    "country": "britain",
+    "era": "industrial",
+    "label": "Paisley shawl",
+    "details": "Subject: woman of Victorian Britain; London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47).\nDraw: Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders\nAvoid: redcoat, police, guards or any uniform; Union Jack or royal regalia; steampunk goggles, gears or other anachronistic gadgets; Homburg hat or upturned waxed moustache (Germany-industrial); loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial); plain black fringed shawl with a bare chignon and coral beads (Italy-industrial); bustle silhouette (1870s-80s, the wrong decade); Dickensian ragged-urchin or chimney-sweep caricature; monocle-and-top-hat 'toff' caricature\nOutput one full-canvas raw accessory_f_britain_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific shawl drape: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+    "flags": {
+      "label": "Paisley shawl"
+    },
+    "pose": "objecting_a",
+    "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+    "base_key": "accessory_f_britain_industrial"
+  },
+  {
     "name": "outfit_m_britain_modern",
     "family": "wardrobe",
     "status": "pending",
