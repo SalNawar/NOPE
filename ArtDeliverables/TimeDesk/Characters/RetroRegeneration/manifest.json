@@ -24091,6 +24091,774 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_medieval__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "cyrtel and leg bindings",
+      "details": "Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Knee-length wool tunic (cyrtel) in madder red or woad blue, loosely bloused over a belt, with contrasting embroidered or tablet-woven bands at the neckline, cuffs and hem. Loose trousers are wrapped from ankle to knee with linen leg bindings (winingas). A plain rectangular wool cloak is draped over the left shoulder and fastened at the right shoulder with a small plain pin.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_m_britain_medieval.",
+      "flags": {
+        "label": "cyrtel and leg bindings"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_britain_medieval",
+      "prompt": "Image1 exact pose head hands, Image2 exact clothing identity and rendering. DressImage1 bluecyrtel ochrerustwovenbands brownleatherbelt buckle700tail850 charcoaltrousers ivoryspirallegbindings brownturnshoes. Ochrecloak pinnedviewerLEFTshoulder, fabricbehindarms to1075. WearerRIGHTpalm raised viewerLEFTx300–407y367–502 fingersup exactlyImage1, otherarmdown. Preserve head239/400center512 hem1000 feet1417 and lowerbody.1024x1536flatgreen#00FF00 exposedskinmagenta#FF00FF. Same textured inked80sanime celshadows. No hair hatsprops text shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4c0acf61-4909-4aea-a9b3-dba0af395bde.png",
+      "path": "Raw/outfit_m_britain_medieval__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2609a11dc787dfa9cf59912b8bb8844000a16a2c3b0b4d848cceff601a1b85d8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_britain_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "collar-length hair",
+      "details": "Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Neck-length straight hair, centre-parted and cut evenly at the collar\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw hair_m_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "collar-length hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_britain_medieval",
+      "prompt": "Separate hair layer. Use exact reference male head scalp239chin400center512 and neutral pose. Neck-length straight dark blond hair, natural centre part, cut evenly at collar y428, blunt straight ends not curls, modest ordinary practical hairstyle. Hair only colored element, hand inked late80s anime with subdued straw highlights pigmentgrain restrained celshadows. RemoveALL costume cloak pin belt shoes and replace with flat opaque magenta#FF00FF long-sleeve calibration shirt fulltrousers socks. Face hands magenta too. No facialhair hats jewelryprops. Same exact face/head scale and position feet1421,1024x1536flatgreen#00FF00. No text castshadow.\nRevision: Change only hair length: extend both side/back panels down to the shirt collar at y428, cut ends evenly straight across instead of outward flicks. Keep same dark blond center part, head face chin400 position and all other pixels/composition/style. 1024x1536flatgreen magenta clothed guide. No other changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-94370bf8-f976-400d-92ab-c3ac1a072476.png",
+      "path": "Raw/hair_m_britain_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0ff52d5e0bd5738ac02c4b899472fa51685ba7cd72c172a1565d34eabaf0aa76",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_britain_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "long English moustache",
+      "details": "Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Long full moustache with a clean-shaven chin (the English look on the Bayeux Tapestry)\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw facialhair_m_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "long English moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_britain_medieval",
+      "prompt": "Separate facialhair layer using exact reference head geometry scalp239chin400center512. Add long full darkblond English moustache with clean-shaven chin and cheeks: dense modest upperlip horizontal moustache y351–369 extending toward corners x476–548, ends drooping naturally to y390, no pointed waxed curls. Moustache ONLY colored object. Remove all originalcostume/cloak/belt/shoes and replace opaque flatmagenta#FF00FFlongsleeve calibration shirt fulltrousers socks. Facehandsskinmagenta. No headhair beard hatsjewelry. Preserveexactpose scale head and feet.1024x1536flatgreen#00FF00. Textured late80s inkedanime celshading subtlegrain no text shadowprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-19fa47b3-1175-4d55-8554-8c4fbecb9dc8.png",
+      "path": "Raw/facialhair_m_britain_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8cc0da45786cbc6cce46b41f23aad044dfac766b58e068812409b468dda90f9e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_britain_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "disc brooch",
+      "details": "Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Large round silver disc brooch with interlace and niello decoration, about as wide as the face, worn high on the right shoulder. Draw the brooch alone, with no cloak behind it\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw accessory_m_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "disc brooch",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_britain_medieval",
+      "prompt": "Separate accessory sprite. Keep reference exact malehead239/400center512 pose and proportions. ONLY colored object: LARGE ROUND SILVER DISC BROOCH intricate interlace and black niello inlay, about face width100px, center at x427 y448 on wearer's RIGHT shoulder(viewerLEFT), spans377–477 y398–498. It replaces small cloakpin from original. Shallow metallic rim, handinked textured80sanime celhighlight NOT photoreal. Remove ALL originalcloakpin clothesbelt shoes, replace opaque flatmagenta#FF00FF long-sleeve shirt fulltrousers socks. Facehandsmagenta. NO cloak behindbrooch, no hair no otherprops.1024x1536flatgreen#00FF00 exactheadscale and neutralpose unchanged no shadows or text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e7a2d4ca-3043-4138-a69e-7f609bd6a884.png",
+      "path": "Raw/accessory_m_britain_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "794c704ce796d09c950946297212aaf73b9dda475fa7f57464d53fcbb021d70b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "bell-sleeved overgown",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Ankle-length undergown with tight long sleeves, under a slightly shorter overgown with wide bell sleeves, in soft red, blue or dark olive-green wool with embroidered cuff bands. A plain mantle hangs from the shoulders, fastened at the upper chest with a plain round gilt clasp.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_f_britain_medieval.",
+      "flags": {
+        "label": "bell-sleeved overgown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_britain_medieval",
+      "prompt": "Image1 exact female anatomy head hand foot registration. Image2 STYLEONLY textured inked80sanime, NOT its costume. Draw Anglo-Saxon1050 civilian woman's outfit: anklelength soft rustred wool UNDERGOWN with tightlong sleeves, underneath slightlyshorter darkolive wool OVERGOWN hem1275 wide bell sleeves with ochre embroidered cuffbands and hem. Plain mutedblue rectangular wool mantle hungshoulders fastenedupperchest smallplaingiltclasp. Overgown simple loosefull modestconstruction, no corset no bodice lacing. Brown leather roundtoed lowshoes soles1440 exactImage1feetx347–449/575–675. Underhem1350. Exposedheadhands solidmagenta#FF00FF. Head164/324center512 neutralhands EXACTImage1. No hair headwear jewelry weaponsbags.1024x1536flatgreen#00FF00. Late80s anime handinked pigmentgrain wooltexture celshadows, not photoreal. No text floorcastshadow. Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Ankle-length undergown with tight long sleeves, under a slightly shorter overgown with wide bell sleeves, in soft red, blue or dark olive-green wool with embroidered cuff bands. A plain mantle hangs from the shoulders, fastened at the upper chest with a plain round gilt clasp.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_f_britain_medieval.\nRevision: Precise correction only lower feet: shoes currently stop y1413. Extend lower ankles underneath skirt and place both shoe soles at y1440. ViewerLEFT shoe x347–449, viewerRIGHT x575–675. Do not scale entirefigure or move skirt hems. Keep head164chin324 hands sleeves all clothing details andcolors entirelyunchanged. Green1024x1536canvas magentaskin same texturedanime. Only lower shoe position/size corrected.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-592ef9c8-0e69-42de-a8a6-77d9d0a7aa50.png",
+      "path": "Raw/outfit_f_britain_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "95318f3e8ed1529841ac709770a097f694f21ac78dd1fb28899c9c89b1069ce4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_medieval__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "bell-sleeved overgown",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Ankle-length undergown with tight long sleeves, under a slightly shorter overgown with wide bell sleeves, in soft red, blue or dark olive-green wool with embroidered cuff bands. A plain mantle hangs from the shoulders, fastened at the upper chest with a plain round gilt clasp.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_f_britain_medieval.",
+      "flags": {
+        "label": "bell-sleeved overgown"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_britain_medieval",
+      "prompt": "DressImage1 EXACTLY in Image2 clothing: darkolive bell-sleeved overgown goldinterlacebandshem1200, rustredtight-sleevedunderrobehem1355, mutedblue mantle giltclasp x467y404, brownshoes soles1437. Image1 governs gesture/headgeometry. WearerLEFT hand on upperchest viewerRIGHTx534–637y395–501 exactlyImage1, oppositearmdown. Mantle behind raisedforearm and hand. Preserveface head164/324center512, same lowerbody skirtwidth hemfeet asImage2. Magenta#FF00FF exposedskin1024x1536flatgreen#00FF00. Same inkedtextured80sanime pigmentgrainwoolcelshadows. No hats hair props text shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-392cbad8-51c0-4d7d-a7e3-aa293442e1a2.png",
+      "path": "Raw/outfit_f_britain_medieval__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c831f3f54a2580b1ff0e54c4886ebe517deb652b8a8b0152fe0e4e3107cea1a9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_medieval__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "bell-sleeved overgown",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Ankle-length undergown with tight long sleeves, under a slightly shorter overgown with wide bell sleeves, in soft red, blue or dark olive-green wool with embroidered cuff bands. A plain mantle hangs from the shoulders, fastened at the upper chest with a plain round gilt clasp.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_f_britain_medieval.",
+      "flags": {
+        "label": "bell-sleeved overgown"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_britain_medieval",
+      "prompt": "DressImage1 EXACTcostumeImage2. Hand/headgeometryImage1: wearerRIGHThand supportingchin x466–560y292–388 exact fingers, otherarmdown. Darkolive bell-sleeveovergown ochregoldinterlacebands hem1200, rustredtightlongsleeveundergownhem1355, mutedblue mantle smallgiltclaspx467y404 partlybehindforearm. Bell sleeve drapes from raisedarm naturally. Preserve lowerbody skirtwidth feet1437 and head164/324center512. Exposedskinflatmagenta#FF00FF,1024x1536flatgreen#00FF00. Textured handinked late80sanime subtlewoolgrain celshadows sameasImage2. No hair hats props shadowtext.\nRevision: Change ONLY misplaced gold cloakclasp at x528y394: REMOVE it and continue blue wool mantle in its place. Correct clasp position x467y404 is fully concealed behind raised rust sleeve/forearm, so NO clasp visible in this pose. Keep exact hand head pose clothing texture hems feet background and all other elements unchanged.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1c7304e1-fb95-4a8a-938f-72b40773f270.png",
+      "path": "Raw/outfit_f_britain_medieval__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9b26b66a64344f344462605b6380d095bd5f399ecb7d9d627c6f0580d2d6911e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_medieval__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "bell-sleeved overgown",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Ankle-length undergown with tight long sleeves, under a slightly shorter overgown with wide bell sleeves, in soft red, blue or dark olive-green wool with embroidered cuff bands. A plain mantle hangs from the shoulders, fastened at the upper chest with a plain round gilt clasp.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_f_britain_medieval.",
+      "flags": {
+        "label": "bell-sleeved overgown"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_britain_medieval",
+      "prompt": "Image1 controls exact pose handheadcoordinates. Image2 exact outfitidentity. DressImage1 same darkolive bell-sleevedovergown goldinterlacebandshem1200 rustredtight-sleeveundergownhem1355 mutedblue mantle giltclaspx467y404 andbrownshoes1437. BOTH palms forward at chest x375–482 and543–651 y460–600 matchingImage1 exactly, elbows bent. Widebellsleeveends hangunderraisedwrists, mantlebehindarms. No shifts in clasp head164/324center512lowerbodyorfeet.1024x1536flatgreen#00FF00exposedskinmagenta#FF00FF. Sameinkedtextured80sanime woolgraincelshadows. No hair hatsprops shadowtext.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-beaef8a0-a3a6-4d37-b6e3-1329e338f6c0.png",
+      "path": "Raw/outfit_f_britain_medieval__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c28ddb734aa6afc2bec91d85c6fd2056a3bd9820136a1a6d2b2b2c108567e846",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_britain_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "low nape coil",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Long hair coiled low and close at the nape\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw hair_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "low nape coil"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_britain_medieval",
+      "prompt": "Separate hairlayer using EXACT reference femaleheadscalp164chin324center512. Darkbrownlonghair centrepart combedback and coiled LOW and CLOSE at NAPE behindneck; front viewonly, small coil edges visible either side of neck y310–349, no highbun no braids downchest no ornaments. Hair ONLY coloredobject handinkedtexturedlate80sanime subduedcelshadows andpigmentgrain. ReplaceALL gownmantleclasp shoes with opaque plain magenta#FF00FFlongsleeve calibration shirt fulltrousers socks. Facehandsmagenta. Preserveexacthead face scale neutralpose.1024x1536flatgreen#00FF00 no textshadowprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b4c8a2de-1a19-42ab-a8a0-41050f72d48c.png",
+      "path": "Raw/hair_f_britain_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aa8d9609b00e70901780484a8b3b658d16c42479e11ed7e93a3dae4680ff00c2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "headrail",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw headwear_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "headrail",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_britain_medieval",
+      "prompt": "Separate headwearlayer alignedexactlyreference female scalp164chin324center512. COLOURED OCHRE HEADRAIL, long rectangular linencloth laid over head, wrappedonce loosely aroundthroat drapeddown shoulders/back, facecompletelyopen. Crown about135, faceopeningforehead185 cheeksandchinfullyvisible; drapedshoulderends to y515 maximum, no turban, nofrills, no whitecloth, no hair visible. Onlyheadrail colored. RemoveALL gownmantleclasp shoes replacingopaque flatmagenta#FF00FFlongsleevecalibrationshirtfulltrouserssocks; faceskinhandsmagenta. Preserveexactheadscale face neutralhandpose.1024x1536flatgreen#00FF00. Same textured handinkedlate80sanime pigmentgrain linen celshadows. No necklacespins hatsprops text castshadow.\nRevision: Shorten ONLY trailing veil panels. This is a headrail, not a second full cloak. All trailing ochre cloth ends at upperarm height y515, not hips. Remove ochre cloth below515 and replace with sameflatgreenbackground outsidebody and plainmagenta shirt insidebody. Keep crown face throatwrap shoulderfolds exact and unchanged, neutralpose canvas1024x1536 no otherchanges.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ae3dbcc6-987b-4f5a-85c9-304144d66f73.png",
+      "path": "Raw/headwear_f_britain_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f0df02a84a92d737c5a8a512e6327c81e55c2559c65bf666f03e188e2d5c6040",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_medieval__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "headrail",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw headwear_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "headrail",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "headwear_f_britain_medieval",
+      "prompt": "Image1 exactposeheadhandguide; Image2 exactochreheadrailidentity. Create separateheadrail layer matching Image1 wearerLEFT handonchestx534–637y395–501. Only coloredobject ochrelinenheadrail crown135 faceopening185 throatwrap350–415 shoulderends580. Preserve sameclothlength andwrap, raisedhand/forearm must be IN FRONT of headrail. All bodysupport opaque plainmagenta#FF00FFlongsleeve shirt fulltrousers socks, exposedfaceskinhandsmagenta. No otherclothingprops hair. Face164/324center512 unchanged exactImage1.1024x1536flatgreen#00FF00 handinked textured80sanime linen celshading. No textshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8a7d7b3f-3896-44d1-bd8b-8709d0a1323e.png",
+      "path": "Raw/headwear_f_britain_medieval__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a5aa49a0d4abc6aaeef2143502ebef96b60df6476f292cc9892008882467b754",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_medieval__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "headrail",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw headwear_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "headrail",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "headwear_f_britain_medieval",
+      "prompt": "Image1 exactthinkingpose handandhead geometry, Image2 headrailidentity. Separate ochrelinenheadrail crown135faceopening185 throatwrap350–415 andshoulderends580 sameasImage2. WearerRIGHThand supports chin x466–560y292–388 exactlyImage1, oppositearmdown. Hand and raisedforearm IN FRONT of throatcloth, clothdrapesbehind. Only headrailcolored, allsupportbodyopaqueplainmagenta#FF00FFlongsleevecalibrationshirtfulltrouserssocks facehandsmagenta. Samehead164/324center512scale.1024x1536flatgreen#00FF00. Texturedinked80sanime celshadows linenpigmentgrain no othercostumehairprops textshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a5e9af64-dd38-481b-9708-0f409a10ea68.png",
+      "path": "Raw/headwear_f_britain_medieval__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8ab33148c9bf25b249a849efe0fc13517585283d8c124ccec2fd1b02d97a274f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_medieval__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "headrail",
+      "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw headwear_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "headrail",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "headwear_f_britain_medieval",
+      "prompt": "Image1 exactposeheadhandguide; Image2 ochrelinenheadrailidentity. BOTH palmsforward chest x375–482 and543–651 y460–600 exactImage1. Separateheadrail only coloredobject crown135faceopening185 throatwrap350–415 shoulderends580. Clothbehindforearms andhands, same clothscale/length asImage2. Head164/324center512unchanged. Allsupportfigureopaqueplainmagenta#FF00FFlongsleevecalibration shirt fulltrousers socks facehandsmagenta.1024x1536flatgreen#00FF00. Same handinkedtextured80sanime linenpigmentgrain celshadows. No othercostumehairprops text shadows.\nRevision: Remove ONLY extra ochrecloth hanging below elbows y600–715. The headrail ends at shoulder/upperarm y580, no veil behind elbows or waist. Fill removedareas flatgreen outsidebody magenta insidebody. Preserve bothraisedpalms exact head face crownthroatwrap allremainingpixels1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9ecefe6f-31bf-4b17-a05a-37efffe9d728.png",
+      "path": "Raw/headwear_f_britain_medieval__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "158b5cb7e3cbf367909f56d8baa363bc165d24c75e994ffd8855985e1cc63fe1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "doublet and ruff",
+      "details": "Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Close-fitting black doublet with small shoulder wings, a short tabbed skirt and a long row of small buttons. It is worn with padded knee breeches (Venetians), dark stockings and flat shoes, and a short black cloak slung over one shoulder. At the neck is a large starched white cartwheel ruff.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_m_britain_earlymodern.",
+      "flags": {
+        "label": "doublet and ruff"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_britain_earlymodern",
+      "prompt": "Image1 exactmale registration pose proportions headscalp239chin400center512 soles1421. Image2 STYLEONLY inkedtexturedlate80sanime, NOTitsclothing. DressImage1 ElizabethanLondon1600 civilian merchant: closefitting blackdoublet smallshoulderwings shorttabbedskirt ending815 longrow smallblackbuttons chesttowaist. Blackpadded knee Venetianbreeches to1040 darkstockings toankle flatblackleathershoes. Shortblackcloak slungviewerRIGHTshoulder ending950. LARGE whitecartwheelruff starched pleatedlinen fullcircularneckcollar, flatoutward disk inperspective y410–470 notfallingcollar. Restrainedcharcoalhighlights blackclothreadable. Neutralarms exactImage1skinmagenta#FF00FF no hairbeard hatsbag jewelryswords.1024x1536flatgreen#00FF00 no floorcastshadowtext. Handmadeinklines subtlepigmentgrain/textiletexture celshadows NOTphotoreal. Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Close-fitting black doublet with small shoulder wings, a short tabbed skirt and a long row of small buttons. It is worn with padded knee breeches (Venetians), dark stockings and flat shoes, and a short black cloak slung over one shoulder. At the neck is a large starched white cartwheel ruff.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_m_britain_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-54d329b2-5121-437e-98e0-32307b5cfe89.png",
+      "path": "Raw/outfit_m_britain_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3a88dd3ed645914b1ade51b356f697d8f68add443a209e65ef98ceed3ac7e29a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "doublet and ruff",
+      "details": "Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Close-fitting black doublet with small shoulder wings, a short tabbed skirt and a long row of small buttons. It is worn with padded knee breeches (Venetians), dark stockings and flat shoes, and a short black cloak slung over one shoulder. At the neck is a large starched white cartwheel ruff.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_m_britain_earlymodern.",
+      "flags": {
+        "label": "doublet and ruff"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_britain_earlymodern",
+      "prompt": "Image1 exactpose/head/handguide Image2 exactcostume. DressImage1 same blackbuttoneddoublet shoulderwings tabbedskirt hem835 blackkneebreeches stockings flatshoes1419 shortcloakviewerRIGHThem1075 whitecartwheelruff y355–465. WearerLEFThand onchest x544–636y496–593 matchingImage1 exactly, oppositearmdown. Keepblackcloakbehindraisedarm, samehead239/400center512 legspositionandruffunchanged.1024x1536flatgreen#00FF00magenta#FF00FFskin. Sameinkedtextured80sanime charcoalclothsubtlegrain celshadows. No hair hatsprops textcastshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a18f71b8-3fce-42b2-8b2b-738a64da630f.png",
+      "path": "Raw/outfit_m_britain_earlymodern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ba1e970b4d62150b16f0f0e493ee8236c726d46d4354a34f24944bf75412fc13",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "doublet and ruff",
+      "details": "Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Close-fitting black doublet with small shoulder wings, a short tabbed skirt and a long row of small buttons. It is worn with padded knee breeches (Venetians), dark stockings and flat shoes, and a short black cloak slung over one shoulder. At the neck is a large starched white cartwheel ruff.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_m_britain_earlymodern.",
+      "flags": {
+        "label": "doublet and ruff"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_britain_earlymodern",
+      "prompt": "Image1 exactthinkingposeheadhandgeometry. Image2 exactcostumeidentity. DressImage1 blackbuttoneddoublet smallshoulderwings tabbedskirt835 blackpaddedkneebreeches stockingsflatshoes1419 viewerRIGHTblackcloak1075 whitecartwheelruff y355–465. RIGHT handtochin viewerLEFT x451–547y371–479 identicalImage1, otherarmdown. RAISEDHANDANDWRIST IN FRONT OF RUFF, collarpartlyhiddenbyhand. No hand throughruff, no changeinhead239/400center512orlowerbodyruffscale.1024x1536flatgreen#00FF00 skinmagenta#FF00FF. Inkedtextured80sanime subtleclothgraincelshadows no hair hats props text shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c357dd6b-edf4-44eb-bfce-75341c2268d5.png",
+      "path": "Raw/outfit_m_britain_earlymodern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8916ffa20c08615a911c1f8f88cce4372a0f9914b47bddcb31e747c1c9e2d802",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "doublet and ruff",
+      "details": "Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Close-fitting black doublet with small shoulder wings, a short tabbed skirt and a long row of small buttons. It is worn with padded knee breeches (Venetians), dark stockings and flat shoes, and a short black cloak slung over one shoulder. At the neck is a large starched white cartwheel ruff.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_m_britain_earlymodern.",
+      "flags": {
+        "label": "doublet and ruff"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_britain_earlymodern",
+      "prompt": "Dress Image1 in EXACT Image2 costume. BOTH palmsforward at chest x359–469 and555–666 y531–658 exactlyImage1; head239/400center512. Blackbuttoneddoublet smallshoulderwings tabbedskirt835 blackpaddedkneeVenetianbreeches darkstockings flatblackshoes1419 shortcloakviewerRIGHTto1075 behindarms. Whitecartwheelruff355–465 unchanged. Keep feetlegswidth andallcostumedetails sameImage2.1024x1536flatgreen#00FF00 exposedskinmagenta#FF00FF. Sameinkedtextured80sanime celshadowsgrain no hats hairprops textcastshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-95a26f82-c940-424d-842a-17b6efb07b89.png",
+      "path": "Raw/outfit_m_britain_earlymodern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "db8e48496407615c41505e5ebbc774fcc579f4dbedc72940b38d46a3bd629107",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_britain_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "brushed-up short hair",
+      "details": "Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Short hair brushed up and back from the forehead\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw hair_m_britain_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "brushed-up short hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_britain_earlymodern",
+      "prompt": "Separate hair layer exactlyalignedreferencehead239/400center512. Short chestnutbrown hair brushed UP and BACK from forehead, modest natural volumeand slightlyunevenhairline, templesvisibleearsopen, napeendsabove collar. Haironlycoloredobject, no beard hat. RemoveALL ruffcloakdoublet stockingsshoes replaceopaqueplainmagenta#FF00FFlongsleevecalibrationshirt fulltrouserssocks. Faceskinhandsmagenta too. Exactheadfacepositionunchanged neutralposefullcanvas1024x1536flatgreen#00FF00. Handinkedtexturedlate80sanime subtlepigmentgrain celshadows notglossy. No textshadowprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-779591d5-a703-41c4-8027-533b47f9303a.png",
+      "path": "Raw/hair_m_britain_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3547a594dabf608b3cf2fec88f7632e5a1d28c94bb3d2667634534de05a744bf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_britain_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "pick-a-devant beard",
+      "details": "Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Pointed 'pick-a-devant' beard with an upturned moustache\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw facialhair_m_britain_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pick-a-devant beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_britain_earlymodern",
+      "prompt": "Separate facialhairlayer exactreferenceheadscalp239chin400center512. Chestnutbrown pointed pick-a-devant beard from chin to y455 with small upturned moustache overupperlip, neatlytrimmed pointed triangular beard no bushysideburns. BeardandmoustacheONLYcoloredobjects. RemoveALL originalcostumeruffcloakshoes, replaceopaqueplainmagenta#FF00FFlongsleevecalibrationshirt fulltrousers socks. Faceskinhandsmagenta. Noheadhairhatprops. Preserveexactfacialgeometryheadposition neutralpose.1024x1536flatgreen#00FF00 handinked texturedlate80sanime subtlegraincelshadows no textcastshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a258fa0f-1d82-4d1c-9366-e77f16f50d44.png",
+      "path": "Raw/facialhair_m_britain_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a6d9b21895fc64dd900c8ebd40a446d3e9359e8e0791f080225b0d8bc42f5f99",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_britain_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "capotain hat",
+      "details": "Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Tall-crowned black felt capotain hat with a narrow brim and a plain hatband\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw headwear_m_britain_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "capotain hat",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_britain_earlymodern",
+      "prompt": "Separate headwearlayer exactreferencehead239/400center512. Tall-crowned blackfelt CAPOTAIN with narrowbrim plainblackhatband NO BUCKLE no feather. Slightly tapered tallcrown topy132, bandy245–263 brim roughlyx414–610y268–291. Naturalblackfelt texture handinked80sanime charcoalcelhighlights subtlegrain. Hat ONLYcoloredobject. RemoveALLoriginalruffcloakclothesstockingsshoes replaceopaqueplainmagenta#FF00FFlongsleevecalibrationshirtfulltrouserssocks, facehandsmagenta. No hairbeard visible no otherprops. Samefaceheadpositionneutralpose1024x1536flatgreen#00FF00 no text shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-843ead76-3154-4660-96e5-43c72462a95e.png",
+      "path": "Raw/headwear_m_britain_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9fcf4fc0682fc1419ba0728e75a937f8f631b971072b0215452e94a07df7694d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "gown and lace ruff",
+      "details": "Subject: woman of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Black or russet gown with a stiff, long, pointed bodice and a full skirt over a modest hip roll, not a court wheel farthingale. A wide starched white lace-edged ruff sits at the neck, with matching white linen cuffs.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_f_britain_earlymodern.",
+      "flags": {
+        "label": "gown and lace ruff"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_britain_earlymodern",
+      "prompt": "Image1 EXACTfemale registrationhead164chin324center512handsfeet1440. Image2 STYLEONLY inkedtextured80sanime andruffconstruction, notmaleclothing. DrawElizabethanLondon1600female civilian RUSSET gown withstiff longpointedbodice pointat700, fullskirt overMODESThiproll nothugefarthingale, skirthem1360 width~350–680. Widewhitestarcheddiskruff laceedge neck350–410 matchingwhitefoldedlinencuffs. Fittedlongsleeves smallnaturalshoulderpuffs, understateddarkrussetseams no heavyjewels. Brownlowleathershoes soles1440 exactguidefeetx347–449/575–675. Headskinhandssolidmagenta#FF00FF. No hair hatsjewelryprops.1024x1536flatgreen#00FF00. NeutralposeexactImage1. Texturedhandinkedlate80sanime pigmentgrain clothcelshadows notphotoreal notroyalportrait. Subject: woman of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Black or russet gown with a stiff, long, pointed bodice and a full skirt over a modest hip roll, not a court wheel farthingale. A wide starched white lace-edged ruff sits at the neck, with matching white linen cuffs.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_f_britain_earlymodern.\nRevision: Correct only lower gown silhouette and shoes. Skirt is MUCH too wide like court farthingale: reduce to modest civilian gathered A-line, hem spans x285–738 (not142–880), bottom hem y1360. Keep bodice hips face arms cuffs ruff unchanged. Shoes fit guide viewerLEFTx347–449 and viewerRIGHT575–675 soles1440, not1457. No otherchanges, same inkedtexturedstyle colors andgreen1024x1536canvas.\nRevision: Only correct shoes and lower hem. Raise shoes 18 pixels so soles y1440. Reduce width of shoes: viewerLEFT347–449 viewerRIGHT575–675, and raise bottom skirt hem to1360 so shoes show. Keep skirt current width and all above y1300 absolutely unchanged. Do not recenter or scaleimage.1024x1536samegreen background, same texturedanime.\nFresh registration correction: Image1 is EXACT anatomy calibration, especially FEET. Dress Image1 in Image2 russet Elizabethangown with white lace ruff,cuffs andpointedbodice. CopyImage1 footpositions: leftshoe wrapsfootx347–449, right575–675, solesat1440. No foot movement, no shorteninglegs. Headscalp164chin324 andneutralhands sameImage1. Image2 costume design only: simple russet pointedbodice fullgatheredA-lineskirt, lacewhiteruff andcuffs. Use lowleathershoes NOTlaceupboots, skirthem1360. Maintain1024x1536flatgreen#00FF00 magentaskin#FF00FF handinked textured80sanime woolgrain celshadows. No hair hats props textshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e759d8e8-1cda-4d56-b7c4-39002ec5dba4.png",
+      "path": "Raw/outfit_f_britain_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7ab0b3b8f01720dec5ac66480da9f65f839a398792b0c99eb61ba497e9511fb8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "gown and lace ruff",
+      "details": "Subject: woman of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Black or russet gown with a stiff, long, pointed bodice and a full skirt over a modest hip roll, not a court wheel farthingale. A wide starched white lace-edged ruff sits at the neck, with matching white linen cuffs.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_f_britain_earlymodern.",
+      "flags": {
+        "label": "gown and lace ruff"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_britain_earlymodern",
+      "prompt": "DressImage1 EXACTcostumeImage2: russetpointedbodicegown fullA-lineskirt hem1355 width170–850 whitecartwheelrufflaceedge y297–424 matchinglacecuffs brownlowshoes soles1440. Image1 controls exactgesture head164/324center512 wearerRIGHTpalmupx393–524y560–607 oppositearmdown. Preserve Image2 bodicepoint700 skirtwidthhemfeetpositions unchanged. Inkedtextured80sanime subtlewovenpigmentgraincelshadows sameImage2 no extraembellishments.1024x1536flatgreen#00FF00exposedskinmagenta#FF00FF no hair hats props textshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e3645202-259c-4d3e-9fba-43ede9bf668a.png",
+      "path": "Raw/outfit_f_britain_earlymodern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c7a203fdfe50b999561e8819ef463119e9774dc6a94cabb22fbb371ef611e20a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "gown and lace ruff",
+      "details": "Subject: woman of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Black or russet gown with a stiff, long, pointed bodice and a full skirt over a modest hip roll, not a court wheel farthingale. A wide starched white lace-edged ruff sits at the neck, with matching white linen cuffs.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_f_britain_earlymodern.",
+      "flags": {
+        "label": "gown and lace ruff"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_britain_earlymodern",
+      "prompt": "Image1 exactpose/head/handgeometry Image2 exactcostumeidentity. DressImage1 same russetgown stiffpointedbodicepoint700 whitecartwheelrufflace297–424 matchinglacecuffs gatheredA-lineskirt1355 lowbrownshoes1440. LEFT fingertipscheek x533–587y274–372, RIGHT forearmcrossed supportingelbow handx559–645y548–608 exactlyImage1. Raisedhand/wrist IN FRONT OF RUFF notthroughit. Preservelowerbody skirtwidth170–850feetandhead164/324center512.1024x1536flatgreen#00FF00magenta#FF00FFskin. Texturedlate80sanime inkedwoolgraincelshadows no hair hatsprops textshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-de54c26f-e9b0-4536-85b5-7e5449e678e8.png",
+      "path": "Raw/outfit_f_britain_earlymodern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "09b623fb2ee7dd397cdb7e12015b2bdce823da0f99d049ee7411a207094fdc72",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "gown and lace ruff",
+      "details": "Subject: woman of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Black or russet gown with a stiff, long, pointed bodice and a full skirt over a modest hip roll, not a court wheel farthingale. A wide starched white lace-edged ruff sits at the neck, with matching white linen cuffs.\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw outfit_f_britain_earlymodern.",
+      "flags": {
+        "label": "gown and lace ruff"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_britain_earlymodern",
+      "prompt": "Image1 exacthand/headgestureguide Image2 exactcostumeandfeet. DressImage1 same russetpointedbodicegown whitelaceruff y297–424 whitecuffs fullgatheredA-lineskirt1355 lowbrownshoes1440. RIGHT handonchestx434–566y394–489, LEFT palmopenside x773–889y685–777 exactlyImage1. HandINFRONTofruffwhereoverlap. Head164/324center512 unchanged, preserveImage2 skirtwidth170–850hemfeetposition noextra flare.1024x1536flatgreen#00FF00 skinmagenta#FF00FF. Inkedtextured80sanime woolgrain celshadows no hair hatsprops textshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-92cee7a5-a34b-4bf2-a2cf-8cd8236f62ae.png",
+      "path": "Raw/outfit_f_britain_earlymodern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f97eb98874cb6e999fcaec76fee900157222942fb36319758c7d5dc432ac8e68",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_britain_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "country": "britain",
+      "era": "earlymodern",
+      "label": "pinned-up hair",
+      "details": "Subject: woman of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.\nDraw: Hair drawn up and back, pinned close to the head, with a smooth front edge at the hairline\nAvoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery\nOutput one full-canvas raw hair_f_britain_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pinned-up hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_britain_earlymodern",
+      "prompt": "Separatehairlayer usingexactreferencefemalehead164/324center512. Darkauburnhair drawnUPandBACK pinnedclose tohead, smoothfrontedgehairline, compactcoiledback hair mostlyhidden, no highbun no curls overforehead no jewelrypins showing. Hair onlycoloredobject. Replace ALL ruffdresscuffsshoes with opaqueplainmagenta#FF00FFlongsleevecalibrationshirtfulltrouserssocks. Faceskinhandsmagenta. Preserveexactheadfaceposition neutralposeandscale.1024x1536flatgreen#00FF00. Inkedtexturedlate80sanime restrainedcelshadows subtlepigmentgrain. No textshadowprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-73901077-21d9-41ea-b78e-e76d66e58910.png",
+      "path": "Raw/hair_f_britain_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2a2d46361246690ffa3c1ac1a21c6bec6c79b5aa1c97a12fd7278f4fe4df5cc8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

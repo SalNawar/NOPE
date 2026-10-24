@@ -12777,6 +12777,75 @@
     "base_key": "headwear_f_britain_medieval"
   },
   {
+    "name": "headwear_f_britain_medieval__explaining_c",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "headwear",
+    "place": "Anglo-Saxon England",
+    "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+    "country": "britain",
+    "era": "medieval",
+    "label": "headrail",
+    "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw headwear_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+    "flags": {
+      "label": "headrail",
+      "leakable": true,
+      "covers": [
+        "Hair"
+      ]
+    },
+    "pose": "explaining_c",
+    "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+    "base_key": "headwear_f_britain_medieval"
+  },
+  {
+    "name": "headwear_f_britain_medieval__thinking_a",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "headwear",
+    "place": "Anglo-Saxon England",
+    "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+    "country": "britain",
+    "era": "medieval",
+    "label": "headrail",
+    "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw headwear_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+    "flags": {
+      "label": "headrail",
+      "leakable": true,
+      "covers": [
+        "Hair"
+      ]
+    },
+    "pose": "thinking_a",
+    "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+    "base_key": "headwear_f_britain_medieval"
+  },
+  {
+    "name": "headwear_f_britain_medieval__objecting_b",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "headwear",
+    "place": "Anglo-Saxon England",
+    "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+    "country": "britain",
+    "era": "medieval",
+    "label": "headrail",
+    "details": "Subject: woman of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw headwear_f_britain_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+    "flags": {
+      "label": "headrail",
+      "leakable": true,
+      "covers": [
+        "Hair"
+      ]
+    },
+    "pose": "objecting_b",
+    "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+    "base_key": "headwear_f_britain_medieval"
+  },
+  {
     "name": "outfit_m_britain_earlymodern",
     "family": "wardrobe",
     "status": "pending",
