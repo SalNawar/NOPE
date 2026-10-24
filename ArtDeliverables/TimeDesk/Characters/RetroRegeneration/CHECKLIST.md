@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 746. Full regeneration is NOT complete.
+Saved: 771. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -750,3 +750,28 @@ Saved: 746. Full regeneration is NOT complete.
 | headwear_f_china_earlymodern | visually reviewed; registration pending |
 | outfit_m_china_industrial | visually reviewed; registration pending |
 | outfit_m_china_industrial__explaining_a | visually reviewed; registration pending |
+| outfit_m_china_industrial__thinking_b | visually reviewed; registration pending |
+| outfit_m_china_industrial__objecting_c | visually reviewed; registration pending |
+| hair_m_china_industrial | visually reviewed; registration pending |
+| headwear_m_china_industrial | visually reviewed; registration pending |
+| outfit_f_china_industrial | visually reviewed; registration pending |
+| outfit_f_china_industrial__explaining_b | visually reviewed; registration pending |
+| outfit_f_china_industrial__thinking_c | visually reviewed; registration pending |
+| outfit_f_china_industrial__objecting_a | visually reviewed; registration pending |
+| hair_f_china_industrial | visually reviewed; registration pending |
+| headwear_f_china_industrial | visually reviewed; registration pending |
+| accessory_f_china_industrial | visually reviewed; registration pending |
+| accessory_f_china_industrial__explaining_b | visually reviewed; registration pending |
+| accessory_f_china_industrial__thinking_c | visually reviewed; registration pending |
+| accessory_f_china_industrial__objecting_a | visually reviewed; registration pending |
+| outfit_m_china_modern | visually reviewed; registration pending |
+| outfit_m_china_modern__explaining_b | visually reviewed; registration pending |
+| outfit_m_china_modern__thinking_c | visually reviewed; registration pending |
+| outfit_m_china_modern__objecting_a | visually reviewed; registration pending |
+| hair_m_china_modern | visually reviewed; registration pending |
+| headwear_m_china_modern | visually reviewed; registration pending |
+| accessory_m_china_modern | visually reviewed; registration pending |
+| outfit_f_china_modern | visually reviewed; registration pending |
+| outfit_f_china_modern__explaining_c | visually reviewed; registration pending |
+| outfit_f_china_modern__thinking_a | visually reviewed; registration pending |
+| outfit_f_china_modern__objecting_b | visually reviewed; registration pending |

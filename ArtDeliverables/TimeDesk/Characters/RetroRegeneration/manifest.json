@@ -18808,6 +18808,759 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_industrial__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "changshan and magua",
+      "details": "Subject: man of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Changshan: an ankle-length gown in dark-blue or grey silk with a small standing collar and a curved diagonal (dajin) opening fastened by cloth knot buttons down the right side. Over it is a magua: a short, hip-length black jacket with a straight centre opening, knot buttons and roomy sleeves. A small embroidered silk purse (hebao) on a knotted cord with a tassel hangs at the right hip below the magua. Black cloth shoes with white soles.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw outfit_m_china_industrial.",
+      "flags": {
+        "label": "changshan and magua"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_china_industrial",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Preserve EXACT head face torso robe hem legs shoes AND small rust hip purse positions. Same Qing darksteelblue changshan black magua roomy sleeves clothknot buttons. Natural sleeve folds follow new arms and hands emerge wrist openings. Skin flat magenta #FF00FF, green #00FF00 background1024x1536. Late1980s inked anime cloth pigmentgrain cel shading. No hair hats additionalaccessories props. Do not change face lowerbody purse or scale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d02bd7ba-ef9e-47d8-835b-6b2bc7d7b422.png",
+      "path": "Raw/outfit_m_china_industrial__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4e8126a3d97e29cefec39312ee3a311148c1d46e14822990ded8ebc70b46789f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_industrial__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "changshan and magua",
+      "details": "Subject: man of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Changshan: an ankle-length gown in dark-blue or grey silk with a small standing collar and a curved diagonal (dajin) opening fastened by cloth knot buttons down the right side. Over it is a magua: a short, hip-length black jacket with a straight centre opening, knot buttons and roomy sleeves. A small embroidered silk purse (hebao) on a knotted cord with a tassel hangs at the right hip below the magua. Black cloth shoes with white soles.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw outfit_m_china_industrial.",
+      "flags": {
+        "label": "changshan and magua"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_china_industrial",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Preserve EXACT head face torso robe hem legs shoes AND small rust hip purse positions. Same Qing darksteelblue changshan black magua roomy sleeves clothknot buttons. Natural sleeve folds follow new arms and hands emerge wrist openings. Skin flat magenta #FF00FF, green #00FF00 background1024x1536. Late1980s inked anime cloth pigmentgrain cel shading. No hair hats additionalaccessories props. Do not change face lowerbody purse or scale.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f96ce683-ff8c-4194-95b4-fe8cf3cf151a.png",
+      "path": "Raw/outfit_m_china_industrial__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "58d9d3f51c409ca2e1d107508215c790085576ef40b56e5e9ac989a0b300c49a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_china_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "queue",
+      "details": "Subject: man of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Queue: the front of the scalp shaved back to the crown and the rest braided into one long, neat plait down the back (hidden from the front). Draw it tidily and with dignity, never as a caricature.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw hair_m_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "queue"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_china_industrial",
+      "prompt": "Subject: man of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Queue: the front of the scalp shaved back to the crown and the rest braided into one long, neat plait down the back (hidden from the front). Draw it tidily and with dignity, never as a caricature.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw hair_m_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nCorrection to pending source: remove the entire black jacket and replace it with a plain opaque flat magenta #FF00FF long-sleeved calibration shirt. No black buttons, collar or fabric. Preserve ONLY the dark hair at rear sides of scalp in natural color; front shaved scalp magenta. Preserve head face hands feet and framing exactly. All support clothes trousers socks magenta; background green #00FF00,1024x1536. Queue braid hidden down back. Late1980s handinked anime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2fe1633b-5373-4b87-84a0-9939050b27fc.png",
+      "path": "Raw/hair_m_china_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "97398f149ff05ae82a53a6c42439edab1e53c3457ca29dec39d751617be0d21b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_china_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "guapimao cap",
+      "details": "Subject: man of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Guapimao: a rounded black satin skullcap of six segments with a red knotted-silk button on top and no official finial\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw headwear_m_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "guapimao cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_china_industrial",
+      "prompt": "Subject: man of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Guapimao: a rounded black satin skullcap of six segments with a red knotted-silk button on top and no official finial\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw headwear_m_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse exact reference headface registration. Rounded black satin sixsegment guapimao skullcap small red silk knot at top, no finial no feathers. Recolor all hair magenta#FF00FF including napehair. Only cap colored, restfacehands opaque shirt trousers socks magenta.1024x1536 flatgreen#00FF00. Preserve head face and bodyposition. Late1980s handinked anime fabricpigmentgrain restrainedcelhighlights.\nCorrection: Hat-only extraction source: recolor black hair at BOTH temples and BOTH sides of nape brightmagenta#FF00FF. Only the black sixpanel cap and its red topknot remain colored. Do not change cap, face, hands, clothes, canvas or pose.\nCorrection: Remove the two small dark hair wedges beside the NECK at y375 to410, x458..469 and554..565. Replace with magenta #FF00FF. Preserve everything else exactly. No hair visible anywhere, only cap is colored.\nReview: two small dark nape guide wedges remain after corrections; exclude these from cap extraction. Cap layer only contains pixels above eyebrows, not nape. Not runtime approved.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-14e6865d-44fa-4260-98f5-12e28f117921.png",
+      "path": "Raw/headwear_m_china_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c9c4c215793fbb193d738c72090650b4731e4c604925cf0a7d54df19ea5c770b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "trimmed ao and skirt",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Ao: a loose, knee-length jacket with wide flared sleeves and a curved right-side opening with knot buttons. Its collar edge, front curve, cuffs and hem are covered in several broad bands of contrasting embroidered trim (xianggun). The jacket is pale coral or pale blue with black trim, worn over a black pleated mamian skirt. Flat black cloth shoes.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw outfit_f_china_industrial.",
+      "flags": {
+        "label": "trimmed ao and skirt"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_china_industrial",
+      "prompt": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Ao: a loose, knee-length jacket with wide flared sleeves and a curved right-side opening with knot buttons. Its collar edge, front curve, cuffs and hem are covered in several broad bands of contrasting embroidered trim (xianggun). The jacket is pale coral or pale blue with black trim, worn over a black pleated mamian skirt. Flat black cloth shoes.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw outfit_f_china_industrial.\nDress exact reference mannequin preserve face hands feet. Pale blue loose knee ao jacket curved rightside opening clothknotbuttons, broad black embroidered trim bands with modest creamrust flowers along collar opening cuffs hem. Black pleated mamian skirt flatcenterpanel. Flat black clothshoes normalfullsized feet following exactguide. No hair hats jewelry props. Scalp164 chin324 soles1440 center512.1024x1536 flatgreen#00FF00 all exposedskinmagenta#FF00FF. Late1980s inked anime textured pigmentgrain fabric celshadows. No glamour, ordinary traveller.\nCorrection: Correct clothing LENGTHS ONLY. Extend blue embroidered ao jacket to KNEES at y1030 keeping same proportions trim pattern loose shape. Extend black mamian skirt to ANKLES y1370, covering calves. Preserve all head face hands arm sleeves shoes coordinates and canvas. Same embroidery style. Do not move body or feet, just lengthen the two garments.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-59bbe297-98c0-4813-ab4a-4cdad7b519ad.png",
+      "path": "Raw/outfit_f_china_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e04e4aed057deaf78d42c199b6c98285cbb5925945eefe82d19165ce56b03bb3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "trimmed ao and skirt",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Ao: a loose, knee-length jacket with wide flared sleeves and a curved right-side opening with knot buttons. Its collar edge, front curve, cuffs and hem are covered in several broad bands of contrasting embroidered trim (xianggun). The jacket is pale coral or pale blue with black trim, worn over a black pleated mamian skirt. Flat black cloth shoes.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw outfit_f_china_industrial.",
+      "flags": {
+        "label": "trimmed ao and skirt"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_china_industrial",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Preserve exact head face torso jacket/skirt hem legs shoes positions and scale. Same pale blue Qing ao broad black floral embroidered bands, curved frontopening, wideflared sleeves, black pleated mamian skirt. Natural sleeve folds from armchange only. Skin flatmagenta#FF00FF green#00FF00 background1024x1536. Late1980s inked anime texturedfabric pigmentgrain celshadows. No hair hats extra accessories props. Do not move lowerbody or change clothinglength.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ea1a3845-381a-43fb-88b9-5133c9de369e.png",
+      "path": "Raw/outfit_f_china_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1999d82333c5b86b095c0dc7d26240824478c12b11ae910ce393a16490a817f4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "trimmed ao and skirt",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Ao: a loose, knee-length jacket with wide flared sleeves and a curved right-side opening with knot buttons. Its collar edge, front curve, cuffs and hem are covered in several broad bands of contrasting embroidered trim (xianggun). The jacket is pale coral or pale blue with black trim, worn over a black pleated mamian skirt. Flat black cloth shoes.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw outfit_f_china_industrial.",
+      "flags": {
+        "label": "trimmed ao and skirt"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_china_industrial",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Preserve exact head face torso jacket/skirt hem legs shoes positions and scale. Same pale blue Qing ao broad black floral embroidered bands, curved frontopening, wideflared sleeves, black pleated mamian skirt. Natural sleeve folds from armchange only. Skin flatmagenta#FF00FF green#00FF00 background1024x1536. Late1980s inked anime texturedfabric pigmentgrain celshadows. No hair hats extra accessories props. Do not move lowerbody or change clothinglength.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-26b874a0-7df0-4a49-844c-f3a1715a2f35.png",
+      "path": "Raw/outfit_f_china_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "14ee857ef4f8c7bee5ef1225042e938824a320227dee974bdd6fecc9c0978148",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "trimmed ao and skirt",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Ao: a loose, knee-length jacket with wide flared sleeves and a curved right-side opening with knot buttons. Its collar edge, front curve, cuffs and hem are covered in several broad bands of contrasting embroidered trim (xianggun). The jacket is pale coral or pale blue with black trim, worn over a black pleated mamian skirt. Flat black cloth shoes.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw outfit_f_china_industrial.",
+      "flags": {
+        "label": "trimmed ao and skirt"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_china_industrial",
+      "prompt": "Edit FIRST costume arms to SECOND pose guide: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Preserve exact head face torso jacket/skirt hem legs shoes positions and scale. Same pale blue Qing ao broad black floral embroidered bands, curved frontopening, wideflared sleeves, black pleated mamian skirt. Natural sleeve folds from armchange only. Skin flatmagenta#FF00FF green#00FF00 background1024x1536. Late1980s inked anime texturedfabric pigmentgrain celshadows. No hair hats extra accessories props. Do not move lowerbody or change clothinglength.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aede5c80-22eb-4b82-a39c-c8e2c05b670c.png",
+      "path": "Raw/outfit_f_china_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3335f05af7d14c9f43cb133005dbb9d6b9c7447232c20e8343d2535c6e4bf511",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_china_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "low flat bun",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Sleek and centre-parted, combed smoothly back into a flat low bun at the nape and pinned with a silver hairpin\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw hair_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "low flat bun"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_china_industrial",
+      "prompt": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Sleek and centre-parted, combed smoothly back into a flat low bun at the nape and pinned with a silver hairpin\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw hair_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nExact reference headface bodyregistration. REMOVE costume and shoes replace with featureless opaque magenta#FF00FF long sleeve shirt fulltrousers socks. Hair only naturalblack, sleekcenterpart swept behindears flat low bun at nape mostly behind head, smallsilverpin end visible nearbun. No otherjewelry band crown. Skin magenta.1024x1536 flatgreen#00FF00. Preserve chin324 faceexpression. Late1980s handinked anime subtlehairpigmentgrain blueblackcelhighlights.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-95b3dbed-1e73-4d99-a953-9696b6034688.png",
+      "path": "Raw/hair_f_china_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d31932d15d5453fc61b6a6c1641c38ee8a22dbcee4909171bceb57b606ff9b81",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_china_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "meile band",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Meile (brow band): a narrow band of black satin worn across the forehead just above the brows and tied at the back. It is embroidered with small flowers and set with a small pearl or jade ornament at centre front, and leaves the face fully visible.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw headwear_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "meile band",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_china_industrial",
+      "prompt": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Meile (brow band): a narrow band of black satin worn across the forehead just above the brows and tied at the back. It is embroidered with small flowers and set with a small pearl or jade ornament at centre front, and leaves the face fully visible.\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw headwear_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse reference hairline exactheadposition. Add narrow black satin meile browband justabove brows with small embroidered mutedcoralflowers and one small centralcreampearl. Recolor ALL HAIR and silverhairpin magenta#FF00FF includinglowbun. Band is only naturallycolored object. Facehands opaque shirt trousers socks allmagenta.1024x1536 green#00FF00. Preserveexactfacehead body scale. Late1980s handinked anime mattefabricgrain celshading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f035ecf0-2ec5-4d7d-bf7f-092779214660.png",
+      "path": "Raw/headwear_f_china_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2614e3618e01ed731b445a4d5206ad8c41e693b5627f55ef3e9b568e6738c6b3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "white jade bangle",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Thick pale white-jade (mutton-fat jade) bangle\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw accessory_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "white jade bangle"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_china_industrial",
+      "prompt": "Create raw modular accessory fitting sheet accessory_f_china_industrial, 1024x1536. Edit reference keeping exact bald head, face, hands, feet and neutral pose pixel positions. Single thick pale white mutton-fat jade bangle on wearer's RIGHT wrist (viewer LEFT), just above hand around y790. No bangle on other wrist. Hand-inked late 1980s anime, restrained cel highlights, fine painted mineral grain, not glossy 3D. Replace ENTIRE blue/black embroidered outfit, skirt and shoes with flat opaque #FF00FF magenta long-sleeved calibration shirt, full-length trousers and socks. Skin is also magenta. Bangle is ONLY non-magenta object. No hair, jewelry, costume remnants or anatomy marks. Flat green #00FF00 background. Preserve full canvas framing scalp164 chin324 soles1440 center512. All guide clothing discard-only, bangle fits wrist rather than floats.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aeb31883-9be8-407f-8440-adad759f881c.png",
+      "path": "Raw/accessory_f_china_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "df4f3386ac4f7cd86778bf262612dace1c70f90d74eefad31b720d9c332fa463",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "white jade bangle",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Thick pale white-jade (mutton-fat jade) bangle\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw accessory_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "white jade bangle"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "accessory_f_china_industrial",
+      "prompt": "Raw accessory sheet accessory_f_china_industrial__explaining_b, 1024x1536. FIRST reference exact pose and spatial placement, SECOND reference jade bangle design only. Preserve first head, hands and feet exactly. Single thick pale white mutton-fat jade bangle on wearer RIGHT wrist, viewer LEFT open hand wrist near (270,690). Fit its angle to this wrist; no bracelet other hand. Replace entire outfit and footwear with flat opaque magenta #FF00FF long-sleeve shirt full trousers socks, face/hands magenta. ONLY bangle colored, no hair/costume remnants. Flat green #00FF00 background. Late80s handinked anime fine mineral grain restrained cel shading. Full canvas scalp164 chin324 soles1440; do not move pose to neutral.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9e26abd5-47b2-43ca-836f-3a198d551e70.png",
+      "path": "Raw/accessory_f_china_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ee1261e74be3037a4950a686042f8b0fb0f9cafe025f45a7f6c1b1f7d394c6e6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "white jade bangle",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Thick pale white-jade (mutton-fat jade) bangle\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw accessory_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "white jade bangle"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "accessory_f_china_industrial",
+      "prompt": "Raw accessory sheet accessory_f_china_industrial__thinking_c, 1024x1536. FIRST reference exact clasped hands pose and spatial placement, SECOND reference jade bangle design only. Preserve first head hands feet exactly. Single thick pale white mutton-fat jade bangle on wearer RIGHT wrist, the arm coming from VIEWER LEFT, at approximately (462,695), directly before upper overlapping hand. Bangle follows diagonal wrist angle, correct partially occluded elliptical ring. No bracelet other wrist. Replace entire outfit and footwear with flat opaque magenta #FF00FF long-sleeve shirt full trousers socks, face/hands magenta. ONLY bangle colored, no hair/costume remnants. Flat green #00FF00 background. Late80s handinked anime fine mineral grain restrained cel shading. Full canvas scalp164 chin324 soles1440; do not change pose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bebd6e03-036a-4764-8156-4c0e7803f541.png",
+      "path": "Raw/accessory_f_china_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f2f86e814de72edc7285b5bedc058f9ccc58b949a68571a72c7b19454b0fd7f9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "country": "china",
+      "era": "industrial",
+      "label": "white jade bangle",
+      "details": "Subject: woman of Qing Shanghai; Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines.\nDraw: Thick pale white-jade (mutton-fat jade) bangle\nAvoid: 19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features; Opium pipes or any opium imagery; Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu); Boxer, Taiping or military imagery; Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman; Any emphasis on bound feet; Coolie straw hat; 1920s qipao (anachronistic); bowler hat, haori or hakama (reads as Japan-industrial)\nOutput one full-canvas raw accessory_f_china_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "white jade bangle"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "accessory_f_china_industrial",
+      "prompt": "Raw accessory sheet accessory_f_china_industrial__objecting_a, 1024x1536. FIRST reference exact raised-palm pose and spatial placement, SECOND reference jade bangle design only. Preserve first head hands feet exactly. Single thick pale white mutton-fat jade bangle on wearer RIGHT wrist, VIEWER LEFT raised wrist around (322,446), below raised open palm. Correct elliptical ring around vertical wrist. No bracelet other wrist. Replace entire outfit and footwear with flat opaque magenta #FF00FF long-sleeve shirt full trousers socks, face/hands magenta. ONLY bangle colored, no hair/costume remnants. Flat green #00FF00 background. Late80s handinked anime fine mineral grain restrained cel shading. Full canvas scalp164 chin324 soles1440; do not change pose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a20561cb-26c8-4eef-9d62-e2f35c492a35.png",
+      "path": "Raw/accessory_f_china_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "196d7b135d78d877abbe4c745d14ef5fe5a97b42ddba49e951abbcdf0c95c3f2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan suit",
+      "details": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Zhongshan suit: loose, boxy grey or navy-blue cotton-wool jacket with a closed turn-down collar, five front buttons and four patch pockets with buttoned flaps, worn with matching straight, roomy trousers and black cloth slip-on shoes.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_m_china_modern.",
+      "flags": {
+        "label": "Zhongshan suit"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_china_modern",
+      "prompt": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Zhongshan suit: loose, boxy grey or navy-blue cotton-wool jacket with a closed turn-down collar, five front buttons and four patch pockets with buttoned flaps, worn with matching straight, roomy trousers and black cloth slip-on shoes.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_m_china_modern.\nProduction modular costume sheet 1024x1536 flat green #00FF00. Use reference as EXACT alignment mannequin: scalp239 chin400 soles1421 center512, hands in same position, same feet stance. Fully clothe in worn navy-blue cotton-wool Zhongshan suit, closed turn-down collar, precisely FIVE front buttons FOUR patch pockets buttoned flaps, roomy straight trousers black cloth slip-on shoes. Ordinary working civilian not model. Late1980s textured cel anime: hand-ink contours, cloth pigment grain and subtle seam wear, 2-3 restrained shadow tones. Keep all exposed head neck hands magenta #FF00FF. No hair, hat, bag, badges, text or accessories. Costume only with magenta fitting guide. Front-facing neutral arms down slightly apart, no repositioning/zooming.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-86639305-c617-4703-8a86-596d4b27b5d0.png",
+      "path": "Raw/outfit_m_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c1a5c49e2c669386353a60d0d913c3b5fc990307da3147c9073f5783f75ad18e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_modern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan suit",
+      "details": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Zhongshan suit: loose, boxy grey or navy-blue cotton-wool jacket with a closed turn-down collar, five front buttons and four patch pockets with buttoned flaps, worn with matching straight, roomy trousers and black cloth slip-on shoes.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_m_china_modern.",
+      "flags": {
+        "label": "Zhongshan suit"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_china_modern",
+      "prompt": "Create outfit_m_china_modern__explaining_b,1024x1536. FIRST reference exact costume identity and stationary head/lower body, SECOND reference required arm pose. BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Match guide hand positions exactly. Keep neutral costume navy textured Zhongshan jacket FIVE front buttons FOUR flap pockets, loose trousers black cloth shoes exactly unchanged below waist. Only arms sleeves bend to pose; keep feet and head pixel fixed. Fine handinked late80s anime fabric grain cel shadows. All exposed head hands neck #FF00FF magenta; background flat #00FF00. No hat hair accessory text badges. Scalp239 chin400 soles1421 center512.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ba8bbd24-4145-4077-a4ef-7c7293ee252f.png",
+      "path": "Raw/outfit_m_china_modern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "009830df3b5dadf563c945e7aa287edc9eda4d4ea798eb4142abd7fdcb9db2e1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_modern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan suit",
+      "details": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Zhongshan suit: loose, boxy grey or navy-blue cotton-wool jacket with a closed turn-down collar, five front buttons and four patch pockets with buttoned flaps, worn with matching straight, roomy trousers and black cloth slip-on shoes.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_m_china_modern.",
+      "flags": {
+        "label": "Zhongshan suit"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_china_modern",
+      "prompt": "Create outfit_m_china_modern__thinking_c,1024x1536. FIRST reference exact costume identity and stationary head/lower body, SECOND reference required arm pose. hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Match guide hand positions exactly. Keep neutral costume navy textured Zhongshan jacket FIVE front buttons FOUR flap pockets, loose trousers black cloth shoes exactly unchanged below waist. Only arms sleeves bend to pose; keep feet and head pixel fixed. Fine handinked late80s anime fabric grain cel shadows. All exposed head hands neck #FF00FF magenta; background flat #00FF00. No hat hair accessory text badges. Scalp239 chin400 soles1421 center512. Hands in front of jacket, naturally cover middle lower buttons.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-862bf9ab-7aa6-4ceb-be5f-42d1897dc4fb.png",
+      "path": "Raw/outfit_m_china_modern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f647d122557bbb260ebfbf6be8886259fd327334ce9ddbbf212fda2f33145ec",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_modern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan suit",
+      "details": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Zhongshan suit: loose, boxy grey or navy-blue cotton-wool jacket with a closed turn-down collar, five front buttons and four patch pockets with buttoned flaps, worn with matching straight, roomy trousers and black cloth slip-on shoes.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_m_china_modern.",
+      "flags": {
+        "label": "Zhongshan suit"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_china_modern",
+      "prompt": "Create outfit_m_china_modern__objecting_a,1024x1536. FIRST reference exact costume identity and stationary head/lower body, SECOND reference required arm pose. RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Match guide hand positions exactly. Keep neutral costume navy textured Zhongshan jacket FIVE front buttons FOUR flap pockets, loose trousers black cloth shoes exactly unchanged below waist. Only right arm(viewerleft) sleeve bends to pose; keep feet and head pixel fixed. Fine handinked late80s anime fabric grain cel shadows. All exposed head hands neck #FF00FF magenta; background flat #00FF00. No hat hair accessory text badges. Scalp239 chin400 soles1421 center512.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5f07f8b9-f34d-48d6-9138-4b5febd65d51.png",
+      "path": "Raw/outfit_m_china_modern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2c0ad651355da73f0b527d9e60f41176cdce4769df41cee451df72ee6517b337",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "side-parted crop",
+      "details": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Short, neat side-parted crop\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw hair_m_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "side-parted crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_china_modern",
+      "prompt": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Short, neat side-parted crop\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw hair_m_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 edit fitting reference. Short practical neat black side-parted crop, modest volume close to scalp, short sideburns, no beard. Late80s handinked anime pigment grain restrained slate highlights. Hair ONLY colored element. Replace ENTIRE navy suit shoes with completely opaque flat MAGENTA #FF00FF plain long-sleeve shirt full trousers socks, no dark costume remnants. Face neck hands magenta. Maintain EXACT neutral head face hands feet positions scalp239 chin400 soles1421 center512. Flat green#00FF00 background. Hair follows head shape, no idealized model styling or tall pompadour.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9bd855ab-4df0-428a-93e6-f8ed2d5407c2.png",
+      "path": "Raw/hair_m_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "62a46b5e332250218fe04873968d3382d5b6cf3eb90934a660c0c20fec380d5c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "navy cap",
+      "details": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Soft navy cotton cap with a tall, rounded, slightly stiffened crown, a cloth band and a short stiff peak. It sits high on the head, unlike a low flat cap. Plain, with no badge or star.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw headwear_m_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "navy cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_china_modern",
+      "prompt": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Soft navy cotton cap with a tall, rounded, slightly stiffened crown, a cloth band and a short stiff peak. It sits high on the head, unlike a low flat cap. Plain, with no badge or star.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw headwear_m_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 hat fitting sheet. Use reference head/face/pose exactly. Add navy cotton civilian cap with HIGH rounded slightly stiffened crown, cloth band and short stiff peak. NO badges stars. Late80s handinked anime fabric grain restrained cel shadows. Hat only colored element. Recolor ALL visible black hair including temples sideburns nape to flat magenta #FF00FF, keep scalp volume beneath cap. All existing guide clothes face hands feet remain magenta. Flat green#00FF00. Preserve head chin400 soles1421 center512 full frame.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5df7193b-428c-43f0-a0dd-e93bc4ac43a2.png",
+      "path": "Raw/headwear_m_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "548a87bece4a834c045a442aba15fcac0a986de98e6cca67fd7708fd66225683",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "khaki satchel",
+      "details": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Plain faded-khaki canvas satchel on a cross-body strap, with no star, slogan, print or stripes\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw accessory_m_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "khaki satchel"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_china_modern",
+      "prompt": "Subject: man of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Plain faded-khaki canvas satchel on a cross-body strap, with no star, slogan, print or stripes\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw accessory_m_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 accessory fitting sheet. Reference exact head face hands feet pose. Add plain faded khaki canvas satchel rectangular flap bag at wearer LEFT hip(viewer RIGHT), bag bounds roughly x580-745 y740-930. Strap from viewerLEFT shoulder x405,y430 diagonally to bag. Civilian practical worn canvas, plain small muted fasteners, no print. Late80s handinked anime texture cel shading. Bag/strap ONLY colored. Replace ENTIRE navy suit/shoes with fully opaque magenta #FF00FF long sleeve shirt full trousers socks; exposed head hands also magenta. Flat green#00FF00. No hair hat other accessories. Preserve scalp239 chin400 soles1421 fullframe. Strap passes naturally over chest but behind any arm/hand crossing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7b1de822-4b4d-44dc-bc06-8228464a3c68.png",
+      "path": "Raw/accessory_m_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4c566ed256ec6f11190daf821ddbc1149bf5132c0df92c35a17131183a39ac42",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan jacket",
+      "details": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_f_china_modern.",
+      "flags": {
+        "label": "Zhongshan jacket"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_china_modern",
+      "prompt": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_f_china_modern.\nProduction modular costume sheet1024x1536 flatgreen#00FF00. Fully clothe exact reference mannequin. Pale dusty blue-grey cotton Zhongshan jacket, FOUR flap patch pockets fivebuttons, white inner shirt collar folded over turn-down jacketcollar. Loose practical jacket NOT fitted fashion tailoring. Straight darkcharcoal trousers, black cloth strap shoes flat soles. Late80s textured celanime handink contours fabric grain muted wear, no glossy digital finish. Exposed head neck hands feet portions magenta#FF00FF. No hair hat accessories. Exact pose and placement scalp164 chin324 soles1440 center512, retain guide feet angle and hands. No zoom, no model stance.\nRevision: Correct jacket collar only: remove the suit-style triangular lapels. Use simple compact turn-down work-jacket collar with small white shirt collar folded OVER it. Front closes higher, add fifth front button just below collar around y410 so five buttons total. Preserve four pockets, cloth texture, all geometry, head hands feet and colors. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ade37081-4231-4835-bea9-96130d61357b.png",
+      "path": "Raw/outfit_f_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2f47edd94fd121c6100655d9901bdcc17a98170bf7931f7ad1acebffb82840eb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_modern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan jacket",
+      "details": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_f_china_modern.",
+      "flags": {
+        "label": "Zhongshan jacket"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_china_modern",
+      "prompt": "Create outfit_f_china_modern__explaining_c,1024x1536. FIRST exact costume identity stationary head legs feet, SECOND required arm pose. LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Match guide hand coordinates. Preserve pale blue-grey cotton jacket fivebuttons fourpockets white folded shirt collar dark roomy trousers black strapshoes. Only arms/sleeves change. Maintain late80s handinked anime fabricgrain celshadows. Exposed head neck hands #FF00FF magenta, background flat#00FF00. No hair hat accessories badges. Scalp164 chin324 soles1440 center512. Preserve foot angle and head alignment.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fe28693e-4247-4cfb-82a0-c92af7e8ff65.png",
+      "path": "Raw/outfit_f_china_modern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "66fa00e847fa6976159385b28b9ccf671182a5cc2173d08438ce9d31898e50c4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_modern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan jacket",
+      "details": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_f_china_modern.",
+      "flags": {
+        "label": "Zhongshan jacket"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_china_modern",
+      "prompt": "Create outfit_f_china_modern__thinking_a,1024x1536. FIRST exact costume identity stationary head legs feet, SECOND required arm pose. RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Match guide hand coordinates chin-touching right hand viewerleft arm up. Preserve pale blue-grey cotton jacket fivebuttons fourpockets white folded shirt collar dark roomy trousers black strapshoes. Only arms/sleeves change. Maintain late80s handinked anime fabricgrain celshadows. Exposed head neck hands #FF00FF magenta, background flat#00FF00. No hair hat accessories badges. Scalp164 chin324 soles1440 center512. Preserve foot angle and head alignment.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-33b0c657-bbe8-4482-a64a-ae0bf3f2fe51.png",
+      "path": "Raw/outfit_f_china_modern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eceb1b5a05d5609bae50c243d3c280c93e6d46693cc3432c8d31949098181598",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_modern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "Zhongshan jacket",
+      "details": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw outfit_f_china_modern.",
+      "flags": {
+        "label": "Zhongshan jacket"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_china_modern",
+      "prompt": "Create outfit_f_china_modern__objecting_b,1024x1536. FIRST exact costume identity stationary head legs feet, SECOND required arm pose. BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Match guide both palms forward near chest coordinates. Preserve pale blue-grey cotton jacket fivebuttons fourpockets white folded shirt collar dark roomy trousers black strapshoes. Only arms/sleeves change. Maintain late80s handinked anime fabricgrain celshadows. Exposed head neck hands #FF00FF magenta, background flat#00FF00. No hair hat accessories badges. Scalp164 chin324 soles1440 center512. Preserve foot angle and head alignment.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b9b3c150-2ccb-43cb-804b-c0fdd23c8802.png",
+      "path": "Raw/outfit_f_china_modern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "52e0c5a58bda30400c2bd199f9bcc4bd55b77a4a968ad709d858740582b5e25d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
