@@ -22580,6 +22580,762 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "office waistcoat set",
+      "details": "Subject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.",
+      "flags": {
+        "label": "office waistcoat set"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_modern",
+      "prompt": "Dress exact female calibration reference in everyday Showa1980 officeuniform. Deep burgundy waistcoat with smalldarkbuttons, white longsleeved blouse with soft white ribbon bow atcollar, matching burgundy kneelength pleated skirt hem near y1040, magenta barelegs no hosiery, low black pumps conform same splayed feet soles1440. Ordinary practical fit not fashionmodel not caricature. Preserve head scalp164chin324center512 body/handpositions exactly.1024x1536 flatgreen #00FF00 exposedskin #FF00FF. No hair hats jewelrybag props. Late1980s handinkedanime pigmentgrain fine fabrictexture restrained celshade, no glossyvectorlook. No groundshadow.\nSubject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.\nRevision:Two precise corrections only: waistcoat must have FOUR evenly spaced darkbuttons in one column (y505,545,585,625), remove duplicated extra centerbutton. Shorten lower ankles by14px so pump soles end at y1440 instead1454. Do not resize shoes or movehead/upperbody/skirthem.1024x1536, keep all other style details.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-711d392c-0593-43bc-85cb-0be8591b3b21.png",
+      "path": "Raw/outfit_f_japan_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "33225b2843453a84eb6dc064612a1864f164ef8dbb04beddcccf3f92ed7fecb3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_modern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "office waistcoat set",
+      "details": "Subject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.",
+      "flags": {
+        "label": "office waistcoat set"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_japan_modern",
+      "prompt": "Dress image1 exact pose in image2 burgundy office waistcoat/skirt white blouse withbow blacklowpumps. Both elbows bent two palms outward asymmetrically: viewerLEFT lower hand x174-282 y675-774, viewerRIGHT higher hand x721-845y558-647. Copy guide handoutlines and positions. Preserve image2 face scalp164chin324center512, torsofourbuttons skirt/legs/shoes EXACTLY unchanged soles1440. Only arms/blousesleeves move. Same late1980s textured handinkedanime.1024x1536 flatgreen#00FF00 skin#FF00FF. No hair accessories nozoom.\nSubject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-14ec8dcb-47fb-4ae5-b0ed-cd2854e66196.png",
+      "path": "Raw/outfit_f_japan_modern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "59754fbe4e381e42694896fcd00c9a74d8c1764f75b40bf5a478cffcf333d4c1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_modern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "office waistcoat set",
+      "details": "Subject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.",
+      "flags": {
+        "label": "office waistcoat set"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_japan_modern",
+      "prompt": "Dress exact poseguide image1 in image2 officeoutfit: burgundy4buttonwaistcoat pleatedkneeskirt whitebow blouseblacklowpumps. Hands loosely crossed atwaist EXACTLY image1 x460-560y681-770 right hand infront. Whiteblouse sleeves follow bentarms. Preserve image2 head scalp164chin324 center512, torso and skirt legs feet soles1440. Only arms change. No movedwaistcoatbuttons no newbelt.1024x1536 flatgreen background exposedskinmagenta. Fine1980s handinkedanime pigmentgrain clothtexture.\nSubject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4bea5bb3-ee92-4f0f-b113-c2510cfe1d8b.png",
+      "path": "Raw/outfit_f_japan_modern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "458fe0baad633fe036583819c0860d98a4199c186e42c6ee5d191c571a78fa4f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_modern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "office waistcoat set",
+      "details": "Subject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.",
+      "flags": {
+        "label": "office waistcoat set"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_japan_modern",
+      "prompt": "Dress exactposeguide image1 in image2 burgundy officewaistcoat andpleatedkneeskirt whiteblousewhitebow blacklowpumps. Right raised palm viewerLEFT nearshoulder x286-390y297-432 fingersup, exactguideoutline. Oppositearmdown. Keep image2 headscalp164chin324center512, fourbuttons waistcoat torso legs shoes andskirtunchanged soles1440. Only rightarm/sleeve changes.1024x1536 flatgreen#00FF00 allskin#FF00FF. Same1980sanime handinked pigmentgrain. No hair jewelry newprops.\nSubject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Office outfit: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, bare legs (no stockings drawn: leave the legs magenta) and low pumps.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_f_japan_modern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0e3ab37e-22d6-4f47-ac98-7e7da246d668.png",
+      "path": "Raw/outfit_f_japan_modern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "abc49b77c6277f9135facfd5ac6afa2974195f49b5162a7f066e4b8afc829dff",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_japan_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "Seiko-chan cut",
+      "details": "Subject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Seiko-chan cut: layered, shoulder-length feathered bob with soft inward flicks at the sides and wispy bangs (the c. 1980 pop-idol trend)\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw hair_f_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Seiko-chan cut"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_japan_modern",
+      "prompt": "Modular HAIR layer using reference exact head scalp164chin324center512 unchanged. Black Seiko-chan layered shoulderlength featheredbob with soft inward flicks at sides wispy bangs, ordinary1980woman not an idolportrait. Soft painted sheen fine inked strands not glossy. Hair ends atshoulders y390. Replace ALL outfit whiteblousebow burgundyvestskirt pumps with plain opaque magenta long sleeve shirt full-lengthstraight trousers socks. Facehands#FF00FF background#00FF00. Haironlycolored, no jewelry/pins/headphones.1024x1536 same fullbodypose. Late1980s handinkedanime pigmenttexture. Nozoom.\nSubject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Seiko-chan cut: layered, shoulder-length feathered bob with soft inward flicks at the sides and wispy bangs (the c. 1980 pop-idol trend)\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw hair_f_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-82e788ab-288c-4664-bfd0-ec847121e402.png",
+      "path": "Raw/hair_f_japan_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "07ead03f697bc2c639fdb4869b28f8cce91ebc85832dc375ad2572f1a4d46d2d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_japan_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "orange headphones",
+      "details": "Subject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: The same silver-and-black headband headphones with round bright-orange foam ear pads, resting around the neck; no cord, no player, no brand logo\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw accessory_f_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "orange headphones",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_japan_modern",
+      "prompt": "Modular accessory only: lightweight1980 silver-and-black thin headband headphones with small brightorange roundfoam earpads resting AROUND neck on collarbones, band curves BEHIND neck. Pads roughly x450-490 and535-575 y345-390. No cord player orlogo. Exact referencehead scalp164chin324center512 fixed. Replace ALL outfit/bow/pumps with opaque plain #FF00FF longsleeve shirt fulltrousers socks. All skinmagenta. No hair. Only headphones colored, flatgreen #00FF00 background1024x1536. Fine handinked1980sanime celshade texture no modern bulkyearcups. No zoom.\nSubject: woman of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: The same silver-and-black headband headphones with round bright-orange foam ear pads, resting around the neck; no cord, no player, no brand logo\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw accessory_f_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3e5fc750-7b60-4062-882e-1d2e9b650db4.png",
+      "path": "Raw/accessory_f_japan_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b0b572ec3a784150165a16de72d51b4247d484391f68f6b1f32e0af626ae666e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "kamishimo and hakama",
+      "details": "",
+      "flags": {
+        "label": "kamishimo and hakama"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_earlymodern2",
+      "prompt": "Historical costume layer, Sengoku Azuchi1576 man. Dress exact maleguide in muted brown-olive kataginu sleeveless overvest with modest outward angular shoulders (not gigantic Edo wings) and matching broadpleated hakama, cream kosode with tiny dark geometricpattern smallsleeveopenings under it, darkumber waistties. Overvest front narrows into vertical bands tucked into hakama. White tabi and worn strawwaraji sandals. No sword armor cape crest insignia. Ordinary retainer travelling unarmed. Keepguide headscalp239chin400center512, exact handsdownandfeet soles1421, no stretch.1024x1536 flatgreen#00FF00 exposedskin#FF00FF. Finehandinked late1980s anime textilegrainrestrainedcelshade. No hair orhat/accessories. Wardrobe label from Assets/Data/World/world_source.json japan earlymodern2; construction reference Kyoto Costume Museum https://www.iz2.or.jp/english/fukusyoku/busou/27new.htm kataginu/hakama overkosode, no weapons.\nRevision:Correct only cream patterned kosode sleeves: extend them to wrists, with modest hanging rectangular sleeve pouches and small wrist openings. They should cover magenta forearms, only hands exposed from y800 down. Not shortsleeves, not giant furisode. Keep olive kataginu shoulders and sash/hakama, head, hands, sandals unchanged.1024x1536 samegreen.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-064c39a2-d3ad-478f-b62e-ca737b55b13c.png",
+      "path": "Raw/outfit_m_japan_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2aef93802590b59afb1f7f52d4d28f35cb43c58b2b44f9f65ee8a2a862d79391",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern2__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "kamishimo and hakama",
+      "details": "",
+      "flags": {
+        "label": "kamishimo and hakama"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_japan_earlymodern2",
+      "prompt": "Dress exactposeguide image1 in image2 olive kataginu hakama cream patterned kosode straw sandals white tabi. Copyboth handpositions exactly: viewerLEFT palmup x177-293y561-642 and viewerRIGHT lowerpalm x732-845y690-777. Cream sleeves adapt bentarms withgravity. Keep costumehead scalp239chin400 center512, olive rigidshoulders torso sashhakamahemfeet unchanged soles1421.1024x1536 flatgreen#00FF00 skin#FF00FF fine late1980shandinkedanime textiletexture. No hair hat weaponsprops. Only armschange, no zoom.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6794e56e-b5e3-48e6-bf2d-516b8cb7d30e.png",
+      "path": "Raw/outfit_m_japan_earlymodern2__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e35c90f57a242b6a9f67c262fc0bb945288692138c211ee2163b29109be1db62",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern2__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "kamishimo and hakama",
+      "details": "",
+      "flags": {
+        "label": "kamishimo and hakama"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_japan_earlymodern2",
+      "prompt": "Dress exact poseguide image1 in image2 olive kataginu/hakama cream patternedkosode white tabi straw sandals. Handslooselycrossed lowwaist image1 at x455-557y724-805. Preserve hand silhouette/positions; sleeves coverarms naturally. Keep image2 head scalp239chin400center512, angularshoulders, sashknot at y710 stays behindhands no downshift; tiesend865. Lowerbodypleats feet exactlyunchangedsoles1421.1024x1536 flatgreen exposedskinmagenta. Texturedhandinked1980sanime samefabricgrain no newitems/nozoom.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fa1b3fb9-b1a9-4db4-a32b-e517927e27b1.png",
+      "path": "Raw/outfit_m_japan_earlymodern2__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3ecda217da761a56e180b6b1059f84b52c75b29f916b325b05bcb8f5db559a5a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern2__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "kamishimo and hakama",
+      "details": "",
+      "flags": {
+        "label": "kamishimo and hakama"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_japan_earlymodern2",
+      "prompt": "Dress exactposeguide image1 in image2 olivekataginu hakama cream patternedkosode white tabi straw sandals. Right palm forward raised nearshoulder viewerLEFT x300-406y367-502 exact outline, oppositearmdown. Creamsleeve hangs naturally frombentarm. Keep headscalp239chin400center512, olive angularshoulders torso sash pleats hem/shoes unchangedsoles1421. No shoulder distortion.1024x1536 greenbackground magentaskin, handinked late1980sanime textilegrain. No hairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-04950101-310b-4b9f-b755-a8a1e13415a6.png",
+      "path": "Raw/outfit_m_japan_earlymodern2__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1973fedc5e961fcdeab0473053fd7521040204da6f4e3368407579f783405be3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_japan_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "shaved-pate topknot",
+      "details": "",
+      "flags": {
+        "label": "shaved-pate topknot"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_japan_earlymodern2",
+      "prompt": "Modular hairlayer SengokuAzuchi1576. Reference exact headscalp239chin400center512 unchanged. Black sides/back combed smoothly into small bound topknot atcrown, broad shavedpate remainingmagenta, modest foldedforward knot natural not hugeball not teawhisk. Hair onlycolored. No beardhat. Replace ALL referencecostume andsandals with plainopaque #FF00FF longsleeveshirt full-lengthstraighttrousers socks. Facehandsmagenta backgroundflat#00FF00.1024x1536 samepose framing. Fine handinked1980sanime hairtexture subduedhighlights. Wardrobe label shaved-pate topknot from world_source.json.\nRevision:Only change little upright fan tuft at crown into compact tied hair bundle folded forward flat against crown (short horizontal cylindrical folded topknot), no splayed teawhisk ends. Black binding instead of magenta. Restore shaved scalp highestpoint to y239 instead230 without changing face/ears. Preserve sidehairandallotherpixels.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-228bd728-03f0-455e-aa74-af56cd74bfe2.png",
+      "path": "Raw/hair_m_japan_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1ca5542942b5f7e8fc2e519c48da8d74bd22a69f2d114d4511d87438da611c50",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_japan_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "thin wispy moustache",
+      "details": "",
+      "flags": {
+        "label": "thin wispy moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_japan_earlymodern2",
+      "prompt": "Modular facialhaironly, SengokuAzuchi1576 thin wispy black moustache: sparse slightly uneven finehairs just above upperlip and barelypastmouthcorners, no hugecurledtips/no beard. Exact reference head scalp239chin400center512 unchanged. Replace ALL costume/shoes with opaque plainmagenta longsleeveshirt fulltrousers socks. Baldmagentaheadfacehands, no hairhat. Only moustachecolored.1024x1536 pure#00FF00 background. Finehandinked1980sanime, naturaltexture. Nozoom. Wardrobelabel thinwispy moustache from world_source.json.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8fe54ee5-3050-4ca9-b846-8bfc15ff1060.png",
+      "path": "Raw/facialhair_m_japan_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5bdb35ae3156883140f8eaf3a8b5ae183a72c856ae1f522fed86674509106b71",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_japan_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "eboshi",
+      "details": "",
+      "flags": {
+        "label": "eboshi",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_japan_earlymodern2",
+      "prompt": "Modular HEADWEAR source: simple black soft eboshi cap for SengokuAzuchi1576 traveller, elongated irregular slightly folded crown bending subtly toside, thinwrinkled blacklacqueredcloth/paper texture; narrowheadband fits forehead abovebrows. Not armorhelmet, not Europeanhat no goldornament. Keep reference exactheadscalp239chin400center512; capextends abovehead, faceunmoved. No hair beard. Replace ALL clothingfootwear with plainopaque magenta longsleeveshirt fulltrousers socks. Headhands#FF00FF caponlycolored, flatgreen#00FF00 background1024x1536. Handinkedlate1980sanime subtle grain. Nozoom.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6426f00e-45ea-409d-8d86-fa00560d984c.png",
+      "path": "Raw/headwear_m_japan_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "00d6bd8743ec8ab99f0e1979c52d511c6a8849d1cd821363ea21f2a8f57620fc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "uchikake over kosode",
+      "details": "",
+      "flags": {
+        "label": "uchikake over kosode"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_earlymodern2",
+      "prompt": "Dress exact female guide in Sengoku Azuchi1576 uchikake overkosode perrepo wardrobe. Muted deep persimmon/rust silkbrocade outerrobe with restrained ochre plumbranch andsmallbird woven motifs, worn OPEN and UNBELTED over cream kosode with thin dark red waistcord. Outerrobe long straight frontpanels toankle, modest full hanging sleeves wristopenings, cream innerrobe collar wearerleftoverright. No huge modern obi no bridalwhite no train hidingfeet. White tabi worn strawzori soles1440 exactguidefootpositions. Preserve guide scalp164chin324center512 handpositions and scale. Magenta skin #FF00FF flatgreen#00FF00 background1024x1536. No hair veil jewelry hats. Fine textured late1980sanime handinked subtleclothgrain maturepracticalproportions. Costume construction source Kyoto Costume Museum https://www.iz2.or.jp/english/fukusyoku/busou/29new.htm.\nRevision:Only shorten exposed ankles by15pixels so sandalsolebaseline becomes y1440 rather1455. Move whole shoesup15px not resize. Keep head/robe/hem/hands exactlyunchanged.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3e94c446-64b8-4c55-a696-2a7fc11be344.png",
+      "path": "Raw/outfit_f_japan_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "257ea43f6645009736821367eeacd7d3cbb5ce2ac4bb8ab42731a8d1fa2bf17d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "uchikake over kosode",
+      "details": "",
+      "flags": {
+        "label": "uchikake over kosode"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_japan_earlymodern2",
+      "prompt": "Edit/compositing: Image 1 is exact pose and registration target. Image 2 is exact costume identity. Dress Image 1 in Image 2's rust persimmon open unbelted uchikake with ochre plum blossoms, branches and birds, cream closed kosode with white inner collar, thin red waist cord and two hanging tails, white tabi and straw sandals red straps. Preserve Image1 exact magenta head and hand contours and positions; wearer's LEFT hand opens close to chest at viewer RIGHT, fingers x535–640 y395–500, bent elbow x705 y600; other arm remains relaxed. Adapt wide hanging sleeve naturally to bent arm; exposed hand magenta #FF00FF. Preserve Image2 lower robe hem, waist knot position, sandal positions/baseline1438, head scalp164 chin324 center512. Same 1024x1536 canvas flat #00FF00 background, no shadow. Rich hand-inked late1980s anime with fine pigment grain textile texture, preserve costume pattern and restrained cel shadows. No hair, hats, jewelry, other props, labels or extra limbs. Do not redesign outfit or shift body.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bee6b1c8-cf4e-4c8a-9baf-eec2cafac4e0.png",
+      "path": "Raw/outfit_f_japan_earlymodern2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8a0d0f6aa7092c71890f6297ee177cd3b76c273a06d3aae6659471a741d63d74",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "uchikake over kosode",
+      "details": "",
+      "flags": {
+        "label": "uchikake over kosode"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_japan_earlymodern2",
+      "prompt": "Edit/compositing: Image 1 is exact pose registration target. Image 2 is exact costume identity. Dress Image1 in Image2's rust persimmon open UNBELTED uchikake ochre plum blossom branches and birds, cream closed kosode white inner collar, thin red waist cord and two tails, white tabi and straw sandals red straps. Preserve Image1 exact magenta head and hand contours/positions. Wearer's RIGHT hand cups under chin fingers x465–560 y291–390, forearm diagonal from viewer LEFT elbow at390,550; opposite arm relaxed. Sleeve naturally drapes from bent elbow, exposes magenta hand and wrist; no extra hands. Preserve Image2 body center512 scalp164 chin324, waist knot595 tails725 lower robe hem1365 sandalbaseline1438. Canvas1024x1536 flat #00FF00 background. All exposed skin #FF00FF. Fine hand-inked late1980s anime textured pigment grain silk textile details restrained cel shadow. No hair hats jewelry labels shadows or props. Keep lower body registered unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2fe5273a-430b-4951-84d7-8a94a515f431.png",
+      "path": "Raw/outfit_f_japan_earlymodern2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "22783236d6fbf9495d8dd07c7090a7d679c28ecf64a57d148a720c44fba08229",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "uchikake over kosode",
+      "details": "",
+      "flags": {
+        "label": "uchikake over kosode"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_japan_earlymodern2",
+      "prompt": "Precise costume transfer: Image1 exact pose target, Image2 costume identity. Dress Image1 in Image2 rust persimmon floral bird silk uchikake open UNBELTED over cream closed kosode thin red waistcord with two tails white tabi straw sandals red straps. BOTH palms face outward at lower chest, retain exact Image1 hands x376–481 and544–650 y461–601 elbows close, no shifting hands. Wide rust sleeves hang naturally below elbows exposing magenta palms. Match Image2 lower body unchanged waistknot595 tail725 hem1365 feet1438, scalp164 chin324 center512. 1024x1536 flat green #00FF00 all exposed skin solid magenta #FF00FF. Exact same fine ink lines late1980s anime pigment grain textile texture, ochre blossoms branches birds. No hair headwear jewelry text props floor shadow. Preserve head position and size.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1a6e377f-f1bb-40cd-bf28-a0cd793384ab.png",
+      "path": "Raw/outfit_f_japan_earlymodern2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5226f0287975192fe4436517f4c5d844100a6cf245e4a8a0a01fd49e707012bc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_japan_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "long loose hair",
+      "details": "",
+      "flags": {
+        "label": "long loose hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_japan_earlymodern2",
+      "prompt": "Modular HAIR source 1024x1536. Reference is exact head/pose registration only. Female Sengoku Azuchi1576 long loose black hair, straight center part, sleek crown close to scalp, long narrow side masses fall behind shoulders to waist with slightly uneven tapered wisps, no bun no modern bangs or accessories. Subtle blueblack handpainted ink pigment grain late1980s anime, not glossy3D. Retain reference face center512 scalp164 chin324 and hands/feet positions. REPLACE ALL rust floral costume cream kosode waistcord socks sandals with opaque plain magenta #FF00FF long-sleeve shirt full-length trousers and socks, fully clothed featureless guide. All face/neck/hands magenta. Only HAIR nonmagenta. Green #00FF00 flat background no shadow text props. Hair is separate layer, no costume or jewelry remaining.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8628b6c2-ad23-41f3-a11a-ac69d9ed48e6.png",
+      "path": "Raw/hair_f_japan_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "76836024aa748f9748c88ad4e4997ab1c427b011b05966a71247c0798b3d93f0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "katsuki veil",
+      "details": "",
+      "flags": {
+        "label": "katsuki veil",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_japan_earlymodern2",
+      "prompt": "Modular HEADWEAR source1024x1536 female Azuchi1576 katsuki/katsugi veil. Reference is exact head/pose geometry ONLY. Add a separate kosode draped OVER THE HEAD with its collar edge over crown and upperforehead; face fully visible, cloth falls over shoulders upperarms to approximately y600, not face veil not a fitted religious hood. Deep indigo silk cloth with small muted ivory and pale blue scattered plum motifs, narrow ivory lining, garment-like loose folds. Cap of head164 facechin324 center512 unchanged. Replace ALL reference rust floral clothes creamkosode redwaistcord white socks sandals with OPAQUE #FF00FF plain magenta longsleeve shirt fulltrousers socks, allskinmagenta. Only overhead cloth nonmagenta. NO hair or jewelry. Same neutral hands down pose feetbaseline1438. Flatgreen#00FF00 no shadows or text. Textured handinked late1980s anime finepigmentgrain restrainedcelshading. Historical shape reference: https://www.iz2.or.jp/english/fukusyoku/busou/23new.htm kosode worn over head by samurai woman; retain an open face.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4ed58405-c3bc-4334-b08a-cd5fea61b873.png",
+      "path": "Raw/headwear_f_japan_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f5aaec85e9cca3df70257c3554eaa54a350d8b5855156bd4096502a871562236",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "katsuki veil",
+      "details": "Pose-specific overhead kosode drape; follow matching outfit arms. Hands in front of cloth.",
+      "flags": {
+        "label": "katsuki veil",
+        "leakable": true
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "headwear_f_japan_earlymodern2",
+      "prompt": "Modular headwear pose edit. Image1 exact POSE target/head/hands; Image2 exact indigo floral overhead kosode HEADWEAR design. Add Image2 veil to Image1, retain crown face opening ivory border sameposition. Adjust shoulder drape for left arm raised at viewer RIGHT, hand stays exactly x535–640 y395–500 in FRONT of veil. No handshift. Replace ALL rust costume creamrobe cord socks sandals with opaque plain magenta #FF00FF longsleeve shirt trousers socks; allskinmagenta. Only INDIGO overhead cloth with ivory/paleblue plum blossoms and ivorylining nonmagenta. Same1024x1536green#00FF00, exactscalp164chin324center512 foot1438. Late80s handinkedanime pigmentgrain fabrictexture celshadows. No hair hatsjewelry props labels castshadow. Cloth behind hand must drape naturally, do not extend into bodyclothing.\nCorrection: Correct only veil LENGTH. Remove BOTH long pointed indigo cloth tails extending below hips to y1000. This overhead veil must end around upperarms/waist y710 at lowest point, like a short overhead robe drape. Shorten outer sides too; no indigo cloth below y720 anywhere. Preserve exact current head, face, raised hand x535–640 y395–500 and arm pose, cloth design/ivory borders, magenta support clothes, background canvas1024x1536. Replace removed cloth area with appropriate flatgreen background or magenta clothing. No costume changes other than shortening veil.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8fb185a3-4d4b-42dd-831e-cbfd5d3d832a.png",
+      "path": "Raw/headwear_f_japan_earlymodern2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "73a0edd1045f30a1804748d8ba4f8e6e4e10e3ae756268352e033e914206d6e8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "katsuki veil",
+      "details": "Pose-specific overhead kosode drape; follow matching outfit arms. Hands in front of cloth.",
+      "flags": {
+        "label": "katsuki veil",
+        "leakable": true
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "headwear_f_japan_earlymodern2",
+      "prompt": "Headwear pose source1024x1536. Image1 EXACT head/hand/arm pose target. Image2 exact overhead indigo plumfloral kosode veil design. Add same veil over head of Image1 keeping faceopening crown ivoryborder. RIGHT hand cups chin exactImage1 x465–560y291–390 foreground overcloth, bentarm viewerLEFT. Veil ends at upperarms/waist lowest y710. NO long cloth tails below y720. Cloth folds lift naturally with elbow. Replace ALL rust floral costume creamrobe white socks sandals with plain OPAQUE magenta#FF00FF longsleeve shirt fulltrousers socks. Face neck hands magenta. Only indigo ivory/paleblue plumveil nonmagenta, no hair jewelry. Preserveheadscalp164chin324center512,sole1438. Flatgreen#00FF00 no shadows no text. Textured1980sanime handinked pigmentgrain fabrictexture. Match veil identity and scale; do not turn it into an ankle robe.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f4f2524c-55b0-48fc-a505-d032054601eb.png",
+      "path": "Raw/headwear_f_japan_earlymodern2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cb329d7a3b241288dfb9c438f0b6b6486e5a9ed8b0b931133f4f8723d6dacfcf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "country": "japan",
+      "era": "earlymodern2",
+      "label": "katsuki veil",
+      "details": "Pose-specific overhead kosode drape; follow matching outfit arms. Hands in front of cloth.",
+      "flags": {
+        "label": "katsuki veil",
+        "leakable": true
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "headwear_f_japan_earlymodern2",
+      "prompt": "1024x1536 modular headwear pose asset. Image1 exacthead/hands/pose target; Image2 overhead indigo ivory-blue plumflower kosode veil design. Transfer SAME veil to Image1 preserving scalp164 chin324 center512 and BOTH palms x376–481 and544–650 y461–601 in FRONT of cloth. No handshift. Veil drapes head shoulders upperarms with natural folded shoulder movement, lowest hem around y710, NO cloth below y740 or long tails. Ivory opening borders face. Replace ALL rust outfit creamrobe cords socks sandals with plainOPAQUE magenta#FF00FF longsleeveshirt fulltrousers socks; skinmagenta. Onlyindigo veil and ivorylining nonmagenta. No hair jewelry props text castshadow. Flatgreen#00FF00, fineinked1980sanime pigmentgrain clothtexture restrainedcelshade. Keep face/feetregistration and exactpose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0862abb4-cebc-4c19-a2bf-d9cad133b1ab.png",
+      "path": "Raw/headwear_f_japan_earlymodern2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9214adeae6204ddb3e391d884239b12306195e6f4d116b7869b0bd00402fcbd0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "striped kosode and haori",
+      "details": "",
+      "flags": {
+        "label": "striped kosode and haori"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_industrial2",
+      "prompt": "Historical clothing game sprite late Edo townsperson c1830. Dress exact reference mannequin, retain head shape/position scalp239chin400center512 and hands/feet contours/locations; no resize or repose. Striped kosode and haori: full ankle-length deep indigo cotton kosode with fine narrow tan-grey vertical stripes, left front over right, narrow muted ochre kaku-obi at low waist, open dark warm brown knee-length haori jacket small cord fastening across chest, short rectangular sleeves with small wrist openings, subtle woven tsumugi texture, white tabi and low woven straw zori blackthongs at same feet baseline1421. Frontview standing relaxed emptyhands. No hakama no sword no crest no tobacco pouch (separate later). All exposed skin solid magenta#FF00FF including baldhead hands. Rich textured handinked late1980s anime filmcel pigmentgrain restrained shadows, no photorealism. 1024x1536 flatgreen#00FF00 no groundshadow no labels props hair hat. Clothing support reference https://museumcollection.tokyo/works/6985002/ men's dark brown tsumugi haori; create original restrained everyday textile outfit. Keep soles at1421 not below.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4288de06-1ba3-486b-9b8d-922b0ea52eb7.png",
+      "path": "Raw/outfit_m_japan_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fc3465ebe979cc3551269971aa5bb12e695a4344eb75b72f4f875334ce2c26d4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "striped kosode and haori",
+      "details": "",
+      "flags": {
+        "label": "striped kosode and haori"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_japan_industrial2",
+      "prompt": "Image1 exact pose/head/hands target; Image2 exact lateEdo1830 outfit. Dress Image1 in Image2 brown woven knee-length haori with ochre braided chestcord, indigo narrowtanstriped ankle kosode left-over-right, ochre narrow waistobi, whitetabi strawzori blackstraps. LEFT hand opens near upperchest viewerRIGHT x544–633 y496–590 exacttarget. Otherhand relaxed. Adapt sleeves to bentelbow, preserve lowerbody hem1335 feet1426 and waistobi708–764 chestcord630. Scalp239chin400center512. Same1024x1536, solidgreen#00FF00background skinbaldheadhands#FF00FF. Finehandinkedlate80sanime pigmentgrain clothtexture subduedcelshadows. No hair hats jewelry bag sword text shadows. Preserve costume identity/scale and exact hand contours.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0b962411-4d06-41ff-8049-16399997cb22.png",
+      "path": "Raw/outfit_m_japan_industrial2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "33d80fcdfdd5957bae3b04fdf5edfad1763f93f72835ae9e73caac8fb75964f3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "striped kosode and haori",
+      "details": "",
+      "flags": {
+        "label": "striped kosode and haori"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_japan_industrial2",
+      "prompt": "Image1 exact pose/head/hands target; Image2 exact lateEdo1830 outfit. Dress Image1 in Image2 brown woven knee-length haori ochre braided chestcord, indigo narrowtanstriped ankle kosode left-over-right, ochre narrow waistobi, whitetabi strawzori blackstraps. RIGHT fingertips touchchin handx450–549y371–480 exacttarget forearm angled from viewerLEFT elbow; oppositehand relaxed. Adapt sleeves to bentelbow, preserve lowerbody hem1335 feet1426 waistobi708–764 chestcord630. Scalp239chin400center512. Same1024x1536 solidgreen#00FF00background skinbaldheadhands#FF00FF. Finehandinkedlate80sanime pigmentgrain clothtexture subduedcelshadows. No hair hats jewelry bag sword text shadows. Preserve costume identity/scale and exact hand contours.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0872a2fb-f0f9-4f6a-b5d5-2fa364a25937.png",
+      "path": "Raw/outfit_m_japan_industrial2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a855fa63cf06044d6e62b58e35d5868d0a794c90c5bcd0a44dd16818f612bfaf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
