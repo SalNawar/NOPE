@@ -21069,6 +21069,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_ancient__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and mo skirt",
+      "details": "Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: White hemp kinu jacket with narrow sleeves, fastened with small cloth bows and belted at the waist, over a mo: a long wrapped skirt to the ankle, sometimes pleated or striped in red and white.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_f_japan_ancient.",
+      "flags": {
+        "label": "kinu and mo skirt"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_japan_ancient",
+      "prompt": "Edit ONLY first Kofun female costume arms/sleeves into second thinkingguide: wearerLEFT fingers lightlyat leftcheek(viewerRIGHT), right forearmcrossestorso supporting leftelbow, facevisible. Preserve first ivoryhempjacket clothbows belt redwhite stripedmo skirt sandals headface lowerbodyfeet exactly scalp164chin324center512soles1440. Allskinheadneckhands toes#FF00FFmagenta. Natural narrowsleeves aroundbend. Full1024x1536solid#00FF00background nohair hatjewelleryprops shadowtext. Late1980s handinked anime tactilehempgrain celpaint. Secondguide provides armgesture only.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e23c24f9-2482-437f-8151-e3b7e18d7880.png",
+      "path": "Raw/outfit_f_japan_ancient__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f65ac1b40b82a89d97a1695f787e73f942a9ffe8313843d5639c829e3acc5816",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_ancient__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and mo skirt",
+      "details": "Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: White hemp kinu jacket with narrow sleeves, fastened with small cloth bows and belted at the waist, over a mo: a long wrapped skirt to the ankle, sometimes pleated or striped in red and white.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_f_japan_ancient.",
+      "flags": {
+        "label": "kinu and mo skirt"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_japan_ancient",
+      "prompt": "Create 1024x1536 game costume pose sprite. Reference 1 is the exact costume and neutral registration to preserve; reference 2 gives ONLY arm/hand positions. Change reference 1 arms to reference 2: wearer's RIGHT hand (viewer left arm) rests across upper chest, LEFT palm extends low to viewer right. Match hand positions closely. Keep reference 1 head scalp y164 chin324, torso axis512, skirt shape and length, sandals positions and bottom y1440 EXACTLY. Preserve ivory textured hemp kinu narrow sleeves two cloth bow closures, waist belt bow, red and ivory vertically striped ankle mo skirt, straw sandals. Late1980s hand-inked anime textile grain restrained cel shading identical first reference. All exposed skin including face hands feet flat #FF00FF magenta; background solid #00FF00 green. No hair jewelry text scenery shadow on background. No rescale or recrop. Pose sleeves deform naturally, hand lies IN FRONT of chest cloth. Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: White hemp kinu jacket with narrow sleeves, fastened with small cloth bows and belted at the waist, over a mo: a long wrapped skirt to the ankle, sometimes pleated or striped in red and white.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_f_japan_ancient.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-afedbefa-804a-49cd-b838-f22065859535.png",
+      "path": "Raw/outfit_f_japan_ancient__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "96f24a01f1f3184148ca6342b2b1d2142277e43efcfae404cccc633bd78a4b4a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_japan_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "board chignon",
+      "details": "Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Flat 'board' chignon: hair gathered on top of the head into a long, flat bun lying front to back, tied at its middle, with a small comb at the front\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw hair_f_japan_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "board chignon"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_japan_ancient",
+      "prompt": "1024x1536 raw modular character HAIR layer game asset. Use reference exact head and neutral figure registration: scalp164 chin324 center512 soles1440. Add black Kofun woman's flat board chignon: sleek hair swept up into a long flattened bun lying FRONT TO BACK over crown, tied at middle, small plain wooden comb at front. From frontal view show flat low elongated bun top contour, not tall round bun, not geisha. Hand inked late1980s anime organic pigment grain fine black lines muted blue-black cel shadows. Change ALL costume skirt sandals into opaque flat #FF00FF magenta plain long sleeve shirt, full straight trousers and socks, fully clothed calibration mannequin. Face neck hands also magenta. Keep head face neutral pose and foot position exactly unchanged. ONLY hair and little wood comb nonmagenta. Background solid #00FF00, no shadow text accessories. Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Flat 'board' chignon: hair gathered on top of the head into a long, flat bun lying front to back, tied at its middle, with a small comb at the front\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw hair_f_japan_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nCorrection: Edit only the hair bun in this modular hair sprite. Current rounded small topknot is wrong. Make Kofun board chignon, a flattened elongated slab of folded black hair running front to back over crown, tied across its middle with plain tan cord. Viewed from front it should present a FLAT low broad rectangular folded hair end above crown, with somewhat squared outer ends, no round ball or donut. Retain wooden comb at front. Preserve exact face head position, all body clothing pose, flat magenta guide figure, pure green background, original1024x1536 canvas. Hair in handinked textured1980s anime. Change nothing else.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2eb691b5-03b9-4f3c-8341-dc1de7b53226.png",
+      "path": "Raw/hair_f_japan_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "32492f6f3255ee9f8bb4f1aaa87e704ba99e6e5692ecbe0647fbed34e7a04fe5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_japan_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "magatama beads",
+      "details": "Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Multi-strand necklace of dark grey-green magatama and round blue glass beads\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw accessory_f_japan_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "magatama beads",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_japan_ancient",
+      "prompt": "1024x1536 modular game accessory sprite. Preserve reference female exact bald head face position scalp164 chin324 center512, neutral arms and feet bottom1440. Replace entire outfit including shoes with plain fully opaque flat #FF00FF magenta long sleeve shirt, full straight trousers and socks. Face neck hands flat magenta. Add ONLY a modest two strand necklace: small dark grey-green comma-shaped magatama beads alternating round muted blue glass beads, brown fine cord. Strands sit around base of neck and upper chest, lower strand bottom y465 approximately, width130px at widest; tiny everyday beads, no giant royal jewel. Handinked late1980s anime restrained pigment grain jade/glass subtle highlights. Everything except necklace magenta on perfectly flat #00FF00 green. No hair hats jewelry other than requested necklace, no text, no background shadow. Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Multi-strand necklace of dark grey-green magatama and round blue glass beads\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw accessory_f_japan_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-75a8e384-3680-4fc5-ab2f-f8229d504b1e.png",
+      "path": "Raw/accessory_f_japan_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4939ba3c4a251ae51f0ec57c7b05a0736b584b62b523adc9fe391b18106fe820",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "hitatare and hakama",
+      "details": "Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.",
+      "flags": {
+        "label": "hitatare and hakama"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_medieval",
+      "prompt": "1024x1536 full body raw modular costume layer. Dress reference mannequin maintaining EXACT scalp239 chin400 face eyes315 center512 hand positions and foot positions soles1421. Neutral arms relaxed slightly outward hands down. All exposed skin face hands feet flat #FF00FF magenta, bald no beard. Opaque historical costume: Muromachi Kyoto c1400, faded persimmon brown textured hemp hitatare crosscollar LEFT-over-right, very wide square sleeves gathered at wrists by threaded cord, chest ties and small dark cord kikutoji seam tufts; tucked into matching ankle-length deeply pleated hakama. Narrow cord waist ties holding a small CLOSED black ribbed folding fan diagonally at front waist. Plain straw sandals in reference foot locations. No crest weapons armour hat hair or jewelry. Late1980s grounded anime handinked variable lines tactile woven fabric grain subtle scuffs restrained cel shades, not smooth vector. Solid green #00FF00 background no shadows or text. Preserve guide registration; clothing fits figure rather than changing proportions. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.\nCorrection: Fix registration of FIRST costume sprite using SECOND mannequin guide. Canvas1024x1536. First head is 55 pixels TOO HIGH! Move head DOWN so bald scalp top y239, chin y400, eyes315, retaining original head size. Shorten neck/upper shoulder arrangement as needed to align guide, keep waist and hands in place. Preserve persimmon hemp hitatare design with very wide gathered sleeves, cord tufts, pleated hakama, tucked closed fan. Sandal soles must end at y1421 rather than1433: bring bottom up12pixels while keeping ankles. Match second guide overall skeleton and neutral pose; do not rescale canvas. Skin and bald head flatmagenta #FF00FF, background flatgreen #00FF00, original texturedhandinkedanime. No other items.\nCorrection: Use FIRST image as exact anatomical registration. Dress that mannequin in SECOND image's persimmon hitatare and hakama costume. CRITICAL preserve FIRST head pixel position: bald crown y239, chin400, eyes315. Second head is22px too high. Use first head WITHOUT changing its placement or size. Fully clothe mannequin in second costume, same persimmon fabric grain, gathered wide sleeves, cord tufts ties, tucked closed fan, pleated hakama, sandals. Neutral hands down samefirstpose. Soles1421. All skin flatmagenta backgroundflatgreen.1024x1536. No additional elements.\nFresh registration attempt: Dress the supplied mannequin WITHOUT moving its head or changing body proportions. This is a registered game costume layer,1024x1536. Keep reference face and head PIXEL IDENTICAL: its crown starts239pixels fromtop, chin400. Head must not move upward. Empty green margin above head must remain exactly same height. Neutral hands unchanged. Cover body with Muromachi Kyoto1400 persimmon-brown hemp hitatare: left-over-right crosscollar, wide square sleeves gathered by cords at wrists, small darkcord seam tufts chest ties; matching ankle-length pleated hakama trousers and narrow waistcords. Small closed folding fan blackribs tucked at front waist. Plain straw sandals fit original feet bottom1421. Textured hand-painted late1980s anime with inkline variation and restrained cel shades. Bald face hands feet flat #FF00FF. Backgroundflat#00FF00. No hair cap beard weapons crests text. Head and hands cannot move, fit clothes around existing figure. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.\nFoot correction: Tiny edit to this1024x1536 sprite. Only shorten the bottom of each straw sandal and foot vertically by10pixels so both soles terminate at image row1421 instead of1431. Keep ankles and trouser hems fixed, do not shift or scale rest of image. Preserve head exactly crown239 chin400, arms hands garment colors lines texture and fan unchanged. Green background and magenta skin unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-64e79a58-c803-4825-99c2-5fbc574d9fbd.png",
+      "path": "Raw/outfit_m_japan_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f4ebb2a41c0bde7896cf76491175be24ddb17762e6c08cbd1f3651f042cc5260",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_medieval__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "hitatare and hakama",
+      "details": "Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.",
+      "flags": {
+        "label": "hitatare and hakama"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_japan_medieval",
+      "prompt": "Edit FIRST costume to SECOND pose. Preserve first head exactly crown239 chin400 eyes315 center512; unchanged waist fan hakama feet sandals bottom1421, unchanged colors texture costume design. Only wearerRIGHT arm(viewerleft) bends with elbowopen and palmup across lowerchest exactly second hand position x410-515,y610-675. Otherarm relaxed. Wide persimmonbrown hemp sleeve drapes naturally under raised forearm, wristcords retained. Late1980s anime grain ink celshadows samefirstimage. All exposed skinflatmagenta #FF00FF,bald,backgroundsolidgreen#00FF00.1024x1536,nevercroprescale. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-837f0e27-c5d2-4df4-9b1e-df682665460d.png",
+      "path": "Raw/outfit_m_japan_medieval__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fe280e1ecbcb10550ac91d93ed2a389569f27690c9241a451ee3093ba888fe14",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_medieval__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "hitatare and hakama",
+      "details": "Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.",
+      "flags": {
+        "label": "hitatare and hakama"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_japan_medieval",
+      "prompt": "Create first costume in exact second arm pose. WearerLEFT index finger touches cheek viewerRIGHT at x551y347; RIGHT forearm crosses abdomen and supports raised elbow at x600y635. Preserve first head crown239 chin400 facecenter512, waist ties fan pleatedhakama sandalpositionsbottom1421 exactly unchanged. Persimmon hemp wide gathered hitatare sleeves deform naturally with pose, still samecuffcords chest tufts. Keep first tactiletextured late80sanimeinks celshades, fullyclothed. Bald head exposedskin hands feet #FF00FF magenta; uniform#00FF00 green background.1024x1536. No tilt body lean recrop rescale hair hat or addedobjects. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7b8afcb8-b401-44f6-9e2c-783b742c82d6.png",
+      "path": "Raw/outfit_m_japan_medieval__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dd35b75f7f66278f922b1bee918973c2b6c2c8693d1b8fbd3a780219ee28e599",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_medieval__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "hitatare and hakama",
+      "details": "Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.",
+      "flags": {
+        "label": "hitatare and hakama"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_japan_medieval",
+      "prompt": "Edit FIRST costume ONLY arms/sleeves to exact SECOND gesture. WearerRIGHT hand rests upperchest at x450-565 y465-560; LEFT arm extends low viewerRIGHT palmout at x745-866y775-840. Match pose guide precisely; gatheredwide persimmon hitatare sleeves drape naturally. Preserve first head crown239 chin400 center512, expression, waist ties tuckedfan, hakama skirt/trouser silhouette and sandals bottom1421 unchanged. Late80shandinkedanime textilegrain and celshadow unchanged. Skinbaldheadhandsfeet flatmagenta#FF00FF/backgroundsolidgreen#00FF00.1024x1536 no rescale no extraobjects. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests. A folding fan (sensu) with black lacquered ribs is tucked, closed, into the waist ties at the front.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_m_japan_medieval.\nCorrection: Fix ONLY low extended arm on viewerRIGHT in firstimage. Its hand goes too far right. Match SECOND pose guide: wristaround(746,790), fingertipsendx866, lowestthumb844. Move hand about48px LEFT and12px DOWN, shorten sleeve reach accordingly while preservinghand size. Do not move chesthand, head, body, legs, shoes or fan. First costume color texture design unchanged. Exact1024x1536 magentaskin greenbackground.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ca8487c4-625d-4f01-a7a3-76c80d56dd0d.png",
+      "path": "Raw/outfit_m_japan_medieval__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "64dedeee976afa75217eb936586912f042d10a0d94925ea4307117f944a34fad",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_japan_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "motodori topknot",
+      "details": "Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Motodori topknot at the crown over a full head of hair (no shaved pate)\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw hair_m_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "motodori topknot"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_japan_medieval",
+      "prompt": "1024x1536 separate HAIR game layer on exact reference neutralmannequin. Keep exact head face placement crown239 chin400 eyes315,neutralarms feetbottom1421. Hair: black motodori crown topknot over FULL unshaved scalp, slick combedbackblackhair to simple tied uprightsmall foldedtopknot with darkplaincord. No shavedpate no cap no beard jewelry. Handinked texturedlate1980sanime subtleblueblack celshadows. Replace ALL costume including sandals fan with opaque plainflat#FF00FF magenta longsleeveshirt fullstraighttrousers socks. Face neck handsflatmagenta. Only hairnonmagenta. Flatgreen#00FF00 background no shadows text. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Motodori topknot at the crown over a full head of hair (no shaved pate)\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw hair_m_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5fe814c4-e27f-4c8e-8017-da4a538dde98.png",
+      "path": "Raw/hair_m_japan_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad7caee84f2184b700d95b79be0b12d3f729e0ff74ea72a7d7923c173d5e6138",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_japan_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "moustache and chin tuft",
+      "details": "Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Short moustache and a small chin tuft\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw facialhair_m_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "moustache and chin tuft"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_japan_medieval",
+      "prompt": "1024x1536 modular FACIAL HAIR sprite. Keep exact reference bald face head crown239 chin400 eyes315 bodypose handsfeet. Add ONLY a SHORT black moustache immediately below nose (about45pxwide) and small modest black pointed chin tuft (about18pxwide extends just20pxbelowchin). No sideburns jawbeard stubble or scalp hair. Late1980s anime handinked fine tapered strands subtlepigmentgrain. Replace entire reference costume fan sandals with plain opaque #FF00FF magenta long sleeve shirt full trousers socks, all face neck hands also flatmagenta. Only moustache/chintuft nonmagenta on flat#00FF00green. No new text shadows accessories. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Short moustache and a small chin tuft\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw facialhair_m_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-858ff011-37f0-417a-8555-fe98e2569e11.png",
+      "path": "Raw/facialhair_m_japan_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "08597d5acd2dd2c65225f9d0b482245db051c8c10cda8d2d811be0e0ec44e19a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_japan_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "eboshi cap",
+      "details": "Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Momi-eboshi: a tall, soft cap of black, lightly lacquered gauze or paper, crumpled and leaning slightly forward\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw headwear_m_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "eboshi cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_japan_medieval",
+      "prompt": "1024x1536 modular HEADWEAR sprite. Exact reference headplacement baldscalp239 chin400 eyes315 centered512 unchanged face. Add Muromachi momi-eboshi tall narrow SOFT black crumpled lightlylacquered gauze/paper cap, irregular vertical wrinkles, leaning a little forward, extending from forehead y285 to topy105 approx, asymmetrical soft folded top. No rigid cylinder no turbanband no horizontalwings no hair beard ornaments. Late1980shandinkedanime grain charcoalblack softgreyhighlights. Replace all costume fan footwear with plain opaque flat #FF00FF magenta longsleeve shirt fulltrousers socks. Face handsneckmagenta. Hatonlynonmagenta. Backgroundflat#00FF00 no shadows text. Subject: man of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Momi-eboshi: a tall, soft cap of black, lightly lacquered gauze or paper, crumpled and leaning slightly forward\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw headwear_m_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fc355658-178d-4189-8a0b-ba2c7a99c910.png",
+      "path": "Raw/headwear_m_japan_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9e822efd9b6c925fa82830c9f522e22d3c82552d512a546370628ded68cf797a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "tsubo-shozoku robes",
+      "details": "Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.",
+      "flags": {
+        "label": "tsubo-shozoku robes"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_medieval",
+      "prompt": "Dress EXACT supplied mannequin in Muromachi Kyoto1400 female tsubo-shozoku travellingdress. Do not move faceheadarmsfeet: crown164 chin324center512 soles1440,1024x1536. Anklelength cream kosode with smallrust motif closed LEFT-over-RIGHT. Indigo outer robe with subtle cream shibori dots, hitched up at hips, lower hem ends MID CALF approx1170 so cream ankle kosode shows below. Narrow rustcloth sash, small indigo/rust tie-dyed drawstring kinchaku hanging viewerLEFT at hip. Wide but modest sleeves small wrist openings, straw sandals matching guide feet. Texturedlate1980s anime handmadeinklinewovenfabricgrain mutedpigment celshadows. Fullyclothed; exposedskin facehandsfeet magenta#FF00FF bald nohair nohat no jewelry or veil. Backgrounduniform#00FF00 green no shadow text. Preserve registration bodyproportions, no fashionmodelstance. Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.\nCorrection: Edit only sandalfeet bottom in this sprite: soles end y1453 but must end y1440. Shorten bottom of feet/sandals vertically13px, keep ankles fixed and eachfoot samehorizontalposition. Everythingelse EXACTunchanged headfacebodyarmsgarmentpatterns pursepose color texture1024x1536greenbackgroundmagentaskin. Do not shiftwholefigure.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-75d74b79-a2dd-46b6-ad59-d92b7d346b36.png",
+      "path": "Raw/outfit_f_japan_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f5f95f69c37eabb0a3cebfab9c88d88e558c089ca0ca5831b254e63e5a1929c8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_medieval__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "tsubo-shozoku robes",
+      "details": "Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.",
+      "flags": {
+        "label": "tsubo-shozoku robes"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_japan_medieval",
+      "prompt": "Edit FIRST costume ONLY arms to SECOND guide pose: both elbows bent palms open asymmetrical, viewerLEFT palm low x174-280y680-774, viewerRIGHT palm higher x722-845y558-645. Sleeve drapery moves naturally. Preserve first head crown164 chin324 facebodycenter512, narrow rustsash, kinchakupurse position viewerLEFT y675-825, hitchedindigo outerrobe and creamunderrobe hems, sandals positionsbottom1433, allpatterns/colors/grain unchanged. Skinheadhandsfeetflat#FF00FF, green#00FF00 background,1024x1536. Samehandinkedlate80sanime, nohairhattextshadows. Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.\nCorrection: Firstsprite viewerRIGHT raised hand is too high andfaroutward. Move that hand DOWN40px and LEFT30px to exactly match SECOND guide hand, palm x725-845 y558-645. Sleeveopeningfollowswrist. Keep viewerLEFT hand and sleeve exactly asis. All other head body costume pursepatternshoes positions unchanged.1024x1536. Greenbackgroundmagentaskin texturedanime unchanged.\nPose-first correction: FIRST image is authoritative exact pose and anatomy: retain its head, shoulders elbows wrists and hands pixelpositions. Dress it in SECOND image's travelcostume. Especially viewerRIGHT palm remains exactly at x724-844 y558-645, thumbtop558, fingertipsend y643. Do NOT change pose to suit sleeves. Indigo small creamshiborimotif outerrobe hitched hips overcreamrustmotif anklekosode narrow rustsash tie-dyepurse samehip spot assecond. Straw sandals sameasneutral.1024x1536 allskinmagentagreenbackground. Texturedhandinkedlate80sanime preserve costume. No newobjects.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3cd9b99c-3126-4b8d-b09a-1cbaf2a03ce6.png",
+      "path": "Raw/outfit_f_japan_medieval__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9944cbb22207a7f9dd7d383eee96c0e63b975693a182c9a70936bacec5a2f2ee",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_medieval__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "tsubo-shozoku robes",
+      "details": "Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.",
+      "flags": {
+        "label": "tsubo-shozoku robes"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_japan_medieval",
+      "prompt": "Dress FIRST pose guide in SECOND costume. FIRST exact anatomy headface hands positions authoritative: hands loosely clasped lowat x460-559 y680-770, elbowsbent closebody. Headcrown164 chin324 center512unchanged. Preserve SECOND garment full indigo creamshibori hitchedouterrobe creamrustanklekosode narrowrustsash and tiedyepurse viewerLEFT y675-825, hem shapes and sandals. Sleeves move to pose naturally; purse stayssamehipplace partiallyoccluded ifneeded. Texturedlate1980sanime inkgrain unchanged.1024x1536 magentabaldheadskin #FF00FF greenbackground #00FF00 nohairhattext. Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.\nCorrection: Firstimage neutral costume is exact reference for entire lowerbody. Change ONLY arms of FIRSTimage to claspedhands pose from SECONDimage. Keep FIRST purse at sameheight (bottom825), same indigo outerhem, creamunderrobe hem1335, sandals bottom1433. Do NOT copy secondlowerbody which is stretched downward. Copy ONLY second foldedforearms and hands, resting around680-770. Head face and bodyposition firstunchanged. 1024x1536. Magentaskin greenbackground late80sanime fabricgrain unchanged.\nSingle-reference retry: Single precise edit: fold this woman's arms so her hands loosely overlap below the waist at center x512 y720. Keep ALL other pixels and shapes unchanged: head, torso, belt, hip pouch, robe skirt hems and feet MUST stay where they are in supplied image. Only redraw arms sleeves and hands. Hands in front of garment, both elbows close to sides; don't hide hands in sleeves. Do not move pouch: top675 bottom825. Don't extend skirts or legs. Exact reference1024x1536 composition greenbackground magentaskin indigo/cream textilegrain. Only arms change.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1f3a9048-07ea-47d7-8f6f-d21e6fe61dc7.png",
+      "path": "Raw/outfit_f_japan_medieval__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "135c31d4a15c99e806332867645063e077abfc04b607984c9aa8cdd403a45bc8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_medieval__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "tsubo-shozoku robes",
+      "details": "Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.",
+      "flags": {
+        "label": "tsubo-shozoku robes"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_japan_medieval",
+      "prompt": "Edit ONLY rightarm(viewerLEFT) of FIRST costume into raisedopen stop palm beside shoulder as SECOND guide, hand x286-390 y298-432, leftarm stays down. Sleeve drapes from bent elbow naturally. Preserve first headface164/324 torsoaxis512, outfit indigo creamshiborirobe hitchedhips, creamrustkosodehem1335, purse675-825, footpositionssoles1433 EXACTLY. No tallerfigure no lowerhem no purse shift. Magentaskinheadhandsfeet #FF00FF greenbackground#00FF00.1024x1536 textilegrain handinkedlate80sanime unchanged. Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash, with a small tie-dyed drawstring purse (kinchaku) hanging from it. Muted tie-dyed or small-motif patterns in indigo, rust and cream.\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw outfit_f_japan_medieval.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6dd7b7c0-8f65-495c-ad16-713f6a5b3387.png",
+      "path": "Raw/outfit_f_japan_medieval__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f098c4eeb7deffc9cd7028a7c6b7aa54dfde0e61ceb48f3dc82d9502732b4c4d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_japan_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "long tied-back hair",
+      "details": "Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Long centre-parted hair worn down, drawn smoothly back behind the ears and tied once loosely at the nape; the long tail falls straight down the back, hidden from the front\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw hair_f_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "long tied-back hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_japan_medieval",
+      "prompt": "1024x1536 modularHAIRsprite. Preserve exactreference headface crown164 chin324 eyes242 center512bodyhandsfeet. Add blacklongcenterparted hair drawn smoothly behind ears and tiedonce looselyat nape; longtailfalls straight downback HIDDENfromfront. Front viewonly smooth close-fitting scalp hair and small narrow darkedges behindears/necksides, no bun no tallupdo no bangs no braids or ornamentalpins. Late80sanime handinks mutedblueblack celshade pigmentgrain. Replace entirecostume purse sandalswithopaque plainflat #FF00FF magenta longsleeveshirt fulltrousers socks. Skinfacehandsmagenta. Onlyhairnonmagenta onsolid#00FF00background no shadows text. Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Long centre-parted hair worn down, drawn smoothly back behind the ears and tied once loosely at the nape; the long tail falls straight down the back, hidden from the front\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw hair_f_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-13ec9d6a-c364-4be1-ab3a-1b78575e1643.png",
+      "path": "Raw/hair_f_japan_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0e57cb331817ec98d102db03470a820d204aa3d2830d0ab023c01e6d2573b632",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "country": "japan",
+      "era": "medieval",
+      "label": "ichime-gasa",
+      "details": "Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Ichime-gasa: a wide-brimmed lacquered sedge hat with a tall knob crown, worn WITHOUT its veil so the face is fully visible\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw headwear_f_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "ichime-gasa",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_japan_medieval",
+      "prompt": "1024x1536 modular HEADWEARsprite. Exact reference headfaceposition crown164 chin324 eyes242 unchanged. Add ichime-gasa widebrim darkbrown lacqueredsedge travelhat with pronounced tallknob crown, gently sloping widebrim approxx285-740 aboveeyebrows no facecover. Wovenfibergrain smallwornedges restrained ochrehighlights late80sanime inkscelshading. NO VEIL NO HAIR or other accessories. Cap shouldsit atop existinghead not move it. Replace entirecostume purse sandals with plainopaque flatmagenta longsleeveshirt fulltrousers socks. Faceheadneckhandsmagenta#FF00FF. Onlyhatnonmagenta onflatgreen#00FF00. No shadows text. Subject: woman of Muromachi Kyoto; Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China.\nDraw: Ichime-gasa: a wide-brimmed lacquered sedge hat with a tall knob crown, worn WITHOUT its veil so the face is fully visible\nAvoid: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face\nOutput one full-canvas raw headwear_f_japan_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-125f861d-72a9-4a80-b116-d1567d1137f2.png",
+      "path": "Raw/headwear_f_japan_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4d80f796b824306af2b47c0c47edede3eb60bdbd8a19136095edf59c15d0bad8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kataginu and hakama",
+      "details": "Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "flags": {
+        "label": "kataginu and hakama"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_earlymodern",
+      "prompt": "Dress EXACT reference mannequin without movingheadbodyhandsfeet. Rawcostumesprite1024x1536,crown239 chin400 eyes315 center512 soles1421. TokugawaEdo1610 male: mutedslategrey hemp kataginu sleeveless overvest with STRAIGHT FLAT SQUARED shoulders only slightly past naturalshoulders, NO tallwings. Matching deeplypleated anklehakama over indigo finecream repeatingpattern kosode with smallsleeveopenings left-overrightcrosscollar. Narrowhakamaties smalldarkbrown stackedlacquer inro case on ochresilkcord at viewerRIGHThip heldsmallcarvedtoggle. Plainstrawsandals fitting guidefeet. No weapons crests hat hair beard. Late1980sanime inkedlinevariationwovenclothgrain wornpigment restrainedcelshade. Allskinflatmagenta#FF00FF backgroundsolidgreen#00FF00 no shadows text. Maintain exact reference head andfootregistration. Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f314eb7f-108b-49f8-861e-f1d053e2bc94.png",
+      "path": "Raw/outfit_m_japan_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cd06c35d5625add3908d9b57e901eb61ae6f018895c02449e26404efaa766cd5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kataginu and hakama",
+      "details": "Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "flags": {
+        "label": "kataginu and hakama"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_japan_earlymodern",
+      "prompt": "Dress FIRST exact poseguide in SECOND costume. Bothhandsopen asymmetric: viewerLEFT palm x177-291 y562-642, viewerRIGHT palm x733-846y690-775. First headface239/400center512 unchanged. Second entire costume slategrey flatshoulderkataginu matchingpleatedhakama indigofinecream motifkosode smallsleeveopenings, waistcords and darkstacked inro viewerRIGHThip sameposition. Keepsecond lowerbody hemsfeetpositions soles1426,no shiftrescale. Sleevesdeformnaturally. Handinked late80sanime textilegrain celshades samecostume. Allskin baldhead handsfeetmagenta#FF00FF flatgreen#00FF00background1024x1536. Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-754d8e15-2da8-4624-9081-5d796dc89122.png",
+      "path": "Raw/outfit_m_japan_earlymodern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "29a14ffa8cf5c1bba6fd801ceb16fac826fd8850b81a02e589aa645a775f2ba6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kataginu and hakama",
+      "details": "Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "flags": {
+        "label": "kataginu and hakama"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_japan_earlymodern",
+      "prompt": "Change ONLY arms of FIRSTcostume to hands clasped low from SECONDguide. Hands at x450-554y725-804, elbowsclosetobody. Keep first head crown239chin400 neutralface center512, shoulderflatvest hakamawaist and hipinro y775-850, hems and sandals bottom1426 EXACT. Sleeves followarms naturally. No changing proportions or lowerbody. Exactslategreytextured hemp vesthakama indigocreampatternkosode narrowtiesstackedcase. Late80sanime inktexture unchanged.1024x1536 allskinmagenta#FF00FF backgroundgreen#00FF00 baldnohair noextraobjects. Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e43aa499-fe68-4128-b20e-85db78e99785.png",
+      "path": "Raw/outfit_m_japan_earlymodern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a51b47bf6d15997b0e7e64d4a6b1363fd160ffd63a06afac276da239637034df",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_earlymodern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kataginu and hakama",
+      "details": "Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "flags": {
+        "label": "kataginu and hakama"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_japan_earlymodern",
+      "prompt": "Edit ONLY wearerRIGHTarm viewerLEFT of FIRST costume to SECOND raisedopen palm stop gesture: handx300-406 y367-502. Otherarm relaxeddown. Preserveexacthead239/400center512, flatshouldergreyvest, waist tiesinrohipcase, hakamahem and sandalpositionsbottom1426. Sleevedrapes naturally aroundbentelbow same indigofinepattern fabric. No newaccessories weapons orhair.1024x1536 flatmagentaskin/solidgreenbackground handinkedlate80sanime fabricgrain/colors unchanged. Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests. An inro (a small stacked lacquered case) hangs at the hip on a silk cord from the hakama waist ties, held by a carved toggle.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_m_japan_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-70f30b84-58bc-44d6-accb-c6f0752db9ae.png",
+      "path": "Raw/outfit_m_japan_earlymodern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ba01119912c12d6201dcb9d4e085197ea332fbc42b3558431b6c56f0cc288ed3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_japan_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "chasen-mage",
+      "details": "Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Chasen-mage: shaved pate (sakayaki), with the remaining hair gathered at the crown into a short upright topknot bound with white cord like a tea whisk\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw hair_m_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "chasen-mage",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_japan_earlymodern",
+      "prompt": "1024x1536 modularHAIRgameasset. Exactreference headface239/400center512,neutralhandsfeetpositionspreserved. Chasen-mage: magenta shavedpate broad central forehead/crown, remaining blackhair at sides gatheredatcrown into SHORT UPRIGHT tea-whisk topknot boundwhitecord with fanned upright tips. No lateEdo foldedforward knot. Finehandinks late80sanime pigmentgrain blueblackcelshade. Replace entirecostumeincludingcaseandsandals withplainOPAQUEmagenta longsleeveshirt straightfulltrousers socks. Allfaceheadneckhandsmagenta#FF00FF including shavedareas. Onlyblackhairandwhitebinding nonmagenta. Flatgreen#00FF00background no otheraccessoriestextshadows. Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Chasen-mage: shaved pate (sakayaki), with the remaining hair gathered at the crown into a short upright topknot bound with white cord like a tea whisk\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw hair_m_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2a111e6c-7ff3-48ab-8432-bf1795fed490.png",
+      "path": "Raw/hair_m_japan_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f0a0907c69061f58b874dfcb2b12c7b7cfd217b21f812ad2e83663f10bdbeed0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_japan_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "thin moustache and beard",
+      "details": "Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Thin moustache and a small chin beard\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw facialhair_m_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "thin moustache and beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_japan_earlymodern",
+      "prompt": "1024x1536 modularFACIALHAIRasset. Onexactreferenceface crown239 chin400 eyes315 add THIN black moustache delicately tapered shorttips about48pxwidth and smallchinbeard endingy428 about28pxwide. Finehandink strands texturedlate80sanime restrainedcelshade. NO scalp hair sideburns fullbeard orhat. Keepfaceheadposeallpositionsunchanged. Replaceallcostume sandals hipcasewithflatopaque#FF00FFmagenta longsleeveshirt fulltrousers socks. Headfacehandsneckmagenta. Onlymoustachebeardnonmagenta onsolid#00FF00background. No textshadowsotherobjects. Subject: man of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Thin moustache and a small chin beard\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw facialhair_m_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-79d4703f-ec70-4b2c-9ffe-de5465c5fc99.png",
+      "path": "Raw/facialhair_m_japan_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7e59ce792ee6e4482c4fe3f191ecef6174cfdecf9fac3e447d3f76d99e97b7cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "Keicho kosode",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.",
+      "flags": {
+        "label": "Keicho kosode"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_earlymodern",
+      "prompt": "Dress exactreferencefemale mannequin in Keicho kosode Japan1610. Crown164 chin324 eyes242center512 handsdownfeetbottom1440 positionsunaltered. Straight anklelength darkwine-red kosode with smallwristopenings rounded sleevebottoms; dense smallgold/cream plantmotifs and shibori dots arranged divideddiagonalzones, handembroidered goldleaf touches, left-over-right collarcreaminneredge. Slimstraight silhoutte no wideobi. Severalwrapsof ochre braided silkcordbelt aroundhips tiedfront longtassels toknee. Straw sandals withdarkwine straps, retain referencefootpositions. Texturedlate1980s anime handinkinglinevariation wovenpaintedclothgrain subtlewear celshadows. Allskin magenta#FF00FF,bald nohair hat jewelry. Solidgreen#00FF00background no shadowtext. Full1024x1536 no crop or rescale. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.\nFoot correction: Tiny localedit: both sandals solescurrentlyy1450 needend at y1440. Shorten feet/sandalsbottomvertically10px keepingankles andhorizontalpositionsfixed. All other imageidentical includingexacthead164chin324 robe pattern belt tassels hem hands andpose.1024x1536 magentaskinflatgreenbackground. Do notmove wholefigure.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c2bb2854-5164-435b-b1a5-cf9c88972b04.png",
+      "path": "Raw/outfit_f_japan_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "17fce4a066f772dfed87e9ee437260e61dc962f0fc552fa8c241ace05c146ebc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "Keicho kosode",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.",
+      "flags": {
+        "label": "Keicho kosode"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_japan_earlymodern",
+      "prompt": "Edit FIRSTcostume only LEFTarm viewerRIGHT into compact chestheightopenhand ofSECONDguide: handx535-635y394-499 facinginward, otherarmdown. Sleeve bendsnaturally. Preserveheadexact164/324center512, deepwine Keicho kosode patternzones goldflowerscreamshiboridots, ochre braidedhipcordlongkneelengthtassels, hem and sandalpositionsbottom1440. Do not rescale or move body. Allskinbaldheadhandsfeet #FF00FF background#00FF00.1024x1536 late80sanimeinktextilegrainunchanged noextraobjects. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f14081a9-3d21-4ac4-8fbc-185b2f00232c.png",
+      "path": "Raw/outfit_f_japan_earlymodern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b01d7f7f207697282a3fe10676a60e2bd3fa28df54d76c43a8b34449a00a0aa4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
