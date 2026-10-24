@@ -11216,6 +11216,66 @@
     "base_key": "headwear_f_japan_earlymodern"
   },
   {
+    "name": "headwear_f_japan_earlymodern__explaining_c",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "headwear",
+    "place": "Tokugawa Edo",
+    "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+    "country": "japan",
+    "era": "earlymodern",
+    "label": "kazuki veil",
+    "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+    "flags": {
+      "label": "kazuki veil",
+      "leakable": true
+    },
+    "pose": "explaining_c",
+    "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+    "base_key": "headwear_f_japan_earlymodern"
+  },
+  {
+    "name": "headwear_f_japan_earlymodern__thinking_a",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "headwear",
+    "place": "Tokugawa Edo",
+    "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+    "country": "japan",
+    "era": "earlymodern",
+    "label": "kazuki veil",
+    "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+    "flags": {
+      "label": "kazuki veil",
+      "leakable": true
+    },
+    "pose": "thinking_a",
+    "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+    "base_key": "headwear_f_japan_earlymodern"
+  },
+  {
+    "name": "headwear_f_japan_earlymodern__objecting_b",
+    "family": "wardrobe",
+    "status": "pending",
+    "gender": "f",
+    "layer": "headwear",
+    "place": "Tokugawa Edo",
+    "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+    "country": "japan",
+    "era": "earlymodern",
+    "label": "kazuki veil",
+    "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+    "flags": {
+      "label": "kazuki veil",
+      "leakable": true
+    },
+    "pose": "objecting_b",
+    "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+    "base_key": "headwear_f_japan_earlymodern"
+  },
+  {
     "name": "outfit_m_japan_industrial",
     "family": "wardrobe",
     "status": "pending",

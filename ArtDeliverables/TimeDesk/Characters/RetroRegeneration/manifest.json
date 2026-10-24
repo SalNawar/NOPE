@@ -21823,6 +21823,763 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "Keicho kosode",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.",
+      "flags": {
+        "label": "Keicho kosode"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_japan_earlymodern",
+      "prompt": "Change ONLY FIRSTcostume wearerRIGHTarm viewerLEFT to chinholdingpose fromSECONDguide, handatx468-560 y294-388 gentlycups chin, otherarmdown. Facehead164/324center512 remainfixed, samebodybeltrobeshoes. Preserve deepwineKeicho kosode goldflowers creamshibori diagonalzones ochrebraidedbelt longtassels and sandalsole1440 EXACT. No newobjects hairhat. Cloth sleeve bendsnaturally samepatternandtexture. Late80sanimehandinks celshade.1024x1536 magentaskin#FF00FFgreenbackground#00FF00. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c13aedbb-4e36-46d8-8462-56f2ed7a0308.png",
+      "path": "Raw/outfit_f_japan_earlymodern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e292e489fb72a904fef50112afa6a3fd45c7982e6fd991e77c21d9545a3ed78c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_earlymodern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "Keicho kosode",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.",
+      "flags": {
+        "label": "Keicho kosode"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_japan_earlymodern",
+      "prompt": "Edit ONLY arms ofFIRSTcostume into SECONDguidepose: bothhandsraised palmout lowchest x375-480and545-650 y460-600, gentle double stop gesture, elbowsbentclose. Exactheadface164/324center512 unchanged, entirebodybelttasselrobehemsfeetunchanged. SamewineKeicho kosode goldflowerscreamshiboripatterns ochrebraidbelt longtassels toesandals bottom1440. Sleevefoldsnatural not oversized.1024x1536 magentaskinbaldheadhandsfeet greenbackground late80sanimehandinksclothgrainunchanged. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw outfit_f_japan_earlymodern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5db2639e-4ad2-429d-bdee-d2ebde36d50c.png",
+      "path": "Raw/outfit_f_japan_earlymodern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad0d88691ffe8d54f050f7112f9bd8dad1d0c157ed62b622feaccaad06b5ab4c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_japan_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "tamamusubi loop",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Long centre-parted hair drawn to the nape and looped once into a soft tamamusubi fold, tied with white paper cord, with the ends hanging down the back (hidden from the front)\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw hair_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "tamamusubi loop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_japan_earlymodern",
+      "prompt": "1024x1536 modularHAIRlayer. Preserve exactreference faceheadcrown164chin324center512neutralhandsfeet. Blacklongcenterparted hair swept gently behindears to nape, loopedonce into softLOW tamamusubi fold tiedwhitepapercord. Ends hang behindback hiddenfromfront. Show justsmallroundednapehairloop edges behindneck, not tallupdo orwidegeishabun. Finehandinkedlate1980sanime subtleblueblackpigmentcelshadegrain. Replaceentirecostume belttassels sandals withOPAQUEplain#FF00FFmagenta longsleeveshirt fulltrousers socks; faceheadneckhandsmagenta. Onlyhair+whitebindingnonmagenta. Flatgreen#00FF00background notextshadows. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Long centre-parted hair drawn to the nape and looped once into a soft tamamusubi fold, tied with white paper cord, with the ends hanging down the back (hidden from the front)\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw hair_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nCorrection: Correctonlyhair. Remove TWO side pigtail loops and BOTH white bands visible beside jaw. This hairstyle has ONE single low loop at center BACK of nape hidden behind neck, whitepaper tie also hiddenbehindneck. Fromfront justsmoothcenterpartedblackscalphair sweptbehindears with tiny darknapeedges, no visible sidebuns/pigtails/bands. Exactfaceheadposition and allbodyposeclothesgreenbackgroundunchanged1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7fdb9d09-3f57-4435-8678-bd043058f442.png",
+      "path": "Raw/hair_f_japan_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "849d56fe111fdd4b3f1899e31d1355fa07c05bc8a413fec33300905751bee14d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kazuki veil",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "kazuki veil",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_japan_earlymodern",
+      "prompt": "1024x1536 modularHEADWEAR sprite exactreferenceheadfacecrown164chin324center512. Add KAZUKI a second kosode draped overhead, its collar across topforehead y195, face FULLY UNCOVERED. Black-brown cloth with dense small mutedcopper/champagne motifs inshiboriandembroidered dividedzones, differentfromwinebodykosode. Robe framesface sides, fallsbothshoulders toupperarms aroundy550, visibly clothing draped asheadveil not religioushood. Preserve exactheadfacepose. Replace ALL original winecostume belttassel sandals withplainOPAQUE#FF00FFmagenta longsleeveshirt fulltrousers socks. Allskinmagenta. No hairunderveil, nohat jewelry pins. Onlykazukinonmagenta onflatgreen#00FF00. Handinkedlate80sanime fabricgrain celshade,no text backgroundshadow. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3b491598-06a2-41e5-98c7-1ec821b4415c.png",
+      "path": "Raw/headwear_f_japan_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "436a9d74769651ec646228e40e8469e563ce41a92dba77a353f52642644e8763",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kazuki veil",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+      "flags": {
+        "label": "kazuki veil",
+        "leakable": true
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "headwear_f_japan_earlymodern",
+      "prompt": "Create pose-specific headveil layer. FIRSTimage authoritative kazuki design andheadfit. SECONDimage gives ONLY pose of leftarm raisedviewerRIGHT handnearupperchest. Thirdguidehandmatching ifneeded. Keepfirst headface exactcrown164chin324. Kazuki blackbrown densecopper/cream dividedpatternzones drapedheadovershoulders should deform overupperarm naturally when wearerLEFT forearmraises near chest; HAND MUST be IN FRONT of veil at x535-635 y394-499, not hidden. Rest of mannequin fullycoveredplainopaquemagenta shirttrouserssocks, allskinmagenta. ONLY kazuki nonmagenta, do NOT copywinebodyrobe fromsecondreference. Same1024x1536greenbackground, late80s animeinkclothgrain. Preservefirstheadveilshape nearface, changeonly shoulder/armdrape to matchpose. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1cabc1cf-39b4-4eb8-b54c-a7fb172dd5f3.png",
+      "path": "Raw/headwear_f_japan_earlymodern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f4ef5d4183bb8f9f7531cee670dc50a20f6d9094d5d5de1f5e98a17b89f90a38",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kazuki veil",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+      "flags": {
+        "label": "kazuki veil",
+        "leakable": true
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "headwear_f_japan_earlymodern",
+      "prompt": "Pose-specifickazuki headveil layer1024x1536. FIRST image supplies exactblackbrowncoppercream patternedkazuki andheadfit; SECOND givesrightarmviewerLEFT chin-cuppingpose only. Hand mustmatchsecondx468-560y294-388 inFRONTofveil, coveringchin naturally, shoulderclothdeformsaroundbentarm. Headface164/324center512 remainsfixed. No copyofwinebodyrobe! Entire supporting bodycoveredplainopaquemagentashirttrouserssocks allskinmagenta. ONLY firstkazuki fabric nonmagenta, preservepatternshapeoverhead otherarmrelaxed. Late80sanimeinkgrain solidgreenbackground. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9bc551d2-dced-4f3e-87e1-fe253c92fcd4.png",
+      "path": "Raw/headwear_f_japan_earlymodern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "649efa3a486297f26ece5397ad14c86791a2ce75cf806234bbb9d35e2ba91e43",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_japan_earlymodern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "country": "japan",
+      "era": "earlymodern",
+      "label": "kazuki veil",
+      "details": "Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+      "flags": {
+        "label": "kazuki veil",
+        "leakable": true
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "headwear_f_japan_earlymodern",
+      "prompt": "Pose-specifickazuki headveil layer1024x1536. FIRST image supplies exactblackbrowncoppercream patternedkazuki andheadfit; SECOND givesBOTHarms raised lowchest palmoutstopgesture. Handpositions matchsecond nearx375-475and550-650,y480-600 inFRONTofcloth. Kazukiupperarmsections deformnaturally aroundbentelbows, sameheadclothfaceopening exacthead164/324center512. ONLYkazukinonmagenta. Replacewinebodyrobe withplainopaquemagentashirttrouserssocks allskinmagenta. Retain firstfabricpatternshandinksgrain late80sanime flatgreenbackground. No otherobjectshairtext. Subject: woman of Tokugawa Edo; Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611..\nDraw: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.\nAvoid: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)\nOutput one full-canvas raw headwear_f_japan_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nPose-specific kazuki drape: follow the matching outfit arms and keep the head registration, with hands in front of the cloth.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8a5337d3-c4bb-4ef3-8fa0-7954ad458932.png",
+      "path": "Raw/headwear_f_japan_earlymodern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "23aef4ef5e17fd532c4211243793d4c29fdc3fbc1e0f20bdc040bede5b96e3ff",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "haori and hakama",
+      "details": "Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "flags": {
+        "label": "haori and hakama"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_industrial",
+      "prompt": "Dress exactreference male mannequin in MeijiNagoya1899 formalhaorihakama.1024x1536 headcrown239chin400eyes315center512 feetbottom1421 handpositionsunchanged. Darknavykimono LEFT-overRIGHT neckline underkneelength BLACKhaori, five smallplainWHITEblankcrestcircles total historicallyplaced(onlyfrontvisibleones show,noinventeddesign). Haoriclosesatchestby thick WHITEbraidedsilkcord haorihimo flatknot2tassels. Grey-black thinverticalstriped deeplypleated anklehakama. WHITEtabisocks splittoes and zorisandals. Nohat hair beard sword militarysymbols. Late80sanimehandinks textilegrain subtlewornblackfabric restrainedcelshades. Exposedskinheadhands#FF00FFmagenta,backgroundflat#00FF00. Preserveguidepose proportions headandfeetexact. Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c992a19-af49-4dea-afc2-c57671689fb5.png",
+      "path": "Raw/outfit_m_japan_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1121dbe43a4073673dbd16c0088856fff33f7d7f442630bf65a826179b511647",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "haori and hakama",
+      "details": "Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "flags": {
+        "label": "haori and hakama"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_japan_industrial",
+      "prompt": "ChangeONLYFIRST costume LEFTarm viewerRIGHT toSECOND compactraisedhandnearupperchest x545-635y496-593. Otherarmrelaxeddown. Preservehead239/400center512andallbodyfeethems. Blackkneelengthhaori plainwhiteroundels whitebraidedchestcordand2tassels darknavykimono thinstripedgreyblackhakama whitetabisocksblackstrapzori soles1423 samepositions. No extra crests orobjects. Sleevesdeformnaturally; handinfrontchest. Late80sanimeinktextilegrain samecolors1024x1536magentaskinbaldheadsolidgreenbackground. Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c9731728-2c4a-40df-b13e-6ea06ba77c80.png",
+      "path": "Raw/outfit_m_japan_industrial__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "485ed9c4c6f8548834e059208ae968f4af3c4da7c0d57683cdc5b463c6023c16",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "haori and hakama",
+      "details": "Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "flags": {
+        "label": "haori and hakama"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_japan_industrial",
+      "prompt": "Edit image 1 into the exact thinking gesture of image 2, a registered modular costume sprite. Output 1024x1536. Preserve image 1 costume, face position scalp y239 chin400 center512, torso, hips, hakama pleats, hems, and sandals at y1423 exactly. Only right arm (viewer LEFT) lifts: fingertips over chin as image 2, matching palm outline at x445-550 y375-480; adapt black haori sleeve naturally to bent elbow. Opposite hand stays down. Preserve thick white braided chest tie, blank white crest circles, navy kimono, striped hakama, white tabi. Pure flat #00FF00 background and exposed face/hands #FF00FF. No hair hats accessories. Late 1980s hand-inked anime with same fine pigment grain and textile texture, not smooth vector. Clothing must be opaque, anatomically sound, no extra hands. No zoom or recenter.\nSubject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-032a5bbb-3333-410b-b248-83a5f0e0b639.png",
+      "path": "Raw/outfit_m_japan_industrial__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "496d0d3e5071bf136efeee4f4e98337961abc426090dc41e36db235941714c80",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "haori and hakama",
+      "details": "Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "flags": {
+        "label": "haori and hakama"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_japan_industrial",
+      "prompt": "Edit image 1 into exact objecting gesture of image 2. Registered modular costume sprite1024x1536, preserve scalp y239 chin400 center512, waist and entire lower body unchanged, soles1423. BOTH palms open facing viewer at lower chest, fingertips y531 palms bottom657, left silhouette x358-469 right555-666. Elbows close torso. Magenta hands in front of costume, naturally hanging black haori sleeves with arm bends. Preserve costume textile grain, white blank roundels, navy kimono, thick white braided haori tie and tassels, striped pleated hakama and white tabi zori. No gloves or accessories. Flat #00FF00 background, exposed skin #FF00FF. Late1980s textured hand-inked anime, restrained cel shading. No zoom, displacement or long legs. No guide body outlines showing through cloth.\nSubject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Dark kimono under a knee-length black haori with five small plain white circles (blank crest roundels with no design inside), closed at the chest by a thick white braided silk cord (haori-himo) tied in a flat knot with two tassels, over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_m_japan_industrial.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3b4c50cd-416d-4401-9142-c11c4cdc383b.png",
+      "path": "Raw/outfit_m_japan_industrial__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7801f0f2b1e7af4d5f3f3d217ad17db72a4c5133cd877223587d6ffd9dd40127",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_japan_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "zangiri crop",
+      "details": "Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Zangiri: a short, Western-style, side-parted crop (topknots were abandoned after 1871)\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw hair_m_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "zangiri crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_japan_industrial",
+      "prompt": "Registered modular HAIR layer only. Use reference exact bald head as anchor: face center512 scalp239 chin400 and unchanged neutral pose/feet1423, 1024x1536 full canvas. Add naturally imperfect short black side-parted zangiri crop, textured individual ink strands, ordinary Meiji man. Hair crown just outside skull, trimmed around ears, no topknot no beard no hat. REPLACE ALL costume including sandals with plain opaque flat magenta long sleeve shirt, full-length straight magenta trousers and magenta socks. Face/hands all #FF00FF. Hair is only colored item. Flat #00FF00 background. Same late1980s handpainted anime pigment grain, restrained cel shading, not glossy. No resize or face movement.\nSubject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Zangiri: a short, Western-style, side-parted crop (topknots were abandoned after 1871)\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw hair_m_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1d8c28fe-f4de-4566-bb08-95ec1abd6fe0.png",
+      "path": "Raw/hair_m_japan_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7da6c82aa3a40f09163a899c0dcd84383a1132f398a655084ef6ee8aee6bdc97",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_japan_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "trimmed moustache",
+      "details": "Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Neat, trimmed moustache, straight and not waxed to points\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw facialhair_m_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "trimmed moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_japan_industrial",
+      "prompt": "Modular FACIAL HAIR source. Reference head stays at exact same coordinates scalp239 chin400 center512. Add only neat compact black straight trimmed moustache above lip around x486-538 y350-361, ordinary Meiji gentleman, no pointed waxed tips, no beard or headhair. Replace ALL reference costume and footwear with plain opaque #FF00FF long-sleeved shirt full-length straight trousers and socks. Face/hands #FF00FF, flat #00FF00 background. Only moustache is colored. 1024x1536 fullcanvas same pose scale. Handinked late1980s anime subtle pigment grain distinct short hairs, no photo realism.\nSubject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Neat, trimmed moustache, straight and not waxed to points\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw facialhair_m_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-13111da1-4532-4a3f-a424-34df4d213e82.png",
+      "path": "Raw/facialhair_m_japan_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "47562ff77deedea2b4a98e68e67e41196266fbdb83f79e01086e1aecef100a8e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_japan_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "bowler hat",
+      "details": "Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Black Western bowler hat (yamataka-bo) with a rigid round dome and a narrow brim\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw headwear_m_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "bowler hat",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_japan_industrial",
+      "prompt": "Modular HEADWEAR source only: black felt Western bowler (yamataka-bo), rigid rounded dome, narrow gently curled brim, plain black grosgrain band. Sits naturally on exact reference head with brow visible; scalp239 chin400 center512 fixed, hat extends upward from scalp. No hair, moustache, hatpin, feather or badges. REPLACE all costume and sandals with plain opaque #FF00FF long sleeve shirt, full-length trousers and socks. Face hands #FF00FF. Hat only colored element, flat #00FF00 background1024x1536 fullcanvas. Late1980s textured anime handinked, subtle worn felt grain, restrained cel shades. Preserve head position/size and fullbody stance, nozoom.\nSubject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Black Western bowler hat (yamataka-bo) with a rigid round dome and a narrow brim\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw headwear_m_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a970cab9-0a68-44c9-b76f-49b55e4e170a.png",
+      "path": "Raw/headwear_m_japan_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "929581e4e9f50bade9330639e6a054b245c80844df4e16de1417a3462ac544f1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "yagasuri and hakama",
+      "details": "Subject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.",
+      "flags": {
+        "label": "yagasuri and hakama"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_industrial",
+      "prompt": "Dress this exact calibration figure in historical costume only; registered modular wardrobe image1024x1536. Face scalp164 chin324 center512 unchanged; hands arms and feet same coordinates, soles1440 (do not elongate). Adult Meiji woman student: indigo and ivory small yagasuri arrow-feather striped kimono with modest rounded hanging sleeves, collar wearer left over right white undercollar; high-waisted deep maroon ebicha pleated hakama, matching cloth waist ties. White tabi socks tan straw zori dark indigo straps, shoes occupy same outward splayed foot positions x348-449 and575-675 y1360-1440. Natural broad cloth shapes, not fashion model. Exposed head neck hands #FF00FF, no hair/hats/jewelry/props. Pure #00FF00 background. Rich textured late1980s handinked anime pigment grain and woven cloth, restrained cel shades, not smooth vector. Neutral arms hanging sameguide. No groundshadow or text.\nSubject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.\nRevision: Single precise correction: retain head face entire clothing hands sash and hem EXACTLY. Shorten the shoes/ankles by14 pixels vertically so the lowest straw sandal sole is y1440 not1454 on this1024x1536 image. Keep same x positions/outward angle. Do not move or scale whole figure. Background stays green. No other changes.\nRevision2: Correct only socked feet and sandals: current soles end too high y1425. Extend ankle length 15 pixels down so soles are exactly at y1440, shoe scale remains same, x unchanged. Leave hem at y1335 and all torso and head unchanged. 1024x1536 green background. Do not shrink shoes, do not alter maroon hakama design or pattern. Add space as ankle between hem and shoe.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8498fe28-e754-4487-83a8-a5f7bc14d334.png",
+      "path": "Raw/outfit_f_japan_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1e1b5ff87b74af8e987fbcf23c2e902ded85f1920d96fffae6386addad2d5aae",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "yagasuri and hakama",
+      "details": "Subject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.",
+      "flags": {
+        "label": "yagasuri and hakama"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_japan_industrial",
+      "prompt": "Create explaining pose of image1 costume by matching only raised arm/hand to image2.1024x1536 registered costume sprite. Right arm viewerLEFT bent, palm up around x393-525 y560-608 held across lower chest, opposite arm down. Patterned sleeve drapes naturally from bent arm. Keep head scalp164 chin324 center512 and entire lower body sash/hem and sandals pixel-position unchanged, soles1440. Preserve maroon hakama with bow and longties and indigo ivory arrow pattern kimono white collar. Skinall #FF00FF flatgreen #00FF00 background. Same handinked1980s anime textile grain. No hair/jewelry/no recenter.\nSubject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.\nRevision:Adjust ONLY raised magenta hand and its sleeve cuff: lower palm by20px so top palm y561 bottom608, fingertip endsx524. Current hand20px too high. Keep elbow nearly same, adapt wrist naturally. Preserve EVERYTHING else including patterned sleeve length, face, sash, skirt pleats and feet.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b6c9ffa3-2306-4189-9852-467e0a8fa172.png",
+      "path": "Raw/outfit_f_japan_industrial__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5a16d87d32d50ece25dc9792bd51a095197a37442534d44199e94a5046ecce2b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "yagasuri and hakama",
+      "details": "Subject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.",
+      "flags": {
+        "label": "yagasuri and hakama"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_japan_industrial",
+      "prompt": "Registered costume pose variant of image1. Match ONLY arms of image2 precisely: left fingertips at cheek viewerRIGHT, right forearm horizontal supporting left elbow across lowerchest. Preserve fixed head scalp164 chin324 center512; facevisible. Dress bent arms in same indigoivory yagasuri kimono sleeves, natural hanging folds not detachedarms. All lowerbody waistbowhakamahem/shoes EXACTLY unchangedfromimage1 soles1440. Skin #FF00FF background #00FF00. Same textured late1980s handinkedanime celshade/textilegrain.1024x1536 nozoom no newobjects nohair.\nSubject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.\nRevision:Restore waist tie bow to its original HIGH position: knot center x555 y585 (currently y630). The crossed magenta forearm SHOULD occlude the bow; don't shift bow down to expose it. Restore top of hakama pleats to y605, longtieends stay original y855 and805. Keep ALL face and arm coordinates, shoes and hem unchanged. Small edit only waistbow behind arm, 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-184c4fe7-ae39-42a7-b839-51af3b09a09f.png",
+      "path": "Raw/outfit_f_japan_industrial__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bd5135c3a333b03a72e5174eea9e59a85dd86cf1378253340dcf09930e56c0e1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "yagasuri and hakama",
+      "details": "Subject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.",
+      "flags": {
+        "label": "yagasuri and hakama"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_japan_industrial",
+      "prompt": "Edit costume image1 arms to match image2 objecting gesture only: right hand overupperchest x432-566 y393-491, left openpalm lowextended viewerRIGHT x773-889 y685-779. Both patterned kimono sleeves adapt naturally with gravity hanging shapes. Keep exact head scalp164chin324 center512, fixed torso/sashbow at y585, hakama pleats hem and white tabi straw sandals soles1440 unchanged. Do not copy guideclothing/feet.1024x1536 flatgreen #00FF00, facehands #FF00FF. Fine textured handinked1980sanime samefabricgrain. Nohair/accessories/text.\nSubject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw outfit_f_japan_industrial.\nRevision:Only adjust low outstretched hand on viewerRIGHT: translate it20 pixels LEFT and20 pixels DOWN. Fingertips should end x889y777, hand begins x773y685. Adapt sleeve cuff to same shift. Preserve chest hand, head, torso and all lower body exactly. 1024x1536 no other edits.\nRevision2:Match ONLY viewerRIGHT low open hand of image1 to exact position outline of image2. Currently hand is25px too low and10px too farleft. Raise it25px and move10pxright. Other arm/head/body/feet/costume unchanged. Preserve own clothing.1024x1536.\nFresh pose-first revision:Image1 is exact POSE guide. Dress her in costume of image2: patterned indigo ivory kimono and maroon pleated hakama bow withwhite tabi sandals. Do NOT change image1 hands in any way: copy both hand outlines positions pixel for pixel, including lower openpalm on right at hipheight. Clothing must fit those arms, not move arms to fit clothing. Keep head position, and use image2 lowerbody skirt feet exactly. Natural draped sleeves.1024x1536 greenbackground magentafacehands. Same textured1980sanime. No newobjects. Exact pose guide is highest priority.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-346a0b6b-3947-414f-8b93-7aee54b5f364.png",
+      "path": "Raw/outfit_f_japan_industrial__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a44e8ff568f517867fcea520666801ac78177aa9e14e3767f242a95b95cb183f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_japan_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "country": "japan",
+      "era": "industrial",
+      "label": "sokuhatsu",
+      "details": "Subject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Sokuhatsu: hair swept up and back into a puffed pompadour roll with a bun at the back of the head (Western-inspired, promoted from 1885), with a large white silk ribbon bow tied high at the back, its loops standing out on both sides of the head in front view\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw hair_f_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "sokuhatsu",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_japan_industrial",
+      "prompt": "Modular hair source using exact reference head scalp164chin324 center512, no moveface. Meiji sokuhatsu black hair swept up and back into soft puffed pompadour roll and bun atback. LARGE white silk ribbon bow high behindhead with loops visible bothsides frontalview, notpigtails. Slightly imperfect natural everyday hair, restrained inked sheen. Hair and whitebow only colored parts. Replace ALL kimono hakama shoes with plain opaque magenta long-sleeved shirt full-length straight trousers and socks. Face hands magenta #FF00FF backgroundflat #00FF00. 1024x1536 head/feet sameplace, late1980s handinked anime texture. No other accessories no makeup.\nSubject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.\nDraw: Sokuhatsu: hair swept up and back into a puffed pompadour roll with a bun at the back of the head (Western-inspired, promoted from 1885), with a large white silk ribbon bow tied high at the back, its loops standing out on both sides of the head in front view\nAvoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)\nOutput one full-canvas raw hair_f_japan_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a827303f-637e-48b0-a463-0b269e3bbd8e.png",
+      "path": "Raw/hair_f_japan_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "601eda7825ebf1e1d8954eb212289c949a87b72dab8431a16775471f11485ad5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "salaryman suit",
+      "details": "Subject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "flags": {
+        "label": "salaryman suit"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_modern",
+      "prompt": "Dress exact reference calibration figure.1024x1536, fixed scalp239chin400center512, hands exactsamepositions, shoe soles1421 not lower. Ordinary Showa1980Tokyo salaryman, dark navy singlebreasted two-button businesssuit, moderate notched lapels, slightly roomy straight trousers, white shirt modest pointcollar, narrow dark burgundy tie small plain knot, black leather laceup shoes outward angle samefeet. Workaday wornfabric, slight elbow creases, not sleekfashionmodel. No hair hats beard accessories orbriefcase. Exposed skin flat #FF00FF puregreenbackground #00FF00. Late1980s handinked anime fine pigmentgrain textiletexture restrainedcelshadows. No caricature no logos no text no groundshadow. Preserve guidebody scale no elongation.\nSubject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-45f97cb9-2dd2-454d-9df1-0286c6f04527.png",
+      "path": "Raw/outfit_m_japan_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "14242c4ebca360891b6784b9906c72732549ac9647f2abd849ae1ca6413fde15",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_modern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "salaryman suit",
+      "details": "Subject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "flags": {
+        "label": "salaryman suit"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_japan_modern",
+      "prompt": "Image1 is exact poseguide, image2 costume reference. Dress guide in image2 navy salaryman suit white shirt burgundy tie blacklaceupshoes. Exact rightpalmup gesture x410-518 y609-674 with oppositearmdown. Preserve costume head scalp239chin400 center512, torso/trousersshoes positionssoles1421. Only arm moves and suit sleeve adapts. No change tie/buttonpockets. Fine handinked1980sanime textilegrain. Flat #00FF00 background skin #FF00FF.1024x1536. No hair accessories nozoom.\nSubject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-364b3041-df7b-498e-ab3f-f26c0334e224.png",
+      "path": "Raw/outfit_m_japan_modern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8b52efb693c05c02f064a9ce48ae0114ec4146c7718a371cfc3d591afaec0c72",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_modern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "salaryman suit",
+      "details": "Subject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "flags": {
+        "label": "salaryman suit"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_japan_modern",
+      "prompt": "Dress exact pose guide image1 in suit of image2. Left fingertip touching cheek on viewerRIGHT, opposite forearm supporting elbow across torso. Copy both hand outlines positions exactly. Keep image2 face scalp239chin400 center512, navy suit white shirt burgundy tie, torso and legs/black shoes unchanged soles1421. Suit sleeves naturally bend without distorting shoulders, no shifted buttons or hem. Face hands flat #FF00FF background #00FF00.1024x1536 same fine textured handinked1980s anime clothgrain. No hair or props.\nSubject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0c04fd57-9a47-4c02-a45b-19dbffe14f91.png",
+      "path": "Raw/outfit_m_japan_modern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "27cc0b1150cee1555705fa1ac01e2b41d63612f86578052073fd6f875b4f958d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_modern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "salaryman suit",
+      "details": "Subject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "flags": {
+        "label": "salaryman suit"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_japan_modern",
+      "prompt": "Dress exact poseguide image1 in image2 navy salaryman suit white shirt burgundy tie blacklaceupshoes. Copy both hand outlines positions from guide exactly: right handonchest, LEFT palm facesout/down lowat side viewerRIGHT x742-867 y772-845, no lifting hand. Keep image2 head scalp239chin400center512, unchanged torso legs feet soles1421. Sleeves adapt arm positions. No changed bodyproportions/pockets/tie.1024x1536 flatgreen backgroundmagenta facehands. Fine handinked1980sanime texture clothgrain. Nohair or accessories.\nSubject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw outfit_m_japan_modern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b18bf0ab-4227-4587-876a-65b756a50da7.png",
+      "path": "Raw/outfit_m_japan_modern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6b3009d280da52ee80a40531f1a3f84aac2e0f9fb305ab26372f58615806fa7d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_japan_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "combed side parting",
+      "details": "Subject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Short hair neatly combed back with a side part\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw hair_m_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "combed side parting"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_japan_modern",
+      "prompt": "Modular HAIR source. Preserve exact reference face/head position scalp239chin400center512. Add short black hair neatly combed BACK with distinct sidepart, slightly receding maturetemples, lowvolume crown and tapered sides, workaday1980salaryman not glamorous. Hair only colored item. Replace ALL suit tie shoes with plain opaque #FF00FF long sleeve shirt full-length straight trousers socks. Face hands #FF00FF, pure flatgreen #00FF00 background.1024x1536. No moustache, hats, headphones. Late1980s handinked anime restrained hair highlights fine pigment grain. No zoom or headshift.\nSubject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Short hair neatly combed back with a side part\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw hair_m_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a120fe40-b8e9-42f0-940a-6250108d3dfe.png",
+      "path": "Raw/hair_m_japan_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2ee7c6aa2569d63dd11e1deeab90f525785097a7a7c4f30ef05b076254d2d8e6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_japan_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "country": "japan",
+      "era": "modern",
+      "label": "orange headphones",
+      "details": "Subject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Lightweight silver-and-black headband headphones with round bright-orange foam ear pads, resting around the neck with the ear pads on the collarbones either side of the throat; no cord, no player, no brand logo\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw accessory_m_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "orange headphones",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_japan_modern",
+      "prompt": "Modular accessory source only. Lightweight early1980s silver thinmetal and blackplastic headband headphones resting AROUND NECK: small round brightorange foam pads on collarbones either side throat y430-475, thin band curves BEHIND neck. Thin lightweight portable cassette-player headphones, not massive modern overear headphones. No cord/player/logo. Preserve reference exact head scalp239chin400 center512 and body stance. REPLACE ALL suit/shirt/tie/shoes with plain opaque #FF00FF long-sleeved shirt straight fulltrousers socks. Skinmagenta, nohair/beard. Only headphones colored, pure #00FF00 background1024x1536. Fine handinked1980sanime restrained texture. No zoom.\nSubject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.\nDraw: Lightweight silver-and-black headband headphones with round bright-orange foam ear pads, resting around the neck with the ear pads on the collarbones either side of the throat; no cord, no player, no brand logo\nAvoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)\nOutput one full-canvas raw accessory_m_japan_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-605442f8-9466-46c7-97da-08d181a4eb39.png",
+      "path": "Raw/accessory_m_japan_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "71f6079397f870e97e4f65a018d47d56ab02cca17e30d85961a68ff81735fdad",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

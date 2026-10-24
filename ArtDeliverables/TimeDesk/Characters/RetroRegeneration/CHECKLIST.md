@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 846. Full regeneration is NOT complete.
+Saved: 871. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -850,3 +850,28 @@ Saved: 846. Full regeneration is NOT complete.
 | facialhair_m_japan_earlymodern | visually reviewed; registration pending |
 | outfit_f_japan_earlymodern | visually reviewed; registration pending |
 | outfit_f_japan_earlymodern__explaining_c | visually reviewed; registration pending |
+| outfit_f_japan_earlymodern__thinking_a | visually reviewed; registration pending |
+| outfit_f_japan_earlymodern__objecting_b | visually reviewed; registration pending |
+| hair_f_japan_earlymodern | visually reviewed; registration pending |
+| headwear_f_japan_earlymodern | visually reviewed; registration pending |
+| headwear_f_japan_earlymodern__explaining_c | visually reviewed; registration pending |
+| headwear_f_japan_earlymodern__thinking_a | visually reviewed; registration pending |
+| headwear_f_japan_earlymodern__objecting_b | visually reviewed; registration pending |
+| outfit_m_japan_industrial | visually reviewed; registration pending |
+| outfit_m_japan_industrial__explaining_c | visually reviewed; registration pending |
+| outfit_m_japan_industrial__thinking_a | visually reviewed; registration pending |
+| outfit_m_japan_industrial__objecting_b | visually reviewed; registration pending |
+| hair_m_japan_industrial | visually reviewed; registration pending |
+| facialhair_m_japan_industrial | visually reviewed; registration pending |
+| headwear_m_japan_industrial | visually reviewed; registration pending |
+| outfit_f_japan_industrial | visually reviewed; registration pending |
+| outfit_f_japan_industrial__explaining_a | visually reviewed; registration pending |
+| outfit_f_japan_industrial__thinking_b | visually reviewed; registration pending |
+| outfit_f_japan_industrial__objecting_c | visually reviewed; registration pending |
+| hair_f_japan_industrial | visually reviewed; registration pending |
+| outfit_m_japan_modern | visually reviewed; registration pending |
+| outfit_m_japan_modern__explaining_a | visually reviewed; registration pending |
+| outfit_m_japan_modern__thinking_b | visually reviewed; registration pending |
+| outfit_m_japan_modern__objecting_c | visually reviewed; registration pending |
+| hair_m_japan_modern | visually reviewed; registration pending |
+| accessory_m_japan_modern | visually reviewed; registration pending |

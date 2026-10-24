@@ -1,0 +1,5 @@
+Dress exact poseguide image1 in image2 navy salaryman suit white shirt burgundy tie blacklaceupshoes. Copy both hand outlines positions from guide exactly: right handonchest, LEFT palm facesout/down lowat side viewerRIGHT x742-867 y772-845, no lifting hand. Keep image2 head scalp239chin400center512, unchanged torso legs feet soles1421. Sleeves adapt arm positions. No changed bodyproportions/pockets/tie.1024x1536 flatgreen backgroundmagenta facehands. Fine handinked1980sanime texture clothgrain. Nohair or accessories.
+Subject: man of Showa Tokyo; Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global.
+Draw: Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie; black leather shoes.
+Avoid: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; Anime or manga caricature, samurai or geisha cliches; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)
+Output one full-canvas raw outfit_m_japan_modern.
