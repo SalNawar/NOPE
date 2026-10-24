@@ -19561,6 +19561,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "clipped bob",
+      "details": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Short, straight, chin-length bob with a side part, held back on one side by a plain black hair clip\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw hair_f_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "clipped bob"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_china_modern",
+      "prompt": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Short, straight, chin-length bob with a side part, held back on one side by a plain black hair clip\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw hair_f_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 raw hair fitting sheet. Plain practical black chinlength straight sidepart bob, held back viewerRIGHT by small plain black clip. Slight hand-drawn irregular strands, subdued slate highlights handinked late80s anime. Hair only colored. Reference exact face/head pose. Replace ALL jacket trousers shoes with opaque magenta#FF00FF plain long-sleeve shirt trousers socks. Face neck hands magenta, backgroundflatgreen#00FF00. No costume remnants jewelry hat. Preserve scalp164 chin324 soles1440 center512. Hair ends aroundjaw behindneck not shoulders.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c4017c35-daf5-41b4-bc97-f20e8a979830.png",
+      "path": "Raw/hair_f_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "046d7e3a9532485d4700475f390e518d621b0dd8cfac5c1654e68861369b2fbb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "navy cap",
+      "details": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: The same soft navy cotton cap as the men's: a tall, rounded, slightly stiffened crown, a cloth band and a short stiff peak, sitting high on the head over the bob, unlike a low flat cap. Plain, with no badge or star.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw headwear_f_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "navy cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_china_modern",
+      "prompt": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: The same soft navy cotton cap as the men's: a tall, rounded, slightly stiffened crown, a cloth band and a short stiff peak, sitting high on the head over the bob, unlike a low flat cap. Plain, with no badge or star.\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw headwear_f_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536. Firstreference exact female head pose and hair volume ONLY fittingguide. Secondreference cap design ONLY. Draw same plain navy tallrounded crown shortpeak clothband cap fitted overfemale head. Hatonly colored. Recolor ENTIRE black bob incl side locks behindears and blackhairclip solid MAGENTA#FF00FF no black remnants anywhere. Allbody/clothing face hands feetmagenta. Flatgreen#00FF00 background. Keep chin324 soles1440center512. Handinked late80sanime subtlecottontexture celshadows. No text badges.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d4ea2000-7bf6-4d15-a174-06d9e6076194.png",
+      "path": "Raw/headwear_f_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0b5395104398a02fdb7fe1f4ccdf83404b0f4e45b16648e2c156cefa71c4b1ef",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "country": "china",
+      "era": "modern",
+      "label": "khaki satchel",
+      "details": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Plain faded-khaki canvas satchel on a cross-body strap, with no star, slogan, print or stripes\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw accessory_f_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "khaki satchel"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_china_modern",
+      "prompt": "Subject: woman of Beijing, People's Republic; Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine.\nDraw: Plain faded-khaki canvas satchel on a cross-body strap, with no star, slogan, print or stripes\nAvoid: Mao badges or portrait pins; Red-star cap badge, green PLA uniform, Red Guard armbands; Little Red Book, slogans, any propaganda text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); Coolie hat or any caricature; Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)\nOutput one full-canvas raw accessory_f_china_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 accessoryfitting sheet. Reference exact neutral pose head handsfeet. Plain worn fadedkhaki canvas satchel small rectangularflap at wearerRIGHT hip(viewerLEFT), bounds roughlyx325-470y680-850. Narrowcrossbodystrap from viewerRIGHT shoulder x605y370 tobag. Practical plaincanvas mutedfasteners no print. Late80shandinked anime grain celshadow. Bag/strap ONLYcolored. Replaceentire jacket trouser shoeswith opaque magenta#FF00FF longsleeveshirt fulltrousers socks; exposedheadhandsmagenta. Flatgreen#00FF00. No hairhatotheraccessories. Preserve scalp164chin324soles1440center512. Strapbehind arms/hands if crossing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-affddf61-fcfc-4b76-b8c8-0c61c790f1f5.png",
+      "path": "Raw/accessory_f_china_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "983e964b9fa43d6dd4868f896339905dbda1de5aac874d9aa85043f7666fcc64",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "shenyi deep robe",
+      "details": "",
+      "flags": {
+        "label": "shenyi deep robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_china_ancient2",
+      "prompt": "outfit_m_china_ancient2: ordinary male traveller, Spring and Autumn Lu Qufu c500BCE. Shenyi deep robe, joined upper garment and anklelength skirt, crosscollar wearer LEFT over RIGHT, curved wrapping front, modestly broad sleeves tapering at wrist, plain cloth sash. Warm unbleached flax beige hemp/silk fabric dark umber plain collar cuffs hem borders, simple darkbrown flat clothshoes. No hats hair beard jewelry weapons courtinsignia dragonmotifs or modern fasteners. Costume only. Reference exact neutral mannequin placement scalp239 chin400 soles1421 center512; preserve feet/hands stance. Fully clothed, exposed head neck hands magenta#FF00FF. 1024x1536 flatgreen#00FF00. Handinked late1980s anime cel art, tactile textile pigmentgrain slight wear restrained shadowtones. Robe hem above shoes with full shoesvisible. No ornamental fantasy robe.\nRevision: Keep entire artwork unchanged except shoes. Extend shoes downward about 10px so lowest soles sit exactly at y1421 on this1024x1536canvas. Keep their horizontal positions and outward foot angles fixed. Do not move head body robe or hands. Flatgreen background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d5da459a-9e93-4a5a-80bc-e25b6a3a3f99.png",
+      "path": "Raw/outfit_m_china_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3b4cb877889de0d6e8b2a88b2e5ace10989fa3a0ecd39f333805e75f026ee59e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "shenyi deep robe",
+      "details": "",
+      "flags": {
+        "label": "shenyi deep robe"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_china_ancient2",
+      "prompt": "outfit_m_china_ancient2__explaining_c 1024x1536 modular robe pose. First reference exact beige shenyi robe dark umber collar cuffs hem sash and brown shoes. Second reference exact required gesture: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Copy hand coordinates and natural sleeve folds; keep first head face lower robe sash shoes fixed. Textured late80s handinked anime cloth grain cel shadows. No hair hat beard accessories. Exposed skin magenta#FF00FF greenbackground#00FF00. Scalp239 chin400 soles1421 center512. Only arms change pose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6f1b894f-fd35-49bb-8003-8b61478715b3.png",
+      "path": "Raw/outfit_m_china_ancient2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "46c419a849af82bef53691adb6b9afa40e539106bc0cf07045e265837f4f90ff",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "shenyi deep robe",
+      "details": "",
+      "flags": {
+        "label": "shenyi deep robe"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_china_ancient2",
+      "prompt": "outfit_m_china_ancient2__thinking_a 1024x1536 modular robe pose. First reference exact beige shenyi robe dark umber collar cuffs hem sash and brown shoes. Second reference exact required gesture: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Copy hand coordinates and natural sleeve folds; keep first head face lower robe sash shoes fixed. Textured late80s handinked anime cloth grain cel shadows. No hair hat beard accessories. Exposed skin magenta#FF00FF greenbackground#00FF00. Scalp239 chin400 soles1421 center512. Only arms change pose. Right hand touches chin, sleeve ends at wrist so no cloth over fingers.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-967392b5-d2c2-4fbb-949c-e50936ea68c5.png",
+      "path": "Raw/outfit_m_china_ancient2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ba2da3de5b05e1f89c270e05d537bea87f517ee95434bc191125069f62e8eaf5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "shenyi deep robe",
+      "details": "",
+      "flags": {
+        "label": "shenyi deep robe"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_china_ancient2",
+      "prompt": "outfit_m_china_ancient2__objecting_b 1024x1536 modular robe pose. First reference exact beige shenyi robe dark umber collar cuffs hem sash and brown shoes. Second reference exact required gesture: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Copy both raised palm coordinates and natural sleeve folds; keep first head face lower robe sash shoes fixed. Textured late80s handinked anime cloth grain cel shadows. No hair hat beard accessories. Exposed skin magenta#FF00FF greenbackground#00FF00. Scalp239 chin400 soles1421 center512. Only arms change pose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e0e213ab-4204-4bb5-9925-4c49ff3e1c98.png",
+      "path": "Raw/outfit_m_china_ancient2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b9e2b57c757b38eb27082db6aa5c6bba9b36404de8a92e92bd3503d9552509f4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_china_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "simple topknot",
+      "details": "",
+      "flags": {
+        "label": "simple topknot"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_china_ancient2",
+      "prompt": "Raw hair_m_china_ancient2 1024x1536. Spring and Autumn Lu c500BCE male simple black topknot, combed back gathered on crown, narrow plain dark cloth binding, no jewelry or hat. Handinked late80s anime restrained charcoal highlights natural strands. Reference exact head and pose. Replace ENTIRE beige robe sash brownshoes with flat opaque magenta#FF00FF long sleeved shirt fulltrousers socks. Face neckhandsmagenta. Hair only colored element. Flatgreen#00FF00. Preserve scalp239 chin400 soles1421 center512. No beard.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-78f9fb9c-41cb-4f9f-a322-87b1ce0a26b4.png",
+      "path": "Raw/hair_m_china_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "04d3282f0527ec1b0f7f9461a8ee933cc200008b763a28a04ff9657050584f8d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_china_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "long thin beard",
+      "details": "",
+      "flags": {
+        "label": "long thin beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_china_ancient2",
+      "prompt": "Raw facialhair_m_china_ancient2,1024x1536. Lu male c500BCE facialhair layer only. Thin natural long black beard from chin tapering to upper chest about y520, narrow ordinary black moustache, wispy subtly greying tips. No large bushy cheek beard no caricature. Head remains bald. Reference exact face scalp239 chin400, same neutralposefeet1421. Replace entire beige robe sash shoes with opaque flat magenta#FF00FF plain longsleeve shirt trousers socks, skinmagenta. Beard ONLY colored. Flatgreen#00FF00. Late80s handinked anime irregular fine strands matte charcoal shadows. Preserve head and proportions.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-00ed4fb0-feb0-401b-9822-9b45b660c143.png",
+      "path": "Raw/facialhair_m_china_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9efb8e8d415a0550ff01a947db0d1f41c1c6e619d4c0c0c8f586f503c932b4b5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_china_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "guan cap",
+      "details": "",
+      "flags": {
+        "label": "guan cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_china_ancient2",
+      "prompt": "Raw headwear_m_china_ancient2,1024x1536. Plain black guan cloth cap of Lu scholar c500BCE, compact upright cloth structure enclosing topknot, simple darkbrown horizontal securing pin. Not imperial crown, no gold jewels wings rank insignia or hanging beads. Use reference headhair as exact fittingvolume. Recolor all visible hair topknot temples nape binding magenta#FF00FF; only cap and securing pin colored. Clothing face hands feet remain magenta. No beard. Flatgreen#00FF00. Handinked late80s anime fabricgrain restrained celshadows. Exact chin400 soles1421 center512, head fixed.\nRevision: Recolor two black temple hair wedges immediately below cap beside forehead above ears to pure magenta#FF00FF. Keep black cap and brown pin exactly as they are. No other changes, 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-92ebec18-a6f2-42a4-a8bd-f89aa697df94.png",
+      "path": "Raw/headwear_m_china_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d047ee21dbd946a16224623cca27b4a8f7478541e0ae2d036a0acd189efd868e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "layered shenyi robe",
+      "details": "",
+      "flags": {
+        "label": "layered shenyi robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_china_ancient2",
+      "prompt": "outfit_f_china_ancient2 ordinary female traveller Lu Qufu c500BCE, layered shenyi robe. Uppergarment joined to anklelength wrapped skirt, crosscollar wearerLEFToverRIGHT, rustred outerrobe muted darkbrown narrow borders, palecream innercollar visible, plain darkbrown waistcloth sash, broad sleeves gently taper to wrists. Simple dark cloth shoes flat soles fullyvisible. Modest practical robes no court dragons gold embroidery or fancy accessories. Late80s textured handink anime pigments clothgrain restrained celshadows. Reference exact head hands feet pose scalp164chin324soles1440center512. All exposedskinmagenta#FF00FF, flatgreen#00FF00 background1024x1536. No hair jewelry hat. No shoes/body repositioning.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bfc0357b-a594-468d-a0f1-521728ac76ca.png",
+      "path": "Raw/outfit_f_china_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8a24ec1efb939a1eb4b22bb577a8ee7a6c7118a34a2cc6fab487f600608e3c20",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "layered shenyi robe",
+      "details": "",
+      "flags": {
+        "label": "layered shenyi robe"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_china_ancient2",
+      "prompt": "outfit_f_china_ancient2__explaining_a1024x1536 costume pose. Firstreference exact rustred layered shenyi darkbrown borders sash cream innercollar and brown clothshoes. Secondreference pose: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Exact hand coordinates, naturally bend sleeves. Keep head face lowerrobe sash feet fixed. Same handinked late80s anime clothgrain celshadows, no new trim. Skinmagenta#FF00FF flatgreenbackground#00FF00. Scalp164chin324soles1440center512. No hair jewelry hats. Only arms move.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-376cc4c6-90c4-41a8-8cd6-dd3b0be145f8.png",
+      "path": "Raw/outfit_f_china_ancient2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5630937c0fa0977d5f066a43954ddaaf14260099c87e3bdc463a18b9fc6028eb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "layered shenyi robe",
+      "details": "",
+      "flags": {
+        "label": "layered shenyi robe"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_china_ancient2",
+      "prompt": "outfit_f_china_ancient2__thinking_b1024x1536 costume pose. Firstreference exact rustred layered shenyi darkbrown borders sash cream innercollar and brown clothshoes. Secondreference pose: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Exact hand coordinates, naturally bend sleeves. Keep head face lowerrobe sash feet fixed. Same handinked late80s anime clothgrain celshadows, no new trim. Skinmagenta#FF00FF flatgreenbackground#00FF00. Scalp164chin324soles1440center512. No hair jewelry hats. Only arms move. Raised left fingertips touch cheek while rightarm crosses under supporting elbow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-41914779-41c5-47b5-822b-20790b1afc63.png",
+      "path": "Raw/outfit_f_china_ancient2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bb2935abc1b03759b8a16577c5e7287708e7ecccec39cd5cce216b70b891ca69",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "layered shenyi robe",
+      "details": "",
+      "flags": {
+        "label": "layered shenyi robe"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_china_ancient2",
+      "prompt": "outfit_f_china_ancient2__objecting_c1024x1536 costume pose. Firstreference exact rustred layered shenyi darkbrown borders sash cream innercollar and brown clothshoes. Secondreference ARMS ONLY pose: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Exact hand coordinates, naturally bend sleeves. Keep FIRST head face lowerrobe sash feet fixed, IGNORE secondguide clothing/shoes. Same handinked late80s anime clothgrain celshadows, no new trim. Skinmagenta#FF00FF flatgreenbackground#00FF00. Scalp164chin324soles1440center512. No hair jewelry hats. Only arms move. Right hand chest and leftpalm outward low.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-94bcbfef-5e2d-437e-894d-640f7c834b02.png",
+      "path": "Raw/outfit_f_china_ancient2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "824669a8c2f34b2379a8ab3cb73de7ed57c4591b4b1e7b8674509125d5e9b24b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_china_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "low tied hair",
+      "details": "",
+      "flags": {
+        "label": "low tied hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_china_ancient2",
+      "prompt": "Raw hair_f_china_ancient2,1024x1536. Lu woman c500BCE, plain black center-parted hair pulled back into small low tied bundle at nape, simple dark cloth tie. No tall bun ornaments pins bangs crown or jewelry. Black hair gently visible behind ears and at nape only, restrained charcoal ink highlights. Reference exact face pose scalp164chin324soles1440center512. Replace entire red robe sash shoes with opaque magenta#FF00FF plain longsleeve shirt fulltrousers socks. Face neckhandsmagenta. Hair ONLYcolored. Flatgreen#00FF00. Late80s handinked anime pigmentgrain not glossy.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-70cf21a0-aff6-4c7b-ab92-4af275a683f4.png",
+      "path": "Raw/hair_f_china_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ee20b60f36cac1c1d2a36a9d9c606915194c7f60da215bc5c99ff600430b1749",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_ancient2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "country": "china",
+      "era": "ancient2",
+      "label": "jade huang",
+      "details": "",
+      "flags": {
+        "label": "jade huang",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_china_ancient2",
+      "prompt": "Raw accessory_f_china_ancient21024x1536. Lu woman c500BCE jade huang pendant accessory. Small pale grey-green arched semicircular jade plaque, crescent shaped thick arc with both upturned ends pierced, suspended from thin dark red cord at each end, centered upperchest y440, width70px, worn outside robe. Very restrained carved lines, no huge gems or modern metal chain. Reference exact neutralhead and pose. Replace ENTIRE redrobe sash shoes with fully opaque flat magenta#FF00FF long sleeve shirt full trousers socks, skinmagenta. Pendant/cord ONLYcolored. Flatgreen#00FF00. Late80s handinked anime mineralgrain celshadows not glossy3D. No hairhatjewelryother. Scalp164chin324soles1440center512 fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f849dc14-cf18-4989-9939-a43bdba055ff.png",
+      "path": "Raw/accessory_f_china_ancient2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "03c89d6fa8876daa0b4915bbebf0081980646c01af7e2463dfefc2f2c15cc4a8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black quju robe",
+      "details": "",
+      "flags": {
+        "label": "black quju robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_china_ancient3",
+      "prompt": "Raw outfit_m_china_ancient3,1024x1536. Ordinary male Qin Xianyang215BCE civilian black quju wrap robe. Dark charcoal inkblack woven cloth with muted redbrown plain edge bands, crossed layered collar wearerLEFT over RIGHT, curved long front panel wrapping around lowerbody with diagonal wrap bands. Broad drooping sleeves narrow at wrists, plain black cloth waist sash, anklelength hem full darkcloth shoes visible. No armour weapons crown hats court emblems dragons jewelry. Late80s handinked anime tactile textile grain moderate wear celshadow layers keep blacks legible. Reference EXACT neutral head hands feet scalp239chin400soles1421center512. Skinmagenta#FF00FF flatgreen#00FF00. No hairbeard. Fullclothed costume layer, no body shape changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4b8eeabb-6513-439e-a973-f7aa149f5c17.png",
+      "path": "Raw/outfit_m_china_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2485b89280ff7dc4292285255fd3e89aabe5dec7f7e0500835b7774041d2f6ef",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient3__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black quju robe",
+      "details": "",
+      "flags": {
+        "label": "black quju robe"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_china_ancient3",
+      "prompt": "outfit_m_china_ancient3__explaining_a1024x1536. Firstreference EXACT black Qin quju robe with redbrown collar hem wrapedge cuffs, black sash shoes; secondreference exact armsgesture RIGHT elbow open, right palm up at lower chest, left arm relaxed. Change only arms and sleeve folds, retain head lowerbody sashfeet pixelpositions. Handcoordinates same asguide. Textured handinked late80sanime clothgrain restrained celshadows. Exposedskin#FF00FF flatgreen#00FF00. No hats hair beard accessories. Scalp239chin400soles1421center512.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6a460e3c-4a11-4847-8d52-a5fcb2290314.png",
+      "path": "Raw/outfit_m_china_ancient3__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b3e32bd0e5f27c69236d487ac9b2693b5b617abe4f05747c132bc41b1d44d751",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient3__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black quju robe",
+      "details": "",
+      "flags": {
+        "label": "black quju robe"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_china_ancient3",
+      "prompt": "outfit_m_china_ancient3__thinking_b1024x1536. Firstreference EXACT black Qin quju robe with redbrown collar hem wrapedge cuffs, black sash shoes; secondreference exact armsgesture LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Change only arms and sleeve folds, retain head lowerbody sashfeet pixelpositions. Handcoordinates same asguide, leftfinger cheek rightarm supports elbow. Textured handinked late80sanime clothgrain restrained celshadows. Exposedskin#FF00FF flatgreen#00FF00. No hats hair beard accessories. Scalp239chin400soles1421center512.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-902f2cd8-8622-4e6a-a515-cc478a42bf0e.png",
+      "path": "Raw/outfit_m_china_ancient3__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1de6f0e21ad23f207384dfe2c1124c06148d5c1925c9f62441add350a9882948",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_ancient3__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black quju robe",
+      "details": "",
+      "flags": {
+        "label": "black quju robe"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_china_ancient3",
+      "prompt": "Edit first reference costume into the pose of second reference mannequin. Produce ONE 1024x1536 full body modular costume source, flat solid #00FF00 green background. First image defines exact charcoal-black Qin quju robe, muted red-brown curved wrap border/cuffs/hem, black sash and black cloth shoes, hand-inked late-1980s anime with visible woven pigment texture. Second image ONLY defines arm gesture: wearer RIGHT hand over upper chest (viewer left arm), wearer LEFT hand extended low to side (viewer right), restrained objection. Drape robe sleeves naturally around those arms. Preserve first image exact head, torso, belt, lower robe and shoe positions; scalp y239, chin400, soles1421, center512. All skin, face, neck and hands flat #FF00FF magenta. No hair, hats, jewellery, additional items or shadow on background. No text. Do not copy naked torso from pose guide. Preserve costume proportions and detailed textile texture.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6faa136b-dc05-4fa2-9dda-4e341f2f5389.png",
+      "path": "Raw/outfit_m_china_ancient3__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a7c623f0eff5b502bc3457bdbc2bfb869061f04170a0c91ae1b704e1661fb2e5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_china_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "side topknot",
+      "details": "",
+      "flags": {
+        "label": "side topknot"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_china_ancient3",
+      "prompt": "Create a modular HAIR ONLY source from reference head registration. 1024x1536 solid #00FF00 background. Keep exact reference bald head, ears, face, neck, center and soles positions. Add Qin-era male black combed-back hair gathered into a compact SIDE TOPKNOT above wearer right temple (viewer LEFT upper scalp), plain dark binding; inked individual strands and subdued blue-black highlight, historical ordinary person not fantasy. ALL costume, shoes and skin from reference MUST be replaced with opaque flat #FF00FF magenta support figure in plain long-sleeved shirt, full trousers and socks, arms relaxed in same pose. Only hair has natural color. No robe, belt, shoe outlines or costume details; no beard, hat, jewellery. Head scalp anchor239 chin400 center512 soles1421 unchanged. Late1980s anime hand ink, textured restrained cel shading. Full body not zoomed or cropped; no text, no ground shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c58b4c7-8039-4082-a1c9-1bdb41c47fba.png",
+      "path": "Raw/hair_m_china_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "da214b615b9a474d1bec57b72cbd6917a8cdfd8c0475e9a0176d3a9629add2c1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_china_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "curled moustache",
+      "details": "",
+      "flags": {
+        "label": "curled moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_china_ancient3",
+      "prompt": "Draw a modular Qin-era male facial-hair asset on exact reference head. The moustache is SHORT and dense just above the upper lip, with small curled ends tucked beside mouth corners. Total width 65 pixels on1024 canvas, no thin long whiskers. No beard, no hair. Keep face scalp239 chin400 center512, body and feet1421. Replace the entire costume with solid magenta plain shirt trousers socks, skin face neck hands also #FF00FF magenta. Only moustache has natural black color, fine inked strand texture. Solid #00FF00 green background, 1024x1536 portrait full-body framing. Late1980s hand-drawn anime source layer. No text, no costume retained, no hat or accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f9663a6a-e15e-4030-b046-c4346cbab058.png",
+      "path": "Raw/facialhair_m_china_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "48b6ec882ad47499afe6b0a72fd45e8c656087de3e5d0f6e7226edacb2d6abed",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_china_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "Qin cap",
+      "details": "",
+      "flags": {
+        "label": "Qin cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_china_ancient3",
+      "prompt": "Generate ONE modular HEADWEAR source 1024x1536. Reference is exact head and body registration, not costume to keep. Add an understated Qin-era black cloth cap, low folded angular crown, narrow brow band, subtle cloth grain, dark brown simple pin fastening, no wings, no crown, no jewels or royal insignia. Ordinary human traveller. Fit to reference head scalp239 chin400 center512. The cap is the ONLY naturally colored object. All other surfaces including scalp/skin/face/neck/hands and complete plain long-sleeved shirt/trousers/socks must be opaque #FF00FF magenta. No hair peeking out anywhere, no robe, sash, borders or black shoes. Same full-body neutral registration and soles1421. Flat #00FF00 background without shadow. Late1980s inked anime subdued celshading with visible cloth texture, no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b7fca065-0da9-4338-864e-e61dcc8f3fe3.png",
+      "path": "Raw/headwear_m_china_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b3dd040d3d282a14372cfa930efa4fb27728f0762d3ff41095c30514d794c735",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black wrap robe",
+      "details": "",
+      "flags": {
+        "label": "black wrap robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_china_ancient3",
+      "prompt": "Dress reference female mannequin in Qin Xianyang215BCE ordinary traveller BLACK WRAP ROBE. Full length charcoal-black woven robe, wrapped cross collar wearer left over right, narrow deep russet border along diagonal collar and curved wrapping skirt hem, small muted brick sash tied waist, generous draping sleeves, restrained small geometric woven edging not imperial symbols. Dark cloth flat shoes follow EXACT splayed feet of mannequin: viewer left shoe x348–449, viewer right x575–675, soles y1440; hem above shoes at1340. Preserve entire reference body/head/face size and placement, scalp164 chin324 center512, relaxed arms and empty hands. All visible skin head neck hands flat#FF00FF magenta. Costume ONLY: no hair headwear jewellery weapon or props. 1024x1536, solid#00FF00 background no shadow no text. Hand-inked late1980s anime, richly textured cloth pigment, restrained cel shading, believable worn hems. Do not elongate feet or narrow stance. Female ordinary fit with loose robe, no glamour pose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-12ffb98a-f492-41a4-a957-3d9b09fb6a94.png",
+      "path": "Raw/outfit_f_china_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1eea40c41407b2d21c49f95ec884c141b5d69258b0f3b6e71bcaee77ec9a0c08",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient3__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black wrap robe",
+      "details": "",
+      "flags": {
+        "label": "black wrap robe"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_china_ancient3",
+      "prompt": "Change ONLY arms/sleeve draping of first reference Qin female black wrap robe to match second pose guide: BOTH palms open outward at asymmetrical heights, viewerLEFT hand lower at hip and viewerRIGHT higher near waist. Preserve first costume collar, rust geometric woven edging, sash knot, lower robe and shoes EXACT positions, face/head/scalp164chin324center512. Natural loose sleeves around arms, magenta hands emerge from cuffs. All exposed skin/face/neck/hands #FF00FF. Full1024x1536 solid#00FF00 background. Late1980s inked anime texturedwovencloth restrained celshadows. No hair, hat, jewellery, props or lettering. Pose guide supplies arms only, do not replace clothing or feet. Keep neutral costume framing and feet baseline.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e2df607b-50e2-4ebd-997f-a5fdf0295aa4.png",
+      "path": "Raw/outfit_f_china_ancient3__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5f56e2937d707073e8220fa02b0b18fcf671809d7674a5f8ae83ef591c494e96",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

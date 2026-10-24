@@ -1,10 +1,10 @@
 # Resume checkpoint: 24 October 2026
 
-User resumed generation. 771 / 1159 raw sources saved; 388 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 796 / 1159 raw sources saved; 363 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: hair_f_china_modern. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_f_china_ancient3__thinking_c. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -45,3 +45,6 @@ Seven further sources saved: Han female hair and corrected smaller jade bi penda
 25 sources since 2b7c22e: remaining Song male beard/cap/belt; complete Song female set; complete Ming male/female sets; Qing male neutral and explaining_a. All 746 PNG dimensions/hashes/prompts audited. Song/Ming male hats corrected for colored temple hair, Song belt corrected to remove robe contamination, Song crescent comb corrected to tuck teeth into bun. Discard residual magenta guide lines/wisps during extraction. Song beard has fine sparse strands needing keying review. Song belt and Ming sitao sash must remain beneath hands. Song and Ming female shoe baselines slightly lower than guide; registration acceptance still pending. Ming female baotou overlaps hair; retain separate hairpins correctly. Qing purse remains at same hip location in neutral/explaining. Last pushed remains 3875d81; explicit 0883141 approval still pending. No runtime integration or old-art removal. Continue Qing thinking_b.
 
 25 sources since d996ef4: remaining Qing male poses/hair/cap; complete Qing female wardrobe with jade bangle neutral and three wrist-specific variants; complete Beijing1972 male set; Beijing female outfit and three poses. Queue expanded to1159 for bangle variants. All771 dimensions/hashes/prompts audited. Review: Qing male cap retains two tiny nape guide wedges to exclude on extraction; female meile has a tiny neck guide wisp to discard. Beijing male satchel strap needs masking beneath crossing arms. Beijing female collar corrected from suit lapels to compact work-jacket collar. Female shoe baseline around1447 remains for registration checking. Raw sources only; no Unity validation or old-art removal. Last pushed remains3875d81; exact0883141 approval remains pending.
+
+
+25 sources since 36c9a5f: Beijing female bob/cap/satchel; complete Lu Qufu male and female wardrobe; complete Qin male wardrobe; Qin female neutral and explaining_b. All 796 source dimensions, hashes and prompts audited. Qin moustache oversized tips corrected using fresh costume reference after two ineffective edits. Review: Lu jade huang pendant and Beijing satchel need hand/neckline overlap masks; Qin cap must mask side topknot. Female soles around1445 require registration checking. These are raw sources only, not Unity-validated. Last pushed remains3875d81; exact0883141 approval remains pending. No old art removed.

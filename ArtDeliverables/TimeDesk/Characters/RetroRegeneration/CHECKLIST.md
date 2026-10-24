@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 771. Full regeneration is NOT complete.
+Saved: 796. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -775,3 +775,28 @@ Saved: 771. Full regeneration is NOT complete.
 | outfit_f_china_modern__explaining_c | visually reviewed; registration pending |
 | outfit_f_china_modern__thinking_a | visually reviewed; registration pending |
 | outfit_f_china_modern__objecting_b | visually reviewed; registration pending |
+| hair_f_china_modern | visually reviewed; registration pending |
+| headwear_f_china_modern | visually reviewed; registration pending |
+| accessory_f_china_modern | visually reviewed; registration pending |
+| outfit_m_china_ancient2 | visually reviewed; registration pending |
+| outfit_m_china_ancient2__explaining_c | visually reviewed; registration pending |
+| outfit_m_china_ancient2__thinking_a | visually reviewed; registration pending |
+| outfit_m_china_ancient2__objecting_b | visually reviewed; registration pending |
+| hair_m_china_ancient2 | visually reviewed; registration pending |
+| facialhair_m_china_ancient2 | visually reviewed; registration pending |
+| headwear_m_china_ancient2 | visually reviewed; registration pending |
+| outfit_f_china_ancient2 | visually reviewed; registration pending |
+| outfit_f_china_ancient2__explaining_a | visually reviewed; registration pending |
+| outfit_f_china_ancient2__thinking_b | visually reviewed; registration pending |
+| outfit_f_china_ancient2__objecting_c | visually reviewed; registration pending |
+| hair_f_china_ancient2 | visually reviewed; registration pending |
+| accessory_f_china_ancient2 | visually reviewed; registration pending |
+| outfit_m_china_ancient3 | visually reviewed; registration pending |
+| outfit_m_china_ancient3__explaining_a | visually reviewed; registration pending |
+| outfit_m_china_ancient3__thinking_b | visually reviewed; registration pending |
+| outfit_m_china_ancient3__objecting_c | visually reviewed; registration pending |
+| hair_m_china_ancient3 | visually reviewed; registration pending |
+| facialhair_m_china_ancient3 | visually reviewed; registration pending |
+| headwear_m_china_ancient3 | visually reviewed; registration pending |
+| outfit_f_china_ancient3 | visually reviewed; registration pending |
+| outfit_f_china_ancient3__explaining_b | visually reviewed; registration pending |
