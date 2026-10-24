@@ -20315,6 +20315,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient3__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black wrap robe",
+      "details": "",
+      "flags": {
+        "label": "black wrap robe"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_china_ancient3",
+      "prompt": "Change only arms/sleeves of first costume to second pose guide: hands loosely linked low before waist, fingers relaxed empty, thoughtful reserved stance. First reference exact Qin female black wrap robe rust geometric borders and sash texturedcloth, same lowerrobe/shoes/head/face positions. Second reference defines arms/hands only. Sleeves drape naturally, magenta hands visible. Preserve scalp164 chin324 center512 and originalfeet baseline. Full1024x1536 green#00FF00 backdrop, skin/head/neck/hands flat#FF00FF. Late1980s handinked anime pigment and wovenfabric grain. No hair, hat, jewellery or props, no backgroundshadow or text. Keep clothing fully closed and same silhouette belowwaist.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c7368836-68b0-419b-bd85-cbf56da157c0.png",
+      "path": "Raw/outfit_f_china_ancient3__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "17dd0422721250456d29190d67c503e88e8a494e0939074df72b85efce1a316c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_ancient3__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "black wrap robe",
+      "details": "",
+      "flags": {
+        "label": "black wrap robe"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_china_ancient3",
+      "prompt": "Change only wearerRIGHT arm and sleeve of first reference costume into second reference gesture: viewerLEFT hand raised open palm forward beside shoulder, fingers upwards, calm please wait. Other arm remains relaxed down. Preserve exact Qin female black wrap robe, rust woven geometric borders/sash, lower robe and shoes, head face scale placement scalp164chin324center512. Sleeve hangs naturally below bent arm; hand skin flat#FF00FF magenta as face/neck/other hand. Same1024x1536 fullfigure solid#00FF00 backdrop no shadows, nohair hat jewellery or props. Late1980s inked anime texturedcloth with restrainedcelshading. Secondreference arm guide only; retain first costume feet and body framing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-028312b1-d2f9-4622-9efd-b3e25a656a22.png",
+      "path": "Raw/outfit_f_china_ancient3__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f2f565ebab37e470b0d394d2b8025ae971c27f020208642a628c9d937a7a9768",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_china_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "low side bun",
+      "details": "",
+      "flags": {
+        "label": "low side bun"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_china_ancient3",
+      "prompt": "Create hair-only modular source matched to reference female head, 1024x1536 solid #00FF00 green background. Add black Qin-era hair, center part, smooth combed sides, compact LOW SIDE BUN tucked beside wearerLEFT nape (viewerRIGHT), a plain dark tie no ornaments. Fine hand-inked strands muted blueblack highlights, textured late1980s anime cel shading. Keep scalp anchor164 chin324 face/features/ears/neck exact size and positions center512. Replace all clothing and shoes with opaque flat#FF00FF magenta plain long-sleeved support shirt/full trousers/socks; all skin/face/neck/hands also flat magenta. Only hair naturally colored. No original robe/sash/shoes/collar details, no jewellery hairpins hat or props. Same neutral fullbody framing feetbaseline1440, do not crop/zoom.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-51fd4743-05be-48fe-86e3-a5de101c00b1.png",
+      "path": "Raw/hair_f_china_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f3aef492d5bb3dee09479dc55ff485776b0b0c12f3c789a98c15b2dc01f7fe7a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_china_ancient3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "country": "china",
+      "era": "ancient3",
+      "label": "jade cicada",
+      "details": "",
+      "flags": {
+        "label": "jade cicada",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_china_ancient3",
+      "prompt": "Generate separate accessory source for reference character: small grey-green carved JADE CICADA pendant suspended from thin dark russet cord around neck, centered upper chest aroundx512y425, pendant only40pxhigh and22pxwide. Stylized incised wings, subdued waxy jade texture and inked contours, not a living insect, no ornate gold setting. Exact reference face/head/neck/shoulder registration scalp164chin324center512. Remove entire Qin robe and shoes; replace with flat opaque#FF00FF magenta plain modest long-sleeved support shirt/fulltrousers/socks; face/skin/hands magenta too. ONLY cord and jade naturallycolored. Bald head, nohair hats jewellery exceptrequestedpendant. 1024x1536 fullbodyneutral sameframing solid#00FF00background, no groundshadow or text. Late1980s texturedinked anime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-21ba71ae-15b9-4a16-8eef-41bf9fd41102.png",
+      "path": "Raw/accessory_f_china_ancient3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "719de47ab7b3cd5c7f234f7664bb421bf5faeab50742fb954a00023d285c0cdb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "deel with right overlap",
+      "details": "",
+      "flags": {
+        "label": "deel with right overlap"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_china_medieval2",
+      "prompt": "Dress exact reference male mannequin as ordinary Mongol traveller Zhongdu1215: calf-length weathered deep indigo wool deel wrapped front closing under wearerRIGHT armpit(viewerLEFT) with simple loops/ties, modest overlapping diagonal neckline, narrow dark ochre edging. Broad warm ochre fabric sash, full darkbrown trousers tucked into practical worn brown leather calfboots with slightly upturned toes and felt soles, no armour or weapons. Loose practical fit no glamour. Preserve neutral hands/arms body stance/head registration scalp239chin400center512 soles1421; boots conform reference feet rather than extending figure. Garment fully belowchin, nohat hair beard or jewellery. All exposed skin face neck hands solid#FF00FF magenta. Full1024x1536 flat#00FF00green background no groundshadow no text. Late1980s hand-inked anime richly textured wool/leather, restrainedcelshading, visible seams and worn cuffs. Single modular outfit source.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-acb4adb8-f35c-4126-b72b-66ff5ed23df4.png",
+      "path": "Raw/outfit_m_china_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dc1d127587126daf40b5c74289a81af489d18bca53f9c3222cde7cd7da30d7d6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval2__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "deel with right overlap",
+      "details": "",
+      "flags": {
+        "label": "deel with right overlap"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_china_medieval2",
+      "prompt": "Modify first reference costume ONLY at arms/sleeves into second reference gesture: both palms open low at uneven heights, viewerLEFT higher near lowerchest and viewerRIGHT lower at waist. Same worn indigo wool Mongol deel, ochre sash, right-sidefastening, trousers brown boots. Keep exact first head face lowerbody boots registration and scale scalp239chin400center512soles1421. Sleeve folds reflect gesture; hands emerge from cuffs, all skin face neck hands flat#FF00FF magenta. Full1024x1536 flat#00FF00 backdrop no shadow or text. Late1980s handinkedanime cloth/leatherpigmentgrain, nohair beard hat jewellery orprops. Secondguide onlyarms, preserve first costume and feet.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a3d5aec6-c068-4313-bb97-3fa4a9ac2b74.png",
+      "path": "Raw/outfit_m_china_medieval2__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0bee5690d02dccc8065203bdb340d3eb3c83c1b1611c1d6857e5fc11c2dea4e7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval2__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "deel with right overlap",
+      "details": "",
+      "flags": {
+        "label": "deel with right overlap"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_china_medieval2",
+      "prompt": "Edit first costume into second reference arm gesture ONLY: hands loosely linked low before waist, fingers relaxed empty. Keep exact indigo Mongol deel ochre sash brownbaggytrousers brownboots, worntexturedfabric, lowerbody and head registration scalp239chin400center512 soles1421. Arms and sleeves bend naturally at elbow, hands at guideheight720–805 overlay sash/skirt correctly. All skin head neck hands#FF00FF magenta. 1024x1536 fullbody solid#00FF00 backdrop no shadow no text. Late1980s handinked anime detailedwool/leathergrain. No hats hair beard accessories orprops. Poseguide onlydefinesarms, do not copy unclothedbody.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-56027da0-1035-4c2e-9e86-1e9b000d80f8.png",
+      "path": "Raw/outfit_m_china_medieval2__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ca8d4d720a1993d798a910848ae92206c842d171aaa722bf28bad3d1070fb1fa",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_medieval2__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "deel with right overlap",
+      "details": "",
+      "flags": {
+        "label": "deel with right overlap"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_china_medieval2",
+      "prompt": "Edit first costume only wearer RIGHT arm/viewerLEFT into second guide raised palm calm wait gesture. Exact handposition x300–407y368–503, elbow bent, fingers up. Other arm relaxed unchanged. Preserve indigo Mongol deel ochre sash brown trousers worn leatherboots, same headface lowerbodyfootplacement scalp239chin400center512soles1421. Natural sleeves around bentarm, opaque#FF00FF skin/face/neck/hands, full1024x1536 solid#00FF00background. Texturedlate1980s inked anime same wool and leathergrain. No hair hats beard jewellery props text or backgroundshadow. Secondguide suppliesarmgesture only.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e4070a52-3cc5-4a4a-adb3-2bc2aeee74b2.png",
+      "path": "Raw/outfit_m_china_medieval2__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "46a919ee61a3f7ae55a7fbe378594e4806fb26bdab343f4f24eca35ed9dd7c63",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_china_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "braided side loops",
+      "details": "",
+      "flags": {
+        "label": "braided side loops"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_china_medieval2",
+      "prompt": "Create separate hair source for male Mongol Zhongdu1215 reference head. Black hair retained at sides/back with two narrow braids looped beside/behind ears, small practical loops reaching upperneck, shaved crown/forehead remains flatmagenta; no modern haircut, no beard, hat jewellery or fantasyhorns. Fine handinked hairstrands subdued blueblackhighlight late1980s anime. Exact head ears face neck registration scalp239chin400center512. Replace entire indigo costume sash boots with opaque#FF00FF magenta plain supportshirt fulltrousers socks, allskin facehandsmagenta too. ONLY hairnaturallycolored. Full1024x1536 same neutralbody framing feet1421, solid#00FF00 background no text or shadow. Do not retain any colored costume.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-28804212-8986-4037-9ca5-1f32e387ce7b.png",
+      "path": "Raw/hair_m_china_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fb261f74ee94a99a3f835059dcacaa08378a46ce5afedb655f25909e512a4281",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_china_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "long drooping moustache",
+      "details": "",
+      "flags": {
+        "label": "long drooping moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_china_medieval2",
+      "prompt": "Separate facialhair source matching reference maleface exactly scalp239chin400center512. Add long black drooping moustache: narrow upperlip growth with two tapered naturally hanging ends descending beside mouth to just belowchin aroundy415, slight asymmetry fine inked strands, no chinbeard/scalphair/sideburns. Ordinary historical Mongol traveller. Replace all reference costume sash shoes with opaque flat#FF00FF magenta modest plain long-sleevedshirt/fulltrousers/socks; skinfacehandsneck also magenta. Only moustache naturallycolored. Full1024x1536 same neutralpose and framing, solid#00FF00 backdrop no text shadow hats jewellery props. Late1980s handinked anime restrainedcelshading and hairtexture.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f2dbe722-230c-4a94-973e-f3d58e308482.png",
+      "path": "Raw/facialhair_m_china_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "09cd117c9d3542ba7991cafea27af9fe7665b923be7b6d1904ba3bf294b59ef4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_china_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "toortsog",
+      "details": "",
+      "flags": {
+        "label": "toortsog",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_china_medieval2",
+      "prompt": "Draw separate Mongolian TOORTSOG headwear source for reference head: modest close-fitting six-panel rounded skullcap, slightly flattened crown, dark rusty red felt with darkbrown narrow band and ochre seams converging on a small cloth knot at crown. Practical worn cloth, no precious jewel pearls feathers or crown. Preserve reference headface registration scalp239chin400center512. Only hat naturallycolored; ALL skin scalp neck face hands and plain modest long-sleeved supportshirt fulltrousers socks flatopaque#FF00FF magenta. No hair or braids anywhere, no facialhair. Replace all reference indigo robe ochresash and brownboots withmagenta. Same full1024x1536 neutralbodyframing feet1421 solid#00FF00 background. Handinkedlate1980s anime with tactile feltgrain restrainedcelshading. No lettering or groundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ac7e5e0a-14ad-42f5-8b22-84279bbc5f6f.png",
+      "path": "Raw/headwear_m_china_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "61096adcf86cc234870476e1bb05d980bf5910988751a61bff208682ff77d837",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "silk deel and sash",
+      "details": "",
+      "flags": {
+        "label": "silk deel and sash"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_china_medieval2",
+      "prompt": "Dress exact female mannequin in Mongol Zhongdu1215 silk DEEL AND SASH. Deep muted peacockteal silk robe calf-length, loose practical cut and sleeves, wrapped front fastened under wearerRIGHTarm(viewerLEFT), narrow subdued gold ochre border, broad plum cloth sash atwaist with short hangingends. Darktrousers tucked into chestnutbrown leather calfboots gentlyupturnedtoes. Subtle small woven textilepattern, lived-in not courtshowpiece, no armour weapons. Preserve headface/neck/body/neutralarms exact reference registration scalp164chin324center512, bootfeet x348–449 and575–675 atbaseline1440. All visibleface skinneckhands flat#FF00FFmagenta. Costumeonly nohair hat earrings jewelleryprops. Full1024x1536 flat#00FF00background no shadow ortext. Handinked late1980sanime celpaint tactile silkgrain and worn leather; avoid glossy3D.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23b5c36d-dac8-4825-b55a-0a1e2f4959af.png",
+      "path": "Raw/outfit_f_china_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b2737551969ffbcc2503bd425ce85573822bf1b672050107e4770243ee7cd657",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_medieval2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "silk deel and sash",
+      "details": "",
+      "flags": {
+        "label": "silk deel and sash"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_china_medieval2",
+      "prompt": "Change only wearerLEFT arm/viewerRIGHT of first costume to match second poseguide: open hand close to upperchest compact measured explanatory gesture, fingers angled inward, right armrelaxed down. Exact first costume teal silk Mongol deel ochreborder plum sash browntrousers leatherboots, preserve headface lowerbodyfeet position scalp164chin324center512soles1440. Naturally folded sleeve and magenta hand emergingcuff. Allskinface neckhands#FF00FF. 1024x1536 solid#00FF00background, no text shadow hair hats jewellery orprops. Late1980s handinked anime textilegrain and restrainedcelshading. Second reference arms only, keep firstfootshape and placement.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-319427f6-11f6-4053-8418-c251f6663c54.png",
+      "path": "Raw/outfit_f_china_medieval2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "18477ce92059716b8b6c96a11de81f9f3c6930e45c815dffadf3bf53cfc1d6c6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_medieval2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "silk deel and sash",
+      "details": "",
+      "flags": {
+        "label": "silk deel and sash"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_china_medieval2",
+      "prompt": "Change first costume wearerRIGHT arm/viewerLEFT into second guide thinkinggesture: hand gently underchin, fingers across lowerjaw, elbowbent; otherarm staysdown. Preserve exact teal silk Mongol deel plum sash ochretrim trousers brownboots headface/bodyregistration scalp164chin324center512soles1440. Hand and face flat#FF00FFmagenta, handoverlapschin asguide; natural sleevefolds. Firstimage clothing and feet invariant, second onlyarmguide. Full1024x1536 solid#00FF00background no text shadow hair hats jewelleryprops. Late1980s handinked anime textured silk/leather and restrainedcelshade.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1a33d427-aed9-4d02-9879-e370750b1ed4.png",
+      "path": "Raw/outfit_f_china_medieval2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7684c8ac3574dd9fd3879333649224651fe39383532dfae6619b264c0a6ce4b5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_medieval2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "silk deel and sash",
+      "details": "",
+      "flags": {
+        "label": "silk deel and sash"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_china_medieval2",
+      "prompt": "Modify first teal silk Mongol deel costume into second reference arms only: BOTH palms raised forward at lowerchest, elbows close to torso, fingersup, questioning refusal. Exact handpositions secondguide y460–600. Preserve first headface, collar plum sash skirttrousers brownboots and feetposition scalp164chin324center512soles1440. Sleeves foldnaturally without covering fingers. Allskinheadneckhands flat#FF00FFmagenta. Same1024x1536 fullbody solid#00FF00background, nohair headwear jewelleryprops text groundshadow. Late1980s handinked anime woven silkgrain and wornleather celpaint.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e711dcd0-3cdc-4e94-bc84-0a3ac3062b0f.png",
+      "path": "Raw/outfit_f_china_medieval2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2dbcc1434f0d1cc6af92716dcee1abac0dca4c9ab50bf70cd3446fbde9fa02b4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_china_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "two long braids",
+      "details": "",
+      "flags": {
+        "label": "two long braids"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_china_medieval2",
+      "prompt": "Generate HAIR ONLY source matching exact reference female head/face/neck. Mongol woman two long black braids hanging down front either side chest towaist, centerpart smoothly combedhead, plain darkbrown ties at braid ends, no ornaments. Individual handinked strands subtle blueblackhighlights late1980sanime texturedcel shading. Preserve scalp anchor164 chin324 center512 faceearsposition. Replace ENTIRE teal robe sash trousers boots with flatopaque#FF00FF magenta plainmodest long-sleeved supportshirt fulltrousers socks; face skin neck hands also magenta. Only hair and simplebraidties naturallycolored, nohat jewellery props. Full1024x1536 neutralbody framing samefeetbaseline1440 solid#00FF00background no textshadow. Braids fullyvisible overmagenta chest, not interrupted by clothing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a1010ddf-63b0-4d35-b4c7-28c7f4399c4c.png",
+      "path": "Raw/hair_f_china_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9c8d6c2c608facb7903cb16f1e31626f595a9b820efcefe6b8782b2d68c88bd4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_china_medieval2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "country": "china",
+      "era": "medieval2",
+      "label": "boqta",
+      "details": "",
+      "flags": {
+        "label": "boqta",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_china_medieval2",
+      "prompt": "Create modular Mongol female BOQTA headdress source matching exact reference head, 1024x1536 green background. Recognizable tall upright cloth-covered column rising from a fitted dark cap, slightly widened square/boot-shaped upper end, crimson silk with subtle ochre woven bands, restrained small pearl edging. Tall form occupies y20–210, centered over scalp, stays entirely inside canvas; do NOT shrink or move head/body to accommodate. Scalp anchor164chin324center512. Small chin securing tie, no shoulder veil, no danglingchestjewellery. No imperial crown. Only headdress/fastening naturallycolored. All scalp/hair area face neck skinhands and simple modest longsleeve supportshirt trousers socks flatopaque#FF00FFmagenta. Remove all originaltealrobe plum sash brownboots. No hairbraids showing. Handinked late1980sanime textilepigmenttexture restrainedcelshading. Solid#00FF00background no groundshadow text.\nCorrect registration of headwear source in first image. Its face has shifted down about40pixels; restore exact face/head/neck placement and size from SECOND reference: chin y324, eyes y242, headcenterx512. Fit first image red boqta hat to restored head, SHORTEN hat's tall red column by40pixels so top staysy26, do NOT move body/head down. Preserve first headdress design textile and pearl edging. All nonhat areas including costume shoes skin face magenta#FF00FF, green#00FF00background. Full1024x1536. No addedhair. Second image ONLY provides exact headregistration, do not restore colored clothing.\nFIRST IMAGE is authoritative registration target. Keep its face ears neck body scale and positions EXACTLY: chin324 eyes242. Recolor its costume/boots/skin entirely flatmagenta#FF00FF as supportfigure. Add the red boqta headwear DESIGN from SECOND IMAGE atop firstimage head, resizing ONLY HAT tofit without movinghead: hat topy25, base foreheady210, cheekpearl ends near y280, chin ties belowy324. Do not copy secondimage face/body framing. Hatcolumn slender crimson with squared expandeduppercap, ochrewoven trim andsmallpearls. No hair or othercoloredobjects. Exact1024x1536 solid#00FF00background fullfigure. Texturedinked1980sanime.\nFinal fresh target correction: Edit THIS exact image without moving any body or facial feature. Add a compact red Mongolian boqta hat above existing head: fitted cap atforehead, upright narrow stiff silk column with slightlyflared square top, crown beginsy30 and base sitsy200. Keep face exactly unchanged at eyes242 mouth290 chin324; do not move head upwards/downwards. Hat redsilk ochregeometric trim thinpearlrim smallredchintie. Recolor all existing clothes boots body/face/hands flat#FF00FFmagenta; onlynew hat has naturalcolors. No hair, veil, jewellery, text or shadows. Preserve1024x1536greenbackground framing. 1980sinkedanime texturedhat.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-19d8b164-21d6-462b-9568-7088333882b5.png",
+      "path": "Raw/headwear_f_china_medieval2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a86cd3f64b47daab37f93954035bfecfdcf35f9fe52d2096bf8925db91ee01fb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and tied hakama",
+      "details": "Subject: man of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Kinu: a hip-length jacket of undyed white hemp with narrow tube sleeves, fastened at the chest with two small cloth bows and belted at the waist. Loose white hakama trousers are gathered and tied just below each knee with cords (ashi-yui), so they balloon above. Bare feet or simple straw sandals; optional simple red triangle or dot trim.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_m_japan_ancient.",
+      "flags": {
+        "label": "kinu and tied hakama"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_ancient",
+      "prompt": "Subject: man of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Kinu: a hip-length jacket of undyed white hemp with narrow tube sleeves, fastened at the chest with two small cloth bows and belted at the waist. Loose white hakama trousers are gathered and tied just below each knee with cords (ashi-yui), so they balloon above. Bare feet or simple straw sandals; optional simple red triangle or dot trim.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_m_japan_ancient.\nReference mannequin supplies exact body/head/face/neutralarms/feet registration scalp239chin400center512soles1421. Draw costume only on it, choose simple straw sandals conforming existing feet with magenta toes; allskin head neck hands feetflat#FF00FF. White hemp means warm unbleached ivory textured fabric, modest red tiny triangle edging at cuffs, practical ordinary traveller. No hair headwear beard jewellery weapon props. Full1024x1536 solid#00FF00 background no shadow text. Late1980s handinked anime tactile hempweave/pigmentgrain and restrainedcelshading. Do notchange figure scale or stance. Not modernkimono.\nCorrect ONLY sandals/feet of first image to exact feet registration in second mannequin reference. Straw soles currently too low; bottom should y1421, not1433. Fit sandals snugly over same underlying toes/footcontour from second reference. Do notshift torso/head/legs or overallframe. Preserve first ivoryhemp kinu/jacket two chestbows narrow redtrianglecuffs belt tied trousers. Skin/toesmagenta greenbackground exact1024x1536. All other drawing unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5f4cfc8c-1382-4c64-8998-f1396c109611.png",
+      "path": "Raw/outfit_m_japan_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f916f2a4a71383f550d379d1da812bb379844d8fd3f19edc7882dcdc65438f5a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_ancient__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and tied hakama",
+      "details": "Subject: man of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Kinu: a hip-length jacket of undyed white hemp with narrow tube sleeves, fastened at the chest with two small cloth bows and belted at the waist. Loose white hakama trousers are gathered and tied just below each knee with cords (ashi-yui), so they balloon above. Bare feet or simple straw sandals; optional simple red triangle or dot trim.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_m_japan_ancient.",
+      "flags": {
+        "label": "kinu and tied hakama"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_japan_ancient",
+      "prompt": "Edit first Kofun costume ONLY wearerLEFT arm/viewerRIGHT to second reference gesture: openhand near upperchest compact explanation, otherarmdown. Preserve first exact ivoryhemp kinu two chestbows waistbelt redtrianglecuffs tiedhakama straw sandals, headface/torso/lowerbody feetregistration scalp239chin400center512soles1421. Sleeve follows bentarm, allskinheadneckhandstoesflat#FF00FFmagenta. Exact1024x1536solid#00FF00 background no shadow text hair beard hat jewellery props. Texturedlate1980s handinkedanime restrainedcelshading. Second image armguide only, do notalter lowerbody.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b96ebdba-a911-4ff8-81c8-c1a14697f80f.png",
+      "path": "Raw/outfit_m_japan_ancient__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "88b6c73539b3ad3cd595aa0a592b3fbd421f54d3a2026eb334ac80557dcf734a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_ancient__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and tied hakama",
+      "details": "Subject: man of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Kinu: a hip-length jacket of undyed white hemp with narrow tube sleeves, fastened at the chest with two small cloth bows and belted at the waist. Loose white hakama trousers are gathered and tied just below each knee with cords (ashi-yui), so they balloon above. Bare feet or simple straw sandals; optional simple red triangle or dot trim.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_m_japan_ancient.",
+      "flags": {
+        "label": "kinu and tied hakama"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_japan_ancient",
+      "prompt": "Change first Kofun costume wearerRIGHT arm/viewerLEFT only to second thinkingpose: fingertips underchin acrossjaw, elbowbent, otherhanddown. Preserve ivoryhemp hipjacket twochestbows redtrianglecuffs narrowwaistbelt tiedhakama strawsandals exactfirst lowerbody headfacefeetregistration scalp239chin400center512soles1421. Sleevefolds natural; allskinface neckhands toesflat#FF00FFmagenta. Secondreference definesarm/hand only. Full1024x1536 solid#00FF00background no shadows text hairhatbeard props. Late1980sinkedanime clothgraincelpaint.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-72134270-9372-4f48-bcef-facb23540a54.png",
+      "path": "Raw/outfit_m_japan_ancient__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "94d77a4051a0ebcd5d4ea9030fd4c4228b0099b602cfa15f5417c898bc639d09",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_ancient__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and tied hakama",
+      "details": "Subject: man of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Kinu: a hip-length jacket of undyed white hemp with narrow tube sleeves, fastened at the chest with two small cloth bows and belted at the waist. Loose white hakama trousers are gathered and tied just below each knee with cords (ashi-yui), so they balloon above. Bare feet or simple straw sandals; optional simple red triangle or dot trim.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_m_japan_ancient.",
+      "flags": {
+        "label": "kinu and tied hakama"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_japan_ancient",
+      "prompt": "Edit arms/sleeves of first Kofun costume to exact secondguide gesture BOTH palmsforward fingersup lowchest questioningrefusal elbowsclosetotorso, hands boundsy531–660. Preserve first ivoryhemp kinu twochestbows belt redtrianglecuffs tiedhakama strawsandals, headface and lowerbodyfootpositions unchanged scalp239chin400center512soles1421. Natural bent sleeves magenta hands emerge cuffs. Allskinface neck hands toesflat#FF00FF. Full1024x1536solid#00FF00background no textshadow hairhatbeard jewelleryprops. Late1980s texturedhandinkedanime tactilehempcelpaint. Poseguide arms only.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-37f80d6a-d2a4-43a1-aa40-c5397560bd71.png",
+      "path": "Raw/outfit_m_japan_ancient__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4b90545e60da2e7746753413f36927a5958392fa57b6e1840a7eb578a46893c1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_japan_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "mizura",
+      "details": "Subject: man of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Mizura: hair parted in the centre, with each side looped into a figure-eight bundle tied beside the ears and hanging to the jaw\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw hair_m_japan_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "mizura",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_japan_ancient",
+      "prompt": "Subject: man of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: Mizura: hair parted in the centre, with each side looped into a figure-eight bundle tied beside the ears and hanging to the jaw\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw hair_m_japan_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nUse reference ONLY for exact head face ears neckandbody registration scalp239chin400center512 feet1421. Replace all ivorycostume sandals with flatmagenta supportclothes asbrief. Skin face neckhandsmagenta#FF00FF. MIZURA blackhair centerpart figures-eightlooped bundles besideears tojaw, darksimpleties only, no hat beard jewellery. Fine handinkedstrands mutedblueblackhighlights late1980s texturedanime. Full1024x1536solid#00FF00 background no textgroundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-87e9c576-0837-40fe-870e-6e3ed310ddd5.png",
+      "path": "Raw/hair_m_japan_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7ad61165b943662a5f11960a9a8708bffccf61f2bc26683cd349224d42f2bf46",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_japan_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "magatama necklace",
+      "details": "Draw: Necklace of dark, dull grey-green jade magatama (comma-shaped beads) strung with cylindrical kudatama beads\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint (seen on haniwa figures); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps",
+      "flags": {
+        "label": "magatama necklace"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_japan_ancient",
+      "prompt": "Draw: Necklace of dark, dull grey-green jade magatama (comma-shaped beads) strung with cylindrical kudatama beads\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint (seen on haniwa figures); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nGenerate necklace-only source on exact reference malehead/neck/body positions scalp239chin400center512. Small dullgrey-green jade comma-shaped magatama alternating short cylindrical beads aroundneck to upperchest y470; no giantcentraljewel, no glossy3Dgold. Replace entire ivoryjacket bows belt trousers sandals with flatopaque#FF00FF plainmodest longsleeveshirt fulltrousers socks; faceheadskinhandseverythingexceptnecklacemagenta. No hair hatbeardprops. Full1024x1536same neutralbodyframe solid#00FF00background no shadowtext. Late1980s handinkedanime tinycarvedstonegrain restrainedcelshading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-eec41a7e-6592-4632-a230-149f7c198c5c.png",
+      "path": "Raw/accessory_m_japan_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cbc886c121caa9d7ecaa7eb0379075dbc24c1e1f6365ff17e86017d19b65b28a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and mo skirt",
+      "details": "Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: White hemp kinu jacket with narrow sleeves, fastened with small cloth bows and belted at the waist, over a mo: a long wrapped skirt to the ankle, sometimes pleated or striped in red and white.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_f_japan_ancient.",
+      "flags": {
+        "label": "kinu and mo skirt"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_ancient",
+      "prompt": "Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: White hemp kinu jacket with narrow sleeves, fastened with small cloth bows and belted at the waist, over a mo: a long wrapped skirt to the ankle, sometimes pleated or striped in red and white.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_f_japan_ancient.\nUse reference exact female headface/body/arms/feet registration scalp164chin324center512soles1440. Choose warm unbleached ivory narrow-sleeve hemp hipjacket with two small chestbows narrowmatchingbelt, long mo wrapped skirt with alternating muted madderred and ivory verticalstripes, anklehem at1340. Simple flat straw sandals snugly fit existingfeet x348–449/575–675, solebottom1440, no extendinglegs. Allskinheadneckhands/toes flat#FF00FFmagenta. Clothingonly nohair hatjewelleryprops. Full1024x1536solid#00FF00 background no shadowtext. Late1980s handinkedanime tactile hempwovenpigmentgrain restrainedcelshading, ordinary practical costume not ritual or glamour.\nCorrect ONLY first image sandals/feet: they hang 14pixels below required baseline. Fit strawsandals precisely to footpositions in secondreference, bottomy1440, x348–449and575–675. Shorten sandalfootextent without shifting bodyheadlegs or frame. Preserve first ivory kinu redwhitestriped mo skirt all other costume andpose unchanged. Exact1024x1536magenta skin greenbackground.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b42c88fa-2e63-4a7b-9522-64c995c54031.png",
+      "path": "Raw/outfit_f_japan_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c837094328194695baf7cbb916b5b20fb0cd33730be05128c02e0a4450f69faf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_ancient__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "country": "japan",
+      "era": "ancient",
+      "label": "kinu and mo skirt",
+      "details": "Subject: woman of Kofun Yamato; Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures.\nDraw: White hemp kinu jacket with narrow sleeves, fastened with small cloth bows and belted at the waist, over a mo: a long wrapped skirt to the ankle, sometimes pleated or striped in red and white.\nAvoid: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint seen on haniwa (reads as war paint or caricature); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps\nOutput one full-canvas raw outfit_f_japan_ancient.",
+      "flags": {
+        "label": "kinu and mo skirt"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_japan_ancient",
+      "prompt": "Edit first Kofun female costume arm ONLY into second poseguide: wearerRIGHT arm/viewerLEFT elbowout forearm acrosswaist palmup atlowerchest y560–605, otherarmrelaxed. Keep exact ivoryhemp jacket clothbows belt redwhite stripedmo longskirt strawsandals, headface/neck/lowerbodyfeetpositions scalp164chin324center512soles1440. Natural bentnarrowsleeve, magentahand emerges cuff. All exposedskinheadneckhandstoesflat#FF00FF. Full1024x1536solid#00FF00background nohair hatsjewelleryprops textshadow. Texturedlate1980s handinked anime wovenhempgrain, restrainedcelshading.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-91a889a6-93ac-4680-8c65-8dd75ce0acc8.png",
+      "path": "Raw/outfit_f_japan_ancient__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "35da0e7c4f1d4111b7fdfef9d65c6c2ddfc438b41cab66c316158effd9836004",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

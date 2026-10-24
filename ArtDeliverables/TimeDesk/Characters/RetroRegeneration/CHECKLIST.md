@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 796. Full regeneration is NOT complete.
+Saved: 821. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -800,3 +800,28 @@ Saved: 796. Full regeneration is NOT complete.
 | headwear_m_china_ancient3 | visually reviewed; registration pending |
 | outfit_f_china_ancient3 | visually reviewed; registration pending |
 | outfit_f_china_ancient3__explaining_b | visually reviewed; registration pending |
+| outfit_f_china_ancient3__thinking_c | visually reviewed; registration pending |
+| outfit_f_china_ancient3__objecting_a | visually reviewed; registration pending |
+| hair_f_china_ancient3 | visually reviewed; registration pending |
+| accessory_f_china_ancient3 | visually reviewed; registration pending |
+| outfit_m_china_medieval2 | visually reviewed; registration pending |
+| outfit_m_china_medieval2__explaining_b | visually reviewed; registration pending |
+| outfit_m_china_medieval2__thinking_c | visually reviewed; registration pending |
+| outfit_m_china_medieval2__objecting_a | visually reviewed; registration pending |
+| hair_m_china_medieval2 | visually reviewed; registration pending |
+| facialhair_m_china_medieval2 | visually reviewed; registration pending |
+| headwear_m_china_medieval2 | visually reviewed; registration pending |
+| outfit_f_china_medieval2 | visually reviewed; registration pending |
+| outfit_f_china_medieval2__explaining_c | visually reviewed; registration pending |
+| outfit_f_china_medieval2__thinking_a | visually reviewed; registration pending |
+| outfit_f_china_medieval2__objecting_b | visually reviewed; registration pending |
+| hair_f_china_medieval2 | visually reviewed; registration pending |
+| headwear_f_china_medieval2 | visually reviewed; registration pending |
+| outfit_m_japan_ancient | visually reviewed; registration pending |
+| outfit_m_japan_ancient__explaining_c | visually reviewed; registration pending |
+| outfit_m_japan_ancient__thinking_a | visually reviewed; registration pending |
+| outfit_m_japan_ancient__objecting_b | visually reviewed; registration pending |
+| hair_m_japan_ancient | visually reviewed; registration pending |
+| accessory_m_japan_ancient | visually reviewed; registration pending |
+| outfit_f_japan_ancient | visually reviewed; registration pending |
+| outfit_f_japan_ancient__explaining_a | visually reviewed; registration pending |

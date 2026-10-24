@@ -1,10 +1,10 @@
 # Resume checkpoint: 24 October 2026
 
-User resumed generation. 796 / 1159 raw sources saved; 363 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 821 / 1159 raw sources saved; 338 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: outfit_f_china_ancient3__thinking_c. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_f_japan_ancient__thinking_b. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -48,3 +48,6 @@ Seven further sources saved: Han female hair and corrected smaller jade bi penda
 
 
 25 sources since 36c9a5f: Beijing female bob/cap/satchel; complete Lu Qufu male and female wardrobe; complete Qin male wardrobe; Qin female neutral and explaining_b. All 796 source dimensions, hashes and prompts audited. Qin moustache oversized tips corrected using fresh costume reference after two ineffective edits. Review: Lu jade huang pendant and Beijing satchel need hand/neckline overlap masks; Qin cap must mask side topknot. Female soles around1445 require registration checking. These are raw sources only, not Unity-validated. Last pushed remains3875d81; exact0883141 approval remains pending. No old art removed.
+
+
+25 sources since 1c3a2f9: remaining Qin female poses/hair/jade cicada; complete Mongol Zhongdu male and female wardrobe sources; complete Kofun male set; Kofun female neutral and explaining_a. All821 dimensions/hashes/prompts audited. Boqta head drift corrected with fresh costume reference after three drafts; saved compact column requires silhouette/fit review against braids. Mongol male explaining palm differs from guide height and requires registration/pose review. Long moustache and frontbraids need hand overlap masking. Qin jade cicada and Kofun magatama require neckline/hand masks and desk-scale sizing review. Kofun male/female sandal baselines corrected before variants; female sandals remain narrower than guide and require registration checking. No runtime approval or oldart removal. Last pushed3875d81; exact0883141 approval pending.
