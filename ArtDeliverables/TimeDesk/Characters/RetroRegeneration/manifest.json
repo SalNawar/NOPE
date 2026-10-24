@@ -23336,6 +23336,761 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_industrial2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "striped kosode and haori",
+      "details": "",
+      "flags": {
+        "label": "striped kosode and haori"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_japan_industrial2",
+      "prompt": "Image1 exact POSE/head/hands target; Image2 exact lateEdo1830 outfit. Dress Image1 in Image2 brown woven knee-length haori ochre braided chestcord, indigo narrowtanstriped ankle kosode left-over-right, ochre narrow waistobi, whitetabi strawzori blackstraps. BOTH palms outward exact Image1 x359–470 and555–666 y531–657 elbowsclose. Adapt sleeves to bentelbows preserve lowerbody hem1335 feet1426 waistobi708–764 chestcord630. Scalp239chin400center512. Same1024x1536 solidgreen#00FF00background skinbaldheadhands#FF00FF. Finehandinkedlate80sanime pigmentgrain clothtexture subduedcelshadows. No hair hats jewelry bag sword text shadows. Preserve costume identity scale and exacthandcontours.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bf0248a8-5a5d-4774-bd3f-18c06368b4c9.png",
+      "path": "Raw/outfit_m_japan_industrial2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "92acf72e4cb98d8a8a5924b33c7890c08c081ef35b2e96d58a4a025698e6dd49",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_japan_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "chonmage",
+      "details": "",
+      "flags": {
+        "label": "chonmage",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_japan_industrial2",
+      "prompt": "Modular HAIR source male lateEdo1830 CHONMAGE. Reference exact faceheadgeometry scalp239chin400center512. Add black hair neatly swept back aboveears from sides, shaved central forehead and pate solidMAGENTA, small tidy cylindrical topknot folded FORWARD lying along crown not upright brush not ponytail. Fine handinked1980sanime darkblueblackcelshading pigmentgrain. Preservefacehandsfeetpositions. Replace entire brownhaori stripedrobe ochrebelt sandals socks with fullyOPAQUEplain #FF00FF magenta longsleeveshirt fulltrousers socks; face/neck/handsmagenta. Onlyhairnonmagenta, no beard hats ornaments. Flatgreen#00FF00 full1024x1536 no text shadows. Supportclothesplainfeatureless not anatomical. Hairline must follow referencehead not resizeface.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9570930b-78d3-4eea-8e07-15615100549a.png",
+      "path": "Raw/hair_m_japan_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5be463aed399611e1b5c43fa07489e37ff3a3ef31080610cccca7d015b86fa1c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_japan_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "tobacco pouch",
+      "details": "",
+      "flags": {
+        "label": "tobacco pouch"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_japan_industrial2",
+      "prompt": "Modular ACCESSORY source 1024x1536 for lateEdo1830 man. Exact reference pose/headhandfootregistration. Only nonmagenta object: small worn brown leather tobacco pouch suspended at wearer'sLEFT hip viewerRIGHT x584–664y795–877, flap small dullbrass clasp, short dark braided cord from waist y734 with small carved wooden toggle at x604y728. Pouch compact palm-sized, no crossbodystrap no smoking pipe no smoke no cigarette no weapon. Replace ALL reference brownhaori indigo stripedrobe ochrebelt white tabi sandals with plainOPAQUE#FF00FFmagenta longsleeveshirt fulltrousers socks, allskinmagenta. Keep face scalp239chin400center512 neutralhandsdownfeet1426 unchanged. OnlyPOUCHcordtoggle nonmagenta, no hair or otherprops. Green#00FF00 flatbackground no castshadow text. Finehandinkedlate80sanime pigmentgrain wornleathertexture restrainedcelshade. Accessory sits in front of clothing on hip, not held in hand.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-41b00eb8-fa36-4c66-9644-0a19bb89e86a.png",
+      "path": "Raw/accessory_m_japan_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "83acfef7e2347883ff970090b5b4fefd2e576ea80a66718d443801015e38a79d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "patterned kosode and obi",
+      "details": "",
+      "flags": {
+        "label": "patterned kosode and obi"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_industrial2",
+      "prompt": "Historical outfit layer female lateEdo townswoman c1830 patternedkosode and obi. Dress reference exact poseheadhandsfeet, scalp164chin324center512 soles1440. Anklelength dusty aubergine plum kosode small scattered ivory willow-leaf sprigs and subtle fine diagonal woven texture, leftfrontOVERright closed wrap collar with thin white innercollar, modest small sleeveopenings wrists with rectangular hanging sleeves tohip, wide muted mustardgold obi acrosswaist simplewoven geometric lozenges, tied atBACK hiddenfromfront, darkred narrow cord acrossmiddle. Practical wearable townswoman no elaborate courtesan costume no train. White tabi low strawzori darkplumthongs keep feet spread sameposition and baseline1440. Baldface neck hands magenta#FF00FF. No hair ornaments hat bags jewelry. Texturedhandinkedlate1980sanime richpigmentgrain subtle cloth wear restrained celshadows. Flatgreen#00FF00 full1024x1536 no floor shadow text. No contemporary clothing. Preserve fullbody height reference registration, do not shrinkfeet.\nCorrection: Precise registration correction ONLY BOTH SANDALS and white tabi: their bottom soles currently y1455; move both shoe/foot silhouettes UP15 pixels so bottom soles end y1440 exactly. Keep same size width angle leftx344–453right572–680, shorten exposed sock height asneeded, no resizing of body. Everything above y1330 unchanged including kosode hem1355, sleeves hands head obi pattern. Canvas1024x1536greenbackground same. Do not move whole figure; only raise feet15pixels.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9b506c26-76c1-4f64-a74e-4593455dff83.png",
+      "path": "Raw/outfit_f_japan_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8bc1848f26807e9393ce6eafdf8ed89514b92360c591798ec6b0f2c24dc153b2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "patterned kosode and obi",
+      "details": "",
+      "flags": {
+        "label": "patterned kosode and obi"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_japan_industrial2",
+      "prompt": "Image1 exact pose/headhandgeometry target; Image2 exact lateEdo female kosode costume. Dress Image1 in SAME plum aubergine ivorywillowleaf kosode whiteinnercollar mustardgold geometricobi darkredcord centerknot, white tabi strawzori plumstraps. RIGHT palmup extended acrosslowerchest x393–524y560–607, forearm from viewerLEFT elbow, oppositearm down. Hands retainexactImage1positions. Adapt clothsleeve naturally. PreserveImage2 lowerbodyhem1355 footbaseline1440 obitop520bottom646 knot584, scalp164chin324center512. Same1024x1536flatgreen#00FF00background skinhandsheadmagenta#FF00FF. Texturedhandinkedlate1980sanime pigmentgrain finefabrictexture celshadow. No hair hats jewelry prop text shadow. Don't change costume design orfeetplacement.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6d6131d3-9e4e-4289-8946-5be24924483c.png",
+      "path": "Raw/outfit_f_japan_industrial2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "695f9c49a18dc1650d8dd478df50517ad2fb7203c5d2dc864922a1bf63124e93",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "patterned kosode and obi",
+      "details": "",
+      "flags": {
+        "label": "patterned kosode and obi"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_japan_industrial2",
+      "prompt": "Image1 exact pose/headhandgeometry target; Image2 exact lateEdo female kosode costume. Dress Image1 in SAME plum aubergine ivorywillowleaf kosode whiteinnercollar mustardgold geometricobi darkredcord centerknot, white tabi strawzori plumstraps. LEFT fingertips at viewerRIGHT cheek x532–588 y275–375, rightforearm supports leftelbow with right handx555–646y548–611. Retain exact Image1 contours. Adapt clothsleeves naturally with crossedforearm infront ofobi, obi remains top520bottom646 behindforearm not moveddown. PreserveImage2 lowerbodyhem1355 footbaseline1440 scalp164chin324center512. Same1024x1536flatgreen#00FF00background skinhandsheadmagenta#FF00FF. Texturedhandinkedlate1980sanime pigmentgrain finefabrictexture celshadow. No hair hats jewelry prop text shadow. Don't change costume design orfeetplacement.\nCorrection: Correct only obi's red cord and lower robe silhouette. Red cord and knot must run at y584 behind crossed foreground forearm, currently visible at y564 abovehand. Move redcordknot DOWN20pixels and conceal behind foreground arm, replacing old cord at y564 with gold obi pattern. Keep obi top520bottom646. Straighten lower kosode sides fromhips throughhem to same modest straightcolumn width x377–645; remove widened hipbulge and narrowedknees, hem y1355. Preserve exact head hands arms sleevepositions feet and allcolors/pattern, canvas1024x1536greenbackground. Do not changepose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9f952958-8a2f-4a79-bc85-edb50a469c58.png",
+      "path": "Raw/outfit_f_japan_industrial2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a32e2111d36a3d48e07bfa37a64cffb7ad5cc62eecbf0c71edbb906ef34876a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_industrial2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "patterned kosode and obi",
+      "details": "",
+      "flags": {
+        "label": "patterned kosode and obi"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_japan_industrial2",
+      "prompt": "Image1 exact pose/headhandgeometry target; Image2 exact lateEdo female kosode costume. Dress Image1 in SAME plum aubergine ivorywillowleaf kosode whiteinnercollar mustardgold geometricobi darkredcord centerknot, white tabi strawzori plumstraps. RIGHT hand rests upperchest x433–565y392–488; LEFT palm extends low viewerRIGHT x773–889y686–778. Exact Image1 hand contours/positions, do not bring extendedhand closer. Adapt clothsleeves naturally. Replace guide shirt/pants completely. PreserveImage2 straightcolumn lowerbodyhem1355 footbaseline1440 obitop520bottom646 knot584, scalp164chin324center512. Same1024x1536flatgreen#00FF00background skinhandsheadmagenta#FF00FF. Texturedhandinkedlate1980sanime pigmentgrain finefabrictexture celshadow. No hair hats jewelry prop text shadow. Don't change costume design orfeetplacement.\nCorrection: Fix only skirt silhouette below y875. Remove flare at hem: lower kosode should be a straight column, sides x377 and645 alltheway to hem1355, not widening to x355 and675. Keep every pixel of face hands arms sleeves obi feet and upperbody composition unchanged. Maintain plum ivorywillowpattern textiletexture shading. No other edits.1024x1536flatgreen background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-42b3a7bc-66ae-4eb2-a320-2d63eb1df1c4.png",
+      "path": "Raw/outfit_f_japan_industrial2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d31269eb63e3663d5cb7d51ff53385567b42709c96d7ce92020c14aff50af221",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_japan_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "shimada",
+      "details": "",
+      "flags": {
+        "label": "shimada",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_japan_industrial2",
+      "prompt": "1024x1536 modular HAIR sprite female lateEdo1830 SHIMADA. Reference exact headface pose registration scalp164chin324center512. Add black smooth sweptback hair with modest rounded sidewings attemples and single horizontal folded loop bun at backcrown, restrained townswoman shimada, no bangs no loose longhair no ornaments pins combs or flowers. Gentle blueblackcelshading handinkedfinehairtexture pigmentgrain late80sanime. Preserve face/headsize handsfeetpositions. Replace all plumkosode goldobi redcord whitesocks sandals with plain OPAQUE magenta#FF00FF longsleeveshirt fulltrousers socks; face neckhandsmagenta. Onlyhairnonmagenta. Flatgreen#00FF00 no shadows text. No geishamakeup. Source ordinary wearable hairstyle not gigantic sculptural courtwig.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bd49703d-17e7-4be9-842b-71b1a728e1ee.png",
+      "path": "Raw/hair_f_japan_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "276d14e8e7654507279f07617a1be0cf0d8d023bc949ba2aa4093ce0a7ca893f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_japan_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "country": "japan",
+      "era": "industrial2",
+      "label": "tortoiseshell kanzashi",
+      "details": "",
+      "flags": {
+        "label": "tortoiseshell kanzashi"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_japan_industrial2",
+      "prompt": "Modular ACCESSORY only female lateEdo TORTOISESHELL KANZASHI hairpin. Reference exacthair/headfit. Add ONE modest amberbrown mottled tortoiseshell two-prong hairpin tucked laterally into upper bun, visible elegant flattened rounded paddle tip viewerRIGHT x551–600 y124–151, thin shaft angles gently downleft into bun centerx521y155. Discreet everydaytownswoman ornament not crown not flowers. Then recolor ALL black/blue hair FULLY opaque magenta#FF00FF so no blackhair remains; retain guidehair silhouette magenta. Entire support figure facehands clothesfeet magenta; only amberpin nonmagenta. Flatgreen#00FF00 full1024x1536. Preserve facechin324 head/hairpositions handsfeet no shifts. Late80sanime fineink pigmentgrain restrained celshade, no photoreal glare. No text shadows additional jewelry. Hairpin should register against existing bun reference and be separable.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-204c76b7-9dab-4d1b-afdf-3372e9a87770.png",
+      "path": "Raw/accessory_f_japan_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e56a165f453ae8c39d6b5fa4993896db23e538bd201317f957037eacfc3f8b8e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked tunic and bracae",
+      "details": "Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Knee-length belted wool tunic over close-fitting trousers (bracae), both woven in bold multicoloured checks of red, mustard yellow and dark olive green. A thick, short rectangular cloak in a contrasting check is pinned at the right shoulder. Soft leather ankle shoes.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_m_britain_ancient.",
+      "flags": {
+        "label": "checked tunic and bracae"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_britain_ancient",
+      "prompt": "EDIT IMAGE1 IN PLACE: exactly retain this mannequin head at x444–579 y239–400, hands x282–344/y800–923 and680–741/y800–923, feet baseline1421. Do NOT scale figure or change anatomy/head/pose. Image2 provides ANIME line/shading style only NOT clothing. Dress IMAGE1 in IronAgeBritish outfit c20CE: kneelength long-sleeve tunic big woven simple red mustard darkolive checks, narrow brownleatherbelt smallbronzebuckle, closefit matchingcheckedtrousers smallercheck, soft brownleatherankleshoes. Short rectangular cream-darkolive-rustcheck cloak draped behindarms with small bronze pin at wearer'sRIGHT shoulder viewerLEFT y450. ALLbody exposedheadhandssolidmagenta#FF00FF, no hair beard jewelry hat weapons. Stylized handdrawn1980sanime cel shaded TWO-TONE fabricplanes fineblackink edges subtlepigmentgrain; NOT photorealistic fabric or 3D product rendering.1024x1536 flatgreen#00FF00, no castshadow text. MUSTpreserve mannequin headtop239 chin400 overallheight feet1421; leave generous239pixelgreenabovebaldhead. Avoid kilts clan tartan druidcostume Romanarmor bluepaint.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5c858014-c709-45dc-aec3-d51aac866a1d.png",
+      "path": "Raw/outfit_m_britain_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "16de54ee8df6ce360084ac64f4a300fb7c0645529adc03a465dfeae1235f5bfb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_ancient__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked tunic and bracae",
+      "details": "Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Knee-length belted wool tunic over close-fitting trousers (bracae), both woven in bold multicoloured checks of red, mustard yellow and dark olive green. A thick, short rectangular cloak in a contrasting check is pinned at the right shoulder. Soft leather ankle shoes.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_m_britain_ancient.",
+      "flags": {
+        "label": "checked tunic and bracae"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_britain_ancient",
+      "prompt": "Image1 EXACTposegeometry Image2 exactIronAgeBritishcostume. DressImage1 in SAME red mustard olive bigcheckedlongsleevekneetunic brownleatherbelt brassbuckle matching smallercheckedtrousers softbrownankleshoes creamolive-rustcheckshortcloak pinned viewerLEFTshoulder bronze roundpin. RIGHT elbow open palmup lowerchest x412–516y609–674 exactlyImage1, oppositearmdown; cloakdrapes behindarms naturally. Preservehead239chin400center512 belt698 hem1000 feet1421 and lowerbody unchanged. Same1024x1536flatgreen#00FF00 allskinmagenta#FF00FF nohairbeardhatsweaponsjewelryexceptpin. Fine handinked late80sanime texturedpigmentgrain restrainedcelshadows not3D. Retain exact costume identity checks palette cloakpin location.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b396ebff-123d-462f-996e-37caf8e49c21.png",
+      "path": "Raw/outfit_m_britain_ancient__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "12b467024c5f82daf6d4084a35c9d92a25354f528b3c9351a5e6856a69c676be",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_ancient__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked tunic and bracae",
+      "details": "Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Knee-length belted wool tunic over close-fitting trousers (bracae), both woven in bold multicoloured checks of red, mustard yellow and dark olive green. A thick, short rectangular cloak in a contrasting check is pinned at the right shoulder. Soft leather ankle shoes.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_m_britain_ancient.",
+      "flags": {
+        "label": "checked tunic and bracae"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_britain_ancient",
+      "prompt": "Image1 EXACTposegeometry Image2 exactIronAgeBritishcostume. DressImage1 in SAME red mustard olive bigcheckedlongsleevekneetunic brownleatherbelt brassbuckle matching smallercheckedtrousers softbrownankleshoes creamolive-rustcheckshortcloak pinned viewerLEFTshoulder bronze roundpin. LEFT fingertips at cheek x525–583y344–468, RIGHT hand supports leftelbow x550–652y600–669 exactlyImage1. Cloak drapes behindarms naturally, nevercovershands. Preservehead239chin400center512 belt698 hem1000 feet1421 and lowerbody unchanged. Same1024x1536flatgreen#00FF00 allskinmagenta#FF00FF nohairbeardhatsweaponsjewelryexceptpin. Finehandinkedlate80sanime texturedpigmentgrain restrainedcelshadows not3D. Retain costume identity checks palette cloakpinlocation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a2e6681a-ef34-4bc9-8154-9fc721a633d8.png",
+      "path": "Raw/outfit_m_britain_ancient__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0034bd403665226fa8a661fda6fafa23e2e8977241ef09f9ed959a645ffbc66f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_ancient__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked tunic and bracae",
+      "details": "Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Knee-length belted wool tunic over close-fitting trousers (bracae), both woven in bold multicoloured checks of red, mustard yellow and dark olive green. A thick, short rectangular cloak in a contrasting check is pinned at the right shoulder. Soft leather ankle shoes.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_m_britain_ancient.",
+      "flags": {
+        "label": "checked tunic and bracae"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_britain_ancient",
+      "prompt": "Image1 EXACTposegeometry Image2 exactIronAgeBritishcostume. DressImage1 in SAME red mustard olive bigcheckedlongsleevekneetunic brownleatherbelt brassbuckle matching smallercheckedtrousers softbrownankleshoes creamolive-rustcheckshortcloak pinned viewerLEFTshoulder bronze roundpin. RIGHT handupperchest x450–568y463–565, LEFT armextendslowviewerRIGHT handx740–867y774–844 exactlyImage1. Cloak drapes BEHIND arms naturally nevercovershands. Preservehead239chin400center512 belt698 hem1000 feet1421 and lowerbody unchanged. Same1024x1536flatgreen#00FF00 allskinmagenta#FF00FF nohairbeardhatsweaponsjewelryexceptpin. Finehandinkedlate80sanime texturedpigmentgrain restrainedcelshadows not3D. Retain costume identity checks palette cloakpinlocation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0b28726b-2914-4abc-9dbd-0bf45804a9cb.png",
+      "path": "Raw/outfit_m_britain_ancient__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8502920dc90dd3642268a6602cdc9b1446734a8cc24987132b31df7d052581af",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_britain_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "swept-back mane",
+      "details": "Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Long swept-back mane: shoulder-length hair brushed straight back off the forehead, thick and full\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw hair_m_britain_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "swept-back mane",
+        "back": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_britain_ancient",
+      "prompt": "1024x1536 modularHAIRsource. Reference exactheadfacepositions scalp239chin400center512 handsfeetneutral. MaleIronAgeBritain long thick sweptback shoulderlength mane, warmdarkcopper auburn hair brushedstraightback off forehead slightlyrough uneven ends to shoulder y470, no sideknot braid or accessory. Stylizedhandinkedlate80sanime subtlepigmentgrain mattecelshade no photorealgloss. Replace ALL checkedcostume cloak pin belt shoes with OPAQUEplain#FF00FFmagenta longsleeveshirt fulltrousers socks. Allface neckhandsmagenta. OnlyHAIRnonmagenta, no beardmoustache jewelryhat. Green#00FF00flatbackground notextshadows. Preservefaceoutline and bodyregistration. Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Long swept-back mane: shoulder-length hair brushed straight back off the forehead, thick and full\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw hair_m_britain_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cf3a179d-eff6-485a-86ad-668f5a2792f7.png",
+      "path": "Raw/hair_m_britain_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f932ad0d17b0c0503b941636b553fceb3a9e93bb531047ad947e17ddc79a22be",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_britain_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "long drooping moustache",
+      "details": "Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Long drooping moustache that hangs past the corners of the mouth; chin and cheeks clean-shaven\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw facialhair_m_britain_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "long drooping moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_britain_ancient",
+      "prompt": "1024x1536 modular FACIALHAIR layer maleIronAgeBritain. Exactreferenceface scalp239chin400center512 unchanged. Add warmdarkcopper auburn thick long drooping moustache on upperlip y352, two narrow taperedends beside mouth reaching y414, cheeks/chin fully cleanshaven. Natural rough strands not waxed curls. NO scalp hair. Replace entire checkedoutfit cloakpin beltshoes with plainOPAQUE#FF00FF magenta longsleeveshirt fulltrousers socks. Allskinmagenta. OnlyMOUSTACHE nonmagenta. Preserve referenceheadfacegeometry handsfeetpose, no rescale. Handinkedlate80sanime finepigmentgrain restrainedcelshadows no photo. Flatgreen#00FF00 no textshadowotherprops. Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Long drooping moustache that hangs past the corners of the mouth; chin and cheeks clean-shaven\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw facialhair_m_britain_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f42105e3-35ca-474f-96f2-45144a2a7b48.png",
+      "path": "Raw/facialhair_m_britain_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c705c1a05131ec11cb32257656ea74b0a20d9690a58efb88311b91d9ad253207",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_britain_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "torc",
+      "details": "Subject: man of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Twisted gold torc: a thick, rope-twisted open neck ring with rounded knob ends meeting at the throat\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw accessory_m_britain_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "torc",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_britain_ancient",
+      "prompt": "Create separate jewellery game sprite on exact reference man's guide. ONLY ornament is an Iron Age gold OPEN torc: C-shaped thick twistedgold neckring wrapping back and sides of neck, two small rounded terminal bulbs pointing toward each other but separated by an EMPTY MAGENTA SPACE at FRONT. Open space wideenough to see bare magenta throat. No connectorbar clasp chain or front joining line. Neckring boundsx453–573 y390–443, endpointcenters484and540 at y430. Referenceheadscalp239chin400center512 unchanged. Replace ALL original checkclothes cloakpinbeltshoes with solidopaque#FF00FF plainmagentalongsleeveshirt fulltrouserssocks. Skinheadhandsmagenta. Onlygoldneckring nonmagenta, no hairbeardotherjewellery. Full1024x1536green#00FF00. Handinked1980sanime ochre gold two-tonecelshade subtlepigmentgrain. Exact originalheadposefeet.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8fced321-2d15-44ae-b79e-1d4fd2142caa.png",
+      "path": "Raw/accessory_m_britain_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3222e452a0827fee8b149e55668e164c8c4763ecd90373f111b47cf86b986a5b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked wool dress",
+      "details": "Subject: woman of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Ankle-length, long-sleeved tunic-dress of bright checked wool in red, yellow and dark olive green, cinched with a woven belt. Over it hangs a thick, plain dark-red or ochre wool mantle, fastened at the chest with a plain bronze pin.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_f_britain_ancient.",
+      "flags": {
+        "label": "checked wool dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_britain_ancient",
+      "prompt": "EDIT Image1 exactmannequin head/pose/registration. Image2 ANIMEstyle/checkwoolmaterial referenceonly not malegarment. DressfemaleImage1 in anklelength long-sleeve checkedwool tunicdress big red mustardyellow darkolive checks, narrowwoven ochre-rustbelt atwaist, plain darkred woolmantle thicksoftfolds behindarms tohips fastened at upperchestsmallplainbronzepin, softbrownleatherankleshoes. Scalp164chin324center512 and neutralhandposition feetbaseline1440 exactlyunchanged. Ordinarytraveller garment notglamour notromantictartankilt. Allskinbaldheadhandsmagenta#FF00FF. Same1024x1536green#00FF00 nofloor shadows text hairhatsnecklaceweapons. Finehandinkedlate80sanime pigmentgrain restrainedcelshadow, notphotoreal. Subject: woman of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Ankle-length, long-sleeved tunic-dress of bright checked wool in red, yellow and dark olive green, cinched with a woven belt. Over it hangs a thick, plain dark-red or ochre wool mantle, fastened at the chest with a plain bronze pin.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_f_britain_ancient.\nCorrection: Correct BOTH brown ankle shoes only. Baseline solescurrently1425; lower each shoe15pixels to y1440. Make leftshoe outer silhouette x347–449 and rightshoe x575–677, a little narrower than current. Preserve shoe shape leather rendering angle. Extend ankle tops to connect robehem1343. ALL image above y1320 unchanged face head hands dress cloakbelt pin; don't move or rescale figure.1024x1536 greenbackground.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c06b5793-3c2b-459b-a40c-5d15d0245740.png",
+      "path": "Raw/outfit_f_britain_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7c7a62c0975be28de426c389c6f4eaf9f318355bf288a3c4c78b750055359781",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_ancient__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked wool dress",
+      "details": "Subject: woman of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Ankle-length, long-sleeved tunic-dress of bright checked wool in red, yellow and dark olive green, cinched with a woven belt. Over it hangs a thick, plain dark-red or ochre wool mantle, fastened at the chest with a plain bronze pin.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_f_britain_ancient.",
+      "flags": {
+        "label": "checked wool dress"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_britain_ancient",
+      "prompt": "Image1 EXACT poseheadhandgeometry, Image2 exactcostumeidentity. DressImage1 in SAME brightredmustardolivechecked ankle wooldress with narrowochrewoventiebelt andtwofringetails, plain darkredthick mantle pinnedupperchestbronzeringpin, brownleatherankleshoes. BOTH palmsopen asymmetrically exactImage1 viewerLEFT x174–282y675–774 viewerRIGHT x723–844y557–647. Cloak foldsbehindarms naturally. PreserveImage2 lowerbody dresshem1343 feet1437 belt610 tails882/932, headscalp164chin324center512.1024x1536flatgreen#00FF00 exposedskinmagenta#FF00FF. Sameinkedlate80sanime pigmentgrain celshadows, clothchecksnotphotoreal. No hair hats jewelry otherprops shadows text. Keepbodycenterfixed andfeetlocationsunchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-baf404f4-7875-4cc2-8cbe-d27df1f2dac3.png",
+      "path": "Raw/outfit_f_britain_ancient__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1e56cea3aaf199faacd78df5621db818fe1a490e6f7ea0949f64433eee343930",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_ancient__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked wool dress",
+      "details": "Subject: woman of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Ankle-length, long-sleeved tunic-dress of bright checked wool in red, yellow and dark olive green, cinched with a woven belt. Over it hangs a thick, plain dark-red or ochre wool mantle, fastened at the chest with a plain bronze pin.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_f_britain_ancient.",
+      "flags": {
+        "label": "checked wool dress"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_britain_ancient",
+      "prompt": "Image1 EXACT poseheadhandgeometry, Image2 exactcostumeidentity. DressImage1 in SAME brightredmustardolivechecked ankle wooldress with narrowochrewoventiebelt andtwofringetails, plain darkredthick mantle pinnedupperchestbronzeringpin, brownleatherankleshoes. BOTH hands looselylinkedatwaist x455–562y680–771 exactlyImage1 overlap RIGHT hand on top. Cloak foldsbehindarms naturally, belttails stayBEHINDhands unchanged. PreserveImage2 lowerbody dresshem1343 feet1437 belt610 tails882/932, headscalp164chin324center512.1024x1536flatgreen#00FF00 exposedskinmagenta#FF00FF. Sameinkedlate80sanime pigmentgrain celshadows, clothchecksnotphotoreal. No hair hats jewelry otherprops shadows text. Keepbodycenterfixed andfeetlocationsunchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7d027b97-9f9e-49d9-9852-18d8cb77500e.png",
+      "path": "Raw/outfit_f_britain_ancient__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "af60c42017af93e95d776d282a86a0b7526cb23d26193de93d0416e732d2c182",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_ancient__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "checked wool dress",
+      "details": "Subject: woman of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Ankle-length, long-sleeved tunic-dress of bright checked wool in red, yellow and dark olive green, cinched with a woven belt. Over it hangs a thick, plain dark-red or ochre wool mantle, fastened at the chest with a plain bronze pin.\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw outfit_f_britain_ancient.",
+      "flags": {
+        "label": "checked wool dress"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_britain_ancient",
+      "prompt": "Image1 EXACT poseheadhandgeometry, Image2 exactcostumeidentity. DressImage1 in SAME brightredmustardolivechecked ankle wooldress with narrowochrewoventiebelt andtwofringetails, plain darkredthick mantle pinnedupperchestbronzeringpin, brownleatherankleshoes. RIGHT palmforward near shoulder x285–390y297–433 exactlyImage1, elbowbent atviewerLEFT, oppositearmdown. Cloak foldsbehindarms naturally. PreserveImage2 lowerbody dresshem1343 feet1437 belt610 tails882/932, headscalp164chin324center512.1024x1536flatgreen#00FF00 exposedskinmagenta#FF00FF. Sameinkedlate80sanime pigmentgrain celshadows, clothchecksnotphotoreal. No hair hats jewelry otherprops shadows text. Keepbodycenterfixed andfeetlocationsunchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2ce22f2f-b271-4f4e-9300-98b8c716c123.png",
+      "path": "Raw/outfit_f_britain_ancient__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "68d879e4150cef5bb7fa4bfdef34f2957755015e3b72917b277a71e198de5f99",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_britain_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "two thick braids",
+      "details": "Subject: woman of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Very long centre-parted hair in two thick braids falling forward over the shoulders to the waist\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw hair_f_britain_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "two thick braids"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_britain_ancient",
+      "prompt": "Use reference only for exact female body/head registration and textured inked late-1980s anime style. Make a separate hair layer fitting this exact head: very long chestnut centre-parted hair in two thick natural braids falling forward over both shoulders to the waist, ends y630. No bangs, ornaments or hat. Scalp164 chin324 center512 unchanged. Replace ALL costume, mantle, brooch, belt and shoes with plain opaque flat magenta #FF00FF long-sleeve calibration shirt, full-length trousers and socks. Face and hands magenta too. Hair is ONLY colored element. Flat green #00FF00 background, 1024x1536 full canvas. Preserve exact head face scale and down-arm neutral pose, soles1440. Hand-inked contours, subtle pigment grain, restrained cel shadows on hair, not glossy digital rendering. No text shadows or props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-97d27a8f-68e4-4d26-b9bb-0fcdbf196f27.png",
+      "path": "Raw/hair_f_britain_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2451ef2ec939842fb582136a6e5ab0aef576009cbc1fbd4a0e8c05ca78da13c2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_britain_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "country": "britain",
+      "era": "ancient",
+      "label": "torc",
+      "details": "Subject: woman of Iron Age Britain; Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul.\nDraw: Twisted gold or bronze torc at the neck\nAvoid: blue woad body paint or tattoos (skin must never carry the signal); horned or winged helmets; Roman toga, tunic-with-toga or Roman armour; swords, shields, spears, chariot-warrior gear; Scottish kilts or clan tartans (anachronistic by 1,500+ years); Suebian side-knot hairstyle or full beard (that is Germany-ancient); plain undyed or single-colour cloth with amber beads (reads as Germany-ancient); fur-loincloth 'savage barbarian' caricature; druid robes or any religious costume\nOutput one full-canvas raw accessory_f_britain_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "torc",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_britain_ancient",
+      "prompt": "Create separate accessory layer registered exactly to reference female head scalp164 chin324 center512. ONLY colored object is a bronze twisted neck torc, an OPEN rigid circular neck ring with small round terminal knobs at front and a clearly visible 24px GAP between terminals. Ring spans x447–577 y326–371, terminals near x492 and532 y364. Muted warm bronze with hand-inked texture and cel shadows, late80s anime style. Remove ALL original dress cloak pin belt footwear: replace with plain opaque flat MAGENTA #FF00FF calibration long-sleeved shirt, full-length trousers socks. All face hands skin magenta. No hair no earrings no additional necklace. Keep reference head scale pose bodyposition unchanged. Flat green #00FF00 background1024x1536. No text or cast shadows. Torc open gap mandatory, no bar closing gap. It sits at base of neck ABOVE mantle neckline in original.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a7333888-410d-4342-bfec-ac947ee3a486.png",
+      "path": "Raw/accessory_f_britain_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b2f5dada631e25c6497ecfa7e97b3a9418f130eac2aa678a042de7c9f4668ee7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "cyrtel and leg bindings",
+      "details": "Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Knee-length wool tunic (cyrtel) in madder red or woad blue, loosely bloused over a belt, with contrasting embroidered or tablet-woven bands at the neckline, cuffs and hem. Loose trousers are wrapped from ankle to knee with linen leg bindings (winingas). A plain rectangular wool cloak is draped over the left shoulder and fastened at the right shoulder with a small plain pin.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_m_britain_medieval.",
+      "flags": {
+        "label": "cyrtel and leg bindings"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_britain_medieval",
+      "prompt": "Image1 exact male registration/pose. Image2 ONLY inked textured late1980s anime rendering reference, NOT clothing. Draw Anglo-Saxon London1050 civilian outfit on Image1: knee-length WOAD BLUE wool cyrtel, bloused slightly over brown leather belt with small bronze buckle at waist700; narrow ochre and rust tablet-woven geometric bands around keyhole neckline,cuffs,hem1000. Loose charcoal-brown trousers visible beneath, cream linen leg bindings spirally wrapped ankle to below knee y1050–1330, soft brown leather round-toed turnshoes soles1421. PLAIN ochre rectangular wool cloak draped over wearer's LEFT shoulder viewerRIGHT, small plain bronze pin wearerRIGHT viewerLEFT, hem~960. No checks or plaid. Exposed head/hands solid magenta#FF00FF no hair beard hats jewelry weapons bags. Head scalp239 chin400 center512 same asImage1, original neutral hands exact. Canvas1024x1536flatgreen#00FF00. Ink contours subtle woven/pigmentgrain celshadows, not photoreal. No floor castshadow text. Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Knee-length wool tunic (cyrtel) in madder red or woad blue, loosely bloused over a belt, with contrasting embroidered or tablet-woven bands at the neckline, cuffs and hem. Loose trousers are wrapped from ankle to knee with linen leg bindings (winingas). A plain rectangular wool cloak is draped over the left shoulder and fastened at the right shoulder with a small plain pin.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_m_britain_medieval.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d4a3de7b-62b1-4103-83fa-ba7300c1345c.png",
+      "path": "Raw/outfit_m_britain_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7dc116fec935012e5611c5a83d2909c8224829906271390406c16a50eaf93104",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_medieval__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "cyrtel and leg bindings",
+      "details": "Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Knee-length wool tunic (cyrtel) in madder red or woad blue, loosely bloused over a belt, with contrasting embroidered or tablet-woven bands at the neckline, cuffs and hem. Loose trousers are wrapped from ankle to knee with linen leg bindings (winingas). A plain rectangular wool cloak is draped over the left shoulder and fastened at the right shoulder with a small plain pin.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_m_britain_medieval.",
+      "flags": {
+        "label": "cyrtel and leg bindings"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_britain_medieval",
+      "prompt": "Dress Image1 in EXACT costume from Image2. Image1 controls pose, head and hands precisely. Both palms open asymmetrical: viewerLEFT hand x177–292y562–642 and viewerRIGHT x732–846y690–776. Keep head239/400center512 and lower body, feet ofImage2 soles1417. Woad blue knee cyrtel ochre/rust geometric woven bands, brown belt buckle700tail850, charcoal loose trousers ivory linen legbindings brown turnshoes. Plain ochre cloak pinnedviewerLEFT shoulder drapedviewerRIGHT behind bent arm. Preserve hem1000, no extra costume or hair. Magenta#FF00FFskin flatgreen#00FF00canvas1024x1536. Same textured inked80sanime, not photoreal. No text shadowprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-55631eb6-35c9-4bbc-be66-627f1702f98e.png",
+      "path": "Raw/outfit_m_britain_medieval__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2c6e3a519b6852a9d5d0735a65e56f28b5a44734c9101c85a3bc6ea9504d6385",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_medieval__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "country": "britain",
+      "era": "medieval",
+      "label": "cyrtel and leg bindings",
+      "details": "Subject: man of Anglo-Saxon England; London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire.\nDraw: Knee-length wool tunic (cyrtel) in madder red or woad blue, loosely bloused over a belt, with contrasting embroidered or tablet-woven bands at the neckline, cuffs and hem. Loose trousers are wrapped from ankle to knee with linen leg bindings (winingas). A plain rectangular wool cloak is draped over the left shoulder and fastened at the right shoulder with a small plain pin.\nAvoid: horned or winged helmets and Viking-raider stereotypes; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green\nOutput one full-canvas raw outfit_m_britain_medieval.",
+      "flags": {
+        "label": "cyrtel and leg bindings"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_britain_medieval",
+      "prompt": "Image1 exact pose and hand/head coordinates, Image2 exact costume. DressImage1 same blue cyrtel ochrerust wovenbands, brown leather belt buckle700 tail850 underhands, charcoal trousers ivory spiral legbindings brown turnshoes. Ochre rectangular cloak pinviewerLEFT shoulder, hangs behind viewerRIGHTarm to1075. BOTH hands gently joined at lowerabdomen x450–556 y725–805 wearerRIGHThand on top matching Image1 precisely. Head scalp239 chin400center512. Keep Image2 legs hem1000 feet1417 and bodyposition unchanged. Magentaskin#FF00FF flatgreen#00FF00 1024x1536. Same inked textured80sanime clothpigmentgrain and celshadows. No hair hat props text shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-98f40abf-9357-4d04-ad71-a4a9bf9eeb89.png",
+      "path": "Raw/outfit_m_britain_medieval__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "71a1a4fe4f2c9c4900b1e30cc878c294cb42b58d218e97ac0c1c514ffc74feb5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

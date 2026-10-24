@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 896. Full regeneration is NOT complete.
+Saved: 921. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -900,3 +900,28 @@ Saved: 896. Full regeneration is NOT complete.
 | outfit_m_japan_industrial2 | visually reviewed; registration pending |
 | outfit_m_japan_industrial2__explaining_c | visually reviewed; registration pending |
 | outfit_m_japan_industrial2__thinking_a | visually reviewed; registration pending |
+| outfit_m_japan_industrial2__objecting_b | visually reviewed; registration pending |
+| hair_m_japan_industrial2 | visually reviewed; registration pending |
+| accessory_m_japan_industrial2 | visually reviewed; registration pending |
+| outfit_f_japan_industrial2 | visually reviewed; registration pending |
+| outfit_f_japan_industrial2__explaining_a | visually reviewed; registration pending |
+| outfit_f_japan_industrial2__thinking_b | visually reviewed; registration pending |
+| outfit_f_japan_industrial2__objecting_c | visually reviewed; registration pending |
+| hair_f_japan_industrial2 | visually reviewed; registration pending |
+| accessory_f_japan_industrial2 | visually reviewed; registration pending |
+| outfit_m_britain_ancient | visually reviewed; registration pending |
+| outfit_m_britain_ancient__explaining_a | visually reviewed; registration pending |
+| outfit_m_britain_ancient__thinking_b | visually reviewed; registration pending |
+| outfit_m_britain_ancient__objecting_c | visually reviewed; registration pending |
+| hair_m_britain_ancient | visually reviewed; registration pending |
+| facialhair_m_britain_ancient | visually reviewed; registration pending |
+| accessory_m_britain_ancient | visually reviewed; registration pending |
+| outfit_f_britain_ancient | visually reviewed; registration pending |
+| outfit_f_britain_ancient__explaining_b | visually reviewed; registration pending |
+| outfit_f_britain_ancient__thinking_c | visually reviewed; registration pending |
+| outfit_f_britain_ancient__objecting_a | visually reviewed; registration pending |
+| hair_f_britain_ancient | visually reviewed; registration pending |
+| accessory_f_britain_ancient | visually reviewed; registration pending |
+| outfit_m_britain_medieval | visually reviewed; registration pending |
+| outfit_m_britain_medieval__explaining_b | visually reviewed; registration pending |
+| outfit_m_britain_medieval__thinking_c | visually reviewed; registration pending |
