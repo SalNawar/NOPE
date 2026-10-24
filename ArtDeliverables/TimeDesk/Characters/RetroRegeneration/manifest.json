@@ -25616,6 +25616,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "college scarf",
+      "details": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Long college scarf in broad block stripes of two contrasting colours, wound once round the neck with the ends hanging loose\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw accessory_m_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "college scarf"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_britain_modern",
+      "prompt": "Subject: man of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Long college scarf in broad block stripes of two contrasting colours, wound once round the neck with the ends hanging loose\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw accessory_m_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 puregreen#00FF00. Exact reference head239chin400bodyfeet1421. Replace entire costume/shoes with plain opaque flatmagenta long sleeve shirtfulltrouserssocks; facehandsmagenta. ONLY scarfcolored. Long wool college scarf broad alternating NAVY and MUSTARD horizontal blockstripes, woundONCE loosely aroundneck belowchin y400–455, two flatfrontends down chest ending asymmetrically y820left/y880right withshortfringes. Width60pxeach, hanginginsidejacketopening nearx465 and555. No logo/no hairhatjewelry. Late80sanime ink and woolgrain celshadows. Faceunchangedfullyvisible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-870677bb-a552-4a61-a416-6e011878336a.png",
+      "path": "Raw/accessory_m_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "274f6415bd8c6b42c1b6dc53b7a525cb3d78f60fd95609d91e935ca04425f920",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "twinset and tweed skirt",
+      "details": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Soft wool twinset (short-sleeved jumper with a matching cardigan) in a pastel or heather tone, tucked into a below-the-knee A-line tweed skirt. Seamed stockings and low-heeled court shoes.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_f_britain_modern.",
+      "flags": {
+        "label": "twinset and tweed skirt"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_britain_modern",
+      "prompt": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Soft wool twinset (short-sleeved jumper with a matching cardigan) in a pastel or heather tone, tucked into a below-the-knee A-line tweed skirt. Seamed stockings and low-heeled court shoes.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_f_britain_modern.\n1024x1536 green#00FF00 fullyclothed modularcostume sprite. Ref1 exactfemale alignmenthead164chin324handsfeet1440. Ref2 handinkedlate1980sanime textile rendering ONLY. Clothing1950 Britishwoman practical woolheatherlavender twinset short-sleeve roundneckjumper under matching long-sleeve buttoncardigan, waistband tuck, belowkneebrown tweed A-line skirt hem1100, opaquetanstockings and lowheel darkbrowncourts. No accessoriesjewelryhairhat. Flatmagentafacehands, stockings natural tan aspartcostume. Exactfootpositionsx348–449x575–675soles1440headunchanged. Normalunposed civilian clothing, smallroundbuttons. Pigmentgrainknitweaveinkcelshadows,no text.\nCorrection: Change ONLY stockings: remove the black vertical seam line visible down the FRONT of each leg. Historical stocking seams are on the BACK, so must be invisible in this front view. Keep tan opaque stockings coverage and subtle shading, exactlegs shoes dress cardigan headhands canvas all unchanged. Same1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-962d2831-8cee-4b33-b3b0-f2209a55e98a.png",
+      "path": "Raw/outfit_f_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "048e8b94836cd6904ad02dd4ad962358720db9e83299234615715180ab64825c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_modern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "twinset and tweed skirt",
+      "details": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Soft wool twinset (short-sleeved jumper with a matching cardigan) in a pastel or heather tone, tucked into a below-the-knee A-line tweed skirt. Seamed stockings and low-heeled court shoes.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_f_britain_modern.",
+      "flags": {
+        "label": "twinset and tweed skirt"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_britain_modern",
+      "prompt": "1024x1536 modularcostume. Ref1 exactposealignment,ref2 identical1950 heatherlavender wool twinset brownAline tweedskirt tanstockingsbrownlowcourts. Fullydressref1 withref2 clothing only sleeveschange. WearerLEFT handnearupperchest x534–637y394–500, otherarmdown. Head164chin324feet1440exact, preserve skirtwidth/hem1115 waist610cardiganhem690 andfootpositions. Stockings no frontseamlines (backseams invisible). Facehandsmagenta#FF00FFgreenbackground#00FF00. Samefineinkclothgrainlate80sanimecelshade, nohairhatjewelrypropsletters.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-843195da-3c0c-43db-813c-07543d3b55eb.png",
+      "path": "Raw/outfit_f_britain_modern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5f74cf99f649d42c314c03e3498ca757a8a2fe7259774bff48aae4e29488dbee",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_modern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "twinset and tweed skirt",
+      "details": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Soft wool twinset (short-sleeved jumper with a matching cardigan) in a pastel or heather tone, tucked into a below-the-knee A-line tweed skirt. Seamed stockings and low-heeled court shoes.\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw outfit_f_britain_modern.",
+      "flags": {
+        "label": "twinset and tweed skirt"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_britain_modern",
+      "prompt": "Generate fully clothed1950civilian costume sprite1024x1536. Ref1 exactpose: BOTH palms forward at chestheight, emptyhands, calm gesture. Ref2 exactheatherlavender twinsetwoolcardigan browntweedAlinebelowkneeskirt tanstockingsbrownlowcourts. Matchhead164chin324feet1440bodycenter512 and allhandcoordinatesref1. Preserve ref2 lowerbody and garmentdesign. Onlysleeves adapt. Facehandspuremagenta#FF00FF flatgreen#00FF00 background. Fineinkhandpaintedtextilegraincelshade late80sanime. No hairhataccessoriespropsletters. Stockingsplainfront, seamsbehindnotvisible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-af2125fe-effe-4d52-8b99-e0eccebc3464.png",
+      "path": "Raw/outfit_f_britain_modern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a164377455bb7c243b57317d3dc86661b7fde760fd088eb69683c043a474f8e9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "pin-curl set",
+      "details": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Early-1950s 'set': collar-length hair in soft rolled pin-curls framing the face\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw hair_f_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pin-curl set"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_britain_modern",
+      "prompt": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Early-1950s 'set': collar-length hair in soft rolled pin-curls framing the face\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw hair_f_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536puregreen#00FF00. Referencehead164chin324 exact. Replace ENTIRE costume including shoesstockings with plainflatmagenta opaque long sleeveshirt fulltrouserssocks; facehandsmagenta. Onlyhaircolored. Ashblonde early1950s soft rolled pin-curl set collarlength ends350, modestvolume top140, gentlyasymmetricpart, no hairpins/jewelry/hat. Hairdistinct from Victorianringlets: soft brushed horizontalrolls and inwardcurled ends. Textured late80sanime handinkedstrands pigmentgrain celshadows. Bodyposefeet1440unchanged no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-75adc6e9-70d0-4370-89f9-5eb5b68fc39c.png",
+      "path": "Raw/hair_f_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d9643ff2430e8e4f5092edd6df3cd8078e64adb0951cd9affa6ac2be08a3c339",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "headscarf",
+      "details": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Printed silk square headscarf folded into a triangle and knotted under the chin, covering the ears, its front edge set back from the forehead; face fully visible\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw headwear_f_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "headscarf",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_britain_modern",
+      "prompt": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: Printed silk square headscarf folded into a triangle and knotted under the chin, covering the ears, its front edge set back from the forehead; face fully visible\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw headwear_f_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536flatgreen#00FF00. Use reference exacthead164chin324; replace entire outfitshoesstockings with flatopaqueMAGENTA long-sleeveshirtfulltrouserssocks, facehandsmagenta. ONLY headscarf colored: ivory silk squareprinted smallnavy andochre scatteredbotanicalsprigs, foldedtriangle covering ears, frontedgebackfromforehead so foreheadfaceopen, underchinknoty345two shortends400. Compactheadcover crown140 no longdrape shoulders. No hair naturalcolor anywhere/no jewelry. Handinkedlate80sanime celshade finepigmentgrain. Posebodyunchangedfeet1440 no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e5b6e1a6-4300-45e0-abe5-418bf2d9987c.png",
+      "path": "Raw/headwear_f_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f5aea8756b46be9eae9e8864d9d71426aed1a1f731ccea6d6609577925fc62c8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_britain_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "country": "britain",
+      "era": "modern",
+      "label": "pearl strand",
+      "details": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: A single strand of pearls (the 'twinset and pearls')\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw accessory_f_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pearl strand"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_britain_modern",
+      "prompt": "Subject: woman of Post-war Britain; Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti).\nDraw: A single strand of pearls (the 'twinset and pearls')\nAvoid: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); a likeness of Alan Turing; Sherlock-style deerstalker cliche\nOutput one full-canvas raw accessory_f_britain_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536puregreen#00FF00. Exactref head164chin324. Replace entire outfitstockingsshoes with opaque flatMAGENTA shirtfulltrouserssocks,facehandsmagenta. ONLY necklacecolored. A single fine ivory pearl strand aroundneck, sidesx459/565start345 curvebelowjumperneckline bottomy415center512. Small5–7pixelbeads evenlyspaced naturalovalnotgiantballs, thin darkanimeoutlines softwarmcelshadows no glossy3D. No pendant/hairhat/otheraccessories. Handinkedlate80sanime pigmentgrain. Figureheadbodyunchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ad5067c2-b9af-4cc8-aa4a-05998ba829d8.png",
+      "path": "Raw/accessory_f_britain_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f03efdeeee4710b7e234eaeabcfc4cff0c209ee7feea109a92ba72bd5d9343a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "justaucorps coat",
+      "details": "",
+      "flags": {
+        "label": "justaucorps coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_britain_earlymodern2",
+      "prompt": "Historical civilian costume London1687, justaucorps coat. One1024x1536modular sprite puregreen#00FF00. Reference1 exactmaleguidescale scalp239chin400feet1421 center512 handsrelaxeddown. Reference2 styleONLY finehandinklate80sanime clothpigmentgrain. Full knee-length plain mutedplum wool COLLARLESS justaucorps coat longbuttonrow, slightlyshapedwaist, ampleturned cuffs, creamlacecuffedges. Darktaupe long waistcoat, fitted kneebreeches, darkcharcoalstockings, black lowbuckledshoes. White linen cravat atneck withsmalllaceedge, no largecollar/lapels, no18thcentury cutawaytails. Coathem1030. Ordinary coffeehousepatron not king, no embroiderygolduniformweaponsprops. Facehandsflatmagenta#FF00FF nohairhatjewelry. Textilegraincelshadowconsistent references. No letters.\nHistorical reference: https://www.vam.ac.uk/articles/lace-and-fashion-in-gibbons-carving ; https://fashionhistory.fitnyc.edu/1680-1689/",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aa6f11c5-c8f8-4c33-8f40-9250fa89778a.png",
+      "path": "Raw/outfit_m_britain_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "efb502b24f22bd519e553c0ce0884b6008fe40f11825eeb6aab73ae2b5b0a901",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "justaucorps coat",
+      "details": "",
+      "flags": {
+        "label": "justaucorps coat"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_britain_earlymodern2",
+      "prompt": "1024x1536 fullcostumesprite. Ref1 exactposeheadhands alignment,ref2 exactLondon1687plumcollarlessjustaucorps/taupewaistcoatbreechesdarkstockingsblackbuckleshoes whitelinencravatlacecuffs. Fullyclothe ref1 identicallyref2. WearerLEFThandnearupperchestx544–637y496–597otherhanddown. Preservehead239chin400feet1421center512 and ref2lowerbodycoathem1030. Adapt sleevesandlargecuffs to pose no other changes. Facehandsflatmagenta#FF00FFpuregreen#00FF00. Richtextilegrain finehandinkcelshadowslate80sanime. Nohairhatpropsletters.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ccf4b6aa-872b-488f-8d8c-b5bd25935f9e.png",
+      "path": "Raw/outfit_m_britain_earlymodern2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "53e8a3efffca54956d65016ed4c350c1ae556e7cd6c58c49b74252ed852ad067",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "justaucorps coat",
+      "details": "",
+      "flags": {
+        "label": "justaucorps coat"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_britain_earlymodern2",
+      "prompt": "Create fullyclothed historicalcostumesprite1024x1536green#00FF00. Ref1 exact reflectivegesture andalignment: right hand atchin, otherarmdown. Ref2exact1687 plumcollarlesslongcoatturnedcuffs whitelacecravat taupewaistcoatbreeches charcoalstockingsblackbuckleshoes. Dressref1 identicallyref2,onlysleeves change. Handx450–550y371–478head239chin400feet1421fixed. Preservebodywidthcoathem1030. Handinfrontofcravat/lace. Facehandspuremagenta#FF00FF nohairhatpropsletters. Late80s handinkedtextilegraincelshade.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aeee5a6b-e840-48c2-9edc-3c979dea6e55.png",
+      "path": "Raw/outfit_m_britain_earlymodern2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d3ec8e5ef3e9457e5f40f273fecd497bbf0699c13a05fcb88a431665dde26298",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_earlymodern2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "justaucorps coat",
+      "details": "",
+      "flags": {
+        "label": "justaucorps coat"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_britain_earlymodern2",
+      "prompt": "1024x1536 fullcostumespritegreen#00FF00. Ref1 exactbothpalmsforward calmobjectingpose allhandcoordinates andhead239chin400feet1421. Ref2 exact1687 plumcollarlessjustaucorpslargecuffs longbuttonrow taupewaistcoatbreeches charcoalstockingsbuckledshoeswhitecravatlacecuffs. Fullydressref1 identicallyref2, onlysleevesfoldsadapttopose. Preservebodywidthcoathem1030andlowerbody. Magentafacehands#FF00FF. Textilegrainlate80sanimeinkcelshade. No hairhatpropsletters.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b7115330-5138-4c71-8874-042df2861015.png",
+      "path": "Raw/outfit_m_britain_earlymodern2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "af10253ce8ded71b2be263faa45866a0c117f22ee3420d9c0696acf4f0329144",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_britain_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "periwig",
+      "details": "",
+      "flags": {
+        "label": "periwig",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_britain_earlymodern2",
+      "prompt": "1024x1536modularHAIRlayer London1687 PERIWIG. Reference exacthead239chin400body alignment. Replace ALL outfit/shoes with opaque flatMAGENTA plain shirt fulltrouserssocks, facehandsmagenta. Onlywigcolored. Darkwarmbrown fullbottomperiwig centerpart, long regularloosecurls sides of face down shoulders tochesty540, voluminousbutnotgiant, crown200. Forehead/eyes/nose/mouthallclear, no beardnohatjewelry. Hairflow around collar area separately tobecomposited; richinkstrandstexturedlate80sanimecelshadows. Puregreen#00FF00bg no text. Preserveheadbodypositionfeet1421.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5d242337-c274-475b-ab6f-b4978de62153.png",
+      "path": "Raw/hair_m_britain_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "65bef0bb5094717c1c7fa81b8912534f86504ed36c1878def88c4bb22bfd9386",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_britain_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "broad-brimmed cocked hat",
+      "details": "",
+      "flags": {
+        "label": "broad-brimmed cocked hat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_britain_earlymodern2",
+      "prompt": "1024x1536 modularhatlayer London1687 civilian broad-brimmed cocked hat. Exactreferencehead239chin400bodyfeet1421. Replace ALL costume/shoes withplainopaque flatmagenta long sleeveshirtfulltrouserssocksfacehandsmagenta. ONLY hatcolored: charcoalblack feltlowroundcrown broad softbrim casuallycockedup on ONEside, plain narrowblackband, no feathers/no militarycockade/no goldbraid/no uniform. Fit overperiwig crown aroundy160–260 brimwidthx365–660 bottom290, faceeyesclear. No hair included. Late80sanimehandink feltgraincelshadows, green#00FF00bg, no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1b9d9aca-35dc-4a6f-b2ad-70a110276a1a.png",
+      "path": "Raw/headwear_m_britain_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5eb14e798b41ab43937d96555ad1bbb7beb0cf55fe7ea9ffe3aee84c1319f1c4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_britain_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "lace cravat",
+      "details": "",
+      "flags": {
+        "label": "lace cravat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_britain_earlymodern2",
+      "prompt": "1024x1536modularACCESSORY lacecravat1687. Exactreferencehead239chin400bodyfeet1421. Replace entire outfitshoes with plainopaque flatmagenta shirtfulltrouserssocks; facehandsmagenta. ONLY cravatcolored: reproduce exactreference ivorylinen neckwrap at375–430 and hanging layeredfinepointlace ends x476–560y405–575. Neckwrapbelowchin do notcoverface; no hairhatjewelrypins. Delicateinkedlace holes scallopededges pigmentgrain handpaintedlate80sanimecelshade, notplasticphoto. Green#00FF00background no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-665ca1e9-b8cb-485b-a37d-4ef0a71599e6.png",
+      "path": "Raw/accessory_m_britain_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "439d71cb944473568e67d3ba0836fdeaa83dcf89e9eeb10492196c68b82ecc16",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "mantua gown",
+      "details": "",
+      "flags": {
+        "label": "mantua gown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_britain_earlymodern2",
+      "prompt": "Generate a single full-length female wardrobe sprite, 1024x1536, pure flat #00FF00 background. Reference1 is exact registration and neutral pose guide: retain scalp y164 chin324 center512 soles1440 feet x348-449 and575-675. Reference2 STYLE ONLY fine hand ink, late1980s anime cel illustration, visible woven textile/pigment grain, NOT its Victorian garment. Dress the guide as an ordinary respectable London woman1687 in an early mantua: dark petrol-blue subtly striped wool/silk open robe pleated from shoulders, belted naturally at waist, overskirt drawn back over hips showing warm muted copper petticoat, modest ivory linen neckline insert, fitted elbow-length sleeves with small ivory linen ruffles, period brown leather low curved heel shoes. Modest civilian quality, softly worn hem, no royal ornament, no enormous panniers or Victorian crinoline, no hair/hat/jewelry/props. Fully covered torso and legs. Bare face neck forearms hands are solid #FF00FF calibration color, do not color skin. Preserve exact guide hand and foot centers. Skirt hem y1350, narrower practical draped silhouette x200-825 max. Symmetrical front view calm neutral stance, no scene/shadow/text. Historical construction reference https://www.metmuseum.org/art/collection/search/81809 and https://www.londonmuseum.org.uk/collections/v/object-85096/ensemble-court-dress-ensemble-mantua/ .",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b504f662-810a-478c-85b1-624393e5f36f.png",
+      "path": "Raw/outfit_f_britain_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2d7cccb0611242cadd72093ce15043420c4008c130c33babedacd05f418a4f2b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "mantua gown",
+      "details": "",
+      "flags": {
+        "label": "mantua gown"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_britain_earlymodern2",
+      "prompt": "Create1024x1536 pure green #00FF00 costume sprite. FIRST reference supplies exact explaining_a pose, head and hands registration. SECOND supplies ONLY exact costume, colors, fabric grain, shoes, hem and late1980s ink/cel style to retain. Put that same petrol-blue striped 1687 mantua copper petticoat ivory neckline and elbow ruffles brown buckled shoes onto FIRST pose. RIGHT elbow open, right palm up at lower chest, left arm relaxed. Match first hand outline precisely, do not shift head torso feet. Scalp164 chin324 shoes baseline1440, center512; keep neutral skirt width and hem. Exposed face neck forearms hands solid #FF00FF calibration color. Fully dressed, no hair hat extra accessories, no text ground shadow or scene. Only pose changes; no redesign.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4b8ec591-3ee0-41db-9519-ca4f678a8a83.png",
+      "path": "Raw/outfit_f_britain_earlymodern2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8577fca329b7246d5d44a5bddd4fcc267518615bb97b12fbff47421980fbb297",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "mantua gown",
+      "details": "",
+      "flags": {
+        "label": "mantua gown"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_britain_earlymodern2",
+      "prompt": "Create1024x1536 pure green #00FF00 costume sprite. FIRST reference supplies exact thinking_b pose, head and hands registration. SECOND supplies ONLY exact costume, colors, fabric grain, shoes, hem and late1980s ink/cel style to retain. Put that same petrol-blue striped 1687 mantua copper petticoat ivory neckline and elbow ruffles brown buckled shoes onto FIRST pose. LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Match first hand outline precisely, do not shift head torso feet. Scalp164 chin324 shoes baseline1440, center512; keep neutral skirt width and hem. Exposed face neck forearms hands solid #FF00FF calibration color. Fully dressed, no hair hat extra accessories, no text ground shadow or scene. Only pose changes; no redesign.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bf4eedd6-2468-4b53-a09c-8bf585f64d9c.png",
+      "path": "Raw/outfit_f_britain_earlymodern2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b3332d0e5bef9bc44b107a677a28c9fcd25045efc913dc04ae65281f864e4876",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_earlymodern2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "mantua gown",
+      "details": "",
+      "flags": {
+        "label": "mantua gown"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_britain_earlymodern2",
+      "prompt": "Create1024x1536 pure green #00FF00 costume sprite. FIRST reference supplies exact objecting_c pose, head and hands registration. SECOND supplies ONLY exact costume, colors, fabric grain, shoes, hem and late1980s ink/cel style to retain. Replace first guide clothes with same petrol-blue striped 1687 mantua copper petticoat ivory neckline and elbow ruffles brown buckled shoes. RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Match first hand outline precisely, do not shift head torso feet. Scalp164 chin324 shoes baseline1440, center512; keep neutral skirt width and hem. Exposed face neck forearms hands solid #FF00FF calibration color. Fully dressed, no hair hat extra accessories, no text ground shadow or scene. Only pose changes; no redesign.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-308a4b7f-dfbe-43cc-8b8a-987ba9532a14.png",
+      "path": "Raw/outfit_f_britain_earlymodern2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "77493e86f078074f027641b0da423836be8f59b663d500d63b835c3f2750d4f2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_britain_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "fontange",
+      "details": "",
+      "flags": {
+        "label": "fontange",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_britain_earlymodern2",
+      "prompt": "1024x1536 pure #00FF00 green background full-length hair layer calibration sprite. Reference exact head/scalp164 chin324 center512 hand and foot positions. Replace entire reference gown and shoes with opaque flat #FF00FF magenta plain long sleeve shirt full trousers and socks; face neck hands also magenta. No anatomical markings. Only colored asset is 1687 London woman's FONTANGE ERA HAIRSTYLE: dark chestnut hair swept upwards into compact high arranged curls above forehead, small curled locks at temples, back hair pinned up, not loose long hair. Hair itself ONLY, no lace cap/ribbons/jewels (separate layer). Hairstyle fits actual head without enlarging it, crown raised to approx110, side curls near cheeks down to300. Ordinary hair slight flyaways and muted gray strands, detailed fine hand-ink textured 1980s anime cel illustration with restrained pigment grain. Neutral front facing, no text or shadow. Clothing fully opaque and plain magenta.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-08b3b73e-3b50-49a7-8b20-803bafa60a48.png",
+      "path": "Raw/hair_f_britain_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3b26b86b4da172141aea3f11843feb1cfa554cb2f7965fba467eb5f569dace8b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_britain_earlymodern2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "country": "britain",
+      "era": "earlymodern2",
+      "label": "lace cap",
+      "details": "",
+      "flags": {
+        "label": "lace cap"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_britain_earlymodern2",
+      "prompt": "Single1024x1536 green#00FF00 background headwear layer sprite for London1687. Reference gives exact head and high swept hairstyle silhouette to fit: keep face chin324 eyes245 unchanged. Draw a small ivory linen LACE CAP set at back of high pinned curls, scalloped lace standing modestly upright BEHIND crown, restrained early fontange arrangement not huge later court tower. Narrow ivory side lappets behind ears falling to shoulders350. Main cap top approx65 and sides near430/595. Recolor ALL reference brown hair to solid magenta#FF00FF with no retained strand detail; it is discard-only silhouette. ALL figure face, hands, fully opaque plain long sleeved shirt trousers socks MAGENTA. Only cap/lace nonmagenta. No brown hair, no jewelry. Fine hand-ink late1980s cel illustration woven lace subtle pigment grain, no photorealism or labels. Keep canvas registration, no crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8d4046b2-0128-48c2-bfcb-b6ba70003472.png",
+      "path": "Raw/headwear_f_britain_earlymodern2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "892c315aef3a0971d0698497b7592829aeefce6c3e28b555c5f0e16129ff545a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "twill tunic and trousers",
+      "details": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Tight-fitting, long-sleeved, knee-length wool tunic and close-fitting long trousers, as in the Thorsberg bog finds, in undyed brown and deep woad blue with a diamond-twill texture. A short, dark rectangular wool cloak with a fringed, tablet-woven border is pinned at the right shoulder with a bronze bow brooch (fibula). Leather wrap shoes.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_m_germany_ancient.",
+      "flags": {
+        "label": "twill tunic and trousers"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_ancient",
+      "prompt": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Tight-fitting, long-sleeved, knee-length wool tunic and close-fitting long trousers, as in the Thorsberg bog finds, in undyed brown and deep woad blue with a diamond-twill texture. A short, dark rectangular wool cloak with a fringed, tablet-woven border is pinned at the right shoulder with a bronze bow brooch (fibula). Leather wrap shoes.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_m_germany_ancient.\n1024x1536 pure green#00FF00 background. FIRST reference exact neutral pose/calibration scalp239 chin400 shoes1421 center512, hands unchanged. SECOND STYLE ONLY hand ink1980s textured anime wool grain restrained cel shading, NOT its checks/clothes. Garment design: plain undyed warm-brown diamond-twill close-fitting long sleeve knee tunic hem1000, deep woad-blue close trousers, short charcoal rectangular wool cloak pinned at wearer's RIGHT/viewerLEFT shoulder with small bronze bow fibula; narrow muted cream/woad tablet woven border and fringe, cloak bottom near930. Simple brown leather belt waist700, wrap shoes footbounds x335-447 and575-690 baseline1421. No modern tailoring, no Viking fancy braids, no armor weapons hair hats beard jewelry. Exposed head neck hands solid #FF00FF magenta. Front-view ordinary traveller, worn woven material not glossy or model styling. Keep all elements on canvas, no text or ground shadow.\nCorrection: Edit this costume image ONE tiny detail only: replace round circular ring brooch at viewerLEFT shoulder x411 y442 with a small bronze BOW FIBULA, an elongated arched safety-pin shape about35px tall and18px wide, vertical curved bow with tiny coil at top and pointed catch below. NOT a circular ring/cross. Preserve EVERYTHING else pixel-position and design: garments cloth grain colors folds face hands shoes background dimensions. Puregreen background magenta head hands unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-514232e5-1ce3-4577-9667-5b698bb89961.png",
+      "path": "Raw/outfit_m_germany_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "11d3bf91def1afe7978c9416588829031e81d65721f4fb8d30d6618d4a7df79a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_ancient__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "twill tunic and trousers",
+      "details": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Tight-fitting, long-sleeved, knee-length wool tunic and close-fitting long trousers, as in the Thorsberg bog finds, in undyed brown and deep woad blue with a diamond-twill texture. A short, dark rectangular wool cloak with a fringed, tablet-woven border is pinned at the right shoulder with a bronze bow brooch (fibula). Leather wrap shoes.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_m_germany_ancient.",
+      "flags": {
+        "label": "twill tunic and trousers"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_germany_ancient",
+      "prompt": "1024x1536 puregreen #00FF00 wardrobe sprite. FIRST exact pose/head/hands calibration; SECOND exact Germania brown diamond-twill knee tunic blue trousers charcoal fringed cloak bronze elongated bowfibula shoulder leather belt and wrap shoes to retain. RIGHT elbow open, right palm up at lower chest, left arm relaxed. Dress FIRST pose in SECOND garments with unchanged colors texture hem and dimensions. Scalp239 chin400 soles1421. Exact first palm/finger positions no arm drift. Hands head neck magenta#FF00FF. Forearm comes in front of cloak correctly, cloak remains behindarm. Preserve fine ink textured1980s cel style. No props hair beard hats text scene or ground shadow. Ordinary fully dressed civilian.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cb43af11-ee21-4ea3-a2cf-952e7789fe4d.png",
+      "path": "Raw/outfit_m_germany_ancient__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "937b9dcbe5e9bf2afea04885486199acca8d2e0031aa0dbc73a0b7a89387a8c6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_ancient__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "twill tunic and trousers",
+      "details": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Tight-fitting, long-sleeved, knee-length wool tunic and close-fitting long trousers, as in the Thorsberg bog finds, in undyed brown and deep woad blue with a diamond-twill texture. A short, dark rectangular wool cloak with a fringed, tablet-woven border is pinned at the right shoulder with a bronze bow brooch (fibula). Leather wrap shoes.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_m_germany_ancient.",
+      "flags": {
+        "label": "twill tunic and trousers"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_germany_ancient",
+      "prompt": "1024x1536 puregreen #00FF00 wardrobe sprite. FIRST exact pose/head/hands calibration; SECOND exact Germania brown diamond-twill knee tunic blue trousers charcoal fringed cloak bronze elongated bowfibula shoulder leather belt and wrap shoes to retain. LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Dress FIRST pose in SECOND garments with unchanged colors texture hem and dimensions. Scalp239 chin400 soles1421. Exact first palm/finger positions no arm drift. Hands head neck magenta#FF00FF. Forearms come in front of cloak correctly, cloak remains behindarms. Preserve fine ink textured1980s cel style. No props hair beard hats text scene or ground shadow. Ordinary fully dressed civilian.\nCorrection:Edit just raised arm sleeve: this tunic has LONG sleeves. Extend brown diamond-twill sleeve on viewerRIGHT raised forearm up to wrist y453, following current forearm outline. Currently magenta forearm is exposed down to y545; cover that forearm with matching brown fabric, leave only hand above wrist magenta. Preserve exact fingers cheek head other arm cloak brooch all torso legs hem shoes and green background. No other changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8886ec6d-d041-4d2d-9a07-dd50d0051ee8.png",
+      "path": "Raw/outfit_m_germany_ancient__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aa49709ac4aa0c9251f9d6f5ed3eb31b67f4756dc3f3307c9528fcbd9db9d1ca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_ancient__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "twill tunic and trousers",
+      "details": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Tight-fitting, long-sleeved, knee-length wool tunic and close-fitting long trousers, as in the Thorsberg bog finds, in undyed brown and deep woad blue with a diamond-twill texture. A short, dark rectangular wool cloak with a fringed, tablet-woven border is pinned at the right shoulder with a bronze bow brooch (fibula). Leather wrap shoes.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_m_germany_ancient.",
+      "flags": {
+        "label": "twill tunic and trousers"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_germany_ancient",
+      "prompt": "1024x1536 puregreen #00FF00 wardrobe sprite. FIRST exact pose/head/hands calibration; SECOND exact Germania brown diamond-twill knee tunic blue trousers charcoal fringed cloak bronze elongated bowfibula shoulder leather belt and wrap shoes to retain. RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Dress FIRST pose in SECOND garments with unchanged colors texture hem and dimensions. Scalp239 chin400 soles1421. Exact first palm/finger positions no arm drift. Hands head neck magenta#FF00FF. Long sleeves MUST end at wrists, no bare forearms. Forearms come in front of cloak correctly, cloak remains behindarms. Preserve fine ink textured1980s cel style. No props hair beard hats text scene or ground shadow. Ordinary fully dressed civilian.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c075e9dd-0290-4cf3-b7ec-c8fd25eeab1a.png",
+      "path": "Raw/outfit_m_germany_ancient__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2ee2f6308422274dd6e16d602d7284ca3cd62da75610dfc6ca0e0630a15e99ef",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_germany_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "Suebian knot",
+      "details": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Suebian knot: hair combed back and to the side and twisted into a tight knot on the right side of the head, above the temple\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw hair_m_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Suebian knot",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_germany_ancient",
+      "prompt": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Suebian knot: hair combed back and to the side and twisted into a tight knot on the right side of the head, above the temple\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw hair_m_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 flatpuregreen#00FF00 background. Reference exact head scalp239 chin400 eye318 center512. Remove ALL costume cloak brooch belt shoes, replace with opaque plain magenta long sleeve shirt trousers socks. Only hair colored: dark sandy blond, swept back and sideways tight SUEBIAN knot above wearer'sRIGHT temple VIEWERLEFT x440y255; compact horizontal twistknot, NOT topknot, no fade/undercut. Crown~225. No beard or ornaments. Hands and face magenta. Fine ink1980s cel handpainted hair grain. Preserve head size and coordinates. No labels or shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bceacac8-5f3f-4217-abc6-90e1a02b9b2c.png",
+      "path": "Raw/hair_m_germany_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2c1ea758cec847944af6823408e52f63ace3d9d29d115ac16f94f19a69ffc0cc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
