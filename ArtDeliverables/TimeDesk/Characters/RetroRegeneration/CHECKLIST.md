@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 1084. Full regeneration is NOT complete.
+Saved: 1109. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -1088,3 +1088,28 @@ Saved: 1084. Full regeneration is NOT complete.
 | outfit_m_egypt_future | visually reviewed; registration pending |
 | outfit_m_egypt_future__explaining_b | visually reviewed; registration pending |
 | outfit_m_egypt_future__thinking_c | visually reviewed; registration pending |
+| outfit_m_egypt_future__objecting_a | visually reviewed; registration pending |
+| hair_m_neutral_future | visually reviewed; registration pending |
+| facialhair_m_neutral_future | visually reviewed; registration pending |
+| outfit_f_egypt_future | visually reviewed; registration pending |
+| outfit_f_egypt_future__explaining_c | visually reviewed; registration pending |
+| outfit_f_egypt_future__thinking_a | visually reviewed; registration pending |
+| outfit_f_egypt_future__objecting_b | visually reviewed; registration pending |
+| hair_f_neutral_future | visually reviewed; registration pending |
+| outfit_m_iraq_future | visually reviewed; registration pending |
+| outfit_m_iraq_future__explaining_c | visually reviewed; registration pending |
+| outfit_m_iraq_future__thinking_a | visually reviewed; registration pending |
+| outfit_m_iraq_future__objecting_b | visually reviewed; registration pending |
+| outfit_f_iraq_future | visually reviewed; registration pending |
+| outfit_f_iraq_future__explaining_a | visually reviewed; registration pending |
+| outfit_f_iraq_future__thinking_b | visually reviewed; registration pending |
+| outfit_f_iraq_future__objecting_c | visually reviewed; registration pending |
+| outfit_m_greece_future | visually reviewed; registration pending |
+| outfit_m_greece_future__explaining_a | visually reviewed; registration pending |
+| outfit_m_greece_future__thinking_b | visually reviewed; registration pending |
+| outfit_m_greece_future__objecting_c | visually reviewed; registration pending |
+| outfit_f_greece_future | visually reviewed; registration pending |
+| outfit_f_greece_future__explaining_b | visually reviewed; registration pending |
+| outfit_f_greece_future__thinking_c | visually reviewed; registration pending |
+| outfit_f_greece_future__objecting_a | visually reviewed; registration pending |
+| outfit_m_italy_future | visually reviewed; registration pending |

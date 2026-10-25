@@ -1,10 +1,10 @@
 # Resume checkpoint: 25 October 2026
 
-User resumed generation. 1084 / 1171 raw sources saved; 87 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 1109 / 1171 raw sources saved; 62 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: outfit_m_egypt_future__objecting_a (confirm queue). Skip blocked accessory_f_britain_earlymodern and outfit_f_britain_modern__thinking_a pending review. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_m_italy_future__explaining_b (confirm queue). Skip blocked accessory_f_britain_earlymodern and outfit_f_britain_modern__thinking_a pending review. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -90,3 +90,5 @@ Cologne1848 male thinking_b and objecting_c also held unsaved: thinking retains 
 
 
 25 sources since ee90199: complete Bonn1790 male/female sources, Cologne1848 male neutral and hair/beard/Kalabreser plus female complete set; Nile2150 male neutral, explaining_b, thinking_c. All1084 PNG dimensions/hashes/prompts verified. Three Cologne male gestures remain quality-held (brocade material drift); two earlier tool-blocked jobs remain pending. Review: Cologne female grain becomes more patterned in poses, objecting cuff about10px low, cap ribbons require collar/hand masking. Male hair crown/head differs slightly from guide; register before accepting. Nile explaining_b regenerated twice to correct hand drift; final hand locations visually match guide, no numeric registration claimed. Nile hanging sleeves and linked hands need overlap checks. Last confirmed push0a1de71; user requests all remaining work pushed when done. No old art removed.
+
+25 more sources saved after 40ffef0: remaining Nile male pose/hair/beard; Nile female set and shared future female hair; complete Baghdad future male/female outfits with three gestures; Aegean future male/female outfits with three gestures; Rome future male neutral. All 1109 PNG dimensions, hashes and prompts audited. Runtime registration remains unverified. Review: Aegean male soles around1430 versus guide1421; female thinking tunic/pocket length drift20-30px; future female shoes around1445 versus1440. Open hanging sleeves require matching underlying body layers. Shared female future hair crown needs fit against guide. Existing five deferred jobs remain unresolved. Continue generation, registration and material continuity review; no old art removed. Latest user instruction: push everything when done.

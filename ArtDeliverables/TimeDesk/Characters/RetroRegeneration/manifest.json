@@ -29029,6 +29029,759 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_future__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: man of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_egypt_future",
+      "prompt": "Use imageONE as strict pose stencil. Dress exact figure in imageTWO clothing. Do not move hands elbows head feet from imageONE. RIGHT hand viewerLEFT palm forward x300–406y367–502 wrist330500 elbow310640, otherarm relaxed. Same Nile2150 civilian offwhite linen outfit, colored concentric textile yoke, centrezip, papyrus strips, printed gold lattice hanging sleeves, pants quilted knees, taupe shoes as imageTWO. Fit cloth around pose, not pose to cloth. Raised palm fully visible; sleeve hangs naturally below bent forearm. Preserve garment colors hem860 head scalp239 chin400 soles1421 and fine late1980s anime handink matte painted linen grain. Exposed head hands magenta#FF00FF, pure green#00FF00 background1024x1536. No hair hat jewellery props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f5616efa-a97a-422c-84a0-5f01e7fed4a7.png",
+      "path": "Raw/outfit_m_egypt_future__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e6563d06a1cd744b8a255c57c9d92787df5838b1373371fa74689d475212c19a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_neutral_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "neutral",
+      "era": "future",
+      "label": "short textured crop",
+      "details": "Subject: man of neutral future civilian.\nDraw: Neat practical contemporary short hair for a man; neatly tied shoulder-length hair for a woman. Brown #78513A. No futuristic ornaments.\nAvoid: \nOutput one full-canvas raw hair_m_neutral_future.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short textured crop",
+        "artNation": "neutral"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_neutral_future",
+      "prompt": "Modular male hair asset for ordinary2150civilian, practical short textured crop in brown #78513A, natural slightly uneven hairline, no ornaments. Head guide from reference scalp239 chin400 centre512. Hair crown217 shorttop30px, tidy sides ending near topofears310. Replace ALL outfit/shoes with fully opaque plainmagenta#FF00FF longsleeve shirt trousers socks. Head face ears neck hands magenta; only hair coloured. Keep neutral fullbody pose feet1421. Fine late1980s anime handdrawn ink, matte painted strands subtle pigmentgrain, not glossy model hairstyle. Puregreen#00FF00 background1024x1536 no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-49430d34-0c54-4aec-9a08-65bd7bf127f7.png",
+      "path": "Raw/hair_m_neutral_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c73ba4886eb2ad7fde55de1fb2e68d8fc50797d040b693214ef2c49d1d37ff11",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_neutral_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "neutral",
+      "era": "future",
+      "label": "short trimmed beard",
+      "details": "Subject: man of neutral future civilian.\nDraw: Short neatly trimmed practical brown #78513A beard and moustache.\nAvoid: \nOutput one full-canvas raw facialhair_m_neutral_future.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short trimmed beard",
+        "artNation": "neutral"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_neutral_future",
+      "prompt": "Modular short trimmed beard and moustache for ordinary futurecivilian man, natural practical brown#78513A, close trim not elaborate. Reference fixes exact head scalp239 chin400 mouth365. Beard from sideburns335 down cheeks/jaw to bottom410, thin connected moustache at350–365, visible magenta mouth opening. No scalp hair. Replace ALL clothing/shoes with opaque plain magenta#FF00FF longsleeve shirt trousers socks; all face scalp ears neck hands magenta. ONLY beard/moustache coloured. Fullbody neutral proportions1024x1536 puregreen#00FF00 background. Fine hand-ink late1980s anime matte painted short hairs subtlegrain, no glossy vector no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b0c0b583-104a-4601-842c-2278cea997c4.png",
+      "path": "Raw/facialhair_m_neutral_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2916403767ab35c7bd060bf16a270856f0b99c1b3238b76e2fef553b053cdf95",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: woman of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_future",
+      "prompt": "Subject: woman of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_egypt_future.\nOrdinary2150Nilecivilian functional womenswear: ecru linen calf-length tunicdress hem1160 over slim lapis trousers, soft taupe closed flat shoes soles1440. Loose comfortable everyday silhouette, waist lightly shaped not corseted, subtle asymmetric side fastening. Broad concentric textile bead-row yoke turquoise/lapis/carnelian/mutedgold upperchest360–490. Narrow knifepleats down front, charcoal winglike seam piping, practical flat pockets, modest oversized hanging sleeves with printed mashrabiya lattice along cuffs, not holes. Avoid royal/ceremonial styling armored plates ornaments glowingtech. Fine handink late1980s anime matte painted linen pigmentgrain restrainedcelshadows. Fit reference exact headscalp164chin324center512 hands feet; all exposed headneckhands#FF00FF magenta no hair headwear jewellery props.1024x1536 puregreen#00FF00background.\nCorrection: Edit only ankles and shoes. Add opaque cream socks covering exposed magenta ankles completely between blue trouser hems and shoes. Lift bottom edges of both shoe soles to y1440 (currently about1447) keeping foot widths and positions x348–449 and575–675. Everything else absolutely unchanged: dress sleeves yoke buttons hairless head hands style texture1024x1536greenbackground.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a9fa4716-3006-49e2-943a-b47694039f9e.png",
+      "path": "Raw/outfit_f_egypt_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "289853ba8cd94fcf7b6198f790a37904895d449a56b7a194f4318155af150abd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_future__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: woman of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_egypt_future",
+      "prompt": "Use imageONE exact pose registration, imageTWO exact costume. Fit clothing to pose without moving head/feet/hands. Nile2150 woman same ecru pleated tunicdress hem1195, broad colored concentric textile yoke, asymmetric sideclasps charcoalpiping lotushem, long hanging printedlattice sleeves, bluecroppedtrousers creamsocks taupeflatshoes soles1440. Only LEFT arm viewerRIGHT raises toward upperchest: hand x535–635y395–500 wrist620500 elbow690615; otherarm unchanged. Repose cloth naturally, long sleeve hangs below bent forearm, hand in frontofchest fullyvisible. Same colors texture design. Late1980sanime fineink mattepaint linen grain. Headscalp164chin324 and handsmagenta#FF00FF puregreen#00FF00background1024x1536. No hairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8f388b42-74ac-48a8-8491-975d3ba50d42.png",
+      "path": "Raw/outfit_f_egypt_future__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "759516a04cc66b0a65b8b27112077a4dcd79d674a07af599bb78bb5be90c88b7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_future__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: woman of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_egypt_future",
+      "prompt": "Use imageONE exact pose registration, imageTWO exact costume. Fit clothing to pose without moving head/feet/hands. Nile2150 woman same ecru pleated tunicdress hem1195, broad colored concentric textile yoke, asymmetric sideclasps charcoalpiping lotushem, long hanging printedlattice sleeves, bluecroppedtrousers creamsocks taupeflatshoes soles1440. Only RIGHT arm viewerLEFT bends inward with hand resting under chin: fingers466–560y290–390 wrist480380 elbow390560 exactly imageONE, otherarm unchanged. Repose cloth naturally, sleeve hangs below bent forearm; hand in frontofchin and yoke. Same colors texture design. Late1980sanime fineink mattepaint linen grain. Headscalp164chin324 and handsmagenta#FF00FF puregreen#00FF00background1024x1536. No hairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-02bf1e30-c4b1-4b1a-88dc-b9ba37d4831e.png",
+      "path": "Raw/outfit_f_egypt_future__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "72801957a38bebefc220beae5df4d10bd849ed5bf89fc097a75fd81bf9b52200",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_future__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: woman of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_egypt_future",
+      "prompt": "Use imageONE exact pose registration, imageTWO exact costume. Fit clothing to pose without moving head/feet/hands. Nile2150 woman same ecru pleated tunicdress hem1195, broad colored concentric textile yoke, asymmetric sideclasps charcoalpiping lotushem, long hanging printedlattice sleeves, bluecroppedtrousers creamsocks taupeflatshoes soles1440. Only arms bend inward BOTH palms facing front at lowerchest: viewerLEFT hand x375–480y461–600 wrist418596, viewerRIGHT hand545–650y461–600 wrist606596; elbowsclosebody. Repose cloth naturally sleeve drapes downbelowbentforearms, hands unobscured. Same colors texture design. Late1980sanime fineink mattepaint linen grain. Headscalp164chin324 and handsmagenta#FF00FF puregreen#00FF00background1024x1536. No hairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c41aae5e-a72a-455f-a99c-83a08ebc0abf.png",
+      "path": "Raw/outfit_f_egypt_future__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "386e0dbf509b98011b5d733b33f634e6bb3c3791ebc2133cc29724336edd9383",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_neutral_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "neutral",
+      "era": "future",
+      "label": "sleek low bun",
+      "details": "Subject: woman of neutral future civilian.\nDraw: Neat practical contemporary short hair for a man; neatly tied shoulder-length hair for a woman. Brown #78513A. No futuristic ornaments.\nAvoid: \nOutput one full-canvas raw hair_f_neutral_future.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "sleek low bun",
+        "artNation": "neutral"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_neutral_future",
+      "prompt": "Modular futurecivilian female hair source. Brown#78513A practical shoulder-length hair neatly tied in compact low bun at nape, centrepart smoothly combed sides with a few ordinary stray wisps, no accessories ornaments. Bun mostly behindneck visible slight sidevolume near y300, crown145. Reference fixes face/head scalp164chin324center512 and fullbody neutral proportions. Replace ALL costume and shoes with opaque plainmagenta#FF00FF long sleeve shirt trousers socks. Face/scalp/ears/neck/hands magenta onlyhaircoloured. Preserve headshape. Late1980s anime hand-ink mattepaint hair finepigmentgrain no glossyvector. Puregreen#00FF00background1024x1536 no text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-08b5f72c-abb2-430b-8f30-53eb62c61551.png",
+      "path": "Raw/hair_f_neutral_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4c755c896f5ae664d7abba05a31bb53da6fb9e5fc9b13a20c3579a4d2d8a7208",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: man of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_iraq_future",
+      "prompt": "Subject: man of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_iraq_future.\nOrdinary Baghdad2150civilian practical clothing, not ceremonial warrior: lapisblue knee-length light coat hem1000 with square soft shoulders, creamunderlayer, brownstraighttrousers taupeclosedwalkingboots soles1421. Short ochrefringe integrated on upperchest yoke and hem, asymmetric soft shoulderpanel draped across chest to opposite side, abstract geometric tiraz armbands noletters. Restrainedgoldseams roundcity concentric embossedbands and muqarnas smallhoneycomb texture, breathable wornwovenfabric notarmor. Useful flatpockets. Exact maleguide scalp239chin400center512 handfeetpositions; headneckhandsmagenta#FF00FF nohairhatbeardaccessoriesprops. Fine late1980s anime handink matte painted pigmentgrain restrainedcelshadows.1024x1536 puregreen#00FF00background.\nRegistration correction: ImageONE exact registration guide. ImageTWO costume design only. Redraw outfitTWO fitted to bodyONE WITHOUT changing bodyONE proportions or placement. HEAD MUST stay at y239 top and y400 chin (NOT y73/y238 from imageTWO). Shoe soles MUST end y1421, hands same bodyONE x280–344y805–925 and680–741y805–925. Preserve full green margin abovehead. Same lapisblue fringedcoat and cream diagonal shoulderpanel abstractgoldbands, creamunderlayer browntrousers taupeboots. Scale costume portions to bodyONE anatomy. Late1980sanimefineinkmattepaintgrain.1024x1536puregreenbackgroundmagentaheadhandsnohairhat. No pose guide lines.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-779929dd-af88-40b4-a043-8c755fc8aacf.png",
+      "path": "Raw/outfit_m_iraq_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fb0a7d2d4cee6118a612238aea81269fc32ff42eb35aa0e8952061e888ba6b53",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_future__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: man of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_iraq_future",
+      "prompt": "Pose variation: imageONE exact body/arm registration; imageTWO exact Baghdad2150 costume. Keep head scalp239chin400 center512, soles1421 and entire lowerbody fixed. Change only LEFT arm viewerRIGHT to compact explanation at chest: hand x544–634 y496–593 wrist620590 elbow705650 matching imageONE. Right arm relaxed. Same lapisblue longcoat hem1050 ochrefringe goldconcentric yoke honeycomb texture creamdiagonal shoulderpanel brownpants taupeboots. Coatblueupper sleeve and cream innercuff cover forearm; hand infrontofshawl. Retain every color pattern seam hem. Fine late1980sanimeink mattewovenpigmentgrain.1024x1536puregreen#00FF00 exposedheadhandsmagenta#FF00FF nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ab0bd0ed-5196-48c1-a5f3-3ced8f3a7e29.png",
+      "path": "Raw/outfit_m_iraq_future__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "be254e6cdef336d9b4442f7f29ce125176ba27eb6bd374ac63e8c6fd45def274",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_future__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: man of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_iraq_future",
+      "prompt": "Pose variation: imageONE exact body/arm registration; imageTWO exact Baghdad2150 costume. Keep head scalp239chin400 center512, soles1421 and entire lowerbody fixed. Change only RIGHT arm viewerLEFT hand underchin: hand x448–546y372–478 wrist465470 elbow380625 matching imageONE. Otherarm relaxed. Same lapisblue longcoat hem1050 ochrefringe goldconcentric yoke honeycomb texture creamdiagonal shoulderpanel brownpants taupeboots. Coatblueupper sleeve and cream innercuff cover forearm completely to wrist; hand infrontofchin shawl. Retain every color pattern seam hem. Fine late1980sanimeink mattewovenpigmentgrain.1024x1536puregreen#00FF00 exposedheadhandsmagenta#FF00FF nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b0684170-66f7-4a20-8f56-7bc6ae1b77c1.png",
+      "path": "Raw/outfit_m_iraq_future__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7095fbaa098a7b736fdd17fd76458129afbbf51445185d96081ff5d1d4dc3582",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_iraq_future__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: man of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_iraq_future",
+      "prompt": "Pose variation: imageONE exact body/arm registration; imageTWO exact Baghdad2150 costume. Keep head scalp239chin400 center512, soles1421 and lowerbody fixed. BOTH palms forward lowerchest exactlyimageONE x358–469y531–658 and555–666y531–658, wrists400655/625655 elbowsclosebody. Same lapisblue longcoat hem1050 ochrefringe goldconcentric yoke honeycomb texture creamdiagonal shoulderpanel brownpants taupeboots. Coatblueupper sleeves and cream innercuffs cover forearms to wrists; hands infrontofshawl. Retain every color pattern seam hem. Fine late1980sanimeink mattewovenpigmentgrain.1024x1536puregreen#00FF00 exposedheadhandsmagenta#FF00FF nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-46a9b353-2e75-4490-b70c-0fbdc0a60623.png",
+      "path": "Raw/outfit_m_iraq_future__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "13b95c106fd6678c3981b65df7fd2ad03ac115e4bd3da0f30d91559c22af1a3b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: woman of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_iraq_future",
+      "prompt": "Subject: woman of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_iraq_future.\nOrdinary Baghdad2150 woman functional civilian clothing. Deep lapisblue midcalf coatdress hem1180, softly square shoulders, gently loose waist no corset; cream fitted long sleeved underlayer and ochre straight ankle trousers, browntaupe closed flat walking shoes with creamsocks soles1440. Asymmetric curved overlap front with cream shoulder-drape panel edged short ochrefringe, abstract roundcity concentric yoke and small muqarnas geometry upperchest. Restrainedgoldthread edging, tiered smallfringe on hem, usefulpockets, breathable wovenfabric noarmor religioussymbolsletters or regalia. Fine late1980sanimehandink matte paintedpigmentgrain. EXACT reference body and head placement scalp164chin324center512 feet x348–449/575–675soles1440, magenta#FF00FFheadneckhands. No hairhatjewelleryprops.1024x1536puregreen#00FF00background.\nCorrection: Precise edit shoes ONLY: reduce their lower soles upward10pixels so both bottom edges land at y1440 instead1450. Keep shoe tops ankles trousers and entire rest of image unchanged. Preserve1024x1536canvas puregreenbackground costume colors texture head hands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-162ee500-bf69-4cec-ae8f-8db09b27b37e.png",
+      "path": "Raw/outfit_f_iraq_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad1aba86e98806184086be2a7cd4913bf751f08242f75fd1891fff5b3703c46e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_future__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: woman of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_iraq_future",
+      "prompt": "Pose variation imageONE exact body/arm registration imageTWO exact Baghdad2150woman costume. Keep headscalp164chin324center512 shoes soles1440 and lowerbody fixed. RIGHT palmup at waist x393–524y560–606 wrist410580 elbow315580 exactlyimageONE, otherarm relaxed. Same lapis coatdress curved front goldedge geometricroundcityyoke shoulderfringe creamshoulderdrape hem1210 ochretrousers creamsocks brownflatshoes. Creamundersleeve covers bentforearm fully to wrist; draped blue outerpanels hangbehind arm. Hand above dress. Preserve all design colors textures. Late1980sanimefineink mattewovenpigmentgrain1024x1536puregreen#00FF00 headneckhandsmagenta#FF00FF nohairhatjewelleryprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e8c60aad-7427-4b0d-85c4-726eaecd79ac.png",
+      "path": "Raw/outfit_f_iraq_future__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4118de126ce16a04f38830604b0f0d7186fd2d134ef2c9c57dc96dfad1926ce7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_future__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: woman of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_iraq_future",
+      "prompt": "Pose variation imageONE exact body/arm registration imageTWO exact Baghdad2150woman costume. Keep headscalp164chin324center512 shoes soles1440 and lowerbody fixed. LEFT fingers touch cheek viewerRIGHT x534–586y275–375 wrist550370, elbow605550; RIGHT forearm crosseswaist supportingelbow hand560–645y548–609 exactlyimageONE. Same lapis coatdress curved front goldedge geometricroundcityyoke shoulderfringe creamshoulderdrape hem1210 ochretrousers creamsocks brownflatshoes. Creamundersleeves cover bothforearms fully to wrists; drapedblueouterpanels behindarms. Hands above clothing. Preserve all design colors textures. Late1980sanimefineink mattewovenpigmentgrain1024x1536puregreen#00FF00 headneckhandsmagenta#FF00FF nohairhatjewelleryprops.\nCorrection: Change ONLY the raised viewerRIGHT cream undersleeve cuff. Extend cream fabric upward to wrist y370, covering magenta forearm strip y370–405. Keep fingers hand wrist bone and all hand coordinates unchanged; sleeve covers forearm to anatomical wrist. Preserve cuff geometry embroiderybelow, entire costume, otherhand, head feet colors textures1024x1536greenbackground.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5974980a-64e5-4452-87b6-2aff2182b7db.png",
+      "path": "Raw/outfit_f_iraq_future__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "35f8dfb30ff9271b42ed661c13d78dc4859b8961f23308a78125e4e9432c2c5c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_iraq_future__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "country": "iraq",
+      "era": "future",
+      "label": "fringed lapis coat",
+      "details": "Subject: woman of Baghdad Garden City; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed wedge-shaped texture and roll-print bands of abstract geometric pattern (no figures, no writing); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the taylasan shoulder shawl as a draped shoulder panel; tiraz armbands of abstract embroidered bands (no letters); square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture. Avoid religious text and deity motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_iraq_future.",
+      "flags": {
+        "label": "fringed lapis coat"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_iraq_future",
+      "prompt": "Pose variation imageONE exact arm/head registration imageTWO exact Baghdad2150woman costume and feet. Keep headscalp164chin324center512 shoes soles1440 lowerbody fixed. RIGHT hand onupperchest x433–565y393–491 wrist445480; LEFT palm openslowtoside x773–887y685–778 wrist783705 exactlyimageONE. Same lapis coatdress curved front goldedge geometricroundcityyoke shoulderfringe creamshoulderdrape hem1210 ochretrousers creamsocks brownflatshoes. Creamundersleeves cover bothforearms to wrists; drapedblueouterpanels hangbehindarms. Hands above clothing. Preserve all design colors textures. Late1980sanimefineink mattewovenpigmentgrain1024x1536puregreen#00FF00 headneckhandsmagenta#FF00FF nohairhatjewelleryprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-165f5edc-9af1-402c-897e-ddbb495f9720.png",
+      "path": "Raw/outfit_f_iraq_future__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e74de11385b9f98cf659b51f53674c3a6b9142b1118abe7409800a8f965c7920",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: man of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_greece_future",
+      "prompt": "Subject: man of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_greece_future.\nOrdinary male wavepower commonwealth civilian2150, functional outfit not ancienttoga or royaluniform. Chalkwhite light long-sleeved hip-length tunicjacket with crisp accordionpleated lowerpanel hem900, asymmetric Aegeanblue short shoulder drape fastened with small round fibulaclasp at viewerLEFT shoulder, fine metallic meander and wavescroll edging, small terracotta/black circular segmentapanel upperchest with oliveleafline embroidery. Darknavy practical straighttrousers and worn chalk/taupeclosedwalking shoes. One narrow handwoven striped pocketpanel. Modest everyday relaxedfit, noarmor weaponscrownsprops. Exact referencecalibration headscalp239chin400center512 hands feet soles1421. Exposedheadneckhands#FF00FFmagenta, nohairhatbeard. Fine late1980sanime handink mattewovenpaintpigmentgrain.1024x1536puregreen#00FF00background.\nRegistration correction: ImageONE exact registration guide. ImageTWO costume design only. Redraw costumeTWO fitted to exact bodyONE, do NOT change anatomy/placement. Head top y239 chin400 NOT y67/y240; shoe soles1421; hands x280–344y805–925 and680–741y805–925. Maintain large green margin abovehead. Same chalkwhite jacket with pleatedlowerpanel blueasymmetricdrape goldmeander wavescroll embroidery roundchestpanel stripedpocket navytrousers chalkwalkingshoes. All garment proportions fit bodyONE. Fine late1980sanime ink paintedlinen grain.1024x1536puregreenbackgroundmagentaheadhands. No guide lines.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8e8e7c5e-d178-4cd5-bec4-2b017e86d3b5.png",
+      "path": "Raw/outfit_m_greece_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eaf4595d6277c3ac164e05f70dd5cb6c4bae124a55523690bebf5c2c49a64ea5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_future__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: man of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_greece_future",
+      "prompt": "ImageONE exact pose stencil imageTWO costume design. Dress exact figureONE without moving head feet orhands. RIGHT palmup at waist x414–516y610–675 wrist419650 elbow325650; otherarm down. Same chalkwhite long sleevejacket pleatedhem905 blueasymmetricshoulderdrape goldmeander wavescroll oliveembroidery roundterracottachestpanel stripedpocket navytrousers chalkshoes. Headscalp239chin400 soles1421. Sleevefullcover to wrist blue drape remainsbehindraisedforearm. Preserve all neutral colors patterns fabric texture and garmentshapes elsewhere. Fine late1980sanimehandink mattewovenpigmentgrain1024x1536puregreen#00FF00magenta#FF00FFheadhands nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8ab8f4dc-c39a-4be4-acfd-6434ddd9b86d.png",
+      "path": "Raw/outfit_m_greece_future__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cf17ba209363172b77bb7ee16486e6d47cd15635d077365b6a82ec562a837232",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_future__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: man of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_greece_future",
+      "prompt": "ImageONE exact pose stencil imageTWO costume design. Dress exact figureONE without moving head feet orhands. LEFT fingertips viewerRIGHT touchcheek x525–584y345–465 wrist560462; RIGHT forearm acrosswaist supportsraisedelbow hand555–650y600–668. Same chalkwhite long sleevejacket pleatedhem905 blueasymmetricshoulderdrape goldmeander wavescroll oliveembroidery roundterracottachestpanel stripedpocket navytrousers chalkshoes. Headscalp239chin400 soles1421. Sleeves fullycover bothforearms to wrists, blue drape behindcrossedarms. Preserve all neutral colors patterns fabric texture garmentshapes elsewhere. Fine late1980sanimehandink mattewovenpigmentgrain1024x1536puregreen#00FF00magenta#FF00FFheadhands nohairhatprops.\nCorrection: Two precise changes only: lengthen pleated lowerjacket panel by15pixels so bottomhem y908 instead893 while keeping waistseam fixed. Extend raised viewerRIGHT cuff upwards20pixels to anatomical wrist y462 instead482 covering magenta forearmstrip, withoutmoving hand/fingers. Keep all other shapes/colors/patterns, headfeet exactlyunchanged.1024x1536greenbackground.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-639a6ebf-2831-4dd8-81be-d74bff31c016.png",
+      "path": "Raw/outfit_m_greece_future__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6d5885c17ede5ed057f45ce0f80c72203da138e73d37eda3ca795f643b625978",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_greece_future__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: man of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_greece_future",
+      "prompt": "ImageONE exact pose stencil imageTWO costume design. Dress exact figureONE without moving head feet orhands. RIGHT hand restsupperchest x450–566y463–566 wrist450550; LEFT hand extendslowtoside x747–866y772–843 wrist752790 exactlyimageONE. Same chalkwhite long sleevejacket pleatedhem905 blueasymmetricshoulderdrape goldmeander wavescroll oliveembroidery roundterracottachestpanel stripedpocket navytrousers chalkshoes. Headscalp239chin400 soles1421. Sleevesfullycoverforearms towrists blue drape behindraisedhand. Preserve all neutral colors patterns fabric texture garmentshapes elsewhere. Fine late1980sanimehandink mattewovenpigmentgrain1024x1536puregreen#00FF00magenta#FF00FFheadhands nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b9cf8df9-70ce-440b-81b0-c32931c5e009.png",
+      "path": "Raw/outfit_m_greece_future__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "323cd9cdebd20be54261b96dd8c676c03a4c509f0d27787ca4c0c00c6238e489",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: woman of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_greece_future",
+      "prompt": "Subject: woman of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_greece_future.\nOrdinary Aegean2150woman civilian outfit, practical modest relaxed tailoring. Chalkwhite long sleeve fittedbutcomfortable tunic with Aegeanblue asymmetrical shoulder drape crossingupperchest, smallround brass fibula at viewerRIGHT shoulder; fine metallic meander/wavescroll trim with sparseoliveleaf line embroidery. Terracotta accordionpleated belowknee skirt hem1160 over charcoalstraightcroppedtrousers, cream socks and flat taupeclosed walking shoes soles1440. Smallblack/terracotta circularsegmentainsert upperchest visible beside drape and one stripedtagaripocketpanel. Noancienttoga costume armor regalia hairhatjewelleryprops. Match EXACT referenceheadscalp164chin324center512 handsfeetpositions sole1440. Headneckhandsmagenta#FF00FF. Fine late1980sanime handink mattewovenpaintpigmentgrain. Puregreen#00FF00background1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-38c1924a-c119-49b4-b04e-c51ad36e7284.png",
+      "path": "Raw/outfit_f_greece_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ffbff64b8edb7bf51581f765022e58783b245c066f562fb941aaf166495bbfbc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_future__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: woman of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_greece_future",
+      "prompt": "ImageONE exact pose stencil imageTWO exact costume. Only change arms to imageONE BOTH palmsopen asymmetrical viewerLEFT hand174–280y675–774 wrist260690; viewerRIGHT hand725–844y558–646 wrist730595. Keep headscalp164chin324 and feet lowerbodyfixed. Same chalk tunic blueasymmetricdrape securedviewerLEFT shoulder trailing to calf, metallicmeanderwavescrolloliveembroidery circlechestpatch stripedpocket, terracottapleatedskirthem1185 charcoaltrousers creamsocks taupeflatshoes soles1440. Fullwhitesleeves coverforearms tocuffs; hands fullyvisible infrontofdrape. Preserve alldesigncolorsgrain. Late1980sanimefineinkmattepaint1024x1536puregreen#00FF00 exposedheadhandsmagenta#FF00FF nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-22da6b4d-e381-4b40-8b5a-2f47f705e3b1.png",
+      "path": "Raw/outfit_f_greece_future__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9f3fa73b8621ea1e8f4c7c99ec01b2d30eaceefe8bdaad2eb52a0ab69b6683dd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_future__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: woman of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_greece_future",
+      "prompt": "ImageONE exact pose stencil imageTWO exact costume. Only change arms to imageONE hands looselylinked at lowerwaist x455–560y680–770 wrists450690/560705. Keep headscalp164chin324 and feet lowerbodyfixed. Same chalk tunic blueasymmetricdrape securedviewerLEFT shoulder trailing to calf, metallicmeanderwavescrolloliveembroidery circlechestpatch stripedpocket, terracottapleatedskirthem1185 charcoaltrousers creamsocks taupeflatshoes soles1440. Fullwhitesleeves coverforearms tocuffs; hands fullyvisible infrontofdrape. Preserve alldesigncolorsgrain. Late1980sanimefineinkmattepaint1024x1536puregreen#00FF00 exposedheadhandsmagenta#FF00FF nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a49a0ca2-05fe-46bc-991d-77c06077003d.png",
+      "path": "Raw/outfit_f_greece_future__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c34d606e0302229823f7b656b1574659e66476d78949dc9847ca5b03c7ffc044",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_greece_future__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "country": "greece",
+      "era": "future",
+      "label": "meander-trim drape",
+      "details": "Subject: woman of Aegean Commonwealth; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Meander (Greek key) and wave-scroll borders as fine metallic trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven panels echoing the tagari.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_greece_future.",
+      "flags": {
+        "label": "meander-trim drape"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_greece_future",
+      "prompt": "ImageONE exact pose stencil imageTWO exact costume. Only change RIGHT arm viewerLEFT palmforward fingersup x286–390y297–432 wrist325430 elbow325580; otherarm unchanged. Keep headscalp164chin324 and feet lowerbodyfixed. Same chalk tunic hem880 blueasymmetricdrape securedviewerLEFT shoulder trailing tocalf, metallicmeanderwavescrolloliveembroidery circlechestpatch stripedpocket, terracottapleatedskirthem1185 charcoaltrousers creamsocks taupeflatshoes soles1440. Fullwhitesleeves coverforearms tocuffs; raisedpalm fullyvisible blue drape behindarm. Preserve alldesigncolorsgrain. Late1980sanimefineinkmattepaint1024x1536puregreen#00FF00 exposedheadhandsmagenta#FF00FF nohairhatprops.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-74b33a46-4b58-4c6a-852c-8e4203bc6af4.png",
+      "path": "Raw/outfit_f_greece_future__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8f961d6afb6bede7cdfad7801749d2eaafbfd4e5e0ac81dbe441efd84472747c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: man of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_italy_future",
+      "prompt": "Create one production wardrobe sprite on this exact male calibration figure. KEEP its head size and position: scalp y239 chin400 center512, hands and feet unchanged soles1421. Full canvas1024x1536 flat green #00FF00. Bald head and hands solid magenta #FF00FF. Dress him completely in the following civilian costume including closed shoes. No hair hat beard or accessories. Subject: man of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_italy_future. Design a coherent wearable outfit: slim travertine tailoring, Florentine crimson asymmetric toga-like short wrap over upper chest, narrow ochre clavi, subtle pomegranate damask confined to crimson fabric, modest slashed-and-puffed sleeve tops with terracotta lining, fitted long sleeves to wrists, charcoal straight trousers and worn brown closed shoes. Upper-chest arcade and concentric radio-wave motif. Late 1980s hand-inked anime production cel with fine textured matte pigment, natural folds, restrained shadows. Do not enlarge figure or recenter vertically. Preserve original calibration anatomy beneath clothing.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c0c41541-5a93-4a96-8f6d-d5628566696a.png",
+      "path": "Raw/outfit_m_italy_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "84a528ca83c148f8fbb91751d98b3dd27a851535c9706e4e90302cfdaedaf419",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
