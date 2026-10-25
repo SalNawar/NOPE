@@ -1,3 +1,7 @@
+# Latest checkpoint — 25 October 2026
+
+1168/1171 raw sources saved (99.74%). Cologne four-pose replacement saved. Only three moderation-blocked requests remain; see STATUS_FOR_CLAUDE.md. Do not retry blocked requests. Runtime registration and assembly remain unverified. Earlier entries below are historical.
+
 # Resume checkpoint: 25 October 2026
 
 User resumed generation. 1165 / 1171 raw sources saved; 6 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).

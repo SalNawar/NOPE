@@ -28656,14 +28656,14 @@
       "pose": "neutral",
       "gesture": "arms relaxed slightly away from body, empty hands down",
       "base_key": "outfit_m_germany_industrial3",
-      "prompt": "Create outfit_m_germany_industrial3 Cologne1848 everydaycivilian man. Dustycharcoal-brown woolfrockcoat fullskirts above knees hem1040 horizontalwaistseam720, modest broadlapels, openfront showing mutedburgundywaistcoat smallbrassbuttons to760, ivory highcollarshirt and darkteal neckstock tiedcompactbow450. Straight slategreytrousers subtleverticalpinstripe, scuffedblackankleshoes soles1421. Plainwool NO floralbrocade, no militaryuniform weaponsflagsinsignia hairbeardhatjewelry. 1024x1536flatgreen#00FF00, exactreference scalp239chin400center512handsfeet positions and proportions, headhandsmagenta#FF00FF. Fine late80sanime handink paintedpigment finelywoven mattecloth smallcelshadows notvectorphotoreal no props textshadow. Fullbodyneutral.",
-      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f4d6f6f8-e26f-4a44-8b89-038fa5756851.png",
+      "prompt": "Create the neutral costume source matching costume reference 2 exactly, on pose template 1. Both arms relaxed down exactly as template 1. Same brown wool frock coat hem1050, burgundy waistcoat hem735 and five brass buttons, ivory shirt teal bow, grey pinstriped trousers black laced shoes. Keep same garment contours proportions pocket positions and collar. Fine stippled wool texture, thin ink and 1980s anime cel shading; no added ornamental fabric pattern. Flat green background, solid magenta head and hands. Canvas1024x1536 scalp239 chin400 soles1421. Do not crop.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-acef4777-016e-49e0-8c68-6589607870c1.png",
       "path": "Raw/outfit_m_germany_industrial3.png",
       "size": [
         1024,
         1536
       ],
-      "sha256": "6f5b047933ab9c45eb8d71a08076ac317adc01cd8c52dfe388b5e9df9eb1087c",
+      "sha256": "470a4daec86f9d0e321825baf2e719a4c330cafba5793c05bea9528da34ffbdc",
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
@@ -31306,6 +31306,96 @@
         1536
       ],
       "sha256": "4d44c61fbc3b726b9ee48a8137f76d979c53749019dc59f3e8dd04df71c24620",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial3__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "frock coat and waistcoat",
+      "details": "",
+      "flags": {
+        "label": "frock coat and waistcoat"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_germany_industrial3",
+      "prompt": "Make a 1024x1536 registered historical game costume sprite, dressing the exact supplied pose template. Adult man, Cologne1848. Keep template scalp239 chin400 feet1421 center512 and palmup x414–516 y609–674 exact. Head/hands remain flatmagenta#FF00FF, backdropflatgreen#00FF00. Clothes: entirely plain charcoal-brown wool knee-length frock coat, long narrow notched lapels, waistseam690 hem970, full matching plainbrown sleeves to wrists; tiny ivory shirt cuffs. Burgundy plain waistcoat, Vneck at520 and pointedhem715, five small roundbrassbuttons x518 y535572608645680. Ivoryshirt highfoldedcollar y375–414, darkteal bowcravat430–470. Slate-grey straight pinstripe trousers to1350 and scuffedblackleathershoes1421. Coatopenfront fromchest tohem; pockets angled fromwaist690. 1980s anime hand-ink outlines restrained celshadows, veryfine stippled pigmenttexture only. Coat is solidplainbrown, absolutely no floral designs, swirling lines, brocade, embroidery or decorative textiles. No hair props text guides. Pose precise: rightarm/viewerleft bent palmup, otherarmrelaxed. Keepfeet bodyunchanged.\nCoordinated replacement set uses longer coat hem1050, waistcoat735. Neutral and other poses are regenerated to match.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e6a0a0c5-5a64-4d95-8306-5e27f9c2d3a2.png",
+      "path": "Raw/outfit_m_germany_industrial3__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0526e38b47e9820e19ea559f4ca050e9d5cdc5bccd40f91382b3929c1588cdbd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial3__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "frock coat and waistcoat",
+      "details": "",
+      "flags": {
+        "label": "frock coat and waistcoat"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_germany_industrial3",
+      "prompt": "Dress pose template1 in exactly costume2. Preserve costume2 plain stippled brown wool, burgundy fivebutton waistcoat, teal bowtie ivoryshirt, greystripepants blackshoes and thininkcelshadows. Copy same jacketcoat length1050 and waistcoat735. Only arms change to template1: finger atcheek, oppositehandsupportselbow. Exact handcontours/positions, wrist ends at460, not490. Coat sleeves cover wholeforearm to wrist and tiny ivorycuffs only. Head239chin400feet1421canvas1024x1536greenbackground magentaheadhands. Do not enhance texture, no new pattern. No otherchanges.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a966eeea-b9b2-4ccb-900d-b28306ca573d.png",
+      "path": "Raw/outfit_m_germany_industrial3__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cf54351f377f6a5375f8109cc911c342907e6b34014c073199e12965d105d0dd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial3__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "frock coat and waistcoat",
+      "details": "",
+      "flags": {
+        "label": "frock coat and waistcoat"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_germany_industrial3",
+      "prompt": "Dress pose template 1 in exactly costume 2. Match template 1 hand contours and position: one palm across chest, opposite palm extended low sideways. Preserve costume 2 plain brown wool frock coat hem y1050, burgundy waistcoat y735, teal bow ivory shirt grey striped trousers black shoes. Thin ink, stippled pigment grain, 1980s anime cel rendering. No ornamental fabric patterns. Head and hands solid magenta, background flat green. 1024x1536 scalp239 chin400 soles1421. Change only arms; preserve costume and proportions.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-49bb2ca5-4c2a-41ef-936b-8408b43d8e51.png",
+      "path": "Raw/outfit_m_germany_industrial3__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9540f218a07acad609f91d510f83a7d48d0a317a7b10ce6e1b3153dd88cb311c",
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"

@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 1165. Full regeneration is NOT complete.
+Saved: 1168. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -1169,3 +1169,6 @@ Saved: 1165. Full regeneration is NOT complete.
 | base_f_skin1_facea__objecting_a | visually reviewed; registration pending |
 | base_f_skin1_facea__objecting_b | visually reviewed; registration pending |
 | base_f_skin1_facea__objecting_c | visually reviewed; registration pending |
+| outfit_m_germany_industrial3__explaining_a | visually reviewed; registration pending |
+| outfit_m_germany_industrial3__thinking_b | visually reviewed; registration pending |
+| outfit_m_germany_industrial3__objecting_c | visually reviewed; registration pending |
