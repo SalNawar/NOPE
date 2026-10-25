@@ -31183,6 +31183,132 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__thinking_a",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "prompt": "One1024x1536 adult female modularcostume base sprite. Keep reference1 exact adultappearance neutralface lightpeachskin brown eyes baldhead opaquegrey bandeau top and opaquegrey modest mid-thighshorts samephysique torso legsfeet. Onlychange viewerLEFT arm to reference2 exact chinrest pose handx465–559y291–390 elbow390550. Otherarmrelaxed. Copyguidegeometry. Scalp164chin324feet1440center512. Top and shorts remainfullyopaque fullchest/pelviscoverage. Samefineink texturedlate1980sanimecelpigmentgrain. Green#00FF00flatbackground no magenta hair accessories text guides castshadows. Nonsexual neutral adultcostumefoundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bfa95ab9-f7ad-4880-b394-b019b20bffde.png",
+      "path": "Raw/base_f_skin1_facea__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fa5c616105be27b7658c9b59655aa1a16acfc47efd1ffd9fe4684afdedeb2b4a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__thinking_b",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "prompt": "Edit adultfemale gamebase reference1 into exactreference2 cheekthinkingpose. Only change arms: viewerRIGHT fingertipscheek x535–587y274–371 with forearmup elbow620550; oppositehand supports elbow x556–645y549–610. Exact handcontoursguide. Preserve adultface lightpeachskin brown eyes bald neutralexpression bodyshape legsfeet opaquegrey bandeautop and greyopaquemid-thighshorts. Top andshorts keepfullcoverage unchanged.1024x1536 scalp164chin324feet1440center512. Original texturedlate1980sanimecelart fineink pigmentgrain. Uniformgreen#00FF00background no magenta hair text guides props shadows. Nonsexual adultmodularclothingfoundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-059808e6-46eb-4baa-aac6-1bdb887ebe2c.png",
+      "path": "Raw/base_f_skin1_facea__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5177c273c75a2bce6c6077891c320f18cdf6b7078320a128e12f50bbd2f99809",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__thinking_c",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "prompt": "Edit reference1 adult female game base only arm pose: reference2 exact hands loosely overlapped at waist x451–560y680–770 elbows350/675600. Preserve firstappearance adultneutralface bald browneyes lightpeachskin ordinarybody proportions greyopaque bandeautop and greyopaque mid-thighshorts legsfeet. Chest andpelvis remaincovered. Scalp164chin324feet1440center512.1024x1536 fullfigure no crop/rescale. Same late1980sanime fineink celpigmenttexture no new patterns. Uniformgreen#00FF00background no magenta hair props text guides shadows. Neutral nonsexual adult modular clothing foundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a565cd8a-7141-4980-a0c0-4ffda9fa6cf6.png",
+      "path": "Raw/base_f_skin1_facea__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "14cb89539cfde277ef89ec8f66514862700202309e6ca1f7d2cfdae9e6678562",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__objecting_a",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "prompt": "Edit firstreference adultfemale gamebody only viewerLEFT arm to secondreference exact please-wait gesture: raisedpalmforward x286–389y297–432 elbow325565. Otherarmdown unchanged. Preserve originaladult identity brown eyes bald neutralface lightpeachskin physique legsfeet opaquegrey bandeauchesttop greyopaque mid-thighshorts. Fullcoverage maintained unchanged garments. Exact scalp164chin324feet1440center512,1024x1536. Matcharm/handoutline not approximate. Original texturedlate1980s fineinkcelpigmentgrain. Uniformgreen#00FF00background no magenta hair props text guides castshadows. Neutral nonsexual adult modularcostumefoundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8a3dabca-4664-459f-97b2-144cf977da22.png",
+      "path": "Raw/base_f_skin1_facea__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1656c70f378977258203347541946d8fd4c75c33dadce96fc8f17d01678c07ec",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__objecting_b",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "prompt": "One1024x1536 adultfemale costume-base sprite. Edit firstreference only botharms to secondguide exact palmsforwardlowerchestpose: handleftx376–481y461–600 rightx544–650y461–600 elbowsclose x340/685590. Exactgeometry. Preserve adultidentity bald brown eyes neutralface lightpeachskin proportions torso legsfeet opaquegrey bandeauchesttop greyopaquemid-thighshorts unchanged fullycovering chest/pelvis. Scalp164 chin324feet1440center512 noresize. Original texturedlate1980sanimeinkcelpigmentgrain. Flatgreen#00FF00background no magenta hair props text guides shadows. Neutral nonsexual modular adultfoundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-061dafff-5dfd-46d0-9aa0-5780f30302c6.png",
+      "path": "Raw/base_f_skin1_facea__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e0ec070cd175c424976b8da5f3dfebeaea4bd63b9336a6f0e7aaa273bcc9013e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__objecting_c",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "prompt": "1024x1536 adultfemale gamebase. Reference1 exact appearance/costume, secondreference only armpositionguide. EditONLY arms ofreference1 to hand-on-chest viewerLEFT x432–565y393–498 and oppositehandlowopen x773–886y685–778. Copy handgeometry precisely. Preserve first bald adultface browneyes neutralexpression lightpeachskin originaltorso legsbarefeet opaquegrey bandeautop greyopaque mid-thighshorts fullchest/pelviscoverage. Do not copy guide's magenta clothing or shoes. Scalp164 chin324feet1440center512 noresize. Original texturedlate1980sanime fineinkcelpigmentgrain. Flatgreen#00FF00background no magenta hair props text guides shadows. Neutral nonsexual adultclothingfoundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0a3940e7-330d-420b-bc9c-4b90174d1699.png",
+      "path": "Raw/base_f_skin1_facea__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4d44c61fbc3b726b9ee48a8137f76d979c53749019dc59f3e8dd04df71c24620",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
