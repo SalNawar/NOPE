@@ -1,10 +1,10 @@
-# Resume checkpoint: 24 October 2026
+# Resume checkpoint: 25 October 2026
 
-User resumed generation. 996 / 1171 raw sources saved; 175 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 1009 / 1171 raw sources saved; 162 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: next unsaved Germania male layer. Skip blocked accessory_f_britain_earlymodern and outfit_f_britain_modern__thinking_a pending review. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_f_germany_medieval. Skip blocked accessory_f_britain_earlymodern and outfit_f_britain_modern__thinking_a pending review. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -70,3 +70,5 @@ Pomander accessory_f_britain_earlymodern remains UNSAVED: drafts have girdle fit
 24 October: outfit_f_britain_modern__thinking_a generation blocked by image tool (self-harm category, request fc057d6a-5023-4907-8444-415d8cc85810). No image returned or saved. Mark unresolved; do not retry blocked generation. Continue other assets.
 
 25 sources since f40862a: Manchester male scarf; female outfit neutral/explaining/objecting, hair/headscarf/pearls (thinking blocked); Restoration male and female costume pose sets and hair/headwear, male lacecravat; Germania male costume four poses and Suebian knot. All996 unique PNG dimensions/hashes/prompts verified. Restoration female soles approx1448 versus1440 guide; cap lappets require shoulder and raisedhand masks, hair crown80 rather than requested110. Germania brooch corrected ring to elongated bow shape but remains large; thinking sleeve corrected to wrist, color/grain slightly warmer after correction. Cloak fringe changes880-900 across gestures; check assembled continuity. No runtime alignment or Unity approval. No old art removed. Last pushed3875d81; exact0883141 approval remains pending.
+
+13 more sources since66c0f9e: Germania male beard, female complete set; Rhineland male costume four poses, hair and Gugel. Audit1009 dimensions/hashes/prompts passed. Review: Germania female hem1325 and soles1445; shawl needs pose occlusion check; amber beads approx333-419. Rhineland belt lowered to hips; thinking pose regenerated for belt/purse drift, final tail around970 vs neutral960 and shoes narrower; texture changed across corrections. Hair ends385 versus chin400. Gugel cape ends595 and overlaps arms, requires pose masking/variants if needed. No runtime approval. User25October explicitly requested push of current work and continued generation.

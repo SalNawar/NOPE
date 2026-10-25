@@ -26370,6 +26370,401 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_germany_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "full short beard",
+      "details": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Full short beard\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw facialhair_m_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "full short beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_germany_ancient",
+      "prompt": "Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Full short beard\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw facialhair_m_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 puregreen#00FF00. Reference head exact scalp239 chin400 eye318 center512. Replace costume and shoes with fullyopaque magenta shirt longtrousers socks. Only colored asset short full sandy-brown beard and connected moustache, close cropped natural irregular hair, bottom420, cheeks below340; lips visible originalposition365. No headhair. Fine ink1980s textured anime cel shading. Preserve all head shape and dimensions. No text shadows jewelry props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93f4c54f-178a-406b-928a-4b20129d4846.png",
+      "path": "Raw/facialhair_m_germany_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0170f7bb350eb1889cfe8e6707e52529f6f8874b8b3251ac3ce205930f713574",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "linen peplos dress",
+      "details": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Loose, sleeveless, ankle-length linen tube dress (peplos type) pinned at each shoulder, leaving the arms bare, with deep wine-red bands at the neck and hem as Tacitus notes. A plain undyed wool shawl drapes round the shoulders, and the waist is tied with a woven band. Draw it modestly: fuller and draped, not a fitted sheath.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_f_germany_ancient.",
+      "flags": {
+        "label": "linen peplos dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_ancient",
+      "prompt": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Loose, sleeveless, ankle-length linen tube dress (peplos type) pinned at each shoulder, leaving the arms bare, with deep wine-red bands at the neck and hem as Tacitus notes. A plain undyed wool shawl drapes round the shoulders, and the waist is tied with a woven band. Draw it modestly: fuller and draped, not a fitted sheath.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_f_germany_ancient.\nCreate1024x1536 flatpuregreen#00FF00 source. FIRST reference female exact neutral registration scalp164 chin324 soles1440 center512. SECOND male garment STYLEONLY for handink1980s texturedanime wool/linen weave not his clothes. Draw modest loose natural flaxlinen peplos shoulderpinned small bronze pins, wine-red woven neck/hem bands, simple woven winebrown waist tie at610, undyed warmtaupe woolshawl draped across shoulders behindarms ends near800. Full soft linen folds anklehem1350, brown simple leather wrapshoes x348-449 and575-675 soles1440. No hairstyle hats jewelry props. Headneck exposed arms hands solidmagenta#FF00FF. Keep hand positions exactly, no model proportions/seductive styling. Practical ordinary civilian fullydressed, no extra people text groundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1e632319-145b-4c61-aae7-ac491e05cf11.png",
+      "path": "Raw/outfit_f_germany_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c3384aa76022c5a21e9ce9643617a7503d31e1651402836a226fabb488d8ba44",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_ancient__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "linen peplos dress",
+      "details": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Loose, sleeveless, ankle-length linen tube dress (peplos type) pinned at each shoulder, leaving the arms bare, with deep wine-red bands at the neck and hem as Tacitus notes. A plain undyed wool shawl drapes round the shoulders, and the waist is tied with a woven band. Draw it modestly: fuller and draped, not a fitted sheath.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_f_germany_ancient.",
+      "flags": {
+        "label": "linen peplos dress"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_germany_ancient",
+      "prompt": "1024x1536 puregreen#00FF00. FIRST guide exact pose and hands scalp164 chin324 feet1440 center512. SECOND exact costume flaxlinen peplos wine-red neck/hem wovenbands brownwinewaisttie fringed taupe shoulder shawl leatherwrap shoes. Put second costume on first pose, BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Preserve garment width length weave colors shoes and waist knot. Magenta#FF00FF face neck barearms hands. Shoulder shawl behind gesturing arms, no cloth glued across hands. Exact first palm/finger outlines, no shift head feet. Fine handink1980s anime texturedwovencloth celshading. No hair jewelry props text shadow. Fullydressed ordinary civilian.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ddf9211f-da52-407e-87f4-f99be726940f.png",
+      "path": "Raw/outfit_f_germany_ancient__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f6178de60d17e66e7059a7bc72309720c6dd07b0057e441eb549b9f2000f7fad",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_ancient__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "linen peplos dress",
+      "details": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Loose, sleeveless, ankle-length linen tube dress (peplos type) pinned at each shoulder, leaving the arms bare, with deep wine-red bands at the neck and hem as Tacitus notes. A plain undyed wool shawl drapes round the shoulders, and the waist is tied with a woven band. Draw it modestly: fuller and draped, not a fitted sheath.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_f_germany_ancient.",
+      "flags": {
+        "label": "linen peplos dress"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_germany_ancient",
+      "prompt": "1024x1536 puregreen#00FF00. FIRST guide exact pose and hands scalp164 chin324 feet1440 center512. SECOND exact costume flaxlinen peplos wine-red neck/hem wovenbands brownwinewaisttie fringed taupe shoulder shawl leatherwrap shoes. Put second costume on first pose, hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Preserve garment width length weave colors shoes and waist knot. Magenta#FF00FF face neck barearms hands. Shoulder shawl behind arms, no cloth glued across hands. Exact first palm/finger outlines, no shift head feet. Fine handink1980s anime texturedwovencloth celshading. No hair jewelry props text shadow. Fullydressed ordinary civilian.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-34807ea9-e5ac-436e-80f2-81bc547aae6d.png",
+      "path": "Raw/outfit_f_germany_ancient__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "38a59b444f13e06e1771581ef66c80b4ed32783305a673b88127ce491acdb685",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_ancient__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "linen peplos dress",
+      "details": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Loose, sleeveless, ankle-length linen tube dress (peplos type) pinned at each shoulder, leaving the arms bare, with deep wine-red bands at the neck and hem as Tacitus notes. A plain undyed wool shawl drapes round the shoulders, and the waist is tied with a woven band. Draw it modestly: fuller and draped, not a fitted sheath.\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw outfit_f_germany_ancient.",
+      "flags": {
+        "label": "linen peplos dress"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_germany_ancient",
+      "prompt": "1024x1536 puregreen#00FF00. FIRST guide exact pose and hands scalp164 chin324 feet1440 center512. SECOND exact costume flaxlinen peplos wine-red neck/hem wovenbands brownwinewaisttie fringed taupe shoulder shawl leatherwrap shoes. Put second costume on first pose, RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Preserve garment width length weave colors shoes and waist knot. Magenta#FF00FF face neck barearms hands. Shoulder shawl behind arms, no cloth glued across hands. Exact first palm/finger outlines, no shift head feet. Fine handink1980s anime texturedwovencloth celshading. No hair jewelry props text shadow. Fullydressed ordinary civilian.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-90220d1e-e819-43b6-9e0a-f38b2caa1a23.png",
+      "path": "Raw/outfit_f_germany_ancient__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "30963917052a14ba41ad0f283f110f4263a2bd476fc43d2e5a7d537f688b5a9c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_germany_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "low bound knot",
+      "details": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Long hair gathered into a low knot at the nape, bound with a narrow woven wool hair-band wound round it\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw hair_f_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "low bound knot"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_germany_ancient",
+      "prompt": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Long hair gathered into a low knot at the nape, bound with a narrow woven wool hair-band wound round it\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw hair_f_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 puregreen#00FF00. Reference exact head scalp164 chin324 eyes245 center512. Replace entirecostume shoes with opaque magenta long sleeve plainshirt trousers socks. Only hair colored: ordinary ashbrown centerpart swept back practical low nape knot partly visible beside neck behindear on viewerRIGHT y295-335, narrow dark red wool binding around knot. No tiara/hairnet/faceframing glamour curls, just few wisps. Hair crown150. Face neck hands magenta#FF00FF. Fine late1980s anime ink/textured hair restrainedcelshading. Same head size position no labels or shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-02024565-5fe0-4db0-b090-117ca3dac13a.png",
+      "path": "Raw/hair_f_germany_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "28c54be7e8abb4d6b7fa35176f1594f1fde1d77cdc4689081f950c757083d4d4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_germany_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "country": "germany",
+      "era": "ancient",
+      "label": "amber beads",
+      "details": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Necklace of chunky orange Baltic amber and glass beads\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw accessory_f_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "amber beads",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_germany_ancient",
+      "prompt": "Subject: woman of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.\nDraw: Necklace of chunky orange Baltic amber and glass beads\nAvoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery\nOutput one full-canvas raw accessory_f_germany_ancient.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 puregreen#00FF00 fullfigure. Reference head exact scalp164chin324 center512. Replace all costume shoes with opaque plain magenta longsleeveshirt trousers socks. Only nonmagenta necklace: single strand warmorange irregular chunky Balticamber beads interspersed few small darkblue glassbeads, no metalpendant. Fit neck upperchest x452-574 top345 lowest427. Beads average10px modestwearable not giant collar. Face hands magenta. Fineink late1980s celpainting grain not glossyphotorealistic. No hair otheraccessories groundshadow labels.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7d9a77bf-2679-42ef-adbc-9dab4168d2e8.png",
+      "path": "Raw/accessory_f_germany_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a0187972ec0640f861b909e15d05595fcda42cab386e9df88c31db63a882459f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "pleated Tappert gown",
+      "details": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Calf-length gown (Tappert) in deep blue or bottle-green wool with regular organ-pipe pleats, a high standing collar and wide, fur-trimmed sleeves, belted low on the hips with a leather belt with a leather purse hanging from it, worn over tight hose. Moderately long pointed shoes (Schnabelschuhe).\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_m_germany_medieval.",
+      "flags": {
+        "label": "pleated Tappert gown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_medieval",
+      "prompt": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Calf-length gown (Tappert) in deep blue or bottle-green wool with regular organ-pipe pleats, a high standing collar and wide, fur-trimmed sleeves, belted low on the hips with a leather belt with a leather purse hanging from it, worn over tight hose. Moderately long pointed shoes (Schnabelschuhe).\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_m_germany_medieval.\n1024x1536 puregreen#00FF00. FIRST exactneutralmaleguide scalp239 chin400 soles1421 center512 handsdown. SECOND STYLEONLY textured1980s inkcel wovenwool dontcopycostume. Design civilian1440 Rhineland bottle-green Tappert calf-length hem1165 regular vertical organpipe pleats high standingcollar to410, wide hanging sleeves with narrow graybrown fur cufftrim, lowhip darkleatherbelt780 and small leatherpurse at viewerRIGHT hip620x y820-925; charcoal fittedhose and darkbrown moderatelypointed leather Schnabelschuhe baseline1421. Short practical shoe tips no clownpoints. No cloak. Bald magentahead neck hands#FF00FF, only clothescolored. Ordinarywornrobe precise guide feet/hands, no props text groundshadow.\nCorrection:Edit garment fit only. Lower the entire leather belt, buckle, hangingbeltend and purse by90pixels so belt runs across LOW HIPS y775 rather than waist685. Loosen gown natural waist so its organpipe pleats fall vertically from chest to low belt. Same head hands arms cufftrim shoes positions. Lengthen green skirt hem from1130 to1165 only. Everything else same detailed textile ink colors greenbackground magentafacehands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3ae01b5f-2752-4a15-a18c-7201880a9330.png",
+      "path": "Raw/outfit_m_germany_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5d799b654c07082897e97b00ac3e75082948fe48c7319457a504229d054b21e5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_medieval__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "pleated Tappert gown",
+      "details": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Calf-length gown (Tappert) in deep blue or bottle-green wool with regular organ-pipe pleats, a high standing collar and wide, fur-trimmed sleeves, belted low on the hips with a leather belt with a leather purse hanging from it, worn over tight hose. Moderately long pointed shoes (Schnabelschuhe).\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_m_germany_medieval.",
+      "flags": {
+        "label": "pleated Tappert gown"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_germany_medieval",
+      "prompt": "1024x1536 puregreen#00FF00. FIRST exact explaining_b gesture hands headfeet guide. SECOND exact costume bottle-green pleated Tappert highstandingcollar wide furtrimmedsleeves LOW HIP leatherbelt y765 purseviewerRIGHT bottom912, calfhem1180 charcoalhose pointedbrownshoes1415. Dress FIRST in SECOND unchanged costume: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Preserve head scalp239chin400 hands outline exact; no foot reposition. Sleeves extend to wrist behindhands with hangingfurcuffs followinggravity. Face hands magenta#FF00FF. Fine ink1980s anime texturedwool celshading. No hair beard hats text shadow props, no highwaist belt.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5e65891d-f30a-4f66-9aab-f7fac749a694.png",
+      "path": "Raw/outfit_m_germany_medieval__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "df619f3549124db14f7285b885fc3b30835fd2dd7abea4738eb08bdf25b0eceb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_medieval__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "pleated Tappert gown",
+      "details": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Calf-length gown (Tappert) in deep blue or bottle-green wool with regular organ-pipe pleats, a high standing collar and wide, fur-trimmed sleeves, belted low on the hips with a leather belt with a leather purse hanging from it, worn over tight hose. Moderately long pointed shoes (Schnabelschuhe).\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_m_germany_medieval.",
+      "flags": {
+        "label": "pleated Tappert gown"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_germany_medieval",
+      "prompt": "Dress first pose guide in second exact bottle-green Tappert costume.1024x1536 flatgreen#00FF00. Preserve first head/hand coordinates EXACT. Hands linked at waist y725-805; belt at y765 must be HIDDEN BEHIND HANDS. Purse at viewerRIGHT x580-665,y815-913; beltend960. Retain second fabric fine drawn matte woolgrain, darkgreen colors and clean ink celshadows, no glossy oilpaint or warped grain. Graybrown fur widecuffs hang behindhands, charcoalhose pointedbrown shoes1415, calfhem1180. Do not shift belt down to show buckle. Baldhead and hands solidmagenta. No extraobjects/text/shadow. Match exact neutral clothing proportions.\nCorrection:Add ONLY missing leather belt tail. Narrow brown leatherstrap with holes, 20px wide, emerges behind linked hands at x548 y800 and hangs vertically to pointed end y962, over green gown. Match purseleather. Don't move belt/purse/hands or any existing part. Preserve rest exact texture color details.\nCorrection:First image edit target. Second image source of exact BELT TAIL. Copy second brown hanging belt tail at x548 from y800 to960 into first image in same position. Remove current first-image long tail at x507 to1015. No other changes. Tail is OFFCENTER toward viewerRIGHT, NOT center. Keep first linked hands, purse, gown, feet all fixed. Match second narrow hole size and natural leather matte texture.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5b63e5d2-bc3b-48e1-85c8-e90fe02774c5.png",
+      "path": "Raw/outfit_m_germany_medieval__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "28617f2c4673628ef831888f393b1e6454a7ae050f29633bd35b220b31e5f278",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_medieval__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "pleated Tappert gown",
+      "details": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Calf-length gown (Tappert) in deep blue or bottle-green wool with regular organ-pipe pleats, a high standing collar and wide, fur-trimmed sleeves, belted low on the hips with a leather belt with a leather purse hanging from it, worn over tight hose. Moderately long pointed shoes (Schnabelschuhe).\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_m_germany_medieval.",
+      "flags": {
+        "label": "pleated Tappert gown"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_germany_medieval",
+      "prompt": "1024x1536 puregreen#00FF00. FIRST exact objecting_a gesture hands headfeet guide. SECOND exact costume bottle-green pleated Tappert highstandingcollar wide furtrimmedsleeves LOW HIP leatherbelt y765 purseviewerRIGHT bottom912 beltendx548y960, calfhem1180 charcoalhose pointedbrownshoes1415. Dress FIRST in SECOND unchanged costume: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Preserve head scalp239chin400 hands outline exact; no foot reposition. Sleeves extend to wrist behindhands with hangingfurcuffs followinggravity. Face hands magenta#FF00FF. Fine ink1980s anime texturedwool celshading. No hair beard hats text shadow props, no highwaist belt.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0eb5a1b0-4a9f-4f64-9495-fe3b74c58461.png",
+      "path": "Raw/outfit_m_germany_medieval__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a8f0468717977dab869eabe8fbcc997b7b04bbd61c891db62e1c2dbf66669ee5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_germany_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "fringed chin-length hair",
+      "details": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Chin-length straight hair with a full fringe\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw hair_m_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "fringed chin-length hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_germany_medieval",
+      "prompt": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Chin-length straight hair with a full fringe\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw hair_m_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 puregreen#00FF00. Reference exact head scalp239chin400 eyes318center512. Replace entiregarment includingfur purse shoes with fullyopaque magenta plain longsleeveshirt trousers socks. Only hair colored: mediumchestnut straight chin-length roughcut medieval hair with FULL fringe to295 abovebrows, sides coverears end at400, crown225. Ordinary slightlyuneven haircut not glossyfashion model, fineink1980s cel texture individual matte strands. No beard hat jewelry props. Keep head position same. Face hands magenta. No labels shadows.\nCorrection:Lengthen ONLY both side sections of hair by25pixels so ends level with chin y400, not mouth375. Cover outer ears fully with hair; keep faceopening, fringe haircrown, headcoordinates and all other image unchanged. Same mattechestnut fineink hair.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f6053cc9-4cea-487a-99f7-ede486ef6efa.png",
+      "path": "Raw/hair_m_germany_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0a53849efbe951f54d8aaa0989c6b5d129c333af0d225e3b35b2aedae4470a78",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_germany_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "Gugel hood",
+      "details": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Gugel: a close hood enclosing the head and neck, with the face opening fully clear. It has a short shoulder cape cut into scalloped leaf-shaped points (dags).\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw headwear_m_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Gugel hood",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_germany_medieval",
+      "source": "C:/Users/Saleh/.codex/generated_images/01a101ae-b1f2-7f11-b4b8-4fc035acd519/exec-d7fc8678-7076-4067-8c4c-9c3d36759f95.png",
+      "prompt": "Subject: man of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Gugel: a close hood enclosing the head and neck, with the face opening fully clear. It has a short shoulder cape cut into scalloped leaf-shaped points (dags).\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw headwear_m_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 puregreen#00FF00. Use reference exact head scalp239 chin400 center512. Replace entire gownfur belt purse shoes with magenta opaque plainshirt longtrousers socks. Only headwear colored: muted brick-red wool Gugel close roundedhood clearoval face opening enclosing neck, short shoulder cape with scalloped leaf dag points ends abouty520, outsideedges x340-685. Small soft liripipe trailing behind on viewerRIGHT not tallpoint. No hair, faceclear magenta. Fineink1980s texturedanime woolpigmentgrain, subduedcelshadows. No text scene shadow accessories. Keep originalheadpositions.",
+      "path": "Raw/headwear_m_germany_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cc28f0c2312002c02d4febb81669e6016746111e371ddcebd581bfb1b55507f1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
