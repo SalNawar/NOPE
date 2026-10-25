@@ -26765,6 +26765,762 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "high-waisted gown",
+      "details": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Ankle-length, high-waisted wool gown in deep blue or bottle green with long sleeves fitted tight to the wrist, belted just under the bust with a wide girdle, the skirt trailing on the ground. A dark mantle hangs from the shoulders, closed at the chest by a plain cord (not held in the hands). The neckline is closed with a round gold clasp.\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_f_germany_medieval.",
+      "flags": {
+        "label": "high-waisted gown"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_medieval",
+      "prompt": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Ankle-length, high-waisted wool gown in deep blue or bottle green with long sleeves fitted tight to the wrist, belted just under the bust with a wide girdle, the skirt trailing on the ground. A dark mantle hangs from the shoulders, closed at the chest by a plain cord (not held in the hands). The neckline is closed with a round gold clasp.\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_f_germany_medieval.\n1024x1536 flatpuregreen#00FF00 background. FIRST exact neutral female guide scalp164chin324 soles1440center512 handsunchanged. SECOND styleonly fineink textured1980s anime woolgrain celshading. Dress woman in deepblue1440 Rhineland highwaisted woolgown longnarrow sleeves, wide mutedochre girdle UNDER BUST y500-550, roundsmallgold neckclasp at380, darkcharcoal mantle atshoulders plain chestcord across410; skirt full looselyfolded fronthem1365 backtrain touchesground1440 behind feet. Brown closedtoe leatherflatshoes at348-449/575-675 soles1440. Bareface neck hands MAGENTA#FF00FF no hair hats jewelry or props. Ordinary civilian quality no royal jewelembroidery. Preserve guide hands and head size, no scene groundshadow text.\nCorrection:Edit only lower skirt/mantle/shoes: this is an ordinary civilian travel gown with a modest short backtrain. Remove huge pooling cloth spread. Narrow outer silhouette to x220..804 maximum atground. Front blue hem should end y1360 allowing both entire brown shoes to show, shoes x348-449 and575-675 bottom1440. Back hem tiny trail behind feet to1440 not expansive courttrain. Keep head uppergown belt sleeves hands EXACT, same blue and charcoal mattewoven style. Pure greenbackground, no groundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e5d68232-7fda-4711-80a9-ddf24ca7f6b8.png",
+      "path": "Raw/outfit_f_germany_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4fe3a4e474472eaf4404edde2852813da7ac885c2a83ca16a636cb652b1e0a89",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_medieval__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "high-waisted gown",
+      "details": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Ankle-length, high-waisted wool gown in deep blue or bottle green with long sleeves fitted tight to the wrist, belted just under the bust with a wide girdle, the skirt trailing on the ground. A dark mantle hangs from the shoulders, closed at the chest by a plain cord (not held in the hands). The neckline is closed with a round gold clasp.\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_f_germany_medieval.",
+      "flags": {
+        "label": "high-waisted gown"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_germany_medieval",
+      "prompt": "1024x1536 puregreen#00FF00 costume sprite. FIRST exactpose/headhands guide. SECOND exact blue Rhinelandgown charcoal mantle goldclasp neckcord ochre highgirdle and brownshoes to retain. Dress first pose in second costume: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Preserve scalp164chin324 center512 and handoutlines exactly. Longfitted sleeves towrists. Mantle behindforearms, no pinninghands tocloth. Same belt y530 tail900, fronthem1360 and modestbacktrail, keep shoesposition. All exposed headneckhands magenta#FF00FF. Same mattewoven fineink1980s celtexture, no hairhat props text shadows redesign.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9cf4c8c9-9ade-4ce8-8c5d-8b43db69d0bf.png",
+      "path": "Raw/outfit_f_germany_medieval__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6f87b786fbd4cfdcd94ad32d4ddd7155f778d37972e5214c41b2cf451cf0382c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_medieval__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "high-waisted gown",
+      "details": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Ankle-length, high-waisted wool gown in deep blue or bottle green with long sleeves fitted tight to the wrist, belted just under the bust with a wide girdle, the skirt trailing on the ground. A dark mantle hangs from the shoulders, closed at the chest by a plain cord (not held in the hands). The neckline is closed with a round gold clasp.\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_f_germany_medieval.",
+      "flags": {
+        "label": "high-waisted gown"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_germany_medieval",
+      "prompt": "1024x1536 puregreen#00FF00 costume sprite. FIRST exactpose/headhands guide. SECOND exact blue Rhinelandgown charcoal mantle goldclasp neckcord ochre highgirdle and brownshoes to retain. Dress first pose in second costume: thoughtful right fingertips underchin, leftarm down. Preserve scalp164chin324 center512 and handoutlines exactly. Longfitted sleeves towrists. Mantle behindforearms, no pinninghands tocloth. Same belt y530 tail900, fronthem1360 and modestbacktrail, keep shoesposition. All exposed headneckhands magenta#FF00FF. Same mattewoven fineink1980s celtexture, no hairhat props text shadows redesign.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-37a83525-6df1-4c13-aead-fad9dbb33d36.png",
+      "path": "Raw/outfit_f_germany_medieval__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c16b3d83f2090f331eb150dc8e2aab220ea4332256adfca545069728503627b7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_medieval__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "high-waisted gown",
+      "details": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Ankle-length, high-waisted wool gown in deep blue or bottle green with long sleeves fitted tight to the wrist, belted just under the bust with a wide girdle, the skirt trailing on the ground. A dark mantle hangs from the shoulders, closed at the chest by a plain cord (not held in the hands). The neckline is closed with a round gold clasp.\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw outfit_f_germany_medieval.",
+      "flags": {
+        "label": "high-waisted gown"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_germany_medieval",
+      "prompt": "1024x1536 puregreen#00FF00 costume sprite. FIRST exactpose/headhands guide. SECOND exact blue Rhinelandgown charcoal mantle goldclasp neckcord ochre highgirdle and brownshoes to retain. Dress first pose in second costume: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Preserve scalp164chin324 center512 and handoutlines exactly. Longfitted sleeves towrists. Mantle behindforearms, no pinninghands tocloth. Same belt y530 tail900, fronthem1360 and modestbacktrail, keep shoesposition. All exposed headneckhands magenta#FF00FF. Same mattewoven fineink1980s celtexture, no hairhat props text shadows redesign.\nCorrection: Correct FIRST image only: raise the ochre waist belt and buckle from y578 to y530, exactly matching SECOND neutral costume reference, belt passing BEHIND the open hands. Shorten hanging belt tip to y900. Keep open hands at their EXACT existing positions and shapes, sleeves, head, hem, shoes, cloak, grain, canvas and pure green background all unchanged. 1024x1536. No other changes.\nFIRST image is edit target. Change ONLY the hanging ochre belt tail: extend its lowest pointed end from pixel y805 down to pixel y900 (95 pixels longer). SECOND reference shows the exact required tail length, width, position and detail. Keep high belt at y530, hands, torso, all fabric texture and everything else unchanged. 1024x1536 green background.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a3c32d69-107d-45b3-b49f-6411b487103c.png",
+      "path": "Raw/outfit_f_germany_medieval__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cca84183f733f21143535ba89f3d7d0624848671b8346d3c78f3141aaa5bfaab",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_germany_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "pinned plaits",
+      "details": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Hair plaited and pinned up close to the head\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw hair_f_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pinned plaits"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_germany_medieval",
+      "prompt": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Hair plaited and pinned up close to the head\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw hair_f_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\nMake a 1024x1536 hair-only modular sprite on pure #00FF00 background. Reference gives head position and style ONLY: scalp y164 chin324 center512. Replace ALL blue costume, cloak, girdle and shoes with plain opaque magenta long-sleeve shirt, trousers and socks. Head hands are magenta too. Only hair is colored: dark ash-brown center parted hair plaited and pinned close to back of head with small flat braided coils behind ears, modest ordinary Rhineland 1440 woman. Hair crown y147, ends around310, no loose lengths, no jewelry hat or props. Fine hand-inked textured 1980s anime hair, subtle painted grain, restrained highlights. Keep face size and placement. Full figure neutral hands down, no text or floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-08c1f496-4273-4afa-a655-0c1905e5c870.png",
+      "path": "Raw/hair_f_germany_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8bd6556b6bc2815466e0c2a938d98007ec5582341cf7e128274fbce94a0bb0e5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_germany_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "country": "germany",
+      "era": "medieval",
+      "label": "Kruseler veil",
+      "details": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Kruseler: a white linen veil edged with several rows of tightly ruffled frills that frame the forehead and cheeks like a halo, with no chin band\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw headwear_f_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Kruseler veil",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_germany_medieval",
+      "prompt": "Subject: woman of Holy Roman Empire (Rhineland); The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type.\nDraw: Kruseler: a white linen veil edged with several rows of tightly ruffled frills that frame the forehead and cheeks like a halo, with no chin band\nAvoid: armour, crowns or noble regalia; clerical or monastic robes; the pointed 'Judenhut' or any discriminatory marker or badge; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses\nOutput one full-canvas raw headwear_f_germany_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 full-canvas modular headwear sprite, pure green#00FF00. Keep referenced face EXACTLY same location chin324 scalp164 center512, same full figure. Recolor all existing brown hair PURE MAGENTA, retain plain opaque magenta long-sleeve shirt trousers socks and magenta face/hands as disposable fitting guide. ONLY veil colored: offwhite linen Kruseler, several tightly fluted ruffle rows framing forehead and cheeks, compact rounded shape crown y108, widths roughly380–645, open face with no chin band. Soft veil down behind neck to y390 only, no big shoulder cape. Historically plausible everyday Rhineland c1440. Fine dark handink linen weave textured late80s anime cel shading with warm grey shadows. No jewelry, crown, text, scenery, floating objects. Do not alter head size.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3990401a-11d9-4e16-8100-928b20e6aed5.png",
+      "path": "Raw/headwear_f_germany_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "efa12f90058ce975e645fc9ce40dc518452c7ab387f5f5839ae1cdbdfb233bb7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "fur-collared Schaube",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Knee-length Schaube: a wide, open, pleated overcoat with a broad fur or velvet shawl collar, worn over a doublet whose sleeves are slashed and puffed to show a contrasting lining. Pleated white shirt with an embroidered stand-up neckband. Hose, and wide square-toed 'cow-mouth' shoes (Kuhmaulschuhe).\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_m_germany_earlymodern.",
+      "flags": {
+        "label": "fur-collared Schaube"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_earlymodern",
+      "prompt": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Knee-length Schaube: a wide, open, pleated overcoat with a broad fur or velvet shawl collar, worn over a doublet whose sleeves are slashed and puffed to show a contrasting lining. Pleated white shirt with an embroidered stand-up neckband. Hose, and wide square-toed 'cow-mouth' shoes (Kuhmaulschuhe).\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_m_germany_earlymodern.\n1024x1536 raw costume sprite green#00FF00. Fit reference mannequin EXACTLY scalp239 chin400 soles1421 center512, keep hands and foot placements. All exposed head neck hands magenta#FF00FF. No hair beard hat jewelry props. Nuremberg prosperous ordinary craftsman1525: dark russet knee-length pleated open Schaube coat hem1030, broad dark brown fur shawl collar and short ample outer sleeves revealing muted sage-green doublet sleeves modestly slashed with ochre lining, ivory pleated shirt with fine black embroidered standing neckband, charcoal fitted hose, wide square brown cow-mouth shoes. No weapons regal emblems codpiece plumes ruff. Textured late1980s anime handink with woven matte cloth grain subtle pigment, restrained celshadows. Practical slightly worn garments, no photorealism or smooth vector. Neutral arms slightly away empty hands down, same guide anatomy and proportions. No text or groundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-79f53d77-7078-4e33-a98c-36b551f877f9.png",
+      "path": "Raw/outfit_m_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7ec95530bb5bb44936c60cbc9de4f175b26ee1a720c05751e17486d8b9229eda",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_earlymodern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "fur-collared Schaube",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Knee-length Schaube: a wide, open, pleated overcoat with a broad fur or velvet shawl collar, worn over a doublet whose sleeves are slashed and puffed to show a contrasting lining. Pleated white shirt with an embroidered stand-up neckband. Hose, and wide square-toed 'cow-mouth' shoes (Kuhmaulschuhe).\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_m_germany_earlymodern.",
+      "flags": {
+        "label": "fur-collared Schaube"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_germany_earlymodern",
+      "prompt": "1024x1536 puregreen#00FF00 modular costume sprite. FIRST exact pose guide, SECOND exact costume design. Dress first figure in second russet fur-collared Schaube, sage slashed doublet sleeves ochre lining, embroidered ivory shirt, charcoal hose and square brown shoes. LEFT hand opens close to upper chest as FIRST, right hand down. EXACT head and hand shapes positions, scalp239chin400soles1421. Keep hem1040, waist670 and colors/materials unchanged. Raised sleeve follows bent forearm, cuff at wrist. Hand lies in front of fur lapel. All exposed head neck hands magenta#FF00FF. Keep fine woven pigment and 80s anime handink; no hair hat props text floor shadow. Do not enlarge head or shorten legs.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ab63128e-a066-412d-8c58-ee83bbc6fa96.png",
+      "path": "Raw/outfit_m_germany_earlymodern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "182bcb5bf74f962845597a4f7c4c2852706f41b597166f5bcea98d6b40c0e229",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_earlymodern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "fur-collared Schaube",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Knee-length Schaube: a wide, open, pleated overcoat with a broad fur or velvet shawl collar, worn over a doublet whose sleeves are slashed and puffed to show a contrasting lining. Pleated white shirt with an embroidered stand-up neckband. Hose, and wide square-toed 'cow-mouth' shoes (Kuhmaulschuhe).\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_m_germany_earlymodern.",
+      "flags": {
+        "label": "fur-collared Schaube"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_germany_earlymodern",
+      "prompt": "1024x1536 puregreen#00FF00 modular costume sprite. FIRST exact pose guide, SECOND exact costume design. Dress first figure in second russet fur-collared Schaube, sage slashed doublet sleeves ochre lining, embroidered ivory shirt, charcoal hose and square brown shoes. RIGHT fingertips under chin as FIRST, left hand down. EXACT head and hand shapes positions, scalp239chin400soles1421. Keep hem1040, waist670 and colors/materials unchanged. Raised sleeve follows bent forearm, cuff at wrist. Hand lies in front of chin and fur lapel. All exposed head neck hands magenta#FF00FF. Keep fine woven pigment and 80s anime handink; no hair hat props text floor shadow. Do not enlarge head or shorten legs.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-dd42fac2-599f-4b47-b117-2682ea14dd42.png",
+      "path": "Raw/outfit_m_germany_earlymodern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f093ac506712fa196ab03928726e8b80e345eea8d12632f762eb4cb9bbe134be",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_earlymodern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "fur-collared Schaube",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Knee-length Schaube: a wide, open, pleated overcoat with a broad fur or velvet shawl collar, worn over a doublet whose sleeves are slashed and puffed to show a contrasting lining. Pleated white shirt with an embroidered stand-up neckband. Hose, and wide square-toed 'cow-mouth' shoes (Kuhmaulschuhe).\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_m_germany_earlymodern.",
+      "flags": {
+        "label": "fur-collared Schaube"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_germany_earlymodern",
+      "prompt": "1024x1536 puregreen#00FF00 modular costume sprite. FIRST exact pose guide, SECOND exact costume design. Dress first figure in second russet fur-collared Schaube, sage slashed doublet sleeves ochre lining, embroidered ivory shirt, charcoal hose and square brown shoes. BOTH palms open facing viewer at lower chest as FIRST, elbows close. EXACT head and hand shapes positions, scalp239chin400soles1421. Keep hem1040, waist670 and colors/materials unchanged. Sleeves follow bent forearms, cuffs at wrists. Hands lie in front of fur lapels. All exposed head neck hands magenta#FF00FF. Keep fine woven pigment and 80s anime handink; no hair hat props text floor shadow. Do not enlarge head or shorten legs.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-02a4f03c-c596-4e30-9dfd-696fdd2238e7.png",
+      "path": "Raw/outfit_m_germany_earlymodern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d5d420dab3f1380528b6d7a40502da7e9864abf2b86012246e98ef2bce5155af",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "short Kolbe",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Shortened Kolbe of the 1520s: hair cut short, level with the ear-lobes, with a short straight fringe\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw hair_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short Kolbe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_germany_earlymodern",
+      "prompt": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Shortened Kolbe of the 1520s: hair cut short, level with the ear-lobes, with a short straight fringe\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw hair_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 modular hair sprite puregreen#00FF00. Reference head position is immutable scalp239chin400center512. ONLY hair is colored: warm dark chestnut short Kolbe1525 ear-lobe length around354, short straight fringe around291, crown218, roughly brushed edges and subtle grey strands. No beard hat ornaments. Replace entire historical outfit and shoes with opaque plain magenta long-sleeve shirt trousers socks; head neck hands magenta too. Same neutral fullfigure. Fine textured handink 1980s anime, matte painted hair with restrained strand highlights. No smooth vector sheen, no text shadow scene. Guide cloth lines disposable.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5e71cb71-7eaa-4c64-be77-6ca533f8b879.png",
+      "path": "Raw/hair_m_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "acfc4027e900661b435442783fd8165a386bf1ccb9b94caa84cb433d5dd68a64",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "short rounded beard",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Full, rounded beard with a moustache, trimmed fairly short (the new German fashion of the 1520s)\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw facialhair_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short rounded beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_germany_earlymodern",
+      "prompt": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Full, rounded beard with a moustache, trimmed fairly short (the new German fashion of the 1520s)\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw facialhair_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 facialhair-only sprite green#00FF00. Reference supplies exact head/face fitting and matteink style. Remove ALL scalp hair leaving baldmagenta head. Add ONLY warm chestnut short rounded full beard and moustache; shortcheeks starting335, lipopening around365 remains visible, roundedbeardend430, no longfork or point. Scalp239chin400center512 exactly unchanged. Keep fullfigure opaque plain magenta shirt trousers socks and magenta hands/face. Facialhair fine handink textured1980s anime restrained strandgrain and saltpepper accents. No hat jewelry outfit detail text props groundshadow. Beard must be separate from hair.\nFresh correction: Generate1024x1536 facial-hair modular layer from reference. Preserve reference BALD HEAD exactly: scalp239, eyes315,mouth365,chin400. Add a chestnut rounded short full beard from cheek335 to BELOW chin430, moustache350 leaving lips visible365. Only beard has color. Replace all costume shoes by plain opaque magenta long-sleeve shirt trousers socks, exposed headhands magenta. Puregreen#00FF00 canvas. Neutral same body and hands. Textured matte late80s anime fineink strands. No scalp hair hat jewelry props text. Exact head position and size most important.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c015f81a-21ad-4bf5-849a-3f62a00af34e.png",
+      "path": "Raw/facialhair_m_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a4b75c9b5254830013e9c22346a3068ee891d2efd23414db20aedfbbee4be98a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "Barett",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Wide, flat black velvet Barett with a slashed brim, worn tilted to one side\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw headwear_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Barett",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_germany_earlymodern",
+      "prompt": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Wide, flat black velvet Barett with a slashed brim, worn tilted to one side\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw headwear_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 modular HAT-only sprite on puregreen#00FF00. Reference is exact fitting guide. Preserve face chin400eyes315center512. Recolor ALL hair puremagenta; keep plainopaque magenta shirt trousers socks handsface. Add ONLY wideflat blackvelvet Barett, modest slashed brim aroundcrown, asymmetrically tilted viewerLEFT, crown near175 brimending280, overall width350–640. Lowflattop NOT tallhat; no feather jewels badges or crown. Mattecharcoal velvet soft handpaintedgrain fineink texturedlate80sanime. Fullneutralfigure same size, no text props floor shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-55e369fd-a671-4875-8812-cfdb594ee107.png",
+      "path": "Raw/headwear_m_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4d8922be7175d4d47cded3ef9a01712e7e15f680cbb0d733b42c23c5ce4c41b5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "gold chain",
+      "details": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Heavy gold link chain draped across the shoulders and chest\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw accessory_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "gold chain"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_germany_earlymodern",
+      "prompt": "Subject: man of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Heavy gold link chain draped across the shoulders and chest\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw accessory_m_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 raw accessory layer puregreen#00FF00. Reference fitting guides exact head239/400center512 and shoulder positions. ONLY colored element one heavy gold oval link chain draped over shoulders across chest, upper ends x410/614y430 shallow U bottomy590, 12px thick, no pendant medallion crown. Fits over referenced fur collar but replace ALL costume/shoes with opaqueplainmagenta long-sleeveshirt trousers socks, headhandsmagenta, no hairhatbeard. Chain warm ochregold fineink celshadedmetal with subtlewear, no bright glow or photorealistic gloss. Neutral pose same fullbody. No text props shadow. Separate necklace asset.\nCorrection: Edit only necklace in reference. Make gold chain far more modest: keep EXACT U path from shoulders410/614 y420 to bottom590, but reduce link overall width from30 pixels to12 pixels with many smaller closely linked oval links. It is a prosperous civilian chain, not a cartoon giant chain. Fine matte ochre-gold celshade with ink, small understated highlights. Do not move head body clothing or anything else. Same1024x1536greenmagenta.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0715eadf-5e39-4e3b-89f9-f5caf56f7cbd.png",
+      "path": "Raw/accessory_m_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4a6ed6cbe879e05275608abfb438410148253815d975fa6f79a232b6b7a47700",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "slashed gown and Goller",
+      "details": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Red or black wool gown with a laced bodice, a full pleated skirt and sleeves banded with horizontal puffs and slashes. It is worn over a high-necked pleated white linen shirt with a gold-embroidered collar band, and a short black velvet shoulder cape (Goller) covers the shoulders.\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_f_germany_earlymodern.",
+      "flags": {
+        "label": "slashed gown and Goller"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_earlymodern",
+      "prompt": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Red or black wool gown with a laced bodice, a full pleated skirt and sleeves banded with horizontal puffs and slashes. It is worn over a high-necked pleated white linen shirt with a gold-embroidered collar band, and a short black velvet shoulder cape (Goller) covers the shoulders.\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_f_germany_earlymodern.\n1024x1536 fullbody costume-only sprite puregreen#00FF00. Reference fixes pose and head exactly scalp164chin324center512soles1440. Same hands and feet, expose magenta#FF00FFheadneckhands. No hair hat jewelry props. Deep brickred wool gown laced front bodice to natural waist610, full pleated skirt hem1360 with no train, narrow black velvet hem band. Horizontal banded puffs/slashes on longsleeves reveal warm ivory linen, cuffs at wrists785. Ivory highneck pleated shirt gold embroidered collar band350. Short blackvelvet Goller cape over shoulders down to upper chest445, open center slight fastener. Simple darkbrown square leather flat shoes soles1440, feet x348–449 and575–675. Practical middleclass1525woman not courtregalia. Textured late80s handink anime, wovencloth pigmentgrain restrained celshading. No glossy3D or vectorflatness no scene text shadow.\nCorrection: Edit only the bottom of this1024x1536 costume sprite. Fill magenta ankle areas above shoes with ivory wool stockings. Move both brown shoes upward11 pixels so lowest soles are at y1440, preserving their width and angle and exact same skirt. Keep ALL other pixels/design: head, hands, bodice, cape, sleeves, fabricgrain, background unchanged. No magenta exposed skin at ankles.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c51ccb62-8d85-4b55-88e6-41d615146f0c.png",
+      "path": "Raw/outfit_f_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "679ecf329bd77a0c612fee7ee296775efa150eb27feac32db9486bce3be20eaf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_earlymodern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "slashed gown and Goller",
+      "details": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Red or black wool gown with a laced bodice, a full pleated skirt and sleeves banded with horizontal puffs and slashes. It is worn over a high-necked pleated white linen shirt with a gold-embroidered collar band, and a short black velvet shoulder cape (Goller) covers the shoulders.\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_f_germany_earlymodern.",
+      "flags": {
+        "label": "slashed gown and Goller"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_germany_earlymodern",
+      "prompt": "1024x1536 puregreen#00FF00 costume sprite. FIRST exactpose guide, SECOND exactcostume. Dress FIRST in SECOND red laced bodice gown fullpleatedblackhem skirt, black Goller shoulder cape, ivory goldembroidered collar shirt, red horizontal puffslashedsleeves ivorylinings, ivory stockings brownflats. RIGHT palm faces upward at waist as FIRST, leftarmdown. Match handoutlines exactly. Keep scalp164chin324center512 and costumehem1390shoeplacement, bodicepoint650 unchanged. Sleevesfollowarms cuffscoverwrists. All exposedheadhandsmagenta. Preserve fine wovenpaint texture and handink80s anime, same palette silhouette pleats cape. No hairhatprops text redesign or groundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-53d4a1da-5620-4d31-93c8-c20da73e3baf.png",
+      "path": "Raw/outfit_f_germany_earlymodern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6f323dc3319fb02f8fa7f45d83e43d9d74129e66614427506fff8ac6652b4c8d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_earlymodern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "slashed gown and Goller",
+      "details": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Red or black wool gown with a laced bodice, a full pleated skirt and sleeves banded with horizontal puffs and slashes. It is worn over a high-necked pleated white linen shirt with a gold-embroidered collar band, and a short black velvet shoulder cape (Goller) covers the shoulders.\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_f_germany_earlymodern.",
+      "flags": {
+        "label": "slashed gown and Goller"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_germany_earlymodern",
+      "prompt": "1024x1536 puregreen#00FF00 costume sprite. FIRST exactpose guide, SECOND exactcostume. Dress FIRST in SECOND red laced bodice gown fullpleatedblackhem skirt, black Goller shoulder cape, ivory goldembroidered collar shirt, red horizontal puffslashedsleeves ivorylinings, ivory stockings brownflats. LEFT fingertips at cheek, RIGHT hand supporting left elbow across waist as FIRST. Match handoutlines exactly. Keep scalp164chin324center512 and costumehem1390shoeplacement, bodicepoint650 unchanged. Sleevesfollowarms cuffscoverwrists. Hand in front of cheek/cape. All exposedheadhandsmagenta. Preserve fine wovenpaint texture and handink80s anime, same palette silhouette pleats cape. No hairhatprops text redesign or groundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e1f7fc19-78d9-4bbc-b7ad-c4a7191050af.png",
+      "path": "Raw/outfit_f_germany_earlymodern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8262f037fe0a371b904902b8d7cb432becce14d0bb1bf44f578468c4a4b304fb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_earlymodern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "slashed gown and Goller",
+      "details": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Red or black wool gown with a laced bodice, a full pleated skirt and sleeves banded with horizontal puffs and slashes. It is worn over a high-necked pleated white linen shirt with a gold-embroidered collar band, and a short black velvet shoulder cape (Goller) covers the shoulders.\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw outfit_f_germany_earlymodern.",
+      "flags": {
+        "label": "slashed gown and Goller"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_germany_earlymodern",
+      "prompt": "1024x1536 puregreen#00FF00 costume sprite. FIRST exactpose guide, SECOND exactcostume. Dress FIRST in SECOND red laced bodice gown fullpleatedblackhem skirt, black Goller shoulder cape, ivory goldembroidered collar shirt, red horizontal puffslashedsleeves ivorylinings, ivory stockings brownflats. RIGHT hand at chest, LEFT hand out to side palmopen in appeal as FIRST. Match handoutlines exactly. Keep scalp164chin324center512 and costumehem1390shoeplacement, bodicepoint650 unchanged. Sleevesfollowarms cuffscoverwrists. Hand in front of cape clasp. All exposedheadhandsmagenta. Preserve fine wovenpaint texture and handink80s anime, same palette silhouette pleats cape. No hairhatprops text redesign or groundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6a3693a1-3ff3-483d-be1f-52d0cbb3d8ec.png",
+      "path": "Raw/outfit_f_germany_earlymodern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b892f6f3b32cff9058ee8c423afcc8e17570bf3430530bb55f9b9299925f2a79",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "plaits in gold net",
+      "details": "Edit the supplied fully clothed adult calibration figure for a 2D game wardrobe. Change the hairstyle into brown hair plaited and gathered in a gold-thread Nuremberg Renaissance hairnet at the back of the head (Haarhaube). No hat or jewellery. Preserve the full 1024x1536 image, centered figure, head location, face marks, pose and empty hands. Replace the brown dress with a plain opaque magenta long-sleeve calibration shirt, loose straight full-length magenta trousers and magenta socks. Show simple cloth seams and collars, with featureless fabric and no anatomical markings. Keep the support figure fully clothed. Keep face and hands flat magenta, and the background pure opaque green #00FF00. Keep soft adult anime shapes, thin dark-brown outlines and restrained flat cel shading. The brown plaits and small gold-thread hairnet are the only coloured wardrobe piece. No extra clothes, objects, letters or logos. This is a fully clothed costume fitting figure. Output one complete raw hair_f_germany_earlymodern sheet, no cropping or enlargement.",
+      "flags": {
+        "label": "plaits in gold net"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_germany_earlymodern",
+      "prompt": "Edit the supplied fully clothed adult calibration figure for a 2D game wardrobe. Change the hairstyle into brown hair plaited and gathered in a gold-thread Nuremberg Renaissance hairnet at the back of the head (Haarhaube). No hat or jewellery. Preserve the full 1024x1536 image, centered figure, head location, face marks, pose and empty hands. Replace the brown dress with a plain opaque magenta long-sleeve calibration shirt, loose straight full-length magenta trousers and magenta socks. Show simple cloth seams and collars, with featureless fabric and no anatomical markings. Keep the support figure fully clothed. Keep face and hands flat magenta, and the background pure opaque green #00FF00. Keep soft adult anime shapes, thin dark-brown outlines and restrained flat cel shading. The brown plaits and small gold-thread hairnet are the only coloured wardrobe piece. No extra clothes, objects, letters or logos. This is a fully clothed costume fitting figure. Output one complete raw hair_f_germany_earlymodern sheet, no cropping or enlargement.\nReference costume is red, replace it as specified with plainmagenta guideclothes. EXACT headposition scalp164chin324center512 remains. Hair warm mediumbrown with centerpart smoothcrown145, compact plaits tucked at nape behindears, fine goldthreadnet around back lower coils y270–325, netonly modest no pearls or jewels. No long loose braids. Onlyhairandgoldnetcolored. Fine matte1980s anime handink subtle painted strandgrain, not shinyplastic or vector. Fullbody1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cfbdf0c8-1132-49a7-909c-7cf9bb781033.png",
+      "path": "Raw/hair_f_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8b1681ac38afb8bb089a2738cf9c2c430fcf05b0d19274ee2644173a0f91c9f5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "Barett",
+      "details": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Wide, flat Barett tilted to one side over the hairnet, trimmed with a small white feather\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw headwear_f_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Barett",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_germany_earlymodern",
+      "prompt": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Wide, flat Barett tilted to one side over the hairnet, trimmed with a small white feather\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw headwear_f_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 hat-only layer green#00FF00. Reference fixes face exactlychin324eyes244center512. Recolor ALL brownhair AND goldnet puremagenta, keep plainmagenta supportclothes handsface. Only hatcolored: low wideflat charcoalvelvet Barett tilted viewerRIGHT, small white feather tucked side no hugeplume. Crown around95 and brim around200, width365–660. Fits over scalp164andhairnet. Fine ink matte woven velvet grain handpaintedlate80sanime, restrainedwarmgreyhighlights, no photorealism. No crownjewels text props shadow. Same fullbody.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-00ce90f2-bf7a-4b65-9c01-33375b61ab65.png",
+      "path": "Raw/headwear_f_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "948c1b8bb9318375daf3b5b6398500550a5272d819701bb532199cb69701ffa8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_germany_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "country": "germany",
+      "era": "earlymodern",
+      "label": "layered gold chains",
+      "details": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Several layered gold chains across the chest\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw accessory_f_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "layered gold chains"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_germany_earlymodern",
+      "prompt": "Subject: woman of Renaissance Nuremberg; Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread.\nDraw: Several layered gold chains across the chest\nAvoid: a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern); Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes; Luther's black preaching gown or any clerical vestment; starched cartwheel ruffs or tall capotain hats (Britain earlymodern); princely or court regalia; printing tools, globes or other held props (the theme lives in the notes, not in the hands)\nOutput one full-canvas raw accessory_f_germany_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 accessory-only layer green#00FF00. Reference head exactlyscalp164chin324center512. Replace ALL gown cape shoes with plainopaque magenta longsleeveshirt trousers socks, exposedheadhandsmagenta. No hairhat. Onlycoloredpiece three layered goldchains across chest: smalloval links8pxwide, fromshoulders x425/599y365 looping tobottoms440,470,500. Warm ochregold mutedhighlights thinhandink, texture late80sanime. Not giantcartoonlinks, no pendant gems regalia. Neutralfullbodyunchanged, no props text floor shadow. Chains to be layered over shortcape and below gesturinghands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c467cfee-5884-4852-86cb-460c30bf3ed1.png",
+      "path": "Raw/accessory_f_germany_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "227c4815eb000f7d8757330312d33ce496495af16fe972d4fcb2a6ac9eb4e679",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Gehrock and Stehkragen",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Dark charcoal wool frock coat (Gehrock) buttoned high over a matching waistcoat, with narrow dark striped trousers. A very tall, stiff white stand-up collar (Stehkragen) with a narrow dark tie.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_m_germany_industrial.",
+      "flags": {
+        "label": "Gehrock and Stehkragen"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_industrial",
+      "prompt": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Dark charcoal wool frock coat (Gehrock) buttoned high over a matching waistcoat, with narrow dark striped trousers. A very tall, stiff white stand-up collar (Stehkragen) with a narrow dark tie.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_m_germany_industrial.\n1024x1536 modular costume sprite on puregreen#00FF00, reference determines exactneutralhands/head/feet. Scalp239chin400soles1421center512. Dress guide in charcoal grey wool fitted but not tight knee-length Gehrock coat hem1030 highbutton closure overmatchingwaistcoat, straight slim charcoal pinstripedtrousers, tallwhitestandingcollar390–438 narrowdeepnavytie to565, blackleatherlaceupshoes. Subtleworncuffsedges and wooltwill; civilianBerlin1899middleclassengineer. All exposedheadhandsmagenta#FF00FF. No hairfacialhairhatglassespropsaccessories. Texturedhandinklate80sanime with tactilegrain and celshadows, no vectorflatness orphotorealism. Keep anatomyscale and pose exact; no text shadow scenery.\nCorrection: Edit collar only. Replace the two large folded-down white collar triangles with a VERY TALL STIFF UPRIGHT WHITE STAND COLLAR (Stehkragen1899), a continuous white band around neck rising to jawline, small centeredgap for navy tie, NO folded triangular flaps. Keep all other costume silhouette buttons texturedwool shoes head hands exactsame.1024x1536 green/magenta.\nCorrection: ONLY correct white collar geometry: remove the downward triangular tips/flaps at x480y430 and x540y430. White collar must be a straight cylindrical standing band around neck with flat horizontal LOWER edge at y408, topedge alongjaw around380. Navy tie knot starts immediately below the band y410. No white triangular pieces. Everythingelse unchanged, exact head/body/shoes/costume texture, 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-44548d46-31fc-4c8c-bb97-619819517705.png",
+      "path": "Raw/outfit_m_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ebfa9b8d968d976a53342c70b3ea566cfdc46a022644dede712b7f22565e1d79",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Gehrock and Stehkragen",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Dark charcoal wool frock coat (Gehrock) buttoned high over a matching waistcoat, with narrow dark striped trousers. A very tall, stiff white stand-up collar (Stehkragen) with a narrow dark tie.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_m_germany_industrial.",
+      "flags": {
+        "label": "Gehrock and Stehkragen"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_germany_industrial",
+      "prompt": "1024x1536 green#00FF00 costume sprite. FIRST exactposeguide SECOND exact costume. Dress first in second charcoalGehrock hem1035buttons at548604660713, charcoalpinstripetrousers blacklaceshoes, tallwhite STANDING COLLAR straightband nofolds, navy tie. RIGHT palm up at waist explaining asFIRST, leftarmdown. Matchhandshapes/locations exactly and headscalp239chin400center512. Keep secondcostume legshoe hem positions and palette. Sleeves cover forearms towrists. Exposedheadhandsmagenta. Retain mattewovenpaintedtexture fineinklate80sanime. No hairhatprops text scene shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-eeb3b6aa-9c99-40d3-88e8-18204db08704.png",
+      "path": "Raw/outfit_m_germany_industrial__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f557b6e133ea21c37d0107adf8886d993f1c69ef15c7fd15606246ffc8cb3a58",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Gehrock and Stehkragen",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Dark charcoal wool frock coat (Gehrock) buttoned high over a matching waistcoat, with narrow dark striped trousers. A very tall, stiff white stand-up collar (Stehkragen) with a narrow dark tie.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_m_germany_industrial.",
+      "flags": {
+        "label": "Gehrock and Stehkragen"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_germany_industrial",
+      "prompt": "1024x1536 green#00FF00 costume sprite. FIRST exactposeguide SECOND exact costume. Dress first in second charcoalGehrock hem1035buttons at548604660713, charcoalpinstripetrousers blacklaceshoes, tallwhite STANDING COLLAR straightband nofolds, navy tie. LEFT fingertips at cheek RIGHT hand supporting left elbow asFIRST. Matchhandshapes/locations exactly and headscalp239chin400center512. Keep secondcostume legshoe hem positions and palette. Sleeves cover forearms towrists. Exposedheadhandsmagenta. Retain mattewovenpaintedtexture fineinklate80sanime. No hairhatprops text scene shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aa0ae44a-9d47-4712-8863-4da990392734.png",
+      "path": "Raw/outfit_m_germany_industrial__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f950066b8d17ce3a97726df90190d375f78912318c6a3d561fe5ebdb950fbb69",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Gehrock and Stehkragen",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Dark charcoal wool frock coat (Gehrock) buttoned high over a matching waistcoat, with narrow dark striped trousers. A very tall, stiff white stand-up collar (Stehkragen) with a narrow dark tie.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_m_germany_industrial.",
+      "flags": {
+        "label": "Gehrock and Stehkragen"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_germany_industrial",
+      "prompt": "1024x1536 green#00FF00 costume sprite. FIRST exactposeguide SECOND exact costume. Dress first in second charcoalGehrock hem1035buttons at548604660713, charcoalpinstripetrousers blacklaceshoes, tallwhite STANDING COLLAR straightband nofolds, navy tie. RIGHT hand onchest LEFT hand stretchedoutside palmdown asFIRST. Matchhandshapes/locations exactly and headscalp239chin400center512. Keep secondcostume legshoe hem positions and palette. Sleeves cover forearms towrists. Exposedheadhandsmagenta. Retain mattewovenpaintedtexture fineinklate80sanime. No hairhatprops text scene shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3c962f51-1a42-451f-a16c-b67ccbca1cf0.png",
+      "path": "Raw/outfit_m_germany_industrial__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "06e9641f6e52dba734af80d306c71d92fc708985f578151c3feac61a9e514dfe",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

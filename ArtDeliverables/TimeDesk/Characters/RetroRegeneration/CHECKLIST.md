@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 1009. Full regeneration is NOT complete.
+Saved: 1034. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -1013,3 +1013,28 @@ Saved: 1009. Full regeneration is NOT complete.
 | outfit_m_germany_medieval__objecting_a | visually reviewed; registration pending |
 | hair_m_germany_medieval | visually reviewed; registration pending |
 | headwear_m_germany_medieval | visually reviewed; registration pending |
+| outfit_f_germany_medieval | visually reviewed; registration pending |
+| outfit_f_germany_medieval__explaining_c | visually reviewed; registration pending |
+| outfit_f_germany_medieval__thinking_a | visually reviewed; registration pending |
+| outfit_f_germany_medieval__objecting_b | visually reviewed; registration pending |
+| hair_f_germany_medieval | visually reviewed; registration pending |
+| headwear_f_germany_medieval | visually reviewed; registration pending |
+| outfit_m_germany_earlymodern | visually reviewed; registration pending |
+| outfit_m_germany_earlymodern__explaining_c | visually reviewed; registration pending |
+| outfit_m_germany_earlymodern__thinking_a | visually reviewed; registration pending |
+| outfit_m_germany_earlymodern__objecting_b | visually reviewed; registration pending |
+| hair_m_germany_earlymodern | visually reviewed; registration pending |
+| facialhair_m_germany_earlymodern | visually reviewed; registration pending |
+| headwear_m_germany_earlymodern | visually reviewed; registration pending |
+| accessory_m_germany_earlymodern | visually reviewed; registration pending |
+| outfit_f_germany_earlymodern | visually reviewed; registration pending |
+| outfit_f_germany_earlymodern__explaining_a | visually reviewed; registration pending |
+| outfit_f_germany_earlymodern__thinking_b | visually reviewed; registration pending |
+| outfit_f_germany_earlymodern__objecting_c | visually reviewed; registration pending |
+| hair_f_germany_earlymodern | visually reviewed; registration pending |
+| headwear_f_germany_earlymodern | visually reviewed; registration pending |
+| accessory_f_germany_earlymodern | visually reviewed; registration pending |
+| outfit_m_germany_industrial | visually reviewed; registration pending |
+| outfit_m_germany_industrial__explaining_a | visually reviewed; registration pending |
+| outfit_m_germany_industrial__thinking_b | visually reviewed; registration pending |
+| outfit_m_germany_industrial__objecting_c | visually reviewed; registration pending |
