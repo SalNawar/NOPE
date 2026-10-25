@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 1034. Full regeneration is NOT complete.
+Saved: 1059. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -1038,3 +1038,28 @@ Saved: 1034. Full regeneration is NOT complete.
 | outfit_m_germany_industrial__explaining_a | visually reviewed; registration pending |
 | outfit_m_germany_industrial__thinking_b | visually reviewed; registration pending |
 | outfit_m_germany_industrial__objecting_c | visually reviewed; registration pending |
+| hair_m_germany_industrial | visually reviewed; registration pending |
+| facialhair_m_germany_industrial | visually reviewed; registration pending |
+| headwear_m_germany_industrial | visually reviewed; registration pending |
+| accessory_m_germany_industrial | visually reviewed; registration pending |
+| outfit_f_germany_industrial | visually reviewed; registration pending |
+| outfit_f_germany_industrial__explaining_b | visually reviewed; registration pending |
+| outfit_f_germany_industrial__thinking_c | visually reviewed; registration pending |
+| outfit_f_germany_industrial__objecting_a | visually reviewed; registration pending |
+| hair_f_germany_industrial | visually reviewed; registration pending |
+| accessory_f_germany_industrial | visually reviewed; registration pending |
+| outfit_m_germany_modern | visually reviewed; registration pending |
+| outfit_m_germany_modern__explaining_b | visually reviewed; registration pending |
+| outfit_m_germany_modern__thinking_c | visually reviewed; registration pending |
+| outfit_m_germany_modern__objecting_a | visually reviewed; registration pending |
+| hair_m_germany_modern | visually reviewed; registration pending |
+| facialhair_m_germany_modern | visually reviewed; registration pending |
+| headwear_m_germany_modern | visually reviewed; registration pending |
+| accessory_m_germany_modern | visually reviewed; registration pending |
+| outfit_f_germany_modern | visually reviewed; registration pending |
+| outfit_f_germany_modern__explaining_c | visually reviewed; registration pending |
+| outfit_f_germany_modern__thinking_a | visually reviewed; registration pending |
+| outfit_f_germany_modern__objecting_b | visually reviewed; registration pending |
+| hair_f_germany_modern | visually reviewed; registration pending |
+| headwear_f_germany_modern | visually reviewed; registration pending |
+| accessory_f_germany_modern | visually reviewed; registration pending |

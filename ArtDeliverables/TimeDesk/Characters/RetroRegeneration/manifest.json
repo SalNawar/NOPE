@@ -27521,6 +27521,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "brush cut",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Short brush cut (Buerstenschnitt): hair cropped close and standing upright\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw hair_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "brush cut"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_germany_industrial",
+      "prompt": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Short brush cut (Buerstenschnitt): hair cropped close and standing upright\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw hair_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 modularhair sprite. Reference exacthead239/400center512. Add short upright bristly ashbrown brushcut, subtly recedingtemples, crown226 cropped sides ends325. ONLYhaircolored. Replace allcoatcollartrousersshoes with plainopaque magentalongsleeveshirt trousers socks, headhandsmagenta. Puregreen#00FF00. Texturedhandinklate80sanime mattehair individualshortbristles subtle greystrands. No beardhatjewelryprops text floor shadow, no changeheadsize.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f111dcce-90e8-4f0e-8731-ad34aee9416d.png",
+      "path": "Raw/hair_m_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8c5ecae231de07e524441c14664541b4382408a90a8dc158d0b18b8a5f331a6a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "turned-up moustache",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Moustache with the ends twisted up in the Wilhelmine 'Es ist erreicht' fashion, kept moderate rather than pointed up to the cheekbones\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw facialhair_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "turned-up moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_germany_industrial",
+      "prompt": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Moustache with the ends twisted up in the Wilhelmine 'Es ist erreicht' fashion, kept moderate rather than pointed up to the cheekbones\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw facialhair_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 moustache-only sprite green#00FF00. Reference baldhead exacteyes315mouth365chin400, preserveallposition. Onlycoloredpiece ashbrown moustache beneathnose y351–370, shortmoderatelycurvedupends x475–548, no giantpoints no beardsideburnshair. Replace ALL costume/shoes with plainopaque magentalongsleeveshirt trousers socks, faceneckhandsmagenta. Fine handink textured1980sanime hair shortstrands with fewgreys matte highlights. Neutralbody and headsizeunchanged. No text hat props shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-05bd3a29-5433-48cd-b531-08a9347448ca.png",
+      "path": "Raw/facialhair_m_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7c68f789a547dccccd1b949c39aa7eaed02813ec46b49e35f3ab454403429cd7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Homburg",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Dark felt Homburg with a single dent down the centre of the crown and a stiff, curled-up, ribbon-bound brim (named after Bad Homburg in Hesse)\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw headwear_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Homburg",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_germany_industrial",
+      "prompt": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Dark felt Homburg with a single dent down the centre of the crown and a stiff, curled-up, ribbon-bound brim (named after Bad Homburg in Hesse)\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw headwear_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 HAT-only sprite green#00FF00. Referencehair fittingguide, recolorallhairmagenta, keep plainmagenta clothesfacehands. Exactfacechin400eyes315center512 unchanged. Darkcharcoalfelt Homburg top165, brim270,width390–632, SINGLE central longitudinal crowncrease, stiffupcurledribbonboundbrim, blackgrosgrainband, no featherbadgepinchfront. Matte feltgrain finehandink texturedlate80sanime subtlewarmgreyshading. Fullfigure sameplacement no props letters shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-37cdc6cd-442d-4985-ba8f-870ad1ecd3e5.png",
+      "path": "Raw/headwear_m_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4f7f04f6689a9c1e7c88a6ad5c3a4bfffb340e353cf9a9d0c456243a7cad4516",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "pince-nez",
+      "details": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Pince-nez (Kneifer) clipped to the nose, on a thin black cord\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw accessory_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "pince-nez"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_germany_industrial",
+      "prompt": "Subject: man of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Pince-nez (Kneifer) clipped to the nose, on a thin black cord\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw accessory_m_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 accessorysprite puregreen#00FF00. Reference gives face exacteye315center512chin400. Onlycoloredaccessory a pair of thin darkbronze oval pince-nez lens frames centeredx488/536y315 clippedbridge to nose, no temples/eararms. Lensinteriorsremainmagenta so underlyingface can show. Fine blackcord from viewerRIGHT outerrim descends cheek then chest to y570. No white lensglare. All costume/shoes replacedbyplainopaque magentalongsleeveshirt trousers socks, headhandsmagenta. No hairbeardhat. Inked textured80sanime subtlemetalgrain, no text scenery propsgroundshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6aee265f-68b7-4296-988b-1a501f8b4acc.png",
+      "path": "Raw/accessory_m_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f456d0489038a0e4565e758782c7913ee0c476bdfc64d2cdf31528ff4c6e5f65",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Reformkleid",
+      "details": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Reformkleid: a loose, uncorseted, floor-length dress hanging straight from a fitted shoulder yoke, with soft full sleeves, in moss-green, cream or dove-grey wool. The yoke and hem are embroidered with flowing Jugendstil plant curves.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_f_germany_industrial.",
+      "flags": {
+        "label": "Reformkleid"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_industrial",
+      "prompt": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Reformkleid: a loose, uncorseted, floor-length dress hanging straight from a fitted shoulder yoke, with soft full sleeves, in moss-green, cream or dove-grey wool. The yoke and hem are embroidered with flowing Jugendstil plant curves.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_f_germany_industrial.\n1024x1536 raw costume sprite green#00FF00. Reference exactneutralcalibration scalp164chin324center512soles1440; preserve head and handlocations. Dress guide with mossgreen mattewool Reformkleid1899: LOOSE uncorseted dress hanging straight from fitted shoulder yoke with no waistseam belt taper or corseting. Softfull longsleeves towrists. Highmodestneckline, yokeend445, Jugendstil flowingivoryochre plantembroidery ONLY on yoke and hem. Body plainwovenwool. Skirt straight gentle Aline hem1370, small darkbrownlowheel laceboots soles1440 atguidefeet. No bustle train. All exposedheadhandsmagenta. No hairhatjewelryprops. Textured late80sanime fineink pigmentgraincelshading, no photorealistic render, no text scene shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1eea317d-d4f5-4cbe-86b8-08cf295ef576.png",
+      "path": "Raw/outfit_f_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "28bfab38d15a338900b3a07f962e8bd25302c61f23aa58b7cb662918e3faae55",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Reformkleid",
+      "details": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Reformkleid: a loose, uncorseted, floor-length dress hanging straight from a fitted shoulder yoke, with soft full sleeves, in moss-green, cream or dove-grey wool. The yoke and hem are embroidered with flowing Jugendstil plant curves.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_f_germany_industrial.",
+      "flags": {
+        "label": "Reformkleid"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_germany_industrial",
+      "prompt": "1024x1536 green#00FF00 costume sprite. FIRST exactposeguide, SECOND exact mossgreen Reformkleid withgoldplantembroidery on yoke andhem. Dress first in second exactcostume. BOTH hands open presenting, viewerLEFT lower viewerRIGHT higher asFIRST. Exact handoutlines and headscalp164chin324center512. Same green looseuncorseted silhouette hangingfromyoke455, softfullsleeves towrists, plainwoolbody, botanical embroideryonlyyokeandhem, brownlaceboots and skirtpositions unchanged. All exposedheadhandsmagenta#FF00FF. Preserve wovenpigmentgrain fineink80sanime, no hairhatprops text scene shadow. No tightenedwaist or newbelt.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2cadd18e-ecb2-4bfb-8fab-95a79072aa4d.png",
+      "path": "Raw/outfit_f_germany_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6269f159fc5b46c1e47082bd2859c6d1fdea6ef251c8314368e0aaebbdda0192",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Reformkleid",
+      "details": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Reformkleid: a loose, uncorseted, floor-length dress hanging straight from a fitted shoulder yoke, with soft full sleeves, in moss-green, cream or dove-grey wool. The yoke and hem are embroidered with flowing Jugendstil plant curves.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_f_germany_industrial.",
+      "flags": {
+        "label": "Reformkleid"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_germany_industrial",
+      "prompt": "1024x1536 green#00FF00 costume sprite. FIRST exactposeguide, SECOND exact mossgreen Reformkleid withgoldplantembroidery on yoke andhem. Dress first in second exactcostume. BOTH hands clasped lowinfront asFIRST, exacthand outlines. Headscalp164chin324center512. Same green looseuncorseted silhouette hangingfromyoke455, softfullsleeves towrists, plainwoolbody, botanical embroideryonlyyokeandhem, brownlaceboots and skirtpositions unchanged. All exposedheadhandsmagenta#FF00FF. Preserve wovenpigmentgrain fineink80sanime, no hairhatprops text scene shadow. No tightenedwaist or newbelt.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4c7352ea-5038-41d3-806c-43e04b4bbb9b.png",
+      "path": "Raw/outfit_f_germany_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1877f51d8a6bdf8224d953475b0b8a8accbc91e0a5ea6891ad9d5806e697e8b1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Reformkleid",
+      "details": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Reformkleid: a loose, uncorseted, floor-length dress hanging straight from a fitted shoulder yoke, with soft full sleeves, in moss-green, cream or dove-grey wool. The yoke and hem are embroidered with flowing Jugendstil plant curves.\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw outfit_f_germany_industrial.",
+      "flags": {
+        "label": "Reformkleid"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_germany_industrial",
+      "prompt": "1024x1536 green#00FF00 costume sprite. FIRST exactposeguide, SECOND exact mossgreen Reformkleid withgoldplantembroidery on yoke andhem. Dress first in second exactcostume. RIGHT palmraisedoutward at shoulderheight, LEFT armdown asFIRST, exacthand outlines. Headscalp164chin324center512. Same green looseuncorseted silhouette hangingfromyoke455, softfullsleeves towrists, plainwoolbody, botanical embroideryonlyyokeandhem, brownlaceboots and skirtpositions unchanged. All exposedheadhandsmagenta#FF00FF. Preserve wovenpigmentgrain fineink80sanime, no hairhatprops text scene shadow. No tightenedwaist or newbelt.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-defc4861-7622-4412-a883-93e827ffc3a0.png",
+      "path": "Raw/outfit_f_germany_industrial__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c3941c37f697e94a694092c494603a6126486ec20e9d7a57cc84ff8f2193e775",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "soft low chignon",
+      "details": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Soft, loose chignon: hair pinned up low and full at the back, with natural waves at the temples\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw hair_f_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "soft low chignon"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_germany_industrial",
+      "prompt": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Soft, loose chignon: hair pinned up low and full at the back, with natural waves at the temples\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw hair_f_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 hair-only sprite green#00FF00. Use exactreferencehead scalp164chin324eyes244center512. ONLYhaircolored softgrey-streaked darkbrown waves attemples and loosefull LOW napechignon visiblebehindneck towardsviewerLEFT at300–335, crown140. Natural everyday hair not fashionmodel. Replace entire dressboots with plainopaque magentalongsleeveshirt trousers socks, facehandsmagenta. Fine handink texturedlate80sanime pigmentgrain variedstrandlines subtlematte highlights. No hatornaments jewelry props text shadows. Samefigureposition.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9aa27aed-731c-42b3-849c-fde241522c80.png",
+      "path": "Raw/hair_f_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c477a17446c4d8b409dfce2a39a86078ead976029a80b2ca32086f32e81d456b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_germany_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "country": "germany",
+      "era": "industrial",
+      "label": "Jugendstil pendant",
+      "details": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Jugendstil pendant: a large silver plaque with dark-blue enamel and a curving 'whiplash' leaf motif in the Pforzheim style, about as wide as the face, hanging at the base of the throat on its own short silver chain\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw accessory_f_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Jugendstil pendant",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_germany_industrial",
+      "prompt": "Subject: woman of Wilhelmine Germany; Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened.\nDraw: Jugendstil pendant: a large silver plaque with dark-blue enamel and a curving 'whiplash' leaf motif in the Pforzheim style, about as wide as the face, hanging at the base of the throat on its own short silver chain\nAvoid: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; monocle (Prussian-officer caricature); exaggerated needle-point Kaiser moustache (caricature); lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle\nOutput one full-canvas raw accessory_f_germany_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 accessorysprite green#00FF00. Reference exactheadscalp164chin324center512 unchanged. Onlycoloredobject Jugendstil Pforzheim pendant, horizontal silver openworkblueenamelplaque width100px x462–562 at y387–435 with whiplashleafcurves, smallsilverchain fromneck x467/557y341to pendant. Followbigpendantbrief without hugechestarmour. Replace entire dressboots with plainopaque magentalongsleeveshirt trousers socks, headhandsmagenta. Fineink mattecelshaded warmtarnishedsilver andnavyenamel texturedlate80sanime, no photorealisticjewelryrender. No hairhatotherjewelryprops text shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4fc8c155-de9c-40fe-9ee0-f450e9534a97.png",
+      "path": "Raw/accessory_f_germany_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "884c27647693cf2bfecb10e0de96e2a4f4ce055539bff15b786fb4d9035f8531",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "rumpled suit and coat",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Loose, slightly rumpled charcoal three-piece wool suit with wide trousers, a white shirt with a soft turn-down collar and a dark knitted tie. A long dark wool overcoat is worn open. Black leather lace-up shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_m_germany_modern.",
+      "flags": {
+        "label": "rumpled suit and coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_modern",
+      "prompt": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Loose, slightly rumpled charcoal three-piece wool suit with wide trousers, a white shirt with a soft turn-down collar and a dark knitted tie. A long dark wool overcoat is worn open. Black leather lace-up shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_m_germany_modern.\n1024x1536 costume sprite puregreen#00FF00. Match mannequin EXACT headscalp239chin400center512handsfeet soles1421. Civilian1926Berlin: loose rumpled charcoal threepiece wool suit broadstraight trousers withcuffs, offwhite shirt SOFTturndowncollar, narrow darkburgundy knittedtie, longopen darkbrowncharcoal woolovercoat hem1140, blacklaceupshoes. No militarydetail, noleathercoat, no insignia. Wovenmattecloth visiblefinegrain (NO floralornamentsbrocade), restrainedcelshadows and handinklate80sanime. All exposedheadhandsmagenta#FF00FF no hairhatbeardaccessoriesprops. Same neutralarmsdown emptyhands. No text scene shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-796016f6-7a59-4106-ba93-44da406a7445.png",
+      "path": "Raw/outfit_m_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5e4fdae4b08e6242bb497e212809fb8263ea63512d4a7efc8fbc7128429c7d65",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_modern__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "rumpled suit and coat",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Loose, slightly rumpled charcoal three-piece wool suit with wide trousers, a white shirt with a soft turn-down collar and a dark knitted tie. A long dark wool overcoat is worn open. Black leather lace-up shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_m_germany_modern.",
+      "flags": {
+        "label": "rumpled suit and coat"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_germany_modern",
+      "prompt": "1024x1536green#00FF00. FIRST exactposeguide SECOND exact1926Berlin costume. Dress first in second darkbrownopenwoolovercoat hem1195charcoalthreepiecesuit widecuffedtrousers softwhitecollar burgundyknittie blackshoes. BOTH hands open outward asymmetrically asFIRST viewerLEFT higher. Exacthandshape/positionsheadscalp239chin400center512. Same clothescolorsbuttonshemfeet silhouettes, sleeves towrists. Exposedheadhandsmagenta. Preserve matteplainwoolfinegrain handinklate80sanime, no brocadeorornaments, no hairhatprops text shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4779cd8f-5af9-4f3c-9104-c40366c6e29f.png",
+      "path": "Raw/outfit_m_germany_modern__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cc194e108a77cae41cbb43f0076801d45c20b8594f9a26d6c1a9e2d5f50f07b2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_modern__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "rumpled suit and coat",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Loose, slightly rumpled charcoal three-piece wool suit with wide trousers, a white shirt with a soft turn-down collar and a dark knitted tie. A long dark wool overcoat is worn open. Black leather lace-up shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_m_germany_modern.",
+      "flags": {
+        "label": "rumpled suit and coat"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_germany_modern",
+      "prompt": "1024x1536green#00FF00. FIRST exactposeguide SECOND exact1926Berlin costume. Dress first in second darkbrownopenwoolovercoat hem1195charcoalthreepiecesuit widecuffedtrousers softwhitecollar burgundyknittie blackshoes. BOTH hands clasped lowfront asFIRST. Exacthandshape/positionsheadscalp239chin400center512. Same clothescolorsbuttonshemfeet silhouettes, sleeves towrists. Exposedheadhandsmagenta. Preserve matteplainwoolfinegrain handinklate80sanime, no brocadeorornaments, no hairhatprops text shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d65bcaa3-98f1-493e-832f-51fa0a383e1e.png",
+      "path": "Raw/outfit_m_germany_modern__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "05d15e58741d6e4e3bb5a74eb6ac1c40592103f6b5cb1924d3df6b69961233b6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_modern__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "rumpled suit and coat",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Loose, slightly rumpled charcoal three-piece wool suit with wide trousers, a white shirt with a soft turn-down collar and a dark knitted tie. A long dark wool overcoat is worn open. Black leather lace-up shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_m_germany_modern.",
+      "flags": {
+        "label": "rumpled suit and coat"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_germany_modern",
+      "prompt": "1024x1536green#00FF00. FIRST exactposeguide SECOND exact1926Berlin costume. Dress first in second darkbrownopenwoolovercoat hem1195charcoalthreepiecesuit widecuffedtrousers softwhitecollar burgundyknittie blackshoes. RIGHT palm raised facingout atshoulder LEFT armdown asFIRST. Exacthandshape/positionsheadscalp239chin400center512. Same clothescolorsbuttonshemfeet silhouettes, sleeves towrists. Exposedheadhandsmagenta. Preserve matteplainwoolfinegrain handinklate80sanime, no brocadeorornaments, no hairhatprops text shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-233a2896-4d33-47b7-b9b4-217dabffba62.png",
+      "path": "Raw/outfit_m_germany_modern__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5342438d51636a4af8b3259219622a7f5bc74abcdfb7b826dbff43f2a68aae2a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "brushed-back hair",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Collar-length hair brushed back from the forehead, a little untidy (not a wild halo)\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw hair_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "brushed-back hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_germany_modern",
+      "prompt": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Collar-length hair brushed back from the forehead, a little untidy (not a wild halo)\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw hair_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 hair-only spritegreen#00FF00. Exactreferenceheadscalp239chin400center512. Add medium ashbrown brushedback collarlengthhair crown214ends420 slightwispyuntidiness, recedingtemples, no wildhalo. Onlyhaircolored. Replace allcostume/shoeswithplainopaquemagenta longsleeveshirt trousers socks, headhandsmagenta. No beardhatglassesjewelry. Fine darkink matte1980sanime paintedstrandgrain, not plasticgloss orphotoreal. Fullneutralfigure same scale no text shadow props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-163384e9-41da-446a-ae6c-3d1997e6f666.png",
+      "path": "Raw/hair_m_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5224144f321f6ca9aa62485ef78e3bd474e54faaa095f6c84d1091a1b49769fe",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "walrus moustache",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Very bushy walrus moustache that covers the whole upper lip and droops past the corners of the mouth, wider than the mouth\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw facialhair_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "walrus moustache",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_germany_modern",
+      "prompt": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Very bushy walrus moustache that covers the whole upper lip and droops past the corners of the mouth, wider than the mouth\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw facialhair_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 sprite flat pure green #00FF00. Keep reference head exact scalp239 chin400 mouth365 center512. Remove colored hair, replace with magenta support scalp. Draw only ashbrown bushy walrus moustache x475-552 y350-384, covering upper lip and drooping past mouth corners. No beard or hair colored. All support shirt trousers socks face hands opaque #FF00FF. Fine dark ink textured late1980s anime painted strands, matte pigment, not glossy vector. Full figure neutral scale unchanged no text props shadows.\nCorrection: moustache ends must droop vertically DOWN past corners, NOT curl upwards as handlebars. Bushy broad straight shaggy curtain across upperlip, bottomragged at y384, no side curls. Keep everything else unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-634ab443-b0e9-4448-abb0-280326b4541a.png",
+      "path": "Raw/facialhair_m_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5db8dcde3123963b529a6eef4ca6de1ea1a7106a1ef4982c85a866d03241ebba",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "broad soft felt hat",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Broad-brimmed soft black felt hat with a pinched crown\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw headwear_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "broad soft felt hat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_germany_modern",
+      "prompt": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Broad-brimmed soft black felt hat with a pinched crown\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw headwear_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 sprite flat pure green #00FF00. Exact reference head scalp239 chin400 center512. Soft broad-brimmed charcoal-black felt hat pinched crown top160 brim around270 spanning390–640. Only hat colored, all hair and guide clothes face hands socks opaque magenta #FF00FF, fully clothed same figure. Retain all positions. Late1980s anime ink fine matte felt grain restrained celshading, no glossy vector, no text props shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-02873170-c6e5-4d69-9c45-d1b46739922d.png",
+      "path": "Raw/headwear_m_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e539b785e1c182ef60e96e226c8ccc7954e0a16d481ee134fbafcda4cc31359b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "round spectacles",
+      "details": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Round wire-rimmed spectacles\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw accessory_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "round spectacles"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_germany_modern",
+      "prompt": "Subject: man of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Round wire-rimmed spectacles\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw accessory_m_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536 sprite flat pure green #00FF00. Exact reference head scalp239 chin400 center512. Only thin darkbronze ROUND wirerim spectacles colored; lens centers488,315 and537,315 diameter40, bridge at512310. Lens interiors flat magenta no glass glare. Reference scalp and all clothing hands socks magenta #FF00FF, remove colored moustache completely. Fully clothed unchanged fullfigure. Fine darkink matte metal tiny celhighlights late1980sanime. No other colored elements no text props shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6a7b62fc-b7eb-4a93-8d9c-ac69be68dd32.png",
+      "path": "Raw/accessory_m_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b35e2f8b08e14f0259324c2a8eaa76283b1801678c9b1d44347b552e90bb0605",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "Bauhaus drop-waist dress",
+      "details": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.",
+      "flags": {
+        "label": "Bauhaus drop-waist dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_modern",
+      "prompt": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.\n1024x1536 sprite puregreen #00FF00. Fit to exact reference pose female scalp164 chin324 soles1440 center512, feet348-449 and575-675. Outfit only no hair hat jewelry. Loose straight long-sleeved 1926 daydress with round neckline at355, dropped hipwaist seam775, knee hem1055, opaque taupestockings and blackflat barstrapshoes soles1440. Restrained geometric blocks in brickred ochre ultramarine charcoal, one offset circle and asymmetrical verticalbars, clearly sewn patterned cloth not plastic. Fine handink late1980sanime painted pigment grain and subtle textile weave small celshadow. Preserve magenta headhands, original proportions with unposed everydaystance no fashionablehourglass. No background, text, props, castshadow, accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-266f14e2-0f27-4864-a706-51b065acd2e1.png",
+      "path": "Raw/outfit_f_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "596a79a2d165d44638991bdf81ac1ba768c0963da18a45b1c474c4f888593190",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_modern__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "Bauhaus drop-waist dress",
+      "details": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.",
+      "flags": {
+        "label": "Bauhaus drop-waist dress"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_germany_modern",
+      "prompt": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.\n1024x1536 green#00FF00 sprite. Match FIRST reference exact gesture and head hands feet; SECOND exact costume unchanged except sleeves follow gesture. Left open hand at upperchest viewerRIGHT exactly thumb625395 wrist615500. Preserve scalp164chin324, shoes1440, dropped waist755, hem1075, ALL geometric pattern positions shapes clothgrain colors, stockings and shoes. Fully clothed, exposedheadhandsmagenta. No hairhatjewelrytextshadow. Fine textured late80s anime inkcel paint. No zoom or changing skirtwidth.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fef343eb-d5b0-4ca0-b5df-f91eefb06ca1.png",
+      "path": "Raw/outfit_f_germany_modern__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "201c58920c1c1b0485ab2daa355e67507bcdf636bee3ceac705f4a3899b6b530",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_modern__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "Bauhaus drop-waist dress",
+      "details": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.",
+      "flags": {
+        "label": "Bauhaus drop-waist dress"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_germany_modern",
+      "prompt": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.\n1024x1536 green#00FF00 sprite. Match FIRST reference exact thoughtful hand-under-chin gesture head hands feet; SECOND exact costume unchanged except sleeves follow gesture. Right fingers underchin as first reference wrist480389 elbow390563, otherarmdown. Preserve scalp164chin324 shoes1440 droppedwaist755 hem1075 ALL geometric pattern positions shapes clothgrain colors stockings shoes. Fully clothed exposedheadhandsmagenta. No hairhatjewelrytextshadow. Fine textured late80s anime inkcelpaint. No zoom changing skirtwidth or replacing weave with floral pattern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-153d5ba1-94ed-45b5-b396-efde3b796d5f.png",
+      "path": "Raw/outfit_f_germany_modern__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "152be909f526c1b37e6175e979dcae83f57a9efd0abb19535b6ff121011c0a90",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_modern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "Bauhaus drop-waist dress",
+      "details": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.",
+      "flags": {
+        "label": "Bauhaus drop-waist dress"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_germany_modern",
+      "prompt": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw outfit_f_germany_modern.\n1024x1536 green#00FF00 sprite. Match FIRST reference exact bothpalmsout gesture head hands feet; SECOND exact costume unchanged except sleeves follow gesture. Fingers topsy461 wristsy599 palmscenters420545 and602545, elbowsclose. Preserve scalp164chin324 shoes1440 droppedwaist755 hem1075 ALL geometric pattern positions shapes clothgrain colors stockings shoes. Fully clothed exposedheadhandsmagenta. No hairhatjewelrytextshadow. Fine textured late80s anime inkcelpaint. No zoom changing skirtwidth or replacing weave with floral pattern.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-88f0ebef-d48c-4a53-8a23-f9e26c67ede3.png",
+      "path": "Raw/outfit_f_germany_modern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "54265193bdba9ffd6377fe2d1ec02b8366864bef98b7389ad8adf685c9d572b8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "Bubikopf bob",
+      "details": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Bubikopf: a sleek chin-length bob with a blunt fringe\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw hair_f_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Bubikopf bob"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_germany_modern",
+      "prompt": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Bubikopf: a sleek chin-length bob with a blunt fringe\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw hair_f_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536green#00FF00 sprite hair only. Preserve reference headscalp164 chin324 eye243 center512. Darkchestnut sleek Bubikopf chinlengthbob ends324 crowntop140 bluntfringe215 abovebrows. Fine darkink with muted warmstrand highlights textured matte late1980sanime paint no glossvector. Replace ALL dress stockings shoes with opaqueplainmagenta longsleeveshirt trousers socks, facehandsmagenta. Fullneutralfigure sameheadhandsfeet positions. Onlyhair colored. No hatjewelrypropsshadowtext.\nCorrect bob length ONLY: current ends are at mouth height y292, extend both sides to chin height y324 with flat inward-curved ends. Preserve crown140 fringe215 face and all other pixels/proportions. Reduce bright hair shine to restrained matte strand highlights.\nHair still too short: extend bottom edge by another 24 pixels to align with LOWEST point of chin, y324. Both bob side ends should touch shoulderward neck at chin level, not lowercheek. Only extend tips; keep existing face and crown.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1700763b-9d4f-4103-b4e2-ec497f86bd13.png",
+      "path": "Raw/hair_f_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "83d34abfb8668dcaae42833e8f78dd02b7d7f8f4929dc9b3a5ee7b2c266a5fcb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "cloche",
+      "details": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Close-fitting felt cloche hat pulled down to just above the eyebrows, with a small brim so the eyes and face stay clear\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw headwear_f_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "cloche",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_germany_modern",
+      "prompt": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Close-fitting felt cloche hat pulled down to just above the eyebrows, with a small brim so the eyes and face stay clear\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw headwear_f_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536green#00FF00 sprite hatonly. Exact reference scalp164chin324eyes243center512. Charcoalblue felt cloche smoothclosefitting bell crown120 small downwardbrimfront215 sides242 keeps eyesclear. Thin ochre feltband no ornament. All hair MUST puremagenta #FF00FF no brown coloredstrands. Allsupportclothes skin socks magenta. Fully clothed unchanged neutralbody. Only hatcolored. Fine darkink late1980sanime matte wovenfeltgrain subtlecelshadows no vectorgloss. No text props jewelry shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-64e6b087-fe3d-43f5-b196-e286cabc3866.png",
+      "path": "Raw/headwear_f_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4ecb3e2a2d0fa6a418ee35ebec9442210239ceb451d1c1ce62d0876728d1e2e9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_germany_modern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "country": "germany",
+      "era": "modern",
+      "label": "Bauhaus necklace",
+      "details": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Geometric chrome-and-brass necklace of circles and bars in the Bauhaus metal-workshop style\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw accessory_f_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "Bauhaus necklace"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_germany_modern",
+      "prompt": "Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.\nDraw: Geometric chrome-and-brass necklace of circles and bars in the Bauhaus metal-workshop style\nAvoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)\nOutput one full-canvas raw accessory_f_germany_modern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.\n1024x1536green#00FF00 accessoryonly sprite. Exact reference scalp164chin324 center512. Necklace geometricchrome and agedbrass linked flatcircles/bars, neckchain attaches465345 and560345 descends tocenterpendant512460. Modest circles20–30pixels not huge chestarmor. Finelineink small restrained highlights matte late1980sanime paintgrain. Replace dressstockingsshoes entirely with opaque plainmagenta longsleeveshirt trousers socks, facehandsmagenta, no hairhat. Onlynecklacecolored, lenslikeinteriorgapsmagenta. Fullfigure samepositions no text props shadow.\nCorrect necklace size: keep attachment at base ofneck (x465/560,y345) but make entire necklace end at y460, current is535too long. Reduce circles from40-48px to20-25px, shortenbars. Same circle/bar design scaled smaller about70% aroundneck, not medallionarmor. Everythingelseunchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8ff9c147-1fd7-45b7-b480-8e9727f5111d.png",
+      "path": "Raw/accessory_f_germany_modern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e2ecfbbddf301e159e1e2c5d3b8590610adfa09d7e113ee4fdacec8106c4841d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
