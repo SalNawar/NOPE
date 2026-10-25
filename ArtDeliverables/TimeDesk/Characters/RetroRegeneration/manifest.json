@@ -30532,6 +30532,657 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_future__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: man of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_britain_future",
+      "prompt": "ONE exact poseguide TWO exactcostume. Dress ONE in TWO withoutmovingmagenta handsheadfeet. Handslinkedatwaist x435-585y724-805 wrists435740/585740, fullsleevestocuffs. Bottlegreenherringbonelongfrockcoat hem1110oxbloodpaisleylapels FairIsle shoulder/chestbands printedpunchcardwaistcoat hem755navypinstripetrousersbrownclosedbootsbrownlaces, smallpleatedivoryfrill underchin sewnbrasstorcneckline. Scalp239chin400soles1421. Matchcostumedetailsandfabric exactly no newpatterns. Hands infrontofcoat.1024x1536flatgreen#00FF00magentaheadhands matte1980sanimefineink.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-748678a4-74cb-42c3-911c-b992ee110be0.png",
+      "path": "Raw/outfit_m_britain_future__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3811bbf68dc69b8d2b1dbaca186e5f3c45bb8d996bf36c458380ab366d8de8cc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_future__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: man of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_britain_future",
+      "prompt": "ONE exactpose stencil TWO identicalcostume. Dress ONE in TWO changing only viewerLEFT arm palmforward x300-407y367-503 wrist327500 elbow310630, otherhanddown. Fullsleevestowrists no bareforearm. Preserve scalp239chin400feet1421 torsolegs. Bottlegreenherringbonefrockcoat hem1110 oxbloodpaisleylapels FairIsleupperchestwovenbands slatepunchcarddotwaistcoathem755navypinstripetrousers brownclosedbootsbrownlaces, ivorypleatedcollar belowchin sewnbrassropeedge. Samebuttons/cuffstraps/materialcolorsandtexture. Matte1980sanimefineink pigmentgrain1024x1536flatgreen#00FF00magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5f90d59d-8f80-45f8-8fb5-f9a5319947d0.png",
+      "path": "Raw/outfit_m_britain_future__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5d9bceb1b0477826b4ad802ffe539982e5373fc972b13fe54f1487f8a71de7f1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: woman of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_britain_future",
+      "prompt": "Productionoutfit on EXACT female calibrationfigure scalp164chin324 center512 handsfeetunchanged soles1440. Subject: woman of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_britain_future. Cohesivepracticalcivilian heather/slategrey herringbone longfittedfrockcoat flaredhem1150, oxblood etchedpaisley facing, bottlegreen FairIsle upperchest band andbrassrivets, smallpleatedopaqueivorycollar belowchin324 twistedcoppertorc trimsewnneckline, navy pinstripe midcalfskirt hem1280. Longsleeves towrists. Opaquecharcoalstockings scuffedoxblood closedankleboots. Clothmattenotglossy. Restrainedfuture tailoring notroyalregalia. Late1980sanimehandinkfinepigmentgrain. No hairhatsprops.1024x1536green#00FF00magenta#FF00FFheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-90b7f871-8b6c-4826-967b-4434445ff7ae.png",
+      "path": "Raw/outfit_f_britain_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0f7a1eeb334015f8ce2a148fd98e01ac95be0405157334a1c84b75e896fecd9e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_future__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: woman of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_britain_future",
+      "prompt": "ONE rigidexactpose TWO exactcostume. Dress ONE with TWO changingonlyviewerRIGHTarm: handraisedat chestx535-641y394-500 wrist620490 elbow690605. Otherhanddown. Preserve scalp164chin324feet1440 bodyunchanged. Heather/slategrey herringbone longflaredfrockcoat with oxbloodpaisley frontedges hem1225 navyrailwaypinstripe underskirt1235 charcoalstockings oxbloodclosedlaceboots. BottlegreenFairIsle shoulder/chestpanel printedpunchcarddots brassbuttons slimwaist, highstandcollar pleatedopaqueivoryfrill justbelowchin. Fullsleeves towrists withgreenknitcuffs. Handinfrontofchest. Samefabrictexturepaletteanddetails mattepigmentfineinklate80sanime1024x1536green#00FF00magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3ba08e99-d8ed-4e1c-bfa5-8123c4c4dc09.png",
+      "path": "Raw/outfit_f_britain_future__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4eef1f0c36c5bd66b0544339f02730ca04145614f999aeb78a7b22eca9a155d2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_future__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: woman of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_britain_future",
+      "prompt": "ONE exactposeguide TWO identicalcostume. Dress ONE with TWO changingonlyviewerLEFT arm handunderchin x464-560y292-390 cuff480380 elbow390550. Preserve otherarm/headfeet scalp164chin324soles1440. Sameheather/slateherringbone fittedflaredfrockcoat oxbloodpaisleyfacings hem1225 navypinstripe skirt1235charcoalstockings oxbloodclosedlaceboots; greenFairIsle chestband printedpunchcard dots brassbuttons highpleatedivorycollar BELOWchin. Hand coverscollar/chin naturally. Fullsleeve to wrist withgreenknitcuff, no exposedforearm. Preserveprecisefabricpatterncolors andmattehandpaintgrain.1024x1536flatgreen#00FF00magentaheadhands late80sanime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-07636d2c-b9da-49f1-b3ca-1eca477e45d4.png",
+      "path": "Raw/outfit_f_britain_future__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aee8e413bb03562a562ab6c287f71841c8def18a52aac98482b3aee88ab191f9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_britain_future__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: woman of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_britain_future",
+      "prompt": "ONE exactrigidposeguide TWO identicalcostume. Dress ONE in TWO changing onlysleeves to bothpalmsforward. Handsunchanged x376-480/544-649y461-600 wrists418600/603600. Headscalp164chin324feet1440 torsolegsunchanged. Heather/slategreyherringboneflaredfrockcoat oxbloodpaisleyfrontedges hem1225 navypinstripeunderskirt1235charcoalstockingsoxbloodclosedlaceboots. BottlegreenFairIsle upperchestpanel printedpunchcarddots brassbuttons pleatedopaqueivoryhighcollar belowchin. Fullsleevesgreenknitcuffstowrists. Hands infrontofcoat. Samecolorspatternsandmattepigmenttexture late80sanime1024x1536flatgreen#00FF00magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0b755b59-fb7e-4489-8afb-302714edb0c8.png",
+      "path": "Raw/outfit_f_britain_future__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "78a6f2d08eccd4461c5d5d1e793549ec5f529b2b9dd30d4ca39b8ae640788a8b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_future",
+      "prompt": "Productioncostume onexactmalecalibrationfigure scalp239chin400center512handsfeetfixedsoles1421. Subject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_germany_future. Coherenteveryday civilian graphiteprecision-tailoredhiplengthjacket asymmetric Bauhausredyellowblue geometricupperchest panels circletriangle square. Roundamberlenslikebuttons, subtle Jugendstilcurvetrimoncuffs, ventedshoulderpanels solidblueunderlining. Smallivorypleatedcollar belowchin separatedfromredareas bybroadbluecollar. Graphitetrousers with blankgridwoven texture, linen socks closedslatewalkingshoes. Fullsleevestowrists. No uniforminsignia propshairhat. Matte texturedlate1980sanime finehandink pigmentgrain notglossy3D.1024x1536flatgreen#00FF00magenta#FF00FFheadhands.\nRegistration correction: ONE is exact registration stencil TWO clothingdesignONLY: TWO is much too tall. Dress ONE with theidentical costumeTWO preserving ONE's headhandsfeet coordinates exactly. Scalp239chin400center512 soles1421handtips923wrist800. Graphite tailoredjacket Bauhausredyellowblueupperchest panels amberlensroundbuttons curvedJugendstiltrim blueslitpuffedshoulderlining bluehighcollar with smallivorypleatedfrillbelowchin400 bluecuffs graphitegridtrousersivorysocksclosedslatewalkingshoes. Keepstyleandcolors precisely. Do NOT use TWO figure scale.1024x1536flatgreen#00FF00magentaheadhands mattehandpaintanimegrain.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-be674d9c-a470-4aee-8ea1-75b3edf70cda.png",
+      "path": "Raw/outfit_m_germany_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5ba7c8ed64d55b65e3ebe579d654606b4624c992d9bc89178ff7f8f8d9c1f796",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_future__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_germany_future",
+      "prompt": "Create one 1024x1536 registered game outfit sprite. Reference 1 is the EXACT pose/body positioning template; reference 2 is the exact costume to preserve. Dress reference 1 in reference 2's same costume, changing ONLY the sleeve on viewer RIGHT to follow the bent arm and open hand close to chest. Copy exact magenta hand contour at x545–635 y496–600, wrist near630,590, elbow700,640. Keep other relaxed hand unchanged. Scalp239 chin400 soles1421, body centered512. Keep jacket hem800, all buttons, geometric primary-colour panels, amber clasps, blue slashed shoulder puffs, gold Jugendstil embroidery, blue cuffs with ivory frill, grid trousers, cream socks and graphite shoes identical. Do not redesign or shift torso/legs. Exposed head and hands flat #FF00FF, background uniform #00FF00. Fine late-1980s anime ink and restrained cel shadows, preserve original subtle pigment grain. No hair, extra accessories, text, guides or shadows on background.\nSubject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_germany_future.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-64e412c7-718b-4c1b-af13-2412321b688e.png",
+      "path": "Raw/outfit_m_germany_future__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "585a98f7a76599f013698a1e194de5357317c50f5ce397a152971a414862aaa5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_future__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_germany_future",
+      "prompt": "One 1024x1536 registered outfit sprite. Reference1 exact pose template. Reference2 exact costume. Dress reference1 in reference2 clothing preserving everything except arm position. VIEWER LEFT hand touches chin fingers x465–550 y375–474 wrist~460,467 elbow375,610. Keep those exact hand contours exposed magenta; cuff ends at wrist not across fingers. Other hand relaxed identical. Scalp239 chin400 soles1421 body512. Same graphite jacket hem800, asymmetrical amber buttons, red yellow blue Bauhaus chest panels, gold whiplash embroidered curves, blue slashed puffs, blue frilled cuffs. Same grid trousers ivory socks graphite shoes. Fine textured 1980s anime pigment grain and cel shadows matching source, no new brocade pattern. Flat #00FF00 background; exposed head hands #FF00FF. No hair accessories text guides background shadows. Keep legs torso buttons fixed, move sleeve naturally.\nSubject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_germany_future.\nFinal correction: preserve neutral torso unchanged behind raised arm; circle mostly occluded, original panel coordinates retained.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9b8ed56c-d397-4ce4-9f86-ebae04fc14f8.png",
+      "path": "Raw/outfit_m_germany_future__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "de21edb44be333ff3b4f4815c5d11e3ddb0ad3ceb22d713e7c5a1362fbc46131",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_future__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_germany_future",
+      "prompt": "One 1024x1536 game outfit sprite. Edit costume reference1 into exact BOTH palms open lowerchest pose of reference2. Only sleeves and hands change, keep original torso legs shoes unchanged. Exact magenta hand contours: viewer-left x360–469 y531–657 rightx555–665 y531–657, elbows close atx340/680 y660. Cuffs join wrist below palms. Preserve head239chin400soles1421 bodycenter512 jackethem800. Preserve all costume graphics exact: redpanelcircle449488, redbottom538, blueyellowtrianglebottom594, yellowwaistsquare489594to539653, amberdiagonalbuttons, goldenJugendstiltrim bluepuffshoulderpanels ivoryfrill bluecuffs gridpants creamsocks graphiteclosedshoes. Hands naturally cover graphics without moving them. Flatgreen#00FF00 backdrop flatmagenta#FF00FF exposedskin. Restrained late1980s inkcelcolour pigmentgrain same as reference1. No additional patterns,text,hair,guidelines or backdrop shadows.\nSubject: man of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_germany_future.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4f6f3568-edb6-40a6-b22a-731381c21e6c.png",
+      "path": "Raw/outfit_m_germany_future__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f9094a68402bee0beb18dce1c832558ad2a9ef6fede66bc583aa43a73596a2e2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_future",
+      "prompt": "Create 1024x1536 full-canvas registered female costume sprite on supplied exact mannequin. Preserve scalp y164 chin324 soles1440, center512 and all hand contours relaxed x275–336 /687–748 y780–906. Do not enlarge or recenter. Completely clothe body, legs and feet; only bald head and hands remain flat #FF00FF. Flat #00FF00 background. Textured late1980s anime production cel with fine ink, pigment grain and restrained matte shadows. Practical Rhine-Ruhr2150 civilian woman worker outfit: graphite precision-tailored long-sleeved short jacket hem720 over calf-length charcoal divided skirt hem1260, opaque graphite stockings and sturdy closed graphite low-heel shoes. Distinct asymmetric Bauhaus chest composition yellow square and cobalt circle on viewer-left upperchest, restrained red triangle on viewer-right. Amber round optical lens fasteners vertically down middle. Fine gold Jugendstil whiplash embroidered trim along shoulder/chest and cuffs. Small vented puff shoulder panels with cobalt lining, sleeves to wrist780. Small linen-white pleated collar immediately below chin, separated from colourblocks by cobalt high neckband. Fine subtle movable-type grid woven texture, no letters. All clothes opaque. No hair, hats, jewelry, weapons, text or extra props. Ordinary functional civilian silhouette not fashion model. Anatomical scale and positions MUST exactly match template.\nSubject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_germany_future.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ae591b9f-b673-4a90-b66f-4d34f8d7b812.png",
+      "path": "Raw/outfit_f_germany_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b6de8bbf9b18ca68d7c4d6987b4180229fcf8aa481db8593b3e26f756ae2a346",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_future__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_germany_future",
+      "prompt": "Edit costume reference1 into exact explaining pose reference2. ONLY viewer-left sleeve bends with hand palm up x393–525 y559–608 elbow300580. Match full hand contour and thumb position from reference2 precisely. Other arm unchanged. Keep entire torso graphics and skirt/head/shoes unchanged; shoulders may bend naturally. Scalp164 chin324 body512 soles1440. Same graphite grid jacket hem708, 6 central amber buttons y362399455513571628, gold shoulder whiplash trim, yellow square406419–458472 blue circle460466 radius26 red triangle583420–615477. Same cobalt puff linings, ivory frilled blue collar, gold cuffs, divided skirt hem1180, graphite stockings and closed lowheeled shoes. Fine late1980s anime celart with pigment grain, do not add brocade. No hair accessories labels guides shadows. Green#00FF00 background and exposed skin magenta#FF00FF. One1024x1536 fullcanvas.\nSubject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_germany_future.\nCorrection: extend bent forearm38px right to align fingertip525 and wrist411 with guide.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-33c0f575-719b-4581-b249-1591acee293b.png",
+      "path": "Raw/outfit_f_germany_future__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "697496a022c320b3c3eb55699b3a7e6479fb3e72535d2b9dd9d4193661cb50cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_future__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_germany_future",
+      "prompt": "1024x1536 registered outfit sprite. Edit reference1 costume ONLY arm pose to exact reference2 pose: viewer-right fingertips at cheek x535–586 y274–370, cuff at wrist370, forearmupright elbow620550; viewer-left forearm crosses waist and magenta hand supports opposite elbow at x557–645 y549–610. Copy guide contours no shift. Preserve head164to324 bodycenter512 shoes1440. Preserve firstimage costume: graphite grid jacket hem708, centralamberbuttons, exact yellow square406419–458472 bluecircle460466 redtriangle583420–615477, goldenJugendstilshoulder/cufftrim bluepufflinings smallivoryfrillcobaltneck. Do not move torso graphics to uncover them; arms occlude as needed. Unchanged dividedskirthem1180 opaquegraphitestockings closedlowheelshoes. Exposedskinflatmagenta#FF00FF greenbackground#00FF00. 1980sanime inkcellooksubtlepigmentgrain sameasfirstimage, no brocade added. No hair text props guides.\nSubject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_germany_future.\nCorrection: extend upright sleeve cuff to wrist370 from410.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-54f0c40a-6fc3-4718-8ce1-f8a7a305567d.png",
+      "path": "Raw/outfit_f_germany_future__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "13dcd01a2859066639361a6d028293827ff0c99693b0728abac6413dccc9f590",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_future__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "country": "germany",
+      "era": "future",
+      "label": "Bauhaus colour panels",
+      "details": "Subject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_germany_future.",
+      "flags": {
+        "label": "Bauhaus colour panels"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_germany_future",
+      "prompt": "Edit first costume into second reference's exact arm gesture, preserving torso head skirt legs and shoes.1024x1536. Viewer-left hand rests upperchest contour x432–565 y393–498 wrist440480. Viewer-right hand extends low toward side contourx773–886 y685–778 wrist780704. Follow guide's hand positions exactly. Sleeves fullgraphite gold embroidered cuffs end at these wrists, no magenta forearms. Do NOT copy guide's magenta clothes. Preserve original costume all graphics same locations naturally occluded by hand, original graphite gridjacket hem708, amberbuttons, blue shoulderpuffs, goldJugendstiltrim and cuffmotifs, cobaltneck ivoryfrill, dividedskirt1180 graphitestockings blacklowheelshoes. Scalp164 chin324center512sole1440. Backgroundflatgreen#00FF00 exposedheadhandsflatmagenta#FF00FF. Textured late1980sanime inkcelart subtlepigmentgrain originalmaterial; no new brocade patterns no text/hair/props/guides.\nSubject: woman of Rhine-Ruhr Metropole; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like buttons and fastenings that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut-look stitched trim (the fabric stays solid). Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. Frilled, Kruseler-like pleated collars kept below the chin. A fine movable-type grid texture (no letters). Baltic amber and linen-white accents, with the white kept away from red-and-black areas. Avoid black-white-red combinations, eagles, crosses and blackletter lettering.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_germany_future.\nCorrection requested: extended hand25px left to guide. Final remains approximately14px left of guide; registration review pending.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aa683ab4-d321-4fb5-a2d5-c75e61069f10.png",
+      "path": "Raw/outfit_f_germany_future__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2d3a978b5cf60056edf29bc4a96a460a75c5b55f972ade98f32e2015814dbc59",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__explaining_a",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "prompt": "Create1024x1536 registered adult male game base-body sprite. Reference1 is exact finished adult identity/skin/style/grey modest mid-thigh opaque shorts to preserve. Reference2 exact pose/silhouette guide. Only change arm positions to match reference2; copy head and legs fromfirst unchanged. Scalp239 chin400 feet1421 center512. ViewerLEFT palmup x414–516y609–674, elbow300640; otherhandrelaxed. Same warm light peachskin, facialidentity brown eyes bald nofacialhair neutralexpression ordinarybuild; same opaque greyshorts and barefeet. Texturedlate1980sanime inkcelpigmentgrain sameasfirst. Flatgreen#00FF00background, no magenta anywhere, no accessories text props shadows. This is neutral nonsexual modular costume foundation for adult travellers; no nudity below waist. Exact guide silhouette hand placement is essential.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8fb0d49f-f37b-4d5c-b27a-d4f3d8b55269.png",
+      "path": "Raw/base_m_skin1_facea__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "59a71e10420cbd14e5184c4a9412dacec238a479041e6619271affb2d52e8868",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__explaining_b",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "prompt": "1024x1536 adult male game base sprite. Reference1 exact adult identity/skin and opaque grey mid-thigh shorts, reference2 exact pose. Preserve firstimage head torso legs feet shorts, ONLY adjust both arms to reference2. BOTH openpalms asymmetrically at sides: viewerleft x177–292 y562–642, viewerright x732–845 y690–777. Copy exact guide arm and hand contours, not broad approximations. Scalp239chin400soles1421center512. Warm lightpeachskin brown eyes bald neutral same face/physique, no added hair. Fineink texturedlate1980sanime celpigmentgrain, modest nonsexual costume foundation, opaquegreyshorts retained. Flatgreen#00FF00background no magenta no text guides objects castshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7cededa3-6391-4c25-8582-bc02a073c9c6.png",
+      "path": "Raw/base_m_skin1_facea__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dfccf82b159407409ac5c2a1f98b1a3ab7fc63b37bfdd63d3e2a860c4270be79",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__explaining_c",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "prompt": "Edit adult male base fromreference1 into exact arm pose ofreference2. Single1024x1536 sprite. Preserve firstreference adultidentity/brown eyes lightpeachskin baldhead neutralexpression torso legs barefeet opaquegrey modest mid-thighshorts pigmenttexture. Only bend viewer-right arm and hand near chest copyingguide x545–635 y496–600 elbow700640. Otherarmrelaxed unchanged. Headscalp239chin400soles1421center512. Do not change bodybuild or framing. Same texturedlate1980sanime celinkart. Flatgreen#00FF00 background no magenta no hair props text guides castshadows. Nonsexual modular costume foundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c849e93-2f66-47ca-ade2-c6638cde828d.png",
+      "path": "Raw/base_m_skin1_facea__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b9169f86214a396fb92af0f89f66daf9fb9f17d73539b8297382a7e05053f6d4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__thinking_b",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "prompt": "Create next adult male game base pose fromreference1 with exact guide2 silhouette. Preserve adultface lightpeachskin baldhead brown eyes neutralexpression grey opaque mid-thighshorts legsfeet and framing. Change only arms: viewer-right indexfinger gently touchescheek x525–582y345–467 with wrist550460, oppositehand supports elbow x553–650y600–667. Full arm contours exactly fromguide2. Same texturedlate1980s anime celpainting fineink pigmentgrain.1024x1536 head239chin400soles1421center512. Modest nonsexual adult costume foundation, shorts opaque. Flatgreen#00FF00 background no magenta no hair props text guidelines shadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6e0fdfe1-fe9e-4625-b8e1-29a00cd47189.png",
+      "path": "Raw/base_m_skin1_facea__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7f6838fd16aea2e9038e2d1909f2f76b9f759e89c057e32639916b6ef7fbac1e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__thinking_c",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "prompt": "1024x1536 adult male modular game costume-base. Editreference1 only arms to reference2 exact hands loosely linked at waist pose. Hands overlap x442–585 y724–805, elbows x340/685y650, exact guidesilhouette. Preserve first adult identity/lightpeachskin brown eyes bald neutralexpression bodybuild greyopaque mid-thighshorts barelegsfeet and fineink texturedlate1980sanimecelpigmentgrain. Headscalp239 chin400 soles1421center512. No reframe no scalechange no facialchange. Modest nonsexual foundation pose. Flatgreen#00FF00background, no magenta text guides accessories or castshadows.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ddf5b984-b9ef-4ce2-948c-5c5dbc6237fc.png",
+      "path": "Raw/base_m_skin1_facea__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cf3786246400aacce8e768b7f3e612e02a19f401eae995c0662eacc5b7edd35f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__objecting_a",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "prompt": "Edit reference1 adultmale base into reference2 exact calm please-wait pose: viewerLEFT palm forward nearshoulder fingersup contourx299–406y367–502 elbow310620, otherarmdown unchanged.1024x1536 fixedbody. Preserve firstreference faceidentity brown eyes bald neutralexpression lightpeachskin physique opaquegrey mid-thighshorts barelegsfeet and originaltextured late1980sanimeinkcelart. Scalp239chin400feet1421center512. Only arm moves; don'tchange proportions or zoom. No magenta no hair props text guides castshadows, uniformgreen#00FF00 background. Neutral nonsexual adultmodularcostumefoundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6e13fa08-09cd-44d4-8e9c-92b201e4d815.png",
+      "path": "Raw/base_m_skin1_facea__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7ae6a574f08c21c0289c7acdf5dfce7a02c5a8bd113478a3876f2a72a2d4a9ed",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__objecting_b",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "prompt": "One1024x1536 adultmale game base sprite. Reference1 appearance identity skin clothing; reference2 exact hand/armgeometry. ONLY change arms ofreference1 to both openpalms forward lowerchest reference2: hands x360–469 and555–665 y531–657 elbowsclose tobody~340/680660. Matchguide precisely. Preserve baldhead brown eyes neutralface lightpeachskin originaltorso legs feet greyopaquemid-thighshorts. Scalp239 chin400 soles1421 center512. Texturedlate1980sanime inkcelart originalpigmentgrain, not glossy. Green#00FF00 uniformbackground no magenta accessories labels guides props castshadows. Neutral nonsexual adultcostume foundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a5779c67-d5fa-4dcd-a355-72d8dd7f889b.png",
+      "path": "Raw/base_m_skin1_facea__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d5a1e458e3c226b4331b91b9d4d7d1792c67527cb38626b9bc7d865f70a9b011",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin1_facea__objecting_c",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "a",
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "prompt": "1024x1536 adult male gamebase. Edit only arms of reference1 to precise reference2: viewerleft hand restingupperchest x449–567 y463–569 elbow330640, viewerright arm downoutwith hand flat x744–867 y773–844. Matchhand silhouettes/locations exactly. Preserve reference1 adultface brown eyes baldhead neutralexpression, lightpeachskin, bodyshape, greyopaque modest mid-thighshorts, legsfeet. Scalp239 chin400 feet1421 center512. Fine texturedlate1980sanime inkcelart samepalettegrain. Uniformgreen#00FF00 background no magenta no text guides hair accessories castshadows. Nonsexual adult modular costume foundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5f64bc14-58c7-4d1f-9eb1-02ca7b123e34.png",
+      "path": "Raw/base_m_skin1_facea__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "027c1dc0b479bc447e62637326ebca706e0fed16f6da0454f04b747487515b1e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__explaining_a",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "prompt": "1024x1536 neutral adult female gamebase pose variant. Reference1 adult identity skin physique opaquegrey bandeau top and opaquegrey mid-thighshorts; preserve all exactly. Reference2 exact arm pose. Only bend viewerLEFT arm palmup: handx393–525y559–608 elbow300580, otherarmdown. Copyguideprecisely. Headscalp164 chin324 feet1440 center512, do not shift head/legsfeet or resizebody. Same warm lightpeachskin browneyes bald neutralface ordinaryadultfigure, fineink textured1980sanime celcolour pigmentgrain. Both chest and pelvis remain fully covered by same opaque grey garments. Flatgreen#00FF00background no magenta text guides hair accessories shadows. Nonsexual modular clothing foundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-019b808e-6cba-4411-b788-50ecc78b38cb.png",
+      "path": "Raw/base_f_skin1_facea__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d99f1eaea98d9e188196fc24ca5160d4828937c23b6931de147c5cdae125ee35",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__explaining_b",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "prompt": "1024x1536 adult female modular gamebody. Preserve reference1 adultidentity baldface brown eyes neutralexpression lightpeachskin originalshape opaquegrey bandeau chesttop and grey mid-thighshorts feetlegs. ONLY change arms to exactreference2 asymmetrical openpalms: viewerleft handx174–280y674–774, viewerrighthandx722–845y558–646, guidesilhouetteprecise. Scalp164chin324soles1440center512 unchanged. Bothgarments opaque unchanged fullcoverage. Texturedlate1980sanime inkcelart subtlepigmentgrain originalstyle. Uniformgreen#00FF00background no magenta accessories labelsguides shadows or props. Nonsexual adult costume foundation.\nReview: viewer-right hand approximately15px wider/right than guide; alignment review required.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-daf8864e-9c63-4802-884d-6aeec5cba07c.png",
+      "path": "Raw/base_f_skin1_facea__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8300dc82976d67d2cb903f38b64618a5cf9683ab1b2329cdc23c357a2ae70901",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea__explaining_c",
+      "family": "body_pose",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "a",
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "prompt": "Edit adultfemale gamebase reference1 only armposition to exactreference2: viewerRIGHT openhandcompactnearupperchest x535–634y394–500 elbow690600, otherarmrelaxed unchanged. Keep same adultidentity bald brown eyes neutralface lightpeachskin originaltorso legsfeet opaquegrey bandeautop and opaquegrey mid-thighshorts. Bothgarments fullycover chest/pelvis. Scalp164 chin324 feet1440center512,1024x1536 no resize. Texturedlate1980sanime fineink celpigmentgrain sourceappearance. Uniformgreen#00FF00 backdrop no magenta hair props text guides or shadows. Neutral nonsexual adultmodularcostumefoundation.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c3468c7-7c04-43c5-ad90-2f475c0a64a7.png",
+      "path": "Raw/base_f_skin1_facea__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9ddba0ee618e7583234351185eb923f1a7784d1e766c8c8225a7acfdeec5f71a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

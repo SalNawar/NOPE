@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 1134. Full regeneration is NOT complete.
+Saved: 1159. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -1138,3 +1138,28 @@ Saved: 1134. Full regeneration is NOT complete.
 | outfit_f_japan_future__objecting_a | visually reviewed; registration pending |
 | outfit_m_britain_future | visually reviewed; registration pending |
 | outfit_m_britain_future__explaining_b | visually reviewed; registration pending |
+| outfit_m_britain_future__thinking_c | visually reviewed; registration pending |
+| outfit_m_britain_future__objecting_a | visually reviewed; registration pending |
+| outfit_f_britain_future | visually reviewed; registration pending |
+| outfit_f_britain_future__explaining_c | visually reviewed; registration pending |
+| outfit_f_britain_future__thinking_a | visually reviewed; registration pending |
+| outfit_f_britain_future__objecting_b | visually reviewed; registration pending |
+| outfit_m_germany_future | visually reviewed; registration pending |
+| outfit_m_germany_future__explaining_c | visually reviewed; registration pending |
+| outfit_m_germany_future__thinking_a | visually reviewed; registration pending |
+| outfit_m_germany_future__objecting_b | visually reviewed; registration pending |
+| outfit_f_germany_future | visually reviewed; registration pending |
+| outfit_f_germany_future__explaining_a | visually reviewed; registration pending |
+| outfit_f_germany_future__thinking_b | visually reviewed; registration pending |
+| outfit_f_germany_future__objecting_c | visually reviewed; registration pending |
+| base_m_skin1_facea__explaining_a | visually reviewed; registration pending |
+| base_m_skin1_facea__explaining_b | visually reviewed; registration pending |
+| base_m_skin1_facea__explaining_c | visually reviewed; registration pending |
+| base_m_skin1_facea__thinking_b | visually reviewed; registration pending |
+| base_m_skin1_facea__thinking_c | visually reviewed; registration pending |
+| base_m_skin1_facea__objecting_a | visually reviewed; registration pending |
+| base_m_skin1_facea__objecting_b | visually reviewed; registration pending |
+| base_m_skin1_facea__objecting_c | visually reviewed; registration pending |
+| base_f_skin1_facea__explaining_a | visually reviewed; registration pending |
+| base_f_skin1_facea__explaining_b | visually reviewed; registration pending |
+| base_f_skin1_facea__explaining_c | visually reviewed; registration pending |
