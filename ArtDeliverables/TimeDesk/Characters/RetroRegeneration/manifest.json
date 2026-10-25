@@ -29782,6 +29782,756 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_future__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: man of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_italy_future",
+      "prompt": "Image ONE is the exact pose stencil; image TWO is the exact costume. Dress image ONE in image TWO's clothing, change only sleeves to follow the arms. Both open hands asymmetrical: viewerLEFT palm x178-290 y561-640 wrist290625, viewerRIGHT palm x734-845 y690-776 wrist740710. Preserve head scalp239 chin400 and feet soles1421, torso/legs/costume immobile. Exact same travertine marble-veined fitted jacket hem835, crimson chest concentric ochre rings and arcade, crimson pomegranate-damask diagonal wrap knot at left waist650 and long right tail1205, puffed slashed sleeves with terracotta lining, charcoal trousers and brown shoes. Preserve all colors and matte late80s anime ink pigment texture. No extra patterns. Cover arms with fitted sleeves to wrists, hands fully visible in front of wrap. 1024x1536 green#00FF00 backdrop magenta#FF00FF head/hands.\nCorrection: Correct only the viewerRIGHT forearm and magenta hand in this image. Move that hand exactly20 pixels LEFT, same vertical position same size same gesture, fingertips end x845 rather865, wristx734 rather754. Adjust sleeve length to join relocated wrist naturally. All other pixels particularly left hand head feet torso costume unchanged. Preserve exact1024x1536 green background, matte handdrawn costume textures.\nFresh guide-based correction: Use image ONE as rigid pose stencil, do not move its hands or fingers at all. Use image TWO as costume reference. Render precisely that Rome2150 marble-white jacket crimson pomegranate damask drape ochre stripes charcoal pants brown shoes on the pose stencil. Absolutely retain ALL magenta shapes of the stencil at original positions: scalp239 chin400 sole1421, viewerLEFT hand178-292 y561-643, viewerRIGHT hand734-845 y690-777. Clothing adapts to stencil, never change stencil to fit clothing. Crimson shoulder-to-right-calf wrap unchanged, fitted sleeves reach wrists, slashed puffs at shoulder, chest ochre radio rings and arcade. Texture unchanged subtle grain late1980s anime. 1024x1536 flatgreen#00FF00 magenta face hands. Head/torso/legs identical registration imageONE.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6b608c36-87ea-460c-9156-aeeaa0beeb50.png",
+      "path": "Raw/outfit_m_italy_future__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "41d138eecb00c4117ebc990f8ed30420f5faf4805d0ab1caf6249bc99aa8f023",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_future__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: man of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_italy_future",
+      "prompt": "ImageONE exact rigid pose stencil. ImageTWO exact costume. Dress stencil with identical costume changing only arms/sleeves. Both hands loosely linked at waist, exact magenta hands x435-585 y724-805, wrists435740 and585740; elbows330650/690650. Preserve scalp239 chin400 soles1421 legs torso. Rome2150 travertine marblevein fitted jacket hem835 crimson chest gold radio rings arcade, pomegranate-damask crimson diagonal wrap from right shoulder440 to leftwaist650 with long right tail1205; ochre stripes, slashed puff shoulder sleeves terracotta lining, fitted cuffs at wrists, charcoal trousers brown shoes. Hands visibly IN FRONT of wrap. Identical palette fabric and matte late80s anime pigment grain. 1024x1536 green#00FF00 magenta face/hands. No headwear hair accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-90be6e27-1a07-4750-8a92-1a01b59fcf1d.png",
+      "path": "Raw/outfit_m_italy_future__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "35375b1aee94a44098372dfc1765eeac1e3548b0fb9c74796a27b1e686f7f07b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_italy_future__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: man of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_italy_future",
+      "prompt": "ImageONE exact pose stencil imageTWO exact costume. Keep every magenta head and hand coordinate from ONE unchanged. Dress it in TWO costume, only arm pose changed. ViewerLEFT palm forward fingersup x300-407 y367-503 wrist327500 elbow310630. Other hand neutral. Scalp239 chin400 soles1421. Rome2150 travertine marbleveined fitted jacket hem835 crimson chest gold radio rings and arcade, slashed puffshoulders terracotta lining, fitted longsleeves, crimson pomegranate-damask diagonal wrap ochre stripes long righttail1205, charcoal trousers wornbrown shoes. No new design. Texture and colors match reference. Hand visible in front of costume. Full1024x1536 green#00FF00 and solidmagentaheadhands. Matte late80s anime.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-86e67515-9dec-48f5-9d96-9dd72f2694be.png",
+      "path": "Raw/outfit_m_italy_future__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "17224033318803d371341cc84e98ed0a6b43fa31c1ad3b373779a151e8dc2600",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: woman of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_italy_future",
+      "prompt": "Create one fullcanvas wardrobe sprite on EXACT female stencil attached; do not change scalp164 chin324 center512 hands positions or soles1440. Flatgreen#00FF00 magenta#FF00FF facehands. Complete opaque civilian outfit and closed shoes. Subject: woman of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_italy_future. A practical textured midcalf travertine A-line dress with slim ochre clavi, crimson asymmetric short upperbody wrap and pomegranate damask panels, modest slashed puff shoulder sleeves terracotta lining and fitted longsleeves, velvet round collar, small Vitruvian circle-square and radio-ring chest motifs. Cream opaque stockings and scuffed brown lowheeled closed walking shoes. Ordinary civilian, no cape train. Matte painted pigment and fine handink late1980s anime texture. Keep original size/position and magenta head/hands; no hair or jewelry or props. 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0b184c7d-bad7-4862-8d7c-5fecfbc9d7b6.png",
+      "path": "Raw/outfit_f_italy_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7a247bc45ba5012fd181c22822bea06e4ab566ae75040aef8e38c7dc0e8cedfc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_future__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: woman of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_italy_future",
+      "prompt": "ImageONE exactpose stencil imageTWO identicalcostume toputon stencil. Change only viewerRIGHT arm raised hand at chest x535-641 y394-500 wrist620490 elbow690605. Preserve all headfeetbody coordinates scalp164 chin324 soles1440. Identical travertine A-line midcalfdress hem1230 ochreclavi crimsonpomegranate-damask diagonal skirt wrap arcade stripe, velvetcrimson highcollar asymmetric shoulderpanel with goldVitruvian emblem at560420; slashedpuffs full crimson fittedsleevestowrist. Hand visible in frontof chestemblem. Creamstockings brownclosedlowheels. No garment changes except sleevepose, originalcolorsmattepainttexturelate1980sanime.1024x1536 flatgreen#00FF00 solidmagentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4fb85bbb-e36c-49f4-9ada-36b36c9ba82c.png",
+      "path": "Raw/outfit_f_italy_future__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cd05f7cec9291129155ed5de1a458781b49937edfd44001a35d54c35bf7868ca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_future__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: woman of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_italy_future",
+      "prompt": "Dress exact pose stencil ONE in identical costume TWO. Only viewerLEFT arm changes: right hand under chin, magenta fingers and palm x464-560 y292-390, cuff at wrist480380, elbow390550. Otherarm remains down. Keep head scalp164 chin324 legsfeetfixedsoles1440. Exacttravertine Aline dress hem1230 ochreclavi crimson pomegranate-damask diagonal skirt wrap arcade trim, highcrimsonvelvetcollar and upperchestwrap with goldVitruviangeometry. Slashedpuff sleeves terracotta lining, fittedcrimsonlongsleeves allthewaytowrists. Hand on topofcollar/chin, skin only magenta hand. Creamstockings brownlowclosedshoes. Preserve paletteandfine matte pigmentgrain late1980sanime.1024x1536 flatgreen#00FF00 magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23cc6556-1795-427e-b3c5-198370b60137.png",
+      "path": "Raw/outfit_f_italy_future__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bfe3e0e061c8c5bc207d465413397c6598cc6f7b86feb7bd65b831a2b5ddd2a4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_italy_future__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "country": "italy",
+      "era": "future",
+      "label": "clavus-stripe wrap",
+      "details": "Subject: woman of Mediterranean Union Rome; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or sheen textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring, and kaleidoscopic swirl prints. Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_italy_future.",
+      "flags": {
+        "label": "clavus-stripe wrap"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_italy_future",
+      "prompt": "Use ONE as exact unchanged pose stencil and TWO as exact costume. BOTH palms forward at lowerchest; retain magenta fingers x376-480 and544-649 y461-600, wrists418600/603600. Costume only arms adapt: fittedcrimson sleeves and cuffs to wrists, hands infront of outfit. Keep scalp164 chin324 soles1440 and dressgeometry fixed. Travertine A-line dress hem1230 ochreverticalclavi crimsonpomegranatedamask curved skirtwrap and arcade border, highvelvetcrimson collar/chestwrap goldVitruvianemblem. Slashedpuffedshoulders terracotta lining. Creamstockings brown closedlowheelwalking shoes. Preserve mattegrain handdrawnlate80sanime.1024x1536 flatgreen#00FF00 magentaheadhands. No accessories.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e74e9dd6-c659-4606-ba3e-2a5cb77043c7.png",
+      "path": "Raw/outfit_f_italy_future__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cf80cd1e7aad99166258b53804c91ce7fa90040009f9b1199e1f79531b996836",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: man of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_china_future",
+      "prompt": "Draw a complete opaque futuristic civilian costume on the exact attached male calibration figure. Keep scalp239 chin400 center512 hand positions feet soles1421. Never enlarge or shift figure. Subject: man of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_china_future. Coherent practical design: inkblack diagonal crosscollar long coat, indigo pleated sidepanels, celadon opaque layered sleeves to wrists, sculpted darkjade pankou closures, cinnabar diagonal lapel accent and fine metallicgold cloud/keyfret borders on upperchest. Restrained blank movabletype grid fabrictexture, compassrose emblem on upperchest. Longcoat hem1120 slim charcoal trousers black closed walkingboots. Matte textured late1980s handinked anime productioncel with pigmentgrain and restrained shadows. No hair hats facialhair or carried props. Baldheadandhands solidmagenta#FF00FF backgroundflatgreen#00FF00 1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c7a045bc-c06d-4604-8c74-ac1926c47e13.png",
+      "path": "Raw/outfit_m_china_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0c2b124de0a508f2db6c0b93e6ad9d993ddb19335c4eef05e910d17f3fd8e83c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_future__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: man of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_china_future",
+      "prompt": "ImageONE exact rigidpose stencil, imageTWO identicalcostume. Dress stencil with costume. Only viewerRIGHT arm raised at chest handx544-633 y496-595 wrist615585 elbow700650. Other hand relaxed. Headscalp239 chin400 feet1421 and torso unchanged. Exactblackcrosscollarcoat with cinnabar lapel jadepankou knots goldcircuitcloudtrim compassrose onupperrightchest, blackoverlayer sleeves celadonlayeredbell sleeves and fittedblackgold innercuffs reaching wrists; indigo gridpleatedsidepanels hem1180, blacktrousersblackboots. Jadebelt pendant rightthigh884 fixed. Handinfrontofcompass. Preserve paletteand matteink pigmentgrain.1024x1536 green#00FF00 magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6992eb6e-7eec-413d-892c-5e92eaef6041.png",
+      "path": "Raw/outfit_m_china_future__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b5cfbb733474c9d18f411275a0343f0d0a539431fbca5e3289c3441a33c9d5bb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_future__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: man of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_china_future",
+      "prompt": "ImageONE exact unchanged poseguide, imageTWO exact clothing. Dress poseguide in samecostume withoutmoving any magenta headhandcoordinates. ViewerLEFT handtoucheschin x450-547y371-477 wrist465470 elbow380620. Otherhanddown. Headscalp239chin400feet1421 unchanged. Blackdiagonalcrosscollarcoat cinnabarlapel darkjadepankouknots goldcloudkeyfret circuittrim largecompassrose upperrightchest, indigo gridpleatedsidepanels hem1180. Celadon layeredbellsleeve with blackgold fitted inner cuff to raisedwrist; no bareforearm. Raisedhand over collar. Jadebeltpendanttail884 unchanged. Blacktrousers blackboots. Preserve SAME mattepigmentgrain colors late80sanime ink, no decorative texture additions.1024x1536 flatgreen#00FF00 magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8dbd3228-9a82-4c65-b109-950ce93942cf.png",
+      "path": "Raw/outfit_m_china_future__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8b20ec2ac8d5b2af6967e9e0eef41b2f4929cb8b21b56c7298f1828c5d2a89af",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_china_future__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: man of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_china_future",
+      "prompt": "ONE exactrigidpose stencil TWO identicalclothes. Dress ONE with TWO, handsremainexactlyasONE. BOTH palmsforward x360-470 and555-666 y531-658, wrists400650/620650. Change only sleevespose. Headscalp239chin400 feet1421fixed. Blackcrosscollarcoat cinnabar diagonal lapel jadepankouknots goldcircuitcloud/keyfret trim compassrose rightchest, celadon layeredbell sleeves and blackgold fittedinnercuffs towrists, indigo gridpleatedsidepanels hem1180 jadebeltpendantright884, blackpantsboots. Handsinfrontofcoat and sleeves. Preserve samecoath emtexturedfabricandpalette mattepaintfineink late1980sanime1024x1536 flatgreen#00FF00 magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6a8b5805-bce1-4044-bd7a-ef281e49afea.png",
+      "path": "Raw/outfit_m_china_future__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "30c4982fb06b770e90e488e8dbb0eb25c00f0a478715b77ff31cd357c4f13b0c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: woman of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_china_future",
+      "prompt": "Create single costume on exact femalepose reference. Headscalp164chin324center512soles1440handpositionsunchanged. Subject: woman of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_china_future. Choose coherent practical design distinctfrommale: celadon crosscollar fittedshortjacket with indigo diagonal lapel, darkjadepankou, gold fine cloudcircuit and starmap lines onupperchest. Layered opaque sleeves cinnabar innercuffs towrists. Cinnabar mamian pleatedside skirt with inkblack centralpanel and narrowgold keyfret border, hem1300. Ivoryopaque stockings blackclosedflatwalkingshoes. Functionalcivilian, no props no hairhatbeard. Late1980s handinkedanime matte pigmentgrain handmade subtle texture. Full1024x1536flatgreen#00FF00 magenta#FF00FFheadhands. Do not enlargecharacter.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-68d9ab4b-75d7-4629-af69-bae7c8ce1fee.png",
+      "path": "Raw/outfit_f_china_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2a7d56cd086b270dcf1f34e838ec0acdda3562875112643c37c30ea29b341e58",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_future__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: woman of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_china_future",
+      "prompt": "ONE exactposeguide TWO exactcostume. Dress ONE identically to TWO changing only viewerLEFT sleeve bent with palmup hand x394-524 y561-607 wrist410580 elbow310580. Allheadhandsfeetcoordinatesunchanged scalp164chin324 soles1440. Celadon crosscollar jacket indigo lapel jadepankou goldcloudcircuit starmap upperchest, layeredceladon indigo hangingopaque sleeves with cinnabar innercuffs towrists. Cinnabar mamian pleatedskirt blackstarmap centralpanel goldkeyfretborder hem1300, cre amstockings blackclosedshoes. Hand visible infrontofjacket, cuffbehindthumb. Preserve SAME palettegeometryand matte handpaintgrain late80sanime.1024x1536 green#00FF00 magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-dcf090bc-9b9b-4ef6-9a74-dd624429f211.png",
+      "path": "Raw/outfit_f_china_future__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "28daaa68dbae403ae424ffdfc4cfe0c09f1bce9587cd5e5e4c4d173154c6ac5c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_future__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: woman of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_china_future",
+      "prompt": "Use ONE exactpose stencil, TWO exactcostume. Dress stencil without moving hands/head/feet. ViewerRIGHT hand lightlytouchingcheek x533-587y275-375 wrist550370; otherhand supports elbow x550-644y548-610. Longlayered celadon-indigo opaque sleeves with fittedcinnabarinnercuffs reach wrists; hands infrontofsleeves, no exposedforearm. Celadon crosscollarjacket jadepankou indigo lapel goldcloudcircuits/starmap, cinnabarmamian pleatedskirt blackcentralstarmappanel hem1300 creamstockings blackclosedshoes. Preserve every other costume detail position andpalette. Scalp164chin324soles1440. Matte1980sanimehandinkpigmentgrain not newpatterns.1024x1536flatgreen#00FF00 magentaheadhands.\nCorrection: Edit only raised viewerRIGHT sleeve cuff near cheek. Extend red opaque inner sleeve upward by35pixels so cuff upperedge crosses wrist at y370 instead405. Keep fingers and palm exactlyunchanged. Cover currentlymagenta forearm below y375 with samecinnabarredfabric. Preserve EVERYotherdetail especially otherhand head skirtlength colors andtexture.1024x1536greenbackground.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-242cae2c-3cb5-4e79-b8a9-025f7e19ba15.png",
+      "path": "Raw/outfit_f_china_future__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8e94bb4508b5372ef1e9c9589a184e2ed01fd2d29bca82c7d4fbc9cf1535e964",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_china_future__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "country": "china",
+      "era": "future",
+      "label": "pankou cross-collar coat",
+      "details": "Subject: woman of Shanghai Megacity; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as layered opaque panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as fine metallic circuit-trace trim. Paper-fold pleating and layered pale panels like xuan paper pages. A fine movable-type grid texture (blank squares, no characters) and star-chart or compass-rose line engraving for the navigation and knowledge theme. Dark jade-like stone fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, dull grey-green celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_china_future.",
+      "flags": {
+        "label": "pankou cross-collar coat"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_china_future",
+      "prompt": "ONE pose stencil TWO exactcostume. Replace guideclothing completely with identical costume TWO, keep headhandsfootpositions from ONE. ViewerLEFT hand across upperchest x434-566y393-497; viewerRIGHT openhand lowoutward x774-888y685-777. Sleeves adapt, fittedcinnabar cuffs towrist, hands infront of cloth. Preserve scalp164chin324 soles1440. Celadon crosscollar jacket indigo lapel jadepankou goldcloudcircuit starmap, layeredceladon-indigobellsleeves, cinnabar mamian pleatedside skirt blackcentralstarmap panel hem1300goldkeyfret border creamstockings blackclosedflats. Samepalette finehandink mattepaintgrain late80sanime.1024x1536flatgreen#00FF00magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-354532fb-e4d4-4fd5-bb0f-8cf489db329b.png",
+      "path": "Raw/outfit_f_china_future__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "438ab4802d7bd16471c6665f09032f864e18687d86f966af27788771c24eaaba",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: man of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_japan_future",
+      "prompt": "Production wardrobe sprite on exact reference male figure. Scalp239 chin400 center512 handlocationssoles1421 unchanged. Subject: man of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_japan_future. Coherent everydaycivilian design indigo shortarchitectural haori jacket with kasane neckline layers washiwhite pale coral vermilion, solid asanoha stitched shoulderpanels, sumi obi wide cincher with modest modularclasp obijime cord, longfullsleeves fittedwristcuffs, wide hakama pleattrousers with subtle sashiko seamgrids and darkclosed splittoetabiwalkingshoes. Plainpracticalgarments with restrained culturallyspecific detailing. No weapons hair hat props. Mattehandpaintedlate1980sanime fineink pigmentgrain.1024x1536 flatgreen#00FF00 magenta#FF00FFheadhands. Do notshift or enlarge figure.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6f3ff9a8-b2da-40a4-829f-2dbf384a610d.png",
+      "path": "Raw/outfit_m_japan_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "67f76527f02ddf101f7887c59ad97416540832b998649b4fa1834570341e96b7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_future__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: man of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_japan_future",
+      "prompt": "ONE exactrigidposeguide TWO identicaloutfit. Dress ONE with TWO changingonlyviewerLEFTarm: palmuphandx414-517y609-674 wrist420650 elbow315645. Headhandsfeetremainexact scalp239chin400soles1421. Indigoarchitecturalhaori asanoha white stitchshoulders whitecoralvermilionkasane collar blackobi doubleclasps redcordtail797, longindigosleeves fittedblackcuffs towrists and architecturalouterpanels, widehakamahem1310 wave/shippostitchsidepatterns closedblacktabishoes. Preserve clothcolors textureandallothergarmentpositions. Handinfrontofobi nothidden.1024x1536green#00FF00 magentaheadhands. Matte1980sanimefineinkpigmentgrain.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-66a48bbf-0f59-4459-8f3e-c35b7d724fdf.png",
+      "path": "Raw/outfit_m_japan_future__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a3f59e5467abfda9914ff50751567f3a7e41fffb7eb46d5c83648bd25f2e2c3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_future__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: man of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_japan_future",
+      "prompt": "ONE exactrigidpose TWO exactcostume. Dress ONE in TWO changingarms only. ViewerRIGHT fingertip atcheek x524-583y344-465 wrist563460; otherhand supporting elbow x550-650y600-668. Full fittedblackinnercuffs reachwrists, handsinfrontofoutercloth. Preserve scalp239chin400soles1421. Indigo haori architecturalwhiteasanoha shoulders kasaneivorycoralvermilion neckline, blackobi doubleclaspsredcordtail797, widehakama indigohem1310whitewaveandshippostitchpanels blackclosedtabishoes. Exactlysamepaletteandmattegrain. No decorativechanges.1024x1536green#00FF00magentaheadhands.\nCorrection: Correct two costume continuity errors only. Raise entire black obi cincher with both buckles and cord40pixels: topedge620 bottom710; redtassel tip797. It must lie partly behind folded arms, don't move hands. Cover small magenta forearm triangle viewerLEFT x430-469y640-675 with matching opaque indigo sleeve, leaving only faceandhands magenta. Rest imageunchanged: headfeet skirtlength shoulders patterns colors texture1024x1536.\nCorrection2: Move ONLY the waist obi belt upward25pixels and left10pixels. Lowerbuckle center must be (512,696) rather(518,720); cordknot (560,670) rather(575,695); tasseltip (565,797) rather(576,820). Topbuckle behind crossedarm, mostlyoccluded. Beltbottomat710. Do not move handorforearm. Bodypose head feet garmenthemallunchanged. Preserve allcolors texture andclosedclothforearm.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-24700da9-50ee-42a2-b5ae-81737c90f599.png",
+      "path": "Raw/outfit_m_japan_future__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c4acc3fb2dd96eeb3fcfcdefe6fa1a281f9bfc4600fbd12762d4e670edbe6a2f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_japan_future__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: man of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_japan_future",
+      "prompt": "ONE exact poseguide TWO identical costume. Dress ONE without moving magenta head hands feet. ViewerLEFT handrests chestx447-567y463-563, viewerRIGHT handoutwardlowx745-867y774-843. Longindigo sleeves blackfittedcuffs towrists. Preserve scalp239chin400soles1421, blackobi top620 bottom710 twoverticalclasps redcordknot560670tasseltip797, indigoarchitecturalhaori whiteasanoha shoulderstitching ivorycoralvermilionkasane collar, widehakamahem1310wave/shippostitchedsidepanels blacktabiclosedshoes. Both hands infrontofclothing. Onlyarms change. Same matteinkpigmenttexturelate1980sanime1024x1536flatgreen#00FF00magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2d945b01-d91e-4ef4-8fe5-329c90d75dc8.png",
+      "path": "Raw/outfit_m_japan_future__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b41d163702547bf4f2060c3bdb3d87e2759f932e12e5b5f81811ffd2dc28887a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: woman of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_japan_future",
+      "prompt": "Productionwardrobe costume on EXACT female calibration reference. Keep scalp164chin324center512 handsandfeetpositionssoles1440. Subject: woman of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_f_japan_future. Distinct practical civilian design: washiwhite short architectural haori with mutedcoral innerpanels and Prussianblue stitchedasanoha shoulderpanels, kasane neckline whitecoralindigo, structuredindigo wideobi modestmodularclasp obijimevermilion cord. Fullsleeves with fittedindigoinnercuffs towrists, foldedouterpanels. Indigo hakamapleatedmidcalfskirt with origamigeometry subtle seigaiha/sashiko hem, whiteopaquelegcoverings closedblacksplittoewalkingshoes. Matte late1980s handinked anime pigmentgrain natural fabric notgloss. No hairhatsprops.1024x1536 flatgreen#00FF00solidmagenta#FF00FFheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fb0c4252-45a2-4fba-a48a-3018865133c9.png",
+      "path": "Raw/outfit_f_japan_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6e532741c9f16569217c1290ef492989e0d0d98c6f704314ba4b920228a7883e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_future__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: woman of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_japan_future",
+      "prompt": "ONE exactposeguide TWO exactcostume. Dress ONE in identical clothing TWO, onlysleevesposechange. Bothopenpalms: viewerLEFT lowx175-280y676-775 wrist265690, viewerRIGHT highx723-844y558-647 wrist728600. Keep all magenta coordinates scalp164chin324 feet1440. Whitearchitecturalhaori indigoasanoha shoulders coralwhiteindigokasane collar, indigoobi top520bottom630 doubleverticalsilverclasps redcordknot560578tasseltip750, longwhitesleeves coralinnerpanels fittedindigocuffs towrists, indigohakamaskirthem1225 whitewavehem patterns stockings blackclosedtabi. Preserve paletteandsurfacegrainlate1980s matteanime. Hands infrontofcloth.1024x1536flatgreen#00FF00magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7d354f12-f7e6-4715-8d12-0cf1ee8e5758.png",
+      "path": "Raw/outfit_f_japan_future__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6e28bd1f7c2b827f0b5c171ddab976690c433c6a0903ccd730d54c62eaf2f9cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_future__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: woman of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_japan_future",
+      "prompt": "ONE exactpose stencil TWO exactoutfit. Dress ONE in identical TWO clothing onlyarmschange. Handslooselylinkedatlowerwaist x449-564y680-770 wrists458700/560700. Preserve scalp164chin324feet1440 alltorsoandlegs. Whitearchitecturalhaori indigostitchedasanoha shoulders whitecoralindigokasane collar indigoobi top520bottom630 silverdoubleclaspsredcordknot560578tassel750; longwhite/coraloutersleeves fittedindigoinnercuffs towrists. Indigo pleatedhakamaskirthem1225 wavewhitehem patterns whiteopaquelegcoverings closedblacktabifootwear. Handsinfrontofcord. Samepalette matteinkpigmenttexturelate1980sanime1024x1536flatgreen#00FF00magentaheadhands.\nCorrection: Shorten ONLY the red obi cord hanging tails by50 pixels. Their tips must end y750/757 as neutral costume, not y800/807. They are partly hidden BEHIND clasped hands; do not move hands or bowknot or belt. Remove danglingred ends belowhands and restore underlying plainindigoskirt. Preserve all otherdetails exactly1024x1536.\nCorrection2: Restore only two red cords vertically from knotx560y578 down along x558 and570 to y750, BEHIND claspedhands. Visible continuous redcord between beltbottomy630 and handtop680. Below680 cord mostlyhidden by hands; a tiny redtassel edge may peek rightofhand x568y735-750. Do not shorten cord tobelt. No redbelowy757. Everyotherpartunchanged1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9e11ada8-77b6-4c67-ab6f-f39445897772.png",
+      "path": "Raw/outfit_f_japan_future__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "afe0fc5cd9d74578c0daad94a34afcf1e9c11389fafc29454ffb8a831c70766b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_japan_future__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "country": "japan",
+      "era": "future",
+      "label": "kasane-collar layers",
+      "details": "Subject: woman of Neo-Tokyo Bay; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut-look stitched line work (the fabric stays solid). Sashiko grid stitching and origami-fold panels. Karakuri-inspired hinged seam details (fabric, not machinery) and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, pale coral accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_f_japan_future.",
+      "flags": {
+        "label": "kasane-collar layers"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_japan_future",
+      "prompt": "ONE rigidpose stencil TWO exactcostume. Dress ONE identically to TWO. OnlyviewerLEFT arm raised palmforward x286-390y297-432 wrist325430elbow325570. Fullindigoinner sleeve reaches wrist430, whiteouterorigamipanel adaptsbehindarm. Otherarmdown. Scalp164chin324soles1440 unchanged. Whitearchitecturalhaori indigoasanoha shoulderpanels coralwhiteindigo kasane collar indigoobi top520bottom630 silverdoubleclasp redcordknot560578 tails750/757. Indigo pleatedhakamaskirthem1225whitewave border, whitestockingsclosedblacktabishoes. Preserve allcolors detailandmattehandpaintgrain late80sanime.1024x1536flatgreen#00FF00magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ab57bd91-7f41-4cf8-b4ec-c3b4a2bef5e7.png",
+      "path": "Raw/outfit_f_japan_future__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ec7183d747e746da3cd7bc2941d6f14fc445005e30383b1cfff9b6742fe44c60",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: man of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_britain_future",
+      "prompt": "Drawproductionwardrobeon exact male calibration reference: scalp239chin400center512handspositionssoles1421fixed. Subject: man of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid:\nOutput one full-canvas raw outfit_m_britain_future. Cohesivepractical everydaycivilian: darkbottlegreen herringbone longfrockcoat tobelowknees with narrowbrassrivetclosures, slim oxblood lapel inset with subtle paisley etchedpattern, highstandcollar andsmallpleatedivorycollarring BELOWchin400. Torctwisted trimsewnneckline. Slatewaistcoat printedpunchcarddots tinyknitbandacrossupperchest, navyrailwaypinstripetrousers darkbrownclosedwalkingboots. Fullsleevestowrists. Keep culturaldetailsrestrainedfunctionalnotregalia. Mattehandpainted late1980sanime fineink subtlepigmentgrain. No hairhatscarriedprops.1024x1536flatgreen#00FF00solidmagenta#FF00FFheadhands.\nRegistration correction: ImageONE is the EXACT registration stencil. ImageTWO is clothing design only, its figure placement is wrong. Dress ONE in identical clothing TWO. LOCK scalp to239 chin400; original ONE headface unchanged; soles1421 handsx280-346/678-742y800-923. Adjust entire clothing proportions to fit guideONE, no independent headshift. Samebottlegreen herringbonefrockcoat oxbloodpaisleylapels smallwhitepleatedcollar BELOWchin400 goldtorctrim FairIsle/punchcardwovenupperchest slatewaistcoat navypinstripetrousers brownclosedboots. Allbodycoordinates followONE notTWO. Full1024x1536green#00FF00magentaheadhands matte1980sanime.\nFootwear correction: Change only boot laces from magenta to muteddarkbrown on both feet. Also trim bootsoles vertically by8pixels so lowestrow1421 instead1429, keep anklepositions and widths same. Everythingelsefixed including scalp239chin400hands torso textures greenbackground1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2bb7c447-ea8a-4ada-858d-6167722e4159.png",
+      "path": "Raw/outfit_m_britain_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9cf97356714e83e45f999a1c437477847fc73e09c7e1557c92dd3860afaedd3b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_britain_future__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "country": "britain",
+      "era": "future",
+      "label": "tweed-grid frock coat",
+      "details": "Subject: man of Thames Barrier London; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. A torc-inspired twisted collar edge sewn into the neckline. Pleated opaque white collar rings, kept below the chin, that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and printed punch-card dot grids (not cut-through holes) that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: dark bottle green, oxblood, slate grey, heather and navy, with brass and copper accents.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_britain_future.",
+      "flags": {
+        "label": "tweed-grid frock coat"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_britain_future",
+      "prompt": "ImageONE rigid exactposeguide imageTWO identicalcostume. Dress ONE in TWO alteringarms/sleevesonly. Preservehands exactly viewerLEFT x178-292y561-643 wrist290625 viewerRIGHT x734-845y690-777 wrist740710. Headscalp239chin400soles1421fixed. Bottle greenherringbonefrockcoat hem1110 oxbloodpaisleylapels FairIsle/punchcardwoven shoulder/chestbands highstandcollarpleatedivoryfrill belowchin and sewnbrassropeedge, slatewaistcoat hem755 buttons539573605639673704 chainright, navypinstripetrousers brownclosedbootsbrownlaces. Fullsleevestowrist withcuffstraps. Matchallcolors fabrictexture fineinkmattepigment1980sanime.1024x1536flatgreen#00FF00 magentaheadhands.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d765adc8-0d9b-45fd-849c-b0625558db4a.png",
+      "path": "Raw/outfit_m_britain_future__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3e4f95bb92aa325a6f5ca25f9ba936d39a47a007d83920d2b7e0ce158c92c033",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

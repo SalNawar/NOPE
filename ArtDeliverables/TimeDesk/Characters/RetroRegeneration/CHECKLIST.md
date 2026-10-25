@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 1109. Full regeneration is NOT complete.
+Saved: 1134. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -1113,3 +1113,28 @@ Saved: 1109. Full regeneration is NOT complete.
 | outfit_f_greece_future__thinking_c | visually reviewed; registration pending |
 | outfit_f_greece_future__objecting_a | visually reviewed; registration pending |
 | outfit_m_italy_future | visually reviewed; registration pending |
+| outfit_m_italy_future__explaining_b | visually reviewed; registration pending |
+| outfit_m_italy_future__thinking_c | visually reviewed; registration pending |
+| outfit_m_italy_future__objecting_a | visually reviewed; registration pending |
+| outfit_f_italy_future | visually reviewed; registration pending |
+| outfit_f_italy_future__explaining_c | visually reviewed; registration pending |
+| outfit_f_italy_future__thinking_a | visually reviewed; registration pending |
+| outfit_f_italy_future__objecting_b | visually reviewed; registration pending |
+| outfit_m_china_future | visually reviewed; registration pending |
+| outfit_m_china_future__explaining_c | visually reviewed; registration pending |
+| outfit_m_china_future__thinking_a | visually reviewed; registration pending |
+| outfit_m_china_future__objecting_b | visually reviewed; registration pending |
+| outfit_f_china_future | visually reviewed; registration pending |
+| outfit_f_china_future__explaining_a | visually reviewed; registration pending |
+| outfit_f_china_future__thinking_b | visually reviewed; registration pending |
+| outfit_f_china_future__objecting_c | visually reviewed; registration pending |
+| outfit_m_japan_future | visually reviewed; registration pending |
+| outfit_m_japan_future__explaining_a | visually reviewed; registration pending |
+| outfit_m_japan_future__thinking_b | visually reviewed; registration pending |
+| outfit_m_japan_future__objecting_c | visually reviewed; registration pending |
+| outfit_f_japan_future | visually reviewed; registration pending |
+| outfit_f_japan_future__explaining_b | visually reviewed; registration pending |
+| outfit_f_japan_future__thinking_c | visually reviewed; registration pending |
+| outfit_f_japan_future__objecting_a | visually reviewed; registration pending |
+| outfit_m_britain_future | visually reviewed; registration pending |
+| outfit_m_britain_future__explaining_b | visually reviewed; registration pending |
