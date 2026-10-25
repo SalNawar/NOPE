@@ -28275,6 +28275,760 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "cutaway frock coat",
+      "details": "",
+      "flags": {
+        "label": "cutaway frock coat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_industrial2",
+      "prompt": "Character layer outfit_m_germany_industrial2. Ordinary civilian man Electoral Bonn1790. Historical shape reference LACMA circa1790 coat https://collections.lacma.org/object/136521 curved cutaway front, fittedsleeves knee-length tails, fabricbuttons. Draw dark desaturated plum wool cutaway frockcoat small turnovercollar ivorylining visible along tails hem1060, muted gold waistcoat to780, ivory linen shirt highneck whitecravat to485. Tan kneebreeches end1100, ivory opaque stockings, blackleather silverbuckle shoes soles1421. No militaryuniform weapon insignia jewelry royalregalia hair beardhat. 1024x1536puregreen#00FF00 sprite. Match reference exact headscalp239 chin400 feet1421 center512 handsdown. Magenta#FF00FF headhands. Fully clothed civilian historicaloutfit only. Fine handink late1980sanime paintedpigment and subtle woolweave matte restrainedcelshading no brocade pattern no glossyvector no photorealism no text shadow props. Do not change body proportions headsize footspacing pose.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c40e8b0b-edd9-41f2-9cc1-414fd7b2ea1d.png",
+      "path": "Raw/outfit_m_germany_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "24877b126df436c27a962b64683f8eb8b3b1e85102014200dd690b60baa30094",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial2__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "cutaway frock coat",
+      "details": "",
+      "flags": {
+        "label": "cutaway frock coat"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_m_germany_industrial2",
+      "prompt": "Generate outfit_m_germany_industrial2__explaining_c sprite1024x1536green#00FF00. FIRSTreference exact pose/headhandsfeet, SECOND exact Bonn1790plumcutawaycoat goldwaistcoat tanbreeches ivorystockings blackbuckleshoes, onlysleevesmove. Left openhand upperchest thumb620497 fingertips545512 wrist610592, rightarmdown. Preserve scalp239chin400soles1421 tails1010 waistcoat750 cravat530 fabriccolors details buttonplacement. Keep matte late80sanime textilegrain fineink no added pattern. Magenta exposedheadhands. No hat hairjewelryprops textcastshadow. Do not move trunk legs or resize.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-00d7fa29-bc51-402a-9287-da8b7b44ea09.png",
+      "path": "Raw/outfit_m_germany_industrial2__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b6a158c0a6a576eed15743ab46900da6b971ea847f1a80e15c6e29ad972419c9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial2__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "cutaway frock coat",
+      "details": "",
+      "flags": {
+        "label": "cutaway frock coat"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_m_germany_industrial2",
+      "prompt": "Generate outfit_m_germany_industrial2__thinking_a sprite1024x1536green#00FF00. FIRSTreference exact thoughtful hand-under-chin pose/headhandsfeet, SECOND exact Bonn1790plumcutawaycoat goldwaistcoat tanbreeches ivorystockings blackbuckleshoes, onlysleevesmove. Right hand underchin fingersx545y380 wristx465y478 elbow375633, otherarmdown. Preserve scalp239chin400soles1421 tails1010 waistcoat750 cravat530 fabriccolors detailsbuttonplacement. Keep matte late80sanime textilegrain fineink no floralbrocadeornewpattern. Magenta exposedheadhands. No hat hairjewelryprops textcastshadow. Do not move trunk legs or resize.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2a28af96-b7b3-4d5b-a1a8-ab04cda2a94a.png",
+      "path": "Raw/outfit_m_germany_industrial2__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9c5528b00195976d94b87a82775fb2f217ef61b37afb324318e53749b01e0ac8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial2__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "cutaway frock coat",
+      "details": "",
+      "flags": {
+        "label": "cutaway frock coat"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_germany_industrial2",
+      "prompt": "Generate outfit_m_germany_industrial2__objecting_b sprite1024x1536green#00FF00. FIRSTreference exact two openpalms refusal pose/headhandsfeet, SECOND exact Bonn1790plumcutawaycoat goldwaistcoat tanbreeches ivorystockings blackbuckleshoes, onlysleevesmove. Both palms atlowerchest fingersy532 wristsy655, elbowsclose, no crossedarms. Preserve scalp239chin400soles1421 tails1010 waistcoat750 cravat530 fabriccolors detailsbuttonplacement. Keep matte late80sanime textilegrain fineink no floralbrocadeornewpattern. Magenta exposedheadhands. No hat hairjewelryprops textcastshadow. Do not move trunk legs or resize.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-41f407f2-961b-4749-9368-c74452f10ca4.png",
+      "path": "Raw/outfit_m_germany_industrial2__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ffcd3c31509ea0600059f2b9dd3f456715f1bc6501c76f1e2974ed5ba27f1662",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_germany_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "powdered queue",
+      "details": "",
+      "flags": {
+        "label": "powdered queue"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_germany_industrial2",
+      "prompt": "Create hair_m_germany_industrial2 haironly sprite Bonn1790 civilian powderedqueue hairstyle. Light warmgrey powderedhair brushedback low crown218 rolledsidecurls aroundtemples ends345, narrow tiedqueue atbacknape falling behindneck not frontbraid, small blackribbon atback visible besideviewerRIGHTneck410. Exact referenceheadscalp239chin400eyes315center512. Replace allcostume shoeswithopaqueplainmagenta longsleeveshirt trousers socks. Facehandsmagenta, no coloredbeardhatjewelry. Onlyhairanditsribbontiecolored. Flatgreen#00FF00 canvas1024x1536 unchangedfullneutralfigurepositions. Fine handink matte pigmenttextured late1980sanime strandshading not glossyvector no shadowsprops text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7ef3298d-96c0-4a3a-8491-674e09a5cd1d.png",
+      "path": "Raw/hair_m_germany_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bf37d1cdb7d6f4356aa73f3ad887e4299b0e7ed7a234b96cd022498e8beb28f0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_germany_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "bicorne",
+      "details": "",
+      "flags": {
+        "label": "bicorne",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_germany_industrial2",
+      "prompt": "Create headwear_m_germany_industrial2 hatonlysprite. On this BALD magentahead place Bonn1790 civilian blackfelt bicorne crosswise two pointed endsx360/660y294, centralcrown200 bottomcenter282. Plainblack no ornamentcockade. Preserve exactscalp239chin400headcenter512. No hair visible ANYWHERE no whiteorgraytempletufts, baldmagenta head. Replaceallcostumeandshoes withfullyopaqueplainmagenta longsleeveshirt fulltrousers socks; facehandsmagenta. Onlyhatcolored blackfelt finehandink matte80sanime grain celshading. 1024x1536flatpuregreen#00FF00, fullbodyoriginalpositions no textpropsshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-893b5db6-c99b-43c1-a1c9-d8a77232dece.png",
+      "path": "Raw/headwear_m_germany_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "399b374c497091e720cbf05f45a9a6652d8e55a7ba4424f536998365e54c6995",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "chemise a la reine",
+      "details": "",
+      "flags": {
+        "label": "chemise a la reine"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_industrial2",
+      "prompt": "Create outfit_f_germany_industrial2 ordinarycivilianwoman Bonn1790 chemise a la reine OUTER DAYDRESS. Historical reference Frick https://www.frick.org/exhibitions/ruffles/queen describes informal gown popular1780s. Fullyopaque lined ivorycotton muslin anklelength gown, gathered round neckline at365 modestsmallruffle, loose long sleeves gathered atwrists, naturalwaist dustyblue sash y590-645 bowviewerright620630 tails800/880. Full softly gathered skirt to1380 NO crinoline no hugepanniers no corsetshaping. Ivory stockings darktaupe lowheel buckleclosedshoes soles1440. Match reference exactscalp164chin324 headhandsfeet spacing center512. Fulloutfitonly no hair hat jewelry bag. Headhandsflatmagenta#FF00FF. 1024x1536green#00FF00. Fine darkhandink matte wovenwhitecotton pigmentgrain late1980sanime restrained warmcelshadows not glossyvectorphotoreal no text props shadow. Opaque lined dress no transparency.\nCorrection only sashwaistposition: lower entireblue sash from y535-577 to y590-632, at naturalwaist NOT highunderbustEmpireline. Lengthen gatheredbodice to590. Bowknot at600,620. Preserve skirt silhouette headhandsfeet and texturedcloth. Bothsash tails should endy900/1035 afterlowering, not longer.\nMove sash band another30pixels DOWN: upperedge590 loweredge630, keep neutralfigureunchanged. Tails tips at835/900, bowcenter600620. This is naturalwaist590 notupperwaist560. No other changes.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4ceaf1ce-6d5b-43c3-8e40-d45bf7f74e21.png",
+      "path": "Raw/outfit_f_germany_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ec321977df74748a6acb9860a23a4046e976233b314f0000d0b002301067308b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial2__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "chemise a la reine",
+      "details": "",
+      "flags": {
+        "label": "chemise a la reine"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_germany_industrial2",
+      "prompt": "Generate outfit_f_germany_industrial2__explaining_a 1024x1536green#00FF00. FIRSTreference exact palm-up explainingpose headhandsfeet. SECONDreference exact opaqueivorycotton Bonn1790 outerdaygown withdustyblue sash, ivory stockings taupebuckleshoes. Moveonlysleeves: RIGHTpalmup atwaist x393–524y560–606, wrist415580, leftarmdown. Preserve scalp164chin324soles1445, skirtoutlinehem1335, sashband580–620 bow600620 tails820/860. No waistheightorbowchange. Keep neckline420, clothgrain colorweavefinehandink late80sanime no embroideryfloralpattern, fullyopaque. Magentaheadhands, no hat hairjewelryprops textshadow. Do not zoom movelegs.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e019a8d2-1917-4dc2-9392-6f53c2611722.png",
+      "path": "Raw/outfit_f_germany_industrial2__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c7ebae9a8058759405566de7279fdfe83873718d931c0f8eb71e5a4c04eab69f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial2__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "chemise a la reine",
+      "details": "",
+      "flags": {
+        "label": "chemise a la reine"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_germany_industrial2",
+      "prompt": "Generate outfit_f_germany_industrial2__thinking_b 1024x1536green#00FF00. FIRSTreference exact thoughtful fingertipcheek pose headhandsfeet. SECONDreference exact opaqueivorycotton Bonn1790 outerdaygown withdustyblue sash, ivory stockings taupebuckleshoes. Moveonlysleeves: LEFTindex atcheek560275 wrist550360; RIGHTforearmacrosswaist supportingelbow fingers635550. Preserve scalp164chin324soles1445, skirtoutlinehem1335, sashband580–620 bow600620 tails820/860. Bowtop naturallyoccludedbyarms doNOT movebow down. Keep neckline420 clothgrain colorweavefinehandink late80sanime no embroideryfloralpattern, fullyopaque. Magentaheadhands no hat hairjewelryprops textshadow. Do not zoom movelegs.\nCorrect raised LEFT sleeve length: current cuffy430 exposesforearm. Extend whitesleeve to wrist justbelowhand y365, so magenta starts only at handwrist365. Keep hand andfinger exact position. Cuff should surround x534–580,y365. Do not move headhands bow hem shoes.\nLengthen the raised white sleeve over all remaining magenta forearm between y365 and400: cuff upperedge at365 and elasticbandat385. Magenta should end exactly at wrist bend at y365. Keep pose unchanged. Important extend sleeve upward another35pixels.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ce602dfe-cab9-434e-ab18-da47787dd972.png",
+      "path": "Raw/outfit_f_germany_industrial2__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b091cd37b1816d4f4ae6181fd791d460abf1ccbd2582ef560ccb741a05109f5e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial2__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "chemise a la reine",
+      "details": "",
+      "flags": {
+        "label": "chemise a la reine"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_germany_industrial2",
+      "prompt": "Generate outfit_f_germany_industrial2__objecting_c 1024x1536green#00FF00. FIRSTreference exact asymmetric questioninggesture headhandsfeet. SECONDreference exact opaqueivorycotton Bonn1790 outerdaygown withdustyblue sash, ivory stockings taupebuckleshoes. Moveonlysleeves RIGHT handonchest x435–565y394–495 LEFTarmopensdownwardviewerRIGHT wrist780700 fingertips887770. Longsleevecuffsreachwrists, no bareforearm. Preserve scalp164chin324soles1445 skirtoutlinehem1335 sashband580–620 bow600620 tails820/860. No waistheightorbowchange. Keep neckline420 clothgrain colorweavefinehandink late80sanime no embroideryfloralpattern fullyopaque. Magentaheadhands no hat hairjewelryprops textshadow. Do not zoom movelegs.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a4490044-f633-4302-b88c-2729514dd153.png",
+      "path": "Raw/outfit_f_germany_industrial2__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cc5cb395ee2bd3de0d6df4cfa9ef2f0ad8332563e09b12ce3d38e0f90c2d0077",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_germany_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "powdered pouf",
+      "details": "",
+      "flags": {
+        "label": "powdered pouf"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_germany_industrial2",
+      "prompt": "Create hair_f_germany_industrial2 haironly Bonn1790 civilian powderedpouf. Modest roundedheight hairpouf crown95 sides420–600, warmgrey powderedcurls sweptup fromforehead at180 no hugecourtwig, small side ringlets down to315, compactbackbunright300. No featherflowersjewelsribbon. Preserve exactreferenceface scalp164chin324eyes243center512. Replaceall dressstockingsshoes withopaqueplainmagenta longsleeveshirt fulltrousers socks, headhandsmagenta#FF00FF. Onlyhaircolored finehandink mattepaintedpigmentgrey strands restrainedceltexture late80sanime no photoreal glossyvector. Fullneutralfigure samepositions 1024x1536green#00FF00 no textpropsshadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f34feba5-680f-47ff-a49f-8e0dc02363b5.png",
+      "path": "Raw/hair_f_germany_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d0d721476e9a5ad15c948e51bced633215de71bf856221ed6437b5884d0588a7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_germany_industrial2",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "country": "germany",
+      "era": "industrial2",
+      "label": "straw bonnet",
+      "details": "",
+      "flags": {
+        "label": "straw bonnet",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_germany_industrial2",
+      "prompt": "Create headwear_f_germany_industrial2 headwearonlysprite Bonn1790 civilian strawbonnet overpouf. Warm ochre finelywovenstraw shallowroundedcrown top55, wide roundedbrim x340–685 fronty165–205, small dustyblueband and blue ribbons underchin knot512345 tails420. No flowersplumesjewelsroyalregalia. Preserve exactreferencefacechin324 eyes243center512. Replace ALL greyhair includingcurls andscalp with flat puremagenta#FF00FF no haircolored. Supportlongsleeveshirt trousers socks facehands entirelymagenta. Onlystrawbonnetanditsribbonscolored. 1024x1536flatgreen#00FF00 unchangedfullfigurepositions. Finehandink mattewovenstraw warmgrainlate80sanime celshadows notphotorealvector no textpropsshadow.\nRemove the brownhair arc now visible atforehead underbrim x441-583 y150-218. Fill that entire hairshape puremagenta#FF00FF without brown strands orlinework. Hatandblueribbonsremainexactlysame. This is hat-only layer, no hair.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c5fc294b-963f-408c-87d1-e478e43eef86.png",
+      "path": "Raw/headwear_f_germany_industrial2.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "af0d881ee3070699bd1895d3c64a3c977c5f889959356c088f4d2193a99a88c6",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_germany_industrial3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "frock coat and waistcoat",
+      "details": "",
+      "flags": {
+        "label": "frock coat and waistcoat"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_germany_industrial3",
+      "prompt": "Create outfit_m_germany_industrial3 Cologne1848 everydaycivilian man. Dustycharcoal-brown woolfrockcoat fullskirts above knees hem1040 horizontalwaistseam720, modest broadlapels, openfront showing mutedburgundywaistcoat smallbrassbuttons to760, ivory highcollarshirt and darkteal neckstock tiedcompactbow450. Straight slategreytrousers subtleverticalpinstripe, scuffedblackankleshoes soles1421. Plainwool NO floralbrocade, no militaryuniform weaponsflagsinsignia hairbeardhatjewelry. 1024x1536flatgreen#00FF00, exactreference scalp239chin400center512handsfeet positions and proportions, headhandsmagenta#FF00FF. Fine late80sanime handink paintedpigment finelywoven mattecloth smallcelshadows notvectorphotoreal no props textshadow. Fullbodyneutral.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f4d6f6f8-e26f-4a44-8b89-038fa5756851.png",
+      "path": "Raw/outfit_m_germany_industrial3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6f5b047933ab9c45eb8d71a08076ac317adc01cd8c52dfe388b5e9df9eb1087c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_germany_industrial3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "thick swept-back hair",
+      "details": "",
+      "flags": {
+        "label": "thick swept-back hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_germany_industrial3",
+      "prompt": "Create hair_m_germany_industrial3 hair-onlysprite Cologne1848 ordinaryman, thick darkchestnut sweptback wavedhair crown202 endsbehindears375 someuntidy tufts, no likenessofMarx. Exactreferenceheadscalp239chin400center512. ReplaceALLclotheswithopaqueplainmagenta longsleeveshirt fulltrousers socks, headhandsmagenta#FF00FF. Onlyhaircolored no beardhatjewelryprops textshadow. 1024x1536flatgreen#00FF00 originalneutralfigurepositions. Handink paintedmatte strands finegrain late80sanime no glossyphotorealvector.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b42f3065-05f1-491e-b8bf-bd657c033f0a.png",
+      "path": "Raw/hair_m_germany_industrial3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d3f475971b2371faa63e2de5df4d9467f50274c95c8ef87851048d7c0b7c0d56",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_germany_industrial3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "full bushy beard",
+      "details": "",
+      "flags": {
+        "label": "full bushy beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_germany_industrial3",
+      "prompt": "Create a modular facial-hair source for an ordinary male traveller in Cologne 1848. Reference is registration guide only: preserve head silhouette scalp y239 chin400 mouth365 center512 and full-body neutral proportions exactly. Replace ALL costume including shoes with opaque plain MAGENTA #FF00FF long sleeve shirt, trousers and socks. Entire scalp, face, ears, neck and hands magenta. Only facial hair is coloured: full bushy warm dark-chestnut beard, slightly uneven ordinary-worker grooming, moustache joining cheeks, beard from cheeks y330 tapering into softly rounded bottom y435, mouth opening remains magenta at y365. No scalp hair or hat. Fine hand-inked late-1980s anime, matte painted strands and fine pigment grain, restrained cel shadows, no glossy vector finish. Flat pure #00FF00 green background, 1024x1536 full-body source, no text, no props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f1bd78a0-9230-4492-be33-6adf492d1ddb.png",
+      "path": "Raw/facialhair_m_germany_industrial3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "700df5884eb8a50aa3c6a8c4193a0c1c103489b9aec6cc799ff6760d36aee0f3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_germany_industrial3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "Kalabreser",
+      "details": "",
+      "flags": {
+        "label": "Kalabreser",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_germany_industrial3",
+      "prompt": "Modular hat source for ordinary Cologne 1848 traveller. Reference image only fixes mannequin registration: preserve bald scalp y239 chin400 center512, neutral full body soles1421. Replace ALL costume/shoes with opaque solid MAGENTA #FF00FF plain long sleeve shirt trousers socks; head ears face hands all magenta. Only hat coloured. Historical Kalabreser broad-brim soft dark charcoal felt hat, modest tapered slightly conical rounded crown top y173, simple narrow black ribbon, wide slightly floppy brim spanning x355–670 at y260–295. Matte worn wool felt with restrained fine pigment grain, hand-inked late1980s anime cel painting. No hair beard feather insignia crown weapon or text. 1024x1536 pure #00FF00 flat green background. Sources for type: Wienbibliothek 1848 headwear collection https://www.digital.wienbibliothek.at/wbrobv/content/titleinfo/3924371 and https://www.johannconradfischer.com/de/keywords/gfa-keywords-8448 .",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-004e921d-8937-49cc-95e5-6be231c58584.png",
+      "path": "Raw/headwear_m_germany_industrial3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b782bda8665071483834047fd5408359950a29509fe46ce4727bced0415202cf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "Biedermeier day dress",
+      "details": "",
+      "flags": {
+        "label": "Biedermeier day dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_germany_industrial3",
+      "prompt": "Historical game wardrobe source: ordinary Cologne woman 1848, Biedermeier day dress. Reference image is exact registration guide, preserve bald head scalp164 chin324 center512 hands/feet position, soles1440. Cover mannequin with complete opaque modest day costume: dusty copper-brown plain woven dress with fitted long pointed bodice, natural waist y610, point y675; high ivory whitework collar around neck base y355–395; dropped shoulder seam, long moderately full bishop sleeves gathered into narrow wrist cuffs, not giant 1830s shoulder balloons; full gathered ankle-length skirt hem y1365, no hoop extreme width. Dark brown low-heel closed shoes ending exactly1440 over ivory stockings, toe positions x348–449 and575–675. Subtle woven fibre pigment, NO floral/brocade pattern, simple seamwork, lived-in everyday material. Tiny dark buttons down centre bodice. No accessories, hair, hat, jewellery or props. Head neck hands flat magenta #FF00FF. Flat green #00FF00 background. Full body 1024x1536 late1980s anime fine hand-ink, warm restrained cel paint with fine irregular paper grain, no vector gloss. Reference garment vocabulary: Met dress ca1840 https://www.metmuseum.org/art/collection/search/80769 and LondonMuseum1845–1850 https://www.londonmuseum.org.uk/collections/v/object-491658/dress/ .",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9d11305e-1c1d-48f5-8c78-462fb2fd171a.png",
+      "path": "Raw/outfit_f_germany_industrial3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fcadb1807dd0b256dc82d2eccd3f2d7161d6efbcebe239ee4f64caf954411273",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial3__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "Biedermeier day dress",
+      "details": "",
+      "flags": {
+        "label": "Biedermeier day dress"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_germany_industrial3",
+      "prompt": "Produce pose variant of the costume in reference TWO fitted exactly to pose in reference ONE. 1024x1536 flat #00FF00 green. Cologne1848 copper-brown plain woven Biedermeier day dress, ivory whitework high collar, eleven small dark bodice buttons, pointed waist, long gathered bishop sleeves with narrow cuffs, full gathered skirt hem1340, dark lowheel closed shoes soles1440. Preserve reference TWO garment design, waistpoint645, colouring, restrained fine woven grain and hand-inked late1980s anime cel rendering; do not add floral or brocade patterns. Only arm/sleeve position changes to reference ONE: BOTH palms open, viewer-left wrist255690 fingers174–280675–774, viewer-right wrist725595 fingers725–844558–646. Keep head scalp164 chin324 and feet exactly fixed. All head neck hands magenta #FF00FF, no hair hat accessories props. No pose guide lines.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0a2139fc-034f-4130-b3e5-7758a21e5fb1.png",
+      "path": "Raw/outfit_f_germany_industrial3__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6b23850f82ec0c2da22a8cc0c61e2048a4ba6b907166ac4ba52be8f4c68834a7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial3__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "Biedermeier day dress",
+      "details": "",
+      "flags": {
+        "label": "Biedermeier day dress"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_germany_industrial3",
+      "prompt": "Pose variant: fit identical costume from reference TWO to exact pose in reference ONE. 1024x1536 pure #00FF00 background. Cologne1848 copper-brown Biedermeier day dress, ivory high whitework collar, eleven dark centre buttons, pointed waist645, bishop sleeves gathered into narrow cuffs, full plain woven skirt hem1340, dark lowheel closed shoes soles1440. Keep fine hand-ink and painted fibre grain late1980s anime. Preserve design colors skirt width head feet. Change only sleeves/arms: hands loosely linked at lower waist exactly reference ONE, right hand crosses over left, hands x455–560 y680–770, wrists around450690 and560705. Cover forearms in same copper sleeves to wrists, empty magenta hands above skirt. Head scalp164 chin324 all exposed head/neck/hands flat #FF00FF magenta. No hair hat jewellery props new patterns or guide lines.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-509f3247-9206-4ffa-9448-191b81b97185.png",
+      "path": "Raw/outfit_f_germany_industrial3__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "add497d105101647ce68d407eb130328973a160413f4f8b7748d87581c301140",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_germany_industrial3__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "Biedermeier day dress",
+      "details": "",
+      "flags": {
+        "label": "Biedermeier day dress"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_germany_industrial3",
+      "prompt": "Create costume pose variant. Reference ONE exact arm/head/foot registration; reference TWO exact wardrobe and style. Same Cologne1848 copper brown plain woven Biedermeier daydress ivory whitework standing collar eleven dark buttons pointed waist645 gathered full skirt hem1340 dark lowheel shoes soles1440. Only arms change: RIGHT hand viewer-left open palm forward fingers upward at x286–390 y297–432 wrist325430 elbow325580; left arm relaxed same as neutral. Long copper bishop sleeve must cover bent forearm fully to narrow cuff y430. Keep neutral head scalp164 chin324, feet and skirt fixed. Magenta #FF00FF exposed head neck hands, flat green #00FF00 background,1024x1536. Late1980s anime fine hand ink and fine matte woven pigment texture; preserve costume colors, no added brocade/floral pattern. No hair hat accessories props text.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5e806bed-9ab5-474d-afc1-f00c20f85b2d.png",
+      "path": "Raw/outfit_f_germany_industrial3__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4e778b7ed345cb9bdc9fa6df09ca6aa449152ae6bd567dbadd68c4ee3bc8de92",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_germany_industrial3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "side ringlets",
+      "details": "",
+      "flags": {
+        "label": "side ringlets"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_germany_industrial3",
+      "prompt": "Modular hair source for ordinary woman Cologne1848: dark ash-brown centre-parted hair smooth over crown into modest back bun, two compact clusters of vertical side ringlets by ears down to jaw y320, crown y140. Reference fixes head scalp164 chin324 center512 and fullbody feet1440. Replace entire dress and shoes with opaque plain magenta #FF00FF longsleeve shirt trousers socks. Head face ears neck hands also magenta. ONLY hair colored. Ringlets should frame face outside cheeks, not cover eyes, no jewellery hat props. Fine hand-inked late1980s anime painted matte strands, subtle pigment grain and restrained cel shadows, not glossy vector. Flat pure #00FF00 green background 1024x1536 fullbody, no lettering.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2eb53812-f593-4284-919e-9d727c6cd0c2.png",
+      "path": "Raw/hair_f_germany_industrial3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5ef72cc50fc1d86569d93cbd2e34c3d78007757a776592ed1b5551bc3fcb61fd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_germany_industrial3",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "country": "germany",
+      "era": "industrial3",
+      "label": "Biedermeier cap",
+      "details": "",
+      "flags": {
+        "label": "Biedermeier cap",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_germany_industrial3",
+      "prompt": "Modular Biedermeier day cap for ordinary Cologne1848 woman. Reference fixes bald head scalp164 chin324 center512, neutral fullbody. Replace ALL costume and shoes with opaque plain #FF00FF magenta long sleeve shirt trousers socks; face ears scalp neck hands magenta. Only cap colored: small ivory cotton gathered crown over back/top head y125–210, delicate whitework lace ruffle around crown ending by ears y270, narrow faded dusty blue ribbon ties meeting in modest bow under chin y340 with short tails ending y400. A close-fitting adult day cap, not wide bonnet, not tall hat, not baby cap. No colored hair whatsoever, magenta blank scalp beneath. Fine late1980s anime hand ink with matte painted cotton and subtle grain, restrained shadows. Flat pure #00FF00 background1024x1536 no text props jewellery.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f7e96f85-3b3f-4365-9437-335a72b32c5f.png",
+      "path": "Raw/headwear_f_germany_industrial3.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4d870ba6738df0ccdf4f239915d33c596c101a0e0d312729aa46b3500234d113",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_future",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: man of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_future",
+      "prompt": "Subject: man of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_egypt_future.\nCreate complete ordinary male civilian outfit for Nile solar arcology2150, no warrior/royal costume. Offwhite linen long sleeved zip-front hip-length overshirt hem900 with narrow knifepleats, broad layered circular textile yoke around upper chest y420–570 in Nile turquoise,lapis,carnelian and muted gold bead-row stitching, charcoal kohl-wing seam piping. Practical ecru straight trousers with restrained irrigation-grid quilted knee panels and dark taupe closed softsole shoes soles1421. Slightly roomy working-person fit, two flat utilitarian pockets, tasteful functional future tailoring, no glowing armor plates. Fine irregular painted linen grain, late1980s anime hand-ink/cel shadows. Fit reference exactly scalp239 chin400 headcenter512 hands and soles fixed, all exposed head neck hands #FF00FF magenta. No hair headwear beard necklaces props logos. Pure green #00FF00 background1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-97dbb4f0-4f83-4e4f-92bd-75a7df2cfed9.png",
+      "path": "Raw/outfit_m_egypt_future.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b9e06448346e84c3029875c6b170348a9c865f14a92b5c008271d292dc70f781",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_future__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: man of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_egypt_future",
+      "prompt": "Fit reference TWO exact Nile2150 civilian outfit onto exact reference ONE pose. Preserve entire head and lower-body registration, scalp239 chin400 center512 shoe soles1421. Only arms/sleeves move. Both empty palms open asymmetrically: viewerLEFT fingers177–292 y562–642 wrist290620, viewerRIGHT fingers734–846y690–778 wrist742715. Offwhite knifepleated linen zipfront overshirt hem860, concentric turquoise/lapis/carnelian/gold textile beadrow yoke upperchest420–538, papyrus floral piping, roomy hanging Mamluk-inspired sleeves with printed gold mashrabiya panels, ecru trousers gridquiltedknees taupe slipon shoes. Same exact pattern placements/color/hem/footwear as referenceTWO. Repose hanging sleeve fabric naturally below bent elbows without concealing hands. Fine late1980s anime handink and matte painted linen grain.1024x1536 puregreen #00FF00; exposed head/neck/hands flatmagenta #FF00FF. No accessories hair hat props text.\nCorrection: Precise registration correction only. Move viewer-RIGHT hand and its wrist/cuff inward toward centre by 32 pixels without changing its height: fingertips rightmost x846 instead878, wrist x742 instead774. Shorten horizontal forearm reach accordingly. Preserve pose, hand shape, sleeve fabric design, all other parts, head feet colors grain background canvas1024x1536 unchanged.\nFresh pose-first correction: Use imageONE as strict pose stencil. Dress that exact figure in imageTWO clothing. Do not move either hand, elbow, head or feet from imageONE. Keep hands precisely traced: viewerLEFT palm x177–292y562–642, viewerRIGHT palm x734–846y690–778. Same Nile2150 linen outfit, yoke, zip, papyrus strips, printed lattice hanging sleeves, pants quilted knees, shoes as imageTWO. Fit the cloth around the pose, never fit the pose to cloth. Keep all garment colors and fine painted linen grain. Exposed head hands magenta, green background.1024x1536.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9c4c92c6-5cf3-4665-8f10-b758f1952bb7.png",
+      "path": "Raw/outfit_m_egypt_future__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d3fd493265db663776ba173ea5855da7dc21ace2d72e15a7bebbfaee6d551e1e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_future__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "country": "egypt",
+      "era": "future",
+      "label": "bead-row yoke linen",
+      "details": "Subject: man of Nile Arcology; .\nDraw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.\nAvoid: \nOutput one full-canvas raw outfit_m_egypt_future.",
+      "flags": {
+        "label": "bead-row yoke linen"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_egypt_future",
+      "prompt": "Use imageONE as strict pose stencil. Dress that exact figure in imageTWO clothing. Do not move hands elbows head feet from imageONE. Hands loosely linked at waist x437–584 y724–805. Same Nile2150 civilian offwhite linen outfit, colored concentric textile yoke, centrezip, papyrus strips, printed gold lattice hanging sleeves, pants quilted knees, taupe shoes as imageTWO. Fit cloth around pose, not pose to cloth. Hands clearly in front of torso/sleeves, only wrists/hand magenta, forearms covered. Preserve garment colors hem860 head scalp239 chin400 soles1421 and fine late1980s anime handink matte painted linen grain. Exposed head hands magenta#FF00FF, pure green#00FF00 background1024x1536. No hair hat jewellery props.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ac44afea-47af-47e7-8fae-136ff12f521e.png",
+      "path": "Raw/outfit_m_egypt_future__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9222a5601f2a9266eb45ec0bf4c8720e0bd739240f4dda24e6b091baab79bd83",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }

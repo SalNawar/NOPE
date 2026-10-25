@@ -1,10 +1,10 @@
 # Resume checkpoint: 25 October 2026
 
-User resumed generation. 1059 / 1171 raw sources saved; 112 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
+User resumed generation. 1084 / 1171 raw sources saved; 87 remain. This supersedes the count in NEXT_WEEK_HANDOVER.md (which preserves the 7 October pause).
 
 24 new sources: Alexandria female outfit and three poses, hair and band; Cairo male/female outfits and three poses each, male hair/beard/sharbush and female braids/scarf; Babylon male wrap and three poses and hair.
 
-Next: outfit_m_germany_industrial2. Skip blocked accessory_f_britain_earlymodern and outfit_f_britain_modern__thinking_a pending review. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
+Next: outfit_m_egypt_future__objecting_a (confirm queue). Skip blocked accessory_f_britain_earlymodern and outfit_f_britain_modern__thinking_a pending review. Read queue minus manifest with tools/characters/next_retro.py. Continue all remaining wardrobe and 18 body-pose sources.
 
 Fetched origin/main 34e87b1 on resume. Read new contract section 10 and process_retro.py registration requirements; main was not merged into this art branch. Claude's main now has processing/pose switching. Our raw sources have not been validated with it or Unity.
 
@@ -80,3 +80,13 @@ Pomander accessory_f_britain_earlymodern remains UNSAVED: drafts have girdle fit
 Checkpoint1034: all25new sources since0a1de71 saved and audited for dimensions/hashes/prompts. Completed Rhineland female source set, Nuremberg male/female sets, Berlin1899male costume plus3gestures. Review: female Nuremberg shoe soles remain about1450 versus1440guide after correction; ankles nowstockings. Its pose skirts about20pxwider, grain becomesmorepatterned. Berlin coat texture gained conspicuous brocade-like marks through collar corrections: repaint as plainwool before runtime approval; collar nowstandingband. Berlin thinking hem about12pxshorter, head baseline some4pxvariance. Nuremberg male beard head corrected using costume reference, beardbottom405; hattilt mustmaskhair. Goldchain reducedto12pxlinks and needsarmmask; female chains needcapeandhandmask. No Unity or registration approval. Lastconfirmedpush0a1de71, newcheckpointlocaluntilnextpush. Continue remaining137including2blockedjobs and18bodyposejobs.
 
 Checkpoint1059: 25 new sources since9050e56 complete Berlin1899 male head items, female Reformkleid outfit/three gestures/hair/pendant, and Berlin1926 male/female source sets. All1059 PNG dimensions/hashes/prompts audited. Review: Berlin1899 coat still requires plainwool texture repair noted above. Reformkleid soles about1450 vs1440, cuffs/hands 15-20px variance; pendant large and needs desk-scale review. Berlin1926 overcoat hem1195, hand wrist about10px low in objecting; walrus moustache corrected downward ends about400, scalp229 vs239 requires registration. Felt hat guide hair tintedpink must be discarded. Spectacles centers roughly480/543 y317 need eye fit. Female Bauhaus skirtwidth differs up to10px; shoes1442; bob corrected twice ends314 rather than324, crown140. Cloche must mask hair; necklace shrunk to circles30px and bottom493, test neckline and raisedhand masking. No registration or Unity approval; no oldart removed. Next outfit_m_germany_industrial2. Last confirmed push0a1de71; user requests allremaining push whenfinished.
+
+
+Quality hold: outfit_m_germany_industrial3__explaining_a not saved. Matching-pose drafts introduced brocade-like grain; edits changed colors, and fresh single-guide generation changed coat hem and collar. Latest draft exec-14680fc5-04... is not accepted. Resume with neutral source and mannequin explaining_a; must preserve coat hem970, 5button burgundywaistcoat715, tealbow, plainmottledwool and exactrightpalm415-515/y610-675. Other assets continue; this job remains in queue for correction, separate from the two tool-blocked jobs.
+
+
+Cologne1848 male thinking_b and objecting_c also held unsaved: thinking retains decorative coat grain; objecting additionally replaced coat sleeves with white shirt sleeves. Fix all three gestures from a cleaned neutral coat as a coherent set; do not count these as saved. Earlier quality-hold truncated draft basename is only a diagnostic hint, not a file path. New body/face guides must retain exact anchors. Continue head items and other wardrobes independently.
+
+
+
+25 sources since ee90199: complete Bonn1790 male/female sources, Cologne1848 male neutral and hair/beard/Kalabreser plus female complete set; Nile2150 male neutral, explaining_b, thinking_c. All1084 PNG dimensions/hashes/prompts verified. Three Cologne male gestures remain quality-held (brocade material drift); two earlier tool-blocked jobs remain pending. Review: Cologne female grain becomes more patterned in poses, objecting cuff about10px low, cap ribbons require collar/hand masking. Male hair crown/head differs slightly from guide; register before accepting. Nile explaining_b regenerated twice to correct hand drift; final hand locations visually match guide, no numeric registration claimed. Nile hanging sleeves and linked hands need overlap checks. Last confirmed push0a1de71; user requests all remaining work pushed when done. No old art removed.

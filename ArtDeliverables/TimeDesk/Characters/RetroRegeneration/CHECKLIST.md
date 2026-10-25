@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 1059. Full regeneration is NOT complete.
+Saved: 1084. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -1063,3 +1063,28 @@ Saved: 1059. Full regeneration is NOT complete.
 | hair_f_germany_modern | visually reviewed; registration pending |
 | headwear_f_germany_modern | visually reviewed; registration pending |
 | accessory_f_germany_modern | visually reviewed; registration pending |
+| outfit_m_germany_industrial2 | visually reviewed; registration pending |
+| outfit_m_germany_industrial2__explaining_c | visually reviewed; registration pending |
+| outfit_m_germany_industrial2__thinking_a | visually reviewed; registration pending |
+| outfit_m_germany_industrial2__objecting_b | visually reviewed; registration pending |
+| hair_m_germany_industrial2 | visually reviewed; registration pending |
+| headwear_m_germany_industrial2 | visually reviewed; registration pending |
+| outfit_f_germany_industrial2 | visually reviewed; registration pending |
+| outfit_f_germany_industrial2__explaining_a | visually reviewed; registration pending |
+| outfit_f_germany_industrial2__thinking_b | visually reviewed; registration pending |
+| outfit_f_germany_industrial2__objecting_c | visually reviewed; registration pending |
+| hair_f_germany_industrial2 | visually reviewed; registration pending |
+| headwear_f_germany_industrial2 | visually reviewed; registration pending |
+| outfit_m_germany_industrial3 | visually reviewed; registration pending |
+| hair_m_germany_industrial3 | visually reviewed; registration pending |
+| facialhair_m_germany_industrial3 | visually reviewed; registration pending |
+| headwear_m_germany_industrial3 | visually reviewed; registration pending |
+| outfit_f_germany_industrial3 | visually reviewed; registration pending |
+| outfit_f_germany_industrial3__explaining_b | visually reviewed; registration pending |
+| outfit_f_germany_industrial3__thinking_c | visually reviewed; registration pending |
+| outfit_f_germany_industrial3__objecting_a | visually reviewed; registration pending |
+| hair_f_germany_industrial3 | visually reviewed; registration pending |
+| headwear_f_germany_industrial3 | visually reviewed; registration pending |
+| outfit_m_egypt_future | visually reviewed; registration pending |
+| outfit_m_egypt_future__explaining_b | visually reviewed; registration pending |
+| outfit_m_egypt_future__thinking_c | visually reviewed; registration pending |
