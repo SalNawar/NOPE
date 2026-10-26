@@ -149,7 +149,7 @@ public class DemoGateTests
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
-    /// <summary>The entries ruled at the six tracks' landing (2026-10-21) spare only the result their check reads: tools.micro's own assertions and desk_plan_homes' presses, never QA-RIG's other assertions in those scenarios.</summary>
+    /// <summary>The entries ruled at the six tracks' landing (2026-10-21, and ruling 6 of 2026-10-27: stamp.aim and stamp.rackClear under CAM) spare only the result their check reads: tools.micro's own assertions, desk_plan_homes' presses, stamp_aim's aim and stamp_case's rackOverPaper, never QA-RIG's or STAMP's other assertions in those scenarios.</summary>
     [Test]
     public void TheRuledKnownRedEntries_SpareOnlyWhatTheirChecksRead()
     {
@@ -157,14 +157,16 @@ public class DemoGateTests
         string text = File.ReadAllText(file);
         List<string> patterns = DemoGate.KnownRedRunPatterns(text);
         Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
-        foreach (string id in new[] { "tools.micro", "desk.play.clicks", "textlang.kitSymbols" })
+        foreach (string id in new[] { "tools.micro", "desk.play.clicks", "textlang.kitSymbols", "stamp.aim", "stamp.rackClear" })
             Assert.IsTrue(known.ContainsKey(id), $"{id} is on the list");
         StringAssert.Contains("CAM", known["desk.play.clicks"]);
         StringAssert.Contains("CONTENT", known["textlang.kitSymbols"]);
         StringAssert.Contains("UI-PC", known["tools.micro"]);
-        foreach (string id in new[] { "tools_microprint.tools.micro.read", "desk_plan_homes.presses" })
+        StringAssert.Contains("CAM", known["stamp.aim"]);
+        StringAssert.Contains("CAM", known["stamp.rackClear"]);
+        foreach (string id in new[] { "tools_microprint.tools.micro.read", "desk_plan_homes.presses", "stamp_aim.aim.c1", "stamp_case.rackOverPaper.a1" })
             Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
-        foreach (string id in new[] { "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses" })
+        foreach (string id in new[] { "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses", "stamp_aim.console", "stamp_aim.presses", "stamp_aim.letGo.rack1", "stamp_case.console", "stamp_case.tab.a1.rackInFrame", "stamp_hold.hold.esc1" })
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
