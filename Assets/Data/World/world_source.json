@@ -22404,19 +22404,37 @@
       },
       {
         "key": "taskbar.start",
-        "text": "Menu",
+        "text": "Start",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "taskbar.moreHint",
+        "text": "More windows",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "startmenu.quitForfeit",
+        "text": "Quit? Today's shift is forfeit. Click again",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.closed",
+        "text": "Orders are closed today: nothing would arrive",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.daysNone",
+        "text": "Pages from earlier days show here.",
+        "gloss": "None",
+        "tier": "Full"
       },
       {
         "key": "startmenu.settings",
         "text": "Settings",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "startmenu.screenOff",
-        "text": "Turn off screen",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -22926,19 +22944,19 @@
       },
       {
         "key": "app.side.left",
-        "text": "Left",
+        "text": "Left page",
         "gloss": "None",
         "tier": "Flavour"
       },
       {
         "key": "app.side.right",
-        "text": "Right",
+        "text": "Right page",
         "gloss": "None",
         "tier": "Flavour"
       },
       {
         "key": "app.pane.shelfHere",
-        "text": "Opens here",
+        "text": "Links open here",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -24456,7 +24474,7 @@
       },
       {
         "key": "keys.escape",
-        "text": "Right-click or Esc: close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Menu or cancel a drag. With none of those, back to the desk",
+        "text": "Right-click or Esc: close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Start menu or cancel a drag. With none of those, Esc opens Settings. Q or a click on the bezel leaves the PC",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -24624,7 +24642,7 @@
       },
       {
         "key": "keys.desk.back",
-        "text": "Back out: a drag, the wheel, the PC, a held value, inspect mode, the stamp bar, the city, the reading view",
+        "text": "Back out: a drag, the wheel, a held value, inspect mode, the stamp bar, the city, the reading view",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -24779,12 +24797,6 @@
         "tier": "Flavour"
       },
       {
-        "key": "mail.from.times",
-        "text": "The Temporal Times",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
         "key": "mail.from.integrity",
         "text": "Timeline Integrity Office",
         "gloss": "None",
@@ -24793,12 +24805,6 @@
       {
         "key": "mail.subject.memo",
         "text": "Today's directives",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "mail.subject.times",
-        "text": "The Temporal Times, day {0}",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -24815,18 +24821,6 @@
         "tier": "Flavour"
       },
       {
-        "key": "mail.body.times",
-        "text": "Today's edition is on the News site.",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "mail.body.timesArchived",
-        "text": "This edition is kept in the News site's archive.",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
         "key": "mail.body.citation",
         "text": "A copy of the citation slip you acknowledged:",
         "gloss": "None",
@@ -24835,12 +24829,6 @@
       {
         "key": "mail.link.rules",
         "text": "Open the directives >",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "mail.link.news",
-        "text": "Read it on the News site >",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -28773,10 +28761,6 @@
             "text": "الإعدادات"
           },
           {
-            "key": "startmenu.screenOff",
-            "text": "إطفاء الشاشة"
-          },
-          {
             "key": "startmenu.quit",
             "text": "إنهاء اللعبة"
           },
@@ -30241,20 +30225,12 @@
             "text": "مديرية الجمارك"
           },
           {
-            "key": "mail.from.times",
-            "text": "صحيفة الزمن"
-          },
-          {
             "key": "mail.from.integrity",
             "text": "مكتب سلامة الخط الزمني"
           },
           {
             "key": "mail.subject.memo",
             "text": "توجيهات اليوم"
-          },
-          {
-            "key": "mail.subject.times",
-            "text": "صحيفة الزمن, اليوم {0}"
           },
           {
             "key": "mail.subject.citation",
@@ -30265,24 +30241,12 @@
             "text": "لا توجيهات سفر اليوم."
           },
           {
-            "key": "mail.body.times",
-            "text": "طبعة اليوم على موقع الأخبار."
-          },
-          {
-            "key": "mail.body.timesArchived",
-            "text": "هذه الطبعة محفوظة في أرشيف موقع الأخبار."
-          },
-          {
             "key": "mail.body.citation",
             "text": "نسخة من قسيمة المخالفة التي اطلعت عليها:"
           },
           {
             "key": "mail.link.rules",
             "text": "افتح التوجيهات >"
-          },
-          {
-            "key": "mail.link.news",
-            "text": "اقرأها على موقع الأخبار >"
           },
           {
             "key": "account.form.title",
@@ -37485,10 +37449,6 @@
             "text": "Ρυθμίσεις"
           },
           {
-            "key": "startmenu.screenOff",
-            "text": "Σβήσιμο οθόνης"
-          },
-          {
             "key": "startmenu.quit",
             "text": "Έξοδος από το παιχνίδι"
           },
@@ -38953,20 +38913,12 @@
             "text": "Διεύθυνση Τελωνείου"
           },
           {
-            "key": "mail.from.times",
-            "text": "Η Χρονική Εφημερίδα"
-          },
-          {
             "key": "mail.from.integrity",
             "text": "Γραφείο Ακεραιότητας Χρονογραμμής"
           },
           {
             "key": "mail.subject.memo",
             "text": "Σημερινές οδηγίες"
-          },
-          {
-            "key": "mail.subject.times",
-            "text": "Η Χρονική Εφημερίδα, ημέρα {0}"
           },
           {
             "key": "mail.subject.citation",
@@ -38977,24 +38929,12 @@
             "text": "Καμία ταξιδιωτική οδηγία σήμερα."
           },
           {
-            "key": "mail.body.times",
-            "text": "Η σημερινή έκδοση είναι στον ιστότοπο Ειδήσεων."
-          },
-          {
-            "key": "mail.body.timesArchived",
-            "text": "Αυτή η έκδοση φυλάσσεται στο αρχείο του ιστότοπου Ειδήσεων."
-          },
-          {
             "key": "mail.body.citation",
             "text": "Αντίγραφο του δελτίου παράβασης που παρέλαβες:"
           },
           {
             "key": "mail.link.rules",
             "text": "Άνοιξε τις οδηγίες >"
-          },
-          {
-            "key": "mail.link.news",
-            "text": "Διάβασέ το στον ιστότοπο Ειδήσεων >"
           },
           {
             "key": "account.form.title",
@@ -45617,10 +45557,6 @@
             "text": "Impostazioni"
           },
           {
-            "key": "startmenu.screenOff",
-            "text": "Spegni lo schermo"
-          },
-          {
             "key": "startmenu.quit",
             "text": "Esci dal gioco"
           },
@@ -47085,20 +47021,12 @@
             "text": "Direzione delle Dogane"
           },
           {
-            "key": "mail.from.times",
-            "text": "Il Corriere del Tempo"
-          },
-          {
             "key": "mail.from.integrity",
             "text": "Ufficio Integrità della Linea Temporale"
           },
           {
             "key": "mail.subject.memo",
             "text": "Direttive di oggi"
-          },
-          {
-            "key": "mail.subject.times",
-            "text": "Il Corriere del Tempo, giorno {0}"
           },
           {
             "key": "mail.subject.citation",
@@ -47109,24 +47037,12 @@
             "text": "Nessuna direttiva di viaggio oggi."
           },
           {
-            "key": "mail.body.times",
-            "text": "L'edizione di oggi è sul sito Notizie."
-          },
-          {
-            "key": "mail.body.timesArchived",
-            "text": "Questa edizione è conservata nell'archivio del sito Notizie."
-          },
-          {
             "key": "mail.body.citation",
             "text": "Una copia del richiamo di cui hai preso atto:"
           },
           {
             "key": "mail.link.rules",
             "text": "Apri le direttive >"
-          },
-          {
-            "key": "mail.link.news",
-            "text": "Leggilo sul sito Notizie >"
           },
           {
             "key": "account.form.title",
@@ -53849,10 +53765,6 @@
             "text": "Einstellungen"
           },
           {
-            "key": "startmenu.screenOff",
-            "text": "Bildschirm aus"
-          },
-          {
             "key": "startmenu.quit",
             "text": "Spiel beenden"
           },
@@ -55317,20 +55229,12 @@
             "text": "Zolldirektion"
           },
           {
-            "key": "mail.from.times",
-            "text": "Der Zeitbote"
-          },
-          {
             "key": "mail.from.integrity",
             "text": "Amt für Zeitlinienintegrität"
           },
           {
             "key": "mail.subject.memo",
             "text": "Heutige Weisungen"
-          },
-          {
-            "key": "mail.subject.times",
-            "text": "Der Zeitbote, Tag {0}"
           },
           {
             "key": "mail.subject.citation",
@@ -55341,24 +55245,12 @@
             "text": "Heute keine Reiseweisungen."
           },
           {
-            "key": "mail.body.times",
-            "text": "Die heutige Ausgabe steht auf der Nachrichtenseite."
-          },
-          {
-            "key": "mail.body.timesArchived",
-            "text": "Diese Ausgabe liegt im Archiv der Nachrichtenseite."
-          },
-          {
             "key": "mail.body.citation",
             "text": "Eine Kopie des Verwarnungszettels, den du bestätigt hast:"
           },
           {
             "key": "mail.link.rules",
             "text": "Weisungen öffnen >"
-          },
-          {
-            "key": "mail.link.news",
-            "text": "Auf der Nachrichtenseite lesen >"
           },
           {
             "key": "account.form.title",
@@ -62293,10 +62185,6 @@
             "text": "设置"
           },
           {
-            "key": "startmenu.screenOff",
-            "text": "关闭屏幕"
-          },
-          {
             "key": "startmenu.quit",
             "text": "退出游戏"
           },
@@ -63761,20 +63649,12 @@
             "text": "海关总署"
           },
           {
-            "key": "mail.from.times",
-            "text": "时间时报"
-          },
-          {
             "key": "mail.from.integrity",
             "text": "时间线完整性办公室"
           },
           {
             "key": "mail.subject.memo",
             "text": "今日指令"
-          },
-          {
-            "key": "mail.subject.times",
-            "text": "时间时报，第{0}天"
           },
           {
             "key": "mail.subject.citation",
@@ -63785,24 +63665,12 @@
             "text": "今日无出行指令。"
           },
           {
-            "key": "mail.body.times",
-            "text": "今日版见新闻网站。"
-          },
-          {
-            "key": "mail.body.timesArchived",
-            "text": "本期存放于新闻网站的存档中。"
-          },
-          {
             "key": "mail.body.citation",
             "text": "你已知悉的违规通知副本："
           },
           {
             "key": "mail.link.rules",
             "text": "打开指令 >"
-          },
-          {
-            "key": "mail.link.news",
-            "text": "在新闻网站阅读 >"
           },
           {
             "key": "account.form.title",
@@ -70081,10 +69949,6 @@
             "text": "設定"
           },
           {
-            "key": "startmenu.screenOff",
-            "text": "画面オフ"
-          },
-          {
             "key": "startmenu.quit",
             "text": "ゲーム終了"
           },
@@ -71549,20 +71413,12 @@
             "text": "税関総局"
           },
           {
-            "key": "mail.from.times",
-            "text": "時空新報"
-          },
-          {
             "key": "mail.from.integrity",
             "text": "時間線保全局"
           },
           {
             "key": "mail.subject.memo",
             "text": "本日の指令"
-          },
-          {
-            "key": "mail.subject.times",
-            "text": "時空新報 {0}日目"
           },
           {
             "key": "mail.subject.citation",
@@ -71573,24 +71429,12 @@
             "text": "本日の渡航指令はありません。"
           },
           {
-            "key": "mail.body.times",
-            "text": "本日の版はニュースサイトにあります。"
-          },
-          {
-            "key": "mail.body.timesArchived",
-            "text": "この版はニュースサイトのアーカイブに保管されています。"
-          },
-          {
             "key": "mail.body.citation",
             "text": "あなたが了承した違反通知の写し:"
           },
           {
             "key": "mail.link.rules",
             "text": "指令を開く >"
-          },
-          {
-            "key": "mail.link.news",
-            "text": "ニュースサイトで読む >"
           },
           {
             "key": "account.form.title",

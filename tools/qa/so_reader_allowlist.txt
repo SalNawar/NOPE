@@ -19,3 +19,4 @@ DeskConfigSO.hallPortalLayers       # BUG-73d, DOC-HANDLE: no reader since HALL-
 DeskConfigSO.hallPortalVortex       # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.vortex)
 DeskConfigSO.hallPortalPulseSeconds # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.pulseSeconds)
 MotionKnobs.cardFlex            # BUG-11b / D3, DOC-HANDLE: unread since DOC-LOOK made cards rigid by rule (PaperBend.FlexOf); the owner deletes it
+DeskConfigSO.crtClockSize      # BUG-20b, DOC-HANDLE: the CRT clock plate it sized is retired (UI-PC, BUG-20a); FIX_PLAN v1 assigns its deletion to DOC-HANDLE
