@@ -221,6 +221,7 @@ Sources:
   - the release slide: `paperSlideSeconds`, which was the duplicate of `DeskConfigSO.paperSlideSeconds`, and `paperSlideMax`;
   - the drop spin and the squash: `paperDropSpinPerSpeed/Max`, `paperDropSquash`;
   - the knobs of the old stamp, cut in P0-C: `stampLift`, `stampRiseSeconds`, `stampSlamSeconds`, `stampSquash`, `inkBloomSeconds`, `stampFeel`.
+    - INTEGRATION (wave 2 merge, 2026-10-28): STAMP's 3959f37 on main reads `stampLift`, `stampRiseSeconds`, `stampSquash` and `stampFeel` again (the dater's rise, squash and rebound, DeskStampTray). The merge restores those four. `stampSlamSeconds` and `inkBloomSeconds` stay deleted; their allowlist lines are dropped.
 - **New `MotionKnobs` knobs:** `paperSettleSpeed` and `cardDropHop`.
 - **`DeskConfigSO`:**
   - removed: `refuseShake` and `readingArea`;

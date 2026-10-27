@@ -154,8 +154,17 @@ public sealed class MotionKnobs
     /// <summary>The held paper's swing (its turn against its travel, loose: an overshoot, the corners lagging), its bend behind the hand (its bow, twist and ripple), and its bow's settle once let go (light damping: a soft wobble, its ends curling up, then drooping, then flat).</summary>
     public SpringTuning paperSwing = SpringTuning.WithRatio(120f, 0.38f), paperBend = SpringTuning.WithRatio(90f, 0.42f), paperWobble = SpringTuning.WithRatio(220f, 0.22f);
 
-    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop (the old stamp's rise, slam, squash, ink bloom and rebound knobs went with it: P0-C cut it, DOC-HANDLE removed its knobs, BUG-73c).</summary>
-    public MotionFeel paperFeel = MotionFeel.Paper;
+    /// <summary>How far a stamp rises before its slam (the anticipation).</summary>
+    public float stampLift = 0.025f;
+
+    /// <summary>Seconds of the anticipation rise (the slam down is the Dater spring, DeskStampTray.Slam).</summary>
+    public float stampRiseSeconds = 0.07f;
+
+    /// <summary>How much the stamp squashes on impact.</summary>
+    public float stampSquash = 0.16f;
+
+    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, and a stamp's rebound (the old stamp's slam and ink-bloom knobs went with P0-C's cut: DOC-HANDLE removed them, BUG-73c; STAMP reads the rise, squash and rebound again, 3959f37).</summary>
+    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Firm;
 
     /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>
     public MotionFeel deskMoveFeel = MotionFeel.Firm;
