@@ -31,10 +31,6 @@ MonoBehaviour:
     text: Impostazioni
     gloss: 0
     tier: 0
-  - key: startmenu.screenOff
-    text: Spegni lo schermo
-    gloss: 0
-    tier: 0
   - key: startmenu.quit
     text: Esci dal gioco
     gloss: 0
@@ -1526,20 +1522,12 @@ MonoBehaviour:
     text: Direzione delle Dogane
     gloss: 0
     tier: 0
-  - key: mail.from.times
-    text: Il Corriere del Tempo
-    gloss: 0
-    tier: 0
   - key: mail.from.integrity
     text: "Ufficio Integrit\xE0 della Linea Temporale"
     gloss: 0
     tier: 0
   - key: mail.subject.memo
     text: Direttive di oggi
-    gloss: 0
-    tier: 0
-  - key: mail.subject.times
-    text: Il Corriere del Tempo, giorno {0}
     gloss: 0
     tier: 0
   - key: mail.subject.citation
@@ -1550,24 +1538,12 @@ MonoBehaviour:
     text: Nessuna direttiva di viaggio oggi.
     gloss: 0
     tier: 0
-  - key: mail.body.times
-    text: "L'edizione di oggi \xE8 sul sito Notizie."
-    gloss: 0
-    tier: 0
-  - key: mail.body.timesArchived
-    text: "Questa edizione \xE8 conservata nell'archivio del sito Notizie."
-    gloss: 0
-    tier: 0
   - key: mail.body.citation
     text: 'Una copia del richiamo di cui hai preso atto:'
     gloss: 0
     tier: 0
   - key: mail.link.rules
     text: Apri le direttive >
-    gloss: 0
-    tier: 0
-  - key: mail.link.news
-    text: Leggilo sul sito Notizie >
     gloss: 0
     tier: 0
   - key: account.form.title
@@ -3088,6 +3064,38 @@ MonoBehaviour:
   - key: portals.footer
     text: "Le rotte sono stabilite dalla Direzione. Finch\xE9 il Varco di ritorno
       non \xE8 riparato, gli sfollati partono dal Portale {0}."
+    gloss: 0
+    tier: 0
+  - key: switchboard.hint
+    text: 'Una spia lampeggia: collegaci un modulo, dagli corrente, tira il MASTER'
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.pull
+    text: TIRA
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.power
+    text: CORRENTE
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.open
+    text: APERTO
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.done
+    text: FATTO
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.fuse
+    text: FUSIBILE
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.closed
+    text: CHIUSO
+    gloss: 0
+    tier: 0
+  - key: switchboard.sent
+    text: +{0} PARTITI
     gloss: 0
     tier: 0
   - key: home.title
@@ -6205,3 +6213,19 @@ MonoBehaviour:
     english: vertical
   - native: lampeggi
     english: flashes
+  - native: spia
+    english: lamp
+  - native: lampeggia
+    english: blinks
+  - native: collegaci
+    english: connect to it
+  - native: modulo
+    english: module
+  - native: corrente
+    english: power
+  - native: tira
+    english: pull
+  - native: MASTER
+    english: MASTER
+  - native: PARTITI
+    english: sent

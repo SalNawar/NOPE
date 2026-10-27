@@ -31,10 +31,6 @@ MonoBehaviour:
     text: "\u03A1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2"
     gloss: 0
     tier: 0
-  - key: startmenu.screenOff
-    text: "\u03A3\u03B2\u03AE\u03C3\u03B9\u03BC\u03BF \u03BF\u03B8\u03CC\u03BD\u03B7\u03C2"
-    gloss: 0
-    tier: 0
   - key: startmenu.quit
     text: "\u0388\u03BE\u03BF\u03B4\u03BF\u03C2 \u03B1\u03C0\u03CC \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9"
     gloss: 0
@@ -1831,10 +1827,6 @@ MonoBehaviour:
     text: "\u0394\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7 \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5"
     gloss: 0
     tier: 0
-  - key: mail.from.times
-    text: "\u0397 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03AE \u0395\u03C6\u03B7\u03BC\u03B5\u03C1\u03AF\u03B4\u03B1"
-    gloss: 0
-    tier: 0
   - key: mail.from.integrity
     text: "\u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF \u0391\u03BA\u03B5\u03C1\u03B1\u03B9\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2
       \u03A7\u03C1\u03BF\u03BD\u03BF\u03B3\u03C1\u03B1\u03BC\u03BC\u03AE\u03C2"
@@ -1842,11 +1834,6 @@ MonoBehaviour:
     tier: 0
   - key: mail.subject.memo
     text: "\u03A3\u03B7\u03BC\u03B5\u03C1\u03B9\u03BD\u03AD\u03C2 \u03BF\u03B4\u03B7\u03B3\u03AF\u03B5\u03C2"
-    gloss: 0
-    tier: 0
-  - key: mail.subject.times
-    text: "\u0397 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03AE \u0395\u03C6\u03B7\u03BC\u03B5\u03C1\u03AF\u03B4\u03B1,
-      \u03B7\u03BC\u03AD\u03C1\u03B1 {0}"
     gloss: 0
     tier: 0
   - key: mail.subject.citation
@@ -1859,18 +1846,6 @@ MonoBehaviour:
       \u03BF\u03B4\u03B7\u03B3\u03AF\u03B1 \u03C3\u03AE\u03BC\u03B5\u03C1\u03B1."
     gloss: 0
     tier: 0
-  - key: mail.body.times
-    text: "\u0397 \u03C3\u03B7\u03BC\u03B5\u03C1\u03B9\u03BD\u03AE \u03AD\u03BA\u03B4\u03BF\u03C3\u03B7
-      \u03B5\u03AF\u03BD\u03B1\u03B9 \u03C3\u03C4\u03BF\u03BD \u03B9\u03C3\u03C4\u03CC\u03C4\u03BF\u03C0\u03BF
-      \u0395\u03B9\u03B4\u03AE\u03C3\u03B5\u03C9\u03BD."
-    gloss: 0
-    tier: 0
-  - key: mail.body.timesArchived
-    text: "\u0391\u03C5\u03C4\u03AE \u03B7 \u03AD\u03BA\u03B4\u03BF\u03C3\u03B7 \u03C6\u03C5\u03BB\u03AC\u03C3\u03C3\u03B5\u03C4\u03B1\u03B9
-      \u03C3\u03C4\u03BF \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF \u03C4\u03BF\u03C5
-      \u03B9\u03C3\u03C4\u03CC\u03C4\u03BF\u03C0\u03BF\u03C5 \u0395\u03B9\u03B4\u03AE\u03C3\u03B5\u03C9\u03BD."
-    gloss: 0
-    tier: 0
   - key: mail.body.citation
     text: "\u0391\u03BD\u03C4\u03AF\u03B3\u03C1\u03B1\u03C6\u03BF \u03C4\u03BF\u03C5
       \u03B4\u03B5\u03BB\u03C4\u03AF\u03BF\u03C5 \u03C0\u03B1\u03C1\u03AC\u03B2\u03B1\u03C3\u03B7\u03C2
@@ -1879,12 +1854,6 @@ MonoBehaviour:
     tier: 0
   - key: mail.link.rules
     text: "\u0386\u03BD\u03BF\u03B9\u03BE\u03B5 \u03C4\u03B9\u03C2 \u03BF\u03B4\u03B7\u03B3\u03AF\u03B5\u03C2
-      >"
-    gloss: 0
-    tier: 0
-  - key: mail.link.news
-    text: "\u0394\u03B9\u03AC\u03B2\u03B1\u03C3\u03AD \u03C4\u03BF \u03C3\u03C4\u03BF\u03BD
-      \u03B9\u03C3\u03C4\u03CC\u03C4\u03BF\u03C0\u03BF \u0395\u03B9\u03B4\u03AE\u03C3\u03B5\u03C9\u03BD
       >"
     gloss: 0
     tier: 0
@@ -3688,6 +3657,41 @@ MonoBehaviour:
       \u03BF\u03B9 \u03B5\u03BA\u03C4\u03BF\u03C0\u03B9\u03C3\u03BC\u03AD\u03BD\u03BF\u03B9
       \u03C6\u03B5\u03CD\u03B3\u03BF\u03C5\u03BD \u03B1\u03C0\u03CC \u03C4\u03B7\u03BD
       \u03A0\u03CD\u03BB\u03B7 {0}."
+    gloss: 0
+    tier: 0
+  - key: switchboard.hint
+    text: "\u039C\u03B9\u03B1 \u03BB\u03AC\u03BC\u03C0\u03B1 \u03B1\u03BD\u03B1\u03B2\u03BF\u03C3\u03B2\u03AE\u03BD\u03B5\u03B9:
+      \u03C3\u03CD\u03BD\u03B4\u03B5\u03C3\u03B5 \u03BC\u03B9\u03B1 \u03BC\u03BF\u03BD\u03AC\u03B4\u03B1,
+      \u03B4\u03CE\u03C3' \u03C4\u03B7\u03C2 \u03C1\u03B5\u03CD\u03BC\u03B1, \u03C4\u03C1\u03AC\u03B2\u03B7\u03BE\u03B5
+      \u03C4\u03BF MASTER"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.pull
+    text: "\u03A4\u03A1\u0391\u0392\u0391"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.power
+    text: "\u03A1\u0395\u03A5\u039C\u0391"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.open
+    text: "\u0391\u039D\u039F\u0399\u03A7\u03A4\u039F"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.done
+    text: "\u0395\u0393\u0399\u039D\u0395"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.fuse
+    text: "\u0391\u03A3\u03A6\u0391\u039B\u0395\u0399\u0391"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.closed
+    text: "\u039A\u039B\u0395\u0399\u03A3\u03A4\u039F"
+    gloss: 0
+    tier: 0
+  - key: switchboard.sent
+    text: "+{0} \u0395\u03A3\u03A4\u0391\u039B\u0397\u03A3\u0391\u039D"
     gloss: 0
     tier: 0
   - key: home.title
@@ -6898,3 +6902,17 @@ MonoBehaviour:
     english: stay
   - native: "\u03B4\u03B9\u03BA\u03AD\u03C2"
     english: own
+  - native: "\u03BB\u03AC\u03BC\u03C0\u03B1"
+    english: lamp
+  - native: "\u03B1\u03BD\u03B1\u03B2\u03BF\u03C3\u03B2\u03AE\u03BD\u03B5\u03B9"
+    english: blinks
+  - native: "\u03C3\u03CD\u03BD\u03B4\u03B5\u03C3\u03B5"
+    english: connect
+  - native: "\u03B4\u03CE\u03C3"
+    english: give
+  - native: "\u03C4\u03C1\u03AC\u03B2\u03B7\u03BE\u03B5"
+    english: pull
+  - native: MASTER
+    english: MASTER
+  - native: "\u0395\u03A3\u03A4\u0391\u039B\u0397\u03A3\u0391\u039D"
+    english: sent

@@ -31,10 +31,6 @@ MonoBehaviour:
     text: Einstellungen
     gloss: 0
     tier: 0
-  - key: startmenu.screenOff
-    text: Bildschirm aus
-    gloss: 0
-    tier: 0
   - key: startmenu.quit
     text: Spiel beenden
     gloss: 0
@@ -1528,20 +1524,12 @@ MonoBehaviour:
     text: Zolldirektion
     gloss: 0
     tier: 0
-  - key: mail.from.times
-    text: Der Zeitbote
-    gloss: 0
-    tier: 0
   - key: mail.from.integrity
     text: "Amt f\xFCr Zeitlinienintegrit\xE4t"
     gloss: 0
     tier: 0
   - key: mail.subject.memo
     text: Heutige Weisungen
-    gloss: 0
-    tier: 0
-  - key: mail.subject.times
-    text: Der Zeitbote, Tag {0}
     gloss: 0
     tier: 0
   - key: mail.subject.citation
@@ -1552,24 +1540,12 @@ MonoBehaviour:
     text: Heute keine Reiseweisungen.
     gloss: 0
     tier: 0
-  - key: mail.body.times
-    text: Die heutige Ausgabe steht auf der Nachrichtenseite.
-    gloss: 0
-    tier: 0
-  - key: mail.body.timesArchived
-    text: Diese Ausgabe liegt im Archiv der Nachrichtenseite.
-    gloss: 0
-    tier: 0
   - key: mail.body.citation
     text: "Eine Kopie des Verwarnungszettels, den du best\xE4tigt hast:"
     gloss: 0
     tier: 0
   - key: mail.link.rules
     text: "Weisungen \xF6ffnen >"
-    gloss: 0
-    tier: 0
-  - key: mail.link.news
-    text: Auf der Nachrichtenseite lesen >
     gloss: 0
     tier: 0
   - key: account.form.title
@@ -3083,6 +3059,38 @@ MonoBehaviour:
   - key: portals.footer
     text: "Die Routen legt die Direktion fest. Bis das R\xFCckkehrtor repariert ist,
       reisen Vertriebene durch Portal {0} ab."
+    gloss: 0
+    tier: 0
+  - key: switchboard.hint
+    text: "Eine Lampe blinkt: Modul anschlie\xDFen, Strom geben, MASTER ziehen"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.pull
+    text: ZIEHEN
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.power
+    text: STROM
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.open
+    text: OFFEN
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.done
+    text: FERTIG
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.fuse
+    text: SICHERUNG
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.closed
+    text: GESCHLOSSEN
+    gloss: 0
+    tier: 0
+  - key: switchboard.sent
+    text: +{0} GESENDET
     gloss: 0
     tier: 0
   - key: home.title
@@ -6304,3 +6312,15 @@ MonoBehaviour:
     english: type
   - native: PCs
     english: PC
+  - native: blinkt
+    english: blinks
+  - native: Modul
+    english: module
+  - native: "anschlie\xDFen"
+    english: connect
+  - native: geben
+    english: give
+  - native: MASTER
+    english: MASTER
+  - native: GESENDET
+    english: sent
