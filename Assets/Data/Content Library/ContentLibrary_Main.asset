@@ -15259,6 +15259,7 @@ MonoBehaviour:
       outline: 3
       minTextFillAlpha: 0.7
     latinFallbackFont: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+    prewarmGlyphsPerFrame: 12
   neutralTheme: {fileID: 11400000, guid: f032433ed1b73e54587158f6e2a9f58d, type: 2}
   themes:
   - {fileID: 11400000, guid: 05c9fef960155b04f9a1031bf36cdf02, type: 2}
