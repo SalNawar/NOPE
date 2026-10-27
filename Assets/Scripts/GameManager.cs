@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -91,6 +92,33 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>True from presenting a traveller until the player's decision (closing-time rule).</summary>
     private bool _travellerAtDesk;
 
+    /// <summary>True while a decided traveller's verdict (the ribbon, a citation slip) shows and their slot is not yet resolved: closing finishes the slot first (ShiftEnd.OnClosing; BUG-28b).</summary>
+    private bool _verdictShowing;
+
+    /// <summary>True once today's closing was handled (closing time, End Shift, CloseNow, or the day's end): it is handled once.</summary>
+    private bool _closingHandled;
+
+    /// <summary>
+    /// True once this office's shift is no longer its own to close: it is not
+    /// running (never begun, its day already ended, a cheat's route closed it:
+    /// CloseShiftForCheat ended the day on the run's world, which the route
+    /// then moved on and saved; or End Shift showed its ending at once), or a
+    /// scene change is under way (SceneTransit.Loading: a cheat's landing, a
+    /// restart or the Title replaces this office, which stays alive behind
+    /// the shutter until the new scene activates). Its clock's Closed and its
+    /// day loop's end are then ignored, so a day is never closed twice and
+    /// the landing morning's save is never overwritten by the office left
+    /// behind (FLOW round 4: a mid-shift Skip day closed day N again on day
+    /// N+1's world).
+    /// </summary>
+    private bool ShiftLeftBehind => ShiftEnd.LeftBehind(_shiftRunning, SceneTransit.Loading);
+
+    /// <summary>The day this office runs (its plan's), for the log; the run's world may already be on another day after a cheat's route.</summary>
+    private int DayNumber => dayPlan != null ? dayPlan.DayNumber : 0;
+
+    /// <summary>The booth's roll shutter (the bible's G3 and G4): up as the shift opens, down after the last payoff, before the report.</summary>
+    private BoothShutter _shutter;
+
     /// <summary>Gameplay tuning, pulled from RunConfig (null-safe).</summary>
     private GameConfigSO _gameConfig;
 
@@ -105,9 +133,6 @@ public sealed partial class GameManager : MonoBehaviour
 
     /// <summary>True once the Departure Board is introduced (the desk-first ramp: the second destination, day 3; Feature.Board): before it, the board prints nothing and the rulebook alone names the open destination.</summary>
     public bool BoardIntroduced => contentLibrary != null && _worldState != null && contentLibrary.Introductions.Has(_worldState.day, Feature.Board);
-
-    /// <summary>Raised when an accepted traveller leaves, with the portal they leave through (PortalDay.DepartureFor; the hall's rings pulse it, VX4).</summary>
-    public event System.Action<int> Departed;
 
     /// <summary>Raised when the player acknowledges a citation slip (Mail's citation notice arrives then, redesign phase 25; the Helix River's red pulse runs then).</summary>
     public event System.Action<CaseVerdict> CitationAcknowledged;
@@ -141,13 +166,23 @@ public sealed partial class GameManager : MonoBehaviour
             Debug.LogError("GameManager missing references (orchestrator/contentLibrary/officeUI).");
             return;
         }
-        Current = this;
+
+        // The office a scene change is replacing is never the cheat menu's live shift (FLOW round 5): not one that starts
+        // while a newer load waits to follow its own, and not this one once a load is asked for (LeaveCurrent).
+        if (SceneTransit.NextWaiting)
+            Debug.Log("[GameManager] This office starts while a newer scene change waits to replace it: it is not the live shift (GameManager.Current).");
+        else
+            Current = this;
+        SceneTransit.Asked += LeaveCurrent;
 
         // Acquire the run (creates RunManager + loads save/new run on first scene).
+        bool runExisted = RunManager.HasInstance;
         RunManager run = RunManager.GetOrCreate();
 
-        // The run exists now: theme the office for the present culture before the briefing shows.
-        CultureThemeService.RefreshActive();
+        // Each scene is themed for the run's culture as it loads (CultureThemeService, sceneLoaded), so the office is
+        // themed once (BUG-31a); only an office opened on its own, whose run is made here, is themed again for that run.
+        if (!runExisted)
+            CultureThemeService.RefreshActive();
 
         if (run != null)
         {
@@ -189,17 +224,18 @@ public sealed partial class GameManager : MonoBehaviour
             shiftClock.Configure(_gameConfig, dayPlan);
             shiftClock.Closed += HandleShiftClosed;
         }
+        else
+            Debug.LogWarning("GameManager: no ShiftClockDriver wired, so the day ends only when the queue empties (no closing time). Run Tools > TimeDesk > Build Office UI.");
 
         // The game feel's director (hit-stop, camera impulses, the shift's bells, the hall's ambience).
         FeelDirector.Attach(this, shiftClock);
 
+        // The booth's roll shutter, shut until the shift opens.
+        _shutter = BoothShutter.Attach(this);
+
         // A waiver signed from the desk's pad costs shift time (the endings and strandings spec §7.3, Q15 = A).
         if (investigationUI != null)
             investigationUI.WaiverSigned += HandleWaiverSigned;
-        else
-        {
-            Debug.LogWarning("GameManager: no ShiftClockDriver wired, so the day ends only when the queue empties (no closing time). Run Tools > TimeDesk > Build Office UI.");
-        }
 
         // Fresh ledger for this shift.
         _ledger = new ShiftLedger();
@@ -278,13 +314,8 @@ public sealed partial class GameManager : MonoBehaviour
         // The day's bulletin, with the new desk hours when they changed overnight (night shifts: the hours grow).
         string bulletin = TodaysBulletin();
 
-        // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
-        // The paper is the world's: the clerk's bulletin is the Bureau memo's, never a back issue's.
-        if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
-                               _worldState.tomorrow.deskLines);
-        else
-            Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
+        // The morning paper is printed: its lines go to the News site's back issues (GameManager.News.cs).
+        RecordTodaysPaper();
 
         // Morning briefing first (if wired), then the day loop.
         if (dayFlowUI != null)
@@ -346,6 +377,9 @@ public sealed partial class GameManager : MonoBehaviour
     {
         if (Current == this)
             Current = null;
+        SceneTransit.Asked -= LeaveCurrent;
+        // A citation slip still up as the office goes (a cheat's jump, quitting to the title) holds no clock in the next scene.
+        PauseState.Shared.Release(PauseState.Citation);
         if (shiftClock != null)
             shiftClock.Closed -= HandleShiftClosed;
         if (investigationUI != null)
@@ -362,30 +396,54 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the last case of the day resolves: closes the desk and ends
-    /// the last traveller's reaction (no bubble over the report), applies the narrative
-    /// dialogs' consequences (then refreshes the HUD and checks endings), saves
-    /// the run, shows the shift report and leads into the Home scene (or the
-    /// title scene when an ending was reached).
+    /// A scene change was asked for (SceneTransit.Asked): this office is being
+    /// replaced, though it stays alive behind the shutter until the new scene
+    /// activates, so it stops being the cheat menu's live shift
+    /// (GameManager.Current) at once. RunManager's routes take the live shift
+    /// from Current, so a second skip or jump under the shutter closes the
+    /// run's landing day on an empty ledger, as from its briefing, and never
+    /// closes this office's day again on the landing world (FLOW round 5: a
+    /// Skip day, then another before the shutter lifted, re-applied the first
+    /// day's strandings, instalment, dialog outcomes and statement row).
+    /// </summary>
+    private void LeaveCurrent()
+    {
+        if (Current != this)
+            return;
+        Current = null;
+        Debug.Log($"[GameManager] A scene change replaces day {DayNumber}'s office: it is no longer the live shift (GameManager.Current).");
+    }
+
+    /// <summary>
+    /// Called when the last case of the day resolves (or the booth closed):
+    /// closes the desk and stops the clock (an early finish rings the closing
+    /// bell, BUG-72), applies the narrative dialogs' consequences (then
+    /// refreshes the HUD and checks endings) and saves the run; then, once the
+    /// last traveller's reaction and walk-off have played (BUG-32a), shows the
+    /// shift report and leads into the Home scene, or into the run's ending
+    /// when one was reached during the shift or at its close (the title scene;
+    /// BUG-28b, BUG-56a). Nothing when the shift is no longer this office's
+    /// to close (ShiftLeftBehind): a cheat's route has already closed the day.
     /// </summary>
     private void HandleDayCompleted()
     {
+        if (ShiftLeftBehind)
+        {
+            Debug.Log($"[GameManager] The day loop of day {DayNumber} ended after its shift was closed elsewhere (a cheat's route, an ending shown at once) or while a scene change replaces this office: nothing is closed again (the run is on day {_worldState.day}).");
+            return;
+        }
+
         Debug.Log($"[GameManager] >>> Entering HandleDayCompleted (day {_worldState.day}).");
 
-        // The booth is shut: freeze the clock (the queue may have run out before closing) and close the desk; an FTUE still open is over (saved below).
+        // The booth is shut: closing is handled, the clock stops (the queue may have run out before closing: the bell rings) and the desk closes; an FTUE still open is over (saved below).
         _travellerAtDesk = false;
         _shiftRunning = false;
+        _closingHandled = true;
         if (guide != null)
             guide.EndShift();
         CloseDesk();
-
-        // The last traveller's reaction ends as the booth shuts: the figure leaves and their bubble hides, so it never sits over the shift report.
-        if (travellerView != null)
-            travellerView.EndLinger();
-        EndReaction();
         if (shiftClock != null)
             shiftClock.StopShift();
-        _characterArt?.Retain(null);
 
         int correctCount = 0;
         int totalPay = 0;
@@ -444,17 +502,58 @@ public sealed partial class GameManager : MonoBehaviour
             RunManager.Instance.SaveNow();
         }
 
-        System.Action next = ending != null ? new System.Action(HandleEndingReached) : HandleGoHome;
+        // A run that reached an ending during the shift (a verdict's CloseNow(endingId)) or at its close ends here: the report, then the ending, never Home.
+        bool ends = ShiftEnd.EndsTheRun(_worldState.endingId);
+        System.Action next = ends ? new System.Action(HandleEndingReached) : HandleGoHome;
 
-        // Show the shift report, then hand off to the home phase (or the title
-        // scene after an ending). The report is read in the booth (like the
-        // morning briefing), so pull back first.
+        Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (the report once the last traveller's payoff has played, then {(ends ? "the ending" : "Home")}).");
+        StartCoroutine(AfterThePayoff(() => ShowDayReport(next, ends)));
+    }
+
+    /// <summary>
+    /// Waits until the last traveller's reaction and walk-off have played
+    /// (DeskAvailability.IsDeparting; at most MotionTuningSO.payoffWaitSeconds
+    /// of real time: ShiftEnd.PayoffDone), then ends their linger and bubble,
+    /// so neither sits over the report, frees their art, rolls the booth's
+    /// shutter down (the bible's G4; at once without one) and runs
+    /// <paramref name="then"/> (BUG-32a: the report wiped the payoff).
+    /// </summary>
+    private IEnumerator AfterThePayoff(System.Action then)
+    {
+        float max = UiMotion.Tuning != null ? UiMotion.Tuning.payoffWaitSeconds : DefaultPayoffWaitSeconds;
+        float waited = 0f;
+        while (!ShiftEnd.PayoffDone(_desk.IsDeparting, waited, max))
+        {
+            yield return null;
+            waited += Time.unscaledDeltaTime;
+        }
+        if (travellerView != null)
+            travellerView.EndLinger();
+        EndReaction();
+        _characterArt?.Retain(null);
+        if (_shutter != null)
+            _shutter.Close(then);
+        else
+            then();
+    }
+
+    /// <summary>The payoff's longest wait without a MotionTuningSO (its default).</summary>
+    private const float DefaultPayoffWaitSeconds = 8f;
+
+    /// <summary>
+    /// Shows the shift report, then hands off to <paramref name="next"/> (Home,
+    /// or the ending when <paramref name="ends"/>). The report is read in the
+    /// booth (like the morning briefing), so the view pulls back first; without
+    /// a report panel, the day's line and <paramref name="next"/> at once.
+    /// </summary>
+    private void ShowDayReport(System.Action next, bool ends)
+    {
         if (dayFlowUI != null)
         {
             if (officeView != null)
                 officeView.FocusOffice();
 
-            Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then {(ending != null ? "the title scene" : "Home")}).");
+            Debug.Log($"[GameManager] The shift report, then {(ends ? "the ending" : "Home")}.");
             if (booth != null)
                 booth.SetPhase(BoothPhase.Newsletter);
             // The last verdict's ribbon goes with the shift (QA2 2026-10-16: CORRECT stayed above the report).
@@ -471,7 +570,7 @@ public sealed partial class GameManager : MonoBehaviour
             if (officeUI != null)
                 officeUI.SetResultText(UiText.Format("day.complete", _worldState.day));
 
-            Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (no results panel, going to {(ending != null ? "the title scene" : "Home")} directly).");
+            Debug.Log($"[GameManager] No results panel: going to {(ends ? "the ending" : "Home")} directly.");
             next();
         }
     }
@@ -495,47 +594,6 @@ public sealed partial class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when the orchestrator starts case slot #N (1-based).
-    /// Displays the generated case in the UI.
-    /// </summary>
-    private void HandleCaseSlotStarted(int caseIndex1Based)
-    {
-        Debug.Log($"[GameManager] >>> Entering HandleCaseSlotStarted (slot {caseIndex1Based}/{_dayCases?.Count ?? 0}).");
-
-        _activeCaseIndex1Based = caseIndex1Based;
-
-        int idx = caseIndex1Based - 1;
-
-        if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
-        {
-            Debug.LogError($"GameManager could not find case for slot {caseIndex1Based}.");
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        CaseInstance inst = _dayCases[idx];
-
-        string claimedEraId = inst.claimedEra != null ? inst.claimedEra.id : string.Empty;
-        string archetypeName = inst.archetype != null ? inst.archetype.displayName : string.Empty;
-        string nationName = inst.claimedNation != null ? inst.claimedNation.displayName : string.Empty;
-        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}.");
-
-        // Clear the previous case's verdict line before showing the new case.
-        if (officeUI != null)
-            officeUI.SetResultText(string.Empty);
-
-        // The traveller waits in the queue: called at once while the desk is
-        // available and free, else when the AVAILABLE sign is clicked (or the
-        // last traveller has left). With no sign wired, show immediately.
-        if (readySign != null)
-            _desk.Arm();
-        else
-            ShowActiveCase(inst);
-
-        Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotStarted (slot {caseIndex1Based}, awaiting player decision).");
-    }
-
     /// <summary>Starts the day loop (after the briefing); the AVAILABLE sign takes clicks from here (the desk starts paused) and its first press starts the shift clock (OpenShift; Saleh 2026-10-07: "shift should not start until you press AVAILABLE"); without a sign the clock starts at once.</summary>
     private void BeginShift(DayPlanSO plan, int daySeed)
     {
@@ -543,6 +601,9 @@ public sealed partial class GameManager : MonoBehaviour
             booth.SetPhase(BoothPhase.NoTraveller);
         if (readySign != null)
             readySign.Interactable = true;
+
+        // The shift runs from here, before the day loop starts: closing time and the day's end are handled only for a running shift (ShiftLeftBehind).
+        _shiftRunning = true;
 
         orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
@@ -554,19 +615,32 @@ public sealed partial class GameManager : MonoBehaviour
             guide.BeginShift(_worldState.day, _worldState.guide, contentLibrary);
 
         // The cheat menu's "Auto-decide" keeps the queue coming from the shift's start.
-        _shiftRunning = true;
         StartAutoDecide();
     }
 
     /// <summary>
-    /// Closing time: the desk closes (the AVAILABLE sign goes off and inert, and
-    /// a traveller still waiting in the queue is never called); a traveller
-    /// already at the desk may be finished, otherwise the booth closes at once.
+    /// Closing time (once a day: closing time, End Shift, CloseNow): the desk
+    /// closes (the AVAILABLE sign goes off and inert, and a traveller still
+    /// waiting in the queue is never called); a traveller at the desk, or a
+    /// decided one whose verdict still shows (a citation slip), is finished
+    /// first (ShiftEnd.OnClosing: the report never covers the slip; BUG-28b),
+    /// otherwise the booth closes at once. Nothing when the shift is no longer
+    /// this office's to close (ShiftLeftBehind): the clock's Closed raised by a
+    /// cheat's close (CloseShiftForCheat finishes the clock after clearing
+    /// _shiftRunning) must not release the day loop into a second day's end.
     /// </summary>
     private void HandleShiftClosed()
     {
-        ClosingAction action = ShiftFlow.OnClosing(_travellerAtDesk);
-        Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}, waiting={_desk.IsWaiting}) -> {action}.");
+        if (_closingHandled)
+            return;
+        if (ShiftLeftBehind)
+        {
+            Debug.Log($"[GameManager] Closing time of day {DayNumber} ignored: its shift was closed by a cheat's route or its ending, or a scene change is replacing this office.");
+            return;
+        }
+        _closingHandled = true;
+        ClosingAction action = ShiftEnd.OnClosing(_travellerAtDesk, _verdictShowing);
+        Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}, verdictShowing={_verdictShowing}, waiting={_desk.IsWaiting}) -> {action}.");
         CloseDesk();
 
         if (action == ClosingAction.FinishCurrent)
@@ -575,92 +649,28 @@ public sealed partial class GameManager : MonoBehaviour
             orchestrator.CloseNow();
     }
 
-    /// <summary>The shift opens (the AVAILABLE sign's first press, DeskAvailability.Opened; at once without a sign): the shift clock starts from the opening hour, and with it what it times (the hall's light, closing time, the last-hour alarm).</summary>
-    private void OpenShift()
+    /// <summary>
+    /// The run ends at this day's end (TIMELINE-FAIL's Q4 = A; BUG-28b,
+    /// BUG-56a: failure plays out at the day's end, never the instant a
+    /// verdict lands): <paramref name="endingId"/> is set (blank keeps the one
+    /// set already) and, while the shift runs, it closes now: the AVAILABLE
+    /// sign goes off, nobody else is called, a traveller at the desk or a
+    /// decided one's verdict is finished first, the closing bell rings; then
+    /// the last payoff, the report and the ending (never Home). Before the
+    /// shift starts, the ending still waits for the day's end.
+    /// </summary>
+    public void CloseNow(string endingId)
     {
+        if (_worldState == null)
+            return;
+        if (!string.IsNullOrEmpty(endingId))
+            _worldState.endingId = endingId;
+        if (!_shiftRunning)
+            return;
+        Debug.Log($"[GameManager] CloseNow('{_worldState.endingId}'): the shift closes now; the run ends at the day's end.");
         if (shiftClock != null)
-            shiftClock.StartShift();
-        Debug.Log($"[GameManager] Shift started at {ShiftClock.Format(shiftClock != null ? shiftClock.MinuteOfDay : 0f)} on AVAILABLE (day {_worldState.day}).");
-    }
-
-    /// <summary>The AVAILABLE sign's click: turns the desk available (the waiting traveller is called once the desk is free) or pauses it (the traveller at the desk is finished normally; the shift clock keeps running).</summary>
-    private void ToggleAvailable()
-    {
-        _desk.Toggle();
-        Debug.Log($"[GameManager] Desk {(_desk.IsAvailable ? "available" : "paused")} (waiting={_desk.IsWaiting}, departing={_desk.IsDeparting}, travellerAtDesk={_travellerAtDesk}).");
-    }
-
-    /// <summary>The shift is over (closing time or the day's end): nobody else is called and the AVAILABLE sign goes off and takes no clicks.</summary>
-    private void CloseDesk()
-    {
-        _desk.Close();
-        if (readySign != null)
-            readySign.Interactable = false;
-    }
-
-    /// <summary>The desk calls the waiting traveller (DeskAvailability.Called): the PC frame closes, so the arrival is seen, and the active slot's case is shown.</summary>
-    private void CallTraveller()
-    {
-        int idx = _activeCaseIndex1Based - 1;
-        if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
-            return;
-
-        if (officeView != null)
-            officeView.FocusOffice();
-        ShowActiveCase(_dayCases[idx]);
-    }
-
-    /// <summary>
-    /// The one presence transition: whether a traveller is at the desk (and
-    /// how they look) feeds the closing-time rule, the booth figure and the
-    /// booth's input phase.
-    /// </summary>
-    private void SetTravellerAtDesk(bool at, TravellerLook look = null, bool keepFigure = false)
-    {
-        _travellerAtDesk = at;
-
-        if (travellerView != null)
-        {
-            if (at)
-                travellerView.Show(look, _characterArt);
-            else if (!keepFigure)
-                travellerView.Clear();
-        }
-
-        if (booth != null)
-            booth.SetPhase(at ? BoothPhase.TravellerAtDesk : BoothPhase.NoTraveller);
-    }
-
-    /// <summary>
-    /// Presents a case via the investigation UI: keeps only this traveller's
-    /// art and picks its set (CharacterArt.PresentTraveller: 80s or classic, never a
-    /// mix), shows them in the booth, and marks a once-per-run premade as met
-    /// (DayCycle.Present: they never come back this run). Without the
-    /// investigation UI no case can be shown: an error, and the slot resolves.
-    /// </summary>
-    private void ShowActiveCase(CaseInstance inst)
-    {
-        // Calling the next traveller ends the last one's linger at once (R4).
-        if (travellerView != null)
-            travellerView.EndLinger();
-        EndReaction();
-        _characterArt?.PresentTraveller(inst.look);
-        SetTravellerAtDesk(true, inst.look);
-
-        DayCycle.Present(_worldState, inst);
-
-        if (investigationUI == null)
-        {
-            Debug.LogError("[GameManager] No InvestigationUIController is wired, so no case can be shown. Run Tools > TimeDesk > Build Office UI.");
-            SetTravellerAtDesk(false);
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
-        if (guide != null)
-            guide.CaseShown(inst);
-        DecideOnArrivalIfCheated();
+            shiftClock.StopShift(); // rings the bell and raises Closed: HandleShiftClosed
+        HandleShiftClosed(); // when the clock never ran (handled once either way)
     }
 
     /// <summary>
@@ -670,189 +680,6 @@ public sealed partial class GameManager : MonoBehaviour
     {
         Debug.Log($"[GameManager] >>> Entering HandleCaseSlotEnded (slot {caseIndex1Based}).");
         Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotEnded (slot {caseIndex1Based}).");
-    }
-
-    /// <summary>
-    /// Resolves the player's decision, one of the three verdicts committed at
-    /// the desk (the hand-back, the DETAIN button; the one decision handler, audit R3-017; the desk
-    /// machine spec §2): scores it, dispatches timeline impacts only on
-    /// accept, checks for an ending, then shows the verdict and advances the day.
-    /// </summary>
-    private void HandleDecision(DeskStamp decision)
-    {
-        bool accepted = decision == DeskStamp.Approved;
-        Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, verdict={decision}).");
-        // The booth has no traveller from here (the wheel cannot open); the figure stays for their reaction (R4). The papers are handed back: the guide hears it.
-        SetTravellerAtDesk(false, keepFigure: true);
-        if (guide != null)
-            guide.CaseDecided();
-
-        int idx = _activeCaseIndex1Based - 1;
-
-        if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
-        {
-            if (travellerView != null)
-                travellerView.Clear();
-            Debug.LogError("Player decided but the active case index is invalid.");
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        CaseInstance inst = _dayCases[idx];
-
-        // No tuning config: keep a simple correct/wrong readout.
-        if (_gameConfig == null)
-        {
-            bool simpleCorrect = accepted == inst.ShouldAccept;
-            if (officeUI != null)
-                officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
-            React(inst, accepted);
-            Debug.Log($"[GameManager] <<< Exiting HandleDecision (no GameConfig, simpleCorrect={simpleCorrect}).");
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        float stabilityBefore = _worldState.timelineStability;
-        int moneyBefore = _worldState.money;
-
-        // Evidence documented in the scanner gates deny decisions (-1 = the
-        // evidence system is not active in this scene, gate skipped).
-        int evidenceCount = investigationUI != null && investigationUI.EvidenceSystemActive
-            ? investigationUI.EvidenceCount
-            : -1;
-        if (_cheatEvidence && evidenceCount == 0)
-            evidenceCount = 1; // the cheat menu's "decide correctly" denies with the evidence a denial needs
-
-        // The verdict onto the ledger; the traveler is only dispatched (and the
-        // timeline moved) when accepted: an accepted liar also carries their true
-        // home's fact into the claim, and an accepted costume error causes a
-        // panic there (tomorrow's news). DayCycle holds the step, so the balance
-        // simulation plays the same one.
-        CaseVerdict verdict = DayCycle.Decide(inst, decision, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
-        if (accepted)
-            AnnounceDeparture(inst);
-
-        if (officeUI != null)
-            officeUI.UpdateHud(_worldState);
-
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: verdict={decision}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.00}->{_worldState.timelineStability:0.00}, firedNow={verdict.firedNow}.");
-
-        // The reaction (the personalities spec's R1-R5): presentation only, after the scoring, never changing it.
-        React(inst, accepted);
-        Resolved?.Invoke(inst, verdict, accepted, stabilityBefore);
-
-        EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
-
-        if (ending != null)
-        {
-            Debug.Log($"[GameManager] Ending check: matched '{ending.id}' ({ending.displayName}).");
-            _worldState.endingId = ending.id;
-
-            if (RunManager.HasInstance)
-                RunManager.Instance.SaveNow();
-
-            ShowVerdictThen(verdict, HandleEndingReached);
-            return;
-        }
-
-        ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
-    }
-
-    /// <summary>An accepted traveller leaves through today's portal for them (the displaced by the Return Gate once repaired, else 01; a citizen by the open route to their destination, else 01): the portal is announced for the hall's pulse; none when the hall has no portals.</summary>
-    private void AnnounceDeparture(CaseInstance inst)
-    {
-        if (_today == null || inst.claimedNation == null || inst.claimedEra == null)
-            return;
-        int portal = _today.Portals.DepartureFor(new PlaceRef(inst.claimedNation.id, inst.claimedEra.id), inst.kind == TravellerKind.Displaced);
-        if (portal <= 0)
-            return;
-        Debug.Log($"[GameManager] Case {_activeCaseIndex1Based} leaves through portal {PortalText.Number(portal)}.");
-        Departed?.Invoke(portal);
-    }
-
-    /// <summary>
-    /// The decided traveller's reaction (the personalities spec's R1-R4): the
-    /// investigation UI says it and returns the linger; the figure leaves
-    /// after it (at once for 0), and their bubble hides as they go. The desk
-    /// calls nobody new until they have left.
-    /// </summary>
-    private void React(CaseInstance inst, bool accepted)
-    {
-        float linger = investigationUI != null ? investigationUI.React(inst, accepted) : 0f;
-        if (travellerView == null)
-        {
-            EndReaction();
-            return;
-        }
-
-        _desk.SetDeparting(true);
-        travellerView.Leave(linger, () =>
-        {
-            EndReaction();
-            _desk.SetDeparting(false);
-        });
-    }
-
-    private void EndReaction()
-    {
-        if (investigationUI != null)
-            investigationUI.EndReaction();
-    }
-
-    /// <summary>
-    /// Shows the verdict slip if a UI is wired (pausing the shift clock while a
-    /// citation slip is up, and holding the PC screen on so the slip can never
-    /// sit on a dark screen), then runs the continuation (Saleh 2026-10-07,
-    /// after the 1007b demo: "I like the violation slip better": the slip is
-    /// back and the Citation paper on the desk is gone).
-    /// </summary>
-    private void ShowVerdictThen(CaseVerdict verdict, System.Action onContinue)
-    {
-        if (officeUI == null)
-        {
-            onContinue?.Invoke();
-            return;
-        }
-
-        // A citation slip holds the day, the shift clock and the screen until acknowledged.
-        bool citation = verdict != null && verdict.citationIssued;
-        bool holdsClock = shiftClock != null && citation;
-        if (holdsClock)
-            shiftClock.Pause();
-        if (citation && booth != null)
-            booth.SetCitationPending(true);
-
-        officeUI.ShowVerdict(verdict, () =>
-        {
-            if (citation && booth != null)
-                booth.SetCitationPending(false);
-            if (holdsClock)
-                shiftClock.Resume();
-            if (citation)
-                CitationAcknowledged?.Invoke(verdict);
-            onContinue?.Invoke();
-        });
-    }
-
-    /// <summary>
-    /// Called once the verdict for a run-ending case, or the shift report of a
-    /// day whose dialog consequences reached an ending, has been shown. Loads
-    /// the title scene to display the ending (WorldState.endingId is already
-    /// set and saved).
-    /// </summary>
-    private void HandleEndingReached()
-    {
-        Debug.Log($"[GameManager] >>> Entering HandleEndingReached (endingId='{_worldState.endingId}').");
-
-        if (RunManager.HasInstance)
-        {
-            Debug.Log("[GameManager] <<< Exiting HandleEndingReached (loading title scene).");
-            RunManager.Instance.LoadTitleScene();
-        }
-        else
-        {
-            Debug.LogError("[GameManager] Ending reached but no RunManager instance — cannot load title scene.");
-        }
     }
 
     /// <summary>

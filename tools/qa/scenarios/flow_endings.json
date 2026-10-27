@@ -1,0 +1,30 @@
+{
+  "name": "flow_endings",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "BUG-56a / BUG-28b (D12, TIMELINE-FAIL Q4 = A): a verdict that ends the run closes the shift (sign off, nobody else called), the payoff and the report play, then the evening edition with Title and Quit; never Home" },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "startShift" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "wait", "f": 1 },
+    { "op": "cheat", "name": "SetStability", "f": 0 },
+    { "op": "recStart", "name": "fired" },
+    { "op": "cheat", "name": "DecideCorrectly" },
+    { "op": "flowPayoff", "f": 60 },
+    { "op": "wait", "f": 1 },
+    { "op": "recStop" },
+    { "op": "still", "name": "fired_report" },
+    { "op": "recStart", "name": "edition" },
+    { "op": "button", "target": "DayFlowUIController.goHomeButton" },
+    { "op": "waitScene", "name": "TitleScene", "f": 120 },
+    { "op": "flowEdition", "f": 30 },
+    { "op": "wait", "f": 1 },
+    { "op": "recStop" },
+    { "op": "still", "name": "edition" }
+  ]
+}
