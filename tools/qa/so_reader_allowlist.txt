@@ -20,3 +20,4 @@ DeskConfigSO.hallPortalDrawing      # BUG-73d, DOC-HANDLE: no reader since HALL-
 DeskConfigSO.hallPortalLayers       # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.rings)
 DeskConfigSO.hallPortalVortex       # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.vortex)
 DeskConfigSO.hallPortalPulseSeconds # BUG-73d, DOC-HANDLE: no reader since HALL-FX (HallPortalsSO.pulseSeconds)
+MotionKnobs.cardFlex            # BUG-11b / D3, DOC-HANDLE: unread since DOC-LOOK made cards rigid by rule (PaperBend.FlexOf); the owner deletes it

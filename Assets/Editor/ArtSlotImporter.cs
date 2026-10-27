@@ -12,11 +12,16 @@ using UnityEngine;
 /// sliced faces are the UI kit's since run 7: UiKitImporter), always a 2D
 /// texture (a delivered file whose .meta holds only its fixed GUID, like the
 /// pet's coats, otherwise imports as a cube map), the pet's pictures and frames
-/// uncompressed and bilinear (ArtSlots.IsPetPicture), so a delivered file is
-/// ready without touching its import settings.
+/// uncompressed (ArtSlots.IsPetPicture), so a delivered file is ready without
+/// touching its import settings. DOC-LOOK (BUG-29, 63): the papers' art and
+/// the pet's pictures with mipmaps and trilinear (ArtSlots.Mipmapped,
+/// Trilinear), the papers' art in the high-quality compression (BC7 on PC);
+/// every other slot bilinear without mipmaps, as before.
 /// </summary>
 public sealed class ArtSlotImporter : AssetPostprocessor
 {
+    /// <summary>Its rules' version: a new one reimports the slots' art once (DOC-LOOK: mipmaps and trilinear on the papers and the pets).</summary>
+    public override uint GetVersion() => 2;
     private void OnPreprocessTexture()
     {
         string slot = ArtSlots.SlotOf(assetPath);
@@ -28,20 +33,18 @@ public sealed class ArtSlotImporter : AssetPostprocessor
         importer.textureShape = TextureImporterShape.Texture2D;
         importer.spriteImportMode = SpriteImportMode.Single;
         importer.alphaIsTransparency = true;
-        importer.mipmapEnabled = ArtSlots.OnDeskPaper(slot);
+        importer.mipmapEnabled = ArtSlots.Mipmapped(slot);
+        importer.filterMode = ArtSlots.Trilinear(slot) ? FilterMode.Trilinear : FilterMode.Bilinear;
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.maxTextureSize = ArtSlots.MaxSide(slot);
         // The hall's slots lie pixel for pixel over the uncompressed painting: the default block compression mottles
         // their large dark fields in play, so they take the high-quality compression (BC7 on PC).
-        if (slot.StartsWith(ArtSlots.HallSlotsFolder, System.StringComparison.Ordinal))
+        if (slot.StartsWith(ArtSlots.HallSlotsFolder, System.StringComparison.Ordinal) || ArtSlots.OnDeskPaper(slot))
             importer.textureCompression = TextureImporterCompression.CompressedHQ;
-        // The pet's pictures and frames (tools/art/pets, 1024 px): uncompressed, bilinear, no mipmaps, whatever a
-        // fresh .meta would default to (a block-compressed fur mottles; ArtSlots.IsPetPicture).
+        // The pet's pictures and frames (tools/art/pets, 1024 px): uncompressed, whatever a fresh .meta would default
+        // to (a block-compressed fur mottles; ArtSlots.IsPetPicture); mipmapped and trilinear above (BUG-29).
         if (ArtSlots.IsPetPicture(slot))
-        {
             importer.textureCompression = TextureImporterCompression.Uncompressed;
-            importer.filterMode = FilterMode.Bilinear;
-        }
 
         importer.spriteBorder = Vector4.zero;
     }

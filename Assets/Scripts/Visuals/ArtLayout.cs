@@ -24,8 +24,18 @@ using System.Linq;
 /// </summary>
 public static class ArtLayout
 {
-    /// <summary>The least share of its size a value or a label shrinks to so that it fits its place (the renderers' fit; the check measures the longest value at it).</summary>
-    public const float FitFloor = 0.5f;
+    /// <summary>The least share of the art's own size a value or a label shrinks to so that it fits its place (the renderers' fit; the check measures the longest value at it): TextFit.Least. A grown text may shrink to the same absolute size (FitFloorOf); below TextFit.Floor it counts as shrunk (the cap-height gate).</summary>
+    public const float FitFloor = TextFit.Least;
+
+    /// <summary>The least share of its size an item of <paramref name="role"/> on <paramref name="art"/> shrinks to: FitFloor of the art's own size, so less of a grown size (labelGrowth for a label, valueGrowth for the rest).</summary>
+    public static float FitFloorOf(FormArt art, FormTextRole role) =>
+        TextFit.LeastOf(FitFloor, art == null ? 1f : role == FormTextRole.Label ? art.labelGrowth : art.valueGrowth);
+
+    /// <summary>A printed label's line over its size (the art's label face, Big Shoulders: 1.2 em, and a hair): the band a re-laid label takes at its cell's top.</summary>
+    public const float LabelLine = 1.25f;
+
+    /// <summary>The most of its place's height a grown value's size takes (the art's value face, Geist Mono, sets a line 1.3 em tall: a larger size would wrap or shrink).</summary>
+    public const float ValueFill = 0.74f;
 
     /// <summary>The nation's emblem inside a visa box, as a share of the box's smaller side.</summary>
     public const float EmblemShare = 0.7f;
@@ -152,6 +162,9 @@ public static class ArtLayout
         {
             int slot = slots.Count;
             FaceRect place = On(f.value);
+            float valueHeight = place.Height;
+            bool cell = worded && art.Regrown && Stacked(f) && !Hidden(data, f.field) && f.field != sealField && f.field != photoField;
+            FaceRect labelPlace = cell ? Cell(On(f.label), place, art, out place) : default;
             if (f.field == sealField)
             {
                 items.Add(new FormItem(FormItemKind.Seal, FormTextRole.Value, place, slot, Value(data, f.field), 0f, FormTextAlign.Centre));
@@ -167,15 +180,17 @@ public static class ArtLayout
             {
                 string value = Value(data, f.field);
                 bool hand = signed.Contains(f.field);
+                float size = Grown(art.valueShare * valueHeight, art.valueGrowth, ValueFill * place.Height);
                 if (hand && string.IsNullOrWhiteSpace(value))
-                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, data.Word(FormLayout.Unsigned), UnsignedShare * art.valueShare * place.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, data.Word(FormLayout.Unsigned), UnsignedShare * size, FormTextAlign.Left));
                 else if (!string.IsNullOrEmpty(value))
-                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, art.valueShare * place.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, size, FormTextAlign.Left));
                 if ((f.relabel || worded) && f.label.IsSet && !Hidden(data, f.field))
                 {
-                    FaceRect label = On(f.label);
+                    FaceRect label = cell ? labelPlace : On(f.label);
+                    float labelSize = cell ? labelPlace.Height / LabelLine : Grown(art.labelShare * label.Height, worded ? art.labelGrowth : 1f, label.Height / LabelLine);
                     string english = !f.relabel && !string.IsNullOrEmpty(f.labelText) ? f.labelText : f.field < data.FieldLabels.Count ? data.FieldLabels[f.field] ?? string.Empty : string.Empty;
-                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Label, label, slot, Capitals(data.Word(english)), art.labelShare * label.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Label, label, slot, Capitals(data.Word(english)), labelSize, FormTextAlign.Left));
                 }
             }
             slots.Add(new FormSlot(slot, f.field, -1, string.Empty, place, 0));
@@ -186,17 +201,14 @@ public static class ArtLayout
         if (worded)
             foreach (ArtCaption c in art.captions ?? new ArtCaption[0])
                 if (c != null && c.rect.IsSet && !string.IsNullOrWhiteSpace(c.text))
-                    items.Add(Caption(c, On(c.rect), data));
+                    items.Add(Caption(c, On(c.rect), data, art));
         foreach (ArtPrint p in art.prints ?? new ArtPrint[0])
         {
             if (p == null || !p.rect.IsSet || (p.field >= 0 && Hidden(data, p.field)))
                 continue;
             string words = PrintText(p, data);
-            if (string.IsNullOrEmpty(words))
-                continue;
-            FaceRect place = On(p.rect);
-            bool hand = p.kind == ArtPrintKind.Signature || p.kind == ArtPrintKind.Office;
-            items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, -1, words, art.valueShare * place.Height, FormTextAlign.Left));
+            if (!string.IsNullOrEmpty(words))
+                items.Add(Print(p, On(p.rect), words, art));
         }
         return new PlacedForm(width, height, height, items, slots, new List<float> { 0f }, FormLayout.PrintUnit(spec, width, m));
     }
@@ -208,8 +220,18 @@ public static class ArtLayout
     /// field the template does not have, a place off the face or without an
     /// area, a relabelled field without a label's place, a print naming no
     /// field or printing nothing, a caption without a visa box, an art without
-    /// its aspect, and a value that does not fit its place at FitFloor of its
-    /// size (measured wrapped at its place's width). Empty when the art fits.
+    /// its aspect, a value that does not fit its place at FitFloor of its
+    /// size (measured wrapped at its place's width), and a value with a word
+    /// wider than its place there (the paper never breaks a word, so it would
+    /// cut it). The words are the probe's, FormLayout.Probe's cut from real
+    /// words, so they stand in for a field's own only as far as they are as
+    /// long: a 7-character value (a Citizen ID) is one probe word as long as
+    /// the longest, but a value of 8 to 12 characters is probed by words of 6
+    /// at most and a 28-character one by words of 11 (CutWords measures the
+    /// names and origins whole; DOC-LOOK.md, "The words"). The prints are
+    /// not measured here: a Signature or Copy print of a name or an origin is
+    /// CutWords', a copy of any other field (TC-230's date stub) no check's.
+    /// Empty when the art fits.
     /// </summary>
     public static List<string> Problems(FormSpec spec, FormData probe, ITextMeasure measure)
     {
@@ -258,24 +280,126 @@ public static class ArtLayout
         {
             if (item.Kind != FormItemKind.Text || item.Slot < 0 || item.Role == FormTextRole.Label)
                 continue;
-            float need = measure.Height(item.Text, item.Role, item.Size * FitFloor, item.Rect.Width);
-            if (need > item.Rect.Height * 1.001f)
-            {
-                int field = full.Slots[item.Slot].Field;
+            float least = item.Size * FitFloorOf(art, item.Role);
+            int field = full.Slots[item.Slot].Field;
+            if (measure.Height(item.Text, item.Role, least, item.Rect.Width) > item.Rect.Height * 1.001f)
                 problems.Add($"field {field} ({probe.FieldLabels[field]})'s longest value does not fit its place on the art even at {FitFloor:0.0} of its size");
-            }
+            else if (TextFit.Words(item.Text).FirstOrDefault(w => Breaks(measure, w, item.Role, least, item.Rect.Width)) is string cut)
+                problems.Add($"field {field} ({probe.FieldLabels[field]})'s longest value has a word ('{cut}') wider than its place on the art even at {FitFloor:0.0} of its size: the paper would cut it (re-lay the place, or shorten the value)");
         }
         return problems;
     }
 
-    /// <summary>An art caption printed in the reading language at its place (a label or title in capitals, a paragraph as written), never picked.</summary>
-    private static FormItem Caption(ArtCaption c, FaceRect place, FormData data)
+    /// <summary>How much taller than one line a single word may measure in its place before it counts as broken across lines (a hair over one line).</summary>
+    private const float OneLine = 1.2f;
+
+    /// <summary>The width a word is measured at on one line (in the form's units: more than any page).</summary>
+    private const float Unwrapped = 1e5f;
+
+    /// <summary>
+    /// The words a paper of <paramref name="spec"/> would cut (BUG-9: the
+    /// paper never breaks a word across lines, TmpFormText.Unbreak, so a word
+    /// wider than its place even at the least size, FitFloorOf, is cut with a
+    /// full stop, and a cut name or origin would read as a false discrepancy
+    /// against another paper): for each field, each of
+    /// <paramref name="words"/>[field] (the content's longest words that field
+    /// prints: its names' or its origins'), measured alone in the field's
+    /// value or hand style at the least size its place lets it shrink to, and
+    /// again in each Signature or Copy print that reprints the field, in that
+    /// print's own place and style (a passport's signature is its name, in a
+    /// hand, in a narrower place: TC-101's, TC-620's); a problem for each
+    /// place (a field's, a print's) one of whose words breaks there. Empty
+    /// off the art, without a measure, or when every word fits.
+    /// </summary>
+    public static List<string> CutWords(FormSpec spec, IReadOnlyList<IReadOnlyList<string>> words, ITextMeasure measure)
+    {
+        var problems = new List<string>();
+        if (!IsArt(spec) || words == null || measure == null)
+            return problems;
+        FormArt art = spec.look.art;
+        int count = Math.Max(words.Count, art.fields.Where(f => f != null).Select(f => f.field + 1).DefaultIfEmpty(0).Max());
+        List<string> labels = Enumerable.Repeat("FIELD", count).ToList();
+        var data = new FormData { FieldLabels = labels, FieldValues = Enumerable.Repeat("W", count).ToList(), HasPhoto = true };
+        PlacedForm form = Place(spec, data, spec.look.AspectOr(1f), null);
+        var reported = new HashSet<int>();
+        foreach (FormItem item in form.Items)
+        {
+            if (item.Kind != FormItemKind.Text || item.Slot < 0 || (item.Role != FormTextRole.Value && item.Role != FormTextRole.Hand))
+                continue;
+            int field = form.Slots[item.Slot].Field;
+            if (reported.Contains(field) || !(Cut(art, item, WordsOf(words, field), measure) is string word))
+                continue;
+            problems.Add($"field {field}'s value word '{word}' is wider than its place on the art even at its least size: the paper would cut it (re-lay the place, or shorten the content)");
+            reported.Add(field);
+        }
+        foreach (ArtPrint p in art.prints ?? new ArtPrint[0])
+        {
+            if (p == null || !p.rect.IsSet || (p.kind != ArtPrintKind.Signature && p.kind != ArtPrintKind.Copy))
+                continue;
+            FormItem item = Print(p, p.rect.On(form.Width, form.PageHeight), PrintText(p, data), art);
+            if (Cut(art, item, WordsOf(words, p.field), measure) is string word)
+                problems.Add($"field {p.field}'s {p.kind} print word '{word}' is wider than the print's place on the art even at its least size: the paper would cut it (re-lay the print's place, or shorten the content)");
+        }
+        return problems;
+    }
+
+    /// <summary><paramref name="words"/>[<paramref name="field"/>], or null past them.</summary>
+    private static IReadOnlyList<string> WordsOf(IReadOnlyList<IReadOnlyList<string>> words, int field) =>
+        field >= 0 && field < words.Count ? words[field] : null;
+
+    /// <summary>The first of <paramref name="words"/> (null: none) that breaks in <paramref name="item"/>'s place, measured alone in its style at the least size its place lets it shrink to (FitFloorOf), or null when each fits.</summary>
+    private static string Cut(FormArt art, FormItem item, IReadOnlyList<string> words, ITextMeasure measure)
+    {
+        float size = item.Size * FitFloorOf(art, item.Role);
+        return words?.FirstOrDefault(w => !string.IsNullOrEmpty(w) && Breaks(measure, w, item.Role, size, item.Rect.Width));
+    }
+
+    /// <summary>The <paramref name="count"/> longest distinct words of <paramref name="texts"/> (TextFit.Words; blank texts skipped), in capitals as a printed form sets them (Capitals), the longest first: a field's words for CutWords, from the texts FieldWords.Of picks for it.</summary>
+    public static List<string> LongestWords(IEnumerable<string> texts, int count) =>
+        (texts ?? Enumerable.Empty<string>()).Where(t => !string.IsNullOrWhiteSpace(t)).SelectMany(TextFit.Words).Select(Capitals)
+            .Distinct().OrderByDescending(w => w.Length).Take(count).ToList();
+
+    /// <summary>True when <paramref name="word"/> alone, in <paramref name="role"/>'s style at <paramref name="size"/>, wraps at <paramref name="width"/> onto more than one line: wider than its place, so TextMeshPro would break it mid-word (the paper cuts it instead, TmpFormText.Unbreak).</summary>
+    private static bool Breaks(ITextMeasure measure, string word, FormTextRole role, float size, float width) =>
+        measure.Height(word, role, size, width) > measure.Height(word, role, size, Unwrapped) * OneLine;
+
+    /// <summary>An art caption printed in the reading language at its place (a label or title in capitals, a paragraph as written), never picked; a label caption grows with the art's labels (labelGrowth), never past a line of its place.</summary>
+    private static FormItem Caption(ArtCaption c, FaceRect place, FormData data, FormArt art)
     {
         string words = data.Word(c.text) ?? string.Empty;
         bool paragraph = c.kind == ArtCaptionKind.Paragraph;
         FormTextRole role = c.kind == ArtCaptionKind.Title ? FormTextRole.Title : paragraph ? FormTextRole.Paragraph : FormTextRole.Label;
-        return new FormItem(FormItemKind.Text, role, place, -1, paragraph ? words : Capitals(words), c.share * place.Height,
+        float size = c.share * place.Height;
+        if (role == FormTextRole.Label)
+            size = Grown(size, art.labelGrowth, place.Height / LabelLine);
+        return new FormItem(FormItemKind.Text, role, place, -1, paragraph ? words : Capitals(words), size,
                             c.centre ? FormTextAlign.Centre : FormTextAlign.Left, string.IsNullOrEmpty(c.ink) ? null : c.ink);
+    }
+
+    /// <summary>True when <paramref name="f"/>'s label stands above its value (a cell to re-lay: the label a band at its top, ArtLayout.Cell); a label beside its value keeps its place, and each grows inside its own.</summary>
+    public static bool Stacked(ArtField f) => f != null && f.label.IsSet && f.value.IsSet && f.label.y1 <= f.value.y0 + 0.25f * (f.value.y1 - f.value.y0);
+
+    /// <summary><paramref name="size"/> grown by <paramref name="growth"/> but never past <paramref name="room"/> (nor below the size it was); a growth of 1 or less leaves it as it is.</summary>
+    public static float Grown(float size, float growth, float room) => growth > 1f ? Math.Max(size, Math.Min(size * growth, room)) : size;
+
+    /// <summary>
+    /// A labelled field's cell re-laid for larger text (BUG-9; the art's
+    /// labels painted out of its clean face, FormArt.printLabels): from its
+    /// label's top to its value's foot, the label a band at the top
+    /// (labelShare of the art's label grown by labelGrowth, LabelLine of it
+    /// tall, as wide as the label and the value together) and the value the
+    /// rest, below it (<paramref name="valuePlace"/>; the field is picked
+    /// there), never less than half its own place. Returns the label's band.
+    /// </summary>
+    public static FaceRect Cell(FaceRect label, FaceRect value, FormArt art, out FaceRect valuePlace)
+    {
+        float top = Math.Min(label.YMin, value.YMin);
+        float band = art.labelShare * label.Height * Math.Max(1f, art.labelGrowth) * LabelLine;
+        float left = Math.Min(label.XMin, value.XMin);
+        float right = Math.Max(label.XMax, value.XMax);
+        float valueTop = Math.Min(top + band, value.YMax - value.Height * 0.5f);
+        valuePlace = new FaceRect(value.XMin, valueTop, value.XMax, value.YMax);
+        return new FaceRect(left, top, right, valueTop);
     }
 
     /// <summary>The art's fields in reading order (top to bottom, then left to right): the slots' order.</summary>
@@ -288,6 +412,13 @@ public static class ArtLayout
         float w = Math.Min(window.Width, window.Height * LookCanvas.PhotoAspect);
         float h = w / LookCanvas.PhotoAspect;
         return FaceRect.FromTop(window.CentreX - w / 2f, window.CentreY - h / 2f, w, h);
+    }
+
+    /// <summary>Print <paramref name="p"/> showing <paramref name="words"/> at <paramref name="place"/>, never picked: a Signature or an Office print in a hand, the rest as a value, each sized as a value of its place (valueShare, grown by valueGrowth, never past ValueFill of it). Place prints it; CutWords measures a Signature or Copy print's words in it.</summary>
+    private static FormItem Print(ArtPrint p, FaceRect place, string words, FormArt art)
+    {
+        bool hand = p.kind == ArtPrintKind.Signature || p.kind == ArtPrintKind.Office;
+        return new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, -1, words, Grown(art.valueShare * place.Height, art.valueGrowth, ValueFill * place.Height), FormTextAlign.Left);
     }
 
     /// <summary>The words a print shows from <paramref name="data"/> (empty: nothing to print).</summary>

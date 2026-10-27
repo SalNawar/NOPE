@@ -2,7 +2,9 @@ using UnityEngine;
 
 /// <summary>
 /// Look of the interaction feedback: the game cursor (arrow, and a hand over
-/// anything clickable) and the hover outline on office objects and desktop UI.
+/// anything clickable), the hover outline on office props and desktop UI, and
+/// a paper's hover lift (Saleh's D15: papers lift Papers, Please-style, props
+/// get a thin outline on the office camera).
 /// </summary>
 [CreateAssetMenu(fileName = "InteractionFeedback_", menuName = "TimeDesk/UI/Interaction Feedback", order = 10)]
 public sealed class InteractionFeedbackSO : ScriptableObject
@@ -21,15 +23,19 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     public Vector2 handHotspot = new Vector2(12f, 1f);
 
     [Header("Hover outline")]
-    /// <summary>Outline colour for office objects (the 3D outline).</summary>
+    /// <summary>Outline colour for office props (the rim round their silhouette).</summary>
     public Color outlineColor = Color.white;
 
-    /// <summary>The office objects' outline thickness in metres (how far the outline hull stands out of the mesh).</summary>
-    [Min(0.0005f)]
-    public float worldOutlineWidth = 0.006f;
+    /// <summary>The office props' outline width in screen pixels (the same on every prop and at every distance; BUG-10a).</summary>
+    [Min(0.5f)]
+    public float outlinePixels = 2f;
 
-    /// <summary>The outline hull's material (TimeDesk/HoverHull: the mesh again, pushed out along its normals, back faces only, unlit).</summary>
+    /// <summary>The outline's material (TimeDesk/HoverHull: a stencil mask of the prop, then its meshes pushed out by outlinePixels in screen space where the mask is not, unlit).</summary>
     public Material outlineMaterial;
+
+    /// <summary>How far a hovered paper lifts, as a share of a held paper's shadow lift (D15; DeskPaperDepth.HoverLift): a paper gets this and the hand cursor, never an outline.</summary>
+    [Range(0f, 1f)]
+    public float paperHoverLift = 0.3f;
 
     /// <summary>
     /// Outline colour for desktop UI that carries no theme tag (the Title and

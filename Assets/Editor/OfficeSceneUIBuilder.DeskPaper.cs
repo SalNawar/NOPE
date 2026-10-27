@@ -52,17 +52,12 @@ public static partial class OfficeSceneUIBuilder
         box.size = new Vector3(size.x, size.y, PaperBoxThickness);
 
         Sprite paperSprite = EnsureOfficeSprite("paper", EnsureFormStyle().paper, 150, 200);
-        Material paperMaterial = EnsureMaterial("Paper", "Universal Render Pipeline/Lit", m =>
-        {
-            m.SetTexture("_BaseMap", paperSprite.texture);
-            m.SetColor("_BaseColor", Color.white);
-            m.SetFloat("_Smoothness", 0.12f);
-            m.SetFloat("_Metallic", 0f);
-        });
-        PrimitivePart(sheet, "Paper", PrimitiveType.Quad, Vector3.zero, new Vector3(size.x, size.y, 1f), paperMaterial);
+        // One material in every zone (BUG-12a: the counter's URP Lit face ignored the bend and swapped shader on a drop):
+        // the paper wears the cel material on the counter and on the desk alike, so DeskDocument.SetZone's swap is a no-op.
+        Material examineMaterial = CelMaterial("Paper_ExamineCel", paperSprite.texture, 0f);
+        PrimitivePart(sheet, "Paper", PrimitiveType.Quad, Vector3.zero, new Vector3(size.x, size.y, 1f), examineMaterial);
         MeshRenderer paper = sheet.Find("Paper").GetComponent<MeshRenderer>();
         paper.shadowCastingMode = ShadowCastingMode.Off;
-        Material examineMaterial = CelMaterial("Paper_ExamineCel", paperSprite.texture, 0f);
 
         // The photo frame: PhotoAspect by 1 (the paper scales it to its form's photo cell) with the crop sprites one unit tall inside.
         Transform frame = EnsureChild(sheet, "PhotoSlot");
@@ -78,6 +73,7 @@ public static partial class OfficeSceneUIBuilder
         frame.gameObject.SetActive(false);
 
         PaperPrint print = BuildPaperPrint(sheet);
+        PaperCover cover = BuildPassportCover(sheet);
 
         Clickable click = root.gameObject.AddComponent<Clickable>();
         click.SetOutline(new Renderer[] { paper });
@@ -101,6 +97,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "paperQuad", paper);
         SetRef(so, "depth", paperDepth);
         SetRef(so, "examineMaterial", examineMaterial);
+        SetRef(so, "cover", cover);
         SetRef(so, "click", click);
         SetRef(so, "drag", drag);
         so.ApplyModifiedProperties();
@@ -111,6 +108,37 @@ public static partial class OfficeSceneUIBuilder
 
         root.gameObject.SetActive(false);
         return doc;
+    }
+
+    /// <summary>
+    /// The passport's cover on the paper template's sheet (PaperCover; D3:
+    /// the passport arrives closed and opens): a hinge on the spine (placed
+    /// when a booklet binds) carrying the front (the cel material in white,
+    /// tinted the nation's colour), the emblem over it (the seal's
+    /// material: the emblem's art in gold) and, back to back with the front,
+    /// the visa page (the cel material showing the face's upper half). No
+    /// collider: the sheet's click box takes the clicks. Inactive until a
+    /// booklet binds.
+    /// </summary>
+    private static PaperCover BuildPassportCover(Transform sheet)
+    {
+        Transform root = EnsureChild(sheet, "Cover");
+        Transform hinge = EnsureChild(root, "Hinge");
+        Material cel = CelMaterial("Passport_Cover", null, 0f);
+        GameObject front = PrimitivePart(hinge, "Front", PrimitiveType.Quad, Vector3.zero, Vector3.one, cel);
+        GameObject emblem = PrimitivePart(hinge, "Emblem", PrimitiveType.Quad, Vector3.zero, Vector3.one, FormSealMaterial());
+        GameObject back = PrimitivePart(hinge, "Back", PrimitiveType.Quad, Vector3.zero, Vector3.one, CelMaterial("Passport_CoverInside", null, 0f));
+        foreach (GameObject part in new[] { front, emblem, back })
+            part.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
+        PaperCover cover = GetOrAdd<PaperCover>(root.gameObject);
+        var so = new SerializedObject(cover);
+        SetRef(so, "hinge", hinge);
+        SetRef(so, "front", front.GetComponent<Renderer>());
+        SetRef(so, "emblem", emblem.GetComponent<Renderer>());
+        SetRef(so, "back", back.GetComponent<Renderer>());
+        so.ApplyModifiedProperties();
+        root.gameObject.SetActive(false);
+        return cover;
     }
 
     /// <summary>A text lying on the paper sheet (in the sheet's plane, just above it), auto-sized into a box of metres.</summary>
@@ -259,8 +287,14 @@ public static partial class OfficeSceneUIBuilder
         new Vector4(0.585f, 0.012f, 0.72f, 0.07f), new Vector4(0.77f, 0.012f, 0.9f, 0.07f)
     };
 
-    /// <summary>How far a tab's plate lies over the folder's plane (metres): a raised card, its model's edge reaching down to the plane, its word over it.</summary>
-    private const float RulebookTabPlateLift = 0.0006f;
+    /// <summary>How far a tab's plate lies from the folder's plane (metres; BUG-12c: the tabs floated 3 mm over the board): on the folder's back board, which stands RulebookBoardTop under the plane its pages print on (docs_models.py folder(): board_top), by the tab model's own thickness (its slab, 0.6 mm).</summary>
+    private const float RulebookTabPlateLift = RulebookBoardTop + 0.0006f;
+
+    /// <summary>The folder model's board top under the plane its pages print on (metres; docs_models.py folder(): board_top -0.0032).</summary>
+    private const float RulebookBoardTop = -0.0032f;
+
+    /// <summary>A tab's word over its plate, and the GUIDE badge over its tab (metres).</summary>
+    private const float RulebookTabInk = 0.0004f;
 
     /// <summary>The tabs' art names in tab order (ArtSlots.RulebookTab).</summary>
     private static readonly string[] RulebookTabArt = { "rules", "papers", "guide", "seals" };
@@ -458,12 +492,14 @@ public static partial class OfficeSceneUIBuilder
             plates.Add(plate.GetComponent<Renderer>());
             tabDepths.Add(DepthParts(plate.transform, null, DocumentMesh("FolderTab", "FolderTabBody"), false));
             Clickable tab = EnsureClickBox(booklet, "Tab" + (i + 1));
-            tab.transform.localPosition = at + new Vector3(0f, 0.0004f, 0f);
+            tab.transform.localPosition = at + new Vector3(0f, 0.0004f, 0f); // the click box over the folder's own (CardClick, at its plane), so a tab takes its clicks
             var box = tab.GetComponent<BoxCollider>();
             box.center = Vector3.zero;
             box.size = new Vector3(size.x, PaperBoxThickness, size.y);
             tab.SetOutline(new[] { plate.GetComponent<Renderer>() });
-            TextMeshPro word = FlatText(tab.transform, "Text", FolderPoint(RulebookTabWords[i]) - at + new Vector3(0f, 0.0004f, 0f), FolderSize(RulebookTabWords[i]), 0.2f, ink, FontStyles.Bold);
+            // the word lies on its plate, down on the board with it (BUG-12c), not up where the click box is
+            float wordDrop = RulebookTabPlateLift + RulebookTabInk - tab.transform.localPosition.y;
+            TextMeshPro word = FlatText(tab.transform, "Text", FolderPoint(RulebookTabWords[i]) - at + new Vector3(0f, wordDrop + 0.0002f, 0f), FolderSize(RulebookTabWords[i]), 0.2f, ink, FontStyles.Bold);
             word.text = UiText.Get(tabKeys[i]);
             Keyed(word, tabKeys[i]);
             tabs.Add(tab);
@@ -538,9 +574,12 @@ public static partial class OfficeSceneUIBuilder
         Clickable guideNext = GuideButton("Next", RulebookSize.x / 2f - 0.012f - RulebookGuideButton.x / 2f, "desk.guide.next");
         TextMeshPro guideNumber = FlatText(guidePage, "Number", new Vector3(0f, 0.0006f, footer), new Vector2(0.07f, 0.02f), 0.09f, ink, FontStyles.Normal);
         guidePage.gameObject.SetActive(false);
+        // The GUIDE tab's NEW badge is a sticker on the tab itself, over its right end (BUG-10c: it floated over the desk above the tab's edge).
         Transform guideTab = tabs[DeskRulebook.GuidePageIndex].transform;
-        TextMeshPro guideBadge = FlatText(booklet, "GuideBadge", guideTab.localPosition + new Vector3(0f, 0f, FolderSize(RulebookTabPlaces[DeskRulebook.GuidePageIndex]).y / 2f + 0.011f),
-                                          new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
+        Vector2 guideTabSize = FolderSize(RulebookTabPlaces[DeskRulebook.GuidePageIndex]);
+        var badgeSize = new Vector2(Mathf.Min(0.05f, guideTabSize.x * 0.35f), Mathf.Min(0.018f, guideTabSize.y * 0.7f));
+        TextMeshPro guideBadge = FlatText(booklet, "GuideBadge", new Vector3(guideTab.localPosition.x + guideTabSize.x / 2f - badgeSize.x / 2f - 0.002f, RulebookTabPlateLift + 2f * RulebookTabInk, guideTab.localPosition.z),
+                                          badgeSize, 0.09f, RulebookNewInk, FontStyles.Bold);
         guideBadge.text = UiText.Get("desk.guide.new");
         Keyed(guideBadge, "desk.guide.new");
         guideBadge.gameObject.SetActive(false);
@@ -585,6 +624,7 @@ public static partial class OfficeSceneUIBuilder
         cardBox.center = new Vector3(0f, -0.0002f, 0f);
         cardBox.size = new Vector3(RulebookFolderSize.x, 0.0004f, RulebookFolderSize.y);
         cardClick.SetOutline(new[] { card.GetComponent<Renderer>() });
+        FolderCover folderCover = BuildFolderCover(booklet);
 
         DeskDraggable drag = GetOrAdd<DeskDraggable>(book.gameObject);
         var soDrag = new SerializedObject(drag);
@@ -598,6 +638,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "depth", folderDepth);
         SerializedArrays.Set(so, "tabDepths", tabDepths);
         SetRef(so, "card", cardClick);
+        SetRef(so, "folderCover", folderCover);
         SetRef(so, "folderFace", card.GetComponent<Renderer>());
         SerializedArrays.Set(so, "coverWords", cover);
         SetRef(so, "title", title);
@@ -629,6 +670,90 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "counter", counter);
         so.ApplyModifiedProperties();
         return rulebook;
+    }
+
+    /// <summary>The folder's spine across its face (the face's unit space: the crease between the rivets, measured on Forms/rulebook_folder at 51.1% of its width) and the front board's outer edge (its body's left edge, DeskRulebook.BodyCentreX less half its BodyWidth).</summary>
+    private const float RulebookSpine = 0.011f, RulebookBoardEdge = DeskRulebook.BodyCentreX - DeskRulebook.BodyWidth / 2f;
+
+    /// <summary>The folder's front board's outside: the manila of the folder's boards (sampled on its art) and the Bureau seal's brown ink on it.</summary>
+    private static readonly Color RulebookManila = new Color(0.7f, 0.54f, 0.37f, 1f), RulebookSealInk = new Color(0.36f, 0.22f, 0.12f, 0.85f);
+
+    /// <summary>
+    /// The rulebook folder's front board (FolderCover; Saleh's D3: the folder
+    /// opens and closes), in the folder card's plane (the booklet turned as the
+    /// card is, unscaled): a hinge on the spine, FolderCover.Lift over the
+    /// face, carrying the board's outside (the cel material in the folder's
+    /// manila; shut, it lies over the right sheet), the Bureau's seal on it, and
+    /// back to back with it the board's inside (the cel material showing the
+    /// left half of the folder's art: its cover page, laid where it lies open
+    /// at 180 degrees); and the open cover page's click box (FolderCoverClick,
+    /// over the left board just above the folder's own box: a click there
+    /// shuts the folder). Rebuilt with the folder.
+    /// </summary>
+    private static FolderCover BuildFolderCover(Transform booklet)
+    {
+        Transform root = EnsureChild(booklet, "Cover");
+        root.localPosition = Vector3.zero;
+        root.localRotation = Quaternion.Euler(90f, 0f, 0f); // the card's plane: x across, y up the page, +z into the desk
+        root.localScale = Vector3.one;
+        Transform hinge = EnsureChild(root, "Hinge");
+        float w = RulebookFolderSize.x, h = RulebookFolderSize.y;
+        float board = (RulebookSpine - RulebookBoardEdge) * w, tall = DeskRulebook.BodyHeight * h, middle = DeskRulebook.BodyCentreY * h;
+        hinge.localPosition = new Vector3(RulebookSpine * w, 0f, -FolderCover.Lift);
+        hinge.localRotation = Quaternion.identity;
+        const float gap = 0.00005f;
+        Material outside = EnsureMaterial("Rulebook_CoverOutside", "TimeDesk/DocumentCel", m =>
+        {
+            m.SetTexture("_BaseMap", null);
+            m.SetColor("_BaseColor", RulebookManila);
+            m.SetFloat("_Cutoff", 0f);
+        });
+        Texture2D folderArt = AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.RulebookFolder + ".png");
+        float u0 = RulebookBoardEdge + 0.5f, u1 = RulebookSpine + 0.5f, v0 = DeskRulebook.BodyCentreY + 0.5f - DeskRulebook.BodyHeight / 2f;
+        Material inside = EnsureMaterial("Rulebook_CoverInside", "TimeDesk/DocumentCel", m =>
+        {
+            m.SetTexture("_BaseMap", folderArt);
+            m.SetTextureScale("_BaseMap", new Vector2(u1 - u0, DeskRulebook.BodyHeight));
+            m.SetTextureOffset("_BaseMap", new Vector2(u0, v0));
+            m.SetColor("_BaseColor", Color.white);
+            m.SetFloat("_Cutoff", 0f);
+        });
+        Texture2D sealArt = AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.AgencySeal + ".png");
+        Material seal = EnsureMaterial("Rulebook_CoverSeal", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetTexture("_BaseMap", sealArt);
+            m.SetColor("_BaseColor", RulebookSealInk);
+            m.SetFloat("_Surface", 1f);
+            m.SetFloat("_Blend", 0f);
+            m.SetFloat("_QueueOffset", SealQueue - (int)RenderQueue.Transparent);
+            UnityEditor.BaseShaderGUI.SetMaterialKeywords(m);
+        });
+        GameObject front = PrimitivePart(hinge, "Front", PrimitiveType.Quad, new Vector3(board / 2f, middle, -gap), new Vector3(board, tall, 1f), outside);
+        float side = board * 0.42f;
+        GameObject emblem = PrimitivePart(hinge, "Seal", PrimitiveType.Quad, new Vector3(board / 2f, middle, -2f * gap), new Vector3(side, side, 1f), seal);
+        // the inside faces away while shut; at 180 degrees it lies where the cover page lies open, the right way round
+        GameObject back = PrimitivePart(hinge, "Back", PrimitiveType.Quad, new Vector3(board / 2f, middle, gap), new Vector3(board, tall, 1f), inside);
+        back.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+        foreach (GameObject part in new[] { front, emblem, back })
+            part.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
+
+        Clickable coverClick = EnsureClickBox(booklet, "FolderCoverClick");
+        coverClick.transform.localPosition = new Vector3((RulebookBoardEdge + RulebookSpine) / 2f * w, 0.0002f, middle);
+        var box = coverClick.GetComponent<BoxCollider>();
+        box.center = Vector3.zero;
+        box.size = new Vector3(board, PaperBoxThickness / 2f, tall);
+        coverClick.SetOutline(System.Array.Empty<Renderer>());
+
+        FolderCover cover = GetOrAdd<FolderCover>(root.gameObject);
+        var so = new SerializedObject(cover);
+        SetRef(so, "hinge", hinge);
+        SetRef(so, "front", front.GetComponent<Renderer>());
+        SetRef(so, "back", back.GetComponent<Renderer>());
+        SetRef(so, "seal", emblem.transform);
+        SetRef(so, "coverClick", coverClick);
+        so.FindProperty("spine").floatValue = RulebookSpine;
+        so.ApplyModifiedProperties();
+        return cover;
     }
 
     /// <summary>The centre of a place on the folder art (shares from its top-left: x0, y0, x1, y1) in the booklet's space (metres; the art's top at the folder's far edge).</summary>

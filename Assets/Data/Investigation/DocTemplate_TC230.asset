@@ -297,3 +297,6 @@ MonoBehaviour:
           ink: '#5F2419'
           centre: 0
         clean: 1
+        printLabels: 1
+        labelGrowth: 1.3
+        valueGrowth: 1.5

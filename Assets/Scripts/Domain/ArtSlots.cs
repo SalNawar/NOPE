@@ -170,14 +170,30 @@ public static class ArtSlots
 
     /// <summary>
     /// Whether a slot is one of the pet's pictures or frames (Home/pet_&lt;kind&gt;_..., <see cref="PetSprite"/>,
-    /// <see cref="PetFrame"/>; not the corner's backdrop): imported uncompressed and bilinear, without mipmaps
-    /// (Saleh 2026-10-18: "pet resolution pictures are bad"; a block-compressed fur mottles, and the 1024 px pictures
-    /// drawn at about 330 to 660 px stay sharpest sampled straight).
+    /// <see cref="PetFrame"/>; not the corner's backdrop): imported uncompressed (Saleh 2026-10-18: "pet resolution
+    /// pictures are bad"; a block-compressed fur mottles), with mipmaps and trilinear (<see cref="Mipmapped"/>,
+    /// <see cref="Trilinear"/>; BUG-29: the 1024 px pictures drawn at 88 to 660 px speckled without them).
     /// </summary>
     public static bool IsPetPicture(string slot) => slot != null && slot.StartsWith("Home/pet_", StringComparison.Ordinal) && slot != PetCorner && slot != PetLoops;
 
-    /// <summary>Whether a slot's art is drawn on the desk's 3D papers (a paper face, the photo frame, an ink mark), so it is imported with mipmaps; UI art is not.</summary>
+    /// <summary>Whether a slot's art is drawn on the desk's 3D papers (a paper face, the photo frame, an ink mark): imported with mipmaps, trilinear and the high-quality compression (BUG-63: bilinear DXT5 crawled on a moving paper's edges); UI art is not.</summary>
     public static bool OnDeskPaper(string slot) => slot != null && slot.StartsWith("Forms/", StringComparison.Ordinal);
+
+    /// <summary>Whether a slot's art is imported with mipmaps: the desk papers' art and the pet's pictures (both drawn minified; BUG-29, 63).</summary>
+    public static bool Mipmapped(string slot) => OnDeskPaper(slot) || IsPetPicture(slot);
+
+    /// <summary>Whether a slot's art is sampled trilinear (blended between its mipmaps, so a moving or minified picture never crawls): every mipmapped slot.</summary>
+    public static bool Trilinear(string slot) => Mipmapped(slot);
+
+    /// <summary>The office's 3D art (DOC-LOOK's OfficeArtImporter writes its import settings: mipmaps, trilinear, the high-quality compression; BUG-63).</summary>
+    public const string OfficeArtRoot = "Assets/Art/Office/";
+
+    /// <summary>The art side's hall layers under the office's art: never imported by OfficeArtImporter (FIX_PLAN §0 rule 2: art-side, their .meta files untouched).</summary>
+    public const string OfficeArtSkipped = "Assets/Art/Office/AnimeHallLayers/";
+
+    /// <summary>True for a texture whose import settings OfficeArtImporter writes: under <see cref="OfficeArtRoot"/>, never under <see cref="OfficeArtSkipped"/> (the importer returns early there).</summary>
+    public static bool OfficeImports(string assetPath) =>
+        assetPath != null && assetPath.StartsWith(OfficeArtRoot, StringComparison.Ordinal) && !assetPath.StartsWith(OfficeArtSkipped, StringComparison.Ordinal);
 
     /// <summary>A name as a file-name key: lower case, letters and digits kept, a run of anything else one underscore, none at the ends ("TC-610" gives tc610; "Citizen Account" gives citizen_account).</summary>
     public static string Key(string name)
