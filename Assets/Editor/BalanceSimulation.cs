@@ -9,7 +9,7 @@ using UnityEngine;
 
 /// <summary>
 /// The balance simulation (redesign phase 23; Tools > TimeDesk > Balance > Run
-/// 50-Run Simulation): 50 runs of 15 days under each <see cref="PlayStyle"/>,
+/// 50-Run Simulation): 50 runs of <see cref="Days"/> days (the run's last day, 21) under each <see cref="PlayStyle"/>,
 /// played headless through the game's own steps (<see cref="DayCycle"/>: the
 /// run's world, CaseFactory's queue, each decision, the shift's close, Home's
 /// bills, the ending checks at the game's moments, the night), with no scene
@@ -31,8 +31,14 @@ public static class BalanceSimulation
     /// <summary>Runs per play style.</summary>
     public const int Runs = 50;
 
-    /// <summary>Days per run: the run's last day (the "world you made" ending is checked at its night).</summary>
-    public const int Days = 15;
+    /// <summary>Days per run when the library names no last day (the three-week progression, Saleh 2026-10-28).</summary>
+    public const int DefaultDays = 21;
+
+    /// <summary>Days per run: the run's last day (ContentLibrarySO.LastDay, the "world you made" ending's day, checked at its night), read when a run starts; <see cref="DefaultDays"/> until then or without one.</summary>
+    public static int Days { get; private set; } = DefaultDays;
+
+    /// <summary>Takes the run's length from <paramref name="lib"/> (its LastDay; <see cref="DefaultDays"/> without one).</summary>
+    private static void TakeDays(ContentLibrarySO lib) => Days = lib != null && lib.LastDay > 0 ? lib.LastDay : DefaultDays;
 
     /// <summary>The run seed whose every decision is dumped per style, and whose runs are played twice to prove the simulation deterministic.</summary>
     public const int ExampleSeed = 12345;
@@ -106,6 +112,7 @@ public static class BalanceSimulation
     {
         if (!Load(out RunConfigSO run, out ContentLibrarySO lib, out GameConfigSO config))
             return null;
+        TakeDays(lib);
 
         var settings = AssetDatabase.LoadAssetAtPath<BalanceSimSettingsSO>(BalanceSimSettingsSO.AssetPath);
         _pace = settings != null ? settings.travellersPerShift : ShiftPace;
@@ -223,6 +230,7 @@ public static class BalanceSimulation
     {
         if (!Load(out RunConfigSO run, out ContentLibrarySO lib, out GameConfigSO config))
             return false;
+        TakeDays(lib);
         LogType filter = Debug.unityLogger.filterLogType;
         Debug.unityLogger.filterLogType = LogType.Error;
         try
@@ -742,7 +750,7 @@ public static class BalanceSimulation
     /// bribes): the endings, the wallet, the household, upkeep, break-ins,
     /// the pet's bills, the bribes, what the house upgrades cost and which were bought
     /// when, and the top tier reached; then Saleh's Q6 in one table (the top
-    /// tier by day 15, careful against bribe-taking); and the tree's prices
+    /// tier by the last day, careful against bribe-taking); and the tree's prices
     /// from the content spreadsheet.
     /// </summary>
     private static void House(StringBuilder sb, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, Dictionary<(PlayStyle, int, int), List<RunResult>> shoppers)
