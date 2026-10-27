@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-4b (FIX_PLAN TOOLS clicks): at A1 in the office view, the chip reader's visual centre presses the chip reader 10/10 (the torch's click box no longer swallows it), and the torch's own centre presses the torch 10/10. Day 12 has both machines (the reader comes on day 11)."
+      "text": "TOOLS BUG-4b (FIX_PLAN TOOLS clicks): at A1 in the office view, the chip reader's visual centre presses the chip reader 10/10 (the torch's click box no longer swallows it), and the torch's own centre presses the torch 10/10. Day 18 has both machines by the plan (the reader comes on day 17; the three-week progression)."
     },
     {
       "op": "title"
@@ -25,11 +25,11 @@
     },
     {
       "op": "jumpDay",
-      "n": 12
+      "n": 18
     },
     {
       "op": "waitOffice",
-      "n": 12
+      "n": 18
     },
     {
       "op": "startShift"

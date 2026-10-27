@@ -8,6 +8,7 @@
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },
     { "op": "cheat", "name": "GiveAllItems" },
+    { "op": "cheat", "name": "UnlockEverything", "n": 1 },
     { "op": "jumpDay", "n": 12 },
     { "op": "waitOffice", "n": 12 },
     { "op": "startShift" },

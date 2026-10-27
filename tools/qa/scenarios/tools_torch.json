@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-2c (FIX_PLAN TOOLS torch; GAME_FEEL_BIBLE C3): the UV torch swept over the handed-over papers on its day (7), at A2 then A1, in the office view (over the counter strip where they arrive) and the reading view (over the passport dragged to the mat), P-FAST, P-SLOW and P-WOBBLE. Pass: tools.torch.*.unoccluded (the lit patch >=95% seen past the torch's own meshes on every held frame) and tools.torch.*.poolOnDesk (0 frames of the pool off the desk). The torch_* sequences are for the director's eye (GIF at full size) and seqtools flicker on the paper text."
+      "text": "TOOLS BUG-2c (FIX_PLAN TOOLS torch; GAME_FEEL_BIBLE C3): the UV torch swept over the handed-over papers on its day (9: the three-week progression), at A2 then A1, in the office view (over the counter strip where they arrive) and the reading view (over the passport dragged to the mat), P-FAST, P-SLOW and P-WOBBLE. Pass: tools.torch.*.unoccluded (the lit patch >=95% seen past the torch's own meshes on every held frame) and tools.torch.*.poolOnDesk (0 frames of the pool off the desk). The torch_* sequences are for the director's eye (GIF at full size) and seqtools flicker on the paper text."
     },
     {
       "op": "title"
@@ -25,11 +25,11 @@
     },
     {
       "op": "jumpDay",
-      "n": 7
+      "n": 9
     },
     {
       "op": "waitOffice",
-      "n": 7
+      "n": 9
     },
     {
       "op": "startShift"
@@ -40,7 +40,7 @@
     },
     {
       "op": "note",
-      "text": "Day 7 opens the NEW TODAY prompt (the Stranding Waiver) with the rulebook's GUIDE page in the reading view: acknowledge it, as a player would, before the sign"
+      "text": "Day 9 opens the NEW TODAY prompt (the Stranding Waiver) with the rulebook's GUIDE page in the reading view: acknowledge it, as a player would, before the sign"
     },
     {
       "op": "button",

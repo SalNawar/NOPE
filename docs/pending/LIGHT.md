@@ -322,7 +322,7 @@ Standard vocabulary: A1 1920×1080, A2 1280×720; H1 09:00, H2 12:00, H3 16:45, 
   - Run TestRunnerApi EditMode. Expected: all green, except the known third-party `PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly`. It includes `LightSeamTests` (8), `LightChecksTests` (8), `DeskLightingTests`, `HallDayCycleTests`, `HallBakedCycleTests`, `ShiftHoursTests`.
   - Run `QaJobs.Gate` (DemoGate, merge mode). Expected: the seven `light.*` checks listed and green. `light.desk.readableAtNight` reports, after the finish (EV +0.1, contrast 12, Neutral, LDR), centre ≈ 68.9, corners ≈ 58.2 (before the finish ≈ 60.1) and a pool step ≈ 10.7. `light.desk.lampAtTheDip` reports the lamp on at 16:30 and the centre going from ≈ 62.7 to ≈ 71.7. `light.hall.nightIsShared` reports linear ≈ (0.0331, 0.0593, 0.1549).
 - **U3. Time-lapse, the desk [BP] (deferred: Unity).**
-  - Paths: A1 and A2; the office view and the reading view; day 12 played in sequence; cheat Time of Day or `ForcedHour` at H2, 15:00, H3, H4, 20:00 and 23:00.
+  - Paths: A1 and A2; the office view and the reading view; day 18 played in sequence (a 16:00 day since the three-week progression); cheat Time of Day or `ForcedHour` at H2, 15:00, H3, H4, 20:00 and 23:00.
   - Per capture, read `Shader.GetGlobalVector("_DeskLightTint")`, `_DeskLightLevel` and `_DeskLampPool`, and project the DeskSurface anchor's bounds to the screen for the mat rect.
   - Measure the mat's luma at its centre and in a 5 % inset at each of its four corners (not the mean of the rect). Record each sample's screen uv.
   - **The vignette is divided out** (decision 11; "Needs the orchestrator's OK" item 4): for each sample at screen uv (x, y), compute `g = DeskLighting.VignetteAt(x − 0.5, y − 0.5, 0.2, 0.65)` (the profile's intensity and smoothness). URP multiplies the linear colour by the vignette **before** the exposure, the tonemap and the contrast, so the measured luma is not simply decoded and divided (that leaves the day mat at about 74.9 instead of 75.9 at a point 30 % off-centre, and the error grows on the darker night mat). Instead, find the light `l` with `DeskLighting.GradedLuma(l, finish) = measured` (bisection: GradedLuma is monotonic), and record `DeskLighting.GradedLuma(l / g, finish)` as the divided value, with `finish = HallLightingSO.FinishModel()`. Record both the measured and the divided value. The day capture at H2 checks the method: the day mat's corners read ≈ 76 after the division (for example 67.2 measured at a point 30 % off-centre on each axis).
@@ -333,16 +333,16 @@ Standard vocabulary: A1 1920×1080, A2 1280×720; H1 09:00, H2 12:00, H3 16:45, 
     - the pool's centre (`_DeskLampPool.xyz`) inside the mat's world bounds;
     - the console shows no `[DeskLightLevel] At night, after the office finish, the mat reads ...` warning (the knobs pass on the real mat).
 - **U4. Lamp switch-on (deferred: Unity).**
-  - Day 12 (opens 16:00), clock at speed. SEQ from 16:00 to 17:00 game time (the plan's window), at 30 fps.
+  - Day 18 (opens 16:00; the three-week progression), clock at speed. SEQ from 16:00 to 17:00 game time (the plan's window), at 30 fps.
   - Expected switch-on at `DeskLighting.LampOnHour`, **16:30 with the round-2 defaults** (the sunset, a quarter of an hour before the plan's H3: "Needs the orchestrator's OK" item 3): the click plays and the pool warms over 0.6 s.
   - **Pass:**
     - a visible switch-on event (the plan's "at the dip"; here at 16:30): the pool's centre gains ≥ 5 luma within the warm-up (model: 62.7 → 71.7 at 16:30, the gate's minute; 62.3 → 71.6 lamp off vs on at 16:31) and turns warm, by eye and by the frame diff;
     - **the pool reads as a pool** (round 2, item 4): at 17:00 and at H5, the centre-to-corner luma step on the mat is ≥ 8 (model: 9.8 at 17:00, 10.7 at night), measured with the vignette divided out (U3's method), and the reviewer agrees by eye that the lamp makes a warm pool with cooler corners, not a uniform warm tint;
     - no frame between 16:00 and 17:00 where the mat's centre is brighter than at H2 (the cap: no dusk brighter than the drawn day);
-    - no click when the office opens already past the switch-on (day 12 jumped to 17:00 by the cheat: no click, lamp on at frame 0);
+    - no click when the office opens already past the switch-on (day 18 jumped to 17:00 by the cheat: no click, lamp on at frame 0);
     - with the SFX volume at 0 in Settings, the click is silent (its source outputs to the Desk group).
 - **U5. Load, no noon frame (deferred: Unity).**
-  - SEQ of the office load at 13:00 (day 8) and 16:00 (day 12), each reached by playing in sequence and by the Jump cheat.
+  - SEQ of the office load at 13:00 (day 8) and 16:00 (day 18), each reached by playing in sequence and by the Jump cheat.
   - Log `HallLightingRig.Hour` in the first LateUpdate.
   - **Pass:** frame 0's hour equals the opening hour (13.0 or 16.0); no noon hall frame; no lamp strike flicker once the clock arrives.
 - **U6. Dusk cheat (deferred: Unity; needs RUN-SAFE's DuskHour read).**
@@ -394,7 +394,7 @@ Standard vocabulary: A1 1920×1080, A2 1280×720; H1 09:00, H2 12:00, H3 16:45, 
   - hall: `hallNightTint` (and `HALL_DEFAULT_NIGHT` in HallDeepLayout.shader with it: `light.hall.nightIsShared` holds them equal), `hallPoolStrength`, `hallEmissionGain`;
   - Bloom: threshold, intensity and scatter in `OfficeFinishProfile.asset`.
 - **U19. Hall time-lapse, 25a (deferred: Unity; BUGLIST BUG-25's "hall time-lapse 16:00-22:00").**
-  - The office view at A1, day 12 played in sequence; `ForcedHour` every 30 minutes from 16:00 to 22:00 (13 stills), plus a SEQ of 16:00-17:30 at clock speed.
+  - The office view at A1, day 18 played in sequence; `ForcedHour` every 30 minutes from 16:00 to 22:00 (13 stills), plus a SEQ of 16:00-17:30 at clock speed.
   - **Pass:**
     - every lit fixture has a wall glow and a floor pool, and the floor away from the pools is darker than under them (luma under a pool ≥ 1.3× the floor midway between two pools at 20:00 and 22:00);
     - the painting's night share and the lamps switch on together (the stills where `HallDayCycle.Evening` ≥ 0.5 show night in the painting);

@@ -9,7 +9,7 @@ Branch `fix/a-text-lang`, cut from `fix/p0-cuts` (5aecb60). Phase A, merge #12. 
 ## Saleh's calls this track builds (quoted from DECISIONS_1019a.md)
 
 - **D7:** "papers will change language and the pc background ... its a pc you set the language but you should see effects on it like maybe color changes". The glasses work "on news paper and documents". Language and culture impact "only start to impact the game after day 7".
-- **R2:** culture effects "accumulate through day 7 and become visible from day 8" (today's trigger, the lens's day 8, stays: v2 "the culture day: today's lens day stays the trigger").
+- **R2:** culture effects "accumulate through day 7 and become visible from day 8" (today's trigger, the lens's day, stays: day 11 since the three-week progression; v2 "the culture day: today's lens day stays the trigger").
 - **D20 / R3-R4** (for the seam FLOW calls): "if you press escape you should auto open the pc setting menu"; "Esc opens the same Settings window everywhere".
 - Standing: everything diegetic; D2 "everything should be animated and satisfying responsive and gives good feedback".
 
@@ -168,7 +168,7 @@ public static class TextLangChecks
         return GateResult.Of("textlang.kitAtlases", "TEXT-LANG", gaps.Count == 0, $"{gaps.Count} face(s) with gaps", string.Join(" | ", gaps));
     }
 
-    /// <summary>The takeover grep: 0 culture text on the chrome or the PC over days 7-9 (BUG-3a).</summary>
+    /// <summary>The takeover grep: 0 culture text on the chrome or the PC over days 10-12 (BUG-3a; the three-week progression).</summary>
     [GateCheck("textlang.play.takeover", "TEXT-LANG", GateKind.Play)]
     public static GateResult Takeover() => GateResults.Require("textlang.play.takeover", "TEXT-LANG", "textlang.takeover.*");
 }
@@ -276,24 +276,24 @@ Every check outside Unity is green (table above). Everything below needs Unity a
 5. **deferred: Unity. Font audit.** `Tools > TimeDesk > Text > Audit Fonts` after step 3.
    - Pass: `Assets/Scenes/OfficeGameplay.unity` absent from the list. Expected remaining: `OfficeScene.unity` 42 and `AnimeHall.unity` 5 (art side, request filed), `TitleScene.unity` 2 (HOME), `Test_DayLoop.unity` 5 (test scene).
 6. **deferred: Unity. Language takeover** (BUG-3a; FIX_PLAN v2: "0 culture-language strings outside Paper surfaces and signs, and 0 on any PC surface").
-   - Golden seed 12345, days 7, 8 and 9 **played in sequence** (not jumped), twice: once with no stored choice (delete `TimeDesk.UiLanguage` from the editor's prefs first, through `PlayerPrefKeys.For`), once with Follow history.
+   - Golden seed 12345, days 10, 11 and 12 **played in sequence** (not jumped; the culture day is 11 since the three-week progression), twice: once with no stored choice (delete `TimeDesk.UiLanguage` from the editor's prefs first, through `PlayerPrefKeys.For`), once with Follow history.
    - At each capture point (the shift report, Home, a wrong call: the citation slip and Mail's copy, the wheel open, the morning newspaper with its Bureau memo, the PC's Mail and Investigation windows) run a temporary `_TimeDeskTextLangProbe` job method that writes `TextLangAudit.CultureOnPlayerSurfaces()`, `LiberationSansOnScreen()` and `AccentedGreekCapitalsOnScreen()` to SCRATCH. The audit counts paper texts and the newspaper panel (outside its memo) as Paper; every other text is chrome or PC.
-   - Make the wrong call on day 8 or 9 on a field whose label is a culture word on the paper (a citation built with `citation.label.onPaper`), so the slip, Mail's copy and the stored visit record (`ShiftLedger` / `CaseVerdict.citationText`, dumped by the probe) quote a paper's word.
+   - Make the wrong call on day 11 or 12 on a field whose label is a culture word on the paper (a citation built with `citation.label.onPaper`), so the slip, Mail's copy and the stored visit record (`ShiftLedger` / `CaseVerdict.citationText`, dumped by the probe) quote a paper's word.
    - Pass: 0 lines from `CultureOnPlayerSurfaces` at every point, on both runs; the citation slip, Mail's copy and the dumped visit record hold the paper word in English; the papers and the newspaper's masthead, edition line, price, dateline and heads show the culture's words **from the culture day (day 8) on both runs, and English on day 7** (Follow history waits for the culture day too: D7, R2), when a culture leads.
-   - Then store Always English and play day 9: the papers and the newspaper stay English.
+   - Then store Always English and play day 12: the papers and the newspaper stay English.
    - Captures at A1 into `R7\FIX\TEXT-LANG\takeover\`.
 7. **deferred: Unity. Mid-day switch** (BUG-3a: "visible change within 1 frame of Apply, and never locked").
-   - Day 8 mid-shift, a paper on the desk in the culture's words: open Settings, click Always English, then Follow history.
+   - Day 11 mid-shift, a paper on the desk in the culture's words: open Settings, click Always English, then Follow history.
    - Pass: both buttons are always interactable; the pair's selection and the line repaint on the click's frame (SEQ capture, 30 fps); the next traveller's papers print in the chosen language; the paper already on the desk keeps its print with no box glyphs; 0 new console lines.
-   - Then on day 7 (before the culture day): click Follow history. Pass: Follow history shows chosen, and the papers stay English (the effect starts on the culture day).
+   - Then on day 10 (before the culture day): click Follow history. Pass: Follow history shows chosen, and the papers stay English (the effect starts on the culture day).
 8. **deferred: Unity. Fonts at run time** (BUG-38a).
-   - Days 1, 8 and 12 (played, and by the cheat path): `TextLangAudit.LiberationSansOnScreen()` at the office, Home and the Title.
+   - Days 1, 11 and 15 (played, and by the cheat path): `TextLangAudit.LiberationSansOnScreen()` at the office, Home and the Title.
    - Pass: 0 texts; the console has no TMP "character … was not found" warning; the passport's "VISAS D'ENTRÉE" draws its É in the same face (zoom capture).
 9. **deferred: Unity. Arabic** (BUG-37a).
    - Cheat an Arabic-led era (Egypt or Iraq) with Follow history, on or after the culture day; capture a paper with a long value, the next morning's newspaper (its seven keyed words: masthead, edition line, price, dateline, "no news" line or story heads), the rulebook GUIDE, the report and a citation.
    - Pass: the masthead reads "صحيفة الزمن", the edition line "الطبعة الصباحية" and the price "رصيد واحد", with no box glyphs (the blackletter face has no Arabic: the culture font draws it) and inside their bands; the paper's words and the newspaper's masthead read right to left with no stray tag characters and numbers/brackets in order (by eye, or an Arabic reader); the rulebook, report and citation are in English (the citation's quoted paper word too) with their arrows pointing outward.
    - DOC-LOOK's per-line call sites (37c) are measured here: a wrapped Arabic paper value's lines in reading order. An Arabic-tongue speech bubble that wraps is the TOOLS gap above (record its state).
-10. **deferred: Unity. Greek capitals and toggles** (UI-19). Cheat a Greek-led era (Follow history), on or after the culture day (cheat "lock now" or play to day 8).
+10. **deferred: Unity. Greek capitals and toggles** (UI-19). Cheat a Greek-led era (Follow history), on or after the culture day (cheat "lock now" or play to day 11).
     - Pass: `AccentedGreekCapitalsOnScreen()` 0 on the PC, Home and Settings; no toggle's word cut (TMP overflow scan of the Settings and Home buttons).
     - The next morning's newspaper: the masthead reads "Η ΧΡΟΝΙΚΗ ΕΦΗΜΕΡΙΔΑ", the edition line "ΠΡΩΙΝΗ ΕΚΔΟΣΗ", the price "ΜΙΑ ΜΟΝΑΔΑ" over the Greek dateline; no box glyphs (UnifrakturMaguntia has no Greek: the culture font draws it), each inside its band (TMP overflow scan of `BriefingPanel/Paper`). Repeat once under Italy and Germany for the longer Latin mastheads ("IL CORRIERE DEL TEMPO").
     - Settings (Esc): the note under the language pair reads the new English `settings.note` (no "fonts", no "next time the office opens") in the player's language.
@@ -303,8 +303,8 @@ Every check outside Unity is green (table above). Everything below needs Unity a
     - Each setting changed in the built player. Pass: the volume meters move (Master, Music, Effects); Windowed / Borderless / Fullscreen switch; the resolution steps; VSync on shows frame pacing at the display's rate; Brightness visibly brightens and darkens (with LIGHT's post-processing on); Reduce flashing persists across a restart.
     - Before #13: `SettingsBootstrap` applies stored choices at startup (set them through PlayerPrefs and restart the player).
     - At #13: OfficeGameplay has exactly one `SettingsWindowController` (on SettingsWindow), wired to every basics row (semantic dump).
-13. **deferred: Unity. RUN-SAFE's day-scoped test** (BUG-27a re-run at #12). Cheat "lock now" on day 7, then skip to day 8.
-    - Pass: `CultureThemeService.LockOverride` is null on day 8 and the papers follow the stored choice.
+13. **deferred: Unity. RUN-SAFE's day-scoped test** (BUG-27a re-run at #12). Cheat "lock now" on day 10, then skip to day 11.
+    - Pass: `CultureThemeService.LockOverride` is null on day 11 and the papers follow the stored choice.
 
 ## INTEGRATION (#12, 2026-10-21, integrate/a over main 4290bd6)
 

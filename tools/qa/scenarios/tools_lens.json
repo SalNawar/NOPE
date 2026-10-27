@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-52 (FIX_PLAN TOOLS translation lens + v2: the candidate set excludes the PC entirely, 0 PC texts in the candidate log): day 8 (the lens's day: Word level issued). First the morning paper (a D7 surface) is swept before the shift starts: something on it must translate (reach). Then, the PC closed, the pointer sweeps the left two thirds of the screen (where 1019a translated phantom desktop words), the desk, then the first handed-over document dragged to the mat (reach); a hovered label is left and timed; last the PC is opened (Q) and its windows swept: the pointer must be over the PC's desktop (overPc) and the candidate log must hold 0 PC texts. Every toolsLens step writes lens_candidates_<name>.txt (the candidate log). Pass: tools.lens.*.phantoms 0, tools.lens.*.pc 0, tools.lens.pc_open*.overPc, tools.lens.newspaper.reach and tools.lens.documents.reach, tools.lens.*.revert <=0.2 s; seqtools flicker on lens_sweep's speech and paper text. For the Arabic answer: ask the traveller through the intercom (the wheel) on an Arabic-speaking traveller's case and run toolsLens over the bubble (add its point here once found in Unity)."
+      "text": "TOOLS BUG-52 (FIX_PLAN TOOLS translation lens + v2: the candidate set excludes the PC entirely, 0 PC texts in the candidate log): day 11 (the lens's day, the three-week progression: Word level issued). First the morning paper (a D7 surface) is swept before the shift starts: something on it must translate (reach). Then, the PC closed, the pointer sweeps the left two thirds of the screen (where 1019a translated phantom desktop words), the desk, then the first handed-over document dragged to the mat (reach); a hovered label is left and timed; last the PC is opened (Q) and its windows swept: the pointer must be over the PC's desktop (overPc) and the candidate log must hold 0 PC texts. Every toolsLens step writes lens_candidates_<name>.txt (the candidate log). Pass: tools.lens.*.phantoms 0, tools.lens.*.pc 0, tools.lens.pc_open*.overPc, tools.lens.newspaper.reach and tools.lens.documents.reach, tools.lens.*.revert <=0.2 s; seqtools flicker on lens_sweep's speech and paper text. For the Arabic answer: ask the traveller through the intercom (the wheel) on an Arabic-speaking traveller's case and run toolsLens over the bubble (add its point here once found in Unity)."
     },
     {
       "op": "title"
@@ -25,11 +25,11 @@
     },
     {
       "op": "jumpDay",
-      "n": 8
+      "n": 11
     },
     {
       "op": "waitOffice",
-      "n": 8
+      "n": 11
     },
     {
       "op": "note",
@@ -90,7 +90,7 @@
     },
     {
       "op": "note",
-      "text": "The documents: in the office view the handed-over papers lie about 10 px tall on the counter strip, so a sweep crosses their texts without landing on a word. The first paper (day 8: the Work Permit, TC-520) is dragged to the mat, which tilts the reading view in (DeskController.Read), and the sweep runs along its title's first line (at 0.428 of the screen's height), so the pointer stays on its words."
+      "text": "The documents: in the office view the handed-over papers lie about 10 px tall on the counter strip, so a sweep crosses their texts without landing on a word. The first paper (day 11: the Work Permit, TC-520) is dragged to the mat, which tilts the reading view in (DeskController.Read), and the sweep runs along its title's first line (at 0.428 of the screen's height), so the pointer stays on its words."
     },
     {
       "op": "drag",
@@ -119,7 +119,7 @@
     },
     {
       "op": "note",
-      "text": "The revert: hover the rulebook folder's cover word (a culture label from day 8; in the reading view at 0.209, 0.293), then leave to the empty top right corner. The folder's own centre is not on a word."
+      "text": "The revert: hover the rulebook folder's cover word (a culture label from day 11; in the reading view at 0.209, 0.293), then leave to the empty top right corner. The folder's own centre is not on a word."
     },
     {
       "op": "toolsRevert",
