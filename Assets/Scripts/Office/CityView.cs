@@ -293,8 +293,16 @@ public sealed class CityView : MonoBehaviour
         Show();
     }
 
-    /// <summary>Turns to the city (no-op while it may not turn or looks there already): A, the left arrow, "◀ City".</summary>
-    public void Look() => Set(true);
+    /// <summary>Turns to the city (no-op while it may not turn or looks there already): A, the left arrow, "◀ City"; while something is held on the desk it ends the hold and turns nothing (BUG-55c; STAMP R5: a held dater seats home, nothing stamped, as on Q and Esc).</summary>
+    public void Look()
+    {
+        if (HoldRegistry.Desk.IsHolding)
+        {
+            HoldRegistry.Desk.Cancel();
+            return;
+        }
+        Set(true);
+    }
 
     /// <summary>Turns back to the desk (no-op when not looking at the city): a click on the city, D, the right arrow, a right-click, Esc, "Desk ▶".</summary>
     public void Return() => Set(false);
