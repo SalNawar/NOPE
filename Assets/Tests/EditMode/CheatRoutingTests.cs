@@ -15,6 +15,9 @@ using NUnit.Framework;
 /// </summary>
 public class CheatRoutingTests
 {
+    /// <summary>The run's last day (the three-week progression, Saleh 2026-10-28; Ending_WorldReport.asset's threshold, ContentLibrarySO.LastDay).</summary>
+    private const int LastDay = 21;
+
     /// <summary>Today closed as played, then its night.</summary>
     private static readonly RunStep[] Today = { RunStep.CloseShift, RunStep.HomeNight, RunStep.Sleep };
 
@@ -44,32 +47,32 @@ public class CheatRoutingTests
     [Test]
     public void JumpForward_ClosesTodayAsPlayed_ThenPlaysEveryDayBetween()
     {
-        List<RunStep> route = RunRoutes.Jump(today: 2, target: 5, lastDay: 15, shiftClosed: false);
+        List<RunStep> route = RunRoutes.Jump(today: 2, target: 5, lastDay: LastDay, shiftClosed: false);
         CollectionAssert.AreEqual(Concat(Today, Played, Played, new[] { RunStep.OpenMorning }), route, "day 2 closes as played, days 3 and 4 are played, day 5 opens");
     }
 
     [Test]
     public void JumpForward_FromHome_SkipsTheCloseOfAShiftAlreadyClosed()
     {
-        List<RunStep> route = RunRoutes.Jump(today: 6, target: 7, lastDay: 15, shiftClosed: true);
+        List<RunStep> route = RunRoutes.Jump(today: 6, target: 7, lastDay: LastDay, shiftClosed: true);
         CollectionAssert.AreEqual(new[] { RunStep.HomeNight, RunStep.Sleep, RunStep.OpenMorning }, route);
     }
 
     [Test]
     public void JumpBack_StartsANewWorld_ThenPlaysEachNightUpToTheDay()
     {
-        List<RunStep> route = RunRoutes.Jump(today: 6, target: 3, lastDay: 15, shiftClosed: false);
+        List<RunStep> route = RunRoutes.Jump(today: 6, target: 3, lastDay: LastDay, shiftClosed: false);
         CollectionAssert.AreEqual(Concat(new[] { RunStep.NewWorld }, Played, Played, new[] { RunStep.OpenMorning }), route, "days 1 and 2 are played, day 3 opens");
-        CollectionAssert.AreEqual(new[] { RunStep.NewWorld, RunStep.OpenMorning }, RunRoutes.Jump(6, 1, 15, false), "back to day 1: the new world's own morning");
+        CollectionAssert.AreEqual(new[] { RunStep.NewWorld, RunStep.OpenMorning }, RunRoutes.Jump(6, 1, LastDay, false), "back to day 1: the new world's own morning");
     }
 
     [Test]
     public void OnlyTodayIsClosedAsPlayed_EveryOtherDayIsPlayed()
     {
-        for (int today = 1; today <= 15; today++)
-            for (int target = 1; target <= 15; target++)
+        for (int today = 1; today <= LastDay; today++)
+            for (int target = 1; target <= LastDay; target++)
             {
-                List<RunStep> route = RunRoutes.Jump(today, target, 15, false);
+                List<RunStep> route = RunRoutes.Jump(today, target, LastDay, false);
                 int closes = route.FindAll(s => s == RunStep.CloseShift).Count;
                 Assert.AreEqual(target > today ? 1 : 0, closes, $"{today}->{target}");
                 Assert.AreEqual(target > today ? target - today - 1 : target < today ? target - 1 : 0, route.FindAll(s => s == RunStep.PlayShift).Count, $"{today}->{target}");
@@ -79,7 +82,7 @@ public class CheatRoutingTests
     [Test]
     public void JumpToToday_IsARestart()
     {
-        CollectionAssert.AreEqual(RunRoutes.Restart(), RunRoutes.Jump(today: 4, target: 4, lastDay: 15, shiftClosed: true));
+        CollectionAssert.AreEqual(RunRoutes.Restart(), RunRoutes.Jump(today: 4, target: 4, lastDay: LastDay, shiftClosed: true));
     }
 
     [Test]
@@ -91,11 +94,11 @@ public class CheatRoutingTests
     [Test]
     public void EveryRoute_EndsAtTheMorningOpen_AndNoNightRunsWithoutTheShiftClosingFirst()
     {
-        for (int today = 1; today <= 15; today++)
-            for (int target = 1; target <= 15; target++)
+        for (int today = 1; today <= LastDay; today++)
+            for (int target = 1; target <= LastDay; target++)
                 foreach (bool closed in new[] { false, true })
                 {
-                    List<RunStep> route = RunRoutes.Jump(today, target, 15, closed);
+                    List<RunStep> route = RunRoutes.Jump(today, target, LastDay, closed);
                     Assert.AreEqual(RunStep.OpenMorning, route[route.Count - 1], $"{today}->{target}");
                     bool open = !closed || route.Contains(RunStep.NewWorld) || route.Contains(RunStep.RestoreMorning);
                     foreach (RunStep step in route)
@@ -113,10 +116,10 @@ public class CheatRoutingTests
     [Test]
     public void TheTarget_IsClampedToTheRunsDays()
     {
-        Assert.AreEqual(15, RunRoutes.Clamp(40, 15));
-        Assert.AreEqual(1, RunRoutes.Clamp(-3, 15));
+        Assert.AreEqual(LastDay, RunRoutes.Clamp(40, LastDay));
+        Assert.AreEqual(1, RunRoutes.Clamp(-3, LastDay));
         Assert.AreEqual(9, RunRoutes.Clamp(9, 0), "no last day known: the target stands");
-        CollectionAssert.AreEqual(RunRoutes.Jump(14, 15, 15, false), RunRoutes.Jump(14, 99, 15, false));
+        CollectionAssert.AreEqual(RunRoutes.Jump(20, 21, LastDay, false), RunRoutes.Jump(20, 99, LastDay, false));
     }
 
     [Test]
