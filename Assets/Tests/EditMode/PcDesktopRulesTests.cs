@@ -641,7 +641,7 @@ public class PcDesktopRulesTests
         Assert.AreEqual("1 APR 2150", TrayClock.Date("14 Mar 2150", 19));
         Assert.IsNull(TrayClock.Date("not a date", 1));
         Assert.IsNull(TrayClock.Date("14 Mar 2150", 0));
-        Assert.AreEqual("00:00", ShiftClock.Format(24f * 60f), "a night shift closing at 24:00 reads as the shift clock reads it");
+        Assert.AreEqual("24:00", ShiftClock.Format(24f * 60f), "a night shift closing at 24:00 reads as the shift clock reads it (BUG-72, FLOW: the closing hour, not the next day's 00:00)");
         Assert.AreEqual("23:59", ShiftClock.Format(24f * 60f - 0.5f));
     }
 }
