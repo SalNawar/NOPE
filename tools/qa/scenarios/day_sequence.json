@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "Days 1 to 21 played in sequence (auto-decided shifts, closing time, Home, Sleep): each day's office reached by the night before it"
+      "text": "Days 1 to 21 played in sequence (auto-decided shifts, closing time, Home, Sleep): each day's office reached by the night before it, and day 21's night played to the ending (the title's ending panel). One decision a day earns less than the harsh economy's nights cost (about 22 cr a night), so day 1 adds 1000 cr: the bankrupt ending (money at or under -100) would otherwise end the run at night 7."
     },
     {
       "op": "title"
@@ -22,6 +22,11 @@
     {
       "op": "probe",
       "name": "d1_briefing"
+    },
+    {
+      "op": "cheat",
+      "name": "AddMoney",
+      "n": 1000
     },
     {
       "op": "startShift"
@@ -1130,6 +1135,41 @@
     {
       "op": "still",
       "name": "d21_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "probe",
+      "name": "d21_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 240
+    },
+    {
+      "op": "waitActive",
+      "target": "TitleUIController.endingPanel",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "d21_ending"
+    },
+    {
+      "op": "probe",
+      "name": "d21_ending"
     }
   ]
 }
