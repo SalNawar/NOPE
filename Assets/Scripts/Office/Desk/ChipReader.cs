@@ -24,6 +24,10 @@ using UnityEngine;
 /// on the readout picks its shown line (the first while MISMATCH shows)
 /// against the box (DeskHardware.Pick), otherwise it steps to the next line. Its parts are the ChipReader art's
 /// (Build Office UI binds them); the office binder lays it on the desk.
+/// A passport lies on the pad upright to the player (FaceThePlayer: its text
+/// reads the right way, BUG-24), sized to fit the pad (PadExtents, DockFit);
+/// a card goes into the slot along its way in. The readout is rebuilt only
+/// when what it shows changes (BUG-65d: no string per frame).
 /// </summary>
 public sealed class ChipReader : MonoBehaviour, IPaperDock
 {
@@ -51,6 +55,9 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
     /// <summary>Where a dropped paper counts as on the reader: its footprint in local XZ, grown by a margin.</summary>
     [SerializeField] private Vector2 dropSize = new Vector2(0.26f, 0.26f);
 
+    /// <summary>The RF pad's size in the model's metres (local x by local z: chip_reader_model.py's PAD_W, PAD_D; the reader's scale applies): a passport is sized to fit it (DockFit).</summary>
+    [SerializeField] private Vector2 padSize = new Vector2(0.12f, 0.092f);
+
     /// <summary>A lamp's glow when lit (its colour's multiplier) and dark.</summary>
     [SerializeField] private float lampOn = 2.2f, lampOff = 0.25f;
 
@@ -66,6 +73,15 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
     private float _lineAt, _flap, _okFlash, _refused;
     private int _ticks;
     private string _shown;
+
+    /// <summary>What the readout shows, as a key (its state, its dots, its line): the text is rebuilt only when this changes.</summary>
+    private int _shownKey = int.MinValue;
+
+    /// <summary>How many results the reader has shown (each new result's lines redraw the readout).</summary>
+    private int _results;
+
+    /// <summary>How a passport lies on the pad: upright to the player (FaceThePlayer); until then along the reader's own forward.</summary>
+    private Quaternion? _padFacing;
     private MaterialPropertyBlock _block;
 
     /// <summary>True while a paper is in it.</summary>
@@ -201,6 +217,7 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
     private void Result()
     {
         _hasResult = true;
+        _results++;
         _document = _cycle.Document >= 0 ? _cycle.Document : _document;
         _outcome = _cycle.Outcome;
         _lines = _cycle.Lines;
@@ -260,9 +277,13 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
         Show();
     }
 
-    /// <summary>The readout's text: READY; READING with its dots; the result (CHIP OK, NO CHIP, MISMATCH with its shown line).</summary>
+    /// <summary>The readout's text: READY; READING with its dots; the result (CHIP OK, NO CHIP, MISMATCH with its shown line). It is built only when what shows changes (ShownKey): nothing is allocated on a frame that shows the same.</summary>
     private void Show()
     {
+        int key = ShownKey();
+        if (key == _shownKey && _shown != null)
+            return;
+        _shownKey = key;
         string text;
         if (_cycle != null && _cycle.Busy && !_hasResult)
             text = UiText.Get("machine.chip.reading") + new string('.', 1 + Mathf.FloorToInt(_cycle.Progress * 3f) % 4);
@@ -284,6 +305,22 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
         _shown = text;
         if (readout != null)
             readout.text = text;
+    }
+
+    /// <summary>What Show would print, as a number (no allocation): reading with its dot count, ready, no chip, OK, mismatch, or the result's shown line (with the result's number, so a new read redraws).</summary>
+    private int ShownKey()
+    {
+        if (_cycle != null && _cycle.Busy && !_hasResult)
+            return 10 + Mathf.FloorToInt(_cycle.Progress * 3f) % 4;
+        if (!_hasResult && _document < 0)
+            return 1;
+        if (_outcome == ChipOutcome.NoChip)
+            return 2;
+        if (_outcome == ChipOutcome.Match || _lines.Count == 0)
+            return 3;
+        if (_line == 0)
+            return 4;
+        return 100 + _line + 1000 * (_results & 0xFFFFF);
     }
 
     /// <summary>The lamps: POWER always lit; READ while reading; FAULT after a mismatch, blinking on a refusal; POWER flashes on an OK.</summary>
@@ -314,8 +351,35 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
         return padCentre != null ? padCentre.position : transform.position + Vector3.up * 0.07f;
     }
 
-    /// <inheritdoc />
-    public Quaternion DockFacing(MachineDock dock) => Quaternion.LookRotation(Slot.way, Vector3.up);
+    /// <summary>How a paper lies docked: a card along the slot's way in; a passport on the pad upright to the player (FaceThePlayer: its top away from the chair, its text the right way up, BUG-24), along the reader's own forward until the desk says where the player sits.</summary>
+    public Quaternion DockFacing(MachineDock dock)
+    {
+        if (dock == MachineDock.Slot)
+            return Quaternion.LookRotation(Slot.way, Vector3.up);
+        if (_padFacing.HasValue)
+            return _padFacing.Value;
+        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+        return Quaternion.LookRotation(forward.sqrMagnitude > 1e-8f ? forward.normalized : Vector3.forward, Vector3.up);
+    }
+
+    /// <summary>The desk tells the reader where the player sits (<paramref name="levelForward"/>: the office view's level forward, away from the chair): a passport lies on the pad upright to them.</summary>
+    public void FaceThePlayer(Vector3 levelForward)
+    {
+        Vector3 forward = Vector3.ProjectOnPlane(levelForward, Vector3.up);
+        if (forward.sqrMagnitude > 1e-8f)
+            _padFacing = Quaternion.LookRotation(forward.normalized, Vector3.up);
+    }
+
+    /// <summary>The pad's extents along the level axes <paramref name="right"/> and <paramref name="forward"/> (world metres: the width and the depth of the box round the pad, seen square to them): what a passport lying upright on it must fit (DockFit).</summary>
+    public Vector2 PadExtents(Vector3 right, Vector3 forward)
+    {
+        Vector3 scale = transform.lossyScale;
+        Vector3 across = Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized * (padSize.x * Mathf.Abs(scale.x) / 2f);
+        Vector3 along = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized * (padSize.y * Mathf.Abs(scale.z) / 2f);
+        float w = 2f * (Mathf.Abs(Vector3.Dot(across, right)) + Mathf.Abs(Vector3.Dot(along, right)));
+        float d = 2f * (Mathf.Abs(Vector3.Dot(across, forward)) + Mathf.Abs(Vector3.Dot(along, forward)));
+        return new Vector2(w, d);
+    }
 
     /// <inheritdoc />
     public (Vector3 way, float depth) Slot

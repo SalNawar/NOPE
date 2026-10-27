@@ -36,10 +36,20 @@ using UnityEngine.EventSystems;
 /// English: a paper never flips. Papers, Please's controls (Saleh
 /// 2026-10-06): a left-click raises Clicked with the box under the pointer in
 /// inspect mode (FormLayout.SlotAt; DeskController routes it through
-/// PaperClicks); a right-click is no click (it backs out, ControlRules). The
-/// paper's zone sizes it (SetZone: small on the counter, full size and evenly
-/// lit on the desk, its unlit reading material and the photo in the reading
-/// tint; DeskZones), easing between the two; in inspect mode every box is
+/// PaperClicks); a right-click is no click (it backs out, ControlRules).
+/// Its size (DOC-HANDLE, BUG-1; Saleh's D1: "no need to enlarge the
+/// documents"): one world size per zone, whatever the view (PaperSizes):
+/// small on the counter, its reading size on the desk (SetZone), easing
+/// between the two only as a held paper's pointer crosses the counter's edge
+/// (the held point stays under the cursor: DeskDraggable.GrabScale), and its
+/// docked size in a machine until it is clear of it (SetDocked); the reading
+/// view's tilt, a click and a drop never change it. Held, it is drawn above
+/// everything on the desk (HeldOnTop: moved toward the camera along its rays,
+/// its picture unchanged), its swing pivoted on the held point; let go, it
+/// rests exactly where it was released, settling as much as it was moving
+/// (PaperPhysics); an ID card is rigid (Saleh's D3). On the desk it is evenly
+/// lit (its unlit reading material and the photo in the reading tint;
+/// DeskZones); in inspect mode every box is
 /// tinted as comparable and the one under the pointer stronger; a picked
 /// box lights up (SlotHighlight). A desk stamp prints where its die pressed
 /// the passport (PagePoint, Stamp; DeskStampTray presses). Slides and resizes are moves
@@ -52,73 +62,75 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>How far above the sheet each layer lies (metres toward the camera, never scaled with the paper: PaperLayers, the one stacking rule): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
     private const float SealLift = PaperLayers.Seal, FillLift = PaperLayers.Fill, HighlightLift = PaperLayers.Highlight, LineLift = PaperLayers.Line, PhotoLift = PaperLayers.Photo, TextLift = PaperLayers.Text, InkLift = PaperLayers.Ink;
 
-    /// <summary>The sheet's scale in <paramref name="zone"/>: the reading size on the desk (at the art's reading share), the counter's share on the counter.</summary>
-    private float ZoneScale(DeskZone zone) => (_config == null ? 1f
-        : zone == DeskZone.Desk ? _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
-        : _config.counterScale);
+    /// <summary>The sheet's world scale lying in (or held over) <paramref name="zone"/>: the counter's share, or its reading size on the desk (at the art's reading share); no view enters it (PaperSizes.SheetScale).</summary>
+    private float ZoneScale(DeskZone zone) => _config == null ? 1f
+        : PaperSizes.SheetScale(zone, _config.counterScale, _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y));
 
-    /// <summary>A paper's header band as a share of its height from its top: the part the desk's spread keeps in view (PaperSpread).</summary>
-    private const float HeaderShare = 0.2f;
+    /// <summary>The scale the sheet shows at once its ease ends: its docked scale while docked, else its zone's.</summary>
+    private float TargetScale => _docked ? _dockScale : ZoneScale(Zone);
 
-    private readonly List<Rect> _keys = new List<Rect>();
+    /// <summary>The paper's normal docked scale (its counter size): a machine takes it at this size or smaller (DockFit).</summary>
+    public float DockScale => ZoneScale(DeskZone.Counter);
 
     /// <summary>
-    /// The parts of the paper the desk's spread keeps in view when papers land
-    /// (PaperSpread; Saleh's playtest 2026-10-07: headers and photos visible at
-    /// once): its header band, its photo and its visa box, as shares of the paper (x from its
-    /// left, y from its top, both 0 to 1).
+    /// The paper goes into a machine (<paramref name="docked"/>: its bed, pad
+    /// or slot) at <paramref name="scale"/> (DockFit: its counter size, or
+    /// smaller to fit the pad; 0 or less: its counter size), easing there on
+    /// its way in; or it is clear of the machine again (the desk calls it only
+    /// once the paper has come back out: it keeps its docked size until then,
+    /// BUG-24) and eases back to its zone's size.
     /// </summary>
-    public IReadOnlyList<Rect> KeyShares => _keys;
-
-    /// <summary>The paper's size in metres once it lies in <paramref name="zone"/> and is read there (its sheet's scale in the reading view).</summary>
-    public Vector2 SizeIn(DeskZone zone) => Size * ZoneScale(zone);
-
-    /// <summary>The sheet's scale lying in <paramref name="zone"/> now: the desk's reading size only while the reading view is on (DeskPapers.ShownFullSize), else the counter's, its normal size.</summary>
-    private float ShownScale(DeskZone zone) => ZoneScale(!_docked && DeskPapers.ShownFullSize(zone, _focused) ? DeskZone.Desk : DeskZone.Counter);
-
-    /// <summary>The paper goes into a machine (<paramref name="docked"/>: its bed, pad or slot) or comes back out: docked, it shows at its normal size (it must fit the slot), out again at its zone's.</summary>
-    public void SetDocked(bool docked)
+    public void SetDocked(bool docked, float scale = 0f)
     {
-        if (_docked == docked)
-            return;
         _docked = docked;
-        EaseTo(ShownScale(Zone));
+        if (docked)
+            _dockScale = scale > 0f ? scale : DockScale;
+        EaseTo(TargetScale);
     }
+
+    /// <summary>True while the paper lies docked in a machine (SetDocked): its lift is its own thickness over the dock, not the stack's.</summary>
+    public bool IsDocked => _docked;
 
     /// <summary>The paper's size as it shows now (metres, width by height: its sheet's scale).</summary>
     public Vector2 ShownSize => Size * _sizeNow;
 
-    /// <summary>The paper's size docked in a machine (metres: its normal size, width by height).</summary>
-    public Vector2 DockedSize => Size * ZoneScale(DeskZone.Counter);
+    /// <summary>The paper's size lying in its zone (metres): the size it rests at, out of any machine, once a change of size has eased; the size a drop is judged at (DropResolver), never the size it is easing from or its docked size.</summary>
+    public Vector2 ZoneSize => Size * ZoneScale(Zone);
 
-    /// <summary>A dragged paper over a machine keeps at least <paramref name="height"/> metres over its place (the casing's top and a clearance; 0 away from every machine): it never passes through a casing while carried.</summary>
-    public void SetCarryFloor(float height)
+    /// <summary>The paper's size docked in a machine (metres: its docked scale's, width by height).</summary>
+    public Vector2 DockedSize => Size * (_docked ? _dockScale : DockScale);
+
+    /// <summary>A refusal (a machine's "no", the counter before the verdict): the paper shakes in place, side to side (PaperPhysics.Shake, DeskConfigSO.refuseShakeDistance), where it lies; it never flies back.</summary>
+    public void Shake()
     {
-        _carryFloor = Mathf.Max(0f, height);
-        if (_liftPlaced)
-            _lift.Target = Mathf.Max(_stackLift, _carryFloor);
+        if (_config != null)
+            _physics.Shake(_config.refuseShakeDistance, _config.refuseShakeSeconds, _config.refuseShakeCycles);
     }
 
-    /// <summary>The machine refused the paper: it shakes its "no" on its swing (PaperPhysics.Nudge, <paramref name="swingSpeed"/> degrees per second) before the desk carries it back.</summary>
-    public void Shake(float swingSpeed) => _physics.Nudge(swingSpeed);
-
-
-    /// <summary>True while the reading view is on (SetFocused): a paper on the desk shows at its reading size only then.</summary>
-    private bool _focused;
+    /// <summary>The paper lands where it was carried (a hand-over's slap at the counter, BUG-49b): its ends curl up and settle and it hops, as a full-speed drop does (PaperPhysics.Land); the slap's sound is FEEDBACK's (DeskEvents.DocumentLanded).</summary>
+    public void Land()
+    {
+        MotionKnobs knobs = UiMotion.Knobs;
+        float hop = _physics.Land(UiMotion.Amount.Share, knobs);
+        if (hop > 0f)
+            _lift.Kick(knobs.Get(knobs.paperFeel).KickFor(hop));
+        _feelDirty = true;
+    }
 
     /// <summary>
-    /// The reading view turned on or off (DeskController): a paper lying on
-    /// the desk eases to its reading size or back to its normal size; a
-    /// carried paper keeps its size until it is dropped (Saleh's 1016a
-    /// playtest: "documents should stay their size").
+    /// The four corners (world, on the desk plane) of the paper lying with its
+    /// root at <paramref name="at"/>, at its zone's size and its rest turn (its
+    /// jitter; no swing, tilt, shake or held lift), written into
+    /// <paramref name="into"/> (4 long): its footprint where it will rest.
     /// </summary>
-    public void SetFocused(bool focused)
+    public void RestCorners(Vector3 at, Vector3[] into)
     {
-        if (_focused == focused)
-            return;
-        _focused = focused;
-        if (drag == null || !drag.IsDragging)
-            EaseTo(ShownScale(Zone));
+        Vector2 half = ZoneSize / 2f;
+        Quaternion lying = transform.rotation * (_sheetRest ?? (sheet != null ? sheet.localRotation : Quaternion.identity));
+        into[0] = at + lying * new Vector3(-half.x, -half.y, 0f);
+        into[1] = at + lying * new Vector3(half.x, -half.y, 0f);
+        into[2] = at + lying * new Vector3(-half.x, half.y, 0f);
+        into[3] = at + lying * new Vector3(half.x, half.y, 0f);
     }
 
     /// <summary>The sheet eases from its size now to <paramref name="target"/>.</summary>
@@ -174,7 +186,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>Every box's tint in inspect mode (Papers, Please: every comparable thing highlights); the box under the pointer takes the style's hover tint over it.</summary>
     [SerializeField] private Color inspectTint = new Color(1f, 0.78f, 0.1f, 0.34f);
 
-    /// <summary>How long a change of size between the counter and the desk takes (seconds; a cut under Reduced Motion).</summary>
+    /// <summary>How long a change of size takes (seconds: a held paper crossing the counter's edge, a paper going into or out of a machine; a cut under Reduced Motion).</summary>
     [SerializeField, Min(0f)] private float resizeSeconds = 0.15f;
 
     /// <summary>The paper's click (hover outline, hand cursor and whether it takes input).</summary>
@@ -243,14 +255,23 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     private MaterialPropertyBlock _block;
     private int _hoveredSlot = -1;
 
-    /// <summary>The sheet's scale now, the scale it eases toward (the zone's) and where the ease started.</summary>
+    /// <summary>The sheet's scale now, the scale it eases toward and where the ease started.</summary>
     private float _sizeNow = 1f, _sizeTarget = 1f, _sizeFrom = 1f, _sizeElapsed;
 
-    /// <summary>The paper's feel (the game feel's desk layer): its lift off the desk (a spring toward SetLift's height), its tilt toward a drag's travel (degrees about the sheet's x and z) and a drop's squash (wider by the value).</summary>
-    private Spring _lift, _tiltX, _tiltZ, _squash;
+    /// <summary>The sheet's scale when the running drag picked it up: the grab offset grows with the size from there (DeskDraggable.GrabScale).</summary>
+    private float _sizeAtGrab = 1f;
 
-    /// <summary>True once the lift has a place (the first SetLift puts it there at once), and the drag's state last frame (a pick-up or a drop plays its cue and its squash).</summary>
-    private bool _liftPlaced, _wasDragged;
+    /// <summary>The paper's feel (the game feel's desk layer): its lift off the desk (a spring toward SetLift's height) and its tilt toward a drag's travel (degrees about the sheet's x and z).</summary>
+    private Spring _lift, _tiltX, _tiltZ;
+
+    /// <summary>True once the lift has a place (the first SetLift puts it there at once), the drag's state last frame (a pick-up or a drop plays its cue), and whether the sheet must be drawn again this frame (a size, a landing).</summary>
+    private bool _liftPlaced, _wasDragged, _feelDirty;
+
+    /// <summary>The held ratio the sheet was last drawn at (HeldOnTop: 1 when not held): a paper let go is drawn once more at 1.</summary>
+    private float _shownRatio = 1f;
+
+    /// <summary>The held point (root-local x, z from the paper's centre) its swing pivots on: kept after a drop until the swing has settled back.</summary>
+    private Vector2 _pivot;
 
     /// <summary>Where the paper was last frame (a drag's speed tilts it).</summary>
     private Vector3 _lastPosition;
@@ -261,11 +282,12 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>The paper carried along a way (a slide across the desk, or over a machine's casing into its dock and out: DockPath).</summary>
     private readonly DeskCarry _carry = new DeskCarry();
 
-    /// <summary>The lift the stack gives the paper (SetLift), and the least lift a dragged paper keeps over a machine's casing under it (SetCarryFloor).</summary>
-    private float _stackLift, _carryFloor;
+    /// <summary>The lift the stack gives the paper (SetLift).</summary>
+    private float _stackLift;
 
-    /// <summary>True while the paper lies docked in a machine (SetDocked): at its normal size, whatever the reading view.</summary>
+    /// <summary>True while the paper lies docked in a machine (SetDocked), and its scale there.</summary>
     private bool _docked;
+    private float _dockScale = 1f;
 
     /// <summary>The paper's drag (the builder wires it): the desk reaches it without a GetComponent each time.</summary>
     public DeskDraggable Drag => drag;
@@ -285,7 +307,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>Where the paper's way starts from: its root where it shows now, lifted by how far it is still held up over its place (a dropped paper is carried from where it hangs).</summary>
     public Vector3 CarriedFrom => transform.position + Vector3.up * Mathf.Max(0f, _lift.Value - _lift.Target);
 
-    /// <summary>The zone the paper is shown for (DeskController sets it as it lies and while it is dragged).</summary>
+    /// <summary>The zone the paper is sized for (DeskController sets it as it lies, and as a held paper's pointer crosses the counter's edge).</summary>
     public DeskZone Zone { get; private set; }
 
     /// <summary>True in inspect mode: every box is tinted and a click picks the box under the pointer.</summary>
@@ -300,24 +322,38 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>Raised on a left-click while the paper takes input: the paper and, in inspect mode, the box under the pointer (-1: none, or not inspecting).</summary>
     public event Action<DeskDocument, int> Clicked;
 
-    /// <summary>Only while one runs: eases the sheet toward its zone's size, and moves along the slide (its done callback on landing).</summary>
+    /// <summary>The paper is drawn again every time its drag moves it (after the move: the held paper's place toward the camera follows the root that frame).</summary>
+    private void Awake()
+    {
+        if (drag != null)
+            drag.Dragged += Followed;
+    }
+
+    /// <summary>Its drag moved it: drawn again where it now is.</summary>
+    private void Followed(DeskDraggable dragged, Vector3 point) => ShowFeel();
+
+    /// <summary>Each frame: its feel, the ease of a change of size (the grab offset growing with it while held), and the carry along a way (its done callback on landing).</summary>
     private void Update()
     {
-        Feel(Time.unscaledDeltaTime);
         if (!Mathf.Approximately(_sizeNow, _sizeTarget))
         {
             _sizeElapsed += Time.deltaTime;
             float seconds = MotionPreference.Reduced ? 0f : resizeSeconds;
             float eased = seconds > 0f ? Mathf.Clamp01(_sizeElapsed / seconds) : 1f;
             _sizeNow = eased >= 1f ? _sizeTarget : Mathf.LerpUnclamped(_sizeFrom, _sizeTarget, UiMotion.Ease(eased, UiMotion.Knobs.deskMoveFeel, seconds));
-            ShowSheetScale();
+            _feelDirty = true;
         }
+        Feel(Time.unscaledDeltaTime); // a pick-up takes note of its size first
+        if (drag != null && drag.IsDragging)
+            drag.GrabScale = PaperSizes.GrabRatio(_sizeAtGrab, _sizeNow);
         _carry.Step(transform, Time.deltaTime);
     }
 
     /// <summary>The paper's printed meshes go with it (they were built for this paper alone).</summary>
     private void OnDestroy()
     {
+        if (drag != null)
+            drag.Dragged -= Followed;
         foreach (MeshFilter filter in new[] { fills, lines })
             if (filter != null && filter.sharedMesh != null)
                 Destroy(filter.sharedMesh);
@@ -335,7 +371,8 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// paper's width with <paramref name="doc"/>'s content (its template's
     /// words, the serial, the fields), its texts, meshes, seal and one quad per
     /// pickable box; the photo moves to its cell. A paper without a form (a
-    /// scene built before phase 4) prints nothing but its paper.
+    /// scene built before phase 4) prints nothing but its paper. An ID card is
+    /// rigid (Saleh's D3: PaperPhysics.Rigid).
     /// </summary>
     public void Bind(int index, CaseDocument doc, DocumentForm form, DeskConfigSO config)
     {
@@ -343,8 +380,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         _config = config;
         _slots.Clear();
         _form = null;
-        _keys.Clear();
-        _keys.Add(new Rect(0f, 0f, 1f, HeaderShare));
         if (config != null)
             Size = config.paperSize;
         if (config == null || doc == null || form == null || style == null || textTemplate == null)
@@ -366,6 +401,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
         PaperKind kind = PaperEdge.KindOf(look.frame);
         Thickness = kind == PaperKind.Booklet ? config.bookletThickness : kind == PaperKind.Card ? config.cardThickness : config.paperThickness;
+        _physics.Rigid = kind == PaperKind.Card;
         Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(form.Data.FormNumber) }) : null;
 
         foreach (FormItem item in _form.Items)
@@ -383,9 +419,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
                     break;
                 case FormItemKind.Photo:
                     PlacePhoto(item.Rect);
-                    break;
-                case FormItemKind.StampArea:
-                    _keys.Add(Share(Local(item.Rect))); // the visa box: the spread keeps it clear for the stamp
                     break;
                 case FormItemKind.Emblem:
                     PlaceMark("Emblem", item.Rect, EmblemArt.Texture(item.Text), cover, TextLift);
@@ -436,23 +469,25 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
 
     /// <summary>
     /// Shows the paper for <paramref name="zone"/> (Papers, Please's counter and
-    /// desk): on the counter at its normal size (DeskConfigSO.counterScale of
-    /// its size), lit by the room; on the desk evenly lit (the reading
-    /// material; the photo in the reading tint instead of the room's), at full
-    /// size (DeskZones.ReadingScale to DeskConfigSO.readingHeight) while the
-    /// reading view is on, else at its normal size (ShownScale). The size eases
-    /// there, or is set at once (<paramref name="instant"/>); a paper on its
-    /// art reads at its art's share of that (FormArt.reading).
+    /// desk): on the counter at its counter size, lit by the room; on the desk
+    /// evenly lit (the reading material; the photo in the reading tint instead
+    /// of the room's) at its reading size (DeskZones.ReadingScale to
+    /// DeskConfigSO.readingHeight), in every view (PaperSizes.SheetScale). The
+    /// size eases there (a held paper crossing the counter's edge), or is set
+    /// at once (<paramref name="instant"/>); a paper on its art reads at its
+    /// art's share of that (FormArt.reading). A docked paper keeps its docked
+    /// size until it is clear of its machine.
     /// </summary>
     public void SetZone(DeskZone zone, bool instant)
     {
         Zone = zone;
-        float target = ShownScale(zone);
-        EaseTo(target);
+        float target = TargetScale;
+        if (!Mathf.Approximately(target, _sizeTarget))
+            EaseTo(target);
         if (instant)
         {
-            _sizeNow = target;
-            ShowSheetScale();
+            _sizeNow = _sizeTarget = target;
+            _feelDirty = true;
         }
 
         bool reading = zone == DeskZone.Desk;
@@ -610,26 +645,14 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         _builtRest ??= _sheetRest ?? sheet.localRotation;
         uint mixed = unchecked((uint)seed * 2654435761u);
         float share = (mixed >> 12) % 2001u / 1000f - 1f;
-        _restYaw = share * _config.paperJitter;
-        Rest();
+        _sheetRest = Quaternion.Euler(0f, share * _config.paperJitter, 0f) * _builtRest.Value;
+        _feelDirty = true;
     }
 
-    /// <summary>The paper's turn on the desk (degrees about its up): its own jitter, then each drop's spin (PaperPhysics: it lies where its momentum left it), kept within twice the jitter either way of square.</summary>
-    private float _restYaw;
-
-    /// <summary>Lays the sheet at its turn (_restYaw) under its tilt.</summary>
-    private void Rest()
-    {
-        if (sheet == null || _builtRest == null)
-            return;
-        _sheetRest = Quaternion.Euler(0f, _restYaw, 0f) * _builtRest.Value;
-        sheet.localRotation = Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
-    }
-
-    /// <summary>The paper's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; 1018a: "all documents are stiff"): its swing and bend while held, its slide, spin, hop and wobble when let go.</summary>
+    /// <summary>The paper's physics feel (Saleh 2026-10-17: "KEEP IT TOP DOWN BUT GIVE IT PHYSICS"; 1018a: "all documents are stiff"): its swing and bend while held, its settle and hop when let go, its refusal's shake.</summary>
     private readonly PaperPhysics _physics = new PaperPhysics();
 
-    /// <summary>The paper's kind (its model: a sheet, a booklet, a card): how much it bends (MotionKnobs.sheetFlex, bookletFlex, cardFlex).</summary>
+    /// <summary>The paper's kind (its model: a sheet, a booklet, a card): how much it bends (MotionKnobs.sheetFlex, bookletFlex, cardFlex; a card is rigid).</summary>
     private PaperKind _kind;
 
     /// <summary>The bend drawn now (PaperBend: flat at rest).</summary>
@@ -656,14 +679,26 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>The sheet's rotation as the builder made it (Jitter turns it from there).</summary>
     private Quaternion? _builtRest;
 
-    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres: the first place at once, then on the paper's spring (a picked-up paper rises, a dropped one settles; a cut without motion).</summary>
-    public void SetLift(float height)
+    /// <summary>
+    /// The photo's rectangle as a share of the paper, which DeskDocument.Render's
+    /// PlacePhoto still records: its reader, the desk's spread of papers sent to
+    /// the desk by a click, went with the click-to-read (Saleh's D1). On
+    /// INTEGRATION's cleanup list (BUG-73c): DOC-LOOK drops the PlacePhoto
+    /// line at its merge, then this list and Share go.
+    /// </summary>
+    private readonly List<Rect> _keys = new List<Rect>();
+
+    /// <summary>A sheet-local rectangle (metres, centre origin, y up) as a share of the paper (x from its left, y from its top): see _keys.</summary>
+    private Rect Share(Rect local) =>
+        new Rect((local.xMin + Size.x / 2f) / Size.x, (Size.y / 2f - local.yMax) / Size.y, local.width / Size.x, local.height / Size.y);
+
+    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres: the first place at once, then on the paper's spring (a picked-up paper rises, a dropped one settles), or at once when <paramref name="instant"/> (a reorder of the stack: the order changes in the same frame, BUG-40b) or without motion.</summary>
+    public void SetLift(float height, bool instant = false)
     {
         if (sheet == null)
             return;
         _stackLift = height;
-        height = Mathf.Max(height, _carryFloor);
-        if (!_liftPlaced || UiMotion.Amount.Still)
+        if (!_liftPlaced || instant || UiMotion.Amount.Still)
         {
             _liftPlaced = true;
             _lift.Snap(height);
@@ -679,10 +714,12 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// The paper's feel (Saleh 2026-10-07: every touch reads as physical): a
     /// pick-up and a drop play their cues; while dragged the sheet tilts
     /// toward its travel by its speed (MotionKnobs.paperTiltPerSpeed, at most
-    /// paperTiltMax), its leading edge dipping; dropped, it squashes softly
-    /// wider (paperDropSquash) and flutters back flat; its lift follows SetLift
-    /// on the same spring (paperFeel). Scaled by the Motion intensity; still
-    /// under Reduced Motion. Nothing runs while it rests.
+    /// paperTiltMax), its leading edge dipping; dropped, it flutters back flat
+    /// and settles as much as it was moving (PaperPhysics: no squash, no
+    /// slide: it never changes size, the feel bible's G5); its lift follows
+    /// SetLift on the same spring (paperFeel). Scaled by the Motion intensity;
+    /// still under Reduced Motion. While held it is drawn every frame (its
+    /// place toward the camera follows the camera); at rest nothing runs.
     /// </summary>
     private void Feel(float dt)
     {
@@ -692,24 +729,28 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         Vector3 position = transform.position;
         MotionKnobs knobs = UiMotion.Knobs;
         MotionAmount amount = UiMotion.Amount;
-        if (dragged != _wasDragged)
+        bool picked = dragged && !_wasDragged, dropped = !dragged && _wasDragged;
+        if (picked)
+        {
+            _sizeAtGrab = _sizeNow;
+            _lastPosition = position;
+        }
+        if (dragged)
+        {
+            Vector3 held = transform.InverseTransformDirection(-drag.GrabOffset);
+            _pivot = new Vector2(held.x, held.z);
+        }
+        float hop = _physics.Step(dt, Vector3.Dot(position, transform.right), Vector3.Dot(position, transform.forward), dragged, knobs, amount);
+        if (picked || dropped)
         {
             _wasDragged = dragged;
             Sounds.Play(dragged ? SoundCues.PaperPickup : SoundCues.PaperDrop);
-            if (!dragged && !amount.Still)
+            if (dropped && !amount.Still)
             {
-                SpringTuning paper = knobs.Get(knobs.paperFeel);
-                _squash.Kick(paper.KickFor(knobs.paperDropSquash * amount.Share));
-                _tiltX.Kick(paper.KickFor(knobs.paperTiltMax * 0.25f * amount.Share)); // the flutter as it lands
+                // the flutter as it lands, as much as it was moving
+                float settle = PaperPhysics.SettleShare(_physics.ReleaseSpeed, knobs.paperSettleSpeed);
+                _tiltX.Kick(knobs.Get(knobs.paperFeel).KickFor(knobs.paperTiltMax * 0.25f * amount.Share * settle));
             }
-        }
-        // The physics feel on top of where the desk puts it (the desk's drop sizing and the scanner's snap decide the place).
-        (float spin, float hop) = _physics.Step(dt, Vector3.Dot(position, transform.right), Vector3.Dot(position, transform.forward), dragged, knobs, amount);
-        if (spin != 0f && _config != null)
-        {
-            float most = Mathf.Max(_config.paperJitter * 2f, 0.5f);
-            _restYaw = Mathf.Clamp(_restYaw + spin, -most, most);
-            Rest();
         }
         if (hop > 0f)
             _lift.Kick(knobs.Get(knobs.paperFeel).KickFor(hop));
@@ -724,7 +765,8 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         else
             _tiltX.Target = _tiltZ.Target = 0f;
         _lastPosition = position;
-        if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest && !_physics.Moving)
+        bool resting = _lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && !_physics.Moving;
+        if (resting && !dragged && !_feelDirty && _shownRatio == 1f)
         {
             if (bent)
                 ShowFeel(); // flat again: down onto its place
@@ -734,7 +776,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         _lift.Step(dt, tuning, knobs.settleValue * 0.01f, knobs.settleSpeed * 0.01f); // metres
         _tiltX.Step(dt, tuning, knobs.settleValue * 10f, knobs.settleSpeed * 10f); // degrees
         _tiltZ.Step(dt, tuning, knobs.settleValue * 10f, knobs.settleSpeed * 10f);
-        _squash.Step(dt, tuning, knobs.settleValue, knobs.settleSpeed);
         ShowFeel();
     }
 
@@ -742,37 +783,55 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     private bool _settling;
 
     /// <summary>
-    /// Draws the lift and the tilt on the sheet, and its scale. The height is
-    /// its lift (while set down, never below its place: the spring's
-    /// undershoot sank it into the desk or the paper under it) raised by how
-    /// far its tilt dips its lowest corner (PaperLayers.TiltDrop: a drag's lean
-    /// or a drop's flutter), so no part of it ever goes through what lies under
-    /// it (Saleh's 1007d playtest: "sometimes they clip or render with the table").
+    /// Draws the sheet: its lift (while set down, never below its place: the
+    /// spring's undershoot sank it into the desk or the paper under it)
+    /// raised by how far its tilt dips its lowest corner (PaperLayers.TiltDrop:
+    /// a drag's lean or a drop's flutter), so no part of it ever goes through
+    /// what lies under it (Saleh's 1007d playtest: "sometimes they clip or
+    /// render with the table"); its swing pivoted on the held point and its
+    /// refusal's shake; its size; and, while held, the whole sheet moved toward
+    /// the camera along its rays and shrunk by the same ratio (HeldOnTop: drawn
+    /// above every prop with its picture unchanged, BUG-8).
     /// </summary>
     private void ShowFeel()
     {
-        float lift = _settling ? Mathf.Max(_lift.Value, _lift.Target) : _lift.Value;
-        float half = _sizeNow * (1f + _squash.Value) / 2f;
-        lift += PaperLayers.TiltDrop(Size.x * half, Size.y * half, _tiltX.Value, _tiltZ.Value);
-        // a bend's drooping ends never pass through what lies under the paper (a held one has its drag's lift of room)
-        float room = drag != null && drag.IsDragging && _config != null ? _config.dragLift : 0f;
-        lift += Mathf.Max(0f, _bend.Lowest(Size.x, Size.y) - room);
-        sheet.localPosition = new Vector3(_physics.OffsetX, lift, _physics.OffsetZ);
-        _sheetRest ??= sheet.localRotation;
-        sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f && _physics.Yaw == 0f
-            ? _sheetRest.Value
-            : Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
-        ShowSheetScale();
-    }
-
-    /// <summary>The sheet's scale: its zone's size, wider in its own plane (its x and y: it lies on its back) by a drop's squash.</summary>
-    private void ShowSheetScale()
-    {
         if (sheet == null)
             return;
-        float wide = 1f + _squash.Value;
-        // The depth stays 1: the parts' heights over the sheet are metres (PaperLayers), so a paper read large never lifts its photo through the paper over it.
-        sheet.localScale = new Vector3(_sizeNow * wide, _sizeNow * wide, 1f);
+        _feelDirty = false;
+        float lift = _settling ? Mathf.Max(_lift.Value, _lift.Target) : _lift.Value;
+        float half = _sizeNow / 2f;
+        lift += PaperLayers.TiltDrop(Size.x * half, Size.y * half, _tiltX.Value, _tiltZ.Value);
+        // a bend's drooping ends never pass through what lies under the paper (a held one has its drag's lift of room)
+        bool held = drag != null && drag.IsDragging;
+        float room = held && _config != null ? _config.dragLift : 0f;
+        lift += Mathf.Max(0f, _bend.Lowest(Size.x, Size.y) - room);
+        (float ox, float oz) = PaperPhysics.PivotOffset(_pivot.x, _pivot.y, _physics.Yaw);
+        Vector3 local = new Vector3(ox + _physics.ShakeX, lift, oz);
+        _sheetRest ??= sheet.localRotation;
+        Quaternion turn = _tiltX.Value == 0f && _tiltZ.Value == 0f && _physics.Yaw == 0f
+            ? _sheetRest.Value
+            : Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+        float s = held ? HeldRatio() : 1f;
+        if (s < 1f)
+        {
+            Vector3 eye = transform.InverseTransformPoint(drag.DragCamera.transform.position);
+            local = eye + (local - eye) * s;
+        }
+        _shownRatio = s;
+        sheet.localPosition = local;
+        sheet.localRotation = turn;
+        // The depth stays 1 at rest: the parts' heights over the sheet are metres (PaperLayers), so a paper read large never lifts its photo through the paper over it.
+        sheet.localScale = new Vector3(_sizeNow * s, _sizeNow * s, s);
+    }
+
+    /// <summary>The held ratio now (HeldOnTop.Ratio): in front of every registered obstacle (DeskObstacles.MaxHeight) and at least DeskConfigSO.heldClearance over the desk, never nearer than heldLeastRatio; 1 without the drag's camera or the config.</summary>
+    private float HeldRatio()
+    {
+        Camera eye = drag != null ? drag.DragCamera : null;
+        if (eye == null || _config == null)
+            return 1f;
+        float clear = Mathf.Max(DeskObstacles.Desk.MaxHeight, _config.heldClearance);
+        return HeldOnTop.Ratio(eye.transform.position.y - transform.position.y, clear, _config.heldLeastRatio);
     }
 
     /// <summary>
@@ -799,10 +858,12 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// where it is: DockPath, over a machine's casing, onto its bed or pad,
     /// into its slot and out) in <paramref name="seconds"/>, turning it to
     /// lie at <paramref name="facing"/> (DeskCarry), then calls
-    /// <paramref name="done"/>. It starts from where it shows
-    /// (CarriedFrom): how far it still hangs over its place moves into its root.
+    /// <paramref name="done"/>; a carry that replaces one still running calls
+    /// that one's <paramref name="cut"/> (its machine lets go). It starts from
+    /// where it shows (CarriedFrom): how far it still hangs over its place
+    /// moves into its root.
     /// </summary>
-    public void Carry(IReadOnlyList<Vector3> way, Quaternion facing, float seconds, Action done)
+    public void Carry(IReadOnlyList<Vector3> way, Quaternion facing, float seconds, Action done, Action cut = null)
     {
         float raised = Mathf.Max(0f, _lift.Value - _lift.Target);
         if (raised > 0f)
@@ -812,7 +873,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
             _settling = false;
             ShowFeel();
         }
-        _carry.Start(transform, way, facing, seconds, done);
+        _carry.Start(transform, way, facing, seconds, done, cut);
     }
 
     /// <summary>The paper's quad and its collider at <paramref name="size"/> (metres): the sheet the form is laid out on.</summary>
@@ -824,10 +885,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         if (sheet != null && sheet.TryGetComponent(out BoxCollider box))
             box.size = new Vector3(size.x, size.y, box.size.z);
     }
-
-    /// <summary>A sheet-local rectangle (metres, centre origin, y up) as a share of the paper (x from its left, y from its top).</summary>
-    private Rect Share(Rect local) =>
-        new Rect((local.xMin + Size.x / 2f) / Size.x, (Size.y / 2f - local.yMax) / Size.y, local.width / Size.x, local.height / Size.y);
 
     /// <summary>A form-space rectangle (the placed form's units from the page's top-left, y down) in the sheet's local space (metres, centre origin, y up).</summary>
     private Rect Local(FaceRect f) =>

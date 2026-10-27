@@ -89,6 +89,16 @@ public sealed class DeskCounter : MonoBehaviour
     public bool Contains(Vector3 point) =>
         Edges(out float far, out _, out _, out _) && DeskZones.OnCounter(Vector3.Dot(point - surface.transform.position, _forward), far, config.counterDepth);
 
+    /// <summary>The counter's near edge (metres from the desk's centre along the office view's level forward: everything at or beyond it is the counter, DeskZones.OnCounter); false without a desk. A desk paper refused there rests just nearer than it (DropResolver).</summary>
+    public bool TryNearEdge(out float near)
+    {
+        near = 0f;
+        if (!Edges(out float far, out _, out _, out _))
+            return false;
+        near = far - config.counterDepth;
+        return true;
+    }
+
     /// <summary>Where paper <paramref name="k"/> of the counter's spots lands, on the desk plane (DeskZones.CounterSpot: a row along the counter, counterSpotInset from its far edge, round the view's centre line); the desk's centre without a desk.</summary>
     public Vector3 Spot(int k)
     {

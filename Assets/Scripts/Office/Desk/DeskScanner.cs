@@ -274,6 +274,34 @@ public sealed class DeskScanner : MonoBehaviour, IPaperDock
     /// <summary>The shut lid's thickness over the body (metres): a paper passing over the casing clears it.</summary>
     private const float LidAllowance = 0.015f;
 
+    /// <summary>
+    /// The highest the lid can reach as it swings open (world y: its hinge's
+    /// height plus its farthest point from the hinge; the casing's top without
+    /// a lid): the lid's swept volume, which the desk registers as an obstacle
+    /// (DeskObstacles, BUG-24: a carried paper cut through the open lid).
+    /// </summary>
+    public float LidSweepTop
+    {
+        get
+        {
+            float top = Casing.Top;
+            if (lid == null)
+                return top;
+            float reach = 0f;
+            foreach (Renderer r in lid.GetComponentsInChildren<Renderer>(false))
+            {
+                Bounds b = r.bounds;
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector3 corner = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z);
+                    Vector3 local = lid.InverseTransformPoint(corner);
+                    reach = Mathf.Max(reach, Mathf.Sqrt(local.y * local.y + local.z * local.z) * Mathf.Abs(lid.lossyScale.y));
+                }
+            }
+            return Mathf.Max(top, lid.position.y + reach);
+        }
+    }
+
     /// <inheritdoc />
     public Vector3 DockPoint(MachineDock dock) => BedPoint;
 
