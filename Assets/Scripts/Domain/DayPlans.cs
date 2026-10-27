@@ -85,7 +85,7 @@ public static class DayPlans
     }
 
     /// <summary>
-    /// The unplanned tail (days 7-15 V1): one warning when the days after the
+    /// The unplanned tail (days 7-15 V1; the run is 21 days since the three-week progression): one warning when the days after the
     /// latest planned one, up to <paramref name="lastDay"/> (the run's last
     /// day, the last-day ending's DayAtLeast threshold), have no plan of
     /// their own and would replay the latest's (Pick). None with every day

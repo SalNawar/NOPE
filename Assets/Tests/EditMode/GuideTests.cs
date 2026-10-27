@@ -10,6 +10,8 @@ public class GuideTests
         (1, Introductions.DayKeys(new[] { "TC-101" }, new[] { "Rule_PaperDates" }, null, null, new[] { Feature.Calendar, Feature.Rulebook })),
         (2, Introductions.DayKeys(new[] { "TC-101", "TC-230" }, null, null, null, null)),
         (3, Introductions.DayKeys(null, null, null, null, new[] { Feature.Board })),
+        (4, Introductions.DayKeys(null, null, new[] { LieKind.ForgedSeal }, null, new[] { Feature.Scanner })),
+        (5, Introductions.DayKeys(null, null, new[] { LieKind.WashedPaper }, new[] { "q_born" }, null)),
         (8, Introductions.DayKeys(new[] { "TC-520" }, null, null, null, null)),
     });
 
@@ -174,6 +176,28 @@ public class GuideTests
         Assert.IsTrue(problems.Any(p => p.Contains("target 'field:TC-101/NotACategory'")));
         Assert.IsTrue(problems.Any(p => p.Contains("BASICS")));
         Assert.IsTrue(problems.Any(p => p.StartsWith("Day 4 has no guide page")));
+    }
+
+    /// <summary>The three-week progression (Saleh 2026-10-28, a new feature every 2 to 3 days): a mastery day brings no feature, a lie or a question at most, so it needs no page; a day that brings a tool with no page is still refused.</summary>
+    [Test]
+    public void Problems_AMasteryDayNeedsNoPage_ADayWithANewToolDoes()
+    {
+        GuideContent content = Content();
+        List<string> problems = content.Problems(Ramp(), 5);
+        Assert.IsTrue(problems.Any(p => p.StartsWith("Day 4 has no guide page") && p.Contains(Feature.Scanner)), "day 4 brings the scanner with no page: " + string.Join(" | ", problems));
+        Assert.IsFalse(problems.Any(p => p.StartsWith("Day 5")), "day 5 brings a lie and a question only, a mastery day: " + string.Join(" | ", problems));
+
+        content.pages.Add(Page("scanner", Feature.Scanner));
+        CollectionAssert.IsEmpty(content.Problems(Ramp(), 5));
+
+        Assert.IsTrue(GuideContent.NeedsPage(Feature.Paper("TC-230")));
+        Assert.IsTrue(GuideContent.NeedsPage(Feature.Rule("Rule_DebtStanding")));
+        Assert.IsTrue(GuideContent.NeedsPage(Feature.Book(ClueCategory.Seal)));
+        Assert.IsTrue(GuideContent.NeedsPage(Feature.Field(ClueCategory.Debt)));
+        Assert.IsTrue(GuideContent.NeedsPage(Feature.App("internet")));
+        Assert.IsFalse(GuideContent.NeedsPage(Feature.Lie(LieKind.ClonedChip)));
+        Assert.IsFalse(GuideContent.NeedsPage(Feature.Question("q_born")));
+        Assert.IsFalse(GuideContent.NeedsPage(null));
     }
 
     [Test]

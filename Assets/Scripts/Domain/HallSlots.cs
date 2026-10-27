@@ -4,13 +4,13 @@ using System.Collections.Generic;
 /// <summary>Where the debt crisis stands, read from the day's desk hours (night shifts: the standard day, the extended hours, the night shifts; HallStates.PhaseOf).</summary>
 public enum HallPhase
 {
-    /// <summary>A day that closes at the standard hour or earlier (days 1-7, 09:00-17:00): the ordinary week.</summary>
+    /// <summary>A day that closes at the standard hour or earlier (week 1, days 1-7, 09:00-17:00): the ordinary week.</summary>
     Normal,
 
-    /// <summary>A day that closes after the standard hour but before midnight (days 8-11, 13:00-21:00): the Bureau extends the hours.</summary>
+    /// <summary>A day that closes after the standard hour but before midnight (week 2, days 8-14, 13:00-21:00): the Bureau extends the hours.</summary>
     Extended,
 
-    /// <summary>A day that closes at midnight (days 12-15, 16:00-24:00): night shifts.</summary>
+    /// <summary>A day that closes at midnight (week 3, days 15-21, 16:00-24:00): night shifts.</summary>
     Nights
 }
 

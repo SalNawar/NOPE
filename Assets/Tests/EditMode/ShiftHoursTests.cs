@@ -65,7 +65,7 @@ public class ShiftHoursTests
     [Test]
     public void TheClock_RunsTheDaysOwnSpan_InTheSameRealTime()
     {
-        // Day 12: 16:00 to midnight over the standard 480 real seconds, a game minute a second as on day 1.
+        // Day 15 (the three-week progression; day 12 before it): 16:00 to midnight over the standard 480 real seconds, a game minute a second as on day 1.
         var hours = new ShiftHours(960, 1440);
         var clock = new ShiftClock(hours.StartMinute, hours.EndMinute, 480f);
         bool closed = false;
@@ -93,7 +93,7 @@ public class ShiftHoursTests
         Assert.AreEqual(1f, HallBakedCycle.Weights(HallDayCycle.Hour(21f * 60f)).w, Tolerance, "day 8 closes at night");
         Assert.AreEqual(1f, HallBakedCycle.Weights(HallDayCycle.Hour(13f * 60f)).y + HallBakedCycle.Weights(HallDayCycle.Hour(13f * 60f)).z, Tolerance, "day 8 opens between noon and evening");
         HallBakedCycle.Weights4 dusk = HallBakedCycle.Weights(HallDayCycle.Hour(16.5f * 60f));
-        Assert.AreEqual(1f, dusk.z + dusk.w, Tolerance, "day 12 opens at 16:00, in the evening by 16:30 (the sunset: half evening, half night)");
+        Assert.AreEqual(1f, dusk.z + dusk.w, Tolerance, "day 15 opens at 16:00, in the evening by 16:30 (the sunset: half evening, half night)");
         Assert.AreEqual(1f, HallDayCycle.Evening(HallDayCycle.Hour(1440f), Lights), Tolerance);
         Assert.AreEqual(1f, HallDayCycle.Evening(HallDayCycle.Hour(21f * 60f), Lights), Tolerance);
         Assert.AreEqual(0f, HallDayCycle.Evening(HallDayCycle.Hour(13f * 60f), Lights), Tolerance);
@@ -121,7 +121,7 @@ public class ShiftHoursTests
         Assert.IsFalse(ShiftHours.Announces(Standard, Standard));
         Assert.IsTrue(ShiftHours.Announces(Standard, new ShiftHours(780, 1260)), "day 8");
         Assert.IsFalse(ShiftHours.Announces(new ShiftHours(780, 1260), new ShiftHours(780, 1260)));
-        Assert.IsTrue(ShiftHours.Announces(new ShiftHours(780, 1260), new ShiftHours(960, 1440)), "day 12");
+        Assert.IsTrue(ShiftHours.Announces(new ShiftHours(780, 1260), new ShiftHours(960, 1440)), "day 15");
     }
 
     [Test]

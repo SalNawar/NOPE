@@ -68,7 +68,7 @@ public class HallSlotsTests
     [TestCase(14 * 60, 24 * 60, HallPhase.Nights)]
     public void Phase_FollowsTheShiftHoursRamp(int open, int close, HallPhase expected)
     {
-        // The day's desk hours (night shifts: days 1-7 09:00-17:00, 8-11 13:00-21:00, 12-15 16:00-24:00) against the standard day.
+        // The day's desk hours (night shifts, by week in the three-week progression: days 1-7 09:00-17:00, 8-14 13:00-21:00, 15-21 16:00-24:00) against the standard day.
         Assert.AreEqual(expected, HallStates.PhaseOf(new ShiftHours(open, close), new ShiftHours(9 * 60, 17 * 60)));
     }
 

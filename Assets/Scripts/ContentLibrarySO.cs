@@ -344,10 +344,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The cheat menu's "unlock everything" copy of the ramp (built the first time it is asked for).</summary>
     [NonSerialized] private Introductions _unlockedIntroductions;
 
-    /// <summary>The ramp's registry as the day plans and the questions write it (built once per load).</summary>
+    /// <summary>The ramp's registry as the day plans and the questions write it (built once per load). The open destinations are left out: the board's places change daily, the check does not (DayPacing.Closures), so a mastery day with its own OpenDestinations rule introduces nothing (GuideContent.Problems).</summary>
     private Introductions Ramp => _introductions ??= new Introductions(
         DayPlans.Where(p => p != null).Select(p => (p.DayNumber, Introductions.DayKeys(
-            p.Papers, p.ActiveTravelRules.Where(r => r != null).Select(r => r.name), p.EnabledLies,
+            p.Papers, p.ActiveTravelRules.Where(r => r != null && r.type != TravelRuleType.OpenDestinations).Select(r => r.name), p.EnabledLies,
             Questions.Where(q => q != null && QuestionDay(q) == p.DayNumber).Select(q => q.question != null ? q.question.id : null),
             p.Introduces))));
 

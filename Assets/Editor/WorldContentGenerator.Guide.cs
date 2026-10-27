@@ -71,7 +71,9 @@ public static partial class WorldContentGenerator
                     errors.Add($"guide: step '{step.id}' detail '{c}' is no ClueCategory.");
         }
         DayData[] days = src.days ?? Array.Empty<DayData>();
-        var known = new Introductions(days.Select(d => (d.day, Introductions.DayKeys(d.papers, d.rules,
+        // The open destinations are left out, as ContentLibrarySO.Ramp leaves them out: a mastery day lists its own and introduces nothing.
+        var open = new HashSet<string>((src.rules ?? Array.Empty<RuleData>()).Where(r => r != null && r.asset != null && r.type == nameof(TravelRuleType.OpenDestinations)).Select(r => r.asset), StringComparer.Ordinal);
+        var known = new Introductions(days.Select(d => (d.day, Introductions.DayKeys(d.papers, (d.rules ?? Array.Empty<string>()).Where(r => !open.Contains(r)),
             (d.lies ?? Array.Empty<string>()).Select(l => ParseEnum(l, out LieKind lie) ? (LieKind?)lie : null).Where(l => l.HasValue).Select(l => l.Value),
             null, d.introduces))));
         GuideContent guide = BuildGuide(g);

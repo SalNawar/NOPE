@@ -6,11 +6,11 @@ public class TranslationLensTests
 {
     private static readonly string[] Levels = { "lens_word", "lens_sentence", "lens_object" };
 
-    /// <summary>The ramp's lens on day 8 (and something else on day 1).</summary>
+    /// <summary>The ramp's lens on day 11 (the three-week progression; and something else on day 1).</summary>
     private static Introductions Ramp() => new Introductions(new (int, IEnumerable<string>)[]
     {
         (1, new[] { Feature.Calendar }),
-        (8, new[] { Feature.Lens, Feature.Field(ClueCategory.Employer) }),
+        (11, new[] { Feature.Lens, Feature.Field(ClueCategory.Employer) }),
     });
 
     private static System.Func<string, bool> Owning(params string[] ids) => id => System.Array.IndexOf(ids, id) >= 0;
@@ -20,41 +20,41 @@ public class TranslationLensTests
     {
         Introductions ramp = Ramp();
         Assert.IsFalse(TranslationLens.LanguageLocked(1, ramp));
-        Assert.IsFalse(TranslationLens.LanguageLocked(7, ramp), "day 7: the player may still switch");
-        Assert.IsTrue(TranslationLens.LanguageLocked(8, ramp), "day 8: locked");
-        Assert.IsTrue(TranslationLens.LanguageLocked(15, ramp), "and stays locked");
-        Assert.AreEqual(8, TranslationLens.LockDay(ramp));
+        Assert.IsFalse(TranslationLens.LanguageLocked(10, ramp), "day 10: the player may still switch");
+        Assert.IsTrue(TranslationLens.LanguageLocked(11, ramp), "day 11: locked");
+        Assert.IsTrue(TranslationLens.LanguageLocked(21, ramp), "and stays locked");
+        Assert.AreEqual(11, TranslationLens.LockDay(ramp));
     }
 
     [Test]
     public void LanguageLocked_Never_WhenNoDayIntroducesTheLens()
     {
-        Assert.IsFalse(TranslationLens.LanguageLocked(15, Introductions.None));
-        Assert.IsFalse(TranslationLens.LanguageLocked(15, null));
+        Assert.IsFalse(TranslationLens.LanguageLocked(21, Introductions.None));
+        Assert.IsFalse(TranslationLens.LanguageLocked(21, null));
         Assert.AreEqual(0, TranslationLens.LockDay(Introductions.None));
     }
 
     [Test]
     public void Reach_None_BeforeTheLensDay_EvenWithLaterLevelsBought()
     {
-        Assert.AreEqual(LensReach.None, TranslationLens.Reach(7, Ramp(), Levels, Owning()));
-        Assert.AreEqual(LensReach.None, TranslationLens.Reach(7, Ramp(), Levels, Owning("lens_sentence", "lens_object")),
+        Assert.AreEqual(LensReach.None, TranslationLens.Reach(10, Ramp(), Levels, Owning()));
+        Assert.AreEqual(LensReach.None, TranslationLens.Reach(10, Ramp(), Levels, Owning("lens_sentence", "lens_object")),
                         "a level bought early waits for the lens itself");
     }
 
     [Test]
     public void Reach_Word_IssuedOnTheLensDay()
     {
-        Assert.AreEqual(LensReach.Word, TranslationLens.Reach(8, Ramp(), Levels, Owning()));
-        Assert.AreEqual(LensReach.Word, TranslationLens.Reach(12, Ramp(), Levels, Owning()));
+        Assert.AreEqual(LensReach.Word, TranslationLens.Reach(11, Ramp(), Levels, Owning()));
+        Assert.AreEqual(LensReach.Word, TranslationLens.Reach(15, Ramp(), Levels, Owning()));
     }
 
     [Test]
     public void Reach_GrowsWithEachLevelOwnedInOrder()
     {
-        Assert.AreEqual(LensReach.Sentence, TranslationLens.Reach(8, Ramp(), Levels, Owning("lens_sentence")));
-        Assert.AreEqual(LensReach.Object, TranslationLens.Reach(8, Ramp(), Levels, Owning("lens_sentence", "lens_object")));
-        Assert.AreEqual(LensReach.Word, TranslationLens.Reach(8, Ramp(), Levels, Owning("lens_object")), "Object without Sentence counts for nothing yet");
+        Assert.AreEqual(LensReach.Sentence, TranslationLens.Reach(11, Ramp(), Levels, Owning("lens_sentence")));
+        Assert.AreEqual(LensReach.Object, TranslationLens.Reach(11, Ramp(), Levels, Owning("lens_sentence", "lens_object")));
+        Assert.AreEqual(LensReach.Word, TranslationLens.Reach(11, Ramp(), Levels, Owning("lens_object")), "Object without Sentence counts for nothing yet");
     }
 
     [Test]
@@ -67,8 +67,8 @@ public class TranslationLensTests
     [Test]
     public void Reach_None_WithoutLevels()
     {
-        Assert.AreEqual(LensReach.None, TranslationLens.Reach(9, Ramp(), new string[0], Owning()));
-        Assert.AreEqual(LensReach.None, TranslationLens.Reach(9, Ramp(), null, Owning()));
+        Assert.AreEqual(LensReach.None, TranslationLens.Reach(12, Ramp(), new string[0], Owning()));
+        Assert.AreEqual(LensReach.None, TranslationLens.Reach(12, Ramp(), null, Owning()));
     }
 
     [Test]

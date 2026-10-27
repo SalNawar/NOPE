@@ -301,7 +301,7 @@ public class SeedsTests
     {
         Assert.AreEqual(Seeds.ForDebtNews(12345), Seeds.ForDebtNews(12345));
         Assert.AreNotEqual(Seeds.ForDebtNews(12345), Seeds.ForDebtNews(12346));
-        for (int day = 1; day <= 15; day++)
+        for (int day = 1; day <= 21; day++)
         {
             int daySeed = Seeds.Day(12345, day);
             CollectionAssert.DoesNotContain(new[] { daySeed, Seeds.ForViolators(daySeed), Seeds.ForSlot(daySeed), Seeds.ForEvents(daySeed), Seeds.ForCase(daySeed, 1) }, Seeds.ForDebtNews(12345));

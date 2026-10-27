@@ -178,8 +178,10 @@ public sealed class GuideContent
     /// days 1 to <paramref name="lastDay"/>): no guided days, no BASICS, a
     /// blank or repeated id, a page whose feature no day introduces or with a
     /// blank word, an unknown target, a step that waits for nothing or says
-    /// nothing, no FTUE step, and a day after the first with no page of its own
-    /// (every day's new thing has its page). Empty when sound.
+    /// nothing, no FTUE step, and a day after the first that introduces a
+    /// feature (<see cref="NeedsPage"/>) with no page of its own (every day's
+    /// new thing has its page; a mastery day, which brings none, needs none).
+    /// Empty when sound.
     /// </summary>
     public List<string> Problems(Introductions known, int lastDay)
     {
@@ -224,10 +226,29 @@ public sealed class GuideContent
             problems.Add("guide.ftueDone (the line after the last step) is blank.");
 
         for (int day = 2; day <= lastDay; day++)
-            if (!(pages ?? new List<GuidePage>()).Any(p => p != null && known.FirstDay(p.feature) == day))
-                problems.Add($"Day {day} has no guide page (guide.pages: a page whose feature the day introduces).");
+        {
+            if ((pages ?? new List<GuidePage>()).Any(p => p != null && known.FirstDay(p.feature) == day))
+                continue;
+            List<string> fresh = known.NewOn(day).Where(NeedsPage).ToList();
+            if (fresh.Count > 0)
+                problems.Add($"Day {day} has no guide page (guide.pages: a page whose feature the day introduces: {string.Join(", ", fresh)}).");
+        }
         return problems;
     }
+
+    /// <summary>
+    /// True when a key a day introduces needs a guide page that day: a paper,
+    /// a directive, a desk tool, an app, a book, a field, a wheel entry or a
+    /// PC feature (Feature). A lie or a question needs none: a mastery day of
+    /// the three-week progression (Saleh 2026-10-28: "a new feature every 2
+    /// to 3 days") may bring a new lie for a tool the player already holds,
+    /// and the questions arrive with the books that answer them. The open
+    /// destinations are not in the registry (ContentLibrarySO.Ramp, Generate
+    /// World's CheckGuide): the board's places change daily, the check does
+    /// not (DayPacing.Closures), so a mastery day introduces nothing.
+    /// </summary>
+    public static bool NeedsPage(string key) =>
+        !string.IsNullOrEmpty(key) && !key.StartsWith("lie:", StringComparison.Ordinal) && !key.StartsWith("question:", StringComparison.Ordinal);
 
     /// <summary>
     /// The bulletins against the ramp: every page's words (GuidePage.named)
