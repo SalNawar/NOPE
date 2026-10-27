@@ -218,6 +218,19 @@ public static class DeskPaintedMap
     public static readonly string[] Booth = { BoothWallLeft, BoothBackWall, BoothFrame, BoothWallRight, BoothBars };
 
     /// <summary>
+    /// How far the booth's front leans back (degrees from the vertical, the
+    /// top away from the chair; the bake's D4, accepted): the painter drew
+    /// every vertical of the booth vertical on screen while the office
+    /// camera looks 9 degrees down, so the front lies in a plane parallel to
+    /// the image plane. The lean is in the meshes (anchors.json's
+    /// booth.frame.up_unity, (0, 0.988, 0.156), is the office camera's up;
+    /// the bars' tops stand 0.27 m behind their feet). The importer adds no
+    /// turn and checks the bars against this, so the lean is never added
+    /// twice (DeskPaintedImporter.CheckBooth).
+    /// </summary>
+    public const float BoothLeanDegrees = 9f;
+
+    /// <summary>
     /// The live hall's layers the booth's left wall closes off (desk v3
     /// round 13; the v3 bake's README, Unity import step 5, "hide the left
     /// city panorama"): the anime hall's living city over its left glass
