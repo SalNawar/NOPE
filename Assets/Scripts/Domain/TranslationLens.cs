@@ -71,6 +71,24 @@ public static class TranslationLens
     /// <summary>The number of levels a lens has (Word, Sentence, Object).</summary>
     public const int LevelCount = 3;
 
+    /// <summary>The longest a translated word or label takes to flip back once the pointer leaves it (seconds; FIX_PLAN TOOLS, BUG-52: "revert ≤0.2 s after leaving"; GAME_FEEL_BIBLE C4).</summary>
+    public const float RevertSeconds = 0.2f;
+
+    /// <summary>
+    /// The texts a hover may touch (FIX_PLAN TOOLS, BUG-52: "the lens only
+    /// touches text the player can see under the cursor"; FIX_PLAN_v2: "the
+    /// candidate set excludes the PC entirely", D7: the PC never shows foreign
+    /// text): not on the PC (<paramref name="onPc"/>), shown
+    /// (<paramref name="shown"/>: active, a desk word's renderer on), drawn
+    /// (<paramref name="drawn"/>: its canvas enabled and an overlay or drawn by
+    /// an enabled camera; a desk word under the camera the pointer's hit came
+    /// from) and not faded out (<paramref name="alpha"/>, its inherited alpha).
+    /// </summary>
+    public static bool Candidate(bool onPc, bool shown, bool drawn, float alpha) => !onPc && shown && drawn && alpha > 0.01f;
+
+    /// <summary>How much faster than its own pace a flip back plays, so a flip of <paramref name="duration"/> seconds is back within <see cref="RevertSeconds"/> (1: its own pace when it already is).</summary>
+    public static float RevertSpeed(float duration) => duration > RevertSeconds ? duration / RevertSeconds : 1f;
+
     /// <summary>True from the lens's first day on: the office's language follows the world's leading culture and Settings no longer switches it.</summary>
     public static bool LanguageLocked(int day, Introductions intro) => intro != null && intro.Has(day, Feature.Lens);
 

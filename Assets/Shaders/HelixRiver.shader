@@ -4,8 +4,14 @@
 // streaks, bright motes riding the strands downstream. Drawn procedurally (distances to curves, no
 // textures) from the parameters HelixRiverMonitor sets each frame from the pure HelixRiver: the meander,
 // the twist pushing past the banks (red bank segments, blue flood blooms), snapped and red-mutated rungs,
-// drifting oxbows, the unzipping and fraying leading end, a citation's red pulse, and the CRT finish
-// (scanlines, vignette, grain, glitch band shifts, chroma split, flicker). Lengths are in the reference
+// drifting oxbows, the unzipping and fraying leading end, a citation's red pulse, the warning state, and
+// the CRT finish (scanlines, vignette, grain, a drop's glitch). Calm, readable motion (HALL-FX, BUG-54):
+// nothing strobes. The clock and the motes' travel come capped from HelixRiver (no detail crosses more than
+// half a pixel a frame); a drop's glitch is one burst whose bands slip once and slide back, with a chroma
+// split only in its first frames; the scanlines ride the glass (not the screen) and fade out when they
+// would be finer than three pixels; the rungs and current streaks fade out before they are packed too
+// close to resolve; the grain holds still. The warning (_Warning, eased) turns the banks red and the glass
+// warm, steadily. Lengths are in the reference
 // sheet's pixels (a 380 px tall glass; helixriver.py), so it looks the same at any size; lines widen to at
 // least a screen pixel when drawn small. Composited additively in gamma space as the reference was, then
 // converted to linear. One unlit pass without a LightMode, so it draws on a world-space quad (the desk's
@@ -30,7 +36,9 @@ Shader "TimeDesk/HelixRiver"
         _Stray ("Mote stray (px)", Float) = 0
         _Drift ("Colour drift", Range(0, 1)) = 0
         _Glitch ("Glitch", Range(0, 1)) = 0
-        _Flicker ("Flicker", Range(0, 1)) = 0
+        _GlitchSeed ("Glitch burst", Float) = 0
+        _Warning ("Warning", Range(0, 1)) = 0
+        _MoteTravel ("Motes' travel (px)", Float) = 0
         _Pulse ("Pulse head (-1 none)", Float) = -1
         _PulseGlow ("Pulse glow", Range(0, 1)) = 0
         _Aspect ("Width / height", Float) = 2.37
@@ -81,7 +89,7 @@ Shader "TimeDesk/HelixRiver"
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
                 float _Calm, _RiverTime, _Meander, _Twist, _Unzip, _UnzipStart, _Snap, _Mutate, _Oxbows, _Fray;
-                float _Flow, _Stray, _Drift, _Glitch, _Flicker, _Pulse, _PulseGlow, _Aspect, _Zoom, _Corner;
+                float _Flow, _Stray, _Drift, _Glitch, _GlitchSeed, _Warning, _MoteTravel, _Pulse, _PulseGlow, _Aspect, _Zoom, _Corner;
                 float4 _ClipRect;
             CBUFFER_END
 
@@ -129,7 +137,7 @@ Shader "TimeDesk/HelixRiver"
             // The eight nations' colours, in the reference's order.
             float3 Nation(float index)
             {
-                int i = (int)(index - 8.0 * floor(index / 8.0) + 0.5) % 8;
+                uint i = (uint)(index - 8.0 * floor(index / 8.0) + 0.5) % 8u;
                 if (i == 0) return float3(0.86, 0.36, 0.40);
                 if (i == 1) return float3(0.45, 0.62, 0.95);
                 if (i == 2) return float3(1.0, 0.45, 0.30);
@@ -195,14 +203,16 @@ Shader "TimeDesk/HelixRiver"
             float3 Scene(float x, float y, float t, float w, float px)
             {
                 float cy = H * 0.5;
-                float3 amber = lerp(AMBER, AMBER_RED, _Drift);
+                float3 amber = lerp(AMBER, AMBER_RED, saturate(_Drift + 0.5 * _Warning));
                 float3 back = amber * 0.45;
                 float3 col = 0;
 
                 // The water between the banks, and its current streaks.
                 float dy = abs(y - cy);
                 col += WATER * 0.35 * (55.0 / 255.0) * (smoothstep(BANK + 3.0, BANK - 3.0, dy) + 1.05 * smoothstep(BANK + 12.0, BANK - 12.0, dy));
-                if (dy < BANK - 2.0)
+                // The streak rows are 6 px apart: closer than about 2 screen pixels they fade out rather than alias.
+                float streakLod = saturate((6.0 / px - 1.5) / 1.5);
+                if (dy < BANK - 2.0 && streakLod > 0.0)
                 {
                     float row = floor((y - (cy - BANK)) / 6.0);
                     float rowY = cy - BANK + row * 6.0 + 3.0;
@@ -215,7 +225,7 @@ Shader "TimeDesk/HelixRiver"
                         float len = 10.0 + Hash21(float2(cell, row + 3.0)) * 18.0;
                         float x0 = cell * 90.0 + Hash21(float2(cell + 5.0, row)) * (90.0 - len);
                         float d = Segment(float2(u, y), float2(x0, rowY), float2(x0 + len, rowY));
-                        col += STREAK * 0.45 * (0.47 + 1.3 * there) * Glow(d, 1.2, 1.2, px);
+                        col += STREAK * 0.45 * (0.47 + 1.3 * there) * streakLod * Glow(d, 1.2, 1.2, px);
                     }
                 }
 
@@ -236,9 +246,11 @@ Shader "TimeDesk/HelixRiver"
                 float overBottom = saturate((max(y1, y2) - bottomBank) * 0.5 + 0.5);
                 float dt = abs(y - topBank), db = abs(y - bottomBank);
                 // (Drawn small, the banks keep most of a screen pixel's light: they frame the river, and their red breaches are the warning.)
+                // The warning turns the banks red, steadily (no strobe).
                 float bankWidth = max(2.0, px * 0.8), breachWidth = max(2.6, px);
-                col += lerp(GREEN * 0.75 * (Glow(dt, bankWidth, 1.6, px) + (110.0 / 255.0) * Glow(abs(y - (topBank - 6.0)), 1.2, 1.6, px)), RED * Glow(dt, breachWidth, 3.0, px), overTop);
-                col += lerp(GREEN * 0.75 * (Glow(db, bankWidth, 1.6, px) + (110.0 / 255.0) * Glow(abs(y - (bottomBank + 6.0)), 1.2, 1.6, px)), RED * Glow(db, breachWidth, 3.0, px), overBottom);
+                float3 bank = lerp(GREEN * 0.75, RED * 0.8, _Warning);
+                col += lerp(bank * (Glow(dt, bankWidth, 1.6, px) + (110.0 / 255.0) * Glow(abs(y - (topBank - 6.0)), 1.2, 1.6, px)), RED * Glow(dt, breachWidth, 3.0, px), overTop);
+                col += lerp(bank * (Glow(db, bankWidth, 1.6, px) + (110.0 / 255.0) * Glow(abs(y - (bottomBank + 6.0)), 1.2, 1.6, px)), RED * Glow(db, breachWidth, 3.0, px), overBottom);
 
                 // Flood blooms leaking out of each breach.
                 if (_Meander + _Twist + _Unzip > BANK * 0.6)
@@ -262,7 +274,10 @@ Shader "TimeDesk/HelixRiver"
                     col += FLOOD * 0.45 * (150.0 / 255.0) * 1.6 * flood;
                 }
 
-                // Rungs in the nations' colours, riding the twist; snapped (two stubs) and some mutated red.
+                // Rungs in the nations' colours, riding the twist; snapped (two stubs) and some mutated red. They are
+                // 16 px apart: closer than about 2 screen pixels they fade out rather than alias into a strobe.
+                float rungLod = saturate((16.0 / px - 2.0) / 2.0);
+                if (rungLod > 0.0)
                 {
                     float speed = 70.4;
                     float id = floor((x - t * speed) / 16.0 + 0.5);
@@ -276,22 +291,23 @@ Shader "TimeDesk/HelixRiver"
                         if (Hash11(id * 0.1731 + 0.3) >= _Snap)
                         {
                             float d = Segment(float2(x, y), float2(xr, lo), float2(xr, hi));
-                            col += nation * 0.9 * (210.0 / 255.0) * Glow(d, 2.0, 1.5, px);
+                            col += rungLod * nation * 0.9 * (210.0 / 255.0) * Glow(d, 2.0, 1.5, px);
                         }
                         else
                         {
                             float stub = (hi - lo) * 0.3;
                             float d = min(Segment(float2(x, y), float2(xr, lo), float2(xr, lo + stub)), Segment(float2(x, y), float2(xr, hi - stub), float2(xr, hi)));
                             bool mutated = Hash11(id * 0.917 + 4.1) < _Mutate;
-                            col += (mutated ? RED * Glow(d, 2.0, 2.2, px) : nation * 0.9 * Glow(d, 2.0, 1.5, px));
+                            col += rungLod * (mutated ? RED * Glow(d, 2.0, 2.2, px) : nation * 0.9 * Glow(d, 2.0, 1.5, px));
                         }
                     }
                 }
 
-                // The current: bright motes riding the strands downstream, straying when unstable.
+                // The current: bright motes riding the strands downstream (their travel capped and integrated by
+                // HelixRiver), straying when unstable.
                 {
-                    float j = floor((x - t * _Flow) / 61.0 + 0.5);
-                    float xm = j * 61.0 + t * _Flow;
+                    float j = floor((x - _MoteTravel) / 61.0 + 0.5);
+                    float xm = j * 61.0 + _MoteTravel;
                     float m1, m2, mc, mph;
                     Strands(xm, t, w, m1, m2, mc, mph);
                     float hj = Hash11(j * 0.37 + 9.2);
@@ -363,20 +379,21 @@ Shader "TimeDesk/HelixRiver"
                 float y = H * 0.5 + (0.5 - uv.y) * viewHeight;
                 float px = max(fwidth(y), 1e-3);
                 float t = _RiverTime;
-                float slot = floor(t * 10.0);
 
-                // Glitch: some bands slip sideways for a tenth of a second.
+                // A drop's glitch: the same few bands (chosen by the burst) slip sideways once and slide back as it fades.
                 if (_Glitch > 0.0)
                 {
                     float band = floor(y / 8.0);
-                    if (Hash21(float2(band, slot)) < _Glitch * 0.12)
-                        x += (Hash21(float2(band + 3.1, slot)) * 2.0 - 1.0) * 16.0;
+                    if (Hash21(float2(band, _GlitchSeed)) < 0.12)
+                        x += (Hash21(float2(band + 3.1, _GlitchSeed)) * 2.0 - 1.0) * 8.0 * _Glitch;
                 }
 
+                // The chroma split: only in the burst's first frames (while it is over half strength).
+                float split = saturate(_Glitch * 2.0 - 1.0);
                 float3 col;
-                if (_Glitch > 0.001)
+                if (split > 0.001)
                 {
-                    float shift = 1.0 + _Glitch * 3.0;
+                    float shift = split * 3.0;
                     col.r = Scene(x - shift, y, t, w, px).r;
                     col.g = Scene(x, y, t, w, px).g;
                     col.b = Scene(x + shift, y, t, w, px).b;
@@ -386,15 +403,16 @@ Shader "TimeDesk/HelixRiver"
                     col = Scene(x, y, t, w, px);
                 }
 
-                // The glass behind the light, a soft reflection, scanlines, vignette, grain, flicker.
-                col += lerp(GLASS_TOP, GLASS_BOTTOM, saturate(1.0 - uv.y));
+                // The glass behind the light (warmer under the warning), a soft reflection, scanlines on the glass (6 px
+                // apart, faded out below three screen pixels), vignette, a still grain.
+                col += lerp(GLASS_TOP, GLASS_BOTTOM, saturate(1.0 - uv.y)) + float3(0.09, 0.015, 0.01) * _Warning;
                 float2 r = (uv - float2(0.3, 0.85)) / float2(0.45, 0.35);
                 col += float3(1.0, 0.97, 0.9) * 0.06 * exp(-dot(r, r) * 2.0);
-                col *= 1.0 - 0.10 * step(0.3, sin(input.positionCS.y * PI / 1.5));
+                float lines = saturate((6.0 / px - 3.0) / 3.0);
+                col *= 1.0 - 0.05 * lines * (1.0 + sin(y * PI / 3.0));
                 float2 v = (uv - 0.5) * 2.0;
                 col *= 1.0 - 0.35 * saturate(v.x * v.x * 0.6 + v.y * v.y - 0.25);
-                col += (Hash21(input.positionCS.xy + frac(t * 30.0) * 97.0) - 0.5) * 0.04;
-                col *= 1.0 - _Flicker * 0.18 * step(0.6, Hash11(floor(t * 15.0) * 0.13 + 0.7));
+                col += (Hash21(floor(input.positionCS.xy)) - 0.5) * 0.04;
                 col = saturate(col);
                 #ifndef UNITY_COLORSPACE_GAMMA
                 col = SRGBToLinear(col);

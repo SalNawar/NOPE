@@ -5,11 +5,10 @@ using UnityEngine;
 /// A text the office builder printed from a UI string that no theme tag
 /// re-reads (a word on the desk's hardware, the rulebook folder's tabs and
 /// page heads, the stamp rail): it reads its string again when the scene
-/// starts and whenever the labels' language changes
-/// (CultureThemeService.LabelsChanged), so it follows the reading language like every other label (Saleh
-/// 2026-10-07: "I want the language to change on all documents and the
-/// apps"). The glyphs a culture's script needs come from the culture font in
-/// TMP's fallback list (CultureThemeService).
+/// starts and whenever the papers' language changes
+/// (CultureThemeService.LabelsChanged). Each is the desk's chrome (or the
+/// PC's), so it reads the player's language on any day (D7, BUG-3a:
+/// UiText.Get on its surface, UiText.SurfaceOf).
 /// </summary>
 [RequireComponent(typeof(TMP_Text))]
 public sealed class KeyedText : MonoBehaviour
@@ -45,6 +44,6 @@ public sealed class KeyedText : MonoBehaviour
     {
         if (string.IsNullOrEmpty(key) || !TryGetComponent(out TMP_Text text))
             return;
-        text.text = template.Replace("{0}", UiText.Get(key, UiText.SurfaceOf(text))); // a word on the PC stays English (UiText.Pc)
+        text.text = template.Replace("{0}", UiText.Get(key, UiText.SurfaceOf(text))); // the chrome's and the PC's words: the player's language
     }
 }

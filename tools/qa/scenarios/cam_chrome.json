@@ -1,0 +1,441 @@
+{
+  "name": "cam_chrome",
+  "owner": "CAM",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "CAM BUG-59: at A1 on day 1 and at A1-A4 on day 12, no shown chrome (the PC and STAMPS pull tabs, the Back control, the city tab) is drawn over a held decoration while it is dragged slowly across the mat, or over the reading view's framed work while it is on (camchrome watches every frame and writes each control's alpha into the sequence's rows). The overlay's plates CAM measured over the work are watched too, each its own line under its owner: the guide's prompt plate (CONTENT; it shows on day 1) and the stamp hint plate (STAMP; camchrome n = 2 shows it as the counter's bounce does, in each leg's reading view): expected red until they move. Each plate's line is plate.<leg>.<key> under its owner (gates cam.play.guidePlate and cam.play.stampHint, outside CAM's cam.play.chrome). A plate the leg shows (n = 2, or the guide named by the day-1 leg's n = 1 target) that is drawn 0 frames gives a red 'not measured' line under CAM (chrome.<leg>.<key>), never silence, so no gate can go green by absence. Each n = 1 target also names the halves the leg must see: 'held' (the day-12 legs' slow decoration drag holds it on at least one frame) and 'reading' (the reading view comes to rest), so neither half of chrome.<leg> passes untested (the held decoration is DeskDecor's plain Item, placed by its Root); a control of CAM's not found turns chrome.<leg> red too. Paper drags join at DOC-HANDLE (#8), when papers register their hold."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "camchrome",
+      "n": 1,
+      "name": "a1_d1",
+      "target": "guide, reading"
+    },
+    {
+      "op": "recStart",
+      "name": "a1_d1_chrome"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.9,
+      "n": 30
+    },
+    {
+      "op": "move",
+      "x": 0.95,
+      "y": 0.95,
+      "n": 30
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "camchrome",
+      "n": 0,
+      "name": "a1_d1"
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "camchrome",
+      "n": 1,
+      "name": "a1",
+      "target": "held, reading"
+    },
+    {
+      "op": "recStart",
+      "name": "a1_chrome"
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.3,
+      "y2": 0.3,
+      "name": "a1_decor_across"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.8,
+      "y2": 0.29,
+      "name": "a1_decor_back"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "camchrome",
+      "n": 2
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.9,
+      "n": 30
+    },
+    {
+      "op": "move",
+      "x": 0.95,
+      "y": 0.95,
+      "n": 30
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "camchrome",
+      "n": 0,
+      "name": "a1"
+    },
+    {
+      "op": "camres",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "camchrome",
+      "n": 1,
+      "name": "a2",
+      "target": "held, reading"
+    },
+    {
+      "op": "recStart",
+      "name": "a2_chrome"
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.3,
+      "y2": 0.3,
+      "name": "a2_decor_across"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.8,
+      "y2": 0.29,
+      "name": "a2_decor_back"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "camchrome",
+      "n": 2
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.9,
+      "n": 30
+    },
+    {
+      "op": "move",
+      "x": 0.95,
+      "y": 0.95,
+      "n": 30
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "camchrome",
+      "n": 0,
+      "name": "a2"
+    },
+    {
+      "op": "camres",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "camchrome",
+      "n": 1,
+      "name": "a3",
+      "target": "held, reading"
+    },
+    {
+      "op": "recStart",
+      "name": "a3_chrome"
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.3,
+      "y2": 0.3,
+      "name": "a3_decor_across"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.8,
+      "y2": 0.29,
+      "name": "a3_decor_back"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "camchrome",
+      "n": 2
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.9,
+      "n": 30
+    },
+    {
+      "op": "move",
+      "x": 0.95,
+      "y": 0.95,
+      "n": 30
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "camchrome",
+      "n": 0,
+      "name": "a3"
+    },
+    {
+      "op": "camres",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "camchrome",
+      "n": 1,
+      "name": "a4",
+      "target": "held, reading"
+    },
+    {
+      "op": "recStart",
+      "name": "a4_chrome"
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.3,
+      "y2": 0.3,
+      "name": "a4_decor_across"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "drag",
+      "path": "Slow",
+      "target": "Decor_form_sorter",
+      "x2": 0.8,
+      "y2": 0.29,
+      "name": "a4_decor_back"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "camchrome",
+      "n": 2
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.9,
+      "n": 30
+    },
+    {
+      "op": "move",
+      "x": 0.95,
+      "y": 0.95,
+      "n": 30
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "camchrome",
+      "n": 0,
+      "name": "a4"
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}

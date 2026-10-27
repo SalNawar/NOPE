@@ -149,6 +149,31 @@ public class DemoGateTests
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
+    /// <summary>The entries ruled at the six tracks' landing (2026-10-21, and ruling 6 of 2026-10-27: stamp.aim and stamp.rackClear under CAM) spare only the result their check reads: tools.micro's own assertions, stamp_aim's sixteen edge tries (a1 to a10 and the six (c) strokes at the rulebook's edge, two to three red each run) and CAM's plate lines; desk.play.clicks and stamp.rackClear went at CAM's landing (2026-10-27); qa.play.camera still spares the camera lines; never QA-RIG's or STAMP's other assertions in those scenarios.</summary>
+    [Test]
+    public void TheRuledKnownRedEntries_SpareOnlyWhatTheirChecksRead()
+    {
+        string file = Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt");
+        string text = File.ReadAllText(file);
+        List<string> patterns = DemoGate.KnownRedRunPatterns(text);
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        foreach (string id in new[] { "tools.micro", "textlang.kitSymbols", "stamp.aim", "cam.play.guidePlate", "cam.play.stampHint", "cam.bp.gc", "qa.play.camera", "cam.play.day12", "tools.lens" })
+            Assert.IsTrue(known.ContainsKey(id), $"{id} is on the list");
+        StringAssert.Contains("CONTENT", known["textlang.kitSymbols"]);
+        StringAssert.Contains("UI-PC", known["tools.micro"]);
+        StringAssert.Contains("STAMP", known["stamp.aim"]);
+        StringAssert.Contains("DOC-HANDLE", known["qa.play.camera"]);
+        Assert.IsFalse(known.ContainsKey("desk.play.clicks"), "desk.play.clicks went at CAM's landing (the intercom pressed in the reading view)");
+        Assert.IsFalse(known.ContainsKey("stamp.rackClear"), "stamp.rackClear went at CAM's landing (0 rack px over the paper in the reading view)");
+        StringAssert.Contains("CONTENT", known["cam.play.guidePlate"]);
+        StringAssert.Contains("STAMP", known["cam.play.stampHint"]);
+        StringAssert.Contains("QA-RIG", known["cam.bp.gc"]);
+        foreach (string id in new[] { "tools_microprint.tools.micro.read", "stamp_aim.aim.a6", "stamp_aim.aim.a9", "stamp_aim.aim.a1", "stamp_aim.aim.c3", "tools_lens.tools.lens.rulebook.revert", "cam_chrome.plate.a1_d1.guide", "cam_chrome.plate.a2.stamphint", "bp.cam_gc.gc.cam_cycle", "desk_plan_homes.camera.intercom_reading", "cam_views.camera", "cam_views.play.d12" })
+            Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
+        foreach (string id in new[] { "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.presses", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses", "stamp_aim.console", "stamp_aim.presses", "stamp_aim.aim.b4_1", "stamp_aim.aim.b9_3", "stamp_aim.aim.c4", "tools_lens.tools.lens.newspaper.reach", "tools_lens.console", "stamp_aim.letGo.rack1", "stamp_case.console", "stamp_case.rackOverPaper.a1", "stamp_case.tab.a1.rackInFrame", "stamp_hold.hold.esc1", "cam_views.tilts.d12", "cam_views.frame.a1_d12_reading", "cam_chrome.console", "cam_chrome.chrome.a1", "cam_chrome.missingScripts.end", "cam_gc.cycle.cam_cycle", "bp.cam_gc.cycle.cam_cycle" })
+            Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
+    }
+
     [Test]
     public void Judge_AResultMeasuredOnUncommittedChanges_FailsAsDirty()
     {

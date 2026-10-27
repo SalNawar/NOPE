@@ -2,20 +2,21 @@ using System;
 
 /// <summary>
 /// The portal rings' vortex (Saleh's demo 1018a: "the vfx for portals looks
-/// bad and is not even alligned"; the portals spec v3 VX1, VX4, VX5): the
-/// pure part of PortalEffect and its shader TimeDesk/PortalGlow. A ring's
-/// opening is an ellipse on the hall drawing's source canvas (pixels, top-left
-/// origin: DeskConfigSO.hallPortalLayers' opening); the effect is a quad
-/// <see cref="Margin"/> times the opening's radii each way around its centre,
-/// so the ring glow outside the opening fits on it. This class maps the
-/// opening to the drawing's local space and texture coordinates, and holds the
+/// bad and is not even alligned"; the portals spec v3 VX1, VX4, VX5; HALL-FX
+/// BUG-26a): the pure part of PortalEffect and its shader TimeDesk/PortalGlow.
+/// A ring's opening is an ellipse on the hall drawing's source canvas (pixels,
+/// top-left origin: HallPortalsSO's rings, fitted to each ring's painted-aperture
+/// mask); the effect is a quad <see cref="Margin"/> times the opening's radii
+/// each way around its centre, so an arch's hole, which reaches past its
+/// ellipse, still fits on it. This class maps the opening to the drawing's
+/// local space and the quad to its ring's crop of the mask atlas, and holds the
 /// effect's curves: the iris that opens and closes it, the departure flare,
 /// the night surge and the turning of its swirl. No UnityEngine, so it is
 /// tested headless (PortalVortexTests).
 /// </summary>
 public static class PortalVortex
 {
-    /// <summary>The quad's half-size as a multiple of the opening's radii (the shader's ring glow reaches out to 1.35 radii).</summary>
+    /// <summary>The quad's half-size as a multiple of the opening's radii (a hole reaches at most this far: HallPortalRing.reach).</summary>
     public const float Margin = 1.5f;
 
     /// <summary>A rectangle (x, y the lower-left corner; w, h its size) in a drawing's local units or texture coordinates.</summary>
@@ -66,24 +67,24 @@ public static class PortalVortex
         return new Box(x - w * 0.5f, y - h * 0.5f, w, h);
     }
 
-    /// <summary>The same quad in the drawing's texture coordinates (0 to 1, y up), for the shader to read the painting under it.</summary>
-    public static Box TextureQuad(float cx, float cy, float rx, float ry, float width, float height)
-    {
-        float w = Math.Max(1f, width), h = Math.Max(1f, height);
-        float sx = 2f * Margin * rx / w, sy = 2f * Margin * ry / h;
-        return new Box(cx / w - sx * 0.5f, 1f - cy / h - sy * 0.5f, sx, sy);
-    }
-
     /// <summary>
-    /// Where the bay's glass fence starts across the quad (its v, 0 bottom to
-    /// 1 top) for a fence whose top rail is at canvas row <paramref name="fenceY"/>:
-    /// below it the vortex shows through the glass. 0 for no fence (a row of 0 or less).
+    /// The map from the quad's texture coordinates (0 to 1, y up) to the mask
+    /// atlas's, for the opening centred at canvas (<paramref name="cx"/>,
+    /// <paramref name="cy"/>, y down) with radii <paramref name="rx"/> and
+    /// <paramref name="ry"/>, whose mask crop covers <paramref name="crop"/> on
+    /// the canvas (x, y its top-left corner, y down) and <paramref name="atlas"/>
+    /// in the atlas (x, y its lower-left corner, y up): the shader reads the
+    /// mask at uv * (W, H) + (X, Y).
     /// </summary>
-    public static float FenceV(float cy, float ry, float fenceY)
+    public static Box MaskMap(float cx, float cy, float rx, float ry, Box crop, Box atlas)
     {
-        if (fenceY <= 0f || ry <= 0f)
-            return 0f;
-        return Clamp01(0.5f + (cy - fenceY) / (2f * Margin * ry));
+        float cw = crop.W > 0f ? crop.W : 1f, ch = crop.H > 0f ? crop.H : 1f;
+        // u: canvas x = cx - M rx + u 2 M rx; v: canvas y = cy + M ry - v 2 M ry (rows run down, v up).
+        float scaleU = atlas.W * 2f * Margin * rx / cw;
+        float offsetU = atlas.X + atlas.W * (cx - Margin * rx - crop.X) / cw;
+        float scaleV = atlas.H * 2f * Margin * ry / ch;
+        float offsetV = atlas.Y + atlas.H * (1f - (cy + Margin * ry - crop.Y) / ch);
+        return new Box(offsetU, offsetV, scaleU, scaleV);
     }
 
     /// <summary>The iris after <paramref name="dt"/> seconds from <paramref name="current"/> toward open (1) or shut (0), over <paramref name="seconds"/>; at once with <paramref name="reduced"/> motion or no time.</summary>

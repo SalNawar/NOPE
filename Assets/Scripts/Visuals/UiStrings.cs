@@ -50,13 +50,16 @@ public sealed class UiStringEntry
 /// {n} and {n:format} arguments; numbers are formatted in the invariant
 /// culture (R17) and strings are inserted verbatim, so canonical values stay
 /// exactly as generated. A right-to-left culture's text is shaped
-/// (ArabicShaper) after its arguments are filled; a culture label whose
+/// (ArabicShaper) once, after its arguments are filled (an argument already
+/// shaped goes back to logical text first: BUG-37a, CODE-44); a culture label whose
 /// reading entry has a gloss shows the English word with it. Every culture
 /// label it returns is remembered as a LensPhrase (its text as drawn, its
 /// English, its words), so the Translation Lens can find and translate it
 /// wherever it is shown; so is the same label in capitals (a paper's printed
 /// words, a label styled in capitals, a form's section head: ArtLayout.Capitals
-/// and plain upper case), its English in capitals.
+/// and plain upper case), its English in capitals. Which surface reads which
+/// language is <see cref="ForSurface"/>'s: only a paper and a sign take the
+/// culture's labels (D7, BUG-3a).
 /// </summary>
 public sealed class UiStrings
 {
@@ -69,6 +72,9 @@ public sealed class UiStrings
     private readonly Dictionary<string, string> _glossary;
     private readonly Dictionary<string, LensPhrase> _phrases = new Dictionary<string, LensPhrase>(StringComparer.Ordinal);
     private readonly List<LensPhrase> _phraseList = new List<LensPhrase>();
+
+    /// <summary>Each paper word <see cref="PaperWord"/> printed in the culture's language, to its English as the paper's own print has it (BUG-3a: a chrome or PC text that quotes one prints the English).</summary>
+    private readonly Dictionary<string, string> _paperWords = new Dictionary<string, string>(StringComparer.Ordinal);
 
     /// <summary>
     /// A lookup over the reading table and, when <paramref name="culture"/> is
@@ -98,6 +104,30 @@ public sealed class UiStrings
     public bool Has(string key) => key != null && _reading.ContainsKey(key);
 
     /// <summary>
+    /// A paper's fixed English word in the culture's language (UiText.FormWords:
+    /// the Paper surface): the string of <paramref name="key"/> (its doc.* key,
+    /// DocumentWords.Key), in capitals (ArtLayout.Capitals) where the English
+    /// is; a word with no key or no string as it is. Every word it turns into
+    /// the culture's is remembered with its English (the latest, when two
+    /// spellings share a translation), so the chrome and the PC
+    /// (<see cref="English"/>) never quote it in the culture's language
+    /// (BUG-3a, CODE-45/79: a citation's "{0} on the {1}" built from a paper's
+    /// word).
+    /// </summary>
+    public string PaperWord(string key, string english)
+    {
+        if (key == null || string.IsNullOrEmpty(english) || !Has(key))
+            return english;
+        string native = Get(key);
+        string shown = ArtLayout.IsCapitals(english) ? ArtLayout.Capitals(native) : native;
+        // The latest English wins: two spellings can share a translation ("AUTHORISED BY", "AUTHORIZED BY"), and a
+        // chrome string quotes the word it was just handed (CaseFactory: DocumentWord, then Format).
+        if (!string.Equals(shown, english, StringComparison.Ordinal))
+            _paperWords[shown] = english;
+        return shown;
+    }
+
+    /// <summary>
     /// The string for a key with its placeholders filled: an IFormattable
     /// argument through its placeholder's format and the invariant culture, a
     /// string verbatim (its format ignored), null as "". Then shaping (a
@@ -111,7 +141,7 @@ public sealed class UiStrings
         _reading.TryGetValue(key, out UiStringEntry reading);
         if (_culture.TryGetValue(key, out UiStringEntry culture) && !string.IsNullOrEmpty(culture.text))
         {
-            string logical = Fill(culture.text, args);
+            string logical = Fill(culture.text, _rightToLeft ? Logical(args) : args);
             string native = _rightToLeft ? ArabicShaper.ToVisual(logical) : logical;
             bool hasEnglish = reading != null && !string.IsNullOrEmpty(reading.text);
             string english = hasEnglish ? Fill(reading.text, args) : null;
@@ -148,19 +178,63 @@ public sealed class UiStrings
     }
 
     /// <summary>
+    /// The string for a key as <paramref name="surface"/> prints it (D7,
+    /// BUG-3a): a paper or a sign by the culture rule (<see cref="Format"/>:
+    /// the culture's label when a culture table applies), every other surface
+    /// (the chrome, the PC) in the reading language (<see cref="English"/>),
+    /// so no chrome text ever turns into the world's language.
+    /// </summary>
+    public string ForSurface(TextSurface surface, string key, params object[] args) =>
+        CultureChoice.FollowsWorld(surface) ? Format(key, args) : English(key, args);
+
+    /// <summary>
     /// The reading language's string for a key with its placeholders filled,
     /// whatever culture table applies (the PC: always in English, Saleh
     /// 2026-10-18): neither shaped nor glossed, and never remembered for the
-    /// lens; a key with no reading text is the key, reported as missing.
+    /// lens; a culture label passed in as an argument (a paper's word in a
+    /// citation, CaseFactory) prints as its English; a key with no reading
+    /// text is the key, reported as missing.
     /// </summary>
     public string English(string key, params object[] args)
     {
         key = key ?? string.Empty;
         if (_reading.TryGetValue(key, out UiStringEntry reading) && !string.IsNullOrEmpty(reading.text))
-            return Fill(reading.text, args);
+            return Fill(reading.text, PlayerArgs(args));
         if (_missingSet.Add(key))
             _missing.Add(key);
         return key;
+    }
+
+    /// <summary>
+    /// The arguments of a chrome or PC text with every culture label in them
+    /// as its English (BUG-3a: "0 culture-language strings outside Paper
+    /// surfaces"): a paper word <see cref="PaperWord"/> printed, else a culture
+    /// label <see cref="Format"/> returned (the lens's phrases, capitals
+    /// included); the array itself when none is one.
+    /// </summary>
+    private object[] PlayerArgs(object[] args)
+    {
+        if (args == null || (_paperWords.Count == 0 && _phrases.Count == 0) || !args.Any(a => a is string s && PlayerWord(s) != null))
+            return args;
+        return args.Select(a => a is string s ? PlayerWord(s) ?? s : a).ToArray();
+    }
+
+    /// <summary>The English of a culture label this lookup printed (a paper word, else a lens phrase with an English), or null for any other text.</summary>
+    private string PlayerWord(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return null;
+        if (_paperWords.TryGetValue(text, out string english))
+            return english;
+        return _phrases.TryGetValue(text, out LensPhrase phrase) && !string.IsNullOrEmpty(phrase.English) ? phrase.English : null;
+    }
+
+    /// <summary>A right-to-left template's arguments with every shaped one back in logical order (ArabicShaper.ToLogical), so the label is shaped once, whole (CODE-44); the array itself when none is shaped.</summary>
+    private static object[] Logical(object[] args)
+    {
+        if (args == null || !args.Any(a => a is string s && ArabicShaper.IsVisual(s)))
+            return args;
+        return args.Select(a => a is string s && ArabicShaper.IsVisual(s) ? ArabicShaper.ToLogical(s) : a).ToArray();
     }
 
     /// <summary>Remembers a culture label for the lens under its text as drawn (<paramref name="native"/>), once.</summary>

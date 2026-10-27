@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// window (PA1-PA3: the TC-970 schedule, read-only, across a scroll), the
 /// hall's Departure Board (BD1-BD5: its rows, its click box and reaction and
 /// the growing board tooltip) and the rings' effects (VX1-VX6: one
-/// PortalEffect per DeskConfigSO.hallPortalLayers entry). Part of
+/// PortalEffect per HallPortalsSO ring, HALL-FX). Part of
 /// <see cref="OfficeSceneUIBuilder"/>; the desktop shell builds the window
 /// and registers it under DesktopAppIds.Portals; BuildOffice builds the
 /// board and the effects and hands them to the office binder.
@@ -68,6 +68,9 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The rings' vortexes' material (TimeDesk/PortalGlow: the cel vortex, unlit and premultiplied, glowing through the evening).</summary>
     private static Material PortalGlowMaterial() => EnsureMaterial("PortalGlow", "TimeDesk/PortalGlow", null);
+
+    /// <summary>The hall's portals, the one source of the rings (HALL-FX BUG-73d; its openings and masks are made by tools/hall/portal_masks.py).</summary>
+    private const string HallPortalsPath = "Assets/Data/Config/HallPortals.asset";
 
     /// <summary>
     /// Makes an overlay callout grow with its lines (the departure board's
@@ -151,21 +154,26 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The rings' vortexes (VX1-VX6, Saleh's demo 1018a) under the Office
-    /// root, rebuilt fresh: one PortalEffect per DeskConfigSO.hallPortalLayers
-    /// entry, in its order, each a disabled built-in quad in the PortalGlow
-    /// material (the anime hall's AnimeHallPortalLink places it on its ring's
-    /// opening, sorts it and opens it).
+    /// root, rebuilt fresh: one PortalEffect per ring of the hall's portals
+    /// (HallPortals.asset, handed to each), in its order, each a disabled
+    /// built-in quad in the PortalGlow material (the anime hall's
+    /// AnimeHallPortalLink places it on its ring's opening, masks it, sorts it
+    /// and opens it). <paramref name="config"/> is not read (the rings moved
+    /// to HallPortalsSO; the argument goes at the caller's cleanup).
     /// </summary>
     private static PortalEffect[] BuildPortalEffects(Transform office, DeskConfigSO config)
     {
         DestroyChildIfPresent(office, "PortalEffects");
         Transform root = EnsureChild(office, "PortalEffects");
         Material material = PortalGlowMaterial();
-        HallPortalLayers[] layers = config.hallPortalLayers ?? new HallPortalLayers[0];
-        var effects = new PortalEffect[layers.Length];
-        for (int i = 0; i < layers.Length; i++)
+        HallPortalsSO portals = AssetDatabase.LoadAssetAtPath<HallPortalsSO>(HallPortalsPath);
+        if (portals == null)
+            Debug.LogError($"[OfficeSceneUIBuilder] {HallPortalsPath} is missing: the hall's portal rings get no vortex.");
+        HallPortalRing[] rings = portals != null && portals.rings != null ? portals.rings : new HallPortalRing[0];
+        var effects = new PortalEffect[rings.Length];
+        for (int i = 0; i < rings.Length; i++)
         {
-            Transform t = EnsureChild(root, "PortalEffect_" + PortalText.Number(layers[i] != null ? layers[i].portal : i + 1));
+            Transform t = EnsureChild(root, "PortalEffect_" + PortalText.Number(rings[i] != null ? rings[i].portal : i + 1));
             t.gameObject.AddComponent<MeshFilter>().sharedMesh = Resources.GetBuiltinResource<Mesh>("Quad.fbx");
             MeshRenderer vortex = t.gameObject.AddComponent<MeshRenderer>();
             vortex.sharedMaterial = material;
@@ -177,6 +185,7 @@ public static partial class OfficeSceneUIBuilder
             effects[i] = t.gameObject.AddComponent<PortalEffect>();
             var so = new SerializedObject(effects[i]);
             Wire(so, "vortex", vortex);
+            Wire(so, "portals", portals);
             so.ApplyModifiedProperties();
         }
         return effects;

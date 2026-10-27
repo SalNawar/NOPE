@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 /// <summary>
@@ -127,14 +128,194 @@ public class ArabicShaperTests
         StringAssert.Contains(code, unsupported);
     }
 
+    /// <summary>BUG-37a / CODE-42: the per-line API is ToVisual on each line, but its lines keep their plain spaces (they are laid out already; only a box that wraps a visual string needs no-break ones).</summary>
     [Test]
-    public void ToVisualLines_IsToVisualOnEachLine()
+    public void ToVisualLines_IsToVisualOnEachLine_WithPlainSpaces()
     {
         var lines = new List<string> { "مرحبا بالعالم", "Desk 3", "رقم 42", string.Empty };
         List<string> visual = ArabicShaper.ToVisualLines(lines);
         Assert.AreEqual(lines.Count, visual.Count);
         for (int i = 0; i < lines.Count; i++)
-            Assert.AreEqual(ArabicShaper.ToVisual(lines[i]), visual[i]);
+            Assert.AreEqual(ArabicShaper.ToVisual(lines[i]).Replace('\u00A0', ' '), visual[i]);
+        Assert.IsFalse(visual.Any(v => v.Contains('\u00A0')), "no no-break space in a laid-out line");
         Assert.AreEqual(0, ArabicShaper.ToVisualLines(null).Count);
+    }
+
+    // ---------------------------------------------------------------------
+    // TEXT-LANG (BUG-37a): tags, shape once, wrap then reorder, mixed runs
+    // ---------------------------------------------------------------------
+
+    /// <summary>The tag names the tests read (the test's own reading of TMP's tags).</summary>
+    private const string TestTags = "b|i|u|s|size|color|noparse|sup|sub|mark|alpha|font|nobr|link|style";
+
+    /// <summary>A text's visible characters: its tags taken out.</summary>
+    private static string Visible(string text) => Regex.Replace(text, "</?(" + TestTags + ")(=[^<>]*)?>", string.Empty);
+
+    /// <summary>True when every opening tag of <paramref name="text"/> is closed after it, innermost first (TMP's nesting).</summary>
+    private static bool Balanced(string text)
+    {
+        var open = new Stack<string>();
+        foreach (Match m in Regex.Matches(text, "<(/?)(" + TestTags + ")(=[^<>]*)?>"))
+        {
+            if (m.Groups[1].Value.Length == 0)
+                open.Push(m.Groups[2].Value);
+            else if (open.Count == 0 || open.Pop() != m.Groups[2].Value)
+                return false;
+        }
+        return open.Count == 0;
+    }
+
+    /// <summary>CODE-43: a tag is a token without a direction: the letters reorder around it, it never mirrors ("b&gt;" or "&lt;/b" never show) and the bold stays on its words.</summary>
+    [TestCase("<b>صورته واسمه</b> ب", "صورته واسمه")]
+    [TestCase("ب <b>قبول</b>", "قبول")]
+    [TestCase("<b>الدينار</b>", "الدينار")]
+    public void ToVisual_TagsAreTokens_BalancedAroundTheirWords(string logical, string bold)
+    {
+        string visual = ArabicShaper.ToVisual(logical);
+        Assert.IsTrue(Balanced(visual), visual);
+        StringAssert.Contains("<b>" + ArabicShaper.ToVisual(bold) + "</b>", visual, "the bold run, shaped and reversed, inside its own tags");
+        Assert.AreEqual(ArabicShaper.ToVisual(Regex.Replace(logical, "</?b>", string.Empty)), Visible(visual), "the letters as without the tags");
+        Assert.IsFalse(Regex.IsMatch(Visible(visual), "[<>]"), "no stray tag character");
+    }
+
+    /// <summary>Nested and valued tags (a gloss's size, a colour) stay balanced and keep their values.</summary>
+    [Test]
+    public void ToVisual_NestedAndValuedTags_StayBalanced()
+    {
+        string logical = "أ <size=60%><color=#FF0000>ب ت</color> ث</size> ج";
+        string visual = ArabicShaper.ToVisual(logical);
+        Assert.IsTrue(Balanced(visual), visual);
+        StringAssert.Contains("<size=60%>", visual);
+        StringAssert.Contains("<color=#FF0000>", visual);
+        Assert.AreEqual(ArabicShaper.ToVisual("أ ب ت ث ج"), Visible(visual));
+    }
+
+    /// <summary>A noparse tag's text is text: a "&lt;b&gt;" inside it is printed, not read as a tag.</summary>
+    [Test]
+    public void ToVisual_NoparseText_IsText()
+    {
+        string visual = ArabicShaper.ToVisual("ب <noparse>x<b>y</noparse>");
+        Assert.IsTrue(visual.Contains("<noparse>") && visual.Contains("</noparse>"), visual);
+        StringAssert.Contains("x<b>y", visual, "the literal text kept in its order (Latin)");
+    }
+
+    /// <summary>A "&lt;" that opens no tag is text, mirrored with the run it reads in.</summary>
+    [Test]
+    public void ToVisual_ALoneAngleBracketIsText()
+    {
+        string visual = ArabicShaper.ToVisual("< ب");
+        Assert.AreEqual(3, visual.Length);
+        Assert.AreEqual('>', visual[2], "mirrored at the line's left end");
+    }
+
+    /// <summary>The shape-once guard: a text already in visual order comes back unchanged, so a label shaped twice reads as shaped once.</summary>
+    [TestCase("قبول")]
+    [TestCase("الاستقرار: 87%")]
+    [TestCase("ب Abbasid Baghdad (Medieval).")]
+    [TestCase("<b>صورته واسمه</b> ب")]
+    [TestCase("سطر\nسطر آخر 3")]
+    public void ToVisual_ShapesOnce(string logical)
+    {
+        string once = ArabicShaper.ToVisual(logical);
+        Assert.AreEqual(once, ArabicShaper.ToVisual(once), "a visual text is not shaped again");
+        string[] laid = once.Replace('\u00A0', ' ').Split('\n');
+        CollectionAssert.AreEqual(laid, ArabicShaper.ToVisualLines(laid), "nor line by line");
+        Assert.IsFalse(ArabicShaper.IsVisual(logical), "logical Arabic is not visual");
+        Assert.IsFalse(ArabicShaper.IsVisual("ACCEPT 1"), "Latin is not visual");
+        Assert.IsTrue(ArabicShaper.IsVisual(ArabicShaper.ToVisual("قبول")));
+    }
+
+    /// <summary>CODE-44: ToLogical undoes ToVisual (a ligature gives its lam and alef, a no-break space a space), so a shaped argument goes back to logical text before its template is shaped.</summary>
+    [TestCase("قبول")]
+    [TestCase("لا")]
+    [TestCase("الأدلة")]
+    [TestCase("الاستقرار: 87%")]
+    [TestCase("عدم تطابق")]
+    [TestCase("(اليوم)")]
+    [TestCase("اليوم 3")]
+    [TestCase("ب Abbasid Baghdad 12 ت")]
+    [TestCase("ب (Rome) ت")]
+    [TestCase("<b>صورته واسمه</b> ب")]
+    [TestCase("رقم -12 و 3.5 من (ب)")]
+    [TestCase("سطر\nسطر آخر 3")]
+    public void ToLogical_UndoesToVisual(string logical)
+    {
+        Assert.AreEqual(logical, ArabicShaper.ToLogical(ArabicShaper.ToVisual(logical)));
+    }
+
+    [Test]
+    public void ToLogical_LeavesTextWithoutShapedLetters()
+    {
+        Assert.AreEqual("ACCEPT 1", ArabicShaper.ToLogical("ACCEPT 1"));
+        Assert.AreEqual("قبول", ArabicShaper.ToLogical("قبول"), "logical Arabic is already logical");
+        Assert.AreEqual(string.Empty, ArabicShaper.ToLogical(null));
+    }
+
+    /// <summary>The width of a line as a box would measure it: one unit per visible character.</summary>
+    private static float Units(string visual) => Visible(visual).Length;
+
+    /// <summary>CODE-42: wrap on the logical text, then reorder each line: the first line holds the first words read, each line reads right to left by itself, and no word breaks.</summary>
+    [Test]
+    public void Wrap_BreaksTheLogicalText_ThenReordersEachLine()
+    {
+        string[] words = { "أول", "ثاني", "ثالث", "رابع", "خامس" };
+        List<string> lines = ArabicShaper.Wrap(string.Join(" ", words), 9f, Units);
+        CollectionAssert.AreEqual(ArabicShaper.ToVisualLines(new[] { "أول ثاني", "ثالث رابع", "خامس" }), lines, "first words on the first line, each line in visual order");
+        Assert.IsTrue(lines.All(l => Units(l) <= 9f), "every line fits");
+        Assert.IsFalse(lines.Any(l => l.Contains('\u00A0')), "plain spaces");
+        Assert.AreEqual(string.Join(" ", words), string.Join(" ", lines.Select(ArabicShaper.ToLogical)), "nothing lost or reordered between lines");
+    }
+
+    /// <summary>A word wider than the line breaks between letters, its first letters (read first) on the first line.</summary>
+    [Test]
+    public void Wrap_ALongWord_BreaksFirstLettersFirst()
+    {
+        List<string> lines = ArabicShaper.Wrap("بتثجحخ", 4f, Units);
+        Assert.AreEqual(2, lines.Count);
+        Assert.AreEqual("بتثج", ArabicShaper.ToLogical(lines[0]));
+        Assert.AreEqual("بتثجحخ", string.Concat(lines.Select(ArabicShaper.ToLogical)));
+    }
+
+    /// <summary>Mixed direction in a wrapped text: numbers and a bracketed Latin label keep their own order on the line they land on.</summary>
+    [Test]
+    public void Wrap_MixedDirection_KeepsNumbersAndBracketsWhole()
+    {
+        const string text = "الرقم 1234 من بغداد (Medieval) اليوم";
+        List<string> lines = ArabicShaper.Wrap(text, 18f, Units);
+        Assert.Greater(lines.Count, 1);
+        Assert.IsTrue(lines.Any(l => l.Contains("1234")), "the number reads left to right");
+        Assert.IsTrue(lines.Any(l => l.Contains("(Medieval)")), "the bracketed Latin label stays whole");
+        Assert.AreEqual(text, string.Join(" ", lines.Select(ArabicShaper.ToLogical)));
+    }
+
+    /// <summary>A tag open across a line break is closed at the line's end and opened again on the next line: every line balanced, the style kept.</summary>
+    [Test]
+    public void Wrap_ATagAcrossLines_IsCarriedAndBalanced()
+    {
+        List<string> lines = ArabicShaper.Wrap("أ <b>ب ت ث</b> ج", 3f, Units);
+        Assert.Greater(lines.Count, 1);
+        Assert.IsTrue(lines.All(Balanced), string.Join(" | ", lines));
+        Assert.AreEqual("أ ب ت ث ج", string.Join(" ", lines.Select(l => Visible(ArabicShaper.ToLogical(l)))));
+        List<string> carried = ArabicShaper.ToVisualLines(new[] { "<b>ب ت", "ث</b> ج" });
+        Assert.IsTrue(carried.All(Balanced), string.Join(" | ", carried));
+        Assert.IsTrue(carried.All(l => l.Contains("<b>")), "both lines keep the bold");
+    }
+
+    [Test]
+    public void Wrap_WithoutAWidth_KeepsEachParagraphOnOneLine()
+    {
+        CollectionAssert.AreEqual(ArabicShaper.ToVisualLines(new[] { "أ ب", "Desk 3" }), ArabicShaper.Wrap("أ ب\nDesk 3", 0f, Units));
+        CollectionAssert.AreEqual(new[] { string.Empty }, ArabicShaper.Wrap(null, 10f, Units));
+    }
+
+    /// <summary>An RTL body is right-aligned: IsRightToLeft reads the first letter, tags and digits skipped.</summary>
+    [TestCase("قبول 3", true)]
+    [TestCase("<b>قبول</b>", true)]
+    [TestCase("3 قبول", true)]
+    [TestCase("Desk قبول", false)]
+    [TestCase("", false)]
+    public void IsRightToLeft_ReadsTheFirstLetter(string text, bool expected)
+    {
+        Assert.AreEqual(expected, ArabicShaper.IsRightToLeft(text));
     }
 }

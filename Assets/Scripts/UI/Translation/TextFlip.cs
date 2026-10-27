@@ -9,12 +9,19 @@ using UnityEngine;
 /// settles its own font and material come back, so the tracked TMP assets
 /// never receive a foreign glyph. A text that shows foreign cells may shrink
 /// to fit (UiText.FitLabel, keeping its wrapping): a script's glyphs can be
-/// far wider than the English. A flipping text is rebuilt only when
+/// far wider than the English. Its size is fitted once per line, as it is
+/// shown, and held through the flip and after it (FIX_PLAN TOOLS, BUG-52:
+/// "auto-size once per flip, not per step"; 1019a re-fitted it at every
+/// letter, so the bubble's line stepped in size as it flipped): auto-size is
+/// off while the line shows and the text's own sizing comes back with the
+/// next line or the release. A flipping text is rebuilt only when
 /// DisplayText.Progress changes, never per frame. A text typing out (the
 /// speech bubble, Type) shows its first characters in reading order: a
 /// left-to-right text by its visible count, a right-to-left one rebuilt with
 /// the characters not typed yet drawn clear in place (DisplayText.Typed; audit
-/// R2-001), only when the count changes.
+/// R2-001), only when the count changes. The right-to-left order of a
+/// mixed line (a flip in progress) is DisplayText's (TEXT-LANG's) and is
+/// worked out for each written step.
 /// </summary>
 public sealed class TextFlip
 {
@@ -27,6 +34,13 @@ public sealed class TextFlip
     private TMP_Text _text;
     private TMP_FontAsset _ownFont;
     private Material _ownMaterial;
+
+    /// <summary>The text's own sizing, remembered the first time it is shown (auto-size, its range, its size): given back with each new line.</summary>
+    private bool _ownAutoSize;
+    private float _ownSize, _ownMin, _ownMax;
+
+    /// <summary>True while the line's size is held (auto-size off at the size fitted as it was shown).</summary>
+    private bool _sizeHeld;
     private string _canonical;
     private Reveal _reveal;
     private CaseTranslation _tr = CaseTranslation.None;
@@ -52,9 +66,14 @@ public sealed class TextFlip
             return;
         if (text != _text)
         {
+            RestoreSize();
             _text = text;
             _ownFont = text.font;
             _ownMaterial = text.fontSharedMaterial;
+            _ownAutoSize = text.enableAutoSizing;
+            _ownSize = text.fontSize;
+            _ownMin = text.fontSizeMin;
+            _ownMax = text.fontSizeMax;
         }
 
         _canonical = canonical;
@@ -62,7 +81,9 @@ public sealed class TextFlip
         _typed = -1;
         _tr = tr ?? CaseTranslation.None;
         _progress = DisplayText.Progress(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
+        RestoreSize();
         Apply(reveal);
+        HoldSize();
         Running = reveal.Kind == RevealKind.Flipping && DisplayText.Remaining(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion) > 0f;
     }
 
@@ -113,7 +134,7 @@ public sealed class TextFlip
         Apply(_reveal);
     }
 
-    /// <summary>The text is being hidden: stops any flip and any typing and gives it back its own font.</summary>
+    /// <summary>The text is being hidden: stops any flip and any typing and gives it back its own font and sizing.</summary>
     public void Release()
     {
         Running = false;
@@ -121,14 +142,15 @@ public sealed class TextFlip
         _typed = -1;
         if (_text != null)
             SetFont(_text, _ownFont, _ownFont, _ownMaterial);
+        RestoreSize();
     }
 
-    /// <summary>Writes the reveal's form (typed out so far, while typing) and picks the font for it.</summary>
+    /// <summary>Writes the reveal's form (typed out so far, while typing) and picks the font for it; the size is fitted only while it is not held (once per line, as it is shown).</summary>
     private void Apply(Reveal reveal)
     {
         _shown = reveal;
         SetFont(_text, DisplayText.FontFor(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion, _tr.Font, _ownFont), _ownFont, _ownMaterial);
-        if (DisplayText.ShowsForeign(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion))
+        if (!_sizeHeld && DisplayText.ShowsForeign(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion))
             Fit(_text);
         if (_typed < 0)
         {
@@ -141,6 +163,37 @@ public sealed class TextFlip
             ? DisplayText.Typed(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion, _typed, HideOpen, HideClose)
             : DisplayText.For(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         _text.maxVisibleCharacters = rightToLeft ? int.MaxValue : _typed;
+    }
+
+    /// <summary>
+    /// Holds the line's size where it was fitted as it was shown: the text is
+    /// laid out once at its first form, the size its auto-size picked kept and
+    /// auto-size turned off, so neither a flip's letters nor its settle in the
+    /// text's own font resize it (its English fits at the size its foreign
+    /// form fits at; FitLabel's note). A text that does not size itself, or
+    /// is not shown (nothing to lay out), is left alone.
+    /// </summary>
+    private void HoldSize()
+    {
+        if (_text == null || !_text.enableAutoSizing || !_text.isActiveAndEnabled)
+            return;
+        _text.ForceMeshUpdate();
+        float fitted = _text.fontSize;
+        _text.enableAutoSizing = false;
+        _text.fontSize = fitted;
+        _sizeHeld = true;
+    }
+
+    /// <summary>Gives the text its own sizing back (auto-size, its range, its size) after a held line.</summary>
+    private void RestoreSize()
+    {
+        if (!_sizeHeld || _text == null)
+            return;
+        _sizeHeld = false;
+        _text.enableAutoSizing = _ownAutoSize;
+        _text.fontSizeMin = _ownMin;
+        _text.fontSizeMax = _ownMax;
+        _text.fontSize = _ownSize;
     }
 
     /// <summary>A text that does not size itself shrinks to fit (it keeps its wrapping); one that already auto-sizes keeps its own range. Its English then shows at its size, since that fits.</summary>

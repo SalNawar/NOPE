@@ -336,7 +336,7 @@ public sealed class InterviewPresenter
             string id = choice.Id;
             actions.Add(new InteractionAction
             {
-                label = choice.Kind == DialogChoiceKind.Look ? UiText.DocumentWord(choice.Label) : choice.Label,
+                label = choice.Label, // the wheel is chrome: the player's language, never a paper's word (BUG-3a, D7)
                 centre = choice.Kind == DialogChoiceKind.Back,
                 icon = _wheel != null ? _wheel.IconFor(choice.Kind) : null,
                 execute = () => Choose(id)

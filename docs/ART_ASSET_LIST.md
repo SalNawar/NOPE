@@ -55,7 +55,7 @@ The room and every prop in it are the art side's 3D models in `Assets/Scenes/Off
 | A poster frame | none | deferred: the culture posters return when the art side adds a frame with an anchor |
 | Desk decoration spots | the gameplay layer's empty slots `photo`, `free_1`, `free_2` | no art planned; any decoration would be a 3D model |
 | The anime hall's departure board: its display stays blank; the game draws the day's portal rows on it (the portals spec v3 BD1-BD5) | `DepartureBoard`: `GameplayAnchors/Anchor_DepartureBoard` over the hall's `16 Departure board blank display` | done: keep the display text-free |
-| The anime hall's five portal rings: the game dims a ring under maintenance and draws the glow and the Return Gate's spiral inside it, under the bay, the ring and the glass (orders: the bay's − 1; VX1-VX6) | the layers `38`-`47` and `53`-`57` (`DeskConfigSO.hallPortalLayers`) | done; keep each ring's centre free of other layers at the bay's order − 1 |
+| The anime hall's five portal rings: the game dims a ring under maintenance and draws the glow and the Return Gate's spiral inside it, under the bay, the ring and the glass (orders: the bay's − 1; VX1-VX6) | the layers `38`-`47` and `53`-`57` (`HallPortalsSO.rings`, `Assets/Data/Config/HallPortals.asset`; each vortex fills its ring's painted hole from `HallPortalMasks.png`, made from the drawing by `tools/hall/portal_masks.py`) | done; keep each ring's centre free of other layers at the bay's order − 1 |
 
 ## 2. The 2D layers over the office
 
@@ -72,7 +72,7 @@ Drawn on the office overlay canvas (1920 × 1080 reference; it scales with the s
 | Speech bubble tail | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
 | Wheel choices and the "< Back" centre | on an ellipse around the traveller, 240 × 44 and 150 × 44 | the UI kit's `ui_button.png` (section 3) | code-drawn themed buttons | from the kit | 2 | code-drawn, later |
 | Desk tooltip | above a clicked prop (credits, day, stability, time), 360 × 60 | the UI kit's `tooltip.png` (section 3) | code-drawn yellow panel | from the kit | 2 | code-drawn, later |
-| Portal glow | superseded (Saleh's demo 1018a): the game draws each ring's cel vortex (the shader `TimeDesk/PortalGlow`, `PortalEffect`), measured on the hall drawing; the slot is retired | - | - | - | - | retired |
+| Portal glow | superseded (Saleh's demo 1018a): the game draws each ring's cel vortex (the shader `TimeDesk/PortalGlow`, `PortalEffect`), clipped to the ring's painted-aperture mask made from the hall drawing (`HallPortals.asset`); the slot is retired | - | - | - | - | retired |
 | Return Gate spiral | superseded (Saleh's demo 1018a): the Return Gate's amber vortex is the same shader's; the slot is retired | - | - | - | - | retired |
 
 - The wheel's icons are in section 8.

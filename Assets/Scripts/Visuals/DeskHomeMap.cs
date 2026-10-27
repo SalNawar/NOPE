@@ -173,13 +173,13 @@ public static class DeskHomeMap
     {
         // The machine rail, right of the mat, in the order of use (chip reader, scanner, stamp rack by the counter).
         new DeskHome(ChipReader, 0.895f, -0.375f, 0.21f, 0.21f, 0f, 0.07f, HomeShow.WhenOwned, HomeSlide.Left),
-        new DeskHome(Scanner, 1.02f, -0.07f, 0.46f, 0.34f, 0f, 0.13f, HomeShow.WhenOwned, HomeSlide.Left),
+        new DeskHome(Scanner, 1.10f, -0.07f, 0.46f, 0.34f, 0f, 0.13f, HomeShow.WhenOwned, HomeSlide.Left), // 8 cm right of the chip reader: the Auto-Feed tray stands 13 cm out of the scanner's left side, and from 1.02 it lay 6 cm on the mat
         new DeskHome(StampRack, 0.83f, 0.35f, 0.32f, 0.12f, 90f, 0.08f, HomeShow.Always),
         // The counter row: the deal tray over the mat, DETAIN left of the AVAILABLE sign, the bell right of it.
         new DeskHome(DealTray, 0f, 0.545f, 0.44f, 0.06f, 0f, 0.01f, HomeShow.Always),
         new DeskHome(Detain, -0.51f, 0.74f, 0.26f, 0.28f, 0f, 0.09f, HomeShow.Always),
         new DeskHome(Bell, 0.43f, 0.67f, 0.14f, 0.14f, 0f, 0.08f, HomeShow.Reserved),
-        new DeskHome(Rolodex, -0.91f, 0.595f, 0.16f, 0.16f, 0f, 0.17f, HomeShow.WhenOwned), // 16 cm: its click box (+1 cm) clears the intercom's and the till's by 5 mm
+        new DeskHome(Rolodex, 0.91f, 0.71f, 0.16f, 0.16f, 0f, 0.17f, HomeShow.WhenOwned), // right of the bell, behind the stamp rack: left, behind the intercom, the office camera saw 60% of it (DESK-PLAN recipe 4's fallback)
         new DeskHome(Glasses, -0.73f, 0.575f, 0.14f, 0.09f, 0f, 0.03f, HomeShow.Reserved),
         new DeskHome(ProtocolRing, -0.74f, 0.74f, 0.12f, 0.12f, 0f, 0.21f, HomeShow.WhenOwned),
         // Left of the mat, beside the PC: ask and look up. The intercom is the art's phone moved here, which waits for Saleh's OK (he said "cut the phone"; docs/pending/DESK-PLAN.md, open call 1).
@@ -195,9 +195,9 @@ public static class DeskHomeMap
         new DeskHome(Xray, 1.57f, 1.225f, 0.50f, 0.45f, 0f, 0.30f, HomeShow.Later),
         // The booth's right end: the portals' switchboard (Saleh: "on the booth wall, right of the desk"); the RING SERVICE panel stands there in Phase A.
         new DeskHome(Switchboard, 2.22f, 1.30f, 0.56f, 0.45f, -20f, 0.40f, HomeShow.WhenOwned),
-        // Deliveries and decorations, right of the rail.
-        new DeskHome(Crate, 1.56f, 0f, 0.48f, 0.34f, 8f, 0.30f, HomeShow.Delivery),
-        new DeskHome(Decor, 1.80f, 0.55f, 0.80f, 0.60f, 0f, 0f, HomeShow.Decor),
+        // Deliveries and decorations, right of the rail. The decor zone stands left of the office camera's line to the switchboard's home (the form sorter, 36 cm tall, hid 80% of the RING SERVICE panel from 1.80, 0.55), deep enough for the sorter behind the tray, and clear of the crate.
+        new DeskHome(Crate, 1.64f, 0f, 0.48f, 0.34f, 8f, 0.30f, HomeShow.Delivery),
+        new DeskHome(Decor, 1.28f, 0.545f, 0.56f, 0.65f, 0f, 0f, HomeShow.Decor),
     };
 
     /// <summary>The fixed art's footprints and heights in the frame (measured on the day-12 top-down capture, R7 AUDIT DESK; rounded out), as homes the plan keeps clear of.</summary>

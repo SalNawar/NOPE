@@ -36,9 +36,10 @@ public static partial class OfficeSceneUIBuilder
     /// the stamp stuff, and the Tab shortcut"), its stamps the two daters (the
     /// desk machine spec §1), rebuilt each run. On the office overlay:
     /// StampBar (the DeskStampTray, an always-active full-screen host) with
-    /// the Tab on the top edge (StampTabX; "STAMPS" beside the key, TAB: the
-    /// reading view over the rack; inactive until the booth shows it, in the
-    /// office view only), the hint's plate at the top right
+    /// the Tab on the top edge (StampTabX; "STAMPS" beside the key, TAB: it
+    /// takes the player to the stamps, the reading view framing the fixed
+    /// rack, and the daters lift to answer; inactive until the booth shows
+    /// it, in the office view only), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
     /// In the office: StampRack (the office binder lays it on its bay of the
     /// desk's plan, its origin at the daters' feet): the heavy brass drawer when its
@@ -52,6 +53,8 @@ public static partial class OfficeSceneUIBuilder
     /// (the click box its proxy: the dater is dragged onto the paper; stamping
     /// is drag-only), holding its body (DaterBody: the prop
     /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED).
+    /// Under the rack lies its ContactShadow (the papers' shadow material,
+    /// inactive: DeskStampTray.Lay draws it under the rack's footprint; BUG-16a).
     /// The tray gets the papers' style, the date's face,
     /// Saleh's dater sounds (WireDaters). The old overlay bar, the 3D tray of
     /// the desk-first redesign and the overlay's hand-back buttons are destroyed.
@@ -142,9 +145,17 @@ public static partial class OfficeSceneUIBuilder
 
         (Clickable denied, Transform deniedDie) = Stamp("Denied", -StampSpacing / 2f, false, "stamp.label.denied");
         (Clickable approved, Transform approvedDie) = Stamp("Approved", StampSpacing / 2f, true, "stamp.label.approved");
-        // No shadows: hanging over the desk under the hall's low light they cast long dark shapes across the papers (Papers, Please's bar casts none).
+        // No light's shadows: under the hall's low light they cast long dark shapes across the papers (Papers, Please's bar casts none).
         foreach (MeshRenderer part in rack.GetComponentsInChildren<MeshRenderer>(true))
             part.shadowCastingMode = ShadowCastingMode.Off;
+        // The rack's contact shadow instead (BUG-16a: the rack floated): the papers' drawn shadow, laid under its footprint by DeskStampTray.Lay.
+        var shadow = new GameObject("ContactShadow", typeof(MeshFilter), typeof(MeshRenderer));
+        shadow.transform.SetParent(rack, false);
+        var shadowRenderer = shadow.GetComponent<MeshRenderer>();
+        shadowRenderer.sharedMaterial = ShadowMaterial();
+        shadowRenderer.shadowCastingMode = ShadowCastingMode.Off;
+        shadowRenderer.receiveShadows = false;
+        shadow.SetActive(false);
         rack.gameObject.SetActive(false);
 
         DeskStampTray stamps = GetOrAdd<DeskStampTray>(host.gameObject);
@@ -152,6 +163,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "config", config);
         SetRef(so, "rack", rack);
         SetRef(so, "drawer", drawer);
+        SetRef(so, "contactShadow", shadow.GetComponent<MeshFilter>());
         SetRef(so, "tab", tab);
         SetRef(so, "approvedStamp", approved);
         SetRef(so, "deniedStamp", denied);

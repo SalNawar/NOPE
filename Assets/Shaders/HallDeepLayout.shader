@@ -29,7 +29,18 @@ Shader "NOPE/Hall Deep Layout"
  TEXTURE2D(_MorningShadow);SAMPLER(sampler_MorningShadow);
  TEXTURE2D(_NoonShadow);TEXTURE2D(_EveningShadow);
  float4 _StateWeights,_CanvasSize;float _LightingAmount,_CloudMotion,_Region,_CityPan,_CeilingCutoff;
- float _FixtureLevels[16];float4 _FixtureCenters[16];int _ScheduledFixtureCount;
+ // Globals (HallBakedLighting; not in Properties, so no material value hides them and every renderer drawn with
+ // this material, the hall slots' sprites included, takes the painting's night). Per fixture: its lit share; its
+ // centre (xy, uv) and wall glow radii (zw, uv); its floor pool (xy centre, zw radii, uv); and how many there are.
+ float _HallFixtureLevels[16];float4 _HallFixtureCenters[16];float4 _HallFixturePools[16];float _HallFixtureCount;
+ // The night knobs (HallLightingSO: hallNightTint, fixtureColour, hallPoolStrength, hallEmissionGain). The tint's
+ // alpha is 1 once published; until then the built-in night below (the knob's default) and the painted glow.
+ // HallBakedLighting publishes the knobs' linear values; the built-in night is hallNightTint (.2,.27,.43) decoded
+ // from sRGB, so it is the same colour (LightChecks light.hall.nightIsShared and LightSeamTests hold them equal).
+ float4 _HallNightTint,_HallPoolColour;float _HallPoolStrength,_HallEmissionGain;
+ #define HALL_DEFAULT_NIGHT half3(.0331,.0593,.1549)
+ // A lamp's soft ellipse (the four-state bake's falloff): 1 at its centre, 0 at its rim.
+ float Ellipse(float2 uv,float4 shape){float2 d=(uv-shape.xy)/max(shape.zw,1e-4);float r=dot(d,d);return r<1?exp(-r*3)*(1-r)*(1-r):0;}
  struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  V vert(A v){V o;o.position=TransformObjectToHClip(v.position.xyz);o.uv=v.uv;o.color=v.color;return o;}
@@ -53,26 +64,33 @@ Shader "NOPE/Hall Deep Layout"
   }
   half4 source=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,v.uv)*v.color;
   source.a*=1-max(mask.r,mask.g);
+  half published=step(.5,_HallNightTint.a);
   half3 tint=half3(1,.94,.86)*_StateWeights.x+half3(1,1,1)*_StateWeights.y+
-   half3(.81,.59,.46)*_StateWeights.z+half3(.24,.32,.49)*_StateWeights.w;
+   half3(.81,.59,.46)*_StateWeights.z+lerp(HALL_DEFAULT_NIGHT,_HallNightTint.rgb,published)*_StateWeights.w;
   half shadow=mask.b>.001?HallGeometricShadow(p,_StateWeights):0;
   // Only bright neutral ceiling diffusers emit; no detached glow columns.
   // Pale stone must not become a new emitter. Use the registered original
   // painting to retain only the pre-existing bright ceiling fixtures.
   half3 fixture=lerp(source.rgb,SAMPLE_TEXTURE2D(_FixtureReference,sampler_FixtureReference,v.uv).rgb,saturate(_UseFixtureReference));
   half neutral=min(fixture.r,min(fixture.g,fixture.b));
-  half emission=smoothstep(.76,.94,neutral)*step(p.y,_CeilingCutoff)*step(_CanvasSize.x*.36,p.x)*(1-max(mask.r,mask.g));
+  // Every ceiling diffuser across the whole canvas (BUG-25d: the old x < 36% cut left the left pier's lamp dark).
+  half emission=smoothstep(.76,.94,neutral)*step(p.y,_CeilingCutoff)*(1-max(mask.r,mask.g));
   // Ceiling diffusers use the nearest registered fixture's live schedule,
   // including the lighting switch, stagger, custom sunset and strike flicker.
-  float level=0,nearest=1e20;
-  [loop] for(int i=0;i<_ScheduledFixtureCount;i++)
+  // Each lit fixture also throws real light (BUG-25a): a glow on the wall
+  // around it (not on the window glass) and a pool on the floor receivers below.
+  float level=0,nearest=1e20;half pools=0;half open=1-max(mask.r,mask.g);
+  int count=(int)min(_HallFixtureCount,16);
+  [loop] for(int i=0;i<count;i++)
   {
-   float2 d=(v.uv-_FixtureCenters[i].xy)*_CanvasSize.xy;float distance=dot(d,d);
-   if(distance<nearest){nearest=distance;level=_FixtureLevels[i];}
+   float2 d=(v.uv-_HallFixtureCenters[i].xy)*_CanvasSize.xy;float distance=dot(d,d);
+   if(distance<nearest){nearest=distance;level=_HallFixtureLevels[i];}
+   pools+=(Ellipse(v.uv,_HallFixtureCenters[i])*open+Ellipse(v.uv,_HallFixturePools[i])*mask.b)*_HallFixtureLevels[i];
   }
   // Unlit glass stays visible; bright emission is separate from the background.
   source.rgb*=lerp(1,.38,emission*(1-level));
-  half3 lit=source.rgb*tint*(1-shadow*mask.b)+emission*half3(1,.78,.5)*(.45*level);
+  half3 illumination=tint*(1-shadow*mask.b)+_HallPoolColour.rgb*(pools*_HallPoolStrength*published);
+  half3 lit=source.rgb*illumination+emission*half3(1,.78,.5)*(.45*level*lerp(1,_HallEmissionGain,published));
   source.rgb=lerp(source.rgb,lit,saturate(_LightingAmount));
   return source;
  }

@@ -8,7 +8,9 @@ using UnityEngine;
 /// RunManager, GameManager and HomeManager run them between their UI
 /// and their saves; the balance simulation (BalanceSimulation, Tools >
 /// TimeDesk > Balance) runs the same steps headless, so what it measures is
-/// the game's own flow, never a copy of it.
+/// the game's own flow, never a copy of it. The cheat menu's skips, jumps
+/// and restarts (RUN-SAFE, BUG-28a) run them too, with Home's night on the
+/// default care (HomeNight), so a cheat lands where play would.
 /// </summary>
 public static class DayCycle
 {
@@ -189,6 +191,87 @@ public static class DayCycle
     }
 
     /// <summary>
+    /// The shift's end as play ends it (GameManager's day end), less its
+    /// screens: the close (CloseShift), the day's row on the clerk's
+    /// statement, Home as the resume point, and the one-day tomorrow
+    /// modifiers reset (today's shift consumed them). The cheat menu's skips
+    /// and jumps end a shift here (RUN-SAFE, BUG-28a): the live one on its
+    /// ledger, a day jumped over on an empty one. True when the close moved
+    /// the wallet or stability (CloseShift), so the caller checks the endings.
+    /// </summary>
+    public static bool EndShift(WorldState world, ShiftLedger ledger, IReadOnlyList<CaseInstance> cases, TodaysWorld today, ContentLibrarySO lib, GameConfigSO config)
+    {
+        bool moved = CloseShift(world, ledger, cases, today, lib, config);
+        ClerkAccountSource.RecordShift(world, ledger, lib, config);
+        world.phase = RunPhase.Home;
+        ResetTomorrowModifiers(world);
+        return moved;
+    }
+
+    /// <summary>
+    /// A day's shift played headless with every traveller decided correctly
+    /// (the cheat menu's Auto-decide: approved without a fault, denied with
+    /// one, with the evidence a denial needs), the whole queue: the travellers
+    /// the office generates (the day's plan, interview and world on the day's
+    /// seed), each presented and decided (Present, Decide) with the ending
+    /// check play runs after each verdict, then the shift's end (EndShift) and
+    /// its check. RUN-SAFE (BUG-28a): the days a cheat jump passes over, so it
+    /// lands with the pay, citations, premades met and pet a played run has.
+    /// Returns the ending, or null.
+    /// </summary>
+    public static EndingSO PlayShiftCorrectly(WorldState world, ContentLibrarySO lib, GameConfigSO config)
+    {
+        var ledger = new ShiftLedger();
+        DayPlanSO plan = lib != null ? lib.GetDayPlan(world.day) : null;
+        var cases = new List<CaseInstance>();
+        TodaysWorld today = null;
+        if (plan != null)
+        {
+            InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, ledger);
+            today = lib.BuildToday(plan, world);
+            cases = new CaseFactory(lib, today).GenerateDayCases(plan, world, Seeds.Day(world.runSeed, world.day), interview, true);
+        }
+
+        for (int i = 0; i < cases.Count; i++)
+        {
+            CaseInstance inst = cases[i];
+            Present(world, inst);
+            Decide(inst, inst.ShouldAccept ? DeskStamp.Approved : DeskStamp.Denied, i + 1, 1, world, today, ledger, lib, config);
+            EndingSO now = config != null ? EndingService.Evaluate(world, lib, config, EndingMoment.Immediate) : null;
+            if (now != null)
+                return now;
+        }
+
+        bool moved = EndShift(world, ledger, cases, today, lib, config);
+        return moved && config != null ? EndingService.Evaluate(world, lib, config, EndingMoment.Immediate) : null;
+    }
+
+    /// <summary>The one-day "tomorrow modifiers" (set by the slot machine for the next day) after a shift consumed them: back to none.</summary>
+    public static void ResetTomorrowModifiers(WorldState world)
+    {
+        world.legendaryChanceBonus = 0f;
+        world.forgeryChanceModifier = 0f;
+        world.payRateMultiplier = 1f;
+    }
+
+    /// <summary>
+    /// Home's night on the default care, as Home plays it with every choice
+    /// left as offered (RUN-SAFE, BUG-28a: "simulate the night with default
+    /// care"), on the day's seed: the arrival (OpenHome: the break-in and the
+    /// fixed bill), tonight's bills on the starting care and the pet's night
+    /// on it (NightRules.DefaultNight), and the night's row on the clerk's
+    /// statement. Nothing is bought. Returns the household's cost.
+    /// </summary>
+    public static int HomeNight(WorldState world, ContentLibrarySO lib, GameConfigSO config)
+    {
+        int seed = Seeds.Day(world.runSeed, world.day);
+        HomeEconomy.ExpenseReport bill = OpenHome(world, lib, config, seed);
+        int household = bill.total + NightRules.DefaultNight(world, lib, config, seed);
+        ClerkAccountSource.RecordHome(world, household, 0, lib, config);
+        return household;
+    }
+
+    /// <summary>
     /// Home's arrival (the Home upgrades spec §5, the Home pet spec PS2), in
     /// this order on <paramref name="daySeed"/> so a reload replays it:
     /// tonight's break-in (it happened while the clerk was at work), then the
@@ -215,7 +298,29 @@ public static class DayCycle
     public static void AdvanceNight(WorldState world, ContentLibrarySO lib, GameConfigSO config)
     {
         CloseDay(world, lib, config);
+        TurnDay(world, lib);
+    }
 
+    /// <summary>
+    /// Sleep (RunManager.Sleep, after Home; NightOrder, BUG-56b): the
+    /// day-boundary ending check (failures, and the run's last day, which
+    /// still gets its own night resolve: EndRun); else the night's resolve,
+    /// then the failures checked again on the world the night left, so a
+    /// night story event that pushes the run past a line ends it that night,
+    /// never at the next morning's first correct stamp; else the next morning
+    /// (as AdvanceNight). Returns the ending, or null when the day turned.
+    /// </summary>
+    public static EndingSO Sleep(WorldState world, ContentLibrarySO lib, GameConfigSO config) =>
+        NightOrder.Run(
+            () => EndingService.Evaluate(world, lib, config, EndingMoment.DayBoundary),
+            ending => EndRun(world, ending, lib, config),
+            () => CloseDay(world, lib, config),
+            () => EndingService.Evaluate(world, lib, config, EndingMoment.Immediate),
+            () => TurnDay(world, lib));
+
+    /// <summary>The day turns: the next morning at the office with no citations yet, and the Orders app's deliveries (OrderBook.Deliver).</summary>
+    private static void TurnDay(WorldState world, ContentLibrarySO lib)
+    {
         world.day++;
         world.citationsToday = 0;
         world.phase = RunPhase.Office;

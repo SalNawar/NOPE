@@ -14,8 +14,9 @@ using UnityEngine;
 ///   the world panel shows instead, under the ending's name; after a failure
 ///   the ending panel's button opens it as "The world you leave behind".
 /// - Otherwise: shows the title panel with Continue (only if a save exists;
-///   it resumes where the save was made: Home after the end-of-shift save,
-///   otherwise the Office) and New Run.
+///   it reads the save from disk again and resumes where the save was made:
+///   Home after the end-of-shift save, otherwise the Office, at the morning
+///   of the day; RUN-SAFE, BUG-35a) and New Run.
 ///
 /// New Run (from the title or an ending) goes through the adoption panel
 /// (the Home pet spec PS1: a dog or a cat, named), then the office; without
@@ -126,13 +127,30 @@ public sealed class TitleSceneController : MonoBehaviour
             Account.ExtractRows(clerk, UiText.Get, AccountWindow.Amount));
     }
 
-    /// <summary>Resumes the current (saved) run where the save was made (RunManager.ResumeRun).</summary>
+    /// <summary>
+    /// Continue: the saved run read from disk again (RunManager.ContinueRun),
+    /// never the run in memory, which may have moved on since the save (a
+    /// Home arrival charged, a cheat), then resumed where the save was made
+    /// (RunManager.ResumeRun). When the save can no longer be read, the title
+    /// shows again (SaveNotice says why).
+    /// </summary>
     private void HandleContinue()
     {
-        if (RunManager.HasInstance)
-            RunManager.Instance.ResumeRun();
-        else
+        if (!RunManager.HasInstance)
+        {
             Debug.LogWarning("[TitleSceneController] Continue with no RunManager instance: nothing to resume.");
+            return;
+        }
+
+        RunManager run = RunManager.Instance;
+        if (run.ContinueRun())
+        {
+            run.ResumeRun();
+            return;
+        }
+
+        Debug.LogWarning("[TitleSceneController] Continue: the save can no longer be read; showing the title again.");
+        Start();
     }
 
     /// <summary>New Run: the adoption panel when it is wired, in a fresh run's language (CultureThemeService.ShowFreshRun; Back returns to what the Title showed, in the saved run's), else a fresh run with the default pet; then the office.</summary>

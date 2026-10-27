@@ -1,0 +1,181 @@
+{
+  "name": "tools_lens",
+  "owner": "TOOLS",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "TOOLS BUG-52 (FIX_PLAN TOOLS translation lens + v2: the candidate set excludes the PC entirely, 0 PC texts in the candidate log): day 8 (the lens's day: Word level issued). First the morning paper (a D7 surface) is swept before the shift starts: something on it must translate (reach). Then, the PC closed, the pointer sweeps the left two thirds of the screen (where 1019a translated phantom desktop words), the desk, then the first handed-over document dragged to the mat (reach); a hovered label is left and timed; last the PC is opened (Q) and its windows swept: the pointer must be over the PC's desktop (overPc) and the candidate log must hold 0 PC texts. Every toolsLens step writes lens_candidates_<name>.txt (the candidate log). Pass: tools.lens.*.phantoms 0, tools.lens.*.pc 0, tools.lens.pc_open*.overPc, tools.lens.newspaper.reach and tools.lens.documents.reach, tools.lens.*.revert <=0.2 s; seqtools flicker on lens_sweep's speech and paper text. For the Arabic answer: ask the traveller through the intercom (the wheel) on an Arabic-speaking traveller's case and run toolsLens over the bubble (add its point here once found in Unity)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 8
+    },
+    {
+      "op": "waitOffice",
+      "n": 8
+    },
+    {
+      "op": "note",
+      "text": "The morning paper is up (the day's briefing). Retarget the sweep to its columns if its layout moved."
+    },
+    {
+      "op": "toolsLens",
+      "name": "newspaper",
+      "x": 0.3,
+      "y": 0.35,
+      "x2": 0.7,
+      "y2": 0.7,
+      "f": 3,
+      "text": "reach"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "recStart",
+      "name": "lens_sweep"
+    },
+    {
+      "op": "toolsLens",
+      "name": "pc_side",
+      "x": 0.05,
+      "y": 0.85,
+      "x2": 0.62,
+      "y2": 0.2,
+      "f": 4
+    },
+    {
+      "op": "toolsLens",
+      "name": "desk",
+      "x": 0.2,
+      "y": 0.25,
+      "x2": 0.8,
+      "y2": 0.45,
+      "f": 4
+    },
+    {
+      "op": "note",
+      "text": "The documents: in the office view the handed-over papers lie about 10 px tall on the counter strip, so a sweep crosses their texts without landing on a word. The first paper (day 8: the Work Permit, TC-520) is dragged to the mat, which tilts the reading view in (DeskController.Read), and the sweep runs along its title's first line (at 0.428 of the screen's height), so the pointer stays on its words."
+    },
+    {
+      "op": "drag",
+      "path": "P-SLOW",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)",
+      "x2": 0.5,
+      "y2": 0.17,
+      "name": "paper"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "toolsLens",
+      "name": "documents",
+      "x": 0.39,
+      "y": 0.428,
+      "x2": 0.52,
+      "y2": 0.428,
+      "f": 4,
+      "text": "reach"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "note",
+      "text": "The revert: hover the rulebook folder's cover word (a culture label from day 8; in the reading view at 0.209, 0.293), then leave to the empty top right corner. The folder's own centre is not on a word."
+    },
+    {
+      "op": "toolsRevert",
+      "name": "rulebook",
+      "x": 0.209,
+      "y": 0.293,
+      "x2": 0.95,
+      "y2": 0.95
+    },
+    {
+      "op": "note",
+      "text": "D7 with the PC open: Q opens the PC; the sweeps cross its desktop and its open windows (retarget them to the windows found in Unity), then Escape backs out."
+    },
+    {
+      "op": "key",
+      "key": "Escape"
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "toolsLens",
+      "name": "pc_open",
+      "x": 0.1,
+      "y": 0.15,
+      "x2": 0.9,
+      "y2": 0.85,
+      "f": 4,
+      "text": "pc"
+    },
+    {
+      "op": "toolsLens",
+      "name": "pc_open_windows",
+      "x": 0.1,
+      "y": 0.85,
+      "x2": 0.9,
+      "y2": 0.15,
+      "f": 4,
+      "text": "pc"
+    },
+    {
+      "op": "key",
+      "key": "Escape"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    }
+  ]
+}

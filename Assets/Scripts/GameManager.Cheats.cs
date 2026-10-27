@@ -13,7 +13,12 @@ using UnityEngine;
 /// through InvestigationUIController.Decide, closing time, a found
 /// difference's mark, the guide's Skip and Replay), so the ledger, the
 /// verdict line, the reaction and the shift report follow as in play. Each
-/// returns a line for the overlay.
+/// returns a line for the overlay. RunManager's skips and jumps close the
+/// live shift here (CloseShiftForCheat: play's close on the shift's own
+/// ledger; RUN-SAFE, BUG-28a). End Shift never draws the report over an
+/// open citation slip, and a run that has ended goes to its ending, never
+/// Home (BUG-28b, the cheat side, EndShiftRule; FLOW makes CloseNow honour
+/// it in play).
 /// </summary>
 public sealed partial class GameManager
 {
@@ -31,6 +36,15 @@ public sealed partial class GameManager
 
     /// <summary>True from the shift's start (after the briefing) until its end: closing time can be called.</summary>
     private bool _shiftRunning;
+
+    /// <summary>True once this office listens to its own verdicts and slips for the cheat menu (EnsureCheatHooks).</summary>
+    private bool _cheatHooked;
+
+    /// <summary>True while a citation slip waits for Acknowledge (a verdict with a citation was resolved and not yet acknowledged).</summary>
+    private bool _slipOpen;
+
+    /// <summary>True when the cheat menu's End Shift waits for the open slip to be acknowledged.</summary>
+    private bool _endShiftAfterSlip;
 
     /// <summary>
     /// The cheat menu's "Decide correctly": the traveller at the desk is
@@ -65,16 +79,59 @@ public sealed partial class GameManager
         return "Auto-decide on: every traveller is decided correctly as they arrive.";
     }
 
-    /// <summary>The cheat menu's "End shift": closing time now (the clock stops; nobody else is called; a traveller at the desk is still finished, then the shift report).</summary>
+    /// <summary>
+    /// The cheat menu's "End shift": closing time now (the clock stops; nobody
+    /// else is called; a traveller at the desk is still finished, then the
+    /// shift report). A run that has ended (an ending set: fired, bankrupt)
+    /// goes to its ending, never Home: after the open slip's Acknowledge (its
+    /// own way there), else at once. With a citation slip open, closing time
+    /// waits for its Acknowledge, so the report is never drawn over the slip
+    /// (BUG-28b).
+    /// </summary>
     public string CheatEndShift()
     {
-        if (!_shiftRunning || _desk.IsClosed)
-            return "No shift to end (it has not started, or it is over).";
+        bool endingSet = _worldState != null && !string.IsNullOrEmpty(_worldState.endingId);
+        switch (EndShiftRule.Decide(endingSet, _slipOpen, _shiftRunning, _desk.IsClosed))
+        {
+            case EndShiftAction.EndingAfterSlip:
+                return $"The run has ended ('{_worldState.endingId}'): acknowledge the slip and the ending follows.";
+            case EndShiftAction.EndingNow:
+                // An ending's own continuation (the verdict's, the report's) may ask for the title too: RunManager loads it once.
+                _shiftRunning = false;
+                HandleEndingReached();
+                return $"The run has ended ('{_worldState.endingId}'): the ending shows.";
+            case EndShiftAction.NoShift:
+                return "No shift to end (it has not started, or it is over).";
+            case EndShiftAction.CloseAfterSlip:
+                _endShiftAfterSlip = true;
+                return "Closing time once the citation slip is acknowledged.";
+        }
         if (shiftClock != null)
             shiftClock.StopShift();
         bool atDesk = _travellerAtDesk;
         HandleShiftClosed();
         return atDesk ? "Closing time: decide the traveller at the desk to end the shift." : "Closing time: the shift ends.";
+    }
+
+    /// <summary>
+    /// A skip or a jump closes today's live shift (RunManager, RUN-SAFE BUG-28a):
+    /// the booth shuts (the clock stops, nobody else is called, an open FTUE
+    /// is over), then play's close on the shift's own ledger (DayCycle.EndShift:
+    /// strandings, the instalment, the dialogs' outcomes, the statement's row,
+    /// Home as the resume point, the tomorrow modifiers reset). True when the
+    /// close moved the wallet or stability (RunManager checks the endings).
+    /// </summary>
+    public bool CloseShiftForCheat()
+    {
+        _travellerAtDesk = false;
+        _shiftRunning = false;
+        _endShiftAfterSlip = false;
+        if (guide != null)
+            guide.EndShift();
+        if (shiftClock != null)
+            shiftClock.StopShift();
+        CloseDesk();
+        return DayCycle.EndShift(_worldState, _ledger ?? new ShiftLedger(), (IReadOnlyList<CaseInstance>)_dayCases ?? System.Array.Empty<CaseInstance>(), _today, contentLibrary, _gameConfig);
     }
 
     /// <summary>
@@ -128,11 +185,46 @@ public sealed partial class GameManager
         StartCoroutine(DecideSoon(ActiveCase));
     }
 
-    /// <summary>The shift starts with "Auto-decide" on (BeginShift): the AVAILABLE sign turns on, so the queue keeps coming.</summary>
+    /// <summary>The shift starts with "Auto-decide" on (BeginShift): the AVAILABLE sign turns on, so the queue keeps coming. The cheat menu's hooks start listening here, before any verdict.</summary>
     private void StartAutoDecide()
     {
+        EnsureCheatHooks();
         if (DevToolsState.AutoDecide && _shiftRunning && !_desk.IsAvailable && !_desk.IsClosed)
             ToggleAvailable();
+    }
+
+    /// <summary>Listens (once) to this office's verdicts and slips, so End Shift knows whether a citation slip is open.</summary>
+    private void EnsureCheatHooks()
+    {
+        if (_cheatHooked)
+            return;
+        _cheatHooked = true;
+        Resolved += NoteSlip;
+        CitationAcknowledged += SlipAcknowledged;
+    }
+
+    /// <summary>A verdict is resolved: a citation's slip opens, where the office shows slips (EndShiftRule.SlipOpens: with no office UI the verdict's continuation runs at once and no Acknowledge comes, so End Shift never waits for one).</summary>
+    private void NoteSlip(CaseInstance inst, CaseVerdict verdict, bool accepted, float stabilityBefore)
+    {
+        if (EndShiftRule.SlipOpens(verdict != null && verdict.citationIssued, officeUI != null))
+            _slipOpen = true;
+    }
+
+    /// <summary>The slip is acknowledged: an End Shift waiting for it runs on the next frame, after the slip's own continuation.</summary>
+    private void SlipAcknowledged(CaseVerdict verdict)
+    {
+        _slipOpen = false;
+        if (!_endShiftAfterSlip)
+            return;
+        _endShiftAfterSlip = false;
+        StartCoroutine(EndShiftNextFrame());
+    }
+
+    /// <summary>The waiting End Shift, a frame after the slip closed (its continuation has resolved the case by then).</summary>
+    private IEnumerator EndShiftNextFrame()
+    {
+        yield return null;
+        Debug.Log("[GameManager] Cheat: " + CheatEndShift());
     }
 
     /// <summary>Decides <paramref name="inst"/> after CheatDecideDelay, when they still stand at the desk.</summary>

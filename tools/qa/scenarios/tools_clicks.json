@@ -1,0 +1,73 @@
+{
+  "name": "tools_clicks",
+  "owner": "TOOLS",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "TOOLS BUG-4b (FIX_PLAN TOOLS clicks): at A1 in the office view, the chip reader's visual centre presses the chip reader 10/10 (the torch's click box no longer swallows it), and the torch's own centre presses the torch 10/10. Day 12 has both machines (the reader comes on day 11)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "still",
+      "name": "office_machines"
+    },
+    {
+      "op": "toolsClicks",
+      "name": "chipReader",
+      "target": "Office/DeskHardware/ChipReader",
+      "n": 10
+    },
+    {
+      "op": "toolsClicks",
+      "name": "uvTorch",
+      "target": "Office/DeskHardware/UvTorch",
+      "n": 10
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "toolsClicks",
+      "name": "chipReader_a2",
+      "target": "Office/DeskHardware/ChipReader",
+      "n": 10
+    }
+  ]
+}

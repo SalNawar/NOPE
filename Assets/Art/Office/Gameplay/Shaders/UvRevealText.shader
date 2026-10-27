@@ -1,12 +1,14 @@
 // The papers' hidden words under the UV torch (the desk machines spec §1): a
-// TextMeshPro text (the ghost of a value washed off a box, a seal's microprint)
-// drawn from its font's signed-distance atlas only inside the torch's cone
-// (_UvCone, _UvConeOn: the torch sets them every frame; the rim fades over
+// TextMeshPro text (the ghost of a value washed off a box) drawn from its
+// font's signed-distance atlas only inside the torch's cone (_UvCone: centre
+// xyz, radius w; _UvConeOn: 0 off .. 1 lit, rising over 120 ms as the marks
+// fluoresce in; the torch sets both every frame; the rim fades over
 // _UvConeSoft of the radius), so the words light up pixel by pixel under the
 // violet light and vanish outside it. A minimal SDF text shader: the atlas's
-// alpha is a distance, cut at 0.5 with a screen-space edge (fwidth), tinted
-// by the text's vertex colour and _FaceColor, glowing additively (a
-// fluorescent ink). Assign the font's atlas as _MainTex (DeskHardware does).
+// alpha is a distance, cut at 0.5 with a screen-space edge (fwidth). Its
+// colour is _FaceColor alone, glowing additively (a fluorescent ink): the
+// text's vertex colour only fades it (its alpha; its RGB is not used). Assign
+// the font's atlas as _MainTex (DeskHardware does).
 Shader "TimeDesk/UvRevealText"
 {
     Properties

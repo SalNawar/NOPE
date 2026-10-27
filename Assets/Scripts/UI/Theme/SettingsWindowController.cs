@@ -1,41 +1,45 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The Settings window's per-player choices: the UI language (piece 6 U12),
-/// "Follow history" or "Always English" (the default; UiLanguagePreference; labels change
-/// at the next scene load, colours, fonts and the wallpaper follow history
-/// either way), a free choice until the Translation Lens's day (day 8): from
-/// then on both buttons are disabled, "Follow history" shows as chosen and a
-/// line under them says why (CultureThemeService.LanguageLocked; the stored
-/// choice comes back with a new run), and motion (piece 9 R17), "Full" or "Reduced"
-/// (MotionPreference; reduced shows translations at once, from the next
-/// traveller, and cuts the game feel's motion), with the Motion intensity
-/// slider under it (0-100 %, MotionPreference.Intensity: how far the game
-/// feel's springs, shakes and the camera move; off while Reduced is chosen),
-/// and Camera sway, "Off" (the default) or "On" (MotionPreference.CameraSway:
-/// the cameras' idle breathing; off and inert while Reduced is chosen);
-/// and the desktop's icons (the PC redesign DK5, DK6): open
-/// with a "Double click" (the default) or a "Single click"
-/// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange)
-/// (the step hints' pair is gone with the hints: the PC clean-up of
-/// 2026-10-05). In each pair the chosen button shows the theme's accent colours (the
-/// Badge role), the other the default button colours. The
-/// Investigation section's Text size (100, 125, 150 %: the zoom levels) is
-/// the app's default zoom (InvestigationApp.SetZoomDefault, saved in
+/// The Settings window's per-player choices. Language (piece 6 U12; D7,
+/// BUG-3a): "Follow history" or "Always English" for the papers only (the PC
+/// and the rest of the game always read the player's language;
+/// UiLanguagePreference), never locked and applied at once (the papers
+/// already on the desk keep their print, and the line under the pair says
+/// so); with "Follow history", as with no choice, the papers read English
+/// until the culture day and the world's language from then on (D7, R2;
+/// CultureChoice.EnglishBySetting), and the pair shows the stored choice
+/// (CultureChoice.ChoseAlwaysEnglish). Motion
+/// (piece 9 R17): "Full" or "Reduced" (MotionPreference; reduced shows
+/// translations at once, from the next traveller, and cuts the game feel's
+/// motion), with the Motion intensity slider under it (0-100 %,
+/// MotionPreference.Intensity; off while Reduced is chosen), and Camera sway,
+/// "Off" (the default) or "On" (MotionPreference.CameraSway; off and inert
+/// while Reduced is chosen). The PC basics (BUG-62): the Master, Music and
+/// Effects volumes (SoundSettings), the window mode, the resolution, vsync,
+/// brightness and Reduce flashing (ScreenSettings), each applied at once;
+/// their rows are built by OfficeSceneUIBuilder.BuildSettingsBasics. The
+/// desktop's icons (the PC redesign DK5, DK6): open with a "Double click"
+/// (the default) or a "Single click" (DesktopPreferences), and "Reset icon
+/// positions" (DesktopIcons.Arrange). In each pair the chosen button shows
+/// the kit's chosen plate (else the theme's accent colours, the Badge role).
+/// The Investigation section's Text size (100, 125, 150 %: the zoom levels)
+/// is the app's default zoom (InvestigationApp.SetZoomDefault, saved in
 /// DesktopPreferences; Ctrl+0 goes back to it). The Keyboard section's "Show
 /// shortcuts" opens the shortcut card (the F1 card: the one shortcut table).
 /// </summary>
 public sealed class SettingsWindowController : MonoBehaviour
 {
-    /// <summary>Chooses "Follow history".</summary>
+    /// <summary>Chooses "Follow history" (the papers take the world's language from the culture day).</summary>
     [SerializeField] private Button followHistoryButton;
 
-    /// <summary>Chooses "Always English".</summary>
+    /// <summary>Chooses "Always English" (the papers stay English).</summary>
     [SerializeField] private Button alwaysEnglishButton;
 
-    /// <summary>The line under the language pair: the choice is the desk's only, the PC always reads English (settings.languageDesk), or, once the language is locked, why (settings.languageLocked).</summary>
+    /// <summary>The line under the language pair (settings.languageDesk): the choice is the papers' only, never locked, from the next paper printed.</summary>
     [SerializeField] private TMP_Text languageLockText;
 
     /// <summary>Chooses Full motion (translations flip letter by letter).</summary>
@@ -86,8 +90,53 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>The shortcut card it opens.</summary>
     [SerializeField] private DesktopWindow shortcutsWindow;
 
+    /// <summary>The volume sliders (0 to 100), one per SoundChannel in its order (BUG-62).</summary>
+    [SerializeField] private Slider[] volumeSliders = new Slider[0];
+
+    /// <summary>Each volume's value beside its slider ("80 %"), in the sliders' order.</summary>
+    [SerializeField] private TMP_Text[] volumeTexts = new TMP_Text[0];
+
+    /// <summary>The window mode choices, one per WindowMode in its order.</summary>
+    [SerializeField] private Button[] windowModeButtons = new Button[0];
+
+    /// <summary>Steps the resolution down, and up.</summary>
+    [SerializeField] private Button resolutionDownButton, resolutionUpButton;
+
+    /// <summary>The resolution chosen ("1920 × 1080").</summary>
+    [SerializeField] private TMP_Text resolutionText;
+
+    /// <summary>Vsync off, and on.</summary>
+    [SerializeField] private Button vsyncOffButton, vsyncOnButton;
+
+    /// <summary>The brightness slider (0 to 100; 50 is the game as painted).</summary>
+    [SerializeField] private Slider brightnessSlider;
+
+    /// <summary>The brightness's value beside its slider ("50 %").</summary>
+    [SerializeField] private TMP_Text brightnessText;
+
+    /// <summary>Reduce flashing off (the default), and on.</summary>
+    [SerializeField] private Button reduceFlashingOffButton, reduceFlashingOnButton;
+
+    /// <summary>The scene's Settings window controller (null when no Settings window is loaded).</summary>
+    private static SettingsWindowController _instance;
+
+    /// <summary>
+    /// Brings the Settings window up (its DesktopWindow opened, in front), for
+    /// FLOW's Esc (D20: "if you press escape you should auto open the pc
+    /// setting menu"; the PC itself is FLOW's to open). False when no Settings
+    /// window is loaded.
+    /// </summary>
+    public static bool Open()
+    {
+        if (_instance == null || !_instance.TryGetComponent(out DesktopWindow window))
+            return false;
+        window.Open();
+        return true;
+    }
+
     private void Awake()
     {
+        _instance = this;
         if (followHistoryButton != null)
             followHistoryButton.onClick.AddListener(() => Choose(false));
         if (alwaysEnglishButton != null)
@@ -116,16 +165,53 @@ public sealed class SettingsWindowController : MonoBehaviour
         }
         if (showShortcutsButton != null && shortcutsWindow != null)
             showShortcutsButton.onClick.AddListener(shortcutsWindow.Open);
+        WireBasics();
+    }
+
+    private void OnDestroy()
+    {
+        if (_instance == this)
+            _instance = null;
     }
 
     private void OnEnable() => ShowSelection();
 
-    /// <summary>Stores the choice and shows it (never while the language is locked).</summary>
+    /// <summary>Wires the PC basics' controls (BUG-62), each applying its choice at once.</summary>
+    private void WireBasics()
+    {
+        for (int i = 0; i < volumeSliders.Length; i++)
+        {
+            var channel = (SoundChannel)i;
+            if (volumeSliders[i] != null)
+                volumeSliders[i].onValueChanged.AddListener(v => ChooseVolume(channel, v));
+        }
+        for (int i = 0; i < windowModeButtons.Length; i++)
+        {
+            var mode = (WindowMode)i;
+            if (windowModeButtons[i] != null)
+                windowModeButtons[i].onClick.AddListener(() => ChooseWindowMode(mode));
+        }
+        if (resolutionDownButton != null)
+            resolutionDownButton.onClick.AddListener(() => StepResolution(-1));
+        if (resolutionUpButton != null)
+            resolutionUpButton.onClick.AddListener(() => StepResolution(1));
+        if (vsyncOffButton != null)
+            vsyncOffButton.onClick.AddListener(() => ChooseVsync(false));
+        if (vsyncOnButton != null)
+            vsyncOnButton.onClick.AddListener(() => ChooseVsync(true));
+        if (brightnessSlider != null)
+            brightnessSlider.onValueChanged.AddListener(ChooseBrightness);
+        if (reduceFlashingOffButton != null)
+            reduceFlashingOffButton.onClick.AddListener(() => ChooseReduceFlashing(false));
+        if (reduceFlashingOnButton != null)
+            reduceFlashingOnButton.onClick.AddListener(() => ChooseReduceFlashing(true));
+    }
+
+    /// <summary>Stores the papers' language choice and applies it at once (never locked, BUG-3a): the theme service re-reads the papers' language, and every text printed from a UI string follows (CultureThemeService.LabelsChanged).</summary>
     private void Choose(bool alwaysEnglish)
     {
-        if (CultureThemeService.LanguageLocked)
-            return;
-        UiLanguagePreference.AlwaysEnglish = alwaysEnglish;
+        UiLanguagePreference.Choose(alwaysEnglish);
+        CultureThemeService.RefreshActive();
         ShowSelection();
     }
 
@@ -167,6 +253,51 @@ public sealed class SettingsWindowController : MonoBehaviour
         ShowSelection();
     }
 
+    /// <summary>Stores and applies a channel's volume (the slider's 0-100 as 0-1) and shows it.</summary>
+    private void ChooseVolume(SoundChannel channel, float percent)
+    {
+        SoundSettings.SetVolume(channel, percent / 100f);
+        ShowSelection();
+    }
+
+    /// <summary>Stores and applies a window mode and shows it.</summary>
+    private void ChooseWindowMode(WindowMode mode)
+    {
+        ScreenSettings.SetMode(mode);
+        ShowSelection();
+    }
+
+    /// <summary>Steps the resolution through the offered sizes (held at the ends), applies it and shows it.</summary>
+    private void StepResolution(int step)
+    {
+        List<ScreenSize> sizes = ScreenSettings.Resolutions();
+        if (sizes.Count == 0)
+            return;
+        ScreenSettings.SetResolution(sizes[SettingsRules.Step(SettingsRules.IndexOf(sizes, ScreenSettings.Resolution), step, sizes.Count)]);
+        ShowSelection();
+    }
+
+    /// <summary>Stores and applies vsync and shows it.</summary>
+    private void ChooseVsync(bool on)
+    {
+        ScreenSettings.SetVsync(on);
+        ShowSelection();
+    }
+
+    /// <summary>Stores and applies the brightness (the slider's 0-100 as 0-1) and shows it.</summary>
+    private void ChooseBrightness(float percent)
+    {
+        ScreenSettings.SetBrightness(percent / 100f);
+        ShowSelection();
+    }
+
+    /// <summary>Stores Reduce flashing and shows it (the flashing effects read it as they flash).</summary>
+    private void ChooseReduceFlashing(bool on)
+    {
+        ScreenSettings.ReduceFlashing = on;
+        ShowSelection();
+    }
+
     /// <summary>The zoom level of Text size button <paramref name="index"/> (100 % without the knobs).</summary>
     private int Level(int index) =>
         config != null && config.zoomLevels != null && index < config.zoomLevels.Length ? config.zoomLevels[index] : AppZoom.Normal;
@@ -183,22 +314,14 @@ public sealed class SettingsWindowController : MonoBehaviour
     {
         CultureThemeService service = CultureThemeService.Instance;
         ThemeSO theme = service != null ? service.ActiveTheme : null;
-        bool locked = CultureThemeService.LanguageLocked;
-        bool english = CultureChoice.EnglishBySetting(UiLanguagePreference.Stored, locked);
+        bool english = CultureChoice.ChoseAlwaysEnglish(UiLanguagePreference.Stored); // the stored choice, not today's effect: Follow history stays chosen before the culture day
         Paint(followHistoryButton, !english, theme);
         Paint(alwaysEnglishButton, english, theme);
-        if (followHistoryButton != null)
-            followHistoryButton.interactable = !locked;
-        if (alwaysEnglishButton != null)
-            alwaysEnglishButton.interactable = !locked;
         if (languageLockText != null)
         {
-            // The choice is the desk's only: the PC always reads English (Saleh 2026-10-18), and the line under the pair says so.
+            // The choice is the papers' only, never locked (D7, BUG-3a), and the line under the pair says so.
             languageLockText.gameObject.SetActive(true);
-            languageLockText.text = locked
-                ? UiText.Pc.Format("settings.languageLocked",
-                    RunManager.HasInstance && RunManager.Instance.Library != null ? TranslationLens.LockDay(RunManager.Instance.Library.Introductions) : 0)
-                : UiText.Pc.Get("settings.languageDesk");
+            languageLockText.text = UiText.Pc.Get("settings.languageDesk");
         }
         bool reduced = MotionPreference.Reduced;
         Paint(fullMotionButton, !reduced, theme);
@@ -224,6 +347,39 @@ public sealed class SettingsWindowController : MonoBehaviour
         int zoom = AppZoom.Parse(DesktopPreferences.DefaultZoom, config != null ? config.zoomLevels : null);
         for (int i = 0; i < textSizeButtons.Length; i++)
             Paint(textSizeButtons[i], Level(i) == zoom, theme);
+        ShowBasics(theme);
+    }
+
+    /// <summary>Shows the PC basics' choices (BUG-62).</summary>
+    private void ShowBasics(ThemeSO theme)
+    {
+        for (int i = 0; i < volumeSliders.Length; i++)
+        {
+            int volume = SettingsRules.Percent(SoundSettings.Volume((SoundChannel)i));
+            if (volumeSliders[i] != null)
+                volumeSliders[i].SetValueWithoutNotify(volume);
+            if (i < volumeTexts.Length && volumeTexts[i] != null)
+                volumeTexts[i].text = UiText.Pc.Format("settings.volumeValue", volume);
+        }
+        WindowMode mode = ScreenSettings.Mode;
+        for (int i = 0; i < windowModeButtons.Length; i++)
+            Paint(windowModeButtons[i], i == (int)mode, theme);
+        if (resolutionText != null)
+        {
+            ScreenSize size = ScreenSettings.Resolution;
+            resolutionText.text = UiText.Pc.Format("settings.resolutionValue", size.Width, size.Height);
+        }
+        bool vsync = ScreenSettings.Vsync;
+        Paint(vsyncOffButton, !vsync, theme);
+        Paint(vsyncOnButton, vsync, theme);
+        int brightness = SettingsRules.Percent(ScreenSettings.Brightness);
+        if (brightnessSlider != null)
+            brightnessSlider.SetValueWithoutNotify(brightness);
+        if (brightnessText != null)
+            brightnessText.text = UiText.Pc.Format("settings.brightnessValue", brightness);
+        bool calm = ScreenSettings.ReduceFlashing;
+        Paint(reduceFlashingOffButton, !calm, theme);
+        Paint(reduceFlashingOnButton, calm, theme);
     }
 
     /// <summary>The kit pieces of a chosen option and of the others.</summary>
