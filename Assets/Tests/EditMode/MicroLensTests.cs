@@ -1,38 +1,51 @@
 using NUnit.Framework;
 
-/// <summary>Reading a microprint line under the lens stand's magnifiers (demo 1018a note 14; the desk machines spec §10): how much of the line a lens shows, and when that reads it.</summary>
+/// <summary>
+/// Reading a paper's microprint (FIX_PLAN_v2 TOOLS, BUG-2b; Saleh D5: the
+/// magnifier is "not sold", so "the scanner's hidden-layer view reveals the
+/// microprint of the ReprintedPaper lie"): a read is credited only once the
+/// player has opened the paper's hidden layer and the line rendered there
+/// large enough to read, measured from the drawn glyphs; the scan view sizes
+/// the line to reach that.
+/// </summary>
 public class MicroLensTests
 {
     [Test]
-    public void ARoundLens_ShowsTheChordOfTheLine_InsideIt()
+    public void Readable_OnlyWithTheLayerOpen_AndTheLineDrawnAtTheCapOrMore()
     {
-        Assert.AreEqual(0.04f, MicroLens.Shown(-0.1f, 0f, 0.1f, 0f, LensShape.Round, 0.02f, 0f), 1e-5f, "through its centre: the diameter");
-        Assert.AreEqual(2f * (float)System.Math.Sqrt(0.02 * 0.02 - 0.01 * 0.01), MicroLens.Shown(-0.1f, 0.01f, 0.1f, 0.01f, LensShape.Round, 0.02f, 0f), 1e-5f, "off centre: a shorter chord");
-        Assert.AreEqual(0f, MicroLens.Shown(-0.1f, 0.03f, 0.1f, 0.03f, LensShape.Round, 0.02f, 0f), "clear of it");
-        Assert.AreEqual(0.02f, MicroLens.Shown(0f, 0f, 0.1f, 0f, LensShape.Round, 0.02f, 0f), 1e-5f, "a line that starts inside");
-        Assert.AreEqual(0.01f, MicroLens.Shown(-0.005f, 0f, 0.005f, 0f, LensShape.Round, 0.02f, 0f), 1e-5f, "a short line wholly inside");
+        Assert.IsTrue(MicroLens.Readable(true, ScanMicroprint.MinCapPx), "the layer open, the capitals 12 px tall");
+        Assert.IsTrue(MicroLens.Readable(true, 18f));
+        Assert.IsFalse(MicroLens.Readable(true, 11.9f), "drawn too small to read: no credit (1019a credited a 0.024 px line by geometry)");
+        Assert.IsFalse(MicroLens.Readable(false, 40f), "the layer closed: nothing was read, however large it would draw");
+        Assert.IsFalse(MicroLens.Readable(true, 0f), "not drawn (the PC closed, the row culled): no credit");
+        Assert.IsFalse(MicroLens.Readable(true, float.NaN));
     }
 
     [Test]
-    public void ARectangularLens_ClipsTheLineToItsSides()
+    public void FontSize_ReachesTheCapWithHeadroom_WhereverTheViewDrawsIt()
     {
-        Assert.AreEqual(0.12f, MicroLens.Shown(-0.2f, 0.001f, 0.2f, 0.001f, LensShape.Rectangle, 0.06f, 0.01f), 1e-5f, "the bar across the line: its width");
-        Assert.AreEqual(0f, MicroLens.Shown(-0.2f, 0.02f, 0.2f, 0.02f, LensShape.Rectangle, 0.06f, 0.01f), "above it");
-        Assert.AreEqual(0.02f, MicroLens.Shown(0f, -0.1f, 0f, 0.1f, LensShape.Rectangle, 0.06f, 0.01f), 1e-5f, "a line across the bar: its height");
-        Assert.AreEqual(0.03f, MicroLens.Shown(0.03f, 0f, 0.2f, 0f, LensShape.Rectangle, 0.06f, 0.01f), 1e-5f);
+        // A UI font whose capitals are 0.7 of its size, drawn at 0.667 px per unit (the 1920x1080 canvas at 1280x720).
+        float size = ScanMicroprint.FontSize(0.7f, 0.667f);
+        float cap = ScanMicroprint.CapPx(size, 0.7f, 0.667f);
+        Assert.AreEqual(ScanMicroprint.MinCapPx * ScanMicroprint.Headroom, cap, 1e-3f, "the capitals land on the cap with headroom");
+        Assert.IsTrue(MicroLens.Readable(true, cap));
+
+        float shrunk = ScanMicroprint.FontSize(0.7f, 0.25f);
+        Assert.Greater(shrunk, size, "a window drawn smaller asks for a larger size, so the line still reads");
+        Assert.AreEqual(ScanMicroprint.MaxFontSize, ScanMicroprint.FontSize(0.7f, 0f), "nothing measured yet: the largest size, never infinity");
+        Assert.AreEqual(ScanMicroprint.MaxFontSize, ScanMicroprint.FontSize(0f, 1f), "no font metrics: the largest size");
     }
 
     [Test]
-    public void ALine_IsReadOnceOneRepeatOfItHasShownForAQuarterSecond()
+    public void Text_IsOneRepeatOfTheLine_TheMarkTheFormAndTheId()
     {
-        Assert.IsFalse(MicroLens.Readable(0.02f, 0.12f), "less than one repeat");
-        Assert.IsTrue(MicroLens.Readable(MicroLens.ReadLength, 0.12f));
-        Assert.IsTrue(MicroLens.Readable(0.019f, 0.02f), "a short line: nearly all of it");
-        Assert.IsFalse(MicroLens.Readable(0f, 0f));
-        float held = MicroLens.Held(0f, true, 0.2f);
-        Assert.IsFalse(UvCone.IsSeen(held));
-        held = MicroLens.Held(held, true, 0.1f);
-        Assert.IsTrue(UvCone.IsSeen(held));
-        Assert.AreEqual(0f, MicroLens.Held(held, false, 0.1f), "moved off: it starts over");
+        var line = new MicroLine(3, "4471-208");
+        string text = ScanMicroprint.Text(line, "TC-101");
+        StringAssert.Contains("TCB", text);
+        StringAssert.Contains("TC-101", text);
+        StringAssert.Contains("4471-208", text, "the Citizen ID the line repeats: what the player holds against the box");
+        Assert.AreEqual(text.Trim(), text, "no trailing space");
+        Assert.IsFalse(text.EndsWith("·"), "no dangling dot after the ID");
+        StringAssert.StartsWith(text, line.Printed("TC-101", 1), "the line the paper prints, once");
     }
 }

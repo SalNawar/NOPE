@@ -14,8 +14,13 @@ using UnityEngine.UI;
 /// comparable (inspect mode: DeskInspect); it returns the reading view when
 /// the next traveller is called, a newsletter shows or the wheel or the PC
 /// frame opens, wakes the screen for a presented traveller and a finished
-/// scan, holds it on for a citation slip, and shows the day-1 wheel note.
-/// What a right-click or Esc backs out of is ControlRules' (OfficeControls).
+/// scan, holds it on for a citation slip, and shows the day-1 wheel note. It
+/// also lights C's next-tool lamp for the case's next step (NextToolLamp into
+/// DeskLayout.Lamps: the bell between travellers while the booth is open,
+/// the deal tray once the passport is stamped; FEEDBACK and DESK-HOMES draw
+/// it) and refreshes the desk's obstacles at a day's start (the machines
+/// shown that day). What a right-click or Esc backs out of is ControlRules'
+/// (OfficeControls).
 /// Every reference is optional: a missing view counts as the office view; a
 /// missing screen counts as on. Event-driven (no per-frame code).
 /// </summary>
@@ -75,6 +80,11 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The city view (the desk-first redesign, item 6; optional): the hall turned left and the whole city faded in.</summary>
     [SerializeField] private CityView cityView;
 
+    /// <summary>The shift (optional): whether the booth takes travellers (its AVAILABLE sign), for the next-tool lamp.</summary>
+    [SerializeField] private GameManager game;
+
+    private DeskAvailability _availability;
+
     private BoothPhase _phase = BoothPhase.NoTraveller;
     private int _day;
     private bool _citationPending;
@@ -89,8 +99,6 @@ public sealed class BoothCoordinator : MonoBehaviour
         CultureThemeService.LabelsChanged += PrintWheelHint;
     }
 
-    /// <summary>Stops following the labels' language.</summary>
-    private void OnDestroy() => CultureThemeService.LabelsChanged -= PrintWheelHint;
 
     /// <summary>The wheel hint's words in the reading language (again whenever the labels' language changes).</summary>
     private void PrintWheelHint()
@@ -139,8 +147,22 @@ public sealed class BoothCoordinator : MonoBehaviour
             cityView.Changed -= Apply;
     }
 
-    /// <summary>The first application, once every component has woken (Awake runs before any Start).</summary>
-    private void Start() => Apply();
+    /// <summary>The first application, once every component has woken (Awake runs before any Start); the booth's availability is followed from then on.</summary>
+    private void Start()
+    {
+        _availability = game != null ? game.Desk : null;
+        if (_availability != null)
+            _availability.Changed += Apply;
+        Apply();
+    }
+
+    /// <summary>Stops following the booth's availability and the labels' language.</summary>
+    private void OnDestroy()
+    {
+        CultureThemeService.LabelsChanged -= PrintWheelHint;
+        if (_availability != null)
+            _availability.Changed -= Apply;
+    }
 
     /// <summary>Where the shift is (GameManager); presenting a traveller (the AVAILABLE sign calls them) also wakes the screen and returns the reading view and the city view, so the arrival is seen.</summary>
     public void SetPhase(BoothPhase phase)
@@ -165,6 +187,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         _wheelOpenedToday = false;
         if (desk != null)
             desk.BeginDay(day, scanners);
+        DeskLayout.RefreshObstacles();
         Apply();
     }
 
@@ -254,5 +277,9 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (wheelHint != null)
             wheelHint.gameObject.SetActive(config != null &&
                 DeskHints.WheelHintVisible(config.wheelHintKey, _day, config.wheelHintUntilDay, _wheelOpenedToday, _phase == BoothPhase.TravellerAtDesk));
+        DeskLayout.Lamps.Show(_phase == BoothPhase.Newsletter ? null : NextToolLamp.For(new CaseLampState(
+            travellerAtDesk: _phase == BoothPhase.TravellerAtDesk,
+            shiftOpen: _availability != null && _availability.IsAvailable,
+            stamped: stampTray != null && stampTray.HasVerdict)));
     }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// One bay of the desk's plan (the desk layout spec): where a machine, an
-/// upgrade's object, a tool or a shelf stands, in the desk's own frame (metres
-/// right of and away from the chair from the mat's centre, along the office
-/// view's level axes: DeskFrame), its footprint there, its turn from facing
-/// the chair and whether it stands on a back shelf (DeskLayoutSettings.shelfHeight up).
+/// One bay of the desk's plan: where an object stands in the desk's own
+/// frame (metres right of and away from the chair from the mat's centre,
+/// along the office view's level axes: DeskFrame), its own footprint there
+/// (across its front, front to back) and its turn from facing the chair. A
+/// home of the desk home map as a placement (DeskLayoutSettings.Bay).
 /// </summary>
 [Serializable]
 public sealed class DeskBay
@@ -15,78 +15,72 @@ public sealed class DeskBay
     /// <summary>The bay's centre: metres right of (x) and away from the chair (y) from the mat's centre.</summary>
     public Vector2 at;
 
-    /// <summary>The bay's footprint (metres across, metres deep): what the plan keeps for it (DeskArrangement.Problems).</summary>
+    /// <summary>The object's own footprint (metres across its front, metres front to back), before its turn.</summary>
     public Vector2 size;
 
     /// <summary>The turn from facing the chair (degrees; + turns its front toward the viewer's left).</summary>
     public float yaw;
-
-    /// <summary>True when it stands on a back shelf (its riser's height above the desk's top).</summary>
-    public bool onShelf;
 
     /// <summary>An empty bay (for the serializer).</summary>
     public DeskBay()
     {
     }
 
-    /// <summary>A bay at <paramref name="x"/>, <paramref name="y"/>, <paramref name="width"/> by <paramref name="depth"/>, turned <paramref name="yaw"/>, on a back shelf or not.</summary>
-    public DeskBay(float x, float y, float width, float depth, float yaw = 0f, bool onShelf = false)
+    /// <summary>A bay at <paramref name="x"/>, <paramref name="y"/> for an object <paramref name="width"/> by <paramref name="depth"/>, turned <paramref name="yaw"/>.</summary>
+    public DeskBay(float x, float y, float width, float depth, float yaw = 0f)
     {
         at = new Vector2(x, y);
         size = new Vector2(width, depth);
         this.yaw = yaw;
-        this.onShelf = onShelf;
     }
 
-    /// <summary>The bay's rectangle in the desk's frame.</summary>
-    public DeskRect Rect => new DeskRect(at.x, at.y, size.x, size.y);
+    /// <summary>The bay a home gives its object.</summary>
+    public DeskBay(DeskHome home) : this(home.x, home.y, home.width, home.depth, home.yaw)
+    {
+    }
+
+    /// <summary>The rectangle the turned object covers in the desk's frame (yaw-aware).</summary>
+    public DeskRect Rect => DeskArrangement.Footprint(at.x, at.y, size.x, size.y, yaw);
 }
 
 /// <summary>A small decoration of the art's desk the player may move (the desk layout spec §3: "small decorations he can"): its id (its saved place's key) and the art's parts it is made of (every mesh whose name starts with one of the prefixes and "__").</summary>
 [Serializable]
 public sealed class DeskDecorItem
 {
-    /// <summary>The id its place is saved under (DeskDecorPreference).</summary>
+    /// <summary>The id its place is saved under (DeskDecor).</summary>
     public string id;
 
-    /// <summary>The art's part prefixes ("Clean_Calculator" takes every "Clean_Calculator__*" mesh).</summary>
+    /// <summary>The art's part prefixes ("Clean_FormSorter" takes every "Clean_FormSorter__*" mesh).</summary>
     public string[] parts;
-
-    /// <summary>The decor zone it starts in (an index into DeskLayoutSettings.decorZones).</summary>
-    public int zone;
 
     /// <summary>An empty item (for the serializer).</summary>
     public DeskDecorItem()
     {
     }
 
-    /// <summary>The decoration <paramref name="id"/> made of <paramref name="parts"/>, starting in zone <paramref name="zone"/>.</summary>
-    public DeskDecorItem(string id, int zone, params string[] parts)
+    /// <summary>The decoration <paramref name="id"/> made of <paramref name="parts"/>.</summary>
+    public DeskDecorItem(string id, params string[] parts)
     {
         this.id = id;
-        this.zone = zone;
         this.parts = parts;
     }
 }
 
 /// <summary>
-/// The desk's plan (the desk layout spec, docs/superpowers/specs/2026-10-18-desk-layout-design.md;
-/// Saleh's 1018a playtest: "every machine should have a space pre planed for
-/// it ... reorgnize the desk its so messy. look at restory and learn from it";
-/// plan v2, his "go with plan v2"): every bay in the desk's frame (DeskBay,
-/// DeskFrame) rather than a point of the office view, so a new camera never
-/// moves a machine. One paper mat in the middle; the paper machines at its
-/// right edge, their beds reaching into the reading view (the scanner, the
-/// chip reader); the fixed stamp rack beside the counter; the tool pouch under
-/// the papers (the UV torch); the intercom on the counter;
-/// two low back shelves (comms on the left with the phone, the BABEL rack, the
-/// Rolodex and the protocol cards; the hall on the right with the RING SERVICE
-/// panel); the four later machines' bays kept empty (hidden until their
-/// machine comes); two decor zones the art's small props live in, the player
-/// moving them there (DeskDecor). The office camera's new framing (58 degrees,
-/// 5 further down: Saleh's "Yes") lives here too.
-/// Read at bind (OfficeSceneBinder); the builder checks the bays
-/// (DeskArrangement.Problems). A section of DeskConfigSO.
+/// The desk's plan (the desk home map Saleh approved on 2026-10-20, "DESK
+/// APPROVED": "Yes, build it"; "Mix: B + A rail + C lamps"; "keep a big mat
+/// size"; the stamp rack's "daters front-to-back"; "we will cut all but decor
+/// objects later will go on clear places like restory"): every object's one
+/// home (DeskHome, DeskHomeMap.Approved: the big art mat holds papers only;
+/// the deal tray, DETAIN and the bell on the counter row; the intercom, the
+/// BABEL tuner, the rulebook's pocket and the UV torch's pouch left of the
+/// mat; A's machine rail right of it in the order of use; the later and
+/// Phase B objects' homes kept, positions only), the fixed art the plan
+/// keeps clear of, the art props cut (their parts switched off at bind), the
+/// decorations the player moves, the plan's gate (Problems: the builder
+/// fails on any) and the office camera's framing (58 degrees, 5 further
+/// down: Saleh's "Yes"). Read at bind (OfficeSceneBinder, DeskLayout). A
+/// section of DeskConfigSO.
 /// </summary>
 [Serializable]
 public sealed class DeskLayoutSettings
@@ -98,107 +92,67 @@ public sealed class DeskLayoutSettings
     /// <summary>How much further down than the art's pose the office camera looks (degrees).</summary>
     [Range(-20f, 30f)] public float officeExtraPitch = 5f;
 
-    [Header("Paper machines (their beds reach into the reading view's right edge)")]
-    /// <summary>The scanner, turned so its front faces the mat (its bed's near end shows at the reading view's right edge).</summary>
-    public DeskBay scanner = new DeskBay(0.74f, 0.13f, 0.56f, 0.36f, 90f);
+    [Header("The home map (DeskHomeMap; Saleh's DESK APPROVED, 2026-10-20)")]
+    /// <summary>Every object's one home (ids: DeskHomeMap's constants).</summary>
+    public DeskHome[] homes = DeskHomeMap.Approved();
 
-    /// <summary>The chip reader under the scanner, its pad at the reading view's right edge.</summary>
-    public DeskBay chipReader = new DeskBay(0.60f, -0.155f, 0.21f, 0.21f, 90f);
+    /// <summary>The fixed art the homes keep clear of (the PC island, the till, the AVAILABLE sign, the lamp), with their heights.</summary>
+    public DeskHome[] fixedArt = DeskHomeMap.FixedArt();
 
-    /// <summary>The chip reader's size against its model's life size (smaller than the other machines: it lives in the reading view's corner).</summary>
+    /// <summary>The chip reader's size against its model's life size.</summary>
     [Min(0.1f)] public float chipReaderScale = 0.9f;
 
-    [Header("Verdict and tools")]
-    /// <summary>The fixed stamp rack (the daters, DENIED and APPROVED), beside the counter at the papers' top right: stamp, then a short drag up hands the papers back.</summary>
-    public DeskBay stampRack = new DeskBay(0.28f, 0.24f, 0.32f, 0.12f);
+    [Header("Cut (Saleh 2026-10-20: \"we will cut all but decor objects later will go on clear places like restory\")")]
+    /// <summary>The art's props cut from the desk: their parts ("prefix__*") are switched off when the art office binds.</summary>
+    public string[] cutParts = { "Clean_Calculator", "Clean_Binder", "Clean_PenPot", "Clean_Stapler", "Clean_Inkpad" };
 
-    /// <summary>The intercom on the counter strip's right: a click opens the questions where the player is (no trip to the office view).</summary>
-    public DeskBay intercom = new DeskBay(0.50f, 0.37f, 0.12f, 0.08f);
-
-    /// <summary>The tool pouch under the papers, its UV torch's cradle (inside the reading view's bottom edge).</summary>
-    public DeskBay uvTorch = new DeskBay(0.18f, -0.22f, 0.24f, 0.10f, -90f);
-
-    /// <summary>The DETAIN button, beside the AVAILABLE sign (rare: one trip to the office view).</summary>
-    public DeskBay detain = new DeskBay(-0.51f, 0.74f, 0.26f, 0.28f);
-
-    /// <summary>Where the supply crate stands on a delivery morning: off the mat, at its front right.</summary>
-    public DeskBay crate = new DeskBay(1.04f, -0.52f, 0.48f, 0.34f, 8f);
-
-    [Header("The back shelves (low risers along the desk's back edge)")]
-    /// <summary>The comms shelf at the back left.</summary>
-    public DeskBay commsShelf = new DeskBay(-1.35f, 1.29f, 1.90f, 0.34f);
-
-    /// <summary>The hall shelf at the back right.</summary>
-    public DeskBay hallShelf = new DeskBay(1.57f, 1.21f, 1.58f, 0.50f);
-
-    /// <summary>The shelves' riser height (metres): what stands on them stands this high.</summary>
-    [Min(0f)] public float shelfHeight = 0.05f;
-
-    /// <summary>The comms shelf's bays: the phone (the art's, moved here), the BABEL rack, the Rolodex, the protocol cards.</summary>
-    public DeskBay phone = new DeskBay(-2.01f, 1.29f, 0.50f, 0.30f, 0f, true), babelRack = new DeskBay(-1.50f, 1.29f, 0.40f, 0.30f, 0f, true),
-                   rolodex = new DeskBay(-1.10f, 1.29f, 0.28f, 0.30f, -16f, true), protocolRing = new DeskBay(-0.76f, 1.29f, 0.28f, 0.30f, 10f, true);
-
-    /// <summary>The art's phone: the part prefix of its meshes (moved onto the comms shelf at bind).</summary>
-    public string phoneParts = "Clean_Phone";
-
-    /// <summary>The hall shelf's RING SERVICE panel.</summary>
-    public DeskBay ringPanel = new DeskBay(1.08f, 1.21f, 0.56f, 0.45f, -20f, true);
-
-    [Header("Later machines (the desk machines spec §8): bays kept empty, nothing shown until they come")]
-    /// <summary>The transponder tuner's bay (beside the scanner), the thumbprint pad's (beside the chip reader), the booth camera's and the X-ray belt's (on the hall shelf).</summary>
-    public DeskBay tuner = new DeskBay(1.22f, 0.06f, 0.36f, 0.20f), thumbprint = new DeskBay(1.10f, -0.12f, 0.40f, 0.12f),
-                   boothCamera = new DeskBay(1.60f, 1.21f, 0.36f, 0.45f, 0f, true), xray = new DeskBay(2.09f, 1.21f, 0.50f, 0.45f, 0f, true);
-
-    [Header("The plan's check")]
-    /// <summary>The art desk's top in the frame (the builder's check that every bay lies on it: DeskArrangement.Problems).</summary>
+    [Header("The plan's check (the builder fails on a problem)")]
+    /// <summary>The art desk's top in the frame (every home lies on it).</summary>
     public DeskBay deskTop = new DeskBay(0f, 0.515f, 5.8f, 2.53f);
 
-    [Header("Decor (the art's small props; the player moves them, DeskDecor)")]
-    /// <summary>The zones decorations live in: the back left corner and the right, between the machines and the hall shelf.</summary>
-    public DeskBay[] decorZones = { new DeskBay(-2.57f, 0.98f, 0.46f, 0.92f), new DeskBay(1.55f, 0.56f, 0.90f, 0.64f) };
+    /// <summary>The art's paper mat in the frame for the builder's check (at run time the art's own mat is used: DeskLayout.Mat).</summary>
+    public DeskBay mat = new DeskBay(0f, 0f, 1.46f, 1.03f);
 
-    /// <summary>The decorations: the art's small props, each starting in its zone (settled there in this order, DeskArrangement.TrySettle).</summary>
+    /// <summary>The office camera's eye for the sight check: metres right, metres from the mat's centre toward the traveller, metres over the desk.</summary>
+    public Vector3 officeEye = new Vector3(0f, -2.10f, 1.09f);
+
+    /// <summary>How much of every shown object's top the office camera must see (BUG-4: "≥90% visible").</summary>
+    [Range(0f, 1f)] public float minVisible = 0.9f;
+
+    [Header("Decor (the art's small props the player moves, DeskDecor)")]
+    /// <summary>The decorations: the art's small props kept (the rest are cut), each starting in the decor home.</summary>
     public DeskDecorItem[] decor =
     {
-        new DeskDecorItem("form_sorter", 1, "Clean_FormSorter"),
-        new DeskDecorItem("tray", 1, "Clean_Tray", "Clean_PaperBundle"),
-        new DeskDecorItem("calculator", 0, "Clean_Calculator"),
-        new DeskDecorItem("binder", 0, "Clean_Binder"),
-        new DeskDecorItem("pen_pot", 0, "Clean_PenPot"),
-        new DeskDecorItem("stapler", 0, "Clean_Stapler"),
-        new DeskDecorItem("ink_pad", 0, "Clean_Inkpad"),
+        new DeskDecorItem("form_sorter", "Clean_FormSorter"),
+        new DeskDecorItem("tray", "Clean_Tray", "Clean_PaperBundle"),
     };
 
-    /// <summary>The grid a dropped decoration settles on (metres, DeskArrangement.TrySettle).</summary>
+    /// <summary>The grid the decorations start on in the decor home (metres, DeskArrangement.TrySettle).</summary>
     [Min(0.005f)] public float decorStep = 0.02f;
 
-    /// <summary>How high a dragged decoration lifts off the desk (metres).</summary>
-    [Min(0f)] public float decorLift = 0.03f;
+    /// <summary>How far a decoration let go on a taken spot is nudged at most (metres; BUG-23: "nudged at most 3 cm"), on a 5 mm grid; further, it goes back.</summary>
+    [Min(0f)] public float decorNudge = 0.03f;
 
-    /// <summary>Every bay the plan keeps, by name (the builder's check: on the desk, none overlapping; the back shelves hold their own bays, so they are left out).</summary>
-    public IEnumerable<KeyValuePair<string, DeskRect>> Bays()
+    /// <summary>How high a dragged decoration lifts off the desk (metres), over whatever lies under it: a paper's carry lift (DeskConfigSO.dragLift), so the drop onto its spot stays inside the QA rig's 8 px at 1080p (3 cm read about 10 px at the decor's distance).</summary>
+    [Min(0f)] public float decorLift = 0.02f;
+
+    /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants), or null.</summary>
+    public DeskHome HomeOf(string id) => DeskHomeMap.Find(homes, id);
+
+    /// <summary>The placement the home <paramref name="id"/> gives its object, or null without that home.</summary>
+    public DeskBay Bay(string id)
     {
-        yield return Named("scanner", scanner);
-        yield return Named("chipReader", chipReader);
-        yield return Named("stampRack", stampRack);
-        yield return Named("intercom", intercom);
-        yield return Named("uvTorch", uvTorch);
-        yield return Named("detain", detain);
-        yield return Named("crate", crate);
-        yield return Named("phone", phone);
-        yield return Named("babelRack", babelRack);
-        yield return Named("rolodex", rolodex);
-        yield return Named("protocolRing", protocolRing);
-        yield return Named("ringPanel", ringPanel);
-        yield return Named("tuner", tuner);
-        yield return Named("thumbprint", thumbprint);
-        yield return Named("boothCamera", boothCamera);
-        yield return Named("xray", xray);
-        for (int i = 0; i < decorZones.Length; i++)
-            yield return Named("decor" + i, decorZones[i]);
+        DeskHome home = HomeOf(id);
+        return home != null ? new DeskBay(home) : null;
     }
 
-    private static KeyValuePair<string, DeskRect> Named(string name, DeskBay bay) => new KeyValuePair<string, DeskRect>(name, bay.Rect);
+    /// <summary>What is wrong with the plan (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
+    public List<string> Problems()
+    {
+        List<string> problems = DeskArrangement.HomeProblems(homes, fixedArt, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), minVisible);
+        problems.AddRange(DeskArrangement.ClickBoxProblems(homes, fixedArt, DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox));
+        return problems;
+    }
 }
 
 /// <summary>
@@ -239,12 +193,227 @@ public readonly struct DeskFrame
         return new Vector2(Vector3.Dot(d, Right), Vector3.Dot(d, Forward));
     }
 
-    /// <summary>Puts <paramref name="target"/> on <paramref name="bay"/>: at its centre on the desk (or, on a shelf, <paramref name="shelfHeight"/> up), facing the chair turned by its yaw; false (it stays) without a target or a bay.</summary>
-    public bool Place(Transform target, DeskBay bay, float shelfHeight)
+    /// <summary>The rectangle in the frame <paramref name="world"/> covers seen from above (its corners along the frame's axes).</summary>
+    public DeskRect Footprint(Bounds world)
+    {
+        float x0 = float.MaxValue, x1 = float.MinValue, y0 = float.MaxValue, y1 = float.MinValue;
+        for (int i = 0; i < 4; i++)
+        {
+            Vector2 c = Local(new Vector3((i & 1) == 0 ? world.min.x : world.max.x, world.min.y, (i & 2) == 0 ? world.min.z : world.max.z));
+            x0 = Mathf.Min(x0, c.x);
+            x1 = Mathf.Max(x1, c.x);
+            y0 = Mathf.Min(y0, c.y);
+            y1 = Mathf.Max(y1, c.y);
+        }
+        return new DeskRect((x0 + x1) / 2f, (y0 + y1) / 2f, x1 - x0, y1 - y0);
+    }
+
+    /// <summary>Puts <paramref name="target"/> on <paramref name="bay"/>: at its centre, <paramref name="lift"/> above the desk, facing the chair turned by its yaw; false (it stays) without a target or a bay.</summary>
+    public bool Place(Transform target, DeskBay bay, float lift)
     {
         if (target == null || bay == null)
             return false;
-        target.SetPositionAndRotation(Point(bay.at, bay.onShelf ? shelfHeight : 0f), Facing(bay.yaw));
+        target.SetPositionAndRotation(Point(bay.at, lift), Facing(bay.yaw));
         return true;
+    }
+}
+
+/// <summary>
+/// The desk home map at run time (DESK-PLAN's seam; FIX_PLAN_v2: "Phase B
+/// objects bind to a home by id and never edit DeskLayout"): the bound
+/// frame, the art mat (DeskMat: papers only), every home by id (HomeOf, Pose,
+/// LampPoint), the desk's obstacles (DeskObstacles: each shown object's
+/// footprint and height, the fixed art's too; a carried thing rises over
+/// them) and C's next-tool lamp (Lamps: which home is lit; FEEDBACK and
+/// DESK-HOMES draw it). Bound by the office binder once the art desk is
+/// arranged; the objects standing on homes are tracked so their obstacles
+/// follow what shows (RefreshObstacles: at bind, at each day's start, when
+/// the crate opens).
+/// </summary>
+public static class DeskLayout
+{
+    private static DeskLayoutSettings _settings;
+    private static readonly Dictionary<string, Transform> Objects = new Dictionary<string, Transform>();
+    private static readonly HashSet<string> Registered = new HashSet<string>();
+
+    /// <summary>True once the office binder has bound the desk.</summary>
+    public static bool Bound { get; private set; }
+
+    /// <summary>The desk's frame (valid when Bound).</summary>
+    public static DeskFrame Frame { get; private set; }
+
+    /// <summary>The art's paper mat in the frame (papers and the open rulebook only).</summary>
+    public static DeskMat Mat { get; private set; }
+
+    /// <summary>The desk's obstacles (registered through Register: every shown object on its home, the fixed art, the decorations); a carried thing reads HeightAt.</summary>
+    public static DeskObstacles Obstacles { get; } = new DeskObstacles();
+
+    /// <summary>Registers (or moves) the desk obstacle <paramref name="id"/>: its <paramref name="footprint"/> in the frame and its <paramref name="height"/> over the desk (forgotten at Unbind).</summary>
+    public static void Register(string id, DeskRect footprint, float height)
+    {
+        if (string.IsNullOrEmpty(id))
+            return;
+        Obstacles.Register(id, footprint, height);
+        Registered.Add(id);
+    }
+
+    /// <summary>Forgets the desk obstacle <paramref name="id"/>.</summary>
+    public static void Unregister(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return;
+        Obstacles.Unregister(id);
+        Registered.Remove(id);
+    }
+
+    /// <summary>C's next-tool lamp (the booth coordinator lights it; NextToolLamp).</summary>
+    public static DeskLamps Lamps { get; } = new DeskLamps();
+
+    /// <summary>Binds the desk: its <paramref name="frame"/>, the art <paramref name="mat"/> and the plan's <paramref name="settings"/>; the fixed art becomes obstacles.</summary>
+    public static void Bind(DeskFrame frame, DeskRect mat, DeskLayoutSettings settings)
+    {
+        Unbind();
+        Frame = frame;
+        Mat = new DeskMat(mat);
+        _settings = settings;
+        foreach (DeskHome art in settings != null && settings.fixedArt != null ? settings.fixedArt : Array.Empty<DeskHome>())
+            if (art != null)
+                Register(art.id, art.Footprint, art.height);
+        Bound = settings != null;
+    }
+
+    /// <summary>The desk is gone (the office unloaded): nothing is bound, tracked, registered or lit.</summary>
+    public static void Unbind()
+    {
+        foreach (string id in Registered)
+            Obstacles.Unregister(id);
+        Registered.Clear();
+        Objects.Clear();
+        _settings = null;
+        Bound = false;
+        Lamps.Show(null);
+    }
+
+    /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants), or null (unbound, or no such home).</summary>
+    public static DeskHome HomeOf(string id) => _settings != null ? _settings.HomeOf(id) : null;
+
+    /// <summary>The world pose of the home <paramref name="id"/>: its centre on the desk's top and its facing; false when unbound or there is no such home.</summary>
+    public static bool TryPose(string id, out Vector3 position, out Quaternion rotation)
+    {
+        DeskHome home = HomeOf(id);
+        position = default;
+        rotation = Quaternion.identity;
+        if (!Bound || home == null)
+            return false;
+        position = Frame.Point(new Vector2(home.x, home.y));
+        rotation = Frame.Facing(home.yaw);
+        return true;
+    }
+
+    /// <summary>The world point of the home <paramref name="id"/>'s lamp (DeskHome.LampPoint on the desk's top); false when unbound or there is no such home.</summary>
+    public static bool TryLampPoint(string id, out Vector3 point)
+    {
+        DeskHome home = HomeOf(id);
+        point = default;
+        if (!Bound || home == null)
+            return false;
+        (float x, float y) lamp = home.LampPoint;
+        point = Frame.Point(new Vector2(lamp.x, lamp.y));
+        return true;
+    }
+
+    /// <summary>The object <paramref name="target"/> stands on the home <paramref name="id"/>: its obstacle follows whether it shows (RefreshObstacles).</summary>
+    public static void Track(string id, Transform target)
+    {
+        if (string.IsNullOrEmpty(id) || target == null)
+            return;
+        Objects[id] = target;
+    }
+
+    /// <summary>The home id of the tracked object <paramref name="t"/> stands under (itself or a part of it: one desk object's click boxes), or null (the QA rig's click-box check, BUG-4a).</summary>
+    public static string HomeIdOf(Transform t)
+    {
+        if (t == null)
+            return null;
+        foreach (KeyValuePair<string, Transform> tracked in Objects)
+            if (tracked.Value != null && t.IsChildOf(tracked.Value))
+                return tracked.Key;
+        return null;
+    }
+
+    /// <summary>
+    /// Registers every tracked object that shows as an obstacle on its home's
+    /// footprint, as tall as its renderers stand over the desk (its home's
+    /// height when it has none showing), and forgets those that do not show.
+    /// </summary>
+    public static void RefreshObstacles()
+    {
+        if (!Bound)
+            return;
+        foreach (KeyValuePair<string, Transform> tracked in Objects)
+        {
+            DeskHome home = HomeOf(tracked.Key);
+            Transform target = tracked.Value;
+            if (home == null || target == null || !target.gameObject.activeInHierarchy || target.lossyScale.sqrMagnitude < 1e-8f)
+            {
+                Unregister(tracked.Key);
+                continue;
+            }
+            float top = home.height;
+            bool any = false;
+            foreach (Renderer r in target.GetComponentsInChildren<Renderer>(false))
+            {
+                if (!r.enabled)
+                    continue;
+                float over = r.bounds.max.y - Frame.Origin.y;
+                top = any ? Mathf.Max(top, over) : over;
+                any = true;
+            }
+            Register(tracked.Key, home.Footprint, top);
+        }
+    }
+
+    /// <summary>
+    /// The uniform scale that fits <paramref name="target"/>'s meshes (inactive
+    /// ones too, from their own bounds) into the home <paramref name="home"/>'s
+    /// footprint in <paramref name="frame"/>: 1 when it fits already or has no
+    /// mesh, else smaller.
+    /// </summary>
+    public static float FitScale(Transform target, DeskHome home, DeskFrame frame)
+    {
+        if (target == null || home == null)
+            return 1f;
+        if (!TryMeshBounds(target, out Bounds world))
+            return 1f;
+        DeskRect have = frame.Footprint(world), room = home.Footprint;
+        float k = 1f;
+        if (have.Width > room.Width && have.Width > 1e-5f)
+            k = Mathf.Min(k, room.Width / have.Width);
+        if (have.Height > room.Height && have.Height > 1e-5f)
+            k = Mathf.Min(k, room.Height / have.Height);
+        return k;
+    }
+
+    /// <summary>The world bounds of every mesh under <paramref name="root"/> (inactive ones too, from the meshes' own bounds); false with none.</summary>
+    public static bool TryMeshBounds(Transform root, out Bounds world)
+    {
+        world = default;
+        bool any = false;
+        foreach (MeshFilter mesh in root.GetComponentsInChildren<MeshFilter>(true))
+        {
+            if (mesh.sharedMesh == null)
+                continue;
+            Bounds b = mesh.sharedMesh.bounds;
+            for (int i = 0; i < 8; i++)
+            {
+                Vector3 corner = mesh.transform.TransformPoint(new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z));
+                if (any)
+                    world.Encapsulate(corner);
+                else
+                    world = new Bounds(corner, Vector3.zero);
+                any = true;
+            }
+        }
+        return any;
     }
 }

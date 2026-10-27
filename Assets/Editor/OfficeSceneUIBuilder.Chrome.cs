@@ -16,8 +16,8 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The gap (reference px) between the tutorial's prompt plate and the desk view's "▲ Back" control under it.</summary>
-    private const float DeskViewBackGap = 12f;
+    /// <summary>The desk view's "▲ Back" control's inset from the overlay's right edge (reference px); its top is the case HUD's strips' (TopStripTop).</summary>
+    private const float DeskViewBackInset = 24f;
 
     /// <summary>The city view's edge buttons (reference px) and their height on the screen (a share from the bottom: above the corkboards' calendar and clock).</summary>
     private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
@@ -30,32 +30,42 @@ public static partial class OfficeSceneUIBuilder
     private const float PcTabHeight = 0.4f;
 
     /// <summary>
+    /// The bottom of the office overlay's top band of chrome (reference px
+    /// from the top): the case HUD's compare and verdict strips (top centre)
+    /// and the desk view's "▲ Back" control (top right), all from
+    /// TopStripTop. The reading view keeps every framed desk point under
+    /// DeskViewTuning.topBand, which cam.chrome.band holds below this.
+    /// </summary>
+    internal static float TopChromeBottom => TopStripTop + Mathf.Max(CompareStripSize.y, Mathf.Max(VerdictStripSize.y, DeskViewBackSize.y));
+
+    /// <summary>The overlay's reference resolution (the canvas scaler's; DeskViewPose's top band is read against it).</summary>
+    internal static Vector2 OverlayReference => ReferenceResolution;
+
+    /// <summary>
     /// The desk view's "▲ Back" control (the readability fix: a visible way
     /// out of the desk view) under the office overlay canvas, rebuilt each run:
-    /// a small button at the top left (the art pass, 2026-10-07: off the
-    /// traveller's face in the closer counter framing), under the case HUD's
-    /// strips and under the tutorial's prompt plate (GuidePlateAt,
-    /// GuidePlateSize: both show in the reading view on day 1), in the
+    /// a small button at the top right, in the overlay's top band beside the
+    /// case HUD's strips (TopChromeBottom), where the reading view frames no
+    /// desk (DeskViewTuning.topBand: BUG-59, no chrome over the work; it sat
+    /// at the top left under the tutorial's plate, over the intercom), in the
     /// "&lt; Desk" button's role, its label keyed (deskView.back); a hover hint
-    /// beside it, on its right (deskView.backHint: the other ways back), in the
-    /// tooltip's role, shown by HoverHint (beside, not under: the speech bubble
-    /// waits right under the Back control in the desk view). Inactive:
-    /// DeskView shows it while tilted (BoothRules.DeskViewBackLive). Returns
-    /// its button.
+    /// beside it, on its left (deskView.backHint: the other ways back), in the
+    /// tooltip's role, shown by HoverHint. Inactive: DeskView shows it while
+    /// tilted (BoothRules.DeskViewBackLive). Returns its button.
     /// </summary>
     private static Button BuildDeskViewBack(Transform overlay)
     {
         DestroyChildIfPresent(overlay, "DeskViewBack");
         Button back = MakeButton(overlay, "DeskViewBack", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton, "deskView.back");
         var rt = (RectTransform)back.transform;
-        rt.anchorMin = new Vector2(0f, 1f);
-        rt.anchorMax = new Vector2(0f, 1f);
-        rt.pivot = new Vector2(0f, 1f);
-        rt.anchoredPosition = new Vector2(24f, Mathf.Min(-CaseHudClearance, GuidePlateAt.y - GuidePlateSize.y - DeskViewBackGap));
+        rt.anchorMin = new Vector2(1f, 1f);
+        rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(1f, 1f);
+        rt.anchoredPosition = new Vector2(-DeskViewBackInset, -TopStripTop);
         rt.sizeDelta = DeskViewBackSize;
 
-        Transform hint = Panel(back.transform, "Hint", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
-        ((RectTransform)hint).pivot = new Vector2(0f, 0.5f);
+        Transform hint = Panel(back.transform, "Hint", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(-8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
+        ((RectTransform)hint).pivot = new Vector2(1f, 0.5f);
         hint.GetComponent<Image>().raycastTarget = false;
         TMP_Text hintText = Text(hint, "Label", null, 18, TextAlignmentOptions.Center, new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.95f), Ink,
                                  ThemeRoleId.Tooltip, "deskView.backHint", FontStyles.Normal, ThemeTextKind.Body, true);
@@ -80,7 +90,8 @@ public static partial class OfficeSceneUIBuilder
     /// the switch live), last on the overlay so it stays on top of the open PC
     /// frame; and the office's callouts (OfficeCallouts on the Office root:
     /// the speech bubble and the board's tooltip, hidden in the reading view
-    /// and the city view). Returns the controls.
+    /// and the city view); and the view's city view, so Q leaves the city as
+    /// it leaves the PC. Returns the controls.
     /// </summary>
     private static OfficeControls BuildControls(Transform overlay, OfficeViewController view, BoothCoordinator booth, TravellerWheel wheel, DeskInspect inspect,
                                                 DeskStampTray stamps, DeskView deskView, CityView cityView, DeskController desk, DeskConfigSO config)
@@ -100,6 +111,11 @@ public static partial class OfficeSceneUIBuilder
         tab.gameObject.SetActive(false);
         tab.transform.SetAsLastSibling();
 
+        // Q in the city view leaves it, as it leaves the PC (OfficeViewController.FocusMonitor).
+        var soView = new SerializedObject(view);
+        SetRef(soView, "cityView", cityView);
+        soView.ApplyModifiedProperties();
+
         OfficeControls controls = GetOrAdd<OfficeControls>(view.gameObject);
         var so = new SerializedObject(controls);
         SetRef(so, "view", view);
@@ -115,14 +131,17 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "pcTabLabel", label);
         so.ApplyModifiedProperties();
 
-        // In the city view only the DESK tab shows: the PC and STAMPS tabs fade out (CityView.deskControls),
+        // In the city view only the DESK tab shows: the PC and STAMPS tabs go (CityView.deskControls),
         // and so do the props' tooltips and the case HUD's strip, which drew over the city.
+        // The two pull tabs (CityView.chrome) also go in the reading view and while something is held (BUG-59).
         var soCity = new SerializedObject(cityView);
-        SerializedProperty hidden = soCity.FindProperty("deskControls");
-        Transform[] deskControls = { tab.transform, overlay.Find("StampBar/Tab"), overlay.Find("DeskTooltip"), overlay.Find("OfficeCaseHud") };
-        hidden.arraySize = deskControls.Length;
-        for (int i = 0; i < deskControls.Length; i++)
-            hidden.GetArrayElementAtIndex(i).objectReferenceValue = deskControls[i] != null ? GetOrAdd<CanvasGroup>(deskControls[i].gameObject) : null;
+        Transform stampTab = overlay.Find("StampBar/Tab");
+        Transform[] deskControls = { tab.transform, stampTab, overlay.Find("DeskTooltip"), overlay.Find("OfficeCaseHud") };
+        Transform[] chrome = { tab.transform, stampTab };
+        CanvasGroup Group(Transform t) => t != null ? GetOrAdd<CanvasGroup>(t.gameObject) : null;
+        SerializedArrays.Set(soCity, "deskControls", deskControls.Select(Group).ToArray());
+        SerializedArrays.Set(soCity, "chrome", chrome.Select(Group).ToArray());
+        SetRef(soCity, "deskView", deskView);
         soCity.ApplyModifiedProperties();
 
         // The office's callouts over the hall (the traveller's speech bubble, the board's tooltip) show only in the office view:
@@ -201,9 +220,10 @@ public static partial class OfficeSceneUIBuilder
     /// of the overlay draws over it, CityScreen (full screen, inactive until
     /// the fade: its CanvasGroup the fade, its Image the matte in
     /// DeskConfigSO.cityMatte; both in the diegetic DiegeticDevice role, so no
-    /// theme recolours the art's view) holding Panorama (a RawImage fitted whole
-    /// inside the screen by an AspectRatioFitter; the view gives it the living
-    /// city's material at bind); then the CITY pull tab at the left edge and
+    /// theme recolours the art's view; a click on it turns back, CityView)
+    /// holding Panorama (a RawImage covering the whole screen through an
+    /// AspectRatioFitter, cropped, never letterboxed: BUG-42; the view gives
+    /// it the living city's material at bind); then the CITY pull tab at the left edge and
     /// the DESK one at the right edge (the UI kit's, OfficeSceneUIBuilder.Kit:
     /// the word over its key's keycap; inactive: the view shows them). Returns it.
     /// </summary>
@@ -224,7 +244,7 @@ public static partial class OfficeSceneUIBuilder
         panorama.raycastTarget = false;
         SceneUiKit.Tag(panorama, ThemeRoleId.DiegeticDevice, ThemePart.Fill);
         AspectRatioFitter fitter = picture.gameObject.AddComponent<AspectRatioFitter>();
-        fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent; // BUG-42: the city fills the screen, cropped, never letterboxed
         fitter.aspectRatio = 3f;
         screen.gameObject.SetActive(false);
 

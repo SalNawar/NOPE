@@ -1241,13 +1241,13 @@ MonoBehaviour:
     text: "\u0627\u0644\u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629 \u062F\u0627\u0626\u0645\u0627"
     gloss: 0
     tier: 0
-  - key: settings.languageLocked
-    text: "\u0645\u0642\u0641\u0644\u0629 \u0645\u0646\u0630 \u0627\u0644\u064A\u0648\u0645
-      {0}: \u0627\u0644\u0645\u0643\u062A\u0628 \u064A\u0642\u0631\u0623 \u0644\u063A\u0629
-      \u0627\u0644\u0639\u0627\u0644\u0645 \u0627\u0644\u0622\u0646.\n\u0645\u0631\u0631
-      \u0627\u0644\u0645\u0624\u0634\u0631 \u0641\u0648\u0642 \u0643\u0644\u0645\u0629
-      \u0644\u062A\u0631\u062C\u0645\u062A\u0647\u0627 (\u0639\u062F\u0633\u0629
-      \u0627\u0644\u062A\u0631\u062C\u0645\u0629)."
+  - key: settings.languageDesk
+    text: "\u0644\u0644\u0623\u0648\u0631\u0627\u0642 \u0648\u0627\u0644\u0635\u062D\u064A\u0641\u0629
+      \u0641\u0642\u0637: \u0628\u0642\u064A\u0629 \u0627\u0644\u0644\u0639\u0628\u0629
+      \u0648\u0627\u0644\u062D\u0627\u0633\u0648\u0628 \u0628\u0644\u063A\u062A\u0643
+      \u062F\u0627\u0626\u0645\u0627. \u0644\u0627 \u064A\u0642\u0641\u0644 \u0623\u0628\u062F\u0627,
+      \u0648\u0627\u0644\u0623\u0648\u0631\u0627\u0642 \u0627\u0644\u062A\u064A \u0639\u0644\u0649
+      \u0645\u0643\u062A\u0628\u0643 \u062A\u062D\u062A\u0641\u0638 \u0628\u0637\u0628\u0627\u0639\u062A\u0647\u0627."
     gloss: 0
     tier: 0
   - key: settings.motion
@@ -1278,6 +1278,62 @@ MonoBehaviour:
     text: "\u062A\u0634\u063A\u064A\u0644"
     gloss: 0
     tier: 0
+  - key: settings.sound
+    text: "\u0627\u0644\u0635\u0648\u062A"
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMaster
+    text: "\u0645\u0633\u062A\u0648\u0649 \u0627\u0644\u0635\u0648\u062A \u0627\u0644\u0639\u0627\u0645"
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMusic
+    text: "\u0627\u0644\u0645\u0648\u0633\u064A\u0642\u0649"
+    gloss: 0
+    tier: 0
+  - key: settings.volumeEffects
+    text: "\u0627\u0644\u0645\u0624\u062B\u0631\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: settings.display
+    text: "\u0627\u0644\u0639\u0631\u0636"
+    gloss: 0
+    tier: 0
+  - key: settings.windowed
+    text: "\u0646\u0627\u0641\u0630\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.borderless
+    text: "\u0628\u0644\u0627 \u0625\u0637\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: settings.fullscreen
+    text: "\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.resolution
+    text: "\u0627\u0644\u062F\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.vsync
+    text: "\u0627\u0644\u0645\u0632\u0627\u0645\u0646\u0629 \u0627\u0644\u0631\u0623\u0633\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.off
+    text: "\u0625\u064A\u0642\u0627\u0641"
+    gloss: 0
+    tier: 0
+  - key: settings.on
+    text: "\u062A\u0634\u063A\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: settings.brightness
+    text: "\u0627\u0644\u0633\u0637\u0648\u0639"
+    gloss: 0
+    tier: 0
+  - key: settings.reduceFlashing
+    text: "\u062A\u062E\u0641\u064A\u0641 \u0627\u0644\u0648\u0645\u064A\u0636"
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "\u0641\u062A\u062D \u0623\u064A\u0642\u0648\u0646\u0627\u062A \u0633\u0637\u062D
       \u0627\u0644\u0645\u0643\u062A\u0628 \u0628\u0648\u0627\u0633\u0637\u0629"
@@ -1305,14 +1361,12 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.note
-    text: "\u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0648\u0627\u0644\u062E\u0637\u0648\u0637
-      \u0648\u0627\u0644\u062E\u0644\u0641\u064A\u0629 \u062A\u062A\u0628\u0639 \u0627\u0644\u062A\u0627\u0631\u064A\u062E
-      \u062F\u0627\u0626\u0645\u0627. \u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u0644\u063A\u0629
-      \u064A\u0633\u0631\u064A \u0641\u064A \u0627\u0644\u0645\u0631\u0629 \u0627\u0644\u0642\u0627\u062F\u0645\u0629
-      \u0627\u0644\u062A\u064A \u064A\u0641\u062A\u062D \u0641\u064A\u0647\u0627
-      \u0627\u0644\u0645\u0643\u062A\u0628. \u0627\u0644\u062D\u0631\u0643\u0629
-      \u0627\u0644\u0645\u062E\u0641\u0641\u0629 \u062A\u0639\u0631\u0636 \u0627\u0644\u062A\u0631\u062C\u0645\u0627\u062A
-      \u0641\u0648\u0631\u0627."
+    text: "\u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0648\u0627\u0644\u062E\u0644\u0641\u064A\u0629
+      \u062A\u062A\u0628\u0639 \u0627\u0644\u062A\u0627\u0631\u064A\u062E \u062F\u0627\u0626\u0645\u0627,
+      \u0623\u0645\u0627 \u062E\u0637 \u0627\u0644\u062D\u0627\u0633\u0648\u0628
+      \u0648\u0644\u063A\u062A\u0647 \u0641\u064A\u0628\u0642\u064A\u0627\u0646 \u0643\u0645\u0627
+      \u0627\u062E\u062A\u0631\u062A. \u0627\u0644\u062D\u0631\u0643\u0629 \u0627\u0644\u0645\u062E\u0641\u0641\u0629
+      \u062A\u0639\u0631\u0636 \u0627\u0644\u062A\u0631\u062C\u0645\u0627\u062A \u0641\u0648\u0631\u0627."
     gloss: 0
     tier: 0
   - key: startmenu.mail
@@ -6760,3 +6814,51 @@ MonoBehaviour:
     english: beside
   - native: "\u0627\u0644\u0637\u0628\u0627\u0639\u0629"
     english: the printing
+  - native: "\u0644\u0644\u0623\u0648\u0631\u0627\u0642"
+    english: for the papers
+  - native: "\u0648\u0627\u0644\u0635\u062D\u064A\u0641\u0629"
+    english: and the newspaper
+  - native: "\u0628\u0642\u064A\u0629"
+    english: rest
+  - native: "\u0648\u0627\u0644\u062D\u0627\u0633\u0648\u0628"
+    english: and the PC
+  - native: "\u0628\u0644\u063A\u062A\u0643"
+    english: in your language
+  - native: "\u064A\u0642\u0641\u0644"
+    english: locks
+  - native: "\u0648\u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    english: and the papers
+  - native: "\u0645\u0643\u062A\u0628\u0643"
+    english: your desk
+  - native: "\u062A\u062D\u062A\u0641\u0638"
+    english: keep
+  - native: "\u0628\u0637\u0628\u0627\u0639\u062A\u0647\u0627"
+    english: their print
+  - native: "\u0645\u0633\u062A\u0648\u0649"
+    english: level
+  - native: "\u0627\u0644\u0635\u0648\u062A"
+    english: sound
+  - native: "\u0627\u0644\u0639\u0627\u0645"
+    english: master
+  - native: "\u0625\u0637\u0627\u0631"
+    english: frame
+  - native: "\u0645\u0644\u0621"
+    english: full
+  - native: "\u0627\u0644\u0645\u0632\u0627\u0645\u0646\u0629"
+    english: sync
+  - native: "\u0627\u0644\u0631\u0623\u0633\u064A\u0629"
+    english: vertical
+  - native: "\u062A\u062E\u0641\u064A\u0641"
+    english: reduce
+  - native: "\u0627\u0644\u0648\u0645\u064A\u0636"
+    english: flashing
+  - native: "\u0623\u0645\u0627"
+    english: as for
+  - native: "\u062E\u0637"
+    english: type
+  - native: "\u0648\u0644\u063A\u062A\u0647"
+    english: and its language
+  - native: "\u0641\u064A\u0628\u0642\u064A\u0627\u0646"
+    english: stay
+  - native: "\u0627\u062E\u062A\u0631\u062A"
+    english: you chose

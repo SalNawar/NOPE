@@ -14,10 +14,14 @@ using UnityEngine.EventSystems;
 /// (ContactCards.ForDay): a tip naming the place one of today's travellers
 /// carrying a fault they watch is headed for, or their quiet line; the gold
 /// card on top is the day's lead. The 24 cards run through the contacts in
-/// turn. Shown while the upgrade is owned (DeskUpgrades). Built by Build
-/// Office UI from Rolodex.fbx (tools/props/machines).
+/// turn. Only the left button turns it (BUG-17b: a right-click backs out,
+/// Papers, Please's controls), and a drag is a hold the desk knows of
+/// (BUG-55b: HoldRegistry.Desk; cancelled, the drum spins on from where it is
+/// and settles). Shown while the upgrade is owned (DeskUpgrades), on its home
+/// on the counter's row (the desk home map). Built by Build Office UI from
+/// Rolodex.fbx (tools/props/machines).
 /// </summary>
-public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IHoldable
 {
     /// <summary>The drum and the knob (both turn about their local X).</summary>
     [SerializeField] private Transform drum, knob;
@@ -72,26 +76,31 @@ public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     /// <summary>The contact on card <paramref name="card"/> (the cards run through the contacts in turn); default with none.</summary>
     private ContactCard ContactOn(int card) => _cards.Count > 0 ? _cards[(card % _cards.Count + _cards.Count) % _cards.Count] : default;
 
-    /// <summary>A click flicks the drum on a few cards.</summary>
+    /// <summary>A left click flicks the drum on a few cards.</summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.dragging)
+        if (eventData.dragging || eventData.button != PointerEventData.InputButton.Left)
             return;
         _settling = false;
         _speed += flickSpeed;
     }
 
-    /// <inheritdoc/>
+    /// <summary>A left drag takes hold of the drum (the desk's one hold).</summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
         _dragging = true;
         _settling = false;
         _speed = 0f;
+        HoldRegistry.Desk.Begin(this);
     }
 
-    /// <inheritdoc/>
+    /// <summary>The held drum turns with the pointer.</summary>
     public void OnDrag(PointerEventData eventData)
     {
+        if (!_dragging || eventData.button != PointerEventData.InputButton.Left)
+            return;
         float turn = eventData.delta.y * degreesPerPixel;
         _angle += turn;
         float dt = Mathf.Max(UiMotion.Delta(Time.unscaledDeltaTime), 1e-3f);
@@ -99,8 +108,23 @@ public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         Pose();
     }
 
-    /// <inheritdoc/>
+    /// <summary>Let go: the drum spins on and settles on a card.</summary>
     public void OnEndDrag(PointerEventData eventData)
+    {
+        if (!_dragging || eventData.button != PointerEventData.InputButton.Left)
+            return;
+        HoldRegistry.Desk.End(this);
+        Release();
+    }
+
+    /// <summary>The hold is cancelled (Esc, focus lost, another hold): the drum lets go where it is and settles.</summary>
+    public void CancelHold()
+    {
+        if (_dragging)
+            Release();
+    }
+
+    private void Release()
     {
         _dragging = false;
         if (_speed == 0f)

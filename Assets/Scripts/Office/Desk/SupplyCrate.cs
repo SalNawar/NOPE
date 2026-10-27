@@ -5,12 +5,16 @@ using UnityEngine;
 /// <summary>
 /// The supply crate (the desk machines spec §4: Saleh's answer "supply crate
 /// yes"): on a morning the Orders app's deliveries arrive
-/// (Orders.DeliveredOn), a taped kraft crate stands on the mat. A click opens
+/// (Orders.DeliveredOn), a taped kraft crate stands on its spot right of the rail. A click opens
 /// it: the red tape tears off (crate_tear), the four flaps pop open one after
 /// another (crate_pop) and a tag with what came springs up out of it (the
-/// upgrades' names), then the crate sinks away and the delivered objects are
-/// on the desk. Left shut, it opens by itself when the shift opens (the
-/// AVAILABLE sign), so it never stands in the way of a case. Built by Build
+/// upgrades' names) as the delivered objects pop onto their homes; then it
+/// leaves in one clean motion (BUG-60a): the tag drops back in, the flaps
+/// fold shut and the crate shrinks away into its spot (ease-in cubic, never
+/// through it), then it is gone. Left shut, it opens by itself when the
+/// shift opens (the AVAILABLE sign), so it never stands in the way of a
+/// case. Every kick follows the comfort settings (BUG-64a). It stands on its
+/// home of the desk home map, on screen in the office view. Built by Build
 /// Office UI from SupplyCrate.fbx (tools/props/machines).
 /// </summary>
 public sealed class SupplyCrate : MonoBehaviour
@@ -27,21 +31,24 @@ public sealed class SupplyCrate : MonoBehaviour
     /// <summary>The cues' placeholder source.</summary>
     [SerializeField] private AudioSource sound;
 
-    /// <summary>The flaps' open angles (degrees: left, right, front, back), the tag's rise (metres, model space), the beat between flaps and how long it stays open before it sinks.</summary>
+    /// <summary>The flaps' open angles (degrees: left, right, front, back), the tag's rise (metres, model space), the beat between flaps and how long it stays open before it leaves.</summary>
     [SerializeField] private Vector4 openAngles = new Vector4(118f, -112f, -125f, 105f);
 
     /// <inheritdoc cref="openAngles"/>
     [SerializeField] private float tagRise = 0.15f, flapBeat = 0.08f, openSeconds = 2.6f;
 
-    private enum Phase { Gone, Shut, Tearing, Open, Sinking }
+    /// <summary>How long the crate takes to leave (seconds; the Game Feel Bible's C7: "sinks away (InCubic 300 ms) and leaves cleanly"): it shrinks into its spot on an ease-in cubic, never through the desk.</summary>
+    [SerializeField, Min(0.01f)] private float leaveSeconds = 0.3f;
+
+    private enum Phase { Gone, Shut, Tearing, Open, Leaving }
 
     private Phase _phase = Phase.Gone;
     private float _at;
     private int _flapsOpen;
-    private Spring _tape, _tag, _sink;
+    private Spring _tape, _tag;
     private readonly Spring[] _flaps = new Spring[4];
     private Quaternion[] _flapRest;
-    private Vector3 _tagRest, _rootRest;
+    private Vector3 _tagRest, _rootRest, _rootScale;
     private bool _rested;
 
     /// <summary>True while the crate is on the desk.</summary>
@@ -65,6 +72,7 @@ public sealed class SupplyCrate : MonoBehaviour
         if (_rested)
             return;
         _rested = true;
+        _rootScale = transform.localScale;
         _flapRest = new[] { Rot(flapLeft), Rot(flapRight), Rot(flapFront), Rot(flapBack) };
         if (tag != null)
             _tagRest = tag.transform.localPosition;
@@ -84,13 +92,12 @@ public sealed class SupplyCrate : MonoBehaviour
         _phase = any ? Phase.Shut : Phase.Gone;
         if (!any)
             return;
-        _rootRest = transform.localPosition;
+        Laid();
         _flapsOpen = 0;
         for (int i = 0; i < _flaps.Length; i++)
             _flaps[i] = Spring.At(0f);
         _tape = Spring.At(0f);
         _tag = Spring.At(0f);
-        _sink = Spring.At(0f);
         Pose();
         if (tag != null)
         {
@@ -112,8 +119,13 @@ public sealed class SupplyCrate : MonoBehaviour
         CueSounds.Play(SoundCues.CrateTear, sound);
     }
 
-    /// <summary>The laid crate's place (the binder lays it; it sinks from there).</summary>
-    public void Laid() => _rootRest = transform.localPosition;
+    /// <summary>The laid crate's place and size (the binder lays it on its home; it leaves from there).</summary>
+    public void Laid()
+    {
+        _rootRest = transform.localPosition;
+        if (transform.localScale.sqrMagnitude > 1e-8f)
+            _rootScale = transform.localScale;
+    }
 
     private void Update()
     {
@@ -136,30 +148,36 @@ public sealed class SupplyCrate : MonoBehaviour
                 while (_flapsOpen < 4 && (_at >= _flapsOpen * flapBeat || UiMotion.Amount.Still))
                 {
                     DeskProps.Aim(ref _flaps[_flapsOpen], 1f);
-                    _flaps[_flapsOpen].Kick(3f);
+                    _flaps[_flapsOpen].Kick(3f, UiMotion.Amount);
                     if (_flapsOpen == 0)
                     {
                         CueSounds.Play(SoundCues.CratePop, sound);
                         if (tag != null)
                             tag.gameObject.SetActive(true);
                         DeskProps.Aim(ref _tag, 1f);
-                        _tag.Kick(4f);
+                        _tag.Kick(4f, UiMotion.Amount);
                         Opening?.Invoke();
                     }
                     _flapsOpen++;
                 }
                 if (_at >= openSeconds)
                 {
-                    _phase = Phase.Sinking;
+                    // One clean exit: the tag drops back in, the flaps fold shut and the crate shrinks away into its spot.
+                    _phase = Phase.Leaving;
                     _at = 0f;
-                    DeskProps.Aim(ref _sink, 1f);
+                    DeskProps.Aim(ref _tag, 0f);
+                    for (int i = 0; i < _flaps.Length; i++)
+                        DeskProps.Aim(ref _flaps[i], 0f);
                 }
                 break;
-            case Phase.Sinking:
-                if (_sink.AtRest || UiMotion.Amount.Still)
+            case Phase.Leaving:
+                if (_at >= leaveSeconds || UiMotion.Amount.Still)
                 {
                     _phase = Phase.Gone;
                     transform.localPosition = _rootRest;
+                    transform.localScale = _rootScale;
+                    if (tag != null)
+                        tag.gameObject.SetActive(false);
                     gameObject.SetActive(false);
                     return;
                 }
@@ -169,7 +187,6 @@ public sealed class SupplyCrate : MonoBehaviour
         for (int i = 0; i < _flaps.Length; i++)
             DeskProps.Step(ref _flaps[i], dt, MotionFeel.Elastic);
         DeskProps.Step(ref _tag, dt, MotionFeel.Elastic);
-        DeskProps.Step(ref _sink, dt, MotionFeel.Balanced);
         Pose();
     }
 
@@ -183,7 +200,8 @@ public sealed class SupplyCrate : MonoBehaviour
             tape.localScale = new Vector3(1f, 1f, 1f - 0.9f * Mathf.Clamp01(_tape.Value));
         if (tag != null)
             tag.transform.localPosition = _tagRest + Vector3.up * (tagRise * _tag.Value);
-        transform.localPosition = _rootRest + Vector3.down * (0.16f * _sink.Value);
+        float left = _phase == Phase.Leaving ? Mathf.Clamp01(_at / leaveSeconds) : 0f;
+        transform.localScale = _rootScale * (1f - left * left * left); // ease-in cubic: slow off its spot, then gone
     }
 
     private void Flap(Transform flap, int i, Vector3 axis, float angle)

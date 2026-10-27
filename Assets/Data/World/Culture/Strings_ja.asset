@@ -1137,9 +1137,8 @@ MonoBehaviour:
     text: "\u5E38\u306B\u82F1\u8A9E"
     gloss: 0
     tier: 0
-  - key: settings.languageLocked
-    text: "{0}\u65E5\u76EE\u304B\u3089\u56FA\u5B9A: \u5C40\u306F\u4ECA\u3084\u4E16\u754C\u306E\u8A00\u8A9E\u3092\u4F7F\u3044\u307E\u3059\u3002\u5358\u8A9E\u306B\u30AB\u30FC\u30BD\u30EB\u3092\u5408\u308F\u305B\u308B\u3068\u7FFB\u8A33\u3055\u308C\u307E\u3059
-      (\u7FFB\u8A33\u30EC\u30F3\u30BA)\u3002"
+  - key: settings.languageDesk
+    text: "\u66F8\u985E\u3068\u65B0\u805E\u306E\u307F\uFF1A\u30B2\u30FC\u30E0\u306E\u307B\u304B\u306E\u90E8\u5206\u3068PC\u306F\u5E38\u306B\u3042\u306A\u305F\u306E\u8A00\u8A9E\u306E\u307E\u307E\u3067\u3059\u3002\u30ED\u30C3\u30AF\u3055\u308C\u308B\u3053\u3068\u306F\u306A\u304F\u3001\u673A\u306E\u4E0A\u306B\u3042\u308B\u66F8\u985E\u306F\u5370\u5237\u3055\u308C\u305F\u307E\u307E\u3067\u3059\u3002"
     gloss: 0
     tier: 0
   - key: settings.motion
@@ -1170,6 +1169,62 @@ MonoBehaviour:
     text: "\u30AA\u30F3"
     gloss: 0
     tier: 0
+  - key: settings.sound
+    text: "\u30B5\u30A6\u30F3\u30C9"
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMaster
+    text: "\u30DE\u30B9\u30BF\u30FC\u97F3\u91CF"
+    gloss: 0
+    tier: 0
+  - key: settings.volumeMusic
+    text: "\u97F3\u697D"
+    gloss: 0
+    tier: 0
+  - key: settings.volumeEffects
+    text: "\u52B9\u679C\u97F3"
+    gloss: 0
+    tier: 0
+  - key: settings.display
+    text: "\u753B\u9762"
+    gloss: 0
+    tier: 0
+  - key: settings.windowed
+    text: "\u30A6\u30A3\u30F3\u30C9\u30A6"
+    gloss: 0
+    tier: 0
+  - key: settings.borderless
+    text: "\u30DC\u30FC\u30C0\u30FC\u30EC\u30B9"
+    gloss: 0
+    tier: 0
+  - key: settings.fullscreen
+    text: "\u30D5\u30EB\u30B9\u30AF\u30EA\u30FC\u30F3"
+    gloss: 0
+    tier: 0
+  - key: settings.resolution
+    text: "\u89E3\u50CF\u5EA6"
+    gloss: 0
+    tier: 0
+  - key: settings.vsync
+    text: "\u5782\u76F4\u540C\u671F"
+    gloss: 0
+    tier: 0
+  - key: settings.off
+    text: "\u30AA\u30D5"
+    gloss: 0
+    tier: 0
+  - key: settings.on
+    text: "\u30AA\u30F3"
+    gloss: 0
+    tier: 0
+  - key: settings.brightness
+    text: "\u660E\u308B\u3055"
+    gloss: 0
+    tier: 0
+  - key: settings.reduceFlashing
+    text: "\u70B9\u6EC5\u3092\u6291\u3048\u308B"
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\u30A2\u30A4\u30B3\u30F3\u3092\u958B\u304F\u64CD\u4F5C"
     gloss: 0
@@ -1195,7 +1250,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.note
-    text: "\u8272\u3001\u30D5\u30A9\u30F3\u30C8\u3001\u58C1\u7D19\u306F\u5E38\u306B\u6B74\u53F2\u306B\u5F93\u3044\u307E\u3059\u3002\u8A00\u8A9E\u306E\u5909\u66F4\u306F\u6B21\u306B\u5C40\u3092\u958B\u3044\u305F\u6642\u306B\u53CD\u6620\u3055\u308C\u307E\u3059\u3002\u52D5\u304D\u3092\u63A7\u3048\u3081\u306B\u3059\u308B\u3068\u7FFB\u8A33\u304C\u3059\u3050\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
+    text: "\u8272\u3068\u58C1\u7D19\u306F\u5E38\u306B\u6B74\u53F2\u306B\u5F93\u3044\u3001PC\u306E\u30D5\u30A9\u30F3\u30C8\u3068\u8A00\u8A9E\u306F\u3042\u306A\u305F\u306E\u8A2D\u5B9A\u306E\u307E\u307E\u3067\u3059\u3002\u52D5\u304D\u3092\u63A7\u3048\u3081\u306B\u3059\u308B\u3068\u7FFB\u8A33\u304C\u3059\u3050\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
     gloss: 0
     tier: 0
   - key: startmenu.mail
@@ -5905,3 +5960,17 @@ MonoBehaviour:
     english: beside
   - native: "\u3044\u306A\u3051\u308C\u3070\u306A\u3089\u306A\u3044"
     english: must
+  - native: "\u307B\u304B"
+    english: other
+  - native: "\u306A\u304F"
+    english: never
+  - native: "\u673A"
+    english: desk
+  - native: "\u30B9\u30AF\u30EA\u30FC\u30F3"
+    english: screen
+  - native: "\u70B9\u6EC5"
+    english: flashing
+  - native: "\u6291\u3048\u308B"
+    english: reduce
+  - native: "\u5F93\u3044"
+    english: follow

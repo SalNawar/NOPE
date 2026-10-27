@@ -12,7 +12,13 @@ using UnityEngine.Rendering;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The UV torch (DeskHardware/UvTorch): its model, its click box over the torch at rest, the violet spot light, the hum's loop and the switch's sources; null without its art.</summary>
+    /// <summary>The thumb slide's travel when on, in the torch's space: toward the lens (uv_torch_model.py's SWITCH_TRAVEL, 10 mm) and pressed 1 mm down (GAME_FEEL_BIBLE C3: "The thumb switch clicks down 1 mm").</summary>
+    private static readonly Vector3 UvTorchSwitchTravel = new Vector3(0f, -0.001f, -0.010f);
+
+    /// <summary>The click box's margin round the torch's own meshes (metres, all round): it hugs the torch (BUG-4b).</summary>
+    private const float UvTorchClickMargin = 0.005f;
+
+    /// <summary>The UV torch (DeskHardware/UvTorch): its model, its click box over the torch at rest (its own meshes only: the beam's cone, BeamFX, never widens it, BUG-4b), the violet spot light, the hum's loop and the switch's sources; null without its art.</summary>
     private static UvTorch BuildUvTorch(Transform root)
     {
         Transform host = EnsureChild(root, "UvTorch");
@@ -27,9 +33,9 @@ public static partial class OfficeSceneUIBuilder
         Transform body = m.Find("UvTorch");
         host.gameObject.layer = OfficeLayers.InteractableLayer;
         BoxCollider box = GetOrAdd<BoxCollider>(host.gameObject);
-        Bounds b = LocalBounds(body, host);
+        Bounds b = TorchBounds(body, host);
         box.center = b.center;
-        box.size = b.size + new Vector3(0.02f, 0.02f, 0.02f);
+        box.size = b.size + Vector3.one * (2f * UvTorchClickMargin);
         Clickable click = GetOrAdd<Clickable>(host.gameObject);
         click.SetOutline(body.GetComponentsInChildren<Renderer>(true).Where(r => r.name != "BeamFX").ToArray());
 
@@ -87,8 +93,37 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "hum", hum);
         SetRef(so, "sound", sound);
         so.FindProperty("lensLocal").vector3Value = body.InverseTransformPoint(body.Find("Lens").position);
+        so.FindProperty("switchTravel").vector3Value = UvTorchSwitchTravel;
         so.ApplyModifiedProperties();
         return torch;
+    }
+
+    /// <summary>
+    /// The bounds of the torch's own meshes under <paramref name="body"/>, in
+    /// <paramref name="space"/>'s local space: the beam's cone (BeamFX, 32 cm
+    /// long) left out. 1019a's box took it in (LocalBounds), 2.6 times the
+    /// torch, and swallowed clicks on the chip reader beside it (BUG-4b).
+    /// </summary>
+    private static Bounds TorchBounds(Transform body, Transform space)
+    {
+        Transform beam = body.Find("BeamFX");
+        Bounds b = default;
+        bool any = false;
+        foreach (MeshFilter f in body.GetComponentsInChildren<MeshFilter>(true))
+        {
+            if (f.sharedMesh == null || (beam != null && f.transform.IsChildOf(beam)))
+                continue;
+            foreach (Vector3 corner in Corners(f.sharedMesh.bounds))
+            {
+                Vector3 p = space.InverseTransformPoint(f.transform.TransformPoint(corner));
+                if (any)
+                    b.Encapsulate(p);
+                else
+                    b = new Bounds(p, Vector3.zero);
+                any = true;
+            }
+        }
+        return b;
     }
 
     /// <summary>The desk material for a slot of the UV torch's model (uv_torch_model.py's table): solids in NOPE/Desk Anime, the lens URP Unlit with its face, the beam an additive Unlit violet.</summary>

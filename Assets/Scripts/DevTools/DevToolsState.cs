@@ -20,8 +20,9 @@ using UnityEngine;
 /// HoldNextGeneration) stay until a new or continued run (ResetAll) and are
 /// shown loudly on the cheat badge while on (<see cref="StickyLine"/>). One
 /// switch lives elsewhere (<see cref="Elsewhere"/>): the cheat menu's language
-/// lock (CultureThemeService.LockOverride, TEXT-LANG's), run-scoped here: on
-/// the badge while set, cleared by ResetAll.
+/// lock (CultureThemeService.LockOverride, TEXT-LANG's): on the badge while
+/// set, cleared at every morning with the day's switches (ResetDay, through
+/// CultureThemeService.ResetForNewDay) and by ResetAll.
 /// </summary>
 public static class DevToolsState
 {
@@ -34,7 +35,7 @@ public static class DevToolsState
     /// <summary>The switches the next generation consumes (kept through the jump or restart that applies them), shown on the cheat badge while waiting.</summary>
     public static readonly string[] NextGeneration = { nameof(ForceLegendaryNextCase), nameof(ForcedCostumeError), nameof(ForcedLie), nameof(ForcedAppearance) };
 
-    /// <summary>The cheat switches kept outside this class, run-scoped (on the badge while set, cleared by ResetAll): the language lock (CultureThemeService.LockOverride, TEXT-LANG's; BUG-27a).</summary>
+    /// <summary>The cheat switches kept outside this class (on the badge while set): the language lock (CultureThemeService.LockOverride, TEXT-LANG's; BUG-27a), day-scoped by its owner (CultureThemeService.ResetForNewDay, which ResetDay calls every morning) and cleared by ResetAll too; the reflection over this class's scopes cannot see it.</summary>
     public static readonly string[] Elsewhere = { "CultureThemeService.LockOverride" };
 
     /// <summary>The next generation's switches held aside (HoldNextGeneration), in <see cref="NextGeneration"/>'s order.</summary>
@@ -139,7 +140,7 @@ public static class DevToolsState
     /// night's turn, a skip, a jump, a restart; BUG-27a): the forced hour (the
     /// hall shows the clock's), auto-decide (the day is played by hand), the
     /// culture's day reset (CultureThemeService.ResetForNewDay: the forced
-    /// leader) and the hall's overrides (HallSlotsDev, the stand-ins with
+    /// leader and the language lock) and the hall's overrides (HallSlotsDev, the stand-ins with
     /// them). The run's switches and the next generation's stay.
     /// </summary>
     public static void ResetDay()

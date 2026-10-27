@@ -19,14 +19,15 @@ using UnityEngine.UI;
 /// over it: never both at once; Saleh 2026-10-08: "it shows everything
 /// doubled"): the art's living city (the hall
 /// windows' "NOPE/Hall Living City" material, its eight time and weather
-/// paintings, depth map and moving atmosphere) drawn unmasked, fitted
-/// whole inside the screen on the cityMatte colour, at the hall's hour
+/// paintings, depth map and moving atmosphere) drawn unmasked over the
+/// cityMatte colour, at the hall's hour
 /// (HallBakedCycle, the lights' clock) and its rain. The city lives (Saleh
 /// 2026-10-07: "why is the city not animated and no parallax when you switch
 /// to it? GPT made the assets for it"): it comes into view with a gentle
 /// pan of the whole painting (its uvRect, from DeskConfigSO.cityParallax to
 /// 0 over citySettleSeconds; the painting cropped by as much each side), then
-/// follows the pointer a little (cityLookParallax), the flying traffic in
+/// follows the pointer a little (cityLookParallax, kept to what eases within
+/// the speed limit: CityParallax.LookShare), the flying traffic in
 /// front panning further (TrafficDepth): one painting and one layer of
 /// flyers, never the shader's depth reprojection, whose coarse depth map
 /// smeared and doubled the painted edges full screen; its sky, airship, bus
@@ -36,16 +37,33 @@ using UnityEngine.UI;
 /// window's flying traffic (HallCityExterior.lanes, the same vehicles at the
 /// same heights, speeds and directions) flies over it whole, entering and
 /// leaving off the frame (CityLookTimeline.Flight; cityTrafficPace,
-/// cityTrafficScale), the farther (smaller) behind, lit by the hour. D, the right arrow, a
-/// right-click, Esc (ControlRules) or the "Desk ▶" button at the right edge
-/// runs the same timeline back (CityLookTimeline: the fade first, then the
-/// turn). While it looks at the city only the DESK tab shows: the desk's own
-/// controls (the PC and STAMPS pull tabs, the red inspect button) and the
-/// props' tooltips and the case HUD's strip (deskControls) fade out over
-/// DeskConfigSO.cityDeskControlsFadeSeconds and take no clicks, and fade back
-/// in as it returns (the traveller's speech bubble and the board's tooltip
-/// fade with them: OfficeCallouts). Reduced Motion cuts both ways and holds the
-/// city still.
+/// cityTrafficScale), the farther (smaller) behind, lit by the hour. The
+/// panorama fills the whole screen (BUG-42: no letterbox; it is cropped to
+/// the screen's shape, never shown with bars: Saleh's call, CAM.md), and its
+/// parallax (the sweep and the pointer's look) eases on a spring that never
+/// moves its nearest layer more than one pixel at 1080p a frame of a 30 fps
+/// capture, the same seconds at any frame rate (BUG-69; CityParallax).
+/// Its clock (the turn, the fade and the parallax) is the game feel's
+/// (UiMotion.Delta): real time, or a capture's fixed step while frames are
+/// captured at a fixed rate (Unity's unscaled time ignores a capture), so
+/// a recording and the QA rig's 30 fps step see the city's own seconds
+/// at any display rate (CAM round 9). A
+/// click on the city, Q (OfficeViewController: Q leaves the city as it
+/// leaves the PC), D, the right arrow, a right-click, Esc (ControlRules) or
+/// the "Desk ▶" button at the right edge runs the same timeline back
+/// (CityLookTimeline: the fade first, then the turn). While it looks at the city only the DESK tab shows: the
+/// desk's own controls (the PC and STAMPS pull tabs) and the props'
+/// tooltips and the case HUD's strip (deskControls) go at once and take no
+/// clicks, and fade back in over the last third of the turn back (BUG-32b;
+/// the traveller's speech bubble and the board's tooltip fade with
+/// OfficeCallouts); the "Desk ▶" button fades in over the last third of the
+/// turn to the city. The pull tabs (chrome) also go while the reading view
+/// is on and while the player holds something (BUG-59: no tab over the
+/// papers or the work), and fade back in over the last third of the move
+/// back. Nothing turns the view while something is held (BUG-55c), and each
+/// turn is tagged as a view key for the QA camera logger. When motion is
+/// still (Reduced Motion or no intensity: BUG-64b) it cuts both ways and
+/// holds the city still.
 /// BoothCoordinator says when it may turn (BoothRules.NormalViewLive: the
 /// normal view, no newsletter, wheel or PC) and returns it when the next
 /// traveller steps up or the PC, the wheel or the reading view take over.
@@ -69,10 +87,10 @@ public sealed class CityView : MonoBehaviour
     /// <summary>The full-screen matte behind the panorama (DeskConfigSO.cityMatte).</summary>
     [SerializeField] private Image matte;
 
-    /// <summary>The panorama, fitted whole inside the screen (its fitter takes the paintings' aspect at bind; its alpha is the city's reveal over the matte).</summary>
+    /// <summary>The panorama, filling the screen (its fitter takes the paintings' aspect at bind; its alpha is the city's reveal over the matte).</summary>
     [SerializeField] private RawImage panorama;
 
-    /// <summary>Keeps the panorama's aspect, fitted inside the screen.</summary>
+    /// <summary>Keeps the panorama's aspect, covering the whole screen (cropped, never letterboxed: BUG-42).</summary>
     [SerializeField] private AspectRatioFitter fitter;
 
     /// <summary>"◀ City" at the office's left edge (shown while the view may turn).</summary>
@@ -81,8 +99,14 @@ public sealed class CityView : MonoBehaviour
     /// <summary>"Desk ▶" at the office's right edge (shown while looking at the city).</summary>
     [SerializeField] private Button backButton;
 
-    /// <summary>The desk's own controls hidden while the city shows (the PC and STAMPS pull tabs, the inspect button; the props' tooltips, the case HUD's strip, which drew over the city): their CanvasGroups fade out and take no clicks; whether each is on stays its owner's.</summary>
+    /// <summary>The desk's own controls hidden while the city shows (the PC and STAMPS pull tabs; the props' tooltips, the case HUD's strip, which drew over the city): their CanvasGroups go and take no clicks, and fade back in over the last third of the turn back; whether each is on stays its owner's.</summary>
     [SerializeField] private CanvasGroup[] deskControls = Array.Empty<CanvasGroup>();
+
+    /// <summary>The screen-edge pull tabs (the PC tab, the STAMPS tab: BUG-59's chrome): hidden as the desk controls are, and also while the reading view is on and while the player holds something; they fade back in over the last third of the move back.</summary>
+    [SerializeField] private CanvasGroup[] chrome = Array.Empty<CanvasGroup>();
+
+    /// <summary>The reading view (optional): the pull tabs hide while it is on.</summary>
+    [SerializeField] private DeskView deskView;
 
     private const string LivingCityShader = "NOPE/Hall Living City";
     private static readonly int MasksId = Shader.PropertyToID("_Masks");
@@ -100,9 +124,6 @@ public sealed class CityView : MonoBehaviour
     /// <summary>The flying traffic flies in front of the painting: it pans this many times the painting's pan.</summary>
     private const float TrafficDepth = 1.25f;
 
-    /// <summary>How fast the pointer's look follows it (per second).</summary>
-    private const float LookFollow = 4f;
-
     /// <summary>One vehicle of the hall window's traffic drawn over the panorama.</summary>
     private struct Vehicle
     {
@@ -115,7 +136,7 @@ public sealed class CityView : MonoBehaviour
     private float _crop;
     private float _reach;
     private float _shown;
-    private float _look;
+    private float _panVelocity;
     private Vector2 _canvas;
 
     private AnimeHallPresentation _hall;
@@ -126,10 +147,20 @@ public sealed class CityView : MonoBehaviour
     private CityR17 _r17;
     private float _clock;
     private float _pan = -1f;
-    private float _deskControls = 1f;
+    private float _cityPan;
+    private bool _revealed;
+
+    /// <summary>The faded controls, each once (deskControls and chrome), whether it is a pull tab (chrome), and the opacity last written.</summary>
+    private readonly List<CanvasGroup> _controls = new List<CanvasGroup>();
+    private readonly List<bool> _isChrome = new List<bool>();
+    private readonly List<float> _alpha = new List<float>();
+    private CanvasGroup _lookGroup, _backGroup;
 
     /// <summary>True while the view turns (or has turned) toward the city.</summary>
     public bool IsOn { get; private set; }
+
+    /// <summary>True once the turn has run its whole timeline on its clock: at its end looking at the city, at 0 back at the desk (always, without a config). The QA rig's cam_gc cycle refuses a city move that did not land with its settle to spare (CamOps).</summary>
+    public bool Landed => config == null || (IsOn ? _clock >= Total : _clock <= 0f);
 
     /// <summary>Raised after the view turns to the city or back.</summary>
     public event Action Changed;
@@ -139,14 +170,48 @@ public sealed class CityView : MonoBehaviour
         if (lookButton != null)
         {
             lookButton.onClick.AddListener(Look);
+            _lookGroup = GroupOf(lookButton.gameObject);
             lookButton.gameObject.SetActive(false);
         }
         if (backButton != null)
         {
             backButton.onClick.AddListener(Return);
+            _backGroup = GroupOf(backButton.gameObject);
             backButton.gameObject.SetActive(false);
         }
-        Draw(0f);
+        if (screen != null)
+        {
+            // A left click on the city turns back to the desk (FIX_PLAN_v2's city exits: "Q or a click on the city, the same as the PC").
+            if (!screen.TryGetComponent(out Button click))
+                click = screen.gameObject.AddComponent<Button>();
+            click.transition = Selectable.Transition.None;
+            click.navigation = new Navigation { mode = Navigation.Mode.None };
+            click.onClick.AddListener(Return);
+        }
+        foreach (CanvasGroup group in deskControls ?? Array.Empty<CanvasGroup>())
+            Track(group, false);
+        foreach (CanvasGroup group in chrome ?? Array.Empty<CanvasGroup>())
+            Track(group, true);
+        Draw(0f, 0f);
+    }
+
+    /// <summary>The CanvasGroup on <paramref name="go"/> (added when it has none).</summary>
+    private static CanvasGroup GroupOf(GameObject go) => go.TryGetComponent(out CanvasGroup group) ? group : go.AddComponent<CanvasGroup>();
+
+    /// <summary>Takes <paramref name="group"/> into the faded controls (once; a pull tab when <paramref name="isChrome"/>).</summary>
+    private void Track(CanvasGroup group, bool isChrome)
+    {
+        if (group == null)
+            return;
+        int i = _controls.IndexOf(group);
+        if (i >= 0)
+        {
+            _isChrome[i] |= isChrome;
+            return;
+        }
+        _controls.Add(group);
+        _isChrome.Add(isChrome);
+        _alpha.Add(group.alpha);
     }
 
     private void OnDestroy()
@@ -191,6 +256,8 @@ public sealed class CityView : MonoBehaviour
         panorama.texture = Texture2D.whiteTexture;
         panorama.uvRect = new Rect(_crop, 0f, 1f - 2f * _crop, 1f);
         Texture painting = _material.GetTexture(MorningId);
+        if (fitter != null)
+            fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent; // BUG-42: the city fills the screen, never letterboxed
         if (fitter != null && painting != null && painting.height > 0)
             fitter.aspectRatio = painting.width * (1f - 2f * _crop) / painting.height;
         if (matte != null && config != null)
@@ -255,40 +322,88 @@ public sealed class CityView : MonoBehaviour
         Show();
     }
 
-    /// <summary>Turns to the city (no-op while it may not turn or looks there already): A, the left arrow, "◀ City".</summary>
-    public void Look() => Set(true);
+    /// <summary>Turns to the city (no-op while it may not turn or looks there already): A, the left arrow, "◀ City"; while something is held on the desk it ends the hold and turns nothing (BUG-55c; STAMP R5: a held dater seats home, nothing stamped, as on Q and Esc).</summary>
+    public void Look()
+    {
+        if (HoldRegistry.Desk.IsHolding)
+        {
+            HoldRegistry.Desk.Cancel();
+            return;
+        }
+        Set(true);
+    }
 
-    /// <summary>Turns back to the desk (no-op when not looking at the city): D, the right arrow, a right-click, Esc, "Desk ▶".</summary>
+    /// <summary>Turns back to the desk (no-op when not looking at the city): a click on the city, D, the right arrow, a right-click, Esc, "Desk ▶".</summary>
     public void Return() => Set(false);
 
+    /// <summary>Turns the view (never while something is held: BUG-55c), tagging the turn's remaining length as a view key for the QA camera logger (0 when motion is still: a cut).</summary>
     private void Set(bool on)
     {
-        if (on == IsOn || (on && ((_material == null && _r17 == null) || !_live)))
+        if (on == IsOn || (on && ((_material == null && _r17 == null) || !_live)) || HoldRegistry.Desk.IsHolding)
             return;
         IsOn = on;
+        float total = Total;
+        QaSignals.TagCamera(CameraMoveCause.ViewKey, UiMotion.Amount.Still ? 0f : on ? total - _clock : _clock);
         Show();
         Changed?.Invoke();
     }
 
-    /// <summary>Advances the timeline (unscaled time) and draws it: the hall's pan, the panorama's fade, and the living city's hour, rain and motion while it shows.</summary>
+    /// <summary>The timeline's length in seconds (0 without a config).</summary>
+    private float Total => config != null ? CityLookTimeline.Total(config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
+
+    /// <summary>Advances the timeline on the game feel's clock (UiMotion.Delta: real time, or a fixed-rate capture's step) and draws it: the hall's pan, the panorama's fade, and the living city's hour, rain and motion while it shows; then the controls' opacity.</summary>
     private void Update()
     {
         if (config == null)
             return;
-        float total = CityLookTimeline.Total(config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds);
-        _clock = CityLookTimeline.Step(_clock, IsOn, Time.unscaledDeltaTime, total, MotionPreference.Reduced);
-        Draw(_clock);
-        FadeDeskControls();
+        float total = Total;
+        float dt = UiMotion.Delta(Time.unscaledDeltaTime);
+        _clock = CityLookTimeline.Step(_clock, IsOn, dt, total, UiMotion.Amount.Still);
+        Draw(_clock, dt);
+        ShowControls(total);
     }
 
-    /// <summary>Fades the desk's own controls out while the city shows and back in at the desk (a cut under Reduced Motion or with no seconds).</summary>
-    private void FadeDeskControls()
+    /// <summary>
+    /// The controls' opacity (BUG-32b, BUG-59): the desk's controls and the
+    /// "◀ City" tab go at once as the view turns to the city and fade in over
+    /// the last third of the turn back; the "Desk ▶" tab fades in over the
+    /// last third of the turn to the city; the pull tabs also go while the
+    /// reading view is on (back over the last third of its return) and while
+    /// something is held. A cut when motion is still. Each takes clicks while
+    /// it shows; whether each is on stays its owner's.
+    /// </summary>
+    private void ShowControls(float total)
     {
-        float seconds = MotionPreference.Reduced ? 0f : config.cityDeskControlsFadeSeconds;
-        _deskControls = CanvasGroupFade.Step(deskControls, _deskControls, !IsOn, seconds, Time.unscaledDeltaTime);
+        bool held = HoldRegistry.Desk.IsHolding;
+        float seconds = UiMotion.Amount.Still ? 0f : total;
+        float atDesk = IsOn ? 0f : DeskViewPose.ControlAlpha(total - _clock, seconds);
+        float atCity = IsOn ? DeskViewPose.ControlAlpha(_clock, seconds) : 0f;
+        float office = deskView != null ? deskView.OfficeControlsAlpha : 1f;
+        float tabs = held ? 0f : Mathf.Min(atDesk, office);
+        for (int i = 0; i < _controls.Count; i++)
+            Write(i, _isChrome[i] ? tabs : atDesk);
+        Apply(_lookGroup, held ? 0f : atDesk);
+        Apply(_backGroup, held ? 0f : atCity);
     }
 
-    private void Draw(float clock)
+    private void Write(int i, float alpha)
+    {
+        if (_alpha[i] == alpha || _controls[i] == null)
+            return;
+        _alpha[i] = alpha;
+        Apply(_controls[i], alpha);
+    }
+
+    private static void Apply(CanvasGroup group, float alpha)
+    {
+        if (group == null || group.alpha == alpha)
+            return;
+        group.alpha = alpha;
+        group.blocksRaycasts = group.interactable = alpha > 0f;
+    }
+
+    /// <summary>Draws the timeline at <paramref name="clock"/>, the parallax's spring stepped by <paramref name="dt"/> (the frame's seconds on the game feel's clock).</summary>
+    private void Draw(float clock, float dt)
     {
         float veil = config != null ? CityLookTimeline.Veil(clock, config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
         float reveal = config != null ? CityLookTimeline.Reveal(clock, config.citySeconds, config.cityFadeFrom, config.cityFadeSeconds) : 0f;
@@ -329,28 +444,46 @@ public sealed class CityView : MonoBehaviour
         if (_material == null || reveal <= 0f)
         {
             _shown = 0f;
+            _revealed = false;
             return;
         }
-        bool moving = !MotionPreference.Reduced && (_exterior == null || _exterior.animateCity);
+        bool moving = !UiMotion.Amount.Still && (_exterior == null || _exterior.animateCity);
         HallBakedCycle.Weights4 w = HallBakedCycle.Weights(_lights != null ? _lights.Hour : 12f);
         _material.SetVector(WeightsId, new Vector4(w.x, w.y, w.z, w.w));
         _material.SetFloat(RainId, _exterior != null ? _exterior.rain : 0f);
         _material.SetFloat(SecondsId, Time.time);
         _material.SetFloat(MotionId, moving ? 1f : 0f);
 
-        // The depth parallax: the sweep as it comes into view, then the pointer's look.
-        float dt = Time.unscaledDeltaTime;
+        // The depth parallax: the sweep as it comes into view, then the pointer's look (each kept small enough to ease within
+        // the speed limit: no crawl at it); the pan follows them on a spring that never moves the nearest layer more than a
+        // pixel at 1080p a frame of a 30 fps capture (BUG-69), from where the city first shows; both on the frame's dt.
         _shown += IsOn ? dt : 0f;
         float cityPan = 0f;
+        float maxSpeed = CityParallax.MaxSpeed(1f - 2f * _crop, ShownWidthPx(), UnityEngine.Screen.height, TrafficDepth);
         if (moving && config != null)
         {
             Mouse mouse = Mouse.current;
             float x = mouse != null && UnityEngine.Screen.width > 0 ? Mathf.Clamp(mouse.position.ReadValue().x / UnityEngine.Screen.width * 2f - 1f, -1f, 1f) : 0f;
-            _look = Mathf.Lerp(_look, x * config.cityLookParallax, 1f - Mathf.Exp(-dt * LookFollow));
-            cityPan = config.cityParallax * CityLookTimeline.Sweep(_shown, config.citySettleSeconds) + _look;
+            float sweep = CityParallax.SweepShare(config.cityParallax, config.citySettleSeconds, maxSpeed);
+            cityPan = sweep * CityLookTimeline.Sweep(_shown, config.citySettleSeconds) + x * CityParallax.LookShare(config.cityLookParallax, maxSpeed);
         }
-        panorama.uvRect = new Rect(_crop + cityPan, 0f, 1f - 2f * _crop, 1f);
-        DrawTraffic(cityPan, moving, w, reveal);
+        if (!_revealed || !moving)
+        {
+            _cityPan = cityPan;
+            _panVelocity = 0f;
+        }
+        else
+            _cityPan = CityParallax.Follow(_cityPan, ref _panVelocity, cityPan, maxSpeed, dt);
+        _revealed = true;
+        panorama.uvRect = new Rect(_crop + _cityPan, 0f, 1f - 2f * _crop, 1f);
+        DrawTraffic(_cityPan, moving, w, reveal);
+    }
+
+    /// <summary>The panorama's width on the screen in pixels (its rect through the canvas' scale).</summary>
+    private float ShownWidthPx()
+    {
+        Canvas canvas = panorama.canvas;
+        return panorama.rectTransform.rect.width * (canvas != null ? canvas.rootCanvas.scaleFactor : 1f);
     }
 
     /// <summary>The traffic at its place on its pass (CityLookTimeline.Travel at cityTrafficPace over CityLookTimeline.Flight: the lane's height, speed and direction, across the whole painting from off the frame to off the frame), in the panorama's crop and TrafficDepth times its pan, sized cityTrafficScale times the hall window's, lit by the hour as the city is (the shader's light), as revealed as the city.</summary>

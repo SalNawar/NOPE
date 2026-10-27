@@ -12,8 +12,13 @@ using UnityEngine.UI;
 /// warning lines (GameConfigSO), steps the river by unscaled time and sets
 /// the material's parameters; a citation (GameManager.CitationAcknowledged,
 /// when the slip is dismissed and the office shows again) sends its red
-/// pulse; Reduced Motion (MotionPreference) slows it. Its material is its
-/// own, made once at load; the frame allocates nothing.
+/// pulse; Reduced Motion (MotionPreference) slows it. Calm motion (HALL-FX,
+/// BUG-54): it measures how big its glass is on screen (or on the render
+/// texture its canvas draws to) so the river slows until no detail crosses
+/// more than half a pixel a frame; a drop glitches it once; near the
+/// destruction point, or while <see cref="SetWarning"/> holds it, it eases
+/// into its steady warning state (BUG-56e). Its material is its own, made once
+/// at load; the frame allocates nothing.
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class HelixRiverMonitor : MonoBehaviour
@@ -47,7 +52,9 @@ public sealed class HelixRiverMonitor : MonoBehaviour
     private static readonly int StrayId = Shader.PropertyToID("_Stray");
     private static readonly int DriftId = Shader.PropertyToID("_Drift");
     private static readonly int GlitchId = Shader.PropertyToID("_Glitch");
-    private static readonly int FlickerId = Shader.PropertyToID("_Flicker");
+    private static readonly int GlitchSeedId = Shader.PropertyToID("_GlitchSeed");
+    private static readonly int WarningId = Shader.PropertyToID("_Warning");
+    private static readonly int MoteTravelId = Shader.PropertyToID("_MoteTravel");
     private static readonly int PulseId = Shader.PropertyToID("_Pulse");
     private static readonly int PulseGlowId = Shader.PropertyToID("_PulseGlow");
     private static readonly int AspectId = Shader.PropertyToID("_Aspect");
@@ -56,8 +63,13 @@ public sealed class HelixRiverMonitor : MonoBehaviour
 
     private HelixRiver _river;
     private Material _material;
+    private Graphic _graphic;
     private RectTransform _rect;
     private bool _reduced;
+    private bool _warningHeld;
+
+    /// <summary>The glass's corners (world space), reused every frame.</summary>
+    private static readonly Vector3[] Corners = new Vector3[4];
 
     private void Awake()
     {
@@ -73,6 +85,7 @@ public sealed class HelixRiverMonitor : MonoBehaviour
         if (TryGetComponent(out Graphic graphic))
         {
             graphic.material = _material;
+            _graphic = graphic;
             _rect = graphic.rectTransform;
         }
         else if (TryGetComponent(out Renderer screen))
@@ -147,8 +160,10 @@ public sealed class HelixRiverMonitor : MonoBehaviour
                                         config != null ? config.stabilityWarningMargin : 0f,
                                         config != null ? config.stabilityCriticalMargin : 0f,
                                         ledger != null ? ledger.TotalStabilityDelta : 0f,
-                                        _reduced);
-        Apply(_river.Step(Time.unscaledDeltaTime, input));
+                                        _reduced, ScreenScale(), _warningHeld);
+        // Real time (a hit-stop never freezes the river), or the capture's frame while frames are captured at a fixed
+        // rate (UiMotion.Delta), so the speed cap holds per recorded frame and a recording shows the river's true speed.
+        Apply(_river.Step(UiMotion.Delta(Time.unscaledDeltaTime), input));
     }
 
     /// <summary>Hands one frame of the river to the material, with this display's shape.</summary>
@@ -168,7 +183,9 @@ public sealed class HelixRiverMonitor : MonoBehaviour
         _material.SetFloat(StrayId, frame.Stray);
         _material.SetFloat(DriftId, frame.Drift);
         _material.SetFloat(GlitchId, frame.Glitch);
-        _material.SetFloat(FlickerId, frame.Flicker);
+        _material.SetFloat(GlitchSeedId, frame.GlitchSeed);
+        _material.SetFloat(WarningId, frame.Warning);
+        _material.SetFloat(MoteTravelId, frame.MoteTravel);
         _material.SetFloat(PulseId, frame.Pulse);
         _material.SetFloat(PulseGlowId, frame.PulseGlow);
         _material.SetFloat(AspectId, Aspect());
@@ -176,9 +193,46 @@ public sealed class HelixRiverMonitor : MonoBehaviour
         _material.SetFloat(CornerId, corner);
     }
 
-    /// <summary>Shows or clears the river's warning (P0-A seam; owner HALL-FX, consumed by FLOW and CONTENT). The P0 stub: no-op.</summary>
-    public void SetWarning(bool on)
+    /// <summary>
+    /// Holds the river's warning state on, or releases it (the P0-A seam;
+    /// owner HALL-FX, consumed by FLOW, CONTENT and TIMELINE-FAIL): while held
+    /// the monitor eases into its steady warning whatever the stability;
+    /// released, it shows the warning only near the destruction point (the
+    /// critical band above GameConfigSO.firedAtStability; HelixRiver).
+    /// </summary>
+    public void SetWarning(bool on) => _warningHeld = on;
+
+    /// <summary>
+    /// How many of the river's reference pixels one pixel of this display
+    /// covers: the glass's reference height (at its zoom) over its height in
+    /// pixels where it is drawn (the screen, or the render texture of its
+    /// canvas's camera); 0 when it cannot tell (no camera), which lifts the
+    /// speed cap.
+    /// </summary>
+    private float ScreenScale()
     {
+        Camera camera;
+        if (_rect != null)
+        {
+            Canvas canvas = _graphic.canvas;
+            if (canvas == null)
+                return 0f;
+            canvas = canvas.rootCanvas;
+            camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera != null ? canvas.worldCamera : Camera.main;
+            if (canvas.renderMode != RenderMode.ScreenSpaceOverlay && camera == null)
+                return 0f;
+            _rect.GetWorldCorners(Corners);
+        }
+        else
+        {
+            camera = Camera.main;
+            if (camera == null)
+                return 0f;
+            Corners[0] = transform.TransformPoint(new Vector3(0f, -0.5f, 0f));
+            Corners[1] = transform.TransformPoint(new Vector3(0f, 0.5f, 0f));
+        }
+        float pixels = Vector2.Distance(RectTransformUtility.WorldToScreenPoint(camera, Corners[0]), RectTransformUtility.WorldToScreenPoint(camera, Corners[1]));
+        return pixels > 0.5f ? HelixRiver.ScreenHeight / Mathf.Max(zoom, 0.01f) / pixels : 0f;
     }
 
     /// <summary>The display's width over its height: the graphic's rect, or the quad's scale.</summary>

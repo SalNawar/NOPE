@@ -19,7 +19,11 @@ using UnityEngine.Rendering.Universal;
 /// camera) that shows it. The office camera never sees the layer. When the
 /// pipeline has no 2D Renderer, or the lighting is switched off, the office
 /// camera draws the layer itself (the painted layers' Sprite-Lit material draws
-/// them unlit there), so the hall never goes missing.
+/// them unlit there), so the hall never goes missing. The texture is HDR when
+/// the device can render one (BUG-51/26b: lit diffusers and the portals glow
+/// past white, which the office finish's bloom picks up). It is redrawn every
+/// frame: the portal vortexes, the dust and the city's traffic animate inside
+/// it (so "redraw only when the hour changes", FIX_PLAN BUG-65h, would freeze them).
 /// </summary>
 [ExecuteAlways]
 [DisallowMultipleComponent]
@@ -53,6 +57,9 @@ public sealed class HallBackdrop : MonoBehaviour
 
     /// <summary>True while the 2D camera draws the hall (false: the office camera draws the layer unlit).</summary>
     public bool Active => _camera != null;
+
+    /// <summary>The office camera the hall is drawn for (the rig turns its post-processing on for the office finish).</summary>
+    public Camera Source => source;
 
     /// <summary>The current lit painting, for the art's foreground seam colour match.</summary>
     public RenderTexture RenderedTexture => _texture;
@@ -109,7 +116,7 @@ public sealed class HallBackdrop : MonoBehaviour
         _camera = go.AddComponent<Camera>();
         _camera.cullingMask = 1 << layer;
         _camera.clearFlags = CameraClearFlags.SolidColor;
-        _camera.allowHDR = false;
+        _camera.allowHDR = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf);
         _camera.allowMSAA = false;
         _camera.useOcclusionCulling = false;
         UniversalAdditionalCameraData data = _camera.GetUniversalAdditionalCameraData();
@@ -210,7 +217,8 @@ public sealed class HallBackdrop : MonoBehaviour
                 _texture.Release();
                 Kill(_texture);
             }
-            _texture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB)
+            _texture = new RenderTexture(width, height, 24, _camera.allowHDR ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGB32,
+                                         _camera.allowHDR ? RenderTextureReadWrite.Linear : RenderTextureReadWrite.sRGB)
             {
                 name = "HallBackdrop (runtime)",
                 hideFlags = HideFlags.DontSave,

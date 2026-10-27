@@ -142,27 +142,6 @@ MonoBehaviour:
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
-  - id: 20
-    fallbacks:
-    - ImportedOfficeDress/Desk/Desk calculator
-    - Clean_Calculator__DeskClean_Case
-    hasDefault: 0
-    defaultPosition: {x: 0, y: 0, z: 0}
-    defaultYaw: 0
-  - id: 21
-    fallbacks:
-    - ImportedOfficeDress/Desk/Pen pot
-    - Clean_PenPot__DeskClean_ABS
-    hasDefault: 0
-    defaultPosition: {x: 0, y: 0, z: 0}
-    defaultYaw: 0
-  - id: 22
-    fallbacks:
-    - ImportedOfficeDress/Desk/Forms stapler
-    - Clean_Stapler__DeskClean_Case
-    hasDefault: 0
-    defaultPosition: {x: 0, y: 0, z: 0}
-    defaultYaw: 0
   - id: 23
     fallbacks:
     - 16 Departure board blank display

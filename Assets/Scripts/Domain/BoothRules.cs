@@ -77,7 +77,7 @@ public readonly struct BoothInput
     /// <summary>The office case HUD (the office compare strip) shows: the frame closed while a traveller is at the desk.</summary>
     public readonly bool CaseHudVisible;
 
-    /// <summary>The reading view may stay, and a click on the mat tilts into it and back: as the props (false returns to the normal view: a click on the intercom, the traveller or the PC from the tilted view blends straight up to the wheel or the frame; Saleh 2026-09-30).</summary>
+    /// <summary>The reading view may stay, and a click on the mat tilts into it and back: out of the PC frame and without a newsletter, the wheel open or not (the intercom's wheel opens where the player is: the desk home map, D5); false returns to the normal view (the PC frame from the tilted view blends straight up to it).</summary>
     public readonly bool DeskViewAllowed;
 
     /// <summary>The "▲ Back" control shows at the top of the office overlay and the mouse wheel rolled up returns from the reading view: the reading view is on and the props are live.</summary>
@@ -122,8 +122,11 @@ public readonly struct BoothInput
 /// power buttons, the props, the documents, the wheel, the traveller, the
 /// stamp bar, inspect mode, the case HUD, the reading view, its "▲ Back"
 /// control, the normal view's own ways and the PC switch take input or show.
-/// What a right-click or Esc backs out of is ControlRules'. Pure, so every
-/// row is tested headless; BoothCoordinator applies it.
+/// The wheel opens in whichever view the player is in and never leaves or
+/// forbids the reading view (the desk home map, FIX_PLAN_v2's DESK-PLAN
+/// delta: Saleh's D5 "intercom to bring out dialogue options", from both
+/// views). What a right-click or Esc backs out of is ControlRules'. Pure, so
+/// every row is tested headless; BoothCoordinator applies it.
 /// </summary>
 public static class BoothRules
 {
@@ -132,7 +135,8 @@ public static class BoothRules
     {
         bool newsletter = c.Phase == BoothPhase.Newsletter;
         bool atDesk = c.Phase == BoothPhase.TravellerAtDesk;
-        bool desk = !c.Focused && !newsletter && !c.WheelOpen;
+        bool reading = !c.Focused && !newsletter;
+        bool desk = reading && !c.WheelOpen;
         bool office = !c.Focused && atDesk;
         bool papers = desk && atDesk;
         return new BoothInput(
@@ -146,7 +150,7 @@ public static class BoothRules
             stampsLive: papers,
             inspectLive: papers,
             caseHudVisible: office,
-            deskViewAllowed: desk,
+            deskViewAllowed: reading,
             deskViewBackLive: c.DeskView && desk,
             normalViewLive: desk && !c.DeskView,
             pcSwitchLive: !newsletter && (c.Focused || !c.WheelOpen));

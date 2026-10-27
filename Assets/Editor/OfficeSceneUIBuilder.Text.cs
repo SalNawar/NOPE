@@ -18,7 +18,10 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// A text, created once (existing-wins); with a role it gets that theme
     /// tag. A new keyed text is baked with its English label; <paramref name="style"/>
-    /// is its built style (new texts get it; the tag records it).
+    /// is its built style (new texts get it; the tag records it). A new text is
+    /// set in the kit's body face (bold: its bold face), never TMP's default
+    /// LiberationSans (BUG-38a; the kit pass gives each role its own face, and
+    /// re-fonts any text an older build left in the default, KitRefont).
     /// </summary>
     private static TMP_Text Text(Transform parent, string name, string content, int size, TextAlignmentOptions align, Vector2 aMin, Vector2 aMax, Color color,
                                  ThemeRoleId? role = null, string labelKey = null, FontStyles style = FontStyles.Normal, ThemeTextKind kind = ThemeTextKind.Body, bool fit = false)
@@ -45,6 +48,12 @@ public static partial class OfficeSceneUIBuilder
         rt.offsetMin = Vector2.zero;
         rt.offsetMax = Vector2.zero;
         var t = go.AddComponent<TextMeshProUGUI>();
+        SceneUiKit.SetBodyFace(t);
+        if ((style & FontStyles.Bold) != 0 && SceneUiKit.BodyBoldFace != null)
+        {
+            t.font = SceneUiKit.BodyBoldFace;
+            t.fontSharedMaterial = SceneUiKit.BodyBoldFace.material;
+        }
         t.text = labelKey != null ? UiText.Get(labelKey) : content;
         t.fontSize = size;
         t.alignment = align;

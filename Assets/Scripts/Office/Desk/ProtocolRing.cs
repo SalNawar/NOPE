@@ -129,7 +129,7 @@ public sealed class ProtocolRing : MonoBehaviour, IBeginDragHandler, IDragHandle
         CueSounds.Play(SoundCues.UiTab, sound, 1f);
         _turn = Spring.At(0f);
         DeskProps.Aim(ref _turn, 1f);
-        _turn.Kick(2f);
+        _turn.Kick(2f, UiMotion.Amount);
         _relabel = true;
         if (UiMotion.Amount.Still)
             Relabel();
@@ -140,7 +140,7 @@ public sealed class ProtocolRing : MonoBehaviour, IBeginDragHandler, IDragHandle
     {
         CueSounds.Play(SoundCues.UiTab, sound, 0.8f);
         _sway = Spring.At(0f);
-        _sway.Kick(UiMotion.Amount.Still ? 0f : 6f);
+        _sway.Kick(6f, UiMotion.Amount);
     }
 
     /// <summary>Each card prints its question: the deck from the front, card by card; a card past the deck is blank.</summary>

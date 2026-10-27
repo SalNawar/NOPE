@@ -234,6 +234,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The decorations the player moves (ArrangeArt, BindDecor), or null.</summary>
     private DeskDecor _decor;
 
+    /// <summary>The art objects the desk home map moved onto their homes (MoveArtProp), each grouped under one root, by home id: the intercom's click box, hover outline and reaction take the whole object (BindIntercom).</summary>
+    private readonly Dictionary<string, Transform> _artHomes = new Dictionary<string, Transform>();
+
     private void Awake()
     {
         Scene art = OfficeScenes.ArtScene;
@@ -243,7 +246,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             SceneManager.sceneLoaded += HandleLoaded;
     }
 
-    private void OnDestroy() => SceneManager.sceneLoaded -= HandleLoaded;
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= HandleLoaded;
+        DeskLayout.Unbind();
+    }
 
     /// <summary>The gameplay layer loaded first (played alone in the editor): bind when the art office arrives.</summary>
     private void HandleLoaded(Scene scene, LoadSceneMode mode)
@@ -464,8 +471,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
             else if (_hasFrame)
             {
-                // The gameplay's machine stands on its bay (the desk layout spec §2): its front (local -Z) toward the mat, the near end of its bed inside the reading view's right edge.
-                _frame.Place(s, config.layout.scanner, config.layout.shelfHeight);
+                // The gameplay's machine stands on its home on the rail right of the mat (the desk home map): its front (local -Z) and its readout toward the chair.
+                _frame.Place(s, config.layout.Bay(DeskHomeMap.Scanner), 0f);
+                DeskLayout.Track(DeskHomeMap.Scanner, s);
             }
 
             if (scanner.TryGetComponent(out BoxCollider box))
@@ -518,17 +526,23 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The counter lies along the desk's far edge in the office view's frame, ending where the desk view shows the desk (Papers, Please's zones).
         if (counter != null && _office != null)
             counter.Bind(_office.transform.forward);
-        // Everything else stands on its bay (the desk layout spec, DeskLayoutSettings): the stamp rack beside the counter, DETAIN by the AVAILABLE sign, the machines and the upgrades' objects, each first-day note over its machine; the back shelves and the intercom are built there.
+        // Everything else stands on its home (the desk home map, DeskLayoutSettings): the stamp rack at the back of the rail by the counter, its daters front to back; DETAIN left of the AVAILABLE sign; the machines and the upgrades' objects, each first-day note over its machine; the deal tray right above the mat; the intercom is the art's phone on its home (a stand-in is built when the art has none).
         if (_hasFrame)
         {
             DeskLayoutSettings layout = config.layout;
             if (stampTray != null)
-                stampTray.Lay(_frame, layout.stampRack);
+            {
+                stampTray.Lay(_frame, layout.Bay(DeskHomeMap.StampRack));
+                DeskLayout.Track(DeskHomeMap.StampRack, stampTray.Rack);
+            }
             if (detainButton != null)
-                _frame.Place(detainButton.transform, layout.detain, layout.shelfHeight);
-            Transform intercom = DeskFurniture.Build(transform, _frame, layout, MaterialNamed, OpenWheel);
-            if (guide != null)
-                guide.SetIntercom(intercom);
+            {
+                _frame.Place(detainButton.transform, layout.Bay(DeskHomeMap.Detain), 0f);
+                DeskLayout.Track(DeskHomeMap.Detain, detainButton.transform);
+            }
+            Transform standIn = DeskFurniture.Build(transform, _frame, layout, MaterialNamed, OpenWheel, At(OfficeAnchorId.Intercom).HasBounds);
+            if (guide != null && standIn != null)
+                guide.SetIntercom(standIn);
         }
         if (hardware != null && _hasFrame)
         {
@@ -538,6 +552,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (hardware.ChipNote != null && hardware.Reader != null)
                 FaceCamera(hardware.ChipNote, hardware.Reader.transform.position + Vector3.up * HintHeight, viewer);
         }
+        DeskLayout.RefreshObstacles();
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
@@ -546,10 +561,18 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             rulebook.Place(at, Quaternion.LookRotation(level, Vector3.up));
         }
 
+        // The papers come in and go back over the deal tray (Saleh, DESK APPROVED); without its home, from the art's hand-over point.
         if (handOver != null)
         {
-            Vector3 from = At(OfficeAnchorId.HandOver).Position;
-            handOver.position = new Vector3(from.x, top, from.z);
+            if (DeskLayout.TryPose(DeskHomeMap.DealTray, out Vector3 tray, out _))
+            {
+                handOver.position = new Vector3(tray.x, top, tray.z);
+            }
+            else
+            {
+                Vector3 from = At(OfficeAnchorId.HandOver).Position;
+                handOver.position = new Vector3(from.x, top, from.z);
+            }
         }
 
         return top;
@@ -616,6 +639,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 if (prop.hasReadout)
                     reaction.SetReadout(TextOf(prop.readout));
             }
+            if (prop.anchor == OfficeAnchorId.Intercom)
+                BindIntercom(prop.click);
         }
     }
 
@@ -778,13 +803,16 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // -----------------------------
 
     /// <summary>
-    /// The art's desk arranged to the desk's plan before anything is bound to
-    /// it (the desk layout spec; the art scene is never edited, its objects
-    /// are moved at run time): the desk's frame from the mat and the office
-    /// view, the art's phone onto the comms shelf (DeskLayoutSettings.phone)
-    /// and the art's small props into the decor zones (DeskDecor); the
-    /// anchors are resolved again when anything moved, so the props' click
-    /// boxes follow them.
+    /// The art's desk arranged to the desk home map before anything is bound
+    /// to it (the art scene is never edited, its objects are moved at run
+    /// time): the desk's frame from the mat and the office view; the art's
+    /// cut props switched off (DeskLayoutSettings.cutParts: Saleh's "we will
+    /// cut all but decor objects"); the desk bound (DeskLayout: the frame,
+    /// the art mat, the homes); the art objects the map moves onto their
+    /// homes (the phone as the intercom, the mouse), shrunk to fit when
+    /// bigger; and the decorations to where the player put them or the decor
+    /// home (DeskDecor). The anchors are resolved again when anything moved,
+    /// so the props' click boxes follow them.
     /// </summary>
     private void ArrangeArt(Scene art)
     {
@@ -797,30 +825,91 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         _artRenderers = art.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<Renderer>(true)).ToArray();
 
         DeskLayoutSettings layout = config.layout;
-        bool moved = MoveArtProp(layout.phoneParts, layout.phone, layout.shelfHeight);
+        bool moved = CutArtProps(layout.cutParts);
+        DeskLayout.Bind(_frame, mat.HasBounds ? _frame.Footprint(mat.Bounds) : layout.mat.Rect, layout);
+        foreach (DeskHome home in layout.homes ?? Array.Empty<DeskHome>())
+            if (home != null && !string.IsNullOrEmpty(home.artParts) && MoveArtProp(home))
+            {
+                moved = true;
+                DeskLayout.Register(home.id, home.Footprint, home.height);
+            }
         _decor = gameObject.AddComponent<DeskDecor>();
         moved |= _decor.Arrange(_frame, layout, _artRenderers);
         if (moved)
             _anchors = OfficeAnchors.Resolve(art, contract);
     }
 
-    /// <summary>Moves the art's prop made of the parts named "<paramref name="prefix"/>__…" (as one) onto <paramref name="bay"/>, its footprint's centre on the bay's, its base on the desk or the shelf; true when it was found.</summary>
-    private bool MoveArtProp(string prefix, DeskBay bay, float shelfHeight)
+    /// <summary>Switches off the art's parts named "prefix__…" for every prefix of <paramref name="prefixes"/> (the cut props); true when any was on.</summary>
+    private bool CutArtProps(IReadOnlyList<string> prefixes)
     {
-        if (string.IsNullOrEmpty(prefix) || bay == null)
-            return false;
-        List<Transform> parts = _artRenderers.Where(r => r != null && r.name.StartsWith(prefix + "__", StringComparison.Ordinal)).Select(r => r.transform).Distinct().ToList();
+        bool cut = false;
+        foreach (Renderer r in _artRenderers)
+        {
+            if (r == null || !r.gameObject.activeSelf)
+                continue;
+            foreach (string prefix in prefixes ?? Array.Empty<string>())
+                if (!string.IsNullOrEmpty(prefix) && r.name.StartsWith(prefix + "__", StringComparison.Ordinal))
+                {
+                    r.gameObject.SetActive(false);
+                    cut = true;
+                    break;
+                }
+        }
+        return cut;
+    }
+
+    /// <summary>Moves the art's object made of the parts named "<paramref name="home"/>.artParts__…" (as one, grouped under one root: GroupArt) onto its home: its footprint's centre on the home's, its base on the desk, shrunk about its base to fit the home's footprint when bigger; true when it was found.</summary>
+    private bool MoveArtProp(DeskHome home)
+    {
+        string prefix = home.artParts;
+        List<Transform> parts = _artRenderers.Where(r => r != null && r.gameObject.activeSelf && r.name.StartsWith(prefix + "__", StringComparison.Ordinal))
+                                             .Select(r => r.transform).Distinct().ToList();
         if (parts.Count == 0)
             return false;
         Bounds b = parts[0].GetComponent<Renderer>().bounds;
         foreach (Transform part in parts)
             b.Encapsulate(part.GetComponent<Renderer>().bounds);
-        Vector3 to = _frame.Point(bay.at, bay.onShelf ? shelfHeight : 0f);
-        Vector3 by = new Vector3(to.x - b.center.x, to.y - b.min.y, to.z - b.center.z);
-        foreach (Transform part in parts)
-            if (!parts.Exists(other => other != part && part.IsChildOf(other)))
-                part.position += by;
+
+        DeskRect have = _frame.Footprint(b), room = home.Footprint;
+        float k = 1f;
+        if (have.Width > room.Width && have.Width > 1e-5f)
+            k = Mathf.Min(k, room.Width / have.Width);
+        if (have.Height > room.Height && have.Height > 1e-5f)
+            k = Mathf.Min(k, room.Height / have.Height);
+        var pivot = new Vector3(b.center.x, b.min.y, b.center.z);
+        Transform root = GroupArt(home.id, parts, pivot);
+        if (k < 1f)
+        {
+            root.position = pivot + (root.position - pivot) * k;
+            root.localScale *= k;
+        }
+
+        root.position += _frame.Point(new Vector2(home.x, home.y)) - pivot;
+        _artHomes[home.id] = root;
         return true;
+    }
+
+    /// <summary>
+    /// The one root an art object's <paramref name="parts"/> move, shrink and
+    /// react as (the phone's body, dial, handset and cord are separate meshes
+    /// in the art), for home <paramref name="homeId"/>: made once at
+    /// <paramref name="pivot"/> under the parts' parent, the topmost parts
+    /// moved under it where they stand; the root already made when they
+    /// stand under it.
+    /// </summary>
+    private static Transform GroupArt(string homeId, List<Transform> parts, Vector3 pivot)
+    {
+        string name = "Art_" + homeId;
+        List<Transform> tops = parts.Where(part => !parts.Exists(other => other != part && part.IsChildOf(other))).ToList();
+        Transform parent = tops[0].parent;
+        if (parent != null && parent.name == name && tops.TrueForAll(top => top.parent == parent))
+            return parent;
+        Transform root = new GameObject(name).transform;
+        root.SetParent(parent, false);
+        root.SetPositionAndRotation(pivot, Quaternion.identity);
+        foreach (Transform top in tops)
+            top.SetParent(root, true);
+        return root;
     }
 
     /// <summary>The decorations made draggable once the props are bound: a prop's click box (its reaction) goes with its decoration (DeskDecor.MakeHandles).</summary>
@@ -852,6 +941,41 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     {
         if (wheel != null)
             wheel.Open();
+    }
+
+    /// <summary>
+    /// The art's phone, moved onto the intercom's home, is the intercom
+    /// (Saleh's D5: "intercom to bring out dialogue options"; FIX_PLAN_v2: the
+    /// art-scene model is the intercom's fallback art): its click box asks the
+    /// traveller where the player is, and the guide points at it. The whole
+    /// moved object is the intercom (MoveArtProp's root): the click box spans
+    /// all of its parts, the hover outlines all of them and the reaction
+    /// moves them as one, not only the body the anchor names.
+    /// </summary>
+    private void BindIntercom(Clickable click)
+    {
+        if (_artHomes.TryGetValue(DeskHomeMap.Intercom, out Transform art) && art != null)
+        {
+            Renderer[] parts = art.GetComponentsInChildren<Renderer>(false);
+            if (parts.Length > 0)
+            {
+                Bounds b = parts[0].bounds;
+                foreach (Renderer r in parts)
+                    b.Encapsulate(r.bounds);
+                PlaceBox(click.transform, b.center, b.size);
+                click.SetOutline(parts);
+                if (click.TryGetComponent(out DeskReaction reaction))
+                {
+                    reaction.SetTarget(art);
+                    reaction.SetTooltipPoint(TopOf(click.transform, b));
+                }
+            }
+        }
+        click.onClick.RemoveListener(OpenWheel);
+        click.onClick.AddListener(OpenWheel);
+        if (guide != null)
+            guide.SetIntercom(click.transform);
+        DeskLayout.Track(DeskHomeMap.Intercom, click.transform);
     }
 
     private TMP_Text TextOf(OfficeAnchorId id)

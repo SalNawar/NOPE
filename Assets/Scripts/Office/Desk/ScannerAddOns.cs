@@ -25,6 +25,12 @@ public sealed class ScannerAddOns : MonoBehaviour
     /// <summary>The tray's and the beacon's click boxes (children of each object: hidden with it).</summary>
     [SerializeField] private Clickable trayClick, beaconClick;
 
+    /// <summary>The Auto-Feed tray's root (its click box's parent), or null: one delivered this morning waits for the supply crate (DeskUpgrades).</summary>
+    public Transform Tray => trayClick != null ? trayClick.transform.parent : null;
+
+    /// <summary>The Analysis beacon's root (its click box's parent), or null: one delivered this morning waits for the supply crate (DeskUpgrades).</summary>
+    public Transform Beacon => beaconClick != null ? beaconClick.transform.parent : null;
+
     /// <summary>Raised when the tray is clicked (DeskScanner passes it on to the desk: feed the stack).</summary>
     public event System.Action TrayClicked;
 
@@ -114,7 +120,7 @@ public sealed class ScannerAddOns : MonoBehaviour
         _lit = marked;
         _beaconFor = marked ? beaconSeconds : 0.45f;
         Aim(ref _pod, marked ? 1f : 0.5f);
-        _pod.Kick(marked ? 6f : 3f);
+        _pod.Kick(marked ? 6f : 3f, UiMotion.Amount);
         Tint(beaconLamp, marked ? LampOn : LampOff);
         CueSounds.Play(SoundCues.BeaconPop, sound, marked ? 1f : 0.85f);
     }

@@ -164,7 +164,7 @@ public static class DisplayText
         var visualSources = new List<int>(logical.Length);
         string visual = ArabicShaper.ToVisual(logical, visualSources);
         foreach (int i in visualSources)
-            sources.Add(logicalSources[i]);
+            sources.Add(i >= 0 ? logicalSources[i] : -1); // a tag written again around a styled run comes from no letter (ArabicShaper)
         return visual;
     }
 

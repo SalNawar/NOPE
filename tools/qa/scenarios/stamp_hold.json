@@ -1,0 +1,174 @@
+{
+  "name": "stamp_hold",
+  "owner": "STAMP",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "STAMP R5 (docs/pending/STAMP.md, BUGLIST 55b): with a dater held over the passport (the left button down), press Esc, right-click, Q, A or TAB, then let the button go, in the reading view and (all but TAB) in the office view. Pass (hold.*): the key ends the hold, the dater goes back unpressed and nothing is stamped. Alt+Tab (focus loss) waits for DOC-HANDLE's HoldRegistry.Desk.OnFocusLost (#8) and is not driven here. Needs StampRig's ops."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "stampPaper",
+      "n": -1,
+      "x2": 0.5,
+      "y2": 0.12,
+      "name": "read"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "Escape",
+      "name": "Escape_A_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "Escape",
+      "name": "Escape_D_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "RightClick",
+      "name": "RightClick_A_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "RightClick",
+      "name": "RightClick_D_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "Tab",
+      "name": "Tab_A_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "Tab",
+      "name": "Tab_D_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "Q",
+      "name": "Q_A_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "Q",
+      "name": "Q_D_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "A",
+      "name": "A_A_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "A",
+      "name": "A_D_reading"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "Escape",
+      "name": "Escape_A_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "Escape",
+      "name": "Escape_D_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "RightClick",
+      "name": "RightClick_A_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "RightClick",
+      "name": "RightClick_D_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "Q",
+      "name": "Q_A_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "Q",
+      "name": "Q_D_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "A",
+      "name": "A_A_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "A",
+      "name": "A_D_office"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1,
+      "name": "hold"
+    }
+  ]
+}

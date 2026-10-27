@@ -7,7 +7,8 @@ using NUnit.Framework;
 /// scope; a morning (ResetDay) clears the day's (the forced hour, auto-decide,
 /// the forced leader, the hall's overrides) and keeps the run's and the next
 /// generation's, which the badge names loudly, with the language lock kept
-/// elsewhere (CultureThemeService.LockOverride); a jump holds the next
+/// elsewhere (CultureThemeService.LockOverride, cleared at a morning by its
+/// owner's ResetForNewDay and by a new run); a jump holds the next
 /// generation's aside and puts them back; the cheat menu's Dusk is the
 /// one day cycle's dusk (HallDayCycle.DuskHour). Pure statics: these run
 /// outside Unity as well as in its EditMode suite, except the one in the

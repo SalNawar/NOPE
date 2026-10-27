@@ -11,8 +11,10 @@ using UnityEngine.EventSystems;
 /// paper's sheet; for an art prop the office binder hands over the prop's own
 /// renderers), or nothing but the hand cursor when the list is empty (a hit
 /// zone). Only a left-click acts (Papers, Please's controls, Saleh
-/// 2026-10-06: a right-click backs out, ControlRules). Designers wire the
-/// response in the inspector.
+/// 2026-10-06: a right-click backs out, ControlRules), and never the release
+/// of a drag (BUG-23: "a drag never fires a click"; a decoration dragged by
+/// its prop's click box plays no click). Designers wire the response in the
+/// inspector.
 /// </summary>
 public sealed class Clickable : MonoBehaviour, IPointerClickHandler
 {
@@ -34,10 +36,10 @@ public sealed class Clickable : MonoBehaviour, IPointerClickHandler
     /// <summary>Sets what the hover outline draws (the office binder: an art prop's renderers).</summary>
     public void SetOutline(Renderer[] renderers) => outline = renderers ?? System.Array.Empty<Renderer>();
 
-    /// <summary>Handles a pointer click from the EventSystem: a left-click only.</summary>
+    /// <summary>Handles a pointer click from the EventSystem: a left-click only, never the end of a drag.</summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (interactable && eventData.button == PointerEventData.InputButton.Left)
+        if (interactable && eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
             onClick.Invoke();
     }
 }

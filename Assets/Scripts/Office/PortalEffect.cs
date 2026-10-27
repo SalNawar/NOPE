@@ -3,31 +3,37 @@ using UnityEngine;
 /// <summary>
 /// One portal ring's vortex in the anime hall (Saleh's demo 1018a: "the vfx
 /// for portals looks bad and is not even alligned"; the portals spec v3 VX1,
-/// VX3-VX6): a quad drawn with TimeDesk/PortalGlow on its ring's opening as
-/// the hall drawing paints it, so it sits exactly in the ring at every aspect
-/// (it follows the drawing's transform each frame, through the art's pan):
-/// the cel swirl, ink line, rim, sparkles and ring glow of an open departure
-/// portal (cyan), the Return Gate's own (amber, winding inward), or nothing
-/// (CLOSED, under maintenance). The shader reads the painting under the quad,
-/// so the ring's metal, the brass rails and the fence posts in front keep
-/// their pixels and the vortex shows through the bay's glass below the fence
-/// rail. A change of state springs the iris open or shut
+/// VX3-VX6; HALL-FX BUG-26a, 64c): a quad drawn with TimeDesk/PortalGlow on its
+/// ring's opening as the hall drawing paints it, so it sits exactly in the
+/// ring at every aspect (it follows the drawing's transform each frame,
+/// through the art's pan): the layered cel swirl, ink line, rim and sparkles
+/// of an open departure portal (cyan), the Return Gate's own (amber, winding
+/// inward), or nothing (CLOSED, under maintenance). It fills exactly the hole
+/// the ring's metal encloses, clipped by the ring's painted-aperture mask
+/// (HallPortalsSO.masks): the rails and bars in front keep their painted
+/// pixels and the part behind the bay's glass shows through it; nothing is
+/// drawn on the metal. A change of state springs the iris open or shut
 /// (PortalVortex.Iris over the tuning's irisSeconds); a departure flares it
 /// (<see cref="Pulse"/>: brighter, a shock ring running to the rim, over the
-/// config's seconds; one step with reduced motion); at night it reads
+/// asset's seconds; one step with reduced motion); at night it reads
 /// brighter, with more sparkles (<see cref="Night"/>, HallLightingRig.PortalNight).
-/// The motion preference is read when it is shown and at each flare, never per
-/// frame (reduced motion holds the swirl and the sparkles still), and a frame
-/// allocates nothing. AnimeHallPortalLink places and shows it; the gameplay
-/// layer builds one per portal (Build Office UI), hidden until then.
+/// The motion preference is read live every frame (BUG-64c: turning Reduced
+/// Motion on stills an open vortex at once and finishes its iris), and a
+/// frame allocates nothing. AnimeHallPortalLink places and shows it; the
+/// gameplay layer builds one per HallPortalsSO ring (Build Office UI), hidden
+/// until then.
 /// </summary>
 public sealed class PortalEffect : MonoBehaviour
 {
     /// <summary>The vortex's quad (the built-in quad, its material TimeDesk/PortalGlow), disabled while shut.</summary>
     [SerializeField] private MeshRenderer vortex;
 
-    private static readonly int DrawingId = Shader.PropertyToID("_Drawing");
-    private static readonly int DrawingRectId = Shader.PropertyToID("_DrawingRect");
+    /// <summary>The hall's portals (HallPortals.asset: the rings, their masks and the vortex's tuning), the same on every effect.</summary>
+    [SerializeField] private HallPortalsSO portals;
+
+    private static readonly int MaskId = Shader.PropertyToID("_Mask");
+    private static readonly int MaskStId = Shader.PropertyToID("_MaskST");
+    private static readonly int MaskRectId = Shader.PropertyToID("_MaskRect");
     private static readonly int ShapeId = Shader.PropertyToID("_Shape");
     private static readonly int DeepId = Shader.PropertyToID("_Deep");
     private static readonly int MidId = Shader.PropertyToID("_Mid");
@@ -41,13 +47,13 @@ public sealed class PortalEffect : MonoBehaviour
     private MaterialPropertyBlock _block;
     private Transform _frame;
     private Rect _local;
-    private Texture _drawing;
-    private Vector4 _drawingRect;
-    private float _fenceV;
+    private Texture _mask;
+    private Vector4 _maskMap;
+    private Vector4 _maskRect;
+    private float _reach = 1f;
     private PortalVortexTuning _tuning;
     private bool _open;
     private bool _returnGate;
-    private bool _reduced;
     private float _reveal;
     private float _angle;
     private float _drift;
@@ -57,22 +63,27 @@ public sealed class PortalEffect : MonoBehaviour
     /// <summary>How far night has come for this ring (0 by day to 1; HallLightingRig.PortalNight, set by AnimeHallPortalLink each frame).</summary>
     public float Night { get; set; }
 
+    /// <summary>The hall's portals this effect was built from (AnimeHallPortalLink reads the rings from it).</summary>
+    public HallPortalsSO Portals => portals;
+
     /// <summary>
     /// Puts the vortex on its opening: <paramref name="local"/> is its quad
     /// (PortalVortex.LocalQuad) in <paramref name="frame"/>'s local space,
-    /// followed each frame; <paramref name="drawing"/> is the painting under
-    /// it with the quad's texture coordinates <paramref name="drawingRect"/>
-    /// (null: nothing read, the vortex fills its whole opening) and the fence's
-    /// rail at <paramref name="fenceV"/> of the quad (0: none); drawn on the
+    /// followed each frame; <paramref name="mask"/> is the ring's mask atlas
+    /// (null: no mask, the vortex fills its ellipse), read at the quad's uv
+    /// times <paramref name="maskMap"/>'s (W, H) plus its (X, Y)
+    /// (PortalVortex.MaskMap) inside the ring's crop <paramref name="maskRect"/>;
+    /// the hole reaches <paramref name="reach"/> opening radii; drawn on the
     /// sorting layer <paramref name="sortingLayerId"/> at <paramref name="sortingOrder"/>.
     /// </summary>
-    public void Place(Transform frame, Rect local, Texture drawing, Rect drawingRect, float fenceV, int sortingLayerId, int sortingOrder)
+    public void Place(Transform frame, Rect local, Texture mask, PortalVortex.Box maskMap, Rect maskRect, float reach, int sortingLayerId, int sortingOrder)
     {
         _frame = frame;
         _local = local;
-        _drawing = drawing;
-        _drawingRect = new Vector4(drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height);
-        _fenceV = fenceV;
+        _mask = mask;
+        _maskMap = new Vector4(maskMap.W, maskMap.H, maskMap.X, maskMap.Y);
+        _maskRect = new Vector4(maskRect.x, maskRect.y, maskRect.width, maskRect.height);
+        _reach = Mathf.Clamp(reach, 1f, PortalVortex.Margin);
         if (vortex != null)
         {
             vortex.sortingLayerID = sortingLayerId;
@@ -94,9 +105,6 @@ public sealed class PortalEffect : MonoBehaviour
         _tuning = tuning;
         _pulseSeconds = Mathf.Max(0.05f, pulseSeconds);
         _pulseAge = -1f;
-        _reduced = MotionPreference.Reduced;
-        if (_reduced)
-            _reveal = open ? 1f : 0f;
     }
 
     /// <summary>True while it is open (its iris opening, open, or a departure portal's or the Return Gate's vortex showing).</summary>
@@ -107,7 +115,6 @@ public sealed class PortalEffect : MonoBehaviour
     {
         if (!_open)
             return;
-        _reduced = MotionPreference.Reduced;
         _pulseAge = 0f;
     }
 
@@ -116,7 +123,8 @@ public sealed class PortalEffect : MonoBehaviour
         if (vortex == null || _tuning == null)
             return;
         float dt = Time.deltaTime;
-        _reveal = PortalVortex.Reveal(_reveal, _open, dt, _tuning.irisSeconds, _reduced);
+        bool reduced = MotionPreference.Reduced;
+        _reveal = PortalVortex.Reveal(_reveal, _open, dt, _tuning.irisSeconds, reduced);
         bool shown = _reveal > 0f;
         if (vortex.enabled != shown)
             vortex.enabled = shown;
@@ -124,8 +132,8 @@ public sealed class PortalEffect : MonoBehaviour
             return;
 
         float spin = _returnGate ? -_tuning.spinDegrees * 0.8f : _tuning.spinDegrees;
-        _angle = PortalVortex.Turn(_angle, spin, dt, _reduced);
-        if (!_reduced)
+        _angle = PortalVortex.Turn(_angle, spin, dt, reduced);
+        if (!reduced)
             _drift = Mathf.Repeat(_drift + _tuning.sparkleDrift * dt, 64f);
 
         float flare = 0f, shock = -1f;
@@ -133,8 +141,8 @@ public sealed class PortalEffect : MonoBehaviour
         {
             _pulseAge += dt;
             float progress = _pulseAge / _pulseSeconds;
-            flare = PortalVortex.Pulse(progress, _reduced);
-            if (!_reduced && progress < 1f)
+            flare = PortalVortex.Pulse(progress, reduced);
+            if (!reduced && progress < 1f)
                 shock = 0.2f + 0.85f * progress;
             if (progress >= 1f)
                 _pulseAge = -1f;
@@ -161,10 +169,11 @@ public sealed class PortalEffect : MonoBehaviour
         _block ??= new MaterialPropertyBlock();
         vortex.GetPropertyBlock(_block);
         PortalVortexTuning k = _tuning;
-        if (_drawing != null)
-            _block.SetTexture(DrawingId, _drawing);
-        _block.SetVector(DrawingRectId, _drawingRect);
-        _block.SetVector(ShapeId, new Vector4(_drawing != null ? 1f : 0f, _fenceV, k.glassOpacity, k.opacity));
+        if (_mask != null)
+            _block.SetTexture(MaskId, _mask);
+        _block.SetVector(MaskStId, _maskMap);
+        _block.SetVector(MaskRectId, _maskRect);
+        _block.SetVector(ShapeId, new Vector4(_reach, k.glassOpacity, k.opacity, _mask != null ? 1f : 0f));
         _block.SetColor(DeepId, _returnGate ? k.returnDeep : k.departureDeep);
         _block.SetColor(MidId, _returnGate ? k.returnMid : k.departureMid);
         _block.SetColor(LightId, _returnGate ? k.returnLight : k.departureLight);

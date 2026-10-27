@@ -61,7 +61,10 @@ public sealed class OfficeSceneContractSO : ScriptableObject
     /// anime hall's preserved desk (art c75e1fe), whose props are flat lists of
     /// "Prop__Material" mesh parts, one part each here (the one whose bounds stand for
     /// the prop; the PC's must be its glass, which the desktop's clone binds to). The
-    /// defaults fit both, as the hall keeps the same desk layout.
+    /// defaults fit both, as the hall keeps the same desk layout. The cut props
+    /// (the calculator, the pen pot and the stapler: Saleh 2026-10-20, the desk
+    /// home map) have no spec: their parts are switched off at bind
+    /// (DeskLayoutSettings.cutParts) and nothing binds or warns about them.
     /// </summary>
     public AnchorSpec[] anchors =
     {
@@ -85,9 +88,6 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         new AnchorSpec(OfficeAnchorId.ReadoutNext, new[] { "GameplayAnchors/NextLabel", "NextLabel" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.OfficeCamera, new[] { "Main Camera", "Anime hall player preview" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.OfficeVCam, new[] { "Cameras/OfficeVCam" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Calculator, new[] { "ImportedOfficeDress/Desk/Desk calculator", "Clean_Calculator__DeskClean_Case" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.PenPot, new[] { "ImportedOfficeDress/Desk/Pen pot", "Clean_PenPot__DeskClean_ABS" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Stapler, new[] { "ImportedOfficeDress/Desk/Forms stapler", "Clean_Stapler__DeskClean_Case" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.DepartureBoard, new[] { "16 Departure board blank display" }, false, Vector3.zero),
     };
 

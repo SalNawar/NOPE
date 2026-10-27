@@ -171,7 +171,7 @@ TDD: every test was red first (a compile error on the missing API), then green.
 6. **Set-aside files are kept forever.** They are small, and New Run is rare. A cleanup belongs in Settings later, behind a confirm.
 7. **The save notice is a plain strip** with English fallbacks until the string tables carry its keys. Skinning it with the UI kit is UI-PC's (S3).
 8. **A skip or jump from Home replays the cheat changes on the end-of-shift save** (verifier round 1, finding 2, option a). Warning or refusing was the other choice. Replaying keeps a tester's stability, money, flag, item, unlock and leader cheats at Home, and keeps the arrival charged once. Home's own choices before the skip are still replaced by the default care: a skip plays the night for you.
-9. **The language lock is run-scoped** (verifier round 1, finding 3): named on the badge, cleared by a new or continued run. Day-scoped is TEXT-LANG's call (see the notes).
+9. **The language lock is run-scoped** (verifier round 1, finding 3): named on the badge, cleared by a new or continued run. Day-scoped is TEXT-LANG's call (see the notes). **At TEXT-LANG's integration (#12)** it became day-scoped: `CultureThemeService.ResetForNewDay` clears it and `DevToolsState.ResetDay` calls that every morning; `Elsewhere` keeps its entry (where the switch lives), and the badge, `runsafe.switch.elsewhere` and the tests are unchanged.
 
 ## FEATURES and CHEATS (for INTEGRATION)
 

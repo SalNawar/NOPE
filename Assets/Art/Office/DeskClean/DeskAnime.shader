@@ -1,8 +1,14 @@
 // NOPE/Desk Anime: the illustrated desk shader (art side). Replaces URP's PBR lighting
 // with three tone bands (shadow, midtone, light) over a flat colour or illustration,
 // with a cool shadow and warm light multiplier, small painted highlights and a soft
-// grazing-angle contour. Receives main and additional light shadows, SSAO and fog;
-// optional alpha cutout (2D paper props).
+// grazing-angle contour. Receives main and additional light shadows and fog;
+// optional alpha cutout (2D paper props). In the office its brightness and colour
+// are the desk's one light (Shaders/Include/DeskLight.hlsl, published by
+// DeskLightLevel: the day cycle's level and the work lamp's pool), not the hall
+// daylight's intensity; elsewhere (nothing published) it is lit as before. No SSAO
+// (BUG-16b: the blue-noise pass re-seeded every frame in the player and crawled).
+// STAMP's cel brass sets _PaintedHighlight (a hard painted highlight band) and
+// _InkRim (a dark ink contour); both are 0 (off) on every other material.
 // Passes: DeskAnimeForward (UniversalForwardOnly), ShadowCaster, DepthOnly and
 // DepthNormalsOnly, all on one UnityPerMaterial buffer (SRP Batcher compatible).
 // Used by every desk prop and booth finish (the DebtRelief Desk_*/Booth_* materials)
@@ -33,7 +39,7 @@ Shader "NOPE/Desk Anime"
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull",Float)=2
         [HideInInspector] _Surface("Surface",Float)=0
         [HideInInspector] _ZWrite("Z write",Float)=1
-        // P0-A seam (owner LIGHT, consumed by STAMP): declared with no visual effect yet.
+        // Cel brass (owner LIGHT, set by STAMP's rack): a hard painted highlight and an ink contour; 0 = off.
         _PaintedHighlight("Painted highlight seam",Range(0,1))=0
         _InkRim("Ink rim seam",Range(0,1))=0
     }
@@ -84,11 +90,11 @@ Shader "NOPE/Desk Anime"
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
             #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
             #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
-            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
             #pragma multi_compile_fog
             #pragma shader_feature_local_fragment _ALPHATEST_ON
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "Assets/Shaders/Include/DeskLight.hlsl"
             half3 BandedFill(Light light,half3 normal,half3 albedo)
             {
                 half band=smoothstep(.05h,.18h,dot(normal,light.direction));
@@ -116,12 +122,21 @@ Shader "NOPE/Desk Anime"
                 // Cap bright sunlight to preserve the painted palette, but follow
                 // diminishing light intensity instead of glowing when the key goes off.
                 half keyEnergy=saturate(dot(key.color,half3(.2126,.7152,.0722))*key.distanceAttenuation);
-                half3 color=a*tone*lightHue*keyEnergy;
+                // In the office the desk's one light sets the energy and hue (the day cycle and the lamp's pool).
+                half published=DeskLightPublished();
+                half3 deskLight=DeskLightAt(i.positionWS);
+                half3 energy=lerp(keyEnergy.xxx,_DeskLightKey*deskLight,published);
+                lightHue=lerp(lightHue,half3(1,1,1),published);
+                half3 color=a*tone*lightHue*energy;
                 // A small environment contribution grounds the bands without washing them out.
-                color+=a*min(SampleSH(n),half3(.24,.24,.24))*.30h;
+                color+=a*min(SampleSH(n),half3(.24,.24,.24))*.30h*lerp(half3(1,1,1),deskLight,published);
                 half nh=saturate(dot(n,normalize(key.direction+v)));
                 half highlight=smoothstep(1-_HighlightSize,1-_HighlightSize+.025h,nh)*lit*cast;
-                color+=lerp(half3(1,.95,.82),a,_Metallic)*highlight*_HighlightStrength*keyEnergy;
+                color+=lerp(half3(1,.95,.82),a,_Metallic)*highlight*_HighlightStrength*energy;
+                // Cel brass: a hard-edged painted highlight band, wider than the soft one, anti-aliased by its derivative.
+                half band=1-_HighlightSize*2.5h,bandWidth=max(.008h,fwidth(nh));
+                half painted=smoothstep(band-bandWidth,band+bandWidth,nh)*mid*cast;
+                color+=half3(1,.96,.86)*painted*_PaintedHighlight*energy;
                 InputData inputData=(InputData)0;inputData.positionWS=i.positionWS;
                 inputData.normalizedScreenSpaceUV=GetNormalizedScreenSpaceUV(i.positionCS);
                 #if defined(_ADDITIONAL_LIGHTS) || defined(_ADDITIONAL_LIGHTS_VERTEX)
@@ -140,10 +155,9 @@ Shader "NOPE/Desk Anime"
                 #endif
                 half edge=1-smoothstep(.035h,.18h,saturate(dot(n,v)));
                 color*=1-edge*_EdgeStrength;
-                #if defined(_SCREEN_SPACE_OCCLUSION)
-                    AmbientOcclusionFactor ao=GetScreenSpaceAmbientOcclusion(inputData.normalizedScreenSpaceUV);
-                    color*=lerp(.55h,1,ao.indirectAmbientOcclusion);
-                #endif
+                // Ink rim: the silhouette darkens to ink, like a cel outline.
+                half rim=1-smoothstep(.12h,.32h,saturate(dot(n,v)));
+                color=lerp(color,color*.18h,rim*_InkRim);
                 return half4(MixFog(color,i.fog),1);
             }
             ENDHLSL

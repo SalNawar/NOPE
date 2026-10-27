@@ -11,7 +11,9 @@ public sealed partial class GameManager
     /// <summary>
     /// Today's bulletin: the plan's line, then, when today's desk hours differ
     /// from yesterday's (ShiftHours.Announces; the night shifts' days 8 and 12),
-    /// the line naming the new hours (UI string briefing.newHours).
+    /// the line naming the new hours (UI string briefing.newHours), in the
+    /// player's language like the briefing it is printed in (the chrome, BUG-3a:
+    /// it no longer turns into the world's language inside English content).
     /// </summary>
     private string TodaysBulletin()
     {

@@ -3,18 +3,18 @@ using UnityEngine;
 
 /// <summary>
 /// One desk paper's microprint line (the desk machines spec §10; Saleh
-/// 2026-10-18, demo 1018a note 14: the lens stand's magnifiers "magnify
-/// microprint that has a meaning, such as microtext that must match"): along
-/// the paper's foot, the Bureau's mark, the form and the Citizen ID its
-/// office issued (CaseHidden.MicroOf), over and over, printed too fine to
-/// read by eye (a hairline of grey). A magnifier held or laid over it shows
-/// it large; once one has shown enough of it for a beat (MicroLens) it is
-/// read (DeskReadings.ReadMicro): a tick pops at its end, and in inspect
-/// mode a click on the line picks its reading against the Citizen ID box
-/// (DeskHardware.Pick, ScanLayer.Micro), which a reprinted paper's
-/// mismatch proves. DeskHardware adds one to each paper the desk hands over
-/// whose form prints one. The lens stand's magnifiers were cut by P0-C, 2026-10-20: until the scanner shows the microprint, FIX_PLAN_v2 #17, nothing reads it:
-/// the line is printed, never read (Track has no caller).
+/// 2026-10-18, demo 1018a note 14: "microprint that has a meaning, such as
+/// microtext that must match"): along the paper's foot, the Bureau's mark,
+/// the form and the Citizen ID its office issued (CaseHidden.MicroOf), over
+/// and over, printed too fine to read by eye (a hairline of grey). The
+/// magnifiers that once read it were cut (P0-C; Saleh D5: "not sold"): the
+/// scanner's hidden-layer view prints it large (ScanMicroprint) and credits
+/// the read once it rendered there (MicroLens.Readable, DeskReadings.ReadMicro;
+/// FIX_PLAN_v2 BUG-2b). When it is read the desk line answers: a tick pops at
+/// its end, and in inspect mode a click on the line picks its reading against
+/// the Citizen ID box (DeskHardware.Pick, ScanLayer.Micro), which a reprinted
+/// paper's mismatch proves. DeskHardware adds one to each paper the desk
+/// hands over whose form prints one.
 /// </summary>
 public sealed class MicroPaperLayer : MonoBehaviour
 {
@@ -30,8 +30,7 @@ public sealed class MicroPaperLayer : MonoBehaviour
     private Rect _band;
     private GameObject _tick;
     private BoxCollider _box;
-    private float _held, _pop;
-    private int _readableFrame = -2;
+    private float _pop;
 
     /// <summary>The paper's index in the case.</summary>
     public int Document => _paper != null ? _paper.Index : -1;
@@ -94,39 +93,35 @@ public sealed class MicroPaperLayer : MonoBehaviour
         tr.sharedMaterial = hardware.MarkMaterial(hardware.TickTexture, 3006, true);
         tr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         Shown(hardware.Readings.MicroRead(Document));
+        hardware.Readings.Changed += OnRead;
     }
 
     /// <summary>
-    /// A magnifier this frame: <paramref name="toLens"/> takes a desk point
-    /// into its frame (metres, x along its width), its <paramref name="shape"/>
-    /// of <paramref name="halfWidth"/> by <paramref name="halfHeight"/>
-    /// (<paramref name="on"/> while it magnifies). The line held under it long
-    /// enough is read once: its tick pops with the inspect tick's sound.
+    /// A desk magnifier this frame: nothing. The magnifiers were cut (P0-C),
+    /// so nothing at the desk reads the line; the scan view credits it
+    /// (MicroLens.Readable) and the tick answers through DeskReadings.Changed.
+    /// Kept only because DeskHardware.TrackLens (DESK-PLAN's file) still calls
+    /// it: INTEGRATION's cleanup list deletes both (docs/pending/TOOLS.md).
     /// </summary>
     public void Track(System.Func<Vector3, Vector2> toLens, LensShape shape, float halfWidth, float halfHeight, bool on, float dt)
     {
-        if (_paper == null || _paper.Sheet == null || _tick == null)
-            return;
-        Transform sheet = _paper.Sheet;
-        Vector2 a = toLens(sheet.TransformPoint(new Vector3(_band.xMin, _band.center.y, 0f)));
-        Vector2 b = toLens(sheet.TransformPoint(new Vector3(_band.xMax, _band.center.y, 0f)));
-        float length = _band.width * sheet.lossyScale.x;
-        float shown = on ? MicroLens.Shown(a.x, a.y, b.x, b.y, shape, halfWidth, halfHeight) : 0f;
-        // Two magnifiers may look at once (the loupe held, the Fresnel laid): the line counts while any of them shows it, once a frame.
-        int frame = Time.frameCount;
-        bool readable = MicroLens.Readable(shown, length);
-        if (readable && _readableFrame != frame)
-        {
-            _held = MicroLens.Held(_readableFrame < frame - 1 ? 0f : _held, true, dt);
-            _readableFrame = frame;
-        }
-        else if (!readable && _readableFrame < frame - 1)
-            _held = 0f;
-        if (!UvCone.IsSeen(_held) || !_hardware.Readings.ReadMicro(Document))
+    }
+
+    /// <summary>A reading of the case changed: when it is this paper's microprint, read in the scan view, its tick pops with the inspect tick's sound and the line becomes clickable.</summary>
+    private void OnRead(int document)
+    {
+        if (document != Document || _hardware == null || _tick == null || _tick.activeSelf || !_hardware.Readings.MicroRead(Document))
             return;
         Shown(true);
         _pop = 1f;
         Sounds.Play(SoundCues.InspectLink);
+    }
+
+    /// <summary>The paper goes (its case ended): it stops listening.</summary>
+    private void OnDestroy()
+    {
+        if (_hardware != null)
+            _hardware.Readings.Changed -= OnRead;
     }
 
     private void Shown(bool read)
