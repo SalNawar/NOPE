@@ -1148,9 +1148,10 @@ public static class CamOps
                 }
             }
             DeskView view = QaGame.Find<DeskView>();
-            // The reading view's framed work, once its tilt has come to rest (mid-blend the camera frames a wider view).
+            // The reading view's framed work, once its tilt has come to rest (mid-blend the camera frames a wider view): DeskView's
+            // _sinceMove is the seconds since the view turned on the game feel's clock (MoveClock, round 9), stepped by its Update.
             if (view != null && view.IsOn && cam != null && DeskLayout.Bound && QaGame.Field(view, "config") is DeskConfigSO config &&
-                Time.unscaledTime - (float)QaGame.Field(view, "_movedAt") >= (float)QaGame.Field(view, "_moveSeconds") + 0.05f)
+                (float)QaGame.Field(view, "_sinceMove") >= (float)QaGame.Field(view, "_moveSeconds") + 0.05f)
             {
                 watch.ReadingFrames++;
                 Rect? framed = Enclose(cam, DeskViewPose.Targets(config.deskView, DeskLayout.Mat.Rect, config.layout.homes));

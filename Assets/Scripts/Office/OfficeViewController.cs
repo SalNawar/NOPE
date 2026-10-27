@@ -52,8 +52,10 @@ public sealed class OfficeViewController : MonoBehaviour
     private static readonly Key PcKey = Enum.TryParse(ControlRules.PcKey, true, out Key key) ? key : Key.Q;
 
     /// <summary>
-    /// Opens the PC frame (no-op if open, or while something is held:
-    /// BUG-55c). While the city view is on, the PC's key (Q) pressed this
+    /// Opens the PC frame (no-op if open). While something is held on the
+    /// desk the key ends the hold and opens nothing (BUG-55c: no view change
+    /// while holding; STAMP R5: Q with a dater held seats it home and stamps
+    /// nothing, as Esc does). While the city view is on, the PC's key (Q) pressed this
     /// frame leaves the city instead (Q leaves the city as it leaves the PC);
     /// every other way here (F1's keys card) opens the PC as before, the city
     /// turning back as the PC takes over (BoothCoordinator). The key is read
@@ -63,7 +65,10 @@ public sealed class OfficeViewController : MonoBehaviour
     public void FocusMonitor()
     {
         if (HoldRegistry.Desk.IsHolding)
+        {
+            HoldRegistry.Desk.Cancel();
             return;
+        }
         if (cityView != null && cityView.IsOn && Keyboard.current is Keyboard keyboard && keyboard[PcKey].wasPressedThisFrame)
         {
             cityView.Return();
