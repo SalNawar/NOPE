@@ -139,7 +139,7 @@ C1 (scanner) is TOOLS' only for the microprint (≥12 px cap: content and rule h
   - `Assets/Scripts/Office/Desk/MicroprintView.cs`;
   - `Assets/Tests/EditMode/UvTorchHoldTests.cs`;
   - `Assets/Editor/QA/Checks/ToolsChecks.cs`;
-  - `Assets/Tests/PlayMode/Tools/Rig/ToolsOps.cs` (the QA ops `toolsTorch`, `toolsClicks`, `toolsLens` with its candidate log, `toolsRevert`, `toolsMicro` with its pixel measure);
+  - `Assets/Tests/PlayMode/Tools/Rig/ToolsOps.cs` (the QA ops `toolsTorch`, `toolsClicks`, `toolsLens` with its candidate log, `toolsRevert`, `toolsMicro` with its pixel measure); since fix/night-seams (2026-10-28, seam G) `toolsLens` takes a `target`: x, y, x2, y2 are then fractions of the target's screen rect (`ToolsOps.SweepEnds`), so `tools_lens`'s documents leg sweeps the paper's own bounds wherever the desk's reading pose lays it (the painted desk's differs from the plan's); the newspaper leg keeps its screen fractions;
   - `tools/qa/scenarios/tools_torch.json`, `tools_clicks.json`, `tools_lens.json`, `tools_microprint.json`;
   - all `.meta` files.
 - **Untouched owned files:**

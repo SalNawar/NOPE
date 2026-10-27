@@ -95,6 +95,7 @@ FOREIGN_OPS = {
     'deskvisible': ('visible.', 'target', 'DESK-PLAN'),
     'deskexpect': ('expect.', 'target', 'DESK-PLAN'),
     'deskclickboxes': ('clickboxes.', 'desk', 'DESK-PLAN'),
+    'deskhomeshown': ('shown.', 'target', 'DESK-PLAN'),  # seam C (2026-10-28): a leg passed over on the painted desk, a pass line
 }
 
 # A CAM run's last probe (each CAM scenario ends on the probe "end"): its line says the run reached its end. QaRunner.Run
@@ -351,9 +352,11 @@ class CamGateCoverageTests(unittest.TestCase):
         # PLAYER_SKIPS: the quality line only with a level to expect, which the QA player's run is never given.
         self.assertRegex(finish, r'if \(!string\.IsNullOrEmpty\(_expectedQuality\)\)\s*\{\s*string end = QualityName\(\);\s*Assert\("quality"')
         self.assertRegex(_body(src, 'private static void FromCommandLine()'), r'\bBegin\(scenario, outDir, true\);')
-        # Run: a step that throws ends the run, and Finish still writes the run's lines (the reason for END).
+        # Run: a step that throws ends the run, and Finish still writes the run's lines (the reason for END). A track's
+        # op may pass the next steps over (QaRunner.Skip, seam C of 2026-10-28): each is recorded as done, inside the loop.
         run = _body(src, 'private IEnumerator Run()')
-        self.assertRegex(run, r'if \(!result\.ok \|\| quit\)\s*break;\s*\}\s*Finish\(\);')
+        self.assertRegex(run, r'if \(!result\.ok \|\| quit\)\s*break;[\s\S]*?\}\s*Finish\(\);')
+        self.assertRegex(run, r'_steps\.Add\(new QaStepResult \{ i = i, op = Scenario\.steps\[i\]\.op, ok = true, note = "skipped: " \+ _skipReason \}\);')
         owners = set(re.findall(r'\bAssert\([^;]*?,\s*("[A-Z-]+"|Scenario\.owner)\s*,', src))
         self.assertEqual({'"QA-RIG"', '"TEXT-LANG"', '"CAM"', 'Scenario.owner'}, owners, 'a built-in line with a new owner: place it in BUILT_IN')
         ops = set(re.findall(r'"([a-z]+)"', re.search(r'public static readonly string\[\] Ops =\s*\{(.*?)\};', src, re.S).group(1)))
@@ -583,15 +586,25 @@ class CamGateCoverageTests(unittest.TestCase):
     def test_every_chrome_leg_names_what_it_shows(self):
         # A plate a leg shows must report a line even when it is never drawn (red 'not measured', never silence), and
         # a half of the leg it shows must be seen: the day-1 leg names the guide's plate and the reading view; each
-        # day-12 leg its held decoration and the reading view, and shows the stamp hint (camchrome n = 2).
+        # day-12 leg the reading view at its start and, where the desk has decorations, its held decoration (camchrome
+        # n = 3 adds it, right after DESK-PLAN's deskhomeshown passes the held half over on the painted desk: seam C of
+        # 2026-10-28), and shows the stamp hint (camchrome n = 2).
         s = json.loads(_read(os.path.join(SCENARIOS, 'cam_chrome.json')))
+        steps = s['steps']
         starts = {st.get('name'): [k for k in re.split(r'[,\s]+', st.get('target', '')) if k]
-                  for st in s['steps'] if st['op'] == 'camchrome' and st.get('n') == 1}
+                  for st in steps if st['op'] == 'camchrome' and st.get('n') == 1}
         self.assertEqual(['guide', 'reading'], starts.pop('a1_d1'))
         self.assertEqual({'a1', 'a2', 'a3', 'a4'}, set(starts))
         for leg, shows in starts.items():
-            self.assertEqual(['held', 'reading'], shows, leg)
-        hints = [st for st in s['steps'] if st['op'] == 'camchrome' and st.get('n') == 2]
+            self.assertEqual(['reading'], shows, leg)
+        held = [i for i, st in enumerate(steps) if st['op'] == 'camchrome' and st.get('n') == 3]
+        self.assertEqual(4, len(held), 'each day-12 leg adds its held half')
+        for i in held:
+            self.assertEqual(['held'], [k for k in re.split(r'[,\s]+', steps[i].get('target', '')) if k])
+            guard = steps[i - 1]
+            self.assertEqual(('deskhomeshown', 'decor'), (guard['op'].lower(), guard.get('target')), 'the held half is guarded: passed over on the painted desk')
+            self.assertEqual(5, guard.get('n'), 'the guard passes over the n = 3 step, two drags and their waits')
+        hints = [st for st in steps if st['op'] == 'camchrome' and st.get('n') == 2]
         self.assertEqual(4, len(hints), 'each day-12 leg (A1-A4) shows the stamp hint')
 
     def test_the_gc_window_holds_the_whole_cycle_and_the_cycle_proves_it_ran_there(self):
