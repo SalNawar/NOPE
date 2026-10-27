@@ -342,16 +342,18 @@ public static class CamOps
         DeskViewTuning t = config.deskView;
         DeskRect mat = DeskLayout.Mat.Rect;
         float matLeft = mat.CentreX - mat.Width / 2f, matRight = mat.CentreX + mat.Width / 2f;
+        float matNear = mat.CentreY - mat.Height / 2f, matFar = mat.CentreY + mat.Height / 2f;
         HashSet<string> shown = ShownHomes();
         var report = new List<string>();
         var failures = new List<string>();
 
-        float matShare = Share(cam, frame, matLeft, mat.CentreY - mat.Height / 2f, matRight, mat.CentreY + mat.Height / 2f, t.paperLift);
+        float matShare = Share(cam, frame, matLeft, matNear, matRight, matFar, t.paperLift);
         report.Add($"mat {matShare:P0}");
         if (matShare < Whole)
             failures.Add($"the mat {matShare:P0} on screen (whole)");
 
-        foreach (DeskHome home in config.layout.homes)
+        // The map in use (DeskLayoutSettings.Homes), the one the pose reads: the painted desk's measured homes while it shows (desk v3 stands the stamp rack's outer edge at x 1.11), else the plan's.
+        foreach (DeskHome home in config.layout.Homes)
         {
             if (home == null || (!shown.Contains(home.id) && home.id != DeskHomeMap.DealTray))
                 continue;
@@ -367,22 +369,24 @@ public static class CamOps
             }
             if (t.homes == null || Array.IndexOf(t.homes, home.id) < 0)
                 continue; // shown, not framed by the reading view (DETAIN, the Rolodex: the office view's)
-            bool beside = x0 >= matRight || x1 <= matLeft;
-            if (!beside || DeskViewPose.IsWhole(t, home.id))
+            // Beside the mat (left or right of it) or beyond its far edge: the strip nearest the mat, as the pose frames it (DeskViewPose.Strip; the plan's 6 cm deal tray is whole within it, the painted desk's 60 cm slot by its mouth).
+            bool side = x0 >= matRight || x1 <= matLeft, beyond = y0 >= matFar || y1 <= matNear;
+            if ((!side && !beyond) || DeskViewPose.IsWhole(t, home.id))
             {
                 if (share < Whole)
                     failures.Add($"{home.id} {share:P0} on screen (whole)");
                 continue;
             }
             float reach = Mathf.Max(0.08f, t.sideReach);
-            float sx0 = x0 >= matRight ? x0 : Mathf.Max(x0, x1 - reach), sx1 = x0 >= matRight ? Mathf.Min(x1, x0 + reach) : x1;
-            float strip = Share(cam, frame, sx0, y0, sx1, y1, home.height);
-            report[report.Count - 1] += $" (inner {Mathf.RoundToInt((sx1 - sx0) * 100f)} cm strip {strip:P0})";
+            (float sx0, float sx1, float sy0, float sy1) = DeskViewPose.Strip(x0, x1, y0, y1, matLeft, matRight, matNear, matFar, reach);
+            float strip = Share(cam, frame, sx0, sy0, sx1, sy1, home.height);
+            int deep = Mathf.RoundToInt((side ? sx1 - sx0 : sy1 - sy0) * 100f);
+            report[report.Count - 1] += $" (inner {deep} cm strip {strip:P0})";
             if (strip < Whole)
-                failures.Add($"{home.id}'s inner {Mathf.RoundToInt((sx1 - sx0) * 100f)} cm strip {strip:P0} on screen (≥8 x 8 cm)");
+                failures.Add($"{home.id}'s inner {deep} cm strip {strip:P0} on screen (≥8 x 8 cm)");
         }
         runner.Assert("frame." + name, Owner, failures.Count == 0, $"view {(reading ? "reading" : "office")}, {Screen.width}x{Screen.height}: {string.Join(", ", report)}",
-                      failures.Count > 0 ? string.Join("; ", failures) : reading ? "the mat, the tray, the rack and the intercom whole; 8 cm of every other in-use side home" : "the mat whole; every shown home ≥98%");
+                      failures.Count > 0 ? string.Join("; ", failures) : reading ? "the mat, the rack and the intercom whole; 8 cm of every other in-use home beside or beyond the mat (the plan's tray whole)" : "the mat whole; every shown home ≥98%");
         if (!reading)
             yield break;
         Ray bottom = cam.ViewportPointToRay(new Vector3(0.5f, 0f, 0f));

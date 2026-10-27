@@ -25,12 +25,14 @@ using UnityEngine.UI;
 /// <para>
 /// The view is a gameplay-owned Cinemachine camera, posed at bind
 /// (OfficeSceneBinder) and again whenever the screen's aspect changes: on
-/// the desk home map, LensFit.Reading backs it out at DeskConfigSO.deskView's
+/// the desk home map in use (the painted desk's measured map while it shows,
+/// else the plan's: DeskLayoutSettings.Homes), LensFit.Reading backs it out at DeskConfigSO.deskView's
 /// pitch and lens until the big mat, the stamp rack and the intercom whole,
-/// the inner strips of the other homes beside it and the deal tray fit
-/// inside the screen's margins, under the overlay's top band of chrome, and
-/// under the desk is never shown (BUG-41, 1b, 7b; Saleh's "keep a big mat
-/// size": papers show at about 55% of the old view at 16:9, CAM.md); without
+/// the inner strips of the other homes beside it and the deal tray's strip
+/// nearest it fit inside the screen's margins, under the overlay's top band
+/// of chrome, and under the desk is never shown (BUG-41, 1b, 7b; Saleh's
+/// "keep a big mat size": papers show at about 48% of the old view at 16:9
+/// on the painted desk, 54% on the plan's map, CAM.md); without
 /// the map, the knobs' fallback pose over the mat's centre. It is raised above the art camera's
 /// priority while on, so the art camera's brain blends. The blend's time and
 /// style come from the one CinemachineCore.GetBlendOverride hook (installed
@@ -187,12 +189,14 @@ public sealed class DeskView : MonoBehaviour
     }
 
     /// <summary>
-    /// The reading pose at the screen's aspect: on the desk home map
-    /// (DeskLayout bound), LensFit.Reading framing DeskViewPose.Targets in the
-    /// desk's frame below the overlay's top band of chrome
-    /// (DeskViewPose.TopMargin), its bottom row kept on the desk's top
-    /// (DeskLayoutSettings.deskTop); otherwise the knobs' fallback over the
-    /// mat's centre. The lens is the office's with the knobs' field of view.
+    /// The reading pose at the screen's aspect: on the desk home map in use
+    /// (DeskLayout bound; DeskLayoutSettings.Homes: the painted desk's
+    /// measured map while it shows, else the plan's), LensFit.Reading framing
+    /// DeskViewPose.Targets in the desk's frame below the overlay's top band
+    /// of chrome (DeskViewPose.TopMargin), its bottom row kept on the desk's
+    /// top (DeskLayoutSettings.deskTop); otherwise the knobs' fallback over
+    /// the mat's centre. The lens is the office's with the knobs' field of
+    /// view.
     /// </summary>
     private void Pose()
     {
@@ -207,7 +211,7 @@ public sealed class DeskView : MonoBehaviour
         Quaternion look = Quaternion.LookRotation(LevelForward, Vector3.up) * Quaternion.Euler(pitch, 0f, 0f);
 
         if (DeskLayout.Bound && config.layout != null &&
-            LensFit.Reading(DeskViewPose.Targets(tuning, DeskLayout.Mat.Rect, config.layout.homes), pitch, _readingFov, aspect,
+            LensFit.Reading(DeskViewPose.Targets(tuning, DeskLayout.Mat.Rect, config.layout.Homes), pitch, _readingFov, aspect,
                             DeskViewPose.TopMargin(tuning, aspect), tuning.bottomMargin, tuning.sideMargin, FrontEdge(config.layout.deskTop.Rect), out ReadingPose pose))
         {
             DeskFrame frame = DeskLayout.Frame;

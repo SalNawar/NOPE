@@ -52,6 +52,28 @@ public class DeskPaintedMapTests
     }
 
     [Test]
+    public void ThePrefabsHomes_AreDeskV3sLayout_WithTheirMeasuredHeights()
+    {
+        // The prefab's homes (the map the game reads: DeskLayoutSettings.UsePainted; the reading pose's pins read them through
+        // PaintedDeskFixture) are the importer's copy of desk v3's layout, each standing as tall as its meshes: a layout re-exported
+        // without Tools > TimeDesk > Import Painted Desk shows here.
+        (DeskHome[] prefab, DeskHome[] prefabFixedArt) = PaintedDeskFixture.Prefab();
+        (DeskHome[] homes, DeskHome[] fixedArt) = Painted();
+        foreach (DeskHome laid in homes.Concat(fixedArt))
+        {
+            DeskHome home = DeskHomeMap.Find(prefab.Concat(prefabFixedArt).ToArray(), laid.id);
+            Assert.IsNotNull(home, $"the prefab carries {laid.id}");
+            Assert.That(home.x, Is.EqualTo(laid.x).Within(1e-4f), laid.id + " x");
+            Assert.That(home.y, Is.EqualTo(laid.y).Within(1e-4f), laid.id + " y");
+            Assert.That(home.width, Is.EqualTo(laid.width).Within(1e-4f), laid.id + " width");
+            Assert.That(home.depth, Is.EqualTo(laid.depth).Within(1e-4f), laid.id + " depth");
+            Assert.AreEqual(laid.yaw, home.yaw, laid.id + " yaw");
+            Assert.Greater(home.height, 0f, laid.id + " stands over the desk");
+        }
+        Assert.Greater(DeskHomeMap.Find(prefab, DeskHomeMap.StampRack).height, 0.2f, "the painted rack's two steps and daters, measured");
+    }
+
+    [Test]
     public void EveryBakedObject_StandsInTheHomeDeskV3sLayoutGivesIt()
     {
         ContentNode objects = Json(Data + "anchors.json").Get("objects");

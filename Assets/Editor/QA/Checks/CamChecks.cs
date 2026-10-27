@@ -86,11 +86,14 @@ public static class CamChecks
 
     /// <summary>
     /// The reading pose solves at every aspect for the live desk config (the
-    /// approved home map's mat and homes, DeskConfigSO.deskView), with every
-    /// framed point inside the screen's margins under the overlay's top band
-    /// (DeskViewPose.TopMargin) and the screen's bottom row on the desk's top
-    /// (BUG-1b, 7b, 41); measured: the distance and how big papers show
-    /// against the old reading view (DeskViewPose.PaperShare).
+    /// plan's mat and the home map the pose reads at run time: the painted
+    /// desk's measured homes, from its prefab as Build Office UI's plan check
+    /// reads them, merged over the plan's while DeskArt.Painted is on, else
+    /// the plan's; DeskConfigSO.deskView), with every framed point inside the
+    /// screen's margins under the overlay's top band (DeskViewPose.TopMargin)
+    /// and the screen's bottom row on the desk's top (BUG-1b, 7b, 41);
+    /// measured: the distance and how big papers show against the old
+    /// reading view (DeskViewPose.PaperShare).
     /// </summary>
     [GateCheck("cam.lens.reading", Owner)]
     public static GateResult ReadingPose()
@@ -99,7 +102,17 @@ public static class CamChecks
         if (config == null)
             return GateResult.Fail("cam.lens.reading", Owner, "no config", $"No DeskConfigSO at {OfficeSceneUIBuilder.DeskConfigPath}.");
         DeskViewTuning t = config.deskView;
-        List<(float x, float y, float z)> targets = DeskViewPose.Targets(t, config.layout.mat.Rect, config.layout.homes);
+        IReadOnlyList<DeskHome> homes = config.layout.homes;
+        string map = "the plan's map";
+        if (config.layout.paintedDesk)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(DeskPaintedImporter.PrefabPath);
+            if (prefab == null || !prefab.TryGetComponent(out DeskPainted painted))
+                return GateResult.Fail("cam.lens.reading", Owner, "no painted desk", $"DeskArt.Painted is on, but no DeskPainted prefab stands at {DeskPaintedImporter.PrefabPath} (Tools > TimeDesk > Import Painted Desk).");
+            homes = DeskPaintedMap.Merge(config.layout.homes, painted.Homes);
+            map = "the painted map";
+        }
+        List<(float x, float y, float z)> targets = DeskViewPose.Targets(t, config.layout.mat.Rect, homes);
         DeskRect deskTop = config.layout.deskTop.Rect;
         float front = deskTop.CentreY - deskTop.Height / 2f;
         float pitch = DeskViewPose.Pitch(t);
@@ -124,7 +137,7 @@ public static class CamChecks
                 problems.Add($"{name}: the bottom row meets the desk at {pose.BottomRowY:0.000} m, past its front edge {front:0.000}");
             measured.Add($"{name} {pose.Distance:0.00} m, papers {DeskViewPose.PaperShare(pose.Distance, t.fieldOfView):P0}");
         }
-        return GateResult.Of("cam.lens.reading", Owner, problems.Count == 0, string.Join(", ", measured), string.Join("; ", problems));
+        return GateResult.Of("cam.lens.reading", Owner, problems.Count == 0, $"{map}: {string.Join(", ", measured)}", string.Join("; ", problems));
     }
 
     /// <summary>
