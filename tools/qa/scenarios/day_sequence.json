@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "Days 1 to 21 played in sequence (auto-decided shifts, closing time, Home, Sleep): each day's office reached by the night before it, and day 21's night played to the ending (the title's ending panel). One decision a day earns less than the harsh economy's nights cost (about 22 cr a night), so day 1 adds 1000 cr: the bankrupt ending (money at or under -100) would otherwise end the run at night 7."
+      "text": "Days 1 to 21 played in sequence (auto-decided shifts, closing time, Home, Sleep): each day's office reached by the night before it, and day 21's night played to the ending (the title's world panel, the last-day ending's). One decision a day earns less than the harsh economy's nights cost (about 22 cr a night), so day 1 adds 1000 cr: the bankrupt ending (money at or under -100) would otherwise end the run at night 7."
     },
     {
       "op": "title"
@@ -1160,7 +1160,7 @@
     },
     {
       "op": "waitActive",
-      "target": "TitleUIController.endingPanel",
+      "target": "TitleUIController.worldPanel",
       "f": 120
     },
     {
