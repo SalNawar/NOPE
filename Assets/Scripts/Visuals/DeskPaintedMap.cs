@@ -598,8 +598,8 @@ public static class DeskPaintedMap
     /// </summary>
     public static readonly string[] Dropped = { DeskHomeMap.Mouse, DeskHomeMap.Thumbprint };
 
-    /// <summary>DESK-PLAN's homes the painted desk moves (metres in the desk's frame): the supply crate's spot 3 cm right, its click box clear of desk v3's scanner tray (its right edge at x 1.30).</summary>
-    public static readonly (string id, float dx, float dy)[] Moved = { (DeskHomeMap.Crate, 0.03f, 0f) };
+    /// <summary>DESK-PLAN's homes the painted desk moves (metres in the desk's frame): the supply crate's spot 3 cm right, its click box clear of desk v3's scanner tray (its right edge at x 1.30); the decor zone 12 cm right, clear of desk v3's stamp rack (its right edge at x 1.11; DESK-PLAN's 74a9d93 moved the zone to x 1.00 for the camera's line to the RING SERVICE panel, which the painted booth wall hides, and the painted desk shows no decorations in it).</summary>
+    public static readonly (string id, float dx, float dy)[] Moved = { (DeskHomeMap.Crate, 0.03f, 0f), (DeskHomeMap.Decor, 0.12f, 0f) };
 
     /// <summary>The id desk v3's layout (layout.HOMES, desk_layout_v3.json) gives the home <paramref name="home"/>: the AVAILABLE sign is its "available".</summary>
     public static string LayoutId(string home) => home == DeskHomeMap.Sign ? "available" : home;

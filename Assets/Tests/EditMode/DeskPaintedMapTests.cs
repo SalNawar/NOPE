@@ -125,7 +125,9 @@ public class DeskPaintedMapTests
         DeskHome crate = DeskHomeMap.Find(map, DeskHomeMap.Crate), was = DeskHomeMap.Find(classic, DeskHomeMap.Crate);
         Assert.That(crate.x, Is.EqualTo(was.x + 0.03f).Within(1e-5f));
         Assert.AreEqual(was.y, crate.y);
-        Assert.AreSame(DeskHomeMap.Find(classic, DeskHomeMap.Decor), DeskHomeMap.Find(map, DeskHomeMap.Decor));
+        DeskHome decor = DeskHomeMap.Find(map, DeskHomeMap.Decor), decorWas = DeskHomeMap.Find(classic, DeskHomeMap.Decor);
+        Assert.That(decor.x, Is.EqualTo(decorWas.x + 0.12f).Within(1e-5f), "the decor zone stands clear of the painted stamp rack (DESK-PLAN's 74a9d93 put it on the rack's right edge)");
+        Assert.AreEqual(decorWas.y, decor.y);
         Assert.AreSame(extra, map.Last());
         Assert.AreEqual(classic.Length - 2 + 1, map.Length);
     }

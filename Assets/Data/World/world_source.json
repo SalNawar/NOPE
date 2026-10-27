@@ -31836,7 +31836,7 @@
           },
           {
             "key": "switchboard.hint",
-            "text": "مصباح يومض: صِل به وحدة، زوّدها بالطاقة، اسحب الذراع الرئيسية"
+            "text": "مصباح يومض: صل به وحدة, زودها بالطاقة, اسحب الذراع الرئيسية"
           },
           {
             "key": "switchboard.display.pull",
@@ -31864,7 +31864,7 @@
           },
           {
             "key": "switchboard.sent",
-            "text": "+{0} أُرسلوا"
+            "text": "+{0} أرسلوا"
           },
           {
             "key": "home.title",
@@ -37547,6 +37547,38 @@
           {
             "native": "اخترت",
             "english": "you chose"
+          },
+          {
+            "native": "يومض",
+            "english": "blinks"
+          },
+          {
+            "native": "صل",
+            "english": "connect"
+          },
+          {
+            "native": "وحدة",
+            "english": "a module"
+          },
+          {
+            "native": "زودها",
+            "english": "give it"
+          },
+          {
+            "native": "بالطاقة",
+            "english": "power"
+          },
+          {
+            "native": "الذراع",
+            "english": "the lever"
+          },
+          {
+            "native": "الرئيسية",
+            "english": "master"
+          },
+          {
+            "native": "أرسلوا",
+            "english": "sent"
           }
         ]
       },
@@ -45711,6 +45743,34 @@
           {
             "native": "δικές",
             "english": "own"
+          },
+          {
+            "native": "λάμπα",
+            "english": "lamp"
+          },
+          {
+            "native": "αναβοσβήνει",
+            "english": "blinks"
+          },
+          {
+            "native": "σύνδεσε",
+            "english": "connect"
+          },
+          {
+            "native": "δώσ",
+            "english": "give"
+          },
+          {
+            "native": "τράβηξε",
+            "english": "pull"
+          },
+          {
+            "native": "MASTER",
+            "english": "MASTER"
+          },
+          {
+            "native": "ΕΣΤΑΛΗΣΑΝ",
+            "english": "sent"
           }
         ]
       },
@@ -53975,6 +54035,38 @@
           {
             "native": "lampeggi",
             "english": "flashes"
+          },
+          {
+            "native": "spia",
+            "english": "lamp"
+          },
+          {
+            "native": "lampeggia",
+            "english": "blinks"
+          },
+          {
+            "native": "collegaci",
+            "english": "connect to it"
+          },
+          {
+            "native": "modulo",
+            "english": "module"
+          },
+          {
+            "native": "corrente",
+            "english": "power"
+          },
+          {
+            "native": "tira",
+            "english": "pull"
+          },
+          {
+            "native": "MASTER",
+            "english": "MASTER"
+          },
+          {
+            "native": "PARTITI",
+            "english": "sent"
           }
         ]
       },
@@ -62451,6 +62543,30 @@
           {
             "native": "PCs",
             "english": "PC"
+          },
+          {
+            "native": "blinkt",
+            "english": "blinks"
+          },
+          {
+            "native": "Modul",
+            "english": "module"
+          },
+          {
+            "native": "anschließen",
+            "english": "connect"
+          },
+          {
+            "native": "geben",
+            "english": "give"
+          },
+          {
+            "native": "MASTER",
+            "english": "MASTER"
+          },
+          {
+            "native": "GESENDET",
+            "english": "sent"
           }
         ]
       },
@@ -70271,6 +70387,46 @@
           {
             "native": "减少",
             "english": "reduce"
+          },
+          {
+            "native": "指示灯",
+            "english": "lamp"
+          },
+          {
+            "native": "接上",
+            "english": "connect"
+          },
+          {
+            "native": "模块",
+            "english": "module"
+          },
+          {
+            "native": "接通",
+            "english": "switch on"
+          },
+          {
+            "native": "电源",
+            "english": "power"
+          },
+          {
+            "native": "拉下",
+            "english": "pull"
+          },
+          {
+            "native": "MASTER",
+            "english": "MASTER"
+          },
+          {
+            "native": "已送出",
+            "english": "sent"
+          },
+          {
+            "native": "开通",
+            "english": "open"
+          },
+          {
+            "native": "保险丝",
+            "english": "fuse"
           }
         ]
       },
@@ -78143,6 +78299,42 @@
           {
             "native": "従い",
             "english": "follow"
+          },
+          {
+            "native": "ランプ",
+            "english": "lamp"
+          },
+          {
+            "native": "したら",
+            "english": "when"
+          },
+          {
+            "native": "モジュール",
+            "english": "module"
+          },
+          {
+            "native": "つなぎ",
+            "english": "connect"
+          },
+          {
+            "native": "電源",
+            "english": "power"
+          },
+          {
+            "native": "入れ",
+            "english": "put in"
+          },
+          {
+            "native": "MASTER",
+            "english": "MASTER"
+          },
+          {
+            "native": "引く",
+            "english": "pull"
+          },
+          {
+            "native": "送出",
+            "english": "sent"
           }
         ]
       }
