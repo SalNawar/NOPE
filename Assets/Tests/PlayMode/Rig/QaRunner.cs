@@ -76,6 +76,8 @@ public sealed class QaRunner : MonoBehaviour
     private string _expectedQuality;
     private string _startQuality;
     private int _presses;
+    private int _skip;
+    private string _skipReason;
     private readonly List<string> _blocked = new List<string>();
     private readonly List<string> _direct = new List<string>();
 
@@ -216,6 +218,14 @@ public sealed class QaRunner : MonoBehaviour
             _steps.Add(result);
             if (!result.ok || quit)
                 break;
+            // A track's op asked to pass over the next steps (Skip): each is recorded as done with the reason, so the run still counts as complete.
+            for (int k = 0; k < _skip && i + 1 < Scenario.steps.Length; k++)
+            {
+                i++;
+                _steps.Add(new QaStepResult { i = i, op = Scenario.steps[i].op, ok = true, note = "skipped: " + _skipReason });
+            }
+            _skip = 0;
+            _skipReason = null;
         }
         Finish();
     }
@@ -623,6 +633,21 @@ public sealed class QaRunner : MonoBehaviour
     {
         QaCameraReport r = Cameras.Report();
         Assert(id, "CAM", r.Pass, $"untagged {r.UntaggedFrames.Count}, over cap {r.OverCap.Count}", r.Summary());
+    }
+
+    /// <summary>
+    /// Asks the run to pass over the next <paramref name="steps"/> steps once
+    /// the current op ends, for <paramref name="reason"/> (each is recorded
+    /// as a step done, "skipped: ..."): a track's op that finds a leg not
+    /// applicable on the desk in use (DeskPlanOps' deskhomeshown on the
+    /// painted desk) writes its pass line and skips the leg, so the rest of
+    /// the scenario is still measured. The op asserts the reason itself; the
+    /// gate's check reads that line.
+    /// </summary>
+    public void Skip(int steps, string reason)
+    {
+        _skip = Math.Max(0, steps);
+        _skipReason = reason;
     }
 
     /// <summary>Records an assertion "&lt;scenario&gt;.&lt;id&gt;" for <paramref name="owner"/> (tracks' scenarios add their own through ops; code may call it during a run).</summary>

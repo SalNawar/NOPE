@@ -25,7 +25,8 @@ using UnityEngine.Rendering;
 /// (DeskLayout.HomeIdOf), measured by Physics.ComputePenetration and judged
 /// by DeskArrangement.ClickBoxClashes. <c>deskexpect</c> asserts a bool
 /// member reads true (the intercom's wheel open with the reading view still
-/// on).
+/// on). <c>deskhomeshown</c> passes a leg over on the painted desk when its
+/// home's object is not there to act on (HomeShown).
 /// Registered at load in the editor and at play start in the QA player.
 /// </summary>
 public static class DeskPlanOps
@@ -46,6 +47,36 @@ public static class DeskPlanOps
         QaRunner.RegisterOp("deskvisible", Visible);
         QaRunner.RegisterOp("deskexpect", Expect);
         QaRunner.RegisterOp("deskclickboxes", ClickBoxes);
+        QaRunner.RegisterOp("deskhomeshown", HomeShown);
+    }
+
+    /// <summary>
+    /// <c>deskhomeshown</c> (target = a home id, DeskHomeMap's constants;
+    /// name = the assertion's name, the target when empty; n = the steps
+    /// that follow which only make sense when the home's object shows):
+    /// asserts <c>shown.&lt;name&gt;</c>. On the painted desk a home the
+    /// painted map draws or dresses differently (DeskPaintedMap.
+    /// NotShownReason: the decor zone's decorations are cut, the RING
+    /// SERVICE panel shows nothing, the deal tray is the shell's) passes as
+    /// "not applicable on the painted desk" with that reason, and the next
+    /// n steps are passed over (QaRunner.Skip: the decoration drags of
+    /// desk_plan_decor and cam_chrome, the breaker click of desk_plan_homes
+    /// and cam_desk); elsewhere it passes as "in play" and the steps run.
+    /// The night of 2026-10-28, seams B and C.
+    /// </summary>
+    private static IEnumerator HomeShown(QaRunner runner, QaStep step)
+    {
+        string home = step.target ?? string.Empty;
+        string name = "shown." + (string.IsNullOrEmpty(step.name) ? home : step.name);
+        string reason = DeskLayout.PaintedShown ? DeskPaintedMap.NotShownReason(home) : null;
+        if (reason != null)
+        {
+            runner.Assert(name, Owner, true, "not applicable on the painted desk", reason + $"; the next {step.n} step(s) are passed over");
+            runner.Skip(step.n, $"{home}: {reason}");
+        }
+        else
+            runner.Assert(name, Owner, true, "in play", $"the {home} home's object is in play on the {(DeskLayout.PaintedShown ? "painted" : "art")} desk; the next {step.n} step(s) run");
+        yield break;
     }
 
     /// <summary>How high over the desk's top a click box's centre may stand and still count as the desk's (metres): the PC and the lamp, not the hall.</summary>

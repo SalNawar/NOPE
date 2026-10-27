@@ -59,7 +59,8 @@ using UnityEngine.UI;
 /// <item><c>camchrome</c> (n = 1 starts, its target naming what the leg
 /// shows: "held" for its drag's held decoration, "reading" for the reading
 /// view at rest, a plate's key, "guide" on day 1; 0 stops; 2 shows the stamp
-/// hint plate as the counter's bounce does; name): every frame between, no
+/// hint plate as the counter's bounce does; 3 adds its target's keys to the
+/// running leg, for a half a desk may lack; name): every frame between, no
 /// shown chrome (the pull tabs, the Back control, "◀ City") is drawn over a
 /// held thing or over the reading view's framed work
 /// (<c>chrome.&lt;name&gt;</c>, BUG-59; red when a half the leg shows was
@@ -824,17 +825,21 @@ public static class CamOps
     /// ("guide" on day 1, where the guide's prompt plate shows),
     /// <see cref="ShowsHeld"/> (the leg's drag holds a decoration) and
     /// <see cref="ShowsReading"/> (the reading view comes to rest). n = 2: the
-    /// stamp hint plate, shown as the counter's bounce shows it. Every shown
-    /// thing is due in the leg's report (<see cref="LegLines"/>), seen or not.
-    /// An unknown key or step throws, so a typo cannot drop an expectation in
+    /// stamp hint plate, shown as the counter's bounce shows it. n = 3: the
+    /// target's keys added to the running leg, nothing shown by the step
+    /// itself (a half of the leg that a desk may not have: the held
+    /// decoration, passed over on the painted desk by DESK-PLAN's
+    /// deskhomeshown; the night of 2026-10-28, seam C). Every shown thing is
+    /// due in the leg's report (<see cref="LegLines"/>), seen or not. An
+    /// unknown key or step throws, so a typo cannot drop an expectation in
     /// silence.
     /// </summary>
     public static List<string> ShownBy(int n, string target)
     {
         if (n == 2)
             return new List<string> { StampHint };
-        if (n != 1)
-            throw new InvalidOperationException($"camchrome: a step with n = {n} shows nothing (1 starts a leg, 2 shows the stamp hint, 0 ends the leg).");
+        if (n != 1 && n != 3)
+            throw new InvalidOperationException($"camchrome: a step with n = {n} shows nothing (1 starts a leg, 2 shows the stamp hint, 3 adds the target's keys to the running leg, 0 ends the leg).");
         var keys = new List<string>();
         foreach (string key in (target ?? string.Empty).Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
         {
@@ -1016,7 +1021,7 @@ public static class CamOps
             }
             else if (_chrome == null || !_chrome.Running)
             {
-                throw new InvalidOperationException("camchrome n = 2 shows the stamp hint to a running watch: start one first (n = 1).");
+                throw new InvalidOperationException($"camchrome n = {step.n} {(step.n == 2 ? "shows the stamp hint to" : "adds its keys to")} a running watch: start one first (n = 1).");
             }
             // What this step makes the leg show is due in the leg's report, seen or not (LegLines).
             _chrome.Shows.UnionWith(shows);

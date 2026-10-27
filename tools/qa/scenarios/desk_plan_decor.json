@@ -3,7 +3,7 @@
   "owner": "DESK-PLAN",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "DESK-PLAN BUG-23: each decoration dragged (Fast, Slow, Wobble, Diag) to free spots off the mat rests where it was let go (drop <= 8 px at 1080p); one let go onto the scanner's home and one onto the mat go back; the camera never moves (A1). The free spots, in the desk frame: the sorter to (1.95, 0.75) then (1.90, 0.62), right of the decor home; the tray to (1.30, 0.62) then back to its start (1.29, 0.38), in the decor home the sorter left. Every home blocks a decoration (the later ones too), so the spots stay off them" },
+    { "op": "note", "text": "DESK-PLAN BUG-23: each decoration dragged (Fast, Slow, Wobble, Diag) to free spots off the mat rests where it was let go (drop <= 8 px at 1080p); one let go onto the scanner's home and one onto the mat go back; the camera never moves (A1). The free spots, in the desk frame: the sorter to (1.95, 0.75) then (1.90, 0.62), right of the decor home; the tray to (1.30, 0.62) then back to its start (1.29, 0.38), in the decor home the sorter left. Every home blocks a decoration (the later ones too), so the spots stay off them. On the painted desk the decorations are cut (DESK-V3): deskHomeShown writes the not-applicable line (shown.decor_spots, which desk.play.decor reads) and passes the recording and its drags over" },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },
@@ -13,6 +13,7 @@
     { "op": "startShift" },
     { "op": "wait", "f": 4 },
     { "op": "still", "name": "decor_before" },
+    { "op": "deskHomeShown", "target": "decor", "name": "decor_spots", "n": 10 },
     { "op": "recStart", "name": "decor_drags" },
     { "op": "drop", "path": "Fast", "target": "Decor_form_sorter", "x2": 0.835, "y2": 0.362, "f": 8 },
     { "op": "drop", "path": "Slow", "target": "Decor_form_sorter", "x2": 0.841, "y2": 0.349, "f": 8 },

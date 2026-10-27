@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -71,7 +72,42 @@ public static class DeskPlanChecks
     [GateCheck("desk.play.intercom", Owner, GateKind.Play)]
     public static GateResult Intercom() => GateResults.Require("desk.play.intercom", Owner, "desk_plan_homes.expect.*");
 
-    /// <summary>Each decoration let go on a free spot rests where it was let go (≤8 px at 1080p, BUG-23).</summary>
+    /// <summary>Each decoration let go on a free spot rests where it was let go (≤8 px at 1080p, BUG-23); on the painted desk, which has no decoration spots, the scenario's "not applicable" line (DeskPlanOps' deskhomeshown, seam C of 2026-10-28).</summary>
     [GateCheck("desk.play.decor", Owner, GateKind.Play)]
-    public static GateResult Decor() => GateResults.Require("desk.play.decor", Owner, "desk_plan_decor.drop.*");
+    public static GateResult Decor()
+    {
+        (IEnumerable<QaGateResult> results, string head) = Measured();
+        return DecorVerdict(results, head);
+    }
+
+    /// <summary>The results and HEAD the decor check judges: every result in Library/QA/results and the checkout's commit (DeskPlanGateTests put given ones in their place).</summary>
+    internal static Func<(IEnumerable<QaGateResult> Results, string Head)> Measured = () => (GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot));
+
+    /// <summary>The scenario's pass line on the painted desk (desk_plan_decor's deskhomeshown step, name decor_spots).</summary>
+    public const string DecorSpotsId = "desk_plan_decor.shown.decor_spots";
+
+    /// <summary>
+    /// The decor check's verdict (pure; DeskPlanGateTests): the drops
+    /// (<c>desk_plan_decor.drop.*</c>, GateResults.Judge) when any was
+    /// measured at <paramref name="head"/>; else the scenario's
+    /// <see cref="DecorSpotsId"/> line, which passes the check only when it
+    /// says the spots are not applicable (the painted desk: its decorations
+    /// are cut, DESK-V3) and was measured at HEAD on a clean tree. A desk
+    /// with spots and no drop measured at HEAD is red: run the recipe.
+    /// </summary>
+    public static GateResult DecorVerdict(IEnumerable<QaGateResult> results, string head)
+    {
+        const string id = "desk.play.decor";
+        List<QaGateResult> all = (results ?? Enumerable.Empty<QaGateResult>()).ToList();
+        bool dropsAtHead = all.Any(r => GateResults.Matches("desk_plan_decor.drop.*", r.id) && string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase));
+        if (dropsAtHead)
+            return GateResults.Judge(id, Owner, "desk_plan_decor.drop.*", all, head, false);
+        GateResult shown = GateResults.Judge(id, Owner, DecorSpotsId, all, head, false);
+        if (!shown.Pass)
+            return GateResult.Fail(id, Owner, shown.Measured, $"no drop measured at HEAD and no '{DecorSpotsId}' line that passes: {shown.Detail}");
+        QaGateResult line = all.First(r => string.Equals(r.id, DecorSpotsId, StringComparison.OrdinalIgnoreCase) && string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase));
+        bool notApplicable = (line.measured ?? string.Empty).StartsWith("not applicable", StringComparison.OrdinalIgnoreCase);
+        return GateResult.Of(id, Owner, notApplicable, line.measured,
+            notApplicable ? line.detail : "the desk in use has decoration spots, but desk_plan_decor measured no drop at HEAD: run the recipe (docs/pending/QA-RIG.md)");
+    }
 }

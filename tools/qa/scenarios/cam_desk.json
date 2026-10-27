@@ -352,6 +352,12 @@
       "target": "ProtocolRing"
     },
     {
+      "op": "deskHomeShown",
+      "target": "switchboard",
+      "name": "breaker_click_1",
+      "n": 1
+    },
+    {
       "op": "click",
       "target": "Breaker1Click"
     },
@@ -426,6 +432,12 @@
     {
       "op": "click",
       "target": "ProtocolRing"
+    },
+    {
+      "op": "deskHomeShown",
+      "target": "switchboard",
+      "name": "breaker_click_2",
+      "n": 1
     },
     {
       "op": "click",
