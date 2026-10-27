@@ -253,6 +253,7 @@ public class DeskSlidesTests
             sliders = new[] { Good("left"), Good("left"), far, pastFelt, stiff, new DeskSlider("nowhere", null, SlideKind.Lift, 0.01f) },
             winnerAfter = 0.2f,
             winnerBelow = 0.6f,
+            focusAim = 0.1f,
         };
         string all = string.Join("\n", slides.Problems(homes, 0.06f));
         StringAssert.Contains("'left' is listed twice", all);
@@ -265,6 +266,7 @@ public class DeskSlidesTests
         StringAssert.Contains("'declared' declares a slide but no track slides it", all);
         StringAssert.Contains("waits up to 0.2 s", all);
         StringAssert.Contains("below 0.6 of the loser's travel", all);
+        StringAssert.Contains("aims 0.1 of the view", all);
         StringAssert.DoesNotContain("'pouch' declares", all, "a track resting in a home that declares no slide is no fault: it stays put until the map declares one");
     }
 

@@ -68,6 +68,9 @@ public sealed class DeskSlideIn : MonoBehaviour
     /// <summary>The slide-in's data (the bound plan's DeskLayoutSettings.slides).</summary>
     public DeskSlides Slides => _slides;
 
+    /// <summary>The assist deciding the slides (FramingFocus follows its pick).</summary>
+    public ProximityAssist Assist => _assist;
+
     /// <summary>The material of the sliders' contact shadows (the papers' Paper_Shadow; null: no shadows).</summary>
     public Material ShadowMaterial { get; private set; }
 
@@ -106,6 +109,15 @@ public sealed class DeskSlideIn : MonoBehaviour
     {
         if (slider != null && _assist != null && !_sliders.Contains(slider))
             _sliders.Add(slider);
+    }
+
+    /// <summary>The attached slider <paramref name="id"/>, or null (FramingFocus aims at it).</summary>
+    public MachineSlideIn Find(string id)
+    {
+        for (int i = 0; i < _sliders.Count; i++)
+            if (_sliders[i] != null && _sliders[i].Id == id)
+                return _sliders[i];
+        return null;
     }
 
     /// <summary>Listens to <paramref name="day"/>'s end (the forced retract), and no longer to the day bound before.</summary>
