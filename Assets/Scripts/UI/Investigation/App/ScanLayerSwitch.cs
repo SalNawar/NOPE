@@ -126,8 +126,14 @@ public sealed class ScanLayerSwitch : MonoBehaviour
         Wire();
         if (_document < 0 || !Available(layer))
             return;
-        Apply(layer, layer != Layer && isActiveAndEnabled);
-        Sounds.Play(SoundCues.UiTab);
+        Apply(layer, layer != Layer && isActiveAndEnabled); // the desktop's mouse click is the press's one sound (BUG-21c)
+    }
+
+    /// <summary>Hidden mid-wipe (the window minimised, the pane switched): the bar goes, never left over the readout (CODE-153).</summary>
+    private void OnDisable()
+    {
+        if (wipe != null)
+            wipe.gameObject.SetActive(false);
     }
 
     private void Apply(ScanLayer layer, bool animate)
@@ -213,12 +219,9 @@ public sealed class ScanLayerSwitch : MonoBehaviour
             label.text = text;
         if (clicked != null && line.GetComponent<Graphic>() != null)
         {
-            Button button = line.GetComponent<Button>() ?? line.AddComponent<Button>();
-            button.onClick.AddListener(() =>
-            {
-                Sounds.Play(SoundCues.UiPress);
-                clicked();
-            });
+            if (!line.TryGetComponent(out Button button)) // never ?? on a Unity object: a destroyed one is not null to it (BUG-58a)
+                button = line.AddComponent<Button>();
+            button.onClick.AddListener(() => clicked()); // the desktop's mouse click is the press's one sound (BUG-21c)
         }
         _lines.Add(line);
     }

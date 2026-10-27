@@ -20,7 +20,7 @@ public static class OrderLines
     /// <summary>A branch's name (a band's head and the form's section).</summary>
     public static string Branch(UpgradeBranch branch) => UiText.Pc.Get(BranchKeys[(int)branch]);
 
-    /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned"; for an owned scanner where it stands (on the node alone, where room is short; after the delivery day on the <paramref name="full"/> detail card).</summary>
+    /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned"; for an owned scanner where it stands (on the node alone, where room is short; after the delivery day on the <paramref name="full"/> detail card). A day orders are closed is said once, by the window's header note (BUG-28d).</summary>
     public static string State(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, OrderState state, bool full)
     {
         switch (state)

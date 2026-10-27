@@ -9,9 +9,20 @@ using UnityEngine;
 /// single, full-rect, mipmapped Sprite (it is drawn smaller than its 2x pixels), and its 9-slice border and pixels
 /// per unit come from the kit's <c>kit_manifest.json</c> (written by the kit
 /// exporter), so the sprites are ready for Image.Type.Sliced without hand setup.
+/// The kit is compressed (BUG-65i: 92.1 MB as RGBA32 with mips, from its 272
+/// PNGs): high quality, BC7 on desktop, which keeps the cel edges and the
+/// alpha; the mips stay (they stop the shimmer). BC7 is 1 byte a pixel
+/// against RGBA32's 4, so the kit comes to about 23.2 MB with its mips, under
+/// FIX_PLAN's 25 MB (UiPcChecks' uipc.kit.memory measures it as imported). A
+/// sprite whose size is not a multiple of 4 cannot be block-compressed and
+/// Unity keeps it uncompressed (one today, 0.1 MB; its import warning names
+/// it, for the kit exporter to pad).
 /// </summary>
 public sealed class UiKitImporter : AssetPostprocessor
 {
+    /// <summary>The importer's version: raised when its rules change, so the kit is imported again (2: compressed, BUG-65i).</summary>
+    public override uint GetVersion() => 2;
+
     /// <summary>The folder the kit's sprites and manifest live in.</summary>
     public const string Folder = "Assets/Art/UI/Kit/";
 
@@ -67,7 +78,12 @@ public sealed class UiKitImporter : AssetPostprocessor
         importer.alphaIsTransparency = true;
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.filterMode = FilterMode.Bilinear;
-        importer.textureCompression = TextureImporterCompression.Uncompressed;
+        importer.textureCompression = TextureImporterCompression.CompressedHQ;
+        TextureImporterPlatformSettings desktop = importer.GetPlatformTextureSettings("Standalone");
+        desktop.overridden = true;
+        desktop.format = TextureImporterFormat.BC7;
+        desktop.textureCompression = TextureImporterCompression.CompressedHQ;
+        importer.SetPlatformTextureSettings(desktop);
 
         var settings = new TextureImporterSettings();
         importer.ReadTextureSettings(settings);

@@ -475,7 +475,10 @@ public sealed partial class InvestigationApp
         if (target.TryGetComponent(out Button button) && button.interactable)
             button.onClick.Invoke();
         else if (target.TryGetComponent(out SidebarEntryRow entry))
-            Jump(entry.Item);
+        {
+            Jump(entry.Item); // a pinned or recent row: the ring stays on it (CODE-156: a refocus here jumped it back to the region's first row)
+            return;
+        }
         Refocus();
     }
 

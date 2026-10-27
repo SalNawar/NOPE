@@ -2,19 +2,32 @@ using NUnit.Framework;
 using UnityEngine;
 
 /// <summary>
-/// UI-PC's P0-A seams: PcFrame.CanOpen (the stub: always, as today; the F1
-/// guard reads it) and OrderBook.CancelPendingFor (the stub: OrderBook's own
-/// same-day cancel and refund, Cancel). Tests in the "NeedsEditor" category
-/// create Unity objects and run only inside Unity.
+/// UI-PC's P0-A seams, as UI-PC ships them: PcFrame.CanOpen (true while the
+/// screen is on, MonitorScreen telling it; true with no screen; the F1 guard
+/// reads it, BUG-58c) and OrderBook.CancelPendingFor (OrderBook's own
+/// same-day cancel and refund, Cancel: a pending order is always today's).
+/// Tests in the "NeedsEditor" category create Unity objects and run only
+/// inside Unity.
 /// </summary>
 public class UiPcSeamTests
 {
     private const string Item = "seam.test.item";
 
     [Test]
-    public void PcFrame_StubCanAlwaysOpen()
+    public void PcFrame_CanOpen_FollowsTheScreen()
     {
-        Assert.IsTrue(PcFrame.CanOpen);
+        Assert.IsTrue(PcFrame.CanOpen, "no screen has said otherwise");
+        try
+        {
+            PcFrame.ScreenPowered(false);
+            Assert.IsFalse(PcFrame.CanOpen, "F1 never opens a dark frame");
+            PcFrame.ScreenPowered(true);
+            Assert.IsTrue(PcFrame.CanOpen);
+        }
+        finally
+        {
+            PcFrame.ScreenPowered(true);
+        }
     }
 
     [Test]
@@ -27,7 +40,7 @@ public class UiPcSeamTests
     }
 
     [Test, Category("NeedsEditor")]
-    public void CancelPendingFor_StubIsCancel_TodaysOrderRefunded_YesterdaysKept()
+    public void CancelPendingFor_IsCancel_TodaysOrderRefunded_YesterdaysKept()
     {
         var item = ScriptableObject.CreateInstance<UpgradeSO>();
         item.id = Item;

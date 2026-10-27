@@ -295,7 +295,8 @@ public sealed class SiteRenderer : MonoBehaviour
     /// <summary>Gives an element an equal share of its row's width.</summary>
     private static void Flexible(Component c)
     {
-        LayoutElement le = c.GetComponent<LayoutElement>() ?? c.gameObject.AddComponent<LayoutElement>();
+        if (!c.TryGetComponent(out LayoutElement le)) // never ?? on a Unity object: a destroyed one is not null to it (BUG-58a)
+            le = c.gameObject.AddComponent<LayoutElement>();
         le.preferredWidth = 1f;
         le.flexibleWidth = 1f;
     }

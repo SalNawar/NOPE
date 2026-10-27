@@ -3,7 +3,8 @@ using System;
 /// <summary>
 /// The wallet's changed signal (P0-A seam; owner UI-PC, BUG-58a): every write
 /// to the wallet (WorldState.money) raises <see cref="Changed"/> right after
-/// it, so the PC's views can follow the wallet live. Nothing listens yet.
+/// it, so the PC's views can follow the wallet live: the Citizen Account
+/// redraws on it while it shows (BUG-58a); Orders follows its own signature.
 /// </summary>
 public static class WalletEvents
 {

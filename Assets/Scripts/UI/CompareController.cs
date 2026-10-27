@@ -167,6 +167,22 @@ public sealed class CompareController : MonoBehaviour
         PicksChanged?.Invoke();
     }
 
+    /// <summary>
+    /// Lets a finished pair go (the workbench, once every listener read it):
+    /// the picks and their highlights clear, but a note the pair wrote on the
+    /// office strip ("DEVIATION LOGGED", "ALREADY DOCUMENTED") stays up until
+    /// the next pick (CODE-110, BUG-58a: it vanished after one frame).
+    /// </summary>
+    public void Release()
+    {
+        bool note = _stripNote && officeBar != null && officeBar.activeSelf;
+        _pair.Clear();
+        ClearHighlights();
+        if (!note)
+            Draw();
+        PicksChanged?.Invoke();
+    }
+
     /// <summary>Restores both sides' highlights.</summary>
     private void ClearHighlights()
     {

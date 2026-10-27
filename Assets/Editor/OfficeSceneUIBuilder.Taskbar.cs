@@ -20,23 +20,22 @@ public static partial class OfficeSceneUIBuilder
 
     private static readonly Color XpRed = new Color(0.77f, 0.235f, 0.17f, 1f);    // close button (#C43C2C: white reads on it)
 
-    /// <summary>Where the taskbar's row of window buttons and tray starts: after the Menu and Back to desk buttons.</summary>
-    private const float TrayRowFrom = PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth + PcSize.L;
+    /// <summary>Where the taskbar's row of window buttons and tray starts: after the Start button (BUG-50a: the Back to desk button is retired; only Q and the bezel leave the PC).</summary>
+    private const float TrayRowFrom = PcSize.S + MenuButtonWidth + PcSize.L;
 
     /// <summary>
-    /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the
-    /// Taskbar role (the culture's deep colour; no gloss), the Menu button
-    /// (the StartButton role) at its left, the tray at its right with
-    /// Credits, the Helix River's live strip (stability without a number;
-    /// OfficeSceneUIBuilder.HelixRiver), today's date and the clock at Caption
-    /// size in a row sized by their words, the tray as wide as they are in any
-    /// language (QA2 2026-10-16: a fixed 840 let the Greek wallet run over the
-    /// river and the date into the clock): it and the window buttons share a
-    /// row (TrayRow) where the buttons take what the tray leaves. The date ("14 MAR 2150 · Day 1"; the
-    /// desk-first redesign: "the date should be on the PC") sits beside the
-    /// clock on a clear button: a click holds today on the workbench, to
-    /// compare with an expiry or a ticket's date. Back to desk and the window
-    /// buttons are added after it (BuildDesktopShell, BuildWindowManager).
+    /// The taskbar (the PC UX redesign C7; BUG-21a, Saleh's notes 10 and 11),
+    /// rebuilt fresh: a light kit bar in the Taskbar role, the Start button
+    /// (the StartButton role) at its left, and at its right end Windows' tray
+    /// clock: the time over today's date ("09:07" over "14 MAR 2150"), the one
+    /// small glass readout on the bar, as wide as its words. Credits and the
+    /// Helix River left the tray (the river hangs on the wall monitor; the
+    /// wallet is the desk till's and the Citizen Account's), so
+    /// <paramref name="moneyText"/> is null. The clock and date are one clear
+    /// button (no underline: OfficeUIController makes it live only while the
+    /// app is on the PC): a click holds today on the workbench, to compare with
+    /// an expiry or a ticket's date. The tray shares a row (TrayRow) with the
+    /// window buttons, which take what it leaves (BuildWindowManager).
     /// </summary>
     private static void BuildTaskbar(Transform root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text clockText)
     {
@@ -60,32 +59,30 @@ public static partial class OfficeSceneUIBuilder
         shared.childForceExpandWidth = false;
         shared.childForceExpandHeight = true;
 
-        // System tray: Credits | the Helix River | Date | Clock, right to left from the bar's end, each as wide as its words (the river as its strip).
+        // The tray: one small glass readout, the clock over the date, inset from the bar's edges.
         Transform tray = Panel(trayRow, "Tray", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
         tray.GetComponent<Image>().raycastTarget = false;
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(tray.gameObject);
-        row.padding = new RectOffset(12, 12, 0, 0);
-        row.spacing = 14f;
-        row.childAlignment = TextAnchor.MiddleRight;
+        row.padding = new RectOffset(4, 4, 4, 4);
+        row.childAlignment = TextAnchor.MiddleCenter;
         row.childControlWidth = true;
         row.childControlHeight = true;
         row.childForceExpandWidth = false;
         row.childForceExpandHeight = true;
-        moneyText = TrayText(tray, "MoneyText", "Credits: 0");
-        BuildTrayRiver(tray);
+        moneyText = null;
         dateButton = MakeButton(tray, "DateButton", null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
         DestroyChildIfPresent(dateButton.transform, "Label");
-        HorizontalLayoutGroup datePad = GetOrAdd<HorizontalLayoutGroup>(dateButton.gameObject);
-        datePad.padding = new RectOffset(8, 8, 0, 0);
-        datePad.childAlignment = TextAnchor.MiddleCenter;
-        datePad.childControlWidth = true;
-        datePad.childControlHeight = true;
-        datePad.childForceExpandWidth = false;
-        datePad.childForceExpandHeight = true;
-        dayText = TrayText(dateButton.transform, "DayText", "14 MAR 2150 · Day 1");
-        dayText.fontStyle = FontStyles.Underline;
+        VerticalLayoutGroup stack = GetOrAdd<VerticalLayoutGroup>(dateButton.gameObject);
+        stack.padding = new RectOffset(10, 10, 0, 0);
+        stack.spacing = 0f;
+        stack.childAlignment = TextAnchor.MiddleCenter;
+        stack.childControlWidth = true;
+        stack.childControlHeight = true;
+        stack.childForceExpandWidth = true;
+        stack.childForceExpandHeight = true;
+        clockText = TrayText(dateButton.transform, "ClockText", "09:00");
+        dayText = TrayText(dateButton.transform, "DayText", "14 MAR 2150");
         BuildHoverHint(dateButton, "tray.date.hint", null, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
-        clockText = TrayText(tray, "ClockText", "09:00");
         // The row is NOT laid out here: the layout groups lay it out when the scene loads, as every
         // other layout group this builder makes. Laying it out before the save (round 4 did) marks the
         // readouts' rects as driven, and Unity writes driven rect values as zero: the saved scene then
@@ -94,7 +91,7 @@ public static partial class OfficeSceneUIBuilder
         bar.SetAsLastSibling();
     }
 
-    /// <summary>A tray readout: one line at Caption size in the tray's ink, as wide as its text.</summary>
+    /// <summary>A tray line: one line at Caption size in the tray's ink, as wide as its text.</summary>
     private static TMP_Text TrayText(Transform tray, string name, string sample)
     {
         TMP_Text text = Text(tray, name, sample, PcType.Caption, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.Tray);
