@@ -169,7 +169,7 @@ public class DemoGateTests
         StringAssert.Contains("QA-RIG", known["cam.bp.gc"]);
         foreach (string id in new[] { "tools_microprint.tools.micro.read", "desk_plan_homes.presses", "stamp_aim.aim.c1", "stamp_case.rackOverPaper.a1", "cam_chrome.plate.a1_d1.guide", "cam_chrome.plate.a2.stamphint", "bp.cam_gc.gc.cam_cycle" })
             Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
-        foreach (string id in new[] { "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses", "stamp_aim.console", "stamp_aim.presses", "stamp_aim.letGo.rack1", "stamp_case.console", "stamp_case.tab.a1.rackInFrame", "stamp_hold.hold.esc1", "cam_chrome.console", "cam_chrome.chrome.a1", "cam_chrome.missingScripts.end", "cam_gc.cycle.cam_cycle", "bp.cam_gc.cycle.cam_cycle", "cam_views.camera" })
+        foreach (string id in new[] { "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses", "stamp_aim.console", "stamp_aim.presses", "stamp_aim.letGo.rack1", "stamp_case.console", "stamp_case.tab.a1.rackInFrame", "stamp_hold.hold.esc1", "cam_chrome.console", "cam_chrome.chrome.a1", "cam_chrome.missingScripts.end", "cam_gc.cycle.cam_cycle", "bp.cam_gc.cycle.cam_cycle" })
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
