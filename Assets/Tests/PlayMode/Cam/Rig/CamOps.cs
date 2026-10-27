@@ -484,16 +484,23 @@ public static class CamOps
         var held = new Held();
         var calls = new List<string>();
         var moved = new List<string>();
+        var ended = new List<string>();
         HoldRegistry.Desk.Begin(held);
 
         // Each view change alone, each checked before the next (a pair would hide a missing guard: an on undone by the next off).
+        // Each call meets a live hold: a view key with something held ends the hold and changes nothing (the city's key, the
+        // PC's key: STAMP R5 with BUG-55c), so the stand-in is held again before the next call.
         IEnumerator Try(string what, Action call)
         {
+            if (!HoldRegistry.Desk.IsHolding)
+                HoldRegistry.Desk.Begin(held);
             bool reading = desk != null && desk.IsOn, looking = city != null && city.IsOn;
             OfficeView pc = office != null ? office.Current : OfficeView.OfficeFocus;
             call();
             yield return QaGame.Frames(2);
             calls.Add(what);
+            if (!HoldRegistry.Desk.IsHolding)
+                ended.Add(what);
             if ((desk != null && desk.IsOn != reading) || (city != null && city.IsOn != looking) || (office != null && office.Current != pc))
                 moved.Add($"{what}: reading {reading}->{desk?.IsOn}, city {looking}->{city?.IsOn}, PC {pc}->{office?.Current}");
         }
@@ -513,8 +520,8 @@ public static class CamOps
         if (office != null)
             yield return Try("the PC (Q)", office.FocusMonitor);
         HoldRegistry.Desk.End(held);
-        runner.Assert("hold." + name, Owner, moved.Count == 0 && calls.Count > 0, $"{calls.Count} view changes made while holding, {moved.Count} went through",
-                      moved.Count > 0 ? string.Join("; ", moved) : "each refused on its own: " + string.Join(", ", calls) + " (BUG-55c)");
+        runner.Assert("hold." + name, Owner, moved.Count == 0 && calls.Count > 0, $"{calls.Count} view changes made while holding, {moved.Count} went through, {ended.Count} ended the hold",
+                      (moved.Count > 0 ? string.Join("; ", moved) : "each refused on its own: " + string.Join(", ", calls) + " (BUG-55c)") + (ended.Count > 0 ? "; the hold ended by: " + string.Join(", ", ended) + " (STAMP R5: a view key seats a held dater home)" : string.Empty));
     }
 
     // ------------------------------------------------------------------ camparallax
