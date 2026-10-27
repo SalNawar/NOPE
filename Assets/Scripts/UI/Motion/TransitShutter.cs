@@ -38,6 +38,9 @@ public sealed class TransitShutter : MonoBehaviour
     /// <summary>The veil's group (its fade under Reduced Motion, and its click block).</summary>
     private CanvasGroup _group;
 
+    /// <summary>The click blocker (a clear full-screen Image): a raycast target only while the shutter is down or rolling (BlocksClicks).</summary>
+    private Image _blocker;
+
     /// <summary>The drawn shutter (moves up out of view to roll up).</summary>
     private RectTransform _shutter;
 
@@ -52,6 +55,15 @@ public sealed class TransitShutter : MonoBehaviour
 
     /// <summary>How far down the shutter is (0 rolled up out of view, 1 covering the screen).</summary>
     private float _cover;
+
+    /// <summary>
+    /// True while the veil takes the pointer (the QA rig waits for this to
+    /// clear before its first press on a new scene): from Lower's first frame
+    /// until Raise has rolled the shutter all the way up and hidden the veil.
+    /// Off, the blocker is no raycast target and the veil is inactive, so a
+    /// click on the new scene is never swallowed by a veil that is not seen.
+    /// </summary>
+    public bool BlocksClicks => gameObject.activeInHierarchy && _blocker != null && _blocker.raycastTarget && _group != null && _group.blocksRaycasts;
 
     /// <summary>Builds the veil under <paramref name="parent"/> (an overlay canvas over everything at <paramref name="sortingOrder"/>), rolled up and off.</summary>
     public static TransitShutter Build(Transform parent, int sortingOrder)
@@ -72,6 +84,7 @@ public sealed class TransitShutter : MonoBehaviour
     {
         gameObject.SetActive(true);
         _group.blocksRaycasts = true;
+        _blocker.raycastTarget = true;
         Place(_cover); // its first frame shows it where it is (up, out of view), never a stale pose
         yield return Roll(1f, seconds);
     }
@@ -80,6 +93,7 @@ public sealed class TransitShutter : MonoBehaviour
     public IEnumerator Raise(float seconds)
     {
         yield return Roll(0f, seconds);
+        _blocker.raycastTarget = false;
         _group.blocksRaycasts = false;
         gameObject.SetActive(false);
     }
@@ -130,8 +144,9 @@ public sealed class TransitShutter : MonoBehaviour
         _group = GetComponent<CanvasGroup>();
         _group.blocksRaycasts = false;
 
-        Image blocker = Layer<Image>("ClickBlocker", transform);
-        blocker.color = new Color(0f, 0f, 0f, 0f);
+        _blocker = Layer<Image>("ClickBlocker", transform);
+        _blocker.color = new Color(0f, 0f, 0f, 0f);
+        _blocker.raycastTarget = false; // on from Lower's first frame, off once Raise has the shutter all the way up
 
         _shutter = Layer<RectTransform>("Shutter", transform);
 

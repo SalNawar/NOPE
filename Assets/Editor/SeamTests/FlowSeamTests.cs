@@ -300,6 +300,59 @@ public class FlowSeamTests
         }
     }
 
+    /// <summary>
+    /// The night of 2026-10-28 (seam A): the veil's ClickBlocker took the QA
+    /// rig's first press on every new scene. The blocker is a raycast target
+    /// from Lower's first frame and no longer the moment Raise has the
+    /// shutter all the way up (BlocksClicks, which QaGame.ShutterBlocks
+    /// reads). Rolled over no time, so the enumerators end at once.
+    /// </summary>
+    [Test, Category("NeedsEditor")]
+    public void TransitShutter_BlocksClicksFromItsFirstFrameDown_AndNotOnceItIsUpAndOff()
+    {
+        var host = new GameObject("FlowSeamTests shutter host", typeof(RectTransform));
+        try
+        {
+            TransitShutter veil = TransitShutter.Build(host.transform, 100);
+            Assert.IsFalse(veil.BlocksClicks, "built rolled up and off: no click taken");
+            Assert.IsFalse(veil.gameObject.activeSelf);
+            IEnumerator lower = veil.Lower(0f);
+            Assert.IsTrue(lower.MoveNext(), "Lower yields its roll");
+            Assert.IsTrue(veil.BlocksClicks, "from Lower's first frame the blocker takes the pointer");
+            Assert.IsTrue(veil.gameObject.activeSelf);
+            Run(lower);
+            Assert.IsTrue(veil.BlocksClicks, "down: still blocking");
+            Run(veil.Raise(0f));
+            Assert.IsFalse(veil.BlocksClicks, "up and off: the blocker is no raycast target and the veil is inactive");
+            Assert.IsFalse(veil.gameObject.activeSelf);
+            var blocker = veil.transform.Find("ClickBlocker").GetComponent<UnityEngine.UI.Image>();
+            Assert.IsFalse(blocker.raycastTarget, "the blocker Image itself takes no raycast once the shutter is up");
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(host);
+        }
+    }
+
+    /// <summary>Runs <paramref name="routine"/> (nested enumerators included) to its end, with a bound against a roll that never settles.</summary>
+    private static void Run(IEnumerator routine)
+    {
+        var stack = new Stack<IEnumerator>();
+        stack.Push(routine);
+        for (int i = 0; stack.Count > 0; i++)
+        {
+            Assert.Less(i, 10000, "the routine never ended");
+            IEnumerator top = stack.Peek();
+            if (!top.MoveNext())
+            {
+                stack.Pop();
+                continue;
+            }
+            if (top.Current is IEnumerator nested)
+                stack.Push(nested);
+        }
+    }
+
     [Test, Category("NeedsEditor")]
     public void Transit_OutsidePlay_WaitsNoTime_AndTheKitLengthIsInRange()
     {

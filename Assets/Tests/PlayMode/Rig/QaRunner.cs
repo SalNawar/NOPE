@@ -258,6 +258,7 @@ public sealed class QaRunner : MonoBehaviour
         {
             case "title":
                 yield return QaGame.Until(() => QaGame.Find<TitleUIController>() != null && RunManager.HasInstance, Timeout(s, 60f), "the title");
+                yield return ClicksFree();
                 if (Scenario.seed != 0 && RunManager.Instance.Config != null)
                 {
                     _oldSeed = _oldSeed ?? RunManager.Instance.Config.fixedRunSeed;
@@ -277,6 +278,7 @@ public sealed class QaRunner : MonoBehaviour
             case "waitoffice":
                 yield return QaGame.Until(() => QaGame.OfficeLoaded() && (s.n <= 0 || QaGame.Day() == s.n) && QaGame.BriefingShown(),
                     Timeout(s, 120f), s.n > 0 ? $"day {s.n}'s briefing in the office" : "the office's briefing");
+                yield return ClicksFree();
                 yield return QaGame.Frames(30);
                 break;
             case "startshift":
@@ -343,6 +345,7 @@ public sealed class QaRunner : MonoBehaviour
                 break;
             case "waitscene":
                 yield return QaGame.Until(() => SceneManager.GetSceneByName(s.name).isLoaded, Timeout(s, 60f), $"the scene {s.name}");
+                yield return ClicksFree();
                 yield return QaGame.Frames(10);
                 break;
             case "res":
@@ -386,6 +389,7 @@ public sealed class QaRunner : MonoBehaviour
                 break;
             case "waitactive":
                 yield return QaGame.Until(() => QaGame.IsShown(QaGame.Member(s.target)), Timeout(s, 60f), $"{s.target} to show");
+                yield return ClicksFree();
                 yield return QaGame.Frames(10);
                 break;
             case "realtime":
@@ -439,6 +443,19 @@ public sealed class QaRunner : MonoBehaviour
         button.onClick.Invoke();
         yield return null;
     }
+
+    /// <summary>
+    /// Waits until the scene change's shutter takes no click (FLOW's
+    /// TransitShutter rolls up over a loaded scene for Transit.Seconds after
+    /// the scene is up: QaGame.ShutterBlocks): every op that waits for a
+    /// scene (title, waitoffice, waitscene, waitactive) ends with this, so
+    /// the first press on the new scene never lands on the veil's
+    /// ClickBlocker (the night of 2026-10-28: every wave 2 scenario's
+    /// startShift and sign presses, blocked). Bounded: a shutter still down
+    /// after 20 s stops the run with that message.
+    /// </summary>
+    private static IEnumerator ClicksFree() =>
+        QaGame.Until(() => !QaGame.ShutterBlocks(), 20f, "the scene change's shutter to be up and off (TransitShutter.BlocksClicks: its ClickBlocker still takes the pointer)");
 
     /// <summary>Clicks <paramref name="go"/> with the virtual mouse at its screen point; when it is off screen or covered, sends the click event and counts the press as blocked as <see cref="Press"/> does.</summary>
     private IEnumerator ClickObject(GameObject go, QaStep step, Action<string> note)

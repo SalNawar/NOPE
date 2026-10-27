@@ -251,6 +251,19 @@ public static class QaGame
         return g.IsValid() && g.isLoaded && OfficeScenes.ArtScene.IsValid() && Find<GameManager>() != null;
     }
 
+    /// <summary>
+    /// True while a scene change's veil (TransitShutter, FLOW) still takes
+    /// the pointer: from its first frame down until it has rolled all the way
+    /// up over the new scene (TransitShutter.BlocksClicks). A press sent
+    /// meanwhile lands on its ClickBlocker, so every op that waits for a
+    /// scene also waits for this to clear (QaRunner.ClicksFree).
+    /// </summary>
+    public static bool ShutterBlocks()
+    {
+        TransitShutter veil = Find<TransitShutter>();
+        return veil != null && veil.BlocksClicks;
+    }
+
     /// <summary>Today's morning paper (the briefing) when it shows, else null.</summary>
     public static GameObject Briefing()
     {
