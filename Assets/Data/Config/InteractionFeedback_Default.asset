@@ -19,5 +19,7 @@ MonoBehaviour:
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   worldOutlineWidth: 0.006
   outlineMaterial: {fileID: 2100000, guid: fa1265badcebd1040b22d80a19c395da, type: 2}
+  outlinePx: 2
+  outlineFadeSeconds: 0.07
   uiOutlineColor: {r: 0.98, g: 0.72, b: 0.2, a: 1}
   uiOutlineDistance: {x: 2, y: -2}

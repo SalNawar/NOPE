@@ -26,7 +26,9 @@ using UnityEngine.Rendering.Universal;
 /// (the global _HallCityLights the living city's shader reads); no
 /// flicker with reduced motion. The screens and the PC's glow stay on,
 /// fainter by day, and each portal ring's light follows its state
-/// (<see cref="SetPortal"/>, from AnimeHallPortalLink). Its Plane child (the
+/// (<see cref="SetPortal"/>, from AnimeHallPortalLink). Under the painted
+/// desk (<see cref="PaintedDesk"/>) it sets the lit hall's brightness on
+/// screen from the knobs (HallBackdrop.Brightness). Its Plane child (the
 /// Light2Ds, the pier shadows, the dust) follows the art's presentation, so
 /// the lights stay on the painted fixtures if the art pans. The desk's 3D
 /// lights cast no real-time shadows (BUG-14b), and the art's desk lamp spot
@@ -102,6 +104,15 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>How far portal <paramref name="portal"/>'s night has come (0 by day; its surge past 1 once its night stage comes, then 1; 0 with the lighting off).</summary>
     public float PortalNight(int portal) => portal >= 0 && portal <= MaxPortal ? _portalNight[portal] : 0f;
 
+    /// <summary>
+    /// True while the painted desk is installed (desk v3; the office binder,
+    /// OfficeSceneBinder.BindHall): the lit hall shows at the knobs'
+    /// paintedDeskBrightness for <see cref="Hour"/> (HallBackdrop.Brightness),
+    /// so it reads as one image with the painted desk; false (the art's
+    /// desk, the hall on its own), as lit.
+    /// </summary>
+    public bool PaintedDesk { get; set; }
+
     /// <summary>Portal <paramref name="portal"/>'s ring state (AnimeHallPortalLink): open (its light on), and whether it is the Return Gate (its colour).</summary>
     public void SetPortal(int portal, bool open, bool returnGate)
     {
@@ -145,7 +156,11 @@ public sealed class HallLightingRig : MonoBehaviour
         HallDayCycle.Publish(settings.Cycle);
         bool on = settings.lightingOn;
         if (backdrop != null)
+        {
             backdrop.SetOn(on, settings.backdropResolution);
+            AnimationCurve painted = settings.paintedDeskBrightness;
+            backdrop.Brightness = PaintedDesk && painted != null && painted.length > 0 ? painted.Evaluate(Hour) : 1f;
+        }
         if (on != _lightsOn || _firstFrame)
             Switch(on);
         if (!on)

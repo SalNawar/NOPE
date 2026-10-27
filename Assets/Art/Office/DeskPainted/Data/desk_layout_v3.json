@@ -1,0 +1,359 @@
+{
+  "source": "layout.py (desk v3, approved as mock_office.png); written by scripts/export_layout.py",
+  "frame": "DeskFrame: x m right of the art mat centre, y m away from the chair; heights in m over the floor",
+  "desk_top": 1.069,
+  "mat": [
+    -0.73,
+    -0.53,
+    0.73,
+    0.5
+  ],
+  "counter": [
+    -0.73,
+    0.46,
+    0.73,
+    0.52
+  ],
+  "rail": [
+    0.745,
+    -0.6,
+    1.38,
+    0.52
+  ],
+  "desk": [
+    -2.75,
+    -0.85,
+    2.3,
+    0.55
+  ],
+  "step": [
+    -2.75,
+    0.55,
+    2.3,
+    1.0
+  ],
+  "step_h": 0.07,
+  "divider_y": [
+    1.0,
+    1.08
+  ],
+  "wall_x": 2.3,
+  "homes": {
+    "stampRack": {
+      "rect": [
+        0.815,
+        0.33,
+        1.11,
+        0.545
+      ],
+      "kind": "fixed",
+      "raise_m": 0.02
+    },
+    "scanner": {
+      "rect": [
+        0.84,
+        -0.14,
+        1.3,
+        0.1
+      ],
+      "kind": "machine",
+      "raise_m": 0.02,
+      "slide": {
+        "dir": [
+          -1,
+          0
+        ],
+        "travel": 0.041,
+        "kind": "track",
+        "track_cut": 0.06
+      }
+    },
+    "chipReader": {
+      "rect": [
+        0.84,
+        -0.53,
+        1.1,
+        -0.27
+      ],
+      "kind": "machine",
+      "raise_m": 0.02,
+      "slide": {
+        "dir": [
+          -1,
+          0
+        ],
+        "travel": 0.037,
+        "kind": "track",
+        "track_cut": 0.06
+      }
+    },
+    "intercom": {
+      "rect": [
+        -1.09,
+        0.24,
+        -0.8,
+        0.46
+      ],
+      "kind": "tool",
+      "raise_m": 0.025,
+      "slide": {
+        "dir": [
+          1,
+          0
+        ],
+        "travel": 0.025,
+        "kind": "track",
+        "track_cut": 0.045
+      }
+    },
+    "babelTuner": {
+      "rect": [
+        -1.1,
+        0.03,
+        -0.79,
+        0.18
+      ],
+      "kind": "locked",
+      "raise_m": 0.025,
+      "slide": {
+        "dir": [
+          1,
+          0
+        ],
+        "travel": 0.035,
+        "kind": "track",
+        "track_cut": 0.045
+      }
+    },
+    "rulebookPocket": {
+      "rect": [
+        -1.1,
+        -0.3,
+        -0.79,
+        -0.09
+      ],
+      "kind": "fixed",
+      "raise_m": 0.025
+    },
+    "uvTorch": {
+      "rect": [
+        -1.06,
+        -0.56,
+        -0.83,
+        -0.38
+      ],
+      "kind": "tool",
+      "raise_m": 0.025,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.015,
+        "kind": "lift",
+        "track_cut": 0.045
+      }
+    },
+    "rolodex": {
+      "rect": [
+        -1.46,
+        0.62,
+        -1.22,
+        0.88
+      ],
+      "kind": "locked",
+      "raise_m": 0.0,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.015,
+        "kind": "lift",
+        "track_cut": 0.0
+      }
+    },
+    "protocolRing": {
+      "rect": [
+        -1.18,
+        0.62,
+        -1.0,
+        0.87
+      ],
+      "kind": "locked",
+      "raise_m": 0.0,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.015,
+        "kind": "lift",
+        "track_cut": 0.0
+      }
+    },
+    "glasses": {
+      "rect": [
+        -0.96,
+        0.62,
+        -0.72,
+        0.86
+      ],
+      "kind": "tool",
+      "raise_m": 0.0,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.02,
+        "kind": "lift",
+        "track_cut": 0.04
+      }
+    },
+    "detain": {
+      "rect": [
+        -0.68,
+        0.6,
+        -0.48,
+        0.86
+      ],
+      "kind": "fixed",
+      "raise_m": 0.0,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.0,
+        "kind": "fixed",
+        "track_cut": 0.0
+      }
+    },
+    "available": {
+      "rect": [
+        -0.46,
+        0.6,
+        -0.23,
+        0.78
+      ],
+      "kind": "fixed",
+      "raise_m": 0.0,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.0,
+        "kind": "fixed",
+        "track_cut": 0.0
+      }
+    },
+    "bell": {
+      "rect": [
+        0.25,
+        0.64,
+        0.45,
+        0.84
+      ],
+      "kind": "fixed",
+      "raise_m": 0.0,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.0,
+        "kind": "fixed",
+        "track_cut": 0.0
+      }
+    },
+    "pc": {
+      "rect": [
+        -1.85,
+        -0.12,
+        -1.2,
+        0.42
+      ],
+      "kind": "fixed",
+      "raise_m": 0.0
+    },
+    "keyboard": {
+      "rect": [
+        -1.84,
+        -0.52,
+        -1.22,
+        -0.28
+      ],
+      "kind": "fixed",
+      "raise_m": 0.0
+    },
+    "mouse": {
+      "rect": [
+        -1.2,
+        -0.5,
+        -1.14,
+        -0.4
+      ],
+      "kind": "fixed",
+      "raise_m": 0.0
+    },
+    "dealTray": {
+      "rect": [
+        -0.21,
+        0.6,
+        0.21,
+        1.2
+      ],
+      "kind": "fixed",
+      "raise_m": 0.0,
+      "slide": {
+        "dir": [
+          0,
+          0
+        ],
+        "travel": 0.0,
+        "kind": "fixed",
+        "track_cut": 0.0
+      }
+    }
+  },
+  "daters": {
+    "stamp_approve": {
+      "x": 0.88,
+      "y": 0.385,
+      "well_h": 0.03
+    },
+    "stamp_deny": {
+      "x": 1.045,
+      "y": 0.495,
+      "well_h": 0.07
+    }
+  },
+  "lamps": {
+    "lamp_stamp": [
+      0.815,
+      0.44
+    ],
+    "lamp_scanner": [
+      0.765,
+      0.15
+    ],
+    "lamp_chip": [
+      0.79,
+      -0.205
+    ],
+    "lamp_intercom": [
+      -0.762,
+      0.195
+    ],
+    "lamp_bell": [
+      0.5,
+      0.74
+    ],
+    "lamp_tray": [
+      0.235,
+      0.7
+    ]
+  }
+}

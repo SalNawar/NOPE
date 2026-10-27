@@ -28,8 +28,21 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     [Min(0.0005f)]
     public float worldOutlineWidth = 0.006f;
 
-    /// <summary>The outline hull's material (TimeDesk/HoverHull: the mesh again, pushed out along its normals, back faces only, unlit).</summary>
+    /// <summary>The outline hull's material (TimeDesk/HoverHull: the mesh's silhouette into the stencil, then the mesh again pushed out along its normals where it is not, unlit, never depth-tested against the desk: HoverHighlighter makes its mask and hull from it).</summary>
     public Material outlineMaterial;
+
+    /// <summary>
+    /// The office objects' outline as screen px at 1080p (scaled by the
+    /// screen's height; 0 uses worldOutlineWidth): one rim for every object,
+    /// near or far, big or small (the review of the desk v3 capture: 3-4 px
+    /// on BABEL against 1 px on the intercom).
+    /// </summary>
+    [Min(0f)]
+    public float outlinePx = 2f;
+
+    /// <summary>How long the outline takes to fade in and to fade out (seconds; a cut under Reduced Motion): it never pops on or off.</summary>
+    [Min(0f)]
+    public float outlineFadeSeconds = 0.07f;
 
     /// <summary>
     /// Outline colour for desktop UI that carries no theme tag (the Title and

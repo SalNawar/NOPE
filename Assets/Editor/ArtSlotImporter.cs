@@ -32,8 +32,9 @@ public sealed class ArtSlotImporter : AssetPostprocessor
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.maxTextureSize = ArtSlots.MaxSide(slot);
         // The hall's slots lie pixel for pixel over the uncompressed painting: the default block compression mottles
-        // their large dark fields in play, so they take the high-quality compression (BC7 on PC).
-        if (slot.StartsWith(ArtSlots.HallSlotsFolder, System.StringComparison.Ordinal))
+        // their large dark fields in play, so they take the high-quality compression (BC7 on PC); so does the
+        // switchboard's plate, whose dark panel fills the screen.
+        if (slot.StartsWith(ArtSlots.HallSlotsFolder, System.StringComparison.Ordinal) || slot.StartsWith(ArtSlots.SwitchboardFolder, System.StringComparison.Ordinal))
             importer.textureCompression = TextureImporterCompression.CompressedHQ;
         // The pet's pictures and frames (tools/art/pets, 1024 px): uncompressed, bilinear, no mipmaps, whatever a
         // fresh .meta would default to (a block-compressed fur mottles; ArtSlots.IsPetPicture).

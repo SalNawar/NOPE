@@ -11,15 +11,20 @@ public static partial class OfficeSceneUIBuilder
     /// The desk home map holds (DeskLayoutSettings.Problems: every id one
     /// home on the art desk's top, none on the paper mat, over another home
     /// or the fixed art, every slide-in clean, every shown object seen by the
-    /// office camera; BUG-4a, BUG-7a): each problem is an error in the
-    /// Console, and any stops the build (it never saves a scene over a broken
-    /// plan).
+    /// office camera; BUG-4a, BUG-7a), and so does the painted desk's
+    /// (DeskLayoutSettings.PaintedProblems on DeskPaintedImporter's prefab,
+    /// when it is built): each problem is an error in the Console, and any
+    /// stops the build (it never saves a scene over a broken plan).
     /// </summary>
     private static void CheckDeskPlan(DeskConfigSO config)
     {
         if (config == null)
             return;
         List<string> problems = config.layout.Problems();
+        var painted = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(DeskPaintedImporter.PrefabPath);
+        if (painted != null && painted.TryGetComponent(out DeskPainted desk))
+            foreach (string problem in config.layout.PaintedProblems(desk.Homes, desk.FixedArt))
+                problems.Add($"(the painted desk) {problem}");
         foreach (string problem in problems)
             Debug.LogError($"[TimeDesk] The desk's plan: {problem} Move it in Desk_Default's layout (DeskLayoutSettings.homes).", config);
         if (problems.Count > 0)

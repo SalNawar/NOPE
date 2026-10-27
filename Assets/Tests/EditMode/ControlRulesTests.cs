@@ -19,6 +19,7 @@ public class ControlRulesTests
             new ControlState(travellerAtDesk: true, wheelOpen: true),
             new ControlState(travellerAtDesk: true, cityView: true), new ControlState(travellerAtDesk: true, dragging: true),
             new ControlState(travellerAtDesk: true, valueHeld: true, inspecting: true, deskView: true),
+            new ControlState(travellerAtDesk: true, switchboard: true),
         };
         foreach (ControlState s in states)
         {
@@ -61,7 +62,6 @@ public class ControlRulesTests
     public void TheCityKeys_TurnAndTurnBack()
     {
         Assert.AreEqual(ControlAction.LookAtCity, ControlRules.Resolve(ControlKey.CityLeft, Desk));
-        Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.CityRight, Desk));
         var city = new ControlState(travellerAtDesk: true, cityView: true);
         Assert.AreEqual(ControlAction.LeaveCity, ControlRules.Resolve(ControlKey.CityRight, city));
         Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.CityLeft, city));
@@ -69,14 +69,45 @@ public class ControlRulesTests
     }
 
     [Test]
+    public void TheSwitchboard_IsTheRightWall_DOrSThere_AOrSBack()
+    {
+        Assert.AreEqual(ControlAction.OpenSwitchboard, ControlRules.Resolve(ControlKey.CityRight, Desk), "D looks right, at the board, as A looks left at the city");
+        Assert.AreEqual(ControlAction.OpenSwitchboard, ControlRules.Resolve(ControlKey.Switchboard, Desk));
+        Assert.AreEqual(ControlAction.OpenSwitchboard, ControlRules.Resolve(ControlKey.Switchboard, new ControlState()), "no traveller needed");
+        var board = new ControlState(travellerAtDesk: true, switchboard: true);
+        Assert.AreEqual(ControlAction.LeaveSwitchboard, ControlRules.Resolve(ControlKey.CityLeft, board));
+        Assert.AreEqual(ControlAction.LeaveSwitchboard, ControlRules.Resolve(ControlKey.Switchboard, board));
+        Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.CityRight, board));
+        Assert.AreEqual(ControlAction.OpenPc, ControlRules.Resolve(ControlKey.Pc, board), "Q still goes to the PC (the board closes first)");
+        Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.Switchboard, new ControlState(pcOpen: true)), "the PC keeps S for its shortcuts");
+        Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.Switchboard, new ControlState(travellerAtDesk: true, dragging: true)), "not with a paper in the hand");
+        Assert.AreEqual(BackOutStep.LeaveSwitchboard, ControlRules.BackOut(board));
+        Assert.AreEqual(BackOutStep.CancelDrag, ControlRules.BackOut(new ControlState(switchboard: true, dragging: true)), "a plug in the hand goes back first");
+    }
+
+    [Test]
+    public void ThePaintedBoard_TakesAClick_OnlyInThePlainOfficeView()
+    {
+        Assert.IsTrue(ControlRules.BoardOnTheWall(Desk));
+        Assert.IsTrue(ControlRules.BoardOnTheWall(new ControlState()));
+        ControlState[] covered =
+        {
+            new ControlState(newsletter: true), new ControlState(pcOpen: true), new ControlState(wheelOpen: true), new ControlState(inspecting: true),
+            new ControlState(cityView: true), new ControlState(deskView: true), new ControlState(dragging: true), new ControlState(switchboard: true),
+        };
+        foreach (ControlState s in covered)
+            Assert.IsFalse(ControlRules.BoardOnTheWall(s));
+    }
+
+    [Test]
     public void BackOut_PeelsOneModeAtATime_InnermostFirst()
     {
         var s = new ControlState(travellerAtDesk: true, dragging: true, wheelOpen: true, pcOpen: true, valueHeld: true, inspecting: true,
-                                 cityView: true, deskView: true);
+                                 cityView: true, deskView: true, switchboard: true);
         BackOutStep[] order =
         {
             BackOutStep.CancelDrag, BackOutStep.CloseWheel, BackOutStep.ClosePc, BackOutStep.DropValue, BackOutStep.LeaveInspect,
-            BackOutStep.LeaveCity, BackOutStep.LeaveDeskView, BackOutStep.None
+            BackOutStep.LeaveSwitchboard, BackOutStep.LeaveCity, BackOutStep.LeaveDeskView, BackOutStep.None
         };
         foreach (BackOutStep expected in order)
         {
@@ -116,5 +147,5 @@ public class ControlRulesTests
         wheelOpen: s.WheelOpen && step != BackOutStep.CloseWheel, valueHeld: s.ValueHeld && step != BackOutStep.DropValue,
         inspecting: s.Inspecting && step != BackOutStep.LeaveInspect,
         cityView: s.CityView && step != BackOutStep.LeaveCity, deskView: s.DeskView && step != BackOutStep.LeaveDeskView,
-        dragging: s.Dragging && step != BackOutStep.CancelDrag);
+        dragging: s.Dragging && step != BackOutStep.CancelDrag, switchboard: s.Switchboard && step != BackOutStep.LeaveSwitchboard);
 }

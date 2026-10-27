@@ -4,12 +4,16 @@
 // depth test or write), so the preserved 3D desk and every gameplay drawing
 // land over it. The triangle's corners are placed in clip space (the mesh is
 // the triangle itself), flipped as the camera's projection is when it renders
-// into a texture; the picture is read by screen position.
+// into a texture; the picture is read by screen position. _Brightness scales
+// the picture as it reads on screen (its sRGB values; 1 shows it as lit):
+// HallBackdrop.Brightness, which HallLightingRig sets from the knobs'
+// paintedDeskBrightness while the painted desk is installed (desk v3).
 Shader "TimeDesk/HallBackdrop"
 {
     Properties
     {
         [NoScaleOffset] _BackdropTex ("The lit hall", 2D) = "black" {}
+        _Brightness ("Brightness on screen (the sRGB values' scale; 1: as lit)", Range(0, 2)) = 1
     }
 
     SubShader
@@ -27,9 +31,14 @@ Shader "TimeDesk/HallBackdrop"
             #pragma vertex Vert
             #pragma fragment Frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 
             TEXTURE2D(_BackdropTex);
             SAMPLER(sampler_BackdropTex);
+
+            CBUFFER_START(UnityPerMaterial)
+                float _Brightness;
+            CBUFFER_END
 
             struct Attributes
             {
@@ -53,7 +62,20 @@ Shader "TimeDesk/HallBackdrop"
 
             half4 Frag(Varyings input) : SV_Target
             {
-                return half4(SAMPLE_TEXTURE2D(_BackdropTex, sampler_BackdropTex, input.uv).rgb, 1.0);
+                float3 hall = SAMPLE_TEXTURE2D(_BackdropTex, sampler_BackdropTex, input.uv).rgb;
+                // The brightness scales what the screen shows (the sRGB values the
+                // desk v3 review measured against the painting), not the light; at 1
+                // the picture passes untouched.
+                UNITY_BRANCH
+                if (_Brightness != 1.0)
+                {
+                #ifdef UNITY_COLORSPACE_GAMMA
+                    hall *= _Brightness;
+                #else
+                    hall = SRGBToLinear(LinearToSRGB(hall) * _Brightness);
+                #endif
+                }
+                return half4(hall, 1.0);
             }
             ENDHLSL
         }

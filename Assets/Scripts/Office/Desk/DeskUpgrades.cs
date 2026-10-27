@@ -60,6 +60,13 @@ public sealed class DeskUpgrades : MonoBehaviour
     /// <summary>The supply crate (null without its art).</summary>
     public SupplyCrate Crate => crate;
 
+    /// <summary>The local scale <paramref name="part"/> stands at on the desk: the one it pops to while it waits for the crate (at zero scale until then), else its own (the painted desk's stand-ins are built at it: OfficeSceneBinder).</summary>
+    public Vector3 RestScale(Transform part)
+    {
+        int waiting = part != null ? _appear.IndexOf(part) : -1;
+        return waiting >= 0 ? _appearScale[waiting] : part != null ? part.localScale : Vector3.one;
+    }
+
     /// <summary>Wires the objects that work with the investigation (GameManager, once, before the first day): the card ring asks its questions, the BABEL rack replays the traveller's last line and lights the cartridge that covers their tongue.</summary>
     public void Bind(InvestigationUIController investigation)
     {

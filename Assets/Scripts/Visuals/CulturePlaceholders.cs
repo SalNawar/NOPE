@@ -10,7 +10,8 @@ public static class CulturePlaceholders
     /// <summary>
     /// A "Bliss"-like wallpaper: a rolling hill with a ground gradient, a sky
     /// gradient and three soft clouds (the office builder's original XP
-    /// painter, so the neutral colours reproduce xp_bliss.png).
+    /// painter; the neutral colours reproduce the first xp_bliss.png, which
+    /// is now final art: desk v3's 80s cel dusk city, DESK-V3.md round 9).
     /// </summary>
     /// <exception cref="ArgumentException">A non-positive size.</exception>
     public static byte[] Wallpaper(int width, int height, Rgba skyTop, Rgba skyBottom, Rgba groundLow, Rgba groundHigh, Rgba cloud)

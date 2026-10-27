@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -99,8 +100,35 @@ public sealed class DeskLayoutSettings
     /// <summary>The fixed art the homes keep clear of (the PC island, the till, the AVAILABLE sign, the lamp), with their heights.</summary>
     public DeskHome[] fixedArt = DeskHomeMap.FixedArt();
 
+    [Header("The slide-in (desk v3, Saleh: \"yes but they need to slide\"; DESK-HOMES)")]
+    /// <summary>The slide-in: the trigger, the timings, the clearances, the D6 focus and every slider (DeskSlides.Approved: the desk pipeline's render/slides.json); a track slides the way its home declares (DeskHome.slide).</summary>
+    public DeskSlides slides = DeskSlides.Approved();
+
     /// <summary>The chip reader's size against its model's life size.</summary>
     [Min(0.1f)] public float chipReaderScale = 0.9f;
+
+    [Header("The painted desk (desk v3, Saleh: \"yes but they need to slide\"; UNITY_PLAN 8: the DeskArt.Painted toggle)")]
+    /// <summary>
+    /// DeskArt.Painted: when on and the gameplay scene holds the painted desk
+    /// (DeskPainted, put there by Build Office UI), it replaces the art's desk
+    /// when the office binds: its homes take over the map (UsePainted), the
+    /// art desk's parts hide (paintedCutParts) and the gameplay objects take
+    /// its look; off, the art's desk as before (A/B and rollback for one
+    /// integration cycle).
+    /// </summary>
+    public bool paintedDesk = true;
+
+    /// <summary>
+    /// The art desk's parts the painted desk replaces: every renderer of the
+    /// art office whose name starts with one, or under a parent named exactly
+    /// as one, hides once the office is bound (DeskPaintedMap.CutParts, its
+    /// default, says which and why: the art's desk, its PC, phone, till, signs
+    /// and partitions, its decorations and both corkboards; on the painted
+    /// desk the decorations are neither drawn, gathered nor dragged; the
+    /// calendar's click lies on the CRT clock's date line:
+    /// OfficeSceneBinder.BindPaintedCalendar).
+    /// </summary>
+    public string[] paintedCutParts = DeskPaintedMap.CutParts();
 
     [Header("Cut (Saleh 2026-10-20: \"we will cut all but decor objects later will go on clear places like restory\")")]
     /// <summary>The art's props cut from the desk: their parts ("prefix__*") are switched off when the art office binds.</summary>
@@ -136,8 +164,33 @@ public sealed class DeskLayoutSettings
     /// <summary>How high a dragged decoration lifts off the desk (metres), over whatever lies under it: a paper's carry lift (DeskConfigSO.dragLift), so the drop onto its spot stays inside the QA rig's 8 px at 1080p (3 cm read about 10 px at the decor's distance).</summary>
     [Min(0f)] public float decorLift = 0.02f;
 
-    /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants), or null.</summary>
-    public DeskHome HomeOf(string id) => DeskHomeMap.Find(homes, id);
+    /// <summary>The map while the painted desk shows (UsePainted), else null.</summary>
+    [NonSerialized] private DeskHome[] _paintedHomes;
+
+    /// <summary>The painted desk's fixed art while it shows, else null.</summary>
+    [NonSerialized] private DeskHome[] _paintedFixedArt;
+
+    /// <summary>The homes in use: the painted desk's map while it shows (UsePainted), else <see cref="homes"/>.</summary>
+    public DeskHome[] Homes => _paintedHomes ?? homes;
+
+    /// <summary>The fixed art in use: the painted desk's while it shows, else <see cref="fixedArt"/>.</summary>
+    public DeskHome[] FixedArt => _paintedFixedArt ?? fixedArt;
+
+    /// <summary>
+    /// The painted desk's homes <paramref name="painted"/> take over the map
+    /// (DeskPaintedMap.Merge over <see cref="homes"/>) with its
+    /// <paramref name="paintedFixedArt"/>, until called with null (the
+    /// office binder: at bind, and when the office goes). Kept off the asset
+    /// (never serialized).
+    /// </summary>
+    public void UsePainted(IReadOnlyList<DeskHome> painted, IReadOnlyList<DeskHome> paintedFixedArt)
+    {
+        _paintedHomes = painted != null ? DeskPaintedMap.Merge(homes, painted) : null;
+        _paintedFixedArt = painted != null ? (paintedFixedArt ?? Array.Empty<DeskHome>()).ToArray() : null;
+    }
+
+    /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants) in the map in use, or null.</summary>
+    public DeskHome HomeOf(string id) => DeskHomeMap.Find(Homes, id);
 
     /// <summary>The placement the home <paramref name="id"/> gives its object, or null without that home.</summary>
     public DeskBay Bay(string id)
@@ -146,11 +199,28 @@ public sealed class DeskLayoutSettings
         return home != null ? new DeskBay(home) : null;
     }
 
-    /// <summary>What is wrong with the plan (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
-    public List<string> Problems()
+    /// <summary>What is wrong with the plan in use (DeskArrangement.HomeProblems against the art desk, the mat, the fixed art, the slide reach and the office camera's sight; DeskSlides.Problems: the sliders against the homes; ClickBoxProblems with the builder's click pad); empty when it holds.</summary>
+    public List<string> Problems() => Problems(Homes, FixedArt, minVisible);
+
+    /// <summary>
+    /// What is wrong with the painted desk's plan: its homes
+    /// <paramref name="painted"/> merged over <see cref="homes"/>
+    /// (DeskPaintedMap.Merge), against its <paramref name="paintedFixedArt"/>,
+    /// by the same checks as Problems but the office camera's box sight check:
+    /// desk v3's sight was gated on its real render with the real occlusion
+    /// (the pipeline's render/legibility_office.txt and its slid states), where
+    /// the boxes miss that the turned PC leaves the back step's homes in view;
+    /// UNITY_PLAN 10.1 gates it again on Unity's ID render.
+    /// </summary>
+    public List<string> PaintedProblems(IReadOnlyList<DeskHome> painted, IReadOnlyList<DeskHome> paintedFixedArt) =>
+        Problems(DeskPaintedMap.Merge(homes, painted), (paintedFixedArt ?? Array.Empty<DeskHome>()).ToArray(), 0f);
+
+    private List<string> Problems(DeskHome[] map, DeskHome[] art, float sight)
     {
-        List<string> problems = DeskArrangement.HomeProblems(homes, fixedArt, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), minVisible);
-        problems.AddRange(DeskArrangement.ClickBoxProblems(homes, fixedArt, DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox));
+        List<string> problems = DeskArrangement.HomeProblems(map, art, mat.Rect, deskTop.Rect, DeskHomeMap.SlideReach, (officeEye.x, officeEye.y, officeEye.z), sight);
+        if (slides != null)
+            problems.AddRange(slides.Problems(map, DeskHomeMap.SlideReach));
+        problems.AddRange(DeskArrangement.ClickBoxProblems(map, art, DeskHomeMap.ClickPad, DeskHomeMap.NoClickBox));
         return problems;
     }
 }
@@ -276,7 +346,7 @@ public static class DeskLayout
         Frame = frame;
         Mat = new DeskMat(mat);
         _settings = settings;
-        foreach (DeskHome art in settings != null && settings.fixedArt != null ? settings.fixedArt : Array.Empty<DeskHome>())
+        foreach (DeskHome art in settings != null && settings.FixedArt != null ? settings.FixedArt : Array.Empty<DeskHome>())
             if (art != null)
                 Register(art.id, art.Footprint, art.height);
         Bound = settings != null;
@@ -288,6 +358,7 @@ public static class DeskLayout
         foreach (string id in Registered)
             Obstacles.Unregister(id);
         Registered.Clear();
+        Sweeps.Clear();
         Objects.Clear();
         _settings = null;
         Bound = false;
@@ -330,6 +401,9 @@ public static class DeskLayout
         Objects[id] = target;
     }
 
+    /// <summary>The object standing on the home <paramref name="id"/> (DeskLayout.Track), or null: the slide-in binds to it (OfficeSceneBinder.BindSlideIn).</summary>
+    public static Transform ObjectOf(string id) => id != null && Objects.TryGetValue(id, out Transform target) ? target : null;
+
     /// <summary>The home id of the tracked object <paramref name="t"/> stands under (itself or a part of it: one desk object's click boxes), or null (the QA rig's click-box check, BUG-4a).</summary>
     public static string HomeIdOf(Transform t)
     {
@@ -343,13 +417,24 @@ public static class DeskLayout
 
     /// <summary>
     /// Registers every tracked object that shows as an obstacle on its home's
-    /// footprint, as tall as its renderers stand over the desk (its home's
-    /// height when it has none showing), and forgets those that do not show.
+    /// footprint, as tall as its renderers stand over the desk at rest (its
+    /// home's height when it has none showing; a part of a slider counted at
+    /// its rest height, MachineSlideIn.Raised taken off, so a lift raised when
+    /// this runs is not counted twice: DeskSweeps.RestHeight), swept by the
+    /// slide-in of what rests in it (a track's footprint to its overshoot
+    /// peak toward the mat, the top raised by its lifts' peak, the stamp rack
+    /// by its daters': DeskSlides.Obstacle, through DeskSweeps.Refresh), and
+    /// forgets those that do not show. The swept boxes of the homes something
+    /// slides or lifts in are also kept apart (DeskSweeps; TrySweptTop,
+    /// SweptStrips): the carry and the drop read them, so a paper is never
+    /// covered or passed through by a machine that slides out after the drag
+    /// began.
     /// </summary>
     public static void RefreshObstacles()
     {
         if (!Bound)
             return;
+        Shown.Clear();
         foreach (KeyValuePair<string, Transform> tracked in Objects)
         {
             DeskHome home = HomeOf(tracked.Key);
@@ -359,18 +444,69 @@ public static class DeskLayout
                 Unregister(tracked.Key);
                 continue;
             }
-            float top = home.height;
-            bool any = false;
+            Parts.Clear();
             foreach (Renderer r in target.GetComponentsInChildren<Renderer>(false))
             {
                 if (!r.enabled)
                     continue;
-                float over = r.bounds.max.y - Frame.Origin.y;
-                top = any ? Mathf.Max(top, over) : over;
-                any = true;
+                MachineSlideIn slider = r.GetComponentInParent<MachineSlideIn>();
+                Parts.Add((r.bounds.max.y - Frame.Origin.y, slider != null ? slider.Raised : 0f));
             }
-            Register(tracked.Key, home.Footprint, top);
+            Shown.Add((home, DeskSweeps.RestHeight(Parts, home.height)));
         }
+        Sweeps.Refresh(_settings.slides, Shown, Boxes);
+        foreach ((string id, DeskRect footprint, float height) in Boxes)
+            Register(id, footprint, height);
+    }
+
+    /// <summary>The swept boxes of the homes something slides or lifts in (RefreshObstacles; the carry and the drop read them: TrySweptTop, SweptStrips).</summary>
+    private static readonly DeskSweeps Sweeps = new DeskSweeps();
+
+    /// <summary>RefreshObstacles' working lists: each drawn part's top and rise, each shown home at its rest height, each obstacle made.</summary>
+    private static readonly List<(float top, float raised)> Parts = new List<(float, float)>();
+    private static readonly List<(DeskHome home, float height)> Shown = new List<(DeskHome, float)>();
+    private static readonly List<(string id, DeskRect footprint, float height)> Boxes = new List<(string, DeskRect, float)>();
+
+    /// <summary>
+    /// The world height of the tallest swept box (a home something slides or
+    /// lifts in, at its overshoot peak) under <paramref name="world"/>, with
+    /// its footprint grown by <paramref name="grow"/> metres (a carried
+    /// paper's corners); false over none or unbound. A dragged paper keeps over
+    /// it (DeskController's carry floor), so a machine that slides out under
+    /// it after the drag began never passes through it, with no live read.
+    /// Allocates nothing.
+    /// </summary>
+    public static bool TrySweptTop(Vector3 world, float grow, out float top)
+    {
+        top = float.NegativeInfinity;
+        if (!Bound)
+            return false;
+        Vector2 at = Frame.Local(world);
+        if (!Sweeps.TryTop(at.x, at.y, grow, out float height))
+            return false;
+        top = Frame.Origin.y + height;
+        return true;
+    }
+
+    /// <summary>
+    /// The world corners (on the desk) of each track's swept box: its home's
+    /// footprint and the strip its slide reaches past it toward the mat
+    /// (DESK-HOMES 6: 0 px over a resting paper). A paper let go keeps clear
+    /// of each (DeskController.ClearOfBlockers). A fresh list.
+    /// </summary>
+    public static List<Vector3[]> SweptStrips()
+    {
+        var strips = new List<Vector3[]>();
+        if (!Bound)
+            return strips;
+        var swept = new List<DeskRect>();
+        Sweeps.Strips(swept);
+        foreach (DeskRect s in swept)
+        {
+            float x0 = s.CentreX - s.Width / 2f, x1 = s.CentreX + s.Width / 2f, y0 = s.CentreY - s.Height / 2f, y1 = s.CentreY + s.Height / 2f;
+            strips.Add(new[] { Frame.Point(new Vector2(x0, y0)), Frame.Point(new Vector2(x1, y0)), Frame.Point(new Vector2(x0, y1)), Frame.Point(new Vector2(x1, y1)) });
+        }
+        return strips;
     }
 
     /// <summary>
