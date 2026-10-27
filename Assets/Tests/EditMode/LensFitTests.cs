@@ -114,12 +114,14 @@ public class LensFitTests
     {
         // Saleh's "keep a big mat size" was put to him as papers at about 67% of the old view (SPEC Q5 B, a different map);
         // on the approved map with the desk plan's §6 framing and the top band, the solve gives about 55% at 16:9, 52% at
-        // 16:10, 41% at 5:4 (CAM.md: Needs Saleh). These pin the solve, so a change to it shows here.
+        // 16:10, 41% at 5:4 (CAM.md: Needs Saleh). These pin the solve, so a change to it shows here. On the landed map (DESK-PLAN
+        // ffa5ce5: the scanner 8 cm further right, its inner strip now the frame's right) the solve gives 54% at 16:9, 50% at 16:10
+        // and 39% at 5:4 (CAM's landing, 2026-10-27).
         var t = new DeskViewTuning();
         ReadingPose wide = Solve(t, 16f / 9f, Front);
         Assert.That(DeskViewPose.PaperShare(wide.Distance, t.fieldOfView), Is.InRange(0.53f, 0.57f), "papers against the old reading view at 16:9");
-        Assert.That(DeskViewPose.PaperShare(Solve(t, 16f / 10f, Front).Distance, t.fieldOfView), Is.InRange(0.50f, 0.54f), "at 16:10");
-        Assert.That(DeskViewPose.PaperShare(Solve(t, 5f / 4f, Front).Distance, t.fieldOfView), Is.InRange(0.39f, 0.43f), "at 5:4");
+        Assert.That(DeskViewPose.PaperShare(Solve(t, 16f / 10f, Front).Distance, t.fieldOfView), Is.InRange(0.48f, 0.52f), "at 16:10");
+        Assert.That(DeskViewPose.PaperShare(Solve(t, 5f / 4f, Front).Distance, t.fieldOfView), Is.InRange(0.37f, 0.41f), "at 5:4");
         Assert.AreEqual(wide.Distance, Solve(t, 2560f / 1080f, Front).Distance, 0.02f, "21:9 is framed by its height, as 16:9");
         Assert.Greater(Solve(t, 5f / 4f, Front).Distance, wide.Distance, "5:4 backs out for the width");
     }

@@ -87,7 +87,10 @@ public class DeskViewPoseTests
         }
         Assert.AreEqual(inner + t.sideReach, scannerFar, Eps, "the scanner shows by its inner 8 cm");
         DeskRect rack = DeskHomeMap.Find(homes, DeskHomeMap.StampRack).Footprint;
-        Assert.AreEqual(rack.CentreX + rack.Width / 2f, right, Eps, "the stamp rack whole: its outer edge is the frame's right");
+        Assert.Contains((rack.CentreX + rack.Width / 2f, rack.CentreY + rack.Height / 2f, 0f), points, "the stamp rack whole: its outer edge is framed");
+        // On the landed map (DESK-PLAN ffa5ce5: the scanner stands 8 cm further right, its Auto-Feed tray clear of the mat) the
+        // scanner's inner 8 cm reach 6 cm past the rack's outer edge, so the frame's right is the scanner's strip (CAM's landing, 2026-10-27).
+        Assert.AreEqual(System.Math.Max(rack.CentreX + rack.Width / 2f, inner + t.sideReach), right, Eps, "the frame's right: the rack's outer edge or the scanner's inner strip, whichever is further");
         DeskRect intercom = DeskHomeMap.Find(homes, DeskHomeMap.Intercom).Footprint;
         Assert.AreEqual(intercom.CentreX - intercom.Width / 2f, left, Eps, "the intercom whole: its outer edge is the frame's left");
         DeskRect babel = DeskHomeMap.Find(homes, DeskHomeMap.BabelTuner).Footprint;
