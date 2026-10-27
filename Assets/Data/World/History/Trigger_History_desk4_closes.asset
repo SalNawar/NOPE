@@ -22,7 +22,7 @@ MonoBehaviour:
   conditions:
   - type: 8
     key: 
-    threshold: 8
+    threshold: 9
     attribute: {fileID: 0}
     profile: {fileID: 0}
     nation: {fileID: 0}

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: lens_sentence
   displayName: 'Translation Lens: Sentences'
   description: 'The lens reads a whole line: hover a word and its whole sentence
-    flips into English. Works with the lens the Bureau issues on day 8.'
+    flips into English. Works with the lens the Bureau issues on day 11.'
   cost: 60
   unlockEffect: {fileID: 0}
   venue: 0

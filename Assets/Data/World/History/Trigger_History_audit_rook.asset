@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: The audit finds the two hundred
   description: Generated from world_source.json history.rules.
   oneShot: 1
-  newsLineOnFire: 'AUDIT: a forged Work Permit passed Desk 3 on day 11, with 200
+  newsLineOnFire: 'AUDIT: a forged Work Permit passed Desk 3 on day 18, with 200
     cr beside it. It goes on file.'
   section: 0
   conditions:
@@ -34,7 +34,7 @@ MonoBehaviour:
     nation: {fileID: 0}
   - type: 8
     key: 
-    threshold: 14
+    threshold: 20
     attribute: {fileID: 0}
     profile: {fileID: 0}
     nation: {fileID: 0}

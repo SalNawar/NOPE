@@ -10063,15 +10063,15 @@
     {
       "asset": "Rule_Open_D18",
       "type": "OpenDestinations",
-      "description": "OPEN TODAY: Bologna, Kingdom of Italy and Weimar Berlin, as the Departure Board shows. Refuse any other destination.",
+      "description": "OPEN TODAY: Periclean Athens and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
       "kinds": [
         "RichTourist",
         "PoorTourist",
         "Labourer"
       ],
       "places": [
-        "italy:industrial",
-        "germany:modern"
+        "greece:ancient",
+        "britain:industrial"
       ]
     },
     {
@@ -10091,15 +10091,15 @@
     {
       "asset": "Rule_Open_D20",
       "type": "OpenDestinations",
-      "description": "OPEN TODAY: Periclean Athens and Qing Shanghai, as the Departure Board shows. Refuse any other destination.",
+      "description": "OPEN TODAY: Republican Rome and Weimar Berlin, as the Departure Board shows. Refuse any other destination.",
       "kinds": [
         "RichTourist",
         "PoorTourist",
         "Labourer"
       ],
       "places": [
-        "greece:ancient",
-        "china:industrial"
+        "italy:ancient",
+        "germany:modern"
       ]
     },
     {
@@ -12345,7 +12345,7 @@
       "queue": 18,
       "shiftStart": "16:00",
       "shiftEnd": "24:00",
-      "bulletin": "NOTICE: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED. Refuse any departure for a CLOSED route.",
+      "bulletin": "NOTICE: no new rule today. Cloned passport chips are in circulation: read every chip on the reader and hold its Citizen ID to the print.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -12414,7 +12414,6 @@
       "countries": [],
       "rules": [
         "Rule_Open_D18",
-        "Rule_NoModernGermany",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
@@ -12518,13 +12517,13 @@
       "portals": [
         {
           "portal": 1,
-          "country": "italy",
-          "era": "industrial"
+          "country": "greece",
+          "era": "ancient"
         },
         {
           "portal": 2,
-          "country": "germany",
-          "era": "modern"
+          "country": "britain",
+          "era": "industrial"
         },
         {
           "portal": 4,
@@ -12712,7 +12711,7 @@
       "queue": 18,
       "shiftStart": "16:00",
       "shiftEnd": "24:00",
-      "bulletin": "NOTICE: no new rule today. Auditors are testing the desks this week: any traveller may be one. Every check, every time.",
+      "bulletin": "NOTICE: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED. Refuse any departure for a CLOSED route. Auditors are testing the desks this week: any traveller may be one. Every check, every time.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -12785,6 +12784,7 @@
       "countries": [],
       "rules": [
         "Rule_Open_D20",
+        "Rule_NoModernGermany",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
@@ -12880,13 +12880,13 @@
       "portals": [
         {
           "portal": 1,
-          "country": "greece",
+          "country": "italy",
           "era": "ancient"
         },
         {
           "portal": 2,
-          "country": "china",
-          "era": "industrial"
+          "country": "germany",
+          "era": "modern"
         },
         {
           "portal": 4,

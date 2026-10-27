@@ -47,7 +47,7 @@ Neutral (no culture leads, days before the first leader and whenever none does) 
 | `culture` | neutral, or one of the eight nations | the timeline's leader (the same culture the PC theme and the Translation Lens follow) |
 | `tier` | steady < strained < breaching < collapsing | the Helix River's own thresholds (oxbows from calm 0.75 = stability 90; the glitch from the warning line 70; the flicker in the critical band 63 and under) |
 | `phase` | normal (days 1-7) < extended (8-14) < nights (15-21) | the day (the shift hours' ramp) |
-| `event` | none, recall (day 17), ban (day 18), return (days 19-21) | the day plan's rules |
+| `event` | none, recall (day 17), ban (day 20), return (days 19-21) | the day plan's rules |
 | `exhibit` / `recent` | the nation with the most famous travellers let through / of the latest one; none | the run's verdicts on the famous travellers |
 
 ## Inventory: every registered layer, and what varies

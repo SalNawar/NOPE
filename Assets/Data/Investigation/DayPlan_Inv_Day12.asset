@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DayPlan_Inv_Day12
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 12
-  visitorsCount: 17
-  shiftStartMinute: 960
-  shiftEndMinute: 1440
-  bulletin: 'NEW: bans. The Directorate can close a route on the board: today Weimar
-    Berlin is CLOSED.'
+  visitorsCount: 16
+  shiftStartMinute: 780
+  shiftEndMinute: 1260
+  bulletin: 'NOTICE: no new rule today. Reprinted papers are in circulation: a scanned
+    copy''s microprint must repeat the holder''s Citizen ID.'
   papers:
   - TC-101
   - TC-230
@@ -37,7 +37,7 @@ MonoBehaviour:
     weight: 3
     honest: 0
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
-    weight: 3
+    weight: 2
     honest: 0
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
@@ -49,65 +49,79 @@ MonoBehaviour:
   - era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
     weight: 2
   - era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
-    weight: 2
+    weight: 1
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
+  - {fileID: 11400000, guid: 6309579b953c3d0459f52208a2c85a2a, type: 2}
+  - {fileID: 11400000, guid: 1ce7e959819e46f42aeedc2a47a21ef2, type: 2}
+  - {fileID: 11400000, guid: 8c00b508dd0ecce4183e38a008218daf, type: 2}
+  - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
   - {fileID: 11400000, guid: 28a33f99f3083054289db1cae6fe58be, type: 2}
   - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  - {fileID: 11400000, guid: 7747a67786131304d8f3c4761258e888, type: 2}
+  - {fileID: 11400000, guid: c9c54c405e9fbed488a124e496535921, type: 2}
+  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  - {fileID: 11400000, guid: 8e656a7f1ae5cc747aae53fdaa6216b7, type: 2}
   - {fileID: 11400000, guid: 5462a20958d55a54c9aacbe8fe90559f, type: 2}
+  - {fileID: 11400000, guid: 5832974224219aa4281e38b801a09bd2, type: 2}
+  - {fileID: 11400000, guid: 1c548ab0bb174b5409194e0c4afeeb08, type: 2}
   - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
   - {fileID: 11400000, guid: 34da1b6f2ba1ada479d3174b62a4f942, type: 2}
+  - {fileID: 11400000, guid: 3d0b35350f80e9c42a249487f6ab4d97, type: 2}
+  - {fileID: 11400000, guid: 219dc0de4a7d0154bad36d5135fce807, type: 2}
+  - {fileID: 11400000, guid: 64d961c38e14376408b9065acbb0cf0e, type: 2}
+  - {fileID: 11400000, guid: ac8ed5f30f4a9ae4a9d1468b2f7a4d9e, type: 2}
+  - {fileID: 11400000, guid: 5b25d73b028c9594bab56d31b29a520c, type: 2}
+  - {fileID: 11400000, guid: 8e80828596cb1fa4a8c67058f21fc3ac, type: 2}
   - {fileID: 11400000, guid: b7390dfdc90a76c4b826895a32a572de, type: 2}
   - {fileID: 11400000, guid: f6dafd30f2d3ff94094352f0d9777481, type: 2}
   - {fileID: 11400000, guid: 102b1a1da431f264789642fcf5bdeddc, type: 2}
   - {fileID: 11400000, guid: 109ef1b03139e1f4c950e732b1c6d37e, type: 2}
   - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
   - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
-  - {fileID: 11400000, guid: a93b21ce48a40c940b31991a0450911c, type: 2}
+  - {fileID: 11400000, guid: d67bb98d29d515e49aeaafff33126ec7, type: 2}
+  - {fileID: 11400000, guid: ee10d0a508322f849a760661655397df, type: 2}
+  - {fileID: 11400000, guid: d7dac8add03f81b4386aeac31d4655da, type: 2}
   tellCount: 1
-  tellChannels: 0000000002000000
-  costumeErrorChance: 0.05
+  tellChannels: 00000000
+  costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 01000000020000000500000006000000070000000a000000090000000c0000000b0000000d000000
-  violationChance: 0.06
+  lieKinds: 010000000200000006000000070000000a000000090000000c0000000d000000
+  violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: ebd4586febfb51340ac0377f4bd7b954, type: 2}
-  - {fileID: 11400000, guid: 5bb4a0a94cee20740a3b154dcbe5f43d, type: 2}
   - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
   - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
-  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
-  - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: ac8ed5f30f4a9ae4a9d1468b2f7a4d9e, type: 2}
+    legendary: {fileID: 11400000, guid: a93b21ce48a40c940b31991a0450911c, type: 2}
     hasLie: 0
     lie: 0
     directive: 0
     dialogId: 
     introLine: 
     conditions: []
-  - caseIndex1Based: 10
-    id: 
+  - caseIndex1Based: 4
+    id: ines
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 219dc0de4a7d0154bad36d5135fce807, type: 2}
+    legendary: {fileID: 11400000, guid: 275a3706fd56e374db695c8f9cb5a28d, type: 2}
     hasLie: 0
     lie: 0
     directive: 0
     dialogId: 
     introLine: 
     conditions: []
-  - caseIndex1Based: 12
+  - caseIndex1Based: 9
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
+    legendary: {fileID: 11400000, guid: dbdebc7551592e847825c7f29e48185c, type: 2}
     hasLie: 0
     lie: 0
     directive: 0

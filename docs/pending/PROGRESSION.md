@@ -10,7 +10,7 @@ The rulings applied (the coordinator, 2026-10-28, on the spec):
 
 1. The spec's table is the source of truth: features on days 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 and 21; the ten even days are mastery days. The day map, old to new: 1, 3, 3, 7, 5, 7, 9, 11, 13, 15, 17, 18, 21, 19, 21. The earlier ruling "week 1 keeps one new thing a day" is withdrawn.
 2. The endings move to day 21 (`Ending_WorldReport.asset`, `threshold` 21).
-3. Nothing is invented: the same 15 features, re-paced. The spec's three merges: the Entry Ticket with the Departure Board (day 3), the seals with the Transponder Card (day 7), the range limit with the Return Order (day 21). The ban is an event on a mastery day (18).
+3. Nothing is invented: the same 15 features, re-paced. The spec's three merges: the Entry Ticket with the Departure Board (day 3), the seals with the Transponder Card (day 7), the range limit with the Return Order (day 21). The ban is an event on a mastery day (20; the spec's 18, see the divergences).
 4. The Currency and Device questions stay cut: `fromDay` 22, past the run.
 
 ## 2. The 21 days
@@ -36,9 +36,9 @@ F = feature day (a new paper, check or tool; its guide page; a bulletin that ope
 | 15 | 3 | F | 17 | 16:00-24:00 | The debt standing (`pc:standing`, Debt). Lie DebtorPosingAsTourist. Week 3 opens: the night hours (`night_shifts` prints). Industrial 2, Modern 2. Aristotle, Hokusai. |
 | 16 | 3 | M | 17 | 16:00-24:00 | Hollis (Frozen). Labourers 4. Genghis, Qin Shi Huang. |
 | 17 | 3 | F | 18 | 16:00-24:00 | The Driftbox 3 recall and the chip reader. `driftbox_recall` prints. Violations 0.08. Kulthum, Leonardo. |
-| 18 | 3 | M | 18 | 16:00-24:00 | Pell 2 (Recalled) and Rook (the bribe). Lie ClonedChip. The ban: `Rule_NoModernGermany`, Weimar Berlin CLOSED on portal 02. `audit_week` prints. Displaced 3. Elizabeth, Khwarizmi. |
+| 18 | 3 | M | 18 | 16:00-24:00 | Pell 2 (Recalled) and Rook (the bribe), on the board's routes (Periclean Athens, Victorian Britain). Lie ClonedChip. `audit_week` prints. Displaced 3. Elizabeth, Khwarizmi. |
 | 19 | 3 | F | 18 | 16:00-24:00 | The Intake Declaration and the return home; Tongues, Capitals, Rulers; the Language, Capital and Ruler questions (`fromDay` 19). Lies FalseOrigin, FakeDisplaced. The Answer channel. Shakespeare, Marco Polo. |
-| 20 | 3 | M | 18 | 16:00-24:00 | The auditor (`auditor_found` after Rook's bribe), "Ada Lovelace", "Socrates". Galileo. |
+| 20 | 3 | M | 18 | 16:00-24:00 | The auditor (`auditor_found` after Rook's bribe), bound for Republican Rome on portal 01; "Ada Lovelace", "Socrates". The ban: `Rule_NoModernGermany`, Weimar Berlin CLOSED on portal 02. Galileo. |
 | 21 | 3 | F | 18 | 16:00-24:00 | The Return Order and the Economy range limit. `range_limit`, `audit_rook`, `drive_last_day` print. Pell 3. Ancient 2. Archimedes, Hammurabi. The run ends at this night. |
 
 Divergences from the spec, each with its reason:
@@ -47,11 +47,12 @@ Divergences from the spec, each with its reason:
 - Day 21's era weights are the old day 15's (Ancient 2, the rest 1), so the range limit's guaranteed violator finds Ancient routes; the spec's "Industrial 2, Modern 2" stops at day 20.
 - Day 14 carries Gutenberg and Confucius (the spec's "two a day" with Gutenberg as a dialog beat); day 20 carries Galileo and Socrates.
 - The day plans' `premades` pools are "every famous minus the day's forced ones" (FEATURES' rule); before, the pools were hand-cut lists of 12 to 14.
+- The ban stands on day 20, not the spec's 18. Generate World refuses an authored fault on a traveller whose place the day closes (`Premades.ForcedProblems`: the closure is the fault already). Day 18's two beats are bound for Periclean Athens (Pell) and Victorian Britain (Rook), so both board routes are theirs and no route is left for the ban; day 18 takes the old day 11's routes. Day 20's board is Republican Rome (the auditor's place, portal 01) and Weimar Berlin on portal 02, CLOSED by the ban; the auditors' day keeps "every check, every time". The rhythm holds: a closure for every kind is no feature (`DayPacing.RuleKey`).
 - The guide's registry (`ContentLibrarySO.Ramp`, Generate World's `CheckGuide`) leaves the open-destination rules out. The spec asked only for the `Guide.cs` rule; without this the day's own `Rule_Open_Dnn` key made every mastery day "introduce" a check. `DayPacing` already counted them as no check.
 
 ## 3. What changed
 
-Data (`content(progression)`): `Assets/Data/World/world_source.json`: `days[]` 21 plans (the generator script of the session, from the 15 old records: queues, hours, bulletins, papers, introduces, lies, kinds, eras, rules, forced, pools, portals); `rules[]` `Rule_Open_D16` to `D21` (each a copy of the day whose routes it reuses: 13, 11, 12, 14, 10, 15); `questions[]` fromDay 19 (`q_language`, `q_capital`, `q_ruler`) and 22 (`q_currency`, `q_device`); `translation.fromDay` 11 and the two lens level descriptions; `guide.guidedThroughDay` 9; `pc.steps` fromDay by the day map (the displaced "facts" to 19); `history.rules` thresholds (section 5.2 of the spec) and `audit_rook`'s "on day 18".
+Data (`content(progression)`): `Assets/Data/World/world_source.json`: `days[]` 21 plans (the generator script of the session, from the 15 old records: queues, hours, bulletins, papers, introduces, lies, kinds, eras, rules, forced, pools, portals); `rules[]` `Rule_Open_D16` to `D21` (each a copy of the day whose routes it reuses: 13, 11, 11, 14, 14 with Weimar Berlin on portal 02, 15); `questions[]` fromDay 19 (`q_language`, `q_capital`, `q_ruler`) and 22 (`q_currency`, `q_device`); `translation.fromDay` 11 and the two lens level descriptions; `guide.guidedThroughDay` 9; `pc.steps` fromDay by the day map (the displaced "facts" to 19); `history.rules` thresholds (section 5.2 of the spec) and `audit_rook`'s "on day 18".
 
 Code: `Assets/Scripts/Domain/Guide.cs` (`GuideContent.NeedsPage`: a lie or a question needs no page, a mastery day passes), `Assets/Scripts/ContentLibrarySO.cs` and `Assets/Editor/WorldContentGenerator.Guide.cs` (the registry without the open destinations), `Assets/Data/Endings/Ending_WorldReport.asset` (21), `Assets/Scripts/DevTools/DebugPanelController.cs` (the fallback 21), `Assets/Editor/BalanceSimulation.cs` (`Days` read from the library's `LastDay` at Run and Observe; `DefaultDays` 21), `Assets/Editor/QA/Checks/RunSafeChecks.cs` (landings d18, d21), `Assets/Editor/QA/QaJobs.cs` (budgets 60 s and 130 s), comment-only pins in `HallSlots.cs`, `DayPlans.cs`, `BalanceSimSettingsSO.cs`.
 
