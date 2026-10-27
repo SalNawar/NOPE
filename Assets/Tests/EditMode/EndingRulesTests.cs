@@ -113,15 +113,15 @@ public class EndingRulesTests
     public void Met_AttrTotalAtLeast_IsRetired_NeverMet(float threshold)
     {
         Assert.IsFalse(EndingRules.Met(EndingConditionType.AttrTotalAtLeast, threshold, Now()));
-        Assert.IsFalse(EndingRules.Met(EndingConditionType.AttrTotalAtLeast, threshold, Now(day: 15)), "not even on the last day");
+        Assert.IsFalse(EndingRules.Met(EndingConditionType.AttrTotalAtLeast, threshold, Now(day: 21)), "not even on the last day");
     }
 
-    [TestCase(14, false)]
-    [TestCase(15, true, Description = "day 15 is the last day")]
-    [TestCase(16, true)]
+    [TestCase(20, false)]
+    [TestCase(21, true, Description = "day 21 is the last day (the three-week progression, Saleh 2026-10-28)")]
+    [TestCase(22, true)]
     public void Met_DayAtLeast_ReachesTheDay(int day, bool expected)
     {
-        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.DayAtLeast, 15f, Now(day: day)));
+        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.DayAtLeast, 21f, Now(day: day)));
     }
 
     [Test]

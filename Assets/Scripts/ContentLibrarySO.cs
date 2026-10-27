@@ -377,10 +377,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to endings.</summary>
     public IReadOnlyList<EndingSO> Endings => endings ?? System.Array.Empty<EndingSO>();
 
-    /// <summary>The run's last day's ending: the DayAtLeast ending with the earliest threshold (the "world you made" ending, day 15, whose closing card is the END OF DEMO card); null without one.</summary>
+    /// <summary>The run's last day's ending: the DayAtLeast ending with the earliest threshold (the "world you made" ending, day 21, whose closing card is the END OF DEMO card); null without one.</summary>
     public EndingSO LastDayEnding => Endings.Where(e => e != null && e.conditionType == EndingConditionType.DayAtLeast).OrderBy(e => e.threshold).FirstOrDefault();
 
-    /// <summary>The run's last day: <see cref="LastDayEnding"/>'s threshold (day 15), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
+    /// <summary>The run's last day: <see cref="LastDayEnding"/>'s threshold (day 21: the three-week progression, Saleh 2026-10-28), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
     public int LastDay => LastDayEnding != null ? (int)LastDayEnding.threshold : 0;
 
     /// <summary>Public read-only access to attributes.</summary>
