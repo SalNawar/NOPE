@@ -49,6 +49,38 @@ public static class HallFxRig
         QaRunner.RegisterOp("hallHitStop", (runner, step) => HitStop());
         QaRunner.RegisterOp("hallPortalsOpen", (runner, step) => OpenAll());
         QaRunner.RegisterOp("hallDrawing", Drawing);
+        QaRunner.RegisterOp("hallCityCars", CityCars);
+    }
+
+    /// <summary>
+    /// <c>hallCityCars</c> (n = the flyers, 8 by default): tracks the old
+    /// city's flyers ("Traffic Exterior flying vehicle i", CityView.
+    /// BuildTraffic) as city_car&lt;i&gt; for the sequences, and asserts
+    /// <c>city.cars</c>. Under the r17 city (CityR17 live on the city view)
+    /// the flyers are r17's lanes, drawn instanced into the city's texture
+    /// (CityR17TrafficDraw): no object to track, so the line passes as "the
+    /// flyers are r17's lanes (CITY-R17)" and nothing is tracked (the night
+    /// of 2026-10-28, seam M: hall_fx_city stopped at the first track).
+    /// </summary>
+    private static IEnumerator CityCars(QaRunner runner, QaStep step)
+    {
+        int n = step.n > 0 ? step.n : 8;
+        CityView view = QaGame.Find<CityView>();
+        CityR17 r17 = view != null ? view.GetComponent<CityR17>() : null;
+        if (r17 != null && r17.Ready)
+        {
+            runner.Assert("city.cars", "HALL-FX", true, "not tracked: the r17 city",
+                $"the flyers are r17's lanes (CITY-R17): CityR17TrafficDraw draws them instanced into the city's texture, so there is no 'Traffic Exterior flying vehicle' object to track; the {n} city_car tracks are left out");
+            yield break;
+        }
+        int tracked = 0;
+        for (int i = 0; i < n; i++)
+        {
+            GameObject go = QaGame.GameObjectAt($"Traffic Exterior flying vehicle {i}");
+            runner.Recorder.Track($"city_car{i}", () => go != null ? QaGame.ScreenRect(go) : null);
+            tracked++;
+        }
+        runner.Assert("city.cars", "HALL-FX", tracked == n, $"{tracked} flyers tracked", "the old city's flyers (CityView.BuildTraffic), tracked as city_car<i>");
     }
 
     /// <summary>
