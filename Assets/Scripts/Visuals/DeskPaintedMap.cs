@@ -364,11 +364,14 @@ public static class DeskPaintedMap
     /// old model, so the painted desk never takes an invisible click from the
     /// old geometry (the code review of round 6). STAMP's daters' side
     /// buttons ("Button", the re-ink: the painted daters have none; STAMP's
-    /// art request) and the chip reader's readout ("ReadoutClick": the
-    /// painted reader has no live readout yet; DESK-PLAN's machines).
+    /// art request). The chip reader's readout ("ReadoutClick") was dead
+    /// while the painted reader had no readout; since the night of
+    /// 2026-10-28 (seam D) the painted reader shows the old reader's readout
+    /// line on its top and the box is re-fitted over it
+    /// (DeskPainted.WearReadout, PaintedReadout).
     /// </summary>
     public static string[] DeadClicks(string home) =>
-        home == DeskHomeMap.StampRack ? new[] { "Button" } : home == DeskHomeMap.ChipReader ? new[] { "ReadoutClick" } : Array.Empty<string>();
+        home == DeskHomeMap.StampRack ? new[] { "Button" } : Array.Empty<string>();
 
     /// <summary>
     /// The gameplay objects the painted desk draws nothing of and takes no

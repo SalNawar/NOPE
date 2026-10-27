@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -706,6 +707,94 @@ public sealed class DeskPainted : MonoBehaviour
             if (Array.IndexOf(keep, t.name) >= 0)
                 return true;
         return false;
+    }
+
+    /// <summary>
+    /// The chip reader's readout on the painted reader <paramref name="name"/>
+    /// (desk v3 round 12's S1; the night of 2026-10-28, seam D): the old
+    /// reader's live text <paramref name="readout"/> (its font, ink and
+    /// auto-size kept; ChipReader.Show writes it, the one source; Reskin
+    /// switched its renderer off) is re-shown as a line on the painted
+    /// reader's top face (PaintedReadout: its near third, facing up, under
+    /// the painted mesh so it rides the reader's slide), and the readout's
+    /// click box <paramref name="clickBox"/> (its BoxCollider and Clickable,
+    /// which Silence may have switched off) is re-fitted over the line, on
+    /// the Interactable layer, outlining the painted reader. The line swaps
+    /// its text as the old readout did (no fade: ChipReader sets the text).
+    /// False without the painted object, its mesh bounds or the text.
+    /// </summary>
+    public bool WearReadout(string name, TMP_Text readout, Transform clickBox)
+    {
+        Transform mesh = Mesh(name);
+        if (mesh == null || readout == null || !TryLocalBounds(mesh, out Bounds bounds))
+            return false;
+        var local = new PaintedReadout.Box(bounds.min.x, bounds.max.x, bounds.min.y, bounds.max.y, bounds.min.z, bounds.max.z);
+        Transform line = readout.transform;
+        line.SetParent(mesh, false);
+        // A TextMeshPro shows on its -Z: forward down shows it from above, its up away from the chair, so it reads from the chair.
+        Pose(line, V(PaintedReadout.LinePosition(local)), Quaternion.LookRotation(Vector3.down, Vector3.forward));
+        if (line is RectTransform rect)
+        {
+            (float width, float height) = PaintedReadout.LineSize(local);
+            rect.sizeDelta = new Vector2(width, height);
+        }
+        foreach (Renderer r in readout.GetComponentsInChildren<Renderer>(true))
+            r.enabled = true;
+        readout.ForceMeshUpdate();
+        if (clickBox == null)
+            return true;
+        clickBox.SetParent(mesh, false);
+        Pose(clickBox, V(PaintedReadout.BoxCentre(local)), Quaternion.identity);
+        int layer = LayerMask.NameToLayer(OfficeLayers.Interactable);
+        if (layer >= 0)
+            clickBox.gameObject.layer = layer;
+        if (clickBox.TryGetComponent(out BoxCollider box))
+        {
+            box.center = Vector3.zero;
+            box.size = V(PaintedReadout.BoxSize(local));
+            box.enabled = true;
+        }
+        if (clickBox.TryGetComponent(out Clickable click))
+        {
+            click.enabled = true;
+            click.Interactable = true;
+            click.SetOutline(RenderersOf(name));
+        }
+        return true;
+    }
+
+    private static Vector3 V((float x, float y, float z) p) => new Vector3(p.x, p.y, p.z);
+
+    /// <summary>Puts <paramref name="t"/> at <paramref name="local"/> in this desk's frame, turned by <paramref name="turn"/> from the desk's facing, at unit world scale.</summary>
+    private void Pose(Transform t, Vector3 local, Quaternion turn)
+    {
+        t.SetPositionAndRotation(transform.TransformPoint(local), transform.rotation * turn);
+        Vector3 parentScale = t.parent != null ? t.parent.lossyScale : Vector3.one;
+        t.localScale = new Vector3(1f / Mathf.Max(1e-6f, parentScale.x), 1f / Mathf.Max(1e-6f, parentScale.y), 1f / Mathf.Max(1e-6f, parentScale.z));
+    }
+
+    /// <summary>The bounds of <paramref name="mesh"/> (its meshes and its children's) in this desk's frame (x across, y up, z away from the chair); false without a mesh.</summary>
+    private bool TryLocalBounds(Transform mesh, out Bounds local)
+    {
+        local = default;
+        bool any = false;
+        foreach (MeshFilter filter in mesh.GetComponentsInChildren<MeshFilter>(true))
+        {
+            if (filter.sharedMesh == null)
+                continue;
+            Bounds b = filter.sharedMesh.bounds;
+            for (int i = 0; i < 8; i++)
+            {
+                var corner = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z);
+                Vector3 p = transform.InverseTransformPoint(filter.transform.TransformPoint(corner));
+                if (any)
+                    local.Encapsulate(p);
+                else
+                    local = new Bounds(p, Vector3.zero);
+                any = true;
+            }
+        }
+        return any;
     }
 
     /// <summary>Moves the bake's <paramref name="child"/> of <paramref name="name"/> (the intercom's Mic) to a direct child of <paramref name="parent"/>, where it stands (MachineSlideIn sways a "Mic" under the slide).</summary>

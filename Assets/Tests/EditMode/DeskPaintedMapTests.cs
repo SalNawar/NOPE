@@ -307,7 +307,7 @@ public class DeskPaintedMapTests
         // The code review of round 6 (2): each dater's side button and the chip reader's readout box stayed live at the old
         // geometry's spots under the painted daters and the painted chip reader: invisible click areas.
         CollectionAssert.AreEqual(new[] { "Button" }, DeskPaintedMap.DeadClicks(DeskHomeMap.StampRack), "the daters' side buttons (the painted daters have none)");
-        CollectionAssert.AreEqual(new[] { "ReadoutClick" }, DeskPaintedMap.DeadClicks(DeskHomeMap.ChipReader), "the readout's box (the painted reader has no readout yet)");
+        CollectionAssert.IsEmpty(DeskPaintedMap.DeadClicks(DeskHomeMap.ChipReader), "the readout's box stays: the painted reader shows the old reader's readout line on its top and the box is re-fitted over it (DeskPainted.WearReadout, seam D of 2026-10-28)");
         foreach (string id in new[] { DeskHomeMap.Scanner, DeskHomeMap.Detain, DeskHomeMap.UvTorch, DeskHomeMap.Intercom })
             CollectionAssert.IsEmpty(DeskPaintedMap.DeadClicks(id), id + ": its boxes are its painted look's (fitted, or its own)");
     }

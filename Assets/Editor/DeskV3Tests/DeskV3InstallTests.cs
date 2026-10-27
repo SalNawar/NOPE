@@ -40,6 +40,68 @@ public class DeskV3InstallTests
                 Assert.IsTrue(DeskPaintedMap.Cuts(prefix + "__Part", Array.Empty<string>(), layout.paintedCutParts), $"{item.id}: its part {prefix} is cut on the painted desk");
     }
 
+    /// <summary>
+    /// The night of 2026-10-28, seam D: tools_clicks pressed the ViewCatcher
+    /// at the painted reader (the old reader's only box was its readout's,
+    /// dead there), and desk v3 round 12's S1: the chip reader's result
+    /// showed nowhere on the painted desk. The painted reader carries a
+    /// click box (EnsureClickable) and the old readout line rides its top
+    /// with the readout's box re-fitted over it (WearReadout).
+    /// </summary>
+    [Test, Category("NeedsEditor")]
+    public void ThePaintedReader_CarriesTheClickBox_AndShowsTheOldReadoutLineOnItsTop()
+    {
+        var root = new GameObject("DeskPainted");
+        var reader = new GameObject("ChipReader");
+        try
+        {
+            root.transform.position = new Vector3(3f, 1f, -2f);
+            GameObject painted = Cube("Desk_ChipReader", root.transform, new Vector3(0.9f, 1.12f, 0.35f), new Vector3(0.22f, 0.08f, 0.16f));
+            var desk = root.AddComponent<DeskPainted>();
+            desk.Configure(new[] { new DeskPainted.Part { name = "Desk_ChipReader", root = painted.transform, mesh = painted.transform } }, null, null, 1.069f, null);
+            reader.transform.SetParent(root.transform, false);
+            Renderer body = Cube("Body", reader.transform, new Vector3(0.5f, 1.1f, 0.2f), Vector3.one * 0.1f).GetComponent<Renderer>();
+            var readoutGo = new GameObject("Readout", typeof(RectTransform), typeof(TMPro.TextMeshPro));
+            readoutGo.transform.SetParent(body.transform, false);
+            var readout = readoutGo.GetComponent<TMPro.TextMeshPro>();
+            readout.text = "READY";
+            (BoxCollider readoutBox, Clickable readoutClick) = ClickBox("ReadoutClick", reader.transform);
+
+            desk.Reskin("Desk_ChipReader", reader.transform, reader.transform, DeskPaintedMap.Kept(DeskHomeMap.ChipReader));
+            DeskPainted.Silence(reader.transform, DeskPaintedMap.DeadClicks(DeskHomeMap.ChipReader));
+            Assert.IsFalse(readout.GetComponent<Renderer>().enabled, "Reskin hid the old readout with the old body");
+
+            Clickable bodyClick = desk.EnsureClickable("Desk_ChipReader", null);
+            Assert.IsNotNull(bodyClick, "the painted mesh carries a click box with a Clickable (the hover rim every slider has)");
+            Assert.IsTrue(painted.transform.IsChildOf(reader.transform), "the painted mesh rides the reader, so its box presses the reader");
+            var bodyBox = painted.GetComponent<BoxCollider>();
+            Assert.IsNotNull(bodyBox);
+            Assert.AreEqual(LayerMask.NameToLayer(OfficeLayers.Interactable), painted.layer);
+
+            Assert.IsTrue(desk.WearReadout("Desk_ChipReader", readout, readoutClick.transform));
+            Assert.IsTrue(readout.GetComponent<Renderer>().enabled, "the readout line shows again");
+            Assert.AreEqual(painted.transform, readout.transform.parent, "under the painted mesh: it rides the reader's slide");
+            float faceTop = painted.GetComponent<Renderer>().bounds.max.y;
+            Assert.AreEqual(faceTop + PaintedReadout.Lift, readout.transform.position.y, 1e-4f, "on the painted reader's top face");
+            Assert.AreEqual(1f, Vector3.Dot(readout.transform.forward, Vector3.down), 1e-4f, "facing up (a TextMeshPro shows on its -Z)");
+            Assert.Less(readout.transform.position.z, painted.transform.position.z, "on the near third, toward the chair");
+            Assert.AreEqual(Vector3.one, readout.transform.lossyScale);
+            Assert.IsTrue(readoutBox.enabled, "the readout's box is live again");
+            Assert.IsTrue(readoutClick.enabled && readoutClick.Interactable);
+            Assert.AreEqual(LayerMask.NameToLayer(OfficeLayers.Interactable), readoutClick.gameObject.layer);
+            Assert.Greater(readoutBox.bounds.max.y, bodyBox.bounds.max.y, "its top over the body's padded box: a click on the line meets it first");
+            Assert.AreEqual(readout.transform.position.x, readoutBox.bounds.center.x, 1e-4f, "over the line");
+            Assert.AreEqual(readout.transform.position.z, readoutBox.bounds.center.z, 1e-4f);
+            CollectionAssert.AreEquivalent(desk.RenderersOf("Desk_ChipReader"), readoutClick.Outline, "its hover outlines the painted reader");
+            Assert.IsFalse(desk.WearReadout("Desk_NoSuch", readout, null));
+        }
+        finally
+        {
+            Object.DestroyImmediate(reader);
+            Object.DestroyImmediate(root);
+        }
+    }
+
     [Test, Category("NeedsEditor")]
     public void AGameplayObjectWearingItsPaintedLook_DrawsNoOldPartButTheKeptOnes_AndOutlinesThePaintedOne()
     {
@@ -132,8 +194,8 @@ public class DeskV3InstallTests
 
             (BoxCollider readoutBox, Clickable readout) = ClickBox("ReadoutClick", reader.transform);
             DeskPainted.Silence(reader.transform, DeskPaintedMap.DeadClicks(DeskHomeMap.ChipReader));
-            Assert.IsFalse(readoutBox.enabled, "the readout's box under the painted reader");
-            Assert.IsFalse(readout.enabled);
+            Assert.IsTrue(readoutBox.enabled, "the readout's box stays: the painted reader shows the readout line (seam D of 2026-10-28; WearReadout re-fits it)");
+            Assert.IsTrue(readout.enabled);
 
             Renderer face = Cube("PanelFace", panel.transform, Vector3.zero, new Vector3(0.5f, 0.4f, 0.05f)).GetComponent<Renderer>();
             (BoxCollider breakerBox, Clickable breaker) = ClickBox("Breaker1Click", panel.transform);

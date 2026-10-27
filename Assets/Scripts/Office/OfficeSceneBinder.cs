@@ -1236,8 +1236,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// already carries as painted). Each gameplay object stands on its painted
     /// home's floor (StandOnPainted) and the painted look rides it (Wear),
     /// its old model never drawn and its old click boxes the painted look
-    /// has no part for never clicked: the chip reader (its readout's box:
-    /// the painted reader has no readout yet), DETAIN and its guard, the
+    /// has no part for never clicked: the chip reader (the painted mesh
+    /// carries its click box, and the old readout's line rides its top with
+    /// the readout's box re-fitted: DeskPainted.WearReadout), DETAIN and its guard, the
     /// stand-in intercom (its mic a direct child, so the slide sways it; its
     /// click box fitted to the painted intercom), the UV torch's body (its
     /// pool and beam kept), STAMP's rack and its two daters (PaintStamps:
@@ -1266,6 +1267,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         {
             StandOnPainted(DeskHomeMap.ChipReader, reader.transform);
             Wear(PaintedReader, DeskHomeMap.ChipReader, reader.transform, reader.transform);
+            // The night of 2026-10-28 (seam D): the old reader had no click box of its own (only its readout's, dead here), so a click at
+            // the painted reader met the ViewCatcher; the painted mesh carries the box now (riding the reader, outlining it), and the
+            // old reader's readout line rides its top with its click box re-fitted (desk v3 round 12's S1: the result shows on the desk).
+            paintedDesk.EnsureClickable(PaintedReader, null);
+            paintedDesk.WearReadout(PaintedReader, reader.Readout, reader.ReadoutClick != null ? reader.ReadoutClick.transform : null);
         }
         UvTorch torch = hardware != null ? hardware.Torch : null;
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;

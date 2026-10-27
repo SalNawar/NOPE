@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-4b (FIX_PLAN TOOLS clicks): at A1 in the office view, the chip reader's visual centre presses the chip reader 10/10 (the torch's click box no longer swallows it), and the torch's own centre presses the torch 10/10. Day 12 has both machines (the reader comes on day 11)."
+      "text": "TOOLS BUG-4b (FIX_PLAN TOOLS clicks): at A1 in the office view, the chip reader's visual centre presses the chip reader 10/10 (the torch's click box no longer swallows it), and the torch's own centre presses the torch 10/10. Day 12 has both machines (the reader comes on day 11). The still reader_readout shows the painted reader with its readout line (READY: this scenario reads no chip); on the painted desk the painted mesh carries the reader's click box (seam D of 2026-10-28)."
     },
     {
       "op": "title"
@@ -47,6 +47,10 @@
       "name": "chipReader",
       "target": "Office/DeskHardware/ChipReader",
       "n": 10
+    },
+    {
+      "op": "still",
+      "name": "reader_readout"
     },
     {
       "op": "toolsClicks",
