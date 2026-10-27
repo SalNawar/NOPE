@@ -63,7 +63,7 @@ MonoBehaviour:
   lampShader: {fileID: 4800000, guid: f8dcd1792c334c439bfe9eea61c52807, type: 3}
   windowShader: {fileID: 4800000, guid: 5c1afe2d56034af59beae716ba6eca30, type: 3}
   presentShader: {fileID: 4800000, guid: a8fb004c29284e3494e0b7831b75fcaf, type: 3}
-  fillScreen: 0
+  fillScreen: 1
   renderScale: 1
   msaa: 4
   parallaxRateCap: 30
