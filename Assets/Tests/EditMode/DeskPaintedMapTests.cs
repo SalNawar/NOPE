@@ -238,6 +238,28 @@ public class DeskPaintedMapTests
         foreach ((int x, int y) in new[] { (0, mid), (mid, 0), (DeskPaintedMap.StandInCell - 1, mid), (mid, DeskPaintedMap.StandInCell - 1), (1, 1) })
             Assert.AreEqual(DeskPaintedMap.InkLine, DeskPaintedMap.StandInTexel(colour, 1, x, y), $"({x}, {y}): an inked edge");
     }
+    /// <summary>
+    /// The night of 2026-10-28 (seam B): desk_plan_homes and cam_desk read
+    /// "DealTray has no renderer showing" (also Rolodex, ProtocolRing,
+    /// BabelRack, RingPanel) on the painted desk. The map says why for each,
+    /// so the visibility op passes them as not applicable with that detail;
+    /// a re-skinned machine or a drawn stand-in gets no reason (a real miss).
+    /// </summary>
+    [Test]
+    public void TheHomesThePaintedDeskDrawsNothingOfItsOwnFor_EachHaveAReason_TheRestNone()
+    {
+        StringAssert.Contains("ShellHomes", DeskPaintedMap.NotShownReason(DeskHomeMap.DealTray), "the deal tray is part of the painted shell");
+        foreach (string insert in DeskPaintedMap.Inserts)
+            StringAssert.Contains("DrawnStandIns", DeskPaintedMap.NotShownReason(insert), insert + ": its stand-in is drawn by nothing");
+        StringAssert.Contains("Unshown", DeskPaintedMap.NotShownReason(DeskHomeMap.Switchboard), "the RING SERVICE panel");
+        StringAssert.Contains("Dropped", DeskPaintedMap.NotShownReason(DeskHomeMap.Mouse));
+        StringAssert.Contains("Dropped", DeskPaintedMap.NotShownReason(DeskHomeMap.Thumbprint));
+        StringAssert.Contains("CutParts", DeskPaintedMap.NotShownReason(DeskHomeMap.Decor), "seam C: the decorations are cut, so a decoration drag has nothing to drag");
+        foreach (string shown in new[] { DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.Intercom, DeskHomeMap.UvTorch, DeskHomeMap.Detain, DeskHomeMap.StampRack, DeskHomeMap.Crate, DeskHomeMap.Glasses })
+            Assert.IsNull(DeskPaintedMap.NotShownReason(shown), shown + ": wears its painted look, boxes or its own parts, so it must show");
+        Assert.IsNull(DeskPaintedMap.NotShownReason(null));
+    }
+
     [Test]
     public void TheRingPanel_ShowsNothing_TheCrateWearsPaintingMatchedBoxes_AndBothStayOnThePaintedMap()
     {

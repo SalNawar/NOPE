@@ -614,6 +614,35 @@ public static class DeskPaintedMap
     /// <summary>DESK-PLAN's homes the painted desk moves (metres in the desk's frame): the supply crate's spot 3 cm right, its click box clear of desk v3's scanner tray (its right edge at x 1.30); the decor zone 12 cm right, clear of desk v3's stamp rack (its right edge at x 1.11; DESK-PLAN's 74a9d93 moved the zone to x 1.00 for the camera's line to the RING SERVICE panel, which the painted booth wall hides, and the painted desk shows no decorations in it).</summary>
     public static readonly (string id, float dx, float dy)[] Moved = { (DeskHomeMap.Crate, 0.03f, 0f), (DeskHomeMap.Decor, 0.12f, 0f) };
 
+    /// <summary>
+    /// Why the gameplay object on the home <paramref name="home"/> shows no
+    /// renderer of its own on the painted desk, or null when it should (a
+    /// real miss): the deal tray is part of the painted shell (ShellHomes),
+    /// an insert's stand-in is built for its click box but drawn by nothing
+    /// (Inserts, DrawnStandIns: the shell carries the home as painted), the
+    /// RING SERVICE panel shows nothing (Unshown), a dropped home has no
+    /// object there (Dropped), and the decor zone's decorations are cut
+    /// (CutParts). The QA rig reads it (DeskPlanOps: "not applicable on the
+    /// painted desk", a pass with this detail, never a silent skip; the
+    /// night of 2026-10-28, seams B and C).
+    /// </summary>
+    public static string NotShownReason(string home)
+    {
+        if (home == null)
+            return null;
+        if (Array.IndexOf(ShellHomes, home) >= 0)
+            return $"the painted shell carries the {home} home (DeskPaintedMap.ShellHomes: the papers come in over the painted tray)";
+        if (Array.IndexOf(Inserts, home) >= 0 && !StandInDrawn(home))
+            return $"the painted shell carries the {home} insert as painted; its stand-in is built for its click box and drawn by nothing (DeskPaintedMap.Inserts, DrawnStandIns; desk v3 round 12)";
+        if (Array.IndexOf(Unshown, home) >= 0)
+            return $"the {home} home's object shows nothing on the painted desk (DeskPaintedMap.Unshown: the painted booth wall carries the painting's switchboard)";
+        if (Array.IndexOf(Dropped, home) >= 0)
+            return $"the {home} home is dropped on the painted desk (DeskPaintedMap.Dropped)";
+        if (home == DeskHomeMap.Decor)
+            return "the decorations are cut on the painted desk (DESK-V3; DeskPaintedMap.CutParts), so the decor zone holds nothing to drag";
+        return null;
+    }
+
     /// <summary>The id desk v3's layout (layout.HOMES, desk_layout_v3.json) gives the home <paramref name="home"/>: the AVAILABLE sign is its "available".</summary>
     public static string LayoutId(string home) => home == DeskHomeMap.Sign ? "available" : home;
 
