@@ -350,8 +350,22 @@ public static class ToolsOps
     }
 
     /// <summary>
+    /// The sweep's two ends (pure): (x, y) and (x2, y2) as fractions of the
+    /// screen, or, with <paramref name="target"/> (a target's screen rect),
+    /// of that rect (the night of 2026-10-28, seam G: the documents' leg
+    /// sweeps the paper's own bounds, wherever the painted desk's reading
+    /// pose lays it, instead of a fixed point of the plan's pose).
+    /// </summary>
+    public static (Vector2 a, Vector2 b) SweepEnds(Rect? target, float x, float y, float x2, float y2, Vector2 screen)
+    {
+        Rect r = target ?? new Rect(0f, 0f, screen.x, screen.y);
+        return (new Vector2(r.xMin + x * r.width, r.yMin + y * r.height), new Vector2(r.xMin + x2 * r.width, r.yMin + y2 * r.height));
+    }
+
+    /// <summary>
     /// Sweeps (x, y) → (x2, y2) → (x, y) over f seconds (default 3; screen
-    /// fractions). Every frame: every translated text must be drawn, not the
+    /// fractions, or fractions of the target's screen rect when a target is
+    /// named: SweepEnds). Every frame: every translated text must be drawn, not the
     /// PC's, and under the pointer (within 24 px of its rect); and the lens's
     /// candidate set (TranslationLensPresenter.Candidates, every text it was
     /// allowed to read there) is logged and must hold no PC text. With text
@@ -373,7 +387,11 @@ public static class ToolsOps
         var pcNames = new HashSet<string>();
         var log = new Dictionary<string, int>();
         float seconds = s.f > 0f ? s.f : 3f, begin = Time.unscaledTime, end = begin + seconds;
-        Vector2 a = new Vector2(s.x * Screen.width, s.y * Screen.height), b = new Vector2(s.x2 * Screen.width, s.y2 * Screen.height);
+        Rect? over = null;
+        if (!string.IsNullOrEmpty(s.target))
+            over = QaGame.ScreenRect(QaGame.GameObjectAt(s.target)) ?? throw new InvalidOperationException($"{s.target} is not on the screen.");
+        (Vector2 a, Vector2 b) = SweepEnds(over, s.x, s.y, s.x2, s.y2, new Vector2(Screen.width, Screen.height));
+        string swept = $"swept {F(a.x)},{F(a.y)} to {F(b.x)},{F(b.y)} px" + (over != null ? $" over {s.target}'s rect {over.Value}" : string.Empty);
         while (Time.unscaledTime < end)
         {
             float phase = (Time.unscaledTime - begin) / seconds;
@@ -431,7 +449,7 @@ public static class ToolsOps
             runner.Assert($"tools.lens.{name}.overPc", Owner, overPc > 0, $"pointer over the PC's desktop {overPc}/{frames} frames",
                 "the PC open and under the sweep, so tools.lens.*.pc tests the candidate set's PC exclusion (open it with key Q first)");
         if (s.text == "reach")
-            runner.Assert($"tools.lens.{name}.reach", Owner, translated > 0, $"{translated} translated text-frames, {log.Count} candidate texts",
+            runner.Assert($"tools.lens.{name}.reach", Owner, translated > 0, $"{translated} translated text-frames, {log.Count} candidate texts; {swept}",
                 "D7 surfaces (the newspaper, the documents): the hover reaches their world-language words (a UI text needs a raycast-target graphic in its panel)");
     }
 
