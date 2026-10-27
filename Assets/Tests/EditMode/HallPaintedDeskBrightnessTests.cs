@@ -44,11 +44,33 @@ public class HallPaintedDeskBrightnessTests
     }
 
     [Test]
+    public void TheBoothsGrade_DarkensAndWarmsTheHall_AndTheAssetCarriesTheDefault()
+    {
+        // Round 13: the enclosed booth (office_bars_v1.png) shows the hall far darker and warmer than mock_office.png did.
+        string asset = Read("Assets/Data/Config/HallLighting_Default.asset");
+        Match value = Regex.Match(asset, @"\n  paintedBoothGrade: \{r: ([0-9.]+), g: ([0-9.]+), b: ([0-9.]+), a: 1\}\n");
+        Assert.IsTrue(value.Success, "HallLighting_Default.asset carries the booth's grade");
+        Match fallback = Regex.Match(Read("Assets/Scripts/Office/HallLightingSO.cs"), @"public Color paintedBoothGrade = new Color\(([0-9.]+)f, ([0-9.]+)f, ([0-9.]+)f, 1f\);");
+        Assert.IsTrue(fallback.Success, "the knob has a C# default");
+        for (int c = 1; c <= 3; c++)
+        {
+            Assert.AreEqual(F(fallback.Groups[c].Value), F(value.Groups[c].Value), 1e-4f, "the asset and the default agree");
+            Assert.AreEqual(BoothGrade[c - 1], F(value.Groups[c].Value), 1e-4f, "judged by eye against office_bars_v1.png (DESK-V3 round 13)");
+            Assert.That(BoothGrade[c - 1], Is.LessThan(1f), "the booth's hall is darker than the open desk's");
+        }
+        Assert.That(BoothGrade[2], Is.LessThan(BoothGrade[0]), "and warmer (the painting's amber)");
+    }
+
+    /// <summary>The booth's grade (r, g, b) round 13 set by eye against office_bars_v1.png.</summary>
+    private static readonly float[] BoothGrade = { 0.48f, 0.45f, 0.37f };
+
+    [Test]
     public void TheBrightness_AppliesOnlyUnderThePaintedDesk()
     {
         string rig = Read("Assets/Scripts/Office/HallLightingRig.cs");
         StringAssert.Contains("backdrop.Brightness = PaintedDesk && painted != null && painted.length > 0 ? painted.Evaluate(Hour) : 1f;", rig,
                               "the rig draws the hall at the knob's value for the hour only under the painted desk, else as lit");
+        StringAssert.Contains("backdrop.Grade = PaintedDesk ? settings.paintedBoothGrade : Color.white;", rig, "and at the booth's grade only under the painted desk");
         string binder = Read("Assets/Scripts/Office/OfficeSceneBinder.cs");
         StringAssert.Contains("lights.PaintedDesk = _painted;", binder, "the office binder says when the painted desk is installed");
     }
@@ -60,10 +82,14 @@ public class HallPaintedDeskBrightnessTests
         StringAssert.Contains("_Brightness (\"Brightness on screen (the sRGB values' scale; 1: as lit)\", Range(0, 2)) = 1", shader, "a fresh material draws the hall as lit");
         string buffer = Regex.Match(shader, @"CBUFFER_START\(UnityPerMaterial\)(.*?)CBUFFER_END", RegexOptions.Singleline).Groups[1].Value;
         StringAssert.Contains("float _Brightness;", buffer, "the knob in UnityPerMaterial (SRP Batcher)");
-        StringAssert.Contains("hall = SRGBToLinear(LinearToSRGB(hall) * _Brightness);", shader, "the scale is on what the screen shows (the review measured sRGB values), in linear colour space");
-        StringAssert.Contains("if (_Brightness != 1.0)", shader, "at 1 the picture is not round-tripped");
+        StringAssert.Contains("float4 _Grade;", buffer, "the booth's grade in UnityPerMaterial too");
+        StringAssert.Contains("float3 scale = _Brightness * _Grade.rgb;", shader, "the grade on top of the brightness");
+        StringAssert.Contains("hall = SRGBToLinear(LinearToSRGB(hall) * scale);", shader, "the scale is on what the screen shows (the review measured sRGB values), in linear colour space");
+        StringAssert.Contains("if (any(scale != 1.0))", shader, "at 1 and white the picture is not round-tripped");
+        StringAssert.Contains("_Grade (\"Grade on screen (the sRGB values' scale per channel; white: none)\", Color) = (1, 1, 1, 1)", shader, "a fresh material draws no grade");
         string backdrop = Read("Assets/Scripts/Office/HallBackdrop.cs");
         StringAssert.Contains("_material.SetFloat(BrightnessId, _brightness);", backdrop, "the runtime material takes the brightness when it is built and when it changes");
+        StringAssert.Contains("_material.SetColor(GradeId, _grade);", backdrop, "and the grade");
     }
 
     [Test]
@@ -72,7 +98,9 @@ public class HallPaintedDeskBrightnessTests
         string floor = Read("Assets/Scripts/Office/HallForegroundFloor.cs");
         StringAssert.Contains("Shader.SetGlobalFloat(BackdropBrightness,backdrop.Brightness);", floor, "set with the lit hall's texture");
         string shader = Read("Assets/Shaders/HallForegroundFloor.shader");
-        StringAssert.Contains("colour=(half3)SRGBToLinear(LinearToSRGB((float3)colour)*_HallFloorBackdropBrightness);", shader);
+        StringAssert.Contains("Shader.SetGlobalVector(BackdropGrade,backdrop.Grade);", floor, "the grade set with the lit hall's texture too");
+        StringAssert.Contains("float3 scale=_HallFloorBackdropBrightness*_HallFloorBackdropGrade.rgb;", shader);
+        StringAssert.Contains("colour=(half3)SRGBToLinear(LinearToSRGB((float3)colour)*scale);", shader);
         int branch = shader.IndexOf("if(_HallFloorHasBackdrop>0.5)", System.StringComparison.Ordinal);
         int scale = shader.IndexOf("_HallFloorBackdropBrightness!=1", System.StringComparison.Ordinal);
         Assert.That(branch, Is.GreaterThan(0));

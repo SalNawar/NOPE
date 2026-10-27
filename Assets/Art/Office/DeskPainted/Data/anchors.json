@@ -765,5 +765,256 @@
   "width_m": 0.36,
   "height_m": 0.29,
   "faces": "local -Y (frame), toward the chair; turned 35 degrees about z with the PC"
+ },
+ "booth": {
+  "note": "DeskBooth.fbx: every object at the DeskFrame origin with identity rotation (place it like DeskShell). The booth front (flank, posts, lintel, header, bars) leans back with the office camera's up (9 degrees) so its verticals stay vertical on screen as painted; the side walls are vertical planes.",
+  "objects": {
+   "Booth_WallLeft": {
+    "pivot_frame": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "pivot_unity": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tris": 336,
+    "texture": "Desk_Booth_Paint.png"
+   },
+   "Booth_BackWall": {
+    "pivot_frame": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "pivot_unity": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tris": 28,
+    "texture": "Desk_Booth_Paint.png"
+   },
+   "Booth_Frame": {
+    "pivot_frame": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "pivot_unity": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tris": 98,
+    "texture": "Desk_Booth_Paint.png"
+   },
+   "Booth_WallRight": {
+    "pivot_frame": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "pivot_unity": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tris": 56,
+    "texture": "Desk_Booth_Paint.png"
+   },
+   "Booth_Bars": {
+    "pivot_frame": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "pivot_unity": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tris": 1056,
+    "texture": "Desk_BoothBars_Paint.png"
+   }
+  },
+  "frame": {
+   "origin_frame": [
+    0.0,
+    0.99,
+    1.194
+   ],
+   "up_frame": [
+    0.0,
+    0.15643446504023092,
+    0.9876883405951378
+   ],
+   "into_hall_frame": [
+    0.0,
+    0.9876883405951378,
+    -0.15643446504023092
+   ],
+   "origin_unity": [
+    0.0,
+    1.194,
+    0.99
+   ],
+   "up_unity": [
+    0.0,
+    0.98769,
+    0.15643
+   ]
+  },
+  "left_wall_x": -2.6468,
+  "right_wall_x": 2.3,
+  "opening_x": [
+   -1.8478,
+   2.0977
+  ],
+  "bars": {
+   "count": 12,
+   "pitch_m": 0.33519,
+   "radius_m": 0.0192,
+   "centres_x_frame": [
+    -1.84346,
+    -1.50827,
+    -1.17308,
+    -0.83788,
+    -0.50269,
+    -0.1675,
+    0.1677,
+    0.50289,
+    0.83808,
+    1.17327,
+    1.50847,
+    1.84366
+   ],
+   "foot_frame": [
+    [
+     -1.84346,
+     1.0473,
+     1.24
+    ],
+    [
+     -1.50827,
+     1.0473,
+     1.24
+    ],
+    [
+     -1.17308,
+     1.0473,
+     1.24
+    ],
+    [
+     -0.83788,
+     1.0473,
+     1.24
+    ],
+    [
+     -0.50269,
+     1.0473,
+     1.24
+    ],
+    [
+     -0.1675,
+     1.0473,
+     1.24
+    ],
+    [
+     0.1677,
+     1.0473,
+     1.24
+    ],
+    [
+     0.50289,
+     1.0473,
+     1.24
+    ],
+    [
+     0.83808,
+     1.0473,
+     1.24
+    ],
+    [
+     1.17327,
+     1.0473,
+     1.24
+    ],
+    [
+     1.50847,
+     1.0473,
+     1.24
+    ],
+    [
+     1.84366,
+     1.0473,
+     1.24
+    ]
+   ],
+   "top_frame": [
+    [
+     -1.84346,
+     1.31768,
+     2.94712
+    ],
+    [
+     -1.50827,
+     1.31768,
+     2.94712
+    ],
+    [
+     -1.17308,
+     1.31768,
+     2.94712
+    ],
+    [
+     -0.83788,
+     1.31768,
+     2.94712
+    ],
+    [
+     -0.50269,
+     1.31768,
+     2.94712
+    ],
+    [
+     -0.1675,
+     1.31768,
+     2.94712
+    ],
+    [
+     0.1677,
+     1.31768,
+     2.94712
+    ],
+    [
+     0.50289,
+     1.31768,
+     2.94712
+    ],
+    [
+     0.83808,
+     1.31768,
+     2.94712
+    ],
+    [
+     1.17327,
+     1.31768,
+     2.94712
+    ],
+    [
+     1.50847,
+     1.31768,
+     2.94712
+    ],
+    [
+     1.84366,
+     1.31768,
+     2.94712
+    ]
+   ]
+  }
  }
 }
