@@ -29,7 +29,10 @@ using UnityEngine.Rendering;
 /// pc_screen). It lays out every painted home (DeskPainted's Homes and
 /// FixedArt, through DeskPaintedMap.Homes: the rectangles of desk v3's
 /// layout, Data/desk_layout_v3.json, the heights measured on the meshes) and
-/// checks every pivot against anchors.json. It touches no scene (Build Office UI puts the prefab
+/// checks every pivot against anchors.json, and (round 13) the booth as
+/// laid: its five objects under Shell at the origin, none casting, the bars'
+/// mesh on anchors.json's bar feet and tops with the bake's lean in it, so no
+/// turn is added to it (CheckBooth). It touches no scene (Build Office UI puts the prefab
 /// into the gameplay scene; the office binder installs it).
 /// </summary>
 public sealed class DeskPaintedImporter : AssetPostprocessor
@@ -181,6 +184,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
             foreach (PaintedObject o in DeskPaintedMap.Objects)
                 if (!parts.Exists(p => p.name == o.name))
                     throw new System.InvalidOperationException($"[DeskPainted] The bake has no {o.name}.");
+            CheckBooth(root.transform, parts, anchors, log);
 
             Transform lamps = Child(root.transform, "Lamps");
             if (bezel != null)
@@ -227,6 +231,84 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     private static float Num(ContentNode node) => float.Parse(node.Text, System.Globalization.CultureInfo.InvariantCulture);
 
     private static Vector3 Vec(ContentNode node) => new Vector3(Num(node.Items[0]), Num(node.Items[1]), Num(node.Items[2]));
+
+    /// <summary>A point of the bake's frame (x right, y away from the chair, z up; anchors.json's *_frame) in Unity's axes (x, z, y).</summary>
+    private static Vector3 FrameToUnity(ContentNode node) => new Vector3(Num(node.Items[0]), Num(node.Items[2]), Num(node.Items[1]));
+
+    /// <summary>The largest distance the build accepts between the bars' mesh and anchors.json's bar feet and tops (metres: the feet's collars and the caps stand a little past them).</summary>
+    private const float BoothTolerance = 0.03f;
+
+    /// <summary>The largest difference the build accepts between the bars' depth (front to back) and the lean's (metres).</summary>
+    private const float BoothDepthTolerance = 0.05f;
+
+    /// <summary>
+    /// Checks the booth as laid (round 13, export v3; DeskPaintedMap.Booth):
+    /// its five objects under Shell at the DeskFrame's origin (no turn of
+    /// their own, like DeskShell), none casting; anchors.json's booth leaning
+    /// DeskPaintedMap.BoothLeanDegrees (its frame's up_unity); and the bars'
+    /// mesh (in the prefab's frame) holding every bar foot and top of
+    /// anchors.json within BoothTolerance, its depth the lean's (the tops
+    /// 0.27 m behind the feet, plus the bars' thickness): the lean the bake
+    /// put in the meshes is there once, and no turn was added to it (a
+    /// vertical booth would be 0.04 m deep, a doubled lean 0.58). Throws on
+    /// a miss; logs the lean.
+    /// </summary>
+    private static void CheckBooth(Transform root, List<DeskPainted.Part> parts, ContentNode anchors, StringBuilder log)
+    {
+        ContentNode booth = anchors.Get("booth");
+        if (booth == null)
+            throw new System.InvalidOperationException("[DeskPainted] anchors.json has no booth (export v3's DeskBooth.fbx).");
+        Vector3 up = Vec(booth.Get("frame").Get("up_unity"));
+        float lean = Vector3.Angle(Vector3.up, up);
+        if (Mathf.Abs(lean - DeskPaintedMap.BoothLeanDegrees) > 0.2f)
+            throw new System.InvalidOperationException($"[DeskPainted] anchors.json's booth leans {lean:0.0} degrees; DeskPaintedMap.BoothLeanDegrees says {DeskPaintedMap.BoothLeanDegrees:0.0}.");
+        foreach (string name in DeskPaintedMap.Booth)
+        {
+            DeskPainted.Part part = parts.Find(p => p.name == name);
+            if (part == null)
+                throw new System.InvalidOperationException($"[DeskPainted] The bake has no {name} (DeskBooth.fbx).");
+            if (part.mesh.parent == null || part.mesh.parent.name != "Shell")
+                throw new System.InvalidOperationException($"[DeskPainted] {name} is not under Shell (DeskPaintedMap: PaintedRole.Shell).");
+            if (part.mesh.localPosition.magnitude > PivotTolerance)
+                throw new System.InvalidOperationException($"[DeskPainted] {name} sits {part.mesh.localPosition.magnitude * 1000f:0.0} mm from the DeskFrame's origin.");
+            foreach (Renderer r in part.mesh.GetComponentsInChildren<Renderer>(true))
+                if (r.shadowCastingMode != ShadowCastingMode.Off)
+                    throw new System.InvalidOperationException($"[DeskPainted] {name}/{r.name} casts a shadow: the booth's are in its paint.");
+        }
+        Transform barsMesh = parts.Find(p => p.name == DeskPaintedMap.BoothBars).mesh;
+        Bounds bars = default;
+        bool any = false;
+        foreach (MeshFilter filter in barsMesh.GetComponentsInChildren<MeshFilter>(true))
+        {
+            if (filter.sharedMesh == null)
+                continue;
+            Bounds b = filter.sharedMesh.bounds;
+            for (int i = 0; i < 8; i++)
+            {
+                Vector3 c = root.InverseTransformPoint(filter.transform.TransformPoint(new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z)));
+                if (any)
+                    bars.Encapsulate(c);
+                else
+                    bars = new Bounds(c, Vector3.zero);
+                any = true;
+            }
+        }
+        if (!any)
+            throw new System.InvalidOperationException("[DeskPainted] Booth_Bars has no mesh.");
+        ContentNode spec = booth.Get("bars");
+        IReadOnlyList<ContentNode> feet = spec.Get("foot_frame").Items, tops = spec.Get("top_frame").Items;
+        float radius = Num(spec.Get("radius_m"));
+        float worst = 0f;
+        foreach (ContentNode point in feet.Concat(tops))
+            worst = Mathf.Max(worst, Mathf.Sqrt(bars.SqrDistance(FrameToUnity(point))));
+        if (worst > BoothTolerance)
+            throw new System.InvalidOperationException($"[DeskPainted] A bar's foot or top of anchors.json is {worst * 1000f:0.0} mm outside the bars' mesh: the booth is turned or moved (the lean is baked in; add none).");
+        Vector3 foot = FrameToUnity(feet[0]), top = FrameToUnity(tops[0]);
+        float depth = top.z - foot.z + 2f * radius;
+        if (Mathf.Abs(bars.size.z - depth) > BoothDepthTolerance)
+            throw new System.InvalidOperationException($"[DeskPainted] The bars are {bars.size.z:0.000} m deep front to back; the lean of {lean:0.0} degrees makes them {depth:0.000} m (a vertical booth 0.04, the lean twice 0.58).");
+        log.AppendLine($"booth: {DeskPaintedMap.Booth.Length} objects under Shell at the origin, none casting; {feet.Count} bars, feet at y {foot.y:0.000} m and tops at y {top.y:0.000} m, leaning back {lean:0.0} degrees as baked (no turn added; worst foot or top {worst * 1000f:0.0} mm, depth {bars.size.z:0.000} m)");
+    }
 
     /// <summary>
     /// Copies the bake's <paramref name="source"/> into the prefab where it
