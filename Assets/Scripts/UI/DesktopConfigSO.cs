@@ -12,14 +12,15 @@ using UnityEngine;
 /// (re-run it after changing one); DesktopWindowManager and DesktopIcons read
 /// the double-click, DesktopIcons the icon knobs, InvestigationApp the
 /// toast's time and the panes' widths, AppPane the tabs' widths and the
-/// history's length and SearchBox the search knobs, at runtime.
+/// history's length, SearchBox the search knobs, PcFrame the power move and
+/// the flash budget (FlashPolicy) and DesktopShell the quit warning, at runtime.
 /// </summary>
 [CreateAssetMenu(fileName = "Desktop_Default", menuName = "TimeDesk/Office/Desktop Config")]
 public sealed class DesktopConfigSO : ScriptableObject
 {
     [Header("The bars under the icon area (desktop units)")]
-    /// <summary>The taskbar's height at the bottom of the desktop.</summary>
-    [Min(1f)] public float taskbarHeight = 60f;
+    /// <summary>The taskbar's height at the bottom of the desktop (72 u: the tray clock's time over its date, BUG-20a).</summary>
+    [Min(1f)] public float taskbarHeight = 72f;
 
     /// <summary>The gap between the taskbar and the Start menu above it.</summary>
     [Min(0f)] public float startMenuGap = 4f;
@@ -31,9 +32,15 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>A window's title size (26 u: 13.5 px at 720p).</summary>
     [Min(1f)] public float titleFontSize = 26f;
 
-    [Header("Taskbar buttons (one per open window: the app's glyph, its name in a hover hint)")]
-    /// <summary>A window button's width (the glyph and its focus bar; the PC UX redesign IA12).</summary>
-    [Min(1f)] public float taskbarButtonWidth = 56f;
+    [Header("Taskbar buttons (one per open window: the app's glyph beside its name; BUG-21a)")]
+    /// <summary>A window button's width when the strip has room (the glyph, the name and the focus bar).</summary>
+    [Min(1f)] public float taskbarButtonWidth = 220f;
+
+    /// <summary>The least a window button shrinks to as windows open (the glyph and a few letters of the name); past it the rest wait behind the chevron (TaskbarStrip).</summary>
+    [Min(1f)] public float taskbarButtonLeast = 120f;
+
+    /// <summary>The chevron's width at the strip's end (the windows that do not fit wait behind it).</summary>
+    [Min(1f)] public float taskbarChevronWidth = 64f;
 
     [Header("Desktop icons (the PC redesign DK2-DK5; desktop units)")]
     /// <summary>An icon's cell: the glyph over its label.</summary>
@@ -81,17 +88,17 @@ public sealed class DesktopConfigSO : ScriptableObject
     [Min(1)] public int browserHistory = 30;
 
     [Header("App windows (redesign phase 25; restored sizes, desktop units)")]
-    /// <summary>The Mail window's size.</summary>
-    public Vector2 mailWindowSize = new Vector2(1060f, 780f);
+    /// <summary>The Mail window's size: the reading apps' one size (Mail, the Citizen Account, Notes: BUG-50a, UI-24 "window sizes are inconsistent"); the work apps, Investigation and Orders, open maximised.</summary>
+    public Vector2 mailWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Citizen Account window's size: wide enough for the Statement's landscape page (982 u across, so its cells print at 13 px at 720p).</summary>
-    public Vector2 accountWindowSize = new Vector2(1020f, 800f);
+    /// <summary>The Citizen Account window's size: the reading apps' one size, wide enough for the Statement's landscape page (1022 u across, so its cells print at 13 px or more at 720p).</summary>
+    public Vector2 accountWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Notes window's size.</summary>
-    public Vector2 notesWindowSize = new Vector2(960f, 800f);
+    /// <summary>The Notes window's size: the reading apps' one size.</summary>
+    public Vector2 notesWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Settings window's size (1010 u tall, the desktop's height above the taskbar: every row fits (sized when it still had the Machine close-ups row, cut by P0-C), the locked language line's three lines and the note's three, in the culture fonts too).</summary>
-    public Vector2 settingsWindowSize = new Vector2(800f, 1010f);
+    /// <summary>The Settings window's size (1000 u tall: the desktop's 1080 less the 72 u taskbar and a margin; every row fits, the Reduce flashing row in the place of the Machine close-ups row that P0-C cut, the locked language line's three lines and the note's three, in the culture fonts too).</summary>
+    public Vector2 settingsWindowSize = new Vector2(800f, 1000f);
 
     /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
     public Vector2 portalsWindowSize = new Vector2(880f, 600f);
@@ -160,8 +167,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The keyboard focus ring's width (the FocusRing role's outline).</summary>
     [Min(1f)] public float focusRingWidth = 3f;
 
-    /// <summary>The shortcut card's size (F1).</summary>
-    public Vector2 shortcutCardSize = new Vector2(960f, 860f);
+    /// <summary>The shortcut card's size (F1): tall enough that its rows show to the last (UI-16), under the desktop's height less the taskbar.</summary>
+    public Vector2 shortcutCardSize = new Vector2(960f, 980f);
 
     [Header("Search (redesign phase 19; the PC spec's SE1)")]
     /// <summary>How long typing pauses before the results update, in seconds.</summary>
@@ -169,6 +176,42 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The hits a source's group shows before "Show all n".</summary>
     [Min(1)] public int searchPerGroup = 5;
+
+    [Header("The PC frame's power move (GAME_FEEL_BIBLE F1, BUG-32c; CrtPower)")]
+    /// <summary>The power-on: the picture grows from a line to full height (F1: 150 ms OutCubic), in seconds.</summary>
+    [Min(0f)] public float crtOpenSeconds = 0.15f;
+
+    /// <summary>The collapse: the picture squeezes to a line, then a dot (F1: 120 ms), in seconds.</summary>
+    [Min(0f)] public float crtCloseSeconds = 0.12f;
+
+    /// <summary>The Reduced Motion fade that replaces both moves, in seconds (300 ms: two halves of 150 ms, the frame over the room, then the picture under its glass; each half takes at least 4 frames of the 30 fps capture, so no step is a cut).</summary>
+    [Min(0f)] public float crtFadeSeconds = 0.3f;
+
+    /// <summary>The line's height as a share of the picture's (2 %).</summary>
+    [Range(0.001f, 1f)] public float crtLineHeight = 0.02f;
+
+    /// <summary>How long the glass stays dark under the degauss hum before the picture starts (F1: "the CRT's degauss hum begins 80 ms before the picture"), in seconds.</summary>
+    [Min(0f)] public float crtHumLeadSeconds = 0.08f;
+
+    /// <summary>How many frames the phosphor dot glows on after the collapse (F1: "a phosphor afterglow of 2 frames on close").</summary>
+    [Min(0)] public int crtAfterglowFrames = 2;
+
+    /// <summary>The frame's own fade in on opening and out after the afterglow, in seconds (F1: "no frame-0 UI pop"; 150 ms: the frame is 63-77 % of the screen, and each step of the 30 fps capture stays under seqtools' cut). The picture comes on once the frame is whole and the hum has led it by crtHumLeadSeconds.</summary>
+    [Min(0f)] public float crtFrameSeconds = 0.15f;
+
+    [Header("Flashes (GAME_FEEL_BIBLE G3; FlashPolicy, every flash's one budget)")]
+    /// <summary>The most flashes drawn in any one second anywhere on screen (G3: 3).</summary>
+    [Min(1)] public int flashesPerSecond = 3;
+
+    /// <summary>How long a flash is held as a static tint with Reduce flashing (G3: 200 ms), in seconds.</summary>
+    [Min(0f)] public float flashTintSeconds = 0.2f;
+
+    [Header("The Start menu")]
+    /// <summary>How long Quit game's mid-shift warning ("Today's shift is forfeit") waits for its confirming press (BUG-35c; QuitGuard), in seconds.</summary>
+    [Min(0f)] public float quitWarningSeconds = 4f;
+
+    /// <summary>The PC frame's power move with these knobs (PcFrame).</summary>
+    public CrtPower PowerMove() => new CrtPower(crtOpenSeconds, crtCloseSeconds, crtFadeSeconds, crtLineHeight, crtHumLeadSeconds, crtAfterglowFrames, crtFrameSeconds);
 
     /// <summary>The icon band's grid in an icon area of <paramref name="width"/> x <paramref name="height"/> desktop units (IconGrid.InColumns with the icon knobs): DesktopIcons lays the icons out in it and the builder puts the waiting strip right of it.</summary>
     public IconGrid IconBand(float width, float height) =>

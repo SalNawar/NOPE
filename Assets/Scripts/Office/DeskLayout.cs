@@ -425,7 +425,7 @@ public static class DeskLayout
     /// peak toward the mat, the top raised by its lifts' peak, the stamp rack
     /// by its daters': DeskSlides.Obstacle, through DeskSweeps.Refresh), and
     /// forgets those that do not show. The swept boxes of the homes something
-    /// slides or lifts in are also kept apart (DeskSweeps; TrySweptTop,
+    /// slides or lifts in are also kept apart (DeskSweeps; SweptPeak,
     /// SweptStrips): the carry and the drop read them, so a paper is never
     /// covered or passed through by a machine that slides out after the drag
     /// began.
@@ -471,9 +471,8 @@ public static class DeskLayout
     /// The world height of the tallest swept box (a home something slides or
     /// lifts in, at its overshoot peak) under <paramref name="world"/>, with
     /// its footprint grown by <paramref name="grow"/> metres (a carried
-    /// paper's corners); false over none or unbound. A dragged paper keeps over
-    /// it (DeskController's carry floor), so a machine that slides out under
-    /// it after the drag began never passes through it, with no live read.
+    /// paper's corners); false over none or unbound. Desk v3's carry floor
+    /// read it; since DOC-HANDLE's one held size the carry reads SweptPeak.
     /// Allocates nothing.
     /// </summary>
     public static bool TrySweptTop(Vector3 world, float grow, out float top)
@@ -489,10 +488,20 @@ public static class DeskLayout
     }
 
     /// <summary>
+    /// The tallest swept box's height over the desk (a home something slides
+    /// or lifts in, at its overshoot or lift peak; 0 unbound or with none): a
+    /// held paper or folder is drawn above it too (DeskDocument.HeldRatio,
+    /// DeskController.HeldRatio: DOC-HANDLE's one held size, with
+    /// DeskObstacles.Desk's tallest), so a machine that slides out under it
+    /// after the drag began never passes through it, with no live read.
+    /// </summary>
+    public static float SweptPeak() => Bound ? Sweeps.MaxHeight : 0f;
+
+    /// <summary>
     /// The world corners (on the desk) of each track's swept box: its home's
     /// footprint and the strip its slide reaches past it toward the mat
     /// (DESK-HOMES 6: 0 px over a resting paper). A paper let go keeps clear
-    /// of each (DeskController.ClearOfBlockers). A fresh list.
+    /// of each (DeskController.RestOf's keep-outs). A fresh list.
     /// </summary>
     public static List<Vector3[]> SweptStrips()
     {

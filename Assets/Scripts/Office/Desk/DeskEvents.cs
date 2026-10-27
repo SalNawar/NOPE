@@ -1,14 +1,17 @@
 using System;
 
 /// <summary>
-/// The desk's events (P0-A seam; owner DOC-HANDLE): a paper landed on the
-/// desk, the case ended, an upgrade arrived, and a paper's place in the
-/// papers' stack changed (its rank: DOC-LOOK's contact shadow, BUG-40c). The
-/// P0 stub declares them; nothing raises them yet (today's behaviour).
+/// The desk's events (owner DOC-HANDLE): a paper handed over landed on the
+/// counter (the hand-over's slap, BUG-49b: FEEDBACK plays its sound on that
+/// frame), the case ended, an upgrade arrived, and a paper's place in the
+/// papers' stack changed (its rank: DOC-LOOK's contact shadow, BUG-40c).
+/// DeskController raises DocumentLanded, CaseEnded and StackChanged;
+/// UpgradeArrived is raised by whoever lays an upgrade on the desk (the
+/// supply crate's owner).
 /// </summary>
 public static class DeskEvents
 {
-    /// <summary>A paper landed on the desk (handed over or dropped).</summary>
+    /// <summary>A paper the traveller handed over landed on the counter, on the frame it lands (the hand-over's slap; a drop plays the paper's own drop cue, not this).</summary>
     public static event Action<DeskDocument> DocumentLanded;
 
     /// <summary>The case at the desk ended (decided, or the traveller left).</summary>

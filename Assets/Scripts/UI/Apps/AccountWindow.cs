@@ -15,7 +15,8 @@ using UnityEngine.UI;
 /// sizes): one row per day of WorldState.accountDays (DAY, WAGES, FINES, DEBT
 /// RELIEF, HOUSEHOLD, PURCHASES, BALANCE, OWED; "–" where no source gives a
 /// value yet), "No entries yet." while there is none, the amounts' unit, the
-/// fine print and the stamp area. Redrawn each time the window shows. There
+/// fine print and the stamp area. Redrawn each time the window shows and on
+/// each wallet write while it shows (WalletEvents). There
 /// is no lookup field: a traveller's record is the Investigation app's.
 /// </summary>
 public sealed class AccountWindow : MonoBehaviour
@@ -38,7 +39,17 @@ public sealed class AccountWindow : MonoBehaviour
     /// <summary>The gap between the two pages (desktop units).</summary>
     [SerializeField] private float gap = 16f;
 
-    private void OnEnable() => Draw();
+    /// <summary>True once drawn: a redraw keeps the scroll where the reader left it.</summary>
+    private bool _drawn;
+
+    /// <summary>Drawn when shown, and again on every wallet write while it shows (WalletEvents, BUG-58a: the balance never disagrees with Orders).</summary>
+    private void OnEnable()
+    {
+        WalletEvents.Changed += Draw;
+        Draw();
+    }
+
+    private void OnDisable() => WalletEvents.Changed -= Draw;
 
     /// <summary>Draws the extract and the statement from the run's account, the statement under the extract.</summary>
     private void Draw()
@@ -79,8 +90,14 @@ public sealed class AccountWindow : MonoBehaviour
 
         if (scroll != null && scroll.content != null)
         {
+            // The first draw starts at the top; later ones (a restore, a wallet write) keep the reader's place (BUG-58a).
+            float keep = scroll.content.anchoredPosition.y;
             scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, bottom);
-            scroll.verticalNormalizedPosition = 1f;
+            if (_drawn)
+                scroll.content.anchoredPosition = new Vector2(scroll.content.anchoredPosition.x, keep);
+            else
+                scroll.verticalNormalizedPosition = 1f;
+            _drawn = true;
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -11,7 +12,14 @@ using UnityEngine;
 /// measured with TextMeshPro as the paper prints), at the form style's sizes
 /// (FormStyle_Agency, or the defaults before Build Office UI made it).
 /// DeskFitProblems reports them, so Build Office UI and Validate Content
-/// Library check the same.
+/// Library check the same. A form drawn on its art is measured in the art's
+/// value face (FormStyleSO.artValueFont), the face its values print in
+/// (BUG-9: the check measured them in LiberationSans, so a value that fit the
+/// check overflowed its place on the paper), and none of the content's names
+/// or origins has a word wider than its place there even at the least size,
+/// its field's place or a Signature or Copy print's that reprints it
+/// (ArtLayout.CutWords: the paper would cut it with a full stop, and a cut
+/// value reads as a false discrepancy against another paper).
 /// </summary>
 public static partial class ContentLibraryValidator
 {
@@ -67,23 +75,45 @@ public static partial class ContentLibraryValidator
         FormMetrics metrics = style != null ? style.metrics : new FormMetrics();
         int longestOrigin = lib.LongestOriginLabel;
         var probe = new GameObject("FormsCheckText", typeof(TextMeshPro)) { hideFlags = HideFlags.HideAndDontSave };
+        var artProbe = new GameObject("FormsCheckArtText", typeof(TextMeshPro)) { hideFlags = HideFlags.HideAndDontSave };
         try
         {
             var measure = new TmpFormText(probe.GetComponent<TextMeshPro>());
+            TextMeshPro artText = artProbe.GetComponent<TextMeshPro>();
+            if (style != null && style.artValueFont != null)
+            {
+                artText.font = style.artValueFont;
+                artText.fontSharedMaterial = style.artValueFont.material;
+            }
+            var artMeasure = new TmpFormText(artText);
             var seen = new HashSet<DocumentTemplateSO>();
             foreach (CaseBlueprintSO blueprint in TravellerBlueprints(lib))
                 foreach (DocumentTemplateSO template in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : new DocumentTemplateSO[0])
                 {
                     if (template == null || !seen.Add(template))
                         continue;
-                    foreach (string problem in DocumentForm.Problems(template, lib.Agency, longestOrigin, metrics, measure))
+                    foreach (string problem in DocumentForm.Problems(template, lib.Agency, longestOrigin, metrics, ArtLayout.IsArt(template.form) ? artMeasure : measure))
                         problems.Add($"{template.displayName} ({template.name}): {problem} (its form, FormLayout.Check; edit the template's form or FormStyle_Agency).");
+                    foreach (string problem in ArtLayout.CutWords(template.form, ContentWords(lib, template), artMeasure))
+                        problems.Add($"{template.displayName} ({template.name}): {problem}.");
                 }
         }
         finally
         {
             Object.DestroyImmediate(probe);
+            Object.DestroyImmediate(artProbe);
         }
         return problems;
     }
+
+    /// <summary>How many of a category's longest words (by letters) CutWords measures in each field.</summary>
+    private const int CutWordsPerField = 12;
+
+    /// <summary>The content's longest words each of <paramref name="template"/>'s fields prints (ArtLayout.CutWords), in capitals as a printed form sets them (ArtLayout.LongestWords, CutWordsPerField a field): FieldWords.Of (pure, tested) picks them from the library's lists, every given name a traveller can carry (every place's lists, the 2150 citizens' among them, and every premade's own name) for a Name or a Signature field and every place's origin label for a Destination field; none for the other fields. Those keep only FormLayout.Check's probe (ArtLayout.Problems' word check), whose words stand in for theirs only where they are as long: a status (8 characters), an incident number (9), a credits figure (9) and a fact's word (up to 14) are longer than their probes' longest words (6, 6, 6 and 11), so they are not measured whole (docs/pending/DOC-LOOK.md, "The words").</summary>
+    private static IReadOnlyList<IReadOnlyList<string>> ContentWords(ContentLibrarySO lib, DocumentTemplateSO template) =>
+        FieldWords.Of(template.fieldSpecs,
+                      lib.Profiles.Where(p => p != null).SelectMany(p => (p.maleNames ?? new string[0]).Concat(p.femaleNames ?? new string[0])),
+                      lib.Legendaries.Where(l => l != null).Select(l => l.displayName),
+                      lib.Profiles.Where(p => p != null).Select(p => p.OriginLabel),
+                      texts => ArtLayout.LongestWords(texts, CutWordsPerField));
 }

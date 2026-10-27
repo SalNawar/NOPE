@@ -22,7 +22,14 @@ using UnityEngine.UI;
 /// F1 shows the keys (the PC's shortcut card, whose
 /// desk section is ControlRules.DeskCard); each closes what is in its way
 /// first (the wheel, the city, the switchboard), so a key does the same from
-/// every desk state. Left-clicks act where they land (the documents, the stamps, the
+/// every desk state. While anything is held (the desk's HoldRegistry: a paper, the
+/// folder, a dater, a tool; or a plug on the switchboard), a right-click, Esc or a view key (TAB, Q, A, D, S,
+/// F1) lets go of it first and does nothing else (BUG-55: no view change under
+/// a held thing, nothing committed), and losing the focus (Alt+Tab) lets go
+/// of it without committing it. While an overlay holds the input
+/// (InputGate.Blocked) it takes no input at all; F1 does nothing while the PC
+/// cannot open (PcFrame.CanOpen: the screen is off, BUG-58c).
+/// Left-clicks act where they land (the documents, the stamps, the
 /// tabs, the buttons). It runs after the desktop's poller and before the
 /// EventSystem; Build Office UI builds it and the PC's tab; BoothCoordinator
 /// says when the tab is live.
@@ -90,7 +97,7 @@ public sealed class OfficeControls : MonoBehaviour
         inspecting: inspect != null && inspect.IsOn,
         cityView: cityView != null && cityView.IsOn,
         deskView: deskView != null && deskView.IsOn,
-        dragging: (desk != null && desk.IsDragging) || (stamps != null && stamps.IsCarrying) || (_switchboard != null && _switchboard.IsDragging),
+        dragging: HoldRegistry.Desk.IsHolding || (desk != null && desk.IsDragging) || (stamps != null && stamps.IsCarrying) || (_switchboard != null && _switchboard.IsDragging),
         textFieldFocused: keyboard != null && keyboard.TextFieldFocused,
         switchboard: _switchboard != null && _switchboard.IsOpen);
 
@@ -135,10 +142,7 @@ public sealed class OfficeControls : MonoBehaviour
         switch (LastBackOut)
         {
             case BackOutStep.CancelDrag:
-                if (_switchboard != null && _switchboard.CancelDrag())
-                    break;
-                if (desk == null || !desk.CancelDrag())
-                    stamps.CancelCarry();
+                LetGo();
                 break;
             case BackOutStep.CloseWheel:
                 wheel.Close();
@@ -163,6 +167,24 @@ public sealed class OfficeControls : MonoBehaviour
                 break;
         }
         return LastBackOut;
+    }
+
+    /// <summary>Lets go of what is held: a plug on the switchboard (its own drag, back to its socket), else the hold registry's hold (it cancels its drag: back where it was picked up), else a paper's drag or a carried dater.</summary>
+    private void LetGo()
+    {
+        if (_switchboard != null && _switchboard.CancelDrag())
+            return;
+        if (HoldRegistry.Desk.IsHolding)
+            HoldRegistry.Desk.Cancel();
+        else if ((desk == null || !desk.CancelDrag()) && stamps != null)
+            stamps.CancelCarry();
+    }
+
+    /// <summary>The game lost the focus (Alt+Tab, another window): whatever is held is let go without being committed (BUG-55: the Input System's release on focus loss never drops it).</summary>
+    private void OnApplicationFocus(bool focused)
+    {
+        if (!focused)
+            HoldRegistry.Desk.OnFocusLost();
     }
 
     /// <summary>The PC's grey tab: to the PC, or back to the desk (only while the switch is live).</summary>
@@ -193,6 +215,9 @@ public sealed class OfficeControls : MonoBehaviour
     {
         switch (action)
         {
+            case ControlAction.CancelHold:
+                LetGo();
+                break;
             case ControlAction.ToggleInspect:
                 ClearTheDesk();
                 if (inspect != null)

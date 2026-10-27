@@ -10,12 +10,13 @@ using System.Collections.Generic;
 /// a lift raised when they are measured is not counted twice) as
 /// DeskSlides.Obstacle sweeps it (a track's footprint to its overshoot peak
 /// toward the mat, a lift's top raised by its peak), and keeps the swept boxes
-/// of the homes something slides or lifts in (DeskSlides.Sweeps). A dragged
-/// paper keeps over the box under it (TryTop: DeskController's carry floor),
-/// and a paper let go keeps clear of each track's swept strip (Strips:
-/// DeskController.ClearOfBlockers; 0 px over a resting paper). DeskLayout
-/// holds one (RefreshObstacles, TrySweptTop, SweptStrips). Pure; TryTop and
-/// Strips allocate nothing.
+/// of the homes something slides or lifts in (DeskSlides.Sweeps). A held
+/// paper or folder is drawn above the tallest swept box (MaxHeight: DOC-HANDLE's
+/// one held size, HeldOnTop, through DeskLayout.SweptPeak; TryTop gives the box
+/// under a point), and a paper let go keeps clear of each track's swept strip
+/// (Strips: DeskController.RestOf's keep-outs; 0 px over a resting paper).
+/// DeskLayout holds one (RefreshObstacles, SweptPeak, TrySweptTop,
+/// SweptStrips). Pure; MaxHeight, TryTop and Strips allocate nothing.
 /// </summary>
 public sealed class DeskSweeps
 {
@@ -26,6 +27,18 @@ public sealed class DeskSweeps
 
     /// <summary>Forgets every swept box (the desk unbound).</summary>
     public void Clear() => _boxes.Clear();
+
+    /// <summary>The tallest swept box's height (metres over the desk, at its overshoot or lift peak), or 0 with none: a held paper or folder is drawn above it, with the desk's other obstacles (DOC-HANDLE's one held size, HeldOnTop; DeskLayout.SweptPeak).</summary>
+    public float MaxHeight
+    {
+        get
+        {
+            float top = 0f;
+            for (int i = 0; i < _boxes.Count; i++)
+                top = Math.Max(top, _boxes[i].height);
+            return top;
+        }
+    }
 
     /// <summary>
     /// How tall (metres over the desk) a home's objects stand at rest: the

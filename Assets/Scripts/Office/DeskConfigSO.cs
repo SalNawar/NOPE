@@ -52,7 +52,7 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The tint the Analysis beacon's click leaves on the two boxes of the pair the analysis marked (the desk machines spec §10; a translucent amber, under a logged difference's mark).</summary>
     public Color analysisFlagTint = new Color(1f, 0.7f, 0.24f, 0.4f);
 
-    /// <summary>The deepest shadow behind the scanner, in metres, where its body hides a paper from the office camera (ScannerClearance: a paper left there moves out to the left, right or front; the desk-first redesign, item 4).</summary>
+    /// <summary>The deepest shadow behind the scanner, in metres, where its body hides a paper from the office camera (ScannerClearance.Shadow; registered in DeskObstacles, so a paper dropped there rests just clear of it: the desk-first redesign, item 4).</summary>
     [Min(0f)] public float scannerShadowMax = 0.35f;
 
     /// <summary>The day-1 note above the scanner: a UI string key (world_source.json ui.strings; empty = no note).</summary>
@@ -71,14 +71,50 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The distance between two of the counter's spots, in metres (closer when the counter is too short).</summary>
     [Min(0f)] public float counterSpacing = 0.17f;
 
-    /// <summary>Seconds a paper takes to slide (hand-over, back from the scanner, away at the decision).</summary>
+    /// <summary>Seconds a paper takes to slide by itself (back from the scanner, away at the decision: the hand-back's slide away); the least time of any way across the desk.</summary>
     [Min(0f)] public float paperSlideSeconds = 0.25f;
+
+    /// <summary>
+    /// The staged hand-over (DOC-HANDLE, BUG-49b; the feel bible's A10): each
+    /// paper the traveller hands over slides in from the hand-over point onto
+    /// the counter in handOverSeconds (0.35 to 0.5) and lands with a slap
+    /// (its landing settle, and DeskEvents.DocumentLanded on that frame: the
+    /// sound is FEEDBACK's), each next paper handOverStagger seconds after the
+    /// one before (one paper bound per frame at most: call-next never builds
+    /// every paper in one frame, BUG-65g); paperPool clones of the paper
+    /// template wait ready, made one per frame between cases.
+    /// </summary>
+    [Range(0.35f, 0.5f)] public float handOverSeconds = 0.42f;
+
+    /// <inheritdoc cref="handOverSeconds"/>
+    [Min(0f)] public float handOverStagger = 0.08f;
+
+    /// <inheritdoc cref="handOverSeconds"/>
+    [Min(0)] public int paperPool = 6;
 
     /// <summary>Height between two stacked papers in metres (each paper above the desk adds one step).</summary>
     [Min(0.0002f)] public float paperStackStep = 0.0015f;
 
-    /// <summary>How high a dragged paper is lifted above the stack, in metres.</summary>
+    /// <summary>How high a dragged paper is lifted above the stack, in metres (the pick-up pop).</summary>
     [FormerlySerializedAs("heldPaperLift"), Min(0f)] public float dragLift = 0.02f;
+
+    /// <summary>How much higher the top paper of the stack lies than the stack's own step (metres; DOC-HANDLE, BUG-40b): its edge stands off the one under it, so the order reads at a glance (the contact shadow by rank is DOC-LOOK's).</summary>
+    [Min(0f)] public float topLift = 0.003f;
+
+    /// <summary>
+    /// A held thing drawn above everything (DOC-HANDLE, BUG-8; HeldOnTop): it
+    /// is drawn in front of every prop up to the tallest registered obstacle
+    /// (DeskObstacles), and never lower than heldClearance metres over the
+    /// desk (props not registered yet), moved toward the camera along its rays
+    /// (its picture unchanged) at most down to heldLeastRatio of the way.
+    /// </summary>
+    [Min(0f)] public float heldClearance = 0.16f;
+
+    /// <inheritdoc cref="heldClearance"/>
+    [Range(0.1f, 1f)] public float heldLeastRatio = 0.3f;
+
+    /// <summary>The part of the reading view's screen a resting paper lies wholly inside (viewport; DOC-HANDLE, BUG-6: the whole paper stays in view, DropResolver): a dropped paper that would reach past it rests just inside it.</summary>
+    public Rect restViewport = new Rect(0.01f, 0.02f, 0.98f, 0.96f);
 
     /// <summary>
     /// Papers and the machines (Saleh's 1018a playtest: "when you move a
@@ -87,8 +123,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// paper passes (metres: dragged over it, and on every way over it), how
     /// fast it is carried into a machine's dock, out and back (metres a second;
     /// never quicker than paperSlideSeconds), how much of a card's length goes
-    /// into a slot (the rest stays out of the mouth, to be taken back), and the
-    /// shake a refused paper or the folder gives (degrees a second on its swing).
+    /// into a slot (the rest stays out of the mouth, to be taken back), and how
+    /// far a passport may overhang the chip reader's pad (a share: DockFit
+    /// sizes it to the pad).
     /// </summary>
     [Min(0f)] public float dockClearance = 0.02f;
 
@@ -99,7 +136,16 @@ public sealed class DeskConfigSO : ScriptableObject
     [Range(0.1f, 1f)] public float slotInsertShare = 0.6f;
 
     /// <inheritdoc cref="dockClearance"/>
-    [Min(0f)] public float refuseShake = 90f;
+    [Range(0f, 0.5f)] public float padOverhang = 0.08f;
+
+    /// <summary>A refused paper's or the folder's shake in place (the feel bible's A11: a machine's "no", the counter before the verdict): side to side this far (metres), this many cycles in this many seconds (PaperPhysics.Shake); it never flies back.</summary>
+    [Min(0f)] public float refuseShakeDistance = 0.004f;
+
+    /// <inheritdoc cref="refuseShakeDistance"/>
+    [Min(0f)] public float refuseShakeSeconds = 0.2f;
+
+    /// <inheritdoc cref="refuseShakeDistance"/>
+    [Min(1)] public int refuseShakeCycles = 3;
 
     [Header("The counter and the desk (Papers, Please's zones, Saleh 2026-10-06)")]
     /// <summary>The counter: the slim strip this deep (metres) at the desk's far edge along the office view, on the traveller's side (Saleh 2026-10-06: "reduce the size of the top counter line"; it was 0.14); a paper dropped there once the passport carries its verdict hands the papers back, before that it bounces back to the desk.</summary>
@@ -108,16 +154,13 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How far nearer than the counter's far edge the papers handed over land (metres: their centres' row, DeskZones.CounterSpot); small papers there reach over the slim strip onto the desk.</summary>
     [Min(0f)] public float counterSpotInset = 0.07f;
 
-    /// <summary>A document's scale on the counter (small: a share of its own size).</summary>
+    /// <summary>A document's scale on the counter (small: a share of its own size; PaperSizes.SheetScale: one world size per zone, whatever the view).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
 
     /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
     [Min(0f)] public float counterRowDepth = 0.05f;
 
-    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the counter strip at the top, the paper machines' beds at the right, the tool pouch at the bottom and the inspect button; the desk layout spec §2): the spread lays them inside it (PaperSpread), off the stamp rack at its top right where it can (DeskController.Spread).</summary>
-    public Rect readingArea = new Rect(0.02f, 0.17f, 0.78f, 0.63f);
-
-    /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
+    /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): its one size on the desk, in the office view and the reading view alike (Saleh's D1), read in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
 
     /// <summary>How thick each thing lying on the desk is (metres; Saleh's 1007d playtest: "too flat when you see them from the side"; 2026-10-17: "use canva and blender to make actual 3d documents"): a sheet of paper, a plastic card, a passport booklet (its covers and pages), the rulebook's folder (its boards and loose sheets), each as deep as its model under its face (DeskPaperDepth). The stack makes room for it (PaperLayers.Lifts) and the contact shadow lies at its foot.</summary>

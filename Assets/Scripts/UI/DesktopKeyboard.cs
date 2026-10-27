@@ -2,20 +2,37 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 /// <summary>
 /// The desktop's one keyboard poller (the PC redesign KB1-KB3, section 3.4,
-/// 3.5; on the desktop canvas). While the desktop takes input (its raycaster
-/// is on: the frame open, the screen on; BoothRules.DesktopInteractive) it
+/// 3.5; on the desktop canvas). While the desktop takes input
+/// (MonitorScreen.IsInteractive: the frame open, the screen on;
+/// BoothRules.DesktopInteractive), from the press frame on, also while the
+/// frame's picture still powers on and the desktop's raycaster is held off
+/// (PcFrame.PictureMoving: clicks wait for the whole picture, the keys and
+/// the back-out never do; Saleh's R3/R4, "Esc = Settings everywhere"), it
 /// reads the Input System's keyboard, turns each key pressed this frame into
 /// a chord and resolves it through the one table, ShortcutMap, in the
 /// desktop's context (the focused window, a text field, an open menu, the
 /// app's focus ring), then runs the command: Escape runs the one chain
 /// (DesktopEscapeRule: a context menu or the shelf's Books menu, the shortcut card, the search results,
-/// the search field's text, a focused field, the Start menu, a drag) and stamps the frame when
-/// it takes the press, so the PC frame's Escape (OfficeViewController) skips
-/// it; F1 (and the app's Keys button) shows or hides the shortcut card; the
+/// the search field's text, a focused field, the Start menu, a drag), and with
+/// nothing left to close brings the Settings app to the front (a right-click
+/// with nothing to close does nothing: PcBackOut; Saleh's R3/R4: Esc opens
+/// Settings, only Q and the bezel leave the PC); it stamps every back-out
+/// press, so the office's back-out (OfficeControls) never closes the PC.
+/// With the PC open and its screen off (the desktop takes no input) it
+/// still takes the back-out: Esc turns the screen on and brings Settings
+/// forward, a right-click does nothing (PcBackOut.ScreenOff; R3/R4: "Esc
+/// opens the same Settings window everywhere"). While an overlay holds the
+/// InputGate (the cheat panel over the PC; RUN-SAFE's BUG-68a contract) it
+/// polls nothing at all: no key, no right-click, no screen-off back-out, so
+/// an Esc there never brings Settings forward behind the panel; and it takes
+/// the EventSystem's selection off a desktop text field that has the
+/// keyboard (PcBackOut.Poller's Gated): the EventSystem still updates the
+/// selected field under the gate, so TMP would take the typing there and its
+/// own Esc would cancel the edit, putting back the text the field had when it
+/// was focused; the deselect ends the edit and keeps the text. F1 (and the app's Keys button) shows or hides the shortcut card; the
 /// icons take the arrows and Enter while no window has the focus; Ctrl+V
 /// with Notes focused adds the clip as a clipping; with Orders focused the
 /// arrows walk its tree, Enter acts on the selected node and Ctrl+=, Ctrl+-
@@ -33,7 +50,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
     /// <summary>The keys the table uses, as the Input System names them (the numpad's Enter, plus and minus count as Enter, = and -).</summary>
     private static readonly (Key key, ShortcutKey shortcut)[] Keys =
     {
-        (Key.F, ShortcutKey.F), (Key.Digit1, ShortcutKey.Digit1), (Key.Digit2, ShortcutKey.Digit2), (Key.Digit3, ShortcutKey.Digit3),
+        (Key.F, ShortcutKey.F), (Key.K, ShortcutKey.K), (Key.Digit1, ShortcutKey.Digit1), (Key.Digit2, ShortcutKey.Digit2), (Key.Digit3, ShortcutKey.Digit3),
         (Key.Digit4, ShortcutKey.Digit4), (Key.Digit5, ShortcutKey.Digit5), (Key.Digit6, ShortcutKey.Digit6), (Key.Tab, ShortcutKey.Tab),
         (Key.PageUp, ShortcutKey.PageUp), (Key.PageDown, ShortcutKey.PageDown), (Key.F6, ShortcutKey.F6), (Key.Backslash, ShortcutKey.Backslash),
         (Key.B, ShortcutKey.B), (Key.S, ShortcutKey.S), (Key.LeftArrow, ShortcutKey.Left), (Key.RightArrow, ShortcutKey.Right),
@@ -43,9 +60,6 @@ public sealed class DesktopKeyboard : MonoBehaviour
         (Key.Minus, ShortcutKey.Minus), (Key.NumpadMinus, ShortcutKey.Minus), (Key.Digit0, ShortcutKey.Digit0), (Key.F1, ShortcutKey.F1),
         (Key.Escape, ShortcutKey.Escape), (Key.F10, ShortcutKey.F10), (Key.ContextMenu, ShortcutKey.Menu),
     };
-
-    /// <summary>The desktop canvas's raycaster (on only while the desktop takes input).</summary>
-    [SerializeField] private GraphicRaycaster raycaster;
 
     /// <summary>The window stack (the focused window, the drag Escape cancels).</summary>
     [SerializeField] private DesktopWindowManager manager;
@@ -71,10 +85,22 @@ public sealed class DesktopKeyboard : MonoBehaviour
     /// <summary>The shortcut card (F1, the app's Keys button, Settings' Show shortcuts).</summary>
     [SerializeField] private DesktopWindow card;
 
+    /// <summary>The desktop's apps (Esc with nothing left to close opens Settings); on the same canvas, found there when not wired.</summary>
+    [SerializeField] private DesktopApps apps;
+
+    /// <summary>The PC frame (is the PC open while its screen is off?); found in the scene when not wired.</summary>
+    [SerializeField] private PcFrame frame;
+
+    /// <summary>The PC's screen (does the desktop take input? Esc turns it on when it is off); the desktop canvas's parent's, found there when not wired.</summary>
+    [SerializeField] private MonitorScreen screen;
+
     private DesktopWindow _notesWindow;
 
     /// <summary>A text field that saw the Escape the desktop took for something else: it gets its focus back after the EventSystem ran.</summary>
     private TMP_InputField _refocus;
+
+    /// <summary>False while a right-click runs the back-out (it never opens Settings); true for the Esc key.</summary>
+    private bool _backOutFromKey = true;
 
     /// <summary>The frame in which the desktop last took an Escape press (-1: never); the PC frame's Escape skips that frame.</summary>
     public int EscapeTakenFrame { get; private set; } = -1;
@@ -89,6 +115,12 @@ public sealed class DesktopKeyboard : MonoBehaviour
     {
         if (notes != null)
             _notesWindow = notes.GetComponent<DesktopWindow>();
+        if (apps == null)
+            apps = GetComponent<DesktopApps>(); // a scene built before the field: the apps share the canvas
+        if (frame == null)
+            frame = FindFirstObjectByType<PcFrame>(FindObjectsInactive.Include); // a scene built before the fields
+        if (screen == null)
+            screen = GetComponentInParent<MonitorScreen>();
     }
 
     /// <summary>F1 and the app's Keys button: shows the shortcut card, or hides it.</summary>
@@ -102,18 +134,28 @@ public sealed class DesktopKeyboard : MonoBehaviour
             card.Open();
     }
 
-    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input.</summary>
+    /// <summary>Polls the keys (and a press, which hides the app's focus ring) while the desktop takes input, from the press frame (never gated on the raycaster, which the picture's power-on holds off: an Esc or a right-click then must still be the PC's, never the office's way out); while the InputGate is held, no key, and a focused desktop field is left (PcBackOut.Poller).</summary>
     private void Update()
     {
-        if (raycaster == null || !raycaster.isActiveAndEnabled)
+        // Under the cheat panel (the InputGate, BUG-68a): no key, and a focused field is left; the screen-off back-out on a dark PC; else the desktop's keys while it takes input.
+        PcPoller poller = PcBackOut.Poller(InputGate.Blocked, screen != null && screen.IsInteractive, frame != null && frame.IsOpen, screen == null || screen.IsOn);
+        if (poller == PcPoller.Gated)
+            LeaveFieldUnderGate();
+        if (poller == PcPoller.ScreenOff)
+            BackOutScreenOff();
+        if (poller != PcPoller.Desktop)
             return;
 
         Mouse mouse = Mouse.current;
         if (mouse != null && app != null && (mouse.leftButton.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame))
             app.PointerPressed();
-        // A right-click backs out as Esc does (Papers, Please's controls: ControlRules): the same chain, stamped when it takes the press.
+        // A right-click backs out as Esc does (Papers, Please's controls: ControlRules): the same chain, always stamped; with nothing to close it does nothing.
         if (mouse != null && mouse.rightButton.wasPressedThisFrame)
+        {
+            _backOutFromKey = false;
             Press(new KeyChord(ShortcutKey.Escape));
+            _backOutFromKey = true;
+        }
 
         Keyboard keyboard = Keyboard.current;
         if (keyboard == null)
@@ -126,6 +168,46 @@ public sealed class DesktopKeyboard : MonoBehaviour
         foreach ((Key key, ShortcutKey shortcut) in Keys)
             if (keyboard[key].wasPressedThisFrame)
                 Press(new KeyChord(shortcut, ctrl, shift, alt));
+        // An Esc no chord took (held with a modifier) is still the PC's: Settings, never the way out (R3/R4).
+        if (keyboard.escapeKey.wasPressedThisFrame && EscapeTakenFrame != Time.frameCount)
+        {
+            EscapeTakenFrame = Time.frameCount;
+            if (apps != null)
+                apps.OpenApp(DesktopAppIds.Settings);
+        }
+    }
+
+    /// <summary>
+    /// The InputGate held (PcBackOut.Poller's Gated: the cheat panel over the
+    /// PC): a desktop text field that has the keyboard loses the EventSystem's
+    /// selection, before the EventSystem runs, so TMP reads no key there under
+    /// the panel: no typing, and no Esc of its own, which would cancel the edit
+    /// and put back the text the field had when it was focused
+    /// (restoreOriginalTextOnEscape is on in each of OfficeGameplay's six
+    /// fields). The deselect ends the edit without a cancel, so
+    /// the text is kept, as MonitorScreen.SetInteractive(false) does; the
+    /// player's next click on the field gives it the keyboard again.
+    /// </summary>
+    private void LeaveFieldUnderGate()
+    {
+        if (FocusedField() != null)
+            EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    /// <summary>The PC open with its screen off (PcBackOut.Poller's ScreenOff: the frame open, the screen off, the InputGate free): the back-out is still the PC's (stamped, so the office's never closes it); Esc turns the screen on and brings Settings forward, a right-click does nothing (PcBackOut.ScreenOff).</summary>
+    private void BackOutScreenOff()
+    {
+        Keyboard keyboard = Keyboard.current;
+        Mouse mouse = Mouse.current;
+        bool esc = keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
+        if (!esc && (mouse == null || !mouse.rightButton.wasPressedThisFrame))
+            return;
+        EscapeTakenFrame = Time.frameCount;
+        if (PcBackOut.ScreenOff(esc) != PcBackOutStep.WakeAndOpenSettings)
+            return;
+        screen.PowerOn();
+        if (apps != null)
+            apps.OpenApp(DesktopAppIds.Settings);
     }
 
     /// <summary>A field that saw an Escape taken for something else gets its focus back (after TMP's own cancel left it).</summary>
@@ -246,8 +328,16 @@ public sealed class DesktopKeyboard : MonoBehaviour
             manager != null && manager.Dragging,
             app != null && app.Holding);
         DesktopEscape step = DesktopEscapeRule.Resolve(state);
-        if (step == DesktopEscape.None)
-            return;
+        EscapeTakenFrame = Time.frameCount; // every back-out on the PC is the desktop's: it never closes the PC (only Q and the bezel do)
+        switch (PcBackOut.Resolve(step, _backOutFromKey))
+        {
+            case PcBackOutStep.OpenSettings:
+                if (apps != null)
+                    apps.OpenApp(DesktopAppIds.Settings);
+                return;
+            case PcBackOutStep.Swallow:
+                return;
+        }
 
         // The focused field sees this press too (TMP's cancel, after this poller): it must not undo the typing.
         if (field != null)
@@ -290,7 +380,6 @@ public sealed class DesktopKeyboard : MonoBehaviour
                 app.ReleaseHold();
                 break;
         }
-        EscapeTakenFrame = Time.frameCount;
     }
 
     /// <summary>The desktop's text field that has the keyboard, or null.</summary>

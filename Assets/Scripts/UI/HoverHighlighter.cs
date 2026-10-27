@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -10,27 +11,31 @@ using UnityEngine.UI;
 /// One persistent instance (created by InteractionFeedbackBootstrap). Each frame
 /// it reads what the pointer is over from the EventSystem (reusing the Input
 /// System UI module's own raycast) and, when that changes, moves the hover
-/// highlight and swaps the cursor: an outline and hand cursor on any
-/// interactable Clickable (an office object) or Selectable (UI), the arrow
-/// elsewhere. An office object's outline is its meshes drawn again through
-/// Graphics.RenderMesh in two steps, every frame while hovered (no scene
-/// objects, no renderer features, the art's own objects untouched): first
-/// as they are into the stencil (the mask: its whole silhouette), then
-/// pushed out along their normals where the mask is not (the hull:
-/// TimeDesk/HoverHull), so only a rim around the silhouette shows, never
-/// depth-tested against the desk under it (the review of the desk v3
-/// capture: the felt and the shell cut the old rim into dashes) and never
-/// over the object itself, thin parts included. The rim is the same screen
-/// px for every object (InteractionFeedbackSO.outlinePx), and it fades in
-/// on the new object and out on the old one (outlineFadeSeconds, HoverFade;
-/// a cut under Reduced Motion): it never pops. A Clickable with no outline
-/// renderers (a hit zone) gets the hand cursor only.
+/// highlight and swaps the cursor: the hand cursor on any interactable
+/// Clickable (an office object) or Selectable (UI), the arrow elsewhere
+/// (Saleh's D15). A paper, the rulebook and its tabs (an IHoverLift on the
+/// Clickable or above it) lift, Papers, Please-style, and get no outline; a
+/// prop gets a thin rim of InteractionFeedbackSO.outlinePixels round its
+/// silhouette: its meshes drawn again through Graphics.RenderMesh in two
+/// steps, every frame while hovered, only on the camera the pointer's raycast
+/// looks through (BUG-10a; no scene objects, no renderer features, the art's
+/// own objects untouched): first as they are into the stencil (the mask: its
+/// whole silhouette), then pushed out in screen space from the mesh's centre
+/// where the mask is not (the hull: TimeDesk/HoverHull), so only a rim around
+/// the silhouette shows, never depth-tested against the desk under it (the
+/// review of the desk v3 capture: the felt and the shell cut the old rim into
+/// dashes) and never over the object itself, thin parts included. The rim is
+/// the same screen px for every object, and it fades in on the new object and
+/// out on the old one (outlineFadeSeconds, HoverFade; a cut under Reduced
+/// Motion): it never pops. While anything is held (HoldRegistry.Desk) nothing
+/// is hovered: no outline or lift flashes under a carried paper. A Clickable
+/// with no outline renderers (a hit zone) gets the hand cursor only.
 /// </summary>
 public sealed class HoverHighlighter : MonoBehaviour
 {
     private static readonly int ColorId = Shader.PropertyToID("_Color");
-    private static readonly int WidthId = Shader.PropertyToID("_Width");
     private static readonly int WidthPxId = Shader.PropertyToID("_WidthPx");
+    private static readonly int CentreId = Shader.PropertyToID("_Centre");
     private static readonly int MaskId = Shader.PropertyToID("_Mask");
     private static readonly int StencilCompId = Shader.PropertyToID("_StencilComp");
     private static readonly int StencilPassId = Shader.PropertyToID("_StencilPass");
@@ -54,7 +59,7 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>How far the hovered object's outline and the left one's have faded in (0 to 1).</summary>
     private float _shown, _fadingShown;
 
-    /// <summary>Each outline's colour with its fade (made once; one block each, so neither overwrites the other's draw).</summary>
+    /// <summary>Each outline's colour with its fade and each mesh's centre (made once; one block each, so neither overwrites the other's draw).</summary>
     private MaterialPropertyBlock _shownBlock, _fadingBlock;
 
     /// <summary>The outline material with the settings' colour and width (made once): the hull, drawn where the mask is not.</summary>
@@ -62,6 +67,15 @@ public sealed class HoverHighlighter : MonoBehaviour
 
     /// <summary>The same shader as the mask (made once): the hovered meshes' silhouette into the stencil, no colour.</summary>
     private Material _maskMaterial;
+
+    /// <summary>The camera the pointer's raycast looks through (the office camera): the outline draws on it alone (BUG-10a).</summary>
+    private Camera _eventCamera;
+
+    /// <summary>The cameras the hovered object's outline and the left one's draw on: the pointer's camera when each was hovered.</summary>
+    private Camera _hullCamera, _fadingCamera;
+
+    /// <summary>The hovered paper's or folder's lift (null on a prop).</summary>
+    private IHoverLift _lift;
 
     /// <summary>Reused pointer data for the fallback raycast.</summary>
     private PointerEventData _pointerData;
@@ -98,10 +112,10 @@ public sealed class HoverHighlighter : MonoBehaviour
         {
             _hullMaterial = new Material(settings.outlineMaterial) { name = settings.outlineMaterial.name + " (hover)" };
             _hullMaterial.SetColor(ColorId, settings.outlineColor);
-            _hullMaterial.SetFloat(WidthId, settings.worldOutlineWidth);
-            _hullMaterial.SetFloat(WidthPxId, settings.outlinePx);
+            _hullMaterial.SetFloat(WidthPxId, settings.outlinePixels);
             Stencil(_hullMaterial, false);
             _maskMaterial = new Material(settings.outlineMaterial) { name = settings.outlineMaterial.name + " (hover mask)" };
+            _maskMaterial.SetFloat(WidthPxId, 0f);
             Stencil(_maskMaterial, true);
         }
 
@@ -148,15 +162,17 @@ public sealed class HoverHighlighter : MonoBehaviour
     public static void Stencil(Material material, bool mask)
     {
         material.SetFloat(MaskId, mask ? 1f : 0f);
-        material.SetFloat(StencilCompId, (float)(mask ? UnityEngine.Rendering.CompareFunction.Always : UnityEngine.Rendering.CompareFunction.NotEqual));
-        material.SetFloat(StencilPassId, (float)(mask ? UnityEngine.Rendering.StencilOp.Replace : UnityEngine.Rendering.StencilOp.Keep));
-        material.SetFloat(ColorMaskId, mask ? 0f : 15f);
+        material.SetFloat(StencilCompId, (float)(mask ? CompareFunction.Always : CompareFunction.NotEqual));
+        material.SetFloat(StencilPassId, (float)(mask ? StencilOp.Replace : StencilOp.Keep));
+        material.SetFloat(ColorMaskId, mask ? 0f : (float)ColorWriteMask.All);
         material.renderQueue = mask ? MaskQueue : HullQueue;
     }
 
-    /// <summary>The interactable under the pointer, or null (hierarchy walk only when the hit object changes).</summary>
+    /// <summary>The interactable under the pointer, or null (hierarchy walk only when the hit object changes); nothing while something is held (BUG-10a: no outline or lift under a carried paper).</summary>
     private Component FindHoverTarget()
     {
+        if (HoldRegistry.Desk.IsHolding)
+            return null;
         GameObject hit = PointerHitObject();
         if (hit != _lastHitObject)
         {
@@ -171,6 +187,7 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>
     /// Topmost object under the pointer: the Input System UI module's own raycast
     /// when that module is active (no second raycast), else a direct EventSystem raycast.
+    /// Remembers the camera the hit's raycaster looks through (the outline draws on it alone).
     /// </summary>
     private GameObject PointerHitObject()
     {
@@ -180,7 +197,11 @@ public sealed class HoverHighlighter : MonoBehaviour
             return null;
 
         if (eventSystem.currentInputModule is InputSystemUIInputModule module)
-            return module.GetLastRaycastResult(pointer.deviceId).gameObject;
+        {
+            RaycastResult result = module.GetLastRaycastResult(pointer.deviceId);
+            _eventCamera = result.module != null ? result.module.eventCamera : null;
+            return result.gameObject;
+        }
 
         if (_pointerData == null || _pointerDataOwner != eventSystem)
         {
@@ -191,6 +212,7 @@ public sealed class HoverHighlighter : MonoBehaviour
         _pointerData.position = pointer.position.ReadValue();
         _hits.Clear();
         eventSystem.RaycastAll(_pointerData, _hits);
+        _eventCamera = _hits.Count > 0 && _hits[0].module != null ? _hits[0].module.eventCamera : null;
         return _hits.Count > 0 ? _hits[0].gameObject : null;
     }
 
@@ -218,17 +240,24 @@ public sealed class HoverHighlighter : MonoBehaviour
         return false;
     }
 
-    /// <summary>Turns the highlight on a target on or off: an office object's outline meshes, or a UI element's outline effect.</summary>
+    /// <summary>Turns the highlight on a target on or off: a paper's or the folder's lift, a prop's outline meshes, or a UI element's outline effect.</summary>
     private void SetHighlighted(Component target, bool on)
     {
         if (target is Clickable clickable)
         {
             if (!on)
             {
+                if (_lift != null)
+                {
+                    // The paper left: it lies again (it had no outline to fade).
+                    _lift.HoverLift(0f);
+                    _lift = null;
+                }
                 // The object left: its outline fades out from where it was while the next one's fades in.
                 _fading.Clear();
                 _fading.AddRange(_hull);
                 _fadingShown = _shown;
+                _fadingCamera = _hullCamera;
                 _hull.Clear();
                 _shown = 0f;
                 return;
@@ -238,6 +267,14 @@ public sealed class HoverHighlighter : MonoBehaviour
             if (clickable == null)
                 return;
 
+            _lift = clickable.GetComponentInParent<IHoverLift>();
+            if (_lift != null)
+            {
+                // A paper, the folder or its tabs lift, Papers, Please-style, and get no outline (D15).
+                _lift.HoverLift(settings.paperHoverLift);
+                return;
+            }
+            _hullCamera = _eventCamera;
             foreach (Renderer r in clickable.Outline)
                 if (r != null && r.TryGetComponent(out MeshFilter filter) && filter.sharedMesh != null)
                     _hull.Add((filter.sharedMesh, r));
@@ -267,7 +304,7 @@ public sealed class HoverHighlighter : MonoBehaviour
         }
     }
 
-    /// <summary>Draws this frame's outline hulls (every submesh of every visible outline renderer): the hovered object's fading in, the one left fading out (HoverFade).</summary>
+    /// <summary>Draws this frame's outline hulls (every submesh of every visible outline renderer): the hovered object's fading in, the one left fading out (HoverFade), each on the camera the pointer looked through when it was hovered.</summary>
     private void DrawHull()
     {
         if (_hullMaterial == null || _maskMaterial == null)
@@ -279,29 +316,30 @@ public sealed class HoverHighlighter : MonoBehaviour
             _fading.Clear();
         _shownBlock ??= new MaterialPropertyBlock();
         _fadingBlock ??= new MaterialPropertyBlock();
-        Draw(_fading, _fadingShown, _fadingBlock);
-        Draw(_hull, _shown, _shownBlock);
+        Draw(_fading, _fadingShown, _fadingBlock, _fadingCamera);
+        Draw(_hull, _shown, _shownBlock, _hullCamera);
     }
 
-    /// <summary>Draws <paramref name="hull"/> at <paramref name="shown"/> of the outline's colour (its alpha): its silhouette into the stencil (the mask), then its rim where the mask is not (the hull).</summary>
-    private void Draw(List<(Mesh mesh, Renderer renderer)> hull, float shown, MaterialPropertyBlock block)
+    /// <summary>Draws <paramref name="hull"/> at <paramref name="shown"/> of the outline's colour (its alpha) on <paramref name="camera"/> alone (none: no draw): each mesh's silhouette into the stencil (the mask), then its rim where the mask is not (the hull), pushed out from the mesh's centre.</summary>
+    private void Draw(List<(Mesh mesh, Renderer renderer)> hull, float shown, MaterialPropertyBlock block, Camera camera)
     {
-        if (hull.Count == 0 || shown <= 0f)
+        if (hull.Count == 0 || shown <= 0f || camera == null)
             return;
         Color colour = settings.outlineColor;
         colour.a *= shown;
         block.SetColor(ColorId, colour);
-        var mask = new RenderParams(_maskMaterial);
-        var parameters = new RenderParams(_hullMaterial) { matProps = block };
+        var mask = new RenderParams(_maskMaterial) { camera = camera, matProps = block };
+        var rim = new RenderParams(_hullMaterial) { camera = camera, matProps = block };
         foreach ((Mesh mesh, Renderer renderer) in hull)
         {
             if (renderer == null || !renderer.enabled || !renderer.gameObject.activeInHierarchy)
                 continue;
             Matrix4x4 matrix = renderer.localToWorldMatrix;
+            block.SetVector(CentreId, mesh.bounds.center);
             for (int s = 0; s < mesh.subMeshCount; s++)
             {
                 Graphics.RenderMesh(mask, mesh, s, matrix);
-                Graphics.RenderMesh(parameters, mesh, s, matrix);
+                Graphics.RenderMesh(rim, mesh, s, matrix);
             }
         }
     }
@@ -325,6 +363,10 @@ public sealed class HoverHighlighter : MonoBehaviour
     {
         _hull.Clear();
         _fading.Clear();
+        _lift = null;
+        _eventCamera = null;
+        _hullCamera = null;
+        _fadingCamera = null;
         _lastHitObject = null;
         _lastCandidate = null;
         _hovered = null;

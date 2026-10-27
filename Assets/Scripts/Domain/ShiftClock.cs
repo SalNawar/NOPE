@@ -22,13 +22,13 @@ public sealed class ShiftClock
     /// <summary>Current in-game minute of day, StartMinute..EndMinute.</summary>
     public float CurrentMinute { get; private set; }
 
-    /// <summary>True between Start() and Stop().</summary>
+    /// <summary>True from Start() until the shift ends (closing time or Finish()).</summary>
     public bool IsStarted { get; private set; }
 
     /// <summary>True while at least one Pause() has no matching Resume().</summary>
     public bool IsPaused => _pauseCount > 0;
 
-    /// <summary>True once the clock reached closing time (permanent for this clock).</summary>
+    /// <summary>True once the shift ended: the clock reached closing time, or the shift finished early (Finish). Permanent for this clock.</summary>
     public bool IsClosed { get; private set; }
 
     /// <summary>True when Tick advances time.</summary>
@@ -37,7 +37,7 @@ public sealed class ShiftClock
     /// <summary>0 at opening, 1 at closing (drives time-of-day visuals).</summary>
     public float Progress01 => (CurrentMinute - StartMinute) / (EndMinute - StartMinute);
 
-    /// <summary>Raised exactly once, when the clock reaches closing time.</summary>
+    /// <summary>Raised exactly once, when the shift ends: the clock reaches closing time, or the shift finishes early (Finish), so the closing bell rings either way (BUG-72).</summary>
     public event Action Closed;
 
     /// <summary>Outstanding Pause() calls.</summary>
@@ -63,15 +63,27 @@ public sealed class ShiftClock
         CurrentMinute = startMinute;
     }
 
-    /// <summary>Starts (or restarts after Stop) the clock. No effect once closed.</summary>
+    /// <summary>Starts the clock. No effect once closed.</summary>
     public void Start()
     {
         if (!IsClosed)
             IsStarted = true;
     }
 
-    /// <summary>Halts the clock without closing (e.g. the queue ran out early).</summary>
-    public void Stop() => IsStarted = false;
+    /// <summary>
+    /// The shift ends before closing time (the queue ran out, End Shift): the
+    /// clock stops at the minute it shows and closes, raising Closed once, so
+    /// an early finish rings the closing bell too (BUG-72). Nothing when the
+    /// shift never started (AVAILABLE was never pressed) or already closed.
+    /// </summary>
+    public void Finish()
+    {
+        if (!IsStarted || IsClosed)
+            return;
+        IsStarted = false;
+        IsClosed = true;
+        Closed?.Invoke();
+    }
 
     /// <summary>Holds time until a matching Resume(). Calls nest.</summary>
     public void Pause() => _pauseCount++;
@@ -118,10 +130,16 @@ public sealed class ShiftClock
         }
     }
 
-    /// <summary>24-hour "HH:MM" for a minute of day (fractions round down).</summary>
+    /// <summary>
+    /// 24-hour "HH:MM" for a minute of day (fractions round down); the end of
+    /// the day (1440) is "24:00", the night shift's closing hour (BUG-72), and
+    /// a later minute wraps into the next day.
+    /// </summary>
     public static string Format(float minuteOfDay)
     {
         int whole = (int)Math.Floor(minuteOfDay);
+        if (whole == MinutesPerDay)
+            return "24:00";
         whole = ((whole % MinutesPerDay) + MinutesPerDay) % MinutesPerDay;
         return $"{whole / 60:00}:{whole % 60:00}";
     }

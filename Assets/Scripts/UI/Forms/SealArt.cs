@@ -7,7 +7,9 @@ using UnityEngine;
 /// renderers tint with the seal's ink; the legend is theirs to print over it.
 /// Both the desk paper (DeskDocument) and the PC (FormView, the Seal Register)
 /// draw from here, so a seal looks the same everywhere. Code-drawn: no seal
-/// art is authored (ArtSlots.AgencySeal stays the agency's faint seal).
+/// art is authored (ArtSlots.AgencySeal stays the agency's faint seal). Each
+/// outline is painted once per session (the textures outlive the scenes) from
+/// its outline resolved once (SealOutlines.Resolve; BUG-31a).
 /// </summary>
 public static class SealArt
 {
@@ -27,7 +29,7 @@ public static class SealArt
             return texture;
         texture = new Texture2D(Size, Size, TextureFormat.RGBA32, true) { name = "Seal_" + shape, wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Trilinear };
         var pixels = new Color32[Size * Size];
-        string name = shape.ToString();
+        SealOutlines.Outline outline = SealOutlines.Resolve(shape.ToString());
         for (int py = 0; py < Size; py++)
             for (int px = 0; px < Size; px++)
             {
@@ -37,7 +39,7 @@ public static class SealArt
                     {
                         float x = ((px + (sx + 0.5f) / Samples) / Size) * 2f - 1f;
                         float y = ((py + (sy + 0.5f) / Samples) / Size) * 2f - 1f;
-                        if (SealOutlines.Inked(name, x, y))
+                        if (outline.Inked(x, y))
                             inked++;
                     }
                 // Textures run bottom-up; the outlines are drawn with y down.

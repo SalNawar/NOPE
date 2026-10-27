@@ -7,13 +7,11 @@ using UnityEngine;
 /// The inbox's sources in the office (the PC spec's ML1-ML2), on the desktop
 /// canvas so the badge counts while the Mail window is closed: each day's
 /// directive memo (the day plan's travel rules, worded as the Directives
-/// window words them), each day's Times issue (the day's paper from the News
-/// site's archive, WorldState.newsArchive; today's from the morning paper
-/// until the briefing archives it; an issue the archive no longer keeps is
-/// only its link),
-/// a notice for each citation slip once it is acknowledged this shift, the
+/// window words them), a notice for each citation slip once it is acknowledged this shift, the
 /// Orders app's delivery notice for each day something arrived (the order
-/// log, WorldState.orders), and the authored mail. It rebuilds the list (Mailbox.ForDays) when the day
+/// log, WorldState.orders), and the authored mail; the inbox keeps none of
+/// the automatic copies (MailDigest, BUG-50a: the paper is not mailed, and
+/// only today's directive memo stays). It rebuilds the list (Mailbox.ForDays) when the day
 /// changes and when a slip is acknowledged; opening a message marks it read
 /// in WorldState.mailRead, the only saved state. The unread count shows on
 /// the Start menu's Mail entry and in the Mail window's title (retitled
@@ -102,11 +100,10 @@ public sealed class MailFeed : MonoBehaviour
         }
 
         ContentLibrarySO library = RunManager.Instance.Library;
-        _items = Mailbox.ForDays(new MailSources
+        _items = MailDigest.Of(Mailbox.ForDays(new MailSources
         {
             Today = world.day,
             Rules = day => RulesOf(library, day),
-            News = day => Headlines(world, day),
             Citations = _citations,
             Authored = library != null ? library.Mail : Array.Empty<AuthoredMail>(),
             HasFlag = world.HasFlag,
@@ -115,7 +112,7 @@ public sealed class MailFeed : MonoBehaviour
             Strandings = world.history != null ? world.history.strandingLog : null,
             StrandingReport = r => StrandingFates.Report(r, library != null ? library.Agency.strandingReport : null,
                                                          library != null ? StrandingFates.Of(library.Agency.strandingFates, r.fate)?.status : null, AccountMaker.Credits)
-        });
+        }), world.day);
         Announce();
     }
 
@@ -128,18 +125,6 @@ public sealed class MailFeed : MonoBehaviour
             foreach (TravelRuleSO rule in plan.ActiveTravelRules)
                 if (rule != null)
                     lines.Add(day == DayOpenings.Day ? rule.Summary(TextSurface.Pc) : rule.AuthoredSummary(TextSurface.Pc));
-        return lines;
-    }
-
-    /// <summary>A day's paper, its notices then its news then the desk's own stories: the archived issue, else today's morning paper; null when neither is on hand.</summary>
-    private static IReadOnlyList<string> Headlines(WorldState world, int day)
-    {
-        NewsIssue issue = NewsArchive.Find(world.newsArchive, day);
-        if (issue == null && day != world.day)
-            return null;
-        var lines = new List<string>(issue != null ? issue.briefing : world.tomorrow.briefingLines);
-        lines.AddRange(issue != null ? issue.news : world.tomorrow.newsLines);
-        lines.AddRange(issue != null ? issue.desk ?? new List<string>() : world.tomorrow.deskLines);
         return lines;
     }
 

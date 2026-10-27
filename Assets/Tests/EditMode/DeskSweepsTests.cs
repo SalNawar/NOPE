@@ -101,4 +101,19 @@ public class DeskSweepsTests
         sweeps.Strips(strips);
         Assert.IsEmpty(strips, "unbound: none");
     }
+
+    [Test]
+    public void TheSweptPeak_IsTheTallestSweptBox_AndNothingWithNone()
+    {
+        // DOC-HANDLE's one held size (HeldOnTop) is drawn above the peak too, with the desk's other obstacles (DeskLayout.SweptPeak).
+        DeskSlides slides = DeskSlides.Approved();
+        (DeskSweeps sweeps, List<(string id, DeskRect footprint, float height)> obstacles) = Refreshed(slides);
+        float expected = obstacles.Where(o => slides.Sweeps(Home(o.id))).Max(o => o.height);
+        Assert.AreEqual(expected, sweeps.MaxHeight, 1e-6f, "the tallest swept box, at its overshoot or lift peak");
+        Assert.Greater(sweeps.MaxHeight, 0f);
+
+        sweeps.Refresh(slides, new List<(DeskHome, float)> { (Home(DeskHomeMap.Detain), 0.09f) }, obstacles);
+        Assert.AreEqual(0f, sweeps.MaxHeight, "DETAIN never moves: no swept box, nothing to rise over");
+        Assert.AreEqual(0f, new DeskSweeps().MaxHeight, "none kept");
+    }
 }

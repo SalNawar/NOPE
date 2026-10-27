@@ -98,25 +98,30 @@ public sealed class MotionKnobs
     /// <summary>A dragged paper's most tilt toward its travel (degrees) and the tilt per metre per second of speed.</summary>
     public float paperTiltMax = 7f, paperTiltPerSpeed = 14f;
 
-    /// <summary>How much a dropped paper squashes as it lands (0.06: 6 % flatter).</summary>
-    public float paperDropSquash = 0.06f;
-
     /// <summary>
     /// The desk's physics feel (PaperPhysics; Saleh 2026-10-17: "KEEP IT TOP
     /// DOWN BUT GIVE IT PHYSICS"; 1018a: "all documents are stiff"): a held
     /// paper's swing against its travel (degrees per metre per second, at most
-    /// paperSwayMax); let go, its slide on into its place (its momentum over
-    /// paperSlideSeconds, at most paperSlideMax metres, stopped by friction),
-    /// the turn its sideways momentum leaves it (degrees per metre per second,
-    /// at most paperDropSpinMax) and its hop (metres high); its speed smoothed
-    /// over paperSpeedSmoothing seconds. The folder takes them divided by its weight.
+    /// paperSwayMax, pivoted on the held point). paperSwayMax is 0 by default:
+    /// no yaw while held (BUG-11a's "Fix must achieve", FIX_PLAN v1 §3
+    /// DOC-HANDLE step 4), so the corners' twist, which follows the swing,
+    /// rests too. The feel bible's A6 keeps a sway of 16°/(m/s) to ≤12°: set
+    /// paperSwayMax to 12 once Saleh or the orchestrator makes that call (the
+    /// swing then pivots on the held point, PaperPhysics.PivotOffset). Let go, it stays where it was
+    /// let go (DOC-HANDLE, BUG-6: no slide on, no spin, no squash: a paper
+    /// never changes size, the feel bible's G5) and hops (metres high) as much
+    /// as it was moving: its hop and its landing curl scale with its speed
+    /// when let go, all of them from paperSettleSpeed metres per second (a
+    /// slow drop barely settles); a rigid card hops at most cardDropHop; its
+    /// speed smoothed over paperSpeedSmoothing seconds. The folder takes them
+    /// divided by its weight.
     /// </summary>
-    public float paperSwayPerSpeed = 16f, paperSwayMax = 12f;
+    public float paperSwayPerSpeed = 16f, paperSwayMax = 0f;
 
     /// <inheritdoc cref="paperSwayPerSpeed"/>
-    public float paperSlideSeconds = 0.16f, paperSlideMax = 0.04f, paperDropSpinPerSpeed = 6f, paperDropSpinMax = 5f, paperDropHop = 0.004f, paperSpeedSmoothing = 0.05f;
+    public float paperDropHop = 0.004f, paperSettleSpeed = 1f, cardDropHop = 0.001f, paperSpeedSmoothing = 0.05f;
 
-    /// <summary>How heavy the rulebook folder moves against a paper (PaperPhysics.Weight): it swings less and slides to rest slower; it never bends.</summary>
+    /// <summary>How heavy the rulebook folder moves against a paper (PaperPhysics.Weight): it swings and bends less (its look's bend is DOC-LOOK's).</summary>
     public float folderWeight = 2.5f;
 
     /// <summary>
@@ -143,8 +148,8 @@ public sealed class MotionKnobs
     /// <inheritdoc cref="paperBowPerSpeed"/>
     public float paperLandKick = 0.14f;
 
-    /// <summary>How much each kind of paper bends (PaperBend's share of the physics' bow, twist and ripple): a loose sheet, a passport's pages, a plastic card.</summary>
-    public float sheetFlex = 1f, bookletFlex = 0.55f, cardFlex = 0.12f;
+    /// <summary>How much each kind of paper bends (PaperBend's share of the physics' bow, twist and ripple): a loose sheet, a passport's pages, a plastic card (0: Saleh's D3, ID cards stay rigid; a card's physics is PaperPhysics.Rigid as well, so it never bends whatever this says).</summary>
+    public float sheetFlex = 1f, bookletFlex = 0.55f, cardFlex = 0f;
 
     /// <summary>The held paper's swing (its turn against its travel, loose: an overshoot, the corners lagging), its bend behind the hand (its bow, twist and ripple), and its bow's settle once let go (light damping: a soft wobble, its ends curling up, then drooping, then flat).</summary>
     public SpringTuning paperSwing = SpringTuning.WithRatio(120f, 0.38f), paperBend = SpringTuning.WithRatio(90f, 0.42f), paperWobble = SpringTuning.WithRatio(220f, 0.22f);
@@ -152,16 +157,13 @@ public sealed class MotionKnobs
     /// <summary>How far a stamp rises before its slam (the anticipation).</summary>
     public float stampLift = 0.025f;
 
-    /// <summary>Seconds of the anticipation rise, then of the slam down.</summary>
-    public float stampRiseSeconds = 0.07f, stampSlamSeconds = 0.05f;
+    /// <summary>Seconds of the anticipation rise (the slam down is the Dater spring, DeskStampTray.Slam).</summary>
+    public float stampRiseSeconds = 0.07f;
 
     /// <summary>How much the stamp squashes on impact.</summary>
     public float stampSquash = 0.16f;
 
-    /// <summary>Seconds the ink mark takes to bloom in after a slam.</summary>
-    public float inkBloomSeconds = 0.08f;
-
-    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, and a stamp's rebound.</summary>
+    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, and a stamp's rebound (the old stamp's slam and ink-bloom knobs went with P0-C's cut: DOC-HANDLE removed them, BUG-73c; STAMP reads the rise, squash and rebound again, 3959f37).</summary>
     public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Firm;
 
     /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>

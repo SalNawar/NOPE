@@ -194,8 +194,20 @@ public sealed class FormArt
     /// <summary>True when the art has a clean face (ArtSlots.PaperFaces' Forms/clean_*: every baked word painted out): while a culture's language is read the paper is drawn on it, every field's label and caption printed in that language; false keeps the art's own English.</summary>
     public bool clean;
 
-    /// <summary>True when a paper showing <paramref name="data"/> prints its words in a culture's language over the clean face.</summary>
-    public bool Worded(FormData data) => clean && data != null && data.Translated;
+    /// <summary>True when the paper always shows its clean face and the game prints every label and caption on it (BUG-9: the labels in the art's ink, larger than the art's baked ones, re-laid with the values: labelGrowth, valueGrowth), in English or the culture's language; false: the baked labels show while English is read.</summary>
+    public bool printLabels;
+
+    /// <summary>How much larger than the art's baked label a printed label (a field's, a label caption's) is set (1: the art's size; the big mat's reading view shows papers at about 67%, so text grows about 1.5x, DOC-LOOK): over 1, each labelled field's cell is re-laid, the label a band at its top and the value the rest (ArtLayout.Place).</summary>
+    public float labelGrowth = 1f;
+
+    /// <summary>How much larger than valueShare of its place a value (and a print, a hand) is set (1: as before), never taller than its place lets it print on one line (ArtLayout.ValueFill).</summary>
+    public float valueGrowth = 1f;
+
+    /// <summary>True when a paper showing <paramref name="data"/> prints its words over the clean face: always with printLabels, else only while a culture's language is read.</summary>
+    public bool Worded(FormData data) => clean && data != null && (printLabels || data.Translated);
+
+    /// <summary>True when the art's cells are re-laid for larger text (a growth over 1).</summary>
+    public bool Regrown => labelGrowth > 1f || valueGrowth > 1f;
 
     /// <summary>True when the form is drawn on its art.</summary>
     public bool IsSet => fields != null && fields.Length > 0;

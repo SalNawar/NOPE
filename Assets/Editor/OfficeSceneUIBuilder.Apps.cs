@@ -68,7 +68,10 @@ public static partial class OfficeSceneUIBuilder
     /// sender under it) on the left; on the right the message's link over the
     /// memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive
     /// memo's link opens <paramref name="investigation"/> on today's rules.
-    /// Rebuilt fresh.
+    /// Rebuilt fresh. <paramref name="apps"/> and <paramref name="browser"/>
+    /// are no longer wired (the paper is not mailed, BUG-50a: no message
+    /// links to the News site); the root still passes them, and INTEGRATION
+    /// drops both arguments with the root's cleanup list.
     /// </summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
                                                  InvestigationApp investigation)
@@ -104,8 +107,6 @@ public static partial class OfficeSceneUIBuilder
         MailWindow component = win.gameObject.AddComponent<MailWindow>();
         var so = new SerializedObject(component);
         SetRef(so, "feed", feed);
-        SetRef(so, "apps", apps);
-        SetRef(so, "browser", browser);
         Wire(so, "investigation", investigation);
         SetRef(so, "listRoot", list);
         SetRef(so, "rowTemplate", row);
@@ -141,7 +142,11 @@ public static partial class OfficeSceneUIBuilder
     /// the Record Extract (a FormView at the PC page width, Form_RecordExtract)
     /// and the Statement (a FormView across the scroll, Form_Statement's
     /// landscape page, so its eight columns keep their type sizes), both
-    /// centred. AccountWindow fills and stacks them. Rebuilt fresh.
+    /// centred on the form style's dark backing (DiegeticBacking, as the
+    /// Documents tab lays its scanned pages: BUG-50a, UI-24 "a third of the
+    /// window is an empty blue-edged margin"; the room beside the portrait
+    /// page is the viewer's backing, not blank paper, and the wheel scrolls
+    /// over it too). AccountWindow fills and stacks them. Rebuilt fresh.
     /// </summary>
     private static DesktopWindow BuildAccountWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -152,6 +157,10 @@ public static partial class OfficeSceneUIBuilder
 
         ScrollRect scroll = BuildScrollArea(win, "Sheet", out RectTransform viewport);
         PlaceRect(scroll.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(config.titleBarHeight + DocGap)));
+        FormStyleSO style = EnsureFormStyle();
+        Image backing = GetOrAdd<Image>(scroll.gameObject);
+        backing.color = style.backing;
+        SceneUiKit.Tag(backing, ThemeRoleId.DiegeticBacking, ThemePart.Fill);
         var content = (RectTransform)Panel(viewport, "Content", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
         content.pivot = new Vector2(0.5f, 1f);
         scroll.content = content;
@@ -178,11 +187,13 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
-    /// The Notes window: "Days" (a scrolling list) on the left; on the right
-    /// the page's heading, "Clippings" with Paste clipping and the cards' list
-    /// (the empty page's hint over it), and "Notes" with its counter and the
-    /// typed notes' field; every label at the PC's scale (the PC UX redesign
-    /// §4). Rebuilt fresh.
+    /// The Notes window: "Days" (a scrolling list) on the left, with its own
+    /// empty state under today's row while no earlier day has a page
+    /// (BUG-50a, UI-24 "Notes: two empty columns"); on the right the page's
+    /// heading, "Clippings" with Paste clipping and the cards' list (the empty
+    /// page's hint over it), and "Notes" with its counter and the typed notes'
+    /// field; every label at the PC's scale (the PC UX redesign §4). Rebuilt
+    /// fresh.
     /// </summary>
     private static DesktopWindow BuildNotesWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -197,6 +208,11 @@ public static partial class OfficeSceneUIBuilder
         RectTransform days = BuildScrollList(win, "Days", Vector2.zero, new Vector2(0f, 1f), 4f);
         PlaceRect(days.parent.parent, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.L, PcSize.L), new Vector2(PcSize.L + NotesDaysWidth, -(top + 48f)));
         Button day = BuildListRow(days, "DayTemplate");
+        TMP_Text daysHint = Text(win, "DaysHint", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, new Vector2(0f, 1f), Ink,
+                                 ThemeRoleId.InputField, "notes.daysNone", FontStyles.Italic);
+        PlaceRect(daysHint.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.L + PcSize.M, PcSize.L), new Vector2(PcSize.L + NotesDaysWidth - PcSize.M, -(top + 48f + PcSize.Row + PcSize.M)));
+        Chrome(daysHint, PcType.Caption, true);
+        daysHint.raycastTarget = false;
 
         TMP_Text title = Text(win, "PageTitle", "", PcType.Title, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
                               ThemeRoleId.WindowBody, style: FontStyles.Bold);
@@ -239,6 +255,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "config", config);
         SetRef(so, "dayListRoot", days);
         SetRef(so, "dayTemplate", day);
+        SetRef(so, "daysHint", daysHint);
         SetRef(so, "pageTitle", title);
         SetRef(so, "clipRoot", clips);
         SetRef(so, "groupTemplate", group);
@@ -267,7 +284,8 @@ public static partial class OfficeSceneUIBuilder
     /// SettingsWindowController): Language (Follow history / Always English,
     /// and the lock's line under them, hidden until the Translation Lens's day),
     /// Motion (Full / Reduced, and the Motion intensity slider under them,
-    /// 0-100 %: the kit's sunk track and bone thumb), Desktop icons open with (Double click /
+    /// 0-100 %: the kit's sunk track and bone thumb; Camera sway Off / On;
+    /// Reduce flashing Off / On, FlashSettingRow), Desktop icons open with (Double click /
     /// Single click) and Reset icon positions (its icons wired by
     /// WireIconSettings), Investigation's Text size (a choice per zoom level,
     /// redesign phase 20; the step hints' pair is gone with the hints),
@@ -294,8 +312,8 @@ public static partial class OfficeSceneUIBuilder
 
         SettingsHeading(column, "LanguageLabel", "settings.language");
         Transform language = SettingsRow(column, "LanguageRow");
-        Button follow = SettingsChoice(language, "FollowHistoryButton", "settings.followHistory");
-        Button english = SettingsChoice(language, "AlwaysEnglishButton", "settings.alwaysEnglish");
+        Button follow = SettingsSwitch(language, "FollowHistoryButton", "settings.followHistory");
+        Button english = SettingsSwitch(language, "AlwaysEnglishButton", "settings.alwaysEnglish");
         TMP_Text languageLock = Text(column, "LanguageLockText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
                                      ThemeRoleId.WindowBody, null);
         Chrome(languageLock, PcType.Caption, true);
@@ -304,8 +322,8 @@ public static partial class OfficeSceneUIBuilder
 
         SettingsHeading(column, "MotionLabel", "settings.motion");
         Transform motion = SettingsRow(column, "MotionRow");
-        Button full = SettingsChoice(motion, "FullMotionButton", "settings.motionFull");
-        Button reduced = SettingsChoice(motion, "ReducedMotionButton", "settings.motionReduced");
+        Button full = SettingsSwitch(motion, "FullMotionButton", "settings.motionFull");
+        Button reduced = SettingsSwitch(motion, "ReducedMotionButton", "settings.motionReduced");
         Transform intensityRow = SettingsRow(column, "MotionIntensityRow");
         TMP_Text intensityLabel = Text(intensityRow, "MotionIntensityLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
                                        ThemeRoleId.WindowBody, "settings.motionIntensity");
@@ -325,13 +343,26 @@ public static partial class OfficeSceneUIBuilder
         Chrome(swayLabel, PcType.Body);
         swayLabel.raycastTarget = false;
         GetOrAdd<LayoutElement>(swayLabel.gameObject).flexibleWidth = 1f;
-        Button swayOff = SettingsChoice(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
-        Button swayOn = SettingsChoice(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
+        Button swayOff = SettingsSwitch(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
+        Button swayOn = SettingsSwitch(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
+        // Reduce flashing (GAME_FEEL_BIBLE G3, gap 2), in the room the cut Machine close-ups row left: its word, then the Off / On pair.
+        Transform flashRow = SettingsRow(column, "ReduceFlashingRow");
+        TMP_Text flashLabel = Text(flashRow, "ReduceFlashingLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
+                                   ThemeRoleId.WindowBody, "settings.reduceFlashing");
+        Chrome(flashLabel, PcType.Body);
+        flashLabel.raycastTarget = false;
+        GetOrAdd<LayoutElement>(flashLabel.gameObject).flexibleWidth = 1f;
+        FlashSettingRow flash = GetOrAdd<FlashSettingRow>(flashRow.gameObject);
+        var soFlash = new SerializedObject(flash);
+        SetRef(soFlash, "offButton", SettingsSwitch(flashRow, "ReduceFlashingOffButton", "settings.cameraSwayOff"));
+        SetRef(soFlash, "onButton", SettingsSwitch(flashRow, "ReduceFlashingOnButton", "settings.cameraSwayOn"));
+        SetRef(soFlash, "kit", _kit);
+        soFlash.ApplyModifiedProperties();
 
         SettingsHeading(column, "DesktopLabel", "settings.desktop");
         Transform icons = SettingsRow(column, "IconOpenRow");
-        Button iconDouble = SettingsChoice(icons, "IconDoubleClickButton", "settings.iconDouble");
-        Button iconSingle = SettingsChoice(icons, "IconSingleClickButton", "settings.iconSingle");
+        Button iconDouble = SettingsSwitch(icons, "IconDoubleClickButton", "settings.iconDouble");
+        Button iconSingle = SettingsSwitch(icons, "IconSingleClickButton", "settings.iconSingle");
         Button resetIcons = SettingsChoice(SettingsRow(column, "ResetIconsRow"), "ResetIconsButton", "settings.resetIcons");
 
         SettingsHeading(column, "InvestigationLabel", "settings.investigation");
@@ -339,7 +370,7 @@ public static partial class OfficeSceneUIBuilder
         var textSizes = new List<Object>();
         foreach (int level in config.zoomLevels)
         {
-            Button size = SettingsChoice(sizes, "TextSizeButton_" + level, null);
+            Button size = SettingsSwitch(sizes, "TextSizeButton_" + level, null);
             TMP_Text sizeLabel = size.transform.Find("Label").GetComponent<TMP_Text>();
             sizeLabel.text = UiText.Format("settings.textSize", level);
             SceneUiKit.Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
@@ -441,6 +472,14 @@ public static partial class OfficeSceneUIBuilder
             slider.transition = Selectable.Transition.None;
         }
         return slider;
+    }
+
+    /// <summary>A Settings switch (one of a choice: a pair, the text sizes): a choice button marked PcSwitch, so its press plays the toggle (F3: "ui_toggle on each switch").</summary>
+    private static Button SettingsSwitch(Transform row, string name, string key)
+    {
+        Button choice = SettingsChoice(row, name, key);
+        GetOrAdd<PcSwitch>(choice.gameObject);
+        return choice;
     }
 
     /// <summary>A choice in a Settings row: a Button-role plate with its keyed label at Body size.</summary>

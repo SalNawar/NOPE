@@ -301,3 +301,6 @@ MonoBehaviour:
           ink: '#151616'
           centre: 0
         clean: 1
+        printLabels: 1
+        labelGrowth: 1.3
+        valueGrowth: 1.5

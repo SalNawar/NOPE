@@ -19,6 +19,11 @@ using UnityEngine.TextCore;
 /// clean print (density 1, no wear) shows in the dater's top window. A date
 /// band (Band) is the rubber ring of one date wheel: its labels round its
 /// circumference. The caller owns every texture made here and destroys it.
+/// The rubber is the bureau's: a verdict word it cannot print (a Greek,
+/// Arabic, Japanese or Chinese word) prints as its English APPROVED or
+/// DENIED (DaterRubber; BUG-38b), chosen by the verdict the caller passes,
+/// never read back from the ink's colour. The word's outline, the costly
+/// layer, is painted once per word for the session (DaterWordOutline; BUG-31a).
 /// </summary>
 public static class DaterImpressionArt
 {
@@ -40,6 +45,9 @@ public static class DaterImpressionArt
     /// <summary>The clean layers of a print, by its texts (the word, the date and the BY line change at most daily).</summary>
     private static readonly Dictionary<string, Layers> Cache = new Dictionary<string, Layers>();
 
+    /// <summary>The words' outline layers, by word and font: two words a session, painted once each (the date and the BY line change daily; the word never does).</summary>
+    private static readonly Dictionary<string, float[]> Words = new Dictionary<string, float[]>();
+
     /// <summary>The fonts' atlases' alpha, read once.</summary>
     private static readonly Dictionary<TMP_FontAsset, byte[]> Atlases = new Dictionary<TMP_FontAsset, byte[]>();
 
@@ -50,17 +58,36 @@ public static class DaterImpressionArt
     }
 
     /// <summary>
-    /// A print of <paramref name="word"/> in <paramref name="wordInk"/>
-    /// (ApprovedInk or DeniedInk) over <paramref name="date"/> and
+    /// A print of <paramref name="word"/> in <paramref name="wordInk"/>, read
+    /// as the verdict <paramref name="wordInk"/> is the ink of: ApprovedInk is
+    /// APPROVED, DeniedInk DENIED. Any other ink is refused (an
+    /// ArgumentException), never guessed: a tinted or culture ink passes its
+    /// verdict with the overload that takes one. DeskStampTray's calls
+    /// (STAMP's file) move to that overload (docs/pending/FLOW.md).
+    /// </summary>
+    /// <exception cref="ArgumentException"><paramref name="wordInk"/> is neither verdict's ink.</exception>
+    public static Texture2D Paint(string word, Color32 wordInk, string date, string byLine, TMP_FontAsset font, float density, int seed, bool worn = true)
+    {
+        bool approved = SameInk(wordInk, ApprovedInk);
+        if (!approved && !SameInk(wordInk, DeniedInk))
+            throw new ArgumentException($"The ink {wordInk} is neither APPROVED's nor DENIED's: pass the verdict (Paint(word, approved, ink, ...)).", nameof(wordInk));
+        return Paint(word, approved, wordInk, date, byLine, font, density, seed, worn);
+    }
+
+    /// <summary>
+    /// A print of the verdict <paramref name="approved"/>'s <paramref name="word"/>
+    /// in <paramref name="wordInk"/> (ApprovedInk or DeniedInk for the bureau's own inks)
+    /// over <paramref name="date"/> and
     /// <paramref name="byLine"/> (in <paramref name="font"/>, DateInk) at
     /// ink <paramref name="density"/> (0..1),
     /// worn by the print's <paramref name="seed"/> (its blotches, edge breaks
-    /// and smudge; <paramref name="worn"/> false: a clean print). Textures
-    /// run bottom-up; the print reads the right way round.
+    /// and smudge; <paramref name="worn"/> false: a clean print). A word the
+    /// rubber cannot print prints as the verdict's English word (DaterRubber),
+    /// whatever the ink. Textures run bottom-up; the print reads the right way round.
     /// </summary>
-    public static Texture2D Paint(string word, Color32 wordInk, string date, string byLine, TMP_FontAsset font, float density, int seed, bool worn = true)
+    public static Texture2D Paint(string word, bool approved, Color32 wordInk, string date, string byLine, TMP_FontAsset font, float density, int seed, bool worn = true)
     {
-        Layers layers = LayersOf(word ?? string.Empty, date ?? string.Empty, byLine ?? string.Empty, font);
+        Layers layers = LayersOf(RubberWord(word, approved, font), date ?? string.Empty, byLine ?? string.Empty, font);
         var pixels = new Color32[Width * Height];
         float d = Mathf.Clamp01(density);
         int sx = worn ? 1 + (int)(DaterInk.Hash01(seed, 1, 7) * 2.5f) : 0, sy = worn ? (int)(DaterInk.Hash01(seed, 2, 7) * 2.5f) - 1 : 0;
@@ -129,15 +156,36 @@ public static class DaterImpressionArt
         return texture;
     }
 
-    /// <summary>The clean layers of a print (painted once per texts).</summary>
+    /// <summary>True when <paramref name="a"/> and <paramref name="b"/> are the same ink (their colour; alpha is the print's).</summary>
+    private static bool SameInk(Color32 a, Color32 b) => a.r == b.r && a.g == b.g && a.b == b.b;
+
+    /// <summary>
+    /// The word the rubber prints for <paramref name="word"/> (DaterRubber):
+    /// itself when each letter prints (the rubber's own capitals, or the
+    /// font's readable glyphs), else the English word of the verdict
+    /// <paramref name="approved"/> (APPROVED or DENIED).
+    /// </summary>
+    private static string RubberWord(string word, bool approved, TMP_FontAsset font)
+    {
+        bool fontReadable = AtlasOf(font) != null;
+        return DaterRubber.Word(word, approved, c => DaterLetters.Has(c) || (fontReadable && font.characterLookupTable.ContainsKey(c)));
+    }
+
+    /// <summary>The clean layers of a print (painted once per texts; the word's outline once per word).</summary>
     private static Layers LayersOf(string word, string date, string byLine, TMP_FontAsset font)
     {
-        string key = word + "\n" + date + "\n" + byLine + "\n" + (font != null ? font.GetInstanceID() : 0);
+        string fontKey = "\n" + (font != null ? font.GetHashCode() : 0);
+        string key = word + "\n" + date + "\n" + byLine + fontKey;
         if (Cache.TryGetValue(key, out Layers layers))
             return layers;
+        if (!Words.TryGetValue(word + fontKey, out float[] wordLayer))
+        {
+            wordLayer = WordLayer(word, font);
+            Words[word + fontKey] = wordLayer;
+        }
         layers = new Layers
         {
-            Word = WordLayer(word, font),
+            Word = wordLayer,
             Date = TextLayer(date, font, Width, Height, 0.06f, 0.94f, DateTop, DateBottom, 0.035f),
             By = TextLayer(byLine, font, Width, Height, 0.06f, 0.94f, ByTop, ByBottom, 0.02f)
         };
@@ -147,38 +195,13 @@ public static class DaterImpressionArt
         return layers;
     }
 
-    /// <summary>The word's outline in the word row: DaterLetters' slab-serif capitals, or (a letter they lack) the whole word's outline from the font.</summary>
+    /// <summary>The word's outline in the word row: DaterLetters' slab-serif capitals (DaterWordOutline, which measures only the letters that reach each pixel; BUG-31a), or (a letter they lack) the whole word's outline from the font.</summary>
     private static float[] WordLayer(string word, TMP_FontAsset font)
     {
-        var cover = new float[Width * Height];
         string w = word.ToUpperInvariant();
-        foreach (char c in w)
-            if (c != ' ' && !DaterLetters.Has(c))
-                return TextLayer(w, font, Width, Height, 0.04f, 0.96f, WordTop, WordBottom, 0f, Line * 0.9f);
-
-        float total = 0f;
-        foreach (char c in w)
-            total += (c == ' ' ? 0.4f : DaterLetters.Width(c)) + Tracking;
-        total -= Tracking;
-        float rowH = (WordBottom - WordTop) * Height, rowW = 0.94f * Width;
-        float cap = Mathf.Min(rowH, total > 0f ? rowW / total : rowH);
-        float left = (Width - total * cap) / 2f, baseline = (1f - WordBottom) * Height + (rowH - cap) / 2f;
-        for (int y = 0; y < Height; y++)
-            for (int x = 0; x < Width; x++)
-            {
-                float ex = (x + 0.5f - left) / cap, ey = (y + 0.5f - baseline) / cap;
-                if (ex < -0.2f || ex > total + 0.2f || ey < -0.2f || ey > 1.2f)
-                    continue;
-                float d = float.MaxValue, at = 0f;
-                foreach (char c in w)
-                {
-                    if (c != ' ')
-                        d = Mathf.Min(d, DaterLetters.Distance(c, ex - at, ey));
-                    at += (c == ' ' ? 0.4f : DaterLetters.Width(c)) + Tracking;
-                }
-                cover[y * Width + x] = Mathf.Clamp01((Line - Mathf.Abs(d)) * cap + 0.5f);
-            }
-        return cover;
+        return DaterWordOutline.Drawn(w)
+            ? DaterWordOutline.Cover(w, Width, Height, WordTop, WordBottom, Line, Tracking)
+            : TextLayer(w, font, Width, Height, 0.04f, 0.96f, WordTop, WordBottom, 0f, Line * 0.9f);
     }
 
     /// <summary>
@@ -292,6 +315,7 @@ public static class DaterImpressionArt
     private static void ResetStatics()
     {
         Cache.Clear();
+        Words.Clear();
         Atlases.Clear();
     }
 }

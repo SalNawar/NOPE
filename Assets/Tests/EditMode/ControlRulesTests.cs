@@ -3,8 +3,10 @@ using NUnit.Framework;
 
 /// <summary>
 /// The one input model (Saleh 2026-10-06, Papers, Please's controls): SPACE,
-/// TAB and Q do the same from every desk state; right-click and Esc back out
-/// of the innermost mode, one per press, in one order everywhere.
+/// TAB and Q do the same from every desk state with nothing held; right-click
+/// and Esc back out of the innermost mode, one per press, in one order
+/// everywhere; while something is held a view key lets go of it first and does
+/// nothing else (DOC-HANDLE, BUG-55).
 /// </summary>
 public class ControlRulesTests
 {
@@ -13,11 +15,12 @@ public class ControlRulesTests
     [Test]
     public void SpaceAndTab_ToggleInspectAndTheStamps_FromEveryDeskState()
     {
+        // The dragging state left this list (BUG-55): TAB or Q while holding used to change the view under the held paper.
         ControlState[] states =
         {
             Desk, new ControlState(travellerAtDesk: true, deskView: true), new ControlState(travellerAtDesk: true, inspecting: true),
             new ControlState(travellerAtDesk: true, wheelOpen: true),
-            new ControlState(travellerAtDesk: true, cityView: true), new ControlState(travellerAtDesk: true, dragging: true),
+            new ControlState(travellerAtDesk: true, cityView: true),
             new ControlState(travellerAtDesk: true, valueHeld: true, inspecting: true, deskView: true),
             new ControlState(travellerAtDesk: true, switchboard: true),
         };
@@ -27,6 +30,20 @@ public class ControlRulesTests
             Assert.AreEqual(ControlAction.ToggleStamps, ControlRules.Resolve(ControlKey.Stamps, s));
             Assert.AreEqual(ControlAction.OpenPc, ControlRules.Resolve(ControlKey.Pc, s));
         }
+    }
+
+    [Test]
+    public void WhileHolding_AViewKey_LetsGoFirst_AndDoesNothingElse()
+    {
+        var holding = new ControlState(travellerAtDesk: true, dragging: true, deskView: true);
+        foreach (ControlKey key in new[] { ControlKey.Stamps, ControlKey.Pc, ControlKey.CityLeft, ControlKey.Help })
+            Assert.AreEqual(ControlAction.CancelHold, ControlRules.Resolve(key, holding), key + ": no view change under a held thing");
+        Assert.AreEqual(ControlAction.CancelHold, ControlRules.Resolve(ControlKey.CityRight, new ControlState(travellerAtDesk: true, dragging: true, cityView: true)));
+        Assert.AreEqual(ControlAction.ToggleInspect, ControlRules.Resolve(ControlKey.Inspect, holding), "SPACE changes no view: it works as ever");
+        Assert.AreEqual(BackOutStep.CancelDrag, ControlRules.BackOut(holding), "Esc and right-click let go first too");
+        Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.Pc, new ControlState(newsletter: true, dragging: true)), "a newsletter still takes no keys");
+        foreach (ControlKey key in Enum.GetValues(typeof(ControlKey)))
+            Assert.AreEqual(key != ControlKey.Inspect, ControlRules.ChangesView(key), key.ToString());
     }
 
     [Test]
@@ -80,7 +97,8 @@ public class ControlRulesTests
         Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.CityRight, board));
         Assert.AreEqual(ControlAction.OpenPc, ControlRules.Resolve(ControlKey.Pc, board), "Q still goes to the PC (the board closes first)");
         Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.Switchboard, new ControlState(pcOpen: true)), "the PC keeps S for its shortcuts");
-        Assert.AreEqual(ControlAction.None, ControlRules.Resolve(ControlKey.Switchboard, new ControlState(travellerAtDesk: true, dragging: true)), "not with a paper in the hand");
+        Assert.AreEqual(ControlAction.CancelHold, ControlRules.Resolve(ControlKey.Switchboard, new ControlState(travellerAtDesk: true, dragging: true)), "not with a paper in the hand: S lets go of it first and does nothing else (BUG-55), as D does");
+        Assert.AreEqual(ControlAction.CancelHold, ControlRules.Resolve(ControlKey.CityRight, new ControlState(travellerAtDesk: true, dragging: true)));
         Assert.AreEqual(BackOutStep.LeaveSwitchboard, ControlRules.BackOut(board));
         Assert.AreEqual(BackOutStep.CancelDrag, ControlRules.BackOut(new ControlState(switchboard: true, dragging: true)), "a plug in the hand goes back first");
     }
