@@ -6,7 +6,10 @@ using NUnit.Framework;
 /// distance back from the aim point along a view pitched by the knob, the
 /// pitch kept between level and straight down; what the solved pose frames
 /// (the mat, the stamp rack and the intercom whole, the other side homes by
-/// their inner strips, the deal tray whole); the top margin the overlay's
+/// their inner strips, the deal tray by its strip nearest the mat: whole on
+/// the plan's map, the mouth of the painted desk's slot), on the plan's map
+/// and on the painted desk's measured map (PaintedDeskFixture: the prefab's
+/// homes, the map in use while the painted desk shows); the top margin the overlay's
 /// chrome band takes at each aspect; papers against the old reading view;
 /// the blend's seconds, a cut when motion is still; the controls' fade over
 /// the last third of a move (BUG-32b).
@@ -102,7 +105,75 @@ public class DeskViewPoseTests
         Assert.IsFalse(points.Exists(p => System.Math.Abs(p.x - (babel.CentreX - babel.Width / 2f)) < 1e-4f), "not the tuner's outer edge");
 
         DeskRect tray = DeskHomeMap.Find(homes, DeskHomeMap.DealTray).Footprint;
-        Assert.IsTrue(Has(points, tray.CentreX - tray.Width / 2f, tray.CentreY + tray.Height / 2f, 0f), "the deal tray whole (over the mat, not beside it)");
+        Assert.LessOrEqual(tray.Height, t.sideReach + 1e-4f, "the plan's deal tray is 6 cm deep: whole within the strip nearest the mat");
+        Assert.IsTrue(Has(points, tray.CentreX - tray.Width / 2f, tray.CentreY + tray.Height / 2f, 0f), "the deal tray whole (at the mat's far edge, within the strip)");
+    }
+
+    [Test]
+    public void Targets_OnThePaintedDesk_TheRacksOuterEdgeIsTheFramesRight_TheIntercomsTheLeft_TheTrayByItsNearStrip()
+    {
+        // Desk v3 (the painted desk, the default since DESK-V3 landed) stands the stamp rack's outer edge at x 1.11, 16 cm past the
+        // plan's frame right (the scanner's strip at 0.95: ruling 10), and the intercom's at -1.09; its deal tray is the 60 cm slot
+        // under the counter (y 0.60 to 1.20, its far 20 cm behind the counter's wall). The pose reads the map in use
+        // (DeskLayoutSettings.Homes), so the rack is whole again (the night of 2026-10-28: 4 of 24 rack corners off screen).
+        var t = new DeskViewTuning();
+        DeskHome[] homes = PaintedDeskFixture.Map();
+        var points = DeskViewPose.Targets(t, DeskHomeMap.Mat, homes);
+
+        DeskHome rackHome = DeskHomeMap.Find(homes, DeskHomeMap.StampRack);
+        DeskRect rack = rackHome.Footprint;
+        DeskRect scanner = DeskHomeMap.Find(homes, DeskHomeMap.Scanner).Footprint;
+        float inner = scanner.CentreX - scanner.Width / 2f;
+        float right = float.MinValue, left = float.MaxValue, far = float.MinValue;
+        foreach ((float x, float y, float z) p in points)
+        {
+            right = System.Math.Max(right, p.x);
+            left = System.Math.Min(left, p.x);
+            far = System.Math.Max(far, p.y);
+        }
+        float rackOuter = rack.CentreX + rack.Width / 2f;
+        Assert.That(rackOuter, Is.EqualTo(1.11f).Within(1e-3f), "desk v3's rack: x 0.815 to 1.11");
+        Assert.Greater(rackOuter, inner + t.sideReach, "the painted rack stands past the scanner's inner strip (the plan's map had it the other way)");
+        Assert.AreEqual(rackOuter, right, Eps, "the frame's right: the painted rack's outer edge");
+        Assert.IsTrue(Has(points, rackOuter, rack.CentreY + rack.Height / 2f, rackHome.height), "the rack whole, to its measured top");
+        Assert.Greater(rackHome.height, 0.2f, "the painted rack's measured height (its two steps and the daters)");
+        Assert.IsTrue(Has(points, inner + t.sideReach, scanner.CentreY - scanner.Height / 2f, 0f), "the scanner by its inner 8 cm");
+
+        DeskRect intercom = DeskHomeMap.Find(homes, DeskHomeMap.Intercom).Footprint;
+        Assert.AreEqual(intercom.CentreX - intercom.Width / 2f, left, Eps, "the intercom whole: its outer edge is the frame's left");
+        Assert.That(left, Is.EqualTo(-1.09f).Within(1e-3f));
+        DeskRect babel = DeskHomeMap.Find(homes, DeskHomeMap.BabelTuner).Footprint;
+        Assert.IsTrue(Has(points, babel.CentreX + babel.Width / 2f - t.sideReach, babel.CentreY - babel.Height / 2f, 0f), "the tuner by its inner 8 cm");
+
+        DeskRect tray = DeskHomeMap.Find(homes, DeskHomeMap.DealTray).Footprint;
+        float trayNear = tray.CentreY - tray.Height / 2f, trayFar = tray.CentreY + tray.Height / 2f;
+        Assert.Greater(tray.Height, 0.5f, "the painted deal tray is the slot under the counter");
+        Assert.GreaterOrEqual(trayNear, DeskHomeMap.Mat.CentreY + DeskHomeMap.Mat.Height / 2f, "beyond the mat's far edge");
+        Assert.IsTrue(Has(points, tray.CentreX - tray.Width / 2f, trayNear + t.sideReach, 0f), "the tray by its 8 cm strip nearest the mat (its mouth)");
+        Assert.AreEqual(trayNear + t.sideReach, far, Eps, "nothing framed past the tray's mouth");
+        Assert.IsFalse(points.Exists(p => System.Math.Abs(p.y - trayFar) < 1e-4f), "not the slot's far end behind the counter's wall");
+    }
+
+    /// <summary>The strip <see cref="DeskViewPose.Strip"/> gives the footprint against the plan's mat with an 8 cm reach, each edge within 1e-5 m.</summary>
+    private static void AssertStrip((float x0, float x1, float y0, float y1) expected, float x0, float x1, float y0, float y1, string why)
+    {
+        (float sx0, float sx1, float sy0, float sy1) = DeskViewPose.Strip(x0, x1, y0, y1, -0.73f, 0.73f, -0.515f, 0.515f, 0.08f);
+        Assert.That(sx0, Is.EqualTo(expected.x0).Within(1e-5f), why + ": x0");
+        Assert.That(sx1, Is.EqualTo(expected.x1).Within(1e-5f), why + ": x1");
+        Assert.That(sy0, Is.EqualTo(expected.y0).Within(1e-5f), why + ": y0");
+        Assert.That(sy1, Is.EqualTo(expected.y1).Within(1e-5f), why + ": y1");
+    }
+
+    [Test]
+    public void Strip_IsTheEdgeNearestTheMat_OnEverySide_AndTheWholeOfAHomeOverIt()
+    {
+        AssertStrip((0.84f, 0.92f, -0.14f, 0.1f), 0.84f, 1.3f, -0.14f, 0.1f, "right of the mat: its left strip (desk v3's scanner)");
+        AssertStrip((-0.87f, -0.79f, 0.03f, 0.18f), -1.1f, -0.79f, 0.03f, 0.18f, "left of the mat: its right strip (desk v3's tuner)");
+        AssertStrip((-0.21f, 0.21f, 0.6f, 0.68f), -0.21f, 0.21f, 0.6f, 1.2f, "beyond the mat: its near strip (desk v3's deal tray, the slot's mouth)");
+        AssertStrip((-0.1f, 0.1f, -0.68f, -0.6f), -0.1f, 0.1f, -0.9f, -0.6f, "before the mat: its far strip");
+        AssertStrip((-0.22f, 0.22f, 0.515f, 0.575f), -0.22f, 0.22f, 0.515f, 0.575f, "the plan's tray at the mat's far edge: whole within the strip");
+        AssertStrip((-0.2f, 0.2f, -0.2f, 0.2f), -0.2f, 0.2f, -0.2f, 0.2f, "over the mat: whole");
+        AssertStrip((0.8f, 0.88f, 0.6f, 0.9f), 0.8f, 1.2f, 0.6f, 0.9f, "a corner home: its side strip");
     }
 
     [Test]
