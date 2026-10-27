@@ -108,6 +108,6 @@ public static class DeskPlanChecks
         QaGateResult line = all.First(r => string.Equals(r.id, DecorSpotsId, StringComparison.OrdinalIgnoreCase) && string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase));
         bool notApplicable = (line.measured ?? string.Empty).StartsWith("not applicable", StringComparison.OrdinalIgnoreCase);
         return GateResult.Of(id, Owner, notApplicable, line.measured,
-            notApplicable ? line.detail : "the desk in use has decoration spots, but desk_plan_decor measured no drop at HEAD: run the recipe (docs/pending/QA-RIG.md)");
+            notApplicable ? line.detail : "the desk in use has decoration spots, but there is no drop measured at HEAD (desk_plan_decor.drop.*): run the recipe (docs/pending/QA-RIG.md)");
     }
 }

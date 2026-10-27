@@ -36,7 +36,7 @@ public class PaintedReadoutTests
         Assert.AreEqual(width, sx, 1e-6f, "the line's footprint");
         Assert.AreEqual(height, sz, 1e-6f);
         float top = cy + sy / 2f - Reader.MaxY;
-        Assert.AreEqual(PaintedReadout.BoxTop, top, 1e-6f);
+        Assert.AreEqual(PaintedReadout.BoxTop + PaintedReadout.Lift, top, 1e-6f, "the box rises from the line, which floats the lift over the face");
         Assert.Greater(top, DeskHomeMap.ClickPad, "its top over the body's padded box (DeskPainted.EnsureClickBox pads by ClickPad), so the ray meets the readout's box first");
         Assert.Less(cy - sy / 2f, ly, "and it reaches down to the line");
     }
