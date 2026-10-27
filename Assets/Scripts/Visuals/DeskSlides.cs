@@ -141,10 +141,11 @@ public sealed class DeskSlider
 /// seat bounce on the arrival frame; the hand-off loser's quick retract and
 /// when the winner may start), the clearances the gate holds (felt and
 /// lamps: the felt gap), a lift's squash, the contact shadows, the cues'
-/// sound ids and their stand-ins, and every slider (Approved:
-/// render/slides.json of the desk pipeline, the numbers as the offline gate
-/// passed them). Pure and serializable: a section of the desk's plan
-/// (DeskLayoutSettings.slides); ProximityAssist runs it, SlideCurve shapes it.
+/// sound ids and their stand-ins, the D6 framing focus and every slider
+/// (Approved: render/slides.json of the desk pipeline, the numbers as the
+/// offline gate passed them). Pure and serializable: a section of the desk's
+/// plan (DeskLayoutSettings.slides); ProximityAssist runs it, SlideCurve
+/// shapes it, SlideFocus frames it.
 /// </summary>
 [Serializable]
 public sealed class DeskSlides
@@ -232,6 +233,12 @@ public sealed class DeskSlides
 
     /// <summary>The pitch each stand-in plays at (the unlatch tick "very low", the knock muted).</summary>
     public float unlatchPitch = 0.6f, stopPitch = 0.7f, seatPitch = 1f;
+
+    /// <summary>The D6 framing focus (DESK-HOMES P3; Q5's default: the reading view only): it starts focusDwellSeconds after the cursor's slider has finished its slide, at most once every focusEverySeconds, and re-aims to the next slider without letting go in between.</summary>
+    public float focusDwellSeconds = 0.15f, focusEverySeconds = 0.8f;
+
+    /// <summary>The focus's budgets as shares of the lens the reading view enters at (its rest lens, DeskView.ReadingFov, plus the push-in): its narrowing (focusShare, 3 %), the push-in and the focus together (focusCap, 8 %), and its aim toward the machine (focusAim, 3 % of the frame).</summary>
+    public float focusShare = 0.03f, focusCap = 0.08f, focusAim = 0.03f;
 
     /// <summary>Every slider (render/slides.json).</summary>
     public DeskSlider[] sliders;
@@ -325,8 +332,9 @@ public sealed class DeskSlides
     /// home that declares a slide no track of it slides; a spring that does
     /// not overshoot once, peaks before its anticipation ends or whose damping
     /// disagrees with its overshoot; the timings' order (the hand-off winner
-    /// may never wait longer than the retract). A track whose home declares
-    /// no slide is not a fault: it stays put until the map declares one.
+    /// may never wait longer than the retract); the focus's budgets (its
+    /// narrowing and aim inside the cap). A track whose home declares no
+    /// slide is not a fault: it stays put until the map declares one.
     /// </summary>
     public List<string> Problems(IReadOnlyList<DeskHome> homes, float slideReach)
     {
@@ -367,6 +375,8 @@ public sealed class DeskSlides
             problems.Add($"The hand-off winner waits up to {winnerAfter} s, longer than the loser's {retractSeconds} s retract.");
         if (winnerBelow <= 0f || winnerBelow >= 0.5f)
             problems.Add($"The hand-off winner starts below {winnerBelow} of the loser's travel: it must be nearly seated (0 < winnerBelow < 0.5), so two sliders are never both half out.");
+        if (focusShare < 0f || focusShare > focusCap || focusAim < 0f || focusAim > focusCap)
+            problems.Add($"The framing focus narrows {focusShare} and aims {focusAim} of the view: each between 0 and its {focusCap} cap.");
         return problems;
     }
 

@@ -141,6 +141,8 @@ public class ProximityAssistTests
         Assert.AreEqual(1 + (int)Math.Ceiling(DeskSlides.Approved().Find(Scanner).peakSeconds / Frame), peak, "the knock at its peak");
         Assert.AreEqual(1f, desk.P(Scanner), 0.03f, "settled at its slid spot");
         Assert.AreEqual(SlidePhase.Out, desk.Assist.Pose(Scanner).Phase);
+        Assert.AreEqual(Scanner, desk.Assist.Picked);
+        Assert.IsTrue(desk.Assist.SlideDone(Scanner), "its slide has finished");
     }
 
     [Test]
@@ -484,6 +486,7 @@ public class ProximityAssistTests
         var atHome = new Desk();
         atHome.Busy.Add(Scanner);
         atHome.Hold(30, On(Scanner), Near(Chip, 60f));
+        Assert.AreEqual(Scanner, atHome.Assist.Picked, "the busy scanner is the cursor's");
         Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Pose(Chip).Phase, "the chip reader stays home");
         Assert.AreEqual(SlidePhase.Rest, atHome.Assist.Pose(Scanner).Phase, "and the busy scanner is not summoned");
 
@@ -673,6 +676,7 @@ public class ProximityAssistTests
         Assert.AreEqual(1, desk.FirstFrame(Scanner, SlideCueKind.Peak), "the arrival's knock on the cut");
         SlidePose pose = desk.Assist.Pose(Scanner);
         Assert.AreEqual(0f, pose.Squash + pose.Sway, 1e-6f, "no squash, no sway");
+        Assert.IsTrue(desk.Assist.SlideDone(Scanner), "done at once");
         desk.Step(On(Chip));
         Assert.AreEqual(0f, desk.P(Scanner), 1e-6f, "the hand-off loser cuts home");
         Assert.AreEqual(1f, desk.P(Chip), 1e-6f, "and the winner cuts out on the same frame");

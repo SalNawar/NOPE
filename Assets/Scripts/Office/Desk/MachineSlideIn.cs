@@ -149,6 +149,17 @@ public sealed class MachineSlideIn : MonoBehaviour
         return Mathf.Sqrt(dx * dx + dy * dy);
     }
 
+    /// <summary>Its middle now (world: its rest footprint's centre moved by its slide, halfway up it); false before its rest is measured (FramingFocus aims at it).</summary>
+    public bool TryCentre(out Vector3 centre)
+    {
+        centre = default;
+        if (!_measured || _slider == null || !DeskLayout.Bound)
+            return false;
+        (float x, float y) at = SlideCurve.ShadowCentre(_slider, _way, Pose.Position, (_restCentre.x, _restCentre.y));
+        centre = DeskLayout.Frame.Point(new Vector2(at.x, at.y), _restBase + _height / 2f);
+        return true;
+    }
+
     /// <summary>
     /// True while the paper docked in it rides it home (the shift is over:
     /// DeskSlideIn asks only then, for a busy slider): the first ask finds

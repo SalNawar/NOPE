@@ -23,9 +23,17 @@ using UnityEngine;
 /// As the reading view comes in, its lens pushes in softly to the solved
 /// reading pose (DeskView.ReadingFov: it starts readingPushIn wider and
 /// narrows on the Heavy spring), tagged with the view's cause while it moves.
+/// On top of it, DESK-HOMES' D6 framing focus (Focus: FramingFocus picks the
+/// machine; CAM.md's hand-off, one lens writer) narrows the reading view a
+/// little more from that rest lens, push-in and focus together never past
+/// their cap of the lens the view entered at, and turns it a little toward
+/// the machine (a CinemachineRecomposer on the reading camera, applied after
+/// its body so the impulses still add on top), on the same spring, each move
+/// tagged SlideInFocus; it is refused out of the reading view and when
+/// motion is still.
 /// The Motion intensity scales every amplitude, live; Reduced Motion and no
-/// intensity (MotionAmount.Still) turn the breathing, the impulses and the
-/// push-in off, live.
+/// intensity (MotionAmount.Still) turn the breathing, the impulses, the
+/// push-in and the focus off, live.
 /// </para>
 /// </summary>
 public sealed class CameraFeel : MonoBehaviour, IMotionTick
@@ -37,10 +45,11 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
 
     private CinemachineCamera _office, _desk;
     private CinemachineImpulseSource _source;
+    private CinemachineRecomposer _turn;
     private DeskView _view;
-    private Spring _push;
-    private float _pushIn;
-    private float _taggedUntil;
+    private Spring _push, _focus, _pan, _tilt;
+    private float _pushIn, _focusCap;
+    private float _taggedUntil, _focusTaggedUntil;
 
     /// <summary>
     /// Gives the reading view's object the cameras' feel: the impulse source,
@@ -100,6 +109,34 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
         _current._source.GenerateImpulseWithVelocity(new Vector3(row.X, row.Y, 0f) * velocity);
     }
 
+    /// <summary>
+    /// DESK-HOMES' D6 framing focus (DESK-HOMES P3; CAM.md's hand-off: a
+    /// second push target next to the reading push-in, one lens writer): the
+    /// reading view narrows from its rest lens (DeskView.ReadingFov) by
+    /// <paramref name="share"/> of the lens it entered at (the rest lens plus
+    /// the push-in), push-in and focus together never past
+    /// <paramref name="cap"/> of it (SlideFocus.Narrowing, SlideFocus.Total),
+    /// and turns toward <paramref name="aim"/> (shares of the frame from its
+    /// centre, x right, y up: SlideFocus.Turn), on the push-in's spring, each
+    /// move tagged SlideInFocus for the QA camera logger. Refused (let go) out
+    /// of the reading view and when motion is still; FramingFocus also
+    /// refuses it while anything is held and while a blend runs. The caller
+    /// scales the share by the Motion intensity. Nothing without the office's
+    /// cameras.
+    /// </summary>
+    public static void Focus(float share, Vector2 aim, float cap)
+    {
+        if (_current != null)
+            _current.SetFocus(share, aim, cap);
+    }
+
+    /// <summary>The D6 framing focus lets go: the narrowing and the turn ease back out (tagged SlideInFocus while they move).</summary>
+    public static void ReleaseFocus()
+    {
+        if (_current != null)
+            _current.SetFocus(0f, Vector2.zero, _current._focusCap);
+    }
+
     /// <summary>How far ahead of <paramref name="live"/> the nearest corner of the paper mat lies (where the eye is: the papers), at most the QA logger's reference depth; the reference depth without a bound desk or camera.</summary>
     private static float WorkDepth(Camera live)
     {
@@ -136,6 +173,18 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
         {
             _push = Spring.At(0f);
             _pushIn = 0f;
+            _focus = Spring.At(0f);
+            _pan = Spring.At(0f);
+            _tilt = Spring.At(0f);
+        }
+        if (!desk.TryGetComponent(out _turn))
+        {
+            // Set up as its Reset would (a runtime add skips Reset: a zoom scale of 0 would collapse the lens), applied after the body so the impulses compose on top.
+            _turn = desk.gameObject.AddComponent<CinemachineRecomposer>();
+            _turn.ApplyAfter = CinemachineCore.Stage.Body;
+            _turn.ZoomScale = 1f;
+            _turn.FollowAttachment = 1f;
+            _turn.LookAtAttachment = 1f;
         }
         if (_source == null && !TryGetComponent(out _source))
         {
@@ -181,6 +230,7 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
             return;
         _pushIn = 0f;
         _push.Snap(0f);
+        SnapFocus();
         Apply();
     }
 
@@ -221,34 +271,85 @@ public sealed class CameraFeel : MonoBehaviour, IMotionTick
         else
             _push.Target = target;
         _taggedUntil = 0f;
+        if (!_view.IsOn)
+            SetFocusTargets(0f, Vector2.zero);
         Apply();
         UiMotion.Run(this);
     }
 
-    /// <summary>Steps the push-in (tagging it while it moves); false once it settled.</summary>
+    /// <summary>The focus's targets (Focus), refused out of the reading view and when motion is still; a snap when motion is still.</summary>
+    private void SetFocus(float share, Vector2 aim, float cap)
+    {
+        if (_desk == null || _view == null)
+            return;
+        _focusCap = cap;
+        bool still = UiMotion.Amount.Still;
+        SetFocusTargets(_view.IsOn && !still ? share : 0f, aim);
+        if (still)
+            SnapFocus();
+        Apply();
+        UiMotion.Run(this);
+    }
+
+    /// <summary>The narrowing's target (SlideFocus.Narrowing, from the lens the reading view entered at, against the push-in's target) and the turn's (SlideFocus.Turn at the reading camera's aspect).</summary>
+    private void SetFocusTargets(float share, Vector2 aim)
+    {
+        _focus.Target = share > 0f ? SlideFocus.Narrowing(_view.ReadingFov + _pushIn, _push.Target, share, _focusCap) : 0f;
+        (float pan, float tilt) turn = share > 0f ? SlideFocus.Turn((aim.x, aim.y), _view.ReadingFov, _desk.Lens.Aspect) : (0f, 0f);
+        _pan.Target = turn.pan;
+        _tilt.Target = turn.tilt;
+        _focusTaggedUntil = 0f;
+    }
+
+    /// <summary>The focus cut to its targets (motion is still): a one-frame move, tagged SlideInFocus when it moves the lens at all.</summary>
+    private void SnapFocus()
+    {
+        if (Mathf.Abs(_focus.Value - _focus.Target) + Mathf.Abs(_pan.Value - _pan.Target) + Mathf.Abs(_tilt.Value - _tilt.Target) > 1e-4f)
+            QaSignals.TagCamera(CameraMoveCause.SlideInFocus, PushTagSeconds);
+        _focus.Snap(_focus.Target);
+        _pan.Snap(_pan.Target);
+        _tilt.Snap(_tilt.Target);
+    }
+
+    /// <summary>Steps the push-in (tagging it with the view's cause while it moves) and the focus (tagging it SlideInFocus while it moves); false once both settled.</summary>
     public bool TickMotion(float dt)
     {
         if (this == null || _desk == null)
             return false;
         MotionKnobs knobs = UiMotion.Knobs;
-        bool moving = _push.Step(dt, knobs.Get(knobs.cameraFeel), 1e-3f, 1e-2f);
+        SpringTuning feel = knobs.Get(knobs.cameraFeel);
+        bool moving = _push.Step(dt, feel, 1e-3f, 1e-2f);
         CameraMoveCause cause = _view != null ? _view.LastCause : CameraMoveCause.ViewKey;
         if (moving && cause != CameraMoveCause.Untagged && Time.unscaledTime >= _taggedUntil - 0.05f)
         {
             QaSignals.TagCamera(cause, PushTagSeconds);
             _taggedUntil = Time.unscaledTime + PushTagSeconds;
         }
+        bool focusing = _focus.Step(dt, feel, 1e-3f, 1e-2f);
+        focusing |= _pan.Step(dt, feel, 1e-3f, 1e-2f);
+        focusing |= _tilt.Step(dt, feel, 1e-3f, 1e-2f);
+        if (focusing && Time.unscaledTime >= _focusTaggedUntil - 0.05f)
+        {
+            QaSignals.TagCamera(CameraMoveCause.SlideInFocus, PushTagSeconds);
+            _focusTaggedUntil = Time.unscaledTime + PushTagSeconds;
+        }
         Apply();
-        return moving;
+        return moving || focusing;
     }
 
-    /// <summary>The reading camera's field of view: the solved reading lens, wider by what is left of the push-in.</summary>
+    /// <summary>The reading camera's field of view: the solved reading lens, wider by what is left of the push-in, narrowed by the focus (SlideFocus.Total: the two never past the focus's cap of the lens the view entered at); its turn toward the focused machine.</summary>
     private void Apply()
     {
         if (_desk == null || _view == null)
             return;
         LensSettings lens = _desk.Lens;
-        lens.FieldOfView = _view.ReadingFov + _pushIn - _push.Value;
+        float entered = _view.ReadingFov + _pushIn;
+        lens.FieldOfView = entered - SlideFocus.Total(entered, _push.Value, _focus.Value, _focusCap);
         _desk.Lens = lens;
+        if (_turn != null)
+        {
+            _turn.Pan = _pan.Value;
+            _turn.Tilt = _tilt.Value;
+        }
     }
 }

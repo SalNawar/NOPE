@@ -293,6 +293,12 @@ public sealed class ProximityAssist
     /// <summary>The cues the last Step raised, in order.</summary>
     public IReadOnlyList<SlideCue> Cues => _cues;
 
+    /// <summary>The slider the last Step picked for the cursor (null: none), a busy one too: the D6 framing focus follows it (SlideFocus).</summary>
+    public string Picked => _picked?.Slider.id;
+
+    /// <summary>True when <paramref name="id"/> is out for the cursor and its slide has finished (outSeconds after its trigger; at once under Reduced Motion): the D6 framing focus may start on it.</summary>
+    public bool SlideDone(string id) => id != null && _byId.TryGetValue(id, out State s) && s.Phase == SlidePhase.Out && (_still || _now - s.T0 >= _slides.outSeconds);
+
     /// <summary>
     /// The shift is over (DeskSlideIn hears DayOrchestrator.OnDayCompleted:
     /// the last traveller was finished, or the booth shut with nobody at the

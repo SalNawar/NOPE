@@ -997,6 +997,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// gives them an object, the folded red book peeking out of its pocket),
     /// and the painted daters on their rack (the dater STAMP carries gives
     /// way while it is carried or strokes).
+    /// Then the D6 framing focus (FramingFocus) on the reading view.
     /// </summary>
     private void BindSlideIn(Transform intercomStandIn)
     {
@@ -1029,6 +1030,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
             MachineSlideIn.Attach(DeskHomeMap.UvTorch, torch.transform, body, layered: true, taken: () => torch.Held);
+        if (!TryGetComponent(out FramingFocus focus))
+            focus = gameObject.AddComponent<FramingFocus>();
+        focus.Bind(slideIn, deskView, _office, desk);
         if (!_painted)
             return;
         foreach (PaintedObject o in DeskPaintedMap.Objects)
