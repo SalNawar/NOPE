@@ -49,10 +49,19 @@ public static class FlowChecks
         string path = Path.Combine(GateResults.ProjectRoot, "Assets", "Data", "Config", "MotionTuning_Default.asset");
         if (!File.Exists(path))
             return GateResult.Of("flow.motionTuning.live", Owner, false, "MotionTuning_Default.asset is missing", path);
-        var live = new HashSet<string>(typeof(MotionKnobs).GetFields(BindingFlags.Public | BindingFlags.Instance).Select(f => f.Name));
-        List<string> stale = Regex.Matches(File.ReadAllText(path), @"^    (\w+):", RegexOptions.Multiline).Cast<Match>()
-                                  .Select(x => x.Groups[1].Value).Where(name => !live.Contains(name)).ToList();
+        List<string> stale = StaleKnobs(File.ReadAllText(path), LiveKnobs());
         return GateResult.Of("flow.motionTuning.live", Owner, stale.Count == 0, $"{stale.Count} stale knob(s)", string.Join(", ", stale));
+    }
+
+    /// <summary>The knobs MotionKnobs has today (its public fields: the asset's lines under knobs:).</summary>
+    public static IEnumerable<string> LiveKnobs() => typeof(MotionKnobs).GetFields(BindingFlags.Public | BindingFlags.Instance).Select(f => f.Name);
+
+    /// <summary>The knob names <paramref name="assetText"/> (a MotionTuningSO's YAML) carries that are not in <paramref name="live"/> (pure; FlowSeamTests): the four-space lines under knobs: are its fields.</summary>
+    public static List<string> StaleKnobs(string assetText, IEnumerable<string> live)
+    {
+        var known = new HashSet<string>(live);
+        return Regex.Matches(assetText ?? string.Empty, @"^    (\w+):", RegexOptions.Multiline).Cast<Match>()
+                    .Select(x => x.Groups[1].Value).Where(name => !known.Contains(name)).ToList();
     }
 
     /// <summary>

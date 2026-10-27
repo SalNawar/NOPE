@@ -301,6 +301,25 @@ public class FlowSeamTests
     }
 
     /// <summary>
+    /// The night of 2026-10-28 (seam I): the wave 2 merge gate read 3 stale
+    /// knobs (paperDropSquash, stampSlamSeconds, inkBloomSeconds) in
+    /// MotionTuning_Default.asset, lines no MotionKnobs field reads (BUG-73c:
+    /// the asset holds the live knobs only). The check's rule is the pure
+    /// StaleKnobs; the project's asset names live knobs only.
+    /// </summary>
+    [Test]
+    public void MotionTuningDefault_NamesLiveKnobsOnly_AndTheRuleNamesAStaleOne()
+    {
+        string path = Path.Combine(SoFieldReadersTests.ProjectRoot(), "Assets", "Data", "Config", "MotionTuning_Default.asset");
+        Assert.IsTrue(File.Exists(path), path);
+        List<string> live = FlowChecks.LiveKnobs().ToList();
+        CollectionAssert.Contains(live, "stampLift");
+        CollectionAssert.IsEmpty(FlowChecks.StaleKnobs(File.ReadAllText(path), live), "every line under knobs: is a MotionKnobs field");
+        CollectionAssert.AreEqual(new[] { "inkBloomSeconds" }, FlowChecks.StaleKnobs("  knobs:\n    stampLift: 0.025\n    inkBloomSeconds: 0.08\n", live), "a line no field reads is stale");
+        CollectionAssert.IsEmpty(FlowChecks.StaleKnobs("  knobs:\n    firm:\n      stiffness: 700\n", live), "a nested spring's fields are not knobs");
+    }
+
+    /// <summary>
     /// The night of 2026-10-28 (seam A): the veil's ClickBlocker took the QA
     /// rig's first press on every new scene. The blocker is a raycast target
     /// from Lower's first frame and no longer the moment Raise has the
