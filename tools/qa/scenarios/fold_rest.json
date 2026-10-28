@@ -227,7 +227,7 @@
     },
     {
       "op": "note",
-      "text": "The passport from the counter onto the mat in the office view (a drop on the desk brings the reading view, D1, so a plain drag, no drop op), then papers over the folder and the folder over papers (both allowed, as in Papers, Please)."
+      "text": "The passport from the counter onto the mat in the office view (a drop on the desk brings the reading view, D1, so a plain drag, no drop op). Then the folder over the passport's lower part, and the passport (grabbed by its visible middle) over the folder: both allowed, as in Papers, Please. A press meets what lies on top, so each drag starts on a part of its target that shows."
     },
     {
       "op": "key",
@@ -256,29 +256,29 @@
     {
       "op": "drop",
       "text": "root",
-      "name": "p_passport_over_folder",
+      "name": "f_folder_over_passport",
       "path": "Plain",
-      "target": "PaperTemplate(Clone)",
-      "x2": 0.6,
-      "y2": 0.2
+      "target": "Rulebook",
+      "x2": 0.469,
+      "y2": 0.4815
     },
     {
       "op": "restTrace",
-      "name": "p_passport_over_folder",
+      "name": "f_folder_over_passport",
       "f": 8
     },
     {
       "op": "drop",
       "text": "root",
-      "name": "f_folder_over_passport",
+      "name": "p_passport_over_folder",
       "path": "Plain",
-      "target": "Rulebook",
-      "x2": 0.64,
-      "y2": 0.24
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.47,
+      "y2": 0.42
     },
     {
       "op": "restTrace",
-      "name": "f_folder_over_passport",
+      "name": "p_passport_over_folder",
       "f": 8
     },
     {
