@@ -80,7 +80,8 @@ public class DeskV3InstallTests
 
             Assert.IsTrue(desk.WearReadout("Desk_ChipReader", readout, readoutClick.transform));
             Assert.IsTrue(readout.GetComponent<Renderer>().enabled, "the readout line shows again");
-            Assert.AreEqual(painted.transform, readout.transform.parent, "under the painted mesh: it rides the reader's slide");
+            Assert.AreEqual(painted.transform, readout.transform.parent.parent, "under the painted mesh: it rides the reader's slide");
+            Assert.AreEqual("ReadoutMount", readout.transform.parent.name, "on an unturned mount that undoes the mesh's scale (no shear)");
             float faceTop = painted.GetComponent<Renderer>().bounds.max.y;
             // The cube in the desk's frame (PaintedReadoutTests' Reader): the line leans toward the chair from its near edge (the code review's R3).
             var cube = new PaintedReadout.Box(0.79f, 1.01f, 1.08f, 1.16f, 0.27f, 0.43f);

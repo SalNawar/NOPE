@@ -739,7 +739,9 @@ public sealed class DeskPainted : MonoBehaviour
             return false;
         var local = new PaintedReadout.Box(bounds.min.x, bounds.max.x, bounds.min.y, bounds.max.y, bounds.min.z, bounds.max.z);
         Transform line = readout.transform;
-        line.SetParent(mesh, false);
+        // A rotated child of the painted mesh's non-uniform scale would shear (the lean came out at about 12 degrees and the letters
+        // skewed): the line rides an unturned mount whose scale undoes the mesh's, so the line's own frame is square.
+        line.SetParent(ReadoutMount(mesh), false);
         // A TextMeshPro shows on its -Z: forward down and away from the chair shows it up and toward the chair (PaintedReadout.Tilt),
         // its top edge up the lean, so it reads from the chair.
         var (forward, up) = PaintedReadout.LineFacing();
@@ -781,6 +783,28 @@ public sealed class DeskPainted : MonoBehaviour
     private static Vector3 V((float x, float y, float z) p) => new Vector3(p.x, p.y, p.z);
 
     /// <summary>Puts <paramref name="t"/> at <paramref name="local"/> in this desk's frame, turned by <paramref name="turn"/> from the desk's facing, at unit world scale: each of its axes is scaled back by the parent's scale along the parent axis the turn lays it on (a parent scaled unevenly, turned under by a right angle, as the readout line is: exact; any other turn, the nearest).</summary>
+    /// <summary>
+    /// The painted mesh's unturned child "ReadoutMount" (made once), its
+    /// scale the inverse of the mesh's world scale, so a turned child under
+    /// it keeps a square frame (no shear) and rides the reader's slide.
+    /// </summary>
+    public static Transform ReadoutMount(Transform mesh)
+    {
+        Transform mount = mesh.Find("ReadoutMount");
+        if (mount == null)
+        {
+            mount = new GameObject("ReadoutMount").transform;
+            mount.SetParent(mesh, false);
+        }
+        mount.localPosition = Vector3.zero;
+        mount.localRotation = Quaternion.identity;
+        Vector3 s = mesh.lossyScale;
+        mount.localScale = new Vector3(Inverse(s.x), Inverse(s.y), Inverse(s.z));
+        return mount;
+    }
+
+    private static float Inverse(float v) => Mathf.Abs(v) < 1e-6f ? 1f : 1f / v;
+
     private void Pose(Transform t, Vector3 local, Quaternion turn)
     {
         t.SetPositionAndRotation(transform.TransformPoint(local), transform.rotation * turn);
