@@ -93,10 +93,10 @@ public sealed class ProtocolRing : MonoBehaviour, IBeginDragHandler, IDragHandle
     /// <inheritdoc/>
     public void OnBeginDrag(PointerEventData eventData) => _dragged = false;
 
-    /// <summary>A drag on the ring flicks the front card over to the next (once per drag), without asking.</summary>
+    /// <summary>A drag on the ring flicks the front card over to the next (once per drag), without asking; in the reading view only (DeskTools).</summary>
     public void OnDrag(PointerEventData eventData)
     {
-        if (_dragged || eventData.delta.sqrMagnitude < 4f)
+        if (_dragged || eventData.delta.sqrMagnitude < 4f || !DeskTools.Live)
             return;
         _dragged = true;
         Refresh();

@@ -79,16 +79,16 @@ public sealed class Rolodex : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     /// <summary>A left click flicks the drum on a few cards.</summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.dragging || eventData.button != PointerEventData.InputButton.Left)
+        if (eventData.dragging || eventData.button != PointerEventData.InputButton.Left || !DeskTools.Live)
             return;
         _settling = false;
         _speed += flickSpeed;
     }
 
-    /// <summary>A left drag takes hold of the drum (the desk's one hold).</summary>
+    /// <summary>A left drag takes hold of the drum (the desk's one hold), in the reading view only (DeskTools).</summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (eventData.button != PointerEventData.InputButton.Left)
+        if (eventData.button != PointerEventData.InputButton.Left || !DeskTools.Live)
             return;
         _dragging = true;
         _settling = false;

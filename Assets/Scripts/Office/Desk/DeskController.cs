@@ -731,8 +731,8 @@ public sealed class DeskController : MonoBehaviour
     private void HandleDragged(DeskDraggable drag, Vector3 point)
     {
         DeskZone under = ZoneAt(point);
-        // The scanner's lid opens for a paper dragged near it (ScannerLid).
-        scanner.SetNear(!_scanners.Hidden && scanner.Near(point));
+        // The scanner's lid opens for a paper dragged near it (ScannerLid), in the reading view only (DeskTools: the office view's machines do not respond).
+        scanner.SetNear(DeskTools.Live && !_scanners.Hidden && scanner.Near(point));
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         if (paper != null && _state != null)
         {
@@ -940,6 +940,11 @@ public sealed class DeskController : MonoBehaviour
     /// </summary>
     private IPaperDock DockAt(DeskRect world, float y)
     {
+        // The machines take a paper or refuse the folder in the reading view only (Saleh's playtest of 2026-10-28, point 11:
+        // "flashlight and other machiences should only be usable on overhead camera"); in the office view a drop on one lies on
+        // the desk beside it (the keep-outs) and, a paper, brings the reading view.
+        if (!DeskTools.Live)
+            return null;
         _dockOrder.Clear();
         IPaperDock reader = hardware != null ? hardware.ReaderDock : null;
         if (reader != null && reader.OnDesk)

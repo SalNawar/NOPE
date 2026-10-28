@@ -9,7 +9,8 @@ using UnityEngine.UI;
 /// decides which of the desktop, the PC, the power buttons, the desk props,
 /// the documents, the traveller, the wheel, the stamp bar, inspect mode, the
 /// mat, the reading view's "▲ Back" control and the mouse wheel, the city
-/// view and the PC's grey tab take input or show, whether the office case HUD
+/// view, the PC's grey tab and the desk's tools (DeskTools: in the reading
+/// view only) take input or show, whether the office case HUD
 /// shows, and whether the documents and the rulebook show their values as
 /// comparable (inspect mode: DeskInspect); it returns the reading view when
 /// the next traveller is called, a newsletter shows or the wheel or the PC
@@ -255,6 +256,8 @@ public sealed class BoothCoordinator : MonoBehaviour
             foreach (Clickable prop in props)
                 if (prop != null)
                     prop.Interactable = input.PropsLive;
+        // After the props: a tool among them (the scanner) is still dead in the office view (Saleh's playtest of 2026-10-28, point 11).
+        DeskTools.Set(input.ToolsLive);
         if (desk != null)
         {
             desk.SetPapersLive(input.PapersLive);

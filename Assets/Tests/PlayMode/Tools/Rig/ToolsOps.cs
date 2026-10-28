@@ -18,7 +18,10 @@ using UnityEngine.Rendering;
 /// held frame, projects the torch's own meshes to the screen and counts the
 /// lit patch's points inside their outline (the reveal ≥95% unoccluded,
 /// BUG-2c), and checks the pool lies on the desk plane inside the desk's
-/// corners whenever it is drawn (0 frames off the surface).</item>
+/// corners whenever it is drawn (0 frames off the surface). With text
+/// "still" (the office view) it asserts instead that the torch never lifts
+/// (Saleh's playtest of 2026-10-28, point 11: the tools are used in the
+/// reading view only).</item>
 /// <item><c>toolsClicks</c>: n tries at the target's visual centre (jittered
 /// ±3 px), each asking the event system what a click there would press: the
 /// target every time (BUG-4b: the torch's box no longer swallows the chip
@@ -118,6 +121,14 @@ public static class ToolsOps
         finally
         {
             Time.captureFramerate = restore;
+        }
+        if (s.text == "still")
+        {
+            // The office view (Saleh's playtest of 2026-10-28, point 11: the tools are used in the reading view only): the drag
+            // over the torch must not lift it (DeskTools; BoothRules.ToolsLive).
+            runner.Assert($"tools.torch.{name}.officeStill", Owner, held == 0, $"held {held} frames in the office view",
+                "point 11: the UV torch does not respond outside the reading view (no lift, no light)");
+            yield break;
         }
         runner.Assert($"tools.torch.{name}.unoccluded", Owner, held > 0 && under == 0 && unmeasured == 0,
             $"held {held} frames; worst {F(worst * 100f)}% of the lit patch seen past the body ({worstAt}); {under} frames under {F(UvTorchHold.UnoccludedShare * 100f)}%; {unmeasured} frames with no body outline; body points: {PointSources(torch)}",

@@ -587,6 +587,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             InstallPainted(standIn);
         DeskLayout.RefreshObstacles();
         BindSlideIn(standIn);
+        RegisterTools();
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
@@ -1342,6 +1343,28 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         DeskLayout.Track(DeskHomeMap.Glasses, paintedDesk.SliderOf(PaintedGlasses));
         DeskLayout.Track(DeskHomeMap.Bell, paintedDesk.Mesh(PaintedBell));
         DeskLayout.Track(DeskHomeMap.RulebookPocket, paintedDesk.Mesh(PaintedPocket));
+    }
+
+    /// <summary>
+    /// The desk's tools' click boxes follow DeskTools' switch (BoothCoordinator
+    /// sets it: the reading view only; Saleh's playtest of 2026-10-28, point
+    /// 11, "flashlight and other machiences should only be usable on overhead
+    /// camera"): the scanner with its add-ons, the chip reader with its
+    /// readout and its painted look's box, the UV torch, and the upgrades'
+    /// Rolodex, protocol cards and BABEL rack (their stand-ins' boxes too).
+    /// The intercom, DETAIN and the stamps are not tools: they answer in both
+    /// views.
+    /// </summary>
+    private void RegisterTools()
+    {
+        DeskTools.RegisterAll(scanner);
+        if (hardware != null)
+        {
+            DeskTools.RegisterAll(hardware.Reader);
+            DeskTools.RegisterAll(hardware.Torch);
+        }
+        foreach (string id in new[] { DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing, DeskHomeMap.BabelTuner })
+            DeskTools.RegisterAll(DeskLayout.ObjectOf(id));
     }
 
     /// <summary>
