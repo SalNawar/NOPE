@@ -185,6 +185,12 @@ public sealed class CityView : MonoBehaviour
             if (!screen.TryGetComponent(out Button click))
                 click = screen.gameObject.AddComponent<Button>();
             click.transition = Selectable.Transition.None;
+            // The click is a full-screen click area, not a control, so its target graphic is a clear, empty one (the hover
+            // highlight gives a transparent graphic no outline). With the matte as its target (the Button's Awake takes the
+            // Image beside it when it has none), the fade's first frame made the matte the pointer's hit, HoverHighlighter
+            // gave it a UI outline (the theme's two rings, at full alpha), and the rings' copies of the full-screen quad
+            // washed the office cream under the rising matte (the director's "cream flash", night build 2026-10-28).
+            click.targetGraphic = ClickArea(screen.transform);
             click.navigation = new Navigation { mode = Navigation.Mode.None };
             click.onClick.AddListener(Return);
         }
@@ -523,6 +529,24 @@ public sealed class CityView : MonoBehaviour
             lookButton.gameObject.SetActive(_live && !IsOn);
         if (backButton != null && backButton.gameObject.activeSelf != IsOn)
             backButton.gameObject.SetActive(IsOn);
+    }
+
+    /// <summary>The city click's target graphic: a clear Image of no size under <paramref name="screen"/> that takes no raycast and draws nothing (made once).</summary>
+    private static Graphic ClickArea(Transform screen)
+    {
+        const string Name = "CityClickArea";
+        Transform existing = screen.Find(Name);
+        if (existing != null && existing.TryGetComponent(out Image found))
+            return found;
+        var go = new GameObject(Name, typeof(RectTransform));
+        go.transform.SetParent(screen, false);
+        var rect = (RectTransform)go.transform;
+        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.sizeDelta = Vector2.zero;
+        Image image = go.AddComponent<Image>();
+        image.color = Color.clear;
+        image.raycastTarget = false;
+        return image;
     }
 
     /// <summary>The hall windows' living city material (the first of the exterior's panels drawing it), or null.</summary>
