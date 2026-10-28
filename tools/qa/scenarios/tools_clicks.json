@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-4b (FIX_PLAN TOOLS clicks): at A1 in the office view, the chip reader's visual centre presses the chip reader 10/10 (the torch's click box no longer swallows it), and the torch's own centre presses the torch 10/10. Day 18 has both machines by the plan (the reader comes on day 17; the three-week progression). The still reader_readout shows the painted reader with its readout line (READY: this scenario reads no chip); on the painted desk the painted mesh carries the reader's click box (seam D of 2026-10-28)."
+      "text": "TOOLS BUG-4b (FIX_PLAN TOOLS clicks): at A1 in the reading view, the chip reader's visual centre presses the chip reader 10/10 (the torch's click box no longer swallows it), and the torch's own centre presses the torch 10/10. Day 18 has both machines by the plan (the reader comes on day 17; the three-week progression). Since Saleh's playtest of 2026-10-28, point 11, the tools answer in the reading view only (DeskTools), so the run turns to the reading view (Tab) before the clicks (integrate/s0800). The stills reader_readout_office (the office view) and reader_readout (the reading view, at 1080p and 5:4) show the painted reader with its readout line (READY: this scenario reads no chip; the code review's R3: the line must read from the chair); on the painted desk the painted mesh carries the reader's click box (seam D of 2026-10-28)."
     },
     {
       "op": "title"
@@ -43,6 +43,18 @@
       "name": "office_machines"
     },
     {
+      "op": "still",
+      "name": "reader_readout_office"
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
       "op": "toolsClicks",
       "name": "chipReader",
       "target": "Office/DeskHardware/ChipReader",
@@ -72,6 +84,19 @@
       "name": "chipReader_a2",
       "target": "Office/DeskHardware/ChipReader",
       "n": 10
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "still",
+      "name": "reader_readout"
     }
   ]
 }
