@@ -91,8 +91,8 @@ public readonly struct BoothInput
 
     /// <summary>
     /// The desk's tools take input (the UV torch, the scanner and the chip
-    /// reader with their add-ons and readout, the Rolodex, the protocol
-    /// cards and the BABEL rack: DeskTools): as the props, in the reading
+    /// reader with their add-ons and readout, and the BABEL rack:
+    /// DeskTools.Homes): as the props, in the reading
     /// view only (Saleh's playtest of 2026-10-28, point 11: "flashlight and
     /// other machiences should only be usable on overhead camera"). In the
     /// office view they do not respond, as Papers, Please's desk items: no

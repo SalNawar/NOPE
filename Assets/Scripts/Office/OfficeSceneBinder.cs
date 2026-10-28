@@ -1394,9 +1394,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// 11, "flashlight and other machiences should only be usable on overhead
     /// camera"): the scanner with its add-ons, the chip reader with its
     /// readout and its painted look's box, the UV torch, and the upgrades'
-    /// Rolodex, protocol cards and BABEL rack (their stand-ins' boxes too).
-    /// The intercom, DETAIN and the stamps are not tools: they answer in both
-    /// views.
+    /// BABEL rack (its stand-in's box too). The intercom, DETAIN, the stamps,
+    /// the Rolodex and the protocol cards are not tools: they answer in both
+    /// views (DeskTools.Homes).
     /// </summary>
     private void RegisterTools()
     {

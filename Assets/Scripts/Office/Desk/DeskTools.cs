@@ -6,9 +6,8 @@ using UnityEngine;
 /// The desk's tools' one switch (Saleh's playtest of 2026-10-28, point 11:
 /// "flashlight and other machiences should only be usable on overhead
 /// camera"): the UV torch, the scanner and the chip reader (a paper let go on
-/// them, the Auto-Feed tray, the Analysis beacon, the reader's readout), the
-/// Rolodex, the protocol cards and the BABEL rack respond only while it is
-/// on. BoothCoordinator sets it from BoothRules' ToolsLive (the reading view,
+/// them, the Auto-Feed tray, the Analysis beacon, the reader's readout) and
+/// the BABEL rack respond only while it is on. BoothCoordinator sets it from BoothRules' ToolsLive (the reading view,
 /// the props live); off, each tool simply does not respond, as Papers,
 /// Please's desk items do in the booth: no pick-up, no drag, no click, no
 /// hover rim (each registered click box's Clickable goes inert), no slide
@@ -16,14 +15,19 @@ using UnityEngine;
 /// machine lies on the desk beside it (DeskController.DockAt).
 /// On by default: with no booth coordinator (a test, an older scene) every
 /// tool works as before. The intercom (the wheel, from both views: Saleh's
-/// D5), DETAIN and the stamps are not tools here.
+/// D5), DETAIN and the stamps are not tools here. Nor are the Rolodex and the
+/// protocol cards (integrate/s0800): they are no machines, and the painted
+/// desk's reading view does not frame them (its frame runs x -1.09 to 1.11 m,
+/// y -0.56 to 0.68 m at 16:9; the Rolodex lies at x -1.46 to -1.22 and the
+/// cards at y 0.62 to 0.87 on the counter row), so in the reading view only
+/// the player could never use them.
 /// </summary>
 public static class DeskTools
 {
     /// <summary>The tools' homes (DeskHomeMap's ids): the objects there are tools (OfficeSceneBinder.RegisterTools) and their slide-in answers the cursor in the reading view only (Responds).</summary>
     public static readonly string[] Homes =
     {
-        DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.UvTorch, DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing, DeskHomeMap.BabelTuner,
+        DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.UvTorch, DeskHomeMap.BabelTuner,
     };
 
     /// <summary>True when the slider <paramref name="id"/> answers the cursor now (DeskSlideIn): a tool's in the reading view only (in the office view it does not slide toward the cursor, as it does not respond); every other one (the intercom, the glasses, the book, the daters) always.</summary>
