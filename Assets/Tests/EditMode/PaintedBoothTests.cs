@@ -160,6 +160,23 @@ public class PaintedBoothTests
             Assert.AreEqual(name == DeskPaintedMap.BoothBars ? "Desk_BoothBars_Paint.png" : "Desk_Booth_Paint.png", booth.Get(name).Get("texture").Text, name);
     }
 
+    /// <summary>
+    /// Saleh 2026-10-28: "textures are terrible when you go overhead". The reading view sees the counter row's and the machines'
+    /// painted faces at a grazing angle; every painted texture takes the hardware's most anisotropic taps (16, not 8), and the
+    /// importer's version moves so Unity imports the folder again. The .meta files carry the same level, so a reimport changes nothing.
+    /// </summary>
+    [Test]
+    public void EveryPaintedTexture_ImportsWithFullAnisotropicFiltering()
+    {
+        string importer = Read(ImporterPath);
+        StringAssert.Contains("importer.anisoLevel = 16;", importer, "the importer sets the most anisotropic taps");
+        StringAssert.Contains("public override uint GetVersion() => 4;", importer, "and its version moved, so the folder imports again");
+        string[] metas = Directory.GetFiles(Path.Combine(Root(), Art + "Textures"), "*.png.meta");
+        Assert.That(metas.Length, Is.GreaterThanOrEqualTo(50), "the painted textures and their masks");
+        foreach (string path in metas)
+            StringAssert.Contains("\n    aniso: 16\n", File.ReadAllText(path).Replace("\r\n", "\n"), Path.GetFileName(path));
+    }
+
     /// <summary>The bake's check (export v3, check/check_report.json, 2026-10-21): the gates the booth passed, recorded here so a changed bake must pass them again.</summary>
     private const float EdgeMatchOverall = 0.9458f, EdgeMatchWorstRegion = 0.9281f, EdgeMatchGate = 0.85f, FaceClearancePx = 10.4f, FaceClearanceGate = 8f;
 

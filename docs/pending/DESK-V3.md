@@ -11,6 +11,20 @@ Branch `feat/desk-v3`, cut from `fix/a-desk-plan` (DESK-PLAN #5, the desk home m
 - **D6:** "when they slide in, we subtly zoom in a bit not too hard just a small focus to frame the shot".
 - On the 2D work: "why are you still working on the mock?" (so this builds the real thing). Nothing pops (his standing rule for motion).
 - **The booth (2026-10-21, the game against his concept B, `canva\B.png`, then `paint\office_bars_v1.png`):** "not that concept the one with the bars also where is the left wall". The bake's calls he accepted: D1 (every texture regraded darker), D4 (the booth front leans back 9 degrees), D5 (the bars keep the traveller's face clear).
+- **The playtest of the night build (2026-10-28):** "bg is dark"; "textures are terrible when you go overhead, visual glitches everywhere"; "things have these black visual glitches as the camera move".
+
+## Saleh's playtest of 2026-10-28 (fix/s0800-visual)
+
+### The hall behind the bars ("bg is dark")
+The booth's grade is re-measured after LIGHT's finish: see round 13, section 4, the 2026-10-28 line.
+
+### The textures from overhead ("textures are terrible when you go overhead")
+- **Cause:** every painted texture is the office painting projected through the office camera (bake v3, D1). The reading view (pitch 80, 1.66 m at 16:9) sees the desk from above. The mat's depth had 308 painting pixels a metre (the 2688 px source); the reading view needs 873 at 1080p, so it is stretched 2.8 times along the depth. The tops of the machines and of the counter row were seen almost edge-on from the chair: the bake filled them from the nearest painted texel along each part's long axis (the README's "extended"), which reads as streaks from above.
+- **Fixed in code:** every painted texture imports with anisotropic level 16 (was 8; `DeskPaintedImporter`, version 4, the 52 .meta files). The sizes (4096 shell, 2048 mat, 1024 machines), BC7 and trilinear filtering stay: the sources are no larger, and BC7 shows no blocks on this paint.
+- **Planned art step: the overhead plate and bake v4.**
+  1. Paint the reading view as a plate, in office_bars_v1's style: CAM's 16:9 pose (pitch 80 degrees, 1.66 m, the frame x -1.09 to 1.11 m, y -0.56 to 0.68 m), at **3840 x 2160** (1745 px a metre: twice the 1080p need, 1:1 at 4K). Register it on the bake's own render of that pose (`check\reading.png`, `ids_reading_169_booth.png`). Saleh approves the plate first.
+  2. Bake v4: each texel takes the plate that sees it most squarely with the most pixels a metre (facing times density); seams blend over 8 px. Gate: the office render moves 0 px against v3 (the office view stays the painting), the edge match against the overhead plate is 0.85 or more.
+  3. Sizes: `Desk_Mat_Paint` 2048 to **4096** (1.45 m x 1745 = 2530 px); the shell's top faces in the reading frame get their own **4096** texture (2.2 x 1.24 m = 3840 x 2160 texels); the scanner, the chip reader and the stamp rack go to **2048** with their top faces given half their UV space. About +60 MB as BC7 with mips.
 
 ## Round 13: the enclosed booth (concept B's left wall and teller bars)
 

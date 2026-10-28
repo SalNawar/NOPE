@@ -75,7 +75,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     private const float PivotTolerance = 0.001f;
 
     /// <summary>Bumped when the import settings change, so Unity imports the folder again.</summary>
-    public override uint GetVersion() => 3;
+    public override uint GetVersion() => 4;
 
     private void OnPreprocessTexture()
     {
@@ -92,7 +92,9 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         importer.alphaIsTransparency = alpha;
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.filterMode = FilterMode.Trilinear;
-        importer.anisoLevel = 8;
+        // The reading view looks at the counter row's and the machines' painted faces at a grazing angle (Saleh 2026-10-28: "textures are terrible when
+        // you go overhead"): the most anisotropic taps the hardware takes keep them from smearing along the slant. Quality's "Forced On" only raises a lower level.
+        importer.anisoLevel = 16;
         // Round 12 (the concept-vs-game review, item 10: the mat and the desk read softer than the painting): the two big static
         // surfaces, seen 3 to 6 texels to a screen pixel, keep more of their line work with Kaiser mips and a -0.5 bias.
         bool sharp = name == "Desk_Mat_Paint" || name == "DeskShell_Paint";
