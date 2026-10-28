@@ -365,7 +365,8 @@ public static class ToolsOps
     /// <summary>
     /// Sweeps (x, y) → (x2, y2) → (x, y) over f seconds (default 3; screen
     /// fractions, or fractions of the target's screen rect when a target is
-    /// named: SweepEnds). Every frame: every translated text must be drawn, not the
+    /// named, a text's own laid-out rect when the target is a text: SweepEnds).
+    /// Every frame: every translated text must be drawn, not the
     /// PC's, and under the pointer (within 24 px of its rect); and the lens's
     /// candidate set (TranslationLensPresenter.Candidates, every text it was
     /// allowed to read there) is logged and must hold no PC text. With text
@@ -389,7 +390,11 @@ public static class ToolsOps
         float seconds = s.f > 0f ? s.f : 3f, begin = Time.unscaledTime, end = begin + seconds;
         Rect? over = null;
         if (!string.IsNullOrEmpty(s.target))
-            over = QaGame.ScreenRect(QaGame.GameObjectAt(s.target)) ?? throw new InvalidOperationException($"{s.target} is not on the screen.");
+        {
+            // A text's own laid-out rect (a paper's title line: TextRect), else the object's screen rect.
+            GameObject target = QaGame.GameObjectAt(s.target);
+            over = (target.TryGetComponent(out TMP_Text text) ? TextRect(text) : QaGame.ScreenRect(target)) ?? throw new InvalidOperationException($"{s.target} is not on the screen.");
+        }
         (Vector2 a, Vector2 b) = SweepEnds(over, s.x, s.y, s.x2, s.y2, new Vector2(Screen.width, Screen.height));
         string swept = $"swept {F(a.x)},{F(a.y)} to {F(b.x)},{F(b.y)} px" + (over != null ? $" over {s.target}'s rect {over.Value}" : string.Empty);
         while (Time.unscaledTime < end)
