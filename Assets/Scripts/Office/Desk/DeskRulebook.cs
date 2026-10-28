@@ -425,6 +425,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced), opening the folder first when it is shut (D3): its rows show, the others' hide; its tab looks open; a turn flicks the loose sheets. The GUIDE shows its sheet (read).</summary>
     public void ShowPage(int page)
     {
+        TakeOut(); // in its pocket (the painted desk), it comes out onto the mat first (the guide's page)
         Open();
         TurnTo(page, true);
     }
@@ -736,6 +737,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
             none.gameObject.SetActive(_indices.Count == 0);
         if (folderCover != null)
             folderCover.ShutNow(); // the day's rules arrive in a shut folder (D3)
+        StowNow(); // in its pocket, on the painted desk (Saleh's playtest of 2026-10-28, point 5: the mat starts empty)
     }
 
     /// <summary>
@@ -1041,6 +1043,12 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         world = default;
         if (!isActiveAndEnabled)
             return false;
+        if (_pocketed)
+        {
+            // in its pocket: the arrow looks at the painted book (a click there brings the folder out)
+            world = _bookPoint;
+            return true;
+        }
         if (Shut && folderFace != null)
         {
             // the shut folder: the arrow looks at its board (a click there opens it)
@@ -1069,7 +1077,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         int row = _indices.IndexOf(ruleIndex) - SheetStart;
         if (row >= SheetCount)
             return false;
-        if (!isActiveAndEnabled || Shut || row < 0 || row >= rows.Length || rows[row] == null || !rows[row].gameObject.activeInHierarchy ||
+        if (!isActiveAndEnabled || Shut || _pocketed || row < 0 || row >= rows.Length || rows[row] == null || !rows[row].gameObject.activeInHierarchy ||
             !rows[row].TryGetComponent(out Collider box))
             return false;
         bounds = box.bounds;

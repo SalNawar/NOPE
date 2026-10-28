@@ -615,6 +615,14 @@ public static class StampRig
         DeskDocument passport = Paper(tray, -1);
         float overlap = step.f > 0f ? step.f : 0.03f;
         var log = new StringBuilder($"== stampFolderOver {step.name}: ");
+        // On the painted desk the folder starts each day in its pocket (Saleh's playtest of 2026-10-28, point 5): out onto the mat
+        // first, as a click on the red book brings it.
+        if (folder.Pocketed && folder.TakeOut())
+        {
+            log.Append("taken out of its pocket; ");
+            for (float waited = 0f; folder.PocketMoving && waited < 3f; waited += Time.unscaledDeltaTime)
+                yield return null;
+        }
         string state = "not checked";
         var screen = new Vector2(Screen.width, Screen.height);
         int began = 0, ended = 0, cancelled = 0, passportMoves = 0;

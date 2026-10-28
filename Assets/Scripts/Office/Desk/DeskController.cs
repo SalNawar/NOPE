@@ -280,7 +280,8 @@ public sealed class DeskController : MonoBehaviour
     /// lies just clear of it (Saleh's 1018a playtest: "if is the wrong
     /// document it shouldnt go through the machience"); dropped on the counter
     /// it shakes its "no" (DeskRulebook) and lies just off it (BUG-6b: never a
-    /// teleport back to where it was picked up).
+    /// teleport back to where it was picked up); dropped on its pocket (the
+    /// painted desk) it goes back in (DeskRulebook.PutAway).
     /// </summary>
     private void RulebookDropped(DeskDraggable drag, Vector3 released)
     {
@@ -291,6 +292,13 @@ public sealed class DeskController : MonoBehaviour
             Vector3 at = rulebook.transform.position;
             // its footprint's centre (the view's frame back to world x, z) decides the machine, as a paper's does
             Vector3 centre = surface.transform.position + _viewRight * folder.CentreX + _viewForward * folder.CentreY;
+            if (rulebook.IntoPocket(released, centre))
+            {
+                // Let go on its pocket (the painted desk's red book; Saleh's playtest of 2026-10-28, point 5): it goes back in, eased.
+                rulebook.PutAway();
+                RulebookLifted(drag);
+                return;
+            }
             IPaperDock dock = DockAt(new DeskRect(centre.x, centre.z, 0f, 0f), at.y);
             bool refused = dock != null && !MachineIntake.Accepts(dock.Machine, MachineFeed.Folder);
             // Clear of the desk's objects too (DESK-PLAN's registry: DETAIN, the bell, the AVAILABLE sign, the glasses, the stamp

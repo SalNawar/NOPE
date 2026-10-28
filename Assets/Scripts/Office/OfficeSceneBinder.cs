@@ -594,6 +594,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             Vector3 right = Vector3.Cross(Vector3.up, level);
             Vector3 at = new Vector3(deskCentre.x, top, deskCentre.z) + right * config.rulebookAt.x + level * config.rulebookAt.y; // on the desk plane: the stack lifts it (DeskController)
             rulebook.Place(at, Quaternion.LookRotation(level, Vector3.up));
+            if (_painted && _hasFrame)
+                BindPocket();
         }
 
         // The papers come in and go back over the deal tray (Saleh, DESK APPROVED); without its home, from the art's hand-over point.
@@ -1268,8 +1270,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// the rulebook's pocket with its red book) are tracked on their homes
     /// (obstacles); the painted sliders among them (the glasses, the book)
     /// show and take the hover outline every slider has (a click answers
-    /// with the press's tick until GLASSES B8 gives the glasses theirs and
-    /// DESK-HOMES P4 takes the book out) and lift (BindSlideIn).
+    /// with the press's tick until GLASSES B8 gives the glasses theirs; the
+    /// book's click and drag take the rulebook folder out: BindPocket) and
+    /// lift (BindSlideIn).
     /// </summary>
     private void InstallPainted(Transform intercomStandIn)
     {
@@ -1349,6 +1352,38 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         DeskLayout.Track(DeskHomeMap.Glasses, paintedDesk.SliderOf(PaintedGlasses));
         DeskLayout.Track(DeskHomeMap.Bell, paintedDesk.Mesh(PaintedBell));
         DeskLayout.Track(DeskHomeMap.RulebookPocket, paintedDesk.Mesh(PaintedPocket));
+    }
+
+    /// <summary>
+    /// The rulebook folder's home on the painted desk (Saleh's playtest of
+    /// 2026-10-28, point 5: "isnt the big red binder for the folder? why is
+    /// the folder by default on the desk? still no place for it"; DESK-HOMES
+    /// P4): the painting's red book in its pocket is the folder put away
+    /// (DeskRulebook.SetPocket: the folder starts each day in it, the mat
+    /// empty). The book's click brings the folder out onto the mat (its tick
+    /// only before the rulebook's day), a drag from it takes the folder out
+    /// under the pointer (PocketBook), and the folder let go on the pocket goes
+    /// back in (DeskController.RulebookDropped).
+    /// </summary>
+    private void BindPocket()
+    {
+        Transform bookHome = paintedDesk.SliderOf(DeskPaintedMap.RulebookFolded);
+        if (bookHome == null || !paintedDesk.TryBounds(DeskPaintedMap.RulebookFolded, out Bounds book))
+            return;
+        DeskRect bookRect = _frame.Footprint(book);
+        DeskRect pocket = paintedDesk.TryBounds(PaintedPocket, out Bounds holder) ? _frame.Footprint(holder) : bookRect;
+        Clickable click = paintedDesk.EnsureClickable(DeskPaintedMap.RulebookFolded, null);
+        if (click != null)
+        {
+            click.onClick.RemoveAllListeners();
+            click.onClick.AddListener(() =>
+            {
+                if (!rulebook.TakeOut())
+                    Sounds.Play(SoundCues.UiPress);
+            });
+            PocketBook.Bind(click.gameObject, rulebook);
+        }
+        rulebook.SetPocket(_frame.Point(new Vector2(bookRect.CentreX, bookRect.CentreY)), pocket, new Vector2(bookRect.Width, bookRect.Height), bookHome.gameObject, book.center);
     }
 
     /// <summary>

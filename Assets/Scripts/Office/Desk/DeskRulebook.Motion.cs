@@ -16,8 +16,14 @@ using UnityEngine;
 /// </summary>
 public sealed partial class DeskRulebook
 {
-    /// <summary>Lays the booklet on the desk at <paramref name="at"/> (on the desk plane), turned to <paramref name="rotation"/> (the office binder).</summary>
-    public void Place(Vector3 at, Quaternion rotation) => transform.SetPositionAndRotation(at, rotation);
+    /// <summary>Lays the booklet on the desk at <paramref name="at"/> (on the desk plane), turned to <paramref name="rotation"/> (the office binder): its reading spot, where it comes out of its pocket (DeskRulebook.Pocket.cs; a folder in its pocket stays there).</summary>
+    public void Place(Vector3 at, Quaternion rotation)
+    {
+        _readAt = at;
+        _readTurn = rotation;
+        if (!_pocketed)
+            transform.SetPositionAndRotation(at, rotation);
+    }
 
     /// <summary>Lifts the booklet <paramref name="height"/> metres off the desk plane (its place in the papers' stack, or the drag's lift: DeskController).</summary>
     public void SetLift(float height)
@@ -110,7 +116,8 @@ public sealed partial class DeskRulebook
             _hop.Velocity = Mathf.Max(0f, _hop.Velocity);
         }
         _carry.Step(transform, Time.deltaTime);
-        if (_physics.Moving || !_hop.AtRest || held || _heldRatio < 1f)
+        bool sizing = StepPocket(Time.deltaTime); // on the carry's clock: in or out of the pocket the size and the way end together
+        if (_physics.Moving || !_hop.AtRest || held || _heldRatio < 1f || sizing)
             ShowMotion();
     }
 
@@ -131,7 +138,7 @@ public sealed partial class DeskRulebook
         }
         booklet.localPosition = local;
         booklet.localRotation = Quaternion.Euler(0f, yaw, 0f);
-        booklet.localScale = _bookletScale.Value * s;
+        booklet.localScale = _bookletScale.Value * (s * PocketSize); // in its pocket it lies shrunk under the book (DeskRulebook.Pocket.cs)
     }
 
     /// <summary>The booklet dropped on the counter (it stays on the clerk's side): it shakes its "no" in place; the desk lays it just off the counter (DeskController.RulebookDropped), never back where it was picked up.</summary>
