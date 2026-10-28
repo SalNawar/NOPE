@@ -54,8 +54,21 @@ public static class SaveSystem
     /// </summary>
     public static string FolderOverride { get; set; }
 
-    /// <summary>The save slot's folder (SaveLocation): Application.persistentDataPath in a player; in the editor the project's Library/EditorSaves, so parallel plays in several worktrees' editors never overwrite one another's save (FolderOverride when set). Tools that set the slot aside keep their copies here too.</summary>
-    public static string Folder => FolderOverride ?? SaveLocation.Folder(Application.isEditor, Application.dataPath, Application.persistentDataPath);
+    /// <summary>The save slot's folder (SaveLocation): Application.persistentDataPath in a player; in the editor the project's Library/EditorSaves, so parallel plays in several worktrees' editors never overwrite one another's save (FolderOverride when set; in a player, the folder after SaveLocation.FolderSwitch when given). Tools that set the slot aside keep their copies here too.</summary>
+    public static string Folder => FolderOverride ?? ArgsFolder ?? SaveLocation.Folder(Application.isEditor, Application.dataPath, Application.persistentDataPath);
+
+    /// <summary>A player's save folder from its command line (SaveLocation.FolderSwitch: the build's boot check), read once; null in the editor or without the switch.</summary>
+    private static string ArgsFolder => _argsFolderRead ? _argsFolder : ReadArgsFolder();
+
+    private static bool _argsFolderRead;
+    private static string _argsFolder;
+
+    private static string ReadArgsFolder()
+    {
+        _argsFolder = Application.isEditor ? null : SaveLocation.FolderFromArgs(Environment.GetCommandLineArgs());
+        _argsFolderRead = true;
+        return _argsFolder;
+    }
 
     /// <summary>Full save file path.</summary>
     public static string SavePath => Path.Combine(Folder, FileName);

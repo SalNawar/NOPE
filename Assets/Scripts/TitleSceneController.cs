@@ -27,6 +27,9 @@ using UnityEngine;
 /// </summary>
 public sealed class TitleSceneController : MonoBehaviour
 {
+    /// <summary>The log line the title writes once the run is acquired: the build's boot check (BLD-02) waits for it to call a new player started.</summary>
+    public const string ReadyLine = "[TitleSceneController] Title ready.";
+
     /// <summary>UI controller for the title panels (optional).</summary>
     [SerializeField] private TitleUIController titleUI;
 
@@ -45,6 +48,7 @@ public sealed class TitleSceneController : MonoBehaviour
             Debug.LogError("TitleSceneController could not acquire a RunManager (missing Resources/RunConfig).");
             return;
         }
+        Debug.Log(ReadyLine);
 
         WorldState world = run.World;
         bool ended = !string.IsNullOrEmpty(world.endingId);

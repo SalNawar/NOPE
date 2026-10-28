@@ -40,6 +40,21 @@ public class SaveLocationTests
         Assert.AreEqual(Persistent, SaveLocation.Folder(false, "/game/NOPE_Data", Persistent));
     }
 
+    [Test]
+    public void Player_TakesTheSaveFolderFromItsCommandLine()
+    {
+        Assert.AreEqual("C:/boot/saves", SaveLocation.FolderFromArgs(new[] { "TimeSorter.exe", "-batchmode", SaveLocation.FolderSwitch, "C:/boot/saves" }));
+    }
+
+    [Test]
+    public void Player_WithoutTheSwitchKeepsItsOwnSave()
+    {
+        Assert.IsNull(SaveLocation.FolderFromArgs(new[] { "TimeSorter.exe", "-batchmode" }));
+        Assert.IsNull(SaveLocation.FolderFromArgs(new[] { "TimeSorter.exe", SaveLocation.FolderSwitch }));
+        Assert.IsNull(SaveLocation.FolderFromArgs(new[] { "TimeSorter.exe", SaveLocation.FolderSwitch, "-logFile" }));
+        Assert.IsNull(SaveLocation.FolderFromArgs(null));
+    }
+
     /// <summary>A path in one form (full, one separator, no trailing separator), so the tests hold on any OS.</summary>
     private static string Normal(string path) =>
         Path.GetFullPath(path.Replace('\\', '/')).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);

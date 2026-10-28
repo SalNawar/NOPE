@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 /// <summary>
@@ -7,7 +8,10 @@ using System.IO;
 /// own), so each worktree's editor has its own save: several editors used to
 /// share the product's one persistent data folder, and parallel plays
 /// overwrote one another's save. Pure, so the rule is tested headless;
-/// SaveSystem applies it.
+/// SaveSystem applies it. A player started with <see cref="FolderSwitch"/>
+/// keeps its save in the folder after the switch instead (the build's boot
+/// check, BLD-02: it starts each new player without touching the player's
+/// own save).
 /// </summary>
 public static class SaveLocation
 {
@@ -24,5 +28,17 @@ public static class SaveLocation
 
         string root = Path.GetDirectoryName(assetsPath.Replace('\\', '/').TrimEnd('/'));
         return Path.Combine(root, "Library", "EditorSaves");
+    }
+
+    /// <summary>The player's command-line switch whose next argument is the save folder (the build's boot check).</summary>
+    public const string FolderSwitch = "-saveFolder";
+
+    /// <summary>The folder after <see cref="FolderSwitch"/> in <paramref name="args"/>, or null when the switch is absent or has no folder after it.</summary>
+    public static string FolderFromArgs(string[] args)
+    {
+        if (args == null)
+            return null;
+        int i = Array.IndexOf(args, FolderSwitch);
+        return i >= 0 && i + 1 < args.Length && !string.IsNullOrWhiteSpace(args[i + 1]) && !args[i + 1].StartsWith("-") ? args[i + 1] : null;
     }
 }

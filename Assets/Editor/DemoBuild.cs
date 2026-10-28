@@ -26,7 +26,12 @@ using UnityEngine;
 /// track's checks; Library/QA/DemoGate/report_demo.md says why). The
 /// product name, company and version come from PlayerSettings. Every run writes
 /// a summary (result, size, time, errors) to a text file beside the output
-/// folder (<see cref="ReportPathFor"/>). Callable from the menu, from the
+/// folder (<see cref="ReportPathFor"/>). Unity's "Succeeded" is not trusted
+/// (audit 2026-10-28, BLD-02): the build refuses to start on a drive with
+/// less than <see cref="BuildVerify.MinFreeBytes"/> free, and a built player
+/// is Failed when the build's log has a write-failure assert, a data file has
+/// a long zero run or the player does not boot to the title
+/// (<see cref="BuildVerify"/>; the boot log beside the report). Callable from the menu, from the
 /// editor's job runner (<see cref="BuildWindowsDemo"/>, parameterless) and
 /// from the command line: -executeMethod DemoBuild.BuildWindowsDemo
 /// [-demoBuildPath &lt;exe path&gt;]. <see cref="BuildScratch"/> builds a
@@ -106,7 +111,7 @@ public static class DemoBuild
         problems.AddRange(refusals);
         if (problems.Count > 0)
         {
-            string refused = Summary(exePath, scenes, null, problems, 0L, setup);
+            string refused = Summary(exePath, scenes, null, problems, 0L, setup, new List<string>());
             Directory.CreateDirectory(Path.GetDirectoryName(reportPath));
             File.WriteAllText(reportPath, refused);
             Debug.LogError("[DemoBuild] Refused to build:\n" + refused);
@@ -125,15 +130,61 @@ public static class DemoBuild
         };
 
         Debug.Log($"[DemoBuild] Building {PlayerSettings.productName} {PlayerSettings.bundleVersion} to {exePath}.");
+        string editorLog = Application.consoleLogPath;
+        long logStart = BuildVerify.LengthOf(editorLog);
         BuildReport report = BuildPipeline.BuildPlayer(options);
 
-        string summary = Summary(exePath, scenes, report, problems, FolderBytes(Path.GetDirectoryName(exePath)), setup);
+        List<string> verify = report.summary.result == BuildResult.Succeeded
+            ? Verify(exePath, BuildVerify.ReadSharedFrom(editorLog, logStart))
+            : new List<string>();
+        BuildResult result = verify.Count == 0 ? report.summary.result : BuildResult.Failed;
+
+        string summary = Summary(exePath, scenes, report, problems, FolderBytes(Path.GetDirectoryName(exePath)), setup, verify);
         File.WriteAllText(reportPath, summary);
-        if (report.summary.result == BuildResult.Succeeded)
+        if (result == BuildResult.Succeeded)
             Debug.Log("[DemoBuild] " + summary);
         else
             Debug.LogError("[DemoBuild] " + summary);
-        return report.summary.result;
+        return result;
+    }
+
+    /// <summary>
+    /// Why the player Unity built to <paramref name="exePath"/> is broken (none
+    /// when it is whole): write-failure asserts in <paramref name="buildLog"/>
+    /// (the editor log of the build), long zero runs in its data files, a boot
+    /// that does not reach the title. A broken player gets a BROKEN_BUILD.txt
+    /// beside its exe, so nobody plays it.
+    /// </summary>
+    private static List<string> Verify(string exePath, string buildLog)
+    {
+        var problems = new List<string>();
+        int writeFailures = BuildVerify.WriteFailures(buildLog);
+        if (writeFailures > 0)
+            problems.Add($"The build's log has {writeFailures} \"{BuildVerify.WriteFailureText}\" asserts: chunks of the data were not written.");
+
+        string folder = Path.GetDirectoryName(exePath);
+        problems.AddRange(BuildVerify.ScanData(Path.Combine(folder, Path.GetFileNameWithoutExtension(exePath) + "_Data")));
+
+        if (problems.Count == 0)
+        {
+            string boot = BuildVerify.Boot(exePath, BootFolderFor(exePath));
+            if (boot != null)
+                problems.Add("Boot: " + boot + $" (log: {Path.Combine(BootFolderFor(exePath), "boot_player.log")})");
+        }
+
+        if (problems.Count > 0)
+            File.WriteAllText(Path.Combine(folder, "BROKEN_BUILD.txt"), "Do not play this build. It failed the build's checks:" + Environment.NewLine + string.Join(Environment.NewLine, problems) + Environment.NewLine);
+        else if (File.Exists(Path.Combine(folder, "BROKEN_BUILD.txt")))
+            File.Delete(Path.Combine(folder, "BROKEN_BUILD.txt"));
+        return problems;
+    }
+
+    /// <summary>The boot check's folder for a build to <paramref name="exePath"/>: &lt;output folder&gt;_Boot beside the output folder (its log and its own save), so it never ships inside it.</summary>
+    public static string BootFolderFor(string exePath)
+    {
+        string folder = Path.GetDirectoryName(Path.GetFullPath(exePath));
+        string parent = Path.GetDirectoryName(folder);
+        return parent == null ? Path.Combine(folder, "Boot") : Path.Combine(parent, Path.GetFileName(folder) + "_Boot");
     }
 
     /// <summary>The summary file for a build to <paramref name="exePath"/>: &lt;output folder&gt;_BuildReport.txt beside the output folder, so it never ships inside it.</summary>
@@ -151,6 +202,13 @@ public static class DemoBuild
         string assets = Path.GetFullPath(Application.dataPath).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
         if (exePath.StartsWith(assets, StringComparison.OrdinalIgnoreCase))
             problems.Add($"The output {exePath} is inside Assets; build outside the project.");
+
+        foreach (string where in new[] { exePath, Application.dataPath })
+        {
+            string space = BuildVerify.SpaceProblem(Path.GetPathRoot(where), BuildVerify.FreeBytes(where), BuildVerify.MinFreeBytes);
+            if (space != null && !problems.Contains(space))
+                problems.Add(space);
+        }
 
         if (scenes.Length == 0)
         {
@@ -196,12 +254,16 @@ public static class DemoBuild
     }
 
     /// <summary>The report's text: what was built, from what, with what result, size, time and messages.</summary>
-    private static string Summary(string exePath, string[] scenes, BuildReport report, List<string> problems, long folderBytes, BuildSetup setup)
+    private static string Summary(string exePath, string[] scenes, BuildReport report, List<string> problems, long folderBytes, BuildSetup setup, List<string> verify)
     {
         var sb = new StringBuilder();
         sb.AppendLine("Time Sorter demo build report");
         sb.AppendLine($"Written:  {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
-        sb.AppendLine($"Result:   {(report == null ? "Refused" : report.summary.result.ToString())}");
+        sb.AppendLine($"Result:   {(report == null ? "Refused" : verify.Count > 0 ? "Failed (Unity said " + report.summary.result + "; the checks below failed)" : report.summary.result.ToString())}");
+        if (report != null && report.summary.result == BuildResult.Succeeded)
+            sb.AppendLine(verify.Count == 0 ? "Verify:   PASS (no write-failure assert, no hole in the data, the player booted to the title)" : "Verify:   FAILED");
+        foreach (string line in verify)
+            sb.AppendLine("Broken:   " + line);
         sb.AppendLine($"Output:   {exePath}");
         sb.AppendLine((setup.Options & BuildOptions.Development) != 0
             ? "Target:   StandaloneWindows64, development build (a scratch player, not a demo)"
