@@ -156,8 +156,26 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>True while the dragged paper's pointer is over the counter (its strip lights).</summary>
     private bool _overCounter;
 
-    /// <summary>The office view's level right and forward on the desk (SetScannerView): the frame every rest is judged in (DropResolver).</summary>
+    /// <summary>The office camera's level line to the scanner and its right (SetScannerView): the way the scanner's shadow falls and the chip reader's upright face. It is not the frame a rest is judged in (RestRight, RestForward).</summary>
     private Vector3 _viewRight = Vector3.right, _viewForward = Vector3.forward;
+
+    /// <summary>
+    /// The frame every rest is judged in (InViewFrame, DropResolver): the
+    /// desk's own while it is bound (DeskLayout.Frame: the office camera's
+    /// level right and forward, the axes the reading view is posed on and the
+    /// frame every home's footprint is given in), else the office view's
+    /// (SetScannerView). FOLD-01 (Saleh's playtest of 2026-10-28, point 4):
+    /// the rests were judged along the office camera's line to the scanner,
+    /// 27 degrees off the desk's axes once the scanner stood on the right
+    /// rail. In that turned frame the reading view's four corners left a band
+    /// only 10 cm deep, narrower than the folder, so every rest's depth was
+    /// put at the band's middle (up to 470 px from the release at 1080p), and
+    /// each keep-out grew to the box round its turned shape.
+    /// </summary>
+    private Vector3 RestRight => DeskLayout.Bound ? DeskLayout.Frame.Right : _viewRight;
+
+    /// <inheritdoc cref="RestRight"/>
+    private Vector3 RestForward => DeskLayout.Bound ? DeskLayout.Frame.Forward : _viewForward;
 
     /// <summary>How deep behind the scanner its body hides a paper from the office camera, in metres (SetScannerView).</summary>
     private float _scannerShadow;
@@ -165,7 +183,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The obstacles' ids this desk registers (DeskObstacles): the scanner, the chip reader, the UV torch's cradle (until TOOLS registers its own).</summary>
     private const string ScannerObstacle = "desk.scanner", ReaderObstacle = "desk.chipReader", TorchObstacle = "desk.uvTorchCradle";
 
-    /// <summary>Reused buffers: the registry's footprints (world), the keep-outs in the view's frame, a paper's four corners.</summary>
+    /// <summary>Reused buffers: the registry's footprints (world), the keep-outs in the rest's frame, a paper's four corners.</summary>
     private readonly List<DeskRect> _footprints = new List<DeskRect>();
     private readonly List<DeskRect> _keepOut = new List<DeskRect>();
     private readonly Vector3[] _corners = new Vector3[4];
@@ -290,8 +308,8 @@ public sealed class DeskController : MonoBehaviour
         if (config != null && surface != null && TryFolderFootprint(out DeskRect folder))
         {
             Vector3 at = rulebook.transform.position;
-            // its footprint's centre (the view's frame back to world x, z) decides the machine, as a paper's does
-            Vector3 centre = surface.transform.position + _viewRight * folder.CentreX + _viewForward * folder.CentreY;
+            // its footprint's centre (the rest's frame back to world x, z) decides the machine, as a paper's does
+            Vector3 centre = surface.transform.position + RestRight * folder.CentreX + RestForward * folder.CentreY;
             if (rulebook.IntoPocket(released, centre))
             {
                 // Let go on its pocket (the painted desk's red book; Saleh's playtest of 2026-10-28, point 5): it goes back in, eased.
@@ -325,7 +343,7 @@ public sealed class DeskController : MonoBehaviour
     private readonly Vector3[] _folderCorners = new Vector3[8];
 
     /// <summary>
-    /// The folder's footprint on the desk (the view's frame): its own box
+    /// The folder's footprint on the desk (the rest's frame): its own box
     /// (DeskRulebook.TryBoxCorners: the board's side alone while shut, as the
     /// player sees it), else everything drawn under it. Saleh's playtest of
     /// 2026-10-28, point 4, "You move the folder and it snaps somewhere else":
@@ -1203,7 +1221,7 @@ public sealed class DeskController : MonoBehaviour
         return new Vector3(rest.x, at.y, rest.z);
     }
 
-    /// <summary>Where a thing whose footprint is <paramref name="footprint"/> (the view's frame) with its root at <paramref name="at"/> rests (DropResolver.Rest, as Rest; the rulebook folder too): kept in what the reading view shows (a thing on the desk), clear of every obstacle, the scanner's hidden area, each swept strip of the desk's slide-in (DeskLayout.SweptStrips), with <paramref name="props"/> every object standing on the desk (DESK-PLAN's registry, DeskLayout.Obstacles: the folder) and, <paramref name="offCounter"/>, the counter.</summary>
+    /// <summary>Where a thing whose footprint is <paramref name="footprint"/> (the rest's frame) with its root at <paramref name="at"/> rests (DropResolver.Rest, as Rest; the rulebook folder too): kept in what the reading view shows (a thing on the desk), clear of every obstacle, the scanner's hidden area, each swept strip of the desk's slide-in (DeskLayout.SweptStrips), with <paramref name="props"/> every object standing on the desk (DESK-PLAN's registry, DeskLayout.Obstacles: the folder) and, <paramref name="offCounter"/>, the counter.</summary>
     private Vector3 RestOf(DeskRect footprint, Vector3 at, bool offCounter, bool inView = true, bool props = false)
     {
         MeasureMachines();
@@ -1253,7 +1271,7 @@ public sealed class DeskController : MonoBehaviour
             Trace(props ? "folder" : "paper", footprint, area, x, y, at.y);
         if (Mathf.Approximately(x, footprint.CentreX) && Mathf.Approximately(y, footprint.CentreY))
             return at;
-        return at + _viewRight * (x - footprint.CentreX) + _viewForward * (y - footprint.CentreY);
+        return at + RestRight * (x - footprint.CentreX) + RestForward * (y - footprint.CentreY);
     }
 
     /// <summary>RestOf's buffers: each registry entry's id and height, and each keep-out's source (filled only while the QA rig traces: DropTrace).</summary>
@@ -1272,7 +1290,7 @@ public sealed class DeskController : MonoBehaviour
         var entry = new DropTrace
         {
             What = what, Frame = Time.frameCount, Footprint = footprint, Area = area, RestX = x, RestY = y,
-            Origin = new Vector3(origin.x, rootY, origin.z), Right = _viewRight, Forward = _viewForward, SurfaceY = origin.y, Clamp = _traceClamp,
+            Origin = new Vector3(origin.x, rootY, origin.z), Right = RestRight, Forward = RestForward, SurfaceY = origin.y, Clamp = _traceClamp,
         };
         for (int i = 0; i < 4; i++)
             entry.View[i] = _viewCorners[i];
@@ -1284,7 +1302,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>How large the counter's keep-out is (metres, every way past its near edge): far more than the desk.</summary>
     private const float CounterKeepOut = 100f;
 
-    /// <summary>The area a resting thing (its <paramref name="footprint"/>, the view's frame) lies wholly inside: the desk's, its centre anywhere a drag may take it (DeskSurface's clamp area, grown by its size), and on the desk (<paramref name="inView"/>) what the reading view shows (DeskConfigSO.restViewport: BUG-6, the whole paper stays in view; the desk's alone without the reading view, or where they do not meet).</summary>
+    /// <summary>The area a resting thing (its <paramref name="footprint"/>, the rest's frame) lies wholly inside: the desk's, its centre anywhere a drag may take it (DeskSurface's clamp area, grown by its size), and on the desk (<paramref name="inView"/>) what the reading view shows (DeskConfigSO.restViewport: BUG-6, the whole paper stays in view; the desk's alone without the reading view, or where they do not meet).</summary>
     private DeskRect RestArea(DeskRect footprint, bool inView)
     {
         DeskRect clamp = InViewFrame(surface.Corners());
@@ -1340,7 +1358,7 @@ public sealed class DeskController : MonoBehaviour
         };
     }
 
-    /// <summary>The footprint on the desk (the view's frame) of everything drawn under <paramref name="root"/>.</summary>
+    /// <summary>The footprint on the desk (the rest's frame) of everything drawn under <paramref name="root"/>.</summary>
     private bool TryFootprint(Transform root, out DeskRect footprint)
     {
         footprint = default;
@@ -1371,14 +1389,14 @@ public sealed class DeskController : MonoBehaviour
         return new[] { c - a - b, c + a - b, c - a + b, c + a + b };
     }
 
-    /// <summary>The rectangle enclosing <paramref name="corners"/> in the office view's frame on the desk (x right, y away from the camera, from the desk's centre).</summary>
+    /// <summary>The rectangle enclosing <paramref name="corners"/> in the rest's frame on the desk (RestRight, RestForward: x right, y away from the chair, metres from the desk's centre).</summary>
     private DeskRect InViewFrame(IEnumerable<Vector3> corners)
     {
-        Vector3 origin = surface.transform.position;
+        Vector3 origin = surface.transform.position, right = RestRight, forward = RestForward;
         float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
         foreach (Vector3 c in corners)
         {
-            float x = Vector3.Dot(c - origin, _viewRight), y = Vector3.Dot(c - origin, _viewForward);
+            float x = Vector3.Dot(c - origin, right), y = Vector3.Dot(c - origin, forward);
             minX = Mathf.Min(minX, x);
             maxX = Mathf.Max(maxX, x);
             minY = Mathf.Min(minY, y);
