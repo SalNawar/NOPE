@@ -57,6 +57,7 @@ Everything else below that is a design choice is marked **proposal (ours)**.
   - `HelixRiver.SpeedCap` turns that height into a speed. The river's clock slows by cap / `FastestOnClock` (80 reference px/s: the current streaks, the rungs and the twist).
   - The motes' travel is capped and integrated (`MoteTravel`), so a change of speed never jumps them. Before, the shader used `t * _Flow`, and a change of `_Flow` swept every mote.
   - On the desk monitor (about 96 px tall at 1080p) the river runs at about half speed. In the small tray strip it keeps its speed.
+  - **The strip's place on the night build (2026-10-28, fix/night-helix):** UI-PC's tray clock (BUG-21a) dropped `BuildTrayRiver`'s call, so the scene rebuilt on the night head held no `TimelineStrip` and `hall_fx_helix` stopped at its track op. `BuildTaskbar` calls it again: the strip sits at the tray's left, before the clock, 176 u wide, its glass 48 u tall under the 72 u bar. The seam test is `HallFxSeamTests.BuildTaskbar_KeepsTheHelixRiversStrip_InTheTray_BeforeTheClock` (NeedsEditor).
 - **The other strobe sources are gone:**
   - Rungs (16 px apart) and current streaks (6 px rows) fade out before they are packed closer than about 2 screen pixels, instead of aliasing.
   - The scanlines are on the glass (uv space, 6 px period, soft) and fade out when finer than 3 screen pixels. Before, they were hard steps in screen space, which crawl when the monitor moves.

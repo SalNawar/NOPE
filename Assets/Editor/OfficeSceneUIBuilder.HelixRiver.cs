@@ -6,8 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// The office builder's Helix River (stability shown without a number;
 /// docs/superpowers/specs/2026-10-07-helix-river-design.md): the taskbar's
-/// live strip in the tray (where "Stability: 100%" stood; a hover hint names
-/// it), the shift report's panel under its body (where the stability line
+/// live strip in the tray, at the tray clock's left (BuildTaskbar calls
+/// BuildTrayRiver; a hover hint names it; FEATURES "The Helix River" shows it
+/// "in the PC tray" and hall_fx_helix tracks "TimelineStrip" there), the
+/// shift report's panel under its body (where the stability line
 /// stood), the fallback HUD's cell, and the quad the office binder lays over
 /// the art's stability monitor (HelixRiverMonitor.Cover). Each is a
 /// HelixRiverMonitor; <see cref="WireHelixRivers"/> gives them all the
