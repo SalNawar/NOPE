@@ -28,14 +28,18 @@ public static partial class OfficeSceneUIBuilder
     /// rebuilt fresh: a light kit bar in the Taskbar role, the Start button
     /// (the StartButton role) at its left, and at its right end Windows' tray
     /// clock: the time over today's date ("09:07" over "14 MAR 2150"), the one
-    /// small glass readout on the bar, as wide as its words. Credits and the
-    /// Helix River left the tray (the river hangs on the wall monitor; the
-    /// wallet is the desk till's and the Citizen Account's), so
-    /// <paramref name="moneyText"/> is null. The clock and date are one clear
-    /// button (no underline: OfficeUIController makes it live only while the
-    /// app is on the PC): a click holds today on the workbench, to compare with
-    /// an expiry or a ticket's date. The tray shares a row (TrayRow) with the
-    /// window buttons, which take what it leaves (BuildWindowManager).
+    /// small glass readout on the bar, as wide as its words, with the Helix
+    /// River's strip at its left (BuildTrayRiver, "TimelineStrip": stability
+    /// without a number; FEATURES "The Helix River" shows it "in the PC tray"
+    /// and HALL-FX's hall_fx_helix tracks it there once Q opens the PC; the
+    /// night of 2026-10-28 put it back after BUG-21a's tray clock dropped its
+    /// call). Credits left the tray (the wallet is the desk till's and the
+    /// Citizen Account's), so <paramref name="moneyText"/> is null. The clock
+    /// and date are one clear button (no underline: OfficeUIController makes
+    /// it live only while the app is on the PC): a click holds today on the
+    /// workbench, to compare with an expiry or a ticket's date. The tray shares
+    /// a row (TrayRow) with the window buttons, which take what it leaves
+    /// (BuildWindowManager).
     /// </summary>
     private static void BuildTaskbar(Transform root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text clockText)
     {
@@ -59,7 +63,7 @@ public static partial class OfficeSceneUIBuilder
         shared.childForceExpandWidth = false;
         shared.childForceExpandHeight = true;
 
-        // The tray: one small glass readout, the clock over the date, inset from the bar's edges.
+        // The tray: the Helix River's strip, then one small glass readout, the clock over the date, inset from the bar's edges.
         Transform tray = Panel(trayRow, "Tray", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
         tray.GetComponent<Image>().raycastTarget = false;
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(tray.gameObject);
@@ -70,6 +74,7 @@ public static partial class OfficeSceneUIBuilder
         row.childForceExpandWidth = false;
         row.childForceExpandHeight = true;
         moneyText = null;
+        BuildTrayRiver(tray);
         dateButton = MakeButton(tray, "DateButton", null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
         DestroyChildIfPresent(dateButton.transform, "Label");
         VerticalLayoutGroup stack = GetOrAdd<VerticalLayoutGroup>(dateButton.gameObject);

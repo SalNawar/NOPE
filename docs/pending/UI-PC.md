@@ -144,6 +144,7 @@ The reverify found fix round 7's items closed in code and doc. It raised one S3 
 
 ### BUG-21a: taskbar skin, Start, Start menu, window buttons, dead affordances
 - **Tray.** Credits and the Helix River left the tray. The river hangs on the wall monitor; the wallet is the desk till's and the Citizen Account's. The tray holds only the clock.
+  - **Night build 2026-10-28 (fix/night-helix):** the river's strip is back in the tray, at the clock's left. FEATURES's Helix line ("in the PC tray") and HALL-FX's `hall_fx_helix` (it tracks `TimelineStrip` once Q opens the PC) keep it there. Credits stay out. The `uipc.tray` check reads the clock, the date, the CRT plate and the credits only, so it stays green.
 - **Bar.** The light kit bar reads as one piece: Start, the window buttons, the clock glass. Back to desk is gone.
 - **Start label.** "Start" reads Start through the `taskbar.start` value change (fragment). Until INTEGRATION applies it, the label reads "Menu".
 - **Start menu.**
@@ -353,7 +354,7 @@ The house runner is green either way.
 - **DOC-HANDLE:**
   - `ControlRules.BackOut`'s `PcOpen → ClosePc` no longer runs while the PC is open: the desktop stamps every back-out with the screen on (`BoothRules.DesktopInteractive`) and with it off (`PcBackOut.ScreenOff`), and under a newsletter the rules already return None. Drop the step, and apply the `keys.desk.back` dependent row with it.
   - Delete `DeskConfigSO.crtClockSize` (BUG-20b).
-- **HALL-FX:** `BuildTrayRiver` and `TrayRiverWidth` (`.HelixRiver.cs`) have no caller now that the river left the tray.
+- **HALL-FX:** `BuildTrayRiver` and `TrayRiverWidth` (`.HelixRiver.cs`) are called again from `BuildTaskbar` (fix/night-helix, 2026-10-28): the strip sits at the tray clock's left. Nothing to drop.
 - **QA-RIG (the harness; fix round 4, item 1):** a track op that changes a saved player setting cannot put it back when the run is stopped from outside. When a step throws, `QaRunner.Guard` stops without disposing the enumerators on its stack. When the run is destroyed (its deadline, a harness reset, play mode left, the player closed), Unity stops the coroutine and nothing disposes them. `CleanUp` restores only the runner's own changes. **Ask, either of:**
   - a run-level cleanup hook, for example `QaRunner.OnCleanUp(Action)`, that `CleanUp` runs once, so it runs from `Finish` and from `OnDestroy`. `uipcPowerOn` would register its restore there (one line).
   - or `Guard` disposing every enumerator left on its stack when it stops on an exception, with `OnDestroy` disposing the running step's stack. Then `uipcPowerOn`'s `finally` runs with no UI-PC change.
@@ -420,7 +421,7 @@ What the asks said, for the record: (1) a Windows-size tray clock is about 4 px 
 - **Line 78 (the desktop):**
   - A 72-unit light kit taskbar: Start, one button per open window, then the tray clock.
   - **Window buttons:** the app's glyph and title, 220 u, shrinking to 120 u, then a chevron "» N" (a glyph and a count) whose click brings the next waiting window forward.
-  - **Tray clock:** the time over today's date. A click holds today on the workbench once the Investigation app is on the PC. No credits, no Helix River.
+  - **Tray clock:** the time over today's date. A click holds today on the workbench once the Investigation app is on the PC. No credits. The Helix River's strip keeps its place at the clock's left (fix/night-helix, 2026-10-28).
   - **Colours:** the kit's look, with no culture colours (21b).
 - **Line 79 (the menu):**
   - "Start" with each app's pictogram tile, then Arrange icons and Quit game. The menu fits the entries a day shows.
