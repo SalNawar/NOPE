@@ -287,7 +287,7 @@
       "name": "p_passport_mat_top",
       "path": "Plain",
       "target": "PaperTemplate(Clone)",
-      "x2": 0.45,
+      "x2": 0.66,
       "y2": 0.55
     },
     {
@@ -301,7 +301,7 @@
     },
     {
       "op": "note",
-      "text": "The office view: the folder let go on the mat rests where let go (the audit's doclook_print: 170 px in 5 frames)."
+      "text": "The office view: the folder let go on the mat rests where let go (the audit's doclook_print: 170 px in 5 frames). The passport lies at the mat's top right, clear of the folder, so the press meets the folder."
     },
     {
       "op": "key",
