@@ -285,7 +285,7 @@ public class PaintedBoothTests
         string binder = Read(BinderPath);
         StringAssert.Contains("if (o.role == PaintedRole.Hidden)\n                paintedDesk.Hide(o.name);", binder, "the glass goes off at install");
         StringAssert.Contains("public void Hide(string name)\n    {\n        Transform mesh = Mesh(name);\n        if (mesh != null)\n            mesh.gameObject.SetActive(false);", Read("Assets/Scripts/Office/Desk/DeskPainted.cs"), "a flag, not a delete");
-        StringAssert.Contains("if (_painted)\n                CloseHallBehindBooth(hall.transform);", binder, "the hall's left city goes off only under the painted desk");
+        StringAssert.Contains("if (_painted)\n            {\n                CloseHallBehindBooth(hall.transform);", binder, "the hall's left city goes off only under the painted desk");
         Match close = Regex.Match(binder, @"private static void CloseHallBehindBooth\(Transform hall\)\n    \{(.*?)\n    \}", RegexOptions.Singleline);
         Assert.IsTrue(close.Success, "the binder closes the hall behind the booth");
         StringAssert.Contains("Array.IndexOf(DeskPaintedMap.HallClosedByBooth, t.name) >= 0", close.Groups[1].Value, "by the map's names");
