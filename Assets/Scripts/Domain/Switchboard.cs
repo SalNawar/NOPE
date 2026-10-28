@@ -754,3 +754,35 @@ public sealed class Switchboard
 
     private bool ValidRoute(SwitchRoute r) => r.Destination >= 0 && r.Destination < Destinations && r.Period >= 0 && r.Period < Periods;
 }
+
+/// <summary>What the hand on the switchboard does this frame (SwitchHand.Step). Not serialized.</summary>
+public enum SwitchHandStep
+{
+    /// <summary>Nothing: the board is not turned to, or the hand may not act now.</summary>
+    None,
+
+    /// <summary>Let go of what the hand holds with nothing changed: a plug back where it was, MASTER back where its breaker rests (SwitchboardView.CancelDrag).</summary>
+    Cancel,
+
+    /// <summary>The hand acts: it holds, lets go (a plug seats, MASTER throws), or picks up.</summary>
+    Hand
+}
+
+/// <summary>
+/// When the hand on the switchboard may act (the night's code review, F1;
+/// BUG-55: "let go without being committed"). The Input System sends a
+/// button release when the game loses the focus (Alt+Tab, another window),
+/// and a let-go plug seats or a let-go MASTER throws; so without the focus a
+/// held plug or MASTER is let go with nothing changed, and nothing is picked
+/// up. Pure.
+/// </summary>
+public static class SwitchHand
+{
+    /// <summary>The step: <paramref name="turned"/> the board fully turned to, <paramref name="focused"/> the game window has the focus, <paramref name="holding"/> a plug or MASTER is in the hand.</summary>
+    public static SwitchHandStep Step(bool turned, bool focused, bool holding)
+    {
+        if (!focused)
+            return holding ? SwitchHandStep.Cancel : SwitchHandStep.None;
+        return turned ? SwitchHandStep.Hand : SwitchHandStep.None;
+    }
+}

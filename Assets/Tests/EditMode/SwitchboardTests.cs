@@ -374,6 +374,16 @@ public class SwitchboardTests
     }
 
     [Test]
+    public void TheHand_LetsGoUncommitted_WhenTheGameLosesTheFocus()
+    {
+        Assert.AreEqual(SwitchHandStep.Cancel, SwitchHand.Step(true, false, true), "BUG-55: the focus loss's release never seats a plug or throws MASTER");
+        Assert.AreEqual(SwitchHandStep.None, SwitchHand.Step(true, false, false), "nothing is picked up without the focus");
+        Assert.AreEqual(SwitchHandStep.Hand, SwitchHand.Step(true, true, true));
+        Assert.AreEqual(SwitchHandStep.Hand, SwitchHand.Step(true, true, false));
+        Assert.AreEqual(SwitchHandStep.None, SwitchHand.Step(false, true, false), "the board is not turned to");
+    }
+
+    [Test]
     public void ACallOffTheBoard_IsIgnored()
     {
         Switchboard board = Board();

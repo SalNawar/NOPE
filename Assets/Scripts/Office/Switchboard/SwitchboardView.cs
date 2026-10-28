@@ -154,8 +154,13 @@ public sealed partial class SwitchboardView : MonoBehaviour
         StepLampPhases(dt);
         StepTurn(dt);
         DrawWall();
-        if (_open && _openT >= 1f)
+        SwitchHandStep step = SwitchHand.Step(_open && _openT >= 1f, Application.isFocused, IsDragging);
+        if (step == SwitchHandStep.Cancel)
+            CancelDrag();
+        if (step == SwitchHandStep.Hand)
             Hand();
+        else if (_grab != null && _grab.gameObject.activeSelf)
+            _grab.gameObject.SetActive(false); // no hand cursor where the hand may not act
         Draw(dt);
         if (!Shown)
             StepLever(0f); // unseen, MASTER rests where its breaker is (a trip while the desk is in view shows no swing at the next turn)
@@ -187,6 +192,13 @@ public sealed partial class SwitchboardView : MonoBehaviour
             _grab.gameObject.SetActive(false);
         if (MotionPreference.Reduced)
             _openT = 0f;
+    }
+
+    /// <summary>The game lost the focus (Alt+Tab, another window): a plug or MASTER in the hand is let go without being committed (BUG-55; the Input System's release on focus loss must not seat a plug or throw MASTER; Update's SwitchHand.Step covers a release seen first).</summary>
+    private void OnApplicationFocus(bool focused)
+    {
+        if (!focused)
+            CancelDrag();
     }
 
     /// <summary>Lets go of what the hand holds without changing the board (a right-click or Esc while dragging): a plug goes back where it was, MASTER back where its breaker rests; false when the hand was empty.</summary>
