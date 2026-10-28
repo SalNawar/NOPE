@@ -19,6 +19,9 @@ using UnityEngine.TextCore;
 /// clean print (density 1, no wear) shows in the dater's top window. A date
 /// band (Band) is the rubber ring of one date wheel: its labels round its
 /// circumference. The caller owns every texture made here and destroys it.
+/// A print keeps its pixels readable (its CPU copy, 415 KB: what the
+/// rubber printed is read back and compared, FlowSeamTests; a band's
+/// are let go, nothing reads them).
 /// The rubber is the bureau's: a verdict word it cannot print (a Greek,
 /// Arabic, Japanese or Chinese word) prints as its English APPROVED or
 /// DENIED (DaterRubber; BUG-38b), chosen by the verdict the caller passes,
@@ -119,7 +122,7 @@ public static class DaterImpressionArt
             }
         var texture = new Texture2D(Width, Height, TextureFormat.RGBA32, true) { name = "DaterImpression", wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Trilinear };
         texture.SetPixels32(pixels);
-        texture.Apply(true, true);
+        texture.Apply(true, false); // readable: the print's pixels stay (GetPixels32 reads them back)
         return texture;
     }
 
