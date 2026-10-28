@@ -592,7 +592,7 @@ public static class DeskPaintedMap
     /// <summary>
     /// DESK-PLAN's homes the painted desk leaves out: the art's mouse (cut;
     /// the painted PC island has its own mouse, fixed art) and the later
-    /// thumbprint reader (positions only, not in days 1-15), whose home beside
+    /// thumbprint reader (positions only, not in days 1-21), whose home beside
     /// the rail lies on desk v3's chip reader tray (DESK-PLAN re-homes it when
     /// it comes).
     /// </summary>

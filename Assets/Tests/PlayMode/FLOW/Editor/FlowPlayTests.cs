@@ -35,7 +35,7 @@ public class FlowPlayTests : QaPlayTest
         AssertRun(Finish());
     }
 
-    /// <summary>Day 12's night shift closes at 24:00, and an early finish raises Closed once, so the closing bell rings (BUG-72). About ten minutes: the shift runs to closing.</summary>
+    /// <summary>Day 15's night shift (day 12 before the three-week progression) closes at 24:00, and an early finish raises Closed once, so the closing bell rings (BUG-72). About ten minutes: the shift runs to closing.</summary>
     [UnityTest, Explicit, Category("QaPlay")]
     public IEnumerator Night_ClosesAt2400_AndAnEarlyFinishRingsTheBell()
     {
