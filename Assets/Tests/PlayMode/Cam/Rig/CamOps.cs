@@ -1414,8 +1414,20 @@ public static class CamOps
         held(true);
     }
 
-    /// <summary>The count of a private collection field of <paramref name="target"/> (0 without it): DeskController's <c>_inReader</c> (a HashSet), TravellerWheel's <c>_said</c> (a List).</summary>
+    /// <summary>The count of a private collection field of <paramref name="target"/> (0 without it): TravellerWheel's <c>_said</c> (a List; DeskController's <c>_inReader</c> set was counted here until DOC-HANDLE replaced it, see <see cref="ReaderHolds"/>).</summary>
     private static int CountOf(object target, string field) => target != null ? Count(QaGame.Field(target, field)) : 0;
+
+    /// <summary>
+    /// True while DeskController's chip reader holds a paper: its machine
+    /// occupancy (<c>_docks</c>, a MachineOccupancy; DOC-HANDLE's one source
+    /// since BUG-24, in place of the <c>_inReader</c> set), asked the way
+    /// DeskController refuses the next paper (<c>Busy(DeskMachine.ChipReader)</c>;
+    /// a paper handed off and on its way out no longer counts). The night of
+    /// 2026-10-28: cam_views stopped at camplay's chip reads with a
+    /// MissingFieldException on the old name (CamRigTests pins the names).
+    /// </summary>
+    private static bool ReaderHolds(DeskController desk) =>
+        desk != null && QaGame.Field(desk, "_docks") is MachineOccupancy docks && docks.Busy(DeskMachine.ChipReader);
 
     /// <summary>
     /// The number of items in <paramref name="collection"/> (0 for null or
@@ -1442,7 +1454,7 @@ public static class CamOps
         /// <summary>The reader never began (a paper with no chip): it bounces back, the next paper is tried.</summary>
         Refused,
 
-        /// <summary>The reader began but its paper never came back out: not a read, and the reads end (while the reader holds a paper DeskController refuses every next one, <c>_inReader</c>).</summary>
+        /// <summary>The reader began but its paper never came back out: not a read, and the reads end (while the reader holds a paper DeskController refuses every next one: its machine occupancy, <see cref="ReaderHolds"/>).</summary>
         Stuck,
 
         /// <summary>The reader finished and its paper is out again: one read.</summary>
@@ -1652,7 +1664,7 @@ public static class CamOps
                 bool began = false, back = false;
                 yield return Wait(() => reader.Busy, 4f, ok => began = ok);
                 if (began)
-                    yield return Wait(() => !reader.Busy && CountOf(desk, "_inReader") == 0, 12f, ok => back = ok);
+                    yield return Wait(() => !reader.Busy && !ReaderHolds(desk), 12f, ok => back = ok);
                 ChipRead read = ChipReadOf(began, back);
                 if (read == ChipRead.Refused)
                 {

@@ -28,7 +28,11 @@ using UnityEngine;
 /// move landed on its own clock (round 9) and the whole cycle ran inside the
 /// gc window (round 8); and CamChecks'
 /// verdict over several patterns (every pattern required, on the built
-/// player when the check says so: round 8). Pure
+/// player when the check says so: round 8); and every private field the
+/// ops read by name through QaGame.Field, pinned on its type (the night of
+/// 2026-10-28: DOC-HANDLE's DeskController replaced its _inReader set with
+/// its machine occupancy, _docks, and cam_views stopped at camplay's chip
+/// reads with a MissingFieldException). Pure
 /// (types and values only, no Unity object made; the hook test puts
 /// Cinemachine's static blend hook back as it found it); in CAM's own Editor
 /// folder (Assembly-CSharp-Editor, the editor runner's).
@@ -37,10 +41,47 @@ public class CamRigTests
 {
     private static readonly string[] None = Array.Empty<string>();
 
+    /// <summary>
+    /// The private fields CamOps reads by name (QaGame.Field: the type's
+    /// own and its bases'), each on its type as the type the op reads it
+    /// as. Kept by hand with CamOps, as CAM's python pins are: a rename on
+    /// the game's side fails here, in the editor runner, not 132 steps into
+    /// cam_views.
+    /// </summary>
+    [Test]
+    public void EveryFieldTheOpsReadByName_ExistsOnItsType_AsThatType()
+    {
+        (Type type, string field, Type kind)[] pins =
+        {
+            (typeof(DeskController), "_docks", typeof(MachineOccupancy)),   // camplay's chip reads: the reader holds a paper (ReaderHolds)
+            (typeof(DeskController), "_state", typeof(DeskPapers)),          // camplay's Auto-Feed: the papers' zones
+            (typeof(DeskView), "config", typeof(DeskConfigSO)),              // camframe, camwatch, camcycle: the desk's tuning
+            (typeof(DeskView), "_moveSeconds", typeof(float)),               // cammove, camwatch: the tilt's length
+            (typeof(DeskView), "_sinceMove", typeof(float)),                 // camwatch: the tilt at rest
+            (typeof(DeskView), "_toggleLive", typeof(bool)),                 // the landing watch: the view's toggle is live
+            (typeof(CityView), "config", typeof(DeskConfigSO)),              // camcycle: the city's tuning
+            (typeof(TravellerWheel), "layout", typeof(Component)),          // camplay's wheel: its ring pills
+            (typeof(TravellerWheel), "_said", typeof(System.Collections.IEnumerable)), // camplay's wheel: the lines said (CountOf walks it)
+            (typeof(ScannerAddOns), "trayClick", typeof(Component)),         // camplay's Auto-Feed: the scanner's tray click
+        };
+        var wrong = new List<string>();
+        foreach ((Type type, string field, Type kind) pin in pins)
+        {
+            FieldInfo f = null;
+            for (Type t = pin.type; t != null && f == null; t = t.BaseType)
+                f = t.GetField(pin.field, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (f == null)
+                wrong.Add($"{pin.type.Name}.{pin.field}: no such field");
+            else if (!pin.kind.IsAssignableFrom(f.FieldType))
+                wrong.Add($"{pin.type.Name}.{pin.field} is a {f.FieldType.Name}, read as {pin.kind.Name}");
+        }
+        CollectionAssert.IsEmpty(wrong, string.Join("; ", wrong));
+    }
+
     [Test]
     public void Count_CountsAHashSet_AsWellAsAList()
     {
-        Assert.AreEqual(2, CamOps.Count(new HashSet<int> { 3, 7 }), "DeskController._inReader is a HashSet<int>");
+        Assert.AreEqual(2, CamOps.Count(new HashSet<int> { 3, 7 }), "a HashSet<int> (DeskController's old _inReader set)");
         Assert.AreEqual(3, CamOps.Count(new List<string> { "a", "b", "c" }), "TravellerWheel._said is a List");
         Assert.AreEqual(0, CamOps.Count(new HashSet<int>()));
         Assert.AreEqual(0, CamOps.Count(null));
