@@ -89,10 +89,22 @@ public readonly struct BoothInput
     /// <summary>The PC's grey tab and Q switch to the PC and back: no newsletter, and either the frame is open (back to the desk) or the wheel is closed (to the PC).</summary>
     public readonly bool PcSwitchLive;
 
+    /// <summary>
+    /// The desk's tools take input (the UV torch, the scanner and the chip
+    /// reader with their add-ons and readout, the Rolodex, the protocol
+    /// cards and the BABEL rack: DeskTools): as the props, in the reading
+    /// view only (Saleh's playtest of 2026-10-28, point 11: "flashlight and
+    /// other machiences should only be usable on overhead camera"). In the
+    /// office view they do not respond, as Papers, Please's desk items: no
+    /// pick-up, no hover rim, and a paper let go on a machine lies on the
+    /// desk beside it (the reading view then comes by itself).
+    /// </summary>
+    public readonly bool ToolsLive;
+
     /// <summary>Creates an output set.</summary>
     public BoothInput(bool desktopInteractive, bool crtFocusable, bool powerButtonLive, bool propsLive, bool papersLive, bool wheelAllowed,
                       bool travellerLive, bool stampsLive, bool inspectLive, bool caseHudVisible, bool deskViewAllowed, bool deskViewBackLive,
-                      bool normalViewLive, bool pcSwitchLive)
+                      bool normalViewLive, bool pcSwitchLive, bool toolsLive)
     {
         DesktopInteractive = desktopInteractive;
         CrtFocusable = crtFocusable;
@@ -108,6 +120,7 @@ public readonly struct BoothInput
         DeskViewBackLive = deskViewBackLive;
         NormalViewLive = normalViewLive;
         PcSwitchLive = pcSwitchLive;
+        ToolsLive = toolsLive;
     }
 }
 
@@ -121,7 +134,8 @@ public readonly struct BoothInput
 /// citation slip and the reading view, which of the desktop, the PC, the
 /// power buttons, the props, the documents, the wheel, the traveller, the
 /// stamp bar, inspect mode, the case HUD, the reading view, its "▲ Back"
-/// control, the normal view's own ways and the PC switch take input or show.
+/// control, the normal view's own ways, the PC switch and the desk's tools
+/// (in the reading view only) take input or show.
 /// The wheel opens in whichever view the player is in and never leaves or
 /// forbids the reading view (the desk home map, FIX_PLAN_v2's DESK-PLAN
 /// delta: Saleh's D5 "intercom to bring out dialogue options", from both
@@ -153,6 +167,7 @@ public static class BoothRules
             deskViewAllowed: reading,
             deskViewBackLive: c.DeskView && desk,
             normalViewLive: desk && !c.DeskView,
-            pcSwitchLive: !newsletter && (c.Focused || !c.WheelOpen));
+            pcSwitchLive: !newsletter && (c.Focused || !c.WheelOpen),
+            toolsLive: desk && c.DeskView);
     }
 }

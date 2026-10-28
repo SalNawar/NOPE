@@ -587,12 +587,15 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             InstallPainted(standIn);
         DeskLayout.RefreshObstacles();
         BindSlideIn(standIn);
+        RegisterTools();
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
             Vector3 right = Vector3.Cross(Vector3.up, level);
             Vector3 at = new Vector3(deskCentre.x, top, deskCentre.z) + right * config.rulebookAt.x + level * config.rulebookAt.y; // on the desk plane: the stack lifts it (DeskController)
             rulebook.Place(at, Quaternion.LookRotation(level, Vector3.up));
+            if (_painted && _hasFrame)
+                BindPocket();
         }
 
         // The papers come in and go back over the deal tray (Saleh, DESK APPROVED); without its home, from the art's hand-over point.
@@ -1267,8 +1270,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// the rulebook's pocket with its red book) are tracked on their homes
     /// (obstacles); the painted sliders among them (the glasses, the book)
     /// show and take the hover outline every slider has (a click answers
-    /// with the press's tick until GLASSES B8 gives the glasses theirs and
-    /// DESK-HOMES P4 takes the book out) and lift (BindSlideIn).
+    /// with the press's tick until GLASSES B8 gives the glasses theirs; the
+    /// book's click and drag take the rulebook folder out: BindPocket) and
+    /// lift (BindSlideIn).
     /// </summary>
     private void InstallPainted(Transform intercomStandIn)
     {
@@ -1290,6 +1294,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
         {
+            // Laid on the painted torch first (its lens on the painted lens), so the painted look rides the grip pointing where
+            // the beam does (Saleh's playtest of 2026-10-28, point 12: held, the painted torch lay sideways to its beam).
+            SeatTorch(torch);
             // Its click box fitted to the painted torch (the round 8 capture: the old model's box stood 20 cm toward the eye over the
             // pocket, so the cursor on the red book took and raised the torch and the book never lifted).
             Renderer[] look = Wear(PaintedTorch, DeskHomeMap.UvTorch, torch.transform, body);
@@ -1298,8 +1305,14 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (detainButton != null)
         {
             StandOnPainted(DeskHomeMap.Detain, detainButton.transform);
-            Wear(PaintedDetain, DeskHomeMap.Detain, detainButton.transform, detainButton.transform);
+            Renderer[] housing = Wear(PaintedDetain, DeskHomeMap.Detain, detainButton.transform, detainButton.transform);
             Wear(PaintedGuard, DeskHomeMap.Detain, detainButton.transform, detainButton.transform);
+            // The painting's guard is the safety cover (Saleh's playtest of 2026-10-28, point 2: "detain button case open and cant be
+            // closed its collider is small too"): it swings on its hinge with the cover, shut over the button at rest; its shut pose
+            // is the bake's own frame (the v2 README: "rotate to identity to close it over the button"), as the painted DETAIN lies.
+            Transform guard = paintedDesk.Mesh(PaintedGuard), detain = paintedDesk.Mesh(PaintedDetain);
+            if (guard != null && detain != null)
+                detainButton.DressCover(guard, detain.rotation, housing);
         }
         if (intercomStandIn != null)
         {
@@ -1339,6 +1352,76 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         DeskLayout.Track(DeskHomeMap.Glasses, paintedDesk.SliderOf(PaintedGlasses));
         DeskLayout.Track(DeskHomeMap.Bell, paintedDesk.Mesh(PaintedBell));
         DeskLayout.Track(DeskHomeMap.RulebookPocket, paintedDesk.Mesh(PaintedPocket));
+    }
+
+    /// <summary>
+    /// The rulebook folder's home on the painted desk (Saleh's playtest of
+    /// 2026-10-28, point 5: "isnt the big red binder for the folder? why is
+    /// the folder by default on the desk? still no place for it"; DESK-HOMES
+    /// P4): the painting's red book in its pocket is the folder put away
+    /// (DeskRulebook.SetPocket: the folder starts each day in it, the mat
+    /// empty). The book's click brings the folder out onto the mat (its tick
+    /// only before the rulebook's day), a drag from it takes the folder out
+    /// under the pointer (PocketBook), and the folder let go on the pocket goes
+    /// back in (DeskController.RulebookDropped).
+    /// </summary>
+    private void BindPocket()
+    {
+        Transform bookHome = paintedDesk.SliderOf(DeskPaintedMap.RulebookFolded);
+        if (bookHome == null || !paintedDesk.TryBounds(DeskPaintedMap.RulebookFolded, out Bounds book))
+            return;
+        DeskRect bookRect = _frame.Footprint(book);
+        DeskRect pocket = paintedDesk.TryBounds(PaintedPocket, out Bounds holder) ? _frame.Footprint(holder) : bookRect;
+        Clickable click = paintedDesk.EnsureClickable(DeskPaintedMap.RulebookFolded, null);
+        if (click != null)
+        {
+            click.onClick.RemoveAllListeners();
+            click.onClick.AddListener(() =>
+            {
+                if (!rulebook.TakeOut())
+                    Sounds.Play(SoundCues.UiPress);
+            });
+            PocketBook.Bind(click.gameObject, rulebook);
+        }
+        rulebook.SetPocket(_frame.Point(new Vector2(bookRect.CentreX, bookRect.CentreY)), pocket, new Vector2(bookRect.Width, bookRect.Height), bookHome.gameObject, book.center);
+    }
+
+    /// <summary>
+    /// The desk's tools' click boxes follow DeskTools' switch (BoothCoordinator
+    /// sets it: the reading view only; Saleh's playtest of 2026-10-28, point
+    /// 11, "flashlight and other machiences should only be usable on overhead
+    /// camera"): the scanner with its add-ons, the chip reader with its
+    /// readout and its painted look's box, the UV torch, and the upgrades'
+    /// Rolodex, protocol cards and BABEL rack (their stand-ins' boxes too).
+    /// The intercom, DETAIN and the stamps are not tools: they answer in both
+    /// views.
+    /// </summary>
+    private void RegisterTools()
+    {
+        DeskTools.RegisterAll(scanner); // an art office's own scanner is not tracked on its home
+        foreach (string id in DeskTools.Homes)
+            DeskTools.RegisterAll(DeskLayout.ObjectOf(id));
+    }
+
+    /// <summary>
+    /// Lays the gameplay torch <paramref name="torch"/> on the painted one
+    /// (Saleh's playtest of 2026-10-28, point 12, "flashlight has wrong
+    /// orintation when you pick it up"): the bake lays its torch along the
+    /// pouch, its brass head and lens at the far end from the chair, and the
+    /// map turns the gameplay torch the same way (DeskPaintedMap.Turned:
+    /// its lens, local -z, away from the chair); here its lens moves onto the
+    /// painted lens, on the painted torch's axis (the far edge of its
+    /// footprint, at the middle of its width and height). The painted torch
+    /// then rides the grip with no turn of its own: held, it points where
+    /// the cone lands and the pointer holds its grip, behind the head.
+    /// </summary>
+    private void SeatTorch(UvTorch torch)
+    {
+        if (torch == null || !paintedDesk.TryBounds(PaintedTorch, out Bounds painted))
+            return;
+        DeskRect f = _frame.Footprint(painted);
+        Vector3 lens = _frame.Point(new Vector2(f.CentreX, f.CentreY + f.Height / 2f), painted.center.y - _frame.Origin.y);
+        torch.transform.position += lens - torch.LensPoint;
     }
 
     /// <summary>The painted daters by their kind (DeskPaintedMap: the APPROVED one on the rack's front step, the DENIED one on its back step) and their lifts' ids (DeskSlides).</summary>

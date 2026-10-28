@@ -86,6 +86,9 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     /// <summary>The spot the cone lights on the desk (while held): ahead of the grip, with the cone's soft lag.</summary>
     public Vector3 Aim => _lit;
 
+    /// <summary>Where the lens's centre is now (world; the cone starts there): the office binder lays the torch with it on the painted torch's lens (OfficeSceneBinder.SeatTorch).</summary>
+    public Vector3 LensPoint => torch != null ? torch.TransformPoint(lensLocal) : transform.position;
+
     /// <summary>Wires it to its machines' hub (DeskHardware).</summary>
     public void Bind(DeskHardware hardware)
     {
@@ -136,16 +139,16 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         _bodyRadius = radius * scale;
     }
 
-    /// <summary>The pointer comes over it at rest: it tips up out of its cradle.</summary>
-    public void OnPointerEnter(PointerEventData eventData) => _hovered = true;
+    /// <summary>The pointer comes over it at rest: it tips up out of its cradle (in the reading view only: DeskTools).</summary>
+    public void OnPointerEnter(PointerEventData eventData) => _hovered = DeskTools.Live;
 
     /// <summary>The pointer leaves it: it settles back.</summary>
     public void OnPointerExit(PointerEventData eventData) => _hovered = false;
 
-    /// <summary>Pressed: it lifts out by its grip under the pointer and switches on, lighting the spot ahead; it becomes the desk's hold.</summary>
+    /// <summary>Pressed: it lifts out by its grip under the pointer and switches on, lighting the spot ahead; it becomes the desk's hold. In the office view it does not respond (DeskTools; Saleh's playtest of 2026-10-28, point 11: the tools are used over the desk, in the reading view).</summary>
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (eventData.button != PointerEventData.InputButton.Left || torch == null)
+        if (eventData.button != PointerEventData.InputButton.Left || torch == null || !DeskTools.Live)
             return;
         Rest();
         _camera = eventData.pressEventCamera != null ? eventData.pressEventCamera : eventData.enterEventCamera;
@@ -347,6 +350,10 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (torch == null || _hardware == null)
             return;
         Rest();
+        if (_held && !DeskTools.Live)
+            Release(); // the tools went dead under the hand (the PC opened, a newsletter): it goes back as on a release
+        if (_hovered && !DeskTools.Live)
+            _hovered = false;
         MotionKnobs knobs = UiMotion.Knobs;
         float dt = UiMotion.Delta(Time.unscaledDeltaTime);
         bool still = UiMotion.Amount.Still;

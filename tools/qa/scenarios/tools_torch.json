@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "TOOLS BUG-2c (FIX_PLAN TOOLS torch; GAME_FEEL_BIBLE C3): the UV torch swept over the handed-over papers on its day (9: the three-week progression), at A2 then A1, in the office view (over the counter strip where they arrive) and the reading view (over the passport dragged to the mat), P-FAST, P-SLOW and P-WOBBLE. Pass: tools.torch.*.unoccluded (the lit patch >=95% seen past the torch's own meshes on every held frame) and tools.torch.*.poolOnDesk (0 frames of the pool off the desk). The torch_* sequences are for the director's eye (GIF at full size) and seqtools flicker on the paper text."
+      "text": "TOOLS BUG-2c (FIX_PLAN TOOLS torch; GAME_FEEL_BIBLE C3): the UV torch swept over the handed-over papers on its day (9: the three-week progression), at A2 then A1, in the reading view (over the passport dragged to the mat), P-FAST, P-SLOW and P-WOBBLE; in the office view the same drags must not lift it (Saleh's playtest of 2026-10-28, point 11: the tools are used in the reading view only; tools.torch.office_*.officeStill). Pass: tools.torch.*.unoccluded (the lit patch >=95% seen past the torch's own meshes on every held frame) and tools.torch.*.poolOnDesk (0 frames of the pool off the desk). The torch_* sequences are for the director's eye (GIF at full size) and seqtools flicker on the paper text."
     },
     {
       "op": "title"
@@ -78,7 +78,8 @@
       "name": "office_fast",
       "path": "P-FAST",
       "x2": 0.45,
-      "y2": 0.2
+      "y2": 0.2,
+      "text": "still"
     },
     {
       "op": "wait",
@@ -89,7 +90,8 @@
       "name": "office_slow",
       "path": "P-SLOW",
       "x2": 0.5,
-      "y2": 0.15
+      "y2": 0.15,
+      "text": "still"
     },
     {
       "op": "wait",
@@ -100,7 +102,8 @@
       "name": "office_wobble",
       "path": "P-WOBBLE",
       "x2": 0.4,
-      "y2": 0.22
+      "y2": 0.22,
+      "text": "still"
     },
     {
       "op": "recStop"
@@ -186,7 +189,8 @@
       "name": "office_a1",
       "path": "Plain",
       "x2": 0.5,
-      "y2": 0.18
+      "y2": 0.18,
+      "text": "still"
     }
   ]
 }

@@ -237,7 +237,7 @@ public sealed class DeskSlideIn : MonoBehaviour
                 continue;
             bool present = slider.Present, busy = present && slider.Busy, taken = present && slider.Taken;
             bool rides = _shiftOver && busy && slider.Rides();
-            bool looks = near && present && !taken;
+            bool looks = near && present && !taken && DeskTools.Responds(slider.Id); // a tool slides toward the cursor in the reading view only (Saleh's playtest of 2026-10-28, point 11)
             _candidates.Add(SlideCandidate.Found(slider.Id, present, busy, taken, rides, near,
                                                  looks ? ProximityAssist.Rank(_owners, hits, slider.Id) : -1,
                                                  looks && onDesk && slider.RestsOn(deskPoint),

@@ -129,6 +129,18 @@
     },
     {
       "op": "note",
+      "text": "The folder starts each day in its pocket on the painted desk (Saleh's playtest of 2026-10-28, point 5: the red book is its home, the mat starts empty): it comes out onto the mat first, as a click on the red book brings it (DeskRulebook.TakeOut)."
+    },
+    {
+      "op": "call",
+      "target": "DeskRulebook.TakeOut"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "note",
       "text": "The revert: hover the rulebook folder's cover word (a culture label from day 11; in the reading view at 0.209, 0.293), then leave to the empty top right corner. The folder's own centre is not on a word. The reading view is left by its own call (DeskView.Return): Esc opens Settings everywhere (FLOW, Saleh's R3)."
     },
     {

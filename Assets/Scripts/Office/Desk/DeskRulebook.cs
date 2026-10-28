@@ -425,6 +425,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced), opening the folder first when it is shut (D3): its rows show, the others' hide; its tab looks open; a turn flicks the loose sheets. The GUIDE shows its sheet (read).</summary>
     public void ShowPage(int page)
     {
+        TakeOut(); // in its pocket (the painted desk), it comes out onto the mat first (the guide's page)
         Open();
         TurnTo(page, true);
     }
@@ -511,6 +512,29 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         }
         _cardBox.center = centre;
         _cardBox.size = size;
+    }
+
+    /// <summary>
+    /// The eight world corners of the folder's own box (ShowCardBox: the whole
+    /// folder open, the board's side alone shut), into
+    /// <paramref name="corners"/> (8 long): what of it lies on the desk, seen
+    /// from above (DeskController judges a drop's rest and its machine by
+    /// them; Saleh's playtest of 2026-10-28, point 4, "You move the folder and
+    /// it snaps somewhere else": the renderers' bounds held the shut folder's
+    /// cut left board, a whole board's width of folder the player never saw,
+    /// so a drop near a keep-out or the view's edge jumped by it). Taken from
+    /// the box's own centre and size, so a drag, which turns the box off,
+    /// changes nothing. False without the box.
+    /// </summary>
+    public bool TryBoxCorners(Vector3[] corners)
+    {
+        if (_cardBox == null || corners == null || corners.Length < 8)
+            return false;
+        Transform t = _cardBox.transform;
+        Vector3 c = _cardBox.center, h = _cardBox.size / 2f;
+        for (int i = 0; i < 8; i++)
+            corners[i] = t.TransformPoint(c + new Vector3((i & 1) == 0 ? -h.x : h.x, (i & 2) == 0 ? -h.y : h.y, (i & 4) == 0 ? -h.z : h.z));
+        return true;
     }
 
     /// <summary>The folder's contact shadow under its body (the right sheet alone while shut).</summary>
@@ -713,6 +737,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
             none.gameObject.SetActive(_indices.Count == 0);
         if (folderCover != null)
             folderCover.ShutNow(); // the day's rules arrive in a shut folder (D3)
+        StowNow(); // in its pocket, on the painted desk (Saleh's playtest of 2026-10-28, point 5: the mat starts empty)
     }
 
     /// <summary>
@@ -1018,6 +1043,12 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         world = default;
         if (!isActiveAndEnabled)
             return false;
+        if (_pocketed)
+        {
+            // in its pocket: the arrow looks at the painted book (a click there brings the folder out)
+            world = _bookPoint;
+            return true;
+        }
         if (Shut && folderFace != null)
         {
             // the shut folder: the arrow looks at its board (a click there opens it)
@@ -1046,7 +1077,7 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         int row = _indices.IndexOf(ruleIndex) - SheetStart;
         if (row >= SheetCount)
             return false;
-        if (!isActiveAndEnabled || Shut || row < 0 || row >= rows.Length || rows[row] == null || !rows[row].gameObject.activeInHierarchy ||
+        if (!isActiveAndEnabled || Shut || _pocketed || row < 0 || row >= rows.Length || rows[row] == null || !rows[row].gameObject.activeInHierarchy ||
             !rows[row].TryGetComponent(out Collider box))
             return false;
         bounds = box.bounds;
