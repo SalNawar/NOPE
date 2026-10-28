@@ -1398,13 +1398,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// </summary>
     private void RegisterTools()
     {
-        DeskTools.RegisterAll(scanner);
-        if (hardware != null)
-        {
-            DeskTools.RegisterAll(hardware.Reader);
-            DeskTools.RegisterAll(hardware.Torch);
-        }
-        foreach (string id in new[] { DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing, DeskHomeMap.BabelTuner })
+        DeskTools.RegisterAll(scanner); // an art office's own scanner is not tracked on its home
+        foreach (string id in DeskTools.Homes)
             DeskTools.RegisterAll(DeskLayout.ObjectOf(id));
     }
 

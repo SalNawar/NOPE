@@ -11,14 +11,24 @@ using UnityEngine;
 /// on. BoothCoordinator sets it from BoothRules' ToolsLive (the reading view,
 /// the props live); off, each tool simply does not respond, as Papers,
 /// Please's desk items do in the booth: no pick-up, no drag, no click, no
-/// hover rim (each registered click box's Clickable goes inert), and a paper
-/// let go on a machine lies on the desk beside it (DeskController.DockAt).
+/// hover rim (each registered click box's Clickable goes inert), no slide
+/// toward the cursor (Responds: DeskSlideIn), and a paper let go on a
+/// machine lies on the desk beside it (DeskController.DockAt).
 /// On by default: with no booth coordinator (a test, an older scene) every
 /// tool works as before. The intercom (the wheel, from both views: Saleh's
 /// D5), DETAIN and the stamps are not tools here.
 /// </summary>
 public static class DeskTools
 {
+    /// <summary>The tools' homes (DeskHomeMap's ids): the objects there are tools (OfficeSceneBinder.RegisterTools) and their slide-in answers the cursor in the reading view only (Responds).</summary>
+    public static readonly string[] Homes =
+    {
+        DeskHomeMap.Scanner, DeskHomeMap.ChipReader, DeskHomeMap.UvTorch, DeskHomeMap.Rolodex, DeskHomeMap.ProtocolRing, DeskHomeMap.BabelTuner,
+    };
+
+    /// <summary>True when the slider <paramref name="id"/> answers the cursor now (DeskSlideIn): a tool's in the reading view only (in the office view it does not slide toward the cursor, as it does not respond); every other one (the intercom, the glasses, the book, the daters) always.</summary>
+    public static bool Responds(string id) => Live || Array.IndexOf(Homes, id) < 0;
+
     /// <summary>The tools' click boxes (Register): their Clickables follow the switch.</summary>
     private static readonly List<Clickable> Clicks = new List<Clickable>();
 
