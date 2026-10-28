@@ -182,7 +182,9 @@ public class SwitchboardTests
         Assert.IsTrue(board.PullMaster().Idle, "a blown module takes no pull");
         board.Tick(2f);
         Assert.AreEqual(SwitchModuleState.Patching, board.Modules[0].State, "the fuse resets; the cords are still in");
-        Assert.AreEqual(SwitchEventKind.FuseReset, Events(board).Single().Kind);
+        CollectionAssert.AreEqual(new[] { SwitchEventKind.FuseReset, SwitchEventKind.BreakerTripped }, Events(board).Select(e => e.Kind).ToArray(),
+                                  "the wrong patch waits again, so the closed breaker trips open for the next pull");
+        Assert.IsFalse(board.BreakerClosed);
 
         board.PlugPeriod(0, GreeceAncient);
         Assert.AreEqual(1, board.PullMaster().Committed, "fixed and pulled again");
@@ -263,6 +265,66 @@ public class SwitchboardTests
         board.PlugPlace(0, 0);
         Assert.IsFalse(board.MasterPending, "a half-patched module does not ask for MASTER");
         Assert.IsTrue(board.PullMaster().Idle);
+    }
+
+    [Test]
+    public void Master_IsABreaker_ItStaysClosedAfterThePull_UntilAPatchWaitsForIt()
+    {
+        Switchboard board = Board();
+        Assert.IsFalse(board.BreakerClosed, "each morning the breaker is open, ready to pull");
+        board.AddCall(GreeceAncient);
+        Patch(board, 0, GreeceAncient);
+        board.PlugPower(0, 0);
+        Events(board);
+        Assert.AreEqual(1, board.PullMaster().Committed);
+        Assert.IsTrue(board.BreakerClosed, "a pulled breaker stays down (Saleh: a breaker, not a spring handle)");
+        board.Tick(5f);
+        Assert.IsTrue(board.BreakerClosed, "nothing waits for it: it stays closed while the route calibrates");
+        Assert.IsFalse(Events(board).Any(e => e.Kind == SwitchEventKind.BreakerTripped));
+
+        board.AddCall(ItalyAncient);
+        Patch(board, 1, ItalyAncient);
+        Assert.IsTrue(board.BreakerClosed, "the rules change only on a tick, never while a plug lands");
+        board.Tick(0.01f);
+        Assert.IsFalse(board.BreakerClosed, "a new patch trips the closed breaker open");
+        Assert.AreEqual(1, Events(board).Count(e => e.Kind == SwitchEventKind.BreakerTripped));
+        Assert.AreEqual(SwitchModuleState.Committed, board.Modules[0].State, "the trip changes no route: 01 keeps its lock");
+        Assert.AreEqual(15f - 0.01f, board.Modules[0].CalibrationLeft, 1e-3f, "and its calibration runs on");
+        board.Tick(1f);
+        Assert.AreEqual(0, Events(board).Count(e => e.Kind == SwitchEventKind.BreakerTripped), "it trips once, not every tick");
+
+        Assert.AreEqual(1, board.PullMaster().Committed, "the next pull locks the new patch in");
+        Assert.IsTrue(board.BreakerClosed);
+    }
+
+    [Test]
+    public void TheBreaker_ThrowsOnlyPast80Percent_DownFromOpen_UpFromClosed()
+    {
+        Assert.AreEqual(MasterThrow.None, Switchboard.Throw(false, 0.79f, 0.79f, 0.8f), "let go before 80 %: back up, nothing happens");
+        Assert.AreEqual(MasterThrow.Closed, Switchboard.Throw(false, 0.6f, 0.8f, 0.8f), "the hand pulled it past 80 % (the spring lags)");
+        Assert.AreEqual(MasterThrow.Closed, Switchboard.Throw(false, 1f, 1f, 0.8f));
+        Assert.AreEqual(MasterThrow.None, Switchboard.Throw(true, 1f, 1f, 0.8f), "a closed breaker let go where it is stays closed (no spring back up)");
+        Assert.AreEqual(MasterThrow.None, Switchboard.Throw(true, 0.25f, 0.25f, 0.8f), "not 80 % of the way up: back down");
+        Assert.AreEqual(MasterThrow.Open, Switchboard.Throw(true, 0.15f, 0.4f, 0.8f), "the hand pushed it 85 % of the way up");
+        Assert.AreEqual(MasterThrow.None, Switchboard.Throw(false, 0f, 0f, 0.8f), "an open breaker pushed up stays open");
+    }
+
+    [Test]
+    public void TheBreaker_ThrownOpenByHand_ChangesNoRoute()
+    {
+        Switchboard board = Board();
+        Assert.IsFalse(board.OpenBreaker(), "an open breaker cannot be opened");
+        board.AddCall(GreeceAncient);
+        Patch(board, 0, GreeceAncient);
+        board.PlugPower(0, 0);
+        board.PullMaster();
+        Assert.IsTrue(board.OpenBreaker());
+        Assert.IsFalse(board.BreakerClosed);
+        Assert.AreEqual(SwitchModuleState.Committed, board.Modules[0].State);
+        board.Tick(20f);
+        Assert.AreEqual(SwitchModuleState.Open, board.Modules[0].State, "the route calibrated with the breaker open");
+        Assert.IsTrue(board.PullMaster().Idle, "a pull with nothing waiting changes no route");
+        Assert.IsTrue(board.BreakerClosed, "but the breaker stays where it was thrown");
     }
 
     [Test]

@@ -97,7 +97,10 @@ public enum SwitchEventKind
     FusePopped,
 
     /// <summary>A popped fuse reset: the module can be pulled again.</summary>
-    FuseReset
+    FuseReset,
+
+    /// <summary>MASTER's breaker was closed and a patch waits for it: the breaker opened again (it trips), so it can be pulled for that patch.</summary>
+    BreakerTripped
 }
 
 /// <summary>One thing that happened on the board, for the view to play (the lamps, the sounds, the flare). Not serialized.</summary>
@@ -127,6 +130,19 @@ public readonly struct SwitchEvent
         Travellers = travellers;
         Bonus = bonus;
     }
+}
+
+/// <summary>Where a let-go MASTER goes (Switchboard.Throw): back where its breaker rests, or thrown to its other end. Not serialized.</summary>
+public enum MasterThrow
+{
+    /// <summary>Not thrown far enough: back where the breaker rests; nothing changes.</summary>
+    None,
+
+    /// <summary>Thrown open (up): the breaker opens; no route changes.</summary>
+    Open,
+
+    /// <summary>Thrown closed (down): the pull (Switchboard.PullMaster).</summary>
+    Closed
 }
 
 /// <summary>What one pull of MASTER did (Switchboard.PullMaster). Not serialized.</summary>
@@ -481,6 +497,43 @@ public sealed class Switchboard
 
     // ------------------------------------------------------------------ MASTER
 
+    /// <summary>
+    /// MASTER is one breaker (Saleh: "one breaker to the side", "a breaker
+    /// that is satisfying to pull to lock in the changes"; 2026-10-28:
+    /// "Master break is pulled down instead of being a break"): it stays
+    /// where it is thrown. Open (up, the ready position) each morning; a pull
+    /// closes it (PullMaster) and it stays closed. When a patch waits for it
+    /// while it is closed, it trips open again (Tick: BreakerTripped), so the
+    /// next pull locks that patch in. The player may also throw it open by
+    /// hand (OpenBreaker). Opening it changes no route: each locked-in route
+    /// keeps its own lock.
+    /// </summary>
+    public bool BreakerClosed { get; private set; }
+
+    /// <summary>
+    /// Where MASTER goes when the hand lets go of it (its handle at
+    /// <paramref name="pull"/>, 0 up to 1 down, or where the hand last pulled
+    /// it, <paramref name="hand"/>): from open it throws closed once either is
+    /// past <paramref name="throwAt"/> (the portals spec: before 80 % nothing
+    /// happens); from closed it throws open once either is past
+    /// <paramref name="throwAt"/> of the way up; else it goes back.
+    /// </summary>
+    public static MasterThrow Throw(bool closed, float pull, float hand, float throwAt)
+    {
+        if (!closed)
+            return Math.Max(pull, hand) >= throwAt ? MasterThrow.Closed : MasterThrow.None;
+        return Math.Min(pull, hand) <= 1f - throwAt ? MasterThrow.Open : MasterThrow.None;
+    }
+
+    /// <summary>The player throws MASTER's breaker open (up): nothing else changes; false when it was open already.</summary>
+    public bool OpenBreaker()
+    {
+        if (!BreakerClosed)
+            return false;
+        BreakerClosed = false;
+        return true;
+    }
+
     /// <summary>True when a module is patched and waits for MASTER (its lamp asks for the pull).</summary>
     public bool MasterPending
     {
@@ -499,10 +552,13 @@ public sealed class Switchboard
     /// another destination's or its destination is calling on other
     /// periods only: a wrong period, whose fuse pops (Blown for FuseSeconds:
     /// time only). A route to a destination nobody calls yet locks in
-    /// (opened ahead). Modules already locked in keep their routes.
+    /// (opened ahead). Modules already locked in keep their routes. The
+    /// breaker closes and stays closed (BreakerClosed), even when nothing
+    /// waited for it.
     /// </summary>
     public MasterPull PullMaster()
     {
+        BreakerClosed = true;
         int committed = 0, fused = 0;
         foreach (SwitchModule m in _modules)
         {
@@ -557,7 +613,8 @@ public sealed class Switchboard
     /// Advances the board by <paramref name="seconds"/>: calls wait longer,
     /// popped fuses cool and reset, powered locked-in routes calibrate and
     /// open, and every open, powered route sends all travellers waiting on it
-    /// as one group (Departed, with the group bonus).
+    /// as one group (Departed, with the group bonus); a closed MASTER breaker
+    /// with a patch waiting for it trips open (BreakerTripped).
     /// </summary>
     public void Tick(float seconds)
     {
@@ -596,6 +653,16 @@ public sealed class Switchboard
             if (m.State == SwitchModuleState.Open && m.Powered)
                 Send(m);
         }
+        Trip();
+    }
+
+    /// <summary>MASTER's breaker trips open when it is closed and a patch waits for it (a new patch, or a fuse that reset with its wrong period still in).</summary>
+    private void Trip()
+    {
+        if (!BreakerClosed || !MasterPending)
+            return;
+        BreakerClosed = false;
+        _events.Add(new SwitchEvent(SwitchEventKind.BreakerTripped, -1, default));
     }
 
     /// <summary>Sends everyone waiting on <paramref name="m"/>'s route as one group.</summary>

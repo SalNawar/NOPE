@@ -645,7 +645,10 @@ public sealed partial class SwitchboardView
         _lastLeft[m] = left;
     }
 
-    /// <summary>MASTER at its spring's place on its pull: the handle down its path, the rods stretched from their pivots to it.</summary>
+    /// <summary>How much bigger MASTER's handle draws when thrown fully down: the breaker swings out of the board toward the clerk on its pivots (the rods foreshorten as it comes), so its handle comes nearer.</summary>
+    private const float HandleThrownScale = 1.12f;
+
+    /// <summary>MASTER at its spring's place on its throw: the handle down its path (nearer the further it swings), the rods stretched from their pivots to it.</summary>
     private void DrawLever(float dt)
     {
         StepLever(dt);
@@ -653,6 +656,7 @@ public sealed partial class SwitchboardView
         float t = Mathf.Clamp(_lever.Value, -0.06f, 1f);
         BoardPoint hc = master.From.Lerp(master.To, t);
         _handle.anchoredPosition = Local(hc);
+        _handle.localScale = Vector3.one * Mathf.LerpUnclamped(1f, HandleThrownScale, t);
         for (int i = 0; i < _rods.Length; i++)
         {
             BoardPoint top = hc.Plus(master.RodTops[i].X, master.RodTops[i].Y);
