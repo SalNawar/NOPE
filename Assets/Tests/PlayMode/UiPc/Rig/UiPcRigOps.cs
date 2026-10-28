@@ -44,6 +44,12 @@ public static class UiPcRigOps
     /// <summary>The wheel's step as the Input System reports one notch.</summary>
     private const float WheelNotch = 120f;
 
+#if UNITY_EDITOR
+    /// <summary>The ops are known in the editor before any play (the scenario check of QaEditorGateTests and the gate read them in edit mode), as CamOps' and DeskPlanOps' are.</summary>
+    [UnityEditor.InitializeOnLoadMethod]
+    private static void RegisterInEditor() => Register();
+#endif
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Register()
     {
