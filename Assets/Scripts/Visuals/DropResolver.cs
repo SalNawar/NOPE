@@ -3,19 +3,25 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Where a thing let go on the desk comes to rest (DOC-HANDLE, BUG-6, BUG-8;
-/// Saleh's note 25: "it should stay where I drop it"): Papers, Please's
-/// honesty. Every rectangle is in one desk frame (DeskController's: x to the
-/// right, y away from the office camera, metres from the desk's centre).
+/// Saleh's note 25: "it should stay where I drop it"; FOLD-01, Saleh's
+/// playtest of 2026-10-28, point 4: "You move the folder and it snaps
+/// somewhere else"): Papers, Please's honesty, a thing let go lies where it
+/// is let go. Every rectangle is in one desk frame (DeskController's: x to
+/// the right, y away from the chair, metres from the desk's centre).
 /// <list type="bullet">
 /// <item>It rests exactly where it was released (its footprint at its final
 /// size), unless that leaves part of it outside <c>area</c> (the desk the
 /// reading view shows: the whole rect stays in view) or over something in
-/// <c>keepOut</c> (a prop's footprint, the scanner's hidden shadow, the
-/// counter strip for a desk paper refused there).</item>
-/// <item>Then it moves the least it can: one joint solve over every keep-out
-/// at once (never one push at a time, which used to land a paper in an
-/// earlier blocker), to a place clear of all of them and inside the area;
-/// where no place is clear, the one that overlaps least.</item>
+/// <c>keepOut</c> (a machine or an object standing on the desk, the
+/// scanner's hidden shadow, the counter strip for a desk paper refused
+/// there).</item>
+/// <item>Out of the area, it takes the least move inward.</item>
+/// <item>Over a keep-out, it takes the nearest place inside the area clear
+/// of every keep-out at once (one joint solve, never one push at a time,
+/// which used to land a paper in an earlier blocker).</item>
+/// <item>Where no place is clear, the nearest place that overlaps less than
+/// where it was let go, else it stays: never the least overlap anywhere
+/// (that rule could take a thing across the desk).</item>
 /// <item>A refusal (a machine that does not take it, a desk paper on the
 /// counter before the verdict) is the same rest with the refusing area added
 /// to the keep-outs: it shakes in place and lies just beside it, never flying
@@ -30,52 +36,95 @@ public static class DropResolver
     /// <summary>The gap left between a moved thing and the keep-out it was moved off (metres).</summary>
     public const float Gap = 0.005f;
 
+    /// <summary>How much less a place must overlap the keep-outs to count as overlapping less (square metres: one square millimetre, above float noise).</summary>
+    private const float LessOverlap = 1e-6f;
+
     /// <summary>
     /// Where <paramref name="paper"/> (its footprint where it was released, at
     /// its final size) rests: its own centre when it lies wholly inside
     /// <paramref name="area"/> and clear of every <paramref name="keepOut"/>;
-    /// else the nearest place (to its release) that is; else, where nothing is
-    /// clear, the place inside the area that overlaps the keep-outs least
-    /// (nearest among equals). <paramref name="keepOut"/> may be null.
+    /// partly outside the area, the least move inward; over a keep-out, the
+    /// nearest place (to its release) inside the area clear of every
+    /// keep-out; where none is clear, the nearest place that overlaps the
+    /// keep-outs less than the release did, else the release moved inside the
+    /// area. <paramref name="keepOut"/> may be null.
     /// </summary>
     public static (float x, float y) Rest(DeskRect paper, DeskRect area, IReadOnlyList<DeskRect> keepOut)
     {
         (float x, float y) inside = Inside(paper, area);
         float w = paper.Width, h = paper.Height;
-        if (Overlap(new DeskRect(inside.x, inside.y, w, h), keepOut) <= 0f)
+        float atRelease = Overlap(new DeskRect(inside.x, inside.y, w, h), keepOut);
+        if (atRelease <= 0f)
             return inside;
 
         float hw = w / 2f, hh = h / 2f;
         var xs = new List<float> { inside.x };
         var ys = new List<float> { inside.y };
-        if (keepOut != null)
-            foreach (DeskRect r in keepOut)
-            {
-                xs.Add(r.CentreX - r.Width / 2f - Gap - hw);
-                xs.Add(r.CentreX + r.Width / 2f + Gap + hw);
-                ys.Add(r.CentreY - r.Height / 2f - Gap - hh);
-                ys.Add(r.CentreY + r.Height / 2f + Gap + hh);
-            }
+        foreach (DeskRect r in keepOut)
+        {
+            xs.Add(r.CentreX - r.Width / 2f - Gap - hw);
+            xs.Add(r.CentreX + r.Width / 2f + Gap + hw);
+            ys.Add(r.CentreY - r.Height / 2f - Gap - hh);
+            ys.Add(r.CentreY + r.Height / 2f + Gap + hh);
+        }
 
-        bool found = false;
-        (float x, float y) best = inside;
-        float bestOverlap = float.MaxValue, bestMove = float.MaxValue;
+        // The nearest clear place; failing that, the nearest place that overlaps less than the release (never the least overlap anywhere).
+        bool clear = false, better = false;
+        (float x, float y) nearestClear = inside, nearestBetter = inside;
+        float clearMove = float.MaxValue, betterMove = float.MaxValue;
         foreach (float cx in xs)
             foreach (float cy in ys)
             {
                 (float x, float y) c = Inside(new DeskRect(cx, cy, w, h), area);
                 float overlap = Overlap(new DeskRect(c.x, c.y, w, h), keepOut);
                 float move = Distance(c.x - paper.CentreX, c.y - paper.CentreY);
-                bool better = overlap < bestOverlap - 1e-9f || (Math.Abs(overlap - bestOverlap) <= 1e-9f && move < bestMove - 1e-6f);
-                if (!found || better)
+                if (overlap <= 0f)
                 {
-                    found = true;
-                    best = c;
-                    bestOverlap = overlap;
-                    bestMove = move;
+                    if (move < clearMove - 1e-6f)
+                    {
+                        clear = true;
+                        nearestClear = c;
+                        clearMove = move;
+                    }
+                }
+                else if (overlap < atRelease - LessOverlap && move < betterMove - 1e-6f)
+                {
+                    better = true;
+                    nearestBetter = c;
+                    betterMove = move;
                 }
             }
-        return best;
+        return clear ? nearestClear : better ? nearestBetter : inside;
+    }
+
+    /// <summary>
+    /// The area a thing on the desk rests wholly inside (FOLD-01), in the
+    /// frame the reading view is posed on: <paramref name="desk"/> (its centre
+    /// anywhere a drag may take it), short of <paramref name="counterNear"/>
+    /// (the counter's near edge: the counter row stands on the back step,
+    /// whose front draws through a paper laid across it; positive infinity
+    /// for none), and the rectangle inside the reading view's four corners on
+    /// the desk (<paramref name="view"/>: near left, near right, far left, far
+    /// right; null for no view). Where they leave nothing, <paramref name="desk"/>.
+    /// The corners must be taken in the frame the view is posed on: in a frame
+    /// turned against it (the office camera's line to the scanner, 27 degrees
+    /// off) the rectangle inside them shrank to a band 10 cm deep, and every
+    /// rest's depth was put at its middle.
+    /// </summary>
+    public static DeskRect Area(DeskRect desk, float counterNear, IReadOnlyList<(float x, float y)> view)
+    {
+        float left = desk.CentreX - desk.Width / 2f, right = desk.CentreX + desk.Width / 2f;
+        float near = desk.CentreY - desk.Height / 2f, far = Math.Min(desk.CentreY + desk.Height / 2f, counterNear);
+        if (view != null && view.Count >= 4)
+        {
+            left = Math.Max(left, Math.Max(view[0].x, view[2].x));
+            right = Math.Min(right, Math.Min(view[1].x, view[3].x));
+            near = Math.Max(near, Math.Max(view[0].y, view[1].y));
+            far = Math.Min(far, Math.Min(view[2].y, view[3].y));
+        }
+        if (right <= left || far <= near)
+            return desk;
+        return new DeskRect((left + right) / 2f, (near + far) / 2f, right - left, far - near);
     }
 
     /// <summary>

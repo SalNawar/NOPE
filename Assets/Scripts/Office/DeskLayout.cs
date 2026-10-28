@@ -504,6 +504,44 @@ public static class DeskLayout
     public static float SweptPeak() => Bound ? Sweeps.MaxHeight : 0f;
 
     /// <summary>
+    /// Every object standing on the desk at rest, for the rest of a thing let
+    /// go (DeskController.RestOf; FOLD-01, Saleh's playtest of 2026-10-28,
+    /// point 4): each registered obstacle (Obstacles: every shown object on
+    /// its home, the fixed art, the decorations) at its own footprint, not
+    /// its slide's sweep (a track's swept strip is the slider's to keep clear
+    /// of a resting paper: MachineSlideIn stops short), with its id and its
+    /// height, in the desk's frame; and on the painted desk each machine
+    /// rail's tray (the scanner's and the chip reader's homes) even before its
+    /// machine is owned: the painting's tray and its brass rim stand there
+    /// from day 1. Each list is cleared first; nothing while unbound.
+    /// </summary>
+    public static void Standing(List<DeskRect> into, List<string> ids, List<float> heights)
+    {
+        Obstacles.Footprints(into, ids, heights);
+        if (!Bound)
+        {
+            into.Clear();
+            ids.Clear();
+            heights.Clear();
+            return;
+        }
+        if (_settings.slides != null)
+            for (int i = 0; i < ids.Count; i++)
+                into[i] = _settings.slides.Standing(HomeOf(ids[i]), into[i]);
+        if (!PaintedShown)
+            return;
+        foreach (string tray in DeskHomeMap.Rail)
+        {
+            DeskHome home = HomeOf(tray);
+            if (home == null || ids.Contains(home.id) || tray == DeskHomeMap.StampRack)
+                continue;
+            into.Add(home.Footprint);
+            ids.Add(home.id + ".tray");
+            heights.Add(0f);
+        }
+    }
+
+    /// <summary>
     /// The world corners (on the desk) of each track's swept box: its home's
     /// footprint and the strip its slide reaches past it toward the mat
     /// (DESK-HOMES 6: 0 px over a resting paper). A paper let go keeps clear

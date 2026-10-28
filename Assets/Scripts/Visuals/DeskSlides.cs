@@ -302,6 +302,15 @@ public sealed class DeskSlides
         return (swept, top);
     }
 
+    /// <summary>
+    /// The footprint a thing let go keeps clear of for the objects resting in
+    /// <paramref name="restsIn"/> (FOLD-01): its own footprint when something
+    /// slides there (a track's swept strip, <paramref name="registered"/> by
+    /// Obstacle, is the slider's to keep clear of a resting paper:
+    /// MachineSlideIn stops short), else <paramref name="registered"/> as it is.
+    /// </summary>
+    public DeskRect Standing(DeskHome restsIn, DeskRect registered) => restsIn != null && Sweeps(restsIn) ? restsIn.Footprint : registered;
+
     /// <summary><paramref name="px"/> on a screen <paramref name="screenHeight"/> px high, as px at referenceHeight: the trigger and the hysteresis are set at 1080p and scale with the screen's height (UNITY_PLAN 5.2).</summary>
     public float ToReference(float px, float screenHeight) => px * referenceHeight / Math.Max(1f, screenHeight);
 
