@@ -1207,29 +1207,78 @@ public sealed class DeskController : MonoBehaviour
     private Vector3 RestOf(DeskRect footprint, Vector3 at, bool offCounter, bool inView = true, bool props = false)
     {
         MeasureMachines();
-        DeskObstacles.Desk.Footprints(_footprints);
+        bool trace = DropTrace.On;
+        _sources.Clear();
+        DeskObstacles.Desk.Footprints(_footprints, _ids, _heights);
         _keepOut.Clear();
-        foreach (DeskRect f in _footprints)
-            _keepOut.Add(InViewFrame(WorldCorners(f, surface.transform.position.y)));
+        for (int i = 0; i < _footprints.Count; i++)
+        {
+            _keepOut.Add(InViewFrame(WorldCorners(_footprints[i], surface.transform.position.y)));
+            if (trace)
+                _sources.Add($"desk:{_ids[i]} h{_heights[i]:0.000}");
+        }
         if (props && DeskLayout.Bound)
         {
             // DESK-PLAN's registry holds each shown object's footprint in the desk's frame (x right, y away from the chair).
-            DeskLayout.Obstacles.Footprints(_footprints);
-            foreach (DeskRect f in _footprints)
-                _keepOut.Add(InViewFrame(FrameCorners(f)));
+            DeskLayout.Obstacles.Footprints(_footprints, _ids, _heights);
+            for (int i = 0; i < _footprints.Count; i++)
+            {
+                _keepOut.Add(InViewFrame(FrameCorners(_footprints[i])));
+                if (trace)
+                    _sources.Add($"prop:{_ids[i]} h{_heights[i]:0.000}");
+            }
         }
         if (scanner != null && !_scanners.Hidden && scanner.OnDesk)
+        {
             _keepOut.Add(ScannerClearance.Blocked(InViewFrame(scanner.Corners()), _scannerShadow));
+            if (trace)
+                _sources.Add("scannerClearance");
+        }
         // Nor where the desk's slide-in moves a machine (DESK-V3, DESK-HOMES 6: 0 px of a slider over a resting paper): each track's swept strip.
         foreach (Vector3[] strip in DeskLayout.SweptStrips())
+        {
             _keepOut.Add(InViewFrame(strip));
+            if (trace)
+                _sources.Add("swept");
+        }
         if (offCounter && counter != null && counter.TryNearEdge(out float near))
+        {
             _keepOut.Add(new DeskRect(0f, near + CounterKeepOut / 2f, CounterKeepOut, CounterKeepOut));
+            if (trace)
+                _sources.Add("counter");
+        }
         DeskRect area = RestArea(footprint, inView);
         (float x, float y) = DropResolver.Rest(footprint, area, _keepOut);
+        if (trace)
+            Trace(props ? "folder" : "paper", footprint, area, x, y, at.y);
         if (Mathf.Approximately(x, footprint.CentreX) && Mathf.Approximately(y, footprint.CentreY))
             return at;
         return at + _viewRight * (x - footprint.CentreX) + _viewForward * (y - footprint.CentreY);
+    }
+
+    /// <summary>RestOf's buffers: each registry entry's id and height, and each keep-out's source (filled only while the QA rig traces: DropTrace).</summary>
+    private readonly List<string> _ids = new List<string>();
+    private readonly List<float> _heights = new List<float>();
+    private readonly List<string> _sources = new List<string>();
+
+    /// <summary>The reading view's four corners on the desk (near left, near right, far left, far right) and the surface's clamp area, as RestArea last took them (only while the QA rig traces).</summary>
+    private readonly (float x, float y)[] _viewCorners = new (float, float)[4];
+    private DeskRect _traceClamp;
+
+    /// <summary>Records this rest for the QA rig (DropTrace.On only): what was let go (its root at <paramref name="rootY"/>), its footprint, the area, every keep-out with its source and the rest.</summary>
+    private void Trace(string what, DeskRect footprint, DeskRect area, float x, float y, float rootY)
+    {
+        Vector3 origin = surface.transform.position;
+        var entry = new DropTrace
+        {
+            What = what, Frame = Time.frameCount, Footprint = footprint, Area = area, RestX = x, RestY = y,
+            Origin = new Vector3(origin.x, rootY, origin.z), Right = _viewRight, Forward = _viewForward, SurfaceY = origin.y, Clamp = _traceClamp,
+        };
+        for (int i = 0; i < 4; i++)
+            entry.View[i] = _viewCorners[i];
+        for (int i = 0; i < _keepOut.Count; i++)
+            entry.KeepOut.Add((i < _sources.Count ? _sources[i] : "?", _keepOut[i], true));
+        DropTrace.Entries.Add(entry);
     }
 
     /// <summary>How large the counter's keep-out is (metres, every way past its near edge): far more than the desk.</summary>
@@ -1248,6 +1297,14 @@ public sealed class DeskController : MonoBehaviour
             || !deskView.TryViewPoint(new Vector2(v.xMin, v.yMax), h, out Vector3 tl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMax), h, out Vector3 tr))
             return desk;
         DeskRect a = InViewFrame(new[] { bl }), b = InViewFrame(new[] { br }), c = InViewFrame(new[] { tl }), d = InViewFrame(new[] { tr });
+        if (DropTrace.On)
+        {
+            _viewCorners[0] = (a.CentreX, a.CentreY);
+            _viewCorners[1] = (b.CentreX, b.CentreY);
+            _viewCorners[2] = (c.CentreX, c.CentreY);
+            _viewCorners[3] = (d.CentreX, d.CentreY);
+            _traceClamp = clamp;
+        }
         float left = Mathf.Max(Mathf.Max(a.CentreX, c.CentreX), desk.CentreX - desk.Width / 2f);
         float right = Mathf.Min(Mathf.Min(b.CentreX, d.CentreX), desk.CentreX + desk.Width / 2f);
         float nearEdge = Mathf.Max(Mathf.Max(a.CentreY, b.CentreY), desk.CentreY - desk.Height / 2f);

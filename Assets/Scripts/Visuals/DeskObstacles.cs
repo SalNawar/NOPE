@@ -61,4 +61,18 @@ public sealed class DeskObstacles
         foreach ((DeskRect footprint, float _) in _byId.Values)
             into.Add(footprint);
     }
+
+    /// <summary>As Footprints, with each footprint's id and height at the same index in <paramref name="ids"/> and <paramref name="heights"/> (each cleared first).</summary>
+    public void Footprints(List<DeskRect> into, List<string> ids, List<float> heights)
+    {
+        into.Clear();
+        ids.Clear();
+        heights.Clear();
+        foreach (KeyValuePair<string, (DeskRect footprint, float height)> entry in _byId)
+        {
+            into.Add(entry.Value.footprint);
+            ids.Add(entry.Key);
+            heights.Add(entry.Value.height);
+        }
+    }
 }

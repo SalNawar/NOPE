@@ -507,7 +507,13 @@ public sealed class QaRunner : MonoBehaviour
     /// <c>n</c> settle frames (default 45) may be at most <c>f</c> pixels at
     /// 1080p (default 8, D1's "8 px in the release frame") from where it was
     /// on the release frame (BUG-53's per-drop assertion; a push after the
-    /// drop, like 1019a's ClearOfBlockers, fails it). The path plays one
+    /// drop, like 1019a's ClearOfBlockers, fails it). With the text "root"
+    /// the place measured is the dragged object's root (its transform's
+    /// position) through the pointer camera, not its bounds: a thing drawn
+    /// above every prop while held (HeldOnTop: the rulebook folder, a paper)
+    /// turns its click box off and is drawn toward the camera, so its bounds
+    /// at the release and at rest measure two different things (FOLD-01: about
+    /// 30 px of "move" with no move at all). The path plays one
     /// sample per frame, so the whole drag and its settle run at the fixed
     /// 30 fps game step (Time.captureFramerate, as a recording does): the
     /// P-* speeds (QaPaths, in px per second at 30 fps) and the settle's
@@ -524,6 +530,7 @@ public sealed class QaRunner : MonoBehaviour
         QaPath path = QaPaths.Drag(kind, from, to, new Vector2(Screen.width, Screen.height));
         int pressFrame = 0, releaseFrame = 0;
         Rect? atRelease = null;
+        bool byRoot = checkRest && string.Equals((s.text ?? string.Empty).Trim(), "root", StringComparison.OrdinalIgnoreCase);
         bool fixedHere = Time.captureFramerate != SeqRecorder.Fps;
         if (fixedHere)
         {
@@ -537,7 +544,7 @@ public sealed class QaRunner : MonoBehaviour
             if (i == path.ReleaseIndex)
             {
                 releaseFrame = Time.frameCount + 1;
-                atRelease = dragged != null ? QaGame.ScreenRect(dragged) : null;
+                atRelease = dragged != null ? Measure(dragged, byRoot) : null;
             }
         });
         string name = Safe(string.IsNullOrEmpty(s.name) ? "drag" : s.name);
@@ -554,7 +561,7 @@ public sealed class QaRunner : MonoBehaviour
         }
         if (!checkRest)
             yield break;
-        Rect? rest = QaGame.ScreenRect(dragged);
+        Rect? rest = Measure(dragged, byRoot);
         float limit = s.f > 0f ? s.f : 8f;
         if (atRelease == null || rest == null)
         {
@@ -564,6 +571,18 @@ public sealed class QaRunner : MonoBehaviour
         float moved = QaCameraMoves.To1080((rest.Value.center - atRelease.Value.center).magnitude, Screen.height);
         Assert($"drop.{name}", Scenario.owner, moved <= limit, $"{moved:0.0} px after the release (max {limit:0.#})",
             $"{dragged.name} ({kind}): released with its centre at {atRelease.Value.center}, at rest at {rest.Value.center}");
+    }
+
+    /// <summary>Where <paramref name="go"/> is on the screen for the drop op: its bounds' screen rect, or with <paramref name="root"/> its root's screen point (a rect of no size; null behind the camera).</summary>
+    private static Rect? Measure(GameObject go, bool root)
+    {
+        if (!root)
+            return QaGame.ScreenRect(go);
+        Camera camera = QaGame.PointerCamera();
+        if (go == null || camera == null)
+            return null;
+        Vector3 s = camera.WorldToScreenPoint(go.transform.position);
+        return s.z > 0f ? new Rect(s.x, s.y, 0f, 0f) : (Rect?)null;
     }
 
     /// <summary>A drag path's kind from its name ("Fast" or "P-FAST"; empty: Plain).</summary>
