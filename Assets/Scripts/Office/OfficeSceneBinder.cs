@@ -627,8 +627,34 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Vector3 feet = At(OfficeAnchorId.Traveller).Position;
         traveller.Stand(feet, viewer, config.travellerHeight, config.travellerTint, deskTop);
         if (wheelHint != null)
-            FaceCamera(wheelHint, feet + Vector3.up * (config.travellerHeight + HintHeight), viewer);
+            PlaceBeforeTheBars(wheelHint, feet + Vector3.up * (config.travellerHeight + HintHeight), viewer, At(OfficeAnchorId.HandOver).Position);
     }
+
+    /// <summary>The wheel note's scale as built (PlaceBeforeTheBars scales from it).</summary>
+    private Vector3 _wheelHintScale;
+
+    /// <summary>
+    /// Saleh's check of 2026-10-28: the day-1 note over the traveller's head
+    /// stood behind the teller bars, so the bars cut through its words. It
+    /// now slides along the chair's line of sight to the desk's side of the
+    /// counter (BarsShare of the hand-over's distance) and shrinks by the same
+    /// share: the same place and size on screen, in front of the bars.
+    /// </summary>
+    private void PlaceBeforeTheBars(Transform note, Vector3 head, Vector3 viewer, Vector3 handOver)
+    {
+        if (_wheelHintScale == Vector3.zero)
+            _wheelHintScale = note.localScale;
+        float far = Flat(head - viewer);
+        float near = Flat(handOver - viewer) * BarsShare;
+        float share = far > 1e-4f && near > 1e-4f && near < far ? near / far : 1f;
+        FaceCamera(note, viewer + (head - viewer) * share, viewer);
+        note.localScale = _wheelHintScale * share;
+    }
+
+    /// <summary>The note's share of the hand-over's distance: on the desk's side of the bars.</summary>
+    private const float BarsShare = 0.8f;
+
+    private static float Flat(Vector3 v) => new Vector2(v.x, v.z).magnitude;
 
     // -----------------------------
     // AVAILABLE sign, props, readouts
