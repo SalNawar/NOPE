@@ -30,7 +30,7 @@
     { "op": "click", "name": "passport_press_open", "target": "PaperTemplate(Clone)" },
     { "op": "wait", "f": 1 },
     { "op": "coverHits", "name": "open", "text": "booklet=open folder=open" },
-    { "op": "drag", "name": "passport_open", "path": "Plain", "target": "PaperTemplate(Clone)", "x2": 0.5, "y2": 0.42 },
+    { "op": "drag", "name": "passport_open", "path": "Plain", "target": "PaperTemplate(Clone)", "x2": 0.5, "y2": 0.2 },
     { "op": "wait", "f": 1.5 },
     { "op": "drag", "name": "folder_over_passport", "path": "Slow", "target": "Rulebook", "x2": 0.52, "y2": 0.44 },
     { "op": "wait", "f": 1.5 },
