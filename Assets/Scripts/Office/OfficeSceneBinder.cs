@@ -830,7 +830,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 lights.PaintedDesk = _painted;
             // Under the painted desk the booth's left wall closes the hall's left side (desk v3 round 13): its living city there draws nothing.
             if (_painted)
+            {
                 CloseHallBehindBooth(hall.transform);
+                // The counter's floor and the desk's front apron close what a moving or taller view saw past the booth (the night pops, 2026-10-28).
+                BoothUnderlay.Install(paintedDesk.transform, BoothBars());
+            }
             gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay), lights, traveller);
             gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects, lights);
             if (config.hallSlots != null)
@@ -854,6 +858,15 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (Array.IndexOf(DeskPaintedMap.HallClosedByBooth, t.name) >= 0)
                 foreach (Renderer r in t.GetComponentsInChildren<Renderer>(true))
                     r.enabled = false;
+    }
+
+    /// <summary>The painted booth's bars (DeskPaintedMap.BoothBars under the painted desk), or null.</summary>
+    private Renderer BoothBars()
+    {
+        foreach (Renderer r in paintedDesk.GetComponentsInChildren<Renderer>(true))
+            if (r.name == DeskPaintedMap.BoothBars)
+                return r;
+        return null;
     }
 
     // -----------------------------
