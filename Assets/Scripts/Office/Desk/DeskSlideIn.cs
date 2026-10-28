@@ -41,6 +41,9 @@ public sealed class DeskSlideIn : MonoBehaviour
 
     private readonly List<MachineSlideIn> _sliders = new List<MachineSlideIn>();
     private readonly List<SlideCandidate> _candidates = new List<SlideCandidate>();
+
+    /// <summary>The footprints of the things resting on the desk this frame (DeskController.Resting): each track stops short of them (Rooms).</summary>
+    private readonly List<DeskRect> _resting = new List<DeskRect>();
     private readonly RaycastHit[] _hits = new RaycastHit[MaxHits];
     private readonly string[] _owners = new string[MaxHits];
     private ProximityAssist _assist;
@@ -197,6 +200,30 @@ public sealed class DeskSlideIn : MonoBehaviour
         for (int i = 0; i < _sliders.Count; i++)
             if (_sliders[i] != null)
                 _sliders[i].Pose = _assist.Pose(_sliders[i].Id);
+        Rooms();
+    }
+
+    /// <summary>
+    /// Each track's room toward the mat this frame (MachineSlideIn.Room,
+    /// SlideRoom.Room): FOLD-01 (Saleh's playtest of 2026-10-28, point 4;
+    /// Papers, Please: a thing let go lies where it is let go). A paper or the
+    /// folder let go beside a machine stays in the strip the machine slides
+    /// into, and the machine stops short of it instead of crossing it or
+    /// pushing it. Allocates nothing.
+    /// </summary>
+    private void Rooms()
+    {
+        if (_papers != null)
+            _papers.Resting(_resting);
+        else
+            _resting.Clear();
+        for (int i = 0; i < _sliders.Count; i++)
+        {
+            MachineSlideIn slider = _sliders[i];
+            if (slider == null || !slider.TryTrack(out DeskRect rest, out float way, out float reach))
+                continue;
+            slider.Room = SlideRoom.Room(rest, way, reach, _resting, SlideRoom.Gap);
+        }
     }
 
     /// <summary>

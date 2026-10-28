@@ -544,8 +544,10 @@ public static class DeskLayout
     /// <summary>
     /// The world corners (on the desk) of each track's swept box: its home's
     /// footprint and the strip its slide reaches past it toward the mat
-    /// (DESK-HOMES 6: 0 px over a resting paper). A paper let go keeps clear
-    /// of each (DeskController.RestOf's keep-outs). A fresh list.
+    /// (DESK-HOMES 6: 0 px of a slider over a resting paper). A paper let go
+    /// no longer keeps clear of them (FOLD-01: a thing rests where it is let
+    /// go); the slider stops short of a resting paper instead
+    /// (MachineSlideIn, SlideRoom). A fresh list.
     /// </summary>
     public static List<Vector3[]> SweptStrips()
     {

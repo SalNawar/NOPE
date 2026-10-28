@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -22,7 +23,8 @@ using UnityEngine;
 /// <c>f</c> over 0 the step asserts <c>restTrace.&lt;name&gt;</c>: at least
 /// one rest was recorded, none moved more than <c>f</c> pixels at 1080p from
 /// its release (DOC-HANDLE D1's 8 px), and each lies wholly in its area and
-/// over no keep-out.
+/// over no keep-out. <c>slideClear</c> asserts that no track slider of the
+/// desk's slide-in lies over a resting thing (SlideClearOp).
 /// </summary>
 public static class RestTraceOps
 {
@@ -30,7 +32,68 @@ public static class RestTraceOps
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
 #endif
-    private static void Register() => QaRunner.RegisterOp("restTrace", RestTraceOp);
+    private static void Register()
+    {
+        QaRunner.RegisterOp("restTrace", RestTraceOp);
+        QaRunner.RegisterOp("slideClear", SlideClearOp);
+    }
+
+    /// <summary>
+    /// <c>slideClear</c> (FOLD-01: a slider stops short of a thing resting in
+    /// its strip; MachineSlideIn.Room): for <c>n</c> frames (default 45) it
+    /// reads every track slider's footprint as its slide has it now (its home
+    /// moved by MachineSlideIn.Slid) and every thing resting on the desk
+    /// (DeskController.Resting), and asserts <c>slideClear.&lt;name&gt;</c>:
+    /// no slider ever lies over a resting thing (1 mm of grace). The measured
+    /// text gives each slider's farthest slide in the window, so a slider that
+    /// stopped short (or never moved) shows.
+    /// </summary>
+    private static IEnumerator SlideClearOp(QaRunner runner, QaStep step)
+    {
+        string name = QaRunner.Safe(string.IsNullOrEmpty(step.name) ? "slides" : step.name);
+        DeskController desk = UnityEngine.Object.FindAnyObjectByType<DeskController>(FindObjectsInactive.Exclude);
+        MachineSlideIn[] sliders = UnityEngine.Object.FindObjectsByType<MachineSlideIn>(FindObjectsInactive.Exclude);
+        var resting = new List<DeskRect>();
+        var farthest = new Dictionary<string, float>();
+        var homes = new Dictionary<string, string>();
+        float worst = 0f;
+        string worstWhat = string.Empty;
+        int frames = step.n > 0 ? step.n : 45;
+        for (int f = 0; f < frames; f++)
+        {
+            yield return null;
+            if (desk == null)
+                break;
+            desk.Resting(resting);
+            foreach (MachineSlideIn slider in sliders)
+            {
+                if (slider == null || !slider.TryTrack(out DeskRect rest, out _, out _))
+                    continue;
+                var now = new DeskRect(rest.CentreX + slider.Slid, rest.CentreY, rest.Width, rest.Height);
+                string id = slider.Id ?? slider.name;
+                if (!farthest.ContainsKey(id))
+                    homes[id] = FormattableString.Invariant($"{id} x {rest.CentreX - rest.Width / 2f:0.000}..{rest.CentreX + rest.Width / 2f:0.000} room {slider.Room:0.000}");
+                farthest[id] = Mathf.Max(farthest.TryGetValue(id, out float far) ? far : 0f, Mathf.Abs(slider.Slid));
+                foreach (DeskRect r in resting)
+                {
+                    float x = Mathf.Min(now.CentreX + now.Width / 2f, r.CentreX + r.Width / 2f) - Mathf.Max(now.CentreX - now.Width / 2f, r.CentreX - r.Width / 2f);
+                    float y = Mathf.Min(now.CentreY + now.Height / 2f, r.CentreY + r.Height / 2f) - Mathf.Max(now.CentreY - now.Height / 2f, r.CentreY - r.Height / 2f);
+                    // Only a thing in its strip counts (beside its home toward the mat); a thing over its home is in it (a docked paper).
+                    bool overHome = Mathf.Min(rest.CentreX + rest.Width / 2f, r.CentreX + r.Width / 2f) - Mathf.Max(rest.CentreX - rest.Width / 2f, r.CentreX - r.Width / 2f) > 1e-4f;
+                    if (overHome || y <= 0f || x <= worst)
+                        continue;
+                    worst = x;
+                    worstWhat = $"{id} {x * 1000f:0.0} mm over a resting thing at frame {f}";
+                }
+            }
+        }
+        string slid = string.Join(", ", farthest.Select(kv => FormattableString.Invariant($"{kv.Key} {kv.Value * 1000f:0.0} mm")));
+        runner.Assert("slideClear." + name, "DOC-HANDLE", desk != null && worst <= 0.001f,
+                      desk == null ? "no desk" : FormattableString.Invariant($"{resting.Count} resting, deepest {worst * 1000f:0.0} mm; farthest slides: {slid}"),
+                      (desk == null ? "No DeskController in the scene." : worst > 0.001f ? worstWhat : "no track slider lay over a resting paper or the folder")
+                      + "; resting " + string.Join(" ", resting.Select(r => FormattableString.Invariant($"x {r.CentreX - r.Width / 2f:0.000}..{r.CentreX + r.Width / 2f:0.000}")))
+                      + "; tracks " + string.Join("; ", homes.Values));
+    }
 
     private static IEnumerator RestTraceOp(QaRunner runner, QaStep step)
     {

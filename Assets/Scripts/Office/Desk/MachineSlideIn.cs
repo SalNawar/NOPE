@@ -67,6 +67,25 @@ public sealed class MachineSlideIn : MonoBehaviour
     /// <summary>The pose DeskSlideIn gave it this frame (its position, squash, sway and contact shadow): put on in LateUpdate.</summary>
     public SlidePose Pose { get; set; }
 
+    /// <summary>
+    /// How far toward the mat a track may go now (metres; DeskSlideIn sets it
+    /// each frame from the things resting in its strip, SlideRoom.Room;
+    /// infinite with nothing there). FOLD-01: a paper or the folder let go
+    /// beside it stays where it was let go, so the track stops short of it:
+    /// its whole slide shrinks to the room (SlideRoom.Share, eased), never
+    /// over the paper and never pushing it.
+    /// </summary>
+    public float Room { get; set; } = float.PositiveInfinity;
+
+    /// <summary>The share of its slide a track makes now (SlideRoom.Share of Room, eased toward it: SlideRoom.EaseShare).</summary>
+    private float _share = 1f;
+
+    /// <summary>What it draws at rest (its slide's showing renderers' footprint in the desk's frame, Measure; no size before it is measured).</summary>
+    private DeskRect _drawn;
+
+    /// <summary>How far its slide has it out along the desk's x now (metres; 0 at rest and for a lift): the QA rig's slideClear reads it.</summary>
+    public float Slid { get; private set; }
+
     /// <summary>True while it is busy (scanning, reading, receiving a paper): it stays as it is (ProximityAssist).</summary>
     public bool Busy => _busy != null && _busy();
 
@@ -115,6 +134,23 @@ public sealed class MachineSlideIn : MonoBehaviour
         return machine;
     }
 
+    /// <summary>A track's footprint at rest (the desk's frame: its home's and what it draws there, Measure, together: the scanner's Auto-Feed tray stands out of its home toward the mat), its way toward the mat (-1 left, +1 right) and its farthest travel (metres: its overshoot peak, never past its felt gap: DeskSlides.Obstacle's reach); false for a lift, a fixed object or before it is bound (DeskSlideIn gives it its Room).</summary>
+    public bool TryTrack(out DeskRect rest, out float way, out float reach)
+    {
+        rest = default;
+        way = 0f;
+        reach = 0f;
+        if (_slider == null || _home == null || _slider.kind != SlideKind.Track || _way == 0f)
+            return false;
+        rest = _drawn.Width > 0f ? DeskRect.Union(_home.Footprint, _drawn) : _home.Footprint;
+        way = _way;
+        reach = Math.Min(_slider.travel * _slider.Peak, _slider.Reach(_slides != null ? _slides.feltGap : 0f));
+        return true;
+    }
+
+    /// <summary>Its pose's position as it shows: a track's shrunk by its share of the room (Room), a lift's as posed.</summary>
+    private float Shown(float position) => _slider != null && _slider.kind == SlideKind.Track ? position * _share : position;
+
     /// <summary>True when <paramref name="part"/> belongs to this object (one of its click boxes).</summary>
     public bool Owns(Component part) => part != null && part.transform.IsChildOf(transform);
 
@@ -155,7 +191,7 @@ public sealed class MachineSlideIn : MonoBehaviour
         centre = default;
         if (!_measured || _slider == null || !DeskLayout.Bound)
             return false;
-        (float x, float y) at = SlideCurve.ShadowCentre(_slider, _way, Pose.Position, (_restCentre.x, _restCentre.y));
+        (float x, float y) at = SlideCurve.ShadowCentre(_slider, _way, Shown(Pose.Position), (_restCentre.x, _restCentre.y));
         centre = DeskLayout.Frame.Point(new Vector2(at.x, at.y), _restBase + _height / 2f);
         return true;
     }
@@ -236,6 +272,7 @@ public sealed class MachineSlideIn : MonoBehaviour
             Destroy(_shadow.gameObject);
         _shadow = null;
         _measured = false;
+        _drawn = default;
         _stillFrames = 0;
         _lastScale = slide.lossyScale;
         Pose = default;
@@ -270,6 +307,7 @@ public sealed class MachineSlideIn : MonoBehaviour
         if (!any)
             return;
         DeskRect footprint = frame.Footprint(world);
+        _drawn = footprint;
         _restCentre = new Vector2(footprint.CentreX, footprint.CentreY);
         _restBase = world.min.y - frame.Origin.y;
         _height = world.size.y;
@@ -344,7 +382,11 @@ public sealed class MachineSlideIn : MonoBehaviour
         SlidePose pose = Pose;
         if (Present && _stillFrames >= SettleFrames && pose.Phase == SlidePhase.Rest && Mathf.Abs(pose.Position) < 1e-6f && (!_measured || !Same(_slide.lossyScale, _measuredScale)))
             Measure(frame);
-        (float right, float up) offset = SlideCurve.Offset(_slider, _way, pose.Position);
+        if (TryTrack(out _, out _, out float reach))
+            _share = SlideRoom.EaseShare(_share, SlideRoom.Share(Room, reach), Time.unscaledDeltaTime, UiMotion.Amount.Still);
+        float position = Shown(pose.Position);
+        (float right, float up) offset = SlideCurve.Offset(_slider, _way, position);
+        Slid = offset.right;
         Vector3 move = ToParent(frame.Right * offset.right + Vector3.up * offset.up);
         float metresPerPx = _slider.MetresPerPx;
 
@@ -393,7 +435,7 @@ public sealed class MachineSlideIn : MonoBehaviour
             _secondary.localPosition = _secondaryRest + ToParent(frame.Right * (_way * pose.Sway * metresPerPx), _secondary);
         if (_shadow != null)
         {
-            (float x, float y) centre = SlideCurve.ShadowCentre(_slider, _way, pose.Position, (_restCentre.x, _restCentre.y));
+            (float x, float y) centre = SlideCurve.ShadowCentre(_slider, _way, position, (_restCentre.x, _restCentre.y));
             _shadow.Show(frame, frame.Point(new Vector2(centre.x, centre.y), _restBase + (_slides != null ? _slides.shadowLift : 0f)), pose.Shadow, pose.ShadowBlur * metresPerPx, pose.ShadowWiden);
         }
     }

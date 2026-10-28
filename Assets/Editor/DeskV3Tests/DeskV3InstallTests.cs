@@ -411,7 +411,7 @@ public class DeskV3InstallTests
         // The code review (round 3, 5; round 6: no SweptBoxes.Add, a carry floor without TrySweptTop and empty strips all survived).
         // Since DOC-HANDLE's one held size (a32a806; NIGHT_ALL_MERGE.md section 4, clash 7) the carry reads no floor per position:
         // a held paper is drawn in front of every swept box at its peak (DeskLayout.SweptPeak through DeskController.HeldRatio),
-        // and a paper let go keeps clear of each track's strip (SweptStrips).
+        // and each track's strip stays known (SweptStrips; FOLD-01: a paper let go in it stays there and the slider stops short of it).
         var settings = new DeskLayoutSettings();
         var frame = new DeskFrame(new Vector3(0f, 1f, 0f), Vector3.forward);
         GameObject scanner = null, deskObject = null, eye = null;
@@ -430,7 +430,7 @@ public class DeskV3InstallTests
             Assert.AreEqual(0.12f, DeskLayout.SweptPeak(), 1e-4f, "the tallest swept box over the desk: a held paper is drawn in front of it");
             Vector3 away = frame.Point(new Vector2(-0.3f, -0.3f), 0.001f);
             Assert.IsFalse(DeskLayout.TrySweptTop(away, 0f, out _), "over the bare mat: no swept box");
-            Assert.IsNotEmpty(DeskLayout.SweptStrips(), "a paper let go has the scanner's strip to keep clear of");
+            Assert.IsNotEmpty(DeskLayout.SweptStrips(), "the scanner's strip is known (the scanner stops short of a paper resting in it)");
 
             deskObject = new GameObject("Desk");
             var desk = deskObject.AddComponent<DeskController>();

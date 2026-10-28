@@ -343,6 +343,51 @@ public sealed class DeskController : MonoBehaviour
     private readonly Vector3[] _folderCorners = new Vector3[8];
 
     /// <summary>
+    /// The footprints (the desk's frame, DeskLayout.Frame) of the things that
+    /// rest on the desk now, into <paramref name="into"/> (cleared first):
+    /// each case paper on the desk that is not held and in no machine, and
+    /// the rulebook folder out of its pocket and not held. The desk's sliders
+    /// stop short of them (DeskSlideIn, SlideRoom; FOLD-01: a thing let go
+    /// lies where it is let go). Nothing while the desk is unbound. Allocates
+    /// nothing (DeskSlideIn asks every frame).
+    /// </summary>
+    public void Resting(List<DeskRect> into)
+    {
+        into.Clear();
+        if (!DeskLayout.Bound)
+            return;
+        DeskFrame frame = DeskLayout.Frame;
+        for (int i = 0; i < _papers.Count; i++)
+        {
+            DeskDocument paper = _papers[i];
+            if (paper == null || !paper.isActiveAndEnabled || paper.Zone != DeskZone.Desk || paper.Index == _dragged || _docks.IsDocked(paper.Index))
+                continue;
+            paper.RestCorners(paper.transform.position, _restingCorners);
+            into.Add(FrameRect(frame, _restingCorners, 4));
+        }
+        if (rulebook != null && rulebook.isActiveAndEnabled && !_rulebookDragged && !rulebook.Pocketed && rulebook.TryBoxCorners(_restingFolder))
+            into.Add(FrameRect(frame, _restingFolder, 8));
+    }
+
+    /// <summary>Resting's buffers (a paper's four corners, the folder's eight).</summary>
+    private readonly Vector3[] _restingCorners = new Vector3[4], _restingFolder = new Vector3[8];
+
+    /// <summary>The rectangle enclosing the first <paramref name="count"/> of <paramref name="corners"/> in <paramref name="frame"/> (allocates nothing).</summary>
+    private static DeskRect FrameRect(DeskFrame frame, Vector3[] corners, int count)
+    {
+        float x0 = float.MaxValue, y0 = float.MaxValue, x1 = float.MinValue, y1 = float.MinValue;
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 c = frame.Local(corners[i]);
+            x0 = Mathf.Min(x0, c.x);
+            x1 = Mathf.Max(x1, c.x);
+            y0 = Mathf.Min(y0, c.y);
+            y1 = Mathf.Max(y1, c.y);
+        }
+        return new DeskRect((x0 + x1) / 2f, (y0 + y1) / 2f, x1 - x0, y1 - y0);
+    }
+
+    /// <summary>
     /// The folder's footprint on the desk (the rest's frame): its own box
     /// (DeskRulebook.TryBoxCorners: the board's side alone while shut, as the
     /// player sees it), else everything drawn under it. Saleh's playtest of
@@ -1241,8 +1286,9 @@ public sealed class DeskController : MonoBehaviour
     /// <item><paramref name="offCounter"/>: off the counter (a desk paper
     /// refused there).</item>
     /// </list>
-    /// Nor where a slider sweeps (DeskLayout.SweptStrips). Papers over papers
-    /// and the folder over papers are allowed, as in Papers, Please.
+    /// A slider's swept strip is not among them: the slider stops short of a
+    /// resting paper (MachineSlideIn). Papers over papers and the folder over
+    /// papers are allowed, as in Papers, Please.
     /// </summary>
     private Vector3 RestOf(DeskRect footprint, Vector3 at, bool offCounter, bool onDesk, string what)
     {
@@ -1273,13 +1319,6 @@ public sealed class DeskController : MonoBehaviour
             _keepOut.Add(ScannerClearance.Blocked(InViewFrame(scanner.Corners()), _scannerShadow));
             if (trace)
                 _sources.Add("scannerClearance");
-        }
-        // Nor where the desk's slide-in moves a machine (DESK-V3, DESK-HOMES 6: 0 px of a slider over a resting paper): each track's swept strip.
-        foreach (Vector3[] strip in DeskLayout.SweptStrips())
-        {
-            _keepOut.Add(InViewFrame(strip));
-            if (trace)
-                _sources.Add("swept");
         }
         if (offCounter && counter != null && counter.TryNearEdge(out float near))
         {
