@@ -138,6 +138,8 @@ Line 191 (the cues the game plays):
 
 QA-RIG (#2) owns `GateCheck`, `GateResults` and the scenario runner. Its branch (`fix/p0-qa-rig`) is not in this branch's base (`fix/p0-cuts`), so `Assets/Editor/QA/Checks/StampChecks.cs` cannot compile here. When main has QA-RIG, add it with this content:
 
+**Since 2026-10-28 (integrate/s0800, the code review's RG-02):** a fifth check, `stamp.carry` (Play), reads `stamp_aim.letGoCarry.*` (the carried dater never below a prop's top under its footprint). It is known red (BUG-15c, `tools/qa/gate_known_red.txt`) until Saleh rules how the carried dater meets the taller painted machines; the demo gate refuses it. The let-go lines (`stamp_aim.letGo.*`) are still read by no check.
+
 ```csharp
 /// <summary>STAMP's gate checks (BUG-15a, 16a, 40a; QA-RIG §5).</summary>
 public static class StampChecks

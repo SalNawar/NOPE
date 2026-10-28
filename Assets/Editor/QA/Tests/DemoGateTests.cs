@@ -104,6 +104,37 @@ public class DemoGateTests
         Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { pile }, 1, known, own).Refused, "the pile refusals stay strict");
     }
 
+    /// <summary>
+    /// The code review's RG-02 (2026-10-28): no check read the dater's carry
+    /// lines, so the demo gate could not refuse QA-05. stamp.carry reads them;
+    /// it is known red under STAMP (Saleh's open call), so the merge gate lists
+    /// it and the demo gate refuses it; the let-go lines stay strict.
+    /// </summary>
+    [Test]
+    public void TheCarryCheck_ReadsTheDatersCarryLines_KnownRedUnderStamp_TheDemoGateRefusesIt()
+    {
+        RegisteredCheck carry = GateChecks.All(new[] { typeof(StampChecks).Assembly }).Single(c => c.Info.Id == "stamp.carry");
+        Assert.AreEqual("STAMP", carry.Info.Owner);
+        Assert.AreEqual(GateKind.Play, carry.Info.Kind);
+        Assert.IsFalse(carry.Info.DemoOnly, "the merge gate runs it too (and lists it as known red)");
+
+        string text = File.ReadAllText(Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt"));
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        Dictionary<string, List<string>> own = DemoGate.KnownRedPatternsByCheck(text);
+        Assert.IsTrue(known.ContainsKey("stamp.carry"));
+        StringAssert.Contains("BUG-15c", known["stamp.carry"]);
+        StringAssert.Contains("STAMP", known["stamp.carry"]);
+        StringAssert.Contains("Saleh's open call: how the carried dater meets the taller painted machines", known["stamp.carry"]);
+
+        GateResult red = GateResults.Judge("stamp.carry", "STAMP", "stamp_aim.letGoCarry.*", new[] { R("stamp_aim.letGoCarry.scanner1", false), R("stamp_aim.letGo.scanner1", false) }, "abc", false);
+        CollectionAssert.AreEqual(new[] { "stamp_aim.letGoCarry.scanner1" }, red.Unmet, "the check reads the carry lines, not the let-go lines");
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { red }, 1, known, own).Refused, "the merge gate lists it");
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Demo, new[] { red }, 1, known, own).Refused, "the demo gate refuses it");
+        List<string> patterns = DemoGate.KnownRedRunPatterns(text);
+        Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, "stamp_aim.letGoCarry.rack1")), "a stamp_aim run reports its carry lines as known red");
+        Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, "stamp_aim.letGo.rack1")), "the let-go lines stay strict");
+    }
+
     /// <summary>The Helix monitor's flicker check judged on <paramref name="results"/> at HEAD "abc" (HallFxChecks.HelixFlicker's pattern).</summary>
     private static GateResult Helix(params QaGateResult[] results) =>
         GateResults.Judge("hallfx.helix.flicker", "HALL-FX", "hall_fx_helix.seq.*.flicker", results, "abc", false);

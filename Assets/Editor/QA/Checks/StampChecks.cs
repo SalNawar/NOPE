@@ -5,6 +5,17 @@ public static class StampChecks
     [GateCheck("stamp.aim", "STAMP", GateKind.Play)]
     public static GateResult Aim() => GateResults.Require("stamp.aim", "STAMP", "stamp_aim.aim.*");
 
+    /// <summary>
+    /// The carried dater never passes through a prop: no part of it below the
+    /// top of the prop under its footprint in any frame from the press to the
+    /// seat (stamp_aim.json, StampRig's letGoCarry lines, R4 (d)'s literal
+    /// line; QA_REVIEW QA-05: 27 lines red on the painted desk, the scanner
+    /// 122 mm deep). No check read these lines before (the code review's RG-02
+    /// of 2026-10-28), so the demo gate could not refuse QA-05.
+    /// </summary>
+    [GateCheck("stamp.carry", "STAMP", GateKind.Play)]
+    public static GateResult Carry() => GateResults.Require("stamp.carry", "STAMP", "stamp_aim.letGoCarry.*");
+
     /// <summary>Rack pixels over any paper = 0 in every frame of a full case at A1 and A2 (stamp_case.json, the rackOverPaper op).</summary>
     [GateCheck("stamp.rackClear", "STAMP", GateKind.Play)]
     public static GateResult RackClear() => GateResults.Require("stamp.rackClear", "STAMP", "stamp_case.rackOverPaper.*");
