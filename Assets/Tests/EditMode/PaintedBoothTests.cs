@@ -161,6 +161,42 @@ public class PaintedBoothTests
     }
 
     /// <summary>
+    /// Saleh 2026-10-28: "things have these black visual glitches as the camera move". The shell's mat well is wider than the mat
+    /// and the desk top has holes (behind the PC, the paper slot): from above the camera looked through them to its clear colour.
+    /// The well floor (DeskPaintedMap, laid by BoothUnderlay) lies under the desk top's lowest surface (desk_layout_v3.json's desk_top, 1.069 m; the well's
+    /// lowest vertex 1.054 m), inside the desk's front edge and its walls, and under the whole mat with a margin past its gaps;
+    /// the binder lays it with the booth. (The offline raster of the bake's meshes over the reading toggle is in the fix report.)
+    /// </summary>
+    [Test]
+    public void TheWellFloor_LiesUnderTheDeskTop_UnderTheMatsGaps_InsideTheDesk()
+    {
+        ContentNode layout = Json(Art + "Data/desk_layout_v3.json");
+        float top = Num(layout.Get("desk_top"));
+        IReadOnlyList<ContentNode> desk = layout.Get("desk").Items, mat = layout.Get("mat").Items;
+        Assert.That(DeskPaintedMap.WellFloorY, Is.LessThan(1.054f), "under the lowest desk-top vertex, so no desk part is ever behind it");
+        Assert.That(DeskPaintedMap.WellFloorY, Is.GreaterThan(top - 0.05f), "and close under it: the gaps show a shallow shadow, not a pit");
+        Assert.That(DeskPaintedMap.WellFloor.Length, Is.EqualTo(2));
+        foreach ((float x0, float z0, float x1, float z1) in DeskPaintedMap.WellFloor)
+        {
+            Assert.That(x0, Is.GreaterThan(Num(desk[0])), "inside the desk's left");
+            Assert.That(x1, Is.LessThan(Num(desk[2])), "inside the right wall");
+            Assert.That(z0, Is.GreaterThan(Num(desk[1])), "behind the desk's front edge: it never shows past it");
+            Assert.That(x1 > x0 && z1 > z0, "a rectangle");
+        }
+        (float mx0, float mz0, float mx1, float mz1) = DeskPaintedMap.WellFloor[0];
+        const float gaps = 0.08f;
+        Assert.That(mx0, Is.LessThan(Num(mat[0]) - gaps), "under the mat's left gap");
+        Assert.That(mx1, Is.GreaterThan(Num(mat[2]) + gaps), "under the mat's right gap");
+        Assert.That(mz0, Is.LessThan(Num(mat[1]) - gaps), "under the mat's near edge");
+        Assert.That(mz1, Is.GreaterThan(1.34f), "past the paper slot's rays under the counter");
+        string underlay = Read("Assets/Scripts/Office/Desk/BoothUnderlay.cs");
+        StringAssert.Contains("(float x0, float z0, float x1, float z1) = DeskPaintedMap.WellFloor[i];", underlay, "BoothUnderlay lays the map's rectangles");
+        StringAssert.Contains("Surface(root.transform, i == 0 ? \"Desk well floor\" : \"Desk well floor (left back)\", plate, Gradient(WellShadow, WellShadow), shader);", underlay,
+                              "with the counter's floor and the apron");
+        StringAssert.Contains("BoothUnderlay.Install(paintedDesk.transform, BoothBars());", Read(BinderPath), "the binder installs it under the painted desk");
+    }
+
+    /// <summary>
     /// Saleh 2026-10-28: "textures are terrible when you go overhead". The reading view sees the counter row's and the machines'
     /// painted faces at a grazing angle; every painted texture takes the hardware's most anisotropic taps (16, not 8), and the
     /// importer's version moves so Unity imports the folder again. The .meta files carry the same level, so a reimport changes nothing.

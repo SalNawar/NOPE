@@ -241,6 +241,22 @@ public static class DeskPaintedMap
     /// </summary>
     public static readonly string[] HallClosedByBooth = { "Deep front city extension" };
 
+    /// <summary>
+    /// The desk's well floor's height (world y, m; BoothUnderlay lays it; Saleh 2026-10-28: "things have these black visual glitches
+    /// as the camera move"): under the desk top's lowest surface. The desk top is at 1.069 m (desk_layout_v3.json's desk_top); the
+    /// lowest vertex of the shell's mat well is 1.054 m (DeskShell.fbx), so no desk part is ever behind the plate.
+    /// </summary>
+    public const float WellFloorY = 1.05f;
+
+    /// <summary>
+    /// The well floor's two rectangles (world x and z, m: x0, z0, x1, z1). The shell's mat well is wider than the mat (gaps of 1 to
+    /// 7 cm at its far edge and both sides) and the desk top has holes behind the PC and in the paper slot; from above the camera
+    /// looked through them to its clear colour. The main rectangle spans the desk top from just inside its front edge (z -0.84) to
+    /// past the bars' foot under the counter (the paper slot's rays reach z 1.34), from behind the PC (x -2.0) to the right wall. The
+    /// second takes the desk top's left back corner, from z -0.35 (the front-left corner is open past the booth's left wall).
+    /// </summary>
+    public static readonly (float x0, float z0, float x1, float z1)[] WellFloor = { (-2.0f, -0.80f, 2.25f, 1.40f), (-2.55f, -0.35f, -2.0f, 1.40f) };
+
     /// <summary>The bake's lamp bezel (one mesh, placed once per lamp of anchors.json).</summary>
     public const string LampBezel = "Desk_LampBezel";
 
