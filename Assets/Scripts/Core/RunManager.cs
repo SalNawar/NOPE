@@ -41,6 +41,17 @@ public sealed class RunManager : MonoBehaviour
     public int Mornings { get; private set; }
 
     /// <summary>
+    /// The day whose desk the run last left: the day a night's Sleep closes,
+    /// or the day a cheat's route (a jump, a skip, a restart) starts from; 0
+    /// after a new or continued run. Today's briefing compares today's desk
+    /// hours with that day's (ShiftHours.ComparedDay, GameManager.TodaysBulletin),
+    /// so a jump that lands on other hours than the clerk last had names them
+    /// (Saleh 2026-10-28: "switching days with cheats start the day at the
+    /// wrong time").
+    /// </summary>
+    public int LeftDeskDay { get; private set; }
+
+    /// <summary>
     /// The cheat changes made to the world since it was last saved (DevCheats
     /// notes each one): a skip or a jump from Home replays them on the
     /// end-of-shift save it starts from, so none is lost (BUG-28a). Cleared at
@@ -165,6 +176,7 @@ public sealed class RunManager : MonoBehaviour
         DevToolsState.ResetAll();
         SaveSystem.SetAsideForNewRun();
         CheatEdits.Clear();
+        LeftDeskDay = 0;
         World = FreshWorld();
         adopt?.Invoke(World);
 
@@ -178,6 +190,7 @@ public sealed class RunManager : MonoBehaviour
     {
         DevToolsState.ResetAll();
         CheatEdits.Clear();
+        LeftDeskDay = 0;
         World = FreshWorld();
         _morning = null;
         Debug.Log($"[RunManager] No save to continue: a fresh run in memory (day {World.day}, seed {World.runSeed}), unsaved until it is started or played.");
@@ -209,6 +222,7 @@ public sealed class RunManager : MonoBehaviour
         World = loaded;
         DevToolsState.ResetAll();
         CheatEdits.Clear();
+        LeftDeskDay = 0;
 
         // A save from before the pet (the Home pet spec) adopts the run config's default;
         // one from before the coats (PS11) gives its pet the kind's first coat.
@@ -330,6 +344,7 @@ public sealed class RunManager : MonoBehaviour
     {
         Debug.Log($"[RunManager] >>> Entering Sleep (day {World.day}, money={World.money}, stability={World.timelineStability:0.00}).");
 
+        LeftDeskDay = World.day;
         EndingSO ending = DayCycle.Sleep(World, Library, GameConfig);
         if (ending != null)
         {
@@ -431,6 +446,7 @@ public sealed class RunManager : MonoBehaviour
     private bool Run(List<RunStep> route, Action<WorldState> reapply)
     {
         Debug.Log($"[RunManager] Cheat route from day {World.day} ({World.phase}): {string.Join(", ", route)}.");
+        LeftDeskDay = World.day;
         GameManager live = GameManager.Current != null && GameManager.Current.World == World ? GameManager.Current : null;
         WorldState world = World;
         EndingSO ending = CheatRoute.Play(ref world, route, Config, live != null ? live.CloseShiftForCheat : (Func<bool>)null, TodaysMorning, EndOfShiftSave);

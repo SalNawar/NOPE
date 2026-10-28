@@ -103,6 +103,21 @@ public readonly struct ShiftHours : IEquatable<ShiftHours>
         yesterday.HasValue && !yesterday.Value.Equals(today);
 
     /// <summary>
+    /// The day whose hours today's briefing compares with (<see cref="Announces"/>):
+    /// the day whose desk the run last left (<paramref name="leftDesk"/>: a
+    /// night's sleep leaves yesterday's, a cheat's jump or skip leaves the day
+    /// it started from), else yesterday (0 or less: none is known, as after a
+    /// new or continued run; today: a restart of today). A cheat's jump lands
+    /// on the day's own hours (its plan's), as a played day does, so a jump
+    /// from day 1 to day 11 opens at 13:00; the clerk never saw day 10's
+    /// hours, so the briefing names the new hours (Saleh 2026-10-28: "switching
+    /// days with cheats start the day at the wrong time"). Day 1 with no
+    /// earlier desk compares with day 0, which has no hours.
+    /// </summary>
+    public static int ComparedDay(int today, int leftDesk) =>
+        leftDesk > 0 && leftDesk != today ? leftDesk : today - 1;
+
+    /// <summary>
     /// Where <paramref name="minuteOfDay"/> stands on <paramref name="standard"/>
     /// (the config's standard day): 0 at or before its opening, 1 at or after
     /// its closing, linear between; a minute that is not a number reads 0. The
