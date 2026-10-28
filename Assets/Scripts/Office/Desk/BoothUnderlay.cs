@@ -35,8 +35,8 @@ public sealed class BoothUnderlay : MonoBehaviour
     /// <summary>The desk's front apron (world, m): its plane just behind the desk's front edge face (z about -1.31), its top behind that face, its bottom under the lowest ray of a 5:4 office frame (y 0.49).</summary>
     public const float ApronZ = -1.27f, ApronTop = 1.02f, ApronBottom = -0.6f, ApronHalfWidth = 3f;
 
-    /// <summary>The hall floor's painted tone just above the counter (sRGB; the office still, day 1) and the counter's shade at its foot.</summary>
-    private static readonly Color32 FloorFar = new Color32(88, 75, 59, 255), FloorNear = new Color32(70, 58, 45, 255);
+    /// <summary>The hall floor's tone and the counter's shade at its foot (sRGB): the up-facing plate shows about 1.5 times brighter under the hour's light, so the far end lands on the painted floor's (85, 71, 53) just above the counter (the office still, day 1).</summary>
+    private static readonly Color32 FloorFar = new Color32(56, 48, 38, 255), FloorNear = new Color32(45, 37, 29, 255);
 
     /// <summary>The desk front's painted tone under its lip (sRGB; the 5:4 office still) and its shade at the floor.</summary>
     private static readonly Color32 ApronTopColour = new Color32(49, 28, 12, 255), ApronBottomColour = new Color32(20, 12, 6, 255);
