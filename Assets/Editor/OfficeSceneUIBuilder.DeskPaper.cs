@@ -683,7 +683,8 @@ public static partial class OfficeSceneUIBuilder
     /// opens and closes), in the folder card's plane (the booklet turned as the
     /// card is, unscaled): a hinge on the spine, FolderCover.Lift over the
     /// face, carrying the board's outside (the cel material in the folder's
-    /// manila; shut, it lies over the right sheet), the Bureau's seal on it, and
+    /// manila; shut, it lies over the right sheet), the Bureau's seal on it with
+    /// the folder's title over and under it (its cover words), and
     /// back to back with it the board's inside (the cel material showing the
     /// left half of the folder's art: its cover page, laid where it lies open
     /// at 180 degrees); and the open cover page's click box (FolderCoverClick,
@@ -718,7 +719,10 @@ public static partial class OfficeSceneUIBuilder
             m.SetColor("_BaseColor", Color.white);
             m.SetFloat("_Cutoff", 0f);
         });
+        // the Bureau's seal: its art when delivered, else the forms' code-drawn ring (ArtSlots.AgencySeal's fallback); with no texture the seal drew a solid brown square
         Texture2D sealArt = AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.AgencySeal + ".png");
+        if (sealArt == null)
+            sealArt = EnsureOfficeShape("form_seal", SealPixels, SealPixels, new Vector2(0.5f, 0.5f), SealRing).texture;
         Material seal = EnsureMaterial("Rulebook_CoverSeal", "Universal Render Pipeline/Unlit", m =>
         {
             m.SetTexture("_BaseMap", sealArt);
@@ -736,6 +740,21 @@ public static partial class OfficeSceneUIBuilder
         back.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
         foreach (GameObject part in new[] { front, emblem, back })
             part.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
+        // the folder's title on the board's outside, from the cover's own words (RulebookCoverWords): the bureau over the seal, the rulebook's line under it
+        var title = new List<TMP_Text>();
+        (string bureau, _, Color bureauInk, _) = RulebookCoverWords[0];
+        (string rulebookLine, _, Color lineInk, _) = RulebookCoverWords[1];
+        float above = (tall / 2f - side / 2f), wordWidth = board * 0.84f;
+        TextMeshPro top = FlatText(hinge, "Title", new Vector3(board / 2f, middle + side / 2f + above / 2f, -2f * gap), new Vector2(wordWidth, above * 0.8f), 0.3f, bureauInk, FontStyles.Bold);
+        top.text = bureau;
+        top.textWrappingMode = TextWrappingModes.Normal;
+        TextMeshPro bottom = FlatText(hinge, "Line", new Vector3(board / 2f, middle - side / 2f - above / 2f, -2f * gap), new Vector2(wordWidth, above * 0.4f), 0.16f, lineInk, FontStyles.Bold);
+        bottom.text = rulebookLine;
+        foreach (TextMeshPro word in new[] { top, bottom })
+        {
+            word.transform.localRotation = Quaternion.identity; // in the hinge's plane, facing the viewer as the front does
+            title.Add(word);
+        }
 
         Clickable coverClick = EnsureClickBox(booklet, "FolderCoverClick");
         coverClick.transform.localPosition = new Vector3((RulebookBoardEdge + RulebookSpine) / 2f * w, 0.0002f, middle);
@@ -750,6 +769,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "front", front.GetComponent<Renderer>());
         SetRef(so, "back", back.GetComponent<Renderer>());
         SetRef(so, "seal", emblem.transform);
+        SerializedArrays.Set(so, "words", title);
         SetRef(so, "coverClick", coverClick);
         so.FindProperty("spine").floatValue = RulebookSpine;
         so.ApplyModifiedProperties();

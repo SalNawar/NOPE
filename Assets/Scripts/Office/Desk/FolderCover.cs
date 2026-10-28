@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -36,6 +37,9 @@ public sealed class FolderCover : MonoBehaviour
     /// <summary>The Bureau's seal on the board's outside (a quad over the front's middle): it rides the front's bow (PaperCover.Ride).</summary>
     [SerializeField] private Transform seal;
 
+    /// <summary>The folder's title on the board's outside (its cover words, TEMPORAL CUSTOMS BUREAU over the seal and CLERK'S RULEBOOK under it, the builder's RulebookCoverWords): they ride the front's bow as the seal does, and Face prints them in the reading language, so the shut folder reads as the rulebook.</summary>
+    [SerializeField] private TMP_Text[] words = Array.Empty<TMP_Text>();
+
     /// <summary>The open folder's cover page as a click box (over the left board): a click shuts the folder; off while it is shut.</summary>
     [SerializeField] private Clickable coverClick;
 
@@ -58,6 +62,14 @@ public sealed class FolderCover : MonoBehaviour
     private Vector3 _sealRest;
     private Vector2 _sealHalf;
 
+    /// <summary>True once the seal's place and half size as built are read (KnowSeal).</summary>
+    private bool _sealKnown;
+
+    /// <summary>The title words' places on the flat board, half sizes (metres) and English as built (KnowSeal).</summary>
+    private Vector3[] _wordRest = Array.Empty<Vector3>();
+    private Vector2[] _wordHalf = Array.Empty<Vector2>();
+    private string[] _wordEnglish = Array.Empty<string>();
+
     private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
 
     private readonly BookletFlip _flip = new BookletFlip();
@@ -78,16 +90,45 @@ public sealed class FolderCover : MonoBehaviour
 
     private void Awake()
     {
-        if (seal != null)
-        {
-            _sealRest = seal.localPosition;
-            _sealHalf = new Vector2(Mathf.Abs(seal.localScale.x), Mathf.Abs(seal.localScale.y)) / 2f;
-        }
+        KnowSeal();
         PaperCover.UseSheet(front);
         PaperCover.UseSheet(back);
         if (coverClick != null)
             coverClick.onClick.AddListener(() => Close());
         Show(true);
+    }
+
+    /// <summary>
+    /// Reads the seal's place and half size as built, once, before anything
+    /// rides it (Show). DeskRulebook.Show shuts the folder (ShutNow) at a
+    /// day's start, which can come before this component's Awake while the
+    /// rulebook's object is inactive. A ride from an unread rest put the seal
+    /// on the hinge, half under the board, as a brown strip on the spine
+    /// (night build stills, 2026-10-28).
+    /// </summary>
+    private void KnowSeal()
+    {
+        if (_sealKnown)
+            return;
+        _sealKnown = true;
+        if (seal != null)
+        {
+            _sealRest = seal.localPosition;
+            _sealHalf = new Vector2(Mathf.Abs(seal.localScale.x), Mathf.Abs(seal.localScale.y)) / 2f;
+        }
+        _wordRest = new Vector3[words.Length];
+        _wordHalf = new Vector2[words.Length];
+        _wordEnglish = new string[words.Length];
+        for (int i = 0; i < words.Length; i++)
+        {
+            if (words[i] == null)
+                continue;
+            Transform word = words[i].transform;
+            Vector2 size = word is RectTransform rect ? rect.rect.size : Vector2.one;
+            _wordRest[i] = word.localPosition;
+            _wordHalf[i] = new Vector2(Mathf.Abs(size.x * word.localScale.x), Mathf.Abs(size.y * word.localScale.y)) / 2f;
+            _wordEnglish[i] = words[i].text;
+        }
     }
 
     /// <summary>Shut at once, with no swing (the folder at a day's start).</summary>
@@ -103,9 +144,13 @@ public sealed class FolderCover : MonoBehaviour
     /// <summary>Swings shut (nothing when shut or shutting); true when it started.</summary>
     public bool Close() => Swing(_flip.Close(UiMotion.Amount.Still));
 
-    /// <summary>The board's inside shows <paramref name="face"/> (the folder's face art now: its clean face while a culture's language is read); null: the material's own.</summary>
+    /// <summary>The board's inside shows <paramref name="face"/> (the folder's face art now: its clean face while a culture's language is read); null: the material's own. The title on the board's outside prints in the reading language (DeskRulebook.ShowCover calls this whenever the labels' language changes).</summary>
     public void Face(Texture2D face)
     {
+        KnowSeal();
+        for (int i = 0; i < words.Length; i++)
+            if (words[i] != null)
+                words[i].text = UiText.DocumentWord(_wordEnglish[i]); // the title on the board in the reading language, as the cover page's words
         if (back == null)
             return;
         _block ??= new MaterialPropertyBlock();
@@ -134,6 +179,7 @@ public sealed class FolderCover : MonoBehaviour
     /// <summary>The hinge at the board's angle (hidden while the folder lies open: its own face shows the cover page); ShutChanged when that changes.</summary>
     private void Show(bool force)
     {
+        KnowSeal();
         bool shut = _flip.State != CoverState.Open;
         if (hinge != null)
         {
@@ -150,7 +196,12 @@ public sealed class FolderCover : MonoBehaviour
             PaperCover.Bow(front, _block, Vector2.right, bow);
             PaperCover.Bow(back, _block, Vector2.left, -bow);
             if (front != null)
+            {
                 PaperCover.Ride(seal, _sealRest, _sealHalf, front.transform, Vector2.right, bow);
+                for (int i = 0; i < words.Length; i++)
+                    if (words[i] != null)
+                        PaperCover.Ride(words[i].transform, _wordRest[i], _wordHalf[i], front.transform, Vector2.right, bow);
+            }
         }
         if (coverClick != null && coverClick.TryGetComponent(out Collider box))
             box.enabled = !shut;
