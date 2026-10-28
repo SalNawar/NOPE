@@ -119,11 +119,15 @@ public static class HallStates
     }
 
     /// <summary>
-    /// Today's special from the day plans' rule types: Return when a
-    /// ReturnHome rule is in force today, else Ban when a border closure
-    /// (NationForbidden, NationEraForbidden) is, else Recall when a
-    /// TransponderRecall rule starts today (in force today, not in
-    /// <paramref name="yesterday"/>), else None. Null lists read as empty.
+    /// Today's special from the day plans' rule types: Ban when a border
+    /// closure (NationForbidden, NationEraForbidden) is in force today, else
+    /// Return when a ReturnHome rule is, else Recall when a TransponderRecall
+    /// rule starts today (in force today, not in <paramref name="yesterday"/>),
+    /// else None. Null lists read as empty. A closure is a one-day event and
+    /// the return a standing rule, so the closure wins: the 21-day run puts
+    /// its closure on day 20, inside the return's days 19 to 21 (the code
+    /// review's R16 of 2026-10-28: with Return first no day was a Ban day,
+    /// and the checkpoint slot, event=ban, never showed).
     /// </summary>
     public static HallEvent EventOf(IEnumerable<TravelRuleType> today, IEnumerable<TravelRuleType> yesterday)
     {
@@ -135,10 +139,10 @@ public static class HallStates
                 ban |= t == TravelRuleType.NationForbidden || t == TravelRuleType.NationEraForbidden;
                 recall |= t == TravelRuleType.TransponderRecall;
             }
-        if (returns)
-            return HallEvent.Return;
         if (ban)
             return HallEvent.Ban;
+        if (returns)
+            return HallEvent.Return;
         if (!recall)
             return HallEvent.None;
         if (yesterday != null)

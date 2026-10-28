@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
 /// <summary>
@@ -81,8 +84,44 @@ public class HallSlotsTests
         Assert.AreEqual(HallEvent.Ban, HallStates.EventOf(recall.Append(TravelRuleType.NationEraForbidden), recall), "a border closure");
         Assert.AreEqual(HallEvent.Ban, HallStates.EventOf(new[] { TravelRuleType.NationForbidden }, null));
         Assert.AreEqual(HallEvent.None, HallStates.EventOf(new[] { TravelRuleType.EraForbidden }, null), "an era range limit is no border closure");
-        Assert.AreEqual(HallEvent.Return, HallStates.EventOf(recall.Append(TravelRuleType.ReturnHome).Append(TravelRuleType.NationForbidden), recall), "the return wins");
+        Assert.AreEqual(HallEvent.Return, HallStates.EventOf(recall.Append(TravelRuleType.ReturnHome), recall), "the return");
+        Assert.AreEqual(HallEvent.Ban, HallStates.EventOf(recall.Append(TravelRuleType.ReturnHome).Append(TravelRuleType.NationForbidden), recall), "a closure wins over the standing return (R16)");
         Assert.AreEqual(HallEvent.None, HallStates.EventOf(null, null));
+    }
+
+    /// <summary>
+    /// The code review's R16 (2026-10-28): the 21-day progression put the
+    /// border closure (Rule_NoModernGermany) on day 20, inside the return's
+    /// days 19 to 21. With Return tested first no day of the run was a Ban
+    /// day, so the checkpoint slot (event=ban) never showed. Read from the
+    /// content source as Generate World reads it.
+    /// </summary>
+    [Test]
+    public void TheRunsDays_ReadTheirEvents_Day20IsTheBan()
+    {
+        Dictionary<int, HallEvent> events = RunEvents();
+        Assert.AreEqual(HallEvent.Ban, events[20], "day 20's closure shows the checkpoint, over the standing return");
+        Assert.AreEqual(HallEvent.Return, events[19], "the return's first day");
+        Assert.AreEqual(HallEvent.Return, events[21]);
+        Assert.AreEqual(HallEvent.Recall, events[17], "the recall's first day");
+        Assert.AreEqual(1, events.Values.Count(e => e == HallEvent.Ban), "one Ban day in the run");
+    }
+
+    /// <summary>Each authored day's event (HallStates.EventOf on its plan's rule types and the day before's, as HallSlotsLink reads them), from world_source.json.</summary>
+    private static Dictionary<int, HallEvent> RunEvents([CallerFilePath] string here = "")
+    {
+        const string source = "Assets/Data/World/world_source.json";
+        string path = File.Exists(source) ? source : Path.Combine(Path.GetDirectoryName(here), "..", "..", "..", source);
+        ContentNode root = ContentJson.Parse(File.ReadAllText(path));
+        var types = new Dictionary<string, TravelRuleType>(StringComparer.Ordinal);
+        foreach (ContentNode rule in root.Get("rules").Items)
+            if (Enum.TryParse(rule.Get("type").Text, out TravelRuleType type))
+                types[rule.Get("asset").Text] = type;
+        var byDay = new Dictionary<int, List<TravelRuleType>>();
+        foreach (ContentNode day in root.Get("days").Items)
+            byDay[int.Parse(day.Get("day").Text)] = day.Get("rules").Items.Where(r => types.ContainsKey(r.Text)).Select(r => types[r.Text]).ToList();
+        Assert.IsTrue(byDay.ContainsKey(21), "the run's 21 days are authored");
+        return byDay.ToDictionary(d => d.Key, d => HallStates.EventOf(d.Value, byDay.TryGetValue(d.Key - 1, out List<TravelRuleType> before) ? before : null));
     }
 
     // ---- the exhibits ----
