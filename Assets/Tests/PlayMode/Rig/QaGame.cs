@@ -111,7 +111,7 @@ public static class QaGame
         return typeof(Object).IsAssignableFrom(type) ? Object.FindAnyObjectByType(type, FindObjectsInactive.Include) : null;
     }
 
-    /// <summary>A loaded GameObject by its hierarchy path ("Office/Desk"; at each step the first active child of that name, else the first: several papers share "PaperTemplate(Clone)") or, failing that, its name (active ones first).</summary>
+    /// <summary>A loaded GameObject by its hierarchy path ("Office/Desk"; at each step the first active child of that name, else the first: several papers share "PaperTemplate(Clone)") or, failing that, its name (active ones first, then the shallowest: a host over a part of its model named the same).</summary>
     public static GameObject GameObjectAt(string pathOrName)
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -133,8 +133,20 @@ public static class QaGame
             }
         }
         IEnumerable<Transform> all = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include);
-        Transform named = all.Where(t => t.name == pathOrName).OrderByDescending(t => t.gameObject.activeInHierarchy).FirstOrDefault();
+        // Active ones first, then the shallowest: a gameplay object over a part of its own model that carries the same name (the
+        // Rolodex host over Rolodex/Machine/Rolodex, the old mesh with no collider; seam O of 2026-10-28: FindObjectsByType's
+        // order picked either, and a click at the mesh met nothing).
+        Transform named = all.Where(t => t.name == pathOrName).OrderByDescending(t => t.gameObject.activeInHierarchy).ThenBy(Depth).FirstOrDefault();
         return named != null ? named.gameObject : throw new InvalidOperationException($"No object '{pathOrName}' is loaded.");
+    }
+
+    /// <summary>How many parents <paramref name="t"/> has (a root: 0).</summary>
+    private static int Depth(Transform t)
+    {
+        int depth = 0;
+        for (Transform p = t.parent; p != null; p = p.parent)
+            depth++;
+        return depth;
     }
 
     /// <summary>The child of <paramref name="root"/> at <paramref name="path"/> ("Desk/Papers/PaperTemplate(Clone)"): at each step the first active child of that name, else the first (Transform.Find takes the first, active or not); null when a step has none.</summary>

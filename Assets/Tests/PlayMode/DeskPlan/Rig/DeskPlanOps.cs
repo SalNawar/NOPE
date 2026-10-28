@@ -49,6 +49,44 @@ public static class DeskPlanOps
         QaRunner.RegisterOp("deskexpect", Expect);
         QaRunner.RegisterOp("deskclickboxes", ClickBoxes);
         QaRunner.RegisterOp("deskhomeshown", HomeShown);
+        QaRunner.RegisterOp("deskinspect", Inspect);
+    }
+
+    /// <summary>
+    /// <c>deskinspect</c> (target = an object's path or name): writes the
+    /// object's state into the step's note and into
+    /// <c>inspect_&lt;name&gt;.txt</c> in the run folder: its path, scales,
+    /// active state, every collider under it (type, enabled, layer, world
+    /// bounds), every renderer (enabled, bounds), the rig's screen point for
+    /// it and what the event system hits there (QaGame.TopAt). A diagnosis
+    /// op, no assertion (the night of 2026-10-28, seam O: a click on the
+    /// Rolodex met nothing).
+    /// </summary>
+    private static IEnumerator Inspect(QaRunner runner, QaStep step)
+    {
+        GameObject go = QaGame.GameObjectAt(step.target);
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"{QaGame.Where(go)} active {go.activeInHierarchy} layer {LayerMask.LayerToName(go.layer)} localScale {go.transform.localScale} lossyScale {go.transform.lossyScale} position {go.transform.position}");
+        foreach (Collider c in go.GetComponentsInChildren<Collider>(true))
+            sb.AppendLine($"  collider {QaGame.Where(c.gameObject)} {c.GetType().Name} enabled {c.enabled} active {c.gameObject.activeInHierarchy} layer {LayerMask.LayerToName(c.gameObject.layer)} lossyScale {c.transform.lossyScale} bounds {c.bounds.center} size {c.bounds.size}");
+        foreach (Renderer r in go.GetComponentsInChildren<Renderer>(true))
+            sb.AppendLine($"  renderer {QaGame.Where(r.gameObject)} {r.GetType().Name} enabled {r.enabled} active {r.gameObject.activeInHierarchy} bounds {r.bounds.center} size {r.bounds.size}");
+        foreach (Clickable click in go.GetComponentsInChildren<Clickable>(true))
+            sb.AppendLine($"  clickable {QaGame.Where(click.gameObject)} enabled {click.enabled} interactable {click.Interactable} outline {click.Outline.Count}");
+        Vector2? p = QaGame.ScreenPoint(go);
+        GameObject top = p.HasValue ? QaGame.TopAt(p.Value) : null;
+        sb.AppendLine($"  screen point {(p.HasValue ? p.Value.ToString() : "none")} at {Screen.width}x{Screen.height}; top hit {(top != null ? QaGame.Where(top) : "nothing")}");
+        Camera cam = QaGame.PointerCamera();
+        if (cam != null && p.HasValue)
+        {
+            Ray ray = cam.ScreenPointToRay(p.Value);
+            RaycastHit[] hits = Physics.RaycastAll(ray, 100f, ~0, QueryTriggerInteraction.Collide);
+            sb.AppendLine($"  physics hits on the ray ({hits.Length}): " + string.Join("; ", hits.OrderBy(h => h.distance).Select(h => $"{QaGame.Where(h.collider.gameObject)} at {h.distance:0.000}")));
+        }
+        string text = sb.ToString();
+        System.IO.File.WriteAllText(System.IO.Path.Combine(runner.OutDir, $"inspect_{QaRunner.Safe(string.IsNullOrEmpty(step.name) ? go.name : step.name)}.txt"), text);
+        runner.Assert("inspect." + (string.IsNullOrEmpty(step.name) ? go.name : step.name), Owner, true, "written", text.Replace("\n", " | "));
+        yield break;
     }
 
     /// <summary>
