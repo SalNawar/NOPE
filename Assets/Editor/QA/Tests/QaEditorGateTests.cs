@@ -96,6 +96,41 @@ public class QaEditorGateTests
         }
     }
 
+    /// <summary>
+    /// Seam O (2026-10-28): "Rolodex" names the upgrade's host and its old
+    /// model's mesh object (Rolodex/Machine/Rolodex, no collider) alike;
+    /// FindObjectsByType's order picked either, and a click at the mesh met
+    /// nothing. The name lookup takes the shallowest active one; a path takes
+    /// the first active child at each step.
+    /// </summary>
+    [Test, Category("NeedsEditor")]
+    public void GameObjectAt_ByName_TakesTheShallowestActiveObject_AndByPath_TheActiveChild()
+    {
+        var host = new GameObject("QaEditorGateTests_Rolodex");
+        var sleeping = new GameObject("QaEditorGateTests_Rolodex");
+        try
+        {
+            var machine = new GameObject("Machine");
+            machine.transform.SetParent(host.transform, false);
+            var mesh = new GameObject("QaEditorGateTests_Rolodex");
+            mesh.transform.SetParent(machine.transform, false);
+            sleeping.SetActive(false);
+            Assert.AreSame(host, QaGame.GameObjectAt("QaEditorGateTests_Rolodex"), "the host (depth 0, active) over its model's mesh (depth 2) and the inactive one");
+            var pooled = new GameObject("Paper");
+            pooled.transform.SetParent(host.transform, false);
+            pooled.transform.SetAsFirstSibling();
+            pooled.SetActive(false);
+            var live = new GameObject("Paper");
+            live.transform.SetParent(host.transform, false);
+            Assert.AreSame(live, QaGame.GameObjectAt("QaEditorGateTests_Rolodex/Paper"), "a path takes the active child of that name, not the first");
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(host);
+            UnityEngine.Object.DestroyImmediate(sleeping);
+        }
+    }
+
     [Test, Category("NeedsEditor")]
     public void Registry_FindsQaRigsChecks_WithNoRegistrationFault()
     {
