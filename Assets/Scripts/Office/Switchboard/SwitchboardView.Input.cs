@@ -6,13 +6,19 @@ using UnityEngine.InputSystem;
 /// (Saleh 2026-10-06): a left-press on a plug picks it up and the cord comes
 /// with it; let go over a jack it may seat in (SwitchCords.Snap, the jacks'
 /// hit radii widened by the magnet) and it snaps in with a click; let go
-/// anywhere else and it flies home. A left-press on MASTER's handle grabs
-/// it: it follows the hand down its pull with weight (a spring), ticks past
-/// its ratchet notches, and let go past 80 % it throws home with a clunk and
-/// locks every patched route in (Switchboard.PullMaster); let go sooner it
-/// rises and nothing changes. A right-click or Esc while holding lets go
-/// with nothing changed (OfficeControls, CancelDrag). The rules change only
-/// when a plug lands, never while it is in the hand.
+/// anywhere else and it flies home. MASTER is a breaker (Saleh: "one
+/// breaker to the side"; "Master break is pulled down instead of being a
+/// break"): a left-press on its handle grabs it; it follows the hand along
+/// its throw with weight (a spring) and ticks past its ratchet notches. From
+/// open (up, the ready position), let go past 80 % it throws home with a
+/// clunk, locks every patched route in (Switchboard.PullMaster) and stays
+/// down; from closed, let go past 80 % up it throws open with a clack and
+/// changes no route. Let go sooner it goes back where it was. A closed
+/// breaker trips open by itself (eased, with a clack) when a patch waits for
+/// it (the rules' BreakerTripped). A right-click or Esc while holding lets
+/// go with nothing changed (OfficeControls, CancelDrag). The rules change
+/// only when a plug lands or the breaker lands, never while either is in
+/// the hand.
 /// </summary>
 public sealed partial class SwitchboardView
 {
@@ -20,8 +26,7 @@ public sealed partial class SwitchboardView
 
     private Cord _held;
     private bool _leverHeld;
-    private bool _leverThrow;
-    private float _leverRise = -1f;
+    private MasterThrow _leverThrow = MasterThrow.None;
     private float _leverGrab;
     private Spring _lever = Spring.At(0f);
     private System.Func<int, bool> _heldAllows;
@@ -50,8 +55,7 @@ public sealed partial class SwitchboardView
             if (OnHandle(p))
             {
                 _leverHeld = true;
-                _leverThrow = false;
-                _leverRise = -1f;
+                _leverThrow = MasterThrow.None;
                 _leverGrab = _lever.Value - _layout.Master.PullOf(p);
             }
             else
@@ -267,46 +271,49 @@ public sealed partial class SwitchboardView
 
     private bool OnHandle(BoardPoint p) => HandleRect().Contains(p);
 
-    /// <summary>MASTER let go: past masterCommitAt it throws home (the clunk comes as it lands), else it rises and nothing changes.</summary>
+    /// <summary>Where MASTER's breaker rests by the rules: 0 open (up, ready to pull), 1 closed (down, thrown).</summary>
+    private float LeverRest => _board != null && _board.BreakerClosed ? 1f : 0f;
+
+    /// <summary>MASTER let go: thrown past masterCommitAt from where it rests, it throws to its other end (the clunk or the clack come as it lands); else it goes back where it rests and nothing changes.</summary>
     private void ReleaseLever()
     {
         _leverHeld = false;
-        if (Mathf.Max(_lever.Value, _lever.Target) >= _config.masterCommitAt)
-        {
-            _leverThrow = true;
-            _lever.Target = 1f;
-        }
-        else
-        {
-            _lever.Target = 0f;
-        }
+        _leverThrow = Switchboard.Throw(LeverRest >= 1f, _lever.Value, _lever.Target, _config.masterCommitAt);
+        _lever.Target = _leverThrow == MasterThrow.Closed ? 1f : _leverThrow == MasterThrow.Open ? 0f : LeverRest;
     }
 
-    /// <summary>MASTER's spring this frame (cut under Reduced Motion): the notches' ticks on the way down, the clunk as a throw lands, and the rise a moment after.</summary>
+    /// <summary>MASTER's spring this frame (cut under Reduced Motion): it follows the hand, a throw, or where the breaker rests by the rules (a trip lifts it, eased); the notches' ticks on the way down, the clunk as a throw closes it, the clack as a throw opens it.</summary>
     private void StepLever(float dt)
     {
-        if (_leverRise > 0f && Time.unscaledTime >= _leverRise)
-        {
-            _leverRise = -1f;
-            _lever.Target = 0f;
-        }
+        if (!_leverHeld && _leverThrow == MasterThrow.None)
+            _lever.Target = LeverRest;
         float before = _lever.Value;
-        if (MotionPreference.Reduced)
-            _lever.Snap(_lever.Target);
+        if (MotionPreference.Reduced || !Shown)
+            _lever.Snap(_lever.Target); // unseen, it is simply where it rests: the next turn to the board shows no swing
         else
             _lever.Step(dt, SpringTuning.WithRatio(_config.leverStiffness, _config.leverDamping, _config.leverMass));
         foreach (float notch in Notches)
             if (before < notch && _lever.Value >= notch)
                 Play(SwitchSound.Ratchet, 0.5f);
-        if (_leverThrow && _lever.Value >= 0.97f)
+        if (_leverThrow == MasterThrow.Closed && _lever.Value >= 0.97f)
             Clunk();
+        else if (_leverThrow == MasterThrow.Open && _lever.Value <= 0.03f)
+            Clack();
     }
 
-    /// <summary>MASTER lands home: the clunk, a shake, and every patched route locked in or fused (the rules); it rises again a moment later.</summary>
+    /// <summary>MASTER thrown open by hand lands up: a lighter clack; the breaker is open and no route changes.</summary>
+    private void Clack()
+    {
+        _leverThrow = MasterThrow.None;
+        Play(SwitchSound.Ratchet, 0.9f);
+        if (_board != null)
+            _board.OpenBreaker();
+    }
+
+    /// <summary>MASTER lands home: the clunk, a shake, and every patched route locked in or fused (the rules); the breaker stays closed.</summary>
     private void Clunk()
     {
-        _leverThrow = false;
-        _leverRise = Time.unscaledTime + 0.14f;
+        _leverThrow = MasterThrow.None;
         Play(SwitchSound.Clunk, 1f);
         Shake(_config.clunkShake);
         if (_board == null)

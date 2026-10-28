@@ -51,8 +51,11 @@ public sealed class SwitchboardConfigSO : ScriptableObject
     /// <summary>The painted board on the office view (the desk v3 painting at 16:9; viewport, 0 to 1 from the bottom left): the click area and the start of the turn.</summary>
     public Rect wallRect = new Rect(0.867f, 0.324f, 0.133f, 0.296f);
 
-    /// <summary>Where the office view shows a waiting call: the painted board's top lamp (viewport at 16:9).</summary>
+    /// <summary>Where the office view shows a waiting call: the painted board's top lamp (viewport at 16:9). The art desk's: under the painted desk the board on the wall lights its own lamps.</summary>
     public Vector2 wallLamp = new Vector2(0.889f, 0.574f);
+
+    /// <summary>The board on the painted booth's wall: its plate's tint, the desk v3 bake's median grade (export v3 README, D1: the v3 painting over the v2 one, about -0.45 stop and warmer), since the plate is painted at the v2 paintings' light. To tune in Unity against office_bars_v1.png.</summary>
+    public Color wallGrade = new Color(0.761f, 0.747f, 0.650f, 1f);
 
     /// <summary>A call's soft buzz repeats every this many seconds while one waits (0: only when it comes in).</summary>
     public float reminderBuzzSeconds = 25f;

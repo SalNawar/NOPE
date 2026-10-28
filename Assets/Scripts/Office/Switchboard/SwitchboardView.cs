@@ -130,6 +130,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
         if (_ownConfig && _config != null)
             Destroy(_config);
         DestroySounds();
+        DestroyWall();
     }
 
     /// <summary>Starts the day once the shift knows it, then runs the rules, the turn, the office view's glow, the hand and the drawing (unscaled time: a hit-stop never stops a calibration).</summary>
@@ -150,11 +151,19 @@ public sealed partial class SwitchboardView : MonoBehaviour
             if (state.Newsletter || state.PcOpen)
                 Close(); // the shift report or the PC came up: they need the screen
         }
+        StepLampPhases(dt);
         StepTurn(dt);
         DrawWall();
-        if (_open && _openT >= 1f)
+        SwitchHandStep step = SwitchHand.Step(_open && _openT >= 1f, Application.isFocused, InputGate.Blocked, IsDragging);
+        if (step == SwitchHandStep.Cancel)
+            CancelDrag();
+        if (step == SwitchHandStep.Hand)
             Hand();
+        else if (_grab != null && _grab.gameObject.activeSelf)
+            _grab.gameObject.SetActive(false); // no hand cursor where the hand may not act
         Draw(dt);
+        if (!Shown)
+            StepLever(0f); // unseen, MASTER rests where its breaker is (a trip while the desk is in view shows no swing at the next turn)
     }
 
     // ------------------------------------------------------------------ the view
@@ -170,14 +179,14 @@ public sealed partial class SwitchboardView : MonoBehaviour
         Play(SwitchSound.PlugOut, 0.35f);
     }
 
-    /// <summary>Turns back to the desk (A, S, a right-click, Esc: OfficeControls); a plug or MASTER in the hand goes back first, and a throw of MASTER not yet landed counts for nothing.</summary>
+    /// <summary>Turns back to the desk (A, S, a right-click, Esc: OfficeControls); a plug or MASTER in the hand goes back first, and a throw of MASTER not yet landed counts for nothing (the breaker goes back where it rests).</summary>
     public void Close()
     {
         if (!_open)
             return;
         CancelDrag();
-        _leverThrow = false;
-        _lever.Target = 0f;
+        _leverThrow = MasterThrow.None;
+        _lever.Target = LeverRest;
         _open = false;
         if (_grab != null)
             _grab.gameObject.SetActive(false);
@@ -185,13 +194,20 @@ public sealed partial class SwitchboardView : MonoBehaviour
             _openT = 0f;
     }
 
-    /// <summary>Lets go of what the hand holds without changing the board (a right-click or Esc while dragging): a plug goes back where it was, MASTER rises; false when the hand was empty.</summary>
+    /// <summary>The game lost the focus (Alt+Tab, another window): a plug or MASTER in the hand is let go without being committed (BUG-55; the Input System's release on focus loss must not seat a plug or throw MASTER; Update's SwitchHand.Step covers a release seen first).</summary>
+    private void OnApplicationFocus(bool focused)
+    {
+        if (!focused)
+            CancelDrag();
+    }
+
+    /// <summary>Lets go of what the hand holds without changing the board (a right-click or Esc while dragging): a plug goes back where it was, MASTER back where its breaker rests; false when the hand was empty.</summary>
     public bool CancelDrag()
     {
         if (_leverHeld)
         {
             _leverHeld = false;
-            _lever.Target = 0f;
+            _lever.Target = LeverRest;
             return true;
         }
         if (_held == null)
@@ -320,6 +336,11 @@ public sealed partial class SwitchboardView : MonoBehaviour
                     break;
                 case SwitchEventKind.Departed:
                     Departed(e);
+                    break;
+                case SwitchEventKind.BreakerTripped:
+                    if (Shown)
+                        Play(SwitchSound.Ratchet, 0.9f); // the breaker springs open (StepLever eases it up): a patch waits for the pull
+                    Debug.Log("[Switchboard] MASTER's breaker tripped open: a patch waits for the pull.");
                     break;
                 case SwitchEventKind.FusePopped:
                     Play(SwitchSound.Fuse, 0.9f);
