@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The office builder's tray and chrome skin: the kit piece a themed chrome
-/// panel takes by its role (the taskbar, the Menu button, the tray's phosphor
-/// glass, a window's title bar and body, the menus, tooltips, toasts, badges,
-/// fields). RolePiece (OfficeSceneUIBuilder.Kit.cs) hands every role it does
+/// panel takes by its role (the taskbar, the Menu button, a window's title
+/// bar and body, the menus, tooltips, toasts, badges, fields). The tray has
+/// no plate: the taskbar's cream body shows through it (Saleh 2026-10-28). RolePiece (OfficeSceneUIBuilder.Kit.cs) hands every role it does
 /// not skin to ChromePiece.
 /// Part of <see cref="OfficeSceneUIBuilder"/>; carved out of OfficeSceneUIBuilder.Kit.cs by P0-A (RolePiece's chrome cases, moved verbatim). Owner: UI-PC.
 /// </summary>
@@ -24,8 +24,6 @@ public static partial class OfficeSceneUIBuilder
                 return image.name == "Taskbar" ? "taskbar" : null;
             case ThemeRoleId.StartButton:
                 return "plate_ox";
-            case ThemeRoleId.Tray:
-                return image.name == "Tray" ? "lcd_glass" : null;
             case ThemeRoleId.TitleBar:
                 return image.GetComponent<WindowDrag>() != null ? "titlebar_slate" : null;
             case ThemeRoleId.WindowBody:

@@ -231,23 +231,26 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>
     /// The enclosed booth's grade (desk v3 round 13; Saleh's concept B,
     /// office_bars_v1.png): the painting shows the hall through the teller
-    /// bars far darker and warmer than the open desk's painting
+    /// bars darker and warmer than the open desk's painting
     /// (mock_office.png) did. A per-channel scale of the lit hall's sRGB
     /// values on top of paintedDeskBrightness, at every hour, while the
     /// painted desk is installed (HallLightingRig.PaintedDesk;
     /// HallBackdrop.Grade); white leaves paintedDeskBrightness as it was. A
     /// colour, not one scale: the painting's hall is warmer (its blue falls
-    /// a quarter further than its red). The default is measured
-    /// (docs/pending/DESK-V3.md round 13): the painting's hall between the
-    /// bars (the gaps left of the traveller) reads sRGB (46, 38, 27) where
-    /// the game's hall at paintedDeskBrightness read (94, 83, 75) in round
-    /// 12's day 1 still at 09:00, the ratio (0.49, 0.46, 0.36); the bake's
-    /// hall_grade_target (export v3 check_report.json: a linear gain of
-    /// (0.26, 0.22, 0.15), -2.2 stops) is the same change in linear light.
-    /// Measured before LIGHT's finish (tonemapping) was merged into the
-    /// branch: the Unity step re-measures on the merged tree.
+    /// further than its red).
+    /// Measured on screen after LIGHT's finish (Saleh 2026-10-28, "bg is
+    /// dark"): the painting's hall between the bars, clear of the bars and
+    /// the traveller, reads sRGB (42.8, 36.4, 26.4), luma 37.0; the night
+    /// build's hall there under round 13's (0.48, 0.45, 0.37) read luma 16.8
+    /// at 09:00, 16.1 at 13:00 and 13.8 at 16:00. Each channel is the old
+    /// grade times the ratio of the two values before the office finish
+    /// (DeskLighting.GradedLuma inverted), between its 13:00 and 16:00 ratios:
+    /// the hall then shows 1.05, 1.03 and 0.93 times the painting's luma at 09:00, 13:00
+    /// and 16:00 (PaintedBoothTests holds the numbers). Round 13's value was
+    /// measured before the finish was merged, and the finish's contrast
+    /// pulls these dark values down.
     /// </summary>
-    public Color paintedBoothGrade = new Color(0.48f, 0.45f, 0.37f, 1f);
+    public Color paintedBoothGrade = new Color(0.81f, 0.82f, 0.64f, 1f);
 
     /// <summary>The day-night cycle's knobs for HallDayCycle (fixture threshold, band and stagger included).</summary>
     public HallDayCycle.Settings Cycle => new HallDayCycle.Settings(sunriseHour, sunsetHour, twilightHours, fixturesOnBelow, fixtureFadeBand, fixtureStaggerMinutes);

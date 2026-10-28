@@ -553,12 +553,13 @@ public static partial class OfficeSceneUIBuilder
                     KitType(text, KitText.MiniPlateLabel, text.transform.parent, _kit.inkOnDark);
                     break;
                 case ThemeRoleId.Tray:
-                    // One size along the tray's row: the date (on its button) sized by the tray, as the credits and the clock.
+                    // One size along the tray's row: the date (on its button) sized by the tray, as the clock. The bar's dark
+                    // ink on its cream body (the tray has no glass of its own: Saleh 2026-10-28, "this black strip").
                     Transform trayRow = text.transform.parent;
                     ThemeTag rowTag = trayRow.GetComponent<ThemeTag>();
                     if ((rowTag == null || rowTag.Role != ThemeRoleId.Tray) && trayRow.parent != null)
                         trayRow = trayRow.parent;
-                    KitType(text, KitText.Readout, trayRow, _kit.phosphorInk);
+                    KitType(text, KitText.Readout, trayRow, _kit.inkOnLight);
                     break;
                 case ThemeRoleId.Toast:
                     KitType(text, KitText.Tooltip, text.transform.parent, _kit.inkOnDark);
@@ -612,8 +613,8 @@ public static partial class OfficeSceneUIBuilder
     /// button a slate plate, a newsletter's an oxblood plate, a wheel choice a
     /// pill, Search a slate mini plate, a window control an icon key, a menu
     /// row the light row), and the chrome's panels (the taskbar, the Menu
-    /// button, the tray's phosphor glass, a window's title bar and body, the
-    /// menus, tooltips, toasts, badges, fields).
+    /// button, a window's title bar and body, the menus, tooltips, toasts,
+    /// badges, fields).
     /// </summary>
     private static string RolePiece(ThemeTag tag, Image image)
     {

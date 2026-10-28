@@ -27,8 +27,8 @@ public static partial class OfficeSceneUIBuilder
     /// The taskbar (the PC UX redesign C7; BUG-21a, Saleh's notes 10 and 11),
     /// rebuilt fresh: a light kit bar in the Taskbar role, the Start button
     /// (the StartButton role) at its left, and at its right end Windows' tray
-    /// clock: the time over today's date ("09:07" over "14 MAR 2150"), the one
-    /// small glass readout on the bar, as wide as its words, with the Helix
+    /// clock: the time over today's date ("09:07" over "14 MAR 2150") in the
+    /// bar's dark ink on its cream body, as wide as its words, with the Helix
     /// River's strip at its left (BuildTrayRiver, "TimelineStrip": stability
     /// without a number; FEATURES "The Helix River" shows it "in the PC tray"
     /// and HALL-FX's hall_fx_helix tracks it there once Q opens the PC; the
@@ -63,9 +63,13 @@ public static partial class OfficeSceneUIBuilder
         shared.childForceExpandWidth = false;
         shared.childForceExpandHeight = true;
 
-        // The tray: the Helix River's strip, then one small glass readout, the clock over the date, inset from the bar's edges.
-        Transform tray = Panel(trayRow, "Tray", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
-        tray.GetComponent<Image>().raycastTarget = false;
+        // The tray: the Helix River's strip, then the clock over the date, inset from the bar's edges. It has no plate of its own
+        // (Saleh 2026-10-28: "Task bar still has this black strip on it"): the taskbar's cream body shows through it, as Windows'
+        // tray does, and the clock's lines are the bar's dark ink. Only the river keeps its own small glass (its shader's).
+        Transform tray = Panel(trayRow, "Tray", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        // As wide as its words and the river, never wider: the window buttons take the rest of the row.
+        LayoutElement traySize = GetOrAdd<LayoutElement>(tray.gameObject);
+        traySize.flexibleWidth = 0f;
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(tray.gameObject);
         row.padding = new RectOffset(4, 4, 4, 4);
         row.childAlignment = TextAnchor.MiddleCenter;
@@ -83,7 +87,8 @@ public static partial class OfficeSceneUIBuilder
         stack.childAlignment = TextAnchor.MiddleCenter;
         stack.childControlWidth = true;
         stack.childControlHeight = true;
-        stack.childForceExpandWidth = true;
+        // Not forced wide: a forced child makes the button, and so the tray, flexible, and the tray took half the bar's free room.
+        stack.childForceExpandWidth = false;
         stack.childForceExpandHeight = true;
         clockText = TrayText(dateButton.transform, "ClockText", "09:00");
         dayText = TrayText(dateButton.transform, "DayText", "14 MAR 2150");

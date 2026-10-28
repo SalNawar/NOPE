@@ -17,8 +17,17 @@ using UnityEngine.Rendering;
 /// <item>The desk's front apron: a panel under the desk's front edge, down past
 /// the frame's bottom, which a taller frame (16:10, 5:4) shows below the desk,
 /// where it showed the same floor extension.</item>
+/// <item>The desk's well floor (Saleh 2026-10-28: "things have these black
+/// visual glitches as the camera move"): a flat plate under the whole desk
+/// top. The shell's well is wider than the mat (gaps of 1 to 7 cm at the mat's
+/// far edge and both sides), and the desk top has holes behind the PC and in
+/// the deal tray's paper slot. A view from above looked down through them to
+/// the clear colour: the black band above the slot and the strips beside the
+/// mat in the reading view, thin lines along the mat in the office view. The
+/// plate lies under the desk top's lowest surface, so no desk part is ever
+/// behind it; it shows only through those gaps, in their shadow tone.</item>
 /// </list>
-/// Both are painted flat in the booth's tones (NOPE/Desk Painted, so they take
+/// All are painted flat in the booth's tones (NOPE/Desk Painted, so they take
 /// the hour's light as the desk does), cast no shadow and take no clicks.
 /// </summary>
 public sealed class BoothUnderlay : MonoBehaviour
@@ -41,9 +50,12 @@ public sealed class BoothUnderlay : MonoBehaviour
     /// <summary>The desk front's painted tone under its lip (sRGB; the 5:4 office still) and its shade at the floor.</summary>
     private static readonly Color32 ApronTopColour = new Color32(49, 28, 12, 255), ApronBottomColour = new Color32(20, 12, 6, 255);
 
+    /// <summary>The gaps' shadow tone (sRGB): the desk's ink-line brown; the up-facing plate shows about 1.5 times brighter under the hour's light.</summary>
+    private static readonly Color32 WellShadow = new Color32(24, 15, 9, 255);
+
     private const string PaintedShader = "NOPE/Desk Painted";
 
-    /// <summary>Lays both surfaces under <paramref name="desk"/> (once; again replaces them). <paramref name="bars"/> is the booth's bars (their bounds give the bars' foot); without them only the apron is laid.</summary>
+    /// <summary>Lays the surfaces under <paramref name="desk"/> (once; again replaces them). <paramref name="bars"/> is the booth's bars (their bounds give the bars' foot); without them the counter's floor is not laid.</summary>
     public static BoothUnderlay Install(Transform desk, Renderer bars)
     {
         if (desk == null)
@@ -77,6 +89,14 @@ public sealed class BoothUnderlay : MonoBehaviour
             new Vector3(-ApronHalfWidth, ApronTop, ApronZ), new Vector3(ApronHalfWidth, ApronTop, ApronZ),
         };
         Surface(root.transform, "Desk front apron", apron, Gradient(ApronBottomColour, ApronTopColour), shader);
+        // The desk's well floor: DeskPaintedMap's numbers (measured on the bake's meshes).
+        float y = DeskPaintedMap.WellFloorY;
+        for (int i = 0; i < DeskPaintedMap.WellFloor.Length; i++)
+        {
+            (float x0, float z0, float x1, float z1) = DeskPaintedMap.WellFloor[i];
+            var plate = new[] { new Vector3(x0, y, z0), new Vector3(x1, y, z0), new Vector3(x0, y, z1), new Vector3(x1, y, z1) };
+            Surface(root.transform, i == 0 ? "Desk well floor" : "Desk well floor (left back)", plate, Gradient(WellShadow, WellShadow), shader);
+        }
         return underlay;
     }
 
