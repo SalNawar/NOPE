@@ -249,6 +249,7 @@ Everything below runs in the NOPE-p5 editor lane by job, after INTEGRATION's reb
 2. **Torch (BUG-2c).** Scenario `tools_torch`:
    - day 9 (the torch's day; day 7 before the three-week progression) at A2, office view then reading view, P-FAST/P-SLOW/P-WOBBLE over the handed-over papers;
    - then A1 in both views.
+   - The office legs assert that the torch does not lift (`toolsTorch` with text `still`: `tools.torch.<leg>.officeStill`; Saleh's playtest 2026-10-28, point 11: the tools respond in the reading view only).
    - If the reading view does not tilt from the step's mat click, retarget that `click` to a paper.
    - **Pass:**
      - every `tools_torch.tools.torch.*.unoccluded` passes: the worst held frame ≥95 % of the lit patch seen past the torch's own meshes, projected (an independent measure from the meshes, not `UvTorchHold`'s capsule);

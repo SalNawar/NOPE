@@ -1264,8 +1264,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// painted model of (the BABEL rack, the Rolodex, the protocol cards)
     /// show as their stand-ins on their painted homes (PaintStandIn); the
     /// RING SERVICE panel shows nothing and takes no click (DeskPaintedMap.
-    /// Unshown: the painted wall carries the painting's switchboard on its
-    /// home); the supply crate wears its own parts as painting-matched boxes
+    /// Unshown: the switchboard's own wall plate stands on its home,
+    /// SwitchboardView.Wall); the supply crate wears its own parts as painting-matched boxes
     /// (DeskPaintedMap.Boxed: its flaps still open, its tag still rises). The
     /// built deal tray's plate hides (the painted desk has its tray). The
     /// painted objects no gameplay object stands for (the glasses, the bell,

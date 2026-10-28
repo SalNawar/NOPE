@@ -84,6 +84,7 @@ Sources:
   - every `DeskObstacles` footprint;
   - the scanner's hidden area (`ScannerClearance.Blocked`);
   - for a counter refusal, the counter from its near edge on (`DeskCounter.TryNearEdge`, new).
+  - for the rulebook folder only (`RestOf(props)`, Saleh's playtest 2026-10-28, points 4 and 2b): every object of DESK-PLAN's registry (`DeskLayout.Obstacles`: DETAIN, the AVAILABLE sign, the bell, the glasses, the stamp rack, the pocket), in the desk's frame turned into the view's (`FrameCorners`). The folder's footprint is its own box (`DeskRulebook.TryBoxCorners`: the board's side alone while shut), not the bounds of its renderers.
 - The area is the desk (centres anywhere the drag may take them) ∩ what the reading view shows (`DeskConfigSO.restViewport`, new) for a desk paper.
 
 **Deleted:**

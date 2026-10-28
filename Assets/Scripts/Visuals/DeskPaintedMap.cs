@@ -436,11 +436,11 @@ public static class DeskPaintedMap
     /// <summary>
     /// The gameplay objects the painted desk draws nothing of and takes no
     /// click on, by their home: the RING SERVICE panel on the switchboard's
-    /// home at the booth's right end, where the painted booth wall shows the
-    /// painting's own switchboard (round 5: a picture, until PORTALS' Time
-    /// Organ replaces the wall). A panel or a stand-in standing in front of
-    /// it would cover the board the painting draws there (Saleh: every object
-    /// matches the painting). The rings' routes stay on the hall's departure
+    /// home at the booth's right end, where the switchboard's own plate
+    /// stands on the painted wall where the painting draws the board
+    /// (SwitchboardView.Wall; Saleh's playtest of 2026-10-28, point 7). A
+    /// panel or a stand-in standing in front of it would cover the board
+    /// (Saleh: every object matches the painting). The rings' routes stay on the hall's departure
     /// board and the PC's Portals window.
     /// </summary>
     public static readonly string[] Unshown = { DeskHomeMap.Switchboard };
@@ -698,7 +698,7 @@ public static class DeskPaintedMap
         if (Array.IndexOf(Inserts, home) >= 0 && !StandInDrawn(home))
             return $"the painted shell carries the {home} insert as painted; its stand-in is built for its click box and drawn by nothing (DeskPaintedMap.Inserts, DrawnStandIns; desk v3 round 12)";
         if (Array.IndexOf(Unshown, home) >= 0)
-            return $"the {home} home's object shows nothing on the painted desk (DeskPaintedMap.Unshown: the painted booth wall carries the painting's switchboard)";
+            return $"the {home} home's object shows nothing on the painted desk (DeskPaintedMap.Unshown: the switchboard's own wall plate stands there, SwitchboardView.Wall)";
         if (Array.IndexOf(Dropped, home) >= 0)
             return $"the {home} home is dropped on the painted desk (DeskPaintedMap.Dropped)";
         if (home == DeskHomeMap.Decor)

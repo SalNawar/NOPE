@@ -286,7 +286,7 @@ public class DeskPaintedMapTests
     {
         // The code review of round 6 (1): the RING SERVICE panel (the old RingPanel.fbx, 5 breaker boxes) stood on the switchboard's
         // home and the supply crate (kraft, tape, flaps, tag) on its spot every delivery morning, neither hidden, re-skinned nor stood in for.
-        CollectionAssert.Contains(DeskPaintedMap.Unshown, DeskHomeMap.Switchboard, "the painted booth wall carries the painting's switchboard on its home");
+        CollectionAssert.Contains(DeskPaintedMap.Unshown, DeskHomeMap.Switchboard, "the switchboard's own wall plate stands on its home (SwitchboardView.Wall)");
         CollectionAssert.Contains(DeskPaintedMap.Boxed, DeskHomeMap.Crate, "the crate keeps its moving parts, in painting-matched boxes");
         DeskHome[] map = DeskPaintedMap.Merge(DeskHomeMap.Approved(), Painted().homes);
         foreach (string id in DeskPaintedMap.Unshown.Concat(DeskPaintedMap.Boxed))
