@@ -7,7 +7,7 @@
 /// was let go (the drop op, the root measured), every rest lies in its area
 /// and over no keep-out and moves no more than its step allows (restTrace),
 /// no slider lies over a thing resting in its strip (slideClear), and the run
-/// reached its last probe (a run that stopped early is red).
+/// reached its last probe ("end": a run that stopped early is red).
 /// </summary>
 public static class DocHandleChecks
 {
@@ -17,5 +17,5 @@ public static class DocHandleChecks
     [GateCheck("doc.play.rests", Owner, GateKind.Play)]
     public static GateResult Rests() =>
         CamChecks.Verdict("doc.play.rests", Owner, false, GateResults.ReadAll(), GitHead.Read(GateResults.ProjectRoot),
-                          "fold_rest.drop.*", "fold_rest.restTrace.*", "fold_rest.slideClear.*", "fold_rest.missingScripts.i_d12_reader_hover");
+                          "fold_rest.drop.*", "fold_rest.restTrace.*", "fold_rest.slideClear.*", "fold_rest.missingScripts.end");
 }
