@@ -23,7 +23,7 @@ public class FolderCoverSealTests
     private static readonly Vector2 BoardCentre = new Vector2(0.111895f, -0.007115625f), BoardSize = new Vector2(0.22379f, 0.2372737f);
     private const float SealSide = 0.0939918f, Gap = 0.00005f;
 
-    [Test]
+    [Test, Category("NeedsEditor")]
     public void ShutNow_BeforeAwake_KeepsTheSealOnTheBoardWhereItWasBuilt()
     {
         var root = new GameObject("Cover");
