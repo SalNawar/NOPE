@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "STAMP R4 (docs/pending/STAMP.md) with the virtual mouse (P-SLOW, P-FAST, P-WOBBLE): day 12 (by the cheat jump, every item given), ten travellers. Each lays its papers in a pile on the mat in the office view, the passport last (on top), then works in the reading view: (b) on a 3-paper pile, an accepted stroke with a re-grab 2 frames after the let-go (c<k>) and three refused tries on the pile (b<k>_i); with fewer papers, the rulebook is dragged over part of the passport and the accepted stroke with the re-grab lands at its edge (c<k>); (a) every traveller: the rulebook over the passport and a try 5-8 mm inside its edge (a<k>), within the 1 cm the recipe names. Pass, every aim.*: the stamp lands on the aimed document within 3 mm of the pointer's spot on it; an accepted stroke prints once in its verdict's ink and the die stops within 0.5 mm of the surface; a refused one prints nothing; a re-grab carries nothing mid-stroke. Then (d) on the eleventh traveller in the office view, ten let-gos each over the rack's box, the chip reader, the scanner and the bare desk (letGo.*: over a prop no stroke, no cue, the dater seats; over the desk the thump, the die on the plane, the 6 mm bounce; letGoCarry.*: the recipe's literal per-frame line). Needs StampRig's ops."
+      "text": "STAMP R4 (docs/pending/STAMP.md) with the virtual mouse (P-SLOW, P-FAST, P-WOBBLE): day 12 (by the cheat jump, every item given), ten travellers. Each lays its papers in a pile on the mat in the office view, the passport last (on top), then works in the reading view: (b) on a 3-paper pile (travellers 1, 4, 5 and 6: the ones who lay 3 papers in the 21-day progression's day 12, since 2026-10-28; traveller 9 lays one), an accepted stroke with a re-grab 2 frames after the let-go (c<k>) and three refused tries on the pile (b<k>_i); with fewer papers, the rulebook is dragged over part of the passport and the accepted stroke with the re-grab lands at its edge (c<k>); (a) every traveller: the rulebook over the passport and a try 5-8 mm inside its edge (a<k>), within the 1 cm the recipe names. Pass, every aim.*: the stamp lands on the aimed document within 3 mm of the pointer's spot on it; an accepted stroke prints once in its verdict's ink and the die stops within 0.5 mm of the surface; a refused one prints nothing; a re-grab carries nothing mid-stroke. Then (d) on the eleventh traveller in the office view, ten let-gos each over the rack's box, the chip reader, the scanner and the bare desk (letGo.*: over a prop no stroke, no cue, the dater seats; over the desk the thump, the die on the plane, the 6 mm bounce; letGoCarry.*: the recipe's literal per-frame line). Needs StampRig's ops."
     },
     {
       "op": "title"
@@ -70,23 +70,52 @@
       "n": 1
     },
     {
-      "op": "stampFolderOver",
-      "name": "t1"
-    },
-    {
       "op": "stampRegrab",
       "text": "correct",
       "n": -1,
-      "target": "folderEdge",
+      "target": "stack",
       "name": "c1"
     },
     {
       "op": "stampAim",
       "text": "correct",
       "n": -1,
-      "target": "folderEdge",
-      "f": 0.005,
+      "target": "stack",
+      "x": 0.4,
+      "y": 0.6,
+      "path": "Slow",
+      "name": "b1_1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.6,
+      "y": 0.4,
       "path": "Fast",
+      "name": "b1_2"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "stack",
+      "x": 0.5,
+      "y": 0.3,
+      "path": "Wobble",
+      "name": "b1_3"
+    },
+    {
+      "op": "stampFolderOver",
+      "name": "t1"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "target": "folderEdge",
+      "path": "Slow",
       "name": "a1"
     },
     {
@@ -501,52 +530,23 @@
       "n": 1
     },
     {
+      "op": "stampFolderOver",
+      "name": "t9"
+    },
+    {
       "op": "stampRegrab",
       "text": "correct",
       "n": -1,
-      "target": "stack",
+      "target": "folderEdge",
       "name": "c9"
     },
     {
       "op": "stampAim",
       "text": "correct",
       "n": -1,
-      "target": "stack",
-      "x": 0.4,
-      "y": 0.6,
-      "path": "Slow",
-      "name": "b9_1"
-    },
-    {
-      "op": "stampAim",
-      "text": "correct",
-      "n": -1,
-      "target": "stack",
-      "x": 0.6,
-      "y": 0.4,
-      "path": "Fast",
-      "name": "b9_2"
-    },
-    {
-      "op": "stampAim",
-      "text": "correct",
-      "n": -1,
-      "target": "stack",
-      "x": 0.5,
-      "y": 0.3,
-      "path": "Wobble",
-      "name": "b9_3"
-    },
-    {
-      "op": "stampFolderOver",
-      "name": "t9"
-    },
-    {
-      "op": "stampAim",
-      "text": "correct",
-      "n": -1,
       "target": "folderEdge",
-      "path": "Slow",
+      "f": 0.005,
+      "path": "Fast",
       "name": "a9"
     },
     {
