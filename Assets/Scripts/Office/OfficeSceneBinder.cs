@@ -1302,8 +1302,14 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (detainButton != null)
         {
             StandOnPainted(DeskHomeMap.Detain, detainButton.transform);
-            Wear(PaintedDetain, DeskHomeMap.Detain, detainButton.transform, detainButton.transform);
+            Renderer[] housing = Wear(PaintedDetain, DeskHomeMap.Detain, detainButton.transform, detainButton.transform);
             Wear(PaintedGuard, DeskHomeMap.Detain, detainButton.transform, detainButton.transform);
+            // The painting's guard is the safety cover (Saleh's playtest of 2026-10-28, point 2: "detain button case open and cant be
+            // closed its collider is small too"): it swings on its hinge with the cover, shut over the button at rest; its shut pose
+            // is the bake's own frame (the v2 README: "rotate to identity to close it over the button"), as the painted DETAIN lies.
+            Transform guard = paintedDesk.Mesh(PaintedGuard), detain = paintedDesk.Mesh(PaintedDetain);
+            if (guard != null && detain != null)
+                detainButton.DressCover(guard, detain.rotation, housing);
         }
         if (intercomStandIn != null)
         {
