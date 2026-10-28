@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,7 +12,9 @@ using UnityEngine;
 /// that was never read and put the seal on the hinge, half under the board.
 /// The cover is built here as the builder builds it (BuildFolderCover's
 /// places and sizes), in edit mode, where its Awake does not run, as on the
-/// inactive rulebook. Needs Unity (the EditMode suite).
+/// inactive rulebook. The folder's title on the board (its cover words)
+/// rides the same way, so it is checked with the seal. Needs Unity (the
+/// EditMode suite).
 /// </summary>
 public class FolderCoverSealTests
 {
@@ -34,6 +37,13 @@ public class FolderCoverSealTests
             back.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
             Renderer seal = Quad("Seal", hinge, new Vector3(BoardCentre.x, BoardCentre.y, -2f * Gap), new Vector2(SealSide, SealSide));
             Vector3 built = seal.transform.localPosition;
+            var titleObject = new GameObject("Title", typeof(RectTransform), typeof(TextMeshPro));
+            titleObject.transform.SetParent(hinge, false);
+            titleObject.transform.localPosition = new Vector3(BoardCentre.x, BoardCentre.y + 0.083f, -2f * Gap);
+            ((RectTransform)titleObject.transform).sizeDelta = new Vector2(0.188f, 0.057f);
+            TextMeshPro title = titleObject.GetComponent<TextMeshPro>();
+            title.text = "TEMPORAL CUSTOMS BUREAU";
+            Vector3 titleBuilt = titleObject.transform.localPosition;
 
             // edit mode: AddComponent runs no Awake, as a day's start on the inactive rulebook does not
             FolderCover cover = root.AddComponent<FolderCover>();
@@ -42,6 +52,9 @@ public class FolderCoverSealTests
             so.FindProperty("front").objectReferenceValue = front;
             so.FindProperty("back").objectReferenceValue = back;
             so.FindProperty("seal").objectReferenceValue = seal.transform;
+            SerializedProperty words = so.FindProperty("words");
+            words.arraySize = 1;
+            words.GetArrayElementAtIndex(0).objectReferenceValue = title;
             so.ApplyModifiedPropertiesWithoutUndo();
 
             cover.ShutNow();
@@ -51,6 +64,7 @@ public class FolderCoverSealTests
                 $"the shut folder's seal moved from its built place {built:F5} to {now:F5} (on the hinge: half under the board, a brown strip on the spine)");
             Assert.That(now.z, Is.LessThan(front.transform.localPosition.z), "the seal lies over the board (toward the viewer), not under it");
             Assert.That(Mathf.Abs(now.x - front.transform.localPosition.x), Is.LessThan(1e-6f), "the seal is centred across the board");
+            Assert.That(Vector3.Distance(titleObject.transform.localPosition, titleBuilt), Is.LessThan(1e-6f), "the folder's title stays where it was built on the board");
             Assert.That(cover.Shut, Is.True);
         }
         finally
