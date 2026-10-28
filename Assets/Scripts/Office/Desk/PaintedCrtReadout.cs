@@ -13,12 +13,18 @@ using UnityEngine.UI;
 /// line large enough to read from the chair (the desktop's own idle line,
 /// "WAITING FOR THE NEXT TRAVELLER", or who is at the desk), and a readout
 /// strip along the bottom like the taskbar's tray, with the shift clock and
-/// today's date and day. It is a world-space canvas on the desktop's layer, in
+/// today's date and day, and a header band along the top with the Helix
+/// River (a copy of the office's own river strip: stability without a number)
+/// and the clerk's credits (the account's currency over the sum; OfficeReadouts
+/// writes the sum): under the painted desk the till and the stability monitor
+/// are cut, so the clerk's terminal carries them (Saleh 2026-10-28: "where is
+/// all the ui?"). It is a world-space canvas on the desktop's layer, in
 /// front of the desktop, so the clone camera draws it onto the glass
 /// (PaintedCrt's curved face, with its scanlines); it is off while the PC is
 /// open (PcFrame: the full desktop, unchanged), so only the office's CRT shows
 /// it. It reads the desktop (the wallpaper, the idle line, the
-/// investigation's status line) and the game (the shift clock, the day), and
+/// investigation's status line) and the game (the shift clock, the day, the
+/// currency's name), and
 /// writes nothing of theirs: UI-PC's desktop is untouched (the hand-off is in
 /// docs/pending/DESK-V3.md, round 12). Its content keeps inside the glass's
 /// visible share of the picture (PaintedCrt.Fit: the bezel and the overscan
@@ -36,6 +42,9 @@ public sealed class PaintedCrtReadout : MonoBehaviour
 
     /// <summary>The readout strip along the bottom, as a share of the visible glass's height.</summary>
     private const float StripHeight = 0.26f;
+
+    /// <summary>The header band along the top (the Helix River and the credits), as shares of the visible glass (bottom, top).</summary>
+    private static readonly Vector2 HeaderBand = new Vector2(0.78f, 1f);
 
     /// <summary>The phosphor's warm cream (the status line).</summary>
     private static readonly Color Cream = new Color(1f, 0.93f, 0.78f, 1f);
@@ -61,6 +70,8 @@ public sealed class PaintedCrtReadout : MonoBehaviour
     private TMP_Text _time;
     private TMP_Text _date;
     private TMP_Text _day;
+    private TMP_Text _currency;
+    private TMP_Text _credits;
     private ShiftClockDriver _clock;
     private GameObject _oldPlate;
     private string _shownStatus;
@@ -74,14 +85,19 @@ public sealed class PaintedCrtReadout : MonoBehaviour
     /// <summary>The date's text (the calendar's click animates it).</summary>
     public Transform DateText => _date != null ? _date.transform : transform;
 
+    /// <summary>The credits' sum on the header band (the office binder hands it to OfficeReadouts, the one writer of the credits).</summary>
+    public TMP_Text Credits => _credits;
+
     /// <summary>
     /// Builds the readout beside <paramref name="desktop"/> (the desktop
     /// canvas, under PcDesktop), keeping its content inside
     /// <paramref name="visible"/> (the share of the desktop the CRT's glass
-    /// shows, PaintedCrt.Fit), off while <paramref name="frame"/> is open.
-    /// Idempotent.
+    /// shows, PaintedCrt.Fit), off while <paramref name="frame"/> is open, its
+    /// header's river a copy of <paramref name="river"/> (the office's river
+    /// strip: its tuning, shader and shift; null: the first river under the
+    /// desktop, the taskbar's; none: no river). Idempotent.
     /// </summary>
-    public static PaintedCrtReadout Create(Canvas desktop, PcFrame frame, Vector2 visible)
+    public static PaintedCrtReadout Create(Canvas desktop, PcFrame frame, Vector2 visible, HelixRiverMonitor river = null)
     {
         if (desktop == null)
             return null;
@@ -108,11 +124,11 @@ public sealed class PaintedCrtReadout : MonoBehaviour
         canvas.sortingOrder = desktop.sortingOrder + 50;
 
         PaintedCrtReadout readout = go.AddComponent<PaintedCrtReadout>();
-        readout.Build(desktop, frame, visible);
+        readout.Build(desktop, frame, visible, river != null ? river : desktop.GetComponentInChildren<HelixRiverMonitor>(true));
         return readout;
     }
 
-    private void Build(Canvas desktop, PcFrame frame, Vector2 visible)
+    private void Build(Canvas desktop, PcFrame frame, Vector2 visible, HelixRiverMonitor river)
     {
         _canvas = GetComponent<Canvas>();
         _frame = frame;
@@ -153,7 +169,35 @@ public sealed class PaintedCrtReadout : MonoBehaviour
         _date = Text(stripPanel.transform, "Date", new Rect(0.46f, 0.44f, 0.51f, 0.48f), font, 92f, Cream, TextAlignmentOptions.Right, FontStyles.Bold);
         _day = Text(stripPanel.transform, "Day", new Rect(0.46f, 0.08f, 0.51f, 0.36f), font, 70f, Amber, TextAlignmentOptions.Right, FontStyles.UpperCase);
         _dateRect = new Rect(strip.x + strip.width * 0.46f, strip.y + strip.height * 0.08f, strip.width * 0.51f, strip.height * 0.84f);
+
+        // The header: the Helix River at the left, the credits at the right (the account's currency over the sum).
+        Rect header = Inner(safe, 0f, HeaderBand.x, 1f, HeaderBand.y);
+        Image headerPanel = Panel(transform, "Header", header, Band);
+        Panel(headerPanel.transform, "Rule", new Rect(0f, 0f, 1f, 0.03f), Amber);
+        CopyRiver(river, headerPanel.transform, new Rect(0.03f, 0.14f, 0.44f, 0.72f));
+        _currency = Text(headerPanel.transform, "Currency", new Rect(0.5f, 0.56f, 0.47f, 0.38f), font, 64f, Amber, TextAlignmentOptions.Right, FontStyles.UpperCase);
+        _credits = Text(headerPanel.transform, "Credits", new Rect(0.5f, 0.08f, 0.47f, 0.5f), font, 112f, Cream, TextAlignmentOptions.Right, FontStyles.Bold);
         LateUpdate();
+    }
+
+    /// <summary>A copy of <paramref name="river"/> (its tuning, shader and shift come with it; it makes its own material) stretched over <paramref name="anchors"/> of <paramref name="parent"/>, on this canvas's layer; nothing without one.</summary>
+    private static void CopyRiver(HelixRiverMonitor river, Transform parent, Rect anchors)
+    {
+        if (river == null)
+            return;
+        GameObject copy = Instantiate(river.gameObject, parent, false);
+        copy.name = "River";
+        foreach (Transform t in copy.GetComponentsInChildren<Transform>(true))
+            t.gameObject.layer = parent.gameObject.layer;
+        if (copy.transform is RectTransform rect)
+        {
+            rect.localScale = Vector3.one;
+            rect.localRotation = Quaternion.identity;
+            Place(rect, anchors);
+        }
+        if (copy.TryGetComponent(out Graphic glass))
+            glass.raycastTarget = false;
+        copy.SetActive(true);
     }
 
     /// <summary>The investigation's status line (MatchBoard's idle plate: who is at the desk, or the waiting words), or null.</summary>
@@ -207,6 +251,8 @@ public sealed class PaintedCrtReadout : MonoBehaviour
             string today = library != null && day > 0 ? AgencyCalendar.Today(library.Agency.firstDate, day) : null;
             _date.text = today != null ? today.ToUpperInvariant() : string.Empty;
             _day.text = day > 0 ? UiText.Pc.Format("tray.day", day) : string.Empty;
+            // The account's currency takes the culture of the day (the night may change it), as the Citizen Account names it.
+            _currency.text = day > 0 ? UiText.Pc.Currency(UiText.WalletForm.Label) : string.Empty;
         }
     }
 

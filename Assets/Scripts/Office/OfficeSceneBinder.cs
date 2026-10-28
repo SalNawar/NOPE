@@ -324,7 +324,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (_painted)
         {
             BindPaintedCalendar(viewer);
-            HideScreenChrome();
+            QuietScreenChrome();
             AuditPainted();
         }
         Report();
@@ -687,7 +687,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
     }
 
-    /// <summary>Binds each readout to the art's text, or to the fallback HUD's when the art has none (the HUD shows only then); the Helix River covers the art's stability text, or shows in the HUD.</summary>
+    /// <summary>Binds each readout to the art's text, or to the fallback HUD's when the art has none (the HUD shows only then); the Helix River covers the art's stability text, or shows in the HUD. Under the painted desk (the till cut) the credits are the painted CRT's (PaintedCrtReadout's header, with its copy of the river), never the HUD's.</summary>
     private void BindReadouts()
     {
         bool hud = false;
@@ -701,7 +701,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
 
         TMP_Text day = Pick(OfficeAnchorId.ReadoutDay, hudDay);
-        TMP_Text credits = Pick(OfficeAnchorId.ReadoutCredits, hudCredits);
+        TMP_Text credits = TextOf(OfficeAnchorId.ReadoutCredits) == null && _crtReadout != null && _crtReadout.Credits != null
+            ? _crtReadout.Credits
+            : Pick(OfficeAnchorId.ReadoutCredits, hudCredits);
         TMP_Text time = Pick(OfficeAnchorId.ReadoutClock, hudClock);
         if (readouts != null)
             readouts.Bind(day, credits);
@@ -1438,8 +1440,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (screenClone != null)
         {
             screenClone.Bind(paintedDesk.Screen, 0, office);
-            // What the CRT shows from the chair (the PC closed): the wallpaper, one status line and the clock (desk v3 round 12).
-            _crtReadout = PaintedCrtReadout.Create(DesktopCanvas(), frame, visible);
+            // What the CRT shows from the chair (the PC closed): the wallpaper, one status line, the clock (desk v3 round 12),
+            // and the Helix River and the credits (the cut till's and stability monitor's; Saleh 2026-10-28: "where is all the ui?").
+            _crtReadout = PaintedCrtReadout.Create(DesktopCanvas(), frame, visible, hudRiver);
         }
         bool crt = paintedDesk.TryBounds(PaintedPc, out Bounds box);
         if (pc != null && crt)
@@ -1521,33 +1524,21 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     }
 
     /// <summary>
-    /// The office view's screen-space chrome under the painted desk (Saleh's
-    /// rule: everything diegetic, actions are in-world desk objects, never UI
-    /// buttons): in the office view the CITY, PC and STAMPS edge tabs draw
-    /// nothing and take no clicks (PaintedChrome; their keys, A, Q and TAB,
-    /// still work through OfficeControls; with the PC open or the city view on
-    /// they show again as their way back; their owners, CAM and STAMP, keep
-    /// them for the art's desk), and the fallback HUD's bar (the credits, the
-    /// day, the clock and the Helix River) hides: the PC's taskbar and its CRT
-    /// clock show the credits, the day and the time (the Helix River's
-    /// in-world home is a hand-off, DESK-V3.md). The guide's plate docks small
-    /// in the top-right corner and its arrow is a small warm chevron
+    /// The office view's screen chrome under the painted desk. The view
+    /// plates stay as on the art's desk (Saleh 2026-10-28: "where is all the
+    /// ui?"): the CITY [A], PC [Q] and STAMPS [TAB] pull tabs at the screen's
+    /// edges, the UI kit's diegetic plates, show and take clicks as their
+    /// owners (CAM, STAMP) show them; desk v3's round 5 had hidden them in the
+    /// office view. The fallback HUD's bar (the credits, the day, the clock
+    /// and the Helix River) stays hidden: each has its in-world home on the
+    /// painted CRT (PaintedCrtReadout: the clock, the date and the day in its
+    /// strip, the river and the credits in its header). The guide's plate docks
+    /// small in the top-left corner, clear of the STAMPS tab on the top edge
+    /// and the CITY tab on the left edge, and its arrow is a small warm chevron
     /// (GuidePrompt.Quiet).
     /// </summary>
-    private void HideScreenChrome()
+    private void QuietScreenChrome()
     {
-        Transform overlay = stampTray != null ? stampTray.transform.parent : null;
-        OfficeViewController view = FindAnyObjectByType<OfficeViewController>(FindObjectsInactive.Include);
-        if (overlay != null)
-            foreach (string path in ScreenTabs)
-            {
-                Transform tab = overlay.Find(path);
-                if (tab == null)
-                    continue;
-                if (!tab.TryGetComponent(out PaintedChrome chrome))
-                    chrome = tab.gameObject.AddComponent<PaintedChrome>();
-                chrome.Bind(view, cityView);
-            }
         if (fallbackHud != null)
             fallbackHud.SetActive(false);
         GuidePrompt prompt = FindAnyObjectByType<GuidePrompt>(FindObjectsInactive.Include);
@@ -1608,9 +1599,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
         return true;
     }
-
-    /// <summary>The office overlay's edge tabs (paths under it): the PC tab, the CITY tab and the STAMPS tab.</summary>
-    private static readonly string[] ScreenTabs = { "PcTab", "CityLook", "StampBar/Tab" };
 
     /// <summary>The first descendant of <paramref name="root"/> (not itself) named <paramref name="name"/>, or null.</summary>
     private static Transform Descendant(Transform root, string name)

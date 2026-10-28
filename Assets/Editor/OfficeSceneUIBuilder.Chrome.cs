@@ -19,15 +19,15 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The desk view's "▲ Back" control's inset from the overlay's right edge (reference px); its top is the case HUD's strips' (TopStripTop).</summary>
     private const float DeskViewBackInset = 24f;
 
-    /// <summary>The city view's edge buttons (reference px) and their height on the screen (a share from the bottom: above the corkboards' calendar and clock).</summary>
-    private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
+    /// <summary>The city view's edge buttons (reference px) and their height on the screen (a share from the bottom: above the corkboards' calendar and clock; ChromeLayout, one source with the guide's quiet plate and its layout test).</summary>
+    private static readonly Vector2 CityButtonSize = new Vector2(ChromeLayout.CityTabWidth, ChromeLayout.CityTabTall);
 
-    private const float CityButtonHeight = 0.74f;
+    private const float CityButtonHeight = ChromeLayout.CityTabHeight;
 
-    /// <summary>The PC's grey tab on the overlay's left edge (reference px) and its height on the screen (a share from the bottom).</summary>
-    private static readonly Vector2 PcTabSize = new Vector2(96f, 96f);
+    /// <summary>The PC's grey tab on the overlay's left edge (reference px) and its height on the screen (a share from the bottom; ChromeLayout).</summary>
+    private static readonly Vector2 PcTabSize = new Vector2(ChromeLayout.PcTabWidth, ChromeLayout.PcTabTall);
 
-    private const float PcTabHeight = 0.4f;
+    private const float PcTabHeight = ChromeLayout.PcTabHeight;
 
     /// <summary>
     /// The bottom of the office overlay's top band of chrome (reference px
@@ -255,7 +255,7 @@ public static partial class OfficeSceneUIBuilder
             var rt = (RectTransform)b.transform;
             rt.anchorMin = rt.anchorMax = new Vector2(left ? 0f : 1f, CityButtonHeight);
             rt.pivot = new Vector2(left ? 0f : 1f, 0.5f);
-            rt.anchoredPosition = new Vector2(left ? 12f : -12f, 0f);
+            rt.anchoredPosition = new Vector2(left ? ChromeLayout.CityTabInset : -ChromeLayout.CityTabInset, 0f);
             rt.sizeDelta = CityButtonSize;
             b.gameObject.SetActive(false);
             return b;
