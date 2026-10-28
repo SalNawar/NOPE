@@ -1,19 +1,25 @@
+using System;
+
 /// <summary>
 /// Where the chip reader's readout line lies on the painted reader (desk v3
 /// round 12's S1: "the chip reader result has no readout on the painted
 /// desk"; the night of 2026-10-28, seam D): the old reader's live text
 /// (ChipReader.Show writes it, the one source) re-shown as a line on the
-/// painted reader's top face, on its near third (toward the chair), facing
-/// up, its top edge away from the chair; and the readout's click box over
-/// the line, raised so its top stands above the painted body's padded click
-/// box (DeskHomeMap.ClickPad) and takes the ray first. Pure (no engine): the
-/// painted reader's bounds in the painted desk's frame (x across, y up, z
-/// away from the chair, metres) in, the line's and the box's pose out;
-/// DeskPainted.WearReadout applies it, with the facing it names.
+/// painted reader's top face, on its near third (toward the chair), its near
+/// edge on the face and the line leant toward the chair (Tilt), its top edge
+/// away from the chair; and the readout's click box over the line, its top
+/// above the painted body's padded click box (DeskHomeMap.ClickPad), so it
+/// takes the ray first. The type may grow to fill the line (FontSizeMax; the
+/// code review's R3 of 2026-10-28: the old reader's auto-size cap of 0.12
+/// left READY about 21 x 3 px at 1080p, and the flat line was seen at about
+/// 20 degrees from the chair). Pure (no engine): the painted reader's bounds
+/// in the painted desk's frame (x across, y up, z away from the chair,
+/// metres) in, the line's and the box's pose out; DeskPainted.WearReadout
+/// applies it, with the facing LineFacing names.
 /// </summary>
 public static class PaintedReadout
 {
-    /// <summary>The line floats this far over the top face (metres; the old readout over its quad).</summary>
+    /// <summary>The line's near edge floats this far over the top face (metres; the old readout over its quad).</summary>
     public const float Lift = 0.0008f;
 
     /// <summary>The line's width as a share of the top face's width.</summary>
@@ -22,14 +28,26 @@ public static class PaintedReadout
     /// <summary>The line's height as a share of the top face's depth.</summary>
     public const float DepthShare = 0.32f;
 
-    /// <summary>Where the line's centre lies along the top face's depth, from its near edge (a share): the near third.</summary>
+    /// <summary>Where the flat line's centre lay along the top face's depth, from its near edge (a share): the near third. The leant line keeps that line's near edge.</summary>
     public const float NearShare = 0.3f;
 
-    /// <summary>The click box's centre over the line (metres) and its thickness: its top at BoxRise + BoxThickness / 2 = 2.7 cm over the face, above the body box's 1 cm pad.</summary>
-    public const float BoxRise = 0.012f, BoxThickness = 0.03f;
+    /// <summary>
+    /// How far the line leans toward the chair (degrees, about its near edge;
+    /// 0 lays it flat on the face): between the office eye (the face seen at
+    /// about 24 degrees) and the reading view (about 80 degrees), so it reads
+    /// in both. 25 degrees gives the line 1.6 times its flat height on screen
+    /// from the chair and raises its far edge 3.5 cm on the 26 cm reader.
+    /// </summary>
+    public const float Tilt = 25f;
 
-    /// <summary>The box's top over the face (metres): it must stand above the body's padded box, so a click on the line meets the readout's box first.</summary>
-    public const float BoxTop = BoxRise + BoxThickness / 2f;
+    /// <summary>The click box's margin over the line's far (top) edge (metres).</summary>
+    public const float BoxRise = 0.012f;
+
+    /// <summary>
+    /// A world-space TextMeshPro's em in metres for each unit of font size (TMP
+    /// scales a 3D text's point size by 0.1: a size of 1 sets a 0.1 m em).
+    /// </summary>
+    public const float EmPerFontSize = 0.1f;
 
     /// <summary>The painted reader's bounds in the painted desk's frame (metres): x across, y up, z away from the chair.</summary>
     public readonly struct Box
@@ -47,24 +65,72 @@ public static class PaintedReadout
         public float CentreZ => (MinZ + MaxZ) / 2f;
     }
 
-    /// <summary>The line's centre in the frame of <paramref name="reader"/>: centred across, over the top face by the lift, on the near third.</summary>
-    public static (float x, float y, float z) LinePosition(Box reader) =>
-        (reader.CentreX, reader.MaxY + Lift, reader.MinZ + reader.Depth * NearShare);
+    private static float TiltRadians => Tilt * (float)Math.PI / 180f;
 
-    /// <summary>The line's rectangle (width across, height along the depth).</summary>
+    /// <summary>The line's rectangle in its own plane (width across, height from its near edge to its far edge).</summary>
     public static (float width, float height) LineSize(Box reader) => (reader.Width * WidthShare, reader.Depth * DepthShare);
 
-    /// <summary>The readout's click box's centre: over the line, BoxRise up.</summary>
+    /// <summary>The line's near edge (its centre point) in the frame of <paramref name="reader"/>: on the top face by the lift, where the flat line's near edge lay.</summary>
+    public static (float x, float y, float z) NearEdge(Box reader)
+    {
+        (_, float height) = LineSize(reader);
+        return (reader.CentreX, reader.MaxY + Lift, reader.MinZ + reader.Depth * NearShare - height / 2f);
+    }
+
+    /// <summary>The line's far edge (its centre point): the near edge, then the line's height up the lean.</summary>
+    public static (float x, float y, float z) FarEdge(Box reader)
+    {
+        (float x, float y, float z) = NearEdge(reader);
+        (_, float height) = LineSize(reader);
+        return (x, y + height * (float)Math.Sin(TiltRadians), z + height * (float)Math.Cos(TiltRadians));
+    }
+
+    /// <summary>The line's centre in the frame of <paramref name="reader"/>: centred across, half way up the lean.</summary>
+    public static (float x, float y, float z) LinePosition(Box reader)
+    {
+        (float x, float y, float z) = NearEdge(reader);
+        (float fx, float fy, float fz) = FarEdge(reader);
+        return ((x + fx) / 2f, (y + fy) / 2f, (z + fz) / 2f);
+    }
+
+    /// <summary>
+    /// The line's facing in the frame: its forward (a TextMeshPro shows on its
+    /// -Z, so forward points down and away from the chair; the text faces up
+    /// and toward the chair) and its up (up the lean, away from the chair, so
+    /// it reads from the chair). Flat (Tilt 0): forward down, up away from the chair.
+    /// </summary>
+    public static ((float x, float y, float z) forward, (float x, float y, float z) up) LineFacing()
+    {
+        float s = (float)Math.Sin(TiltRadians), c = (float)Math.Cos(TiltRadians);
+        return ((0f, -c, s), (0f, s, c));
+    }
+
+    /// <summary>
+    /// The readout text's largest font size: its em fills the line's height
+    /// (EmPerFontSize), so a short line (READY, CHIP OK) fills the line and a
+    /// long one shrinks only to the line's width (the text auto-sizes).
+    /// </summary>
+    public static float FontSizeMax(Box reader)
+    {
+        (_, float height) = LineSize(reader);
+        return height / EmPerFontSize;
+    }
+
+    /// <summary>The readout's click box's centre: over the line's footprint, from the line's near edge up to BoxRise over its far edge.</summary>
     public static (float x, float y, float z) BoxCentre(Box reader)
     {
         (float x, float y, float z) = LinePosition(reader);
-        return (x, y + BoxRise, z);
+        (_, float bottom, _) = NearEdge(reader);
+        (_, float far, _) = FarEdge(reader);
+        return (x, (bottom + far + BoxRise) / 2f, z);
     }
 
-    /// <summary>The readout's click box's size: the line's footprint, BoxThickness tall.</summary>
+    /// <summary>The readout's click box's size: the line's footprint (its width, its depth along the lean), from its near edge to BoxRise over its far edge.</summary>
     public static (float x, float y, float z) BoxSize(Box reader)
     {
         (float width, float height) = LineSize(reader);
-        return (width, BoxThickness, height);
+        (_, float bottom, _) = NearEdge(reader);
+        (_, float far, _) = FarEdge(reader);
+        return (width, far + BoxRise - bottom, height * (float)Math.Cos(TiltRadians));
     }
 }

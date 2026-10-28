@@ -82,8 +82,14 @@ public class DeskV3InstallTests
             Assert.IsTrue(readout.GetComponent<Renderer>().enabled, "the readout line shows again");
             Assert.AreEqual(painted.transform, readout.transform.parent, "under the painted mesh: it rides the reader's slide");
             float faceTop = painted.GetComponent<Renderer>().bounds.max.y;
-            Assert.AreEqual(faceTop + PaintedReadout.Lift, readout.transform.position.y, 1e-4f, "on the painted reader's top face");
-            Assert.AreEqual(1f, Vector3.Dot(readout.transform.forward, Vector3.down), 1e-4f, "facing up (a TextMeshPro shows on its -Z)");
+            // The cube in the desk's frame (PaintedReadoutTests' Reader): the line leans toward the chair from its near edge (the code review's R3).
+            var cube = new PaintedReadout.Box(0.79f, 1.01f, 1.08f, 1.16f, 0.27f, 0.43f);
+            float rise = (PaintedReadout.FarEdge(cube).y - PaintedReadout.NearEdge(cube).y) / 2f;
+            Assert.AreEqual(faceTop + PaintedReadout.Lift + rise, readout.transform.position.y, 1e-4f, "on the painted reader's top face, half way up its lean");
+            var (forward, _) = PaintedReadout.LineFacing();
+            Assert.AreEqual(1f, Vector3.Dot(readout.transform.forward, new Vector3(forward.x, forward.y, forward.z)), 1e-4f, "facing up and toward the chair (a TextMeshPro shows on its -Z)");
+            Assert.AreEqual(PaintedReadout.FontSizeMax(cube), readout.fontSizeMax, 1e-5f, "its type may fill the line (R3: the old cap 0.12 left READY about 3 px high)");
+            Assert.IsTrue(readout.enableAutoSizing, "a long line shrinks to the line's width");
             Assert.Less(readout.transform.position.z, painted.transform.position.z, "on the near third, toward the chair");
             // Unit world scale under the painted mesh's own scale (Pose): to a tolerance, since Unity's lossyScale is a float decomposition of the world matrix.
             Vector3 lossy = readout.transform.lossyScale;

@@ -1,43 +1,134 @@
+using System;
 using NUnit.Framework;
 
 /// <summary>
 /// The readout line on the painted chip reader (PaintedReadout; desk v3
-/// round 12's S1, the night of 2026-10-28, seam D): it lies on the top face,
-/// inside it, on its near third, and its click box stands over the line
-/// above the body's padded box, so the line is clicked before the body.
+/// round 12's S1, the night of 2026-10-28, seam D): it stands on the top
+/// face, inside it, on its near third, leant toward the chair, and its click
+/// box covers the line above the body's padded box, so the line is clicked
+/// before the body. Its type may fill the line, so it reads from the chair
+/// (the code review's R3 of 2026-10-28: READY was about 21 x 3 px at 1080p).
 /// </summary>
 public class PaintedReadoutTests
 {
     private static readonly PaintedReadout.Box Reader = new PaintedReadout.Box(0.79f, 1.01f, 1.08f, 1.16f, 0.27f, 0.43f);
 
+    /// <summary>
+    /// The painted chip reader as the bake lays it, in the painted desk's
+    /// frame with y over the desk top (DeskObjects.fbx's Desk_ChipReader: x
+    /// 0.84 to 1.10, y 1.105 to 1.194 in the world over the desk top at 1.069,
+    /// z -0.532 to -0.27; desk_layout_v3.json's chipReader rect).
+    /// </summary>
+    private static readonly PaintedReadout.Box PaintedReader = new PaintedReadout.Box(0.84f, 1.10f, 0.036f, 0.125f, -0.532f, -0.27f);
+
+    /// <summary>The office camera's vertical field of view at 16:9 and its pitch down (degrees; DeskLayoutSettings.officeFieldOfView, DeskHomeMap.OfficeEye's "58 degrees, 9 down").</summary>
+    private const float OfficeFieldOfView = 58f, OfficePitch = 9f;
+
+    /// <summary>The old reader's auto-size cap (OfficeSceneUIBuilder.Machines: fontSizeMax 0.12), which the painted line kept before R3.</summary>
+    private const float OldFontSizeMax = 0.12f;
+
     [Test]
-    public void TheLine_LiesOnTheTopFace_OnItsNearThird_InsideIt()
+    public void TheLine_StandsOnTheTopFace_OnItsNearThird_InsideIt()
     {
         (float x, float y, float z) = PaintedReadout.LinePosition(Reader);
+        (float nx, float ny, float nz) = PaintedReadout.NearEdge(Reader);
+        (float fx, float fy, float fz) = PaintedReadout.FarEdge(Reader);
         (float width, float height) = PaintedReadout.LineSize(Reader);
-        Assert.AreEqual(Reader.MaxY + PaintedReadout.Lift, y, 1e-6f, "over the top face by the lift");
+        Assert.AreEqual(Reader.MaxY + PaintedReadout.Lift, ny, 1e-6f, "its near edge over the top face by the lift");
+        Assert.Greater(fy, ny, "its far edge raised: the line leans toward the chair");
         Assert.AreEqual(Reader.CentreX, x, 1e-6f, "centred across");
+        Assert.AreEqual(nx, fx, 1e-6f);
+        Assert.AreEqual((ny + fy) / 2f, y, 1e-6f, "its centre half way up the lean");
+        Assert.AreEqual((nz + fz) / 2f, z, 1e-6f);
         Assert.Less(z, Reader.CentreZ, "on the near half (toward the chair)");
-        Assert.GreaterOrEqual(z - height / 2f, Reader.MinZ, "its near edge inside the face");
-        Assert.LessOrEqual(z + height / 2f, Reader.MaxZ, "its far edge inside the face");
+        Assert.GreaterOrEqual(nz, Reader.MinZ, "its near edge over the face");
+        Assert.LessOrEqual(fz, Reader.MaxZ, "its far edge over the face");
         Assert.LessOrEqual(width, Reader.Width, "no wider than the face");
         Assert.Greater(width, 0.8f * Reader.Width, "most of the face's width: a readable line");
+        Assert.AreEqual(height, Distance((nx, ny, nz), (fx, fy, fz)), 1e-5f, "the line keeps its height up the lean");
     }
 
     [Test]
-    public void TheClickBox_StandsOverTheLine_AboveTheBodysPaddedBox()
+    public void TheLine_FacesUpAndTowardTheChair_ItsTopAwayFromTheChair()
+    {
+        var (forward, up) = PaintedReadout.LineFacing();
+        // A TextMeshPro shows on its -Z: the side it shows faces up and toward the chair (-z).
+        Assert.Less(-forward.y, 1f, "not flat: leant");
+        Assert.Greater(-forward.y, 0f, "it faces up");
+        Assert.Less(-forward.z, 0f, "and toward the chair");
+        Assert.AreEqual(PaintedReadout.Tilt, (float)(Math.Acos(-forward.y) * 180.0 / Math.PI), 1e-3f, "leant by Tilt");
+        Assert.Greater(up.z, 0f, "its top edge away from the chair: it reads from the chair");
+        Assert.AreEqual(0f, forward.x * up.x + forward.y * up.y + forward.z * up.z, 1e-6f, "forward and up are square");
+        (_, float ny, float nz) = PaintedReadout.NearEdge(Reader);
+        (_, float fy, float fz) = PaintedReadout.FarEdge(Reader);
+        (_, float height) = PaintedReadout.LineSize(Reader);
+        Assert.AreEqual(up.y, (fy - ny) / height, 1e-5f, "up runs from the near edge to the far edge");
+        Assert.AreEqual(up.z, (fz - nz) / height, 1e-5f);
+    }
+
+    [Test]
+    public void TheClickBox_CoversTheLine_AboveTheBodysPaddedBox()
     {
         (float cx, float cy, float cz) = PaintedReadout.BoxCentre(Reader);
         (float sx, float sy, float sz) = PaintedReadout.BoxSize(Reader);
-        (float lx, float ly, float lz) = PaintedReadout.LinePosition(Reader);
-        (float width, float height) = PaintedReadout.LineSize(Reader);
+        (float lx, _, float lz) = PaintedReadout.LinePosition(Reader);
+        (_, float ny, float nz) = PaintedReadout.NearEdge(Reader);
+        (_, float fy, float fz) = PaintedReadout.FarEdge(Reader);
+        (float width, _) = PaintedReadout.LineSize(Reader);
         Assert.AreEqual(lx, cx, 1e-6f);
         Assert.AreEqual(lz, cz, 1e-6f);
-        Assert.AreEqual(width, sx, 1e-6f, "the line's footprint");
-        Assert.AreEqual(height, sz, 1e-6f);
-        float top = cy + sy / 2f - Reader.MaxY;
-        Assert.AreEqual(PaintedReadout.BoxTop + PaintedReadout.Lift, top, 1e-6f, "the box rises from the line, which floats the lift over the face");
-        Assert.Greater(top, DeskHomeMap.ClickPad, "its top over the body's padded box (DeskPainted.EnsureClickBox pads by ClickPad), so the ray meets the readout's box first");
-        Assert.Less(cy - sy / 2f, ly, "and it reaches down to the line");
+        Assert.AreEqual(width, sx, 1e-6f, "the line's width");
+        Assert.AreEqual(fz - nz, sz, 1e-6f, "the line's footprint along the depth");
+        Assert.AreEqual(ny, cy - sy / 2f, 1e-6f, "it reaches down to the line's near edge");
+        Assert.AreEqual(fy + PaintedReadout.BoxRise, cy + sy / 2f, 1e-6f, "and over its far edge by the margin");
+        Assert.Greater(cy + sy / 2f - Reader.MaxY, DeskHomeMap.ClickPad, "its top over the body's padded box (DeskPainted.EnsureClickBox pads by ClickPad), so the ray meets the readout's box first");
     }
+
+    /// <summary>
+    /// The code review's R3 (2026-10-28): the line's type kept the old
+    /// reader's cap, an em of 1.2 cm, about 3 px high from the chair at
+    /// 1080p. The type may now fill the line's height, and the leant line
+    /// shows taller from the chair than flat.
+    /// </summary>
+    [Test]
+    public void TheLargestType_FillsTheLine_AndReadsFromTheChairAt1080p()
+    {
+        (float width, float height) = PaintedReadout.LineSize(PaintedReader);
+        float size = PaintedReadout.FontSizeMax(PaintedReader);
+        Assert.AreEqual(height, size * PaintedReadout.EmPerFontSize, 1e-6f, "the largest em is the line's height");
+        Assert.Greater(size, OldFontSizeMax * 5f, "far over the old reader's cap");
+
+        float line = ScreenHeight(PaintedReadout.NearEdge(PaintedReader), PaintedReadout.FarEdge(PaintedReader));
+        Assert.GreaterOrEqual(line, 32f, $"the line {line:0.0} px high from the chair at 1080p (the largest em; at least 32 px)");
+        float old = line * OldFontSizeMax * PaintedReadout.EmPerFontSize / height;
+        Assert.Less(old, 8f, $"the old cap's em {old:0.0} px: the review's smear");
+
+        (float nx, float ny, float nz) = PaintedReadout.NearEdge(PaintedReader);
+        float flat = ScreenHeight((nx, ny, nz), (nx, ny, nz + height));
+        Assert.Greater(line, 1.4f * flat, $"leant {line:0.0} px against flat {flat:0.0} px: the lean shows the line taller from the chair");
+
+        float wide = ScreenWidth((nx - width / 2f, ny, nz), (nx + width / 2f, ny, nz));
+        Assert.GreaterOrEqual(wide, 80f, $"the line {wide:0} px wide from the chair at 1080p");
+    }
+
+    /// <summary>The screen height (px, 1920 x 1080) between two points of the painted desk's frame seen from the office eye (DeskHomeMap.OfficeEye).</summary>
+    private static float ScreenHeight((float x, float y, float z) a, (float x, float y, float z) b) => Math.Abs(Screen(a).y - Screen(b).y);
+
+    /// <summary>The screen width (px, 1920 x 1080) between two points seen from the office eye.</summary>
+    private static float ScreenWidth((float x, float y, float z) a, (float x, float y, float z) b) => Math.Abs(Screen(a).x - Screen(b).x);
+
+    /// <summary>A point of the painted desk's frame (x across, y over the desk top, z away from the chair) on a 1920 x 1080 screen from the office eye, pitched OfficePitch down.</summary>
+    private static (float x, float y) Screen((float x, float y, float z) p)
+    {
+        (float ex, float ey, float eh) = DeskHomeMap.OfficeEye;
+        double vx = p.x - ex, vy = p.y - eh, vz = p.z - ey;
+        double pitch = OfficePitch * Math.PI / 180.0, half = Math.Tan(OfficeFieldOfView * Math.PI / 360.0);
+        double ahead = -vy * Math.Sin(pitch) + vz * Math.Cos(pitch);
+        double upward = vy * Math.Cos(pitch) + vz * Math.Sin(pitch);
+        Assert.Greater(ahead, 0.0, "the point is in front of the eye");
+        return ((float)(960.0 + 540.0 * vx / ahead / half), (float)(540.0 - 540.0 * upward / ahead / half));
+    }
+
+    private static float Distance((float x, float y, float z) a, (float x, float y, float z) b) =>
+        (float)Math.Sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
 }

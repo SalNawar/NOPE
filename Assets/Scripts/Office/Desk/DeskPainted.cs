@@ -720,11 +720,12 @@ public sealed class DeskPainted : MonoBehaviour
     /// <summary>
     /// The chip reader's readout on the painted reader <paramref name="name"/>
     /// (desk v3 round 12's S1; the night of 2026-10-28, seam D): the old
-    /// reader's live text <paramref name="readout"/> (its font, ink and
-    /// auto-size kept; ChipReader.Show writes it, the one source; Reskin
-    /// switched its renderer off) is re-shown as a line on the painted
-    /// reader's top face (PaintedReadout: its near third, facing up, under
-    /// the painted mesh so it rides the reader's slide), and the readout's
+    /// reader's live text <paramref name="readout"/> (its font and ink kept;
+    /// ChipReader.Show writes it, the one source; Reskin switched its renderer
+    /// off) is re-shown as a line on the painted reader's top face
+    /// (PaintedReadout: its near third, leant toward the chair, its type free
+    /// to grow to the line's height, under the painted mesh so it rides the
+    /// reader's slide; the code review's R3 of 2026-10-28), and the readout's
     /// click box <paramref name="clickBox"/> (its BoxCollider and Clickable,
     /// which Silence may have switched off) is re-fitted over the line, on
     /// the Interactable layer, outlining the painted reader. The line swaps
@@ -739,13 +740,18 @@ public sealed class DeskPainted : MonoBehaviour
         var local = new PaintedReadout.Box(bounds.min.x, bounds.max.x, bounds.min.y, bounds.max.y, bounds.min.z, bounds.max.z);
         Transform line = readout.transform;
         line.SetParent(mesh, false);
-        // A TextMeshPro shows on its -Z: forward down shows it from above, its up away from the chair, so it reads from the chair.
-        Pose(line, V(PaintedReadout.LinePosition(local)), Quaternion.LookRotation(Vector3.down, Vector3.forward));
+        // A TextMeshPro shows on its -Z: forward down and away from the chair shows it up and toward the chair (PaintedReadout.Tilt),
+        // its top edge up the lean, so it reads from the chair.
+        var (forward, up) = PaintedReadout.LineFacing();
+        Pose(line, V(PaintedReadout.LinePosition(local)), Quaternion.LookRotation(V(forward), V(up)));
         if (line is RectTransform rect)
         {
             (float width, float height) = PaintedReadout.LineSize(local);
             rect.sizeDelta = new Vector2(width, height);
         }
+        // The old reader's auto-size cap (0.12: an em of 1.2 cm) kept READY about 21 x 3 px at 1080p; the type may now fill the line.
+        readout.enableAutoSizing = true;
+        readout.fontSizeMax = PaintedReadout.FontSizeMax(local);
         foreach (Renderer r in readout.GetComponentsInChildren<Renderer>(true))
             r.enabled = true;
         readout.ForceMeshUpdate();
