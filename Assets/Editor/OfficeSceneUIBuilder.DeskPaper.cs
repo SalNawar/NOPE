@@ -718,7 +718,10 @@ public static partial class OfficeSceneUIBuilder
             m.SetColor("_BaseColor", Color.white);
             m.SetFloat("_Cutoff", 0f);
         });
+        // the Bureau's seal: its art when delivered, else the forms' code-drawn ring (ArtSlots.AgencySeal's fallback); with no texture the seal drew a solid brown square
         Texture2D sealArt = AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.AgencySeal + ".png");
+        if (sealArt == null)
+            sealArt = EnsureOfficeShape("form_seal", SealPixels, SealPixels, new Vector2(0.5f, 0.5f), SealRing).texture;
         Material seal = EnsureMaterial("Rulebook_CoverSeal", "Universal Render Pipeline/Unlit", m =>
         {
             m.SetTexture("_BaseMap", sealArt);

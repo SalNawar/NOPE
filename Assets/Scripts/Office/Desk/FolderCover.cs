@@ -58,6 +58,9 @@ public sealed class FolderCover : MonoBehaviour
     private Vector3 _sealRest;
     private Vector2 _sealHalf;
 
+    /// <summary>True once the seal's place and half size as built are read (KnowSeal).</summary>
+    private bool _sealKnown;
+
     private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
 
     private readonly BookletFlip _flip = new BookletFlip();
@@ -78,16 +81,29 @@ public sealed class FolderCover : MonoBehaviour
 
     private void Awake()
     {
-        if (seal != null)
-        {
-            _sealRest = seal.localPosition;
-            _sealHalf = new Vector2(Mathf.Abs(seal.localScale.x), Mathf.Abs(seal.localScale.y)) / 2f;
-        }
+        KnowSeal();
         PaperCover.UseSheet(front);
         PaperCover.UseSheet(back);
         if (coverClick != null)
             coverClick.onClick.AddListener(() => Close());
         Show(true);
+    }
+
+    /// <summary>
+    /// Reads the seal's place and half size as built, once, before anything
+    /// rides it (Show). DeskRulebook.Show shuts the folder (ShutNow) at a
+    /// day's start, which can come before this component's Awake while the
+    /// rulebook's object is inactive. A ride from an unread rest put the seal
+    /// on the hinge, half under the board, as a brown strip on the spine
+    /// (night build stills, 2026-10-28).
+    /// </summary>
+    private void KnowSeal()
+    {
+        if (_sealKnown || seal == null)
+            return;
+        _sealKnown = true;
+        _sealRest = seal.localPosition;
+        _sealHalf = new Vector2(Mathf.Abs(seal.localScale.x), Mathf.Abs(seal.localScale.y)) / 2f;
     }
 
     /// <summary>Shut at once, with no swing (the folder at a day's start).</summary>
@@ -134,6 +150,7 @@ public sealed class FolderCover : MonoBehaviour
     /// <summary>The hinge at the board's angle (hidden while the folder lies open: its own face shows the cover page); ShutChanged when that changes.</summary>
     private void Show(bool force)
     {
+        KnowSeal();
         bool shut = _flip.State != CoverState.Open;
         if (hinge != null)
         {
