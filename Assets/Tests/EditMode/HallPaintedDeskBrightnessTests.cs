@@ -46,7 +46,7 @@ public class HallPaintedDeskBrightnessTests
     [Test]
     public void TheBoothsGrade_DarkensAndWarmsTheHall_AndTheAssetCarriesTheDefault()
     {
-        // Round 13: the enclosed booth (office_bars_v1.png) shows the hall far darker and warmer than mock_office.png did.
+        // Round 13: the enclosed booth (office_bars_v1.png) shows the hall darker and warmer than mock_office.png did; 2026-10-28: measured after the finish.
         string asset = Read("Assets/Data/Config/HallLighting_Default.asset");
         Match value = Regex.Match(asset, @"\n  paintedBoothGrade: \{r: ([0-9.]+), g: ([0-9.]+), b: ([0-9.]+), a: 1\}\n");
         Assert.IsTrue(value.Success, "HallLighting_Default.asset carries the booth's grade");
@@ -55,14 +55,14 @@ public class HallPaintedDeskBrightnessTests
         for (int c = 1; c <= 3; c++)
         {
             Assert.AreEqual(F(fallback.Groups[c].Value), F(value.Groups[c].Value), 1e-4f, "the asset and the default agree");
-            Assert.AreEqual(BoothGrade[c - 1], F(value.Groups[c].Value), 1e-4f, "the measured ratio of the painting's hall gaps over the game's at 09:00 (DESK-V3 round 13; PaintedBoothTests)");
+            Assert.AreEqual(BoothGrade[c - 1], F(value.Groups[c].Value), 1e-4f, "measured after the office finish (2026-10-28; PaintedBoothTests holds the measurement)");
             Assert.That(BoothGrade[c - 1], Is.LessThan(1f), "the booth's hall is darker than the open desk's");
         }
         Assert.That(BoothGrade[2], Is.LessThan(BoothGrade[0]), "and warmer (the painting's amber)");
     }
 
-    /// <summary>The booth's grade (r, g, b), round 13: the painting's hall between the bars over the game's hall at paintedDeskBrightness (PaintedBoothTests holds the measurement).</summary>
-    private static readonly float[] BoothGrade = { 0.48f, 0.45f, 0.37f };
+    /// <summary>The booth's grade (r, g, b), measured on screen after the office finish (2026-10-28, Saleh: "bg is dark"; PaintedBoothTests holds the measurement).</summary>
+    private static readonly float[] BoothGrade = { 0.81f, 0.82f, 0.64f };
 
     [Test]
     public void TheBrightness_AppliesOnlyUnderThePaintedDesk()

@@ -245,18 +245,63 @@ public class PaintedBoothTests
         CollectionAssert.DoesNotContain(DeskPaintedMap.HallClosedByBooth, "03 Exterior placeholder single layer", "the back windows' city stays: it shows through the bars as the painting's does");
     }
 
-    /// <summary>The painting's hall between the bars (bars_reg.png: office_bars_v1.png registered to the office camera; the three gaps left of the traveller) and the game's hall there at paintedDeskBrightness (round 12's day 1 still, 09:00): mean sRGB (r13\measure_r13.py, 2026-10-21).</summary>
-    private static readonly float[] PaintingGaps = { 46f, 38f, 27f }, GameGaps = { 94f, 83f, 75f };
+    /// <summary>
+    /// The painting's hall behind the bars (bars_reg.png: office_bars_v1.png registered to the office camera at 1920x1080; the
+    /// window (390, 150)-(1580, 655) clear of the twelve bars, the traveller and the speech bubble): mean sRGB, luma 37.0
+    /// (Saleh 2026-10-28, "bg is dark"; NOPE-tools\reports\night\saleh_0800\hall_luma.py).
+    /// </summary>
+    private static readonly float[] PaintingHall = { 42.8f, 36.4f, 26.4f };
+
+    /// <summary>The painting's hall luma (Rec. 709 of the sRGB values).</summary>
+    private const float PaintingHallLuma = 37.0f;
+
+    /// <summary>
+    /// The night build's hall in the same window on screen (after LIGHT's finish) under round 13's grade: day 1 at 09:00, day 12
+    /// at 13:00 and at 16:00 (reports/night/stills: d1_office_traveller, d12_office_traveller, d12_office_1600): mean sRGB.
+    /// </summary>
+    private static readonly float[][] ShownAtRound13 = { new[] { 22.4f, 15.8f, 9.8f }, new[] { 21.1f, 15.2f, 9.9f }, new[] { 20.0f, 12.6f, 7.6f } };
+
+    /// <summary>Round 13's grade, the one the night build showed (measured before the finish was merged).</summary>
+    private static readonly float[] Round13Grade = { 0.48f, 0.45f, 0.37f };
+
+    /// <summary>An sRGB value (0-255) the hall draws at, as the screen shows it after the office finish (DeskLighting's model of URP's maths).</summary>
+    private static float Finished(float srgb) => DeskLighting.GradedLuma(DeskLighting.LuminanceForLuma(srgb), DeskLighting.Finish.Office);
+
+    /// <summary>The sRGB value (0-255) the hall must draw at for the screen to show <paramref name="shown"/> after the office finish.</summary>
+    private static float Unfinished(float shown)
+    {
+        float lo = 0f, hi = 255f;
+        for (int i = 0; i < 40; i++)
+        {
+            float mid = (lo + hi) / 2f;
+            if (Finished(mid) < shown) lo = mid; else hi = mid;
+        }
+        return (lo + hi) / 2f;
+    }
 
     [Test]
-    public void TheBoothsGrade_IsThePaintingsHallOverTheGames_ReadWithTheBrightness_WhiteOffThePaintedDesk()
+    public void TheBoothsGrade_ShowsThePaintingsHallBehindTheBars_AfterTheFinish_ReadWithTheBrightness_WhiteOffThePaintedDesk()
     {
         string asset = Read("Assets/Data/Config/HallLighting_Default.asset");
         Match value = Regex.Match(asset, @"\n  paintedBoothGrade: \{r: ([0-9.]+), g: ([0-9.]+), b: ([0-9.]+), a: 1\}\n");
         Assert.IsTrue(value.Success, "HallLighting_Default.asset carries the booth's grade");
+        var grade = new float[3];
         for (int c = 0; c < 3; c++)
-            Assert.AreEqual(PaintingGaps[c] / GameGaps[c], F(value.Groups[c + 1].Value), 0.015f, "r, g, b: the measured ratio, to the nearest hundredth");
-        Assert.That(PaintingGaps[2] / GameGaps[2], Is.LessThan(PaintingGaps[0] / GameGaps[0] * 0.8f), "a colour, not one scale: the blue falls a quarter further than the red");
+            grade[c] = F(value.Groups[c + 1].Value);
+        string[] hours = { "09:00", "13:00", "16:00" };
+        for (int h = 0; h < 3; h++)
+        {
+            // The grade scales the hall's sRGB values before the finish: the same pixels drawn at the new grade.
+            var shown = new float[3];
+            for (int c = 0; c < 3; c++)
+            {
+                shown[c] = Finished(Unfinished(ShownAtRound13[h][c]) * grade[c] / Round13Grade[c]);
+                Assert.AreEqual(PaintingHall[c], shown[c], PaintingHall[c] * 0.12f, $"{hours[h]}, channel {"rgb"[c]}: within 12% of the painting's hall");
+            }
+            float luma = 0.2126f * shown[0] + 0.7152f * shown[1] + 0.0722f * shown[2];
+            Assert.That(luma / PaintingHallLuma, Is.InRange(0.9f, 1.1f), $"{hours[h]}: the hall's luma {luma:0.0} is the painting's {PaintingHallLuma} within 10%");
+        }
+        Assert.That(grade[2], Is.LessThan(grade[0] * 0.85f), "a colour, not one scale: the blue falls further than the red");
         string rig = Read("Assets/Scripts/Office/HallLightingRig.cs");
         StringAssert.Contains("backdrop.Brightness = PaintedDesk && painted != null && painted.length > 0 ? painted.Evaluate(Hour) : 1f;\n            backdrop.Grade = PaintedDesk ? settings.paintedBoothGrade : Color.white;", rig,
                               "read where paintedDeskBrightness is read, white off the painted desk");
