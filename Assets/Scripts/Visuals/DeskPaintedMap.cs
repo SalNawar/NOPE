@@ -348,15 +348,59 @@ public static class DeskPaintedMap
     /// The parts of a gameplay object that stay drawn under its painted look
     /// (DeskPainted.Reskin's and WearBoxes' keep): the scanner's sweep light,
     /// raised onto the painted bed, while a scan runs (its old lid-edge glow
-    /// and its readout hide with the old model); the UV torch's pool and
-    /// beam; the supply crate's tag (the delivery's live label: what came).
-    /// Nothing else of an old model ever shows.
+    /// and its readout hide with the old model); the UV torch's pool on the
+    /// papers; the supply crate's tag (the delivery's live label: what came).
+    /// Nothing else of an old model ever shows. The torch's old beam cone
+    /// (BeamFX) hides with its old model (Saleh's playtest of 2026-10-28,
+    /// point 12, "flashlight has wrong orintation when you pick it up": the
+    /// cone, 32 cm long and sized for the old lens, drew a purple blob over
+    /// the held torch; the approved mock_interaction.png draws no beam, only
+    /// the light on the paper).
     /// </summary>
     public static string[] Kept(string home) =>
         home == DeskHomeMap.Scanner ? new[] { "SweepBar" }
-        : home == DeskHomeMap.UvTorch ? new[] { "UvPool", "BeamFX" }
+        : home == DeskHomeMap.UvTorch ? new[] { "UvPool" }
         : home == DeskHomeMap.Crate ? new[] { "Tag" }
         : Array.Empty<string>();
+
+    /// <summary>
+    /// The turns (degrees, DeskHome.yaw) the bake gives the gameplay objects
+    /// it lays differently from DESK-PLAN's map, by home: the UV torch lies
+    /// along its pouch with its lens away from the chair (the bake's torch:
+    /// its body near the chair, its brass head at the far end; anchors.json
+    /// and the blockout's uv_torch along the frame's y), so the gameplay
+    /// torch, whose lens is its local -z, turns a half turn (DESK-PLAN's
+    /// quarter turn laid it across the pouch, 90 degrees off the painted
+    /// torch, which rides it: held, the painted torch lay sideways to its
+    /// beam; Saleh's playtest of 2026-10-28, point 12).
+    /// </summary>
+    public static readonly (string home, float yaw)[] Turns = { (DeskHomeMap.UvTorch, 180f) };
+
+    /// <summary>The bake's turn for the home <paramref name="home"/> (Turns), or null when the map's own turn stands.</summary>
+    public static float? TurnOf(string home)
+    {
+        foreach ((string id, float yaw) in Turns)
+            if (id == home)
+                return yaw;
+        return null;
+    }
+
+    /// <summary>
+    /// <paramref name="home"/> turned as the bake lays its object (TurnOf): a
+    /// copy at the bake's turn covering the same rectangle (a quarter turn's
+    /// swapped width and depth swapped back), or the home itself when the
+    /// bake keeps its turn. Merge applies it, so the prefab's measured homes
+    /// need no new import.
+    /// </summary>
+    public static DeskHome Turned(DeskHome home)
+    {
+        float? turn = home != null ? TurnOf(home.id) : null;
+        if (turn == null || Math.Abs(home.yaw - turn.Value) < 0.01f)
+            return home;
+        bool quarter = Math.Abs(Math.Abs(home.yaw) - 90f) < 0.01f, toQuarter = Math.Abs(Math.Abs(turn.Value) - 90f) < 0.01f;
+        bool swap = quarter != toQuarter;
+        return new DeskHome(home.id, home.x, home.y, swap ? home.depth : home.width, swap ? home.width : home.depth, turn.Value, home.height, home.show, home.slide, home.artParts);
+    }
 
     /// <summary>
     /// The click boxes of a gameplay object's old model that its painted look
@@ -693,8 +737,8 @@ public static class DeskPaintedMap
     /// <paramref name="y1"/>) in the desk's frame, standing
     /// <paramref name="height"/> over the desk: turned as
     /// <paramref name="classic"/> turns its object (the gameplay object laid
-    /// there keeps its design: STAMP's rack its daters front to back, the UV
-    /// torch across its pouch; a quarter turn swaps its own width and depth,
+    /// there keeps its design: STAMP's rack its daters front to back; the UV
+    /// torch across its pouch here, along it once merged: Turned; a quarter turn swaps its own width and depth,
     /// so it covers the same rectangle; any other turn is dropped), its show
     /// rule from <paramref name="classic"/> (ShowOf), its slide SlideOf's, no
     /// art parts moved onto it.
@@ -743,9 +787,9 @@ public static class DeskPaintedMap
     /// The map while the painted desk shows: every home of
     /// <paramref name="classic"/> (DESK-PLAN's map) but the Dropped ones,
     /// each replaced by the painted home of its id in
-    /// <paramref name="painted"/> or else moved as Moved says, in the
-    /// classic order, then the painted homes the classic map lacks. A fresh
-    /// array.
+    /// <paramref name="painted"/> (turned as the bake lays its object:
+    /// Turned) or else moved as Moved says, in the classic order, then the
+    /// painted homes the classic map lacks. A fresh array.
     /// </summary>
     public static DeskHome[] Merge(IReadOnlyList<DeskHome> classic, IReadOnlyList<DeskHome> painted)
     {
@@ -756,12 +800,12 @@ public static class DeskPaintedMap
             if (home == null || Array.IndexOf(Dropped, home.id) >= 0)
                 continue;
             DeskHome over = DeskHomeMap.Find(painted, home.id);
-            merged.Add(over ?? MovedHome(home));
+            merged.Add(over != null ? Turned(over) : MovedHome(home));
             used.Add(home.id);
         }
         foreach (DeskHome home in painted ?? Array.Empty<DeskHome>())
             if (home != null && used.Add(home.id))
-                merged.Add(home);
+                merged.Add(Turned(home));
         return merged.ToArray();
     }
 

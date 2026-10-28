@@ -124,6 +124,27 @@ public class DeskPaintedMapTests
     }
 
     [Test]
+    public void TheMergedTorch_LiesAlongItsPouch_ItsLensAwayFromTheChair_OverTheSameRectangle()
+    {
+        // Saleh's playtest of 2026-10-28, point 12: the bake lays its torch along the pouch, its head away from the chair; DESK-PLAN's
+        // quarter turn laid the gameplay torch across it, so the painted torch riding it lay sideways to the beam once held.
+        DeskHome painted = DeskHomeMap.Find(Painted().homes, DeskHomeMap.UvTorch);
+        Assert.AreEqual(-90f, painted.yaw, "the importer's home keeps DESK-PLAN's quarter turn (the prefab needs no new import)");
+        DeskHome merged = DeskHomeMap.Find(DeskPaintedMap.Merge(DeskHomeMap.Approved(), Painted().homes), DeskHomeMap.UvTorch);
+        Assert.AreEqual(180f, merged.yaw, "merged, its lens (local -z) points away from the chair, along the painted torch");
+        DeskRect before = painted.Footprint, after = merged.Footprint;
+        Assert.That(after.CentreX, Is.EqualTo(before.CentreX).Within(1e-5f));
+        Assert.That(after.CentreY, Is.EqualTo(before.CentreY).Within(1e-5f));
+        Assert.That(after.Width, Is.EqualTo(before.Width).Within(1e-5f), "the same rectangle across");
+        Assert.That(after.Height, Is.EqualTo(before.Height).Within(1e-5f), "the same rectangle along");
+        (float x0, float y0, float x1, float y1) rect = LayoutRect(DeskHomeMap.UvTorch).Value;
+        Assert.That(merged.depth, Is.EqualTo(rect.y1 - rect.y0).Within(1e-5f), "its depth (lens to tail) runs along the pouch");
+        Assert.IsNull(DeskPaintedMap.TurnOf(DeskHomeMap.StampRack), "every other object keeps its map's turn");
+        DeskHome rack = DeskHomeMap.Find(Painted().homes, DeskHomeMap.StampRack);
+        Assert.AreSame(rack, DeskPaintedMap.Turned(rack), "a home the bake keeps the turn of is itself");
+    }
+
+    [Test]
     public void APaintedObjectOnTheDesk_ShowsFromDayOne_ElseTheClassicRule()
     {
         DeskHome[] classic = DeskHomeMap.Approved();
@@ -164,7 +185,7 @@ public class DeskPaintedMapTests
         foreach (string insert in new[] { "Desk_BabelHome", "Desk_RolodexHome", "Desk_CardsHome", DeskPaintedMap.Glass })
             Assert.AreEqual(PaintedRole.Hidden, DeskPaintedMap.Find(insert).role, insert + ": the shell already carries it as painted (drawn too, it doubled)");
         CollectionAssert.AreEquivalent(new[] { "SweepBar" }, DeskPaintedMap.Kept(DeskHomeMap.Scanner), "only the scanner's sweep light stays: its add-ons, its lid glow and its readout were the old model");
-        CollectionAssert.AreEquivalent(new[] { "UvPool", "BeamFX" }, DeskPaintedMap.Kept(DeskHomeMap.UvTorch), "the torch's light");
+        CollectionAssert.AreEquivalent(new[] { "UvPool" }, DeskPaintedMap.Kept(DeskHomeMap.UvTorch), "the torch's light on the paper; its old beam cone hides (Saleh's playtest of 2026-10-28, point 12: a purple blob over the held torch)");
         CollectionAssert.IsEmpty(DeskPaintedMap.Kept(DeskHomeMap.ChipReader));
         foreach (string id in DeskPaintedMap.Inserts)
             Assert.IsNotNull(DeskPaintedMap.StandInFor(id), id + ": no painted model yet, so a stand-in, never the old one");

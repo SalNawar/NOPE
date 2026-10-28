@@ -86,6 +86,9 @@ public sealed class UvTorch : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     /// <summary>The spot the cone lights on the desk (while held): ahead of the grip, with the cone's soft lag.</summary>
     public Vector3 Aim => _lit;
 
+    /// <summary>Where the lens's centre is now (world; the cone starts there): the office binder lays the torch with it on the painted torch's lens (OfficeSceneBinder.SeatTorch).</summary>
+    public Vector3 LensPoint => torch != null ? torch.TransformPoint(lensLocal) : transform.position;
+
     /// <summary>Wires it to its machines' hub (DeskHardware).</summary>
     public void Bind(DeskHardware hardware)
     {

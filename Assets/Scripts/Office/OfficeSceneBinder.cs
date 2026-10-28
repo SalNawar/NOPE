@@ -1290,6 +1290,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Transform body = torch != null ? Descendant(torch.transform, "UvTorch") : null;
         if (body != null)
         {
+            // Laid on the painted torch first (its lens on the painted lens), so the painted look rides the grip pointing where
+            // the beam does (Saleh's playtest of 2026-10-28, point 12: held, the painted torch lay sideways to its beam).
+            SeatTorch(torch);
             // Its click box fitted to the painted torch (the round 8 capture: the old model's box stood 20 cm toward the eye over the
             // pocket, so the cursor on the red book took and raised the torch and the book never lifted).
             Renderer[] look = Wear(PaintedTorch, DeskHomeMap.UvTorch, torch.transform, body);
@@ -1339,6 +1342,27 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         DeskLayout.Track(DeskHomeMap.Glasses, paintedDesk.SliderOf(PaintedGlasses));
         DeskLayout.Track(DeskHomeMap.Bell, paintedDesk.Mesh(PaintedBell));
         DeskLayout.Track(DeskHomeMap.RulebookPocket, paintedDesk.Mesh(PaintedPocket));
+    }
+
+    /// <summary>
+    /// Lays the gameplay torch <paramref name="torch"/> on the painted one
+    /// (Saleh's playtest of 2026-10-28, point 12, "flashlight has wrong
+    /// orintation when you pick it up"): the bake lays its torch along the
+    /// pouch, its brass head and lens at the far end from the chair, and the
+    /// map turns the gameplay torch the same way (DeskPaintedMap.Turned:
+    /// its lens, local -z, away from the chair); here its lens moves onto the
+    /// painted lens, on the painted torch's axis (the far edge of its
+    /// footprint, at the middle of its width and height). The painted torch
+    /// then rides the grip with no turn of its own: held, it points where
+    /// the cone lands and the pointer holds its grip, behind the head.
+    /// </summary>
+    private void SeatTorch(UvTorch torch)
+    {
+        if (torch == null || !paintedDesk.TryBounds(PaintedTorch, out Bounds painted))
+            return;
+        DeskRect f = _frame.Footprint(painted);
+        Vector3 lens = _frame.Point(new Vector2(f.CentreX, f.CentreY + f.Height / 2f), painted.center.y - _frame.Origin.y);
+        torch.transform.position += lens - torch.LensPoint;
     }
 
     /// <summary>The painted daters by their kind (DeskPaintedMap: the APPROVED one on the rack's front step, the DENIED one on its back step) and their lifts' ids (DeskSlides).</summary>
