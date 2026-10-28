@@ -64,6 +64,15 @@ public sealed class GateResult
     /// <summary>What was checked, and what failed.</summary>
     public string Detail { get; set; } = string.Empty;
 
+    /// <summary>
+    /// The ids of the measured results that made the check red (red, stale,
+    /// dirty, or not on a built player; GateResults.Judge fills it). The merge
+    /// gate spares a known-red check only when each of these matches its
+    /// entry's own run patterns (DemoGate.Evaluate; the code review's RG-01 of
+    /// 2026-10-28). Empty when the check reads no run result.
+    /// </summary>
+    public List<string> Unmet { get; } = new List<string>();
+
     /// <summary>A passing result.</summary>
     public static GateResult Ok(string id, string owner, string measured, string detail = "") =>
         new GateResult { Id = id, Owner = owner, Pass = true, Measured = measured, Detail = detail };

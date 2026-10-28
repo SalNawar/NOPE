@@ -53,6 +53,61 @@ public class DemoGateTests
         StringAssert.Contains("known red", demo.Reasons[0]);
     }
 
+    /// <summary>
+    /// The code review's RG-01 (2026-10-28): the merge gate spared a known-red
+    /// check whole, so the entry for the Helix monitor's helix_before line hid
+    /// helix_after_drop when it went red (69f23c4). An entry spares its check
+    /// only when every result that made it red matches that entry's own run
+    /// patterns; an entry with no pattern still spares its check whole.
+    /// </summary>
+    [Test]
+    public void KnownRedEntry_SparesOnlyItsOwnRunPatterns_AnyOtherRedInTheCheckRefusesTheMerge()
+    {
+        const string text = "hallfx.helix.flicker  hall_fx_helix.seq.helix_before.flicker  # BUG-13, HALL-FX: helix_before only\nqa.scenes.liberationSans  # BUG-3, TEXT-LANG\n";
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        Dictionary<string, List<string>> own = DemoGate.KnownRedPatternsByCheck(text);
+        CollectionAssert.AreEqual(new[] { "hall_fx_helix.seq.helix_before.flicker" }, own["hallfx.helix.flicker"]);
+        CollectionAssert.IsEmpty(own["qa.scenes.liberationSans"]);
+
+        GateResult beforeOnly = Helix(R("hall_fx_helix.seq.helix_before.flicker", false), R("hall_fx_helix.seq.helix_after_drop.flicker", true));
+        DemoGateReport spared = DemoGate.Evaluate(GateLevel.Merge, new[] { beforeOnly }, 1, known, own);
+        Assert.IsFalse(spared.Refused, "the entry's own line is red: spared");
+        Assert.AreEqual(1, spared.KnownRed.Count);
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Demo, new[] { beforeOnly }, 1, known, own).Refused, "the demo gate refuses known red");
+
+        GateResult afterDrop = Helix(R("hall_fx_helix.seq.helix_before.flicker", false), R("hall_fx_helix.seq.helix_after_drop.flicker", false));
+        CollectionAssert.AreEquivalent(new[] { "hall_fx_helix.seq.helix_before.flicker", "hall_fx_helix.seq.helix_after_drop.flicker" }, afterDrop.Unmet);
+        DemoGateReport refused = DemoGate.Evaluate(GateLevel.Merge, new[] { afterDrop }, 1, known, own);
+        Assert.IsTrue(refused.Refused, "a red line outside the entry's patterns refuses the merge");
+        StringAssert.Contains("helix_after_drop", refused.Reasons.Single());
+        CollectionAssert.IsEmpty(refused.KnownRed);
+
+        GateResult stale = Helix(R("hall_fx_helix.seq.helix_before.flicker", false), R("hall_fx_helix.seq.helix_after_drop.flicker", true, "old"));
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { stale }, 1, known, own).Refused, "a stale line outside the patterns refuses too: it measured no commit");
+
+        var whole = new[] { GateResult.Fail("qa.scenes.liberationSans", "TEXT-LANG", "4 texts", "...") };
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, whole, 1, known, own).Refused, "an entry with no pattern spares its check whole");
+    }
+
+    /// <summary>RG-01 on the project's own list: the Helix entry and stamp.aim's edge tries spare only their lines; helix_after_drop and a pile refusal refuse the merge.</summary>
+    [Test]
+    public void TheProjectsKnownRedList_SparesEachCheckOnlyForItsEntrysLines()
+    {
+        string text = File.ReadAllText(Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt"));
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        Dictionary<string, List<string>> own = DemoGate.KnownRedPatternsByCheck(text);
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { Helix(R("hall_fx_helix.seq.helix_before.flicker", false)) }, 1, known, own).Refused);
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { Helix(R("hall_fx_helix.seq.helix_after_drop.flicker", false)) }, 1, known, own).Refused, "the other three helix lines stay strict");
+        GateResult edge = GateResults.Judge("stamp.aim", "STAMP", "stamp_aim.aim.*", new[] { R("stamp_aim.aim.a6", false), R("stamp_aim.aim.c3", false), R("stamp_aim.aim.b4_1", true) }, "abc", false);
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { edge }, 1, known, own).Refused, "the edge tries the entry names");
+        GateResult pile = GateResults.Judge("stamp.aim", "STAMP", "stamp_aim.aim.*", new[] { R("stamp_aim.aim.a6", false), R("stamp_aim.aim.b9_1", false) }, "abc", false);
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { pile }, 1, known, own).Refused, "the pile refusals stay strict");
+    }
+
+    /// <summary>The Helix monitor's flicker check judged on <paramref name="results"/> at HEAD "abc" (HallFxChecks.HelixFlicker's pattern).</summary>
+    private static GateResult Helix(params QaGateResult[] results) =>
+        GateResults.Judge("hallfx.helix.flicker", "HALL-FX", "hall_fx_helix.seq.*.flicker", results, "abc", false);
+
     [Test]
     public void KnownRedThatNowPasses_IsReportedStale()
     {

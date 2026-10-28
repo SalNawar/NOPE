@@ -138,7 +138,7 @@ public static class DemoGate
                 EditorUtility.ClearProgressBar();
             }
         }
-        DemoGateReport report = Evaluate(level, results, checks.Count, KnownRedList());
+        DemoGateReport report = Evaluate(level, results, checks.Count, KnownRedList(), KnownRedPatternsByCheck());
         report.Head = GitHead.Read(GateResults.ProjectRoot);
         Directory.CreateDirectory(ReportFolder);
         File.WriteAllText(Path.Combine(ReportFolder, level == GateLevel.Demo ? "report_demo.md" : "report.md"), report.ToMarkdown());
@@ -184,6 +184,24 @@ public static class DemoGate
     /// <summary>The run patterns of the project's known-red list.</summary>
     public static List<string> KnownRedRunPatterns() =>
         File.Exists(KnownRedPath) ? KnownRedRunPatterns(File.ReadAllText(KnownRedPath)) : new List<string>();
+
+    /// <summary>
+    /// Each known-red entry's own run patterns, by its check id (an entry with
+    /// no pattern names a check that reads no run result, and spares it whole).
+    /// The merge gate spares a red check only for the patterns of its own
+    /// entry, never the pooled list (<see cref="Evaluate"/>; RG-01).
+    /// </summary>
+    public static Dictionary<string, List<string>> KnownRedPatternsByCheck(string text)
+    {
+        var byCheck = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        foreach (KnownRedLine line in KnownRedLines(text))
+            byCheck[line.Words[0]] = line.Words.Skip(1).Distinct(StringComparer.Ordinal).ToList();
+        return byCheck;
+    }
+
+    /// <summary>The project's known-red entries' own run patterns, by check id.</summary>
+    public static Dictionary<string, List<string>> KnownRedPatternsByCheck() =>
+        File.Exists(KnownRedPath) ? KnownRedPatternsByCheck(File.ReadAllText(KnownRedPath)) : new Dictionary<string, List<string>>();
 
     private readonly struct KnownRedLine
     {
@@ -248,11 +266,19 @@ public static class DemoGate
     /// At <see cref="GateLevel.Merge"/> a red result on
     /// <paramref name="knownRed"/> (an open BUG part a later track owns) is
     /// listed but does not refuse, so the merge gate catches regressions only;
-    /// the demo gate refuses it like any other.
+    /// the demo gate refuses it like any other. An entry with run patterns
+    /// (<paramref name="knownRedPatterns"/>, by check id) spares its check only
+    /// when every result that made it red (<see cref="GateResult.Unmet"/>)
+    /// matches one of that entry's own patterns; any other red result in the
+    /// check refuses the merge (the code review's RG-01 of 2026-10-28: the
+    /// entry for helix_before spared the whole Helix check, and
+    /// helix_after_drop went red unseen). An entry with no pattern, or a red
+    /// check that names no result, is spared whole.
     /// </summary>
-    public static DemoGateReport Evaluate(GateLevel level, IEnumerable<GateResult> results, int registered, IDictionary<string, string> knownRed = null)
+    public static DemoGateReport Evaluate(GateLevel level, IEnumerable<GateResult> results, int registered, IDictionary<string, string> knownRed = null, IDictionary<string, List<string>> knownRedPatterns = null)
     {
         knownRed = knownRed ?? new Dictionary<string, string>();
+        knownRedPatterns = knownRedPatterns ?? new Dictionary<string, List<string>>();
         var report = new DemoGateReport { Level = level };
         report.Results.AddRange(results.OrderBy(r => r.Owner, StringComparer.Ordinal).ThenBy(r => r.Id, StringComparer.Ordinal));
         if (registered == 0)
@@ -261,8 +287,11 @@ public static class DemoGate
         {
             string line = $"{r.Id} [{r.Owner}]: {r.Measured}{(string.IsNullOrEmpty(r.Detail) ? string.Empty : " - " + r.Detail)}";
             string known = knownRed.Keys.FirstOrDefault(k => GateResults.Matches(k, r.Id));
-            if (known != null && level == GateLevel.Merge)
+            List<string> outside = known != null ? OutsideOwnPatterns(r, known, knownRedPatterns) : new List<string>();
+            if (known != null && level == GateLevel.Merge && outside.Count == 0)
                 report.KnownRed.Add($"{line} (known: {knownRed[known]})");
+            else if (known != null && level == GateLevel.Merge)
+                report.Reasons.Add($"{line} (known red {known} spares only its own run patterns, {string.Join(" ", knownRedPatterns[known])}; red outside them: {string.Join(", ", outside)})");
             else
                 report.Reasons.Add(known != null ? $"{line} (known red: {knownRed[known]})" : line);
         }
@@ -274,5 +303,13 @@ public static class DemoGate
         }
         report.Refused = report.Reasons.Count > 0;
         return report;
+    }
+
+    /// <summary>The ids that made <paramref name="result"/> red and match none of entry <paramref name="known"/>'s own run patterns (empty when the entry has no pattern: it spares the check whole).</summary>
+    private static List<string> OutsideOwnPatterns(GateResult result, string known, IDictionary<string, List<string>> knownRedPatterns)
+    {
+        if (!knownRedPatterns.TryGetValue(known, out List<string> own) || own == null || own.Count == 0)
+            return new List<string>();
+        return result.Unmet.Where(id => !own.Any(p => GateResults.Matches(p, id))).ToList();
     }
 }

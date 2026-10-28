@@ -6,6 +6,9 @@
 # feed the check, in any scenario: a play run whose only failures match them reports "ok (known red ...)" in
 # harness.txt, QaPlayTest.AssertRun and run_player.py, so a smoke run is not "failed" every time until the owner merges.
 # run.json's own ok stays strict. An entry's patterns leave with it.
+# At the merge gate an entry with run patterns spares its check only while every result that made the check red
+# matches that entry's own patterns (DemoGate.Evaluate, the code review's RG-01 of 2026-10-28); any other red line in
+# the check refuses the merge. An entry with no pattern (a static check) spares its check whole.
 # INTEGRATION keeps it: an entry goes when its owner's merge turns the check green (the gate report lists entries
 # that now pass under "Known-red entries that now pass"), and a new one comes only with Saleh's or the plan's owner.
 # The entries below are expected red at the QA-RIG merge; the first Unity run confirms or drops each (deferred).

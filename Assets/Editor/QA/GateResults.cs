@@ -115,7 +115,9 @@ public static class GateResults
                        .Concat(stale.Select(r => $"STALE {r.id} measured at {Short(r.commit)}, HEAD is {Short(head)}"))
                        .Concat(dirty.Select(r => $"DIRTY {r.id} measured on uncommitted changes at {Short(r.commit)}: commit, then measure again"))
                        .Concat(notBp.Select(r => $"NOT-BP {r.id} was measured in the editor"));
-        return GateResult.Fail(checkId, owner, measured, string.Join("; ", lines));
+        GateResult fail = GateResult.Fail(checkId, owner, measured, string.Join("; ", lines));
+        fail.Unmet.AddRange(red.Concat(stale).Concat(dirty).Concat(notBp).Select(r => r.id).Distinct(StringComparer.OrdinalIgnoreCase));
+        return fail;
     }
 
     /// <summary>True when <paramref name="id"/> matches <paramref name="pattern"/> ('*' = any run of characters; case-insensitive).</summary>
