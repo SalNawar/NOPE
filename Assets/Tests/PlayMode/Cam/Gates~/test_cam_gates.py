@@ -96,6 +96,7 @@ FOREIGN_OPS = {
     'deskexpect': ('expect.', 'target', 'DESK-PLAN'),
     'deskclickboxes': ('clickboxes.', 'desk', 'DESK-PLAN'),
     'deskhomeshown': ('shown.', 'target', 'DESK-PLAN'),  # seam C (2026-10-28): a leg passed over on the painted desk, a pass line
+    'deskinspect': ('inspect.', 'target', 'DESK-PLAN'),  # seam O (2026-10-28): a diagnosis op, a pass line with the object's state
 }
 
 # A CAM run's last probe (each CAM scenario ends on the probe "end"): its line says the run reached its end. QaRunner.Run

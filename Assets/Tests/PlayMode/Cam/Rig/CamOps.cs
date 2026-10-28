@@ -1682,7 +1682,7 @@ public static class CamOps
                 yield return new WaitForSecondsRealtime(0.8f);
             }
 
-            // The intercom: its wheel opens in the view the player is in (no camera move); a question asked on its ring and answered (the bubble says a line), then Esc.
+            // The intercom: its wheel opens in the view the player is in (no camera move); a question asked on its ring and answered (the bubble says a line), then the wheel closes.
             TravellerWheel wheel = QaGame.Find<TravellerWheel>();
             if (wheel == null || !DeskLayout.TryPose(DeskHomeMap.Intercom, out Vector3 intercom, out _))
             {
@@ -1730,7 +1730,10 @@ public static class CamOps
                 }
                 if (wheel.IsOpen)
                 {
-                    yield return input.Tap(Key.Escape);
+                    // The wheel closed by its own call: Esc opens Settings everywhere (FLOW, Saleh's R3) with the PC in front, and the
+                    // reading view's toggle is dead while the PC is open (fix/night-seams, seam N, 2026-10-28: cam_views' day-12 reading
+                    // legs read "the office view is on" after this leg).
+                    wheel.Close();
                     yield return new WaitForSecondsRealtime(0.5f);
                 }
             }
