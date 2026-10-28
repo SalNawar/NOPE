@@ -1,6 +1,6 @@
 # PROGRESSION: three weeks, a new feature every two days
 
-*2026-10-28. The run is days 1 to 21. Branch `feat/progression-21`, from `integrate/cam` (main 6c5536e plus CAM). Spec: `E:\unity\NOPE-tools\briefs\PROGRESSION_21.md` (the night session's research spec; its section 5 is the table below). Status: data, code, tests, scenarios and docs are in; the Unity steps of section 5 are not run yet.*
+*2026-10-28. The run is days 1 to 21. Branch `feat/progression-21`, from `integrate/cam` (main 6c5536e plus CAM). Spec: `E:\unity\NOPE-tools\briefs\PROGRESSION_21.md` (the night session's research spec; its section 5 is the table below). Status: data, code, tests, scenarios and docs are in. Unity (NOPE-p5, 2026-10-28, head 8311baf): Generate World wrote the 21 day plans (0 errors), the validator 0 errors, the day jumps and the day sequence to the ending both ok (section 5, steps 1 and 3); steps 2, 4, 5, 6 and 7 are not run yet.*
 
 ## 1. The decision
 
@@ -74,9 +74,9 @@ Not changed: `breakInFromDay` 11 (mid second week, as Saleh asked); `GameConfig_
 
 ## 5. What Unity must verify
 
-1. `Tools > TimeDesk > Generate World`: writes `DayPlan_Inv_Day16` to `Day21`, `Rule_Open_D16` to `D21`, the Days sheet; 0 errors, no unplanned-tail warning. Then `Validate Content Library`: 0 issues.
+1. `Tools > TimeDesk > Generate World`: writes `DayPlan_Inv_Day16` to `Day21`, `Rule_Open_D16` to `D21`, the Days sheet; 0 errors, no unplanned-tail warning. Then `Validate Content Library`: 0 issues. **Ran 2026-10-28 02:13 after the day 18 and 20 fix: 21 day plans written, 0 errors, no unplanned tail; the validator 0 errors and 1 warning older than this branch (the UI string `rule.openRepaired` has no translations).**
 2. The EditMode suite in the editor (the NeedsEditor tests: `CheatLedgerTests.AJumpToTheLastDay` lands on 21 with no ending).
-3. `QaJobs.DaySequence` (days 1 to 21; day 21's night shows the ending) and `QaJobs.DayJumps` (d15, d18, d21 land at their briefings; `runsafe.play.dayJumps` green).
+3. `QaJobs.DaySequence` (days 1 to 21; day 21's night shows the ending) and `QaJobs.DayJumps` (d15, d18, d21 land at their briefings; `runsafe.play.dayJumps` green). **Ran 2026-10-28 02:52 at 8311baf: both ok. The sequence reached day 21 (money 610 at its morning) and its night's ending `world_report` (The World You Made, the title's world panel; still `d21_ending`), 1 known red (`day_sequence.camera`, CAM). The jumps landed d1 to d21, 5 known red (`liberationSans`, TEXT-LANG); `runsafe.play.dayJumps` PASS in the gate.**
 4. The guide: days 1 to 3 as before; days 9, 10 and 11: the NEW TODAY moment opens on 9 (guided) and the badge on 11, nothing on 10.
 5. The measured day 12 scenarios with Unlock everything: every machine seen (cam_desk, desk_plan_homes), the stills re-based.
 6. The Statement (`AccountWindow`, one row a day): 21 rows must fit the page at 720p.
