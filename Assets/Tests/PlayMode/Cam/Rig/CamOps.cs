@@ -1170,7 +1170,10 @@ public static class CamOps
                 (float)QaGame.Field(view, "_sinceMove") >= (float)QaGame.Field(view, "_moveSeconds") + 0.05f)
             {
                 watch.ReadingFrames++;
-                Rect? framed = Enclose(cam, DeskViewPose.Targets(config.deskView, DeskLayout.Mat.Rect, config.layout.homes));
+                // The desk home map in use (DeskLayoutSettings.Homes: the painted desk's measured homes over the plan's), as
+                // DeskView.Pose frames it (ba0474a; the code review's R6 of 2026-10-28: the plan's map left the painted rack's outer
+                // 16 cm, the intercom's outer 9 cm and the deal tray's mouth out of the watched work).
+                Rect? framed = Enclose(cam, DeskViewPose.Targets(config.deskView, DeskLayout.Mat.Rect, config.layout.Homes));
                 if (framed.HasValue)
                     work.Add(("the reading view's work", framed.Value));
             }

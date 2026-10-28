@@ -78,6 +78,25 @@ public class CamRigTests
         CollectionAssert.IsEmpty(wrong, string.Join("; ", wrong));
     }
 
+    /// <summary>
+    /// The code review's R6 (2026-10-28): the ops frame the reading view's
+    /// work on the desk home map in use (DeskLayoutSettings.Homes: the
+    /// painted desk's measured homes merged over the plan's), as DeskView.Pose
+    /// does since ba0474a. The camchrome watch read the plan's own map
+    /// (layout.homes), so chrome over the painted rack's outer 16 cm went
+    /// unflagged and cam_chrome's "ok" could be a false pass.
+    /// </summary>
+    [Test]
+    public void TheOps_FrameTheReadingViewOnTheHomeMapInUse_NeverThePlansOwnMap()
+    {
+        string source = System.IO.File.ReadAllText(System.IO.Path.Combine(SoFieldReadersTests.ProjectRoot(), "Assets", "Tests", "PlayMode", "Cam", "Rig", "CamOps.cs"));
+        System.Text.RegularExpressions.MatchCollection calls = System.Text.RegularExpressions.Regex.Matches(source, @"DeskViewPose\.Targets\([^;]*;");
+        Assert.GreaterOrEqual(calls.Count, 1, "the camchrome watch frames the reading view's work");
+        foreach (System.Text.RegularExpressions.Match call in calls)
+            StringAssert.Contains("layout.Homes", call.Value, "a framing on the map in use");
+        Assert.IsFalse(source.Contains("layout.homes"), "no op reads the plan's own map (layout.homes) on a desk that may be painted");
+    }
+
     [Test]
     public void Count_CountsAHashSet_AsWellAsAList()
     {
