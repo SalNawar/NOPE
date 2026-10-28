@@ -34,6 +34,9 @@ public sealed partial class SwitchboardView
     private static readonly Color LampWarm = new Color(1f, 0.92f, 0.72f, 1f);
     private static readonly Color DisplayGlass = new Color(0.045f, 0.03f, 0.022f, 0.94f);
     private static readonly Color VeilColor = new Color(0.04f, 0.025f, 0.018f, 0.5f);
+
+    /// <summary>How far a closed module's veil stays inside the module's rectangle on each side (plate pixels, halved).</summary>
+    private const float VeilInset = 10f;
     private static readonly Color PaperColor = new Color(0.94f, 0.9f, 0.8f, 1f);
     private static readonly Color TapeColor = new Color(0.86f, 0.82f, 0.64f, 0.85f);
     private static readonly Color PowerRubber = new Color(0.42f, 0.1f, 0.06f, 1f);
@@ -252,7 +255,7 @@ public sealed partial class SwitchboardView
         for (int m = 0; m < n; m++)
         {
             LayoutModule module = _layout.Modules[m];
-            _veils[m] = Picture("Closed " + module.Id, layer, null, VeilColor, Local(module.Rect.Centre), new Vector2(module.Rect.W - 10f, module.Rect.H - 10f));
+            _veils[m] = Picture("Closed " + module.Id, layer, null, VeilColor, Local(module.Rect.Centre), new Vector2(module.Rect.W - VeilInset, module.Rect.H - VeilInset));
             BoardPoint at = DisplayCentre(module);
             var display = new Display { Glass = Picture("Display " + module.Id, layer, null, DisplayGlass, Local(at), new Vector2(Mathf.Min(104f, module.Rect.W - 70f), 26f)) };
             display.Text = Label("Display text " + module.Id, display.Glass.rectTransform, Vector2.zero, new Vector2(display.Glass.rectTransform.sizeDelta.x - 8f, 22f), LampAmber, 8f, 17f, _mono);
@@ -272,13 +275,16 @@ public sealed partial class SwitchboardView
         _masterLamp = MakeLamp("MASTER lamp", layer, _layout.Master.Lamp);
     }
 
+    /// <summary>A lamp's sizes (plate pixels): the glass radius the art's lamp sprites are drawn for, the lit dome's width and the glow's at that radius.</summary>
+    private const float LampGlassPixels = 12f, LitPixels = 30f, GlowPixels = 96f;
+
     private Lamp MakeLamp(string name, RectTransform layer, BoardLamp at)
     {
-        float scale = at.GlassRadius / 12f;
+        float scale = at.GlassRadius / LampGlassPixels;
         return new Lamp
         {
-            Glow = Picture(name + " glow", layer, Sprite("lamp_glow"), Color.clear, Local(at.Centre), new Vector2(96f, 96f) * scale),
-            Lit = Picture(name, layer, Sprite("lamp_lit_amber"), Color.clear, Local(at.Centre), new Vector2(30f, 30f) * scale),
+            Glow = Picture(name + " glow", layer, Sprite("lamp_glow"), Color.clear, Local(at.Centre), new Vector2(GlowPixels, GlowPixels) * scale),
+            Lit = Picture(name, layer, Sprite("lamp_lit_amber"), Color.clear, Local(at.Centre), new Vector2(LitPixels, LitPixels) * scale),
         };
     }
 
@@ -434,7 +440,7 @@ public sealed partial class SwitchboardView
         float e = _openT * _openT * (3f - 2f * _openT);
         Vector2 canvas = _canvasRect.rect.size;
         float fit = Mathf.Min(canvas.x / _layout.Width, canvas.y / _layout.Height);
-        Rect wall = WallRect(canvas);
+        Rect wall = WallStart(canvas);
         var from = new Vector2(wall.width / _layout.Board.W, wall.height / _layout.Board.H);
         Vector2 boardCentre = Local(_layout.Board.Centre);
         Vector2 start = wall.center - Vector2.Scale(boardCentre, from);
@@ -448,7 +454,10 @@ public sealed partial class SwitchboardView
         _matte.color = new Color(MatteColor.r, MatteColor.g, MatteColor.b, e * 0.97f);
     }
 
-    /// <summary>The painted board's rectangle in the canvas (its centre at the origin): the config's viewport rectangle measured at 16:9, moved for the screen's shape (the office camera keeps its height of view).</summary>
+    /// <summary>Where the turn to the board starts (the canvas's units, its centre at the origin): the board on the wall where it stands on the screen, else the painting's board (WallRect).</summary>
+    private Rect WallStart(Vector2 canvas) => WallOnScreen(canvas, out Rect onScreen) ? onScreen : WallRect(canvas);
+
+    /// <summary>The painted board's rectangle in the canvas (its centre at the origin): the config's viewport rectangle measured at 16:9, moved for the screen's shape (the office camera keeps its height of view). The art desk's: its painting draws the board.</summary>
     private Rect WallRect(Vector2 canvas)
     {
         Rect r = _config.wallRect;
@@ -469,12 +478,23 @@ public sealed partial class SwitchboardView
 
     // ------------------------------------------------------------------ the office view
 
-    /// <summary>The painted board in the office view: its click area (with the hand cursor) and a warm glow on hover only in the plain office view (ControlRules.BoardOnTheWall); its top lamp glows while a call waits (blinking while one is unanswered).</summary>
+    /// <summary>The board in the office view, taking a click only in the plain office view (ControlRules.BoardOnTheWall): under the painted desk the board on the wall (SwitchboardView.Wall: its click box, hover outline and live lamps); else the painting's board, with the overlay's click area (with the hand cursor), a warm glow on hover and its top lamp glowing while a call waits (blinking while one is unanswered).</summary>
     private void DrawWall()
     {
         if (_wallLayer == null)
             return;
         bool live = _controls != null && !_open && _openT <= 0f && ControlRules.BoardOnTheWall(_controls.State());
+        TryBuildWall();
+        if (OnTheWall)
+        {
+            if (_hitZone.gameObject.activeSelf)
+                _hitZone.gameObject.SetActive(false);
+            _wallHover.color = Clear(LampWarm);
+            _wallGlow.color = Clear(LampAmber);
+            _wallDot.color = Clear(Color.white);
+            DrawOnTheWall(live, Time.unscaledDeltaTime);
+            return;
+        }
         if (_hitZone.gameObject.activeSelf != live)
             _hitZone.gameObject.SetActive(live);
         Vector2 canvas = _canvasRect.rect.size;
@@ -508,10 +528,10 @@ public sealed partial class SwitchboardView
         _wallDot.color = new Color(1f, 1f, 1f, level);
     }
 
-    /// <summary>The painted board was clicked in the office view: the same as its key (OfficeControls closes what is in the way first).</summary>
+    /// <summary>The board was clicked in the office view: the same as its key (OfficeControls closes what is in the way first); only from the plain office view.</summary>
     private void OpenFromWall()
     {
-        if (_controls != null)
+        if (_controls != null && ControlRules.BoardOnTheWall(_controls.State()))
             _controls.Press(ControlKey.Switchboard);
     }
 
@@ -530,51 +550,83 @@ public sealed partial class SwitchboardView
         DrawFx(dt);
     }
 
-    /// <summary>The call lamps (blinking amber faster the longer a call waits, steady amber connected, green DONE), the modules' (amber while calibrating, slow when it lacks power; green open; red fuse) and MASTER's (green blinking while a route waits for the pull, steady while one runs).</summary>
+    /// <summary>A lamp's look this frame: its colour and how lit it is (0 dark to 1).</summary>
+    private readonly struct LampLook
+    {
+        public readonly LampColour Colour;
+        public readonly float Level;
+
+        public LampLook(LampColour colour, float level)
+        {
+            Colour = colour;
+            Level = level;
+        }
+    }
+
+    /// <summary>Every lamp's blink phase moves on, every frame, so the board view and the board on the wall blink together.</summary>
+    private void StepLampPhases(float dt)
+    {
+        if (_callLamps == null)
+            return;
+        for (int d = 0; d < _callLamps.Length; d++)
+            _callLamps[d].Phase += dt * (_board != null ? _board.BlinkHz(d) : 1f);
+        for (int m = 0; m < _moduleLamps.Length; m++)
+        {
+            SwitchModule module = _board != null ? _board.Modules[m] : null;
+            SwitchModuleState state = module != null ? module.State : SwitchModuleState.Closed;
+            if (state == SwitchModuleState.Committed)
+                _moduleLamps[m].Phase += dt * (module.Powered ? 1.4f : 0.8f);
+            else if (state == SwitchModuleState.Blown)
+                _moduleLamps[m].Phase += dt * 5f;
+        }
+        _masterLamp.Phase += dt * 2f;
+    }
+
+    /// <summary>A call lamp: blinking amber faster the longer a call waits, steady amber connected, green DONE.</summary>
+    private LampLook CallLook(int d)
+    {
+        switch (_board != null ? _board.CallLamp(d) : SwitchCallLamp.Dark)
+        {
+            case SwitchCallLamp.Calling: return new LampLook(LampColour.Amber, Blink(_callLamps[d].Phase));
+            case SwitchCallLamp.Connected: return new LampLook(LampColour.Amber, 0.8f);
+            case SwitchCallLamp.Done: return new LampLook(LampColour.Green, 1f);
+            default: return new LampLook(LampColour.Amber, 0f);
+        }
+    }
+
+    /// <summary>A module's lamp: amber while calibrating (a slow blink when it lacks power), green open, red fuse; <paramref name="running"/> turns true for a route that runs.</summary>
+    private LampLook ModuleLook(int m, ref bool running)
+    {
+        SwitchModule module = _board != null ? _board.Modules[m] : null;
+        float phase = _moduleLamps[m].Phase;
+        switch (module != null ? module.State : SwitchModuleState.Closed)
+        {
+            case SwitchModuleState.Committed:
+                running |= module.Powered;
+                return new LampLook(LampColour.Amber, module.Powered ? 0.55f + 0.45f * Mathf.Cos(phase * 2f * Mathf.PI) : Blink(phase));
+            case SwitchModuleState.Open:
+                running = true;
+                return new LampLook(LampColour.Green, 1f);
+            case SwitchModuleState.Blown:
+                return new LampLook(LampColour.Red, Blink(phase));
+            default:
+                return new LampLook(LampColour.Amber, 0f);
+        }
+    }
+
+    /// <summary>MASTER's lamp: green blinking while a route waits for the pull, steady while one runs.</summary>
+    private LampLook MasterLook(bool running) =>
+        new LampLook(LampColour.Green, _board != null && _board.MasterPending ? Blink(_masterLamp.Phase) : running ? 0.6f : 0f);
+
+    /// <summary>The call lamps, the modules' and MASTER's (CallLook, ModuleLook, MasterLook).</summary>
     private void DrawLamps(float dt)
     {
         for (int d = 0; d < _callLamps.Length; d++)
-        {
-            SwitchCallLamp state = _board != null ? _board.CallLamp(d) : SwitchCallLamp.Dark;
-            Lamp lamp = _callLamps[d];
-            lamp.Phase += dt * (_board != null ? _board.BlinkHz(d) : 1f);
-            switch (state)
-            {
-                case SwitchCallLamp.Calling: SetLamp(lamp, LampColour.Amber, Blink(lamp.Phase), dt); break;
-                case SwitchCallLamp.Connected: SetLamp(lamp, LampColour.Amber, 0.8f, dt); break;
-                case SwitchCallLamp.Done: SetLamp(lamp, LampColour.Green, 1f, dt); break;
-                default: SetLamp(lamp, LampColour.Amber, 0f, dt); break;
-            }
-        }
+            SetLamp(_callLamps[d], CallLook(d), dt);
         bool running = false;
         for (int m = 0; m < _moduleLamps.Length; m++)
-        {
-            Lamp lamp = _moduleLamps[m];
-            SwitchModule module = _board != null ? _board.Modules[m] : null;
-            SwitchModuleState state = module != null ? module.State : SwitchModuleState.Closed;
-            switch (state)
-            {
-                case SwitchModuleState.Committed:
-                    running |= module.Powered;
-                    lamp.Phase += dt * (module.Powered ? 1.4f : 0.8f);
-                    SetLamp(lamp, LampColour.Amber, module.Powered ? 0.55f + 0.45f * Mathf.Cos(lamp.Phase * 2f * Mathf.PI) : Blink(lamp.Phase), dt);
-                    break;
-                case SwitchModuleState.Open:
-                    running = true;
-                    SetLamp(lamp, LampColour.Green, 1f, dt);
-                    break;
-                case SwitchModuleState.Blown:
-                    lamp.Phase += dt * 5f;
-                    SetLamp(lamp, LampColour.Red, Blink(lamp.Phase), dt);
-                    break;
-                default:
-                    SetLamp(lamp, LampColour.Amber, 0f, dt);
-                    break;
-            }
-        }
-        _masterLamp.Phase += dt * 2f;
-        bool pending = _board != null && _board.MasterPending;
-        SetLamp(_masterLamp, LampColour.Green, pending ? Blink(_masterLamp.Phase) : running ? 0.6f : 0f, dt);
+            SetLamp(_moduleLamps[m], ModuleLook(m, ref running), dt);
+        SetLamp(_masterLamp, MasterLook(running), dt);
     }
 
     /// <summary>Each module's veil (not in service, but for 04's and 05's painted placards) and display: PULL while MASTER waits for it, the calibration's countdown (alternating with POWER while it lacks a cord), OPEN, DONE, FUSE, CLOSED.</summary>
@@ -880,17 +932,20 @@ public sealed partial class SwitchboardView
     private static BoardPoint DisplayCentre(LayoutModule module) =>
         new BoardPoint(module.Rect.Centre.X, (module.NumberPlate.Y + module.NumberPlate.H + module.Place.Centre.Y - module.Place.RingRadius) / 2f);
 
-    /// <summary>A lamp lit at <paramref name="level"/> (0 dark to 1) in <paramref name="colour"/>, easing like a filament.</summary>
-    private void SetLamp(Lamp lamp, LampColour colour, float level, float dt)
+    /// <summary>A lamp lit as <paramref name="look"/> says (its level 0 dark to 1, its colour), easing like a filament.</summary>
+    private void SetLamp(Lamp lamp, LampLook look, float dt)
     {
-        lamp.Shown = Mathf.MoveTowards(lamp.Shown, Mathf.Clamp01(level), dt * 14f);
-        Sprite lit = _lit[(int)colour];
+        lamp.Shown = Mathf.MoveTowards(lamp.Shown, Mathf.Clamp01(look.Level), dt * 14f);
+        Sprite lit = _lit[(int)look.Colour];
         if (lit != null && lamp.Lit.sprite != lit)
             lamp.Lit.sprite = lit;
-        Color glow = colour == LampColour.Green ? LampGreen : colour == LampColour.Red ? LampRed : LampAmber;
+        Color glow = LampTint(look.Colour);
         lamp.Lit.color = new Color(1f, 1f, 1f, lamp.Shown);
         lamp.Glow.color = new Color(glow.r, glow.g, glow.b, lamp.Shown * 0.75f);
     }
+
+    /// <summary>A lit lamp's glow colour.</summary>
+    private static Color LampTint(LampColour colour) => colour == LampColour.Green ? LampGreen : colour == LampColour.Red ? LampRed : LampAmber;
 
     /// <summary>A blink at <paramref name="phase"/> (cycles): mostly on or off, with soft edges.</summary>
     private static float Blink(float phase)

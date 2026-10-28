@@ -79,6 +79,46 @@ public class SwitchboardLayoutTests
         Assert.Greater(master.RodPivotY, master.RodTopY);
     }
 
+    /// <summary>The office camera at 16:9 (the art office's; DeskHomeMap.OfficeEye, BoothUnderlay.OfficeEye): a frame point (x right, y away from the chair, z over the floor) to 1920x1080 pixels, top left origin.</summary>
+    private static (float x, float y) OfficeView((float x, float y, float z) p)
+    {
+        double pitch = 9.0 * Math.PI / 180.0, th = Math.Tan(29.0 * Math.PI / 180.0), tw = th * 16.0 / 9.0;
+        double dx = p.x - 0.0, dy = p.y - -2.10, dz = p.z - 2.16;
+        double depth = dy * Math.Cos(pitch) - dz * Math.Sin(pitch);
+        double up = dy * Math.Sin(pitch) + dz * Math.Cos(pitch);
+        return ((float)((0.5 + dx / depth / (2.0 * tw)) * 1920.0), (float)((0.5 - up / depth / (2.0 * th)) * 1080.0));
+    }
+
+    [Test]
+    public void TheBoardOnTheWall_StandsWhereThePaintingDrawsIt_SeenFromTheDesk()
+    {
+        SwitchboardLayout layout = Layout();
+        SwitchboardWall wall = SwitchboardWall.Painted;
+        BoardRect board = layout.Board;
+        // The painted board in the office view (render/board_mask_office.png at 1920x1080): its far edge from (1692, 392) at the top down to about (1654, 730), the frame's right edge cutting it.
+        (float x, float y) farTop = OfficeView(wall.At(board, new BoardPoint(board.X, board.Y)));
+        (float x, float y) farFoot = OfficeView(wall.At(board, new BoardPoint(board.X, board.Y + board.H)));
+        (float x, float y) nearTop = OfficeView(wall.At(board, new BoardPoint(board.X + board.W, board.Y)));
+        Assert.AreEqual(1692f, farTop.x, 20f);
+        Assert.AreEqual(392f, farTop.y, 20f);
+        Assert.AreEqual(1654f, farFoot.x, 20f);
+        Assert.AreEqual(730f, farFoot.y, 40f);
+        Assert.Greater(nearTop.x, 1920f, "the board runs on past the frame's right edge, as painted");
+        // What the clerk sees of it: the first destinations' call lamps and the open modules, inside the painted board.
+        foreach (BoardPoint seen in new[] { layout.Destinations[0].Lamp.Centre, layout.Destinations[1].Lamp.Centre, layout.Modules[0].Lamp.Centre, layout.Modules[1].Lamp.Centre })
+        {
+            (float x, float y) at = OfficeView(wall.At(board, seen));
+            Assert.That(at.x, Is.InRange(1642f, 1919f), seen.ToString());
+            Assert.That(at.y, Is.InRange(392f, 837f), seen.ToString());
+        }
+        // The board stands clear of the desk: on the wall's near side, over the back step, in front of the window's post.
+        Assert.Less(wall.Face, 2.30f, "proud of the right wall");
+        Assert.Greater(wall.Foot, 1.139f, "over the back step");
+        Assert.Less(wall.Far, 0.99f, "in front of the window frame's plane");
+        Assert.AreEqual(wall.Height / board.H, wall.MetresPerPixel(board), 1e-6f);
+        Assert.AreEqual(wall.Height * board.W / board.H, wall.Length(board), 1e-5f, "the plate's own aspect");
+    }
+
     [Test]
     public void APlugsCord_LeavesItsEndCap_DownLeftOfTheSocket()
     {

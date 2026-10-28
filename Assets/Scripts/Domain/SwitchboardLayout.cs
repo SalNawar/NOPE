@@ -378,3 +378,65 @@ public sealed class SwitchboardLayout
 
     private static BoardLamp Lamp(ContentNode l) => new BoardLamp(Point(Need(l, "c")), Num(Need(l, "glass_r")));
 }
+
+/// <summary>
+/// The switchboard on the booth's right wall, seen from the desk (Saleh,
+/// 2026-10-28: "Switchboard isnt visible instead it looks weird from the
+/// desk"; the director's night review: the right wall 3/10, "a flat dark
+/// slab stands there"): the board's own plate stands where concept B
+/// (office_bars_v1.png) paints the board, so the clerk sees the board in the
+/// room, its lamps live, before D turns to it. In the painted desk's frame
+/// (the bake's: x metres right of the mat's centre, y metres away from the
+/// chair, z metres above the floor; DeskPainted's local space is (x, z, y)).
+/// The painted board, back-projected through the office camera (the eye at
+/// 0, -2.10, 2.16, 9 degrees down, 58 degrees high at 16:9) from the desk
+/// pipeline's render/board_mask_office.png onto the board's face, 8 cm proud
+/// of the right wall at x 2.30 (layout.py's BOARD_DEPTH; the desk plan's
+/// switchboard home at x 2.22): its far edge at y 0.88, its top at z 2.12,
+/// its foot at z 1.15, just over the back step (z 1.139). It runs toward the
+/// chair at the plate's aspect, on past the frame's right edge, as painted.
+/// Pure.
+/// </summary>
+public readonly struct SwitchboardWall
+{
+    /// <summary>A board face at x <paramref name="face"/>, its far edge at y <paramref name="far"/>, from z <paramref name="foot"/> up to z <paramref name="top"/>.</summary>
+    public SwitchboardWall(float face, float far, float top, float foot)
+    {
+        Face = face;
+        Far = far;
+        Top = top;
+        Foot = foot;
+    }
+
+    /// <summary>The board on the painted booth's right wall (the measure above).</summary>
+    public static SwitchboardWall Painted => new SwitchboardWall(2.22f, 0.88f, 2.12f, 1.15f);
+
+    /// <summary>The board face's x (metres right of the mat's centre).</summary>
+    public float Face { get; }
+
+    /// <summary>The board's far edge (its left, as the clerk faces the wall): y metres away from the chair.</summary>
+    public float Far { get; }
+
+    /// <summary>The board's top, z metres above the floor.</summary>
+    public float Top { get; }
+
+    /// <summary>The board's foot, z metres above the floor.</summary>
+    public float Foot { get; }
+
+    /// <summary>The board's height on the wall (metres).</summary>
+    public float Height => Top - Foot;
+
+    /// <summary>How far <paramref name="board"/> (the plate's board rectangle) runs along the wall toward the chair at its own aspect (metres).</summary>
+    public float Length(BoardRect board) => board.H > 0f ? Height * board.W / board.H : 0f;
+
+    /// <summary>Metres on the wall per plate pixel of <paramref name="board"/>.</summary>
+    public float MetresPerPixel(BoardRect board) => board.H > 0f ? Height / board.H : 0f;
+
+    /// <summary>Where the plate pixel <paramref name="p"/> lies on the wall (the painted desk's frame): the board's left edge at the far end, its top at Top.</summary>
+    public (float x, float y, float z) At(BoardRect board, BoardPoint p)
+    {
+        float s = board.W > 0f ? (p.X - board.X) / board.W : 0f;
+        float t = board.H > 0f ? (p.Y - board.Y) / board.H : 0f;
+        return (Face, Far - s * Length(board), Top - t * Height);
+    }
+}

@@ -130,6 +130,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
         if (_ownConfig && _config != null)
             Destroy(_config);
         DestroySounds();
+        DestroyWall();
     }
 
     /// <summary>Starts the day once the shift knows it, then runs the rules, the turn, the office view's glow, the hand and the drawing (unscaled time: a hit-stop never stops a calibration).</summary>
@@ -150,6 +151,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
             if (state.Newsletter || state.PcOpen)
                 Close(); // the shift report or the PC came up: they need the screen
         }
+        StepLampPhases(dt);
         StepTurn(dt);
         DrawWall();
         if (_open && _openT >= 1f)
