@@ -792,7 +792,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The rulebook's GUIDE sheet text box (metres) and its PREV / NEXT buttons (metres).</summary>
     private static readonly Vector2 RulebookGuideBody = new Vector2(RulebookSize.x - 0.016f, RulebookSize.y - 0.075f);
     /// <summary>The STAMPS tab on the overlay's top edge beside the drawer, flush on the edge (reference px; Saleh's 1016a playtest: "the ui for it should be the same area it spawns so not on the side"; DeskStampTray.PlaceTab keeps it beside the drawer).</summary>
-    private static readonly Vector2 StampTabSize = new Vector2(236f, 64f);
+    private static readonly Vector2 StampTabSize = new Vector2(ChromeLayout.StampTabWidth, ChromeLayout.StampTabTall);
     /// <summary>The art's desk folder (DeskClean): the stamp rack is in its NOPE/Desk Anime materials (the desk polish: the rack matches the desk).</summary>
     private const string DeskCleanFolder = "Assets/Art/Office/DeskClean";
 

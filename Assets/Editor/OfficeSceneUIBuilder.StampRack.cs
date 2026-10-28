@@ -16,7 +16,7 @@ using UnityEngine.UI;
 public static partial class OfficeSceneUIBuilder
 {
     /// <summary>Where the STAMPS tab's left edge sits along the screen's top edge (viewport x): where the drawer's band was before the fixed rack.</summary>
-    private const float StampTabX = 0.66f;
+    private const float StampTabX = ChromeLayout.StampTabX;
 
     /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two daters' distance apart (DENIED left, APPROVED right), the label lip's reach past each, its gap in front of the daters' frames and its section (deep, tall). The lip lies low at the daters' feet, in front of them (toward the chair), its words on its top, so the whole green and red bodies with their wheels show over it (run 7's integration: the rail at the bodies' height hid them).</summary>
     private const float StampSpacing = 0.14f;

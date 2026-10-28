@@ -133,19 +133,22 @@ public sealed class GuidePrompt : MonoBehaviour
     /// The painted desk's look (desk v3; Saleh's rule: everything diegetic,
     /// and the review of the day-1 still: the plate covered the hall and the
     /// city, the arrow floated over the desk as a blue button): the plate
-    /// docks small in the top-right corner, over the hall's ceiling, under the
-    /// screen's top edge and above the stamp hint, covering neither the city
-    /// window nor the desk; the arrow is a small warm chevron with no plate,
-    /// bobbing less. Called by the office binder when the painted desk is
-    /// installed (DESK-HOMES; the owner, CONTENT, may restyle it).
+    /// docks small in the top-left corner (ChromeLayout.QuietPlate), over the
+    /// painted booth's dark header, clear of the view plates (the STAMPS tab
+    /// on the top edge, which the top-right dock covered; the CITY tab on the
+    /// left edge below it; Saleh 2026-10-28: "where is all the ui?" brought
+    /// them back), covering neither the hall behind the bars nor the desk; the
+    /// arrow is a small warm chevron with no plate, bobbing less. Called by the
+    /// office binder when the painted desk is installed (DESK-HOMES; the owner,
+    /// CONTENT, may restyle it).
     /// </summary>
     public void Quiet()
     {
         if (plate != null)
         {
-            plate.anchorMin = plate.anchorMax = plate.pivot = Vector2.one;
-            plate.anchoredPosition = new Vector2(-QuietMargin, -QuietMargin);
-            plate.localScale = Vector3.one * QuietPlateScale;
+            plate.anchorMin = plate.anchorMax = plate.pivot = new Vector2(0f, 1f);
+            plate.anchoredPosition = new Vector2(ChromeLayout.QuietMargin, -ChromeLayout.QuietMargin);
+            plate.localScale = Vector3.one * ChromeLayout.QuietPlateScale;
         }
         if (arrow != null)
         {
@@ -168,13 +171,13 @@ public sealed class GuidePrompt : MonoBehaviour
         arrowBob = Mathf.Min(arrowBob, QuietBob);
     }
 
-    /// <summary>The quiet look's plate scale and margin (canvas reference px), the arrow's scale, ink (the painting's lamp amber) and bob.</summary>
-    private const float QuietPlateScale = 0.8f, QuietMargin = 16f, QuietArrowScale = 0.7f, QuietBob = 3f;
+    /// <summary>The quiet look's arrow scale, ink (the painting's lamp amber) and bob (the plate's scale and margin: ChromeLayout).</summary>
+    private const float QuietArrowScale = 0.7f, QuietBob = 3f;
 
-    /// <inheritdoc cref="QuietPlateScale"/>
+    /// <inheritdoc cref="QuietArrowScale"/>
     private static readonly Color QuietArrowInk = new Color(0.95f, 0.64f, 0.24f, 0.9f);
 
-    /// <summary>Points the arrow down at the top of the overlay control <paramref name="target"/> (up at it from under it when it lies on the screen's top edge or the arrow would cover the plate); hidden while it is hidden, or while it draws nothing (the painted desk hides the screen's edge tabs: their keys still work).</summary>
+    /// <summary>Points the arrow down at the top of the overlay control <paramref name="target"/> (up at it from under it when it lies on the screen's top edge or the arrow would cover the plate); hidden while it is hidden, or while it draws nothing.</summary>
     public void PointAt(RectTransform target)
     {
         if (arrow == null || _canvasRect == null || target == null || !target.gameObject.activeInHierarchy || (target.TryGetComponent(out Graphic drawn) && !drawn.enabled))

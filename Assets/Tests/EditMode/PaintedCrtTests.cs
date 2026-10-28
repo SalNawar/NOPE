@@ -100,7 +100,7 @@ public class PaintedCrtTests
         int bind = binder.IndexOf("screenClone.Bind(paintedDesk.Screen, 0, office);", StringComparison.Ordinal);
         Assert.That(fit, Is.GreaterThan(0));
         Assert.That(bind, Is.GreaterThan(fit), "the glass's bounds are the clone's to measure, so the face is fitted first");
-        StringAssert.Contains("PaintedCrtReadout.Create(DesktopCanvas(), frame, visible);", binder);
+        StringAssert.Contains("PaintedCrtReadout.Create(DesktopCanvas(), frame, visible, hudRiver);", binder, "the desk view, its header with a copy of the office's river strip (Saleh 2026-10-28: \"where is all the ui?\")");
         StringAssert.Contains("if (BindCalendarOnReadout(calendar, viewer))", binder, "the calendar's click lies on the readout's date, the old plate hidden");
     }
 

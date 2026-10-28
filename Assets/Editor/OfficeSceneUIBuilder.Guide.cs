@@ -20,8 +20,8 @@ public static partial class OfficeSceneUIBuilder
     private const string GuideReplayButton = "ReplayTutorialButton";
 
     /// <summary>The prompt's plate (reference px) and its place from the overlay's top left corner (Saleh's follow-up: it never covers the papers or the rulebook in the reading view: the counter's papers lie round the centre line, the rulebook and the papers lower down, the stamp hint mirrors it at the top right); the arrow's size.</summary>
-    private static readonly Vector2 GuidePlateSize = new Vector2(640f, 124f);
-    private static readonly Vector2 GuidePlateAt = new Vector2(16f, -16f);
+    private static readonly Vector2 GuidePlateSize = new Vector2(ChromeLayout.GuidePlateWidth, ChromeLayout.GuidePlateTall);
+    private static readonly Vector2 GuidePlateAt = new Vector2(ChromeLayout.GuidePlateMargin, -ChromeLayout.GuidePlateMargin);
     private static readonly Vector2 GuideArrowSize = new Vector2(56f, 56f);
 
     /// <summary>

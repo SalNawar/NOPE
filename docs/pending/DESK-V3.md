@@ -590,6 +590,24 @@ Not edited this round: `DeskController.cs` (DOC-HANDLE), `DeskStampTray.cs` (STA
 6. **The settle back:** summon the chip reader again on its way-home frame: no tick, shush or knock (`Sounds.Fired`).
 7. **The dead clicks:** no hand cursor on the painted daters' sides nor under the painted reader where the old readout was; the daters still drag and stamp. No decoration takes a drag on the painted desk (the form sorter and the tray are cut).
 
+## Saleh's playtest of the night build (2026-10-28, point 8): the UI comes back
+
+Saleh: "where is all the ui?" On the art's desk the office view showed the CITY [A], PC [Q] and STAMPS [TAB] plates, the corkboard's shift clock and date card, the till's credits and the right board's Helix River monitor. Round 5 (below) hid the plates in the office view and the fallback HUD's bar; the cut corkboards, till and monitor took the rest. Only the guide's plate and the CRT's readout were left. Branch `fix/s0800-ui`:
+
+| Element | Now | Where |
+|---|---|---|
+| CITY [A], PC [Q], STAMPS [TAB] plates | Shown and clickable in the office view again, as on the art's desk (their owners CAM and STAMP show and hide them; `PaintedChrome` is deleted) | `OfficeSceneBinder.QuietScreenChrome` |
+| DESK [D] (the way back from the PC and the city) | Unchanged (it always showed) | |
+| Shift clock, date, day | On the painted CRT's readout strip (round 12), unchanged | `PaintedCrtReadout` |
+| Credits | On the CRT's new header band: the account's currency over the sum; `OfficeReadouts` writes the sum (the till's text, cut) | `PaintedCrtReadout.Credits`, `OfficeSceneBinder.BindReadouts` |
+| Helix River | On the CRT's header band: a copy of the office's river strip (its tuning, shader and shift) | `PaintedCrtReadout.CopyRiver` |
+| Guide plate | Docks top-left at 0.8 scale over the booth's dark header, clear of the STAMPS tab it covered top-right (both layouts: `ChromeLayoutTests`) | `GuidePrompt.Quiet`, `ChromeLayout` |
+| Fallback HUD bar | Stays hidden: each of its readouts has its in-world home on the CRT | |
+
+The tab and plate sizes now come from one place, `ChromeLayout` (Domain), which Build Office UI reads (same values: no rebuild needed).
+
+**For the Unity step** (day 1, office view, the tutorial on, 1920x1080 then 1280x1024): the CITY tab at the left edge above the PC tab, the STAMPS tab on the top edge, the guide's plate in the top-left corner over the booth's header, none on another; A, Q and TAB by key and by click; the CRT shows the river and the credits at its top, the clock, the date and the day at its bottom, readable from the chair; earn a fee and the credits change (with the ding); a citation sends the river's red pulse.
+
 ## Round 5: Saleh's day-1 visual list (the screen chrome, the corkboards, the guide, the right wall)
 
 Saleh on the in-game day-1 still (`E:\unity\NOPE-tools\reports\desk_v3_unity\desk_rest_day1.png`): "So many visual problems". Everything there that does not match `mock_office.png` or his rules (everything diegetic: actions are in-world desk objects, never UI buttons), what this round changed, and the owner of what it could not fix. All of it applies only while the painted desk is installed (DeskArt.Painted on); off, the art's desk and its chrome are as before. The old props, the slide-in findings and the rest of OPEN.md are in their own commit and section.

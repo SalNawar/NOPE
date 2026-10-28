@@ -10,7 +10,10 @@ public sealed partial class GameManager
 {
     /// <summary>
     /// Today's bulletin: the plan's line, then, when today's desk hours differ
-    /// from yesterday's (ShiftHours.Announces; the night shifts' days 8 and 12),
+    /// from the hours of the desk the run last left (ShiftHours.ComparedDay
+    /// over RunManager.LeftDeskDay: yesterday's in play, so the night shifts'
+    /// days 8 and 15; the day a cheat's jump or skip started from, so a jump
+    /// from day 1 to day 11 names its 13:00 opening) (ShiftHours.Announces),
     /// the line naming the new hours (UI string briefing.newHours), in the
     /// player's language like the briefing it is printed in (the chrome, BUG-3a:
     /// it no longer turns into the world's language inside English content).
@@ -19,8 +22,9 @@ public sealed partial class GameManager
     {
         string bulletin = dayPlan.Bulletin.Trim();
         ShiftHours today = dayPlan.Shift(_gameConfig);
-        DayPlanSO yesterdayPlan = _worldState.day > 1 ? contentLibrary.GetDayPlan(_worldState.day - 1) : null;
-        if (!ShiftHours.Announces(yesterdayPlan != null ? yesterdayPlan.Shift(_gameConfig) : (ShiftHours?)null, today))
+        int compared = ShiftHours.ComparedDay(_worldState.day, RunManager.HasInstance ? RunManager.Instance.LeftDeskDay : 0);
+        DayPlanSO earlierPlan = compared >= 1 ? contentLibrary.GetDayPlan(compared) : null;
+        if (!ShiftHours.Announces(earlierPlan != null ? earlierPlan.Shift(_gameConfig) : (ShiftHours?)null, today))
             return bulletin;
         string hours = UiText.Format("briefing.newHours", today.Open, today.Close);
         return string.IsNullOrEmpty(bulletin) ? hours : bulletin + " " + hours;
