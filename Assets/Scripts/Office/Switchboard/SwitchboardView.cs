@@ -154,7 +154,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
         StepLampPhases(dt);
         StepTurn(dt);
         DrawWall();
-        SwitchHandStep step = SwitchHand.Step(_open && _openT >= 1f, Application.isFocused, IsDragging);
+        SwitchHandStep step = SwitchHand.Step(_open && _openT >= 1f, Application.isFocused, InputGate.Blocked, IsDragging);
         if (step == SwitchHandStep.Cancel)
             CancelDrag();
         if (step == SwitchHandStep.Hand)

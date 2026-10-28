@@ -774,14 +774,16 @@ public enum SwitchHandStep
 /// button release when the game loses the focus (Alt+Tab, another window),
 /// and a let-go plug seats or a let-go MASTER throws; so without the focus a
 /// held plug or MASTER is let go with nothing changed, and nothing is picked
-/// up. Pure.
+/// up. The same while the input gate is held (the code review, F2: the
+/// cheat panel or a dialog over the open board; InputGate.Blocked), so a
+/// click there never picks up a plug or pulls MASTER. Pure.
 /// </summary>
 public static class SwitchHand
 {
-    /// <summary>The step: <paramref name="turned"/> the board fully turned to, <paramref name="focused"/> the game window has the focus, <paramref name="holding"/> a plug or MASTER is in the hand.</summary>
-    public static SwitchHandStep Step(bool turned, bool focused, bool holding)
+    /// <summary>The step: <paramref name="turned"/> the board fully turned to, <paramref name="focused"/> the game window has the focus, <paramref name="blocked"/> the input gate is held (InputGate.Blocked), <paramref name="holding"/> a plug or MASTER is in the hand.</summary>
+    public static SwitchHandStep Step(bool turned, bool focused, bool blocked, bool holding)
     {
-        if (!focused)
+        if (!focused || blocked)
             return holding ? SwitchHandStep.Cancel : SwitchHandStep.None;
         return turned ? SwitchHandStep.Hand : SwitchHandStep.None;
     }
