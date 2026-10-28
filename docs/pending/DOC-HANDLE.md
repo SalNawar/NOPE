@@ -75,17 +75,17 @@ Sources:
 
 **`Visuals/DropResolver.cs` (new, pure):**
 - `Rest(footprint, area, keepOuts)` gives the release centre unless the rect would leave `area` or overlap a keep-out.
-- When it would, it gives the least move clear of **all** keep-outs at once: a candidate grid over every keep-out's sides, clamped into the area, nearest first. Where nothing is clear, the least overlap.
+- When it would, it gives the least move clear of **all** keep-outs at once: a candidate grid over every keep-out's sides, clamped into the area, nearest first. Where nothing is clear, the nearest place that overlaps less (FOLD-01; it was the least overlap anywhere).
 - `Inside` keeps the whole rect in the area.
 - `DockOf(footprint, docks, holds)` is the dock rule that ships. `DeskController.DockAt` calls it (verifier finding 3; before, `DockAt` used `IPaperDock.Contains` directly, and `DockOf` was dead code that only its test called).
 
 **`DeskController`:**
-- `Rest`/`RestOf` builds the keep-outs in the office view's frame:
+- `Rest`/`RestOf` builds the keep-outs in the desk's frame (FOLD-01; it was the office camera's line to the scanner, see FOLD-01 below):
   - every `DeskObstacles` footprint;
   - the scanner's hidden area (`ScannerClearance.Blocked`);
   - for a counter refusal, the counter from its near edge on (`DeskCounter.TryNearEdge`, new).
-  - for the rulebook folder only (`RestOf(props)`, Saleh's playtest 2026-10-28, points 4 and 2b): every object of DESK-PLAN's registry (`DeskLayout.Obstacles`: DETAIN, the AVAILABLE sign, the bell, the glasses, the stamp rack, the pocket), in the desk's frame turned into the view's (`FrameCorners`). The folder's footprint is its own box (`DeskRulebook.TryBoxCorners`: the board's side alone while shut), not the bounds of its renderers.
-- The area is the desk (centres anywhere the drag may take them) ∩ what the reading view shows (`DeskConfigSO.restViewport`, new) for a desk paper.
+  - for the folder and every desk paper (Saleh's playtest 2026-10-28, points 4 and 2b; FOLD-01): every object of DESK-PLAN's registry at its own footprint (`DeskLayout.Standing`: DETAIN, the AVAILABLE sign, the bell, the glasses, the stamp rack, the pocket, the painted rail's trays). The folder's footprint is its own box (`DeskRulebook.TryBoxCorners`: the board's side alone while shut), not the bounds of its renderers.
+- The area is the desk (centres anywhere the drag may take them) ∩ what the reading view shows (`DeskConfigSO.restViewport`, new) ∩ the desk short of the counter's near edge (FOLD-01) for a desk paper and the folder (`DropResolver.Area`).
 
 **Deleted:**
 - `ClearOfBlockers`, `CarryFloor` and `DeskDocument.SetCarryFloor` / `_carryFloor`.
@@ -116,6 +116,42 @@ Sources:
   - `Dropped` now only shakes the folder's "no".
   - `DeskController.RulebookDropped` lays it just off the counter, beside a refusing machine or clear of any prop (`RestOf`, then `Refused`/`RestAt`, which carry the folder the short way).
 - **Held:** it is drawn above every prop (`ShowHeld`, HeldOnTop). Any swing pivots on the held point; by default there is none (`paperSwayMax` 0, BUG-11a).
+
+### FOLD-01: a thing rests where it is let go (Saleh's playtest 2026-10-28, point 4)
+
+Saleh: "You move the folder and it snaps somewhere else." Papers, Please: a thing let go lies where it is let go. The report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01.md.
+
+**The cause:**
+- The rest was judged in the frame of the office camera's line to the scanner (`SetScannerView(toScanner)`, OfficeSceneBinder). On the painted desk the scanner stands on the right rail, so that frame is 27 degrees off the desk's axes.
+- In that turned frame the reading view's four corners left a band 10 cm deep. The folder is 26 cm deep, so `DropResolver.Inside` put every rest's depth at the band's middle (the audit's drag 1: 470 px; drag 2: 125 px).
+- Each keep-out also grew to the box round its turned shape (the folder's about 40 % wider).
+- No keep-out pushed the folder in the audit's two drags. The rest area did.
+
+**The rule now (`DeskController.RestOf`, `DropResolver`):**
+- The frame is the desk's own (`RestRight`, `RestForward`: `DeskLayout.Frame`, the axes the reading view is posed on). `SetScannerView` keeps the scanner's line for the scanner's shadow and the chip reader's upright face only.
+- The area (`DropResolver.Area`): the drag's clamp, the reading view (`restViewport`) and, for a thing on the desk, the desk short of the counter's near edge. The counter row stands on the back step, and the step's front draws through a thing laid across it.
+- Partly out of the area: the least move inward.
+- The keep-outs, for a paper and the folder alike: DOC-HANDLE's registry (the machines' casings, the torch's cradle), DESK-PLAN's objects at their own footprints (`DeskLayout.Standing`, `DeskSlides.Standing`), the painted rail's two trays (the scanner's and the chip reader's homes, even before the machine is owned), the scanner's hidden shadow, and the counter for a refusal.
+- A slider's swept strip is not a keep-out any more (see below).
+- Over a keep-out: the nearest place clear of all of them at once. Where none is clear: the nearest place that overlaps less, else the release. Never the least overlap anywhere.
+- Papers over papers and the folder over papers stay allowed.
+- Every remaining move eases (`DeskCarry`, as before).
+
+**The sliders stop short (our choice, "stop short" over "push"):**
+- A track slider (the scanner, the chip reader, the intercom) slides toward the mat only as far as the nearest thing resting in its strip, less a 5 mm gap (`SlideRoom.Room`). `DeskSlideIn.Rooms` gives each slider its room every frame from `DeskController.Resting`.
+- Its whole slide shrinks to the room (`SlideRoom.Share`: the same curve, shorter, so its ease and overshoot stay). The share eases to a new room (`SlideRoom.EaseShare`, 80 ms), so a paper let go in the strip while the slider is out sees it back off with no jump.
+- Why not push: a push moves the player's paper by itself, which is the fault this fixes. Stopping short keeps the hover cue and moves nothing the player put down.
+- `MachineSlideIn.TryTrack` takes the slider's footprint at rest as its home's and what it draws there together.
+
+**QA (DOC-HANDLE's rig ops, `Assets/Tests/PlayMode/DocHandle/Rig/RestTraceOps.cs`; never a shipped log):**
+- `restTrace`: text "on" starts `DropTrace` (DeskController records each rest only while it is on), "off" stops it. Any other step writes the rests since the last write to the run's `rests.tsv`: the footprint at the release, the area (with the view's corners), the rest and every keep-out with its source and its overlap, in metres and in screen pixels (origin top-left). With `f` it asserts `restTrace.<name>`: a rest was recorded, none moved more than `f` px at 1080p, each lies in its area and over no keep-out.
+- `slideClear`: for `n` frames it asserts `slideClear.<name>`: no track slider lies over a resting thing. It lists each slider's farthest slide and room.
+- The `drop` op takes text "root": it measures the dragged object's root, not its bounds. A held folder or paper turns its click box off and is drawn toward the camera, so its bounds at the release and at rest measure two things (about 30 px of false move).
+- Scenario `fold_rest` (day 1 and day 12, 1920x1080, both views): the audit's two drags, the mat's middle, the mat's left by the red book, over DETAIN (pointer on the desk, and pointer on the counter), partly off the view's bottom edge, papers over the folder and the folder over papers, the office view, and the folder in the scanner's and the chip reader's slide strips with the cursor near each machine.
+
+- Gate: `doc.play.rests` (Play, DOC-HANDLE, `Assets/Editor/QA/Checks/DocHandleChecks.cs`) reads fold_rest's `drop`, `restTrace` and `slideClear` results and its last probe, at HEAD on a clean tree. The battery must run `fold_rest`.
+
+**Tests:** `DropResolverTests` (the FOLD-01 cases on the desk the scenario measured, the turned frame's band, the nearest-place rule, the slide strip), `SlideRoomTests`, `RestFrameTests` (NeedsEditor: the rest's frame is the desk's).
 
 ### BUG-8: no shared obstacle model
 

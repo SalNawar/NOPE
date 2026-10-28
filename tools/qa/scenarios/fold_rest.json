@@ -1,0 +1,525 @@
+{
+  "name": "fold_rest",
+  "owner": "DOC-HANDLE",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "FOLD-01 (Saleh's playtest of 2026-10-28, point 4: 'You move the folder and it snaps somewhere else'; Papers, Please: a thing let go lies where it is let go). Day 1 and day 12, 1920x1080, the reading view and the office view. Each drop op asserts that the dropped thing's screen centre moves 8 px or less at 1080p after the release (more only where the step says why: a release over DETAIN or partly off the view). Each restTrace step writes the rest's keep-outs to rests.tsv (DropTrace) and asserts the rule's own move in px at 1080p. Screen fractions are from the bottom-left (QaRunner.Frac); rests.tsv and the stills are top-left."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "restTrace",
+      "text": "on"
+    },
+    {
+      "op": "still",
+      "name": "d1_reading"
+    },
+    {
+      "op": "note",
+      "text": "The audit's drag 1: from the red book (the folder comes out under the pointer) to the mat's bottom left. Its bottom edge lies 16 px past the reading view's rest margin (DeskConfigSO.restViewport, 98% of the height), so it takes the least move inward (about 15 px, eased): f 20."
+    },
+    {
+      "op": "track",
+      "name": "folder",
+      "target": "Rulebook"
+    },
+    {
+      "op": "recStart",
+      "name": "d1_drops"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "d1_pocket_to_bottom",
+      "path": "Slow",
+      "target": "Rulebook",
+      "x2": 0.4,
+      "y2": 0.1,
+      "f": 20
+    },
+    {
+      "op": "restTrace",
+      "name": "d1_pocket_to_bottom",
+      "f": 20
+    },
+    {
+      "op": "still",
+      "name": "d1_pocket_to_bottom"
+    },
+    {
+      "op": "note",
+      "text": "(c) The audit's drag 2: let go at (576,486) top-left."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "c_audit_drag2",
+      "path": "Slow",
+      "target": "Rulebook",
+      "x2": 0.3,
+      "y2": 0.55
+    },
+    {
+      "op": "restTrace",
+      "name": "c_audit_drag2",
+      "f": 8
+    },
+    {
+      "op": "still",
+      "name": "c_audit_drag2"
+    },
+    {
+      "op": "note",
+      "text": "(a) The mat's free middle."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "a_mat_middle",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.55,
+      "y2": 0.45
+    },
+    {
+      "op": "restTrace",
+      "name": "a_mat_middle",
+      "f": 8
+    },
+    {
+      "op": "still",
+      "name": "a_mat_middle"
+    },
+    {
+      "op": "note",
+      "text": "(b) The mat's left part, near the red book and the left stack."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "b_mat_left",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.26,
+      "y2": 0.31
+    },
+    {
+      "op": "restTrace",
+      "name": "b_mat_left",
+      "f": 8
+    },
+    {
+      "op": "still",
+      "name": "b_mat_left"
+    },
+    {
+      "op": "note",
+      "text": "(d) Over DETAIN (Saleh point 2b): grabbed by its lower part and let go with the pointer on the desk, the folder's top lies over DETAIN and the AVAILABLE sign. They stand on the back step, the counter row, whose front draws through a folder laid across it; the desk ends at the counter's near edge. So the least move is just onto the desk, clear of the step, DETAIN and the sign (about 125 px, eased): f 140."
+    },
+    {
+      "op": "drag",
+      "name": "d_over_detain",
+      "path": "Plain",
+      "x": 0.2677,
+      "y": 0.2361,
+      "x2": 0.2917,
+      "y2": 0.725
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "restTrace",
+      "name": "d_over_detain",
+      "f": 140
+    },
+    {
+      "op": "still",
+      "name": "d_over_detain"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "note",
+      "text": "(d2) Let go with the pointer on DETAIN itself: that is the counter (the traveller's side), which refuses the folder (BUG-6b). It shakes its no and lies just off the counter's near edge, on the desk, clear of DETAIN: the least move off the counter (about 125 px, eased), not the 8 px rule."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "d2_on_detain_counter",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.29,
+      "y2": 0.86,
+      "f": 150
+    },
+    {
+      "op": "restTrace",
+      "name": "d2_on_detain_counter",
+      "f": 150
+    },
+    {
+      "op": "still",
+      "name": "d2_on_detain_counter"
+    },
+    {
+      "op": "note",
+      "text": "(e) Partly off the reading view's bottom edge: the drag holds the folder's centre on the desk's clamp (0.5075 m from the centre), its bottom edge then lies past the view's rest margin; the least move inward (about 37 px, eased): f 40."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "e_off_bottom",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.62,
+      "y2": 0.075,
+      "f": 40
+    },
+    {
+      "op": "restTrace",
+      "name": "e_off_bottom",
+      "f": 40
+    },
+    {
+      "op": "still",
+      "name": "e_off_bottom"
+    },
+    {
+      "op": "note",
+      "text": "The passport from the counter onto the mat in the office view (a drop on the desk brings the reading view, D1, so a plain drag, no drop op), then papers over the folder and the folder over papers (both allowed, as in Papers, Please)."
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "drag",
+      "name": "passport_to_mat",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.5,
+      "y2": 0.2
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "restTrace",
+      "name": "passport_to_mat"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "p_passport_over_folder",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.6,
+      "y2": 0.2
+    },
+    {
+      "op": "restTrace",
+      "name": "p_passport_over_folder",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "f_folder_over_passport",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.64,
+      "y2": 0.24
+    },
+    {
+      "op": "restTrace",
+      "name": "f_folder_over_passport",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "p_passport_mat_top",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.45,
+      "y2": 0.55
+    },
+    {
+      "op": "restTrace",
+      "name": "p_passport_mat_top",
+      "f": 8
+    },
+    {
+      "op": "still",
+      "name": "papers_and_folder"
+    },
+    {
+      "op": "note",
+      "text": "The office view: the folder let go on the mat rests where let go (the audit's doclook_print: 170 px in 5 frames)."
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "office_before"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "o_office_mat",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.42,
+      "y2": 0.26
+    },
+    {
+      "op": "restTrace",
+      "name": "o_office_mat",
+      "f": 8
+    },
+    {
+      "op": "still",
+      "name": "o_office_mat"
+    },
+    {
+      "op": "restTrace",
+      "text": "off"
+    },
+    {
+      "op": "note",
+      "text": "Day 12 (every item): the machines stand on the right rail and slide toward the mat. A folder let go in the scanner's slide strip stays; the scanner stops short of it when the cursor nears it."
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "cheat",
+      "name": "UnlockEverything",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "restTrace",
+      "text": "on"
+    },
+    {
+      "op": "still",
+      "name": "d12_reading"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "g_d12_pocket_to_middle",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.5,
+      "y2": 0.45
+    },
+    {
+      "op": "restTrace",
+      "name": "g_d12_pocket_to_middle",
+      "f": 8
+    },
+    {
+      "op": "note",
+      "text": "(h) Day 12: the folder let go beside the scanner, its right edge 5 mm from the scanner's casing (the casing keeps a resting thing off it) and so inside the 4.9 cm the scanner slides toward the mat, stays there. A plain drag: the reading camera leans toward the scanner as the cursor nears it (CAM's SlideInFocus), so a screen measure would count the camera's lean; restTrace measures the rule's move on the desk. The cursor then waits just above the scanner (near it, not on it), and slideClear asserts the scanner never lies over the folder (it stops about 7 mm short)."
+    },
+    {
+      "op": "track",
+      "name": "folder",
+      "target": "Rulebook"
+    },
+    {
+      "op": "recStart",
+      "name": "d12_strips"
+    },
+    {
+      "op": "drag",
+      "name": "h_d12_scanner_strip",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.7685,
+      "y2": 0.451
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "restTrace",
+      "name": "h_d12_scanner_strip",
+      "f": 8
+    },
+    {
+      "op": "still",
+      "name": "h_d12_scanner_strip"
+    },
+    {
+      "op": "move",
+      "x": 0.9167,
+      "y": 0.5685,
+      "n": 10
+    },
+    {
+      "op": "slideClear",
+      "name": "h_d12_scanner_hover",
+      "n": 45
+    },
+    {
+      "op": "still",
+      "name": "h_d12_scanner_hover"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.7,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "note",
+      "text": "(i) Day 12: the folder let go in the chip reader's slide strip (its right edge 2.5 cm from the reader, inside the 4.3 cm the reader slides) stays there; the cursor near the reader (just above it) slides it out only as far as the folder (it stops short: MachineSlideIn.Room), and slideClear asserts it never lies over the folder. (The intercom's strip, left of the mat, lies past where the drag can take the folder.)"
+    },
+    {
+      "op": "drag",
+      "name": "i_d12_reader_strip",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.7828,
+      "y2": 0.163
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "restTrace",
+      "name": "i_d12_reader_strip",
+      "f": 8
+    },
+    {
+      "op": "still",
+      "name": "i_d12_reader_strip"
+    },
+    {
+      "op": "move",
+      "x": 0.875,
+      "y": 0.2926,
+      "n": 10
+    },
+    {
+      "op": "slideClear",
+      "name": "i_d12_reader_hover",
+      "n": 45
+    },
+    {
+      "op": "still",
+      "name": "i_d12_reader_hover"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.45,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "restTrace",
+      "text": "off"
+    }
+  ]
+}
