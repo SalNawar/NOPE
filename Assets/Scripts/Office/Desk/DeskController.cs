@@ -286,14 +286,17 @@ public sealed class DeskController : MonoBehaviour
     {
         _rulebookDragged = false;
         rulebook.ShowHeld(null, 1f);
-        if (config != null && surface != null && TryFootprint(rulebook.transform, out DeskRect folder))
+        if (config != null && surface != null && TryFolderFootprint(out DeskRect folder))
         {
             Vector3 at = rulebook.transform.position;
             // its footprint's centre (the view's frame back to world x, z) decides the machine, as a paper's does
             Vector3 centre = surface.transform.position + _viewRight * folder.CentreX + _viewForward * folder.CentreY;
             IPaperDock dock = DockAt(new DeskRect(centre.x, centre.z, 0f, 0f), at.y);
             bool refused = dock != null && !MachineIntake.Accepts(dock.Machine, MachineFeed.Folder);
-            Vector3 rest = RestOf(folder, at, counter != null && counter.Contains(released));
+            // Clear of the desk's objects too (DESK-PLAN's registry: DETAIN, the bell, the AVAILABLE sign, the glasses, the stamp
+            // rack, the pocket...; Saleh's playtest of 2026-10-28, point 2: "folder clipping detain button"), as DOC-HANDLE keeps
+            // it clear of the machines: a folder let go half over the back step lay through what stands there.
+            Vector3 rest = RestOf(folder, at, counter != null && counter.Contains(released), true, true);
             List<Vector3> way = (rest - at).sqrMagnitude > 1e-8f ? Way(at, rest, RulebookGrow()) : null;
             float seconds = way != null ? WaySeconds(at, way) : 0f;
             if (refused)
@@ -308,7 +311,30 @@ public sealed class DeskController : MonoBehaviour
     }
 
     /// <summary>Half the rulebook's diagonal on the desk (metres): how far its edges reach from its root.</summary>
-    private float RulebookGrow() => TryFootprint(rulebook.transform, out DeskRect folder) ? Mathf.Sqrt(folder.Width * folder.Width + folder.Height * folder.Height) / 2f : 0.2f;
+    private float RulebookGrow() => TryFolderFootprint(out DeskRect folder) ? Mathf.Sqrt(folder.Width * folder.Width + folder.Height * folder.Height) / 2f : 0.2f;
+
+    /// <summary>The folder's eight box corners (TryFolderFootprint's buffer: no allocation per drop).</summary>
+    private readonly Vector3[] _folderCorners = new Vector3[8];
+
+    /// <summary>
+    /// The folder's footprint on the desk (the view's frame): its own box
+    /// (DeskRulebook.TryBoxCorners: the board's side alone while shut, as the
+    /// player sees it), else everything drawn under it. Saleh's playtest of
+    /// 2026-10-28, point 4, "You move the folder and it snaps somewhere else":
+    /// the renderers' bounds held the shut folder's cut left board, so the
+    /// rest kept a whole unseen board in view and clear of the keep-outs, and
+    /// a drop near the left of the view or of the machines' strips jumped by
+    /// up to a board's width (QA-39).
+    /// </summary>
+    private bool TryFolderFootprint(out DeskRect folder)
+    {
+        if (rulebook.TryBoxCorners(_folderCorners))
+        {
+            folder = InViewFrame(_folderCorners);
+            return folder.Width > 0f && folder.Height > 0f;
+        }
+        return TryFootprint(rulebook.transform, out folder);
+    }
 
     /// <summary>Makes a spare paper ready (between hand-overs), hands the next arrival over on its beat, then advances a running scan (a finished paper slides back to where it was picked up, keeping its docked size until clear of the scanner) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner).</summary>
     private void Update()
@@ -1169,14 +1195,21 @@ public sealed class DeskController : MonoBehaviour
         return new Vector3(rest.x, at.y, rest.z);
     }
 
-    /// <summary>Where a thing whose footprint is <paramref name="footprint"/> (the view's frame) with its root at <paramref name="at"/> rests (DropResolver.Rest, as Rest; the rulebook folder too): kept in what the reading view shows (a thing on the desk), clear of every obstacle, the scanner's hidden area, each swept strip of the desk's slide-in (DeskLayout.SweptStrips) and, <paramref name="offCounter"/>, the counter.</summary>
-    private Vector3 RestOf(DeskRect footprint, Vector3 at, bool offCounter, bool inView = true)
+    /// <summary>Where a thing whose footprint is <paramref name="footprint"/> (the view's frame) with its root at <paramref name="at"/> rests (DropResolver.Rest, as Rest; the rulebook folder too): kept in what the reading view shows (a thing on the desk), clear of every obstacle, the scanner's hidden area, each swept strip of the desk's slide-in (DeskLayout.SweptStrips), with <paramref name="props"/> every object standing on the desk (DESK-PLAN's registry, DeskLayout.Obstacles: the folder) and, <paramref name="offCounter"/>, the counter.</summary>
+    private Vector3 RestOf(DeskRect footprint, Vector3 at, bool offCounter, bool inView = true, bool props = false)
     {
         MeasureMachines();
         DeskObstacles.Desk.Footprints(_footprints);
         _keepOut.Clear();
         foreach (DeskRect f in _footprints)
             _keepOut.Add(InViewFrame(WorldCorners(f, surface.transform.position.y)));
+        if (props && DeskLayout.Bound)
+        {
+            // DESK-PLAN's registry holds each shown object's footprint in the desk's frame (x right, y away from the chair).
+            DeskLayout.Obstacles.Footprints(_footprints);
+            foreach (DeskRect f in _footprints)
+                _keepOut.Add(InViewFrame(FrameCorners(f)));
+        }
         if (scanner != null && !_scanners.Hidden && scanner.OnDesk)
             _keepOut.Add(ScannerClearance.Blocked(InViewFrame(scanner.Corners()), _scannerShadow));
         // Nor where the desk's slide-in moves a machine (DESK-V3, DESK-HOMES 6: 0 px of a slider over a resting paper): each track's swept strip.
@@ -1215,6 +1248,21 @@ public sealed class DeskController : MonoBehaviour
             return desk;
         return new DeskRect((left + right) / 2f, (nearEdge + farEdge) / 2f, right - left, farEdge - nearEdge);
     }
+
+    /// <summary>The four world corners of a rectangle in the desk's frame (DeskLayout.Frame), into a reused buffer.</summary>
+    private Vector3[] FrameCorners(DeskRect frame)
+    {
+        float hx = frame.Width / 2f, hy = frame.Height / 2f;
+        DeskFrame f = DeskLayout.Frame;
+        _frameCorners[0] = f.Point(new Vector2(frame.CentreX - hx, frame.CentreY - hy));
+        _frameCorners[1] = f.Point(new Vector2(frame.CentreX + hx, frame.CentreY - hy));
+        _frameCorners[2] = f.Point(new Vector2(frame.CentreX - hx, frame.CentreY + hy));
+        _frameCorners[3] = f.Point(new Vector2(frame.CentreX + hx, frame.CentreY + hy));
+        return _frameCorners;
+    }
+
+    /// <summary>FrameCorners' buffer.</summary>
+    private readonly Vector3[] _frameCorners = new Vector3[4];
 
     /// <summary>The four corners of a world x, z footprint at height <paramref name="y"/>.</summary>
     private static Vector3[] WorldCorners(DeskRect footprint, float y)
