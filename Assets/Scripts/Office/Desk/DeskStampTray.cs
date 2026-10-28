@@ -178,8 +178,8 @@ public sealed class DeskStampTray : MonoBehaviour
         Up
     }
 
-    /// <summary>One dater of the rack: what it prints, its parts, its place in the rack and its motion. While carried it is the desk's hold (HoldRegistry): a cancel drops it back into the rack.</summary>
-    private sealed class Handle : IHoldable
+    /// <summary>One dater of the rack: what it prints, its parts, its place in the rack and its motion. While carried, its drag is the desk's hold (DeskDraggable in HoldRegistry: every desk drag holds through it, DOC-HANDLE); a cancel of that hold cuts the drag and the dater goes back into the rack (PutBack). The tray registers no hold of its own: a second hold for one carry would cancel the first.</summary>
+    private sealed class Handle
     {
         public DeskStamp Kind;
 
@@ -256,13 +256,6 @@ public sealed class DeskStampTray : MonoBehaviour
         /// <summary>The wheels' clicks still to come in the morning roll (the wheel of each), and when the next one comes.</summary>
         public readonly Queue<int> Clicks = new Queue<int>();
         public float NextClick;
-
-        /// <summary>The hold is cancelled (another hold began, the focus was lost): the drag is cut and the dater goes back to the rack.</summary>
-        public void CancelHold()
-        {
-            if (Drag != null)
-                Drag.Cancel();
-        }
     }
 
     private readonly StampFlow _flow = new StampFlow();
@@ -414,7 +407,6 @@ public sealed class DeskStampTray : MonoBehaviour
             Destroy(_shadowMesh);
         foreach (Handle handle in _handles)
         {
-            HoldRegistry.Desk.End(handle);
             if (handle.WindowPrint != null)
                 Destroy(handle.WindowPrint);
             foreach (Texture2D band in handle.Bands)
@@ -867,7 +859,7 @@ public sealed class DeskStampTray : MonoBehaviour
         Play(handle.Kind == DeskStamp.Approved ? approvedRelease : deniedRelease, Pitch());
     }
 
-    /// <summary>A dater's drag begins: it is carried and is the desk's hold (it stands straight, its lift and tip let go); the first touch of the day rolls its wheels.</summary>
+    /// <summary>A dater's drag begins: it is carried (its drag is the desk's hold, DeskDraggable; it stands straight, its lift and tip let go); the first touch of the day rolls its wheels.</summary>
     private void PickUp(Handle handle)
     {
         Deselect();
@@ -881,7 +873,6 @@ public sealed class DeskStampTray : MonoBehaviour
         handle.Click.transform.localRotation = handle.HomeTurn;
         _carried = handle;
         _aimed = false;
-        HoldRegistry.Desk.Begin(handle);
         Sounds.Play(SoundCues.StampLift);
         Show();
     }
@@ -891,7 +882,6 @@ public sealed class DeskStampTray : MonoBehaviour
     {
         if (_carried == handle)
             _carried = null;
-        HoldRegistry.Desk.End(handle);
         Press(handle);
         Show();
     }
@@ -901,7 +891,6 @@ public sealed class DeskStampTray : MonoBehaviour
     {
         if (_carried == handle)
             _carried = null;
-        HoldRegistry.Desk.End(handle);
         Return(handle);
         Show();
     }
