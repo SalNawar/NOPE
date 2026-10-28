@@ -598,10 +598,15 @@ public static class StampRig
 
     /// <summary>
     /// Drags the rulebook (the last thing touched lies on top) so its edge facing the passport lies f (default 3 cm)
-    /// over it. Its grab is a point of its top no paper covers; the drags are P-SLOW (the carried rulebook trails a
-    /// fast pointer and lands short). A move too short to be a drag (the EventSystem's threshold) goes out 6 cm first
-    /// and back; the drop is checked (the edge 15-60 mm over the passport, the rulebook on top there) and corrected up
-    /// to three times.
+    /// over it, beside the passport across the view. Its grab is a point of its top no paper covers; the drags are
+    /// P-SLOW (the carried rulebook trails a fast pointer and lands short). A move too short to be a drag (the
+    /// EventSystem's threshold) goes out 6 cm first and back; the drop is checked (the edge 15-60 mm over the
+    /// passport, the rulebook on top there) and corrected up to three times. The desk keeps a resting thing wholly
+    /// in the reading view's area (DeskController.RestOf): on the painted desk that area is too narrow for the
+    /// rulebook beside a passport in its middle, so a rulebook the desk holds back more than 6 cm over the passport
+    /// (or one the papers cover) gets room: the passport is dragged away from it by the rest (at most twice), and
+    /// the rulebook is dragged after it. Each round starts in the reading view and logs what the press meets and
+    /// whether the drag ran.
     /// </summary>
     private static IEnumerator FolderOver(QaRunner runner, QaStep step)
     {
@@ -611,45 +616,124 @@ public static class StampRig
         float overlap = step.f > 0f ? step.f : 0.03f;
         var log = new StringBuilder($"== stampFolderOver {step.name}: ");
         string state = "not checked";
-        for (int round = 0; round < 4; round++)
+        var screen = new Vector2(Screen.width, Screen.height);
+        int began = 0, ended = 0, cancelled = 0, passportMoves = 0;
+        bool makeRoom = false;
+        float sign = 0f;
+        Action<DeskDraggable> onBegan = d => began++, onCancelled = d => cancelled++;
+        Action<DeskDraggable, Vector3> onEnded = (d, w) => ended++;
+        if (folder.Drag != null)
         {
-            Camera cam = Cam();
-            var f = Footprint(tray, folder);
-            var p = Footprint(tray, passport, folder.transform.right);
-            float fa = (f.minA + f.maxA) / 2f, fb = (f.minB + f.maxB) / 2f, pa = (p.minA + p.maxA) / 2f, pb = (p.minB + p.maxB) / 2f;
-            bool onA = Mathf.Abs(pa - fa) - (f.maxA - f.minA + p.maxA - p.minA) / 2f >= Mathf.Abs(pb - fb) - (f.maxB - f.minB + p.maxB - p.minB) / 2f;
-            float sign = onA ? Mathf.Sign(pa - fa) : Mathf.Sign(pb - fb);
-            // How far the rulebook's edge facing the passport reaches over it now, and the move that makes it overlap.
-            float now = onA ? (sign > 0f ? f.maxA - p.minA : p.maxA - f.minA) : (sign > 0f ? f.maxB - p.minB : p.maxB - f.minB);
-            float da = onA ? sign * (overlap - now) : pa - fa, db = onA ? pb - fb : sign * (overlap - now);
-            Vector3 delta = f.across * da + f.along * db;
-            Vector3 edgeMid = f.across * (onA ? (sign > 0f ? f.maxA - now / 2f : f.minA + now / 2f) : (Mathf.Max(f.minA, p.minA) + Mathf.Min(f.maxA, p.maxA)) / 2f)
-                              + f.along * (onA ? (Mathf.Max(f.minB, p.minB) + Mathf.Min(f.maxB, p.maxB)) / 2f : (sign > 0f ? f.maxB - now / 2f : f.minB + now / 2f))
-                              + Up(tray) * ((Surface(tray) is Transform s ? Vector3.Dot(s.position, Up(tray)) : 0f) + f.top);
-            bool onTop = OnTopAt(folder, passport, edgeMid, cam);
-            state = $"overlap {Mm(now)} (asked {Mm(overlap)}), rulebook on top {onTop}";
-            if (round > 0 && now >= 0.015f && now <= 0.06f && onTop)
-                break;
-            // The drag keeps the grab's offset on the desk's plane (DeskDraggable): the pointer's point on the plane moves with the rulebook.
-            (Vector2 from, Vector3 grab) = FolderGrab(tray, folder, cam);
-            grab = OnDeskPlane(tray, cam, from) ?? grab;
-            Vector2 to = Screen2(grab + delta, cam);
-            if ((to - from).magnitude < 40f)
+            folder.Drag.DragBegan += onBegan;
+            folder.Drag.DragEnded += onEnded;
+            folder.Drag.DragCancelled += onCancelled;
+        }
+        try
+        {
+            for (int round = 0; round < 4 + passportMoves; round++)
             {
-                // Out 6 cm, away from the passport, and back: a short move is a click, not a drag.
-                Vector3 away = (onA ? f.across : f.along) * (-sign * 0.06f);
-                QaPath outPath = QaPaths.Drag(QaPathKind.Slow, from, Screen2(grab + away, cam), new Vector2(Screen.width, Screen.height));
-                yield return FixedStep(Settle(runner.Input.Play(outPath), 20));
-                yield return StandsStill(folder.transform);
-                log.Append($"out by {V(away)}; ");
-                (from, grab) = FolderGrab(tray, folder, cam);
+                // The set-up works in the reading view: a paper's drop, the hand-over or a press on the view's catcher can leave the office view in front.
+                var view = QaGame.Field(tray, "deskView") as DeskView;
+                for (int k = 0; k < 3 && view != null && !view.IsOn; k++)
+                {
+                    log.Append("the reading view on; ");
+                    yield return View(runner, new QaStep { n = 1, f = 0.6f });
+                }
+                Camera cam = Cam();
+                var f = Footprint(tray, folder);
+                var p = Footprint(tray, passport, folder.transform.right);
+                float fa = (f.minA + f.maxA) / 2f, fb = (f.minB + f.maxB) / 2f, pa = (p.minA + p.maxA) / 2f, pb = (p.minB + p.maxB) / 2f;
+                // The rulebook's side of the passport across the view (its long side), kept for the whole set-up.
+                if (round == 0)
+                    sign = pa - fa >= 0f ? 1f : -1f;
+                // How far the rulebook's edge facing the passport reaches over it now, and the move that makes it overlap.
+                float now = sign > 0f ? f.maxA - p.minA : p.maxA - f.minA;
+                // Along the view the rulebook stays where it lies while it already meets the passport over 8 cm (the view's area narrows away from the chair, so a move along it can push the rulebook back over the passport).
+                float meetB = Mathf.Min(f.maxB, p.maxB) - Mathf.Max(f.minB, p.minB);
+                Vector3 delta = f.across * (sign * (overlap - now)) + f.along * (meetB >= 0.08f ? 0f : pb - fb);
+                Vector3 edgeMid = f.across * (sign > 0f ? f.maxA - now / 2f : f.minA + now / 2f)
+                                  + f.along * ((Mathf.Max(f.minB, p.minB) + Mathf.Min(f.maxB, p.maxB)) / 2f)
+                                  + Up(tray) * ((Surface(tray) is Transform s ? Vector3.Dot(s.position, Up(tray)) : 0f) + f.top);
+                bool onTop = OnTopAt(folder, passport, edgeMid, cam);
+                state = $"overlap {Mm(now)} (asked {Mm(overlap)}), rulebook on top {onTop}";
+                if (round > 0 && now >= 0.015f && now <= 0.06f && onTop)
+                    break;
+                Vector2 from = Vector2.zero;
+                Vector3 grab = Vector3.zero;
+                bool covered = false;
+                if (!makeRoom)
+                {
+                    try
+                    {
+                        (from, grab) = FolderGrab(tray, folder, cam);
+                    }
+                    catch (InvalidOperationException) when (passportMoves < 2)
+                    {
+                        covered = true;
+                    }
+                }
+                if (makeRoom || covered)
+                {
+                    // Room for the rulebook: the passport goes away from it, across the view, by what the rulebook could not.
+                    makeRoom = false;
+                    if (covered)
+                        passportMoves++;
+                    Vector2 pFrom = GrabPoint(tray, passport, cam);
+                    Vector3 pGrab = OnDeskPlane(tray, cam, pFrom) ?? throw new InvalidOperationException("stampFolderOver: the passport's grab is not on the desk.");
+                    Vector3 move = f.across * (sign * Mathf.Max(0.02f, now - overlap));
+                    Vector2 pTo = Screen2(pGrab + move, cam);
+                    Vector3 pBefore = passport.transform.position;
+                    yield return FixedStep(Settle(runner.Input.Play(QaPaths.Drag(QaPathKind.Slow, pFrom, pTo, screen)), 45));
+                    yield return QaGame.Until(() => !passport.IsSliding, 10f, "the passport to settle");
+                    yield return StandsStill(passport.transform);
+                    float went = Vector3.ProjectOnPlane(passport.transform.position - pBefore, Up(tray)).magnitude;
+                    log.Append($"round {round + 1}: {state}; {(covered ? "the papers cover the rulebook" : "the desk held the rulebook back")}: the passport moved {Mm(went)} of {Mm(move.magnitude)} away from it ({pFrom} to {pTo}); ");
+                    continue;
+                }
+                // The drag keeps the grab's offset on the desk's plane (DeskDraggable): the pointer's point on the plane moves with the rulebook.
                 grab = OnDeskPlane(tray, cam, from) ?? grab;
-                to = Screen2(grab - away + delta, cam);
+                Vector2 to = Screen2(grab + delta, cam);
+                if ((to - from).magnitude < 40f)
+                {
+                    // Out 6 cm, away from the passport, and back: a short move is a click, not a drag.
+                    Vector3 away = f.across * (-sign * 0.06f);
+                    QaPath outPath = QaPaths.Drag(QaPathKind.Slow, from, Screen2(grab + away, cam), screen);
+                    yield return FixedStep(Settle(runner.Input.Play(outPath), 20));
+                    yield return StandsStill(folder.transform);
+                    log.Append($"out by {V(away)}; ");
+                    (from, grab) = FolderGrab(tray, folder, cam);
+                    grab = OnDeskPlane(tray, cam, from) ?? grab;
+                    to = Screen2(grab - away + delta, cam);
+                }
+                // What the press meets (the EventSystem gives it to the first collider along the pointer's ray) and whether the rulebook's drag ran.
+                string hits = string.Join(" ", Physics.RaycastAll(cam.ScreenPointToRay(from), 10f, Physics.AllLayers, QueryTriggerInteraction.Collide)
+                                                      .OrderBy(h => h.distance).Take(4)
+                                                      .Select(h => $"{h.collider.name}@{h.distance:0.0000}{(h.collider.GetComponentInParent<DeskDocument>() is DeskDocument dd ? $"(paper {dd.Index})" : h.collider.GetComponentInParent<DeskRulebook>() != null ? "(rulebook)" : string.Empty)}"));
+                int began0 = began, ended0 = ended, cancelled0 = cancelled;
+                Vector3 before = folder.transform.position;
+                QaPath path = QaPaths.Drag(QaPathKind.Slow, from, to, screen);
+                yield return FixedStep(Settle(runner.Input.Play(path), 45));
+                yield return StandsStill(folder.transform);
+                float shift = Vector3.ProjectOnPlane(folder.transform.position - before, Up(tray)).magnitude;
+                var f2 = Footprint(tray, folder);
+                var p2 = Footprint(tray, passport, folder.transform.right);
+                float after = sign > 0f ? f2.maxA - p2.minA : p2.maxA - f2.minA;
+                log.Append($"round {round + 1}: {state}, moved by {V(delta)} ({from} to {path.End}); view on {(view != null && view.IsOn)}, the press meets {(hits.Length > 0 ? hits : "nothing")}; drag began {began - began0}, ended {ended - ended0}, cancelled {cancelled - cancelled0}; the rulebook moved {Mm(shift)}, overlap now {Mm(after)}; ");
+                if (after > 0.06f && passportMoves < 2)
+                {
+                    makeRoom = true;
+                    passportMoves++;
+                }
             }
-            QaPath path = QaPaths.Drag(QaPathKind.Slow, from, to, new Vector2(Screen.width, Screen.height));
-            yield return FixedStep(Settle(runner.Input.Play(path), 45));
-            yield return StandsStill(folder.transform);
-            log.Append($"round {round + 1}: {state}, moved by {V(delta)} ({from} to {path.End}); ");
+        }
+        finally
+        {
+            if (folder.Drag != null)
+            {
+                folder.Drag.DragBegan -= onBegan;
+                folder.Drag.DragEnded -= onEnded;
+                folder.Drag.DragCancelled -= onCancelled;
+            }
         }
         Report(runner, log + "then " + state);
     }
