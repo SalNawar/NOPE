@@ -72,7 +72,7 @@ public static class DeskPlanChecks
     [GateCheck("desk.play.intercom", Owner, GateKind.Play)]
     public static GateResult Intercom() => GateResults.Require("desk.play.intercom", Owner, "desk_plan_homes.expect.*");
 
-    /// <summary>Each decoration let go on a free spot rests where it was let go (≤8 px at 1080p, BUG-23); on the painted desk, which has no decoration spots, the scenario's "not applicable" line (DeskPlanOps' deskhomeshown, seam C of 2026-10-28).</summary>
+    /// <summary>Each decoration let go on a free spot rests where it was let go (≤8 px at 1080p, BUG-23); on the painted desk, which has no decoration spots, the scenario's "not applicable" line (DeskPlanOps' deskhomeshown, seam C of 2026-10-28) is red: the decorations are cut there (BUG-23a, known red under DESK-V3 until Saleh rules; the code review's RG-03).</summary>
     [GateCheck("desk.play.decor", Owner, GateKind.Play)]
     public static GateResult Decor()
     {
@@ -90,10 +90,15 @@ public static class DeskPlanChecks
     /// The decor check's verdict (pure; DeskPlanGateTests): the drops
     /// (<c>desk_plan_decor.drop.*</c>, GateResults.Judge) when any was
     /// measured at <paramref name="head"/>; else the scenario's
-    /// <see cref="DecorSpotsId"/> line, which passes the check only when it
-    /// says the spots are not applicable (the painted desk: its decorations
-    /// are cut, DESK-V3) and was measured at HEAD on a clean tree. A desk
-    /// with spots and no drop measured at HEAD is red: run the recipe.
+    /// <see cref="DecorSpotsId"/> line. A line that says the spots are not
+    /// applicable (the painted desk: its decorations are cut, DESK-V3) is red,
+    /// not green: Saleh asked for the decorations (the 1018a playtest), and the
+    /// cut is the orchestrator's ruling 13, open to his veto (the code review's
+    /// RG-03 of 2026-10-28: the check passed a cut feature as green). The
+    /// known-red list spares that one line at the merge gate (BUG-23a,
+    /// DESK-V3), and the result names it (<see cref="GateResult.Unmet"/>), so a
+    /// red drop is never spared with it. A desk with spots and no drop
+    /// measured at HEAD is red: run the recipe.
     /// </summary>
     public static GateResult DecorVerdict(IEnumerable<QaGateResult> results, string head)
     {
@@ -107,7 +112,11 @@ public static class DeskPlanChecks
             return GateResult.Fail(id, Owner, shown.Measured, $"no drop measured at HEAD and no '{DecorSpotsId}' line that passes: {shown.Detail}");
         QaGateResult line = all.First(r => string.Equals(r.id, DecorSpotsId, StringComparison.OrdinalIgnoreCase) && string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase));
         bool notApplicable = (line.measured ?? string.Empty).StartsWith("not applicable", StringComparison.OrdinalIgnoreCase);
-        return GateResult.Of(id, Owner, notApplicable, line.measured,
-            notApplicable ? line.detail : "the desk in use has decoration spots, but there is no drop measured at HEAD (desk_plan_decor.drop.*): run the recipe (docs/pending/QA-RIG.md)");
+        if (!notApplicable)
+            return GateResult.Fail(id, Owner, line.measured, "the desk in use has decoration spots, but there is no drop measured at HEAD (desk_plan_decor.drop.*): run the recipe (docs/pending/QA-RIG.md)");
+        GateResult cut = GateResult.Fail(id, Owner, line.measured,
+            $"the decorations are cut on the painted desk (DESK-V3, DeskPaintedMap.CutParts), so no decoration can be placed: Saleh asked for them (1018a); BUG-23a, known red until he rules on the cut. {line.detail}");
+        cut.Unmet.Add(line.id);
+        return cut;
     }
 }

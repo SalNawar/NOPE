@@ -8,7 +8,9 @@ using NUnit.Framework;
 /// since the decorations are cut there (DESK-V3). The scenario's
 /// deskhomeshown step now writes the "not applicable" line and passes the
 /// drags over; the check reads the drops when any was measured at HEAD,
-/// else that line, and only when it says not applicable.
+/// else that line. The code review's RG-03 (2026-10-28): that line is red,
+/// not green (the decorations are cut, a feature Saleh asked for); the
+/// known-red list spares only that line (BUG-23a, DESK-V3).
 /// </summary>
 public class DeskPlanGateTests
 {
@@ -28,11 +30,24 @@ public class DeskPlanGateTests
     }
 
     [Test]
-    public void OnThePaintedDesk_TheNotApplicableLine_PassesTheCheck_AndSaysWhy()
+    public void OnThePaintedDesk_TheNotApplicableLine_IsRed_TheCutIsKnownRedUnderDeskV3()
     {
         GateResult r = DeskPlanChecks.DecorVerdict(new[] { Result(DeskPlanChecks.DecorSpotsId, true, "not applicable on the painted desk") }, Head);
-        Assert.IsTrue(r.Pass, r.Detail);
+        Assert.IsFalse(r.Pass, "a cut feature is not green");
         StringAssert.Contains("not applicable", r.Measured);
+        StringAssert.Contains("cut", r.Detail);
+        StringAssert.Contains("BUG-23a", r.Detail);
+        CollectionAssert.AreEqual(new[] { DeskPlanChecks.DecorSpotsId }, r.Unmet, "it names the line, so the known-red entry spares that line only");
+
+        string text = System.IO.File.ReadAllText(System.IO.Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt"));
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        Dictionary<string, List<string>> own = DemoGate.KnownRedPatternsByCheck(text);
+        StringAssert.Contains("BUG-23a", known["desk.play.decor"]);
+        StringAssert.Contains("DESK-V3", known["desk.play.decor"]);
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { r }, 1, known, own).Refused, "the merge gate lists the cut");
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Demo, new[] { r }, 1, known, own).Refused, "the demo gate refuses it");
+        GateResult drop = DeskPlanChecks.DecorVerdict(new[] { Result("desk_plan_decor.drop.Slow", false, "12 px") }, Head);
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { drop }, 1, known, own).Refused, "a red drop on the art desk is not spared with the cut");
     }
 
     [Test]
@@ -60,6 +75,7 @@ public class DeskPlanGateTests
             Result("desk_plan_decor.drop.Fast", false, "12 px", "0000000000000000000000000000000000000000"),
             Result(DeskPlanChecks.DecorSpotsId, true, "not applicable on the painted desk"),
         }, Head);
-        Assert.IsTrue(r.Pass, r.Detail);
+        Assert.IsFalse(r.Pass, "the cut is red (RG-03)");
+        CollectionAssert.AreEqual(new[] { DeskPlanChecks.DecorSpotsId }, r.Unmet, "the line decides, not the stale drop");
     }
 }
