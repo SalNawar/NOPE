@@ -3,23 +3,89 @@
   "owner": "DOC-LOOK",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "DOC-LOOK cap-height gate (BUG-9): day 1's papers dragged onto the mat into the reading view, every printed value and label measured on screen at A1 and A2 (capHeight)" },
-    { "op": "title" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "newRun", "text": "Biscuit" },
-    { "op": "waitOffice", "n": 1 },
-    { "op": "startShift" },
-    { "op": "sign" },
-    { "op": "waitTraveller" },
-    { "op": "wait", "f": 2 },
-    { "op": "drag", "name": "passport_to_mat", "path": "Plain", "target": "PaperTemplate(Clone)", "x2": 0.5, "y2": 0.42 },
-    { "op": "wait", "f": 1.5 },
-    { "op": "still", "name": "doclook_a1_reading" },
-    { "op": "capHeight", "name": "a1" },
-    { "op": "res", "w": 1280, "h": 720 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "doclook_a2_reading" },
-    { "op": "capHeight", "name": "a2" },
-    { "op": "res", "w": 1920, "h": 1080 }
+    {
+      "op": "note",
+      "text": "DOC-LOOK cap-height gate (BUG-9): day 1's papers dragged onto the mat into the reading view, every printed value and label measured on screen at A1 and A2 (capHeight) The passport is clicked open before the drag (D3: a booklet arrives shut; shut, its print is inside and measures nothing; doclook_print's passport_press_open does the same). fix/night-seams, 2026-10-28."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "click",
+      "name": "passport_press_open",
+      "target": "PaperTemplate(Clone)"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "drag",
+      "name": "passport_to_mat",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.5,
+      "y2": 0.42
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "doclook_a1_reading"
+    },
+    {
+      "op": "capHeight",
+      "name": "a1"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 720
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "doclook_a2_reading"
+    },
+    {
+      "op": "capHeight",
+      "name": "a2"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    }
   ]
 }

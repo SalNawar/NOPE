@@ -90,7 +90,16 @@
     },
     {
       "op": "note",
-      "text": "The documents: in the office view the handed-over papers lie about 10 px tall on the counter strip, so a sweep crosses their texts without landing on a word. The first paper (day 8: the Work Permit, TC-520) is dragged to the mat, which tilts the reading view in (DeskController.Read), and the sweep runs over the paper's own screen rect (toolsLens with a target: x, y, x2, y2 are fractions of the paper's rect), from its lower left part to its upper right, so it crosses the printed lines wherever the desk's reading pose lays the paper (the painted desk's differs from the plan's; seam G of 2026-10-28)."
+      "text": "The documents: in the office view the handed-over papers lie about 10 px tall on the counter strip, so a sweep crosses their texts without landing on a word. The first paper (day 8: the Work Permit, TC-520) is dragged to the mat, which tilts the reading view in (DeskController.Read), and the sweep runs over the paper's own screen rect (toolsLens with a target: x, y, x2, y2 are fractions of the paper's rect), from its lower left part to its upper right, so it crosses the printed lines wherever the desk's reading pose lays the paper (the painted desk's differs from the plan's; seam G of 2026-10-28). The paper is clicked open first (DOC-LOOK D3: a booklet arrives shut and opens on a click; shut, its words are inside)."
+    },
+    {
+      "op": "click",
+      "name": "paper_open",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)"
+    },
+    {
+      "op": "wait",
+      "f": 1
     },
     {
       "op": "drag",
@@ -120,7 +129,7 @@
     },
     {
       "op": "note",
-      "text": "The revert: hover the rulebook folder's cover word (a culture label from day 8; in the reading view at 0.209, 0.293), then leave to the empty top right corner. The folder's own centre is not on a word."
+      "text": "The revert: hover the rulebook folder's cover word (a culture label from day 8; in the reading view at 0.209, 0.293), then leave to the empty top right corner. The folder's own centre is not on a word. The reading view is left by its own call (DeskView.Return): Esc opens Settings everywhere (FLOW, Saleh's R3)."
     },
     {
       "op": "toolsRevert",
@@ -132,11 +141,11 @@
     },
     {
       "op": "note",
-      "text": "D7 with the PC open: Q opens the PC; the sweeps cross its desktop and its open windows (retarget them to the windows found in Unity), then Escape backs out."
+      "text": "D7 with the PC open: Q opens the PC; the sweeps cross its desktop and its open windows (retarget them to the windows found in Unity), then Q leaves the PC (Esc opens Settings everywhere: FLOW, R3)."
     },
     {
-      "op": "key",
-      "key": "Escape"
+      "op": "call",
+      "target": "DeskView.Return"
     },
     {
       "op": "wait",
@@ -172,7 +181,7 @@
     },
     {
       "op": "key",
-      "key": "Escape"
+      "key": "Q"
     },
     {
       "op": "wait",

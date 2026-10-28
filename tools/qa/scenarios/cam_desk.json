@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "DESK-PLAN at A3 and A4 (FIX_PLAN v1: deferred to CAM's merge): every kept object is seen (ID buffer, >=90%) and its centre click reaches it, day 1 and day 12 with every item; the intercom opens the wheel from the office view and from the reading view with no camera move. The A1/A2 legs are DESK-PLAN's desk_plan_homes."
+      "text": "DESK-PLAN at A3 and A4 (FIX_PLAN v1: deferred to CAM's merge): every kept object is seen (ID buffer, >=90%) and its centre click reaches it, day 1 and day 12 with every item; the intercom opens the wheel from the office view and from the reading view with no camera move. The A1/A2 legs are DESK-PLAN's desk_plan_homes. On the painted desk (fix/night-seams, 2026-10-28, seam B) the shell's recess covers 11 % of the intercom (DeskShell, 208 of 1838 px at 960x540) and the shell and the pouch's rim 7 % of the torch (35 + 17 of 759 px): the painting's own composition (DESK-V3), so their floor is 85 % (f 0.85). Esc opens Settings everywhere (FLOW, Saleh's R3), so the wheel is closed by its own call (TravellerWheel.Close), not by Esc."
     },
     {
       "op": "title"
@@ -48,7 +48,8 @@
     {
       "op": "deskvisible",
       "target": "Intercom",
-      "name": "a3_d1_intercom"
+      "name": "a3_d1_intercom",
+      "f": 0.85
     },
     {
       "op": "deskvisible",
@@ -77,7 +78,8 @@
     {
       "op": "deskvisible",
       "target": "Intercom",
-      "name": "a4_d1_intercom"
+      "name": "a4_d1_intercom",
+      "f": 0.85
     },
     {
       "op": "deskvisible",
@@ -114,8 +116,8 @@
       "name": "a3_d1_intercom_office"
     },
     {
-      "op": "key",
-      "key": "Escape"
+      "op": "call",
+      "target": "TravellerWheel.Close"
     },
     {
       "op": "wait",
@@ -160,8 +162,8 @@
       "name": "a3_intercom_reading"
     },
     {
-      "op": "key",
-      "key": "Escape"
+      "op": "call",
+      "target": "TravellerWheel.Close"
     },
     {
       "op": "wait",
@@ -194,8 +196,8 @@
       "name": "a4_d1_intercom_office"
     },
     {
-      "op": "key",
-      "key": "Escape"
+      "op": "call",
+      "target": "TravellerWheel.Close"
     },
     {
       "op": "wait",
@@ -240,8 +242,8 @@
       "name": "a4_intercom_reading"
     },
     {
-      "op": "key",
-      "key": "Escape"
+      "op": "call",
+      "target": "TravellerWheel.Close"
     },
     {
       "op": "wait",
@@ -306,7 +308,8 @@
     {
       "op": "deskvisible",
       "target": "UvTorch",
-      "name": "a3_d12_uvTorch"
+      "name": "a3_d12_uvTorch",
+      "f": 0.85
     },
     {
       "op": "deskvisible",
@@ -316,7 +319,8 @@
     {
       "op": "deskvisible",
       "target": "Intercom",
-      "name": "a3_d12_intercom"
+      "name": "a3_d12_intercom",
+      "f": 0.85
     },
     {
       "op": "deskvisible",
@@ -388,7 +392,8 @@
     {
       "op": "deskvisible",
       "target": "UvTorch",
-      "name": "a4_d12_uvTorch"
+      "name": "a4_d12_uvTorch",
+      "f": 0.85
     },
     {
       "op": "deskvisible",
@@ -398,7 +403,8 @@
     {
       "op": "deskvisible",
       "target": "Intercom",
-      "name": "a4_d12_intercom"
+      "name": "a4_d12_intercom",
+      "f": 0.85
     },
     {
       "op": "deskvisible",
